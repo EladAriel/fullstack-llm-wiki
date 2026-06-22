@@ -1,0 +1,162 @@
+---
+type: "Framework Learn Page"
+framework: "mongodb"
+source_repo: "https://github.com/mongodb/docs.git"
+source_branch: "main"
+source_path: "content/manual/manual/source/core/inmemory.txt"
+source_commit: "96788e8ed140cbdde184ff82e1066dff4996bde4"
+source_commit_short: "96788e8e"
+source_commit_date: "2026-06-19T21:35:03-06:00"
+generated_at: "2026-06-21T07:41:52Z"
+---
+
+=====================================================
+
+# In-Memory Storage Engine for Self-Managed Deployments
+
+The in-memory storage engine is part of general availability (GA) in 64-bit builds. Other than some metadata and diagnostic data, the in-memory storage engine does not maintain any on-disk data, including configuration data, indexes, user credentials, etc.
+
+By avoiding disk I/O, the in-memory storage engine allows for more predictable latency of database operations.
+
+## Specify In-Memory Storage Engine
+
+To select the in-memory storage engine, specify:
+
+- `inMemory` for the :option:`--storageEngine <mongod --storageEngine>` option, or the
+:setting:`storage.engine` setting if using a configuration file.
+
+- `--dbpath`, or :setting:`storage.dbPath` if using a configuration
+file. Although the in-memory storage engine does not write data to the filesystem, it maintains in the `--dbpath` small metadata files and diagnostic data as well temporary files for building large indexes.
+
+For example, from the command line:
+
+```bash
+mongod --storageEngine inMemory --dbpath <path> 
+```
+
+Or, if using the `YAML configuration file format </reference/configuration-options>`:
+
+```yaml
+storage:
+   engine: inMemory
+   dbPath: <path>
+```
+
+See `cli-mongod-inmemory` for configuration options specific to this storage engine. Most :binary:`~bin.mongod` configuration options are available for use with in-memory storage engine except for those options that are related to data persistence, such as journaling or encryption at rest configuration.
+
+> **Warning:** The in-memory storage engine does not persist data after process shutdown.
+
+## Transaction (Read and Write) Concurrency
+
+.. include:: /includes/fact-dynamic-concurrency.rst
+
+## Document Level Concurrency
+
+The in-memory storage engine uses document-level concurrency control for write operations. As a result, multiple clients can modify different documents of a collection at the same time.
+
+## Memory Use
+
+In-memory storage engine requires that all its data (including indexes, oplog if :binary:`~bin.mongod` instance is part of a replica set, etc.) must fit into the specified :option:`--inMemorySizeGB <mongod --inMemorySizeGB>` command-line option or :setting:`storage.inMemory.engineConfig.inMemorySizeGB` setting in the `YAML configuration file <configuration-options>`.
+
+.. include:: /includes/fact-inmemory-storage-engine-default-ram.rst
+
+If a write operation would cause the data to exceed the specified memory size, MongoDB returns with the error:
+
+```bash
+"WT_CACHE_FULL: operation would overflow cache"
+```
+
+To specify a new size, use the :setting:`storage.inMemory.engineConfig.inMemorySizeGB` setting in the `YAML configuration file format </reference/configuration-options>`:
+
+```yaml
+storage:
+   engine: inMemory
+   dbPath: <path>
+   inMemory:
+      engineConfig:
+         inMemorySizeGB: <newSize>
+```
+
+Or use the command-line option :option:`--inMemorySizeGB  <mongod --inMemorySizeGB>`:
+
+```bash
+mongod --storageEngine inMemory --dbpath <path> --inMemorySizeGB <newSize>
+```
+
+## Durability
+
+The in-memory storage engine is non-persistent and does not write data to a persistent storage. Non-persisted data includes application data and system data, such as users, permissions, indexes, replica set configuration, sharded cluster configuration, etc.
+
+As such, the concept of `journal` or waiting for data to become `durable` does not apply to the in-memory storage engine.
+
+.. include:: /includes/extracts/no-journaling-writeConcernMajorityJournalDefault-false.rst
+
+> **Note:** .. include:: /includes/extracts/4.2-changes-inmem-startup-warning.rst
+
+.. include:: /includes/extracts/no-journaling-rollback.rst
+
+Write operations that specify a write concern :writeconcern:`journaled <j>` are acknowledged immediately. When an :binary:`~bin.mongod` instance shuts down, either as result of the :dbcommand:`shutdown` command or due to a system error, recovery of in-memory data is impossible.
+
+## Transactions
+
+.. include:: /includes/extracts/transactions-inmemory-storage-page.rst
+
+## Deployment Architectures
+
+In addition to running as standalones, :binary:`~bin.mongod` instances that use in-memory storage engine can run as part of a replica set or part of a sharded cluster.
+
+### Replica Set
+
+You can deploy :binary:`~bin.mongod` instances that use in-memory storage engine as part of a replica set. For example, as part of a three-member replica set, you could have:
+
+- two :binary:`~bin.mongod` instances run with in-memory storage engine.
+- one :binary:`~bin.mongod` instance run with :doc:`WiredTiger
+</core/wiredtiger>` storage engine. Configure the WiredTiger member as a hidden member (i.e. :rsconf:`hidden: true <members[n].hidden>` and :rsconf:`priority: 0 <members[n].priority>`).
+
+With this deployment model, only the :binary:`~bin.mongod` instances running with the in-memory storage engine can become the primary. Clients connect only to the in-memory storage engine :binary:`~bin.mongod` instances. Even if both :binary:`~bin.mongod` instances running in-memory storage engine crash and restart, they can sync from the member running WiredTiger. The hidden :binary:`~bin.mongod` instance running with WiredTiger persists the data to disk, including the user data, indexes, and replication configuration information.
+
+> **Note:** In-memory storage engine requires that all its data (including oplog
+if :binary:`~bin.mongod` is part of replica set, etc.) fit into the
+specified :option:`--inMemorySizeGB <mongod --inMemorySizeGB>` command-line option or
+:setting:`storage.inMemory.engineConfig.inMemorySizeGB` setting. See
+`inmemory-memory-use`.
+
+### Sharded Cluster
+
+You can deploy :binary:`~bin.mongod` instances that use an in-memory storage engine as part of a `sharded cluster`. The in-memory storage engine avoids disk I/O to allow for more predictable database operation latency. In a sharded cluster, a `shard` can consist of a single :program:`mongod` instance or a `replica set`. For example, you could have one shard that consists of the following replica set:
+
+- two :binary:`~bin.mongod` instances run with in-memory storage engine
+- one :binary:`~bin.mongod` instance run with :doc:`WiredTiger
+</core/wiredtiger>` storage engine. Configure the WiredTiger member as a hidden member (i.e. :rsconf:`hidden: true <members[n].hidden>` and :rsconf:`priority: 0 <members[n].priority>`).
+
+To this shard, add the :method:`tag <sh.addShardTag>` `inmem`. For example, if this shard has the name `shardC`, connect to the :binary:`~bin.mongos` and run :method:`sh.addShardTag()`.
+
+For example,
+
+```javascript
+sh.addShardTag("shardC", "inmem")
+```
+
+To the other shards, add a separate tag `persisted` .
+
+```javascript
+sh.addShardTag("shardA", "persisted")
+sh.addShardTag("shardB", "persisted")
+```
+
+For each sharded collection that should reside on the `inmem` shard, :method:`assign to the entire chunk range <sh.addTagRange>` the tag `inmem`:
+
+```javascript
+sh.addTagRange("test.analytics", { shardKey: MinKey }, { shardKey: MaxKey }, "inmem")
+```
+
+For each sharded collection that should reside across the `persisted` shards, :method:`assign to the entire chunk range <sh.addTagRange>` the tag `persisted`:
+
+```javascript
+sh.addTagRange("salesdb.orders", { shardKey: MinKey }, { shardKey: MaxKey }, "persisted")
+```
+
+For the `inmem` shard, create a database or move the database.
+
+> **Note:** Read concern level :readconcern:`"snapshot"` is not officially supported
+with the in-memory storage engine.

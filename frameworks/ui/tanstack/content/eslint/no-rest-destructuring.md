@@ -1,0 +1,59 @@
+---
+type: "Framework Learn Page"
+framework: "tanstack"
+source_repo: "https://github.com/tanstack/query"
+source_branch: "main"
+source_path: "docs/eslint/no-rest-destructuring.md"
+source_commit: "4f11927ac5f3841984389a07587ee2ae1e0abfbb"
+source_commit_short: "4f11927a"
+source_commit_date: "2026-06-19T13:43:35+02:00"
+generated_at: "2026-06-21T12:31:28Z"
+---
+
+---
+id: no-rest-destructuring
+title: Disallow object rest destructuring on query results
+---
+
+Use object rest destructuring on query results automatically subscribes to every field of the query result, which may cause unnecessary re-renders.
+This makes sure that you only subscribe to the fields that you actually need.
+
+## Rule Details
+
+Examples of **incorrect** code for this rule:
+
+```tsx
+/* eslint "@tanstack/query/no-rest-destructuring": "warn" */
+
+const useTodos = () => {
+  const { data: todos, ...rest } = useQuery({
+    queryKey: ['todos'],
+    queryFn: () => api.getTodos(),
+  })
+  return { todos, ...rest }
+}
+```
+
+Examples of **correct** code for this rule:
+
+```tsx
+const todosQuery = useQuery({
+  queryKey: ['todos'],
+  queryFn: () => api.getTodos(),
+})
+
+// normal object destructuring is fine
+const { data: todos } = todosQuery
+```
+
+When [typed linting](https://typescript-eslint.io/getting-started/typed-linting/) is enabled, the rule also flags rest destructuring on custom hooks that return a TanStack Query result.
+
+## When Not To Use It
+
+If you set the `notifyOnChangeProps` options manually, you can disable this rule.
+Since you are not using tracked queries, you are responsible for specifying which props should trigger a re-render.
+
+## Attributes
+
+- [x] ✅ Recommended
+- [ ] 🔧 Fixable

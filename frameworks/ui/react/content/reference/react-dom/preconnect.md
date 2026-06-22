@@ -1,0 +1,101 @@
+---
+type: "Framework Learn Page"
+framework: "react"
+source_repo: "https://github.com/reactjs/react.dev"
+source_branch: "main"
+source_path: "src/content/reference/react-dom/preconnect.md"
+source_commit: "8bb31acb86bf68fa33d97dd0f1b834dfa71e2b1a"
+source_commit_short: "8bb31acb"
+source_commit_date: "2026-06-17T13:38:02-04:00"
+generated_at: "2026-06-21T12:23:02Z"
+---
+
+---
+title: preconnect
+---
+
+<Intro>
+
+`preconnect` lets you eagerly connect to a server that you expect to load resources from.
+
+```js
+preconnect("https://example.com");
+```
+
+</Intro>
+
+<InlineToc />
+
+---
+
+## Reference {/*reference*/}
+
+### `preconnect(href)` {/*preconnect*/}
+
+To preconnect to a host, call the `preconnect` function from `react-dom`.
+
+```js
+import { preconnect } from 'react-dom';
+
+function AppRoot() {
+  preconnect("https://example.com");
+  // ...
+}
+
+```
+
+[See more examples below.](#usage)
+
+The `preconnect` function provides the browser with a hint that it should open a connection to the given server. If the browser chooses to do so, this can speed up the loading of resources from that server.
+
+#### Parameters {/*parameters*/}
+
+* `href`: a string. The URL of the server you want to connect to.
+
+
+#### Returns {/*returns*/}
+
+`preconnect` returns nothing.
+
+#### Caveats {/*caveats*/}
+
+* Multiple calls to `preconnect` with the same server have the same effect as a single call.
+* In the browser, you can call `preconnect` in any situation: while rendering a component, in an Effect, in an event handler, and so on.
+* In server-side rendering or when rendering Server Components, `preconnect` only has an effect if you call it while rendering a component or in an async context originating from rendering a component. Any other calls will be ignored.
+* If you know the specific resources you'll need, you can call [other functions](/reference/react-dom/#resource-preloading-apis) instead that will start loading the resources right away.
+* There is no benefit to preconnecting to the same server the webpage itself is hosted from because it's already been connected to by the time the hint would be given.
+
+---
+
+## Usage {/*usage*/}
+
+### Preconnecting when rendering {/*preconnecting-when-rendering*/}
+
+Call `preconnect` when rendering a component if you know that its children will load external resources from that host.
+
+```js
+import { preconnect } from 'react-dom';
+
+function AppRoot() {
+  preconnect("https://example.com");
+  return ...;
+}
+```
+
+### Preconnecting in an event handler {/*preconnecting-in-an-event-handler*/}
+
+Call `preconnect` in an event handler before transitioning to a page or state where external resources will be needed. This gets the process started earlier than if you call it during the rendering of the new page or state.
+
+```js
+import { preconnect } from 'react-dom';
+
+function CallToAction() {
+  const onClick = () => {
+    preconnect('http://example.com');
+    startWizard();
+  }
+  return (
+    <button onClick={onClick}>Start Wizard</button>
+  );
+}
+```

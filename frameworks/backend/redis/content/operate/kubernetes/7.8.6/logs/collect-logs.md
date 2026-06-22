@@ -1,0 +1,54 @@
+---
+type: "Framework Learn Page"
+framework: "redis"
+source_repo: "https://github.com/redis/docs.git"
+source_branch: "main"
+source_path: "content/operate/kubernetes/7.8.6/logs/collect-logs.md"
+source_commit: "bc92ea237bbfc2117c870c904f1a3ca619073ef1"
+source_commit_short: "bc92ea23"
+source_commit_date: "2026-06-18T14:53:00-05:00"
+generated_at: "2026-06-21T11:25:32Z"
+---
+
+---
+Title: Collect logs
+alwaysopen: false
+categories:
+- docs
+- operate
+- kubernetes
+description: Run the log collector script to package relevant logs into a tar.gz file
+  to send to Redis Support for help troubleshooting your Kubernetes environment.
+linkTitle: Collect logs
+weight: 89
+url: '/operate/kubernetes/7.8.6/logs/collect-logs/'
+---
+
+The Redis Enterprise cluster (REC) log collector script ([`log_collector.py`](https://github.com/RedisLabs/redis-enterprise-k8s-docs/blob/master/log_collector/log_collector.py)) creates and fills a directory with the relevant logs for your environment. These logs will help the support team with troubleshooting.
+
+As of version 6.2.18-3, the log collector tool has two modes:
+
+- **restricted** collects only resources and logs created by the operator and Redis Enterprise deployments
+  - This is the default for versions 6.2.18-3 and later
+- **all** collects everything from your environment
+  - This is the default mode for versions 6.2.12-1 and earlier
+
+{{<note>}} This script requires Python 3.6 or later. {{</note>}}
+
+1. Download the latest [`log_collector.py`](https://github.com/RedisLabs/redis-enterprise-k8s-docs/blob/master/log_collector/log_collector.py) file.
+
+1. Have a K8s administrator run the script on the system that runs your `kubectl` or `oc` commands.
+    - Pass `-n` parameter to run on a different namespace than the one you are currently on
+    - Pass `-m` parameter to change the log collector mode (`all` or `restricted`)
+    - Run with `-h` to see more options
+
+    ```bash
+    python log_collector.py 
+    ```
+
+   {{< note >}} If you get an error because the yaml module is not found, install the pyYAML module with `pip install pyyaml`.
+  {{< /note >}}
+
+
+
+1. Upload the resulting `tar.gz` file containing all the logs to [Redis Support](https://support.redislabs.com/).

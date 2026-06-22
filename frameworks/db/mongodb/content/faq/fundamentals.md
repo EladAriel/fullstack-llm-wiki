@@ -1,0 +1,131 @@
+---
+type: "Framework Learn Page"
+framework: "mongodb"
+source_repo: "https://github.com/mongodb/docs.git"
+source_branch: "main"
+source_path: "content/manual/manual/source/faq/fundamentals.txt"
+source_commit: "96788e8ed140cbdde184ff82e1066dff4996bde4"
+source_commit_short: "96788e8e"
+source_commit_date: "2026-06-19T21:35:03-06:00"
+generated_at: "2026-06-21T07:41:52Z"
+---
+
+:orphan:
+
+=========================
+
+# FAQ: MongoDB Fundamentals
+
+This document answers some common questions about MongoDB.
+
+## What platforms does MongoDB support?
+
+For the list of supported platforms, see `prod-notes-supported-platforms`.
+
+## Is MongoDB offered as a hosted service?
+
+Yes. [MongoDB Atlas](https://www.mongodb.com/atlas/database) is a cloud-hosted database-as-a-service.
+
+## How does a collection differ from a table?
+
+Instead of tables, a MongoDB database stores its data in `collections <collection>`. A collection holds one or more `BSON documents <bson-document-format>`. Documents are analogous to records or rows in a relational database table. Each document has `one or more fields <document-structure>`; fields are similar to the columns in a relational database table.
+
+> **Seealso:** - `/reference/sql-comparison`
+- `/introduction`
+
+## How do I create a database and a collection?
+
+> **Note:** You can enter the commands in this FAQ using :binary:`~bin.mongosh`, an
+interactive JavaScript interface to MongoDB.
+
+If a database does not exist, MongoDB creates the database when you first store data for that database.
+
+If a collection does not exist, MongoDB creates the collection when you first store data for that collection.
+
+As such, you can switch to a non-existent database (`use <dbname>`) and perform the following operation:
+
+```javascript
+use myNewDB;
+
+db.myNewCollection1.insertOne( { x: 1 } );
+db.myNewCollection2.createIndex( { a: 1 } );
+```
+
+- The :method:`db.collection.insertOne()` method creates
+the collection `myNewCollection1` if it does not already exist.
+
+- The :method:`db.collection.createIndex()` method creates the index and
+the collection `myNewCollection2` if it does not already exist.
+
+- If the `myNewDb` database did not exist, either the
+:method:`db.collection.createIndex()` method or :method:`db.collection.insertOne()` method would have created the `myNewDb` database automatically.
+
+You can also create a collection explicitly using :method:`db.createCollection` method if you want to specify specific `options<create_collection_parameters>`, such as maximum size or schema validation rules:
+
+```javascript
+use myNewDB;
+
+db.createCollection("myNewCollection1");
+```
+
+## How do I define or alter the collection schema?
+
+You do not need to specify a schema for a collection in MongoDB. Although it is common for documents in a collection to have a largely homogeneous structure, they don't need to have the same set of fields. The data type for a field can differ across documents in a collection as well.
+
+To change the structure of the documents in a collection, update the documents to the new structure. For instance, add new fields, remove existing ones, or update the value of a field to a new type.
+
+> **Note:** You can enforce `schema validation rules </core/schema-validation>`
+for a collection during update and insert operations.
+
+Some collection properties, such as maximum size, can be set during explicit collection creation, using the :method:`db.createCollection` method, and  modified later with the :dbcommand:`collMod` command. If you don't need to set these properties, you don't need to explicitly create the collection. MongoDB creates new collections when you first store data for them.
+
+## Does MongoDB support SQL?
+
+No, but MongoDB supports a rich query language of its own. For examples on using MongoDB's query language, see `crud`.
+
+You can also use the [MongoDB Connector for BI](https://www.mongodb.com/products/bi-connector) to query MongoDB collections with SQL.
+
+> **Seealso:** `/reference/sql-comparison`
+
+## Does MongoDB support transactions?
+
+.. include:: /includes/extracts/transactions-faq.rst
+
+.. include:: /includes/extracts/transactions-usage.rst
+
+## Does MongoDB handle caching?
+
+Yes. MongoDB keeps most recently used data in RAM. If you have created indexes for your queries and your working data set fits in RAM, MongoDB serves all queries from memory.
+
+MongoDB does not cache the query results in order to return the cached results for identical queries.
+
+For more information on MongoDB and memory use, see `WiredTiger and Memory Use <wiredtiger-RAM>`.
+
+## How does MongoDB address SQL or Query injection?
+
+### BSON
+
+As a client program assembles a query in MongoDB, it builds a BSON object, not a string. Thus traditional SQL injection attacks are not a problem. More details and some nuances are covered below.
+
+MongoDB represents queries as `BSON` objects. Typically :driver:`client libraries </>` provide a convenient, injection free, process to build these objects. Consider the following C++ example:
+
+```cpp
+BSONObj my_query = BSON( "name" << a_name );
+auto_ptr<DBClientCursor> cursor = c.query("tutorial.persons", my_query);
+```
+
+Here, `my_query` then will have a value such as `{ name : "Joe" }`. If `my_query` contained special characters, for example `,`, `:`, and `{`, the query simply wouldn't match any documents. For example, users cannot hijack a query and convert it to a delete.
+
+### JavaScript
+
+> **Note:** .. include:: /includes/fact-disable-javascript-with-noscript.rst
+
+The following MongoDB operations permit you to run arbitrary JavaScript expressions directly on the server:
+
+- :query:`$where`
+- :dbcommand:`mapReduce`
+- :group:`$accumulator`
+- :expression:`$function`
+You must exercise care in these cases to prevent users from submitting malicious JavaScript.
+
+Fortunately, you can express most operations in MongoDB without JavaScript.

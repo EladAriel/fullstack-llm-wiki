@@ -1,0 +1,12 @@
+{
+  "framework": "react",
+  "display_name": "react",
+  "source_repo": "https://github.com/reactjs/react.dev",
+  "source_branch": "main",
+  "source_docs_path": "src/content",
+  "source_commit": "8bb31acb86bf68fa33d97dd0f1b834dfa71e2b1a",
+  "source_commit_short": "8bb31acb",
+  "source_commit_date": "2026-06-17T13:38:02-04:00",
+  "wiki_generated_at": "2026-06-21T12:23:02Z",
+  "page_count": 222
+}

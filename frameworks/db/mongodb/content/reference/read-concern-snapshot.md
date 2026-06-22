@@ -1,0 +1,91 @@
+---
+type: "Framework Learn Page"
+framework: "mongodb"
+source_repo: "https://github.com/mongodb/docs.git"
+source_branch: "main"
+source_path: "content/manual/manual/source/reference/read-concern-snapshot.txt"
+source_commit: "96788e8ed140cbdde184ff82e1066dff4996bde4"
+source_commit_short: "96788e8e"
+source_commit_date: "2026-06-19T21:35:03-06:00"
+generated_at: "2026-06-21T07:41:52Z"
+---
+
+===========================
+
+# Read Concern `"snapshot"`
+
+.. versionchanged:: 5.0
+
+.. include:: /includes/fact-snapshot-read-concern.rst
+
+Read concern `"snapshot"` is available for `multi-document transactions </core/transactions>`, and starting in MongoDB 5.0, certain read operations outside of multi-document transactions.
+
+- If the transaction is not part of a :ref:`causally consistent session
+<sessions>`, upon transaction commit with write concern :writeconcern:`"majority"`, the transaction operations are guaranteed to have read from a snapshot of majority-committed data.
+
+- If the transaction is part of a :ref:`causally consistent session
+<sessions>`, upon transaction commit with write concern :writeconcern:`"majority"`, the transaction operations are guaranteed to have read from a snapshot of majority-committed data that provides causal consistency with the operation immediately preceding the transaction start.
+
+> **Important:** A `"snapshot"` read can only be performed within the time
+period specified by :parameter:`minSnapshotHistoryWindowInSeconds`.
+A read operation that lasts longer than
+:parameter:`minSnapshotHistoryWindowInSeconds` may terminate.
+
+Outside of multi-document transactions, read concern :readconcern:`"snapshot"` is available on primaries and secondaries for the following read operations:
+
+- :dbcommand:`find`
+- :dbcommand:`aggregate`
+- :dbcommand:`distinct` (on unsharded collections)
+All other read commands prohibit :readconcern:`"snapshot"`.
+
+## Operations
+
+For a list of all operations that accept read concerns, see `read-concern-operations`.
+
+## Read Concern and Transactions
+
+Multi-document transactions support read concern :readconcern:`"snapshot"` as well as :readconcern:`"local"`, and :readconcern:`"majority"`.
+
+> **Note:** You set the read concern at the transaction level, not at the
+individual operation level. To set the read concern for
+transactions, see `transactions-read-concern`.
+
+## Read Concern and `atClusterTime`
+
+.. versionadded:: 5.0
+
+Outside of multi-document transactions, reads with read concern :readconcern:`"snapshot"` support the optional parameter `atClusterTime`. The parameter `atClusterTime` allows you to specify the timestamp for the read. To satisfy a read request with a specified `atClusterTime` of T, the :binary:`~bin.mongod` performs the request based on the data available at time T.
+
+You can obtain the `operationTime` or `clusterTime` of an operation from the response of :method:`db.runCommand()` or from the :method:`Session` object.
+
+The following command performs a find operation with read concern :readconcern:`"snapshot"` and specifies that the operation should read data from the snapshot at cluster time `Timestamp(1613577600, 1)`.
+
+```javascript
+db.runCommand( {
+    find: "restaurants",
+    filter: { _id: 5 },
+    readConcern: {
+        level: "snapshot",
+        atClusterTime: Timestamp(1613577600, 1)
+    },
+} )
+```
+
+If the parameter `atClusterTime` is not supplied, the :binary:`~bin.mongos`, or in single member replica sets the :binary:`~bin.mongod`, selects the timestamp of the latest majority-committed snapshot as the `atClusterTime` and returns it to the client.
+
+Outside of transactions, :readconcern:`"snapshot"` reads are guaranteed to read from majority-committed data.
+
+### `atClusterTime` Considerations and Behavior
+
+- The allowed values for `atClusterTime` depend on the
+:parameter:`minSnapshotHistoryWindowInSeconds` parameter. `minSnapshotHistoryWindowInSeconds` is the minimum time window in seconds for which the storage engine keeps the snapshot history. If you specify an `atClusterTime <atClusterTime>` value older than the oldest snapshot retained according to `minSnapshotHistoryWindowInSeconds`, :binary:`~bin.mongod` returns an error.
+
+- If you perform a read operation with :readconcern:`"snapshot"`
+against a delayed replica set member, the returned majority-committed data could be stale.
+
+- It is not possible to specify `atClusterTime` for
+:readconcern:`"snapshot"` inside of `causally consistent sessions <sessions>`.
+
+## Read Concern on Capped Collections
+
+.. include:: /includes/snapshot-capped-collections.rst

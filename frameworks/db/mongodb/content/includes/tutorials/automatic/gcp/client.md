@@ -1,0 +1,66 @@
+---
+type: "Framework Learn Page"
+framework: "mongodb"
+source_repo: "https://github.com/mongodb/docs.git"
+source_branch: "main"
+source_path: "content/manual/manual/source/includes/tutorials/automatic/gcp/client.rst"
+source_commit: "96788e8ed140cbdde184ff82e1066dff4996bde4"
+source_commit_short: "96788e8e"
+source_commit_date: "2026-06-19T21:35:03-06:00"
+generated_at: "2026-06-21T07:41:52Z"
+---
+
+a. Specify the {+key-vault-long-title+} Namespace
+
+Specify `encryption.__keyVault` as the {+key-vault-long+} namespace.
+
+#. Specify your Cloud Account Credentials
+
+#. Create an Encryption Schema For Your Collection
+
+> **Tip:**    Make sure to update the following code to include your Base64
+   {+dek-abbr+} ID. You received this value in the
+   `Generate your {+dek-long+} <csfle-gcp-create-dek>` step of this
+   guide.
+.. tabs-drivers::
+   .. tab::
+      :tabid: java-sync
+      .. literalinclude:: /includes/generated/in-use-encryption/csfle/java/gcp/reader/src/main/java/com/mongodb/csfle/InsertEncryptedDocument.java
+         :start-after: start-schema
+         :end-before: end-schema
+         :language: java
+         :dedent:
+   .. tab::
+      :tabid: nodejs
+      .. literalinclude:: /includes/generated/in-use-encryption/csfle/node/gcp/reader/insert_encrypted_document.js
+         :start-after: start-schema
+         :end-before: end-schema
+         :language: javascript
+         :dedent:
+   .. tab::
+      :tabid: python
+      .. literalinclude:: /includes/generated/in-use-encryption/csfle/python/gcp/reader/insert_encrypted_document.py
+         :start-after: start-schema
+         :end-before: end-schema
+         :language: python
+         :dedent:
+   .. tab::
+      :tabid: csharp
+      .. literalinclude:: /includes/generated/in-use-encryption/csfle/dotnet/gcp/reader/CSFLE/InsertEncryptedDocument.cs
+         :start-after: start-schema
+         :end-before: end-schema
+         :language: csharp
+         :dedent:
+   .. tab::
+      :tabid: go
+      .. literalinclude:: /includes/generated/in-use-encryption/csfle/go/gcp/reader/insert-encrypted-document.go
+         :start-after: start-schema
+         :end-before: end-schema
+         :language: go
+         :dedent:
+
+#. Specify the Location of the {+shared-library+}
+
+#. Create the MongoClient
+
+Instantiate a MongoDB client object with the following automatic encryption settings that use the variables declared in the previous steps:

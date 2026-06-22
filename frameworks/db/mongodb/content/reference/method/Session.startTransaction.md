@@ -1,0 +1,157 @@
+---
+type: "Framework Learn Page"
+framework: "mongodb"
+source_repo: "https://github.com/mongodb/docs.git"
+source_branch: "main"
+source_path: "content/manual/manual/source/reference/method/Session.startTransaction.txt"
+source_commit: "96788e8ed140cbdde184ff82e1066dff4996bde4"
+source_commit_short: "96788e8e"
+source_commit_date: "2026-06-19T21:35:03-06:00"
+generated_at: "2026-06-21T07:41:52Z"
+---
+
+===========================================
+
+# Session.startTransaction() (mongosh method)
+
+## Definition
+
+## Compatibility
+
+This method is available in deployments hosted in the following environments:
+
+.. include:: /includes/fact-environments-atlas-only.rst
+
+.. include:: /includes/fact-environments-onprem-only.rst
+
+## Behavior
+
+### Operations Supported within a Transaction
+
+> **Note:** If running with `access control <authorization>`, you
+must have privileges for the :ref:`operations in the transaction
+<transactions-operations>`.
+
+For `multi-document transactions <transactions>`:
+
+.. include:: /includes/extracts/transactions-operations-crud.rst
+
+.. include:: /includes/table-transactions-operations.rst
+
+Operations that affect the database catalog, such as creating or dropping a collection or an index, are not allowed in multi-document transactions. For example, a multi-document transaction cannot include an insert operation that would result in the creation of a new collection. See `transactions-ops-restricted`.
+
+.. include:: /includes/extracts/transactions-operations-restrictions-info.rst
+
+### Read Preference
+
+Transactions support read preference :readmode:`primary`.
+
+### Atomicity
+
+While the transaction is open, no data changes made by operations in the transaction is visible outside the transaction:
+
+- When a transaction commits, all data changes made in the transaction
+are saved and visible outside the transaction. That is, a transaction will not commit some of its changes while rolling back others.
+
+.. include:: /includes/extracts/transactions-committed-visibility.rst
+
+- When a transaction aborts, all data changes made by the writes in the
+transaction are discarded without ever becoming visible and the transaction ends.
+
+## Example
+
+Consider a scenario where as changes are made to an employee's record in the `hr` database, you want to ensure that the `events` collection in the `reporting` database are in sync with the `hr` changes. That is, you want to ensure that these writes are done as a single transaction, such that either both operations succeed or fail.
+
+The `employees` collection in the `hr` database has the following documents:
+
+```javascript
+{ "_id" : ObjectId("5af0776263426f87dd69319a"), "employee" : 3, "name" : { "title" : "Mr.", "name" : "Iba Ochs" }, "status" : "Active", "department" : "ABC" }
+{ "_id" : ObjectId("5af0776263426f87dd693198"), "employee" : 1, "name" : { "title" : "Miss", "name" : "Ann Thrope" }, "status" : "Active", "department" : "ABC" }
+{ "_id" : ObjectId("5af0776263426f87dd693199"), "employee" : 2, "name" : { "title" : "Mrs.", "name" : "Eppie Delta" }, "status" : "Active", "department" : "XYZ" }
+```
+
+The `events` collection in the `reporting` database has the following documents:
+
+```javascript
+{ "_id" : ObjectId("5af07daa051d92f02462644a"), "employee" : 1, "status" : { "new" : "Active", "old" : null }, "department" : { "new" : "ABC", "old" : null } }
+{ "_id" : ObjectId("5af07daa051d92f02462644b"), "employee" : 2, "status" : { "new" : "Active", "old" : null }, "department" : { "new" : "XYZ", "old" : null } }
+{ "_id" : ObjectId("5af07daa051d92f02462644c"), "employee" : 3, "status" : { "new" : "Active", "old" : null }, "department" : { "new" : "ABC", "old" : null } }
+```
+
+The following example opens a transaction, updates an employee's status to `Inactive` in the `employees` status and inserts a corresponding document to the `events` collection, and commits the two operations as a single transaction.
+
+```javascript
+// Runs the txnFunc and retries if TransientTransactionError encountered
+
+function runTransactionWithRetry(txnFunc, session) {
+    while (true) {
+        try {
+            txnFunc(session);  // performs transaction
+            break;
+        } catch (error) {
+            // If transient error, retry the whole transaction
+            if (error?.errorLabels?.includes("TransientTransactionError")  ) {
+                print("TransientTransactionError, retrying transaction ...");
+                continue;
+            } else {
+                throw error;
+            }
+        }
+    }   
+}
+
+// Retries commit if UnknownTransactionCommitResult encountered
+
+function commitWithRetry(session) {
+    while (true) {
+        try {
+            session.commitTransaction(); // Uses write concern set at transaction start.
+            print("Transaction committed.");
+            break;
+        } catch (error) {
+            // Can retry commit
+            if (error?.errorLabels?.includes("UnknownTransactionCommitResult") ) {
+                print("UnknownTransactionCommitResult, retrying commit operation ...");
+                continue;
+            } else {
+                print("Error during commit ...");
+                throw error;
+            }
+       }
+    }
+}
+
+// Updates two collections in a transactions
+
+function updateEmployeeInfo(session) {
+    employeesCollection = session.getDatabase("hr").employees;
+    eventsCollection = session.getDatabase("reporting").events;
+
+    session.startTransaction( { readConcern: { level: "snapshot" }, writeConcern: { w: "majority" } } );
+
+    try{
+        employeesCollection.updateOne( { employee: 3 }, { $set: { status: "Inactive" } } );
+        eventsCollection.insertOne( { employee: 3, status: { new: "Inactive", old: "Active" } } );
+    } catch (error) {
+        print("Caught exception during transaction, aborting.");
+        session.abortTransaction();
+        throw error;
+    }
+
+    commitWithRetry(session);
+}
+
+// Start a session.
+session = db.getMongo().startSession( { readPreference: { mode: "primary" } } );
+
+try{
+   runTransactionWithRetry(updateEmployeeInfo, session);
+} catch (error) {
+   // Do something with error
+} finally {
+   session.endSession();
+}
+```
+
+> **Seealso:** - :method:`Session.abortTransaction()`
+- :method:`Session.commitTransaction()`

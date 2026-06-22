@@ -1,0 +1,121 @@
+---
+type: "Framework Learn Page"
+framework: "shadcnui"
+source_repo: "https://github.com/shadcn-ui/ui"
+source_branch: "main"
+source_path: "apps/v4/content/docs/installation/gatsby.mdx"
+source_commit: "5602b81d8344e0d0d7178e3bf57612662cd42957"
+source_commit_short: "5602b81d"
+source_commit_date: "2026-06-21T15:49:35+04:00"
+generated_at: "2026-06-21T12:47:26Z"
+---
+
+---
+title: Gatsby
+description: Install and configure shadcn/ui for Gatsby.
+---
+
+<Callout className="mb-6 border-blue-600 bg-blue-50 dark:border-blue-900 dark:bg-blue-950 [&_code]:bg-blue-100 dark:[&_code]:bg-blue-900">
+  **Note:** This guide is for Gatsby with Tailwind CSS v3. For new projects, we
+  recommend using one of the other frameworks that support Tailwind CSS v4.
+</Callout>
+
+<Steps>
+
+### Create project
+
+Start by creating a new Gatsby project using `create-gatsby`:
+
+```bash
+npm init gatsby
+```
+
+### Configure your Gatsby project to use TypeScript and Tailwind CSS
+
+You will be asked a few questions to configure your project:
+
+```txt showLineNumbers
+✔ What would you like to call your site?
+· your-app-name
+✔ What would you like to name the folder where your site will be created?
+· your-app-name
+✔ Will you be using JavaScript or TypeScript?
+· TypeScript
+✔ Will you be using a CMS?
+· Choose whatever you want
+✔ Would you like to install a styling system?
+· Tailwind CSS
+✔ Would you like to install additional features with other plugins?
+· Choose whatever you want
+✔ Shall we do this? (Y/n) · Yes
+```
+
+### Edit tsconfig.json file
+
+Add the following code to the `tsconfig.json` file to resolve paths:
+
+```ts {4-9} showLineNumbers
+{
+  "compilerOptions": {
+    // ...
+    "baseUrl": ".",
+    "paths": {
+      "@/*": [
+        "./src/*"
+      ]
+    }
+    // ...
+  }
+}
+```
+
+### Create gatsby-node.ts file
+
+Create a `gatsby-node.ts` file at the root of your project if it doesn’t already exist, and add the code below to the `gatsby-node` file so your app can resolve paths:
+
+```ts
+import * as path from "path"
+
+export const onCreateWebpackConfig = ({ actions }) => {
+  actions.setWebpackConfig({
+    resolve: {
+      alias: {
+        "@/components": path.resolve(__dirname, "src/components"),
+        "@/lib/utils": path.resolve(__dirname, "src/lib/utils"),
+      },
+    },
+  })
+}
+```
+
+### Run the CLI
+
+Run the `shadcn` init command to set up your project:
+
+```bash
+npx shadcn@latest init
+```
+
+### That's it
+
+You can now start adding components to your project.
+
+```bash
+npx shadcn@latest add button
+```
+
+The command above will add the `Button` component to your project. You can then import it like this:
+
+```tsx {1,6} showLineNumbers
+import { Button } from "@/components/ui/button"
+
+export default function Home() {
+  return (
+    <div>
+      <Button>Click me</Button>
+    </div>
+  )
+}
+```
+
+</Steps>

@@ -1,0 +1,32 @@
+---
+type: "Framework Learn Page"
+framework: "mongodb"
+source_repo: "https://github.com/mongodb/docs.git"
+source_branch: "main"
+source_path: "content/manual/manual/source/includes/atlas-search-commands/access-control/drop-access-control.rst"
+source_commit: "96788e8ed140cbdde184ff82e1066dff4996bde4"
+source_commit_short: "96788e8e"
+source_commit_date: "2026-06-19T21:35:03-06:00"
+generated_at: "2026-06-21T07:41:52Z"
+---
+
+If your deployment enforces access control, the user running |method-name| must have the :authaction:`dropSearchIndex` privilege action on the database or collection:
+
+```javascript
+{
+   resource: {
+      db : <database>,
+      collection: <collection>
+   },
+   actions: [ "dropSearchIndex" ]
+}
+```
+
+The built-in :authrole:`dbAdmin` and :authrole:`readWrite` roles provide the `dropSearchIndex` privilege. The following example grants the `readWrite` role on the `qa` database:
+
+```javascript
+db.grantRolesToUser(
+   "<user>",
+   [ { role: "readWrite", db: "qa" } ]
+)
+```

@@ -1,0 +1,125 @@
+---
+type: "Framework Learn Page"
+framework: "redis"
+source_repo: "https://github.com/redis/docs.git"
+source_branch: "main"
+source_path: "content/commands/hpexpiretime.md"
+source_commit: "bc92ea237bbfc2117c870c904f1a3ca619073ef1"
+source_commit_short: "bc92ea23"
+source_commit_date: "2026-06-18T14:53:00-05:00"
+generated_at: "2026-06-21T11:25:32Z"
+---
+
+---
+acl_categories:
+- '@read'
+- '@hash'
+- '@fast'
+arguments:
+- display_text: key
+  key_spec_index: 0
+  name: key
+  type: key
+- arguments:
+  - display_text: numfields
+    name: numfields
+    type: integer
+  - display_text: field
+    multiple: true
+    name: field
+    type: string
+  name: fields
+  token: FIELDS
+  type: block
+arity: -5
+categories:
+- docs
+- develop
+- stack
+- oss
+- rs
+- rc
+- oss
+- kubernetes
+- clients
+command_flags:
+- readonly
+- fast
+complexity: O(N) where N is the number of specified fields
+description: Returns the expiration time of a hash field as a Unix timestamp, in msec.
+group: hash
+hidden: false
+key_specs:
+- RO: true
+  access: true
+  begin_search:
+    spec:
+      index: 1
+    type: index
+  find_keys:
+    spec:
+      keystep: 1
+      lastkey: 0
+      limit: 0
+    type: range
+linkTitle: HPEXPIRETIME
+railroad_diagram: /images/railroad/hpexpiretime.svg
+since: 7.4.0
+summary: Returns the expiration time of a hash field as a Unix timestamp, in msec.
+syntax_fmt: "HPEXPIRETIME key FIELDS\_numfields field [field ...]"
+title: HPEXPIRETIME
+---
+`HPEXPIRETIME` has the same semantics as [`HEXPIRETIME`]({{< relref "/commands/hexpiretime" >}}), but returns the absolute Unix expiration timestamp in milliseconds since Unix epoch instead of seconds.
+
+## Required arguments
+
+<details open><summary><code>key</code></summary>
+
+The name of the key that holds the hash.
+
+</details>
+
+<details open><summary><code>FIELDS numfields field [field ...]</code></summary>
+
+The hash fields to retrieve the expiration time for. `numfields` is the number of fields, followed by that many field names.
+
+</details>
+
+## Examples
+
+```
+redis> HSET mykey field1 "hello" field2 "world"
+(integer) 2
+redis> HEXPIRE mykey 300 FIELDS 2 field1 field2
+1) (integer) 1
+2) (integer) 1
+redis> HPEXPIRETIME mykey FIELDS 2 field1 field2
+1) (integer) 1715705913659
+2) (integer) 1715705913659
+```
+
+## Redis Software and Redis Cloud compatibility
+
+| Redis<br />Software | Redis<br />Cloud | <span style="min-width: 9em; display: table-cell">Notes</span> |
+|:----------------------|:-----------------|:------|
+| <span title="Supported">&#x2705; Standard</span><br /><span title="Supported"><nobr>&#x2705; Active-Active</nobr></span> | <span title="Supported">&#x2705; Standard</span><br /><span title="Supported"><nobr>&#x2705; Active-Active</nobr></span> |  |
+
+## Return information
+
+{{< multitabs id="hpexpiretime-return-info" 
+    tab1="RESP2" 
+    tab2="RESP3" >}}
+
+* [Array reply](../../develop/reference/protocol-spec#arrays). For each field:
+    - [Integer reply](../../develop/reference/protocol-spec#integers): `-2` if no such field exists in the provided hash key, or the provided key does not exist.
+    - [Integer reply](../../develop/reference/protocol-spec#integers): `-1` if the field exists but has no associated expiration set.
+    - [Integer reply](../../develop/reference/protocol-spec#integers): the expiration (Unix timestamp) in milliseconds.
+
+-tab-sep-
+
+* [Array reply](../../develop/reference/protocol-spec#arrays). For each field:
+    - [Integer reply](../../develop/reference/protocol-spec#integers): `-2` if no such field exists in the provided hash key, or the provided key does not exist.
+    - [Integer reply](../../develop/reference/protocol-spec#integers): `-1` if the field exists but has no associated expiration set.
+    - [Integer reply](../../develop/reference/protocol-spec#integers): the expiration (Unix timestamp) in milliseconds.
+
+{{< /multitabs >}}

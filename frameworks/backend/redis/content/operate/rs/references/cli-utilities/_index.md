@@ -1,0 +1,58 @@
+---
+type: "Framework Learn Page"
+framework: "redis"
+source_repo: "https://github.com/redis/docs.git"
+source_branch: "main"
+source_path: "content/operate/rs/references/cli-utilities/_index.md"
+source_commit: "bc92ea237bbfc2117c870c904f1a3ca619073ef1"
+source_commit_short: "bc92ea23"
+source_commit_date: "2026-06-18T14:53:00-05:00"
+generated_at: "2026-06-21T11:25:32Z"
+---
+
+---
+Title: Command-line utilities
+alwaysopen: false
+categories:
+- docs
+- operate
+- rs
+description: Reference for Redis Software command-line utilities, including rladmin, redis-cli, crdb-cli, and rlcheck.
+hideListLinks: true
+linkTitle: Command-line utilities
+weight: $weight
+---
+
+Redis Software includes a set of utilities to help you manage and test your cluster. To use a utility, run it from the command line.
+
+## Public utilities
+
+Administrators can use these CLI tools to manage and test a Redis Software cluster. You can find the binaries in the `/opt/redislabs/bin/` directory.
+
+{{<table-children columnNames="Utility,Description" columnSources="LinkTitle,Description" enableLinks="LinkTitle">}}
+
+## Internal utilities
+
+The `/opt/redislabs/bin/` directory also contains utilities used internally by Redis Software and for troubleshooting.
+
+{{<warning>}}
+Do not use these tools for normal operations.
+{{</warning>}}
+
+| Utility | Description |
+|---------|-------------|
+| bdb-cli | `redis-cli` connected to a database. |
+| ccs-cli | Inspect Cluster Configuration Store. |
+| cnm_ctl | Manages services for provisioning, migration, monitoring, <br />resharding, rebalancing, deprovisioning, and autoscaling. |
+| consistency_checker | Checks the consistency of Redis instances. |
+| crdbtop | Monitor Active-Active databases. |
+| debug_mode | Enables debug mode. |
+| debuginfo | Collects cluster information. |
+| dmc-cli | Configure and monitor the DMC proxy. |
+| pdns_control | Sends commands to a running PowerDNS nameserver. |
+| [rdb-cli](https://github.com/redis/librdb) | Parse and convert RDB files. |
+| redis_ctl | Stops or starts Redis instances. |
+| rl_rdbloader | Load RDB backup files to a server. |
+| rlutil | Maintenance utility. |
+| shard-cli | `redis-cli` connected to a shard. |
+| supervisorctl | Manages the lifecycles of Redis Software services. |

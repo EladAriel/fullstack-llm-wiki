@@ -1,0 +1,156 @@
+---
+type: "Framework Learn Page"
+framework: "sqlalchemy"
+source_repo: "https://github.com/sqlalchemy/sqlalchemy"
+source_branch: "main"
+source_path: "doc/build/orm/versioning.rst"
+source_commit: "ddf3b6589fd6ccb2affbaea5d4f400a8c1ad02d8"
+source_commit_short: "ddf3b658"
+source_commit_date: "2026-06-18T14:12:36-04:00"
+generated_at: "2026-06-21T07:22:30Z"
+---
+
+# Configuring a Version Counter
+
+The `_orm.Mapper` supports management of a `version id column`, which is a single table column that increments or otherwise updates its value each time an `UPDATE` to the mapped table occurs.  This value is checked each time the ORM emits an `UPDATE` or `DELETE` against the row to ensure that the value held in memory matches the database value.
+
+> **Warning:**  Because the versioning feature relies upon comparison of the **in memory**
+ record of an object, the feature only applies to the `.Session.flush`
+ process, where the ORM flushes individual in-memory rows to the database.
+ It does **not** take effect when performing
+ a multirow UPDATE or DELETE using `_query.Query.update or query.Query.delete`
+ methods, as these methods only emit an UPDATE or DELETE statement but otherwise
+ do not have direct access to the contents of those rows being affected.
+
+The purpose of this feature is to detect when two concurrent transactions are modifying the same row at roughly the same time, or alternatively to provide a guard against the usage of a "stale" row in a system that might be reusing data from a previous transaction without refreshing (e.g. if one sets `expire_on_commit=False` with a `.Session`, it is possible to reuse the data from a previous transaction).
+
+## Simple Version Counting
+
+The most straightforward way to track versions is to add an integer column to the mapped table, then establish it as the `version_id_col` within the mapper options:
+
+```
+class User(Base):
+    __tablename__ = "user"
+
+    id = mapped_column(Integer, primary_key=True)
+    version_id = mapped_column(Integer, nullable=False)
+    name = mapped_column(String(50), nullable=False)
+
+    __mapper_args__ = {"version_id_col": version_id}
+```
+
+> **Note:** be made NOT NULL.  The versioning feature **does not support** a NULL
+value in the versioning column.
+
+Above, the `User` mapping tracks integer versions using the column `version_id`.   When an object of type `User` is first flushed, the `version_id` column will be given a value of "1".   Then, an UPDATE of the table later on will always be emitted in a manner similar to the following:
+
+```sql
+ UPDATE user SET version_id=:version_id, name=:name
+ WHERE user.id = :user_id AND user.version_id = :user_version_id
+ -- {"name": "new name", "version_id": 2, "user_id": 1, "user_version_id": 1}
+```
+
+The above UPDATE statement is updating the row that not only matches `user.id = 1`, it also is requiring that `user.version_id = 1`, where "1" is the last version identifier we've been known to use on this object. If a transaction elsewhere has modified the row independently, this version id will no longer match, and the UPDATE statement will report that no rows matched; this is the condition that SQLAlchemy tests, that exactly one row matched our UPDATE (or DELETE) statement.  If zero rows match, that indicates our version of the data is stale, and a `.StaleDataError` is raised.
+
+## Custom Version Counters / Types
+
+Other kinds of values or counters can be used for versioning.  Common types include dates and GUIDs.   When using an alternate type or counter scheme, SQLAlchemy provides a hook for this scheme using the `version_id_generator` argument, which accepts a version generation callable.  This callable is passed the value of the current known version, and is expected to return the subsequent version.
+
+For example, if we wanted to track the versioning of our `User` class using a randomly generated GUID, we could do this (note that some backends support a native GUID type, but we illustrate here using a simple string):
+
+```
+import uuid
+
+class User(Base):
+    __tablename__ = "user"
+
+    id = mapped_column(Integer, primary_key=True)
+    version_uuid = mapped_column(String(32), nullable=False)
+    name = mapped_column(String(50), nullable=False)
+
+    __mapper_args__ = {
+        "version_id_col": version_uuid,
+        "version_id_generator": lambda version: uuid.uuid4().hex,
+    }
+```
+
+The persistence engine will call upon `uuid.uuid4()` each time a `User` object is subject to an INSERT or an UPDATE.  In this case, our version generation function can disregard the incoming value of `version`, as the `uuid4()` function generates identifiers without any prerequisite value.  If we were using a sequential versioning scheme such as numeric or a special character system, we could make use of the given `version` in order to help determine the subsequent value.
+
+> **Seealso:**  `custom_guid_type`
+
+## Server Side Version Counters
+
+The `version_id_generator` can also be configured to rely upon a value that is generated by the database.  In this case, the database would need some means of generating new identifiers when a row is subject to an INSERT as well as with an UPDATE.   For the UPDATE case, typically an update trigger is needed, unless the database in question supports some other native version identifier.  The PostgreSQL database in particular supports a system column called [xmin](https://www.postgresql.org/docs/current/static/ddl-system-columns.html) which provides UPDATE versioning.  We can make use of the PostgreSQL `xmin` column to version our `User` class as follows:
+
+```
+from sqlalchemy import FetchedValue
+
+class User(Base):
+    __tablename__ = "user"
+
+    id = mapped_column(Integer, primary_key=True)
+    name = mapped_column(String(50), nullable=False)
+    xmin = mapped_column("xmin", String, system=True, server_default=FetchedValue())
+
+    __mapper_args__ = {"version_id_col": xmin, "version_id_generator": False}
+```
+
+With the above mapping, the ORM will rely upon the `xmin` column for automatically providing the new value of the version id counter.
+
+The ORM typically does not actively fetch the values of database-generated values when it emits an INSERT or UPDATE, instead leaving these columns as "expired" and to be fetched when they are next accessed, unless the `eager_defaults orm.Mapper` flag is set.  However, when a server side version column is used, the ORM needs to actively fetch the newly generated value.  This is so that the version counter is set up before any concurrent transaction may update it again.   This fetching is also best done simultaneously within the INSERT or UPDATE statement using `RETURNING`, otherwise if emitting a SELECT statement afterwards, there is still a potential race condition where the version counter may change before it can be fetched.
+
+When the target database supports RETURNING, an INSERT statement for our `User` class will look like this:
+
+```sql
+ INSERT INTO "user" (name) VALUES (%(name)s) RETURNING "user".id, "user".xmin
+ -- {'name': 'ed'}
+```
+
+Where above, the ORM can acquire any newly generated primary key values along with server-generated version identifiers in one statement.   When the backend does not support RETURNING, an additional SELECT must be emitted for **every** INSERT and UPDATE, which is much less efficient, and also introduces the possibility of missed version counters:
+
+```sql
+ INSERT INTO "user" (name) VALUES (%(name)s)
+ -- {'name': 'ed'}
+
+ SELECT "user".version_id AS user_version_id FROM "user" where
+ "user".id = :param_1
+ -- {"param_1": 1}
+```
+
+It is strongly recommended that server side version counters only be used when absolutely necessary and only on backends that support `RETURNING`, currently PostgreSQL, Oracle Database, MariaDB 10.5, SQLite 3.35, and SQL Server.
+
+## Programmatic or Conditional Version Counters
+
+When `version_id_generator` is set to False, we can also programmatically (and conditionally) set the version identifier on our object in the same way we assign any other mapped attribute.  Such as if we used our UUID example, but set `version_id_generator` to `False`, we can set the version identifier at our choosing:
+
+```
+import uuid
+
+class User(Base):
+    __tablename__ = "user"
+
+    id = mapped_column(Integer, primary_key=True)
+    version_uuid = mapped_column(String(32), nullable=False)
+    name = mapped_column(String(50), nullable=False)
+
+    __mapper_args__ = {"version_id_col": version_uuid, "version_id_generator": False}
+
+u1 = User(name="u1", version_uuid=uuid.uuid4().hex)
+
+session.add(u1)
+
+session.commit()
+
+u1.name = "u2"
+u1.version_uuid = uuid.uuid4().hex
+
+session.commit()
+```
+
+We can update our `User` object without incrementing the version counter as well; the value of the counter will remain unchanged, and the UPDATE statement will still check against the previous value.  This may be useful for schemes where only certain classes of UPDATE are sensitive to concurrency issues:
+
+```
+# will leave version_uuid unchanged
+u1.name = "u3"
+session.commit()
+```

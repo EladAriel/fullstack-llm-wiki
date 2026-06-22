@@ -1,0 +1,67 @@
+---
+type: "Framework Learn Page"
+framework: "postgres"
+source_repo: "https://github.com/postgres/postgres.git"
+source_branch: "master"
+source_path: "doc/src/sgml/ref/dropuser.sgml"
+source_commit: "031904048aa22e7c70dc8e9c170e2743f9b0f090"
+source_commit_short: "03190404"
+source_commit_date: "2026-06-20T18:20:58+09:00"
+generated_at: "2026-06-21T07:06:11Z"
+---
+
+dropuser
+
+`dropuser`
+1
+Application
+
+dropuser
+remove a PostgreSQL user account
+
+`dropuser`
+`connection-option`
+`option`
+`username`
+
+## Description
+
+`dropuser` removes an existing PostgreSQL user. Superusers can use this command to remove any role; otherwise, only non-superuser roles can be removed, and only by a user who possesses the `CREATEROLE` privilege and has been granted `ADMIN OPTION` on the target role.
+
+`dropuser` is a wrapper around the SQL command DROP ROLE. There is no effective difference between dropping users via this utility and via other methods for accessing the server.
+
+## Options
+
+`dropuser` accepts the following command-line arguments: - Specifies the name of the PostgreSQL user to be removed. You will be prompted for a name if none is specified on the command line and the `-i`/`--interactive` option is used. - Echo the commands that `dropuser` generates and sends to the server. - Prompt for confirmation before actually removing the user, and prompt for the user name if none is specified on the command line. - Print the `dropuser` version and exit. - Do not throw an error if the user does not exist. A notice is issued in this case. - Show help about `dropuser` command line arguments, and exit.
+
+`dropuser` also accepts the following command-line arguments for connection parameters: - Specifies the host name of the machine on which the server is running. If the value begins with a slash, it is used as the directory for the Unix domain socket. - Specifies the TCP port or local Unix domain socket file extension on which the server is listening for connections. - User name to connect as (not the user name to drop). - Never issue a password prompt. If the server requires password authentication and a password is not available by other means such as a `.pgpass` file, the connection attempt will fail. This option can be useful in batch jobs and scripts where no user is present to enter a password. - Force `dropuser` to prompt for a password before connecting to a database. This option is never essential, since `dropuser` will automatically prompt for a password if the server demands password authentication. However, `dropuser` will waste a connection attempt finding out that the server wants a password. In some cases it is worth typing `-W` to avoid the extra connection attempt.
+
+## Environment
+
+- Default connection parameters
+- Specifies whether to use color in diagnostic messages. Possible values are `always`, `auto` and `never`.
+
+This utility, like most other PostgreSQL utilities, also uses the environment variables supported by `libpq` (see `libpq-envars`).
+
+## Diagnostics
+
+In case of difficulty, see `sql-droprole` and `app-psql` for discussions of potential problems and error messages. The database server must be running at the targeted host. Also, any default connection settings and environment variables used by the `libpq` front-end library will apply.
+
+## Examples
+
+To remove user `joe` from the default database server:
+
+```
+$ dropuser joe
+```
+
+To remove user `joe` using the server on host `eden`, port 5000, with verification and a peek at the underlying command:
+
+```
+$ dropuser -p 5000 -h eden -i -e joe
+Role "joe" will be permanently removed.
+Are you sure? (y/n) y
+DROP ROLE joe;
+```
+
+## See Also

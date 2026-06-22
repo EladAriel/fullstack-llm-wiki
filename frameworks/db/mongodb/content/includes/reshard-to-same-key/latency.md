@@ -1,0 +1,13 @@
+---
+type: "Framework Learn Page"
+framework: "mongodb"
+source_repo: "https://github.com/mongodb/docs.git"
+source_branch: "main"
+source_path: "content/manual/manual/source/includes/reshard-to-same-key/latency.rst"
+source_commit: "96788e8ed140cbdde184ff82e1066dff4996bde4"
+source_commit_short: "96788e8e"
+source_commit_date: "2026-06-19T21:35:03-06:00"
+generated_at: "2026-06-21T07:41:52Z"
+---
+
+You must ensure that your application can tolerate two seconds where the collection being resharded blocks writes. When writes are blocked, your application experiences an increase in latency. If your workload cannot tolerate this requirement, use chunk migrations to balance your cluster.

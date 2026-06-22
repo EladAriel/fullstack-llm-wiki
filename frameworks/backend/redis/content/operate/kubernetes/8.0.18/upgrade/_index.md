@@ -1,0 +1,64 @@
+---
+type: "Framework Learn Page"
+framework: "redis"
+source_repo: "https://github.com/redis/docs.git"
+source_branch: "main"
+source_path: "content/operate/kubernetes/8.0.18/upgrade/_index.md"
+source_commit: "bc92ea237bbfc2117c870c904f1a3ca619073ef1"
+source_commit_short: "bc92ea23"
+source_commit_date: "2026-06-18T14:53:00-05:00"
+generated_at: "2026-06-21T11:25:32Z"
+---
+
+---
+Title: Upgrade Redis Enterprise for Kubernetes
+alwaysopen: false
+categories:
+- docs
+- operate
+- kubernetes
+description: Upgrade Redis Enterprise operator, clusters, and databases on Kubernetes.
+hideListLinks: false
+linkTitle: Upgrade
+weight: 15
+url: '/operate/kubernetes/8.0.18/upgrade/'
+---
+
+Keep your Redis Enterprise deployment up to date with the latest features, security patches, and bug fixes. The upgrade process involves updating three main components in sequence: the Redis Enterprise operator, Redis Enterprise clusters (REC), and Redis Enterprise databases (REDB).
+
+## Upgrade methods
+
+Choose the appropriate upgrade method for your deployment:
+
+- [Upgrade Redis Enterprise for Kubernetes]({{<relref "/operate/kubernetes/8.0.18/upgrade/upgrade-redis-cluster" >}}) - Standard upgrade process for most Kubernetes distributions
+- [Upgrade with OpenShift CLI]({{<relref "/operate/kubernetes/8.0.18/upgrade/openshift-cli">}}) - OpenShift-specific upgrade using CLI tools
+- [Upgrade with OpenShift OperatorHub]({{<relref "/operate/kubernetes/8.0.18/upgrade/upgrade-olm">}}) - Upgrade using OpenShift OperatorHub and OLM
+- [Upgrade with Helm]({{<relref "/operate/kubernetes/8.0.18/deployment/helm#upgrade-the-chart">}}) - Helm-specific upgrade instructions for chart-based deployments
+
+## Upgrade process
+
+The upgrade process includes updating three components in order:
+
+1. **Upgrade the Redis Enterprise operator** - Update the operator to the latest version
+2. **Upgrade the Redis Enterprise cluster (REC)** - Update cluster nodes and infrastructure
+3. **Upgrade Redis Enterprise databases (REDB)** - Update database versions and configurations
+
+## Upgrade compatibility
+
+When upgrading, both your Kubernetes version and Redis operator version need to be supported at all times.
+
+{{<warning>}}If your current Kubernetes distribution is not [supported]({{<relref "/operate/kubernetes/8.0.18/reference/supported_k8s_distributions">}}), upgrade to a supported distribution before upgrading. {{</warning>}}
+
+## RHEL9-based image
+
+As of version 7.8.2-6, Redis Enterprise images are based on Red Hat Enterprise Linux 9 (RHEL9). This means upgrades require:
+
+- [Cluster version of 7.4.2-2 or later](https://redis.io/docs/latest/operate/kubernetes/7.4.6/upgrade/).
+- Database version 7.2 or later.
+- RHEL9 compatible binaries for any modules you need.
+
+For detailed steps, see the relevant upgrade page:
+
+- [OpenShift CLI]({{<relref "/operate/kubernetes/8.0.18/upgrade/openshift-cli">}})
+- [OpenShift OperatorHub]({{<relref "/operate/kubernetes/8.0.18/upgrade/upgrade-olm">}})
+- [Kubernetes]({{<relref "/operate/kubernetes/8.0.18/upgrade/upgrade-redis-cluster" >}})

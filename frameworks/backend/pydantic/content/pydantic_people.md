@@ -1,0 +1,54 @@
+---
+type: "Framework Learn Page"
+framework: "pydantic"
+source_repo: "https://github.com/pydantic/pydantic"
+source_branch: "main"
+source_path: "docs/pydantic_people.md"
+source_commit: "363728fe0b353db1a1fcb44aac5c38fd96a8cc20"
+source_commit_short: "363728fe"
+source_commit_date: "2026-06-20T11:20:58+01:00"
+generated_at: "2026-06-21T11:37:01Z"
+---
+
+# Pydantic People
+
+Pydantic has an amazing community of contributors, reviewers, and experts that help propel the project forward.
+Here, we celebrate those people and their contributions.
+
+## Maintainers
+
+These are the current maintainers of the Pydantic repository. Feel free to tag us if you have questions, review requests, or feature requests for which you'd like feedback!
+
+{{ maintainers }}
+
+## Experts
+
+These are the users that have helped others the most with questions in GitHub through *all time*.
+
+{{ experts }}
+
+### Most active users last month
+
+These are the users that have helped others the most with questions in GitHub during the last month.
+
+{{ most_active_users }}
+
+## Top contributors
+
+These are the users that have created the most pull requests that have been *merged*.
+
+{{ top_contributors }}
+
+## Top Reviewers
+
+These are the users that have reviewed the most Pull Requests from others, assisting with code quality, documentation, bug fixes, feature requests, etc.
+
+{{ top_reviewers }}
+
+## About the data
+
+The data displayed above is calculated monthly via the Github GraphQL API (see
+[source code](https://github.com/pydantic/pydantic/tree/main/.github/actions/people/people.py),
+many thanks to [Sebastián Ramírez](https://github.com/tiangolo) for the script from which we based this logic).
+
+Depending on changing conditions, the thresholds for the different categories of contributors may change in the future.

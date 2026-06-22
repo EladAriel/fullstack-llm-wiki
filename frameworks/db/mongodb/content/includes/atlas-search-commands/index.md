@@ -1,0 +1,48 @@
+---
+type: "Framework Learn Directory Index"
+framework: "mongodb"
+directory: "content/includes/atlas-search-commands"
+source_repo: "https://github.com/mongodb/docs.git"
+source_branch: "main"
+source_commit: "96788e8ed140cbdde184ff82e1066dff4996bde4"
+source_commit_short: "96788e8e"
+source_commit_date: "2026-06-19T21:35:03-06:00"
+generated_at: "2026-06-21T07:41:52Z"
+---
+# Atlas Search Commands
+
+This directory contains mongodb learning pages related to atlas search commands.
+
+## Breadcrumbs
+
+[Wiki Home](../../../index.md) -> [Content](../../index.md) -> [Includes](../index.md) -> [Atlas Search Commands](index.md)
+
+## Navigation
+
+- Parent: [Parent Index](../index.md)
+
+## Child Directories
+
+- [Access Control](access-control/index.md) - pages related to access control
+- [Behavior](behavior/index.md) - pages related to behavior
+- [Command Descriptions](command-descriptions/index.md) - pages related to command descriptions
+- [Command Output](command-output/index.md) - pages related to command output
+- [Field Definitions](field-definitions/index.md) - pages related to field definitions
+
+## Pages in This Directory
+
+- [Atlas Only Db Command](atlas-only-db-command.md)
+- [Atlas Search Command Table](atlas-search-command-table.md)
+- [Database Command Intro](database-command-intro.md)
+- [Mongosh Method Intro](mongosh-method-intro.md)
+- [Mongosh Method Table](mongosh-method-table.md)
+- [Search Index Definition Fields](search-index-definition-fields.md)
+- [Vector Search Index Definition Fields](vector-search-index-definition-fields.md)
+
+## IDE LLM Guidance
+
+When answering implementation questions related to this directory:
+
+1. Prefer the most specific page listed above.
+2. If the topic is broad, read the child directory index first.
+3. Use source metadata from each page when giving answers.

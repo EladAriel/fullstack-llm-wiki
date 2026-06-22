@@ -1,0 +1,88 @@
+---
+type: "Framework Learn Page"
+framework: "redis"
+source_repo: "https://github.com/redis/docs.git"
+source_branch: "main"
+source_path: "content/operate/rs/7.22/references/rest-api/requests/migrations/_index.md"
+source_commit: "bc92ea237bbfc2117c870c904f1a3ca619073ef1"
+source_commit_short: "bc92ea23"
+source_commit_date: "2026-06-18T14:53:00-05:00"
+generated_at: "2026-06-21T11:25:32Z"
+---
+
+---
+Title: Migrations requests
+alwaysopen: false
+categories:
+- docs
+- operate
+- rs
+description: REST API request to get the migration status of a database in the cluster when using Replica Of.
+headerRange: '[1-2]'
+hideListLinks: true
+linkTitle: migrations
+weight: $weight
+url: '/operate/rs/7.22/references/rest-api/requests/migrations/'
+---
+
+| Method | Path | Description |
+|--------|------|-------------|
+| [GET](#get-migrations) | `/v1/migrations/<uid>` | Get database migration status |
+
+## Get migration status {#get-migrations}
+
+```sh
+GET /v1/migrations/<uid>
+```
+
+Gets the migration status of a database in the cluster when using Replica Of.
+
+#### Required permissions
+
+| Permission name | Roles |
+|-----------------|-------|
+| [view_bdb_info]({{< relref "/operate/rs/7.22/references/rest-api/permissions#view_bdb_info" >}}) | admin<br />cluster_member<br />cluster_viewer<br />db_member<br />db_viewer<br />user_manager |
+
+### Request {#get-request}
+
+#### Example HTTP request
+
+```sh
+GET /v1/migrations/1
+```
+
+#### Headers
+
+| Key | Value | Description |
+|-----|-------|-------------|
+| Host | cnm.cluster.fqdn | Domain name |
+| Accept | application/json | Accepted media type |
+
+#### URL parameters
+
+| Field | Type | Description |
+|-------|------|-------------|
+| uid | integer | The database's unique ID |
+
+### Response {#get-response}
+
+Returns a JSON array with all data required by the migration orchestrator.
+
+#### Example response body
+
+```json
+"migration": {
+    "status": "foo",
+    "lag": 123,
+    "run_id": "5",
+    "flush_counter": 2,
+    "source_shards": [{"replication_id": "1", "replication_offset": 2}]
+}
+```
+
+#### Status codes {#get-status-codes}
+
+| Code | Description |
+|------|-------------|
+| [200 OK](https://www.rfc-editor.org/rfc/rfc9110.html#name-200-ok) | No error |
+| [404 Not Found](https://www.rfc-editor.org/rfc/rfc9110.html#name-404-not-found) | Database does not exist |

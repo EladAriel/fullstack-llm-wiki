@@ -1,0 +1,1454 @@
+---
+type: "Framework Learn Page"
+framework: "sqlalchemy"
+source_repo: "https://github.com/sqlalchemy/sqlalchemy"
+source_branch: "main"
+source_path: "doc/build/changelog/migration_21.rst"
+source_commit: "ddf3b6589fd6ccb2affbaea5d4f400a8c1ad02d8"
+source_commit_short: "ddf3b658"
+source_commit_date: "2026-06-18T14:12:36-04:00"
+generated_at: "2026-06-21T07:22:30Z"
+---
+
+=============================
+
+# What's New in SQLAlchemy 2.1?
+
+> **Admonition:**  This document describes changes between SQLAlchemy version 2.0 and
+ version 2.1.
+
+# Introduction
+
+This guide introduces what's new in SQLAlchemy version 2.1 and also documents changes which affect users migrating their applications from the 2.0 series of SQLAlchemy to 2.1.
+
+Please carefully review the sections on behavioral changes for potentially backwards-incompatible changes in behavior.
+
+# General
+
+## Asyncio "greenlet" dependency no longer installs by default
+
+SQLAlchemy 1.4 and 2.0 used a complex expression to determine if the `greenlet` dependency, needed by the `asyncio <asyncio_toplevel>` extension, could be installed from pypi using a pre-built wheel instead of having to build from source.   This because the source build of `greenlet` is not always trivial on some platforms.
+
+Disadvantages to this approach included that SQLAlchemy needed to track exactly which versions of `greenlet` were published as wheels on pypi; the setup expression led to problems with some package management tools such as `poetry`; it was not possible to install SQLAlchemy **without** `greenlet` being installed, even though this is completely feasible if the asyncio extension is not used.
+
+These problems are all solved by keeping `greenlet` entirely within the `[asyncio]` target.  The only downside is that users of the asyncio extension need to be aware of this extra installation dependency.
+
+:ticket:`10197`
+
+# New Features and Improvements - ORM
+
+## Session autoflush behavior simplified to be unconditional
+
+Session autoflush behavior has been simplified to unconditionally flush the session each time an execution takes place, regardless of whether an ORM statement or Core statement is being executed. This change eliminates the previous conditional logic that only flushed when ORM-related statements were detected.
+
+Previously, the session would only autoflush when executing ORM queries:
+
+```
+# 2.0 behavior - autoflush only occurred for ORM statements
+session.add(User(name="new user"))
+
+# This would trigger autoflush
+users = session.execute(select(User)).scalars().all()
+
+# This would NOT trigger autoflush
+result = session.execute(text("SELECT * FROM users"))
+```
+
+In 2.1, autoflush occurs for all statement executions:
+
+```
+# 2.1 behavior - autoflush occurs for all executions
+session.add(User(name="new user"))
+
+# Both of these now trigger autoflush
+users = session.execute(select(User)).scalars().all()
+result = session.execute(text("SELECT * FROM users"))
+```
+
+This change provides more consistent and predictable session behavior across all types of SQL execution.
+
+:ticket:`9809`
+
+## Session-level execution options applied to Connection at procurement time
+
+Building on the session-level execution options feature introduced in :ticket:`12659, the orm.Session.execution_options parameter now applies its options to the engine.Connection` when it is first procured for a transaction, in addition to being merged into explicit query executions as before.  This means that execution options such as `schema_translate_map` as well as custom user-defined options now take effect for **all** operations within the session, including:
+
+- Flush operations (INSERT/UPDATE/DELETE emitted by the unit of work)
+- Event hooks such as `_events.ConnectionEvents.before_cursor_execute`
+- Eager loader queries
+Previously, session-level execution options were only applied to explicit calls such as `_orm.Session.execute`, which meant that `schema_translate_map set on the orm.Session` would not take effect for flush operations.  The prior workaround was to set `schema_translate_map on the engine.Engine` itself, which remains supported.
+
+The new behavior allows `schema_translate_map to be set directly on the orm.Session`:
+
+```
+session = Session(
+    engine,
+    execution_options={"schema_translate_map": {None: "my_schema"}},
+)
+
+# schema_translate_map takes effect for both queries and flushes
+session.add(MyObject(data="some data"))
+session.commit()
+
+results = session.scalars(select(MyObject)).all()
+```
+
+Custom execution options that are consumed in event hooks such as `_events.ConnectionEvents.before_cursor_execute` are also available during flush operations:
+
+```
+session = Session(engine, execution_options={"my_audit_flag": True})
+
+@event.listens_for(engine, "before_cursor_execute")
+def receive_before_cursor_execute(
+    conn, cursor, statement, parameters, context, executemany
+):
+    if context.execution_options.get("my_audit_flag"):
+        log.info("Executing: %s", statement)
+
+session.add(SomeObject())
+session.flush()  # before_cursor_execute sees my_audit_flag=True
+```
+
+:ticket:`13346`
+
+## ORM Relationship allows callable for back_populates
+
+To help produce code that is more amenable to IDE-level linting and type checking, the `_orm.relationship.back_populates` parameter now accepts both direct references to a class-bound attribute as well as lambdas which do the same:
+
+```
+class A(Base):
+    __tablename__ = "a"
+
+    id: Mapped[int] = mapped_column(primary_key=True)
+
+    # use a lambda: to link to B.a directly when it exists
+    bs: Mapped[list[B]] = relationship(back_populates=lambda: B.a)
+
+class B(Base):
+    __tablename__ = "b"
+    id: Mapped[int] = mapped_column(primary_key=True)
+    a_id: Mapped[int] = mapped_column(ForeignKey("a.id"))
+
+    # A.bs already exists, so can link directly
+    a: Mapped[A] = relationship(back_populates=A.bs)
+```
+
+:ticket:`10050`
+
+## ORM Mapped Dataclasses no longer populate implicit `default`, collection-based `default_factory in _dict__`
+
+This behavioral change addresses a widely reported issue with SQLAlchemy's `orm_declarative_native_dataclasses` feature that was introduced in 2.0. SQLAlchemy ORM has always featured a behavior where a particular attribute on an ORM mapped class will have different behaviors depending on if it has an actively set value, including if that value is `None, versus if the attribute is not set at all.  When Declarative Dataclass Mapping was introduced, the orm.mapped_column.default parameter introduced a new capability which is to set up a dataclass-level default to be present in the generated _init__` method. This had the unfortunate side effect of breaking various popular workflows, the most prominent of which is creating an ORM object with the foreign key value in lieu of a many-to-one reference:
+
+```
+class Base(MappedAsDataclass, DeclarativeBase):
+    pass
+
+class Parent(Base):
+    __tablename__ = "parent"
+
+    id: Mapped[int] = mapped_column(primary_key=True, init=False)
+
+    related_id: Mapped[int | None] = mapped_column(ForeignKey("child.id"), default=None)
+    related: Mapped[Child | None] = relationship(default=None)
+
+class Child(Base):
+    __tablename__ = "child"
+
+    id: Mapped[int] = mapped_column(primary_key=True, init=False)
+```
+
+In the above mapping, the `__init__` method generated for `Parent` would in Python code look like this:
+
+```
+def __init__(self, related_id=None, related=None): ...
+```
+
+This means that creating a new `Parent` with `related_id` only would populate both `related_id` and `related in _dict__`:
+
+```
+# 2.0 behavior; will INSERT NULL for related_id due to the presence
+# of related=None
+>>> p1 = Parent(related_id=5)
+>>> p1.__dict__
+{'related_id': 5, 'related': None, '_sa_instance_state': ...}
+```
+
+The `None` value for `'related'` means that SQLAlchemy favors the non-present related `Child` over the present value for `'related_id'`, which would be discarded, and `NULL` would be inserted for `'related_id'` instead.
+
+In the new behavior, the `__init__` method instead looks like the example below, using a special constant `DONT_SET` indicating a non-present value for `'related'` should be ignored.  This allows the class to behave more closely to how SQLAlchemy ORM mapped classes traditionally operate:
+
+```
+def __init__(self, related_id=DONT_SET, related=DONT_SET): ...
+```
+
+We then get a `__dict__` setup that will follow the expected behavior of omitting `related from _dict__` and later running an INSERT with `related_id=5`:
+
+```
+# 2.1 behavior; will INSERT 5 for related_id
+>>> p1 = Parent(related_id=5)
+>>> p1.__dict__
+{'related_id': 5, '_sa_instance_state': ...}
+```
+
+#### Dataclass defaults are delivered via descriptor instead of __dict__
+
+The above behavior goes a step further, which is that in order to honor default values that are something other than `None, the value of the dataclass-level default (i.e. set using any of the orm.mapped_column.default, orm.column_property.default, or orm.deferred.default` parameters) is directed to be delivered at the Python `descriptor` level using mechanisms in SQLAlchemy's attribute system that normally return `None for un-populated columns, so that even though the default is not populated into _dict__`, it's still delivered when the attribute is accessed.  This behavior is based on what Python dataclasses itself does when a default is indicated for a field that also includes `init=False`.
+
+In the example below, an immutable default `"default_status"` is applied to a column called `status`:
+
+```
+class Base(MappedAsDataclass, DeclarativeBase):
+    pass
+
+class SomeObject(Base):
+    __tablename__ = "parent"
+
+    id: Mapped[int] = mapped_column(primary_key=True, init=False)
+
+    status: Mapped[str] = mapped_column(default="default_status")
+```
+
+In the above mapping, constructing `SomeObject with no parameters will deliver no values inside of _dict__`, but will deliver the default value via descriptor:
+
+```
+# object is constructed with no value for ``status``
+>>> s1 = SomeObject()
+
+# the default value is not placed in ``__dict__``
+>>> s1.__dict__
+{'_sa_instance_state': ...}
+
+# but the default value is delivered at the object level via descriptor
+>>> s1.status
+'default_status'
+
+# the value still remains unpopulated in ``__dict__``
+>>> s1.__dict__
+{'_sa_instance_state': ...}
+```
+
+The value passed as `_orm.mapped_column.default is also assigned as was the case before to the schema.Column.default parameter of the underlying schema.Column, where it takes place as a Python-level default for INSERT statements.  So while _dict__` is never populated with the default value on the object, the INSERT still includes the value in the parameter set.  This essentially modifies the Declarative Dataclass Mapping system to work more like traditional ORM mapped classes, where a "default" means just that, a column level default.
+
+#### Dataclass defaults are accessible on objects even without init
+
+As the new behavior makes use of descriptors in a similar way as Python dataclasses do themselves when `init=False, the new feature implements this behavior as well.   This is an all new behavior where an ORM mapped class can deliver a default value for fields even if they are not part of the _init__()` method at all.  In the mapping below, the `status` field is configured with `init=False`, meaning it's not part of the constructor at all:
+
+```
+class Base(MappedAsDataclass, DeclarativeBase):
+    pass
+
+class SomeObject(Base):
+    __tablename__ = "parent"
+    id: Mapped[int] = mapped_column(primary_key=True, init=False)
+    status: Mapped[str] = mapped_column(default="default_status", init=False)
+```
+
+When we construct `SomeObject()` with no arguments, the default is accessible on the instance, delivered via descriptor:
+
+```
+>>> so = SomeObject()
+>>> so.status
+default_status
+```
+
+#### default_factory for collection-based relationships internally uses DONT_SET
+
+A late add to the behavioral change brings equivalent behavior to the use of the `_orm.relationship.default_factory` parameter with collection-based relationships.   This attribute is `documented <orm_declarative_dc_relationships>` as being limited to exactly the collection class that's stated on the left side of the annotation, which is now enforced at mapper configuration time:
+
+```
+class Parent(Base):
+    __tablename__ = "parents"
+
+    id: Mapped[int] = mapped_column(primary_key=True, init=False)
+    name: Mapped[str]
+
+    children: Mapped[list["Child"]] = relationship(default_factory=list)
+```
+
+With the above mapping, the actual `_orm.relationship.default_factory` parameter is replaced internally to instead use the same `DONT_SET constant that's applied to orm.relationship.default` for many-to-one relationships. SQLAlchemy's existing collection-on-attribute access behavior occurs as always on access:
+
+```
+>>> p1 = Parent(name="p1")
+>>> p1.children
+[]
+```
+
+This change to `_orm.relationship.default_factory` accommodates a similar merge-based condition where an empty collection would be forced into a new object that in fact wants a merged collection to arrive.
+
+#### Related Changes
+
+This change includes the following API changes:
+
+- The `_orm.relationship.default` parameter, when present, only
+accepts a value of `None, and is only accepted when the relationship is ultimately a many-to-one relationship or one that establishes orm.relationship.uselist` as `False`.
+
+- The `_orm.mapped_column.default and orm.mapped_column.insert_default`
+parameters are mutually exclusive, and only one may be passed at a time. The behavior of the two parameters is equivalent at the `_schema.Column level, however at the Declarative Dataclass Mapping level, only orm.mapped_column.default actually sets the dataclass-level default with descriptor access; using orm.mapped_column.insert_default` will have the effect of the object attribute defaulting to `None` on the instance until the INSERT takes place, in the same way it works on traditional ORM mapped classes.
+
+:ticket:`12168`
+
+## New Hybrid DML hook features
+
+To complement the existing `.hybrid_property.update_expression` decorator, a new decorator `.hybrid_property.bulk_dml is added, which works specifically with parameter dictionaries passed to orm.Session.execute when dealing with ORM-enabled dml.insert or dml.update`:
+
+```
+from typing import MutableMapping
+from dataclasses import dataclass
+
+@dataclass
+class Point:
+    x: int
+    y: int
+
+class Location(Base):
+    __tablename__ = "location"
+
+    id: Mapped[int] = mapped_column(primary_key=True)
+    x: Mapped[int]
+    y: Mapped[int]
+
+    @hybrid_property
+    def coordinates(self) -> Point:
+        return Point(self.x, self.y)
+
+    @coordinates.inplace.bulk_dml
+    @classmethod
+    def _coordinates_bulk_dml(
+        cls, mapping: MutableMapping[str, Any], value: Point
+    ) -> None:
+        mapping["x"] = value.x
+        mapping["y"] = value.y
+```
+
+Additionally, a new helper `_sql.from_dml_column` is added, which may be used with the `.hybrid_property.update_expression` hook to indicate reuse of a column expression from elsewhere in the UPDATE statement's SET clause:
+
+```
+from sqlalchemy import from_dml_column
+
+class Product(Base):
+    __tablename__ = "product"
+
+    id: Mapped[int] = mapped_column(primary_key=True)
+    price: Mapped[float]
+    tax_rate: Mapped[float]
+
+    @hybrid_property
+    def total_price(self) -> float:
+        return self.price * (1 + self.tax_rate)
+
+    @total_price.inplace.update_expression
+    @classmethod
+    def _total_price_update_expression(cls, value: Any) -> List[Tuple[Any, Any]]:
+        return [(cls.price, value / (1 + from_dml_column(cls.tax_rate)))]
+```
+
+In the above example, if the `tax_rate` column is also indicated in the SET clause of the UPDATE, that expression will be used for the `total_price` expression rather than making use of the previous value of the `tax_rate` column:
+
+```pycon+sql
+ >>> from sqlalchemy import update
+ >>> print(update(Product).values({Product.tax_rate: 0.08, Product.total_price: 125.00}))
+ {printsql}UPDATE product SET tax_rate=:tax_rate, price=(:param_1 / (:tax_rate + :param_2))
+```
+
+When the target column is omitted, `_sql.from_dml_column` falls back to using the original column expression:
+
+```pycon+sql
+ >>> from sqlalchemy import update
+ >>> print(update(Product).values({Product.total_price: 125.00}))
+ {printsql}UPDATE product SET price=(:param_1 / (tax_rate + :param_2))
+```
+
+> **Seealso:**  `hybrid_bulk_update`
+
+:ticket:`12496`
+
+## New rules for None-return for ORM Composites
+
+ORM composite attributes configured using `_orm.composite` can now specify whether or not they should return `None using a new parameter orm.composite.return_none_on`.   By default, a composite attribute now returns a non-None object in all cases, whereas previously under 2.0, a `None` value would be returned for a pending object with `None` values for all composite columns.
+
+Given a composite mapping:
+
+```
+import dataclasses
+
+@dataclasses.dataclass
+class Point:
+    x: int | None
+    y: int | None
+
+class Base(DeclarativeBase):
+    pass
+
+class Vertex(Base):
+    __tablename__ = "vertices"
+
+    id: Mapped[int] = mapped_column(primary_key=True)
+
+    start: Mapped[Point] = composite(mapped_column("x1"), mapped_column("y1"))
+    end: Mapped[Point] = composite(mapped_column("x2"), mapped_column("y2"))
+```
+
+When constructing a pending `Vertex` object, the initial value of the `x1`, `y1`, `x2`, `y2` columns is `None`.   Under version 2.0, accessing the composite at this stage would automatically return `None`:
+
+```
+>>> v1 = Vertex()
+>>> v1.start
+None
+```
+
+Under 2.1, the default behavior is to return the composite class with attributes set to `None`:
+
+```
+>>> v1 = Vertex()
+>>> v1.start
+Point(x=None, y=None)
+```
+
+This behavior is now consistent with other forms of access, such as accessing the attribute from a persistent object as well as querying for the attribute directly.  It is also consistent with the mapped annotation `Mapped[Point]`.
+
+The behavior can be further controlled by applying the `_orm.composite.return_none_on` parameter, which accepts a callable that returns True if the composite should be returned as None, given the arguments that would normally be passed to the composite class.  The typical callable here would return True (i.e. the value should be `None`) for the case where all columns are `None`:
+
+```
+class Vertex(Base):
+    __tablename__ = "vertices"
+
+    id: Mapped[int] = mapped_column(primary_key=True)
+
+    start: Mapped[Point] = composite(
+        mapped_column("x1"),
+        mapped_column("y1"),
+        return_none_on=lambda x, y: x is None and y is None,
+    )
+    end: Mapped[Point] = composite(
+        mapped_column("x2"),
+        mapped_column("y2"),
+        return_none_on=lambda x, y: x is None and y is None,
+    )
+```
+
+For the above class, any `Vertex` instance whether pending or persistent will return `None` for `start` and `end` if both composite columns for the attribute are `None`:
+
+```
+>>> v1 = Vertex()
+>>> v1.start
+None
+```
+
+The `_orm.composite.return_none_on` parameter is also set automatically, if not otherwise set explicitly, when using `orm_declarative_mapped_column`; setting the left hand side to `Optional` or `| None` will assign the above `None`-handling callable:
+
+```
+class Vertex(Base):
+    __tablename__ = "vertices"
+
+    id: Mapped[int] = mapped_column(primary_key=True)
+
+    # will apply return_none_on=lambda *args: all(arg is None for arg in args)
+    start: Mapped[Point | None] = composite(mapped_column("x1"), mapped_column("y1"))
+    end: Mapped[Point | None] = composite(mapped_column("x2"), mapped_column("y2"))
+```
+
+The above object will return `None` for `start` and `end` automatically if the columns are also None:
+
+```
+>>> session.scalars(
+...     select(Vertex.start).where(Vertex.x1 == None, Vertex.y1 == None)
+... ).first()
+None
+```
+
+If `_orm.composite.return_none_on` is set explicitly, that value will supersede the choice made by ORM Annotated Declarative.   This includes that the parameter may be explicitly set to `None` which will disable the ORM Annotated Declarative setting from taking place.
+
+:ticket:`12570`
+
+## New RegistryEvents System for ORM Mapping Customization
+
+SQLAlchemy 2.1 introduces `.RegistryEvents, providing for event hooks that are specific to a orm.registry.  These events include orm.RegistryEvents.before_configured and orm.RegistryEvents.after_configured to complement the same-named events that can be established on a orm.Mapper, as well as orm.RegistryEvents.resolve_type_annotation` that allows programmatic access to the ORM Annotated Declarative type resolution process.  Examples are provided illustrating how to define resolution schemes for any kind of type hierarchy in an automated fashion, including `695` type aliases.
+
+E.g.:
+
+```
+from typing import Any
+
+from sqlalchemy import event
+from sqlalchemy.orm import DeclarativeBase
+from sqlalchemy.orm import registry as RegistryType
+from sqlalchemy.orm import TypeResolve
+from sqlalchemy.types import TypeEngine
+
+class Base(DeclarativeBase):
+    pass
+
+@event.listens_for(Base, "resolve_type_annotation")
+def resolve_custom_type(resolve_type: TypeResolve) -> TypeEngine[Any] | None:
+    if resolve_type.resolved_type is MyCustomType:
+        return MyCustomSQLType()
+    else:
+        return None
+
+@event.listens_for(Base, "after_configured")
+def after_base_configured(registry: RegistryType) -> None:
+    print(f"Registry {registry} fully configured")
+```
+
+> **Seealso:**  `orm_declarative_resolve_type_event` - Complete documentation on using
+ the `.RegistryEvents.resolve_type_annotation` event
+ `.RegistryEvents` - Complete API reference for all registry events
+
+:ticket:`9832`
+
+# New Features and Improvements - Core
+
+## Template String (t-string) Support for Python 3.14+
+
+SQLAlchemy 2.1 adds support for Python 3.14+ template strings (t-strings) via the new `_sql.tstring` construct, as defined in `750`. This feature provides a more ergonomic way to construct SQL statements by automatically interpolating Python values and SQLAlchemy expressions within template strings.
+
+The `_sql.tstring function works similarly to sql.text`, but automatically handles different types of interpolated values:
+
+- **String literals** from the template are rendered directly as SQL
+- **SQLAlchemy expressions** (columns, functions, subqueries, etc.) are
+embedded as clause elements
+
+- **Plain Python values** are automatically wrapped with `_sql.literal`
+Example usage:
+
+```
+from sqlalchemy import tstring, select, literal, JSON
+
+# Python values become bound values
+user_id = 42
+stmt = tstring(t"SELECT * FROM users WHERE id = {user_id}")
+# renders: SELECT * FROM users WHERE id = :param_1
+
+# SQLAlchemy expressions are embedded
+from sqlalchemy import table, column
+
+stmt = tstring(t"SELECT {column('q')} FROM {table('t')}")
+# renders: SELECT q FROM t
+
+# Apply explicit SQL types to bound values using literal()
+some_json = {"foo": "bar"}
+stmt = tstring(t"SELECT {literal(some_json, JSON)}")
+```
+
+Like `_sql.text, the sql.TString construct supports the sql.TString.columns` method to specify return columns and their types:
+
+```
+from sqlalchemy import column, Integer, String
+
+stmt = tstring(t"SELECT id, name FROM users").columns(
+    column("id", Integer), column("name", String)
+)
+
+for id, name in connection.execute(stmt):
+    print(id, name)
+```
+
+The `_sql.tstring` construct is fully compatible with SQLAlchemy's statement caching system. Statements with the same structure but different literal values will share the same cache key, providing optimal performance.
+
+> **Seealso:**  `_sql.tstring`
+ `_sql.TString`
+ [PEP 750](https://peps.python.org/pep-0750/) - Template Strings
+
+:ticket:`12548`
+
+## `Row` now represents individual column types directly without `Tuple`
+
+SQLAlchemy 2.0 implemented a broad array of `484 typing throughout all components, including a new ability for row-returning statements such as sql.select to maintain track of individual column types, which were then passed through the execution phase onto the engine.Result object and then to the individual engine.Row` objects.   Described at `change_result_typing_20`, this approach solved several issues with statement / row typing, but some remained unsolvable.  In 2.1, one of those issues, that the individual column types needed to be packaged into a `typing.Tuple`, is now resolved using new `646` integration, which allows for tuple-like types that are not actually typed as `Tuple`.
+
+In SQLAlchemy 2.0, a statement such as:
+
+```
+stmt = select(column("x", Integer), column("y", String))
+```
+
+Would be typed as:
+
+```
+Select[Tuple[int, str]]
+```
+
+In 2.1, it's now typed as:
+
+```
+Select[int, str]
+```
+
+When executing `stmt, the engine.Result and engine.Row` objects will be typed as `Result[int, str]` and `Row[int, str], respectively. The prior workaround using engine.Row._t` to type as a real `Tuple` is no longer needed and projects can migrate off this pattern.
+
+Mypy users will need to make use of **Mypy 1.7 or greater** for pep-646 integration to be available.
+
+#### Limitations
+
+Not yet solved by pep-646 or any other pep is the ability for an arbitrary number of expressions within `_sql.Select and others to be mapped to row objects, without stating each argument position explicitly within typing annotations.   To work around this issue, SQLAlchemy makes use of automated "stub generation" tools to generate hardcoded mappings of different numbers of positional arguments to constructs like sql.select` to resolve to individual `Unpack[]` expressions (in SQLAlchemy 2.0, this generation produced `Tuple[] annotations instead).  This means that there are arbitrary limits on how many specific column expressions will be typed within the engine.Row` object, without restoring to `Any for remaining expressions; for sql.select, it's currently ten expressions, and for DML expressions like dml.insert that use dml.Insert.returning`, it's eight.    If and when a new pep that provides a `Map` operator to pep-646 is proposed, this limitation can be lifted. [1]_  Originally, it was mistakenly assumed that this limitation prevented pep-646 from being usable at all, however, the `Unpack` construct does in fact replace everything that was done using `Tuple` in 2.0.
+
+An additional limitation for which there is no proposed solution is that there's no way for the name-based attributes on `_engine.Row` to be automatically typed, so these continue to be typed as `Any` (e.g. `row.x` and `row.y for the above example).   With current language features, this could only be fixed by having an explicit class-based construct that allows one to compose an explicit engine.Row` with explicit fields up front, which would be verbose and not automatic.
+
+:ticket:`10635`
+
+## Better type checker integration for Core froms, like Table
+
+SQLAlchemy 2.1 changes `_schema.Table, along with most sql.FromClause subclasses, to be generic on the column collection, providing the option for better static type checking support. By declaring the columns using a schema.TypedColumns subclass and providing it to the schema.Table instance, IDEs and type checkers can infer the exact types of columns when accessing them via the schema.Table.c` attribute, enabling better autocomplete and type validation.
+
+Example usage:
+
+```
+from sqlalchemy import Table, TypedColumns, Column, Integer
+from sqlalchemy import MetaData, Named, SmallInteger, select
+
+class user_cols(TypedColumns):
+    # the name will be set to ``id``, type is inferred as Column[int]
+    # from the Integer SQL type.
+    id = Column(Integer, primary_key=True)
+
+    # not null String column is generated
+    name: Named[str]
+
+    # nullable Integer column, the SQL type is manually set SmallInteger
+    age: Named[int | None] = Column(SmallInteger)
+
+    # optional, used to infer the select types when selecting the table
+    __row_pos__: tuple[int, str, int | None]
+
+metadata = MetaData()
+user = Table("user", metadata, user_cols)
+
+# Type checkers now understand the column types when selecting single columns
+stmt = select(user.c.id, user.c.name)  # Inferred as Select[int, str]
+
+# and also when selecting the whole table, when __row_pos__ is present
+stmt = select(user)  # Inferred as Select[int, str, int | None]
+```
+
+The optional `sqlalchemy.sql._annotated_cols.HasRowPos.__row_pos__` annotation is used to infer the types of a select when selecting the table directly.
+
+Columns can be declared in `.TypedColumns` subclasses by instantiating them directly, like `id`, by using only a type annotations, like `name, letting the schema.Table` infer SQL type and nullability, or by mixing the two, like `age`, to provide explicit column options while inferring nullability and/or SQL type.
+
+Other `_sql.FromClause, like sql.Join, sql.CTE, etc, can be made generic using the sql.FromClause.with_cols` method:
+
+```
+# using with_cols the ``c`` collection of the cte has typed columns
+cte = user.select().cte().with_cols(user_cols)
+```
+
+#### ORM Integration
+
+This functionality also offers some integration with the ORM, by using `_orm.MappedColumn annotated attributes in the ORM model and orm.as_typed_table to get an annotated sql.FromClause`:
+
+```
+from sqlalchemy import TypedColumns
+from sqlalchemy.orm import DeclarativeBase, mapped_column
+from sqlalchemy.orm import MappedColumn, as_typed_table
+
+class Base(DeclarativeBase):
+    pass
+
+class A(Base):
+    __tablename__ = "a"
+    __typed_cols__: "a_cols"
+
+    id: MappedColumn[int] = mapped_column(primary_key=True)
+    data: MappedColumn[str]
+
+class a_cols(A, TypedColumns):
+    pass
+
+# table_a is annotated as FromClause[a_cols], and is just A.__table__
+table_a = as_typed_table(A)
+```
+
+For proper typing integration `_orm.MappedColumn should be used to annotate the single columns, since it's a more specific annotation than the usual orm.Mapped` used for ORM attributes.
+
+:ticket:`13085`
+
+## `filter_by()` now searches across all FROM clause entities
+
+The `_sql.Select.filter_by method, available for both Core sql.Select` objects and ORM-enabled select statements, has been enhanced to search for attribute names across **all entities present in the FROM clause** of the statement, rather than only looking at the last joined entity or first FROM entity.
+
+This resolves a long-standing issue where the behavior of `_sql.Select.filter_by was sensitive to the order of operations. For example, calling sql.Select.with_only_columns after setting up joins would reset which entity was searched, causing sql.Select.filter_by` to fail even though the joined entity was still part of the FROM clause.
+
+Example - previously failing case now works:
+
+```
+from sqlalchemy import select, MetaData, Table, Column, Integer, String, ForeignKey
+
+metadata = MetaData()
+
+users = Table(
+    "users",
+    metadata,
+    Column("id", Integer, primary_key=True),
+    Column("name", String(50)),
+)
+
+addresses = Table(
+    "addresses",
+    metadata,
+    Column("id", Integer, primary_key=True),
+    Column("user_id", ForeignKey("users.id")),
+    Column("email", String(100)),
+)
+
+# This now works in 2.1 - previously raised an error
+stmt = (
+    select(users)
+    .join(addresses)
+    .with_only_columns(users.c.id)  # changes selected columns
+    .filter_by(email="foo@bar.com")  # searches addresses table successfully
+)
+```
+
+#### Ambiguous Attribute Names
+
+When an attribute name exists in more than one entity in the FROM clause, `_sql.Select.filter_by now raises exc.AmbiguousColumnError, indicating that sql.Select.filter` should be used instead with explicit column references:
+
+```
+# Both users and addresses have 'id' column
+stmt = select(users).join(addresses)
+
+# Raises AmbiguousColumnError in 2.1
+stmt = stmt.filter_by(id=5)
+
+# Use filter() with explicit qualification instead
+stmt = stmt.filter(addresses.c.id == 5)
+```
+
+The same behavior applies to ORM entities:
+
+```
+from sqlalchemy.orm import Session
+
+stmt = select(User).join(Address)
+
+# If both User and Address have an 'id' attribute, this raises
+# AmbiguousColumnError
+stmt = stmt.filter_by(id=5)
+
+# Use filter() with explicit entity qualification
+stmt = stmt.filter(Address.id == 5)
+```
+
+#### Legacy Query Use is Unchanged
+
+The change to `.Select.filter_by` has **not** been applied to the `.Query.filter_by` method of `.Query`; as `.Query` is a legacy API, its behavior hasn't changed.
+
+#### Migration Path
+
+Code that was previously working should continue to work without modification in the vast majority of cases. The only breaking changes would be:
+
+1. **Ambiguous names that were previously accepted**: If your code had joins
+where `_sql.Select.filter_by happened to use an ambiguous column name but it worked because it searched only one entity, this will now raise exc.AmbiguousColumnError. The fix is to use sql.Select.filter` with explicit column qualification.
+
+2. **Different entity selection**: In rare cases where the old behavior of
+selecting the "last joined" or "first FROM" entity was being relied upon, `_sql.Select.filter_by might now find the attribute in a different entity. Review any sql.Select.filter_by` calls in complex multi-entity queries.
+
+It's hoped that in most cases, this change will make `_sql.Select.filter_by` more intuitive to use.
+
+:ticket:`8601`
+
+## New Syntax Extension Feature for Core
+
+Added the ability to create custom SQL constructs that can define new clauses within SELECT, INSERT, UPDATE, and DELETE statements without needing to modify the construction or compilation code of `.Select, dml.Insert`, `.Update`, or `.Delete` directly.
+
+Custom extension can be created by subclassing the class `sqlalchemy.sql.SyntaxExtension`. For example, support for the `INTO OUTFILE` clause of a select supported by MariaDB and MySQL, can be implemented using syntax extensions as follows:
+
+```
+from sqlalchemy.ext.compiler import compiles
+from sqlalchemy.sql import ClauseElement, Select, SyntaxExtension, visitors
+
+def into_outfile(name: str) -> "IntoOutFile":
+    """Return a INTO OUTFILE construct"""
+    return IntoOutFile(name)
+
+class IntoOutFile(SyntaxExtension, ClauseElement):
+    """Define the INTO OUTFILE class."""
+
+    _traverse_internals = [("name", visitors.InternalTraversal.dp_string)]
+    """Structure that defines how SQLAlchemy can cache this element.
+    Specify ``inherit_cache=False`` to turn off caching.
+    """
+    name: str
+
+    def __init__(self, name: str):
+        self.name = name
+
+    def apply_to_select(self, select_stmt: Select) -> None:
+        """Called when the :meth:`.Select.ext` method is called."""
+        select_stmt.apply_syntax_extension_point(
+            self.append_replacing_same_type, "post_body"
+        )
+
+@compiles(IntoOutFile)
+def _compile_into_outfile(element: IntoOutFile, compiler, **kw):
+    """a compiles extension that compiles to SQL IntoOutFile"""
+    name = element.name.replace("'", "''")
+    return f"INTO OUTFILE '{name}'"
+```
+
+This can then be used in a select using the `.Select.ext` method:
+
+```pycon+sql
+ >>> import sqlalchemy as sa
+
+ >>> stmt = (
+ ...     sa.select(sa.column("a"))
+ ...     .select_from(sa.table("tbl"))
+ ...     .ext(into_outfile("myfile.txt"))
+ ... )
+ >>> print(sql)
+ {printsql}SELECT a
+ FROM tbl INTO OUTFILE 'myfile.txt'{stop}
+```
+
+Several SQLAlchemy features custom to a single backend have been re-implemented using this new system, including PostgreSQL `_postgresql.distinct_on and MySQL mysql.limit` functions that supersede the previous implementations.
+
+> **Seealso:**  `examples_syntax_extensions` - A fully documented example of a
+ `QUALIFY` clause implemented using this new feature.
+
+:ticket:`12195` :ticket:`12342`
+
+## URL stringify and parse now supports URL escaping for the "database" portion
+
+A URL that includes URL-escaped characters in the database portion will now parse with conversion of those escaped characters:
+
+```
+>>> from sqlalchemy import make_url
+>>> u = make_url("driver://user:pass@host/database%3Fname")
+>>> u.database
+'database?name'
+```
+
+Previously, such characters would not be unescaped:
+
+```
+>>> # pre-2.1 behavior
+>>> from sqlalchemy import make_url
+>>> u = make_url("driver://user:pass@host/database%3Fname")
+>>> u.database
+'database%3Fname'
+```
+
+This change also applies to the stringify side; most special characters in the database name will be URL escaped, omitting a few such as plus signs and slashes:
+
+```
+>>> from sqlalchemy import URL
+>>> u = URL.create("driver", database="a?b=c")
+>>> str(u)
+'driver:///a%3Fb%3Dc'
+```
+
+Where the above URL correctly round-trips to itself:
+
+```
+>>> make_url(str(u))
+driver:///a%3Fb%3Dc
+>>> make_url(str(u)).database == u.database
+True
+```
+
+Whereas previously, special characters applied programmatically would not be escaped in the result, leading to a URL that does not represent the original database portion.  Below, `b=c` is part of the query string and not the database portion:
+
+```
+>>> # pre-2.1 behavior
+>>> from sqlalchemy import URL
+>>> u = URL.create("driver", database="a?b=c")
+>>> str(u)
+'driver:///a?b=c'
+```
+
+:ticket:`11234`
+
+## Improved `params()` implementation for executable statements
+
+The `_sql.ClauseElement.params and sql.ClauseElement.unique_params` methods have been deprecated in favor of a new implementation on executable statements that provides improved performance and better integration with ORM-enabled statements.
+
+Executable statement objects like `_sql.Select, sql.CompoundSelect, and sql.TextClause now provide an improved sql.ExecutableStatement.params` method that avoids a full cloned traversal of the statement tree. Instead, parameters are stored directly on the statement object and efficiently merged during compilation and/or cache key traversal.
+
+The new implementation provides several benefits:
+
+- **Better performance** - Parameters are stored in a simple dictionary rather than
+requiring a full statement tree traversal with cloning
+
+- **Proper caching integration** - Parameters are correctly integrated into SQLAlchemy's
+cache key system via `_generate_cache_key()`
+
+- **ORM statement compatibility** - Works correctly with ORM-enabled statements, including
+ORM entities used with `_orm.aliased`, subqueries, CTEs, etc.
+
+Use of `_sql.ExecutableStatement.params is unchanged, provided the given object is a statement object such as sql.select`:
+
+```
+stmt = select(table).where(table.c.data == bindparam("x"))
+
+# Execute with parameter value
+result = connection.execute(stmt.params(x=5))
+
+# Can be chained and used in subqueries
+stmt2 = stmt.params(x=6).subquery().select()
+result = connection.execute(stmt2.params(x=7))  # Uses x=7
+```
+
+The deprecated `_sql.ClauseElement.params and sql.ClauseElement.unique_params methods on non-executable elements like sql.ColumnElement and general sql.ClauseElement` instances will continue to work during the deprecation period but will emit deprecation warnings.
+
+:ticket:`7066`
+
+## CREATE VIEW and CREATE TABLE AS SELECT Support
+
+SQLAlchemy 2.1 adds support for the SQL `CREATE VIEW` and `CREATE TABLE ... AS SELECT` constructs, as well as the `SELECT ... INTO` variant for selected backends. Both DDL statements generate a table or table-like construct based on the structure and rows represented by a SELECT statement. The constructs are available via the `.CreateView and schema.CreateTableAs DDL classes, as well as the sql.SelectBase.into` convenience method.
+
+Both constructs work in exactly the same way, including that a `.Table` object is automatically generated from a given `.Select`. DDL can then be emitted by executing the construct directly or by allowing the `.MetaData.create_all` or `.Table.create` sequences to emit the correct DDL.
+
+E.g. using `.CreateView`:
+
+```
+>>> from sqlalchemy import Table, Column, Integer, String, MetaData
+>>> from sqlalchemy import CreateView, select
+>>>
+>>> metadata_obj = MetaData()
+>>> user_table = Table(
+...     "user_account",
+...     metadata_obj,
+...     Column("id", Integer, primary_key=True),
+...     Column("name", String(30)),
+...     Column("fullname", String),
+... )
+>>> view = CreateView(
+...     select(user_table).where(user_table.c.name.like("%spongebob%")),
+...     "spongebob_view",
+...     metadata=metadata_obj,
+... )
+```
+
+The above `CreateView` construct will emit CREATE VIEW when executed directly, or when a DDL create operation is run.  When using `.MetaData.create_all`, the view is created after all dependent tables have been created:
+
+```pycon+sql
+ >>> from sqlalchemy import create_engine
+ >>> e = create_engine("sqlite://", echo=True)
+ >>> metadata_obj.create_all(e)
+ {opensql}BEGIN (implicit)
+
+ CREATE TABLE user_account (
+ 	id INTEGER NOT NULL,
+ 	name VARCHAR(30),
+ 	fullname VARCHAR,
+ 	PRIMARY KEY (id)
+ )
+
+ CREATE VIEW spongebob_view AS
+ SELECT user_account.id, user_account.name, user_account.fullname
+ FROM user_account
+ WHERE user_account.name LIKE '%spongebob%'
+
+ COMMIT
+```
+
+The view is usable in SQL expressions via the `.CreateView.table` attribute:
+
+```pycon+sql
+ >>> with e.connect() as conn:
+ ...     conn.execute(select(view.table))
+ {opensql}BEGIN (implicit)
+ SELECT spongebob_view.id, spongebob_view.name, spongebob_view.fullname
+ FROM spongebob_view
+ <sqlalchemy.engine.cursor.CursorResult object at 0x7f573e4a4ad0>
+ ROLLBACK
+```
+
+`_schema.CreateTableAs` works in the same way, emitting `CREATE TABLE AS`:
+
+```
+>>> from sqlalchemy import CreateTableAs
+>>> select_stmt = select(users.c.id, users.c.name).where(users.c.name == "squidward")
+>>> create_table_as = CreateTableAs(select_stmt, "squidward_users")
+```
+
+In this case, `.CreateTableAs` was not given a `.MetaData` collection. While a `.MetaData` collection will be created automatically in this case, the actual `CREATE TABLE AS` statement can also be generated by directly executing the object:
+
+```pycon+sql
+ >>> with e.begin() as conn:
+ ...     conn.execute(create_table_as)
+ {opensql}BEGIN (implicit)
+ CREATE TABLE squidward_users AS SELECT user_account.id, user_account.name
+ FROM user_account
+ WHERE user_account.name = 'squidward'
+ COMMIT
+```
+
+Like before, the `.Table` is accessible from `.CreateTableAs.table`:
+
+```pycon+sql
+ >>> with e.connect() as conn:
+ ...     conn.execute(select(create_table_as.table))
+ {opensql}BEGIN (implicit)
+ SELECT squidward_users.id, squidward_users.name
+ FROM squidward_users
+ <sqlalchemy.engine.cursor.CursorResult object at 0x7f573e4a4f30>
+ ROLLBACK
+```
+
+> **Seealso:**  `metadata_create_view` - in `metadata_toplevel`
+ `metadata_create_table_as` - in `metadata_toplevel`
+ `_schema.CreateView` - DDL construct for CREATE VIEW
+ `_schema.CreateTableAs` - DDL construct for CREATE TABLE AS
+ `_sql.SelectBase.into` - convenience method on SELECT and UNION
+ statements
+
+:ticket:`4950`
+
+## Operator classes added to validate operator usage with datatypes
+
+SQLAlchemy 2.1 introduces a new "operator classes" system that provides validation when SQL operators are used with specific datatypes. This feature helps catch usage of operators that are not appropriate for a given datatype during the initial construction of expression objects. A simple example is an integer or numeric column used with a "string match" operator. When an incompatible operation is used, a deprecation warning is emitted; in a future major release this will raise `.InvalidRequestError`.
+
+The initial motivation for this new system is to revise the use of the `.ColumnOperators.contains method when used with types.JSON` columns. The `.ColumnOperators.contains method in the case of the types.JSON datatype makes use of the string-oriented version of the method, that assumes string data and uses LIKE to match substrings.  This is not compatible with the same-named method that is defined by the PostgreSQL postgresql.JSONB type, which uses PostgreSQL's native JSONB containment operators. Because types.JSON` data is normally stored as a plain string, `.ColumnOperators.contains would "work", and even in trivial cases behave similarly to that of postgresql.JSONB`. However, since the two operations are not actually compatible at all, this mis-use can easily lead to unexpected inconsistencies.
+
+Code that uses `.ColumnOperators.contains with types.JSON` columns will now emit a deprecation warning:
+
+```
+from sqlalchemy import JSON, select, Column
+from sqlalchemy.orm import DeclarativeBase, Mapped, mapped_column
+
+class Base(DeclarativeBase):
+    pass
+
+class MyTable(Base):
+    __tablename__ = "my_table"
+
+    id: Mapped[int] = mapped_column(primary_key=True)
+    json_column: Mapped[dict] = mapped_column(JSON)
+
+# This will now emit a deprecation warning
+select(MyTable).filter(MyTable.json_column.contains("some_value"))
+```
+
+Above, using `.ColumnOperators.contains with types.JSON` columns is considered to be inappropriate, since `.ColumnOperators.contains works as a simple string search without any awareness of JSON structuring. To explicitly indicate that the JSON data should be searched as a string using LIKE, the column should first be cast (using either sql.cast for a full CAST, or sql.type_coerce` for a Python-side cast) to `.String`:
+
+```
+from sqlalchemy import type_coerce, String
+
+# Explicit string-based matching
+select(MyTable).filter(type_coerce(MyTable.json_column, String).contains("some_value"))
+```
+
+This change forces code to distinguish between using string-based "contains" with a `_types.JSON column and using PostgreSQL's JSONB containment operator with postgresql.JSONB` columns as separate, explicitly-stated operations.
+
+The operator class system involves a mapping of SQLAlchemy operators listed out in `sqlalchemy.sql.operators` to operator class combinations that come from the `.OperatorClass` enumeration, which are reconciled at expression construction time with datatypes using the `.TypeEngine.operator_classes` attribute.  A custom user defined type may want to set this attribute to indicate the kinds of operators that make sense:
+
+```
+from sqlalchemy.types import UserDefinedType
+from sqlalchemy.sql.sqltypes import OperatorClass
+
+class ComplexNumber(UserDefinedType):
+    operator_classes = OperatorClass.MATH
+```
+
+The above `ComplexNumber` datatype would then validate that operators used are included in the "math" operator class.   By default, user defined types made with `.UserDefinedType` are left open to accept all operators by default, whereas classes defined with `.TypeDecorator` will make use of the operator classes declared by the "impl" type.
+
+> **Seealso:**  `.Operators.op.operator_class` - define an operator class when creating custom operators
+ `.OperatorClass`
+
+:ticket:`12736`
+
+## Non-integer RANGE window frame clauses now supported
+
+The `_sql.over clause now supports non-integer values in the sql.over.range_ parameter through the new sql.FrameClause` construct. Previously, only integer values were allowed in RANGE clauses, which limited their use to integer-based ordering columns.
+
+With this change, applications can now use RANGE with other data types such as floating-point numbers, dates, and intervals. The new `_sql.FrameClause construct provides explicit control over frame boundaries using the sql.FrameClauseType` enum:
+
+```
+from datetime import timedelta
+from sqlalchemy import FrameClause, FrameClauseType
+
+# Example: date-based RANGE with a 7-day window
+func.sum(my_table.c.amount).over(
+    order_by=my_table.c.date,
+    range_=FrameClause(
+        start=timedelta(days=7),
+        end=None,
+        start_frame_type=FrameClauseType.PRECEDING,
+        end_frame_type=FrameClauseType.CURRENT,
+    ),
+)
+```
+
+For backwards compatibility, the traditional tuple-based syntax continues to work with integer values:
+
+```
+# This continues to work unchanged
+func.row_number().over(order_by=table.c.col, range_=(None, 10))
+```
+
+However, attempting to use non-integer values in the tuple syntax will now raise an error, directing users to use `_sql.FrameClause` instead.
+
+:ticket:`12596`
+
+## Python float literals now render as DOUBLE in CAST expressions
+
+When Python `float` values are used as literal bound parameters in SQL expressions, in the absence of an explicit type being passed to the bound parameter expression, they now use the `.Double` type instead of `.Float`. This change affects the SQL keyword that is rendered when these values appear in CAST expressions.
+
+The `.Double` and `.Float` types have identical implementations and behavior at runtime. The only difference is in DDL and CAST rendering: `.Double` renders as `DOUBLE` or `DOUBLE PRECISION`, while `.Float` renders as `FLOAT`. The `DOUBLE` keyword better matches Python's `float` datatype, which uses 8-byte double-precision storage.
+
+This change is most visible in division operations, where a float divisor is automatically cast to ensure proper floating-point division:
+
+```
+from sqlalchemy import table, column, Integer, select
+
+t = table("t", column("x", Integer))
+
+stmt = select(t.c.x / 5.0)
+```
+
+The above statement will now render with a DOUBLE CAST on most backends:
+
+```sql
+ SELECT t.x / CAST(:x_1 AS DOUBLE) AS anon_1 FROM t
+```
+
+Previously, this would have rendered as `CAST(:x_1 AS FLOAT)`.
+
+#### Notes for Third-Party Dialects
+
+Third-party dialect implementations that don't support the `DOUBLE` keyword will need to ensure they have a `visit_double()` method in their type compiler to render an appropriate alternative keyword for the target database.
+
+For example, a dialect for a database that doesn't support `DOUBLE` might map it to `FLOAT`:
+
+```
+class MyDialectTypeCompiler(GenericTypeCompiler):
+    def visit_double(self, type_, **kw):
+        # Map double to FLOAT for databases that don't support DOUBLE
+        return "FLOAT"
+```
+
+The built-in SQLAlchemy dialects (PostgreSQL, MySQL, Oracle, SQL Server, SQLite) all handle `visit_double()` by rendering either `DOUBLE` or `DOUBLE PRECISION`.
+
+:ticket:`10300`
+
+# PostgreSQL
+
+## Default PostgreSQL driver changed to psycopg (psycopg 3)
+
+The default DBAPI driver for the PostgreSQL dialect has been changed from `psycopg2` to `psycopg` (psycopg version 3). When using a connection URL of the form `postgresql://user:pass@host/dbname`, SQLAlchemy will now attempt to use the `psycopg` driver by default.
+
+The `psycopg` (version 3) driver is the modernized successor to `psycopg2`, featuring improved performance when built with C extensions, better support for modern PostgreSQL features, and native async support via the `psycopg_async` dialect. The performance characteristics of `psycopg` with C extensions are comparable to `psycopg2`.
+
+The `psycopg2` driver remains fully supported and can be used by explicitly specifying it in the connection URL.
+
+Examples to summarize the change are as follows:
+
+```
+# omit the driver portion, will use the psycopg dialect
+engine = create_engine("postgresql://user:pass@host/dbname")
+
+# indicate the psycopg driver/dialect explicitly (preferred)
+engine = create_engine("postgresql+psycopg://user:pass@host/dbname")
+
+# use the legacy psycopg2 driver/dialect
+engine = create_engine("postgresql+psycopg2://user:pass@host/dbname")
+```
+
+The `psycopg` DBAPI driver itself can be installed either directly or via the `sqlalchemy[postgresql]` extra:
+
+```txt
+ # install psycopg directly
+ pip install "psycopg[binary]"
+
+ # or use SQLAlchemy's postgresql extra (now installs psycopg)
+ pip install sqlalchemy[postgresql]
+```
+
+> **Seealso:**  `postgresql_psycopg` - Documentation for the psycopg 3 dialect
+
+:ticket:`13010`
+
+## Changes to Named Type Handling in PostgreSQL
+
+Named types such as `_postgresql.ENUM, postgresql.DOMAIN` and the dialect-agnostic `._types.Enum` have undergone behavioral changes in SQLAlchemy 2.1 to better align with how a distinct type object that may be shared among tables works in practice.
+
+#### Named Types are Now Associated with MetaData
+
+Named types are now more strongly associated with the `_schema.MetaData at the top of the table hierarchy and are de-associated with any particular schema.Table` they may be a part of. This better represents how PostgreSQL named types exist independently of any particular table, and that they may be used across many tables simultaneously.
+
+`_types.Enum and postgresql.DOMAIN now have their types.SchemaType.metadata attribute set as soon as they are associated with a table, and no longer refer to the schema.Table` or tables they are within (a table of course still refers to the named types that it uses).
+
+#### Schema Inheritance from MetaData
+
+Named types will now "inherit" the schema of the `_schema.MetaData` by default. For example, `MetaData(schema="myschema") will cause all types.Enum and postgresql.DOMAIN` to use the schema "myschema":
+
+```
+metadata = MetaData(schema="myschema")
+
+table = Table(
+    "mytable",
+    metadata,
+    Column("status", Enum("active", "inactive", name="status_enum")),
+)
+
+# The enum will be created as "myschema.status_enum"
+```
+
+To have named types use the schema name of an immediate `_schema.Table that they are associated with, set the types.SchemaType.schema` parameter of the type to be that same schema name:
+
+```
+table = Table(
+    "mytable",
+    metadata,
+    Column(
+        "status", Enum("active", "inactive", name="status_enum", schema="tableschema")
+    ),
+    schema="tableschema",
+)
+```
+
+The `_types.SchemaType.inherit_schema` parameter remains available for this release but is deprecated for eventual removal, and will emit a deprecation warning when used.
+
+#### Modified Create and Drop Behavior
+
+The rules by which named types are created and dropped are also modified to flow more in terms of a `_schema.MetaData`:
+
+1. `_schema.MetaData.create_all and schema.Table.create` will
+create any named types needed
+
+2. `_schema.Table.drop` will not drop any named types
+3. `_schema.MetaData.drop_all` will drop named types after all tables
+are dropped
+
+#### Refined CheckFirst Behavior
+
+There is also newly refined "checkfirst" behavior. A new enumeration `_schema.CheckFirst is introduced which allows fine-grained control within schema.MetaData.create_all, schema.MetaData.drop_all, schema.Table.create, and schema.Table.drop` as to what "check" queries are emitted, allowing tests for types, sequences etc. to be included or not:
+
+```
+from sqlalchemy import CheckFirst
+
+# Only check for table existence, skip type checks
+metadata.create_all(engine, checkfirst=CheckFirst.TABLES)
+
+# Check for both tables and types
+metadata.create_all(engine, checkfirst=CheckFirst.TABLES | CheckFirst.TYPES)
+```
+
+#### inherit_schema is Deprecated
+
+Because named types now inherit the schema of `.MetaData` automatically and remain agnostic of what `.Table objects refer to them, the types.Enum.inherit_schema` parameter is deprecated.  For 2.1 it still works the old way by associating the type with the parent `.Table`, however as this binds the type to a single `.Table even though the type can be used against any number of tables, it's preferred to set types.Enum.schema` directly as desired when the schema used by the `.MetaData` is not what's desired.
+
+:ticket:`10594`
+
+## Support for `VIRTUAL` computed columns
+
+The behaviour of `.Computed.persisted` has change in SQLAlchemy 2.1 to no longer indicate `STORED` computed columns by default in PostgreSQL..
+
+This change aligns SQLAlchemy with PostgreSQL 18+, which has introduced support for `VIRTUAL` computed columns, and has made them the default type if no qualifier is specified.
+
+#### Migration Path
+
+To maintain the previous behaviour of `STORED` computed columns, `.Computed.persisted` should be set to `True` explicitly:
+
+```
+from sqlalchemy import Table, Column, MetaData, Computed, Integer
+
+metadata = MetaData()
+
+t = Table(
+    "t",
+    metadata,
+    Column("x", Integer),
+    Column("x^2", Integer, Computed("x * x", persisted=True)),
+)
+```
+
+## Addition of `BitString` subclass for handling postgresql `BIT` columns
+
+Values of `_postgresql.BIT` columns in the PostgreSQL dialect are returned as instances of a new `str subclass, postgresql.BitString.  Previously, the value of postgresql.BIT` columns was driver dependent, with most drivers returning `str` instances except `asyncpg`, which used `asyncpg.BitString`.
+
+With this change, for the `psycopg`, `psycopg2`, and `pg8000 drivers, the new postgresql.BitString` type is mostly compatible with `str`, but adds methods for bit manipulation and supports bitwise operators.
+
+As `_postgresql.BitString` is a string subclass, hashability as well as equality tests continue to work against plain strings.   This also leaves ordering operators intact.
+
+For implementations using the `asyncpg` driver, the new type is incompatible with the existing `asyncpg.BitString` type.
+
+:ticket:`10556`
+
+## HSTORE subscripting now uses native PostgreSQL 14+ syntax
+
+When connected to PostgreSQL 14 or later, HSTORE column subscripting operations now automatically use PostgreSQL's native subscript notation `hstore_col['key']` instead of the traditional arrow operator `hstore_col -> 'key'`. This change applies to both read and write operations and provides better compatibility with PostgreSQL's native HSTORE subscripting feature introduced in version 14.
+
+The change is similar to the equivalent change made for JSONB columns in SQLAlchemy 2.0.42.   The change for HSTORE is kept in 2.1 to provide a longer migration buffer for the issue of indexes which may refer to a subscript function, which was unanticipated when the JSONB change was made.
+
+For PostgreSQL versions prior to 14, SQLAlchemy continues to use the arrow operator syntax automatically, ensuring backward compatibility.
+
+Example of the new syntax when connected to PostgreSQL 14+:
+
+```
+from sqlalchemy import table, column, update
+from sqlalchemy.dialects.postgresql import HSTORE
+
+data = table("data", column("h", HSTORE))
+
+stmt1 = select(data.c.h["key"])
+
+stmt2 = update(data).values({data.c.h["status"]: "active"})
+```
+
+On PostgreSQL 14 and above, the statements above would render as:
+
+```sql
+ -- new subscript operator on PostgreSQL 14+
+ SELECT data.h['key'] FROM data
+
+ UPDATE data SET h['status'] = 'active'
+```
+
+On PostgreSQL 13 and earlier, they would render using the arrow operator:
+
+```sql
+ -- Same code on PostgreSQL 13 renders as:
+ SELECT data.h -> 'key' FROM data
+
+ UPDATE data SET h -> 'status' = 'active'
+```
+
+#### Impact on Existing Indexes
+
+If existing PostgreSQL 14+ databases have expression indexes on HSTORE subscript operations, those indexes will need to be recreated to match the new SQL syntax. The index definitions that used the arrow operator syntax (`h -> 'key'`) will not match the new subscript syntax (`h['key']`), which may cause index scans to not be used.
+
+To update an existing index:
+
+```sql
+ -- Drop the old index
+ DROP INDEX IF EXISTS idx_hstore_key;
+
+ -- Create new index with subscript syntax
+ CREATE INDEX idx_hstore_key ON my_table ((h['key']));
+```
+
+:ticket:`12948`
+
+## Support for Server-Side Monotonic Functions such as uuidv7() in Batched INSERT Operations
+
+SQLAlchemy 2.1 adds support for using monotonic server-side functions, such as PostgreSQL 18's `uuidv7()` function, as sentinels in the `engine_insertmanyvalues` feature. This allows these functions to work efficiently with batched INSERT operations while maintaining deterministic row ordering.
+
+When using a monotonic function as a default value, the `monotonic=True` parameter must be passed to the function to indicate that it produces monotonically increasing values. This enables SQLAlchemy to use the function's values to correlate RETURNING results with input parameter sets:
+
+```
+from sqlalchemy import Table, Column, MetaData, UUID, Integer, func
+
+metadata = MetaData()
+
+t = Table(
+    "t",
+    metadata,
+    Column("id", UUID, server_default=func.uuidv7(monotonic=True), primary_key=True),
+    Column("x", Integer),
+)
+```
+
+With the above configuration, when performing a batched INSERT with RETURNING on PostgreSQL, SQLAlchemy will generate SQL that properly orders the rows while allowing the server to generate the UUID values:
+
+```sql
+ INSERT INTO t (x) SELECT p0::INTEGER FROM
+ (VALUES (%(x__0)s, 0), (%(x__1)s, 1), (%(x__2)s, 2), ...)
+ AS imp_sen(p0, sen_counter) ORDER BY sen_counter
+ RETURNING t.id, t.id AS id__1
+```
+
+The returned rows are then sorted by the monotonically increasing UUID values to match the order of the input parameters, ensuring that ORM objects and returned values are properly correlated.
+
+This feature works with both `_schema.Column.server_default (for DDL-level defaults) and schema.Column.default` (for ad-hoc server-side function calls).
+
+> **Seealso:**  `engine_insertmanyvalues_monotonic_functions` - Complete documentation
+ on using monotonic functions
+ `postgresql_monotonic_functions` - PostgreSQL-specific examples
+
+:ticket:`13014`
+
+# Microsoft SQL Server
+
+## Potential breaking change to odbc_connect= handling for mssql+pyodbc
+
+Fixed a mssql+pyodbc issue where valid plus signs in an already-unquoted `odbc_connect=` (raw DBAPI) connection string were replaced with spaces.
+
+Previously, the pyodbc connector would always pass the odbc_connect value to unquote_plus(), even if it was not required. So, if the (unquoted) odbc_connect value contained `PWD=pass+word` that would get changed to `PWD=pass word`, and the login would fail. One workaround was to quote just the plus sign — `PWD=pass%2Bword` — which would then get unquoted to `PWD=pass+word`.
+
+Implementations using the above workaround with `_engine.URL.create` to specify a plus sign in the `PWD=` argument of an odbc_connect string will have to remove the workaround and just pass the `PWD=` value as it would appear in a valid ODBC connection string (i.e., the same as would be required if using the connection string directly with `pyodbc.connect()`).
+
+:ticket:`11250`
+
+## Support for mssql-python driver
+
+SQLAlchemy 2.1 adds support for the `mssql-python` driver, Microsoft's official Python driver for SQL Server. This driver represents a modern alternative to the widely-used `pyodbc` driver, with native support for several SQL Server-specific features.
+
+The `mssql-python` driver can be used by specifying `mssql+mssqlpython` in the connection URL:
+
+```
+from sqlalchemy import create_engine
+
+# Basic connection
+engine = create_engine("mssql+mssqlpython://user:password@hostname/database")
+
+# With Windows Authentication
+engine = create_engine(
+    "mssql+mssqlpython://hostname/database?authentication=ActiveDirectoryIntegrated"
+)
+```
+
+The `mssql-python` driver is available from PyPI:
+
+```text
+ pip install mssql-python
+```
+
+> **Seealso:**  `mssql_python` - Documentation for the mssql-python dialect
+
+:ticket:`12869`
+
+# Oracle Database
+
+## Default Oracle driver changed to python-oracledb
+
+The default DBAPI driver for the Oracle dialect has been changed from `cx_oracle` to `oracledb` (python-oracledb). When using a connection URL of the form `oracle://user:pass@host/dbname`, SQLAlchemy will now attempt to use the `oracledb` driver by default.
+
+The `oracledb` driver is the modernized successor to `cx_oracle`, actively maintained by Oracle with improved performance characteristics and ongoing feature development. The documentation for `cx_oracle` has been largely replaced with references to `oracledb` at https://cx-oracle.readthedocs.io/.
+
+The `cx_oracle` driver remains fully supported and can be used by explicitly specifying it in the connection URL.
+
+Examples to summarize the change are as follows:
+
+```
+# omit the driver portion, will use the oracledb dialect
+engine = create_engine("oracle://user:pass@host/dbname")
+
+# indicate the oracledb driver/dialect explicitly (preferred)
+engine = create_engine("oracle+oracledb://user:pass@host/dbname")
+
+# use the legacy cx_oracle driver/dialect
+engine = create_engine("oracle+cx_oracle://user:pass@host/dbname")
+```
+
+The `oracledb` DBAPI driver itself can be installed either directly or via the `sqlalchemy[oracle]` extra:
+
+```text
+ # install oracledb directly
+ pip install oracledb
+
+ # or use SQLAlchemy's oracle extra (now installs oracledb)
+ pip install sqlalchemy[oracle]
+```
+
+> **Seealso:**  `oracledb` - Documentation for the python-oracledb dialect
+
+:ticket:`13010`
+
+## Native `.BOOLEAN` support for Oracle 23c and above
+
+The `.Boolean` emulated datatype will now produce the DDL `BOOLEAN` when Oracle Database 23c or higher is used. The `.BOOLEAN` exact datatype may also be used with Oracle Database.    For earlier versions, the `.Boolean` emulated type will still produce `SMALLINT` in DDL and convert between Boolean and integer.   An Oracle database that uses `SMALLINT` with emulation on version 23c or above will also function correctly when using the `.Boolean` datatype.
+
+> **Seealso:**  `oracle_boolean_support`
+
+:ticket:`11633`
+
+# SQLite
+
+## Added `_sqlite.JSONB` json format for SQLite
+
+SQLite version 3.45 added support for serializing json using a binaly format called `JSONB, which provides imporved performance and storage saving. The new sqlite.JSONB` type provides support for this format, ensuring that the data is correctly serialized when inserting and deserialized when querying.
+
+> **Seealso:**  `_sqlite.JSONB`
+
+:ticket:`13260`

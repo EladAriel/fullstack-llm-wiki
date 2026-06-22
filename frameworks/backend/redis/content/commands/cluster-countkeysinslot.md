@@ -1,0 +1,86 @@
+---
+type: "Framework Learn Page"
+framework: "redis"
+source_repo: "https://github.com/redis/docs.git"
+source_branch: "main"
+source_path: "content/commands/cluster-countkeysinslot.md"
+source_commit: "bc92ea237bbfc2117c870c904f1a3ca619073ef1"
+source_commit_short: "bc92ea23"
+source_commit_date: "2026-06-18T14:53:00-05:00"
+generated_at: "2026-06-21T11:25:32Z"
+---
+
+---
+acl_categories:
+- '@slow'
+arguments:
+- display_text: slot
+  name: slot
+  type: integer
+arity: 3
+categories:
+- docs
+- develop
+- stack
+- oss
+- rs
+- rc
+- oss
+- kubernetes
+- clients
+command_flags:
+- stale
+complexity: O(1)
+description: Returns the number of keys in a hash slot.
+group: cluster
+hidden: false
+linkTitle: CLUSTER COUNTKEYSINSLOT
+railroad_diagram: /images/railroad/cluster-countkeysinslot.svg
+since: 3.0.0
+summary: Returns the number of keys in a hash slot.
+syntax_fmt: CLUSTER COUNTKEYSINSLOT slot
+title: CLUSTER COUNTKEYSINSLOT
+---
+Returns the number of keys in the specified Redis Cluster hash slot. The
+command only queries the local data set, so contacting a node
+that is not serving the specified hash slot will always result in a count of
+zero being returned.
+
+{{< note>}}During atomic slot migration operations (available since Redis 8.4.0), keys being imported or trimmed will be filtered out from the results.
+{{< /note >}}
+
+
+## Required arguments
+
+<details open><summary><code>slot</code></summary>
+
+The hash slot to count the keys in.
+
+</details>
+
+## Examples
+
+```
+> CLUSTER COUNTKEYSINSLOT 7000
+(integer) 50341
+```
+
+## Redis Software and Redis Cloud compatibility
+
+| Redis<br />Software | Redis<br />Cloud | <span style="min-width: 9em; display: table-cell">Notes</span> |
+|:----------------------|:-----------------|:------|
+| <span title="Not supported">&#x274c; Standard</span><br /><span title="Not supported"><nobr>&#x274c; Active-Active</nobr></span> | <span title="Not supported">&#x274c; Standard</span><br /><span title="Not supported"><nobr>&#x274c; Active-Active</nobr></span> |  |
+
+## Return information
+
+{{< multitabs id="cluster-countkeysinslot-return-info" 
+    tab1="RESP2" 
+    tab2="RESP3" >}}
+
+[Integer reply](../../develop/reference/protocol-spec#integers): The number of keys in the specified hash slot, or an error if the hash slot is invalid.
+
+-tab-sep-
+
+[Integer reply](../../develop/reference/protocol-spec#integers): The number of keys in the specified hash slot, or an error if the hash slot is invalid.
+
+{{< /multitabs >}}

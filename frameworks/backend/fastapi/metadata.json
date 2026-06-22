@@ -1,0 +1,12 @@
+{
+  "framework": "fastapi",
+  "display_name": "FastAPI",
+  "source_repo": "https://github.com/fastapi/fastapi.git",
+  "source_branch": "master",
+  "source_docs_path": "docs/en/docs",
+  "source_commit": "0cb4a8e284b450abbccb71c543ad7757de46c0b2",
+  "source_commit_short": "0cb4a8e2",
+  "source_commit_date": "2026-06-20T16:31:34Z",
+  "wiki_generated_at": "2026-06-21T07:06:10Z",
+  "page_count": 107
+}

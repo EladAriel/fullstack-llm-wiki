@@ -1,0 +1,162 @@
+---
+type: "Framework Learn Page"
+framework: "mongodb"
+source_repo: "https://github.com/mongodb/docs.git"
+source_branch: "main"
+source_path: "content/manual/manual/source/reference/operator/projection/positional.txt"
+source_commit: "96788e8ed140cbdde184ff82e1066dff4996bde4"
+source_commit_short: "96788e8e"
+source_commit_date: "2026-06-19T21:35:03-06:00"
+generated_at: "2026-06-21T07:41:52Z"
+---
+
+=========================
+
+# \$  (projection operator)
+
+## Definition
+
+## Usage Considerations
+
+.. include:: /includes/fact-positional-projection-vs-elemmatch.rst
+
+.. include:: /includes/extracts/views-unsupported-projection-$.rst
+
+## Behavior
+
+### Syntax
+
+To return the first array element that matches the specified query condition on the array:
+
+```javascript
+db.collection.find( { <array>: <condition> ... },
+                    { "<array>.$": 1 } )
+db.collection.find( { <array.field>: <condition> ...},
+                    { "<array>.$": 1 } )
+```
+
+You can use the :projection:`$` operator to limit an `<array>` field, which does not appear in the `query document <read-operations-query-argument>`. In previous versions of MongoDB, the `<array>` field being limited **must** appear in the query document.
+
+```javascript
+db.collection.find( { <someOtherArray>: <condition> ... }, 
+                    { "<array>.$" : 1 } )
+```
+
+> **Important:** .. include:: /includes/fact-behavior-project-different-array.rst
+
+### Array Field Limitations
+
+MongoDB requires the following when dealing with projection over arrays:
+
+- Only one positional :projection:`$` operator may appear in the projection
+document.
+
+- Only one array field should appear in the
+`query document <read-operations-query-argument>`. Additional array fields in the query document may lead to undefined behavior.
+
+For example, the following projection may lead to undefined behavior:
+
+```javascript
+  db.collection.find( { <array>: <value>, <someOtherArray>: <value2> },
+                      { "<array>.$": 1 } )
+```
+
+- The `query document <read-operations-query-argument>` should only
+contain a single condition on the array field to which it is applied. Multiple conditions may override each other internally and lead to undefined behavior.
+
+To specify criteria on multiple fields of documents inside that array, use the :query:`$elemMatch` query operator. The following query returns the first document inside a `grades` array that has a `mean` of greater than 70 and a `grade` of greater than 90.
+
+```javascript
+  db.students.find( { grades: { $elemMatch: {
+                                              mean: { $gt: 70 },
+                                              grade: { $gt:90 }
+                                            } } },
+                    { "grades.$": 1 } )
+
+You must use the :projection:`$elemMatch` operator if you need separate conditions
+for selecting documents and for choosing fields within those documents.
+```
+
+### Sorts and the Positional Operator
+
+When the :method:`~db.collection.find()` method includes a :method:`~cursor.sort()`, the :method:`~db.collection.find()` method applies the :method:`~cursor.sort()` to order the matching documents **before** it applies the positional :projection:`$` projection operator.
+
+If an array field contains multiple documents with the same field name and the :method:`~db.collection.find()` method includes a :method:`~cursor.sort()` on that repeating field, the returned documents may not reflect the sort order because the sort was applied to the elements of the array before the :projection:`$` projection operator.
+
+### Positional Operator Placement Restriction
+
+.. include:: /includes/extracts/projection-positional-operator-path.rst
+
+### Positional Operator and `$slice` Restriction
+
+.. include:: /includes/extracts/projection-positional-operator-slice-full.rst
+
+## Examples
+
+### Project Array Values
+
+A collection `students` contains the following documents:
+
+```javascript
+db.students.insertMany( [
+   { _id : 1, "semester" : 1, "grades" : [ 70, 87, 90 ] },
+   { _id : 2, "semester" : 1, "grades" : [ 90, 88, 92 ] },
+   { _id : 3, "semester" : 1, "grades" : [ 85, 100, 90 ] },
+   { _id : 4, "semester" : 2, "grades" : [ 79, 85, 80 ] },
+   { _id : 5, "semester" : 2, "grades" : [ 88, 88, 92 ] },
+   { _id : 6, "semester" : 2, "grades" : [ 95, 90, 96 ] }
+] )
+```
+
+In the following query, the projection `{ "grades.$": 1 }` returns only the first element greater than or equal to `85` for the `grades` field.
+
+```javascript
+db.students.find( { semester: 1, grades: { $gte: 85 } },
+                  { "grades.$": 1 } )
+```
+
+The operation returns the following documents:
+
+```javascript
+{ "_id" : 1, "grades" : [ 87 ] }
+{ "_id" : 2, "grades" : [ 90 ] }
+{ "_id" : 3, "grades" : [ 85 ] }
+```
+
+Although the array field `grades` may contain multiple elements that are greater than or equal to `85`, the :projection:`$` projection operator returns only the first matching element from the array.
+
+### Project Array Documents
+
+A `students` collection contains the following documents where the `grades` field is an array of documents; each document contain the three field names `grade`, `mean`, and `std`:
+
+```javascript
+db.students.insertMany( [
+   { _id : 7, semester: 3, "grades" : [ { grade: 80, mean: 75, std: 8 },
+                                       { grade: 85, mean: 90, std: 5 },
+                                       { grade: 90, mean: 85, std: 3 } ] },
+
+   { _id : 8, semester: 3, "grades" : [ { grade: 92, mean: 88, std: 8 },
+                                       { grade: 78, mean: 90, std: 5 },
+                                       { grade: 88, mean: 85, std: 3 } ] }
+] )
+```
+
+In the following query, the projection `{ "grades.$": 1 }` returns only the first element with the `mean` greater than `70` for the `grades` field:
+
+```javascript
+db.students.find(
+   { "grades.mean": { $gt: 70 } },
+   { "grades.$": 1 }
+)
+```
+
+The operation returns the following documents:
+
+```javascript
+{ "_id" : 7, "grades" : [  {  "grade" : 80,  "mean" : 75,  "std" : 8 } ] }
+{ "_id" : 8, "grades" : [  {  "grade" : 92,  "mean" : 88,  "std" : 8 } ] }
+```
+
+## Further Reading
+
+:projection:`$elemMatch (projection) <$elemMatch>`

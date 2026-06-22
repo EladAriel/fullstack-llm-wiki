@@ -1,0 +1,108 @@
+---
+type: "Framework Learn Page"
+framework: "redis"
+source_repo: "https://github.com/redis/docs.git"
+source_branch: "main"
+source_path: "content/commands/decr.md"
+source_commit: "bc92ea237bbfc2117c870c904f1a3ca619073ef1"
+source_commit_short: "bc92ea23"
+source_commit_date: "2026-06-18T14:53:00-05:00"
+generated_at: "2026-06-21T11:25:32Z"
+---
+
+---
+acl_categories:
+- '@write'
+- '@string'
+- '@fast'
+arguments:
+- display_text: key
+  key_spec_index: 0
+  name: key
+  type: key
+arity: 2
+categories:
+- docs
+- develop
+- stack
+- oss
+- rs
+- rc
+- oss
+- kubernetes
+- clients
+command_flags:
+- write
+- denyoom
+- fast
+complexity: O(1)
+description: Decrements the integer value of a key by one. Uses 0 as initial value
+  if the key doesn't exist.
+group: string
+hidden: false
+key_specs:
+- RW: true
+  access: true
+  begin_search:
+    spec:
+      index: 1
+    type: index
+  find_keys:
+    spec:
+      keystep: 1
+      lastkey: 0
+      limit: 0
+    type: range
+  update: true
+linkTitle: DECR
+railroad_diagram: /images/railroad/decr.svg
+since: 1.0.0
+summary: Decrements the integer value of a key by one. Uses 0 as initial value if
+  the key doesn't exist.
+syntax_fmt: DECR key
+title: DECR
+---
+Decrements the number stored at `key` by one.
+If the key does not exist, it is set to `0` before performing the operation.
+An error is returned if the key contains a value of the wrong type or contains a
+string that can not be represented as integer.
+This operation is limited to 64-bit signed integers.
+
+See [`INCR`]({{< relref "/commands/incr" >}}) for extra information on increment/decrement operations.
+
+## Required arguments
+
+<details open><summary><code>key</code></summary>
+
+The name of the key.
+
+</details>
+
+## Examples
+
+{{% redis-cli %}}
+SET mykey "10"
+DECR mykey
+SET mykey "234293482390480948029348230948"
+DECR mykey
+{{% /redis-cli %}}
+
+## Redis Software and Redis Cloud compatibility
+
+| Redis<br />Software | Redis<br />Cloud | <span style="min-width: 9em; display: table-cell">Notes</span> |
+|:----------------------|:-----------------|:------|
+| <span title="Supported">&#x2705; Standard</span><br /><span title="Supported"><nobr>&#x2705; Active-Active</nobr></span> | <span title="Supported">&#x2705; Standard</span><br /><span title="Supported"><nobr>&#x2705; Active-Active</nobr></span> |  |
+
+## Return information
+
+{{< multitabs id="decr-return-info" 
+    tab1="RESP2" 
+    tab2="RESP3" >}}
+
+[Integer reply](../../develop/reference/protocol-spec#integers): the value of the key after decrementing it.
+
+-tab-sep-
+
+[Integer reply](../../develop/reference/protocol-spec#integers): the value of the key after decrementing it.
+
+{{< /multitabs >}}

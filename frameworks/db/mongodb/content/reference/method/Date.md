@@ -1,0 +1,126 @@
+---
+type: "Framework Learn Page"
+framework: "mongodb"
+source_repo: "https://github.com/mongodb/docs.git"
+source_branch: "main"
+source_path: "content/manual/manual/source/reference/method/Date.txt"
+source_commit: "96788e8ed140cbdde184ff82e1066dff4996bde4"
+source_commit_short: "96788e8e"
+source_commit_date: "2026-06-19T21:35:03-06:00"
+generated_at: "2026-06-21T07:41:52Z"
+---
+
+====================================
+
+# Date() and Datetime (mongosh method)
+
+## Compatibility
+
+.. include:: /includes/fact-compatibility.rst
+
+## Syntax
+
+You can specify either of the following formats:
+
+- `Date()` returns the current date as a string in
+:binary:`~bin.mongosh`.
+
+- `new Date()` returns the current date as a
+`document-bson-type-date` object. :binary:`~bin.mongosh` wraps the `document-bson-type-date` object with the `ISODate` helper. The `ISODate` is in [UTC](https://en.wikipedia.org/wiki/Coordinated_Universal_Time)_.
+
+You can specify a particular date by passing an ISO-8601 date string with a year within the inclusive range `0` through `9999` to the `new Date()` constructor or the `ISODate()` function. These functions accept the following formats:
+
+- `new Date("<YYYY-mm-dd>")` returns the `ISODate` with the
+specified date.
+
+- `new Date("<YYYY-mm-ddTHH:MM:ss.sss>")` specifies the datetime in
+the client's local timezone and returns the `ISODate` with the specified datetime in UTC. `ss.sss` specifies seconds (`ss`) and milliseconds (`.sss`). Milliseconds are set to `0` if omitted.
+
+- `new Date("<YYYY-mm-ddTHH:MM:ss.sssZ>")` specifies the datetime in
+UTC and returns the `ISODate` with the specified datetime in UTC. `ss.sss` specifies seconds (`ss`) and milliseconds (`.sss`). Milliseconds are set to `0` if omitted.
+
+- `new Date(<integer>)` specifies the datetime as milliseconds
+since the `UNIX epoch <unix epoch>` (Jan 1, 1970), and returns the resulting `ISODate` instance.
+
+## Behavior
+
+.. include:: /includes/fact-bson-date-internals.rst
+
+## Examples
+
+### Use Date in a Query
+
+If no document with `_id` equal to `1` exists in the `products` collection, the following operation inserts a document with the field `dateAdded` set to the current date:
+
+```javascript
+db.products.updateOne(
+   { _id: 1 },
+   {
+     $set: { item: "apple" },
+     $setOnInsert: { dateAdded: new Date() }
+   },
+   { upsert: true }
+)
+```
+
+> **Seealso:** - :update:`$currentDate`
+- `NOW aggregation variable usage <currentDate-example-agg>` to
+  update with aggregation pipeline
+
+### Return Date as a String
+
+To return the date as a string, use the `Date()` method. For example:
+
+```javascript
+var myDateString = Date();
+```
+
+### Return Date as `Date` Object
+
+:binary:`~bin.mongosh` wraps objects of `document-bson-type-date` type with the `ISODate` helper. However, the objects are `document-bson-type-date` types.
+
+The following example uses `new Date()` to return a `document-bson-type-date` object with the specified UTC datetime:
+
+```javascript
+var myDate = new Date("2016-05-18T16:00:00Z");
+```
+
+> **Seealso:** - `BSON Date <document-bson-type-date>`
+- `mongo Shell Date <mongo-shell-date-type>`
+
+### Insert and Return `ISODate` Objects
+
+You can specify dates as `ISODate` objects.
+
+The following example creates a `cakeSales` collection with `ISODate` objects in the `orderDate` field:
+
+```javascript
+db.cakeSales.insertMany( [
+   { _id: 0, type: "chocolate", orderDate: new ISODate("2020-05-18T14:10:30.123Z") },
+   { _id: 1, type: "strawberry", orderDate: new ISODate("2021-03-20T11:30:05Z") },
+   { _id: 2, type: "vanilla", orderDate: new ISODate("2021-01-15T06:31:15.456Z") }
+] )
+```
+
+The following example returns documents where the `orderDate` is less than the `ISODate` specified in the :expression:`$lt` operator:
+
+```javascript
+db.cakeSales.find( { orderDate: { $lt: ISODate("2021-02-25T10:03:46.234Z") } } )
+```
+
+Example output:
+
+```javascript
+[
+   {
+      _id: 0,
+      type: 'chocolate',
+      orderDate: ISODate("2020-05-18T14:10:30.123Z")
+   },
+   {
+      _id: 2,
+      type: 'vanilla',
+      orderDate: ISODate("2021-01-15T06:31:15.456Z")
+   }
+]
+```

@@ -1,0 +1,182 @@
+---
+type: "Framework Learn Page"
+framework: "mongodb"
+source_repo: "https://github.com/mongodb/docs.git"
+source_branch: "main"
+source_path: "content/manual/manual/source/core/indexes/index-types/index-wildcard/reference/restrictions.txt"
+source_commit: "96788e8ed140cbdde184ff82e1066dff4996bde4"
+source_commit_short: "96788e8e"
+source_commit_date: "2026-06-19T21:35:03-06:00"
+generated_at: "2026-06-21T07:41:52Z"
+---
+
+===========================
+
+# Wildcard Index Restrictions
+
+This page describes limitations for wildcard indexes such as incompatible properties and unsupported query patterns.
+
+## Compound Wildcard Index Restrictions
+
+.. include:: /includes/indexes/wildcard-restrictions-compound.rst
+
+## Incompatible Index Properties
+
+You cannot specify the following properties for a wildcard index:
+
+- `TTL <index-feature-ttl>`
+- `Unique <index-type-unique>`
+## Incompatible Index Types
+
+You cannot create the following index types using wildcard syntax (`$.**`):
+
+- `2d (Geospatial) <2d-index>`
+- `2dsphere (Geospatial) <2dsphere-index>`
+- `Hashed <index-type-hashed>`
+> **Note:** Wildcard Indexes are distinct from and incompatible with
+`create-wildcard-text-index`. Wildcard indexes cannot support
+queries using the :query:`$text` operator.
+
+## Shard Key
+
+You cannot use a wildcard index as a `shard key index <sharding-shard-key-indexes>`.
+
+## Unsupported Query Patterns
+
+Wildcard indexes cannot support the following query patterns:
+
+### Array Field is Not Equal to `null`
+
+If a given field is an array in any document in the collection, wildcard indexes cannot support queries for documents where that field is not equal to `null`.
+
+For example, consider an `inventory` collection with a wildcard index on `product_attributes`. The wildcard index **cannot** support the following queries if `product_attributes.tags` is an array in any document in the collection:
+
+```javascript
+db.inventory.find( { $ne : [ "product_attributes.tags", null ] } )
+
+db.inventory.aggregate( [
+   { 
+      $match : { $ne : [ "product_attributes.tags", null ] }
+   }
+] )
+```
+
+### Equality Matches on Documents and Arrays
+
+Wildcard indexes store entries for the contents of a document or array, not the document or array itself. Therefore, wildcard indexes cannot support exact equality matches on documents or arrays.
+
+For example, consider an `inventory` collection with a wildcard index on `product_attributes`. The wildcard index cannot support the following queries:
+
+```javascript
+db.inventory.find(
+   {
+      "product_attributes" : { "price" : 29.99 }
+   }
+)
+
+db.inventory.find(
+   { 
+      "product_attributes.tags" : [ "waterproof", "fireproof" ]
+   }
+)
+```
+
+> **Note:**  Wildcard indexes **can** support queries where the field equals an
+ empty document `{}`.
+
+Similarly, wildcard indexes cannot support exact **inequality** matches on documents and arrays. For example, a wildcard index on `product_attributes` cannot support the following queries:
+
+```javascript
+db.inventory.aggregate( [
+   { 
+      $match : { 
+         $ne : [ "product_attributes", { "price" : 29.99 } ]
+      }
+   }
+] )
+
+db.inventory.aggregate( [
+   { 
+      $match : {
+         $ne : [ "product_attributes.tags", [ "waterproof", "fireproof" ] ]
+      }
+   }
+] )
+```
+
+### Field Does Not Exist
+
+Wildcard indexes are `sparse <index-type-sparse>` and do not index empty fields. Therefore, wildcard indexes cannot support queries for documents where a field does not exist.
+
+For example, consider an `inventory` collection with a wildcard index on `product_attributes`. The wildcard index cannot support the following queries:
+
+```javascript
+db.inventory.find(
+   { 
+      "product_attributes" : { $exists : false }
+   }
+)
+
+db.inventory.aggregate( [
+  {
+     $match : {
+        "product_attributes" : { $exists : false }
+     }
+  }
+] )
+```
+
+### Multi-Field Query Predicates
+
+In the case that a single wildcard index could support multiple query fields, MongoDB can only use the wildcard index to support one of the query fields.
+
+For example, consider an `inventory` collection with a wildcard index on `product_attributes`. The wildcard index cannot support all of the predicates in the following query:
+
+```javascript
+db.inventory.find(
+   {
+      "product_attributes.price": { $gt: 20 },
+      "product_attributes.material": "silk",
+      "product_attributes.size": "large"
+   }
+)
+```
+
+Instead, MongoDB uses the wildcard index to support only one of the query predicates. MongoDB automatically chooses which predicate to support based on relevant wildcard index paths. The unsupported query predicates are shown in the `explain.queryPlanner.rejectedPlans` of the `explain results <explain-results>`.
+
+This is also true for compound wildcard indexes. The wildcard term of a compound index can only support one query predicate, although the non-wildcard terms can support the remaining predicates.
+
+> **Note:** MongoDB may use the same wildcard index to support each independent
+argument of the query :query:`$or` or aggregation :expression:`$or`
+operators.
+
+### Queries with Sort
+
+MongoDB can use a wildcard index for satisfying the :method:`~cursor.sort()` **only if** all of the following are true:
+
+- The query planner selects the wildcard index for satisfying the
+query predicate.
+
+- The :method:`~cursor.sort()` specifies **only** the query predicate
+field.
+
+- The specified field is never an array.
+If the above conditions are not met, MongoDB cannot use the wildcard index for the sort. MongoDB does not support :method:`~cursor.sort` operations that require a different index from that of the query predicate.
+
+Consider the following wildcard index on the `products` collection:
+
+```javascript
+db.products.createIndex( { "product_attributes.$**" : 1 } )
+```
+
+The following operation queries for a single field `product_attributes.price` and sorts on that same field:
+
+```javascript
+db.products.find(
+  { "product_attributes.price" : { $gt : 10.00 } },
+).sort(
+  { "product_attributes.price" : 1 }
+)
+```
+
+Assuming that the specified `price` is never an array, MongoDB can use the `product_attributes.$**` wildcard index for satisfying both the :method:`~db.collection.find()` and :method:`~cursor.sort()`.

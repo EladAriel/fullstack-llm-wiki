@@ -1,0 +1,83 @@
+---
+type: "Framework Learn Page"
+framework: "mongodb"
+source_repo: "https://github.com/mongodb/docs.git"
+source_branch: "main"
+source_path: "content/manual/manual/source/reference/operator/query/lt.txt"
+source_commit: "96788e8ed140cbdde184ff82e1066dff4996bde4"
+source_commit_short: "96788e8e"
+source_commit_date: "2026-06-19T21:35:03-06:00"
+generated_at: "2026-06-21T07:41:52Z"
+---
+
+==============================
+
+# $lt (query predicate operator)
+
+## Definition
+
+## Examples
+
+The following examples use the `inventory` collection. Create the collection:
+
+.. include:: /includes/examples-create-inventory.rst
+
+### Match Document Fields
+
+Select all documents in the `inventory` collection where `quantity` is less than `20`:
+
+```javascript
+db.inventory.find( { quantity: { $lt: 20 } } )
+```
+
+Example output:
+
+```javascript
+{
+  _id: ObjectId("61ba634dfe687fce2f04241f"),
+  item: 'washers',
+  quantity: 10,
+  carrier: { name: 'Shipit', fee: 1 }
+}
+```
+
+### Perform an Update Based on Embedded Document Fields
+
+The following example sets the `price` field based on a :query:`$lt` comparison against a field in an embedded document.
+
+```javascript
+db.inventory.updateMany( { "carrier.fee": { $lt: 20 } }, { $set: { price: 9.99 } } )
+```
+
+Example output:
+
+```javascript
+{
+  _id: ObjectId("61ba634dfe687fce2f04241d"),
+  item: 'nuts',
+  quantity: 30,
+  carrier: { name: 'Shipit', fee: 3 },
+  price: 9.99
+},
+{
+  _id: ObjectId("61ba634dfe687fce2f04241e"),
+  item: 'bolts',
+  quantity: 50,
+  carrier: { name: 'Shipit', fee: 4 },
+  price: 9.99
+},
+{
+  _id: ObjectId("61ba634dfe687fce2f04241f"),
+  item: 'washers',
+  quantity: 10,
+  carrier: { name: 'Shipit', fee: 1 },
+  price: 9.99
+}
+```
+
+This :method:`~db.collection.updateMany()` operation searches for an embedded document, `carrier`, with a subfield named `fee`. It sets `{ price: 9.99 }` in each document where `fee` has a value less than 20.
+
+To set the value of the `price` field in only the first document where `carrier.fee` is less than 20, use :method:`~db.collection.updateOne()`.
+
+> **Seealso:** - :method:`~db.collection.find()`
+- :update:`$set`

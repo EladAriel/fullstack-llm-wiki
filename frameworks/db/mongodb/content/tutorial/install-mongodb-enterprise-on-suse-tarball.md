@@ -1,0 +1,79 @@
+---
+type: "Framework Learn Page"
+framework: "mongodb"
+source_repo: "https://github.com/mongodb/docs.git"
+source_branch: "main"
+source_path: "content/manual/manual/source/tutorial/install-mongodb-enterprise-on-suse-tarball.txt"
+source_commit: "96788e8ed140cbdde184ff82e1066dff4996bde4"
+source_commit_short: "96788e8e"
+source_commit_date: "2026-06-19T21:35:03-06:00"
+generated_at: "2026-06-21T07:41:52Z"
+---
+
+=====================================================
+
+# Install MongoDB Enterprise on SUSE using .tgz Tarball
+
+.. include:: /includes/minor-release.rst
+
+## Overview
+
+Use this tutorial to manually install MongoDB {+version+} |edition| Edition on SUSE Linux Enterprise Server (SLES) using a downloaded `.tgz` tarball.
+
+:products:`MongoDB Enterprise Edition</mongodb-enterprise-advanced>` is available on select platforms and contains support for features related to security and monitoring.
+
+### MongoDB Version
+
+.. include:: /includes/fact-install-past-mongodb.rst
+
+### Installation Method
+
+.. include:: /includes/fact-use-package-manager.rst
+
+|arrow| See `Install MongoDB using the zypper Package Manager<install-mdb-enterprise-suse>` for instructions.
+
+## Considerations
+
+### MongoDB Shell, `mongosh`
+
+.. include:: /includes/fact-have-to-install-mongosh-tgz.rst
+
+### Platform Support
+
+.. include:: /includes/fact-platform-support-enterprise-suse.rst
+
+### Production Notes
+
+.. include:: /includes/fact-see-production-notes.rst
+
+## Install MongoDB Enterprise Edition
+
+### Prerequisites
+
+.. include:: /includes/fact-tarball-dependencies.rst
+
+.. include:: /includes/deploy/enterprise-prereq-suse.rst
+
+### Procedure
+
+Follow these steps to manually install MongoDB |edition| Edition from the `.tgz`.
+
+.. include:: /includes/deploy/install-tar.rst
+
+## Run MongoDB Enterprise Edition
+
+.. include:: /includes/fact-installation-directories.rst
+
+.. include:: /includes/fact-installation-ulimit.rst
+
+### Procedure
+
+Follow these steps to run MongoDB |edition| Edition. These instructions assume that you are using the default settings.
+
+.. include:: /includes/steps/run-mongodb-on-linux-tarball.rst
+
+## Additional Information
+
+### Localhost Binding by Default
+
+.. include:: /includes/fact-installation-bind-ip-default-in-config.rst
