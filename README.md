@@ -80,7 +80,8 @@ mkdir -p /path/to/user-repo/.antigravitycli/skills
 cp -R skills/fullstack-llm-wiki-navigator /path/to/user-repo/.antigravitycli/skills/fullstack-llm-wiki-navigator
 ```
 
-### Codex
+<details>
+<summary><h3>Codex</h3></summary>
 
 Open Codex from the wiki repo root. Codex discovers the repo skill at:
 
@@ -90,7 +91,10 @@ Open Codex from the wiki repo root. Codex discovers the repo skill at:
 
 For another project, copy or symlink `.agents/skills/fullstack-llm-wiki-navigator/` into that project's `.agents/skills/`, or into your user skills folder. Keep this wiki repo accessible, preferably as `fullstack-llm-wiki/` inside the project.
 
-### Claude Code
+</details>
+
+<details>
+<summary><h3>Claude Code</h3></summary>
 
 Open Claude Code from the wiki repo root. Claude can use:
 
@@ -101,7 +105,10 @@ CLAUDE.md
 
 For another project, copy or symlink `.claude/skills/fullstack-llm-wiki-navigator/` into that project's `.claude/skills/`, or into your user-level Claude skills folder. Keep this wiki repo accessible, preferably as `fullstack-llm-wiki/` inside the project.
 
-### Cursor
+</details>
+
+<details>
+<summary><h3>Cursor</h3></summary>
 
 Cursor supports skills, so this repo uses a Cursor skill instead of a Cursor rule. Rules are for always-on project guidance; this wiki is better as a skill because Cursor can invoke it for relevant framework/library questions without forcing the full instruction into every request.
 
@@ -113,7 +120,10 @@ Open the wiki repo in Cursor. Cursor discovers the project skill at:
 
 For another project, copy `skills/fullstack-llm-wiki-navigator/` into that project's `.cursor/skills/`. Keep this wiki repo accessible, preferably as `fullstack-llm-wiki/` inside the project.
 
-### Antigravity CLI
+</details>
+
+<details>
+<summary><h3>Antigravity CLI</h3></summary>
 
 Gemini CLI is deprecated for this workflow. Use Antigravity CLI instead.
 
@@ -124,6 +134,8 @@ Open Antigravity CLI from the wiki repo root. Antigravity CLI discovers the proj
 ```
 
 For another project, copy `skills/fullstack-llm-wiki-navigator/` into that project's `.antigravitycli/skills/`. Keep this wiki repo accessible, preferably as `fullstack-llm-wiki/` inside the project.
+
+</details>
 
 ## Main Files
 
