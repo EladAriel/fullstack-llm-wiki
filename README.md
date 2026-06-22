@@ -40,7 +40,7 @@ framework root index -> nearest directory index -> most specific content page
 Clone the wiki, open the repo root in your AI IDE, and ask questions normally:
 
 ```bash
-git clone https://github.com/<owner>/fullstack-llm-wiki.git
+git clone https://github.com/EladAriel/fullstack-llm-wiki.git
 cd fullstack-llm-wiki
 ```
 
@@ -49,6 +49,36 @@ If you clone this repo inside another project, keep the folder name `fullstack-l
 ## Assign The Wiki To Your AI Tool
 
 This repo includes native setup files so users do not have to create them manually.
+
+To install the skill into another repo, copy the canonical skill folder into the tool-specific skill directory.
+
+For Codex:
+
+```bash
+mkdir -p /path/to/user-repo/.agents/skills
+cp -R skills/fullstack-llm-wiki-navigator /path/to/user-repo/.agents/skills/fullstack-llm-wiki-navigator
+```
+
+For Claude Code:
+
+```bash
+mkdir -p /path/to/user-repo/.claude/skills
+cp -R skills/fullstack-llm-wiki-navigator /path/to/user-repo/.claude/skills/fullstack-llm-wiki-navigator
+```
+
+For Cursor:
+
+```bash
+mkdir -p /path/to/user-repo/.cursor/skills
+cp -R skills/fullstack-llm-wiki-navigator /path/to/user-repo/.cursor/skills/fullstack-llm-wiki-navigator
+```
+
+For Antigravity CLI:
+
+```bash
+mkdir -p /path/to/user-repo/.antigravitycli/skills
+cp -R skills/fullstack-llm-wiki-navigator /path/to/user-repo/.antigravitycli/skills/fullstack-llm-wiki-navigator
+```
 
 ### Codex
 
@@ -73,41 +103,39 @@ For another project, copy or symlink `.claude/skills/fullstack-llm-wiki-navigato
 
 ### Cursor
 
-Open the wiki repo in Cursor. Cursor reads the project rule at:
+Cursor supports skills, so this repo uses a Cursor skill instead of a Cursor rule. Rules are for always-on project guidance; this wiki is better as a skill because Cursor can invoke it for relevant framework/library questions without forcing the full instruction into every request.
+
+Open the wiki repo in Cursor. Cursor discovers the project skill at:
 
 ```text
-.cursor/rules/fullstack-llm-wiki.mdc
+.cursor/skills/fullstack-llm-wiki-navigator/SKILL.md
 ```
 
-For another project, copy that rule file into the project's `.cursor/rules/` directory, or add it through Cursor's Rules settings. Keep this wiki repo accessible, preferably as `fullstack-llm-wiki/` inside the project.
+For another project, copy `skills/fullstack-llm-wiki-navigator/` into that project's `.cursor/skills/`. Keep this wiki repo accessible, preferably as `fullstack-llm-wiki/` inside the project.
 
-### Gemini CLI
+### Antigravity CLI
 
-Open Gemini CLI from the wiki repo root. Gemini CLI reads:
+Gemini CLI is deprecated for this workflow. Use Antigravity CLI instead.
+
+Open Antigravity CLI from the wiki repo root. Antigravity CLI discovers the project skill at:
 
 ```text
-GEMINI.md
+.antigravitycli/skills/fullstack-llm-wiki-navigator/SKILL.md
 ```
 
-Use `/memory show` to verify the file is loaded, and `/memory refresh` after changing the wiki instructions. For another project, copy or symlink `GEMINI.md` into that project and keep this wiki repo accessible, preferably as `fullstack-llm-wiki/`.
+For another project, copy `skills/fullstack-llm-wiki-navigator/` into that project's `.antigravitycli/skills/`. Keep this wiki repo accessible, preferably as `fullstack-llm-wiki/` inside the project.
 
 ## Main Files
 
 - `AGENTS.md` - shared repo instructions for tools that read agent guidance
 - `CLAUDE.md` - Claude Code project memory
-- `GEMINI.md` - Gemini CLI project memory
 - `.agents/skills/fullstack-llm-wiki-navigator/SKILL.md` - Codex repo skill
 - `.claude/skills/fullstack-llm-wiki-navigator/SKILL.md` - Claude Code repo skill
-- `.cursor/rules/fullstack-llm-wiki.mdc` - Cursor project rule
+- `.cursor/skills/fullstack-llm-wiki-navigator/SKILL.md` - Cursor repo skill
+- `.antigravitycli/skills/fullstack-llm-wiki-navigator/SKILL.md` - Antigravity CLI repo skill
 - `skills/fullstack-llm-wiki-navigator/SKILL.md` - portable canonical skill instructions
 - `frameworks/index.md` - global framework category index
 - `frameworks/ui/index.md` - UI framework index
 - `frameworks/backend/index.md` - backend framework index
 - `frameworks/db/index.md` - database framework index
 - `frameworks/test/index.md` - test framework index
-
-## Update The Wiki
-
-This standalone repo contains the generated wiki output. The generator scripts live outside this repo in the builder workspace.
-
-To update the generated docs, run the wiki builder from the builder workspace, then copy or regenerate the updated `frameworks/` tree here before committing.

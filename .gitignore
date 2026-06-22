@@ -19,8 +19,8 @@ venv/
 # Local agent/editor state
 CLAUDE.local.md
 .claude/settings.local.json
+.antigravitycli/settings.local.json
 .codex/
-.gemini/
 .idea/
 .vscode/
 
