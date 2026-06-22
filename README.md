@@ -52,36 +52,15 @@ This repo includes native setup files so users do not have to create them manual
 
 To install the skill into another repo, copy the canonical skill folder into the tool-specific skill directory.
 
-For Codex:
+<details>
+<summary><h3>Codex</h3></summary>
+
+Install into another repo:
 
 ```bash
 mkdir -p /path/to/user-repo/.agents/skills
 cp -R skills/fullstack-llm-wiki-navigator /path/to/user-repo/.agents/skills/fullstack-llm-wiki-navigator
 ```
-
-For Claude Code:
-
-```bash
-mkdir -p /path/to/user-repo/.claude/skills
-cp -R skills/fullstack-llm-wiki-navigator /path/to/user-repo/.claude/skills/fullstack-llm-wiki-navigator
-```
-
-For Cursor:
-
-```bash
-mkdir -p /path/to/user-repo/.cursor/skills
-cp -R skills/fullstack-llm-wiki-navigator /path/to/user-repo/.cursor/skills/fullstack-llm-wiki-navigator
-```
-
-For Antigravity CLI:
-
-```bash
-mkdir -p /path/to/user-repo/.antigravitycli/skills
-cp -R skills/fullstack-llm-wiki-navigator /path/to/user-repo/.antigravitycli/skills/fullstack-llm-wiki-navigator
-```
-
-<details>
-<summary><h3>Codex</h3></summary>
 
 Open Codex from the wiki repo root. Codex discovers the repo skill at:
 
@@ -95,6 +74,13 @@ For another project, copy or symlink `.agents/skills/fullstack-llm-wiki-navigato
 
 <details>
 <summary><h3>Claude Code</h3></summary>
+
+Install into another repo:
+
+```bash
+mkdir -p /path/to/user-repo/.claude/skills
+cp -R skills/fullstack-llm-wiki-navigator /path/to/user-repo/.claude/skills/fullstack-llm-wiki-navigator
+```
 
 Open Claude Code from the wiki repo root. Claude can use:
 
@@ -110,6 +96,13 @@ For another project, copy or symlink `.claude/skills/fullstack-llm-wiki-navigato
 <details>
 <summary><h3>Cursor</h3></summary>
 
+Install into another repo:
+
+```bash
+mkdir -p /path/to/user-repo/.cursor/skills
+cp -R skills/fullstack-llm-wiki-navigator /path/to/user-repo/.cursor/skills/fullstack-llm-wiki-navigator
+```
+
 Cursor supports skills, so this repo uses a Cursor skill instead of a Cursor rule. Rules are for always-on project guidance; this wiki is better as a skill because Cursor can invoke it for relevant framework/library questions without forcing the full instruction into every request.
 
 Open the wiki repo in Cursor. Cursor discovers the project skill at:
@@ -124,6 +117,13 @@ For another project, copy `skills/fullstack-llm-wiki-navigator/` into that proje
 
 <details>
 <summary><h3>Antigravity CLI</h3></summary>
+
+Install into another repo:
+
+```bash
+mkdir -p /path/to/user-repo/.antigravitycli/skills
+cp -R skills/fullstack-llm-wiki-navigator /path/to/user-repo/.antigravitycli/skills/fullstack-llm-wiki-navigator
+```
 
 Gemini CLI is deprecated for this workflow. Use Antigravity CLI instead.
 
