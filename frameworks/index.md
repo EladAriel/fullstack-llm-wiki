@@ -2,6 +2,14 @@
 
 Local Markdown documentation wikis grouped by category.
 
+## AI
+
+- [LangChain](ai/langchain/index.md)
+- [LangGraph](ai/langgraph/index.md)
+- [Langfuse](ai/langfuse/index.md)
+- [Model Context Protocol](ai/modelcontextprotocol/index.md)
+- [Ragas](ai/ragas/index.md)
+
 ## UI
 
 - [React](ui/react/index.md)

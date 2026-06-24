@@ -1,0 +1,12 @@
+{
+  "framework": "modelcontextprotocol",
+  "display_name": "Model Context Protocol",
+  "source_repo": "https://github.com/modelcontextprotocol/modelcontextprotocol",
+  "source_branch": "main",
+  "source_docs_path": "docs",
+  "source_commit": "47501e4ced7823014b83be168916d4c9e63b594e",
+  "source_commit_short": "47501e4c",
+  "source_commit_date": "2026-06-22T09:16:44-07:00",
+  "wiki_generated_at": "2026-06-23T14:04:43Z",
+  "page_count": 215
+}

@@ -1,0 +1,120 @@
+---
+type: "Framework Learn Page"
+framework: "LangChain"
+source_repo: "https://github.com/langchain-ai/docs"
+source_branch: "main"
+source_path: "src/oss/langchain/install.mdx"
+source_commit: "d037cd23f3f298721837c403b2ffd289e31d56d0"
+source_commit_short: "d037cd23"
+source_commit_date: "2026-06-23T11:18:55+02:00"
+generated_at: "2026-06-23T13:53:33Z"
+---
+
+---
+title: Install LangChain
+sidebarTitle: Install
+---
+
+To install the LangChain package:
+
+:::python
+<CodeGroup>
+    ```bash pip
+    pip install -U langchain
+    # Requires Python 3.10+
+    ```
+
+    ```bash uv
+    uv add langchain
+    # Requires Python 3.10+
+    ```
+</CodeGroup>
+:::
+
+:::js
+    <CodeGroup>
+    ```bash npm
+    npm install langchain @langchain/core
+    # Requires Node.js 22+
+    ```
+
+    ```bash pnpm
+    pnpm add langchain @langchain/core
+    # Requires Node.js 22+
+    ```
+
+    ```bash yarn
+    yarn add langchain @langchain/core
+    # Requires Node.js 22+
+    ```
+
+    ```bash bun
+    bun add langchain @langchain/core
+    # Requires Bun v1.0.0+
+    ```
+    </CodeGroup>
+:::
+
+LangChain provides integrations to hundreds of LLMs and thousands of other integrations. These live in independent provider packages.
+
+:::python
+<CodeGroup>
+    ```bash pip
+    # Installing the OpenAI integration
+    pip install -U langchain-openai
+
+    # Installing the Anthropic integration
+    pip install -U langchain-anthropic
+    ```
+    ```bash uv
+    # Installing the OpenAI integration
+    uv add langchain-openai
+
+    # Installing the Anthropic integration
+    uv add langchain-anthropic
+    ```
+</CodeGroup>
+
+:::
+
+:::js
+<CodeGroup>
+    ```bash npm
+    # Installing the OpenAI integration
+    npm install @langchain/openai
+    # Installing the Anthropic integration
+    npm install @langchain/anthropic
+    ```
+
+    ```bash pnpm
+    # Installing the OpenAI integration
+    pnpm install @langchain/openai
+    # Installing the Anthropic integration
+    pnpm install @langchain/anthropic
+    ```
+
+    ```bash yarn
+    # Installing the OpenAI integration
+    yarn add @langchain/openai
+    # Installing the Anthropic integration
+    yarn add @langchain/anthropic
+    ```
+
+    ```bash bun
+    # Installing the OpenAI integration
+    bun add @langchain/openai
+    # Installing the Anthropic integration
+    bun add @langchain/anthropic
+    ```
+</CodeGroup>
+:::
+
+<Tip>
+See the [Integrations tab](/oss/integrations/providers/overview) for a full list of available integrations.
+</Tip>
+
+Now that you have LangChain installed, you can get started by following the [Quickstart guide](/oss/langchain/quickstart).
+
+<Tip>
+Set up [LangSmith](https://smith.langchain.com) tracing to debug your first LangChain app. Follow the [tracing quickstart](/langsmith/trace-with-langchain) to get started. We recommend you also set up [LangSmith Engine](/langsmith/engine) which monitors your traces, detects issues, and proposes fixes.
+</Tip>

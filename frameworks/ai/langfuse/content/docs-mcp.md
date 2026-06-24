@@ -1,0 +1,63 @@
+---
+type: "Framework Learn Page"
+framework: "Langfuse"
+source_repo: "https://github.com/langfuse/langfuse-docs"
+source_branch: "main"
+source_path: "content/docs/docs-mcp.mdx"
+source_commit: "4a702ece53852a6af86b3883f434adf3f5cae421"
+source_commit_short: "4a702ece"
+source_commit_date: "2026-06-23T13:41:14Z"
+generated_at: "2026-06-23T13:55:15Z"
+---
+
+---
+title: Docs MCP Server
+---
+
+# Langfuse Docs MCP Server
+
+The Langfuse Docs MCP server exposes the Langfuse docs to AI agents.
+
+Core use case: Use Cursor (or other AI Coding Agent) to automatically integrate Langfuse Tracing into your codebase, see [get started](/docs/get-started) for detailed instructions and an example prompt.
+
+<Callout type="info">
+
+This is the public MCP server for the Langfuse documentation. There is also an authenticated MCP server to integrate with the rest of the Langfuse data platform ([docs](/docs/api-and-data-platform/features/mcp-server)).
+
+</Callout>
+
+## Install
+
+import DocsMcpServerInstallation from "@/components-mdx/docs-mcp-server-installation.mdx";
+
+<DocsMcpServerInstallation />
+
+## About
+
+- Endpoint: `https://langfuse.com/api/mcp`
+- Transport: `streamableHttp`
+- Authentication: None
+
+<Callout type="info">
+
+The [MCP Reference](https://mcp.reference.langfuse.com) is the canonical source for current Docs MCP tools, input schemas, and generated request examples.
+
+</Callout>
+
+## References
+
+- Implementation of the MCP server: [route.ts](https://github.com/langfuse/langfuse-docs/blob/main/app/api/mcp/route.ts)
+- [MCP Reference](https://mcp.reference.langfuse.com): reference for MCP servers, setup snippets, tools, schemas, and requests
+- [Agentic Onboarding](/docs/get-started) powered by the MCP server
+- [Ask AI](/docs/ask-ai): RAG chat with the Langfuse docs to get answers to your questions
+- [langfuse.com/llms.txt](https://langfuse.com/llms.txt): concise overview with page titles and links to detailed sub-files ([llms-docs.txt](https://langfuse.com/llms-docs.txt), [llms-integrations.txt](https://langfuse.com/llms-integrations.txt), [llms-self-hosting.txt](https://langfuse.com/llms-self-hosting.txt))
+
+## REST Endpoint
+
+The underlying docs search (`searchLangfuseDocs` tool) is also available independently as a REST API at `https://langfuse.com/api/search-docs`.
+
+```bash
+curl "https://langfuse.com/api/search-docs?query=Langfuse+Docs+MCP+Server"
+```
+
+Use this endpoint directly when you need lightweight semantic search outside of MCP.

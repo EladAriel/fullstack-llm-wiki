@@ -1,6 +1,10 @@
 # Local wiki builder/cache output
 .cache/
 
+# Local GitHub Actions testing output
+.act/
+framework-freshness-report.json
+
 # Python and test artifacts
 __pycache__/
 *.py[cod]

@@ -1,0 +1,102 @@
+name: Check framework freshness
+
+on:
+  schedule:
+    - cron: "24 6 * * *"
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  issues: write
+
+concurrency:
+  group: check-framework-freshness
+  cancel-in-progress: false
+
+jobs:
+  check-framework-freshness:
+    name: Check framework freshness
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Find stale frameworks
+        run: python3 .github/scripts/find-stale-frameworks.py --output framework-freshness-report.json
+
+      - name: Create update issues
+        uses: actions/github-script@v7
+        with:
+          script: |
+            const fs = require('fs');
+            const report = JSON.parse(fs.readFileSync('framework-freshness-report.json', 'utf8'));
+            const labelName = 'wiki-update-needed';
+
+            if (report.stale_frameworks.length === 0) {
+              core.info('No stale frameworks found');
+              return;
+            }
+
+            try {
+              await github.rest.issues.getLabel({
+                owner: context.repo.owner,
+                repo: context.repo.repo,
+                name: labelName,
+              });
+            } catch (error) {
+              if (error.status !== 404) {
+                throw error;
+              }
+
+              await github.rest.issues.createLabel({
+                owner: context.repo.owner,
+                repo: context.repo.repo,
+                name: labelName,
+                color: 'd73a4a',
+                description: 'Framework wiki has not been updated recently',
+              });
+            }
+
+            const openIssues = await github.paginate(github.rest.issues.listForRepo, {
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              state: 'open',
+              labels: labelName,
+              per_page: 100,
+            });
+
+            for (const framework of report.stale_frameworks) {
+              const existingIssue = openIssues.find((issue) => issue.body && issue.body.includes(framework.marker));
+
+              if (existingIssue) {
+                core.info(`Open issue already exists for ${framework.display_name}`);
+                continue;
+              }
+
+              const lastUpdatedDate = framework.last_updated_at.slice(0, 10);
+              const title = `Update ${framework.display_name} wiki - last updated ${lastUpdatedDate}`;
+              const body = [
+                `The ${framework.display_name} wiki has not been updated in this repository for ${framework.age_days} days.`,
+                '',
+                `- Framework: ${framework.display_name}`,
+                `- Path: \`${framework.path}\``,
+                `- Last repo update: ${framework.last_updated_at}`,
+                `- Freshness threshold: ${framework.threshold_days} days`,
+                '',
+                'Please update this wiki from its source documentation.',
+                '',
+                `<!-- ${framework.marker} -->`,
+              ].join('\n');
+
+              await github.rest.issues.create({
+                owner: context.repo.owner,
+                repo: context.repo.repo,
+                title,
+                body,
+                labels: [labelName],
+              });
+              core.info(`Created issue for ${framework.display_name}`);
+            }

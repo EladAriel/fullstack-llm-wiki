@@ -1,0 +1,90 @@
+---
+type: "Framework Learn Page"
+framework: "Langfuse"
+source_repo: "https://github.com/langfuse/langfuse-docs"
+source_branch: "main"
+source_path: "content/docs/metrics/overview.mdx"
+source_commit: "4a702ece53852a6af86b3883f434adf3f5cae421"
+source_commit_short: "4a702ece"
+source_commit_date: "2026-06-23T13:41:14Z"
+generated_at: "2026-06-23T13:55:15Z"
+---
+
+---
+title: Overview
+description: Improve your LLM application with open source metrics tracking latency, cost, and quality across various dimensions.
+---
+
+# Metrics
+
+Langfuse metrics derive actionable insights from [observability](/docs/observability) and [evaluation](/docs/evaluation) traces.
+
+Metrics can be sliced and diced via the [customizable dashboards](/docs/metrics/features/custom-dashboards) and the [metrics API](/docs/metrics/features/metrics-api).
+
+<Frame fullWidth>
+  <img src="/images/docs/llm-analytics.png" alt="LLM Analytics" />
+</Frame>
+
+## Features
+
+import { LayoutDashboard, Activity } from "lucide-react";
+
+<Cards num={2}>
+  <Card
+    title="Custom Dashboards"
+    href="/docs/metrics/features/custom-dashboards"
+    icon={<LayoutDashboard />}
+    arrow
+  />
+  <Card
+    title="Metrics API"
+    href="/docs/metrics/features/metrics-api"
+    icon={<Activity />}
+    arrow
+  />
+  <Card
+    title="Export to PostHog"
+    href="/integrations/analytics/posthog"
+    icon={
+      <div className="w-6 h-6 dark:bg-white rounded-sm p-1 flex items-center justify-center">
+        <img
+          src="/images/integrations/posthog_icon.svg"
+          alt="PostHog icon"
+          className="w-full h-full object-contain"
+        />
+      </div>
+    }
+    arrow
+  />
+  <Card
+    title="Export to Mixpanel"
+    href="/integrations/analytics/mixpanel"
+    icon={
+      <div className="w-6 h-6 dark:bg-white rounded-sm p-1 flex items-center justify-center">
+        <img
+          src="/images/integrations/mixpanel_icon.svg"
+          alt="Mixpanel icon"
+          className="w-full h-full object-contain"
+        />
+      </div>
+    }
+    arrow
+  />
+</Cards>
+
+## Metrics & Dimensions
+
+Metrics:
+
+- **Quality** is measured through user feedback, model-based scoring, human-in-the-loop scored samples or custom scores via SDKs/API (see [scores](/docs/evaluation/overview)). Quality is assessed over time as well as across prompt versions, LLMs and users.
+- **Cost and Latency** are accurately measured and broken down by user, session, geography, feature, model and prompt version.
+- **Volume** based on the ingested traces and tokens used.
+
+Dimensions:
+
+- Trace name: differentiate between different use cases, features, etc. by adding a `name` field to your traces.
+- User: track usage and cost by user. Just add a `userId` to your traces ([docs](/docs/observability/features/users)).
+- Tags: filter different use cases, features, etc. by adding [tags](/docs/observability/features/tags) to your traces.
+- Release and version numbers: track how changes to the LLM application affected your metrics.
+
+For an exact definition, please refer to the [metrics API docs](/docs/metrics/features/metrics-api).

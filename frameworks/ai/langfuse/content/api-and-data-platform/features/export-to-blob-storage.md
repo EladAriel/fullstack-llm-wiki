@@ -1,0 +1,180 @@
+---
+type: "Framework Learn Page"
+framework: "Langfuse"
+source_repo: "https://github.com/langfuse/langfuse-docs"
+source_branch: "main"
+source_path: "content/docs/api-and-data-platform/features/export-to-blob-storage.mdx"
+source_commit: "4a702ece53852a6af86b3883f434adf3f5cae421"
+source_commit_short: "4a702ece"
+source_commit_date: "2026-06-23T13:41:14Z"
+generated_at: "2026-06-23T13:55:15Z"
+---
+
+---
+title: Export to Blob Storage
+description: Export traces, observations, enriched observations, and scores to Blob Storage, e.g. S3, GCS, or Azure Blob Storage.
+sidebarTitle: Export to Blob Storage
+---
+
+import BlobStorageReExporting from "@/components-mdx/blob-storage-re-exporting.mdx";
+import BlobStorageEmptyFiles from "@/components-mdx/blob-storage-empty-files.mdx";
+
+# Export via Blob Storage Integration
+
+<AvailabilityBanner
+  availability={{
+    hobby: "not-available",
+    core: "not-available",
+    pro: "team-add-on",
+    enterprise: "full",
+    selfHosted: "full",
+  }}
+/>
+
+You can create schedule exports to a Blob Storage, e.g. S3, GCS, or Azure Blob Storage, for `traces`, `observations`, enriched observations, and `scores`.
+
+Those exports can run every `20 minutes`, or on an `hourly`, `daily`, or `weekly` schedule.
+Navigate to your project settings and select `Integrations > Blob Storage` to set up a new export.
+Select whether you want to use S3, a S3 compatible storage, Google Cloud Storage, or Azure Blob Storage.
+
+## Start exporting via Blob Storage
+
+To set up the export navigate to `Your Project` > `Settings` > `Integrations` > `Blob Storage`.
+
+Fill in the settings to authenticate with your vendor, enable the integration, and press save.
+An initial export starts shortly after you enable the integration and then continues on the schedule you selected.
+The export supports CSV, JSON, and JSONL file formats.
+Read [our blob storage documentation](/self-hosting/deployment/infrastructure/blobstorage) for more information on how to get credentials for your specific vendor.
+
+<Frame className="my-10" fullWidth>
+  ![Blob Storage Integration Setup](/images/docs/blob-storage.png)
+</Frame>
+
+## Export source (Fast Preview)
+
+Blob Storage integrations now include an `Export Source` selector. New integrations default to `Enriched observations (recommended)` (trace attributes are directly set on observations).
+
+This source uses enriched observations with trace attributes and provides significantly better export performance. `Scores` are always included, regardless of the selected source.
+
+Available options:
+
+- `Traces and observations (legacy)`
+- `Traces and observations (legacy) and enriched observations`
+- `Enriched observations (recommended)`
+
+<Callout type="warning">
+  `Traces and observations (legacy)` sources may be deprecated in the future.
+  All new export jobs should use `Enriched observations (recommended)`, and
+  existing legacy jobs are strongly recommended to upgrade.
+</Callout>
+
+<Callout type="info">
+  **Cloud projects created on or after 2026-05-20** will not see the Export Source selector — new Cloud projects export as `Enriched observations (recommended)` automatically. The REST API rejects legacy values for these projects with `400 BAD_REQUEST`. Existing projects and all self-hosted deployments are unaffected.
+</Callout>
+
+### Upgrade path for existing configurations
+
+This migration path applies to **pre-cutoff Cloud projects and self-hosted deployments**. Post-cutoff Cloud projects already use `Enriched observations (recommended)` and cannot select legacy sources.
+
+Existing integrations continue to use `Traces and observations (legacy)` until changed.
+
+To migrate safely:
+
+1. Switch to `Traces and observations (legacy) and enriched observations`.
+2. Validate downstream jobs and data consumers while both sources are exported (this mode creates duplicate records by design).
+3. Switch to `Enriched observations (recommended)` once validation is complete.
+
+For rollout details, see the [Simplify for Scale changelog](/changelog/2026-03-10-simplify-for-scale).
+
+## Exported fields
+
+For a complete reference of all fields included in each export file (traces, observations, enriched observations, and scores), see the [Export Field Reference](/docs/api-and-data-platform/features/blob-storage-export-fields).
+
+## Choose which columns are exported [#export-field-groups]
+
+For the **Enriched observations (recommended)** and **Traces and observations (legacy) and enriched observations** sources, you can choose which column groups appear in each row of the enriched observations export. Eleven groups cover the full row, ten of which are toggleable; toggle them in **Project Settings → Integrations → Blob Storage** under **Export Field Groups**.
+
+| Group           | Columns                                                                                                      | Toggleable                 |
+| --------------- | ------------------------------------------------------------------------------------------------------------ | -------------------------- |
+| `core`          | `id`, `trace_id`, `start_time`, `end_time`, `project_id`, `parent_observation_id`, `type`                    | Required (always exported) |
+| `basic`         | `name`, `level`, `status_message`, `version`, `environment`, `bookmarked`, `public`, `user_id`, `session_id` | Yes                        |
+| `time`          | `completion_start_time`, `created_at`, `updated_at`                                                          | Yes                        |
+| `io`            | `input`, `output`                                                                                            | Yes                        |
+| `metadata`      | `metadata`                                                                                                   | Yes                        |
+| `model`         | `provided_model_name`, `model_id`, `model_parameters`, `input_price`, `output_price`, `total_price`          | Yes                        |
+| `usage`         | `usage_details`, `cost_details`, `total_cost`, `usage_pricing_tier_id`, `usage_pricing_tier_name`            | Yes                        |
+| `prompt`        | `prompt_id`, `prompt_name`, `prompt_version`                                                                 | Yes                        |
+| `metrics`       | `latency`, `time_to_first_token`                                                                             | Yes                        |
+| `tools`         | `tool_definitions`, `tool_calls`, `tool_call_names`                                                          | Yes                        |
+| `trace_context` | `tags`, `release`, `trace_name`                                                                              | Yes                        |
+
+<Callout type="info">
+  Per-unit pricing fields (`input_price`, `output_price`, `total_price`) live in the `model` group — they come from the matched model definition. Deselecting `model` skips the worker-side model pricing lookup entirely. The `usage_pricing_tier_id` and `usage_pricing_tier_name` fields stay in the `usage` group.
+</Callout>
+
+New integrations default to all eleven groups, so behavior matches earlier exports unless you narrow the selection. The **Traces and observations (legacy)** source uses a fixed column set and ignores field groups.
+
+### Configure via REST API [#field-groups-rest-api]
+
+`GET` and `PUT /api/public/integrations/blob-storage` accept and return:
+
+- `exportSource` — `LEGACY_TRACES_OBSERVATIONS`, `OBSERVATIONS_V2`, or `LEGACY_TRACES_AND_ENRICHED_OBSERVATIONS`.
+- `exportFieldGroups` — a list of group names. Must include `core` when provided. Must be omitted or `null` for `LEGACY_TRACES_OBSERVATIONS` (the REST contract returns `null` on read and rejects non-null on write for that source). When omitted on update, the existing value is preserved.
+- `compressed` — boolean; defaults to `true` for new integrations. When `true`, files are written as `.csv.gz`, `.json.gz`, or `.jsonl.gz`.
+
+See the [API reference](https://api.reference.langfuse.com/#tag/blobstorageintegrations) for the full schema.
+
+## Export modes [#export-modes]
+
+The **Export Mode** determines how far back the integration starts exporting from:
+
+| Mode                 | Starts from                           | When to use                                                                                                          |
+| -------------------- | ------------------------------------- | -------------------------------------------------------------------------------------------------------------------- |
+| **Full history**     | The earliest data in your project     | You want a complete one-time backfill of all existing data alongside ongoing exports.                                |
+| **From setup date**  | The moment you enable the integration | You only care about data going forward and don't need history — the lightest option to get started.                  |
+| **From custom date** | A start date you choose               | You want history from a specific point (for example, the start of a quarter) without exporting everything before it. |
+
+Changing the mode resets the sync position, so it's also the mechanism for re-scanning history — see [Re-exporting data and configuration changes](#re-exporting).
+
+## How exports run [#how-exports-run]
+
+Each run exports one time window of data to your bucket, then advances and exports the next window on your configured schedule.
+
+- **Export delay.** Data is exported with a short delay rather than right up to the current moment, so records still moving through ingestion are not exported half-written. Expect a brief lag between when an event is recorded and when it appears in your bucket.
+- **Catch-up / backfill.** When an integration starts from a historic point — or falls behind — it works forward through the backlog and may write many files in quick succession before settling into its normal cadence. A freshly created full-history integration does this until it catches up to the present.
+
+## Export status [#export-status]
+
+The integration settings page shows a status badge:
+
+| Badge        | Meaning                                                                                |
+| ------------ | -------------------------------------------------------------------------------------- |
+| **Active**   | Enabled and synced; the next export is scheduled for the future.                       |
+| **Queued**   | An export is due and waiting to run.                                                   |
+| **Pending**  | Enabled but has not run an export yet (`Data exported up to` shows `Never (pending)`). |
+| **Disabled** | The integration is turned off.                                                         |
+| **Error**    | The most recent export failed; an error message and timestamp are shown.               |
+
+The status card on the same page also surfaces:
+
+- **Data exported up to** — timestamp of the last successfully exported window (or `Never (pending)`).
+- **Next export scheduled** — when the next run will happen.
+- **Export mode** — `Full history`, `From setup date`, or `From custom date` (plus the start date where applicable).
+- A **Last export failed** alert with the error message and time when in the Error state.
+
+A failed export is retried automatically on the next run; repeated failures trigger a notification.
+
+## Re-exporting data and configuration changes [#re-exporting]
+
+<BlobStorageReExporting />
+
+## Empty files in your bucket [#empty-files]
+
+<BlobStorageEmptyFiles />
+
+## Alternatives
+
+You can also export data via:
+
+- [UI](/docs/api-and-data-platform/features/export-from-ui) - Manual batch-exports from the Langfuse UI
+- [SDKs/API](/docs/api-and-data-platform/features/public-api) - Programmatic access using Langfuse SDKs or API

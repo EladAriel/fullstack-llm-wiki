@@ -1,0 +1,12 @@
+{
+  "framework": "langgraph",
+  "display_name": "LangGraph",
+  "source_repo": "https://github.com/langchain-ai/docs",
+  "source_branch": "main",
+  "source_docs_path": "src/oss/langgraph",
+  "source_commit": "d037cd23f3f298721837c403b2ffd289e31d56d0",
+  "source_commit_short": "d037cd23",
+  "source_commit_date": "2026-06-23T11:18:55+02:00",
+  "wiki_generated_at": "2026-06-23T13:54:20Z",
+  "page_count": 42
+}
