@@ -1,0 +1,23 @@
+[
+  {
+    "framework": "fastapi",
+    "display_name": "FastAPI",
+    "category": "backend",
+    "source_repo": "https://github.com/fastapi/fastapi.git",
+    "source_branch": "master",
+    "source_docs_path": "docs/en/docs",
+    "include_globs": ["**/*.md"],
+    "exclude_globs": ["**/_build/**", "**/en/**"]
+  },
+  {
+    "framework": "langchain",
+    "display_name": "LangChain",
+    "category": "ai",
+    "source_repo": "https://github.com/langchain-ai/docs.git",
+    "source_branch": "main",
+    "source_docs_path": "src/oss/langchain",
+    "include_globs": ["**/*.md", "**/*.mdx"],
+    "exclude_globs": []
+  }
+]
+
