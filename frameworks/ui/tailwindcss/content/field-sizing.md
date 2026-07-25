@@ -1,0 +1,88 @@
+---
+type: "Framework Learn Page"
+framework: "Tailwind CSS"
+source_repo: "https://github.com/tailwindlabs/tailwindcss.com.git"
+source_branch: "main"
+source_path: "src/docs/field-sizing.mdx"
+source_commit: "1e700c43f5f270a1a55c4a33e71f01952f24b8c2"
+source_commit_short: "1e700c4"
+source_commit_date: "2026-07-16T19:14:03+02:00"
+generated_at: "2026-07-25T13:40:03.107652Z"
+---
+# Field Sizing
+
+import { ApiTable } from "@/components/api-table.tsx";
+import { Example } from "@/components/example.tsx";
+import { Figure } from "@/components/figure.tsx";
+import { ResponsiveDesign } from "@/components/content.tsx";
+
+export const title = "field-sizing";
+export const description = "Utilities for controlling the sizing of form controls.";
+
+<ApiTable
+  rows={[
+    ["field-sizing-fixed", "field-sizing: fixed;"],
+    ["field-sizing-content", "field-sizing: content;"],
+  ]}
+/>
+
+## Examples
+
+### Sizing based on content
+
+Use the `field-sizing-content` utility to allow a form control to adjust its size based on the content:
+
+<Figure hint="Type in the input below to see the size change">
+
+<Example>
+  {
+    <textarea
+      rows="2"
+      defaultValue="Latex Salesman, Vanderlay Industries"
+      className="mx-auto block field-sizing-content rounded-md p-2 text-sm text-gray-950 outline-1 outline-gray-900/10 focus:outline-2 focus:outline-gray-900 dark:bg-gray-950/25 dark:text-white dark:outline-1 dark:outline-white/5 dark:focus:outline-white/20"
+    />
+  }
+</Example>
+
+```html
+<!-- [!code classes:field-sizing-content] -->
+<textarea class="field-sizing-content ..." rows="2">
+  Latex Salesman, Vanderlay Industries
+</textarea>
+```
+
+</Figure>
+
+### Using a fixed size
+
+Use the `field-sizing-fixed` utility to make a form control use a fixed size:
+
+<Figure hint="Type in the input below to see the size remain the same">
+
+<Example>
+  {
+    <textarea
+      rows="2"
+      defaultValue="Latex Salesman, Vanderlay Industries"
+      className="mx-auto block field-sizing-fixed w-80 rounded-md p-2 text-sm text-gray-950 outline-1 outline-gray-900/10 focus:outline-2 focus:outline-gray-900 dark:bg-gray-950/25 dark:text-white dark:outline-1 dark:outline-white/5 dark:focus:outline-white/20"
+    />
+  }
+</Example>
+
+```html
+<!-- [!code classes:field-sizing-fixed] -->
+<textarea class="field-sizing-fixed w-80 ..." rows="2">
+  Latex Salesman, Vanderlay Industries
+</textarea>
+```
+
+</Figure>
+
+### Responsive design
+
+<ResponsiveDesign
+  element="input"
+  property="field-sizing"
+  defaultClass="field-sizing-content"
+  featuredClass="field-sizing-fixed"
+/>

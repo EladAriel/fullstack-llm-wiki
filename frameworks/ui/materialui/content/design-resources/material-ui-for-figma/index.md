@@ -1,0 +1,20 @@
+---
+type: "Framework Learn Directory Index"
+framework: "Material UI"
+generated_at: "2026-07-25T13:39:41.088573Z"
+---
+# Material-Ui-For-Figma
+
+This directory contains Material UI learning pages related to material-ui-for-figma.
+
+## Breadcrumbs
+
+[Wiki Home](../index.md) -> [Content](index.md)
+
+## Navigation
+
+- Wiki Home: [Root Index](../index.md)
+
+## Pages in This Directory
+
+- [Material Ui For Figma](material-ui-for-figma.md)

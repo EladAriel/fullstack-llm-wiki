@@ -1,0 +1,22 @@
+[
+  {
+    "framework": "tailwindcss",
+    "display_name": "Tailwind CSS",
+    "category": "ui",
+    "source_repo": "https://github.com/tailwindlabs/tailwindcss.com.git",
+    "source_branch": "main",
+    "source_docs_path": "src/docs",
+    "include_globs": ["**/*.md", "**/*.mdx"],
+    "exclude_globs": ["img/**", "utils/**"]
+  },
+  {
+    "framework": "materialui",
+    "display_name": "Material UI",
+    "category": "ui",
+    "source_repo": "https://github.com/mui/material-ui.git",
+    "source_branch": "master",
+    "source_docs_path": "docs/data/material",
+    "include_globs": ["**/*.md", "**/*.mdx"],
+    "exclude_globs": []
+  }
+]

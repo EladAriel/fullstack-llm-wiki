@@ -1,0 +1,118 @@
+---
+type: "Framework Learn Page"
+framework: "Tailwind CSS"
+source_repo: "https://github.com/tailwindlabs/tailwindcss.com.git"
+source_branch: "main"
+source_path: "src/docs/font-weight.mdx"
+source_commit: "1e700c43f5f270a1a55c4a33e71f01952f24b8c2"
+source_commit_short: "1e700c4"
+source_commit_date: "2026-07-16T19:14:03+02:00"
+generated_at: "2026-07-25T13:40:03.084239Z"
+---
+# Font Weight
+
+import { ApiTable } from "@/components/api-table.tsx";
+import { CustomizingYourTheme, ResponsiveDesign, UsingACustomValue } from "@/components/content.tsx";
+import { Example } from "@/components/example.tsx";
+import { Figure } from "@/components/figure.tsx";
+import { CodeExample } from "@/components/code-example.tsx";
+
+export const title = "font-weight";
+export const description = "Utilities for controlling the font weight of an element.";
+
+<ApiTable
+  rows={[
+    ["font-thin", "font-weight: 100;"],
+    ["font-extralight", "font-weight: 200;"],
+    ["font-light", "font-weight: 300;"],
+    ["font-normal", "font-weight: 400;"],
+    ["font-medium", "font-weight: 500;"],
+    ["font-semibold", "font-weight: 600;"],
+    ["font-bold", "font-weight: 700;"],
+    ["font-extrabold", "font-weight: 800;"],
+    ["font-black", "font-weight: 900;"],
+    ["font-(<custom-property>)", "font-weight: var(<custom-property>);"],
+    ["font-[<value>]", "font-weight: <value>;"],
+  ]}
+/>
+
+## Examples
+
+### Basic example
+
+Use utilities like `font-thin` and `font-bold` to set the font weight of an element:
+
+<Figure>
+
+<Example>
+  {
+    <div className="flex flex-col gap-8">
+      <div>
+        <span className="mb-3 font-mono text-xs font-medium text-gray-500 dark:text-gray-400">font-light</span>
+        <p className="text-lg font-light text-gray-900 dark:text-gray-200">
+          The quick brown fox jumps over the lazy dog.
+        </p>
+      </div>
+      <div>
+        <span className="mb-3 font-mono text-xs font-medium text-gray-500 dark:text-gray-400">font-normal</span>
+        <p className="text-lg font-normal text-gray-900 dark:text-gray-200">
+          The quick brown fox jumps over the lazy dog.
+        </p>
+      </div>
+      <div>
+        <span className="mb-3 font-mono text-xs font-medium text-gray-500 dark:text-gray-400">font-medium</span>
+        <p className="text-lg font-medium text-gray-900 dark:text-gray-200">
+          The quick brown fox jumps over the lazy dog.
+        </p>
+      </div>
+      <div>
+        <span className="mb-3 font-mono text-xs font-medium text-gray-500 dark:text-gray-400">font-semibold</span>
+        <p className="text-lg font-semibold text-gray-900 dark:text-gray-200">
+          The quick brown fox jumps over the lazy dog.
+        </p>
+      </div>
+      <div>
+        <span className="mb-3 font-mono text-xs font-medium text-gray-500 dark:text-gray-400">font-bold</span>
+        <p className="text-lg font-bold text-gray-900 dark:text-gray-200">
+          The quick brown fox jumps over the lazy dog.
+        </p>
+      </div>
+    </div>
+  }
+</Example>
+
+```html
+<!-- [!code classes:font-light,font-normal,font-medium,font-semibold,font-bold] -->
+<p class="font-light ...">The quick brown fox ...</p>
+<p class="font-normal ...">The quick brown fox ...</p>
+<p class="font-medium ...">The quick brown fox ...</p>
+<p class="font-semibold ...">The quick brown fox ...</p>
+<p class="font-bold ...">The quick brown fox ...</p>
+```
+
+</Figure>
+
+### Using a custom value
+
+<UsingACustomValue
+  element="p"
+  utility="font"
+  value="1000"
+  name="font weight"
+  variable="font-weight"
+  dataType="weight"
+/>
+
+### Responsive design
+
+<ResponsiveDesign element="p" property="font-weight" defaultClass="font-normal" featuredClass="font-bold" />
+
+## Customizing your theme
+
+<CustomizingYourTheme
+  utility="font"
+  themeKey="font-weight"
+  name="font weight"
+  customValue="1000"
+  customName="extrablack"
+/>
