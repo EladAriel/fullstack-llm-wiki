@@ -4,10 +4,10 @@ framework: "nextjs"
 source_repo: "https://github.com/vercel/next.js/"
 source_branch: "canary"
 source_path: "docs/01-app/04-glossary.mdx"
-source_commit: "79142d7806ff4194c8d9885b80fa69db5ecf534a"
-source_commit_short: "79142d78"
-source_commit_date: "2026-06-20T23:40:12Z"
-generated_at: "2026-06-21T12:07:17Z"
+source_commit: "dcf242a17b5d4622bbd9624db531a9d84177619f"
+source_commit_short: "dcf242a1"
+source_commit_date: "2026-07-25T10:16:19+02:00"
+generated_at: "2026-07-25T11:50:53Z"
 ---
 
 ---
@@ -24,7 +24,7 @@ The Next.js router introduced in version 13, built on top of React Server Compon
 
 ## App Shell
 
-A per-route prerender containing only the generic, reusable parts of a page: what Next.js can produce without any URL-specific data. Used as the loading state of last resort by [ISR with Cache Components](/docs/app/guides/incremental-static-regeneration-cache-components) and [runtime prefetching](/docs/app/guides/runtime-prefetching).
+A per-route prerender containing the parts of a page that don't depend on URL data. Routes that read `cookies()` or `headers()` produce one that also includes session data, cached per session on the client. Used as the prefetch payload during client navigations, the loading state during [runtime prefetching](/docs/app/guides/runtime-prefetching), and the fallback for [ISR with Cache Components](/docs/app/guides/incremental-static-regeneration-cache-components).
 
 # B
 
@@ -174,7 +174,7 @@ A pattern that allows simultaneously or conditionally rendering multiple pages w
 
 ## Partial Prefetching
 
-A prefetching strategy for [Cache Components](#cache-components) routes where `<Link>` loads only a per-route [App Shell](#app-shell) by default. The page's cached content is downloaded only when the link sets `prefetch={true}`, and dynamic content is never prefetched. Enable with [`partialPrefetching: true`](/docs/app/api-reference/config/next-config-js/partialPrefetching) in `next.config.ts`. Learn more in the [Adopting Partial Prefetching guide](/docs/app/guides/adopting-partial-prefetching).
+A prefetching strategy for [Cache Components](#cache-components) routes where a `<Link>` prefetches a per-route [App Shell](#app-shell) by default instead of the full page. Enable it with [`partialPrefetching: true`](/docs/app/api-reference/config/next-config-js/partialPrefetching) in `next.config.ts`. Learn more in the [Adopting Partial Prefetching guide](/docs/app/guides/adopting-partial-prefetching).
 
 ## Partial Prerendering (PPR)
 
@@ -233,7 +233,7 @@ A part of the URL path (between two slashes) defined by a folder in the `app` di
 
 ## RSC Payload
 
-The React Server Component Payload—a compact binary representation of the rendered React Server Components tree. Contains the rendered result of Server Components, placeholders for Client Components, and props passed between them. Learn more in [Server and Client Components](/docs/app/getting-started/server-and-client-components#how-do-server-and-client-components-work-in-nextjs).
+The React Server Component Payload is a compact binary representation of the rendered React Server Components tree. It contains the rendered result of Server Components, placeholders for Client Components, and props passed between them. Learn more in [Server and Client Components](/docs/app/getting-started/server-and-client-components#how-do-server-and-client-components-work-in-nextjs).
 
 # S
 
@@ -284,6 +284,10 @@ A fast, Rust-based bundler built for Next.js. Turbopack is the default bundler f
 The process of removing unused code from your JavaScript bundles during the build process. Next.js automatically tree-shakes your code to reduce bundle sizes. Learn more in the [Package Bundling guide](/docs/app/guides/package-bundling).
 
 # U
+
+## URL data
+
+Data that identifies a specific URL, such as the pathname and query parameters. In the App Router this means [`params`](/docs/app/api-reference/file-conventions/page#params-optional) and [`searchParams`](/docs/app/api-reference/file-conventions/page#searchparams-optional), and the client hooks that read them like [`usePathname`](/docs/app/api-reference/functions/use-pathname) and [`useSearchParams`](/docs/app/api-reference/functions/use-search-params). URL data varies per link, not per session, so it can't be part of a shared [App Shell](#app-shell).
 
 ## `"use cache"` Directive
 

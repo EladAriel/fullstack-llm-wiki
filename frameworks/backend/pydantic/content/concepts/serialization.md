@@ -4,10 +4,10 @@ framework: "pydantic"
 source_repo: "https://github.com/pydantic/pydantic"
 source_branch: "main"
 source_path: "docs/concepts/serialization.md"
-source_commit: "363728fe0b353db1a1fcb44aac5c38fd96a8cc20"
-source_commit_short: "363728fe"
-source_commit_date: "2026-06-20T11:20:58+01:00"
-generated_at: "2026-06-21T11:37:01Z"
+source_commit: "a2a6577d4c329dd574a45dbb01a8feaa16b1ad3d"
+source_commit_short: "a2a6577d"
+source_commit_date: "2026-07-23T15:38:17Z"
+generated_at: "2026-07-25T11:50:12Z"
 ---
 
 Beyond accessing model attributes directly via their field names (e.g. `model.foobar`), models can be converted, dumped,
@@ -144,6 +144,13 @@ In addition to the [supported types][json.JSONEncoder] by the standard library [
 variety of types ([date and time types][datetime], [`UUID`][uuid.UUID] objects, [sets][set], etc). If an unsupported type
 is used and can't be serialized to JSON, a [`PydanticSerializationError`][pydantic_core.PydanticSerializationError] exception
 is raised.
+
+!!! tip "Logfire integration"
+    A serialization error like this often only shows up when a particular object reaches the point of being
+    serialized (commonly when building a response), so it can be easy to miss until it happens in
+    production. Like any exception, it's captured by [Logfire](../integrations/logfire.md) if you've
+    instrumented your application, in the context of the request that triggered it, and grouped with other
+    occurrences so you can tell a one-off from a recurring problem.
 
 !!! info "See also"
     The [`TypeAdapter.dump_json()`][pydantic.TypeAdapter.dump_json] method, useful when *not* dealing with Pydantic models.
@@ -620,7 +627,7 @@ print(m.model_dump())  # (1)!
 ### Polymorphic serialization
 
 /// version-added | v2.13
-Polymorphic serialization was added as an better alternative to the [serialize as any](#serializing-as-any) behavior, and only
+Polymorphic serialization was added as a better alternative to the [serialize as any](#serializing-as-any) behavior, and only
 applies to Pydantic models and Pydantic dataclasses.
 ///
 

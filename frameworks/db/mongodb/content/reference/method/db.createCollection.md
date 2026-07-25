@@ -4,10 +4,10 @@ framework: "mongodb"
 source_repo: "https://github.com/mongodb/docs.git"
 source_branch: "main"
 source_path: "content/manual/manual/source/reference/method/db.createCollection.txt"
-source_commit: "96788e8ed140cbdde184ff82e1066dff4996bde4"
-source_commit_short: "96788e8e"
-source_commit_date: "2026-06-19T21:35:03-06:00"
-generated_at: "2026-06-21T07:41:52Z"
+source_commit: "ab9db26ed3d11618cdb61516d8180337d8e3f679"
+source_commit_short: "ab9db26e"
+source_commit_date: "2026-07-24T16:22:46-06:00"
+generated_at: "2026-07-25T11:51:15Z"
 ---
 
 ======================================
@@ -70,8 +70,6 @@ The `options` document contains the following fields:
 
 ## Behavior
 
-`db.createCollection()` has the following behavior:
-
 ### Resource Locking
 
 .. include:: /includes/extracts/createCollection-resource-lock.rst
@@ -88,7 +86,7 @@ The `options` document contains the following fields:
 
 ### Create a Capped Collection
 
-Capped collections have maximum size or document counts that prevent them from growing beyond maximum thresholds. All capped collections must specify a maximum size and may also specify a maximum document count. MongoDB removes older documents if a collection reaches the maximum size limit before it reaches the maximum document count. Consider the following example:
+Capped collections have a maximum size and, optionally, a maximum document count. When a capped collection reaches its maximum size, MongoDB removes older documents to make room for new ones. The following example creates a capped collection named `log`:
 
 ```javascript
 db.createCollection("log", { capped : true, size : 5242880, max : 5000 } )
@@ -162,7 +160,7 @@ You can specify `collation <collation>` at the collection or `view <views-landin
 db.createCollection( "myColl", { collation: { locale: "fr" } } );
 ```
 
-This collation will be used by indexes and operations that support collation unless they explicitly specify a different collation. For example, insert the following documents into `myColl`:
+This collation is used by indexes and operations that support collation unless they explicitly specify a different collation. For example, insert the following documents into `myColl`:
 
 ```javascript
 { _id: 1, category: "café" }
@@ -184,7 +182,7 @@ The operation returns documents in the following order:
 { "_id" : 1, "category" : "café" }
 ```
 
-The same operation on a collection that uses simple binary collation (i.e. no specific collation set) returns documents in the following order:
+The same operation on a collection that uses binary collation (that is, no specific collation set) returns documents in the following order:
 
 ```javascript
 { "_id" : 3, "category" : "cafE" }
@@ -196,7 +194,7 @@ The same operation on a collection that uses simple binary collation (i.e. no sp
 
 ### Specify Storage Engine Options
 
-You can specify collection-specific storage engine configuration options when you create a collection with `db.createCollection()`. Consider the following operation:
+You can specify collection-specific storage engine configuration options when you create a collection with `db.createCollection()`.
 
 ```javascript
 db.createCollection(
@@ -205,7 +203,7 @@ db.createCollection(
 )
 ```
 
-This operation creates a new collection named `users` with a specific configuration string that MongoDB will pass to the `wiredTiger` storage engine.
+This operation creates a new collection named `users` with a specific configuration string that MongoDB passes to the `wiredTiger` storage engine.
 
 For example, to specify the `zlib` compressor for file blocks in the `users` collection, set the `block_compressor` option with the following command:
 

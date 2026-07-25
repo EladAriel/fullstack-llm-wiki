@@ -4,10 +4,10 @@ framework: "mongodb"
 source_repo: "https://github.com/mongodb/docs.git"
 source_branch: "main"
 source_path: "content/manual/manual/source/administration/tcmalloc-performance.txt"
-source_commit: "96788e8ed140cbdde184ff82e1066dff4996bde4"
-source_commit_short: "96788e8e"
-source_commit_date: "2026-06-19T21:35:03-06:00"
-generated_at: "2026-06-21T07:41:52Z"
+source_commit: "ab9db26ed3d11618cdb61516d8180337d8e3f679"
+source_commit_short: "ab9db26e"
+source_commit_date: "2026-07-24T16:22:46-06:00"
+generated_at: "2026-07-25T11:51:15Z"
 ---
 
 ===============================================================
@@ -75,7 +75,7 @@ If per-CPU caches aren't enabled, ensure that:
 
 The new TCMalloc requires [Restartable Sequences (rseq)](https://github.com/google/tcmalloc/blob/master/docs/design.md#restartable-sequences-and-per-cpu-tcmalloc) to implement per-CPU caches. If another application, such as the glibc library, registers an rseq structure before TCMalloc, TCMalloc can't use rseq. Without rseq, TCMalloc uses per-thread caches, which are used by the legacy TCMalloc version.
 
-To ensure that TCMalloc can use rseq to enable per-CPU caches, you can disable glibc’s registration of a rseq structure. To disable glibc rseq, set the following environment variable before you start `mongod`:
+To enable per-CPU caches, disable glibc’s rseq registration by setting the following environment variable before you start `mongod`:
 
 ```sh
  GLIBC_TUNABLES=glibc.pthread.rseq=0
@@ -84,7 +84,7 @@ To ensure that TCMalloc can use rseq to enable per-CPU caches, you can disable g
 
 ### Check Kernel Version
 
-If you disabled glibc rseq and per-CPU caches are still not enabled, ensure that you're using Linux kernel version 4.18 or later. To check your kernel version, run the following command:
+If per-CPU caches are still not enabled after disabling glibc rseq, verify that you're using Linux kernel 4.18 or later:
 
 ```sh
 uname -r

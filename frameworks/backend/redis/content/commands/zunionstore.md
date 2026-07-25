@@ -4,10 +4,10 @@ framework: "redis"
 source_repo: "https://github.com/redis/docs.git"
 source_branch: "main"
 source_path: "content/commands/zunionstore.md"
-source_commit: "bc92ea237bbfc2117c870c904f1a3ca619073ef1"
-source_commit_short: "bc92ea23"
-source_commit_date: "2026-06-18T14:53:00-05:00"
-generated_at: "2026-06-21T11:25:32Z"
+source_commit: "9d30f68c3dad1a6b3b7d30fe604b911348ce8152"
+source_commit_short: "9d30f68c"
+source_commit_date: "2026-07-24T10:52:10-07:00"
+generated_at: "2026-07-25T11:51:22Z"
 ---
 
 ---
@@ -179,13 +179,25 @@ How to combine the scores of members that exist in multiple sets: `SUM` (the def
 ## Examples
 
 {{% redis-cli %}}
-ZADD zset1 1 "one"
-ZADD zset1 2 "two"
-ZADD zset2 1 "one"
-ZADD zset2 2 "two"
-ZADD zset2 3 "three"
-ZUNIONSTORE out 2 zset1 zset2 WEIGHTS 2 3
-ZRANGE out 0 -1 WITHSCORES
+redis> ZADD zset1 1 "one"
+(integer) 1
+redis> ZADD zset1 2 "two"
+(integer) 1
+redis> ZADD zset2 1 "one"
+(integer) 1
+redis> ZADD zset2 2 "two"
+(integer) 1
+redis> ZADD zset2 3 "three"
+(integer) 1
+redis> ZUNIONSTORE out 2 zset1 zset2 WEIGHTS 2 3
+(integer) 3
+redis> ZRANGE out 0 -1 WITHSCORES
+1) "one"
+2) "5"
+3) "three"
+4) "9"
+5) "two"
+6) "10"
 {{% /redis-cli %}}
 
 ## Redis Software and Redis Cloud compatibility

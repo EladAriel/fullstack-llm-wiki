@@ -4,10 +4,10 @@ framework: "redis"
 source_repo: "https://github.com/redis/docs.git"
 source_branch: "main"
 source_path: "content/develop/ai/redisvl/api/searchindex.md"
-source_commit: "bc92ea237bbfc2117c870c904f1a3ca619073ef1"
-source_commit_short: "bc92ea23"
-source_commit_date: "2026-06-18T14:53:00-05:00"
-generated_at: "2026-06-21T11:25:32Z"
+source_commit: "9d30f68c3dad1a6b3b7d30fe604b911348ce8152"
+source_commit_short: "9d30f68c"
+source_commit_date: "2026-07-24T10:52:10-07:00"
+generated_at: "2026-07-25T11:51:22Z"
 ---
 
 ---
@@ -207,6 +207,11 @@ tag at a time.
 #### `drop_keys(keys)`
 
 Remove a specific entry or entries from the index by it’s key ID.
+
+Uses `UNLINK` rather than `DEL` so memory reclamation runs on a
+background thread. This avoids blocking the main thread when a large
+number of keys are dropped at once (for example, scope-targeted
+`SemanticCache` invalidation). The returned count is unchanged.
 
 * **Parameters:**
   **keys** (*Union* *[* *str* *,* *List* *[* *str* *]* *]*) – The document ID or IDs to remove from the index.
@@ -682,6 +687,11 @@ tag at a time.
 #### `async drop_keys(keys)`
 
 Remove a specific entry or entries from the index by it’s key ID.
+
+Uses `UNLINK` rather than `DEL` so memory reclamation runs on a
+background thread. This avoids blocking the main thread when a large
+number of keys are dropped at once (for example, scope-targeted
+`SemanticCache` invalidation). The returned count is unchanged.
 
 * **Parameters:**
   **keys** (*Union* *[* *str* *,* *List* *[* *str* *]* *]*) – The document ID or IDs to remove from the index.

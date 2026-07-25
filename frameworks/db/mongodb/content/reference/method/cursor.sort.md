@@ -4,10 +4,10 @@ framework: "mongodb"
 source_repo: "https://github.com/mongodb/docs.git"
 source_branch: "main"
 source_path: "content/manual/manual/source/reference/method/cursor.sort.txt"
-source_commit: "96788e8ed140cbdde184ff82e1066dff4996bde4"
-source_commit_short: "96788e8e"
-source_commit_date: "2026-06-19T21:35:03-06:00"
-generated_at: "2026-06-21T07:41:52Z"
+source_commit: "ab9db26ed3d11618cdb61516d8180337d8e3f679"
+source_commit_short: "ab9db26e"
+source_commit_date: "2026-07-24T16:22:46-06:00"
+generated_at: "2026-07-25T11:51:15Z"
 ---
 
 ==============================
@@ -163,7 +163,7 @@ expressions:
 
 ### Sort and Index Use
 
-MongoDB can obtain the results of a sort operation from an index which includes the sort fields. MongoDB may use multiple indexes to support a sort operation if the sort uses the same indexes as the query predicate.
+.. include:: /includes/fact-sort-multiple-indexes.rst
 
 If MongoDB cannot use an index or indexes to obtain the sort order, MongoDB must perform an in-memory sort operation on the data.
 
@@ -185,7 +185,7 @@ with :method:`cursor.sort()`. See `sort-limit-results` for more information and 
 
 You can use :method:`~cursor.sort()` in conjunction with :method:`~cursor.limit()` to return the first (in terms of the sort order) `k` documents, where `k` is the specified limit.
 
-If MongoDB cannot obtain the sort order via an index scan, then MongoDB uses a top-k sort algorithm. This algorithm buffers the first `k` results (or last, depending on the sort order) seen so far by the underlying index or collection access. If at any point the memory footprint of these `k` results exceeds 100 megabytes, the query will fail unless the query specifies :method:`cursor.allowDiskUse()`.
+If MongoDB cannot obtain the sort order with an index scan, then MongoDB uses a top-k sort algorithm. This algorithm buffers the first `k` results (or last, depending on the sort order) seen so far by the underlying index or collection access. If the memory footprint of these `k` results exceeds 100 megabytes, MongoDB automatically writes temporary files to disk unless the query specifies :method:`cursor.allowDiskUse()` with a value of `false` (in which case, the query fails).
 
 > **Seealso:** :limit:`Memory Limits on Sort Operations <Sort Operations>`
 

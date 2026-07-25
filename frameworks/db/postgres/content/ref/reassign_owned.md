@@ -4,10 +4,10 @@ framework: "postgres"
 source_repo: "https://github.com/postgres/postgres.git"
 source_branch: "master"
 source_path: "doc/src/sgml/ref/reassign_owned.sgml"
-source_commit: "031904048aa22e7c70dc8e9c170e2743f9b0f090"
-source_commit_short: "03190404"
-source_commit_date: "2026-06-20T18:20:58+09:00"
-generated_at: "2026-06-21T07:06:11Z"
+source_commit: "38afc3dcb25c45b744d4025029ce0a6c90b7059f"
+source_commit_short: "38afc3dc"
+source_commit_date: "2026-07-25T19:08:27+09:00"
+generated_at: "2026-07-25T11:50:59Z"
 ---
 
 REASSIGN OWNED
@@ -30,7 +30,7 @@ REASSIGN OWNED BY { old_role | CURRENT_ROLE | CURRENT_USER | SESSION_USER } [, .
 
 ## Parameters
 
-- The name of a role. The ownership of all the objects within the current database, and of all shared objects (databases, tablespaces), owned by this role will be reassigned to `new_role`.
+- The name of a role. The ownership of all the objects within the current database, and of all shared objects (databases, tablespaces), owned by this role will be reassigned to `new_role`. Subscriptions, although stored in a shared catalog, belong to a specific database and are reassigned only when `REASSIGN OWNED` is executed in that database.
 - The name of the role that will be made the new owner of the affected objects.
 
 ## Notes

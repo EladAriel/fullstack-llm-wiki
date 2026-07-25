@@ -4,10 +4,10 @@ framework: "sqlalchemy"
 directory: "content/changelog/unreleased_21"
 source_repo: "https://github.com/sqlalchemy/sqlalchemy"
 source_branch: "main"
-source_commit: "ddf3b6589fd6ccb2affbaea5d4f400a8c1ad02d8"
-source_commit_short: "ddf3b658"
-source_commit_date: "2026-06-18T14:12:36-04:00"
-generated_at: "2026-06-21T07:22:30Z"
+source_commit: "aa1a5575358d3aa14953b04dced02f4763fed2e7"
+source_commit_short: "aa1a5575"
+source_commit_date: "2026-07-23T18:02:59Z"
+generated_at: "2026-07-25T11:50:45Z"
 ---
 # Unreleased 21
 
@@ -27,22 +27,13 @@ This directory contains sqlalchemy learning pages related to unreleased 21.
 
 ## Pages in This Directory
 
-- [10610](10610.md)
-- [11450](11450.md)
-- [13260](13260.md)
-- [13268](13268.md)
-- [13291](13291.md)
-- [13293](13293.md)
-- [13309](13309.md)
-- [13333](13333.md)
-- [13339](13339.md)
-- [13343](13343.md)
-- [13346](13346.md)
-- [13350](13350.md)
-- [13363](13363.md)
-- [5987](5987.md)
-- [8068](8068.md)
-- [8430](8430.md)
+- [10748](10748.md)
+- [11122](11122.md)
+- [11297](11297.md)
+- [12398](12398.md)
+- [13311](13311.md)
+- [13420](13420.md)
+- [2943](2943.md)
 
 ## IDE LLM Guidance
 

@@ -4,10 +4,10 @@ framework: "LangChain"
 source_repo: "https://github.com/langchain-ai/docs"
 source_branch: "main"
 source_path: "src/oss/langchain/multi-agent/subagents.mdx"
-source_commit: "d037cd23f3f298721837c403b2ffd289e31d56d0"
-source_commit_short: "d037cd23"
-source_commit_date: "2026-06-23T11:18:55+02:00"
-generated_at: "2026-06-23T13:53:33Z"
+source_commit: "2aae1dfc98ee953a9a5185fb6fcdd9efb3f4d878"
+source_commit_short: "2aae1dfc"
+source_commit_date: "2026-07-25T00:27:23Z"
+generated_at: "2026-07-25T11:51:05Z"
 ---
 
 ---
@@ -702,3 +702,14 @@ const callSubagent1 = tool(
 By default, subagents use the **inherited checkpointer** mode—each invocation starts with fresh state, supports [interrupts](/oss/langgraph/interrupts#pause-using-interrupt), and runs safely in parallel. If you need a subagent to maintain its own persistent conversation history across invocations, compile it with `checkpointer=True` (continuations mode). See [subgraph persistence](/oss/langgraph/use-subgraphs#subgraph-persistence) for a full comparison of modes.
 
 Because subagents are called inside tool functions, LangGraph cannot [statically discover](/oss/langgraph/use-subgraphs#view-subgraph-state) them. This means [`get_state` with `subgraphs`](/oss/langgraph/use-subgraphs#view-subgraph-state) will not return subagent state. If you need to read nested graph state (e.g., during an [interrupt](/oss/langgraph/interrupts#pause-using-interrupt)), invoke the subagent from a [node function](/oss/langgraph/use-subgraphs#call-a-subgraph-inside-a-node) in a custom graph instead. See [subgraph persistence](/oss/langgraph/use-subgraphs#subgraph-persistence) for details on how each mode affects state visibility.
+
+:::python
+<Card
+    title="Migrate from langgraph-supervisor"
+    icon="arrow-right"
+    href="/oss/migrate/langgraph-supervisor"
+    arrow cta="View guide"
+>
+    The langgraph-supervisor package is no longer actively maintained. Learn how to migrate from create_supervisor to the subagents pattern, including interrupt and resume flows with external API callbacks.
+</Card>
+:::

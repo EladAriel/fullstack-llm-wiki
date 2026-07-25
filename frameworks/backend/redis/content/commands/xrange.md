@@ -4,10 +4,10 @@ framework: "redis"
 source_repo: "https://github.com/redis/docs.git"
 source_branch: "main"
 source_path: "content/commands/xrange.md"
-source_commit: "bc92ea237bbfc2117c870c904f1a3ca619073ef1"
-source_commit_short: "bc92ea23"
-source_commit_date: "2026-06-18T14:53:00-05:00"
-generated_at: "2026-06-21T11:25:32Z"
+source_commit: "9d30f68c3dad1a6b3b7d30fe604b911348ce8152"
+source_commit_short: "9d30f68c"
+source_commit_date: "2026-07-24T10:52:10-07:00"
+generated_at: "2026-07-25T11:51:22Z"
 ---
 
 ---
@@ -121,13 +121,29 @@ The maximum number of entries to return.
 ## Examples
 
 {{% redis-cli %}}
-XADD writers * name Virginia surname Woolf
-XADD writers * name Jane surname Austen
-XADD writers * name Toni surname Morrison
-XADD writers * name Agatha surname Christie
-XADD writers * name Ngozi surname Adichie
-XLEN writers
-XRANGE writers - + COUNT 2
+redis> XADD writers * name Virginia surname Woolf
+"1784722084364-0"
+redis> XADD writers * name Jane surname Austen
+"1784722084364-1"
+redis> XADD writers * name Toni surname Morrison
+"1784722084365-0"
+redis> XADD writers * name Agatha surname Christie
+"1784722084366-0"
+redis> XADD writers * name Ngozi surname Adichie
+"1784722084366-1"
+redis> XLEN writers
+(integer) 5
+redis> XRANGE writers - + COUNT 2
+1) 1) "1784722084364-0"
+   2) 1) "name"
+      2) "Virginia"
+      3) "surname"
+      4) "Woolf"
+2) 1) "1784722084364-1"
+   2) 1) "name"
+      2) "Jane"
+      3) "surname"
+      4) "Austen"
 {{% /redis-cli %}}
 
 ## Details

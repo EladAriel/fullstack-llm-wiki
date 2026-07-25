@@ -4,10 +4,10 @@ framework: "redis"
 source_repo: "https://github.com/redis/docs.git"
 source_branch: "main"
 source_path: "content/operate/rs/monitoring/db-availability.md"
-source_commit: "bc92ea237bbfc2117c870c904f1a3ca619073ef1"
-source_commit_short: "bc92ea23"
-source_commit_date: "2026-06-18T14:53:00-05:00"
-generated_at: "2026-06-21T11:25:32Z"
+source_commit: "9d30f68c3dad1a6b3b7d30fe604b911348ce8152"
+source_commit_short: "9d30f68c"
+source_commit_date: "2026-07-24T10:52:10-07:00"
+generated_at: "2026-07-25T11:51:22Z"
 ---
 
 ---
@@ -40,6 +40,8 @@ GET /v1/bdbs/<database_id>/availability
 ```
 
 If the OSS Cluster API is enabled, this request verifies all endpoints for this database are available. Otherwise, it verifies the database has at least one available endpoint.
+
+An endpoint is available only if the database's primary (master) shards are reachable and the endpoint's listener port is bound. If either check fails, the database is reported as unavailable, and the [`error_code` and `description`]({{<relref "/operate/rs/references/rest-api/requests/bdbs/availability#get-db-error-codes">}}) identify the specific reason.
 
 Returns the status code 200 OK if the database is available.
 

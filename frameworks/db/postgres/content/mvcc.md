@@ -4,10 +4,10 @@ framework: "postgres"
 source_repo: "https://github.com/postgres/postgres.git"
 source_branch: "master"
 source_path: "doc/src/sgml/mvcc.sgml"
-source_commit: "031904048aa22e7c70dc8e9c170e2743f9b0f090"
-source_commit_short: "03190404"
-source_commit_date: "2026-06-20T18:20:58+09:00"
-generated_at: "2026-06-21T07:06:11Z"
+source_commit: "38afc3dcb25c45b744d4025029ce0a6c90b7059f"
+source_commit_short: "38afc3dc"
+source_commit_date: "2026-07-25T19:08:27+09:00"
+generated_at: "2026-07-25T11:50:59Z"
 ---
 
 ## Concurrency Control
@@ -376,6 +376,16 @@ X
 X
 
 X
+
+## Fast-Path Locking
+
+fast-path locking
+
+Internally, PostgreSQL can record some table-level locks using a fast-path locking mechanism instead of the main lock table. This reduces the overhead of acquiring and releasing locks that rarely conflict. It is an implementation optimization and does not change lock semantics.
+
+Fast-path locking can be used only for eligible relation locks in the weak table-level lock modes `ACCESS SHARE` (`AccessShareLock`), `ROW SHARE` (`RowShareLock`), and `ROW EXCLUSIVE` (`RowExclusiveLock`). It does not apply to shared relations (those visible across all databases, such as `pg_authid`). Other lock types, and stronger lock modes on relations, always go through the main lock table. Even for eligible locks, fast-path is used only when a per-backend slot is available; the number of slots is derived from `guc-max-locks-per-transaction`. When no slot is available, the lock is acquired via the main lock table instead.
+
+Acquiring a lock via the main lock table is considerably more expensive than the fast path, and under heavy concurrent lock activity can become a point of contention (observable as the `LockManager` wait event).
 
 ## Row-Level Locks
 

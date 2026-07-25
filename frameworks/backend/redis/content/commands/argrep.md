@@ -4,10 +4,10 @@ framework: "redis"
 source_repo: "https://github.com/redis/docs.git"
 source_branch: "main"
 source_path: "content/commands/argrep.md"
-source_commit: "bc92ea237bbfc2117c870c904f1a3ca619073ef1"
-source_commit_short: "bc92ea23"
-source_commit_date: "2026-06-18T14:53:00-05:00"
-generated_at: "2026-06-21T11:25:32Z"
+source_commit: "9d30f68c3dad1a6b3b7d30fe604b911348ce8152"
+source_commit_short: "9d30f68c"
+source_commit_date: "2026-07-24T10:52:10-07:00"
+generated_at: "2026-07-25T11:51:22Z"
 ---
 
 ---
@@ -180,13 +180,28 @@ Zero or more of the following modifiers:
 ## Examples
 
 {{% redis-cli %}}
-ARMSET log 0 "boot: ok" 1 "warn: disk" 2 "ERROR: cpu" 3 "info: ready" 4 "error: net"
-ARGREP log - + MATCH "error" NOCASE
-ARGREP log - + MATCH "error" NOCASE WITHVALUES
-ARGREP log 0 4 GLOB "warn:*" OR GLOB "error:*"
-ARGREP log 0 4 RE "^[A-Za-z]+: (cpu|net)$" NOCASE WITHVALUES
-ARGREP log 0 4 EXACT "info: ready"
-ARGREP log - + MATCH "error" NOCASE LIMIT 1
+redis> ARMSET log 0 "boot: ok" 1 "warn: disk" 2 "ERROR: cpu" 3 "info: ready" 4 "error: net"
+(integer) 5
+redis> ARGREP log - + MATCH "error" NOCASE
+1) (integer) 2
+2) (integer) 4
+redis> ARGREP log - + MATCH "error" NOCASE WITHVALUES
+1) 1) (integer) 2
+   2) "ERROR: cpu"
+2) 1) (integer) 4
+   2) "error: net"
+redis> ARGREP log 0 4 GLOB "warn:*" OR GLOB "error:*"
+1) (integer) 1
+2) (integer) 4
+redis> ARGREP log 0 4 RE "^[A-Za-z]+: (cpu|net)$" NOCASE WITHVALUES
+1) 1) (integer) 2
+   2) "ERROR: cpu"
+2) 1) (integer) 4
+   2) "error: net"
+redis> ARGREP log 0 4 EXACT "info: ready"
+1) (integer) 3
+redis> ARGREP log - + MATCH "error" NOCASE LIMIT 1
+1) (integer) 2
 {{% /redis-cli %}}
 
 ## Redis Software and Redis Cloud compatibility

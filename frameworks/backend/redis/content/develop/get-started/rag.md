@@ -4,10 +4,10 @@ framework: "redis"
 source_repo: "https://github.com/redis/docs.git"
 source_branch: "main"
 source_path: "content/develop/get-started/rag.md"
-source_commit: "bc92ea237bbfc2117c870c904f1a3ca619073ef1"
-source_commit_short: "bc92ea23"
-source_commit_date: "2026-06-18T14:53:00-05:00"
-generated_at: "2026-06-21T11:25:32Z"
+source_commit: "9d30f68c3dad1a6b3b7d30fe604b911348ce8152"
+source_commit_short: "9d30f68c"
+source_commit_date: "2026-07-24T10:52:10-07:00"
+generated_at: "2026-07-25T11:51:22Z"
 ---
 
 ---
@@ -56,7 +56,7 @@ To build a RAG application with Redis, follow these general steps:
 
 1. **Use a Framework**:
     1. **Redis Vector Library (RedisVL)**: [RedisVL](https://redis.io/docs/latest/integrate/redisvl/) enhances the development of generative AI applications by efficiently managing vectors and metadata. It allows for storage of vector embeddings and facilitates fast similarity searches, crucial for retrieving relevant information in RAG.
-    1. **Popular AI frameworks**: Redis integrates seamlessly with various AI frameworks and tools. For instance, combining Redis with [LangChain](https://python.langchain.com/v0.2/docs/integrations/vectorstores/redis/) or [LlamaIndex](https://docs.llamaindex.ai/en/latest/examples/vector_stores/RedisIndexDemo/), libraries for building language models, enables developers to create sophisticated RAG pipelines. These integrations support efficient data management and building real-time LLM chains.
+    1. **Popular AI frameworks**: Redis integrates seamlessly with various AI frameworks and tools. For instance, combining Redis with [LangChain](https://python.langchain.com/v0.2/docs/integrations/vectorstores/redis/) or [LlamaIndex](https://developers.llamaindex.ai/python/examples/vector_stores/redisindexdemo/), libraries for building language models, enables developers to create sophisticated RAG pipelines. These integrations support efficient data management and building real-time LLM chains.
     1. **Spring AI and Redis**: Using [Spring AI with Redis](https://redis.io/blog/building-a-rag-application-with-redis-and-spring-ai/) simplifies building RAG applications. Spring AI provides a structured approach to integrating AI capabilities into applications, while Redis handles data management, ensuring the RAG pipeline is efficient and scalable.
 
 1. **Embed and store data**: Convert your data into vector embeddings using a suitable model (e.g., BERT, GPT). Store these embeddings in Redis, where they can be quickly retrieved based on vector searches.

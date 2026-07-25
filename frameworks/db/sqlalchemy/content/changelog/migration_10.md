@@ -4,10 +4,10 @@ framework: "sqlalchemy"
 source_repo: "https://github.com/sqlalchemy/sqlalchemy"
 source_branch: "main"
 source_path: "doc/build/changelog/migration_10.rst"
-source_commit: "ddf3b6589fd6ccb2affbaea5d4f400a8c1ad02d8"
-source_commit_short: "ddf3b658"
-source_commit_date: "2026-06-18T14:12:36-04:00"
-generated_at: "2026-06-21T07:22:30Z"
+source_commit: "aa1a5575358d3aa14953b04dced02f4763fed2e7"
+source_commit_short: "aa1a5575"
+source_commit_date: "2026-07-23T18:02:59Z"
+generated_at: "2026-07-25T11:50:45Z"
 ---
 
 =============================

@@ -4,10 +4,10 @@ framework: "redis"
 source_repo: "https://github.com/redis/docs.git"
 source_branch: "main"
 source_path: "content/commands/geosearchstore.md"
-source_commit: "bc92ea237bbfc2117c870c904f1a3ca619073ef1"
-source_commit_short: "bc92ea23"
-source_commit_date: "2026-06-18T14:53:00-05:00"
-generated_at: "2026-06-21T11:25:32Z"
+source_commit: "9d30f68c3dad1a6b3b7d30fe604b911348ce8152"
+source_commit_short: "9d30f68c"
+source_commit_date: "2026-07-24T10:52:10-07:00"
+generated_at: "2026-07-25T11:51:22Z"
 ---
 
 ---
@@ -266,12 +266,37 @@ Store the distance from the center as the sorted-set score, instead of the geoha
 ## Examples
 
 {{% redis-cli %}}
-GEOADD Sicily 13.361389 38.115556 "Palermo" 15.087269 37.502669 "Catania"
-GEOADD Sicily 12.758489 38.788135 "edge1"   17.241510 38.788135 "edge2" 
-GEOSEARCHSTORE key1 Sicily FROMLONLAT 15 37 BYBOX 400 400 km ASC COUNT 3
-GEOSEARCH key1 FROMLONLAT 15 37 BYBOX 400 400 km ASC WITHCOORD WITHDIST WITHHASH
-GEOSEARCHSTORE key2 Sicily FROMLONLAT 15 37 BYBOX 400 400 km ASC COUNT 3 STOREDIST
-ZRANGE key2 0 -1 WITHSCORES
+redis> GEOADD Sicily 13.361389 38.115556 "Palermo" 15.087269 37.502669 "Catania"
+(integer) 2
+redis> GEOADD Sicily 12.758489 38.788135 "edge1"   17.241510 38.788135 "edge2"
+(integer) 2
+redis> GEOSEARCHSTORE key1 Sicily FROMLONLAT 15 37 BYBOX 400 400 km ASC COUNT 3
+(integer) 3
+redis> GEOSEARCH key1 FROMLONLAT 15 37 BYBOX 400 400 km ASC WITHCOORD WITHDIST WITHHASH
+1) 1) "Catania"
+   2) "56.4413"
+   3) (integer) 3479447370796909
+   4) 1) "15.087267458438873"
+      2) "37.50266842333162"
+2) 1) "Palermo"
+   2) "190.4424"
+   3) (integer) 3479099956230698
+   4) 1) "13.361389338970184"
+      2) "38.1155563954963"
+3) 1) "edge2"
+   2) "279.7403"
+   3) (integer) 3481342659049484
+   4) 1) "17.241510450839996"
+      2) "38.78813451624225"
+redis> GEOSEARCHSTORE key2 Sicily FROMLONLAT 15 37 BYBOX 400 400 km ASC COUNT 3 STOREDIST
+(integer) 3
+redis> ZRANGE key2 0 -1 WITHSCORES
+1) "Catania"
+2) "56.4412578701582"
+3) "Palermo"
+4) "190.44242984775784"
+5) "edge2"
+6) "279.7403417843143"
 {{% /redis-cli %}}
 
 ## Redis Software and Redis Cloud compatibility

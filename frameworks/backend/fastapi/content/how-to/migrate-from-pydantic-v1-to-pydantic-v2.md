@@ -4,10 +4,10 @@ framework: "FastAPI"
 source_repo: "https://github.com/fastapi/fastapi.git"
 source_branch: "master"
 source_path: "docs/en/docs/how-to/migrate-from-pydantic-v1-to-pydantic-v2.md"
-source_commit: "0cb4a8e284b450abbccb71c543ad7757de46c0b2"
-source_commit_short: "0cb4a8e2"
-source_commit_date: "2026-06-20T16:31:34Z"
-generated_at: "2026-06-21T07:06:10Z"
+source_commit: "255b912928904e3ba5980425a54d6837c8bd1a1c"
+source_commit_short: "255b9129"
+source_commit_date: "2026-07-24T21:15:37Z"
+generated_at: "2026-07-25T11:50:10Z"
 ---
 
 # Migrate from Pydantic v1 to Pydantic v2 { #migrate-from-pydantic-v1-to-pydantic-v2 }
@@ -36,7 +36,7 @@ If you have an old FastAPI app with Pydantic v1, here I'll show you how to migra
 
 ## Official Guide { #official-guide }
 
-Pydantic has an official [Migration Guide](https://docs.pydantic.dev/latest/migration/) from v1 to v2.
+Pydantic has an official [Migration Guide](https://pydantic.dev/docs/validation/latest/get-started/migration/) from v1 to v2.
 
 It also includes what has changed, how validations are now more correct and strict, possible caveats, etc.
 

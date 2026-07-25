@@ -4,10 +4,10 @@ framework: "mongodb"
 source_repo: "https://github.com/mongodb/docs.git"
 source_branch: "main"
 source_path: "content/manual/manual/source/reference/operator/aggregation/replaceWith.txt"
-source_commit: "96788e8ed140cbdde184ff82e1066dff4996bde4"
-source_commit_short: "96788e8e"
-source_commit_date: "2026-06-19T21:35:03-06:00"
-generated_at: "2026-06-21T07:41:52Z"
+source_commit: "ab9db26ed3d11618cdb61516d8180337d8e3f679"
+source_commit_short: "ab9db26e"
+source_commit_date: "2026-07-24T16:22:46-06:00"
+generated_at: "2026-07-25T11:51:15Z"
 ---
 
 ================================
@@ -22,15 +22,6 @@ If the `<replacementDocument>` is not a document, :pipeline:`$replaceWith` error
 
 If the `<replacementDocument>` resolves to a missing document (i.e. the document does not exist), :pipeline:`$replaceWith` errors and fails. For example, create a collection with the following documents:
 
-```javascript
-db.collection.insertMany([
-   { "_id": 1, "name" : { "first" : "John", "last" : "Backus" } },
-   { "_id": 2, "name" : { "first" : "John", "last" : "McCarthy" } },
-   { "_id": 3, "name": { "first" : "Grace", "last" : "Hopper" } },
-   { "_id": 4, "firstname": "Ole-Johan", "lastname" : "Dahl" },
-])
-```
-
 Then the following :pipeline:`$replaceWith` operation fails because one of the document does not have the `name` field:
 
 ```javascript
@@ -41,28 +32,9 @@ db.collection.aggregate([
 
 To avoid the error, you can use :expression:`$mergeObjects` to merge the  `name` document with some default document; for example:
 
-```javascript
-db.collection.aggregate([
-   { $replaceWith: { $mergeObjects: [ { _id: "$_id", first: "", last: "" }, "$name" ] } }
-])
-```
-
 Alternatively, you can skip the documents that are missing the `name` field by including a :pipeline:`$match` stage to check for existence of the document field before passing documents to the :pipeline:`$replaceWith` stage:
 
-```javascript
-db.collection.aggregate([
-   { $match: { name : { $exists: true, $not: { $type: "array" }, $type: "object" } } },
-   { $replaceWith: "$name" }
-])
-```
-
 Or, you can use :expression:`$ifNull` expression to specify some other document to be root; for example:
-
-```javascript
-db.collection.aggregate([
-   { $replaceWith: { $ifNull: [ "$name", { _id: "$_id", missingName: true} ] } }
-])
-```
 
 ## Examples
 

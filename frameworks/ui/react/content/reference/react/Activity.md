@@ -4,10 +4,10 @@ framework: "react"
 source_repo: "https://github.com/reactjs/react.dev"
 source_branch: "main"
 source_path: "src/content/reference/react/Activity.md"
-source_commit: "8bb31acb86bf68fa33d97dd0f1b834dfa71e2b1a"
-source_commit_short: "8bb31acb"
-source_commit_date: "2026-06-17T13:38:02-04:00"
-generated_at: "2026-06-21T12:23:02Z"
+source_commit: "7b6c3ceb9dd97249e9dce4a8a94e61aed6424698"
+source_commit_short: "7b6c3ceb"
+source_commit_date: "2026-07-20T15:31:48+02:00"
+generated_at: "2026-07-25T11:50:43Z"
 ---
 
 ---
@@ -767,17 +767,7 @@ Pre-rendering components with hidden Activity boundaries is a powerful way to re
 
 <Note>
 
-**Only Suspense-enabled data sources will be fetched during pre-rendering.** They include:
-
-- Data fetching with Suspense-enabled frameworks like [Relay](https://relay.dev/docs/guided-tour/rendering/loading-states/) and [Next.js](https://nextjs.org/docs/app/building-your-application/routing/loading-ui-and-streaming#streaming-with-suspense)
-- Lazy-loading component code with [`lazy`](/reference/react/lazy)
-- Reading the value of a cached Promise with [`use`](/reference/react/use)
-
-Activity **does not** detect data that is fetched inside an Effect.
-
-The exact way you would load data in the `Posts` component above depends on your framework. If you use a Suspense-enabled framework, you'll find the details in its data fetching documentation.
-
-Suspense-enabled data fetching without the use of an opinionated framework is not yet supported. The requirements for implementing a Suspense-enabled data source are unstable and undocumented. An official API for integrating data sources with Suspense will be released in a future version of React.
+Only data read from a source that [activates a Suspense boundary](/reference/react/Suspense#what-activates-a-suspense-boundary), such as a Promise read with [`use`](/reference/react/use), is fetched during pre-rendering. Activity does not detect data fetched inside an Effect.
 
 </Note>
 

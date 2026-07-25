@@ -4,10 +4,10 @@ framework: "redis"
 source_repo: "https://github.com/redis/docs.git"
 source_branch: "main"
 source_path: "content/develop/ai/search-and-query/vectors/_index.md"
-source_commit: "bc92ea237bbfc2117c870c904f1a3ca619073ef1"
-source_commit_short: "bc92ea23"
-source_commit_date: "2026-06-18T14:53:00-05:00"
-generated_at: "2026-06-21T11:25:32Z"
+source_commit: "9d30f68c3dad1a6b3b7d30fe604b911348ce8152"
+source_commit_short: "9d30f68c"
+source_commit_date: "2026-07-24T10:52:10-07:00"
+generated_at: "2026-07-25T11:51:22Z"
 ---
 
 ---
@@ -116,7 +116,7 @@ Choose the `HNSW` index type when you have larger datasets (> 1M documents) or w
 
 **Optional attributes**
 
-[`HNSW`](https://arxiv.org/ftp/arxiv/papers/1603/1603.09320.pdf) supports a number of additional parameters to tune
+[`HNSW`](https://arxiv.org/abs/1603.09320) supports a number of additional parameters to tune
 the accuracy of the queries, while trading off performance.
 
 | Attribute          | Description                                                        | Default value |

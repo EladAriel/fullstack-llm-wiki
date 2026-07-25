@@ -8,9 +8,9 @@ This is a local LLM-friendly wiki generated from the official Model Context Prot
 - Source repo: `https://github.com/modelcontextprotocol/modelcontextprotocol`
 - Source branch: `main`
 - Source docs path: `docs`
-- Source commit: `47501e4c`
-- Source commit date: `2026-06-22T09:16:44-07:00`
-- Wiki generated at: `2026-06-23T14:04:43Z`
+- Source commit: `76346843`
+- Source commit date: `2026-07-23T16:49:30-07:00`
+- Wiki generated at: `2026-07-25T11:50:39Z`
 
 ## How the IDE LLM should use this wiki
 
@@ -50,11 +50,13 @@ This is a local LLM-friendly wiki generated from the official Model Context Prot
 - [Governance](content/community/governance.md)
 - [Auth](content/community/interest-groups/auth.md)
 - [Enterprise Managed Authorization](content/community/interest-groups/enterprise-managed-authorization.md)
+- [Financial Services](content/community/interest-groups/financial-services.md)
+- [Primitive Grouping](content/community/interest-groups/primitive-grouping.md)
 - [Security](content/community/interest-groups/security.md)
 - [Tool Annotations](content/community/interest-groups/tool-annotations.md)
 - [Sdk Tiers](content/community/sdk-tiers.md)
+- [Security](content/community/security.md)
 - [Sep Guidelines](content/community/sep-guidelines.md)
-- [2243 Http Standardization](content/community/seps/2243-http-standardization.md)
 - [File Uploads](content/community/working-groups/file-uploads.md)
 - [Inspector V2](content/community/working-groups/inspector-v2.md)
 - [Interceptors](content/community/working-groups/interceptors.md)

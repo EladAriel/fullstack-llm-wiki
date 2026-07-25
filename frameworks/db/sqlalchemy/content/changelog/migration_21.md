@@ -4,10 +4,10 @@ framework: "sqlalchemy"
 source_repo: "https://github.com/sqlalchemy/sqlalchemy"
 source_branch: "main"
 source_path: "doc/build/changelog/migration_21.rst"
-source_commit: "ddf3b6589fd6ccb2affbaea5d4f400a8c1ad02d8"
-source_commit_short: "ddf3b658"
-source_commit_date: "2026-06-18T14:12:36-04:00"
-generated_at: "2026-06-21T07:22:30Z"
+source_commit: "aa1a5575358d3aa14953b04dced02f4763fed2e7"
+source_commit_short: "aa1a5575"
+source_commit_date: "2026-07-23T18:02:59Z"
+generated_at: "2026-07-25T11:50:45Z"
 ---
 
 =============================
@@ -27,7 +27,7 @@ Please carefully review the sections on behavioral changes for potentially backw
 
 ## Asyncio "greenlet" dependency no longer installs by default
 
-SQLAlchemy 1.4 and 2.0 used a complex expression to determine if the `greenlet` dependency, needed by the `asyncio <asyncio_toplevel>` extension, could be installed from pypi using a pre-built wheel instead of having to build from source.   This because the source build of `greenlet` is not always trivial on some platforms.
+SQLAlchemy 1.4 and 2.0 used a complex expression to determine if the `greenlet` dependency, needed by the `asyncio <asyncio_toplevel>` extension, could be installed from pypi using a pre-built wheel instead of having to build from source.   This is because the source build of `greenlet` is not always trivial on some platforms.
 
 Disadvantages to this approach included that SQLAlchemy needed to track exactly which versions of `greenlet` were published as wheels on pypi; the setup expression led to problems with some package management tools such as `poetry`; it was not possible to install SQLAlchemy **without** `greenlet` being installed, even though this is completely feasible if the asyncio extension is not used.
 
@@ -35,50 +35,16 @@ These problems are all solved by keeping `greenlet` entirely within the `[asynci
 
 :ticket:`10197`
 
-# New Features and Improvements - ORM
+# ORM - New Features
 
-## Session autoflush behavior simplified to be unconditional
+## Session-level execution options added
 
-Session autoflush behavior has been simplified to unconditionally flush the session each time an execution takes place, regardless of whether an ORM statement or Core statement is being executed. This change eliminates the previous conditional logic that only flushed when ORM-related statements were detected.
-
-Previously, the session would only autoflush when executing ORM queries:
-
-```
-# 2.0 behavior - autoflush only occurred for ORM statements
-session.add(User(name="new user"))
-
-# This would trigger autoflush
-users = session.execute(select(User)).scalars().all()
-
-# This would NOT trigger autoflush
-result = session.execute(text("SELECT * FROM users"))
-```
-
-In 2.1, autoflush occurs for all statement executions:
-
-```
-# 2.1 behavior - autoflush occurs for all executions
-session.add(User(name="new user"))
-
-# Both of these now trigger autoflush
-users = session.execute(select(User)).scalars().all()
-result = session.execute(text("SELECT * FROM users"))
-```
-
-This change provides more consistent and predictable session behavior across all types of SQL execution.
-
-:ticket:`9809`
-
-## Session-level execution options applied to Connection at procurement time
-
-Building on the session-level execution options feature introduced in :ticket:`12659, the orm.Session.execution_options parameter now applies its options to the engine.Connection` when it is first procured for a transaction, in addition to being merged into explicit query executions as before.  This means that execution options such as `schema_translate_map` as well as custom user-defined options now take effect for **all** operations within the session, including:
+The `_orm.Session, orm.sessionmaker, orm.scoped_session, ext.asyncio.AsyncSession, and ext.asyncio.async_sessionmaker constructors now accept an orm.Session.execution_options parameter, which establishes a dictionary of execution options that are applied across all operations within that session instance. These options are propagated both to explicit query executions such as orm.Session.execute and orm.Session.scalars, and to the engine.Connection` when it is first procured for a transaction. This means that execution options such as `schema_translate_map` as well as custom user-defined options take effect for **all** operations within the session, including:
 
 - Flush operations (INSERT/UPDATE/DELETE emitted by the unit of work)
 - Event hooks such as `_events.ConnectionEvents.before_cursor_execute`
 - Eager loader queries
-Previously, session-level execution options were only applied to explicit calls such as `_orm.Session.execute`, which meant that `schema_translate_map set on the orm.Session` would not take effect for flush operations.  The prior workaround was to set `schema_translate_map on the engine.Engine` itself, which remains supported.
-
-The new behavior allows `schema_translate_map to be set directly on the orm.Session`:
+For example, `schema_translate_map may be applied to a orm.Session` such that it takes effect for both queries and flushes:
 
 ```
 session = Session(
@@ -93,7 +59,7 @@ session.commit()
 results = session.scalars(select(MyObject)).all()
 ```
 
-Custom execution options that are consumed in event hooks such as `_events.ConnectionEvents.before_cursor_execute` are also available during flush operations:
+Custom execution options consumed in event hooks such as `_events.ConnectionEvents.before_cursor_execute` are also available during flush operations:
 
 ```
 session = Session(engine, execution_options={"my_audit_flag": True})
@@ -109,7 +75,120 @@ session.add(SomeObject())
 session.flush()  # before_cursor_execute sees my_audit_flag=True
 ```
 
+:ticket:`12659`
+
 :ticket:`13346`
+
+## New Hybrid DML hook features
+
+To complement the existing `.hybrid_property.update_expression` decorator, a new decorator `.hybrid_property.bulk_dml is added, which works specifically with parameter dictionaries passed to orm.Session.execute when dealing with ORM-enabled dml.insert or dml.update`:
+
+```
+from typing import MutableMapping
+from dataclasses import dataclass
+
+@dataclass
+class Point:
+    x: int
+    y: int
+
+class Location(Base):
+    __tablename__ = "location"
+
+    id: Mapped[int] = mapped_column(primary_key=True)
+    x: Mapped[int]
+    y: Mapped[int]
+
+    @hybrid_property
+    def coordinates(self) -> Point:
+        return Point(self.x, self.y)
+
+    @coordinates.inplace.bulk_dml
+    @classmethod
+    def _coordinates_bulk_dml(
+        cls, mapping: MutableMapping[str, Any], value: Point
+    ) -> None:
+        mapping["x"] = value.x
+        mapping["y"] = value.y
+```
+
+Additionally, a new helper `_sql.from_dml_column` is added, which may be used with the `.hybrid_property.update_expression` hook to indicate reuse of a column expression from elsewhere in the UPDATE statement's SET clause:
+
+```
+from sqlalchemy import from_dml_column
+
+class Product(Base):
+    __tablename__ = "product"
+
+    id: Mapped[int] = mapped_column(primary_key=True)
+    price: Mapped[float]
+    tax_rate: Mapped[float]
+
+    @hybrid_property
+    def total_price(self) -> float:
+        return self.price * (1 + self.tax_rate)
+
+    @total_price.inplace.update_expression
+    @classmethod
+    def _total_price_update_expression(cls, value: Any) -> List[Tuple[Any, Any]]:
+        return [(cls.price, value / (1 + from_dml_column(cls.tax_rate)))]
+```
+
+In the above example, if the `tax_rate` column is also indicated in the SET clause of the UPDATE, that expression will be used for the `total_price` expression rather than making use of the previous value of the `tax_rate` column:
+
+```pycon+sql
+ >>> from sqlalchemy import update
+ >>> print(update(Product).values({Product.tax_rate: 0.08, Product.total_price: 125.00}))
+ {printsql}UPDATE product SET tax_rate=:tax_rate, price=(:param_1 / (:tax_rate + :param_2))
+```
+
+When the target column is omitted, `_sql.from_dml_column` falls back to using the original column expression:
+
+```pycon+sql
+ >>> from sqlalchemy import update
+ >>> print(update(Product).values({Product.total_price: 125.00}))
+ {printsql}UPDATE product SET price=(:param_1 / (tax_rate + :param_2))
+```
+
+> **Seealso:**  `hybrid_bulk_update`
+
+:ticket:`12496`
+
+## New RegistryEvents System for ORM Mapping Customization
+
+SQLAlchemy 2.1 introduces `.RegistryEvents, providing for event hooks that are specific to a orm.registry.  These events include orm.RegistryEvents.before_configured and orm.RegistryEvents.after_configured to complement the same-named events that can be established on a orm.Mapper, as well as orm.RegistryEvents.resolve_type_annotation` that allows programmatic access to the ORM Annotated Declarative type resolution process.  Examples are provided illustrating how to define resolution schemes for any kind of type hierarchy in an automated fashion, including `695` type aliases.
+
+E.g.:
+
+```
+from typing import Any
+
+from sqlalchemy import event
+from sqlalchemy.orm import DeclarativeBase
+from sqlalchemy.orm import registry as RegistryType
+from sqlalchemy.orm import TypeResolve
+from sqlalchemy.types import TypeEngine
+
+class Base(DeclarativeBase):
+    pass
+
+@event.listens_for(Base, "resolve_type_annotation")
+def resolve_custom_type(resolve_type: TypeResolve) -> TypeEngine[Any] | None:
+    if resolve_type.resolved_type is MyCustomType:
+        return MyCustomSQLType()
+    else:
+        return None
+
+@event.listens_for(Base, "after_configured")
+def after_base_configured(registry: RegistryType) -> None:
+    print(f"Registry {registry} fully configured")
+```
+
+> **Seealso:**  `orm_declarative_resolve_type_event` - Complete documentation on using
+ the `.RegistryEvents.resolve_type_annotation` event
+ `.RegistryEvents` - Complete API reference for all registry events
+
+:ticket:`9832`
 
 ## ORM Relationship allows callable for back_populates
 
@@ -134,6 +213,8 @@ class B(Base):
 ```
 
 :ticket:`10050`
+
+# ORM - Behavioral Changes and Improvements
 
 ## ORM Mapped Dataclasses no longer populate implicit `default`, collection-based `default_factory in _dict__`
 
@@ -287,80 +368,37 @@ parameters are mutually exclusive, and only one may be passed at a time. The beh
 
 :ticket:`12168`
 
-## New Hybrid DML hook features
+## Session autoflush behavior simplified to be unconditional
 
-To complement the existing `.hybrid_property.update_expression` decorator, a new decorator `.hybrid_property.bulk_dml is added, which works specifically with parameter dictionaries passed to orm.Session.execute when dealing with ORM-enabled dml.insert or dml.update`:
+Session autoflush behavior has been simplified to unconditionally flush the session each time an execution takes place, regardless of whether an ORM statement or Core statement is being executed. This change eliminates the previous conditional logic that only flushed when ORM-related statements were detected.
 
-```
-from typing import MutableMapping
-from dataclasses import dataclass
-
-@dataclass
-class Point:
-    x: int
-    y: int
-
-class Location(Base):
-    __tablename__ = "location"
-
-    id: Mapped[int] = mapped_column(primary_key=True)
-    x: Mapped[int]
-    y: Mapped[int]
-
-    @hybrid_property
-    def coordinates(self) -> Point:
-        return Point(self.x, self.y)
-
-    @coordinates.inplace.bulk_dml
-    @classmethod
-    def _coordinates_bulk_dml(
-        cls, mapping: MutableMapping[str, Any], value: Point
-    ) -> None:
-        mapping["x"] = value.x
-        mapping["y"] = value.y
-```
-
-Additionally, a new helper `_sql.from_dml_column` is added, which may be used with the `.hybrid_property.update_expression` hook to indicate reuse of a column expression from elsewhere in the UPDATE statement's SET clause:
+Previously, the session would only autoflush when executing ORM queries:
 
 ```
-from sqlalchemy import from_dml_column
+# 2.0 behavior - autoflush only occurred for ORM statements
+session.add(User(name="new user"))
 
-class Product(Base):
-    __tablename__ = "product"
+# This would trigger autoflush
+users = session.execute(select(User)).scalars().all()
 
-    id: Mapped[int] = mapped_column(primary_key=True)
-    price: Mapped[float]
-    tax_rate: Mapped[float]
-
-    @hybrid_property
-    def total_price(self) -> float:
-        return self.price * (1 + self.tax_rate)
-
-    @total_price.inplace.update_expression
-    @classmethod
-    def _total_price_update_expression(cls, value: Any) -> List[Tuple[Any, Any]]:
-        return [(cls.price, value / (1 + from_dml_column(cls.tax_rate)))]
+# This would NOT trigger autoflush
+result = session.execute(text("SELECT * FROM users"))
 ```
 
-In the above example, if the `tax_rate` column is also indicated in the SET clause of the UPDATE, that expression will be used for the `total_price` expression rather than making use of the previous value of the `tax_rate` column:
+In 2.1, autoflush occurs for all statement executions:
 
-```pycon+sql
- >>> from sqlalchemy import update
- >>> print(update(Product).values({Product.tax_rate: 0.08, Product.total_price: 125.00}))
- {printsql}UPDATE product SET tax_rate=:tax_rate, price=(:param_1 / (:tax_rate + :param_2))
+```
+# 2.1 behavior - autoflush occurs for all executions
+session.add(User(name="new user"))
+
+# Both of these now trigger autoflush
+users = session.execute(select(User)).scalars().all()
+result = session.execute(text("SELECT * FROM users"))
 ```
 
-When the target column is omitted, `_sql.from_dml_column` falls back to using the original column expression:
+This change provides more consistent and predictable session behavior across all types of SQL execution.
 
-```pycon+sql
- >>> from sqlalchemy import update
- >>> print(update(Product).values({Product.total_price: 125.00}))
- {printsql}UPDATE product SET price=(:param_1 / (tax_rate + :param_2))
-```
-
-> **Seealso:**  `hybrid_bulk_update`
-
-:ticket:`12496`
+:ticket:`9809`
 
 ## New rules for None-return for ORM Composites
 
@@ -460,43 +498,7 @@ If `_orm.composite.return_none_on` is set explicitly, that value will supersede 
 
 :ticket:`12570`
 
-## New RegistryEvents System for ORM Mapping Customization
-
-SQLAlchemy 2.1 introduces `.RegistryEvents, providing for event hooks that are specific to a orm.registry.  These events include orm.RegistryEvents.before_configured and orm.RegistryEvents.after_configured to complement the same-named events that can be established on a orm.Mapper, as well as orm.RegistryEvents.resolve_type_annotation` that allows programmatic access to the ORM Annotated Declarative type resolution process.  Examples are provided illustrating how to define resolution schemes for any kind of type hierarchy in an automated fashion, including `695` type aliases.
-
-E.g.:
-
-```
-from typing import Any
-
-from sqlalchemy import event
-from sqlalchemy.orm import DeclarativeBase
-from sqlalchemy.orm import registry as RegistryType
-from sqlalchemy.orm import TypeResolve
-from sqlalchemy.types import TypeEngine
-
-class Base(DeclarativeBase):
-    pass
-
-@event.listens_for(Base, "resolve_type_annotation")
-def resolve_custom_type(resolve_type: TypeResolve) -> TypeEngine[Any] | None:
-    if resolve_type.resolved_type is MyCustomType:
-        return MyCustomSQLType()
-    else:
-        return None
-
-@event.listens_for(Base, "after_configured")
-def after_base_configured(registry: RegistryType) -> None:
-    print(f"Registry {registry} fully configured")
-```
-
-> **Seealso:**  `orm_declarative_resolve_type_event` - Complete documentation on using
- the `.RegistryEvents.resolve_type_annotation` event
- `.RegistryEvents` - Complete API reference for all registry events
-
-:ticket:`9832`
-
-# New Features and Improvements - Core
+# Core - New Features
 
 ## Template String (t-string) Support for Python 3.14+
 
@@ -551,41 +553,212 @@ The `_sql.tstring` construct is fully compatible with SQLAlchemy's statement cac
 
 :ticket:`12548`
 
-## `Row` now represents individual column types directly without `Tuple`
+## CREATE VIEW and CREATE TABLE AS SELECT Support
 
-SQLAlchemy 2.0 implemented a broad array of `484 typing throughout all components, including a new ability for row-returning statements such as sql.select to maintain track of individual column types, which were then passed through the execution phase onto the engine.Result object and then to the individual engine.Row` objects.   Described at `change_result_typing_20`, this approach solved several issues with statement / row typing, but some remained unsolvable.  In 2.1, one of those issues, that the individual column types needed to be packaged into a `typing.Tuple`, is now resolved using new `646` integration, which allows for tuple-like types that are not actually typed as `Tuple`.
+SQLAlchemy 2.1 adds support for the SQL `CREATE VIEW` and `CREATE TABLE ... AS SELECT` constructs, as well as the `SELECT ... INTO` variant for selected backends. Both DDL statements generate a table or table-like construct based on the structure and rows represented by a SELECT statement. The constructs are available via the `.CreateView and schema.CreateTableAs DDL classes, as well as the sql.SelectBase.into` convenience method.
 
-In SQLAlchemy 2.0, a statement such as:
+Both constructs work in exactly the same way, including that a `.Table` object is automatically generated from a given `.Select`. DDL can then be emitted by executing the construct directly or by allowing the `.MetaData.create_all` or `.Table.create` sequences to emit the correct DDL.
 
-```
-stmt = select(column("x", Integer), column("y", String))
-```
-
-Would be typed as:
+E.g. using `.CreateView`:
 
 ```
-Select[Tuple[int, str]]
+>>> from sqlalchemy import Table, Column, Integer, String, MetaData
+>>> from sqlalchemy import CreateView, select
+>>>
+>>> metadata_obj = MetaData()
+>>> user_table = Table(
+...     "user_account",
+...     metadata_obj,
+...     Column("id", Integer, primary_key=True),
+...     Column("name", String(30)),
+...     Column("fullname", String),
+... )
+>>> view = CreateView(
+...     select(user_table).where(user_table.c.name.like("%spongebob%")),
+...     "spongebob_view",
+...     metadata=metadata_obj,
+... )
 ```
 
-In 2.1, it's now typed as:
+The above `CreateView` construct will emit CREATE VIEW when executed directly, or when a DDL create operation is run.  When using `.MetaData.create_all`, the view is created after all dependent tables have been created:
+
+```pycon+sql
+ >>> from sqlalchemy import create_engine
+ >>> e = create_engine("sqlite://", echo=True)
+ >>> metadata_obj.create_all(e)
+ {opensql}BEGIN (implicit)
+
+ CREATE TABLE user_account (
+ 	id INTEGER NOT NULL,
+ 	name VARCHAR(30),
+ 	fullname VARCHAR,
+ 	PRIMARY KEY (id)
+ )
+
+ CREATE VIEW spongebob_view AS
+ SELECT user_account.id, user_account.name, user_account.fullname
+ FROM user_account
+ WHERE user_account.name LIKE '%spongebob%'
+
+ COMMIT
+```
+
+The view is usable in SQL expressions via the `.CreateView.table` attribute:
+
+```pycon+sql
+ >>> with e.connect() as conn:
+ ...     conn.execute(select(view.table))
+ {opensql}BEGIN (implicit)
+ SELECT spongebob_view.id, spongebob_view.name, spongebob_view.fullname
+ FROM spongebob_view
+ <sqlalchemy.engine.cursor.CursorResult object at 0x7f573e4a4ad0>
+ ROLLBACK
+```
+
+`_schema.CreateTableAs` works in the same way, emitting `CREATE TABLE AS`:
 
 ```
-Select[int, str]
+>>> from sqlalchemy import CreateTableAs
+>>> select_stmt = select(user_table.c.id, user_table.c.name).where(
+...     user_table.c.name == "squidward"
+... )
+>>> create_table_as = CreateTableAs(select_stmt, "squidward_users")
 ```
 
-When executing `stmt, the engine.Result and engine.Row` objects will be typed as `Result[int, str]` and `Row[int, str], respectively. The prior workaround using engine.Row._t` to type as a real `Tuple` is no longer needed and projects can migrate off this pattern.
+In this case, `.CreateTableAs` was not given a `.MetaData` collection. While a `.MetaData` collection will be created automatically in this case, the actual `CREATE TABLE AS` statement can also be generated by directly executing the object:
 
-Mypy users will need to make use of **Mypy 1.7 or greater** for pep-646 integration to be available.
+```pycon+sql
+ >>> with e.begin() as conn:
+ ...     conn.execute(create_table_as)
+ {opensql}BEGIN (implicit)
+ CREATE TABLE squidward_users AS SELECT user_account.id, user_account.name
+ FROM user_account
+ WHERE user_account.name = 'squidward'
+ COMMIT
+```
 
-#### Limitations
+Like before, the `.Table` is accessible from `.CreateTableAs.table`:
 
-Not yet solved by pep-646 or any other pep is the ability for an arbitrary number of expressions within `_sql.Select and others to be mapped to row objects, without stating each argument position explicitly within typing annotations.   To work around this issue, SQLAlchemy makes use of automated "stub generation" tools to generate hardcoded mappings of different numbers of positional arguments to constructs like sql.select` to resolve to individual `Unpack[]` expressions (in SQLAlchemy 2.0, this generation produced `Tuple[] annotations instead).  This means that there are arbitrary limits on how many specific column expressions will be typed within the engine.Row` object, without restoring to `Any for remaining expressions; for sql.select, it's currently ten expressions, and for DML expressions like dml.insert that use dml.Insert.returning`, it's eight.    If and when a new pep that provides a `Map` operator to pep-646 is proposed, this limitation can be lifted. [1]_  Originally, it was mistakenly assumed that this limitation prevented pep-646 from being usable at all, however, the `Unpack` construct does in fact replace everything that was done using `Tuple` in 2.0.
+```pycon+sql
+ >>> with e.connect() as conn:
+ ...     conn.execute(select(create_table_as.table))
+ {opensql}BEGIN (implicit)
+ SELECT squidward_users.id, squidward_users.name
+ FROM squidward_users
+ <sqlalchemy.engine.cursor.CursorResult object at 0x7f573e4a4f30>
+ ROLLBACK
+```
 
-An additional limitation for which there is no proposed solution is that there's no way for the name-based attributes on `_engine.Row` to be automatically typed, so these continue to be typed as `Any` (e.g. `row.x` and `row.y for the above example).   With current language features, this could only be fixed by having an explicit class-based construct that allows one to compose an explicit engine.Row` with explicit fields up front, which would be verbose and not automatic.
+> **Seealso:**  `metadata_create_view` - in `metadata_toplevel`
+ `metadata_create_table_as` - in `metadata_toplevel`
+ `_schema.CreateView` - DDL construct for CREATE VIEW
+ `_schema.CreateTableAs` - DDL construct for CREATE TABLE AS
+ `_sql.SelectBase.into` - convenience method on SELECT and UNION
+ statements
 
-:ticket:`10635`
+:ticket:`4950`
 
-## Better type checker integration for Core froms, like Table
+## Explicit USING support for DELETE (MySQL, PostgreSQL)
+
+The `_sql.Delete.using` method has been added, allowing explicit `USING` expressions to be specified in DELETE statements.  This is useful for backend-specific multiple-table DELETE forms where the secondary FROM clause needs to be stated explicitly, such as joined DELETE on MySQL/MariaDB and PostgreSQL.
+
+Previously, multi-table DELETE was supported by inferring extra FROM entries from the WHERE clause, which works for simple cases.  The new `_sql.Delete.using` method allows more complex expressions such as explicit joins to be stated:
+
+```
+from sqlalchemy import delete, table, column
+
+user_table = table("users", column("id"), column("name"))
+address_table = table("addresses", column("id"), column("user_id"), column("email"))
+
+stmt = (
+    delete(user_table)
+    .using(
+        user_table.outerjoin(
+            address_table,
+            user_table.c.id == address_table.c.user_id,
+        )
+    )
+    .where(address_table.c.email == "patrick@aol.com")
+)
+```
+
+On MySQL/MariaDB, the above renders as:
+
+```sql
+ DELETE FROM users USING users LEFT OUTER JOIN addresses
+ ON users.id = addresses.user_id
+ WHERE addresses.email = %s
+```
+
+On PostgreSQL, a similar form is rendered using the PostgreSQL-specific `DELETE .. USING` syntax.
+
+> **Seealso:**  `tutorial_multi_table_deletes` - updated tutorial section for
+ multi-table deletes
+
+:ticket:`8130`
+
+## New Syntax Extension Feature for Core
+
+Added the ability to create custom SQL constructs that can define new clauses within SELECT, INSERT, UPDATE, and DELETE statements without needing to modify the construction or compilation code of `.Select, dml.Insert`, `.Update`, or `.Delete` directly.
+
+Custom extension can be created by subclassing the class `sqlalchemy.sql.SyntaxExtension`. For example, support for the `INTO OUTFILE` clause of a select supported by MariaDB and MySQL, can be implemented using syntax extensions as follows:
+
+```
+from sqlalchemy.ext.compiler import compiles
+from sqlalchemy.sql import ClauseElement, Select, SyntaxExtension, visitors
+
+def into_outfile(name: str) -> "IntoOutFile":
+    """Return a INTO OUTFILE construct"""
+    return IntoOutFile(name)
+
+class IntoOutFile(SyntaxExtension, ClauseElement):
+    """Define the INTO OUTFILE class."""
+
+    _traverse_internals = [("name", visitors.InternalTraversal.dp_string)]
+    """Structure that defines how SQLAlchemy can cache this element.
+    Specify ``inherit_cache=False`` to turn off caching.
+    """
+    name: str
+
+    def __init__(self, name: str):
+        self.name = name
+
+    def apply_to_select(self, select_stmt: Select) -> None:
+        """Called when the :meth:`.Select.ext` method is called."""
+        select_stmt.apply_syntax_extension_point(
+            self.append_replacing_same_type, "post_body"
+        )
+
+@compiles(IntoOutFile)
+def _compile_into_outfile(element: IntoOutFile, compiler, **kw):
+    """a compiles extension that compiles to SQL IntoOutFile"""
+    name = element.name.replace("'", "''")
+    return f"INTO OUTFILE '{name}'"
+```
+
+This can then be used in a select using the `.Select.ext` method:
+
+```pycon+sql
+ >>> import sqlalchemy as sa
+
+ >>> stmt = (
+ ...     sa.select(sa.column("a"))
+ ...     .select_from(sa.table("tbl"))
+ ...     .ext(into_outfile("myfile.txt"))
+ ... )
+ >>> print(stmt)
+ {printsql}SELECT a
+ FROM tbl INTO OUTFILE 'myfile.txt'{stop}
+```
+
+Several SQLAlchemy features custom to a single backend have been re-implemented using this new system, including PostgreSQL `_postgresql.distinct_on and MySQL mysql.limit` functions that supersede the previous implementations.
+
+> **Seealso:**  `examples_syntax_extensions` - A fully documented example of a
+ `QUALIFY` clause implemented using this new feature.
+
+:ticket:`12195` :ticket:`12342`
+
+## New type checker integration structures for Core FROM clauses, like Table
 
 SQLAlchemy 2.1 changes `_schema.Table, along with most sql.FromClause subclasses, to be generic on the column collection, providing the option for better static type checking support. By declaring the columns using a schema.TypedColumns subclass and providing it to the schema.Table instance, IDEs and type checkers can infer the exact types of columns when accessing them via the schema.Table.c` attribute, enabling better autocomplete and type validation.
 
@@ -621,7 +794,7 @@ stmt = select(user)  # Inferred as Select[int, str, int | None]
 
 The optional `sqlalchemy.sql._annotated_cols.HasRowPos.__row_pos__` annotation is used to infer the types of a select when selecting the table directly.
 
-Columns can be declared in `.TypedColumns` subclasses by instantiating them directly, like `id`, by using only a type annotations, like `name, letting the schema.Table` infer SQL type and nullability, or by mixing the two, like `age`, to provide explicit column options while inferring nullability and/or SQL type.
+Columns can be declared in `.TypedColumns` subclasses by instantiating them directly, like `id`, by using only a type annotation, like `name, letting the schema.Table` infer SQL type and nullability, or by mixing the two, like `age`, to provide explicit column options while inferring nullability and/or SQL type.
 
 Other `_sql.FromClause, like sql.Join, sql.CTE, etc, can be made generic using the sql.FromClause.with_cols` method:
 
@@ -659,6 +832,109 @@ table_a = as_typed_table(A)
 For proper typing integration `_orm.MappedColumn should be used to annotate the single columns, since it's a more specific annotation than the usual orm.Mapped` used for ORM attributes.
 
 :ticket:`13085`
+
+## Non-integer RANGE window frame clauses now supported
+
+The `_sql.over clause now supports non-integer values in the sql.over.range_ parameter through the new sql.FrameClause` construct. Previously, only integer values were allowed in RANGE clauses, which limited their use to integer-based ordering columns.
+
+With this change, applications can now use RANGE with other data types such as floating-point numbers, dates, and intervals. The new `_sql.FrameClause construct provides explicit control over frame boundaries using the sql.FrameClauseType` enum:
+
+```
+from datetime import timedelta
+from sqlalchemy import FrameClause, FrameClauseType
+
+# Example: date-based RANGE with a 7-day window
+func.sum(my_table.c.amount).over(
+    order_by=my_table.c.date,
+    range_=FrameClause(
+        start=timedelta(days=7),
+        end=None,
+        start_frame_type=FrameClauseType.PRECEDING,
+        end_frame_type=FrameClauseType.CURRENT,
+    ),
+)
+```
+
+For backwards compatibility, the traditional tuple-based syntax continues to work with integer values:
+
+```
+# This continues to work unchanged
+func.row_number().over(order_by=table.c.col, range_=(None, 10))
+```
+
+However, attempting to use non-integer values in the tuple syntax will now raise an error, directing users to use `_sql.FrameClause` instead.
+
+:ticket:`12596`
+
+# Core - Behavioral Changes and Improvements
+
+## Improved `params()` implementation for executable statements
+
+The `_sql.ClauseElement.params and sql.ClauseElement.unique_params` methods have been deprecated in favor of a new implementation on executable statements that provides improved performance and better integration with ORM-enabled statements.
+
+Executable statement objects like `_sql.Select, sql.CompoundSelect, and sql.TextClause now provide an improved sql.ExecutableStatement.params` method that avoids a full cloned traversal of the statement tree. Instead, parameters are stored directly on the statement object and efficiently merged during compilation and/or cache key traversal.
+
+The new implementation provides several benefits:
+
+- **Better performance** - Parameters are stored in a simple dictionary rather than
+requiring a full statement tree traversal with cloning
+
+- **Proper caching integration** - Parameters are correctly integrated into SQLAlchemy's
+cache key system via `_generate_cache_key()`
+
+- **ORM statement compatibility** - Works correctly with ORM-enabled statements, including
+ORM entities used with `_orm.aliased`, subqueries, CTEs, etc.
+
+Use of `_sql.ExecutableStatement.params is unchanged, provided the given object is a statement object such as sql.select`:
+
+```
+stmt = select(table).where(table.c.data == bindparam("x"))
+
+# Execute with parameter value
+result = connection.execute(stmt.params(x=5))
+
+# Can be chained and used in subqueries
+stmt2 = stmt.params(x=6).subquery().select()
+result = connection.execute(stmt2.params(x=7))  # Uses x=7
+```
+
+The deprecated `_sql.ClauseElement.params and sql.ClauseElement.unique_params methods on non-executable elements like sql.ColumnElement and general sql.ClauseElement` instances will continue to work during the deprecation period but will emit deprecation warnings.
+
+:ticket:`7066`
+
+## `Row` now represents individual column types directly without `Tuple`
+
+SQLAlchemy 2.0 implemented a broad array of `484 typing throughout all components, including a new ability for row-returning statements such as sql.select to maintain track of individual column types, which were then passed through the execution phase onto the engine.Result object and then to the individual engine.Row` objects.   Described at `change_result_typing_20`, this approach solved several issues with statement / row typing, but some remained unsolvable.  In 2.1, one of those issues, that the individual column types needed to be packaged into a `typing.Tuple`, is now resolved using new `646` integration, which allows for tuple-like types that are not actually typed as `Tuple`.
+
+In SQLAlchemy 2.0, a statement such as:
+
+```
+stmt = select(column("x", Integer), column("y", String))
+```
+
+Would be typed as:
+
+```
+Select[Tuple[int, str]]
+```
+
+In 2.1, it's now typed as:
+
+```
+Select[int, str]
+```
+
+When executing `stmt, the engine.Result and engine.Row` objects will be typed as `Result[int, str]` and `Row[int, str], respectively. The prior workaround using engine.Row._t` to type as a real `Tuple` is no longer needed and projects can migrate off this pattern.
+
+Mypy users will need to make use of **Mypy 1.7 or greater** for pep-646 integration to be available.
+
+#### Limitations
+
+Not yet solved by pep-646 or any other pep is the ability for an arbitrary number of expressions within `_sql.Select and others to be mapped to row objects, without stating each argument position explicitly within typing annotations.   To work around this issue, SQLAlchemy makes use of automated "stub generation" tools to generate hardcoded mappings of different numbers of positional arguments to constructs like sql.select` to resolve to individual `Unpack[]` expressions (in SQLAlchemy 2.0, this generation produced `Tuple[] annotations instead).  This means that there are arbitrary limits on how many specific column expressions will be typed within the engine.Row` object, without resorting to `Any for remaining expressions; for sql.select, it's currently ten expressions, and for DML expressions like dml.insert that use dml.Insert.returning`, it's eight.    If and when a new pep that provides a `Map` operator to pep-646 is proposed, this limitation can be lifted. [1]_  Originally, it was mistakenly assumed that this limitation prevented pep-646 from being usable at all, however, the `Unpack` construct does in fact replace everything that was done using `Tuple` in 2.0.
+
+An additional limitation for which there is no proposed solution is that there's no way for the name-based attributes on `_engine.Row` to be automatically typed, so these continue to be typed as `Any` (e.g. `row.x` and `row.y for the above example).   With current language features, this could only be fixed by having an explicit class-based construct that allows one to compose an explicit engine.Row` with explicit fields up front, which would be verbose and not automatic.
+
+:ticket:`10635`
 
 ## `filter_by()` now searches across all FROM clause entities
 
@@ -741,70 +1017,25 @@ where `_sql.Select.filter_by happened to use an ambiguous column name but it wor
 2. **Different entity selection**: In rare cases where the old behavior of
 selecting the "last joined" or "first FROM" entity was being relied upon, `_sql.Select.filter_by might now find the attribute in a different entity. Review any sql.Select.filter_by` calls in complex multi-entity queries.
 
-It's hoped that in most cases, this change will make `_sql.Select.filter_by` more intuitive to use.
+In most cases, this change is expected to make `_sql.Select.filter_by` more intuitive to use.
 
 :ticket:`8601`
 
-## New Syntax Extension Feature for Core
+## Error handling extended to DBAPI cursor operations in before_cursor_execute/after_cursor_execute event hooks
 
-Added the ability to create custom SQL constructs that can define new clauses within SELECT, INSERT, UPDATE, and DELETE statements without needing to modify the construction or compilation code of `.Select, dml.Insert`, `.Update`, or `.Delete` directly.
+Applications that use the `_events.ConnectionEvents.before_cursor_execute or events.ConnectionEvents.after_cursor_execute` event hooks will see two behavioral changes. Both changes apply specifically to the case where hook code operates directly on the raw DBAPI cursor or DBAPI connection object — for example, calling `cursor.execute() or performing other raw DBAPI operations from inside the hook. When the SQLAlchemy engine.Connection` is used instead, its own error handling already applies and is unaffected by this change.
 
-Custom extension can be created by subclassing the class `sqlalchemy.sql.SyntaxExtension`. For example, support for the `INTO OUTFILE` clause of a select supported by MariaDB and MySQL, can be implemented using syntax extensions as follows:
+When an exception escapes from one of these hooks (that is, as it propagates outward toward the calling code such as `_engine.Connection.execute`), SQLAlchemy's error handling machinery now intercepts it. This produces two effects:
 
-```
-from sqlalchemy.ext.compiler import compiles
-from sqlalchemy.sql import ClauseElement, Select, SyntaxExtension, visitors
+- **Connection invalidation now occurs correctly.** Previously, any exception
+that escaped these hooks — including `BaseException` subclasses such as `asyncio.CancelledError`, `KeyboardInterrupt`, and `SystemExit` — bypassed SQLAlchemy's error handling path entirely. The connection was not invalidated and the pool was not notified, potentially leaving a broken connection checked back into the pool.
 
-def into_outfile(name: str) -> "IntoOutFile":
-    """Return a INTO OUTFILE construct"""
-    return IntoOutFile(name)
+- **Raw DBAPI errors are now wrapped as SQLAlchemy exceptions.** A DBAPI
+exception raised by a raw DBAPI operation inside the hook, which previously propagated as a bare DBAPI exception, is now wrapped in a `_exc.DBAPIError` subclass, consistent with errors raised during normal statement execution.
 
-class IntoOutFile(SyntaxExtension, ClauseElement):
-    """Define the INTO OUTFILE class."""
+It is important to note that this new level of exception handling, which applies **only** to direct operations on the DBAPI cursor passed into the event hook, is applied **outside** the body of the event hook itself — it takes effect as the exception propagates outward from the hook back through SQLAlchemy's execution machinery. This is in contrast to the case where a `_engine.Connection is used from within the hook body, where exception processing occurs locally at the point of that engine.Connection` call, before the exception ever leaves the hook.
 
-    _traverse_internals = [("name", visitors.InternalTraversal.dp_string)]
-    """Structure that defines how SQLAlchemy can cache this element.
-    Specify ``inherit_cache=False`` to turn off caching.
-    """
-    name: str
-
-    def __init__(self, name: str):
-        self.name = name
-
-    def apply_to_select(self, select_stmt: Select) -> None:
-        """Called when the :meth:`.Select.ext` method is called."""
-        select_stmt.apply_syntax_extension_point(
-            self.append_replacing_same_type, "post_body"
-        )
-
-@compiles(IntoOutFile)
-def _compile_into_outfile(element: IntoOutFile, compiler, **kw):
-    """a compiles extension that compiles to SQL IntoOutFile"""
-    name = element.name.replace("'", "''")
-    return f"INTO OUTFILE '{name}'"
-```
-
-This can then be used in a select using the `.Select.ext` method:
-
-```pycon+sql
- >>> import sqlalchemy as sa
-
- >>> stmt = (
- ...     sa.select(sa.column("a"))
- ...     .select_from(sa.table("tbl"))
- ...     .ext(into_outfile("myfile.txt"))
- ... )
- >>> print(sql)
- {printsql}SELECT a
- FROM tbl INTO OUTFILE 'myfile.txt'{stop}
-```
-
-Several SQLAlchemy features custom to a single backend have been re-implemented using this new system, including PostgreSQL `_postgresql.distinct_on and MySQL mysql.limit` functions that supersede the previous implementations.
-
-> **Seealso:**  `examples_syntax_extensions` - A fully documented example of a
- `QUALIFY` clause implemented using this new feature.
-
-:ticket:`12195` :ticket:`12342`
+:ticket:`13381`
 
 ## URL stringify and parse now supports URL escaping for the "database" portion
 
@@ -856,143 +1087,6 @@ Whereas previously, special characters applied programmatically would not be esc
 ```
 
 :ticket:`11234`
-
-## Improved `params()` implementation for executable statements
-
-The `_sql.ClauseElement.params and sql.ClauseElement.unique_params` methods have been deprecated in favor of a new implementation on executable statements that provides improved performance and better integration with ORM-enabled statements.
-
-Executable statement objects like `_sql.Select, sql.CompoundSelect, and sql.TextClause now provide an improved sql.ExecutableStatement.params` method that avoids a full cloned traversal of the statement tree. Instead, parameters are stored directly on the statement object and efficiently merged during compilation and/or cache key traversal.
-
-The new implementation provides several benefits:
-
-- **Better performance** - Parameters are stored in a simple dictionary rather than
-requiring a full statement tree traversal with cloning
-
-- **Proper caching integration** - Parameters are correctly integrated into SQLAlchemy's
-cache key system via `_generate_cache_key()`
-
-- **ORM statement compatibility** - Works correctly with ORM-enabled statements, including
-ORM entities used with `_orm.aliased`, subqueries, CTEs, etc.
-
-Use of `_sql.ExecutableStatement.params is unchanged, provided the given object is a statement object such as sql.select`:
-
-```
-stmt = select(table).where(table.c.data == bindparam("x"))
-
-# Execute with parameter value
-result = connection.execute(stmt.params(x=5))
-
-# Can be chained and used in subqueries
-stmt2 = stmt.params(x=6).subquery().select()
-result = connection.execute(stmt2.params(x=7))  # Uses x=7
-```
-
-The deprecated `_sql.ClauseElement.params and sql.ClauseElement.unique_params methods on non-executable elements like sql.ColumnElement and general sql.ClauseElement` instances will continue to work during the deprecation period but will emit deprecation warnings.
-
-:ticket:`7066`
-
-## CREATE VIEW and CREATE TABLE AS SELECT Support
-
-SQLAlchemy 2.1 adds support for the SQL `CREATE VIEW` and `CREATE TABLE ... AS SELECT` constructs, as well as the `SELECT ... INTO` variant for selected backends. Both DDL statements generate a table or table-like construct based on the structure and rows represented by a SELECT statement. The constructs are available via the `.CreateView and schema.CreateTableAs DDL classes, as well as the sql.SelectBase.into` convenience method.
-
-Both constructs work in exactly the same way, including that a `.Table` object is automatically generated from a given `.Select`. DDL can then be emitted by executing the construct directly or by allowing the `.MetaData.create_all` or `.Table.create` sequences to emit the correct DDL.
-
-E.g. using `.CreateView`:
-
-```
->>> from sqlalchemy import Table, Column, Integer, String, MetaData
->>> from sqlalchemy import CreateView, select
->>>
->>> metadata_obj = MetaData()
->>> user_table = Table(
-...     "user_account",
-...     metadata_obj,
-...     Column("id", Integer, primary_key=True),
-...     Column("name", String(30)),
-...     Column("fullname", String),
-... )
->>> view = CreateView(
-...     select(user_table).where(user_table.c.name.like("%spongebob%")),
-...     "spongebob_view",
-...     metadata=metadata_obj,
-... )
-```
-
-The above `CreateView` construct will emit CREATE VIEW when executed directly, or when a DDL create operation is run.  When using `.MetaData.create_all`, the view is created after all dependent tables have been created:
-
-```pycon+sql
- >>> from sqlalchemy import create_engine
- >>> e = create_engine("sqlite://", echo=True)
- >>> metadata_obj.create_all(e)
- {opensql}BEGIN (implicit)
-
- CREATE TABLE user_account (
- 	id INTEGER NOT NULL,
- 	name VARCHAR(30),
- 	fullname VARCHAR,
- 	PRIMARY KEY (id)
- )
-
- CREATE VIEW spongebob_view AS
- SELECT user_account.id, user_account.name, user_account.fullname
- FROM user_account
- WHERE user_account.name LIKE '%spongebob%'
-
- COMMIT
-```
-
-The view is usable in SQL expressions via the `.CreateView.table` attribute:
-
-```pycon+sql
- >>> with e.connect() as conn:
- ...     conn.execute(select(view.table))
- {opensql}BEGIN (implicit)
- SELECT spongebob_view.id, spongebob_view.name, spongebob_view.fullname
- FROM spongebob_view
- <sqlalchemy.engine.cursor.CursorResult object at 0x7f573e4a4ad0>
- ROLLBACK
-```
-
-`_schema.CreateTableAs` works in the same way, emitting `CREATE TABLE AS`:
-
-```
->>> from sqlalchemy import CreateTableAs
->>> select_stmt = select(users.c.id, users.c.name).where(users.c.name == "squidward")
->>> create_table_as = CreateTableAs(select_stmt, "squidward_users")
-```
-
-In this case, `.CreateTableAs` was not given a `.MetaData` collection. While a `.MetaData` collection will be created automatically in this case, the actual `CREATE TABLE AS` statement can also be generated by directly executing the object:
-
-```pycon+sql
- >>> with e.begin() as conn:
- ...     conn.execute(create_table_as)
- {opensql}BEGIN (implicit)
- CREATE TABLE squidward_users AS SELECT user_account.id, user_account.name
- FROM user_account
- WHERE user_account.name = 'squidward'
- COMMIT
-```
-
-Like before, the `.Table` is accessible from `.CreateTableAs.table`:
-
-```pycon+sql
- >>> with e.connect() as conn:
- ...     conn.execute(select(create_table_as.table))
- {opensql}BEGIN (implicit)
- SELECT squidward_users.id, squidward_users.name
- FROM squidward_users
- <sqlalchemy.engine.cursor.CursorResult object at 0x7f573e4a4f30>
- ROLLBACK
-```
-
-> **Seealso:**  `metadata_create_view` - in `metadata_toplevel`
- `metadata_create_table_as` - in `metadata_toplevel`
- `_schema.CreateView` - DDL construct for CREATE VIEW
- `_schema.CreateTableAs` - DDL construct for CREATE TABLE AS
- `_sql.SelectBase.into` - convenience method on SELECT and UNION
- statements
-
-:ticket:`4950`
 
 ## Operator classes added to validate operator usage with datatypes
 
@@ -1046,39 +1140,6 @@ The above `ComplexNumber` datatype would then validate that operators used are i
  `.OperatorClass`
 
 :ticket:`12736`
-
-## Non-integer RANGE window frame clauses now supported
-
-The `_sql.over clause now supports non-integer values in the sql.over.range_ parameter through the new sql.FrameClause` construct. Previously, only integer values were allowed in RANGE clauses, which limited their use to integer-based ordering columns.
-
-With this change, applications can now use RANGE with other data types such as floating-point numbers, dates, and intervals. The new `_sql.FrameClause construct provides explicit control over frame boundaries using the sql.FrameClauseType` enum:
-
-```
-from datetime import timedelta
-from sqlalchemy import FrameClause, FrameClauseType
-
-# Example: date-based RANGE with a 7-day window
-func.sum(my_table.c.amount).over(
-    order_by=my_table.c.date,
-    range_=FrameClause(
-        start=timedelta(days=7),
-        end=None,
-        start_frame_type=FrameClauseType.PRECEDING,
-        end_frame_type=FrameClauseType.CURRENT,
-    ),
-)
-```
-
-For backwards compatibility, the traditional tuple-based syntax continues to work with integer values:
-
-```
-# This continues to work unchanged
-func.row_number().over(order_by=table.c.col, range_=(None, 10))
-```
-
-However, attempting to use non-integer values in the tuple syntax will now raise an error, directing users to use `_sql.FrameClause` instead.
-
-:ticket:`12596`
 
 ## Python float literals now render as DOUBLE in CAST expressions
 
@@ -1160,7 +1221,7 @@ The `psycopg` DBAPI driver itself can be installed either directly or via the `s
 
 ## Changes to Named Type Handling in PostgreSQL
 
-Named types such as `_postgresql.ENUM, postgresql.DOMAIN` and the dialect-agnostic `._types.Enum` have undergone behavioral changes in SQLAlchemy 2.1 to better align with how a distinct type object that may be shared among tables works in practice.
+Named types such as `_postgresql.ENUM, postgresql.DOMAIN and the dialect-agnostic types.Enum` have undergone behavioral changes in SQLAlchemy 2.1 to better align with how a distinct type object that may be shared among tables works in practice.
 
 #### Named Types are Now Associated with MetaData
 
@@ -1232,13 +1293,13 @@ Because named types now inherit the schema of `.MetaData` automatically and rema
 
 ## Support for `VIRTUAL` computed columns
 
-The behaviour of `.Computed.persisted` has change in SQLAlchemy 2.1 to no longer indicate `STORED` computed columns by default in PostgreSQL..
+The behavior of `.Computed.persisted` has changed in SQLAlchemy 2.1 to no longer indicate `STORED` computed columns by default in PostgreSQL.
 
 This change aligns SQLAlchemy with PostgreSQL 18+, which has introduced support for `VIRTUAL` computed columns, and has made them the default type if no qualifier is specified.
 
 #### Migration Path
 
-To maintain the previous behaviour of `STORED` computed columns, `.Computed.persisted` should be set to `True` explicitly:
+To maintain the previous behavior of `STORED` computed columns, `.Computed.persisted` should be set to `True` explicitly:
 
 ```
 from sqlalchemy import Table, Column, MetaData, Computed, Integer
@@ -1360,16 +1421,6 @@ This feature works with both `_schema.Column.server_default (for DDL-level defau
 
 # Microsoft SQL Server
 
-## Potential breaking change to odbc_connect= handling for mssql+pyodbc
-
-Fixed a mssql+pyodbc issue where valid plus signs in an already-unquoted `odbc_connect=` (raw DBAPI) connection string were replaced with spaces.
-
-Previously, the pyodbc connector would always pass the odbc_connect value to unquote_plus(), even if it was not required. So, if the (unquoted) odbc_connect value contained `PWD=pass+word` that would get changed to `PWD=pass word`, and the login would fail. One workaround was to quote just the plus sign — `PWD=pass%2Bword` — which would then get unquoted to `PWD=pass+word`.
-
-Implementations using the above workaround with `_engine.URL.create` to specify a plus sign in the `PWD=` argument of an odbc_connect string will have to remove the workaround and just pass the `PWD=` value as it would appear in a valid ODBC connection string (i.e., the same as would be required if using the connection string directly with `pyodbc.connect()`).
-
-:ticket:`11250`
-
 ## Support for mssql-python driver
 
 SQLAlchemy 2.1 adds support for the `mssql-python` driver, Microsoft's official Python driver for SQL Server. This driver represents a modern alternative to the widely-used `pyodbc` driver, with native support for several SQL Server-specific features.
@@ -1397,6 +1448,68 @@ The `mssql-python` driver is available from PyPI:
 > **Seealso:**  `mssql_python` - Documentation for the mssql-python dialect
 
 :ticket:`12869`
+
+## Potential breaking change to odbc_connect= handling for mssql+pyodbc
+
+The mssql+pyodbc connector was incorrectly applying `unquote_plus()` to the `odbc_connect value after extracting it. When using engine.URL.create`, the value is a plain Python string with no URL encoding, so `unquote_plus()` was never appropriate — it silently corrupted literal `+` characters, rewriting `PWD=pass+word` as `PWD=pass word`. When using a raw URL string, the URL parser already handles decoding of the query string, making the additional `unquote_plus()` call equally wrong. The fix removes the `unquote_plus()` call entirely.
+
+The **breaking change** affects code that used `%2B` as a workaround when passing `odbc_connect via engine.URL.create`. Previously, the `%2B` would be decoded to a literal `+` by the second `unquote_plus()` pass. Now it is passed to pyodbc as-is. Remove the workaround and write the `+` directly:
+
+```
+# before (workaround — %2B relied on the now-removed unquote_plus pass)
+engine = create_engine(
+    URL.create(
+        "mssql+pyodbc",
+        query={"odbc_connect": "DSN=mydsn;PWD=pass%2Bword"},
+    )
+)
+
+# after
+engine = create_engine(
+    URL.create(
+        "mssql+pyodbc",
+        query={"odbc_connect": "DSN=mydsn;PWD=pass+word"},
+    )
+)
+```
+
+A summary of `odbc_connect` patterns is as follows:
+
+```
+# raw URL string, password contains a space ("pass word")
+# use %20 within the URL-encoded odbc_connect value
+engine = create_engine("mssql+pyodbc:///?odbc_connect=DSN%3Dmydsn%3BPWD%3Dpass%20word")
+
+# raw URL string, password contains a plus sign ("pass+word")
+# use %2B within the URL-encoded odbc_connect value
+engine = create_engine("mssql+pyodbc:///?odbc_connect=DSN%3Dmydsn%3BPWD%3Dpass%2Bword")
+
+# URL.create(), password contains a space ("pass word")
+# pass the odbc_connect value as a plain ODBC connection string
+engine = create_engine(
+    URL.create(
+        "mssql+pyodbc",
+        query={"odbc_connect": "DSN=mydsn;PWD=pass word"},
+    )
+)
+
+# URL.create(), password contains a plus sign ("pass+word")
+# pass the odbc_connect value as a plain ODBC connection string
+engine = create_engine(
+    URL.create(
+        "mssql+pyodbc",
+        query={"odbc_connect": "DSN=mydsn;PWD=pass+word"},
+    )
+)
+```
+
+:ticket:`11250`
+
+## Improved reflection performance via native multi-table queries
+
+The SQL Server dialect now implements native bulk reflection methods, including `.MSDialect.get_multi_columns`, `.MSDialect.get_multi_pk_constraint`, `.MSDialect.get_multi_foreign_keys`, `.MSDialect.get_multi_indexes`, and `.MSDialect.get_multi_table_comment`.  Previously, the SQL Server dialect fell back to the default implementation which calls the per-table single-reflection methods in a loop, resulting in one round-trip per table per object type.  The new implementations issue a single bulk query per object type against the `sys.*` catalog views, dramatically reducing the number of database round trips when reflecting large schemas.  The single-table reflection methods are now thin wrappers over the multi-table implementations, consistent with the pattern used by the PostgreSQL and Oracle dialects.
+
+:ticket:`8430`
 
 # Oracle Database
 
@@ -1447,7 +1560,7 @@ The `.Boolean` emulated datatype will now produce the DDL `BOOLEAN` when Oracle 
 
 ## Added `_sqlite.JSONB` json format for SQLite
 
-SQLite version 3.45 added support for serializing json using a binaly format called `JSONB, which provides imporved performance and storage saving. The new sqlite.JSONB` type provides support for this format, ensuring that the data is correctly serialized when inserting and deserialized when querying.
+SQLite version 3.45 added support for serializing json using a binary format called `JSONB, which provides improved performance and storage saving. The new sqlite.JSONB` type provides support for this format, ensuring that the data is correctly serialized when inserting and deserialized when querying.
 
 > **Seealso:**  `_sqlite.JSONB`
 

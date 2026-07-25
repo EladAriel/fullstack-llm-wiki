@@ -4,10 +4,10 @@ framework: "Model Context Protocol"
 directory: "content/community"
 source_repo: "https://github.com/modelcontextprotocol/modelcontextprotocol"
 source_branch: "main"
-source_commit: "47501e4ced7823014b83be168916d4c9e63b594e"
-source_commit_short: "47501e4c"
-source_commit_date: "2026-06-22T09:16:44-07:00"
-generated_at: "2026-06-23T14:04:43Z"
+source_commit: "7634684382c3d14cf7e9f14073fe40a2d8ace3fa"
+source_commit_short: "76346843"
+source_commit_date: "2026-07-23T16:49:30-07:00"
+generated_at: "2026-07-25T11:50:39Z"
 ---
 # Community
 
@@ -24,7 +24,6 @@ This directory contains Model Context Protocol learning pages related to communi
 ## Child Directories
 
 - [Interest Groups](interest-groups/index.md) - pages related to interest groups
-- [Seps](seps/index.md) - pages related to seps
 - [Working Groups](working-groups/index.md) - pages related to working groups
 
 ## Pages in This Directory
@@ -38,6 +37,7 @@ This directory contains Model Context Protocol learning pages related to communi
 - [Feature Lifecycle](feature-lifecycle.md)
 - [Governance](governance.md)
 - [Sdk Tiers](sdk-tiers.md)
+- [Security](security.md)
 - [Sep Guidelines](sep-guidelines.md)
 - [Working Interest Groups](working-interest-groups.md)
 

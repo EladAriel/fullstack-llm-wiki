@@ -4,10 +4,10 @@ framework: "postgres"
 source_repo: "https://github.com/postgres/postgres.git"
 source_branch: "master"
 source_path: "doc/src/sgml/high-availability.sgml"
-source_commit: "031904048aa22e7c70dc8e9c170e2743f9b0f090"
-source_commit_short: "03190404"
-source_commit_date: "2026-06-20T18:20:58+09:00"
-generated_at: "2026-06-21T07:06:11Z"
+source_commit: "38afc3dcb25c45b744d4025029ce0a6c90b7059f"
+source_commit_short: "38afc3dc"
+source_commit_date: "2026-07-25T19:08:27+09:00"
+generated_at: "2026-07-25T11:50:59Z"
 ---
 
 ## High Availability, Load Balancing, and Replication
@@ -325,7 +325,7 @@ An important health indicator of streaming replication is the amount of WAL reco
 
 You can retrieve a list of WAL sender processes via the pg_stat_replication view. Large differences between `pg_current_wal_lsn` and the view's `sent_lsn` field might indicate that the primary server is under heavy load, while differences between `sent_lsn` and `pg_last_wal_receive_lsn` on the standby might indicate network delay, or that the standby is under heavy load.
 
-On a hot standby, the status of the WAL receiver process can be retrieved via the pg_stat_wal_receiver view. A large difference between `pg_last_wal_replay_lsn` and the view's `flushed_lsn` indicates that WAL is being received faster than it can be replayed.
+On a hot standby, the status of the WAL receiver process can be retrieved via the pg_stat_wal_receiver view. A large difference between `pg_last_wal_replay_lsn` and the view's `flushed_lsn` indicates that WAL is being received faster than it can be replayed. Recovery state and replay progress can also be monitored via the pg_stat_recovery view.
 
 ## Replication Slots
 
@@ -567,7 +567,7 @@ In normal operation, read-only transactions are allowed to use `LISTEN` and `NOT
 
 During hot standby, the parameter `transaction_read_only` is always true and may not be changed. But as long as no attempt is made to modify the database, connections during hot standby will act much like any other database connection. If failover or switchover occurs, the database will switch to normal processing mode. Sessions will remain connected while the server changes mode. Once hot standby finishes, it will be possible to initiate read-write transactions (even from a session begun during hot standby).
 
-Users can determine whether hot standby is currently active for their session by issuing `SHOW in_hot_standby`. (In server versions before 14, the `in_hot_standby` parameter did not exist; a workable substitute method for older servers is `SHOW transaction_read_only`.) In addition, a set of functions (`functions-recovery-info-table`) allow users to access information about the standby server. These allow you to write programs that are aware of the current state of the database. These can be used to monitor the progress of recovery, or to allow you to write complex programs that restore the database to particular states.
+Users can determine whether hot standby is currently active for their session by issuing `SHOW in_hot_standby`. (In server versions before 14, the `in_hot_standby` parameter did not exist; a workable substitute method for older servers is `SHOW transaction_read_only`.) In addition, a set of functions (`functions-recovery-info-table`) and the pg_stat_recovery view allow users to access information about the standby server. These facilities allow you to write programs that are aware of the current state of the database. They can be used to monitor the progress of recovery, or to allow you to write complex programs that restore the database to particular states.
 
 ## Handling Query Conflicts
 

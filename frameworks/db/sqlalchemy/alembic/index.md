@@ -8,9 +8,9 @@ This is a local LLM-friendly wiki generated from the official sqlalchemy/alembic
 - Source repo: `https://github.com/sqlalchemy/alembic`
 - Source branch: `main`
 - Source docs path: `docs/build`
-- Source commit: `96fb8481`
-- Source commit date: `2026-05-31T12:51:03-04:00`
-- Wiki generated at: `2026-06-21T11:33:13Z`
+- Source commit: `7b2af57e`
+- Source commit date: `2026-07-16T13:04:26-04:00`
+- Wiki generated at: `2026-07-25T11:47:25Z`
 
 ## How the IDE LLM should use this wiki
 
@@ -30,7 +30,6 @@ This is a local LLM-friendly wiki generated from the official sqlalchemy/alembic
 
 - [Content Index](content/index.md)
 - [Api](content/api/index.md)
-- [Unreleased](content/unreleased/index.md)
 
 ## All Pages
 
@@ -56,7 +55,3 @@ This is a local LLM-friendly wiki generated from the official sqlalchemy/alembic
 - [Offline](content/offline.md)
 - [Ops](content/ops.md)
 - [Tutorial](content/tutorial.md)
-- [1258](content/unreleased/1258.md)
-- [1712](content/unreleased/1712.md)
-- [1745](content/unreleased/1745.md)
-- [1806](content/unreleased/1806.md)

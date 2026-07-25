@@ -8,9 +8,9 @@ This is a local LLM-friendly wiki generated from the official LangChain document
 - Source repo: `https://github.com/langchain-ai/docs`
 - Source branch: `main`
 - Source docs path: `src/oss/langchain`
-- Source commit: `d037cd23`
-- Source commit date: `2026-06-23T11:18:55+02:00`
-- Wiki generated at: `2026-06-23T13:53:33Z`
+- Source commit: `2aae1dfc`
+- Source commit date: `2026-07-25T00:27:23Z`
+- Wiki generated at: `2026-07-25T11:51:05Z`
 
 ## How the IDE LLM should use this wiki
 
@@ -96,7 +96,6 @@ This is a local LLM-friendly wiki generated from the official LangChain document
 - [Overview](content/overview.md)
 - [Philosophy](content/philosophy.md)
 - [Quickstart](content/quickstart.md)
-- [Rag](content/rag.md)
 - [Retrieval](content/retrieval.md)
 - [Runtime](content/runtime.md)
 - [Short Term Memory](content/short-term-memory.md)

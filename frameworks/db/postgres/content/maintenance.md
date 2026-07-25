@@ -4,10 +4,10 @@ framework: "postgres"
 source_repo: "https://github.com/postgres/postgres.git"
 source_branch: "master"
 source_path: "doc/src/sgml/maintenance.sgml"
-source_commit: "031904048aa22e7c70dc8e9c170e2743f9b0f090"
-source_commit_short: "03190404"
-source_commit_date: "2026-06-20T18:20:58+09:00"
-generated_at: "2026-06-21T07:06:11Z"
+source_commit: "38afc3dcb25c45b744d4025029ce0a6c90b7059f"
+source_commit_short: "38afc3dc"
+source_commit_date: "2026-07-25T19:08:27+09:00"
+generated_at: "2026-07-25T11:50:59Z"
 ---
 
 ## Routine Database Maintenance Tasks
@@ -188,7 +188,7 @@ This output shows a system with significant multixact activity: about 312 millio
 
 Similar to the XID case, if autovacuum fails to clear old MXIDs from a table, the system will begin to emit warning messages when the database's oldest MXIDs reach one hundred million transactions from the wraparound point. And, just as in the XID case, if these warnings are ignored, the system will refuse to generate new MXIDs once there are fewer than three million left until wraparound.
 
-Normal operation when MXIDs are exhausted can be restored in much the same way as when XIDs are exhausted. Follow the same steps in the previous section, but with the following differences: 1. Running transactions and prepared transactions can be ignored if there is no chance that they might appear in a multixact. 2. MXID information is not directly visible in system views such as `pg_stat_activity`; however, looking for old XIDs is still a good way of determining which transactions are causing MXID wraparound problems. 3. XID exhaustion will block all write transactions, but MXID exhaustion will only block a subset of write transactions, specifically those that involve row locks that require an MXID.
+Normal operation when MXIDs are exhausted can be restored in much the same way as when XIDs are exhausted. Follow the same steps in the previous section, but with the following differences: 1. Running transactions and prepared transactions can be ignored if there is no chance that they might appear in a multixact. 2. Unlike transaction ID wraparound, replication slots do not directly hold back multixact cleanup. Dropping stale replication slots is therefore not usually relevant to resolving multixact ID wraparound problems. 3. MXID information is not directly visible in system views such as `pg_stat_activity`; however, looking for old XIDs is still a good way of determining which transactions are causing MXID wraparound problems. 4. XID exhaustion will block all write transactions, but MXID exhaustion will only block a subset of write transactions, specifically those that involve row locks that require an MXID.
 
 ## The Autovacuum Daemon
 

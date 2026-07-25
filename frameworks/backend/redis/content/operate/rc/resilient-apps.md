@@ -4,10 +4,10 @@ framework: "redis"
 source_repo: "https://github.com/redis/docs.git"
 source_branch: "main"
 source_path: "content/operate/rc/resilient-apps.md"
-source_commit: "bc92ea237bbfc2117c870c904f1a3ca619073ef1"
-source_commit_short: "bc92ea23"
-source_commit_date: "2026-06-18T14:53:00-05:00"
-generated_at: "2026-06-21T11:25:32Z"
+source_commit: "9d30f68c3dad1a6b3b7d30fe604b911348ce8152"
+source_commit_short: "9d30f68c"
+source_commit_date: "2026-07-24T10:52:10-07:00"
+generated_at: "2026-07-25T11:51:22Z"
 ---
 
 ---
@@ -64,7 +64,7 @@ For geographic availability, create [Active-Active databases]({{< relref "/opera
 
 - **Geographic distribution**: Data is replicated across multiple regions and availability zones. Applications can read from and write to the nearest region, reducing latency for users worldwide.
 
-- **99.999% availability**: Higher availability than single-region deployments by protecting against regional outages.
+- **99.999% availability**: Higher availability than single-region deployments by protecting against regional outages. Regions with fewer than three availability zones use single-zone replication and provide 99.99% (four-nines) availability instead. When an Active-Active database spans regions with different availability zone counts, the availability of the entire deployment is determined by the least resilient region.
 
 - **Automatic conflict resolution**: Uses conflict-free replicated data types (CRDTs) to handle concurrent writes across regions.
 

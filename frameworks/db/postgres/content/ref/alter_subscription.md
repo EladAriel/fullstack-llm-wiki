@@ -4,10 +4,10 @@ framework: "postgres"
 source_repo: "https://github.com/postgres/postgres.git"
 source_branch: "master"
 source_path: "doc/src/sgml/ref/alter_subscription.sgml"
-source_commit: "031904048aa22e7c70dc8e9c170e2743f9b0f090"
-source_commit_short: "03190404"
-source_commit_date: "2026-06-20T18:20:58+09:00"
-generated_at: "2026-06-21T07:06:11Z"
+source_commit: "38afc3dcb25c45b744d4025029ce0a6c90b7059f"
+source_commit_short: "38afc3dc"
+source_commit_date: "2026-07-25T19:08:27+09:00"
+generated_at: "2026-07-25T11:50:59Z"
 ---
 
 ALTER SUBSCRIPTION
@@ -39,7 +39,7 @@ ALTER SUBSCRIPTION name RENAME TO new_name
 
 `ALTER SUBSCRIPTION` can change most of the subscription properties that can be specified in `sql-createsubscription`.
 
-You must own the subscription to use `ALTER SUBSCRIPTION`. To rename a subscription or alter the owner, you must have `CREATE` permission on the database. In addition, to alter the owner, you must be able to `SET ROLE` to the new owning role. If the subscription has `password_required=false`, only superusers can modify it.
+You must own the subscription to use `ALTER SUBSCRIPTION`. To rename a subscription or alter the owner, you must have `CREATE` permission on the database. In addition, to alter the owner, you must be able to `SET ROLE` to the new owning role. If the subscription has `password_required=false`, only superusers can modify it. If the subscription uses a foreign server, the new owner must have `USAGE` privilege on the foreign server, a user mapping for the new owner or for `PUBLIC` must exist, and the connection string generated for the new owner must be valid. If the new owner is not a superuser and the subscription has `password_required=true`, the generated connection string must include a password.
 
 When refreshing a publication we remove the relations that are no longer part of the publication and we also remove the table synchronization slots if there are any. It is necessary to remove these slots so that the resources allocated for the subscription on the remote host are released. If due to network breakdown or some other error, PostgreSQL is unable to remove the slots, an error will be reported. To proceed in this situation, the user either needs to retry the operation or disassociate the slot from the subscription and drop the subscription as explained in `sql-dropsubscription`.
 
@@ -68,7 +68,9 @@ The system catalog pg_subscription_rel is updated to record all tables and seque
 
 `REFRESH SEQUENCES`
 
-Re-synchronize sequence data with the publisher. Unlike ALTER SUBSCRIPTION ... REFRESH PUBLICATION which only has the ability to synchronize newly added sequences, `REFRESH SEQUENCES` will re-synchronize the sequence data for all currently subscribed sequences. It does not add or remove sequences from the subscription to match the publication.
+Re-synchronize sequence data with the publisher. Unlike ALTER SUBSCRIPTION ... REFRESH PUBLICATION, which synchronizes the subscription's set of sequences with the publication (adding new and removing dropped sequences), `REFRESH SEQUENCES` will re-synchronize the sequence data for all currently subscribed sequences without changing which sequences are subscribed. Run `REFRESH PUBLICATION` first if the publication's set of sequences has changed.
+
+Sequence replication requires the publisher to be running PostgreSQL 19 or later.
 
 See `sequence-definition-mismatches` for recommendations on how to handle any warnings about sequence definition differences between the publisher and the subscriber.
 
@@ -84,7 +86,7 @@ Disables a running subscription, stopping the logical replication worker at the 
 
 `SET ( subscription_parameter [= value] [, ... ] )`
 
-This clause alters parameters originally set by `sql-createsubscription`. See there for more information. The parameters that can be altered are slot_name, synchronous_commit, binary, streaming, disable_on_error, password_required, run_as_owner, origin, failover, two_phase, retain_dead_tuples, max_retention_duration, and wal_receiver_timeout. Only a superuser can set `password_required = false`.
+This clause alters parameters originally set by `sql-createsubscription`. See there for more information. The parameters that can be altered are slot_name, synchronous_commit, binary, streaming, disable_on_error, password_required, run_as_owner, origin, failover, two_phase, retain_dead_tuples, max_retention_duration, wal_receiver_timeout, and conflict_log_destination. Only a superuser can set `password_required = false`.
 
 When altering the slot_name, the `failover` and `two_phase` property values of the named slot may differ from the counterpart failover and two_phase parameters specified in the subscription. When creating the slot, ensure the slot properties `failover` and `two_phase` match their counterpart parameters of the subscription. Otherwise, the slot on the publisher may behave differently from what these subscription options say: for example, the slot on the publisher could either be synced to the standbys even when the subscription's failover option is disabled or could be disabled for sync even when the subscription's failover option is enabled.
 
@@ -93,6 +95,8 @@ The failover, two_phase, and retain_dead_tuples parameters can only be altered w
 When altering two_phase from `true` to `false`, the backend process reports an error if any prepared transactions done by the logical replication worker (from when `two_phase` parameter was still `true`) are found. You can resolve prepared transactions on the publisher node, or manually roll them back on the subscriber, and then try again. The transactions prepared by logical replication worker corresponding to a particular subscription have the following pattern: `pg_gid_%u_%u` (parameters: subscription `oid`, remote transaction id `xid`). To resolve such transactions manually, you need to roll back all the prepared transactions with corresponding subscription IDs in their names. Applications can check pg_prepared_xacts to find the required prepared transactions. After the `two_phase` option is changed from `true` to `false`, the publisher will replicate the transactions again when they are committed.
 
 If the retain_dead_tuples option is altered to `false` and no other subscription has this option enabled, the replication slot named `pg_conflict_detection`, created to retain dead tuples for conflict detection, will be dropped.
+
+When the conflict_log_destination parameter is set to `table` or `all`, the system automatically creates the conflict log table. Conversely, if the destination is changed to `log`, the conflict log table is automatically dropped.
 
 `SKIP ( skip_option = value )`
 

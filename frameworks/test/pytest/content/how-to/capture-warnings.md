@@ -4,10 +4,10 @@ framework: "pytest"
 source_repo: "https://github.com/pytest-dev/pytest"
 source_branch: "main"
 source_path: "doc/en/how-to/capture-warnings.rst"
-source_commit: "d2466e3a9655f75d25719bcc4510cdbcb39cf10d"
-source_commit_short: "d2466e3a"
-source_commit_date: "2026-06-21T06:49:47+02:00"
-generated_at: "2026-06-21T11:47:50Z"
+source_commit: "344c23787cdb3431dcc441b8b63ee9950f04b921"
+source_commit_short: "344c2378"
+source_commit_date: "2026-07-24T17:37:16+02:00"
+generated_at: "2026-07-25T11:50:13Z"
 ---
 
 # How to capture warnings
@@ -266,7 +266,7 @@ The function also returns a list of all raised warnings (as `warnings.WarningMes
 
 Alternatively, you can examine raised warnings in detail using the :fixture:`recwarn` fixture (see `below <recwarn>`).
 
-The :fixture:`recwarn` fixture automatically ensures to reset the warnings filter at the end of the test, so no global state is leaked.
+The :fixture:`recwarn` fixture automatically resets the warnings filter at the end of the test, so no global state is leaked.
 
 ## Recording warnings
 

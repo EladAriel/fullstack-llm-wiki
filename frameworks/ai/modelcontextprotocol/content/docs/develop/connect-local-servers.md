@@ -4,10 +4,10 @@ framework: "Model Context Protocol"
 source_repo: "https://github.com/modelcontextprotocol/modelcontextprotocol"
 source_branch: "main"
 source_path: "docs/docs/develop/connect-local-servers.mdx"
-source_commit: "47501e4ced7823014b83be168916d4c9e63b594e"
-source_commit_short: "47501e4c"
-source_commit_date: "2026-06-22T09:16:44-07:00"
-generated_at: "2026-06-23T14:04:43Z"
+source_commit: "7634684382c3d14cf7e9f14073fe40a2d8ace3fa"
+source_commit_short: "76346843"
+source_commit_date: "2026-07-23T16:49:30-07:00"
+generated_at: "2026-07-25T11:50:39Z"
 ---
 
 ---
@@ -161,7 +161,7 @@ Only grant access to directories you're comfortable with Claude reading and modi
 <Step title="Restart Claude Desktop">
 After saving the configuration file, completely quit Claude Desktop and restart it. The application needs to restart to load the new configuration and start the MCP server.
 
-Upon successful restart, you'll see an MCP server indicator <img src="/images/claude-desktop-mcp-slider.svg" style={{display: 'inline', margin: 0, height: '1.3em'}} /> in the bottom-right corner of the conversation input box:
+Upon successful restart, click the "Add files, connectors, and more /" indicator <img src="/images/claude-add-files-connectors-and-more.png" style={{display: 'inline', margin: 0, height: '1.3em', width: 'auto'}} /> in the bottom-left corner of the conversation input box:
 
 <Frame>
   <img
@@ -170,7 +170,7 @@ Upon successful restart, you'll see an MCP server indicator <img src="/images/cl
   />
 </Frame>
 
-Click on this indicator to view the available tools provided by the Filesystem Server:
+Click on this indicator, then move the mouse over "Connectors" and click "Manage connectors". Select "filesystem" from the connector list to view the Filesystem Server's available tools:
 
 <Frame style={{ textAlign: "center" }}>
   <img
@@ -180,7 +180,7 @@ Click on this indicator to view the available tools provided by the Filesystem S
   />
 </Frame>
 
-If the server indicator doesn't appear, refer to the [Troubleshooting](#troubleshooting) section for debugging steps.
+If the Filesystem Server doesn't connect, refer to the [Troubleshooting](#troubleshooting) section for debugging steps.
 
 </Step>
 </Steps>

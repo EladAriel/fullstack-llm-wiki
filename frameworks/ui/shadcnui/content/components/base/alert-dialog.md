@@ -4,10 +4,10 @@ framework: "shadcnui"
 source_repo: "https://github.com/shadcn-ui/ui"
 source_branch: "main"
 source_path: "apps/v4/content/docs/components/base/alert-dialog.mdx"
-source_commit: "5602b81d8344e0d0d7178e3bf57612662cd42957"
-source_commit_short: "5602b81d"
-source_commit_date: "2026-06-21T15:49:35+04:00"
-generated_at: "2026-06-21T12:47:26Z"
+source_commit: "4baadbc6517070ae8f8feb2c97037adc2b305544"
+source_commit_short: "4baadbc6"
+source_commit_date: "2026-07-23T23:50:36+04:00"
+generated_at: "2026-07-25T11:50:48Z"
 ---
 
 ---
@@ -123,9 +123,7 @@ AlertDialog
         └── AlertDialogAction
 ```
 
-## Examples
-
-### Basic
+## Basic
 
 A basic alert dialog with a title, description, and cancel and continue buttons.
 
@@ -135,7 +133,7 @@ A basic alert dialog with a title, description, and cancel and continue buttons.
   previewClassName="h-56"
 />
 
-### Small
+## Small
 
 Use the `size="sm"` prop to make the alert dialog smaller.
 
@@ -145,7 +143,7 @@ Use the `size="sm"` prop to make the alert dialog smaller.
   previewClassName="h-56"
 />
 
-### Media
+## Media
 
 Use the `AlertDialogMedia` component to add a media element such as an icon or image to the alert dialog.
 
@@ -155,7 +153,7 @@ Use the `AlertDialogMedia` component to add a media element such as an icon or i
   previewClassName="h-56"
 />
 
-### Small with Media
+## Small with Media
 
 Use the `size="sm"` prop to make the alert dialog smaller and the `AlertDialogMedia` component to add a media element such as an icon or image to the alert dialog.
 
@@ -165,7 +163,7 @@ Use the `size="sm"` prop to make the alert dialog smaller and the `AlertDialogMe
   previewClassName="h-56"
 />
 
-### Destructive
+## Destructive
 
 Use the `AlertDialogAction` component to add a destructive action button to the alert dialog.
 

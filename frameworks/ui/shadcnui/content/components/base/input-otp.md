@@ -4,10 +4,10 @@ framework: "shadcnui"
 source_repo: "https://github.com/shadcn-ui/ui"
 source_branch: "main"
 source_path: "apps/v4/content/docs/components/base/input-otp.mdx"
-source_commit: "5602b81d8344e0d0d7178e3bf57612662cd42957"
-source_commit_short: "5602b81d"
-source_commit_date: "2026-06-21T15:49:35+04:00"
-generated_at: "2026-06-21T12:47:26Z"
+source_commit: "4baadbc6517070ae8f8feb2c97037adc2b305544"
+source_commit_short: "4baadbc6"
+source_commit_date: "2026-07-23T23:50:36+04:00"
+generated_at: "2026-07-25T11:50:48Z"
 ---
 
 ---
@@ -129,45 +129,43 @@ import { REGEXP_ONLY_DIGITS_AND_CHARS } from "input-otp"
 
 <ComponentPreview styleName="base-nova" name="input-otp-pattern" />
 
-## Examples
-
-### Separator
+## Separator
 
 Use the `<InputOTPSeparator />` component to add a separator between input groups.
 
 <ComponentPreview styleName="base-nova" name="input-otp-separator" />
 
-### Disabled
+## Disabled
 
 Use the `disabled` prop to disable the input.
 
 <ComponentPreview styleName="base-nova" name="input-otp-disabled" />
 
-### Controlled
+## Controlled
 
 Use the `value` and `onChange` props to control the input value.
 
 <ComponentPreview styleName="base-nova" name="input-otp-controlled" />
 
-### Invalid
+## Invalid
 
 Use `aria-invalid` on the slots to show an error state.
 
 <ComponentPreview styleName="base-nova" name="input-otp-invalid" />
 
-### Four Digits
+## Four Digits
 
 A common pattern for PIN codes. This uses the `pattern={REGEXP_ONLY_DIGITS}` prop.
 
 <ComponentPreview styleName="base-nova" name="input-otp-four-digits" />
 
-### Alphanumeric
+## Alphanumeric
 
 Use `REGEXP_ONLY_DIGITS_AND_CHARS` to accept both letters and numbers.
 
 <ComponentPreview styleName="base-nova" name="input-otp-alphanumeric" />
 
-### Form
+## Form
 
 <ComponentPreview
   styleName="base-nova"

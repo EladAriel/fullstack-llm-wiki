@@ -4,10 +4,10 @@ framework: "redis"
 source_repo: "https://github.com/redis/docs.git"
 source_branch: "main"
 source_path: "content/commands/zadd.md"
-source_commit: "bc92ea237bbfc2117c870c904f1a3ca619073ef1"
-source_commit_short: "bc92ea23"
-source_commit_date: "2026-06-18T14:53:00-05:00"
-generated_at: "2026-06-21T11:25:32Z"
+source_commit: "9d30f68c3dad1a6b3b7d30fe604b911348ce8152"
+source_commit_short: "9d30f68c"
+source_commit_date: "2026-07-24T10:52:10-07:00"
+generated_at: "2026-07-25T11:51:22Z"
 ---
 
 ---
@@ -203,15 +203,6 @@ Increment the member's score by `score` instead of setting it, behaving like `ZI
 7) "three"
 8) "3"
 {{< /clients-example >}}
-
-Give these commands a try in the interactive console:
-
-{{% redis-cli %}}
-ZADD myzset 1 "one"
-ZADD myzset 1 "uno"
-ZADD myzset 2 "two" 3 "three"
-ZRANGE myzset 0 -1 WITHSCORES
-{{% /redis-cli %}}
 
 ## Details
 

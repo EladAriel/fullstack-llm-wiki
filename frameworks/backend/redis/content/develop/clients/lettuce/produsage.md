@@ -4,10 +4,10 @@ framework: "redis"
 source_repo: "https://github.com/redis/docs.git"
 source_branch: "main"
 source_path: "content/develop/clients/lettuce/produsage.md"
-source_commit: "bc92ea237bbfc2117c870c904f1a3ca619073ef1"
-source_commit_short: "bc92ea23"
-source_commit_date: "2026-06-18T14:53:00-05:00"
-generated_at: "2026-06-21T11:25:32Z"
+source_commit: "9d30f68c3dad1a6b3b7d30fe604b911348ce8152"
+source_commit_short: "9d30f68c"
+source_commit_date: "2026-07-24T10:52:10-07:00"
+generated_at: "2026-07-25T11:51:22Z"
 ---
 
 ---
@@ -82,7 +82,7 @@ logger.info("Lettuce epool is available: {}", EpollProvider.isAvailable());
 
 If the snippet above returns `false`, you need to enable debugging logging for `io.lettuce.core` and `io.netty` to see why the native transport is not available.
 
-For more information on using Netty Native Transport, see the [Lettuce reference guide](https://redis.github.io/lettuce/advanced-usage/#native-transports).
+For more information on using Netty Native Transport, see the [Lettuce reference guide](https://redis.github.io/lettuce/advanced-usage/native-transports/).
 
 ### Setting timeouts
 
@@ -294,7 +294,7 @@ client.setOptions(ClientOptions.builder()
 ```
 
 See
-[Command execution reliability](https://redis.github.io/lettuce/advanced-usage/#command-execution-reliability)
+[Command execution reliability](https://redis.github.io/lettuce/advanced-usage/command-execution-reliability/)
 in the Lettuce reference guide for more information.
 
 ## Smart client handoffs

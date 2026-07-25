@@ -4,10 +4,10 @@ framework: "pytest"
 source_repo: "https://github.com/pytest-dev/pytest"
 source_branch: "main"
 source_path: "doc/en/example/nonpython.rst"
-source_commit: "d2466e3a9655f75d25719bcc4510cdbcb39cf10d"
-source_commit_short: "d2466e3a"
-source_commit_date: "2026-06-21T06:49:47+02:00"
-generated_at: "2026-06-21T11:47:50Z"
+source_commit: "344c23787cdb3431dcc441b8b63ee9950f04b921"
+source_commit_short: "344c2378"
+source_commit_date: "2026-07-24T17:37:16+02:00"
+generated_at: "2026-07-25T11:50:13Z"
 ---
 
 # Working with non-python tests
@@ -53,7 +53,7 @@ You get one dot for the passing `sub1: sub1` check and one failure. Obviously in
 `reportinfo()` is used for representing the test location and is also consulted when reporting in `verbose` mode. It should return a tuple `(path, lineno, description)`, where:
 
 - `path` is the path shown in reports (usually `self.path` or `self.fspath`).
-- `lineno` is a zero-based line number, or `0` when no specific line applies.
+- `lineno` is the line number, or `0` when no specific line applies.
 - `description` is a short label shown for the collected item:
 ```pytest
  nonpython $ pytest -v

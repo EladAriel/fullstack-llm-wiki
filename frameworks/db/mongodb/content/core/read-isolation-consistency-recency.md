@@ -4,10 +4,10 @@ framework: "mongodb"
 source_repo: "https://github.com/mongodb/docs.git"
 source_branch: "main"
 source_path: "content/manual/manual/source/core/read-isolation-consistency-recency.txt"
-source_commit: "96788e8ed140cbdde184ff82e1066dff4996bde4"
-source_commit_short: "96788e8e"
-source_commit_date: "2026-06-19T21:35:03-06:00"
-generated_at: "2026-06-21T07:41:52Z"
+source_commit: "ab9db26ed3d11618cdb61516d8180337d8e3f679"
+source_commit_short: "ab9db26e"
+source_commit_date: "2026-07-24T16:22:46-06:00"
+generated_at: "2026-07-25T11:51:15Z"
 ---
 
 ========================================
@@ -140,13 +140,7 @@ reads with :readconcern:`"majority"` read concern and writes with
 
 Consider a collection `items` that maintains current and historical data for various items. Only historical data has a non-null `end` date. If the `sku` value for an item changes, update the document with the old `sku` value to add the `end` date, then insert a new document with the current `sku` value. Use a causally consistent session to ensure that the update occurs before the insert.
 
-----------
-
-|arrow| Use the **Select your language** drop-down menu in the upper-right to set the language of this example.
-
-----------
-
-To read all current `sku` values from another client, advance the cluster time and the operation time to match the other session. This ensures that the client is causally consistent with the other session and reads after the two writes:
+Use the language selector to set the language of this example.
 
 ### Limitations
 

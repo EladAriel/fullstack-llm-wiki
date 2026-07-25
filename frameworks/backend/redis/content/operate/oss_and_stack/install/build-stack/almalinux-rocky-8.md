@@ -4,10 +4,10 @@ framework: "redis"
 source_repo: "https://github.com/redis/docs.git"
 source_branch: "main"
 source_path: "content/operate/oss_and_stack/install/build-stack/almalinux-rocky-8.md"
-source_commit: "bc92ea237bbfc2117c870c904f1a3ca619073ef1"
-source_commit_short: "bc92ea23"
-source_commit_date: "2026-06-18T14:53:00-05:00"
-generated_at: "2026-06-21T11:25:32Z"
+source_commit: "9d30f68c3dad1a6b3b7d30fe604b911348ce8152"
+source_commit_short: "9d30f68c"
+source_commit_date: "2026-07-24T10:52:10-07:00"
+generated_at: "2026-07-25T11:51:22Z"
 ---
 
 ---
@@ -49,18 +49,9 @@ dnf install sudo -y
 ```
 {{< /note >}}
 
-Clean the package metadata, enable required repositories, and install development tools:
+Enable the required repositories and install the base development tools:
 
 ```bash
-sudo dnf clean all
-sudo tee /etc/yum.repos.d/goreleaser.repo > /dev/null <<EOF
-[goreleaser]
-name=GoReleaser
-baseurl=https://repo.goreleaser.com/yum/
-enabled=1
-gpgcheck=0
-EOF
-sudo dnf update -y
 sudo dnf groupinstall "Development Tools" -y
 sudo dnf config-manager --set-enabled powertools
 sudo dnf install -y epel-release
@@ -71,7 +62,7 @@ sudo dnf install -y epel-release
 Update your package lists and install the necessary development tools and libraries:
 
 ```bash
-sudo dnf install -y --nobest --skip-broken \
+sudo dnf install -y \
     pkg-config \
     wget \
     gcc-toolset-13-gcc \
@@ -86,18 +77,11 @@ sudo dnf install -y --nobest --skip-broken \
     unzip \
     rsync \
     clang \
-    curl \
     libtool \
     automake \
     autoconf \
     jq \
     systemd-devel
-```
-
-Create a Python virtual environment:
-
-```bash
-python3.11 -m venv /opt/venv
 ```
 
 Enable the GCC toolset:
@@ -159,7 +143,6 @@ cd /usr/src/redis-<version>
 export BUILD_TLS=yes
 export BUILD_WITH_MODULES=yes
 export INSTALL_RUST_TOOLCHAIN=yes
-export DISABLE_WERRORS=yes
 make -j "$(nproc)" all
 ```
 

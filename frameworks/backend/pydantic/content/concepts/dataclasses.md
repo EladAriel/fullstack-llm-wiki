@@ -4,10 +4,10 @@ framework: "pydantic"
 source_repo: "https://github.com/pydantic/pydantic"
 source_branch: "main"
 source_path: "docs/concepts/dataclasses.md"
-source_commit: "363728fe0b353db1a1fcb44aac5c38fd96a8cc20"
-source_commit_short: "363728fe"
-source_commit_date: "2026-06-20T11:20:58+01:00"
-generated_at: "2026-06-21T11:37:01Z"
+source_commit: "a2a6577d4c329dd574a45dbb01a8feaa16b1ad3d"
+source_commit_short: "a2a6577d"
+source_commit_date: "2026-07-23T15:38:17Z"
+generated_at: "2026-07-25T11:50:12Z"
 ---
 
 ??? api "API Documentation"
@@ -15,6 +15,11 @@ generated_at: "2026-06-21T11:37:01Z"
 
 If you don't want to use Pydantic's [`BaseModel`][pydantic.BaseModel] you can instead get the same data validation
 on standard [dataclasses][dataclasses].
+
+!!! tip "Logfire integration"
+    Because a Pydantic dataclass validates its inputs just like a model, the same observability applies: if
+    you use [Logfire](../integrations/logfire.md), validations of Pydantic dataclasses are
+    [recorded alongside model validations](../errors/troubleshooting.md), input included.
 
 ```python
 from datetime import datetime

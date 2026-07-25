@@ -4,10 +4,10 @@ framework: "react"
 source_repo: "https://github.com/reactjs/react.dev"
 source_branch: "main"
 source_path: "src/content/blog/2024/05/22/react-conf-2024-recap.md"
-source_commit: "8bb31acb86bf68fa33d97dd0f1b834dfa71e2b1a"
-source_commit_short: "8bb31acb"
-source_commit_date: "2026-06-17T13:38:02-04:00"
-generated_at: "2026-06-21T12:23:02Z"
+source_commit: "7b6c3ceb9dd97249e9dce4a8a94e61aed6424698"
+source_commit_short: "7b6c3ceb"
+source_commit_date: "2026-07-20T15:31:48+02:00"
+generated_at: "2026-07-25T11:50:43Z"
 ---
 
 ---
@@ -57,7 +57,7 @@ Next in the keynote, [Josh Story](https://twitter.com/joshcstory) and [Andrew Cl
 - [React for Two Computers](https://www.youtube.com/watch?v=T8TZQ6k4SLE&t=18825s) by [Dan Abramov](https://bsky.app/profile/danabra.mov)
 - [And Now You Understand React Server Components](https://www.youtube.com/watch?v=0ckOUBiuxVY&t=11256s) by [Kent C. Dodds](https://twitter.com/kentcdodds)
 
-Finally, we ended the keynote with [Joe Savona](https://twitter.com/en_JS), [Sathya Gunasekaran](https://twitter.com/_gsathya), and [Mofei Zhang](https://twitter.com/zmofei) announcing that the React Compiler is now [Open Source](https://github.com/facebook/react/pull/29061), and sharing an experimental version of the React Compiler to try out.
+Finally, we ended the keynote with [Joe Savona](https://twitter.com/en_JS), [Sathya Gunasekaran](https://twitter.com/_gsathya), and [Mofei Zhang](https://twitter.com/zmofei) announcing that the React Compiler is now [Open Source](https://github.com/react/react/pull/29061), and sharing an experimental version of the React Compiler to try out.
 
 For more information on using the Compiler and how it works, check out [the docs](/learn/react-compiler) and these talks:
 

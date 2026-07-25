@@ -4,44 +4,39 @@ framework: "redis"
 source_repo: "https://github.com/redis/docs.git"
 source_branch: "main"
 source_path: "content/integrate/redis-data-integration/reference/cli/redis-di-list-contexts.md"
-source_commit: "bc92ea237bbfc2117c870c904f1a3ca619073ef1"
-source_commit_short: "bc92ea23"
-source_commit_date: "2026-06-18T14:53:00-05:00"
-generated_at: "2026-06-21T11:25:32Z"
+source_commit: "9d30f68c3dad1a6b3b7d30fe604b911348ce8152"
+source_commit_short: "9d30f68c"
+source_commit_date: "2026-07-24T10:52:10-07:00"
+generated_at: "2026-07-25T11:51:22Z"
 ---
 
 ---
 Title: redis-di list-contexts
 linkTitle: redis-di list-contexts
-description: Lists all saved contexts
+description: Lists all contexts
 weight: 10
 alwaysopen: false
 categories: ["redis-di"]
 aliases:
 ---
 
+Lists all contexts from the `~/.redis-di` context file and indicates which one is active. See the
+[CLI reference overview]({{< relref "/integrate/redis-data-integration/reference/cli#contexts" >}})
+for more about contexts.
+
 ## Usage
 
 ```
-Usage: redis-di list-contexts [OPTIONS]
+redis-di list-contexts [flags]
 ```
 
 ## Options
 
-- `help`:
-  - Type: BOOL
-  - Default: `false`
-  - Usage: `--help`
+This command takes only the
+[global options]({{< relref "/integrate/redis-data-integration/reference/cli/redis-di#global-options" >}}).
 
-  Show this message and exit.
+## Example
 
-## CLI help
-
-```
-Usage: redis-di list-contexts [OPTIONS]
-
-  Lists all saved contexts
-
-Options:
-  --help  Show this message and exit.
+```bash
+redis-di list-contexts
 ```

@@ -4,10 +4,10 @@ framework: "redis"
 source_repo: "https://github.com/redis/docs.git"
 source_branch: "main"
 source_path: "content/commands/xadd.md"
-source_commit: "bc92ea237bbfc2117c870c904f1a3ca619073ef1"
-source_commit_short: "bc92ea23"
-source_commit_date: "2026-06-18T14:53:00-05:00"
-generated_at: "2026-06-21T11:25:32Z"
+source_commit: "9d30f68c3dad1a6b3b7d30fe604b911348ce8152"
+source_commit_short: "9d30f68c"
+source_commit_date: "2026-07-24T10:52:10-07:00"
+generated_at: "2026-07-25T11:51:22Z"
 ---
 
 ---
@@ -265,11 +265,11 @@ remove data from a stream.
 
 {{< clients-example set="cmds_stream" step="xadd1" description="Basic XADD: Add entries to a stream with auto-generated IDs, check stream the stream size, and read entries" difficulty="beginner" >}}
 > XADD mystream * name Sara surname OConnor
-4378417975-0"
+"4378417975-0"
 > XADD mystream * field1 value1 field2 value2 field3 value3
-4378417976-0"
+"4378417976-0"
 > XLEN mystream
-eger) 2
+(integer) 2
 > XRANGE mystream - +
 1) 1) "1774378417975-0"
    2) 1) "name"
@@ -297,7 +297,7 @@ eger) 2
 > XADD mystream IDMPAUTO producer2 * field value
 "1774378417977-0"
 > XCFGSET mystream IDMP-DURATION 300 IDMP-MAXSIZE 1000
-"OK"
+OK
 {{< /clients-example >}}
 
 ## Details

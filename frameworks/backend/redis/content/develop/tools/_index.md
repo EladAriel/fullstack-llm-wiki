@@ -4,10 +4,10 @@ framework: "redis"
 source_repo: "https://github.com/redis/docs.git"
 source_branch: "main"
 source_path: "content/develop/tools/_index.md"
-source_commit: "bc92ea237bbfc2117c870c904f1a3ca619073ef1"
-source_commit_short: "bc92ea23"
-source_commit_date: "2026-06-18T14:53:00-05:00"
-generated_at: "2026-06-21T11:25:32Z"
+source_commit: "9d30f68c3dad1a6b3b7d30fe604b911348ce8152"
+source_commit_short: "9d30f68c"
+source_commit_date: "2026-07-24T10:52:10-07:00"
+generated_at: "2026-07-25T11:51:22Z"
 ---
 
 ---
@@ -35,6 +35,7 @@ manage it and interact with the data:
 * The [`redis-cli`](#redis-command-line-interface-cli) command line tool
 * [Redis Insight](#redis-insight) (a graphical user interface tool)
 * The Redis [VSCode extension](#redis-vscode-extension)
+* [`redisctl`](#redisctl) (a unified CLI for managing Redis Cloud and Redis Software)
 
 ## Redis command line interface (CLI)
 
@@ -53,3 +54,9 @@ The [Redis command line interface]({{< relref "/develop/tools/cli" >}}) (also kn
 
 [Redis for VS Code]({{< relref "/develop/tools/redis-for-vscode" >}})
 is an extension that allows you to connect to your Redis databases from within Microsoft Visual Studio Code. After connecting to a database, you can view, add, modify, and delete keys, and interact with your Redis databases using a Redis Insight like UI and also a built-in CLI interface.
+
+## redisctl
+
+[`redisctl`](https://github.com/redis/redisctl) is a unified command-line tool for managing Redis Cloud and Redis Software from your terminal. It provides complete API coverage for both platforms — including subscriptions, databases, VPC peering, ACLs, clusters, and users — without needing custom scripts. It also includes an MCP server component that exposes management operations to AI assistants.
+
+Install via Homebrew, Cargo, or download a binary release from the [GitHub repository](https://github.com/redis/redisctl).

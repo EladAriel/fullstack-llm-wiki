@@ -4,17 +4,17 @@ framework: "mongodb"
 source_repo: "https://github.com/mongodb/docs.git"
 source_branch: "main"
 source_path: "content/manual/manual/source/reference/mql/expressions.txt"
-source_commit: "96788e8ed140cbdde184ff82e1066dff4996bde4"
-source_commit_short: "96788e8e"
-source_commit_date: "2026-06-19T21:35:03-06:00"
-generated_at: "2026-06-21T07:41:52Z"
+source_commit: "ab9db26ed3d11618cdb61516d8180337d8e3f679"
+source_commit_short: "ab9db26e"
+source_commit_date: "2026-07-24T16:22:46-06:00"
+generated_at: "2026-07-25T11:51:15Z"
 ---
 
 ===========
 
 # Expressions
 
-Expressions are :abbr:`MQL (MongoDB Query Language)` components that resolve to a value. Expressions are stateless, meaning they return a value without mutating any of the values used to build the expression. You can use expressions in the following MQL contexts:
+Expressions are :abbr:`MQL (MongoDB Query Language)` components that resolve to a value without modifying their inputs. You can use them in the following contexts:
 
 - Some aggregation pipeline stages, such as :pipeline:`$project`,
 :pipeline:`$addFields`, and :pipeline:`$group`
@@ -23,19 +23,17 @@ Expressions are :abbr:`MQL (MongoDB Query Language)` components that resolve to 
 - Find command `projections <read-operations-projection>`
 .. include:: /includes/expression-components.rst
 
-Expression operators are similar to functions that take arguments. In general, these operators take an array of arguments and have the following form:
+Expression operators take an array of arguments and have the following form:
 
 ```javascript
 { <operator>: [ <argument1>, <argument2> ... ] }
 ```
 
-If an operator accepts a single argument, you can omit the outer array designating the argument list:
+If an operator accepts a single argument, you can omit the outer array:
 
 ```javascript
 { <operator>: <argument> }
 ```
-
-This page lists operators that you can use to construct `expressions <expression>`.
 
 ## Arithmetic Operators
 
@@ -75,7 +73,7 @@ This page lists operators that you can use to construct `expressions <expression
 
 ## Expressions Associated with Accumulators
 
-Some accumulators for the :pipeline:`$group` stage are also available for use as expressions. When used as expressions, they calculate an aggregate value over the given input arguments or input array.
+Some :pipeline:`$group` accumulators are also available as expressions that compute a value over input arguments or an input array.
 
 .. include:: /includes/agg-operators-accumulators-project.rst
 

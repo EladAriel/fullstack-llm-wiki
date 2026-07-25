@@ -4,10 +4,10 @@ framework: "mongodb"
 source_repo: "https://github.com/mongodb/docs.git"
 source_branch: "main"
 source_path: "content/manual/manual/source/reference/command/getMore.txt"
-source_commit: "96788e8ed140cbdde184ff82e1066dff4996bde4"
-source_commit_short: "96788e8e"
-source_commit_date: "2026-06-19T21:35:03-06:00"
-generated_at: "2026-06-21T07:41:52Z"
+source_commit: "ab9db26ed3d11618cdb61516d8180337d8e3f679"
+source_commit_short: "ab9db26e"
+source_commit_date: "2026-07-24T16:22:46-06:00"
+generated_at: "2026-07-25T11:51:15Z"
 ---
 
 ==========================
@@ -48,7 +48,7 @@ The command accepts the following fields:
 
 ## Output
 
-The command returns a document that contains the cursor information as well as the next batch.
+The command returns a document that contains the cursor information and the next batch.
 
 For example, running `getMore` on a cursor created by a :dbcommand:`find` operation on a sharded cluster returns a document similar to this output:
 
@@ -94,7 +94,7 @@ If `authentication <authentication>` is enabled, you can only run `getMore` agai
 
 For cursors created inside a session, you cannot call `getMore` outside the session.
 
-Similarly, for cursors created outside of a session, you cannot call `getMore` inside a session.
+For cursors created outside a session, you cannot call `getMore` inside a session.
 
 Transactions ````````````
 
@@ -104,7 +104,7 @@ For `multi-document transactions <transactions>`:
 
 ### Errors
 
-Starting in MongoDB 8.2, the cursor identifier must match the name of the cursor that operates on the specified `collection`. If the `collection` does not have a cursor with the specified cursor identifier, `getMore` returns an error.
+Starting in MongoDB 8.2, the cursor identifier must match the name of the cursor operating on the specified `collection`. If no matching cursor exists, `getMore` returns an error.
 
 ### Slow Queries
 

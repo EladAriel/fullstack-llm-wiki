@@ -4,10 +4,10 @@ framework: "redis"
 source_repo: "https://github.com/redis/docs.git"
 source_branch: "main"
 source_path: "content/commands/get.md"
-source_commit: "bc92ea237bbfc2117c870c904f1a3ca619073ef1"
-source_commit_short: "bc92ea23"
-source_commit_date: "2026-06-18T14:53:00-05:00"
-generated_at: "2026-06-21T11:25:32Z"
+source_commit: "9d30f68c3dad1a6b3b7d30fe604b911348ce8152"
+source_commit_short: "9d30f68c"
+source_commit_date: "2026-07-24T10:52:10-07:00"
+generated_at: "2026-07-25T11:51:22Z"
 ---
 
 ---
@@ -73,13 +73,14 @@ The name of the key.
 
 ## Examples
 
-{{% redis-cli %}}
-GET nonexisting
-SET mykey "Hello"
-GET mykey
-{{% /redis-cli %}}
-&nbsp;
-{{< clients-example set="set_and_get" step="get" description="Foundational: Retrieve the string value of a key using GET (returns nil if key doesn't exist)" difficulty="beginner" />}}
+{{< clients-example set="set_and_get" step="get" description="Foundational: Retrieve the string value of a key using GET (returns nil if key doesn't exist)" difficulty="beginner" >}}
+> GET nonexisting
+(nil)
+> SET mykey "Hello"
+OK
+> GET mykey
+"Hello"
+{{< /clients-example >}}
 
 ## Redis Software and Redis Cloud compatibility
 

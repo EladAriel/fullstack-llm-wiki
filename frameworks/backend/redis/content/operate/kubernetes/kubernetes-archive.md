@@ -4,10 +4,10 @@ framework: "redis"
 source_repo: "https://github.com/redis/docs.git"
 source_branch: "main"
 source_path: "content/operate/kubernetes/kubernetes-archive.md"
-source_commit: "bc92ea237bbfc2117c870c904f1a3ca619073ef1"
-source_commit_short: "bc92ea23"
-source_commit_date: "2026-06-18T14:53:00-05:00"
-generated_at: "2026-06-21T11:25:32Z"
+source_commit: "9d30f68c3dad1a6b3b7d30fe604b911348ce8152"
+source_commit_short: "9d30f68c"
+source_commit_date: "2026-07-24T10:52:10-07:00"
+generated_at: "2026-07-25T11:51:22Z"
 ---
 
 ---
@@ -28,7 +28,7 @@ The Redis Enterprise for Kubernetes documentation is versioned. You are looking 
 - View the [8.0.18 docs](https://redis.io/docs/latest/operate/kubernetes/8.0.18/) for Redis Enterprise for Kubernetes versions 8.0.18-11 and 8.0.20-21.
 - View the [8.0 docs](https://redis.io/docs/latest/operate/kubernetes/8.0/) for Redis Enterprise for Kubernetes versions 8.0.2-2 through 8.0.10-23.
 - View the [7.22 docs](https://redis.io/docs/latest/operate/kubernetes/7.22/) for Redis Enterprise for Kubernetes versions 7.22.0-7 through 7.22.2-40.
-- View the [7.8.6 docs](https://redis.io/docs/latest/operate/kubernetes/7.8.6/) for Redis Enterprise for Kubernetes versions 7.8.6-1 through 7.8.6-15.
+- View the [7.8.6 docs](https://redis.io/docs/latest/operate/kubernetes/7.8.6/) for Redis Enterprise for Kubernetes versions 7.8.6-1 through 7.8.6-16.
 - View the [7.8.4 docs](https://redis.io/docs/latest/operate/kubernetes/7.8.4/) for Redis Enterprise for Kubernetes versions 7.8.2-6, 7.8.4-8, and 7.8.4-9.
 - View the [7.4.6 docs](https://redis.io/docs/latest/operate/kubernetes/7.4.6/) for Redis Enterprise for Kubernetes versions 7.4.6-2 and 7.4.6-6.
 

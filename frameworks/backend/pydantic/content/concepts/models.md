@@ -4,10 +4,10 @@ framework: "pydantic"
 source_repo: "https://github.com/pydantic/pydantic"
 source_branch: "main"
 source_path: "docs/concepts/models.md"
-source_commit: "363728fe0b353db1a1fcb44aac5c38fd96a8cc20"
-source_commit_short: "363728fe"
-source_commit_date: "2026-06-20T11:20:58+01:00"
-generated_at: "2026-06-21T11:37:01Z"
+source_commit: "a2a6577d4c329dd574a45dbb01a8feaa16b1ad3d"
+source_commit_short: "a2a6577d"
+source_commit_date: "2026-07-23T15:38:17Z"
+generated_at: "2026-07-25T11:50:12Z"
 ---
 
 ??? api "API Documentation"
@@ -568,6 +568,13 @@ except ValidationError as e:
       Input should be a valid number, unable to parse string as a number [type=float_parsing, input_value='not a float', input_type=str]
     """
 ```
+
+!!! tip "Logfire integration"
+    In an example like this one, the offending `data` is right there in the code. In a running application
+    it usually isn't. The exception says which fields failed, but the input that produced it is whatever a
+    user, API, or job happened to send at the time. If you need to see that input as well,
+    [Logfire can record failed validations](../errors/troubleshooting.md) together with the data that
+    caused them.
 
 ## Arbitrary class instances
 
@@ -1436,30 +1443,6 @@ print(PetsByName({'Otis': 'dog', 'Milo': 'cat'}).model_dump_json())
 #> {"Otis":"dog","Milo":"cat"}
 print(PetsByName.model_validate({'Otis': 'dog', 'Milo': 'cat'}))
 #> root={'Otis': 'dog', 'Milo': 'cat'}
-```
-
-If you want to access items in the `root` field directly or to iterate over the items, you can implement
-custom `__iter__` and `__getitem__` functions, as shown in the following example.
-
-```python
-from pydantic import RootModel
-
-
-class Pets(RootModel):
-    root: list[str]
-
-    def __iter__(self):
-        return iter(self.root)
-
-    def __getitem__(self, item):
-        return self.root[item]
-
-
-pets = Pets.model_validate(['dog', 'cat'])
-print(pets[0])
-#> dog
-print([pet for pet in pets])
-#> ['dog', 'cat']
 ```
 
 You can also create subclasses of the parametrized root model directly:

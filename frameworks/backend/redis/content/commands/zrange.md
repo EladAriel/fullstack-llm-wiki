@@ -4,10 +4,10 @@ framework: "redis"
 source_repo: "https://github.com/redis/docs.git"
 source_branch: "main"
 source_path: "content/commands/zrange.md"
-source_commit: "bc92ea237bbfc2117c870c904f1a3ca619073ef1"
-source_commit_short: "bc92ea23"
-source_commit_date: "2026-06-18T14:53:00-05:00"
-generated_at: "2026-06-21T11:25:32Z"
+source_commit: "9d30f68c3dad1a6b3b7d30fe604b911348ce8152"
+source_commit_short: "9d30f68c"
+source_commit_date: "2026-07-24T10:52:10-07:00"
+generated_at: "2026-07-25T11:51:22Z"
 ---
 
 ---
@@ -175,6 +175,8 @@ Also return the score of each member.
 The following example using `WITHSCORES` shows how the command returns always an array, but this time, populated with *element_1*, *score_1*, *element_2*, *score_2*, ..., *element_N*, *score_N*.
 
 {{< clients-example set="cmds_sorted_set" step="zrange2" description="Return scores with members: Retrieve members with their scores from a sorted set using ZRANGE with WITHSCORES option" difficulty="intermediate" >}}
+> DEL myzset
+(integer) 1
 > ZADD myzset 1 "one" 2 "two" 3 "three"
 (integer) 3
 > ZRANGE myzset 0 1 WITHSCORES
@@ -187,20 +189,13 @@ The following example using `WITHSCORES` shows how the command returns always an
 This example shows how to query the sorted set by score, excluding the value `1` and up to infinity, returning only the second element of the result:
 
 {{< clients-example set="cmds_sorted_set" step="zrange3" description="Query by score: Query a sorted set by score range using ZRANGE with BYSCORE and LIMIT options (supports exclusive ranges and pagination)" difficulty="intermediate" >}}
+> DEL myzset
+(integer) 1
 > ZADD myzset 1 "one" 2 "two" 3 "three"
 (integer) 3
 > ZRANGE myzset (1 +inf BYSCORE LIMIT 1 1
 1) "three"
 {{< /clients-example >}}
-
-Give these commands a try in the interactive console:
-
-{{% redis-cli %}}
-ZADD myzset 1 "one" 2 "two" 3 "three"
-ZRANGE myzset 0 -1
-ZRANGE myzset 2 3
-ZRANGE myzset -2 -1
-{{% /redis-cli %}}
 
 ## Details
 

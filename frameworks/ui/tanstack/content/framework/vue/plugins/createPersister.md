@@ -4,10 +4,10 @@ framework: "tanstack"
 source_repo: "https://github.com/tanstack/query"
 source_branch: "main"
 source_path: "docs/framework/vue/plugins/createPersister.md"
-source_commit: "4f11927ac5f3841984389a07587ee2ae1e0abfbb"
-source_commit_short: "4f11927a"
-source_commit_date: "2026-06-19T13:43:35+02:00"
-generated_at: "2026-06-21T12:31:28Z"
+source_commit: "fd50fa14d283c7d6664a796f758498d1ad5bfce7"
+source_commit_short: "fd50fa14"
+source_commit_date: "2026-07-24T22:22:47+10:00"
+generated_at: "2026-07-25T11:50:41Z"
 ---
 
 ---
@@ -115,7 +115,7 @@ If `query` is `expired`, `busted` or `malformed` it would be removed from the st
 
 ### `persisterGc(): Promise<void>`
 
-This function can be used to sporadically clean up stoage from `expired`, `busted` or `malformed` entries.
+This function can be used to sporadically clean up storage from `expired`, `busted` or `malformed` entries.
 
 For this function to work, your storage must expose `entries` method that would return a `key-value tuple array`.  
 For example `Object.entries(localStorage)` for `localStorage` or `entries` from `idb-keyval`.

@@ -4,10 +4,10 @@ framework: "shadcnui"
 source_repo: "https://github.com/shadcn-ui/ui"
 source_branch: "main"
 source_path: "apps/v4/content/docs/changelog/2025-10-new-components.mdx"
-source_commit: "5602b81d8344e0d0d7178e3bf57612662cd42957"
-source_commit_short: "5602b81d"
-source_commit_date: "2026-06-21T15:49:35+04:00"
-generated_at: "2026-06-21T12:47:26Z"
+source_commit: "4baadbc6517070ae8f8feb2c97037adc2b305544"
+source_commit_short: "4baadbc6"
+source_commit_date: "2026-07-23T23:50:36+04:00"
+generated_at: "2026-07-25T11:50:48Z"
 ---
 
 ---
@@ -44,21 +44,21 @@ import { Spinner } from "@/components/ui/spinner"
 
 Here's what it looks like:
 
-<ComponentPreview
+<ComponentPreview styleName="new-york-v4"
   name="spinner-basic"
 
 />
 
 Here's what it looks like in a button:
 
-<ComponentPreview
+<ComponentPreview styleName="new-york-v4"
   name="spinner-button"
 
 />
 
 You can edit the code and replace it with your own spinner.
 
-<ComponentPreview
+<ComponentPreview styleName="new-york-v4"
   name="spinner-custom"
 
 />
@@ -84,7 +84,7 @@ Use `KbdGroup` to group keyboard keys together.
 </KbdGroup>
 ```
 
-<ComponentPreview
+<ComponentPreview styleName="new-york-v4"
   name="kbd-demo"
 
 />
@@ -95,7 +95,7 @@ You can add it to buttons, tooltips, input groups, and more.
 
 I got a lot of requests for this one: Button Group. It's a container that groups related buttons together with consistent styling. Great for action groups, split buttons, and more.
 
-<ComponentPreview
+<ComponentPreview styleName="new-york-v4"
   name="button-group-demo"
 
 />
@@ -130,14 +130,14 @@ You can nest button groups to create more complex layouts with spacing.
 
 Use `ButtonGroupSeparator` to create split buttons. Classic dropdown pattern.
 
-<ComponentPreview
+<ComponentPreview styleName="new-york-v4"
   name="button-group-dropdown"
 
 />
 
 You can also use it to add prefix or suffix buttons and text to inputs.
 
-<ComponentPreview
+<ComponentPreview styleName="new-york-v4"
   name="button-group-select"
 
 />
@@ -174,6 +174,7 @@ import {
 Here's a preview with icons:
 
 <ComponentPreview
+  styleName="new-york-v4"
   name="input-group-icon"
   className="[&_.preview]:h-[300px] [&_pre]:h-[300px]!"
 />
@@ -181,6 +182,7 @@ Here's a preview with icons:
 You can also add buttons to the input group.
 
 <ComponentPreview
+  styleName="new-york-v4"
   name="input-group-button"
   className="[&_.preview]:h-[300px] [&_pre]:h-[300px]!"
 />
@@ -188,6 +190,7 @@ You can also add buttons to the input group.
 Or text, labels, tooltips, ...
 
 <ComponentPreview
+  styleName="new-york-v4"
   name="input-group-text"
   className="[&_.preview]:h-[350px] [&_pre]:h-[350px]!"
 />
@@ -195,6 +198,7 @@ Or text, labels, tooltips, ...
 It also works with textareas so you can build really complex components with lots of knobs and dials or yet another prompt form.
 
 <ComponentPreview
+  styleName="new-york-v4"
   name="input-group-textarea"
   className="[&_.preview]:h-[450px] [&_pre]:h-[450px]!"
 />
@@ -202,6 +206,7 @@ It also works with textareas so you can build really complex components with lot
 Oh here are some cool ones with spinners:
 
 <ComponentPreview
+  styleName="new-york-v4"
   name="input-group-spinner"
   className="[&_.preview]:h-[350px] [&_pre]:h-[350px]!"
 />
@@ -234,6 +239,7 @@ Here's a basic field with an input:
 ```
 
 <ComponentPreview
+  styleName="new-york-v4"
   name="field-input"
   className="[&_.preview]:h-[350px] [&_pre]:h-[350px]!"
 />
@@ -241,6 +247,7 @@ Here's a basic field with an input:
 It works with all form controls. Inputs, textareas, selects, checkboxes, radios, switches, sliders, you name it. Here's a full example:
 
 <ComponentPreview
+  styleName="new-york-v4"
   name="field-demo"
   className="[&_.preview]:h-[850px] [&_pre]:h-[850px]!"
 />
@@ -248,6 +255,7 @@ It works with all form controls. Inputs, textareas, selects, checkboxes, radios,
 Here are some checkbox fields:
 
 <ComponentPreview
+  styleName="new-york-v4"
   name="field-checkbox"
   className="[&_.preview]:h-[500px] [&_pre]:h-[500px]!"
 />
@@ -266,6 +274,7 @@ multi-section forms.
 ```
 
 <ComponentPreview
+  styleName="new-york-v4"
   name="field-fieldset"
   className="[&_.preview]:h-[500px] [&_pre]:h-[500px]!"
 />
@@ -274,6 +283,7 @@ Making it responsive is easy. Use `orientation="responsive"` and it switches
 between vertical and horizontal layouts based on container width. Done.
 
 <ComponentPreview
+  styleName="new-york-v4"
   name="field-responsive"
   className="[&_.preview]:h-[600px] [&_pre]:h-[600px]!"
 />
@@ -281,6 +291,7 @@ between vertical and horizontal layouts based on container width. Done.
 Wait, here's more. Wrap your fields in `FieldLabel` to create a selectable field group. Really easy. And it looks great.
 
 <ComponentPreview
+  styleName="new-york-v4"
   name="field-choice-card"
   className="[&_.preview]:h-[600px] [&_pre]:h-[600px]!"
 />
@@ -316,6 +327,7 @@ Here's a basic item:
 ```
 
 <ComponentPreview
+  styleName="new-york-v4"
   name="item-demo"
   className="[&_.preview]:h-[300px] [&_.preview]:p-4 [&_pre]:h-[300px]!"
 />
@@ -323,11 +335,13 @@ Here's a basic item:
 You can add icons, avatars, or images to the item.
 
 <ComponentPreview
+  styleName="new-york-v4"
   name="item-icon"
   className="[&_.preview]:h-[300px] [&_.preview]:p-4 [&_pre]:h-[300px]!"
 />
 
 <ComponentPreview
+  styleName="new-york-v4"
   name="item-avatar"
   className="[&_.preview]:h-[300px] [&_.preview]:p-4 [&_pre]:h-[300px]!"
 />
@@ -335,6 +349,7 @@ You can add icons, avatars, or images to the item.
 And here's what a list of items looks like with `ItemGroup`:
 
 <ComponentPreview
+  styleName="new-york-v4"
   name="item-group"
   className="[&_.preview]:h-[500px] [&_.preview]:p-4 [&_pre]:h-[500px]!"
 />
@@ -356,6 +371,7 @@ Need it as a link? Use the `asChild` prop:
 ```
 
 <ComponentPreview
+  styleName="new-york-v4"
   name="item-link"
   className="[&_.preview]:h-[400px] [&_.preview]:p-4 [&_pre]:h-[400px]!"
 />
@@ -390,6 +406,7 @@ Here's how you use it:
 ```
 
 <ComponentPreview
+  styleName="new-york-v4"
   name="empty-demo"
   className="[&_.preview]:h-[400px] [&_.preview]:p-4 [&_pre]:h-[400px]!"
 />
@@ -397,6 +414,7 @@ Here's how you use it:
 You can use it with avatars:
 
 <ComponentPreview
+  styleName="new-york-v4"
   name="empty-avatar"
   className="[&_.preview]:h-[400px] [&_pre]:h-[400px]!"
 />
@@ -404,6 +422,7 @@ You can use it with avatars:
 Or with input groups for things like search results or email subscriptions:
 
 <ComponentPreview
+  styleName="new-york-v4"
   name="empty-input-group"
   className="[&_.preview]:h-[450px] [&_pre]:h-[450px]!"
 />

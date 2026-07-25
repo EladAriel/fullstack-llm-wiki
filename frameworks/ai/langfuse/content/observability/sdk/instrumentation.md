@@ -4,10 +4,10 @@ framework: "Langfuse"
 source_repo: "https://github.com/langfuse/langfuse-docs"
 source_branch: "main"
 source_path: "content/docs/observability/sdk/instrumentation.mdx"
-source_commit: "4a702ece53852a6af86b3883f434adf3f5cae421"
-source_commit_short: "4a702ece"
-source_commit_date: "2026-06-23T13:41:14Z"
-generated_at: "2026-06-23T13:55:15Z"
+source_commit: "fcd1eca34a924867563c3c4e801254c4e66c0021"
+source_commit_short: "fcd1eca3"
+source_commit_date: "2026-07-25T00:45:45Z"
+generated_at: "2026-07-25T11:51:12Z"
 ---
 
 ---
@@ -470,6 +470,7 @@ You can add attributes to observations to help you better understand your applic
 - [`metadata`](/docs/observability/features/metadata)
 - [`version`](/docs/observability/features/releases-and-versioning)
 - [`tags`](/docs/observability/features/tags)
+- [`environment`](/docs/observability/features/environments) (Python SDK)
 - `traceName` (trace name)
 
 To update the input and output of the trace, see [trace-level inputs/outputs](#trace-inputoutput-behavior).
@@ -478,6 +479,7 @@ To update the input and output of the trace, see [trace-level inputs/outputs](#t
 <Tab title="Python SDK">
 
 Use [`propagate_attributes()`](https://python.reference.langfuse.com/langfuse#propagate_attributes) to add attributes to observations.
+In the Python SDK, `environment` is a first-class Langfuse environment and maps to `langfuse.environment`, not to trace metadata. Use it when the environment is request-scoped, for example when one shared proxy handles requests from multiple deployment environments.
 
 ```python /propagate_attributes/
 from langfuse import get_client, propagate_attributes
@@ -490,6 +492,7 @@ with langfuse.start_as_current_observation(as_type="span", name="user-workflow")
         session_id="session_abc",
         metadata={"experiment": "variant_a"},
         version="1.0",
+        environment="staging",
         trace_name="user-workflow",
     ):
         with langfuse.start_as_current_observation(as_type="generation", name="llm-call"):
@@ -553,6 +556,8 @@ await startActiveObservation("user-workflow", async () => {
 
 For distributed tracing across multiple services, use the `as_baggage` parameter (see [OpenTelemetry documentation for more details](https://opentelemetry.io/docs/concepts/signals/baggage/)) to propagate attributes via HTTP headers.
 
+In the Python SDK, `environment` can also be propagated this way. The environment is sent as `langfuse_environment` baggage and takes precedence over the downstream service's local `LANGFUSE_TRACING_ENVIRONMENT` or client-level environment for spans created within the propagated context.
+
 <LangTabs items={["Python SDK", "JS/TS SDK"]}>
 <Tab title="Python SDK">
 
@@ -566,6 +571,7 @@ with langfuse.start_as_current_observation(as_type="span", name="api-request"):
     with propagate_attributes(
         user_id="user_123",
         session_id="session_abc",
+        environment="staging",
         as_baggage=True,
     ):
         requests.get("https://service-b.example.com/api")

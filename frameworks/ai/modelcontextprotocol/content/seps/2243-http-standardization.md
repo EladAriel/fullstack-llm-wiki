@@ -4,10 +4,10 @@ framework: "Model Context Protocol"
 source_repo: "https://github.com/modelcontextprotocol/modelcontextprotocol"
 source_branch: "main"
 source_path: "docs/seps/2243-http-standardization.mdx"
-source_commit: "47501e4ced7823014b83be168916d4c9e63b594e"
-source_commit_short: "47501e4c"
-source_commit_date: "2026-06-22T09:16:44-07:00"
-generated_at: "2026-06-23T14:04:43Z"
+source_commit: "7634684382c3d14cf7e9f14073fe40a2d8ace3fa"
+source_commit_short: "76346843"
+source_commit_date: "2026-07-23T16:49:30-07:00"
+generated_at: "2026-07-25T11:50:39Z"
 ---
 
 ---
@@ -467,7 +467,7 @@ When constructing a `tools/call` request via HTTP transport, the client MUST:
 1. Encode the values according to the rules in [Value Encoding](#value-encoding)
 1. Append a `Mcp-Param-{Name}: {Value}` header to the request:
 
-> **Implementation Note**: If the client does not have the tool's `inputSchema` (e.g., `tools/list` has not yet been called) or the cached schema is stale (e.g., its TTL has expired), the client SHOULD send the request without custom `Mcp-Param-*` headers. If the server rejects the request because required custom headers are missing, the client SHOULD call `tools/list` to obtain the current `inputSchema`, then retry the original request with the appropriate headers. Clients MAY pre-load tool definitions via other means (e.g., from a previous session or configuration) to enable header emission without a prior `tools/list` call.
+> **Implementation Note**: Clients MUST construct `Mcp-Param-*` headers using the most recently obtained `inputSchema` for the tool. A client that has never obtained the tool's `inputSchema` SHOULD send the request without `Mcp-Param-*` headers. If the server rejects the request because required `Mcp-Param-*` headers are missing or do not match the body, the client SHOULD call `tools/list` to obtain the current `inputSchema`, then retry the original request with the appropriate headers. Clients MAY pre-load tool definitions via other means (e.g., from a previous session or configuration) to enable header emission without a prior `tools/list` call.
 
 #### Server Behavior
 
@@ -782,7 +782,7 @@ This section defines edge cases that conformance tests MUST cover to ensure inte
 | Invalid Base64 characters | `=?base64?SGVs!!!bG8=?=` | Server MUST reject with 400 and error code `-32001`; Intermediary MAY reject with 400 status code |
 | Missing prefix            | `SGVsbG8=`               | Server treats as literal value, not Base64                                                        |
 | Missing suffix            | `=?base64?SGVsbG8=`      | Server treats as literal value, not Base64                                                        |
-| Malformed wrapper         | `=?BASE64?SGVsbG8=?=`    | Server MUST accept (case-insensitive prefix)                                                      |
+| Non-lowercase prefix      | `=?BASE64?SGVsbG8=?=`    | Server treats as literal value, not Base64                                                        |
 
 #### Null and Missing Values
 
@@ -808,3 +808,9 @@ Implementation requirements:
 - **Server SDKs**: Provide a mechanism (attribute/decorator) for marking parameters with `x-mcp-header`
 - **Client SDKs**: Implement the client behavior for extracting and encoding header values
 - **Validation**: Both sides must validate header/body consistency
+
+## Changes since SEP became Final
+
+This SEP is preserved as a historical record of what was accepted. The list below tracks changes made to the specification after this SEP reached Final status. Refer to the current [specification](https://modelcontextprotocol.io/specification) for the authoritative, up-to-date requirements.
+
+- **`HeaderMismatch` error code reassigned from `-32001` to `-32020`.** This SEP originally assigned `HeaderMismatch` to `-32001`. The error-code allocation update in [#2907](https://github.com/modelcontextprotocol/modelcontextprotocol/pull/2907) reassigned `HeaderMismatch` to `-32020`. All references to `-32001` above should be read as `-32020` when implementing against the current specification.

@@ -4,10 +4,10 @@ framework: "redis"
 directory: "content/integrate"
 source_repo: "https://github.com/redis/docs.git"
 source_branch: "main"
-source_commit: "bc92ea237bbfc2117c870c904f1a3ca619073ef1"
-source_commit_short: "bc92ea23"
-source_commit_date: "2026-06-18T14:53:00-05:00"
-generated_at: "2026-06-21T11:25:32Z"
+source_commit: "9d30f68c3dad1a6b3b7d30fe604b911348ce8152"
+source_commit_short: "9d30f68c"
+source_commit_date: "2026-07-24T10:52:10-07:00"
+generated_at: "2026-07-25T11:51:22Z"
 ---
 # Integrate
 
@@ -33,6 +33,7 @@ This directory contains redis learning pages related to integrate.
 - [Docker Redis Enterprise](docker-redis-enterprise/index.md) - pages related to docker redis enterprise
 - [Dynatrace With Redis Cloud](dynatrace-with-redis-cloud/index.md) - pages related to dynatrace with redis cloud
 - [Dynatrace With Redis Enterprise](dynatrace-with-redis-enterprise/index.md) - pages related to dynatrace with redis enterprise
+- [Fastapi](fastapi/index.md) - pages related to fastapi
 - [Fusioncache](fusioncache/index.md) - pages related to fusioncache
 - [Gcp Redis Cloud](gcp-redis-cloud/index.md) - pages related to gcp redis cloud
 - [Go Redis](go-redis/index.md) - pages related to go redis

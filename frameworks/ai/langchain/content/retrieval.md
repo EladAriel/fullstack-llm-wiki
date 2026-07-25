@@ -4,10 +4,10 @@ framework: "LangChain"
 source_repo: "https://github.com/langchain-ai/docs"
 source_branch: "main"
 source_path: "src/oss/langchain/retrieval.mdx"
-source_commit: "d037cd23f3f298721837c403b2ffd289e31d56d0"
-source_commit_short: "d037cd23"
-source_commit_date: "2026-06-23T11:18:55+02:00"
-generated_at: "2026-06-23T13:53:33Z"
+source_commit: "2aae1dfc98ee953a9a5185fb6fcdd9efb3f4d878"
+source_commit_short: "2aae1dfc"
+source_commit_date: "2026-07-25T00:27:23Z"
+generated_at: "2026-07-25T11:51:05Z"
 ---
 
 ---
@@ -29,7 +29,7 @@ A **knowledge base** is a repository of documents or structured data used during
 If you need a custom knowledge base, you can use LangChain’s document loaders and vector stores to build one from your own data.
 
 <Note>
-    If you already have a knowledge base (e.g., a SQL database, CRM, or internal documentation system), you do **not** need to rebuild it. You can:
+    If you already have a knowledge base (e.g., a SQL database, a document database, a CRM, or an internal documentation system), you do **not** need to rebuild it. You can:
     - Connect it as a **tool** for an agent in Agentic RAG.
     - Query it and supply the retrieved content as context to the LLM [(2-Step RAG)](#2-step-rag).
 </Note>
@@ -171,13 +171,11 @@ graph LR
 <Card
     title="Tutorial: Retrieval-Augmented Generation (RAG)"
     icon="robot"
-    href="/oss/langchain/rag#rag-chains"
+    href="/oss/deepagents/rag"
     arrow cta="Learn more"
 >
-    See how to build a Q&A chatbot that can answer questions grounded in your data using Retrieval-Augmented Generation.
-    This tutorial walks through two approaches:
-    * A **RAG agent** that runs searches with a flexible tool—great for general-purpose use.
-    * A **2-step RAG** chain that requires just one LLM call per query—fast and efficient for simpler tasks.
+    See how to build a Q&A chatbot that answers questions grounded in your documentation using Retrieval-Augmented Generation.
+    The tutorial indexes LangChain docs into a vector store, retrieves relevant chunks at query time, offloads them to the agent filesystem, and delegates analysis to subagents.
 </Card>
 
 ### Agentic RAG
@@ -248,7 +246,7 @@ const fetchUrl = tool(
 );
 
 const agent = createAgent({
-    model: "claude-sonnet-4-0",
+    model: "claude-sonnet-4-6",
     tools: [fetchUrl],
     systemPrompt,
 });
@@ -314,7 +312,7 @@ Your answers should be clear, concise, and technically accurate.
 
 tools = [fetch_documentation]
 
-model = init_chat_model("claude-sonnet-4-0", max_tokens=32_000)
+model = init_chat_model("claude-sonnet-4-6", max_tokens=32_000)
 
 agent = create_agent(
     model=model,
@@ -392,7 +390,7 @@ Your answers should be clear, concise, and technically accurate.
 const tools = [fetchDocumentation];
 
 const agent = createAgent({
-  model: "claude-sonnet-4-0"
+  model: "claude-sonnet-4-6"
   tools,  // [!code highlight]
   systemPrompt,  // [!code highlight]
   name: "Agentic RAG",
@@ -416,13 +414,11 @@ console.log(response.messages.at(-1)?.content);
 <Card
     title="Tutorial: Retrieval-Augmented Generation (RAG)"
     icon="robot"
-    href="/oss/langchain/rag"
+    href="/oss/deepagents/rag"
     arrow cta="Learn more"
 >
-    See how to build a Q&A chatbot that can answer questions grounded in your data using Retrieval-Augmented Generation.
-    This tutorial walks through two approaches:
-    * A **RAG agent** that runs searches with a flexible tool—great for general-purpose use.
-    * A **2-step RAG** chain that requires just one LLM call per query—fast and efficient for simpler tasks.
+    See how to build a Q&A chatbot that answers questions grounded in your documentation using Retrieval-Augmented Generation.
+    The tutorial indexes LangChain docs into a vector store, retrieves relevant chunks at query time, offloads them to the agent filesystem, and delegates analysis to subagents.
 </Card>
 
 ### Hybrid RAG

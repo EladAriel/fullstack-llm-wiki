@@ -4,10 +4,10 @@ framework: "redis"
 source_repo: "https://github.com/redis/docs.git"
 source_branch: "main"
 source_path: "content/develop/_index.md"
-source_commit: "bc92ea237bbfc2117c870c904f1a3ca619073ef1"
-source_commit_short: "bc92ea23"
-source_commit_date: "2026-06-18T14:53:00-05:00"
-generated_at: "2026-06-21T11:25:32Z"
+source_commit: "9d30f68c3dad1a6b3b7d30fe604b911348ce8152"
+source_commit_short: "9d30f68c"
+source_commit_date: "2026-07-24T10:52:10-07:00"
+generated_at: "2026-07-25T11:51:22Z"
 ---
 
 ---
@@ -43,7 +43,7 @@ or analyze and manage your database with our
 
 | | |
 | - | - |
-|{{< image-card image="images/dev/icons/icon-redis-insight-64-duotone.png" alt="Redis Insight icon" title="Redis Insight" url="/develop/tools/insight" >}} <p>Visual client tool for creating, managing, and analyzing Redis databases.<br/><a href="https://redis.io/downloads/#insight">Download Redis Insight</a>.</p> | {{< image-card image="images/dev/icons/icon-redis-code-64-duotone.png" alt="Redis for VS Code icon" title="Redis for VS Code" url="/develop/tools/redis-for-vscode" >}} <p>VS Code extension for creating, managing, and analyzing Redis databases.<br/><a href="https://marketplace.visualstudio.com/items?itemName=redis.redis">Install Redis for VS Code</a>.</p> |
+|{{< image-card image="images/dev/icons/icon-redis-insight-64-duotone.png" alt="Redis Insight icon" title="Redis Insight" url="/develop/tools/insight" >}} <p>Visual client tool for creating, managing, and analyzing Redis databases.<br/><a href="https://redis.io/downloads/#insight">Download Redis Insight</a>.</p> | {{< image-card image="images/dev/icons/icon-redis-code-64-duotone.png" alt="Redis for VS Code icon" title="Redis for VS Code" url="/develop/tools/redis-for-vscode" >}} <p>VS Code extension for creating, managing, and analyzing Redis databases.<br/><a href="https://marketplace.visualstudio.com/items?itemName=Redis.redis-for-vscode">Install Redis for VS Code</a>.</p> |
 | | |
 
 | {{< image-card image="images/icon_logo/icon-developers-64-midnight.png" alt="Quick start icon" title="Quick start" url="/develop/get-started" >}} | {{< image-card image="images/icon_logo/icon-data-structures-64-midnight.png" alt="Data types icon" title="Data types" url="/develop/data-types" >}} | {{< image-card image="images/icon_logo/icon-text-search-64-midnight.png" alt="Redis Search icon" title="Redis Search" url="/develop/ai/search-and-query" >}} |

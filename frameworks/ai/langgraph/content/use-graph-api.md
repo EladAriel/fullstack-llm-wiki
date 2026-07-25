@@ -4,10 +4,10 @@ framework: "LangGraph"
 source_repo: "https://github.com/langchain-ai/docs"
 source_branch: "main"
 source_path: "src/oss/langgraph/use-graph-api.mdx"
-source_commit: "d037cd23f3f298721837c403b2ffd289e31d56d0"
-source_commit_short: "d037cd23"
-source_commit_date: "2026-06-23T11:18:55+02:00"
-generated_at: "2026-06-23T13:54:20Z"
+source_commit: "2aae1dfc98ee953a9a5185fb6fcdd9efb3f4d878"
+source_commit_short: "2aae1dfc"
+source_commit_date: "2026-07-25T00:27:23Z"
+generated_at: "2026-07-25T11:51:08Z"
 ---
 
 ---
@@ -1539,7 +1539,7 @@ By default, the retry policy retries on any exception except for the following:
   // Create an in-memory database
   const db: typeof Database.prototype = new Database(":memory:");
 
-  const model = new ChatAnthropic({ model: "claude-3-5-sonnet-20240620" });
+  const model = new ChatAnthropic({ model: "claude-sonnet-4-6" });
 
   const callModel: GraphNode<typeof State> = async (state) => {
     const response = await model.invoke(state.messages);

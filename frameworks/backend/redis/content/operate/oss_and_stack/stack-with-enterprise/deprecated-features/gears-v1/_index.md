@@ -4,10 +4,10 @@ framework: "redis"
 source_repo: "https://github.com/redis/docs.git"
 source_branch: "main"
 source_path: "content/operate/oss_and_stack/stack-with-enterprise/deprecated-features/gears-v1/_index.md"
-source_commit: "bc92ea237bbfc2117c870c904f1a3ca619073ef1"
-source_commit_short: "bc92ea23"
-source_commit_date: "2026-06-18T14:53:00-05:00"
-generated_at: "2026-06-21T11:25:32Z"
+source_commit: "9d30f68c3dad1a6b3b7d30fe604b911348ce8152"
+source_commit_short: "9d30f68c"
+source_commit_date: "2026-07-24T10:52:10-07:00"
+generated_at: "2026-07-25T11:51:22Z"
 ---
 
 ---
@@ -39,7 +39,7 @@ Prior to v1.2, RedisGears only supported Python. However, an internal C API exis
 
 ## Getting started with RedisGears
 
-RedisGears is implemented by a Redis module. To use RedisGears, you'll need to make sure that your Redis deployment has the module installed. [Redis Software](https://docs.redislabs.com/latest/rs/) supports the module natively.
+RedisGears is implemented by a Redis module. To use RedisGears, you'll need to make sure that your Redis deployment has the module installed. [Redis Software](https://redis.io/docs/latest/operate/rs/) supports the module natively.
 
 If you're running Redis Open Source, you'll also need to [install the RedisGears module]({{< relref "/operate/oss_and_stack/stack-with-enterprise/deprecated-features/gears-v1/installing-redisgears" >}}) before using it.
 

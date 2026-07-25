@@ -4,10 +4,10 @@ framework: "redis"
 source_repo: "https://github.com/redis/docs.git"
 source_branch: "main"
 source_path: "content/operate/rs/references/cli-utilities/rladmin/info.md"
-source_commit: "bc92ea237bbfc2117c870c904f1a3ca619073ef1"
-source_commit_short: "bc92ea23"
-source_commit_date: "2026-06-18T14:53:00-05:00"
-generated_at: "2026-06-21T11:25:32Z"
+source_commit: "9d30f68c3dad1a6b3b7d30fe604b911348ce8152"
+source_commit_short: "9d30f68c"
+source_commit_date: "2026-07-24T10:52:10-07:00"
+generated_at: "2026-07-25T11:51:22Z"
 ---
 
 ---
@@ -211,4 +211,35 @@ proxy:1
     scale_duration: 30 (seconds)
     max_threads: 8
     threads: 3
+```
+
+## `info metrics`
+
+Shows the cluster-wide [metrics configuration]({{<relref "/operate/rs/monitoring/metrics_stream_engine/metrics-configuration">}}) for the v2 metrics stream engine.
+
+```sh
+rladmin info metrics
+```
+
+### Parameters
+
+None
+
+### Returns
+
+Returns the current metrics configuration. To update it, use [`rladmin metrics config`]({{<relref "/operate/rs/references/cli-utilities/rladmin/metrics#metrics-config">}}).
+
+### Example
+
+``` sh
+$ rladmin info metrics
+Metrics configuration:
+    key_distribution_enabled: True
+    key_size_buckets: 128M,512M
+    key_items_buckets: 1M,8M
+    local_storage_max_size_mb: 1024
+    local_storage_retention_days: 8
+    expose_db_tags: True
+    metrics_tag_keys_exposed: env,team
+    max_requests_in_flight: 2
 ```

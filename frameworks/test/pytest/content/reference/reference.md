@@ -4,10 +4,10 @@ framework: "pytest"
 source_repo: "https://github.com/pytest-dev/pytest"
 source_branch: "main"
 source_path: "doc/en/reference/reference.rst"
-source_commit: "d2466e3a9655f75d25719bcc4510cdbcb39cf10d"
-source_commit_short: "d2466e3a"
-source_commit_date: "2026-06-21T06:49:47+02:00"
-generated_at: "2026-06-21T11:47:50Z"
+source_commit: "344c23787cdb3431dcc441b8b63ee9950f04b921"
+source_commit_short: "344c2378"
+source_commit_date: "2026-07-24T17:37:16+02:00"
+generated_at: "2026-07-25T11:50:13Z"
 ---
 
 :tocdepth: 3
@@ -157,7 +157,7 @@ Mark a test function as using the given fixture names.
 
 Marks a test function as expected to fail.
 
-:keyword Union[bool, str] condition: Condition for marking the test function as xfail (`True/False` or a `condition string <string conditions>`). If a `bool`, you also have to specify `reason` (see `condition string <string conditions>`). :keyword str reason: Reason why the test function is marked as xfail. :keyword raises: Exception class (or tuple of classes) expected to be raised by the test function; other exceptions will fail the test. Note that subclasses of the classes passed will also result in a match (similar to how the `except` statement works). :type raises: Type[:py`Exception`]
+:keyword Union[bool, str] condition: Condition for marking the test function as xfail (`True/False` or a `condition string <string conditions>`). If a `bool`, you also have to specify `reason` (see `condition string <string conditions>`). :keyword str reason: Reason why the test function is marked as xfail. :keyword raises: Exception class (or tuple of classes) expected to be raised by the test function; other exceptions will fail the test. Note that subclasses of the classes passed will also result in a match (similar to how the `except` statement works). :type raises: Type[:py`Exception`] | Tuple[Type[:py`Exception`], ...] | None
 
 :keyword bool run: Whether the test function should actually be executed. If `False`, the function will always xfail and will not be executed (useful if a function is segfaulting). :keyword bool strict:
 
@@ -412,6 +412,8 @@ These are the collector and item classes (collectively called "nodes") which mak
 
 Objects accessible from `fixtures <fixture>` or `hooks <hook-reference>` or importable from `pytest`.
 
+### Approx
+
 ### CallInfo
 
 ### CollectReport
@@ -482,7 +484,7 @@ collect_ignore_glob = ["*_ignore.py"]
 
 **Tutorial**: `available installable plugins`
 
-Can be declared at the **global** level in test modules and conftest.py files to register additional plugins. Can be either a `str` or `Sequence[str]`.
+Can be declared at the **global** level in test modules and conftest.py files to register additional plugins. Can be either a `str` or `Sequence[str]`. Each entry can be the name of an importable module or the entry point name of an installed plugin.
 
 ```python
  pytest_plugins = "myapp.testsupport.myplugin"
@@ -491,6 +493,8 @@ Can be declared at the **global** level in test modules and conftest.py files to
 ```python
  pytest_plugins = ("myapp.testsupport.tools", "myapp.testsupport.regression")
 ```
+
+.. versionchanged:: 9.2
 
 **Tutorial**: `scoped-marking`
 

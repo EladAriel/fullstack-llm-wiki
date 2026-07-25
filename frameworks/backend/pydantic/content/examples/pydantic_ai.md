@@ -4,13 +4,13 @@ framework: "pydantic"
 source_repo: "https://github.com/pydantic/pydantic"
 source_branch: "main"
 source_path: "docs/examples/pydantic_ai.md"
-source_commit: "363728fe0b353db1a1fcb44aac5c38fd96a8cc20"
-source_commit_short: "363728fe"
-source_commit_date: "2026-06-20T11:20:58+01:00"
-generated_at: "2026-06-21T11:37:01Z"
+source_commit: "a2a6577d4c329dd574a45dbb01a8feaa16b1ad3d"
+source_commit_short: "a2a6577d"
+source_commit_date: "2026-07-23T15:38:17Z"
+generated_at: "2026-07-25T11:50:12Z"
 ---
 
-[Pydantic AI](https://ai.pydantic.dev/) is a Python agent framework built by the Pydantic team that uses Pydantic validation for [structured output](https://ai.pydantic.dev/output/#structured-output) schema generation and validation.
+[Pydantic AI](https://pydantic.dev/docs/ai/overview/) is a Python agent framework built by the Pydantic team that uses Pydantic validation for [structured output](https://pydantic.dev/docs/ai/core-concepts/output/#structured-output) schema generation and validation.
 By specifying an `output_type` on an Agent, you can constrain the LLM to return data that matches your Pydantic model schema.
 
 ## LLM Structured Output
@@ -46,3 +46,8 @@ result = agent.run_sync('List the 3 largest cities in Japan')
 print(result.output)
 #> [City(name='Tokyo', country='Japan', population=13960000), ...]
 ```
+
+!!! tip "Logfire integration"
+    Pydantic AI has a complete integration with [Logfire](../integrations/logfire.md), which records
+    agent runs and the validation inside them: each agent run shows the output the model produced,
+    the errors your validators raised, and the retry that followed.

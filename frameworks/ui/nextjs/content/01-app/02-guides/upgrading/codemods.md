@@ -4,10 +4,10 @@ framework: "nextjs"
 source_repo: "https://github.com/vercel/next.js/"
 source_branch: "canary"
 source_path: "docs/01-app/02-guides/upgrading/codemods.mdx"
-source_commit: "79142d7806ff4194c8d9885b80fa69db5ecf534a"
-source_commit_short: "79142d78"
-source_commit_date: "2026-06-20T23:40:12Z"
-generated_at: "2026-06-21T12:07:17Z"
+source_commit: "dcf242a17b5d4622bbd9624db531a9d84177619f"
+source_commit_short: "dcf242a1"
+source_commit_date: "2026-07-25T10:16:19+02:00"
+generated_at: "2026-07-25T11:50:53Z"
 ---
 
 ---
@@ -46,6 +46,7 @@ npx @next/codemod upgrade [revision]
 
 - `revision` (optional): Specify the upgrade type (`patch`, `minor`, `major`), an NPM dist tag (e.g. `latest`, `canary`, `rc`), or an exact version (e.g. `15.0.0`). Defaults to `minor` for stable versions.
 - `--verbose`: Show more detailed output during the upgrade process.
+- `-y, --yes`: Skip every interactive prompt and accept its default (upgrade React past 18, enable Turbopack, apply all recommended codemods, run the React 19 codemods). Also auto-enabled when stdin is not a TTY (CI, an AI coding agent, or any non-interactive shell), so you usually don't need to pass it explicitly.
 
 For example:
 
@@ -64,14 +65,58 @@ npx @next/codemod upgrade 16
 
 # Upgrade to the canary release
 npx @next/codemod upgrade canary
+
+# Run from an agent or CI: skip every prompt
+npx @next/codemod upgrade canary --yes
 ```
 
 > **Good to know**:
 >
 > - If the target version is the same as or lower than your current version, the command exits without making changes.
 > - During the upgrade, you may be prompted to choose which Next.js codemods to apply and run React 19 codemods if upgrading React.
+> - When invoked by an AI coding agent or in CI (anywhere stdin isn't a TTY), the upgrade runs non-interactively and accepts every default. Pass `--yes` to force this behavior even from a terminal.
 
 ## Codemods
+
+### 16.3
+
+#### Opt every route out of Cache Components validation
+
+##### `cache-components-instant-false`
+
+```bash filename="Terminal"
+npx @next/codemod@canary cache-components-instant-false ./app
+```
+
+This codemod adds `export const instant = false` to every `app/**/{page,layout,default}` file that doesn't already export `instant`, so you can enable [`cacheComponents`](/docs/app/api-reference/config/next-config-js/cacheComponents) and then remove the opt-outs route by route. It skips Client Components (`"use client"`) and files that already declare `instant`.
+
+```diff filename="app/page.tsx"
++ // TODO: Cache Components adoption. Refactor this route so this opt-out can be removed.
++ // See: https://nextjs.org/docs/app/guides/migrating-to-cache-components
++ export const instant = false
++
+  export default function Page() {
+    return <h1>Hello</h1>
+  }
+```
+
+See the [Migrating to Cache Components](/docs/app/guides/migrating-to-cache-components) guide for the full adoption path.
+
+#### Remove `prefetch = 'partial'` Route Segment Config after enabling Partial Prefetching
+
+##### `remove-partial-prefetch`
+
+```bash filename="Terminal"
+npx @next/codemod@canary remove-partial-prefetch ./app
+```
+
+This codemod removes `export const prefetch = 'partial'` from `app/**/{page,layout}` files, so you can enable [`partialPrefetching`](/docs/app/api-reference/config/next-config-js/partialPrefetching) globally and then drop the now-redundant per-route opt-ins. It removes only the `'partial'` value and leaves other values such as `prefetch = 'allow-runtime'` in place.
+
+```diff filename="app/products/[slug]/page.tsx"
+- export const prefetch = 'partial'
+```
+
+See the [Adopting Partial Prefetching](/docs/app/guides/adopting-partial-prefetching) guide for the full adoption path.
 
 ### 16.0
 

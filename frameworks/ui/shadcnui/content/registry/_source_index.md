@@ -4,10 +4,10 @@ framework: "shadcnui"
 source_repo: "https://github.com/shadcn-ui/ui"
 source_branch: "main"
 source_path: "apps/v4/content/docs/registry/index.mdx"
-source_commit: "5602b81d8344e0d0d7178e3bf57612662cd42957"
-source_commit_short: "5602b81d"
-source_commit_date: "2026-06-21T15:49:35+04:00"
-generated_at: "2026-06-21T12:47:26Z"
+source_commit: "4baadbc6517070ae8f8feb2c97037adc2b305544"
+source_commit_short: "4baadbc6"
+source_commit_date: "2026-07-23T23:50:36+04:00"
+generated_at: "2026-07-25T11:50:48Z"
 generated_filename: "_source_index.md"
 ---
 
@@ -29,14 +29,14 @@ You can use the `shadcn` CLI to run your own code registry. Running your own reg
     width="1432"
     height="960"
     alt="Registry"
-    className="mt-6 w-full overflow-hidden rounded-lg border dark:hidden"
+    className="mt-6 w-full overflow-hidden rounded-2xl border dark:hidden"
   />
   <Image
     src="/images/registry-dark.png"
     width="1432"
     height="960"
     alt="Registry"
-    className="mt-6 hidden w-full overflow-hidden rounded-lg border shadow-sm dark:block"
+    className="mt-6 hidden w-full overflow-hidden rounded-2xl border shadow-sm dark:block"
   />
   <figcaption className="text-center text-sm text-gray-500">
     A distribution system for code

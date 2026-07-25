@@ -4,10 +4,10 @@ framework: "mongodb"
 source_repo: "https://github.com/mongodb/docs.git"
 source_branch: "main"
 source_path: "content/manual/manual/source/reference/command/findAndModify.txt"
-source_commit: "96788e8ed140cbdde184ff82e1066dff4996bde4"
-source_commit_short: "96788e8e"
-source_commit_date: "2026-06-19T21:35:03-06:00"
-generated_at: "2026-06-21T07:41:52Z"
+source_commit: "ab9db26ed3d11618cdb61516d8180337d8e3f679"
+source_commit_short: "ab9db26e"
+source_commit_date: "2026-07-24T16:22:46-06:00"
+generated_at: "2026-07-25T11:51:15Z"
 ---
 
 ================================
@@ -103,10 +103,10 @@ Shard Key Modification ``````````````````````
 To update the **existing** shard key value with :dbcommand:`findAndModify`:
 
 - You :red:`must` run on a :binary:`~bin.mongos`. Do :red:`not`
-issue the operation directly on the shard.
+run the operation directly on the shard.
 
-- You :red:`must` run either in a :doc:`transaction
-</core/transactions>` or as a `retryable write </core/retryable-writes>`.
+- You :red:`must` run either in a `transaction <transactions>`
+or as a `retryable write <retryable-writes>`.
 
 - You :red:`must` include an equality filter on the full shard key.
 Missing Shard Key `````````````````
@@ -114,10 +114,10 @@ Missing Shard Key `````````````````
 Documents in a sharded collection can be `missing the shard key fields <shard-key-missing>`. To use :dbcommand:`findAndModify` to set the document's **missing** shard key:
 
 - You :red:`must` run on a :binary:`~bin.mongos`. Do :red:`not`
-issue the operation directly on the shard.
+run the operation directly on the shard.
 
-- You :red:`must` run either in a :doc:`transaction
-</core/transactions>` or as a `retryable write </core/retryable-writes>` if the new shard key value is not `null`.
+- You :red:`must` run either in a `transaction <transactions>`
+or as a `retryable write <retryable-writes>` if the new shard key value is not `null`.
 
 - You :red:`must` include an equality filter on the full shard key.
 > **Tip:** .. include:: /includes/extracts/missing-shard-key-equality-condition-abridged.rst
@@ -180,7 +180,7 @@ This command performs the following actions:
 
 #. The `query` finds a document in the `people` collection where the `name` field has the value `Tom`, the `state` field has the value `active` and the `rating` field has a value :expression:`greater than <$gt>` 10.
 
-#. The `sort` orders the results of the query in ascending order. If multiple documents meet the `query` condition, the command will select for modification the first document as ordered by this `sort`.
+#. The `sort` orders the results of the query in ascending order. If multiple documents match the `query` condition, the command modifies the first document in sort order.
 
 #. The `update` :update:`increments <$inc>` the value of the `score` field by 1.
 
@@ -189,8 +189,8 @@ This command performs the following actions:
 - The `lastErrorObject` field that contains the details of the
 command, including the field `updatedExisting` which is `true`, and
 
-- The `value` field that contains the original (i.e.
-pre-modification) document selected for this update:
+- The `value` field that contains the original pre-modification
+document selected for this update:
 
 ```javascript
      {
@@ -246,7 +246,7 @@ However, the :method:`~db.collection.findAndModify()` shell helper method return
 
 ### `upsert: true`
 
-The following :dbcommand:`findAndModify` command includes the `upsert: true` option for the `update` operation to either update a matching document or, if no matching document exists, create a new document:
+The following command uses `upsert: true` to update a matching document or insert a new one if no match exists:
 
 ```javascript
 db.runCommand(
@@ -282,7 +282,7 @@ command, including the field `upserted that contains the id` value of the newly 
 
 ### Return New Document
 
-The following :dbcommand:`findAndModify` command includes both `upsert: true` option and the `new:true` option. The command either updates a matching document and returns the updated document or, if no matching document exists, inserts a document and returns the newly inserted document in the `value` field.
+The following command uses both `upsert: true` and `new: true` to update a matching document or insert a new one, and returns the new or updated document in the `value` field.
 
 In the following example, no document in the `people` collection matches the `query` condition:
 
@@ -513,7 +513,7 @@ The operation updates the `grades` field for a single document, and after the op
 
 .. include:: /includes/list-update-agg-stages.rst
 
-Using the aggregation pipeline allows for a more expressive update statement, such as expressing conditional updates based on current field values or updating one field using the value of another field(s).
+Using the aggregation pipeline allows for a more expressive update statement, such as expressing conditional updates based on current field values or updating one field using the value of another field.
 
 For example, create a collection `students2` with the following documents:
 

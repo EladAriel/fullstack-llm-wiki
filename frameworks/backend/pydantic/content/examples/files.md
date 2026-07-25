@@ -4,10 +4,10 @@ framework: "pydantic"
 source_repo: "https://github.com/pydantic/pydantic"
 source_branch: "main"
 source_path: "docs/examples/files.md"
-source_commit: "363728fe0b353db1a1fcb44aac5c38fd96a8cc20"
-source_commit_short: "363728fe"
-source_commit_date: "2026-06-20T11:20:58+01:00"
-generated_at: "2026-06-21T11:37:01Z"
+source_commit: "a2a6577d4c329dd574a45dbb01a8feaa16b1ad3d"
+source_commit_short: "a2a6577d"
+source_commit_date: "2026-07-23T15:38:17Z"
+generated_at: "2026-07-25T11:50:12Z"
 ---
 
 `pydantic` is a great tool for validating data coming from various sources.
@@ -91,10 +91,10 @@ except ValidationError as err:
     3 validation errors for Person
     name
     Field required [type=missing, input_value={'age': -30, 'email': 'not-an-email-address'}, input_type=dict]
-        For further information visit https://errors.pydantic.dev/2.10/v/missing
+        For further information visit https://errors.pydantic.dev/2/v/missing
     age
     Input should be greater than 0 [type=greater_than, input_value=-30, input_type=int]
-        For further information visit https://errors.pydantic.dev/2.10/v/greater_than
+        For further information visit https://errors.pydantic.dev/2/v/greater_than
     email
     value is not a valid email address: An email address must have an @-sign. [type=value_error, input_value='not-an-email-address', input_type=str]
     """
@@ -142,6 +142,12 @@ print(people)
 
 1. We use [`TypeAdapter`][pydantic.type_adapter.TypeAdapter] to validate a list of `Person` objects.
 [`TypeAdapter`][pydantic.type_adapter.TypeAdapter] is a Pydantic construct used to validate data against a single type.
+
+!!! tip "Logfire integration"
+    With two records, spotting a bad one is easy. In a pipeline processing files with thousands of records,
+    the error's `loc` gives you the index of the failing one, and if the pipeline runs unattended,
+    [Logfire](../errors/troubleshooting.md) records each failed validation with its input, so you can find
+    the offending record after the run.
 
 ## JSON lines files
 
@@ -257,7 +263,7 @@ age: 30
 email: john@example.com
 ```
 
-Here's how we validate that data:
+Here's how we validate that data using [PyYAML](https://pypi.org/project/PyYAML/):
 
 ```python {test="skip"}
 import yaml

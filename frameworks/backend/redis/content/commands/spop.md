@@ -4,10 +4,10 @@ framework: "redis"
 source_repo: "https://github.com/redis/docs.git"
 source_branch: "main"
 source_path: "content/commands/spop.md"
-source_commit: "bc92ea237bbfc2117c870c904f1a3ca619073ef1"
-source_commit_short: "bc92ea23"
-source_commit_date: "2026-06-18T14:53:00-05:00"
-generated_at: "2026-06-21T11:25:32Z"
+source_commit: "9d30f68c3dad1a6b3b7d30fe604b911348ce8152"
+source_commit_short: "9d30f68c"
+source_commit_date: "2026-07-24T10:52:10-07:00"
+generated_at: "2026-07-25T11:51:22Z"
 ---
 
 ---
@@ -99,15 +99,23 @@ The number of members to pop. Without it, a single member is popped.
 ## Examples
 
 {{% redis-cli %}}
-SADD myset "one"
-SADD myset "two"
-SADD myset "three"
-SPOP myset
-SMEMBERS myset
-SADD myset "four"
-SADD myset "five"
-SPOP myset 3
-SMEMBERS myset
+redis> SADD myset "one"
+(integer) 1
+redis> SADD myset "two"
+(integer) 1
+redis> SADD myset "three"
+(integer) 1
+redis> SPOP myset
+redis> SMEMBERS myset
+1) "one"
+2) "three"
+redis> SADD myset "four"
+(integer) 1
+redis> SADD myset "five"
+(integer) 1
+redis> SPOP myset 3
+redis> SMEMBERS myset
+1) "three"
 {{% /redis-cli %}}
 
 ## Details

@@ -4,10 +4,10 @@ framework: "shadcnui"
 source_repo: "https://github.com/shadcn-ui/ui"
 source_branch: "main"
 source_path: "apps/v4/content/docs/components/base/card.mdx"
-source_commit: "5602b81d8344e0d0d7178e3bf57612662cd42957"
-source_commit_short: "5602b81d"
-source_commit_date: "2026-06-21T15:49:35+04:00"
-generated_at: "2026-06-21T12:47:26Z"
+source_commit: "4baadbc6517070ae8f8feb2c97037adc2b305544"
+source_commit_short: "4baadbc6"
+source_commit_date: "2026-07-23T23:50:36+04:00"
+generated_at: "2026-07-25T11:50:48Z"
 ---
 
 ---
@@ -103,9 +103,7 @@ Card
 └── CardFooter
 ```
 
-## Examples
-
-### Size
+## Size
 
 Use the `size="sm"` prop to set the size of the card to small. The small size variant uses smaller spacing.
 
@@ -115,7 +113,7 @@ Use the `size="sm"` prop to set the size of the card to small. The small size va
   previewClassName="h-96"
 />
 
-### Spacing
+## Spacing
 
 In addition to the `size` prop, you can use the `--card-spacing` CSS variable to control the spacing between sections and the inset of card parts.
 
@@ -133,7 +131,7 @@ Use negative margins with `-mx-(--card-spacing)` to make content go edge to edge
   previewClassName="h-[24rem]"
 />
 
-### Image
+## Image
 
 Add an image before the card header to create a card with an image.
 

@@ -4,10 +4,10 @@ framework: "mongodb"
 source_repo: "https://github.com/mongodb/docs.git"
 source_branch: "main"
 source_path: "content/manual/manual/source/reference/method/db.collection.update.txt"
-source_commit: "96788e8ed140cbdde184ff82e1066dff4996bde4"
-source_commit_short: "96788e8e"
-source_commit_date: "2026-06-19T21:35:03-06:00"
-generated_at: "2026-06-21T07:41:52Z"
+source_commit: "ab9db26ed3d11618cdb61516d8180337d8e3f679"
+source_commit_short: "ab9db26e"
+source_commit_date: "2026-07-24T16:22:46-06:00"
+generated_at: "2026-07-25T11:51:15Z"
 ---
 
 =======================================
@@ -32,7 +32,7 @@ This method is available in deployments hosted in the following environments:
 
 .. versionchanged:: 5.0
 
-The :method:`db.collection.update()` method has the following form:
+The `db.collection.update()` method has the following form:
 
 ```javascript
 db.collection.update(
@@ -54,7 +54,7 @@ db.collection.update(
 
 ### Parameters
 
-The :method:`db.collection.update()` method takes the following parameters:
+The `db.collection.update()` method takes the following parameters:
 
 ### Returns
 
@@ -79,13 +79,13 @@ If you set `multi: true`, use the `update()` method only for `idempotent` operat
 
 ### Using `$expr` in an Update with `Upsert`
 
-Attempting to use the :manual:`$expr </reference/operator/query/expr/>` operator with the upsert flag set to `true` will generate an error.
+Attempting to use the :manual:`$expr </reference/operator/query/expr/>` operator with the upsert flag set to `true` generates an error.
 
 ### Sharded Collections
 
-To use :method:`db.collection.update()` with `multi: false on a sharded collection, you must include an exact match on the id` field or target a single shard (such as by including the shard key).
+To use `db.collection.update()` with `multi: false on a sharded collection, you must include an exact match on the id` field or target a single shard (such as by including the shard key).
 
-When the :method:`db.collection.update()` performs update operations (and not document replacement operations), :method:`db.collection.update()` can target multiple shards.
+When the `db.collection.update()` performs update operations (and not document replacement operations), `db.collection.update()` can target multiple shards.
 
 > **Seealso:** :method:`~db.collection.findAndModify()`
 
@@ -97,7 +97,7 @@ In earlier versions, the operation attempts to target using the replacement docu
 
 `upsert` on a Sharded Collection ``````````````````````````````````
 
-For a :method:`db.collection.update()` operation that includes `upsert: true <update-upsert>` and is on a sharded collection, you must include the full shard key in the `filter`:
+For a `db.collection.update()` operation that includes `upsert: true <update-upsert>` and is on a sharded collection, you must include the full shard key in the `filter`:
 
 - For an update operation.
 - For a replace document operation.
@@ -107,7 +107,7 @@ Shard Key Modification ``````````````````````
 
 .. include:: /includes/limits-sharding-shardkey-document-immutable.rst
 
-To modify the **existing** shard key value with :method:`db.collection.update()`:
+To modify the **existing** shard key value with `db.collection.update()`:
 
 - You :red:`must` run on a :binary:`~bin.mongos`. Do :red:`not`
 issue the operation directly on the shard.
@@ -125,7 +125,7 @@ See also `method-update-sharded-upsert`.
 
 Missing Shard Key `````````````````
 
-Documents in a sharded collection can be `missing the shard key fields <shard-key-missing>`. To use :method:`db.collection.update()` to set the document's **missing** shard key, you :red:`must` run on a :binary:`~bin.mongos`. Do :red:`not` issue the operation directly on the shard.
+Documents in a sharded collection can be `missing the shard key fields <shard-key-missing>`. To use `db.collection.update()` to set the document's **missing** shard key, you :red:`must` run on a :binary:`~bin.mongos`. Do :red:`not` issue the operation directly on the shard.
 
 In addition, the following requirements also apply:
 
@@ -145,7 +145,7 @@ Upsert within Transactions ``````````````````````````
 
 .. include:: /includes/extracts/transactions-upsert-availability.rst
 
-Write Concerns and Transactions ````````````````````````````````
+Write Concerns and Transactions ```````````````````````````````
 
 .. include:: /includes/extracts/transactions-operations-write-concern.rst
 
@@ -165,13 +165,13 @@ If all `db.collection.update()` operations finish the query phase before any cli
 
 A unique index on the `name` field ensures that only one document is created. With a unique index in place, the multiple `db.collection.update()` operations now exhibit the following behavior:
 
-- Exactly one `db.collection.update()` operation will successfully insert a new
+- Exactly one `db.collection.update()` operation successfully inserts a new
 document.
 
 - Other `db.collection.update()` operations either update the newly-inserted
 document or fail due to a unique key collision.
 
-In order for other `db.collection.update()` operations to update the newly-inserted document, **all** of the following conditions must be met:
+For other `db.collection.update()` operations to update the newly-inserted document, **all** of the following conditions must be met:
 
 - The target collection has a unique index that would cause a
 duplicate key error.
@@ -207,11 +207,15 @@ aggregation pipeline.
 
 ### Successful Results
 
-The :method:`db.collection.update()` method returns a :method:`WriteResult` object that contains the status of the operation. Upon success, the :method:`WriteResult` object contains the number of documents that matched the query condition, the number of documents inserted by the update, and the number of documents modified.
+The `db.collection.update()` method returns a :method:`WriteResult` object that contains the status of the operation. Upon success, the :method:`WriteResult` object contains the number of documents that matched the query condition, the number of documents inserted by the update, and the number of documents modified.
+
+> **Seealso:** - `WriteResult.nMatched`
+- `WriteResult.nUpserted`
+- `WriteResult.nModified`
 
 ### Write Concern Errors
 
-If the :method:`db.collection.update()` method encounters write concern errors, the results include the `WriteResult.writeConcernError` field.
+If the `db.collection.update()` method encounters write concern errors, the results include the `WriteResult.writeConcernError` field.
 
 The following table explains the possible values of `WriteResult.writeConcernError.provenance`:
 
@@ -219,7 +223,7 @@ The following table explains the possible values of `WriteResult.writeConcernErr
 
 ### Errors Unrelated to Write Concern
 
-If the :method:`db.collection.update()` method encounters a non-write concern error, the results include the `WriteResult.writeError` field.
+If the `db.collection.update()` method encounters a non-write concern error, the results include the `WriteResult.writeError` field.
 
 ## Examples
 
@@ -230,24 +234,24 @@ If the :method:`db.collection.update()` method encounters a non-write concern er
 When you specify the option `upsert: true <update-upsert>`:
 
 - If document(s) match the query criteria,
-:method:`db.collection.update()` performs an update.
+`db.collection.update()` performs an update.
 
 - If no document matches the query criteria,
-:method:`db.collection.update()` inserts a single document.
+`db.collection.update()` inserts a single document.
 
 > **Note:**   If multiple, identical `upserts <upsert>` are issued at
   roughly the same time, it is possible for
-  :method:`~db.collection.update()` used with :ref:`upsert: true
+  `update()` used with :ref:`upsert: true
   <update-upsert>` to create duplicate documents. See
   `update-with-unique-indexes` for more information.
 
-If you specify `upsert: true` on a sharded collection, you must include the full shard key in the `filter`. For additional :method:`db.collection.update()` behavior on a sharded collection, see `update-sharded-collection`.
+If you specify `upsert: true` on a sharded collection, you must include the full shard key in the `filter`. For additional `db.collection.update()` behavior on a sharded collection, see `update-sharded-collection`.
 
-The following tabs showcase a variety of uses of the `upsert` modifier with :method:`~db.collection.update()`.
+The following tabs showcase a variety of uses of the `upsert` modifier with `update()`.
 
 ### Update with Aggregation Pipeline
 
-The :method:`db.collection.update()` method can accept an `aggregation pipeline <aggregation-pipeline>` `[ <stage1>, <stage2>, ... ]` that specifies the modifications to perform. The pipeline can consist of the following stages:
+The `db.collection.update()` method can accept an `aggregation pipeline <aggregation-pipeline>` `[ <stage1>, <stage2>, ... ]` that specifies the modifications to perform. The pipeline can consist of the following stages:
 
 .. include:: /includes/list-update-agg-stages.rst
 
@@ -301,7 +305,7 @@ The operation targets "The Godfather" document and updates only array elements m
 
 ### Specify `hint` for Update Operations
 
-The `hint` option allows you to specify which index MongoDB should use for the update operation. This is useful when updating multiple documents and you want to ensure a specific index is used for performance. This example uses the existing `movies` collection from the sample_mflix database.
+The `hint` option specifies which index MongoDB uses for the update operation. Specify an index to ensure a consistent query plan when you update multiple documents. This example uses the existing `movies` collection from the sample_mflix database.
 
 First, create an index on the `year` field:
 

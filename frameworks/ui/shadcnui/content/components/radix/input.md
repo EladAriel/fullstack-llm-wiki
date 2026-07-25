@@ -4,10 +4,10 @@ framework: "shadcnui"
 source_repo: "https://github.com/shadcn-ui/ui"
 source_branch: "main"
 source_path: "apps/v4/content/docs/components/radix/input.mdx"
-source_commit: "5602b81d8344e0d0d7178e3bf57612662cd42957"
-source_commit_short: "5602b81d"
-source_commit_date: "2026-06-21T15:49:35+04:00"
-generated_at: "2026-06-21T12:47:26Z"
+source_commit: "4baadbc6517070ae8f8feb2c97037adc2b305544"
+source_commit_short: "4baadbc6"
+source_commit_date: "2026-07-23T23:50:36+04:00"
+generated_at: "2026-07-25T11:50:48Z"
 ---
 
 ---
@@ -69,9 +69,7 @@ import { Input } from "@/components/ui/input"
 <Input />
 ```
 
-## Examples
-
-### Basic
+## Basic
 
 <ComponentPreview
   styleName="radix-nova"
@@ -79,7 +77,7 @@ import { Input } from "@/components/ui/input"
   previewClassName="*:max-w-xs"
 />
 
-### Field
+## Field
 
 Use `Field`, `FieldLabel`, and `FieldDescription` to create an input with a
 label and description.
@@ -90,7 +88,7 @@ label and description.
   previewClassName="*:max-w-xs"
 />
 
-### Field Group
+## Field Group
 
 Use `FieldGroup` to show multiple `Field` blocks and to build forms.
 
@@ -100,7 +98,7 @@ Use `FieldGroup` to show multiple `Field` blocks and to build forms.
   previewClassName="*:max-w-xs"
 />
 
-### Disabled
+## Disabled
 
 Use the `disabled` prop to disable the input. To style the disabled state, add the `data-disabled` attribute to the `Field` component.
 
@@ -110,7 +108,7 @@ Use the `disabled` prop to disable the input. To style the disabled state, add t
   previewClassName="*:max-w-xs"
 />
 
-### Invalid
+## Invalid
 
 Use the `aria-invalid` prop to mark the input as invalid. To style the invalid state, add the `data-invalid` attribute to the `Field` component.
 
@@ -120,7 +118,7 @@ Use the `aria-invalid` prop to mark the input as invalid. To style the invalid s
   previewClassName="*:max-w-xs"
 />
 
-### File
+## File
 
 Use the `type="file"` prop to create a file input.
 
@@ -130,7 +128,7 @@ Use the `type="file"` prop to create a file input.
   previewClassName="*:max-w-xs"
 />
 
-### Inline
+## Inline
 
 Use `Field` with `orientation="horizontal"` to create an inline input.
 Pair with `Button` to create a search input with a button.
@@ -141,7 +139,7 @@ Pair with `Button` to create a search input with a button.
   previewClassName="*:max-w-xs"
 />
 
-### Grid
+## Grid
 
 Use a grid layout to place multiple inputs side by side.
 
@@ -151,7 +149,7 @@ Use a grid layout to place multiple inputs side by side.
   previewClassName="p-6"
 />
 
-### Required
+## Required
 
 Use the `required` attribute to indicate required inputs.
 
@@ -161,7 +159,7 @@ Use the `required` attribute to indicate required inputs.
   previewClassName="*:max-w-xs"
 />
 
-### Badge
+## Badge
 
 Use `Badge` in the label to highlight a recommended field.
 
@@ -171,7 +169,7 @@ Use `Badge` in the label to highlight a recommended field.
   previewClassName="*:max-w-xs"
 />
 
-### Input Group
+## Input Group
 
 To add icons, text, or buttons inside an input, use the `InputGroup` component. See the [Input Group](/docs/components/input-group) component for more examples.
 
@@ -181,7 +179,7 @@ To add icons, text, or buttons inside an input, use the `InputGroup` component. 
   previewClassName="*:max-w-xs"
 />
 
-### Button Group
+## Button Group
 
 To add buttons to an input, use the `ButtonGroup` component. See the [Button Group](/docs/components/button-group) component for more examples.
 
@@ -191,7 +189,7 @@ To add buttons to an input, use the `ButtonGroup` component. See the [Button Gro
   previewClassName="*:max-w-xs"
 />
 
-### Form
+## Form
 
 A full form example with multiple inputs, a select, and a button.
 

@@ -4,10 +4,10 @@ framework: "Langfuse"
 source_repo: "https://github.com/langfuse/langfuse-docs"
 source_branch: "main"
 source_path: "content/docs/evaluation/overview.mdx"
-source_commit: "4a702ece53852a6af86b3883f434adf3f5cae421"
-source_commit_short: "4a702ece"
-source_commit_date: "2026-06-23T13:41:14Z"
-generated_at: "2026-06-23T13:55:15Z"
+source_commit: "fcd1eca34a924867563c3c4e801254c4e66c0021"
+source_commit_short: "fcd1eca3"
+source_commit_date: "2026-07-25T00:45:45Z"
+generated_at: "2026-07-25T11:51:12Z"
 ---
 
 ---
@@ -45,6 +45,7 @@ Once you have that context, use the table below to find the right feature page:
 | If you want to...                                   | Use this Langfuse feature                                                                                                                      |
 | --------------------------------------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------- |
 | Review and rate traces manually                     | [Annotation Queues](/docs/evaluation/evaluation-methods/annotation-queues), [Scores via UI](/docs/evaluation/evaluation-methods/scores-via-ui) |
+| Collect feedback from your end users                | [User Feedback](/docs/observability/features/user-feedback)                                                                                    |
 | Leave open-ended notes on traces                    | [Text scores](/docs/evaluation/scores/overview#score-types), [Annotation Queues](/docs/evaluation/evaluation-methods/annotation-queues)        |
 | Track recurring failure categories                  | [Score configs](/faq/all/manage-score-configs), [scores](/docs/evaluation/scores/overview#score-types)                                         |
 | Build a reusable set of test cases                  | [Datasets](/docs/evaluation/experiments/datasets)                                                                                              |

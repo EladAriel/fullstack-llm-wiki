@@ -4,10 +4,10 @@ framework: "nextjs"
 source_repo: "https://github.com/vercel/next.js/"
 source_branch: "canary"
 source_path: "docs/02-pages/03-building-your-application/01-routing/08-custom-error.mdx"
-source_commit: "79142d7806ff4194c8d9885b80fa69db5ecf534a"
-source_commit_short: "79142d78"
-source_commit_date: "2026-06-20T23:40:12Z"
-generated_at: "2026-06-21T12:07:17Z"
+source_commit: "dcf242a17b5d4622bbd9624db531a9d84177619f"
+source_commit_short: "dcf242a1"
+source_commit_date: "2026-07-25T10:16:19+02:00"
+generated_at: "2026-07-25T11:50:53Z"
 ---
 
 ---
@@ -20,6 +20,8 @@ description: Override and extend the built-in Error page to handle custom errors
 A 404 page may be accessed very often. Server-rendering an error page for every visit increases the load of the Next.js server. This can result in increased costs and slow experiences.
 
 To avoid the above pitfalls, Next.js provides a static 404 page by default without having to add any additional files.
+
+> **Good to know**: The default 404 and 500 pages follow the operating system's color scheme via `prefers-color-scheme` and do not read an app-level theme. Because `pages/404.js` and `pages/500.js` render inside your custom `App`, providing your own files lets your global styles and theme apply.
 
 ### Customizing The 404 Page
 

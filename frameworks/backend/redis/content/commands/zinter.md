@@ -4,10 +4,10 @@ framework: "redis"
 source_repo: "https://github.com/redis/docs.git"
 source_branch: "main"
 source_path: "content/commands/zinter.md"
-source_commit: "bc92ea237bbfc2117c870c904f1a3ca619073ef1"
-source_commit_short: "bc92ea23"
-source_commit_date: "2026-06-18T14:53:00-05:00"
-generated_at: "2026-06-21T11:25:32Z"
+source_commit: "9d30f68c3dad1a6b3b7d30fe604b911348ce8152"
+source_commit_short: "9d30f68c"
+source_commit_date: "2026-07-24T10:52:10-07:00"
+generated_at: "2026-07-25T11:51:22Z"
 ---
 
 ---
@@ -138,13 +138,24 @@ Also return the score of each member.
 ## Examples
 
 {{% redis-cli %}}
-ZADD zset1 1 "one"
-ZADD zset1 2 "two"
-ZADD zset2 1 "one"
-ZADD zset2 2 "two"
-ZADD zset2 3 "three"
-ZINTER 2 zset1 zset2
-ZINTER 2 zset1 zset2 WITHSCORES
+redis> ZADD zset1 1 "one"
+(integer) 1
+redis> ZADD zset1 2 "two"
+(integer) 1
+redis> ZADD zset2 1 "one"
+(integer) 1
+redis> ZADD zset2 2 "two"
+(integer) 1
+redis> ZADD zset2 3 "three"
+(integer) 1
+redis> ZINTER 2 zset1 zset2
+1) "one"
+2) "two"
+redis> ZINTER 2 zset1 zset2 WITHSCORES
+1) "one"
+2) "2"
+3) "two"
+4) "4"
 {{% /redis-cli %}}
 
 ## Redis Software and Redis Cloud compatibility

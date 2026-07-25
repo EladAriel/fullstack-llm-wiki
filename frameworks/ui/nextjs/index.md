@@ -8,9 +8,9 @@ This is a local LLM-friendly wiki generated from the official nextjs documentati
 - Source repo: `https://github.com/vercel/next.js/`
 - Source branch: `canary`
 - Source docs path: `docs`
-- Source commit: `79142d78`
-- Source commit date: `2026-06-20T23:40:12Z`
-- Wiki generated at: `2026-06-21T12:07:17Z`
+- Source commit: `dcf242a1`
+- Source commit date: `2026-07-25T10:16:19+02:00`
+- Wiki generated at: `2026-07-25T11:50:53Z`
 
 ## How the IDE LLM should use this wiki
 
@@ -61,6 +61,7 @@ This is a local LLM-friendly wiki generated from the official nextjs documentati
 - [Analytics](content/01-app/02-guides/analytics.md)
 - [Authentication](content/01-app/02-guides/authentication.md)
 - [Backend For Frontend](content/01-app/02-guides/backend-for-frontend.md)
+- [Building](content/01-app/02-guides/building.md)
 - [Caching Without Cache Components](content/01-app/02-guides/caching-without-cache-components.md)
 - [Cdn Caching](content/01-app/02-guides/cdn-caching.md)
 - [Ci Build Caching](content/01-app/02-guides/ci-build-caching.md)
@@ -78,6 +79,7 @@ This is a local LLM-friendly wiki generated from the official nextjs documentati
 - [Incremental Static Regeneration](content/01-app/02-guides/incremental-static-regeneration.md)
 - [Instant Navigation](content/01-app/02-guides/instant-navigation.md)
 - [Instrumentation](content/01-app/02-guides/instrumentation.md)
+- [Interactive Apps](content/01-app/02-guides/interactive-apps.md)
 - [Internationalization](content/01-app/02-guides/internationalization.md)
 - [Json Ld](content/01-app/02-guides/json-ld.md)
 - [Lazy Loading](content/01-app/02-guides/lazy-loading.md)
@@ -264,6 +266,7 @@ This is a local LLM-friendly wiki generated from the official nextjs documentati
 - [Serverexternalpackages](content/01-app/03-api-reference/05-config/01-next-config-js/serverExternalPackages.md)
 - [Staletimes](content/01-app/03-api-reference/05-config/01-next-config-js/staleTimes.md)
 - [Staticgeneration](content/01-app/03-api-reference/05-config/01-next-config-js/staticGeneration.md)
+- [Supportsimmutableassets](content/01-app/03-api-reference/05-config/01-next-config-js/supportsImmutableAssets.md)
 - [Taint](content/01-app/03-api-reference/05-config/01-next-config-js/taint.md)
 - [Trailingslash](content/01-app/03-api-reference/05-config/01-next-config-js/trailingSlash.md)
 - [Transpilepackages](content/01-app/03-api-reference/05-config/01-next-config-js/transpilePackages.md)
@@ -272,11 +275,12 @@ This is a local LLM-friendly wiki generated from the official nextjs documentati
 - [Turbopackignoreissue](content/01-app/03-api-reference/05-config/01-next-config-js/turbopackIgnoreIssue.md)
 - [Turbopacklocalpostcssconfig](content/01-app/03-api-reference/05-config/01-next-config-js/turbopackLocalPostcssConfig.md)
 - [Turbopackmemoryeviction](content/01-app/03-api-reference/05-config/01-next-config-js/turbopackMemoryEviction.md)
+- [Turbopackrustreactcompiler](content/01-app/03-api-reference/05-config/01-next-config-js/turbopackRustReactCompiler.md)
 - [Typedroutes](content/01-app/03-api-reference/05-config/01-next-config-js/typedRoutes.md)
 - [Typescript](content/01-app/03-api-reference/05-config/01-next-config-js/typescript.md)
 - [Urlimports](content/01-app/03-api-reference/05-config/01-next-config-js/urlImports.md)
 - [Uselightningcss](content/01-app/03-api-reference/05-config/01-next-config-js/useLightningcss.md)
-- [Viewtransition](content/01-app/03-api-reference/05-config/01-next-config-js/viewTransition.md)
+- [Usetypescriptcli](content/01-app/03-api-reference/05-config/01-next-config-js/useTypeScriptCli.md)
 - [Webvitalsattribution](content/01-app/03-api-reference/05-config/01-next-config-js/webVitalsAttribution.md)
 - [Webpack](content/01-app/03-api-reference/05-config/01-next-config-js/webpack.md)
 - [02 Typescript](content/01-app/03-api-reference/05-config/02-typescript.md)
@@ -296,6 +300,7 @@ This is a local LLM-friendly wiki generated from the official nextjs documentati
 - [09 Output Types](content/01-app/03-api-reference/07-adapters/09-output-types.md)
 - [10 Routing Information](content/01-app/03-api-reference/07-adapters/10-routing-information.md)
 - [11 Use Cases](content/01-app/03-api-reference/07-adapters/11-use-cases.md)
+- [12 Immutable Static Assets](content/01-app/03-api-reference/07-adapters/12-immutable-static-assets.md)
 - [Original Source Index](content/01-app/03-api-reference/07-adapters/_source_index.md)
 - [07 Edge](content/01-app/03-api-reference/07-edge.md)
 - [08 Turbopack](content/01-app/03-api-reference/08-turbopack.md)
@@ -438,6 +443,7 @@ This is a local LLM-friendly wiki generated from the official nextjs documentati
 - [Typescript](content/02-pages/04-api-reference/04-config/01-next-config-js/typescript.md)
 - [Urlimports](content/02-pages/04-api-reference/04-config/01-next-config-js/urlImports.md)
 - [Uselightningcss](content/02-pages/04-api-reference/04-config/01-next-config-js/useLightningcss.md)
+- [Usetypescriptcli](content/02-pages/04-api-reference/04-config/01-next-config-js/useTypeScriptCli.md)
 - [Webvitalsattribution](content/02-pages/04-api-reference/04-config/01-next-config-js/webVitalsAttribution.md)
 - [Webpack](content/02-pages/04-api-reference/04-config/01-next-config-js/webpack.md)
 - [01 Typescript](content/02-pages/04-api-reference/04-config/01-typescript.md)

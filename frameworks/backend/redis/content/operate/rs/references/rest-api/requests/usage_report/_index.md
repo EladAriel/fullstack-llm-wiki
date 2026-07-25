@@ -4,10 +4,10 @@ framework: "redis"
 source_repo: "https://github.com/redis/docs.git"
 source_branch: "main"
 source_path: "content/operate/rs/references/rest-api/requests/usage_report/_index.md"
-source_commit: "bc92ea237bbfc2117c870c904f1a3ca619073ef1"
-source_commit_short: "bc92ea23"
-source_commit_date: "2026-06-18T14:53:00-05:00"
-generated_at: "2026-06-21T11:25:32Z"
+source_commit: "9d30f68c3dad1a6b3b7d30fe604b911348ce8152"
+source_commit_short: "9d30f68c"
+source_commit_date: "2026-07-24T10:52:10-07:00"
+generated_at: "2026-07-25T11:51:22Z"
 ---
 
 ---
@@ -75,7 +75,7 @@ Returns Newline Delimited JSON (NDJSON), which represents the usage report for e
 | replication | boolean | Indicates if replication is enabled |
 | software_version | string | The Redis Software version |
 | used_memory | number | Used memory in bytes |
-| <span class="break-all">using_redis_search</span> | boolean | Indicates if RediSearch is in use |
+| <span class="break-all">using_redis_search</span> | boolean | Indicates if Redis Search is in use |
 | <span class="break-all">master_shards_count</span> | number | Amount of primary shards |
 | license | object | License information for the cluster<br />{{<code>}} "license": {<br />    "activation_date": string,<br />    "expiration_date": string,<br />    "ram_shards_in_use": integer,<br />    "ram_shards_limit": integer,<br />    "flash_shards_in_use": integer,<br />    "flash_shards_limit": integer,<br />    "shards_limit": integer<br />}{{</code>}}<br />**activation_date**: License activation date and time<br />**expiration_date**: License expiration date and time<br />**ram_shards_in_use**: Amount of RAM shards in use<br />**ram_shards_limit**: Amount of RAM shards allowed<br />**flash_shards_in_use**: Amount of flash shards in use<br />**flash_shards_limit**: Amount of flash shards allowed<br />**shards_limit**: Total shards limit |
 

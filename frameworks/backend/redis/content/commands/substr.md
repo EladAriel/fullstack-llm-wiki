@@ -4,10 +4,10 @@ framework: "redis"
 source_repo: "https://github.com/redis/docs.git"
 source_branch: "main"
 source_path: "content/commands/substr.md"
-source_commit: "bc92ea237bbfc2117c870c904f1a3ca619073ef1"
-source_commit_short: "bc92ea23"
-source_commit_date: "2026-06-18T14:53:00-05:00"
-generated_at: "2026-06-21T11:25:32Z"
+source_commit: "9d30f68c3dad1a6b3b7d30fe604b911348ce8152"
+source_commit_short: "9d30f68c"
+source_commit_date: "2026-07-24T10:52:10-07:00"
+generated_at: "2026-07-25T11:51:22Z"
 ---
 
 ---
@@ -101,11 +101,16 @@ The end offset, zero-based and inclusive. A negative value counts from the end o
 ## Examples
 
 {{% redis-cli %}}
-SET mykey "This is a string"
-GETRANGE mykey 0 3
-GETRANGE mykey -3 -1
-GETRANGE mykey 0 -1
-GETRANGE mykey 10 100
+redis> SET mykey "This is a string"
+OK
+redis> GETRANGE mykey 0 3
+"This"
+redis> GETRANGE mykey -3 -1
+"ing"
+redis> GETRANGE mykey 0 -1
+"This is a string"
+redis> GETRANGE mykey 10 100
+"string"
 {{% /redis-cli %}}
 
 ## Redis Software and Redis Cloud compatibility

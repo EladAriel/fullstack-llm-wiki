@@ -4,10 +4,10 @@ framework: "mongodb"
 source_repo: "https://github.com/mongodb/docs.git"
 source_branch: "main"
 source_path: "content/manual/manual/source/core/queryable-encryption/quick-start.txt"
-source_commit: "96788e8ed140cbdde184ff82e1066dff4996bde4"
-source_commit_short: "96788e8e"
-source_commit_date: "2026-06-19T21:35:03-06:00"
-generated_at: "2026-06-21T07:41:52Z"
+source_commit: "ab9db26ed3d11618cdb61516d8180337d8e3f679"
+source_commit_short: "ab9db26e"
+source_commit_date: "2026-07-24T16:22:46-06:00"
+generated_at: "2026-07-25T11:51:15Z"
 ---
 
 ================================
@@ -30,7 +30,7 @@ Enterprise Advanced to implement this sample application.
 
 > **Warning:** Version 8.2.0 of `mongocryptd` might not run on Windows.
 This bug affects `In-Use Encryption <security-in-use-encryption>`
-with the MongoDB .NET/C# driver and might affect other drivers based
+with the MongoDB .NET/C# Driver and might affect other drivers based
 on your `mongocryptd` spawn arguments.
 To learn more about this issue and how to resolve it, see `8.2-known-issues`
 in the MongoDB 8.2 Release Notes.

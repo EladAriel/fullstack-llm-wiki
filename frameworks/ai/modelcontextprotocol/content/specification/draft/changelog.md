@@ -4,10 +4,10 @@ framework: "Model Context Protocol"
 source_repo: "https://github.com/modelcontextprotocol/modelcontextprotocol"
 source_branch: "main"
 source_path: "docs/specification/draft/changelog.mdx"
-source_commit: "47501e4ced7823014b83be168916d4c9e63b594e"
-source_commit_short: "47501e4c"
-source_commit_date: "2026-06-22T09:16:44-07:00"
-generated_at: "2026-06-23T14:04:43Z"
+source_commit: "7634684382c3d14cf7e9f14073fe40a2d8ace3fa"
+source_commit_short: "76346843"
+source_commit_date: "2026-07-23T16:49:30-07:00"
+generated_at: "2026-07-25T11:50:39Z"
 ---
 
 ---
@@ -23,7 +23,7 @@ the previous revision, [2025-11-25](/specification/2025-11-25).
 
 1. Remove protocol-level sessions and the `Mcp-Session-Id` header from the Streamable HTTP transport. List endpoints (`tools/list`, `resources/list`, `prompts/list`) no longer vary per-connection. Servers that need cross-call state use explicit, server-minted handles passed as ordinary tool arguments ([SEP-2567](https://github.com/modelcontextprotocol/modelcontextprotocol/pull/2567)).
 
-2. Make MCP stateless: remove the `initialize`/`notifications/initialized` handshake. Every request now carries its protocol version, client identity, and client capabilities in `_meta` (`io.modelcontextprotocol/protocolVersion`, `io.modelcontextprotocol/clientInfo`, `io.modelcontextprotocol/clientCapabilities`). Version mismatches return `UnsupportedProtocolVersionError` ([SEP-2575](https://github.com/modelcontextprotocol/modelcontextprotocol/pull/2575)).
+2. Make MCP stateless: remove the `initialize`/`notifications/initialized` handshake. Every request now carries its protocol version and client capabilities in `_meta` (`io.modelcontextprotocol/protocolVersion`, `io.modelcontextprotocol/clientCapabilities`). Clients SHOULD identify themselves on each request (`io.modelcontextprotocol/clientInfo`), and servers SHOULD identify themselves in each result's `_meta` (`io.modelcontextprotocol/serverInfo`). Version mismatches return `UnsupportedProtocolVersionError` ([SEP-2575](https://github.com/modelcontextprotocol/modelcontextprotocol/pull/2575)).
 
 3. Add `server/discover`: servers MUST implement this RPC to advertise their supported protocol versions, capabilities, and identity. Clients MAY call it before any other request for up-front version selection, or use it as a backward-compatibility probe on STDIO ([SEP-2575](https://github.com/modelcontextprotocol/modelcontextprotocol/pull/2575)).
 

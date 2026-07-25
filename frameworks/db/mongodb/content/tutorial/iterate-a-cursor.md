@@ -4,10 +4,10 @@ framework: "mongodb"
 source_repo: "https://github.com/mongodb/docs.git"
 source_branch: "main"
 source_path: "content/manual/manual/source/tutorial/iterate-a-cursor.txt"
-source_commit: "96788e8ed140cbdde184ff82e1066dff4996bde4"
-source_commit_short: "96788e8e"
-source_commit_date: "2026-06-19T21:35:03-06:00"
-generated_at: "2026-06-21T07:41:52Z"
+source_commit: "ab9db26ed3d11618cdb61516d8180337d8e3f679"
+source_commit_short: "ab9db26e"
+source_commit_date: "2026-07-24T16:22:46-06:00"
+generated_at: "2026-07-25T11:51:15Z"
 ---
 
 ===============================
@@ -28,6 +28,10 @@ This tutorial overviews how to:
 
 - Return and access the cursor documents as an array with the
 :method:`~cursor.toArray()` method.
+
+### Batch Sizes
+
+A cursor returns documents in batches. By default, mongosh displays 20 documents per cursor iteration. You can use `config.set("displayBatchSize") <mongosh-configure-api-params>` to change it, if this is too much or too little for your needs.
 
 ## Before You Begin
 
@@ -55,9 +59,9 @@ In :binary:`~bin.mongosh`, the cursor does not automatically iterate when you as
 let myCursor = db.users.find( { type: "user" } )
 ```
 
-You can call the cursor variable in the shell to iterate up to 20 times [#set-shell-batch-size]_ and print the matching documents.
+You can call the cursor variable in the shell to print matching documents.
 
-If the returned cursor is not assigned to a variable using the `let` keyword, then the cursor is automatically iterated up to the batch size [#set-shell-batch-size]_, printing the first batch of results.
+If the returned cursor is not assigned to a variable using the `let` keyword, then the cursor is automatically iterated up to the batch size, printing the first batch of results.
 
 ### Access Documents in a Cursor with :method:`next() <cursor.next()>`
 
@@ -86,5 +90,3 @@ You can access the resulting document array as a traditional array.
 The :method:`~cursor.toArray()` method loads all documents returned by the cursor into RAM and exhausts the cursor.
 
 Some :driver:`Drivers </>` provide access to the documents by using an index on the cursor (i.e. `cursor[index]`). This is a shortcut for first calling the :method:`~cursor.toArray()` method and then using an index on the resulting array.
-
-.. include:: /includes/footnote-set-shell-batch-size.rst

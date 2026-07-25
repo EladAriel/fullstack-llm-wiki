@@ -4,10 +4,10 @@ framework: "redis"
 source_repo: "https://github.com/redis/docs.git"
 source_branch: "main"
 source_path: "content/integrate/redis-data-integration/data-pipelines/transform-examples/redis-string-example.md"
-source_commit: "bc92ea237bbfc2117c870c904f1a3ca619073ef1"
-source_commit_short: "bc92ea23"
-source_commit_date: "2026-06-18T14:53:00-05:00"
-generated_at: "2026-06-21T11:25:32Z"
+source_commit: "9d30f68c3dad1a6b3b7d30fe604b911348ce8152"
+source_commit_short: "9d30f68c"
+source_commit_date: "2026-07-24T10:52:10-07:00"
+generated_at: "2026-07-25T11:51:22Z"
 ---
 
 ---
@@ -30,9 +30,6 @@ weight: 30
 
 The string data type is useful for capturing a string representation of a single column from
 a source table.
-
-{{< note >}}The `string` data type is supported by the classic processor only.
-The Flink processor currently supports only `hash` and `json` outputs.{{< /note >}}
 
 In the example job below, the `title` column is captured from the `album` table in the source.
 The `title` is then written to the Redis target database as a string under a custom key of the

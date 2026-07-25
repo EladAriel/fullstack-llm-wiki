@@ -4,10 +4,10 @@ framework: "redis"
 source_repo: "https://github.com/redis/docs.git"
 source_branch: "main"
 source_path: "content/operate/rs/references/cli-utilities/crdb-cli/crdb/create.md"
-source_commit: "bc92ea237bbfc2117c870c904f1a3ca619073ef1"
-source_commit_short: "bc92ea23"
-source_commit_date: "2026-06-18T14:53:00-05:00"
-generated_at: "2026-06-21T11:25:32Z"
+source_commit: "9d30f68c3dad1a6b3b7d30fe604b911348ce8152"
+source_commit_short: "9d30f68c"
+source_commit_date: "2026-07-24T10:52:10-07:00"
+generated_at: "2026-07-25T11:51:22Z"
 ---
 
 ---
@@ -66,8 +66,8 @@ Before you create an Active-Active database, you must have:
 | memory-size \<maximum_memory\>                                                                | size in bytes, megabytes (MB), or gigabytes (GB) | Maximum database memory (required)                                                                                                                                                                                           |
 | instance fqdn=\<cluster_fqdn\>,username=\<username\>,password=\<password\>,url=https://\<hostname-or-IP\>:9443,replication_endpoint=\<hostname-or-IP\>:\<port\>,replication_tls_sni=\<hostname\>         | strings                                         | The connection information for the participating clusters (required for each participating cluster)<br/><br/>**Required:**<br/>• `fqdn` - Cluster fully qualified domain name<br/>• `username` - Cluster username<br/>• `password` - Cluster password<br/><br/>**Optional:**<br/>• `url` - URL to access the cluster's REST API<br/>• `replication_endpoint` - Address to access the database instance for peer replication<br/>• `replication_tls_sni` - Cluster [Server Name Indication (SNI)](https://en.wikipedia.org/wiki/Server_Name_Indication) hostname for TLS connections |
 | port \<port_number\>                                                                 | integer                                         | TCP port for the Active-Active database on all participating clusters                                                                                                                                                        |
-| default-db-config \<configuration\>                                                  | string                                          | Default database configuration options                                                                                                                                                                                       |
-| default-db-config-file \<filename\>                                                  | filepath                                        | Default database configuration options from a file                                                                                                                                                                           |
+| default-db-config \<configuration\>                                                  | string                                          | Default database configuration options. For a list of database settings, see the [CRDB database config object]({{<relref "/operate/rs/references/rest-api/objects/crdb/database_config">}}) reference.|
+| default-db-config-file \<filename\>                                                  | filepath                                        | Default database configuration options from a file. For a list of database settings, see the [CRDB database config object]({{<relref "/operate/rs/references/rest-api/objects/crdb/database_config">}}) reference.|
 | wait                                                                               |                                                 | Prevents `crdb-cli` from running another command before this command finishes                                                                                                                                                  |
 | no-wait                                                                            |                                                 | `crdb-cli` can run another command before this command finishes                                                                                                                                                 |
 | compression                                                                           | 0-6                                             | The level of data compression: <br /><br > 0 = No compression <br /><br > 6 = High compression and resource load (Default: 3)                                                                                                            |

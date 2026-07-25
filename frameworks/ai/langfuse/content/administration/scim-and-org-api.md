@@ -4,10 +4,10 @@ framework: "Langfuse"
 source_repo: "https://github.com/langfuse/langfuse-docs"
 source_branch: "main"
 source_path: "content/docs/administration/scim-and-org-api.mdx"
-source_commit: "4a702ece53852a6af86b3883f434adf3f5cae421"
-source_commit_short: "4a702ece"
-source_commit_date: "2026-06-23T13:41:14Z"
-generated_at: "2026-06-23T13:55:15Z"
+source_commit: "fcd1eca34a924867563c3c4e801254c4e66c0021"
+source_commit_short: "fcd1eca3"
+source_commit_date: "2026-07-25T00:45:45Z"
+generated_at: "2026-07-25T11:51:12Z"
 ---
 
 ---
@@ -109,7 +109,7 @@ The following SCIM endpoints are available:
 
 #### Okta
 
-This guide will cover how to setup Okta user provisioning for Langfuse. First, you will need to setup [authentication via OIDC](/docs/administration/authentication-and-sso).
+This guide will cover how to set up Okta user provisioning for Langfuse. First, you will need to set up [authentication via OIDC](/docs/administration/authentication-and-sso).
 
 <Video
   src="https://static.langfuse.com/docs-videos/2025-08-06-okta-scim-setup.mov.mp4"
@@ -118,7 +118,7 @@ This guide will cover how to setup Okta user provisioning for Langfuse. First, y
 />
 
 For user provisioning, Langfuse supports the SCIM 2.0 protocol.
-To setup user provisioning in Okta, follow these steps:
+To set up user provisioning in Okta, follow these steps:
 
 1. **Create a SAML/SCIM Application**:
    - Log in to your Okta admin console.

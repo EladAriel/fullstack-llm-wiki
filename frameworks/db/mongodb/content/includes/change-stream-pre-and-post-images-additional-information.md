@@ -4,10 +4,10 @@ framework: "mongodb"
 source_repo: "https://github.com/mongodb/docs.git"
 source_branch: "main"
 source_path: "content/manual/manual/source/includes/change-stream-pre-and-post-images-additional-information.rst"
-source_commit: "96788e8ed140cbdde184ff82e1066dff4996bde4"
-source_commit_short: "96788e8e"
-source_commit_date: "2026-06-19T21:35:03-06:00"
-generated_at: "2026-06-21T07:41:52Z"
+source_commit: "ab9db26ed3d11618cdb61516d8180337d8e3f679"
+source_commit_short: "ab9db26e"
+source_commit_date: "2026-07-24T16:22:46-06:00"
+generated_at: "2026-07-25T11:51:15Z"
 ---
 
 Pre- and post-images are not available for a `change stream event <change-stream-output>` if the images were:
@@ -91,6 +91,14 @@ shard node on a sharded cluster or a :binary:`~bin.mongod` node on a replica set
     use config
     db.system.preimages.totalSize()
     db.system.preimages.stats()
+
+ .. note::
+
+    You must have the :authaction:`collStats` privilege action on the
+    ``config.system.preimages`` collection to run these commands.
+
+    To run these commands on an {+atlas+} deployment, you must have
+    the :atlasrole:`atlasAdmin` role.
 
 - Pre-images are removed asynchronously by a background process.
 ```

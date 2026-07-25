@@ -4,10 +4,10 @@ framework: "redis"
 source_repo: "https://github.com/redis/docs.git"
 source_branch: "main"
 source_path: "content/operate/rs/_index.md"
-source_commit: "bc92ea237bbfc2117c870c904f1a3ca619073ef1"
-source_commit_short: "bc92ea23"
-source_commit_date: "2026-06-18T14:53:00-05:00"
-generated_at: "2026-06-21T11:25:32Z"
+source_commit: "9d30f68c3dad1a6b3b7d30fe604b911348ce8152"
+source_commit_short: "9d30f68c"
+source_commit_date: "2026-07-24T10:52:10-07:00"
+generated_at: "2026-07-25T11:51:22Z"
 ---
 
 ---
@@ -64,6 +64,7 @@ Create and manage a [Redis database]({{< relref "/operate/rs/databases" >}}) on 
 ## Reference
 Use command-line utilities and the REST API to manage the cluster and databases.
 - [rladmin]({{< relref "/operate/rs/references/cli-utilities/rladmin" >}}), [crdb-cli]({{< relref "/operate/rs/references/cli-utilities/crdb-cli" >}}), & [other utilities]({{< relref "/operate/rs/references/cli-utilities" >}})
+- [`redisctl`](https://github.com/redis/redisctl) — a unified CLI for managing Redis Software and Redis Cloud from your terminal
 - [REST API reference]({{< relref "/operate/rs/references/rest-api" >}}) & [examples]({{< relref "/operate/rs/references/rest-api/quick-start" >}})
 - [Redis commands]({{< relref "/commands" >}})
 

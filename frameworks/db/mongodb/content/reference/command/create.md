@@ -4,10 +4,10 @@ framework: "mongodb"
 source_repo: "https://github.com/mongodb/docs.git"
 source_branch: "main"
 source_path: "content/manual/manual/source/reference/command/create.txt"
-source_commit: "96788e8ed140cbdde184ff82e1066dff4996bde4"
-source_commit_short: "96788e8e"
-source_commit_date: "2026-06-19T21:35:03-06:00"
-generated_at: "2026-06-21T07:41:52Z"
+source_commit: "ab9db26ed3d11618cdb61516d8180337d8e3f679"
+source_commit_short: "ab9db26e"
+source_commit_date: "2026-07-24T16:22:46-06:00"
+generated_at: "2026-07-25T11:51:15Z"
 ---
 
 =========================
@@ -94,7 +94,7 @@ The :method:`db.createCollection()` method and the :method:`db.createView()` met
 
 .. versionchanged:: 5.0
 
-When using `Stable API <stable-api>` V1, you cannot specify the following fields in a `create` command:
+When using `Stable API <stable-api>` V1, all `create` command fields are supported except the following fields, which are not available in Stable API V1:
 
 - `autoIndexId`
 - `capped`
@@ -231,7 +231,7 @@ db.runCommand ( {
 });
 ```
 
-This collation will be used by indexes and operations that support collation unless they explicitly specify a different collation. For example, insert the following documents into `myColl`:
+This collation is used by indexes and operations that support collation unless they explicitly specify a different collation. For example, insert the following documents into `myColl`:
 
 ```javascript
 { _id: 1, category: "café" }
@@ -253,7 +253,7 @@ The operation returns documents in the following order:
 { "_id" : 1, "category" : "café" }
 ```
 
-The same operation on a collection that uses simple binary collation (i.e. no specific collation set) returns documents in the following order:
+The same operation on a collection that uses binary collation returns documents in the following order:
 
 ```javascript
 { "_id" : 3, "category" : "cafE" }
@@ -275,6 +275,6 @@ db.runCommand( {
 } )
 ```
 
-This operation creates a new collection named `users` with a specific configuration string that MongoDB will pass to the `wiredTiger` storage engine. See the :wtdocs-v5.0:`WiredTiger documentation of collection level options </struct_w_t___s_e_s_s_i_o_n.html>` for specific `wiredTiger` options.
+This operation creates a new collection named `users` with a specific configuration string that MongoDB passes to the `wiredTiger` storage engine. See the :wtdocs-v5.0:`WiredTiger documentation of collection level options </struct_w_t___s_e_s_s_i_o_n.html>` for specific `wiredTiger` options.
 
 .. include:: /includes/fact-encryption-options-create-collection.rst

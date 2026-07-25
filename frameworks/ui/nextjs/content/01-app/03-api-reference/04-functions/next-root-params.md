@@ -4,10 +4,10 @@ framework: "nextjs"
 source_repo: "https://github.com/vercel/next.js/"
 source_branch: "canary"
 source_path: "docs/01-app/03-api-reference/04-functions/next-root-params.mdx"
-source_commit: "79142d7806ff4194c8d9885b80fa69db5ecf534a"
-source_commit_short: "79142d78"
-source_commit_date: "2026-06-20T23:40:12Z"
-generated_at: "2026-06-21T12:07:17Z"
+source_commit: "dcf242a17b5d4622bbd9624db531a9d84177619f"
+source_commit_short: "dcf242a1"
+source_commit_date: "2026-07-25T10:16:19+02:00"
+generated_at: "2026-07-25T11:50:53Z"
 ---
 
 ---
@@ -59,8 +59,92 @@ Root parameters are the [dynamic segments](/docs/app/api-reference/file-conventi
 >
 > - Root parameter names must be valid JavaScript function identifiers. Kebab-cased segment names (e.g. `[post-slug]`) are not supported and will cause an error at dev time or during build.
 > - `next/root-params` can be used in Server Components. It cannot be used in Client Components, Server Actions, or [Route Handlers](/docs/app/api-reference/file-conventions/route). Support for Route Handlers is planned for a future release.
-> - With [Cache Components](/docs/app/api-reference/config/next-config-js/cacheComponents) enabled, [`generateStaticParams`](/docs/app/api-reference/functions/generate-static-params) must return at least one value for each root parameter. Providing values makes them static route parameters, required for prerendering static shells.
-> - The examples on this page use [`PageProps`](/docs/app/api-reference/file-conventions/page#page-props-helper) and [`LayoutProps`](/docs/app/api-reference/file-conventions/layout#layout-props-helper), which are auto-generated type helpers based on your route structure.
+> - Types for the `next/root-params` exports are generated during `next dev`, `next build`, or [`next typegen`](/docs/app/api-reference/cli/next#next-typegen-options), the same as [`PageProps` and `LayoutProps`](/docs/app/api-reference/config/typescript#route-aware-type-helpers).
+
+## Root parameters and `generateStaticParams`
+
+Root parameters are available as soon as you create the routes that define them. A [`generateStaticParams`](/docs/app/api-reference/functions/generate-static-params) function is only required with [Cache Components](/docs/app/api-reference/config/next-config-js/cacheComponents), where each root parameter must have at least one value or the build fails.
+
+With a single root parameter:
+
+```tsx filename="app/[lang]/layout.tsx" highlight={11,12,13} switcher
+import { lang } from 'next/root-params'
+
+export default async function RootLayout(props: LayoutProps<'/[lang]'>) {
+  return (
+    <html lang={await lang()}>
+      <body>{props.children}</body>
+    </html>
+  )
+}
+
+export async function generateStaticParams() {
+  return [{ lang: 'en' }, { lang: 'fr' }]
+}
+```
+
+```jsx filename="app/[lang]/layout.js" highlight={11,12,13} switcher
+import { lang } from 'next/root-params'
+
+export default async function RootLayout({ children }) {
+  return (
+    <html lang={await lang()}>
+      <body>{children}</body>
+    </html>
+  )
+}
+
+export async function generateStaticParams() {
+  return [{ lang: 'en' }, { lang: 'fr' }]
+}
+```
+
+With multiple root parameters, return a value for each:
+
+```tsx filename="app/[lang]/[locale]/layout.tsx"
+export async function generateStaticParams() {
+  return [
+    { lang: 'en', locale: 'us' },
+    { lang: 'en', locale: 'uk' },
+  ]
+}
+```
+
+### Reading root parameters in a nested `generateStaticParams`
+
+Inside a nested segment's [`generateStaticParams`](/docs/app/api-reference/functions/generate-static-params), you can read a root parameter directly with its getter, instead of destructuring it from the `params` argument:
+
+```tsx filename="app/[lang]/posts/[slug]/page.tsx" highlight={1,4} switcher
+import { lang } from 'next/root-params'
+
+export async function generateStaticParams() {
+  const language = await lang()
+  const posts = await fetch(
+    `https://api.example.com/posts?lang=${language}`
+  ).then((res) => res.json())
+  return posts.map((post) => ({ slug: post.slug }))
+}
+
+export default async function Page() {
+  // ...
+}
+```
+
+```jsx filename="app/[lang]/posts/[slug]/page.js" highlight={1,4} switcher
+import { lang } from 'next/root-params'
+
+export async function generateStaticParams() {
+  const language = await lang()
+  const posts = await fetch(
+    `https://api.example.com/posts?lang=${language}`
+  ).then((res) => res.json())
+  return posts.map((post) => ({ slug: post.slug }))
+}
+
+export default async function Page() {
+  // ...
+}
+```
 
 ## Root parameters and other route parameters
 
@@ -207,42 +291,6 @@ async function getDataWithParams(language) {
 export default async function Page({ params }) {
   const { lang: language } = await params
   const data = await getDataWithParams(language)
-  // ...
-}
-```
-
-## Use in `generateStaticParams` for nested segments
-
-Inside a nested segment's [`generateStaticParams`](/docs/app/api-reference/functions/generate-static-params), you can read a root parameter directly with its getter, instead of destructuring it from the `params` argument:
-
-```tsx filename="app/[lang]/posts/[slug]/page.tsx" highlight={1,4} switcher
-import { lang } from 'next/root-params'
-
-export async function generateStaticParams() {
-  const language = await lang()
-  const posts = await fetch(
-    `https://api.example.com/posts?lang=${language}`
-  ).then((res) => res.json())
-  return posts.map((post) => ({ slug: post.slug }))
-}
-
-export default async function Page() {
-  // ...
-}
-```
-
-```jsx filename="app/[lang]/posts/[slug]/page.js" highlight={1,4} switcher
-import { lang } from 'next/root-params'
-
-export async function generateStaticParams() {
-  const language = await lang()
-  const posts = await fetch(
-    `https://api.example.com/posts?lang=${language}`
-  ).then((res) => res.json())
-  return posts.map((post) => ({ slug: post.slug }))
-}
-
-export default async function Page() {
   // ...
 }
 ```

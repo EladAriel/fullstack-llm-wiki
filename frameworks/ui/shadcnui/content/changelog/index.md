@@ -4,10 +4,10 @@ framework: "shadcnui"
 directory: "content/changelog"
 source_repo: "https://github.com/shadcn-ui/ui"
 source_branch: "main"
-source_commit: "5602b81d8344e0d0d7178e3bf57612662cd42957"
-source_commit_short: "5602b81d"
-source_commit_date: "2026-06-21T15:49:35+04:00"
-generated_at: "2026-06-21T12:47:26Z"
+source_commit: "4baadbc6517070ae8f8feb2c97037adc2b305544"
+source_commit_short: "4baadbc6"
+source_commit_date: "2026-07-23T23:50:36+04:00"
+generated_at: "2026-07-25T11:50:48Z"
 ---
 # Changelog
 
@@ -71,7 +71,13 @@ This directory contains shadcnui learning pages related to changelog.
 - [2026 05 Registry Include](2026-05-registry-include.md)
 - [2026 05 Rhea](2026-05-rhea.md)
 - [2026 05 Shadcn Eject](2026-05-shadcn-eject.md)
+- [2026 06 Chat Components](2026-06-chat-components.md)
 - [2026 06 Github Registries](2026-06-github-registries.md)
+- [2026 07 Base Ui Default](2026-07-base-ui-default.md)
+- [2026 07 Helpers](2026-07-helpers.md)
+- [2026 07 React Aria](2026-07-react-aria.md)
+- [2026 07 Toast](2026-07-toast.md)
+- [2026 07 Typeset](2026-07-typeset.md)
 - [Original Source Index](_source_index.md)
 
 ## IDE LLM Guidance

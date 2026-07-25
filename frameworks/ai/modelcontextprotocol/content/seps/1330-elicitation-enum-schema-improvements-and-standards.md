@@ -4,10 +4,10 @@ framework: "Model Context Protocol"
 source_repo: "https://github.com/modelcontextprotocol/modelcontextprotocol"
 source_branch: "main"
 source_path: "docs/seps/1330-elicitation-enum-schema-improvements-and-standards.mdx"
-source_commit: "47501e4ced7823014b83be168916d4c9e63b594e"
-source_commit_short: "47501e4c"
-source_commit_date: "2026-06-22T09:16:44-07:00"
-generated_at: "2026-06-23T14:04:43Z"
+source_commit: "7634684382c3d14cf7e9f14073fe40a2d8ace3fa"
+source_commit_short: "76346843"
+source_commit_date: "2026-07-23T16:49:30-07:00"
+generated_at: "2026-07-25T11:50:39Z"
 ---
 
 ---
@@ -115,8 +115,7 @@ export type TitledSingleSelectEnumSchema = {
 
 // Combined single selection enumeration
 export type SingleSelectEnumSchema =
-  | UntitledSingleSelectEnumSchema
-  | TitledSingleSelectEnumSchema;
+  UntitledSingleSelectEnumSchema | TitledSingleSelectEnumSchema;
 ```
 
 ### 3. Introduce Multiple Selection Enums (with Titled and Untitled varieties)
@@ -154,8 +153,7 @@ export type TitledMultiSelectEnumSchema = {
 
 // Combined Multiple select enumeration
 export type MultiSelectEnumSchema =
-  | UntitledMultiSelectEnumSchema
-  | TitledMultiSelectEnumSchema;
+  UntitledMultiSelectEnumSchema | TitledMultiSelectEnumSchema;
 ```
 
 ### 4. Combine All Varieties as `EnumSchema`
@@ -165,9 +163,7 @@ The final `EnumSchema` rolls up the legacy, multi-select, and single-select sche
 ```typescript
 // Combined legacy, multiple, and single select enumeration
 export type EnumSchema =
-  | SingleSelectEnumSchema
-  | MultiSelectEnumSchema
-  | LegacyEnumSchema;
+  SingleSelectEnumSchema | MultiSelectEnumSchema | LegacyEnumSchema;
 ```
 
 ### 5. Extend ElicitResult

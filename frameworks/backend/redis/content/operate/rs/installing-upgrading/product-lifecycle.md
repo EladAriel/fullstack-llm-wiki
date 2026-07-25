@@ -4,10 +4,10 @@ framework: "redis"
 source_repo: "https://github.com/redis/docs.git"
 source_branch: "main"
 source_path: "content/operate/rs/installing-upgrading/product-lifecycle.md"
-source_commit: "bc92ea237bbfc2117c870c904f1a3ca619073ef1"
-source_commit_short: "bc92ea23"
-source_commit_date: "2026-06-18T14:53:00-05:00"
-generated_at: "2026-06-21T11:25:32Z"
+source_commit: "9d30f68c3dad1a6b3b7d30fe604b911348ce8152"
+source_commit_short: "9d30f68c"
+source_commit_date: "2026-07-24T10:52:10-07:00"
+generated_at: "2026-07-25T11:51:22Z"
 ---
 
 ---
@@ -56,7 +56,8 @@ This update to the EOL policy allows a lead time of at least 24 months to upgrad
 
 | Version - Release date | End of Life (EOL)  |
 | ----------------------------------------- | ------------------ |
-| 8.0 – October 2025				        | - |
+| 8.2 – July 2026				            | - |
+| 8.0 – October 2025				        | July 31, 2028 |
 | 7.22 – May 2025				            | October 30, 2027 |
 | 7.8 – November 2024				        | May 30, 2027 |
 | 7.4 – February 2024				        | November 30, 2026 |
@@ -71,7 +72,8 @@ This update to the EOL policy allows a lead time of at least 24 months to upgrad
 The following timeline chart visualizes the Redis Software product lifecycle, showing release dates and end-of-life dates for each major version:
 
 ```timeline {title="Redis Software product lifecycle"}
-8.0: Oct 2025 - TBD
+8.2: Jul 2026 - TBD
+8.0: Oct 2025 - Jul 31, 2028
 7.22: May 2025 - Oct 30, 2027
 7.8: Nov 2024 - May 30, 2027
 7.4: Feb 2024 - Nov 30, 2026

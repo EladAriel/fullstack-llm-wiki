@@ -4,10 +4,10 @@ framework: "FastAPI"
 source_repo: "https://github.com/fastapi/fastapi.git"
 source_branch: "master"
 source_path: "docs/en/docs/python-types.md"
-source_commit: "0cb4a8e284b450abbccb71c543ad7757de46c0b2"
-source_commit_short: "0cb4a8e2"
-source_commit_date: "2026-06-20T16:31:34Z"
-generated_at: "2026-06-21T07:06:10Z"
+source_commit: "255b912928904e3ba5980425a54d6837c8bd1a1c"
+source_commit_short: "255b9129"
+source_commit_date: "2026-07-24T21:15:37Z"
+generated_at: "2026-07-25T11:50:10Z"
 ---
 
 # Python Types Intro { #python-types-intro }
@@ -281,7 +281,7 @@ It doesn't mean "`one_person` is the **class** called `Person`".
 
 ## Pydantic models { #pydantic-models }
 
-[Pydantic](https://docs.pydantic.dev/) is a Python library to perform data validation.
+[Pydantic](https://pydantic.dev/docs/) is a Python library to perform data validation.
 
 You declare the "shape" of the data as classes with attributes.
 
@@ -297,7 +297,7 @@ An example from the official Pydantic docs:
 
 /// note
 
-To learn more about [Pydantic, check its docs](https://docs.pydantic.dev/).
+To learn more about [Pydantic, check its docs](https://pydantic.dev/docs/).
 
 ///
 

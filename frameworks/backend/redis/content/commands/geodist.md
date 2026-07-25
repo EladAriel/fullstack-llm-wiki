@@ -4,10 +4,10 @@ framework: "redis"
 source_repo: "https://github.com/redis/docs.git"
 source_branch: "main"
 source_path: "content/commands/geodist.md"
-source_commit: "bc92ea237bbfc2117c870c904f1a3ca619073ef1"
-source_commit_short: "bc92ea23"
-source_commit_date: "2026-06-18T14:53:00-05:00"
-generated_at: "2026-06-21T11:25:32Z"
+source_commit: "9d30f68c3dad1a6b3b7d30fe604b911348ce8152"
+source_commit_short: "9d30f68c"
+source_commit_date: "2026-07-24T10:52:10-07:00"
+generated_at: "2026-07-25T11:51:22Z"
 ---
 
 ---
@@ -129,11 +129,16 @@ The unit for the returned distance: meters (`M`, the default), kilometers (`KM`)
 ## Examples
 
 {{% redis-cli %}}
-GEOADD Sicily 13.361389 38.115556 "Palermo" 15.087269 37.502669 "Catania"
-GEODIST Sicily Palermo Catania
-GEODIST Sicily Palermo Catania km
-GEODIST Sicily Palermo Catania mi
-GEODIST Sicily Foo Bar
+redis> GEOADD Sicily 13.361389 38.115556 "Palermo" 15.087269 37.502669 "Catania"
+(integer) 2
+redis> GEODIST Sicily Palermo Catania
+"166274.1516"
+redis> GEODIST Sicily Palermo Catania km
+"166.2742"
+redis> GEODIST Sicily Palermo Catania mi
+"103.3182"
+redis> GEODIST Sicily Foo Bar
+(nil)
 {{% /redis-cli %}}
 
 ## Redis Software and Redis Cloud compatibility

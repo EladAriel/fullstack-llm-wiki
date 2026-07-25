@@ -4,10 +4,10 @@ framework: "react"
 source_repo: "https://github.com/reactjs/react.dev"
 source_branch: "main"
 source_path: "src/content/learn/tutorial-tic-tac-toe.md"
-source_commit: "8bb31acb86bf68fa33d97dd0f1b834dfa71e2b1a"
-source_commit_short: "8bb31acb"
-source_commit_date: "2026-06-17T13:38:02-04:00"
-generated_at: "2026-06-21T12:23:02Z"
+source_commit: "7b6c3ceb9dd97249e9dce4a8a94e61aed6424698"
+source_commit_short: "7b6c3ceb"
+source_commit_date: "2026-07-20T15:31:48+02:00"
+generated_at: "2026-07-25T11:50:43Z"
 ---
 
 ---
@@ -911,19 +911,20 @@ body {
 
 ### React Developer Tools {/*react-developer-tools*/}
 
-React DevTools let you check the props and the state of your React components. You can find the React DevTools tab at the bottom of the _browser_ section in CodeSandbox:
+React Developer Tools let you check the props and the state of your React components. It is available as a [Chrome](https://chrome.google.com/webstore/detail/react-developer-tools/fmkadmapgofadopljbjfkapdkoienihi?hl=en), [Firefox](https://addons.mozilla.org/en-US/firefox/addon/react-devtools/), and [Edge](https://microsoftedge.microsoft.com/addons/detail/react-developer-tools/gpphkfbcpidddadnkolkpfckpihlkkil) browser extension.
 
-![React DevTools in CodeSandbox](../images/tutorial/codesandbox-devtools.png)
+After you install it, a new *Components* tab will appear in your browser Developer Tools for sites using React. If you're following along in CodeSandbox, you'd need to first open your sandbox preview in a new tab:
 
-To inspect a particular component on the screen, use the button in the top left corner of React DevTools:
+![opening in new tab](../images/tutorial/sandbox-new-tab.png)
 
-![Selecting components on the page with React DevTools](../images/tutorial/devtools-select.gif)
+Then, on the preview page, open your browser's DevTools and find the *Components* tab:
 
-<Note>
+![components tab](../images/tutorial/components-tab.png)
 
-For local development, React DevTools is available as a [Chrome](https://chrome.google.com/webstore/detail/react-developer-tools/fmkadmapgofadopljbjfkapdkoienihi?hl=en), [Firefox](https://addons.mozilla.org/en-US/firefox/addon/react-devtools/), and [Edge](https://microsoftedge.microsoft.com/addons/detail/react-developer-tools/gpphkfbcpidddadnkolkpfckpihlkkil) browser extension. Install it, and the *Components* tab will appear in your browser Developer Tools for sites using React.
+To inspect a particular component on the screen, use the button in the top left corner of the Components tab:
 
-</Note>
+![inspecting with devtools](../images/tutorial/devtools-inspect.gif)
+
 
 ## Completing the game {/*completing-the-game*/}
 

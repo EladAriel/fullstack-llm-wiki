@@ -4,10 +4,10 @@ framework: "postgres"
 source_repo: "https://github.com/postgres/postgres.git"
 source_branch: "master"
 source_path: "doc/src/sgml/ref/select.sgml"
-source_commit: "031904048aa22e7c70dc8e9c170e2743f9b0f090"
-source_commit_short: "03190404"
-source_commit_date: "2026-06-20T18:20:58+09:00"
-generated_at: "2026-06-21T07:06:11Z"
+source_commit: "38afc3dcb25c45b744d4025029ce0a6c90b7059f"
+source_commit_short: "38afc3dc"
+source_commit_date: "2026-07-25T19:08:27+09:00"
+generated_at: "2026-07-25T11:50:59Z"
 ---
 
 SELECT
@@ -32,7 +32,7 @@ SELECT [ ALL | DISTINCT [ ON ( expression [, ...] ) ] ]
     [ { * | expression [ [ AS ] output_name ] } [, ...] ]
     [ FROM from_item [, ...] ]
     [ WHERE condition ]
-    [ GROUP BY { ALL | [ ALL | DISTINCT ] grouping_element [, ...] } ]
+    [ GROUP BY [ ALL | DISTINCT ] grouping_element [, ...] ]
     [ HAVING condition ]
     [ WINDOW window_name AS ( window_definition ) [, ...] ]
     [ { UNION | INTERSECT | EXCEPT } [ ALL | DISTINCT ] select ]
@@ -140,12 +140,10 @@ where `condition` is any expression that evaluates to a result of type `boolean`
 The optional `GROUP BY` clause has the general form
 
 ```
-GROUP BY { ALL | [ ALL | DISTINCT ] grouping_element [, ...] }
+GROUP BY [ ALL | DISTINCT ] grouping_element [, ...]
 ```
 
 `GROUP BY` will condense into a single row all selected rows that share the same values for the grouped expressions. An `expression` used inside a `grouping_element` can be an input column name, or the name or ordinal number of an output column (`SELECT` list item), or an arbitrary expression formed from input-column values; however, it cannot contain an aggregate function or a window function. In case of ambiguity, a `GROUP BY` name will be interpreted as an input-column name rather than an output column name.
-
-The form `GROUP BY ALL` with no explicit `grouping_elements` provided is equivalent to writing `GROUP BY` with the numbers of all `SELECT` output columns that do not contain either an aggregate function or a window function.
 
 If any of `GROUPING SETS`, `ROLLUP` or `CUBE` are present as grouping elements, then the `GROUP BY` clause as a whole defines some number of independent `grouping sets`. The effect of this is equivalent to constructing a `UNION ALL` between subqueries having the individual grouping sets as their `GROUP BY` clauses. The optional `DISTINCT` key word removes duplicate grouping sets before processing; it does not transform the implied `UNION ALL` into a `UNION DISTINCT`. For further details on the handling of grouping sets see `queries-grouping-sets`.
 

@@ -4,10 +4,10 @@ framework: "redis"
 source_repo: "https://github.com/redis/docs.git"
 source_branch: "main"
 source_path: "content/develop/get-started/data-store.md"
-source_commit: "bc92ea237bbfc2117c870c904f1a3ca619073ef1"
-source_commit_short: "bc92ea23"
-source_commit_date: "2026-06-18T14:53:00-05:00"
-generated_at: "2026-06-21T11:25:32Z"
+source_commit: "9d30f68c3dad1a6b3b7d30fe604b911348ce8152"
+source_commit_short: "9d30f68c"
+source_commit_date: "2026-07-24T10:52:10-07:00"
+generated_at: "2026-07-25T11:51:22Z"
 ---
 
 ---
@@ -53,7 +53,7 @@ You can alternatively follow the [installation guides]({{< relref "/operate/oss_
 
 The first step is to connect to Redis. You can find further details about the connection options in this documentation site's [Tools section]({{< relref "/develop/tools" >}}). The following example shows how to connect to a Redis server that runs on localhost (`-h 127.0.0.1`) and listens on the default port (`-p 6379`): 
 
-{{< clients-example set="search_quickstart" step="connect" description="Foundational: Connect to a Redis server" difficulty="beginner" >}}
+{{< clients-example set="search_quickstart" step="connect" description="Foundational: Connect to a Redis server" difficulty="beginner" runnable="false" try_it="false" >}}
 > redis-cli -h 127.0.0.1 -p 6379
 {{< /clients-example>}}
 <br/>
@@ -68,20 +68,20 @@ Redis stands for Remote Dictionary Server. You can use the same data types as in
 Similar to byte arrays, Redis strings store sequences of bytes, including text, serialized objects, counter values, and binary arrays. The following example shows you how to set and get a string value:
 
 {{< clients-example set="set_and_get" step="" description="Foundational: Set and retrieve string values using SET and GET commands" difficulty="beginner" >}}
-SET bike:1 "Process 134"
-GET bike:1
+> SET bike:1 "Process 134"
+> GET bike:1
 {{< /clients-example >}}
 
 Hashes are the equivalent of dictionaries (dicts or hash maps). Among other things, you can use hashes to represent plain objects and to store groupings of counters. The following example explains how to set and access field values of an object:
 
 {{< clients-example set="hash_tutorial" step="set_get_all" description="Foundational: Store and retrieve hash data structures using HSET to set multiple fields, HGET to retrieve individual fields, and HGETALL to retrieve all fields at once" difficulty="beginner" >}}
-> HSET bike:1 model Deimos brand Ergonom type 'Enduro bikes' price 4972
+> HSET bike:2 model Deimos brand Ergonom type 'Enduro bikes' price 4972
 (integer) 4
-> HGET bike:1 model
+> HGET bike:2 model
 "Deimos"
-> HGET bike:1 price
+> HGET bike:2 price
 "4972"
-> HGETALL bike:1
+> HGETALL bike:2
 1) "model"
 2) "Deimos"
 3) "brand"

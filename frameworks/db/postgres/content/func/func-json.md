@@ -4,10 +4,10 @@ framework: "postgres"
 source_repo: "https://github.com/postgres/postgres.git"
 source_branch: "master"
 source_path: "doc/src/sgml/func/func-json.sgml"
-source_commit: "031904048aa22e7c70dc8e9c170e2743f9b0f090"
-source_commit_short: "03190404"
-source_commit_date: "2026-06-20T18:20:58+09:00"
-generated_at: "2026-06-21T07:06:11Z"
+source_commit: "38afc3dcb25c45b744d4025029ce0a6c90b7059f"
+source_commit_short: "38afc3dc"
+source_commit_date: "2026-07-25T19:08:27+09:00"
+generated_at: "2026-07-25T11:50:59Z"
 ---
 
 ## JSON Functions and Operators
@@ -1432,7 +1432,7 @@ Taking JSON data as input, `JSON_TABLE` uses a JSON path expression to extract a
 
 To split the row pattern into columns, `JSON_TABLE` provides the `COLUMNS` clause that defines the schema of the created view. For each column, a separate JSON path expression can be specified to be evaluated against the row pattern to get an SQL/JSON value that will become the value for the specified column in a given output row.
 
-JSON data stored at a nested level of the row pattern can be extracted using the `NESTED PATH` clause. Each `NESTED PATH` clause can be used to generate one or more columns using the data from a nested level of the row pattern. Those columns can be specified using a `COLUMNS` clause that looks similar to the top-level COLUMNS clause. Rows constructed from NESTED COLUMNS are called child rows and are joined against the row constructed from the columns specified in the parent `COLUMNS` clause to get the row in the final view. Child columns themselves may contain a `NESTED PATH` specification thus allowing to extract data located at arbitrary nesting levels. Columns produced by multiple `NESTED PATH`s at the same level are considered to be siblings of each other and their rows after joining with the parent row are combined using UNION.
+JSON data stored at a nested level of the row pattern can be extracted using the `NESTED PATH` clause. Each `NESTED PATH` clause can be used to generate one or more columns using the data from a nested level of the row pattern. Those columns can be specified using a `COLUMNS` clause that looks similar to the top-level COLUMNS clause. Rows constructed from NESTED COLUMNS are called child rows and are joined against the row constructed from the columns specified in the parent `COLUMNS` clause to get the row in the final view. Child columns themselves may contain a `NESTED PATH` specification, thus allowing extraction of data located at arbitrary nesting levels. Columns produced by multiple `NESTED PATH`s at the same level are considered to be siblings of each other and their rows after joining with the parent row are combined using UNION.
 
 The rows produced by `JSON_TABLE` are laterally joined to the row that generated them, so you do not have to explicitly join the constructed view with the original table holding JSON data.
 
@@ -1442,6 +1442,11 @@ The syntax is:
 JSON_TABLE (
     context_item, path_expression  AS json_path_name   PASSING { value AS varname } , ... 
     COLUMNS ( json_table_column , ... )
+    
+        PLAN ( json_table_plan ) |
+        PLAN DEFAULT ( { OUTER | INNER }  , { CROSS | UNION } 
+                     | { CROSS | UNION }  , { OUTER | INNER }  )
+    
      { ERROR | EMPTY ARRAY} ON ERROR 
 )
 
@@ -1458,6 +1463,16 @@ where json_table_column is:
   | name type EXISTS  PATH path_expression 
          { ERROR | TRUE | FALSE | UNKNOWN } ON ERROR 
   | NESTED  PATH  path_expression  AS json_path_name  COLUMNS ( json_table_column , ... )
+
+json_table_plan is:
+
+    json_path_name  { OUTER | INNER } json_table_plan_primary 
+  | json_table_plan_primary { UNION json_table_plan_primary } ...
+  | json_table_plan_primary { CROSS json_table_plan_primary } ...
+
+json_table_plan_primary is:
+
+    json_path_name | ( json_table_plan )
 ```
 
 Each syntax element is described below in more detail.
@@ -1466,13 +1481,35 @@ Each syntax element is described below in more detail.
 - The `COLUMNS` clause defining the schema of the constructed view. In this clause, you can specify each column to be filled with an SQL/JSON value obtained by applying a JSON path expression against the row pattern. `json_table_column` has the following variants: `name` `FOR ORDINALITY` Adds an ordinality column that provides sequential row numbering starting from 1. Each `NESTED PATH` (see below) gets its own counter for any nested ordinality columns.
 - Inserts an SQL/JSON value obtained by applying `path_expression` against the row pattern into the view's output row after coercing it to specified `type`. Specifying `FORMAT JSON` makes it explicit that you expect the value to be a valid `json` object. It only makes sense to specify `FORMAT JSON` if `type` is one of `bpchar`, `bytea`, `character varying`, `name`, `json`, `jsonb`, `text`, or a domain over these types. Optionally, you can specify `WRAPPER` and `QUOTES` clauses to format the output. Note that specifying `OMIT QUOTES` overrides `FORMAT JSON` if also specified, because unquoted literals do not constitute valid `json` values. Optionally, you can use `ON EMPTY` and `ON ERROR` clauses to specify whether to throw the error or return the specified value when the result of JSON path evaluation is empty and when an error occurs during JSON path evaluation or when coercing the SQL/JSON value to the specified type, respectively. The default for both is to return a `NULL` value. This clause is internally turned into and has the same semantics as `JSON_VALUE` or `JSON_QUERY`. The latter if the specified type is not a scalar type or if either of `FORMAT JSON`, `WRAPPER`, or `QUOTES` clause is present.
 - Inserts a boolean value obtained by applying `path_expression` against the row pattern into the view's output row after coercing it to specified `type`. The value corresponds to whether applying the `PATH` expression to the row pattern yields any values. The specified `type` should have a cast from the `boolean` type. Optionally, you can use `ON ERROR` to specify whether to throw the error or return the specified value when an error occurs during JSON path evaluation or when coercing SQL/JSON value to the specified type. The default is to return a boolean value `FALSE`. This clause is internally turned into and has the same semantics as `JSON_EXISTS`.
-- Extracts SQL/JSON values from nested levels of the row pattern, generates one or more columns as defined by the `COLUMNS` subclause, and inserts the extracted SQL/JSON values into those columns. The `json_table_column` expression in the `COLUMNS` subclause uses the same syntax as in the parent `COLUMNS` clause. The `NESTED PATH` syntax is recursive, so you can go down multiple nested levels by specifying several `NESTED PATH` subclauses within each other. It allows to unnest the hierarchy of JSON objects and arrays in a single function invocation rather than chaining several `JSON_TABLE` expressions in an SQL statement.
+- Extracts SQL/JSON values from nested levels of the row pattern, generates one or more columns as defined by the `COLUMNS` subclause, and inserts the extracted SQL/JSON values into those columns. The `json_table_column` expression in the `COLUMNS` subclause uses the same syntax as in the parent `COLUMNS` clause. The `NESTED PATH` syntax is recursive, so you can go down multiple nested levels by specifying several `NESTED PATH` subclauses within each other. It allows you to unnest the hierarchy of JSON objects and arrays in a single function invocation rather than chaining several `JSON_TABLE` expressions in an SQL statement. You can use the `PLAN` clause to define how to join the columns returned by `NESTED PATH` clauses.
 
 In each variant of `json_table_column` described above, if the `PATH` clause is omitted, path expression `$.name` is used, where `name` is the provided column name.
 
 `AS` `json_path_name`
 
-The optional `json_path_name` serves as an identifier of the provided `path_expression`. The name must be unique and distinct from the column names.
+The optional `json_path_name` serves as an identifier of the provided `path_expression`. The path name must be unique and distinct from the column names. Each path name can appear in the `PLAN` clause only once.
+
+The SQL/JSON standard requires an explicit path name for every `NESTED PATH` when a `PLAN` or `PLAN DEFAULT` clause is present, while the row pattern path name always remains optional. As an extension, PostgreSQL does not require any path name: a name is generated for any path left unnamed. Note, however, that a specific `PLAN` (`json_table_plan`) can only refer to paths by name, so every path that such a plan must mention has to be given a name explicitly.
+
+`PLAN` ( `json_table_plan` )
+
+Defines how to join the data returned by `NESTED PATH` clauses to the constructed view.
+
+To join columns with parent/child relationship, you can use:
+
+- Use `LEFT OUTER JOIN`, so that the parent row is always included into the output even if it does not have any child rows after joining the data returned by `NESTED PATH`, with NULL values inserted into the child columns if the corresponding values are missing. This is the default option for joining columns with parent/child relationship.
+- Use `INNER JOIN`, so that the parent row is omitted from the output if it does not have any child rows after joining the data returned by `NESTED PATH`.
+
+To join sibling columns, you can use:
+
+- Generate one row for each value produced by each of the sibling columns. The columns from the other siblings are set to null. This is the default option for joining sibling columns.
+- Generate one row for each combination of values from the sibling columns.
+
+`PLAN DEFAULT` ( { `OUTER` | `INNER` } , { `UNION` | `CROSS` } )
+
+The terms can also be specified in reverse order. The `INNER` or `OUTER` option defines the joining plan for parent/child columns, while `UNION` or `CROSS` affects joins of sibling columns. This form of `PLAN` overrides the default plan for all columns at once.
+
+`PLAN DEFAULT` is simpler than specifying a complete `PLAN`, and is often all that is required to get the desired output.
 
 { `ERROR` | `EMPTY` } `ON ERROR`
 
@@ -1634,4 +1671,36 @@ COLUMNS (
        1 |          |       |          |       2 | Wonder  |         1 | Jun Murakami
        1 |          |       |          |       2 | Wonder  |         2 | Craig Doe
 (5 rows)
+```
+
+Find a director that has done films in two different genres:
+
+```
+SELECT
+  director1 AS director, title1, kind1, title2, kind2
+FROM
+  my_films,
+  JSON_TABLE ( js, '$.favorites' AS favs COLUMNS (
+    NESTED PATH '$[*]' AS films1 COLUMNS (
+      kind1 text PATH '$.kind',
+      NESTED PATH '$.films[*]' AS film1 COLUMNS (
+        title1 text PATH '$.title',
+        director1 text PATH '$.director')
+    ),
+    NESTED PATH '$[*]' AS films2 COLUMNS (
+      kind2 text PATH '$.kind',
+      NESTED PATH '$.films[*]' AS film2 COLUMNS (
+        title2 text PATH '$.title',
+        director2 text PATH '$.director'
+      )
+    )
+   )
+   PLAN (favs OUTER ((films1 INNER film1) CROSS (films2 INNER film2)))
+  ) AS jt
+ WHERE kind1 > kind2 AND director1 = director2;
+
+     director     | title1  |  kind1   | title2 | kind2
+------------------+---------+----------+--------+--------
+ Alfred Hitchcock | Vertigo | thriller | Psycho | horror
+(1 row)
 ```

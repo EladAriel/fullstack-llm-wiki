@@ -4,16 +4,16 @@ framework: "Langfuse"
 source_repo: "https://github.com/langfuse/langfuse-docs"
 source_branch: "main"
 source_path: "content/docs/api-and-data-platform/features/query-via-sdk.mdx"
-source_commit: "4a702ece53852a6af86b3883f434adf3f5cae421"
-source_commit_short: "4a702ece"
-source_commit_date: "2026-06-23T13:41:14Z"
-generated_at: "2026-06-23T13:55:15Z"
+source_commit: "fcd1eca34a924867563c3c4e801254c4e66c0021"
+source_commit_short: "fcd1eca3"
+source_commit_date: "2026-07-25T00:45:45Z"
+generated_at: "2026-07-25T11:51:12Z"
 ---
 
 ---
 title: Query via SDKs
 sidebarTitle: Query via SDKs
-description: Query Langfuse data via Python and JS/TS SDKs using the high-performance v2 data APIs.
+description: Query Langfuse data via Python and JS/TS SDKs using the high-performance data APIs.
 ---
 
 # Query Data via SDKs
@@ -42,20 +42,18 @@ The `api` namespace is auto-generated from the Public API (OpenAPI). Method name
 
 <Callout type="warning">
 
-From Python SDK v4 and JS/TS SDK v5 onward, the high-performance v2 data APIs
+From Python SDK v4 and JS/TS SDK v5 onward, the high-performance data APIs
 are the defaults:
 
 - `api.observations` (formerly `api.observations_v_2` / `api.observationsV2`)
-- `api.scores` (formerly `api.score_v_2` / `api.scoreV2`)
+- `api.scores_v3` / `api.scoresV3` — the v3 scores reads; `api.scores` (v2 reads) is deprecated, see [Migration of deprecated APIs](/faq/all/deprecated-api-migration#scores)
 - `api.metrics` (formerly `api.metrics_v_2` / `api.metricsV2`)
 
 The old v2 aliases were removed in Python SDK v4 and JS/TS SDK v5.
 
-The older trace, observation, and metrics read APIs remain available, but they
-are not recommended as the default for new data extraction workflows because
-they are less performant at scale. See [Observations API v2](/docs/api-and-data-platform/features/observations-api#v2)
-for row-level data and [Metrics API v2](/docs/metrics/features/metrics-api#v2)
-for aggregates.
+The `api.legacy.*` resources call the deprecated endpoints; see
+[Migration of deprecated APIs](/faq/all/deprecated-api-migration) for
+replacements and the endpoint reference.
 
 </Callout>
 
@@ -114,8 +112,14 @@ sessions = langfuse.api.sessions.list(limit=50)
 Scores:
 
 ```python
-scores = langfuse.api.scores.get_many(score_ids = "ScoreId")
+# Scores API v3 (recommended)
+scores = langfuse.api.scores_v3.get_many_v3(id="ScoreId")
+
+# Scores API v2 (deprecated)
+scores = langfuse.api.scores.get_many(score_ids="ScoreId")
 ```
+
+To move existing v2 score reads to v3, see [Migration of deprecated APIs](/faq/all/deprecated-api-migration#scores).
 
 Prompts:
 
@@ -127,7 +131,7 @@ Datasets:
 # Namespaces:
 # - langfuse.api.datasets.*
 # - langfuse.api.dataset_items.*
-# - langfuse.api.dataset_run_items.*
+# - langfuse.api.experiments.*
 ```
 
 #### Async equivalents
@@ -208,8 +212,14 @@ const sessions = await langfuse.api.sessions.list({ limit: 50 });
 Scores:
 
 ```ts
+// Scores API v3 (recommended)
+const scoresV3 = await langfuse.api.scoresV3.getManyV3();
+
+// Scores API v2 (deprecated)
 const scores = await langfuse.api.scores.getMany();
 ```
+
+To move existing v2 score reads to v3, see [Migration of deprecated APIs](/faq/all/deprecated-api-migration#scores).
 
 Prompts:
 
@@ -221,7 +231,7 @@ Datasets:
 // Namespaces:
 // - langfuse.api.datasets.*
 // - langfuse.api.datasetItems.*
-// - langfuse.api.datasetRunItems.*
+// - langfuse.api.experiments.*
 ```
 
 Explore more entities via Intellisense on `langfuse.api`.
@@ -232,6 +242,7 @@ Explore more entities via Intellisense on `langfuse.api`.
 ## Related Resources
 
 - To move existing trace or observation reads to v2, see [Observations API v2](/docs/api-and-data-platform/features/observations-api#v2).
+- To move existing score reads to v3, see [Migration of deprecated APIs](/faq/all/deprecated-api-migration#scores).
 - To move existing metrics queries to v2, see [Metrics API v2](/docs/metrics/features/metrics-api#v2).
 - For large-scale data exports (e.g., all traces for fine-tuning or analytics), consider using the [Blob Storage Export](/docs/api-and-data-platform/features/export-to-blob-storage) to automatically sync data to S3, GCS, or Azure on a schedule instead of paginating through the API.
 - To manually export filtered data from the Langfuse UI, see [Export from UI](/docs/api-and-data-platform/features/export-from-ui).

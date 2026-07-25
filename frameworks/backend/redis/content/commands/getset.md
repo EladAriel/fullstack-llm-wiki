@@ -4,10 +4,10 @@ framework: "redis"
 source_repo: "https://github.com/redis/docs.git"
 source_branch: "main"
 source_path: "content/commands/getset.md"
-source_commit: "bc92ea237bbfc2117c870c904f1a3ca619073ef1"
-source_commit_short: "bc92ea23"
-source_commit_date: "2026-06-18T14:53:00-05:00"
-generated_at: "2026-06-21T11:25:32Z"
+source_commit: "9d30f68c3dad1a6b3b7d30fe604b911348ce8152"
+source_commit_short: "9d30f68c"
+source_commit_date: "2026-07-24T10:52:10-07:00"
+generated_at: "2026-07-25T11:51:22Z"
 ---
 
 ---
@@ -90,9 +90,12 @@ The new value to set.
 ## Examples
 
 {{% redis-cli %}}
-SET mykey "Hello"
-GETSET mykey "World"
-GET mykey
+redis> SET mykey "Hello"
+OK
+redis> GETSET mykey "World"
+"Hello"
+redis> GET mykey
+"World"
 {{% /redis-cli %}}
 
 ## Details
@@ -104,9 +107,12 @@ For example, you can call [INCR]({{< relref "/commands/incr" >}}) on the key `my
 This can be done using `GETSET mycounter "0"`:
 
 {{% redis-cli %}}
-INCR mycounter
-GETSET mycounter "0"
-GET mycounter
+redis> INCR mycounter
+(integer) 1
+redis> GETSET mycounter "0"
+"1"
+redis> GET mycounter
+"0"
 {{% /redis-cli %}}
 
 ## Redis Software and Redis Cloud compatibility

@@ -4,10 +4,10 @@ framework: "tanstack"
 source_repo: "https://github.com/tanstack/query"
 source_branch: "main"
 source_path: "docs/framework/react/reference/useSuspenseQueries.md"
-source_commit: "4f11927ac5f3841984389a07587ee2ae1e0abfbb"
-source_commit_short: "4f11927a"
-source_commit_date: "2026-06-19T13:43:35+02:00"
-generated_at: "2026-06-21T12:31:28Z"
+source_commit: "fd50fa14d283c7d6664a796f758498d1ad5bfce7"
+source_commit_short: "fd50fa14"
+source_commit_date: "2026-07-24T22:22:47+10:00"
+generated_at: "2026-07-25T11:50:41Z"
 ---
 
 ---
@@ -27,6 +27,8 @@ The same as for [useQueries](./useQueries.md), except that each `query` can't ha
 - `throwOnError`
 - `enabled`
 - `placeholderData`
+
+> The [`select` typing caveat](./useQueries.md#typescript-typing-the-select-option) for `useQueries` applies here as well: annotate the `select` parameter or use the [`queryOptions`](./queryOptions.md) helper to keep type inference.
 
 **Returns**
 

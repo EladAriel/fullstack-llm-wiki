@@ -4,10 +4,10 @@ framework: "mongodb"
 source_repo: "https://github.com/mongodb/docs.git"
 source_branch: "main"
 source_path: "content/manual/manual/source/reference/operator/aggregation/scoreFusion.txt"
-source_commit: "96788e8ed140cbdde184ff82e1066dff4996bde4"
-source_commit_short: "96788e8e"
-source_commit_date: "2026-06-19T21:35:03-06:00"
-generated_at: "2026-06-21T07:41:52Z"
+source_commit: "ab9db26ed3d11618cdb61516d8180337d8e3f679"
+source_commit_short: "ab9db26e"
+source_commit_date: "2026-07-24T16:22:46-06:00"
+generated_at: "2026-07-25T11:51:15Z"
 ---
 
 ==========================
@@ -15,7 +15,7 @@ generated_at: "2026-06-21T07:41:52Z"
 # $scoreFusion (aggregation)
 
 > **Important:** `$scoreFusion` is only available for deployments that use MongoDB
-8.2+.
+8.3+.
 
 ## Definition
 
@@ -77,9 +77,8 @@ A scoring pipeline sorts or orders documents based on the score of the documents
 - :pipeline:`$search`
 - :pipeline:`$vectorSearch`
 - :pipeline:`$match` with legacy text search
-- :pipeline:`$geoNear`
 - Contain an explicit :pipeline:`$score` stage if the preceding pipeline
-doesn't inherently return a score.
+doesn't inherently return a score. For example, :pipeline:`$geoNear` returns a distance rather than a score, so it requires an explicit `$score` stage.
 
 ### Input Pipeline Names
 

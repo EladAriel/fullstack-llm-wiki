@@ -4,10 +4,10 @@ framework: "Model Context Protocol"
 source_repo: "https://github.com/modelcontextprotocol/modelcontextprotocol"
 source_branch: "main"
 source_path: "docs/specification/draft/deprecated.mdx"
-source_commit: "47501e4ced7823014b83be168916d4c9e63b594e"
-source_commit_short: "47501e4c"
-source_commit_date: "2026-06-22T09:16:44-07:00"
-generated_at: "2026-06-23T14:04:43Z"
+source_commit: "7634684382c3d14cf7e9f14073fe40a2d8ace3fa"
+source_commit_short: "76346843"
+source_commit_date: "2026-07-23T16:49:30-07:00"
+generated_at: "2026-07-25T11:50:39Z"
 ---
 
 ---
@@ -38,9 +38,9 @@ deprecation notices and changelog entries, which are the normative records.
 | [Roots](/specification/draft/client/roots)                                                                              | [SEP-2577](https://github.com/modelcontextprotocol/modelcontextprotocol/pull/2577) | `2026-07-28`  | Pass directories or files via tool parameters, resource URIs, or server configuration                                     | First revision released on or after 2027-07-28                                                        |
 | [Sampling](/specification/draft/client/sampling)                                                                        | [SEP-2577](https://github.com/modelcontextprotocol/modelcontextprotocol/pull/2577) | `2026-07-28`  | Integrate directly with LLM provider APIs                                                                                 | First revision released on or after 2027-07-28                                                        |
 | [Logging](/specification/draft/server/utilities/logging)                                                                | [SEP-2577](https://github.com/modelcontextprotocol/modelcontextprotocol/pull/2577) | `2026-07-28`  | Log to `stderr` for stdio transports; use [OpenTelemetry](https://opentelemetry.io/) for observability                    | First revision released on or after 2027-07-28                                                        |
-| [HTTP+SSE transport](/specification/2024-11-05/basic/transports#http-with-sse)                                          | [SEP-2596](https://github.com/modelcontextprotocol/modelcontextprotocol/pull/2596) | `2025-03-26`  | [Streamable HTTP](/specification/draft/basic/transports/streamable-http)                                                  | Three months after SEP-2596 reaches Final                                                             |
-| `includeContext: "thisServer"` / `"allServers"` ([Sampling](/specification/draft/client/sampling#capabilities))         | [SEP-2596](https://github.com/modelcontextprotocol/modelcontextprotocol/pull/2596) | `2025-11-25`  | Omit the field or use `"none"`                                                                                            | Follows Sampling ([SEP-2577](https://github.com/modelcontextprotocol/modelcontextprotocol/pull/2577)) |
 | [Dynamic Client Registration](/specification/draft/basic/authorization/client-registration#dynamic-client-registration) | [PR #2858](https://github.com/modelcontextprotocol/modelcontextprotocol/pull/2858) | `2026-07-28`  | [Client ID Metadata Documents](/specification/draft/basic/authorization/client-registration#client-id-metadata-documents) | First revision released on or after 2027-07-28                                                        |
+| `includeContext: "thisServer"` / `"allServers"` ([Sampling](/specification/draft/client/sampling#capabilities))         | [SEP-2596](https://github.com/modelcontextprotocol/modelcontextprotocol/pull/2596) | `2025-11-25`  | Omit the field or use `"none"`                                                                                            | Follows Sampling ([SEP-2577](https://github.com/modelcontextprotocol/modelcontextprotocol/pull/2577)) |
+| [HTTP+SSE transport](/specification/2024-11-05/basic/transports#http-with-sse)                                          | [SEP-2596](https://github.com/modelcontextprotocol/modelcontextprotocol/pull/2596) | `2025-03-26`  | [Streamable HTTP](/specification/draft/basic/transports/streamable-http)                                                  | Three months after SEP-2596 reaches Final                                                             |
 
 The HTTP+SSE transport and the `includeContext` values were already described
 as deprecated before the lifecycle policy existed; SEP-2596 reclassifies them

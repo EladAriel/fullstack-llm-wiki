@@ -4,10 +4,10 @@ framework: "shadcnui"
 source_repo: "https://github.com/shadcn-ui/ui"
 source_branch: "main"
 source_path: "apps/v4/content/docs/components/base/dropdown-menu.mdx"
-source_commit: "5602b81d8344e0d0d7178e3bf57612662cd42957"
-source_commit_short: "5602b81d"
-source_commit_date: "2026-06-21T15:49:35+04:00"
-generated_at: "2026-06-21T12:47:26Z"
+source_commit: "4baadbc6517070ae8f8feb2c97037adc2b305544"
+source_commit_short: "4baadbc6"
+source_commit_date: "2026-07-23T23:50:36+04:00"
+generated_at: "2026-07-25T11:50:48Z"
 ---
 
 ---
@@ -136,69 +136,67 @@ DropdownMenu
                 └── DropdownMenuItem
 ```
 
-## Examples
-
-### Basic
+## Basic
 
 A basic dropdown menu with labels and separators.
 
 <ComponentPreview styleName="base-nova" name="dropdown-menu-basic" />
 
-### Submenu
+## Submenu
 
 Use `DropdownMenuSub` to nest secondary actions.
 
 <ComponentPreview styleName="base-nova" name="dropdown-menu-submenu" />
 
-### Shortcuts
+## Shortcuts
 
 Add `DropdownMenuShortcut` to show keyboard hints.
 
 <ComponentPreview styleName="base-nova" name="dropdown-menu-shortcuts" />
 
-### Icons
+## Icons
 
 Combine icons with labels for quick scanning.
 
 <ComponentPreview styleName="base-nova" name="dropdown-menu-icons" />
 
-### Checkboxes
+## Checkboxes
 
 Use `DropdownMenuCheckboxItem` for toggles.
 
 <ComponentPreview styleName="base-nova" name="dropdown-menu-checkboxes" />
 
-### Checkboxes Icons
+## Checkboxes Icons
 
 Add icons to checkbox items.
 
 <ComponentPreview styleName="base-nova" name="dropdown-menu-checkboxes-icons" />
 
-### Radio Group
+## Radio Group
 
 Use `DropdownMenuRadioGroup` for exclusive choices.
 
 <ComponentPreview styleName="base-nova" name="dropdown-menu-radio-group" />
 
-### Radio Icons
+## Radio Icons
 
 Show radio options with icons.
 
 <ComponentPreview styleName="base-nova" name="dropdown-menu-radio-icons" />
 
-### Destructive
+## Destructive
 
 Use `variant="destructive"` for irreversible actions.
 
 <ComponentPreview styleName="base-nova" name="dropdown-menu-destructive" />
 
-### Avatar
+## Avatar
 
 An account switcher dropdown triggered by an avatar.
 
 <ComponentPreview styleName="base-nova" name="dropdown-menu-avatar" />
 
-### Complex
+## Complex
 
 A richer example combining groups, icons, and submenus.
 

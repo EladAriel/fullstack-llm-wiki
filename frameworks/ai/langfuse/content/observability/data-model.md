@@ -4,10 +4,10 @@ framework: "Langfuse"
 source_repo: "https://github.com/langfuse/langfuse-docs"
 source_branch: "main"
 source_path: "content/docs/observability/data-model.mdx"
-source_commit: "4a702ece53852a6af86b3883f434adf3f5cae421"
-source_commit_short: "4a702ece"
-source_commit_date: "2026-06-23T13:41:14Z"
-generated_at: "2026-06-23T13:55:15Z"
+source_commit: "fcd1eca34a924867563c3c4e801254c4e66c0021"
+source_commit_short: "fcd1eca3"
+source_commit_date: "2026-07-25T00:45:45Z"
+generated_at: "2026-07-25T11:51:12Z"
 ---
 
 ---
@@ -27,58 +27,21 @@ Langfuse organizes an application's data into three core concepts: observations,
 
 <TracingHierarchyDiagram />
 
-import ObservationTypesList from "@/components-mdx/observation-types-list.mdx";
+import { ObservationsTableDiagram } from "@/components/ObservationsTableDiagram";
 
-### Observations
+### Observations & Traces [#observations-and-traces]
 
-`Observations` are the individual steps within a trace. Langfuse supports a number of LLM application specific [observation types](/docs/observability/features/observation-types), for example _generations_, _toolcalls_, _RAG retrieval steps_, etc.
+`Observations` are the individual steps of your application: LLM calls, tool calls, retrieval steps, and so on. They can be nested to reflect the structure of your application, and Langfuse supports several LLM-specific [observation types](/docs/observability/features/observation-types) such as _generations_ and _events_.
 
-Observations can be nested. The example below shows a trace with a nested observation.
+A `trace` represents a single request or operation, for example one chatbot interaction from the user's question to the final response. It is the logical grouping of all observations that share the same `trace_id`.
 
-<div className="grid grid-cols-2 mt-6 gap-2 md:gap-4">
+Trace-level attributes such as `user_id`, `session_id`, `tags`, and `metadata` live on every observation within the trace; the SDKs propagate them automatically. Conceptually, Langfuse stores one observations table, and each row holds the observation-level data plus a copy of the trace-level attributes. This keeps queries and aggregations fast:
 
-<div className="embedded-mermaid border rounded py-4 px-4 flex flex-col items-center justify-center bg-card">
+<ObservationsTableDiagram />
 
-Hierarchical structure of observations in Langfuse
+For day-to-day work in the observations table (filter recipes, saved views, the root-observations default), see [Working with the observations table](/faq/all/explore-observations-in-v4).
 
-<div className="flex-1 flex items-center justify-center ">
-
-```mermaid
-classDiagram
-    Trace "1" *-- "n" Observation
-    Observation o-- Observation: Nesting
-```
-
-</div>
-
-</div>
-
-<div className="border rounded py-4 px-4 text-center block dark:hidden bg-card">
-
-Example trace in Langfuse UI
-
-![Trace in Langfuse UI](/images/docs/tracing-observation-tree-light.png)
-
-</div>
-
-<div className="border rounded py-4 px-4 text-center bg-card hidden dark:block">
-
-Example trace in Langfuse UI
-
-![Trace in Langfuse UI](/images/docs/tracing-observation-tree-dark.png)
-
-</div>
-
-</div>
-
-### Traces
-
-A `trace` typically represents a single request or operation.
-For example, when a user asks a question to a chatbot, that interaction, from the user's question to the bot's response, is captured as one trace.
-
-It serves as container of observations. Trace attributes such as `user_id`, `session_id`, `tags`, `metadata`, etc. are propagated to all observations within the trace.
-
-### Sessions
+### Sessions [#sessions]
 
 Optionally, traces can be grouped into [sessions](/docs/observability/features/sessions).
 Sessions are used to group traces that are part of the same user interaction.
@@ -141,7 +104,7 @@ See the [OpenTelemetry integration guide](/integrations/native/opentelemetry) fo
 
 #### Instrumentation
 
-Instrumentation is the process of adding code to record its behavior. Once this recording is turned on, Langfuse (through OpenTelemetry) can automatically capture these events and structure them into traces and observations.
+Instrumentation is the process of adding code to your application to record what it does. Once this recording is turned on, Langfuse (through OpenTelemetry) can automatically capture these events and structure them into traces and observations.
 
 The [Get Started guide](/docs/observability/get-started) walks you through the process of instrumenting a function in your application.
 

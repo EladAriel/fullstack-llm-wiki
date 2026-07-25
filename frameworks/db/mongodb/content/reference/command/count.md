@@ -4,10 +4,10 @@ framework: "mongodb"
 source_repo: "https://github.com/mongodb/docs.git"
 source_branch: "main"
 source_path: "content/manual/manual/source/reference/command/count.txt"
-source_commit: "96788e8ed140cbdde184ff82e1066dff4996bde4"
-source_commit_short: "96788e8e"
-source_commit_date: "2026-06-19T21:35:03-06:00"
-generated_at: "2026-06-21T07:41:52Z"
+source_commit: "ab9db26ed3d11618cdb61516d8180337d8e3f679"
+source_commit_short: "ab9db26e"
+source_commit_date: "2026-07-24T16:22:46-06:00"
+generated_at: "2026-07-25T11:51:15Z"
 ---
 
 ========================
@@ -54,7 +54,7 @@ db.runCommand(
 
 ## Stable API Support
 
-Starting in MongoDB 6.0, the `count` command is included in `Stable API <stable-api>` V1. To use the `count` command in the Stable API, you must connect your driver to a deployment that is running MongoDB 6.0 or greater.
+Starting in MongoDB 6.0, the `count` command is included in `Stable API <stable-api>` V1. To use the `count` command in the Stable API, you must connect your driver to a deployment running MongoDB 6.0 or later.
 
 ## Behavior
 
@@ -62,7 +62,7 @@ Starting in MongoDB 6.0, the `count` command is included in `Stable API <stable-
 
 When you call :dbcommand:`count` without a query predicate, you may receive inaccurate document counts. Without a query predicate, :dbcommand:`count` commands return results based on the collection's metadata, which may result in an approximate count. In particular,
 
-- On a sharded cluster, the resulting count will not correctly
+- On a sharded cluster, the resulting count does not correctly
 filter out `orphaned documents <orphaned document>`.
 
 - After an unclean shutdown or :ref:`file copy based initial sync
@@ -93,17 +93,15 @@ operations that do not include a query document.
 
 ## Examples
 
-The following sections provide examples of the :dbcommand:`count` command.
-
 ### Count All Documents
 
-The following operation counts the number of all documents in the `orders` collection:
+The following operation counts all documents in the `orders` collection:
 
 ```javascript
 db.runCommand( { count: 'orders' } )
 ```
 
-In the result, the `n`, which represents the count, is `26`, and the command status `ok` is `1`:
+The operation returns the following document:
 
 ```javascript
 { "n" : 26, "ok" : 1 }
@@ -111,7 +109,7 @@ In the result, the `n`, which represents the count, is `26`, and the command sta
 
 ### Count Documents That Match a Query
 
-The following operation returns a count of the documents in the `orders` collection where the value of the `ord_dt` field is greater than `Date('01/01/2012')`:
+The following operation counts documents in the `orders` collection where the `ord_dt` field is greater than `Date('01/01/2012')`:
 
 ```javascript
 db.runCommand( { count:'orders',
@@ -119,7 +117,7 @@ db.runCommand( { count:'orders',
                } )
 ```
 
-In the result, the `n`, which represents the count, is `13` and the command status `ok` is `1`:
+The operation returns the following document:
 
 ```javascript
 { "n" : 13, "ok" : 1 }
@@ -127,7 +125,7 @@ In the result, the `n`, which represents the count, is `13` and the command stat
 
 ### Skip Documents in Count
 
-The following operation returns a count of the documents in the `orders` collection where the value of the `ord_dt` field is greater than `Date('01/01/2012')` and skip the first `10` matching documents:
+The following operation counts documents in the `orders` collection where the `ord_dt` field is greater than `Date('01/01/2012')`, skipping the first `10` matches:
 
 ```javascript
 db.runCommand( { count:'orders',
@@ -135,7 +133,7 @@ db.runCommand( { count:'orders',
                  skip: 10 }  )
 ```
 
-In the result, the `n`, which represents the count, is `3` and the command status `ok` is `1`:
+The operation returns the following document:
 
 ```javascript
 { "n" : 3, "ok" : 1 }
@@ -143,7 +141,7 @@ In the result, the `n`, which represents the count, is `3` and the command statu
 
 ### Specify the Index to Use
 
-The following operation uses the index `{ status: 1 }` to return a count of the documents in the `orders` collection where the value of the `ord_dt` field is greater than `Date('01/01/2012')` and the `status` field is equal to `"D"`:
+The following operation uses the index `{ status: 1 }` to count documents in the `orders` collection where the `ord_dt` field is greater than `Date('01/01/2012')` and the `status` field equals `"D"`:
 
 ```javascript
 db.runCommand(
@@ -158,7 +156,7 @@ db.runCommand(
 )
 ```
 
-In the result, the `n`, which represents the count, is `1` and the command status `ok` is `1`:
+The operation returns the following document:
 
 ```javascript
 { "n" : 1, "ok" : 1 }

@@ -8,9 +8,9 @@ This is a local LLM-friendly wiki generated from the official react documentatio
 - Source repo: `https://github.com/reactjs/react.dev`
 - Source branch: `main`
 - Source docs path: `src/content`
-- Source commit: `8bb31acb`
-- Source commit date: `2026-06-17T13:38:02-04:00`
-- Wiki generated at: `2026-06-21T12:23:02Z`
+- Source commit: `7b6c3ceb`
+- Source commit date: `2026-07-20T15:31:48+02:00`
+- Wiki generated at: `2026-07-25T11:50:43Z`
 
 ## How the IDE LLM should use this wiki
 

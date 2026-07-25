@@ -4,10 +4,10 @@ framework: "Langfuse"
 source_repo: "https://github.com/langfuse/langfuse-docs"
 source_branch: "main"
 source_path: "content/docs/observability/features/multi-modality.mdx"
-source_commit: "4a702ece53852a6af86b3883f434adf3f5cae421"
-source_commit_short: "4a702ece"
-source_commit_date: "2026-06-23T13:41:14Z"
-generated_at: "2026-06-23T13:55:15Z"
+source_commit: "fcd1eca34a924867563c3c4e801254c4e66c0021"
+source_commit_short: "fcd1eca3"
+source_commit_date: "2026-07-25T00:45:45Z"
+generated_at: "2026-07-25T11:51:12Z"
 ---
 
 ---
@@ -48,11 +48,72 @@ Multi-modal attachments are available today. You need to configure your own obje
 
 ## Supported media formats
 
-Langfuse supports:
+Langfuse supports a wide range of media types, including:
 
-- **Images**: .png, .jpg, .webp
-- **Audio files**: .mpeg, .mp3, .wav
-- **Other attachments**: .pdf, plain text
+- **Images**: .png, .jpg, .webp, .gif
+- **Audio**: .mp3, .wav, .ogg
+- **Video**: .mp4, .webm, .mov
+- **Text & code**: .txt, .md, .html, .csv
+- **Documents**: .pdf, .docx, .xlsx, .pptx
+- **Data & archives**: .json, .xml, .zip
+
+<details>
+<summary>Full list of supported MIME types</summary>
+
+| Category        | MIME type                                                                   | File extension  |
+| --------------- | --------------------------------------------------------------------------- | --------------- |
+| Images          | `image/png`                                                                 | `.png`          |
+| Images          | `image/jpeg`, `image/jpg`                                                   | `.jpg`, `.jpeg` |
+| Images          | `image/webp`                                                                | `.webp`         |
+| Images          | `image/gif`                                                                 | `.gif`          |
+| Images          | `image/svg+xml`                                                             | `.svg`          |
+| Images          | `image/tiff`                                                                | `.tiff`         |
+| Images          | `image/bmp`                                                                 | `.bmp`          |
+| Images          | `image/avif`                                                                | `.avif`         |
+| Images          | `image/heic`                                                                | `.heic`         |
+| Audio           | `audio/mpeg`, `audio/mp3`                                                   | `.mp3`          |
+| Audio           | `audio/wav`                                                                 | `.wav`          |
+| Audio           | `audio/ogg`                                                                 | `.ogg`          |
+| Audio           | `audio/oga`                                                                 | `.oga`          |
+| Audio           | `audio/aac`                                                                 | `.aac`          |
+| Audio           | `audio/mp4`                                                                 | `.m4a`          |
+| Audio           | `audio/flac`                                                                | `.flac`         |
+| Audio           | `audio/opus`                                                                | `.opus`         |
+| Audio           | `audio/webm`                                                                | `.weba`         |
+| Video           | `video/mp4`                                                                 | `.mp4`          |
+| Video           | `video/webm`                                                                | `.webm`         |
+| Video           | `video/ogg`                                                                 | `.ogv`          |
+| Video           | `video/mpeg`                                                                | `.mpeg`         |
+| Video           | `video/quicktime`                                                           | `.mov`          |
+| Video           | `video/x-msvideo`                                                           | `.avi`          |
+| Video           | `video/x-matroska`                                                          | `.mkv`          |
+| Text & code     | `text/plain`                                                                | `.txt`          |
+| Text & code     | `text/html`                                                                 | `.html`         |
+| Text & code     | `text/css`                                                                  | `.css`          |
+| Text & code     | `text/csv`                                                                  | `.csv`          |
+| Text & code     | `text/markdown`                                                             | `.md`           |
+| Text & code     | `text/x-python`                                                             | `.py`           |
+| Text & code     | `application/javascript`                                                    | `.js`           |
+| Text & code     | `text/x-typescript`                                                         | `.ts`           |
+| Text & code     | `application/x-yaml`                                                        | `.yaml`         |
+| Documents       | `application/pdf`                                                           | `.pdf`          |
+| Documents       | `application/msword`                                                        | `.doc`          |
+| Documents       | `application/vnd.openxmlformats-officedocument.wordprocessingml.document`   | `.docx`         |
+| Documents       | `application/vnd.ms-excel`                                                  | `.xls`          |
+| Documents       | `application/vnd.openxmlformats-officedocument.spreadsheetml.sheet`         | `.xlsx`         |
+| Documents       | `application/vnd.openxmlformats-officedocument.presentationml.presentation` | `.pptx`         |
+| Documents       | `application/rtf`                                                           | `.rtf`          |
+| Data & archives | `application/json`                                                          | `.json`         |
+| Data & archives | `application/x-ndjson`                                                      | `.jsonl`        |
+| Data & archives | `application/xml`                                                           | `.xml`          |
+| Data & archives | `application/vnd.apache.parquet`                                            | `.parquet`      |
+| Data & archives | `application/zip`                                                           | `.zip`          |
+| Data & archives | `application/gzip`                                                          | `.gz`           |
+| Data & archives | `application/x-tar`                                                         | `.tar`          |
+| Data & archives | `application/x-7z-compressed`                                               | `.7z`           |
+| Data & archives | `application/octet-stream`                                                  | `.bin`          |
+
+</details>
 
 If you require support for additional file types, please let us know in our [GitHub Discussion](https://github.com/orgs/langfuse/discussions/3004) where we're actively gathering feedback on multi-modal support.
 
@@ -61,6 +122,13 @@ If you require support for additional file types, please let us know in our [Git
 ### Base64 data URI encoded media
 
 If you use base64 encoded images, audio, or other files in your LLM applications, upgrade to the latest version of the Langfuse SDKs. The Langfuse SDKs automatically detect and handle base64 encoded media by extracting it, uploading it separately as a Langfuse Media file, and including a reference in the trace.
+
+<Callout type="warning" title="Handle media in the client or SDK">
+  If large base64-encoded media reaches Langfuse without client-side processing,
+  Langfuse processes it server-side to keep it intact and available for
+  inspection in the UI. This is a fallback. We strongly recommend handling
+  media in the client or Langfuse SDK.
+</Callout>
 
 This works with standard Data URI ([MDN](https://developer.mozilla.org/en-US/docs/Web/URI/Schemes/data#syntax)) formatted media (like those used by OpenAI and other LLMs).
 

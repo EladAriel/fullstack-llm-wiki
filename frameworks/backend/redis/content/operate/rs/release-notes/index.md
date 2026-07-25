@@ -4,10 +4,10 @@ framework: "redis"
 directory: "content/operate/rs/release-notes"
 source_repo: "https://github.com/redis/docs.git"
 source_branch: "main"
-source_commit: "bc92ea237bbfc2117c870c904f1a3ca619073ef1"
-source_commit_short: "bc92ea23"
-source_commit_date: "2026-06-18T14:53:00-05:00"
-generated_at: "2026-06-21T11:25:32Z"
+source_commit: "9d30f68c3dad1a6b3b7d30fe604b911348ce8152"
+source_commit_short: "9d30f68c"
+source_commit_date: "2026-07-24T10:52:10-07:00"
+generated_at: "2026-07-25T11:51:22Z"
 ---
 # Release Notes
 
@@ -31,6 +31,7 @@ This directory contains redis learning pages related to release notes.
 - [Rs 7 4 2 Releases](rs-7-4-2-releases/index.md) - pages related to rs 7 4 2 releases
 - [Rs 7 8 Releases](rs-7-8-releases/index.md) - pages related to rs 7 8 releases
 - [Rs 8 0 Releases](rs-8-0-releases/index.md) - pages related to rs 8 0 releases
+- [Rs 8 2 Releases](rs-8-2-releases/index.md) - pages related to rs 8 2 releases
 
 ## Pages in This Directory
 

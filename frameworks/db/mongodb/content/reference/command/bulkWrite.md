@@ -4,10 +4,10 @@ framework: "mongodb"
 source_repo: "https://github.com/mongodb/docs.git"
 source_branch: "main"
 source_path: "content/manual/manual/source/reference/command/bulkWrite.txt"
-source_commit: "96788e8ed140cbdde184ff82e1066dff4996bde4"
-source_commit_short: "96788e8e"
-source_commit_date: "2026-06-19T21:35:03-06:00"
-generated_at: "2026-06-21T07:41:52Z"
+source_commit: "ab9db26ed3d11618cdb61516d8180337d8e3f679"
+source_commit_short: "ab9db26e"
+source_commit_date: "2026-07-24T16:22:46-06:00"
+generated_at: "2026-07-25T11:51:15Z"
 ---
 
 ============================
@@ -119,8 +119,6 @@ The command returns a document with these fields:
 
 ## Behavior
 
-This section describes the `bulkWrite` command behavior.
-
 ### Multiple Document Field and Retryable Writes
 
 .. include:: /includes/bulkWrite-multi-field.rst
@@ -139,7 +137,7 @@ You can use `bulkWrite` update and delete operations with the `multi` field set 
 
 If you rewrite existing insert, update, and delete commands as a `bulkWrite` command and set `errorsOnly` to `true`, the `bulkWrite` command has similar performance as the existing commands. If you set `errorsOnly` to `false`, performance is worse.
 
-In addition, if you have a sequence of commands like this:
+Replacing multiple separate write commands with a single `bulkWrite` command can improve performance by reducing network latency. For example, consider this sequence:
 
 ```javascript
 insert
@@ -147,11 +145,11 @@ update
 delete
 ```
 
-If you replace those commands with the following example fragment, then the command with the following fragment is faster regardless of other options:
+Replace this sequence with a single `bulkWrite` command:
 
 ```javascript
 {
-   bulkWrite: 1, 
+   bulkWrite: 1,
    ops: [
       insert,
       update,
@@ -160,11 +158,7 @@ If you replace those commands with the following example fragment, then the comm
 }
 ```
 
-Most of the performance improvement is because of network latency, which is variable depending on your implementation, but the example is always faster.
-
 ## Examples
-
-This section contains `bulkWrite` command examples.
 
 ### Single Namespace Bulk Write Example
 

@@ -4,10 +4,10 @@ framework: "redis"
 source_repo: "https://github.com/redis/docs.git"
 source_branch: "main"
 source_path: "content/commands/srandmember.md"
-source_commit: "bc92ea237bbfc2117c870c904f1a3ca619073ef1"
-source_commit_short: "bc92ea23"
-source_commit_date: "2026-06-18T14:53:00-05:00"
-generated_at: "2026-06-21T11:25:32Z"
+source_commit: "9d30f68c3dad1a6b3b7d30fe604b911348ce8152"
+source_commit_short: "9d30f68c"
+source_commit_date: "2026-07-24T10:52:10-07:00"
+generated_at: "2026-07-25T11:51:22Z"
 ---
 
 ---
@@ -95,10 +95,11 @@ The number of members to return. A positive `count` returns up to that many dist
 ## Examples
 
 {{% redis-cli %}}
-SADD myset one two three
-SRANDMEMBER myset
-SRANDMEMBER myset 2
-SRANDMEMBER myset -5
+redis> SADD myset one two three
+(integer) 3
+redis> SRANDMEMBER myset
+redis> SRANDMEMBER myset 2
+redis> SRANDMEMBER myset -5
 {{% /redis-cli %}}
 
 ## Details

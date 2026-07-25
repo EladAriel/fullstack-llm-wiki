@@ -4,10 +4,10 @@ framework: "redis"
 source_repo: "https://github.com/redis/docs.git"
 source_branch: "main"
 source_path: "content/operate/rs/security/access-control/create-cluster-roles.md"
-source_commit: "bc92ea237bbfc2117c870c904f1a3ca619073ef1"
-source_commit_short: "bc92ea23"
-source_commit_date: "2026-06-18T14:53:00-05:00"
-generated_at: "2026-06-21T11:25:32Z"
+source_commit: "9d30f68c3dad1a6b3b7d30fe604b911348ce8152"
+source_commit_short: "9d30f68c"
+source_commit_date: "2026-07-24T10:52:10-07:00"
+generated_at: "2026-07-25T11:51:22Z"
 ---
 
 ---
@@ -101,3 +101,34 @@ POST /v1/roles
 {{< /multitabs >}}
 
 You can [assign the new role to users]({{<relref "/operate/rs/security/access-control/create-users#assign-roles-to-users">}}) to grant cluster access.
+
+## Scope a role to specific databases
+
+By default, the `db_member` and `db_viewer` [management roles](#default-management-roles) grant access to every database in the cluster. In a shared or multi-tenant cluster, you can scope one of these roles to specific databases so that users assigned the role can view or manage only those databases.
+
+To scope a role, add the `resources` field when you [create]({{<relref "/operate/rs/references/rest-api/requests/roles#post-role">}}) or [update]({{<relref "/operate/rs/references/rest-api/requests/roles#put-role">}}) a role with the REST API. The `resources` field is a list of resource scopes; each scope has a `type` (currently only `db`) and a `uids` array of the database IDs the role applies to.
+
+For example, the following request creates a `db_member` role scoped to databases `1` and `2`:
+
+```sh
+POST /v1/roles
+{
+  "name": "team-a-dbs",
+  "management": "db_member",
+  "resources": [
+    { "type": "db", "uids": ["1", "2"] }
+  ]
+}
+```
+
+When you [assign this role to a user]({{<relref "/operate/rs/security/access-control/create-users#assign-roles-to-users">}}):
+
+- The user can view or manage only the databases listed in the role's `resources` scope.
+
+- In the Cluster Manager UI and REST API responses, the user sees only their authorized databases, including in database lists, metrics, alerts, and event logs. Other databases are hidden.
+
+To return a role to cluster-wide scope, update it with an empty `resources` list or omit the field. Roles without a `resources` scope apply to all databases, so existing roles are unaffected.
+
+{{<note>}}
+Database scoping applies to the `db_member` and `db_viewer` management roles.
+{{</note>}}

@@ -4,10 +4,10 @@ framework: "mongodb"
 directory: "content"
 source_repo: "https://github.com/mongodb/docs.git"
 source_branch: "main"
-source_commit: "96788e8ed140cbdde184ff82e1066dff4996bde4"
-source_commit_short: "96788e8e"
-source_commit_date: "2026-06-19T21:35:03-06:00"
-generated_at: "2026-06-21T07:41:52Z"
+source_commit: "ab9db26ed3d11618cdb61516d8180337d8e3f679"
+source_commit_short: "ab9db26e"
+source_commit_date: "2026-07-24T16:22:46-06:00"
+generated_at: "2026-07-25T11:51:15Z"
 ---
 # Content
 
@@ -34,6 +34,7 @@ This directory contains mongodb learning pages related to content.
 - [Meta](meta/index.md) - pages related to meta
 - [Reference](reference/index.md) - pages related to reference
 - [Release Notes](release-notes/index.md) - pages related to release notes
+- [Sample Data](sample-data/index.md) - pages related to sample data
 - [Troubleshooting](troubleshooting/index.md) - pages related to troubleshooting
 - [Tutorial](tutorial/index.md) - pages related to tutorial
 
@@ -58,6 +59,7 @@ This directory contains mongodb learning pages related to content.
 - [Reference](reference.md)
 - [Release Notes](release-notes.md)
 - [Replication](replication.md)
+- [Sample Data](sample-data.md)
 - [Security](security.md)
 - [Self Managed Deployments](self-managed-deployments.md)
 - [Sharding](sharding.md)

@@ -4,10 +4,10 @@ framework: "Langfuse"
 source_repo: "https://github.com/langfuse/langfuse-docs"
 source_branch: "main"
 source_path: "content/docs/administration/data-deletion.mdx"
-source_commit: "4a702ece53852a6af86b3883f434adf3f5cae421"
-source_commit_short: "4a702ece"
-source_commit_date: "2026-06-23T13:41:14Z"
-generated_at: "2026-06-23T13:55:15Z"
+source_commit: "fcd1eca34a924867563c3c4e801254c4e66c0021"
+source_commit_short: "fcd1eca3"
+source_commit_date: "2026-07-25T00:45:45Z"
+generated_at: "2026-07-25T11:51:12Z"
 ---
 
 ---
@@ -112,8 +112,8 @@ Then select `Delete` in the `Actions` dropdown.
 Most deletions in Langfuse happen instantly, but the deletion of tracing data does not.
 Removing those records from our data warehouse is a resource intensive operation and, therefore, we rate limit
 how many deletions we process at any point in time.
-Usually, trace data is deleted from our system within 15 minutes of the delete call and there is no confirmation, i.e.
-To verify that your data got deleted, you will have to query it again.
+Usually, trace data is deleted from our system within 15 minutes of the delete call.
+There is no deletion confirmation or notification; to verify that your data got deleted, query it again.
 
 If you need to regularly clean up old data, consider using [Data Retention](/docs/administration/data-retention) instead, which automatically deletes traces, observations, scores, and media assets older than a configured number of days.
 

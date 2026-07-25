@@ -4,10 +4,10 @@ framework: "react"
 source_repo: "https://github.com/reactjs/react.dev"
 source_branch: "main"
 source_path: "src/content/blog/2025/10/01/react-19-2.md"
-source_commit: "8bb31acb86bf68fa33d97dd0f1b834dfa71e2b1a"
-source_commit_short: "8bb31acb"
-source_commit_date: "2026-06-17T13:38:02-04:00"
-generated_at: "2026-06-21T12:23:02Z"
+source_commit: "7b6c3ceb9dd97249e9dce4a8a94e61aed6424698"
+source_commit_short: "7b6c3ceb"
+source_commit_date: "2026-07-20T15:31:48+02:00"
+generated_at: "2026-07-25T11:50:43Z"
 ---
 
 ---
@@ -312,7 +312,7 @@ To continue using the legacy config, you can change to `recommended-legacy`:
 
 For a full list of compiler enabled rules, [check out the linter docs](/reference/eslint-plugin-react-hooks#recommended).
 
-Check out the `eslint-plugin-react-hooks` [changelog for a full list of changes](https://github.com/facebook/react/blob/main/packages/eslint-plugin-react-hooks/CHANGELOG.md#610).
+Check out the `eslint-plugin-react-hooks` [changelog for a full list of changes](https://github.com/react/react/blob/main/packages/eslint-plugin-react-hooks/CHANGELOG.md#610).
 
 ---
 
@@ -327,23 +327,23 @@ The original intent of using a special character that was not valid for CSS sele
 ## Changelog {/*changelog*/}
 
 Other notable changes
-- `react-dom`: Allow nonce to be used on hoistable styles [#32461](https://github.com/facebook/react/pull/32461)
-- `react-dom`: Warn for using a React owned node as a Container if it also has text content [#32774](https://github.com/facebook/react/pull/32774)
+- `react-dom`: Allow nonce to be used on hoistable styles [#32461](https://github.com/react/react/pull/32461)
+- `react-dom`: Warn for using a React owned node as a Container if it also has text content [#32774](https://github.com/react/react/pull/32774)
 
 Notable bug fixes
-- `react`: Stringify context as "SomeContext" instead of "SomeContext.Provider" [#33507](https://github.com/facebook/react/pull/33507)
-- `react`: Fix infinite useDeferredValue loop in popstate event [#32821](https://github.com/facebook/react/pull/32821)
-- `react`: Fix a bug when an initial value was passed to useDeferredValue [#34376](https://github.com/facebook/react/pull/34376)
-- `react`: Fix a crash when submitting forms with Client Actions [#33055](https://github.com/facebook/react/pull/33055)
-- `react`: Hide/unhide the content of dehydrated suspense boundaries if they resuspend [#32900](https://github.com/facebook/react/pull/32900)
-- `react`: Avoid stack overflow on wide trees during Hot Reload [#34145](https://github.com/facebook/react/pull/34145)
-- `react`: Improve component stacks in various places [#33629](https://github.com/facebook/react/pull/33629), [#33724](https://github.com/facebook/react/pull/33724), [#32735](https://github.com/facebook/react/pull/32735), [#33723](https://github.com/facebook/react/pull/33723)
-- `react`: Fix a bug with React.use inside React.lazy-ed Component [#33941](https://github.com/facebook/react/pull/33941)
-- `react-dom`: Stop warning when ARIA 1.3 attributes are used [#34264](https://github.com/facebook/react/pull/34264)
-- `react-dom`: Fix a bug with deeply nested Suspense inside Suspense fallbacks [#33467](https://github.com/facebook/react/pull/33467)
-- `react-dom`: Avoid hanging when suspending after aborting while rendering [#34192](https://github.com/facebook/react/pull/34192)
+- `react`: Stringify context as "SomeContext" instead of "SomeContext.Provider" [#33507](https://github.com/react/react/pull/33507)
+- `react`: Fix infinite useDeferredValue loop in popstate event [#32821](https://github.com/react/react/pull/32821)
+- `react`: Fix a bug when an initial value was passed to useDeferredValue [#34376](https://github.com/react/react/pull/34376)
+- `react`: Fix a crash when submitting forms with Client Actions [#33055](https://github.com/react/react/pull/33055)
+- `react`: Hide/unhide the content of dehydrated suspense boundaries if they resuspend [#32900](https://github.com/react/react/pull/32900)
+- `react`: Avoid stack overflow on wide trees during Hot Reload [#34145](https://github.com/react/react/pull/34145)
+- `react`: Improve component stacks in various places [#33629](https://github.com/react/react/pull/33629), [#33724](https://github.com/react/react/pull/33724), [#32735](https://github.com/react/react/pull/32735), [#33723](https://github.com/react/react/pull/33723)
+- `react`: Fix a bug with React.use inside React.lazy-ed Component [#33941](https://github.com/react/react/pull/33941)
+- `react-dom`: Stop warning when ARIA 1.3 attributes are used [#34264](https://github.com/react/react/pull/34264)
+- `react-dom`: Fix a bug with deeply nested Suspense inside Suspense fallbacks [#33467](https://github.com/react/react/pull/33467)
+- `react-dom`: Avoid hanging when suspending after aborting while rendering [#34192](https://github.com/react/react/pull/34192)
 
-For a full list of changes, please see the [Changelog](https://github.com/facebook/react/blob/main/CHANGELOG.md).
+For a full list of changes, please see the [Changelog](https://github.com/react/react/blob/main/CHANGELOG.md).
 
 
 ---

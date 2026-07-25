@@ -4,10 +4,10 @@ framework: "redis"
 source_repo: "https://github.com/redis/docs.git"
 source_branch: "main"
 source_path: "content/operate/rc/databases/active-active/create-active-active-database.md"
-source_commit: "bc92ea237bbfc2117c870c904f1a3ca619073ef1"
-source_commit_short: "bc92ea23"
-source_commit_date: "2026-06-18T14:53:00-05:00"
-generated_at: "2026-06-21T11:25:32Z"
+source_commit: "9d30f68c3dad1a6b3b7d30fe604b911348ce8152"
+source_commit_short: "9d30f68c"
+source_commit_date: "2026-07-24T10:52:10-07:00"
+generated_at: "2026-07-25T11:51:22Z"
 ---
 
 ---
@@ -111,6 +111,8 @@ In the **Advanced options** section, you can:
 
 {{< note >}}
 Multi-AZ replication is required for all Active-Active databases.
+
+Regions with fewer than three availability zones are not available in the Redis Cloud console. To create an Active-Active database that includes one of these regions, use the REST API to [create a Pro subscription]({{< relref "/operate/rc/api/examples/manage-subscriptions#create-a-pro-subscription" >}}). You'll be able to manage these subscriptions and databases using the Redis Cloud console after they're created. Active-Active databases in these regions use single-zone replication and provide 99.99% (four-nines) availability instead of 99.999%. For more information, see [Active-Active Redis]({{< relref "/operate/rc/databases/active-active#multi-zone" >}}).
 {{< /note >}}
 
 When finished, choose **Continue** to determine your size requirements.

@@ -4,10 +4,10 @@ framework: "pydantic"
 source_repo: "https://github.com/pydantic/pydantic"
 source_branch: "main"
 source_path: "docs/contributing.md"
-source_commit: "363728fe0b353db1a1fcb44aac5c38fd96a8cc20"
-source_commit_short: "363728fe"
-source_commit_date: "2026-06-20T11:20:58+01:00"
-generated_at: "2026-06-21T11:37:01Z"
+source_commit: "a2a6577d4c329dd574a45dbb01a8feaa16b1ad3d"
+source_commit_short: "a2a6577d"
+source_commit_date: "2026-07-23T15:38:17Z"
+generated_at: "2026-07-25T11:50:12Z"
 ---
 
 We'd love you to contribute to Pydantic!
@@ -85,11 +85,11 @@ git clone git@github.com:<your username>/pydantic.git
 cd pydantic
 
 # Install UV and pre-commit
-# We use pipx here, for other options see:
+# We use uv here, for other options see:
 # https://docs.astral.sh/uv/getting-started/installation/
 # https://pre-commit.com/#install
 curl -LsSf https://astral.sh/uv/install.sh | sh
-uvx install pre-commit
+uv tool install pre-commit
 
 # Install pydantic, dependencies, test dependencies and doc dependencies
 make install
@@ -112,7 +112,7 @@ Run tests and linting locally to make sure everything is working as expected.
 ```bash
 # Run automated code formatting and linting
 make format
-# Pydantic uses ruff, an awesome Python linter written in rust
+# Pydantic uses ruff, an awesome Python linter written in Rust
 # https://github.com/astral-sh/ruff
 
 # Run tests and linting
@@ -177,9 +177,9 @@ When contributing to Pydantic, please make sure that all code is well documented
 
 Pydantic uses [Google-style docstrings](https://google.github.io/styleguide/pyguide.html#38-comments-and-docstrings) formatted according to [PEP 257](https://www.python.org/dev/peps/pep-0257/) guidelines. (See [Example Google Style Python Docstrings](https://sphinxcontrib-napoleon.readthedocs.io/en/latest/example_google.html) for further examples.)
 
-[pydocstyle](https://www.pydocstyle.org/en/stable/index.html) is used for linting docstrings. You can run `make format` to check your docstrings.
+Ruff lints docstrings automatically. You can run `make format` to auto-fix any docstring issues.
 
-Where this is a conflict between Google-style docstrings and pydocstyle linting, follow the pydocstyle linting hints.
+Where there is a conflict between Google-style docstrings and Ruff linting, follow the Ruff linting hints.
 
 Class attributes and function arguments should be documented in the format "name: description." When applicable, a return type should be documented with just a description. Types are inferred from the signature.
 

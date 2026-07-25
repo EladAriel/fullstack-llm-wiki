@@ -4,10 +4,10 @@ framework: "Langfuse"
 directory: "content/observability/features"
 source_repo: "https://github.com/langfuse/langfuse-docs"
 source_branch: "main"
-source_commit: "4a702ece53852a6af86b3883f434adf3f5cae421"
-source_commit_short: "4a702ece"
-source_commit_date: "2026-06-23T13:41:14Z"
-generated_at: "2026-06-23T13:55:15Z"
+source_commit: "fcd1eca34a924867563c3c4e801254c4e66c0021"
+source_commit_short: "fcd1eca3"
+source_commit_date: "2026-07-25T00:45:45Z"
+generated_at: "2026-07-25T11:51:12Z"
 ---
 # Features
 
@@ -31,6 +31,7 @@ This directory contains Langfuse learning pages related to features.
 - [Comments](comments.md)
 - [Corrections](corrections.md)
 - [Environments](environments.md)
+- [Events Table Charts](events-table-charts.md)
 - [Filter Search Bar](filter-search-bar.md)
 - [Full Text Search](full-text-search.md)
 - [Log Levels](log-levels.md)

@@ -4,10 +4,10 @@ framework: "redis"
 source_repo: "https://github.com/redis/docs.git"
 source_branch: "main"
 source_path: "content/develop/use-cases/feature-store/ruby/_index.md"
-source_commit: "bc92ea237bbfc2117c870c904f1a3ca619073ef1"
-source_commit_short: "bc92ea23"
-source_commit_date: "2026-06-18T14:53:00-05:00"
-generated_at: "2026-06-21T11:25:32Z"
+source_commit: "9d30f68c3dad1a6b3b7d30fe604b911348ce8152"
+source_commit_short: "9d30f68c"
+source_commit_date: "2026-07-24T10:52:10-07:00"
+generated_at: "2026-07-25T11:51:22Z"
 ---
 
 ---
@@ -391,7 +391,7 @@ One round trip for the whole batch. The demo returns a 30-user batch in
 
 A Redis Cluster is different: a single `redis.pipelined` block ships
 through one connection to one node. For batch reads on a cluster, use
-the [`redis-clustering`](https://github.com/redis/redis-rb-cluster) gem
+the [`redis-clustering`](https://github.com/redis/redis-rb) gem
 and either fan out parallel `hmget` calls (the cluster client routes
 each one to the right shard) or, for tighter control, group entity IDs
 by hash slot and run one `pipelined` block per shard in parallel.
@@ -596,7 +596,7 @@ prevents training-serving skew.
 
 A single `redis.pipelined` block ships through one connection to one
 node. On a Redis Cluster you need the
-[`redis-clustering`](https://github.com/redis/redis-rb-cluster) gem,
+[`redis-clustering`](https://github.com/redis/redis-rb) gem,
 which routes each command to the right shard transparently. For batch
 reads on a cluster, either fan out parallel `hmget` calls (each routed
 per-shard) or group entity IDs by hash slot ahead of time and run one

@@ -4,17 +4,17 @@ framework: "FastAPI"
 source_repo: "https://github.com/fastapi/fastapi.git"
 source_branch: "master"
 source_path: "docs/en/docs/fastapi-cli.md"
-source_commit: "0cb4a8e284b450abbccb71c543ad7757de46c0b2"
-source_commit_short: "0cb4a8e2"
-source_commit_date: "2026-06-20T16:31:34Z"
-generated_at: "2026-06-21T07:06:10Z"
+source_commit: "255b912928904e3ba5980425a54d6837c8bd1a1c"
+source_commit_short: "255b9129"
+source_commit_date: "2026-07-24T21:15:37Z"
+generated_at: "2026-07-25T11:50:10Z"
 ---
 
 # FastAPI CLI { #fastapi-cli }
 
 **FastAPI <abbr title="command line interface">CLI</abbr>** is a command line program that you can use to serve your FastAPI app, manage your FastAPI project, and more.
 
-When you install FastAPI (e.g. with `pip install "fastapi[standard]"`), it comes with a command line program you can run in the terminal.
+When you add FastAPI to your project (e.g. with `uv add "fastapi[standard]"`), it comes with a command line program you can run in the terminal.
 
 To run your FastAPI app for development, you can use the `fastapi dev` command:
 
@@ -64,7 +64,7 @@ For production you would use `fastapi run` instead of `fastapi dev`. 🚀
 
 ///
 
-Internally, **FastAPI CLI** uses [Uvicorn](https://www.uvicorn.dev), a high-performance, production-ready, ASGI server. 😎
+Internally, **FastAPI CLI** uses [Uvicorn](https://uvicorn.dev), a high-performance, production-ready, ASGI server. 😎
 
 The `fastapi` CLI will try to detect automatically the FastAPI app to run, assuming it's an object called `app` in a file `main.py` (or a couple other variants).
 
@@ -112,13 +112,13 @@ from backend.main import app
 You can also pass the file path to the `fastapi dev` command, and it will guess the FastAPI app object to use:
 
 ```console
-$ fastapi dev main.py
+$ uv run fastapi dev main.py
 ```
 
 Or, you can also pass the `--entrypoint` option to the `fastapi dev` command:
 
 ```console
-$ fastapi dev --entrypoint main:app
+$ uv run fastapi dev --entrypoint main:app
 ```
 
 But you would have to remember to pass the correct path\entrypoint every time you call the `fastapi` command.

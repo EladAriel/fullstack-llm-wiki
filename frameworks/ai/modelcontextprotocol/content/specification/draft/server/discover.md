@@ -4,10 +4,10 @@ framework: "Model Context Protocol"
 source_repo: "https://github.com/modelcontextprotocol/modelcontextprotocol"
 source_branch: "main"
 source_path: "docs/specification/draft/server/discover.mdx"
-source_commit: "47501e4ced7823014b83be168916d4c9e63b594e"
-source_commit_short: "47501e4c"
-source_commit_date: "2026-06-22T09:16:44-07:00"
-generated_at: "2026-06-23T14:04:43Z"
+source_commit: "7634684382c3d14cf7e9f14073fe40a2d8ace3fa"
+source_commit_short: "76346843"
+source_commit_date: "2026-07-23T16:49:30-07:00"
+generated_at: "2026-07-25T11:50:39Z"
 ---
 
 ---
@@ -58,9 +58,11 @@ identity. This operation supports [caching](/specification/draft/server/utilitie
       "tools": {},
       "resources": {}
     },
-    "serverInfo": {
-      "name": "ExampleServer",
-      "version": "1.0.0"
+    "_meta": {
+      "io.modelcontextprotocol/serverInfo": {
+        "name": "ExampleServer",
+        "version": "1.0.0"
+      }
     },
     "instructions": "This server provides weather and resource utilities.",
     "ttlMs": 3600000,
@@ -77,8 +79,12 @@ RPC inline and handle
 if the server does not support the requested version. However, `server/discover`
 is useful in two scenarios:
 
-- **Up-front version selection.** The client learns the server's supported
-  versions before sending any other request, avoiding a round-trip error.
+- **Presenting server information.** While a client doesn't need to call
+  `server/discover` to use the server, it's a convenient way to retrieve the
+  server's identity, capabilities, and supported versions in a single request.
+  For example, a client can present the capabilities a server supports from a
+  single `server/discover` response instead of probing with separate
+  `tools/list`, `prompts/list`, and `resources/list` requests.
 - **stdio backward-compatibility probe.** On stdio, there is no per-request
   HTTP status code to drive fallback. A client that supports both modern
   (per-request `_meta`) and legacy (`initialize` handshake) servers **SHOULD**
@@ -101,6 +107,14 @@ A discovery result includes:
   choose one of these for subsequent requests.
 - `capabilities`: Capabilities the server supports (tools, resources, prompts,
   etc.)
-- `serverInfo`: Name and version of the server software
+- `_meta['io.modelcontextprotocol/serverInfo']`: Name and version of the server
+  software. Servers **SHOULD** include this field.
 - `instructions`: Optional natural-language guidance for LLMs on how to use
   this server effectively
+
+<Note>
+  `serverInfo` is self-reported by the server and is not verified by the
+  protocol. It is intended for display, logging, and debugging. Clients **SHOULD
+  NOT** use it to change their behavior, and **SHOULD NOT** rely on it for
+  security decisions.
+</Note>

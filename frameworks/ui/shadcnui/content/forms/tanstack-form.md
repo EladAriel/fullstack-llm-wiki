@@ -4,10 +4,10 @@ framework: "shadcnui"
 source_repo: "https://github.com/shadcn-ui/ui"
 source_branch: "main"
 source_path: "apps/v4/content/docs/forms/tanstack-form.mdx"
-source_commit: "5602b81d8344e0d0d7178e3bf57612662cd42957"
-source_commit_short: "5602b81d"
-source_commit_date: "2026-06-21T15:49:35+04:00"
-generated_at: "2026-06-21T12:47:26Z"
+source_commit: "4baadbc6517070ae8f8feb2c97037adc2b305544"
+source_commit_short: "4baadbc6"
+source_commit_date: "2026-07-23T23:50:36+04:00"
+generated_at: "2026-07-25T11:50:48Z"
 ---
 
 ---
@@ -33,6 +33,7 @@ We'll start by building the following form. It has a simple text input and a tex
 </Callout>
 
 <ComponentPreview
+  styleName="new-york-v4"
   name="form-tanstack-demo"
   className="sm:[&_.preview]:h-[700px]"
   chromeLessOnMobile
@@ -270,6 +271,7 @@ Display errors next to the field using `<FieldError />`. For styling and accessi
 - To show errors, add the `aria-invalid` prop to the `<Input />` component and the `data-invalid` prop to the `<Field />` component.
 
 <ComponentPreview
+  styleName="new-york-v4"
   name="form-tanstack-input"
   className="sm:[&_.preview]:h-[700px]"
   chromeLessOnMobile
@@ -310,6 +312,7 @@ Display errors next to the field using `<FieldError />`. For styling and accessi
 - To show errors, add the `aria-invalid` prop to the `<Textarea />` component and the `data-invalid` prop to the `<Field />` component.
 
 <ComponentPreview
+  styleName="new-york-v4"
   name="form-tanstack-textarea"
   className="sm:[&_.preview]:h-[700px]"
   chromeLessOnMobile
@@ -352,6 +355,7 @@ Display errors next to the field using `<FieldError />`. For styling and accessi
 - To show errors, add the `aria-invalid` prop to the `<SelectTrigger />` component and the `data-invalid` prop to the `<Field />` component.
 
 <ComponentPreview
+  styleName="new-york-v4"
   name="form-tanstack-select"
   className="sm:[&_.preview]:h-[700px]"
   chromeLessOnMobile
@@ -404,6 +408,7 @@ Display errors next to the field using `<FieldError />`. For styling and accessi
 - Remember to add `data-slot="checkbox-group"` to the `<FieldGroup />` component for proper styling and spacing.
 
 <ComponentPreview
+  styleName="new-york-v4"
   name="form-tanstack-checkbox"
   className="sm:[&_.preview]:h-[700px]"
   chromeLessOnMobile
@@ -466,6 +471,7 @@ Display errors next to the field using `<FieldError />`. For styling and accessi
 - To show errors, add the `aria-invalid` prop to the `<RadioGroupItem />` component and the `data-invalid` prop to the `<Field />` component.
 
 <ComponentPreview
+  styleName="new-york-v4"
   name="form-tanstack-radiogroup"
   className="sm:[&_.preview]:h-[700px]"
   chromeLessOnMobile
@@ -519,6 +525,7 @@ Display errors next to the field using `<FieldError />`. For styling and accessi
 - To show errors, add the `aria-invalid` prop to the `<Switch />` component and the `data-invalid` prop to the `<Field />` component.
 
 <ComponentPreview
+  styleName="new-york-v4"
   name="form-tanstack-switch"
   className="sm:[&_.preview]:h-[500px]"
   chromeLessOnMobile
@@ -558,6 +565,7 @@ Display errors next to the field using `<FieldError />`. For styling and accessi
 Here is an example of a more complex form with multiple fields and validation.
 
 <ComponentPreview
+  styleName="new-york-v4"
   name="form-tanstack-complex"
   className="sm:[&_.preview]:h-[1100px]"
   chromeLessOnMobile
@@ -578,6 +586,7 @@ Use `form.reset()` to reset the form to its default values.
 TanStack Form provides powerful array field management with `mode="array"`. This allows you to dynamically add, remove, and update array items with full validation support.
 
 <ComponentPreview
+  styleName="new-york-v4"
   name="form-tanstack-array"
   className="sm:[&_.preview]:h-[700px]"
   chromeLessOnMobile

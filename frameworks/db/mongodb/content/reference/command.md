@@ -4,10 +4,10 @@ framework: "mongodb"
 source_repo: "https://github.com/mongodb/docs.git"
 source_branch: "main"
 source_path: "content/manual/manual/source/reference/command.txt"
-source_commit: "96788e8ed140cbdde184ff82e1066dff4996bde4"
-source_commit_short: "96788e8e"
-source_commit_date: "2026-06-19T21:35:03-06:00"
-generated_at: "2026-06-21T07:41:52Z"
+source_commit: "ab9db26ed3d11618cdb61516d8180337d8e3f679"
+source_commit_short: "ab9db26e"
+source_commit_date: "2026-07-24T16:22:46-06:00"
+generated_at: "2026-07-25T11:51:15Z"
 ---
 
 =================
@@ -48,7 +48,10 @@ db.runCommand( { hello: 1 } )
 
 ## Contents
 
-- Query Plan Cache </reference/command/nav-plan-cache>
+- planCacheClear </reference/command/planCacheClear>
+- planCacheClearFilters </reference/command/planCacheClearFilters>
+- planCacheListFilters </reference/command/planCacheListFilters>
+- planCacheSetFilter </reference/command/planCacheSetFilter>
 
 ## Database Operations
 
@@ -56,25 +59,53 @@ db.runCommand( { hello: 1 } )
 
 ## Contents
 
-- Authentication </reference/command/nav-authentication>
+- authenticate </reference/command/authenticate>
+- logout </reference/command/logout>
 
 ### User Management Commands
 
 ## Contents
 
-- User Management </reference/command/nav-user-management>
+- createUser </reference/command/createUser>
+- dropAllUsersFromDatabase </reference/command/dropAllUsersFromDatabase>
+- dropUser </reference/command/dropUser>
+- grantRolesToUser </reference/command/grantRolesToUser>
+- revokeRolesFromUser </reference/command/revokeRolesFromUser>
+- updateUser </reference/command/updateUser>
+- usersInfo </reference/command/usersInfo>
 
 ### Role Management Commands
 
 ## Contents
 
-- Role Management </reference/command/nav-role-management>
+- createRole </reference/command/createRole>
+- dropAllRolesFromDatabase </reference/command/dropAllRolesFromDatabase>
+- dropRole </reference/command/dropRole>
+- grantPrivilegesToRole </reference/command/grantPrivilegesToRole>
+- grantRolesToRole </reference/command/grantRolesToRole>
+- invalidateUserCache </reference/command/invalidateUserCache>
+- revokePrivilegesFromRole </reference/command/revokePrivilegesFromRole>
+- revokeRolesFromRole </reference/command/revokeRolesFromRole>
+- rolesInfo </reference/command/rolesInfo>
+- updateRole </reference/command/updateRole>
 
 ### Replication Commands
 
 ## Contents
 
-- Replication </reference/command/nav-replication>
+- appendOplogNote </reference/command/appendOplogNote>
+- applyOps </reference/command/applyOps>
+- hello </reference/command/hello>
+- replSetAbortPrimaryCatchUp </reference/command/replSetAbortPrimaryCatchUp>
+- replSetFreeze </reference/command/replSetFreeze>
+- replSetGetConfig </reference/command/replSetGetConfig>
+- replSetGetStatus </reference/command/replSetGetStatus>
+- replSetInitiate </reference/command/replSetInitiate>
+- replSetMaintenance </reference/command/replSetMaintenance>
+- replSetReconfig </reference/command/replSetReconfig>
+- replSetResizeOplog </reference/command/replSetResizeOplog>
+- replSetStepDown </reference/command/replSetStepDown>
+- replSetSyncFrom </reference/command/replSetSyncFrom>
 
 > **Seealso:** `/replication` for more information regarding
 replication.
@@ -83,7 +114,57 @@ replication.
 
 ## Contents
 
-- Sharding </reference/command/nav-sharding>
+- abortMoveCollection </reference/command/abortMoveCollection>
+- abortReshardCollection </reference/command/abortReshardCollection>
+- abortRewriteCollection </reference/command/abortRewriteCollection>
+- abortUnshardCollection </reference/command/abortUnshardCollection>
+- addShard </reference/command/addShard>
+- addShardToZone </reference/command/addShardToZone>
+- analyzeShardKey </reference/command/analyzeShardKey>
+- balancerCollectionStatus </reference/command/balancerCollectionStatus>
+- balancerStart </reference/command/balancerStart>
+- balancerStatus </reference/command/balancerStatus>
+- balancerStop </reference/command/balancerStop>
+- checkMetadataConsistency </reference/command/checkMetadataConsistency>
+- clearJumboFlag </reference/command/clearJumboFlag>
+- cleanupOrphaned </reference/command/cleanupOrphaned>
+- cleanupReshardCollection </reference/command/cleanupReshardCollection>
+- commitReshardCollection </reference/command/commitReshardCollection>
+- commitShardRemoval </reference/command/commitShardRemoval>
+- commitTransitionToDedicatedConfigServer </reference/command/commitTransitionToDedicatedConfigServer>
+- configureCollectionBalancing </reference/command/configureCollectionBalancing>
+- configureQueryAnalyzer </reference/command/configureQueryAnalyzer>
+- enableSharding </reference/command/enableSharding>
+- flushRouterConfig </reference/command/flushRouterConfig>
+- getShardMap </reference/command/getShardMap>
+- getTransitionToDedicatedConfigServerStatus </reference/command/getTransitionToDedicatedConfigServerStatus>
+- isdbgrid </reference/command/isdbgrid>
+- listShards </reference/command/listShards>
+- mergeAllChunksOnShard </reference/command/mergeAllChunksOnShard>
+- mergeChunks </reference/command/mergeChunks>
+- moveChunk </reference/command/moveChunk>
+- moveCollection </reference/command/moveCollection>
+- movePrimary </reference/command/movePrimary>
+- moveRange </reference/command/moveRange>
+- refineCollectionShardKey </reference/command/refineCollectionShardKey>
+- removeShard </reference/command/removeShard>
+- removeShardFromZone </reference/command/removeShardFromZone>
+- reshardCollection </reference/command/reshardCollection>
+- rewriteCollection </reference/command/rewriteCollection>
+- setAllowMigrations </reference/command/setAllowMigrations>
+- shardCollection </reference/command/shardCollection>
+- shardDrainingStatus </reference/command/shardDrainingStatus>
+- shardingState </reference/command/shardingState>
+- split </reference/command/split>
+- startShardDraining </reference/command/startShardDraining>
+- startTransitionToDedicatedConfigServer </reference/command/startTransitionToDedicatedConfigServer>
+- stopShardDraining </reference/command/stopShardDraining>
+- stopTransitionToDedicatedConfigServer </reference/command/stopTransitionToDedicatedConfigServer>
+- transitionFromDedicatedConfigServer </reference/command/transitionFromDedicatedConfigServer>
+- transitionToDedicatedConfigServer </reference/command/transitionToDedicatedConfigServer>
+- unsetSharding </reference/command/unsetSharding>
+- unshardCollection </reference/command/unshardCollection>
+- updateZoneKeyRange </reference/command/updateZoneKeyRange>
 
 > **Seealso:** `/sharding` for more information about MongoDB's
 sharding functionality.
@@ -94,27 +175,92 @@ sharding functionality.
 
 ## Contents
 
-- Sessions </reference/command/nav-sessions>
+- abortTransaction </reference/command/abortTransaction>
+- commitTransaction </reference/command/commitTransaction>
+- endSessions </reference/command/endSessions>
+- killAllSessions </reference/command/killAllSessions>
+- killAllSessionsByPattern </reference/command/killAllSessionsByPattern>
+- killSessions </reference/command/killSessions>
+- refreshSessions </reference/command/refreshSessions>
+- startSession </reference/command/startSession>
 
 ### Administration Commands
 
 ## Contents
 
-- Administration </reference/command/nav-administration>
+- autoCompact </reference/command/autoCompact>
+- cloneCollectionAsCapped </reference/command/cloneCollectionAsCapped>
+- collMod </reference/command/collMod>
+- compact </reference/command/compact>
+- compactStructuredEncryptionData </reference/command/compactStructuredEncryptionData>
+- convertToCapped </reference/command/convertToCapped>
+- create </reference/command/create>
+- createIndexes </reference/command/createIndexes>
+- currentOp </reference/command/currentOp>
+- drop </reference/command/drop>
+- dropDatabase </reference/command/dropDatabase>
+- dropConnections </reference/command/dropConnections>
+- dropIndexes </reference/command/dropIndexes>
+- filemd5 </reference/command/filemd5>
+- fsync </reference/command/fsync>
+- fsyncUnlock </reference/command/fsyncUnlock>
+- getAuditConfig </reference/command/getAuditConfig>
+- getClusterParameter </reference/command/getClusterParameter>
+- getDefaultRWConcern </reference/command/getDefaultRWConcern>
+- getParameter </reference/command/getParameter>
+- killCursors </reference/command/killCursors>
+- killOp </reference/command/killOp>
+- listCollections </reference/command/listCollections>
+- listDatabases </reference/command/listDatabases>
+- listIndexes </reference/command/listIndexes>
+- logRotate </reference/command/logRotate>
+- reIndex </reference/command/reIndex>
+- removeQuerySettings </reference/command/removeQuerySettings>
+- renameCollection </reference/command/renameCollection>
+- rotateCertificates </reference/command/rotateCertificates>
+- setAuditConfig </reference/command/setAuditConfig>
+- setClusterParameter </reference/command/setClusterParameter>
+- setDefaultRWConcern </reference/command/setDefaultRWConcern>
+- setFeatureCompatibilityVersion </reference/command/setFeatureCompatibilityVersion>
+- setIndexCommitQuorum </reference/command/setIndexCommitQuorum>
+- setParameter </reference/command/setParameter>
+- setQuerySettings </reference/command/setQuerySettings>
+- setUserWriteBlockMode </reference/command/setUserWriteBlockMode>
+- shutdown </reference/command/shutdown>
 
 ### Diagnostic Commands
 
 ## Contents
 
-- Diagnostics </reference/command/nav-diagnostic>
+- buildInfo </reference/command/buildInfo>
+- collStats </reference/command/collStats>
+- connPoolStats </reference/command/connPoolStats>
+- connectionStatus </reference/command/connectionStatus>
+- dataSize </reference/command/dataSize>
+- dbHash </reference/command/dbHash>
+- dbStats </reference/command/dbStats>
+- explain </reference/command/explain>
+- getCmdLineOpts </reference/command/getCmdLineOpts>
+- getLog </reference/command/getLog>
+- hostInfo </reference/command/hostInfo>
+- listCommands </reference/command/listCommands>
+- lockInfo </reference/command/lockInfo>
+- ping </reference/command/ping>
+- profile </reference/command/profile>
+- serverStatus </reference/command/serverStatus>
+- shardConnPoolStats </reference/command/shardConnPoolStats>
+- top </reference/command/top>
+- validate </reference/command/validate>
+- validateDBMetadata </reference/command/validateDBMetadata>
+- whatsmyuri </reference/command/whatsmyuri>
 
 ### Auditing Commands
 
 ## Contents
 
-- Auditing </reference/command/nav-auditing>
+- logApplicationMessage </reference/command/logApplicationMessage>
 
-## {+fts+} Commands
+## Atlas Search
 
 .. versionadded:: 7.0 (Also available starting in 6.0.7)
 
@@ -122,4 +268,6 @@ sharding functionality.
 
 ## Contents
 
-- {+fts+} </reference/command/nav-atlas-search>
+- createSearchIndexes </reference/command/createSearchIndexes>
+- dropSearchIndex </reference/command/dropSearchIndex>
+- updateSearchIndex </reference/command/updateSearchIndex>

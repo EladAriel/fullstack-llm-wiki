@@ -4,10 +4,10 @@ framework: "pytest"
 source_repo: "https://github.com/pytest-dev/pytest"
 source_branch: "main"
 source_path: "doc/en/how-to/plugins.rst"
-source_commit: "d2466e3a9655f75d25719bcc4510cdbcb39cf10d"
-source_commit_short: "d2466e3a"
-source_commit_date: "2026-06-21T06:49:47+02:00"
-generated_at: "2026-06-21T11:47:50Z"
+source_commit: "344c23787cdb3431dcc441b8b63ee9950f04b921"
+source_commit_short: "344c2378"
+source_commit_date: "2026-07-24T17:37:16+02:00"
+generated_at: "2026-07-25T11:50:13Z"
 ---
 
 # How to install and use plugins
@@ -123,9 +123,9 @@ pytest --disable-plugin-autoload -p NAME -p NAME2
 plugins are loaded, but they serve slightly different use-cases.
 * :option:`-p` loads (or disables with `-p no:<name>`) a plugin by name or entry point
   for a specific pytest invocation, and is processed early during startup.
-* :envvar:`PYTEST_PLUGINS` is a comma-separated list of Python modules that are imported
-  and registered as plugins during startup. This mechanism is commonly used by test
-  suites, for example when testing a plugin.
+* :envvar:`PYTEST_PLUGINS` is a comma-separated list of Python modules or plugin
+  entry point names that are loaded and registered as plugins during startup.
+  This mechanism is commonly used by test suites, for example when testing a plugin.
 When explicitly controlling plugin loading (especially with
 :envvar:`PYTEST_DISABLE_PLUGIN_AUTOLOAD` or :option:`--disable-plugin-autoload`),
 avoid specifying the same plugin via multiple mechanisms. Registering the same plugin

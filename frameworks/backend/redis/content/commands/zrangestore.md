@@ -4,10 +4,10 @@ framework: "redis"
 source_repo: "https://github.com/redis/docs.git"
 source_branch: "main"
 source_path: "content/commands/zrangestore.md"
-source_commit: "bc92ea237bbfc2117c870c904f1a3ca619073ef1"
-source_commit_short: "bc92ea23"
-source_commit_date: "2026-06-18T14:53:00-05:00"
-generated_at: "2026-06-21T11:25:32Z"
+source_commit: "9d30f68c3dad1a6b3b7d30fe604b911348ce8152"
+source_commit_short: "9d30f68c"
+source_commit_date: "2026-07-24T10:52:10-07:00"
+generated_at: "2026-07-25T11:51:22Z"
 ---
 
 ---
@@ -166,9 +166,13 @@ Skip `offset` matching members and return up to `count` of them. Requires `BYSCO
 ## Examples
 
 {{% redis-cli %}}
-ZADD srczset 1 "one" 2 "two" 3 "three" 4 "four"
-ZRANGESTORE dstzset srczset 2 -1
-ZRANGE dstzset 0 -1
+redis> ZADD srczset 1 "one" 2 "two" 3 "three" 4 "four"
+(integer) 4
+redis> ZRANGESTORE dstzset srczset 2 -1
+(integer) 2
+redis> ZRANGE dstzset 0 -1
+1) "three"
+2) "four"
 {{% /redis-cli %}}
 
 ## Redis Software and Redis Cloud compatibility

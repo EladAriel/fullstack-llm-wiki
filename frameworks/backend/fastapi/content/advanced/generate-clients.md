@@ -4,10 +4,10 @@ framework: "FastAPI"
 source_repo: "https://github.com/fastapi/fastapi.git"
 source_branch: "master"
 source_path: "docs/en/docs/advanced/generate-clients.md"
-source_commit: "0cb4a8e284b450abbccb71c543ad7757de46c0b2"
-source_commit_short: "0cb4a8e2"
-source_commit_date: "2026-06-20T16:31:34Z"
-generated_at: "2026-06-21T07:06:10Z"
+source_commit: "255b912928904e3ba5980425a54d6837c8bd1a1c"
+source_commit_short: "255b9129"
+source_commit_date: "2026-07-24T21:15:37Z"
+generated_at: "2026-07-25T11:50:10Z"
 ---
 
 # Generating SDKs { #generating-sdks }
@@ -24,27 +24,13 @@ A versatile option is the [OpenAPI Generator](https://openapi-generator.tech/), 
 
 For **TypeScript clients**, [Hey API](https://heyapi.dev/) is a purpose-built solution, providing an optimized experience for the TypeScript ecosystem.
 
-You can discover more SDK generators on [OpenAPI.Tools](https://openapi.tools/#sdk).
+You can discover more SDK generators on [OpenAPI.Tools](https://openapi.tools/categories/sdk-generators).
 
 /// tip
 
 FastAPI automatically generates **OpenAPI 3.1** specifications, so any tool you use must support this version.
 
 ///
-
-## SDK Generators from FastAPI Sponsors { #sdk-generators-from-fastapi-sponsors }
-
-This section highlights **venture-backed** and **company-supported** solutions from companies that sponsor FastAPI. These products provide **additional features** and **integrations** on top of high-quality generated SDKs.
-
-By ✨ [**sponsoring FastAPI**](https://github.com/sponsors/tiangolo) ✨, these companies help ensure the framework and its **ecosystem** remain healthy and **sustainable**.
-
-Their sponsorship also demonstrates a strong commitment to the FastAPI **community** (you), showing that they care not only about offering a **great service** but also about supporting a **robust and thriving framework**, FastAPI. 🙇
-
-For example, you might want to try:
-
-* [Stainless](https://www.stainless.com/?utm_source=fastapi&utm_medium=referral)
-
-Some of these solutions may also be open source or offer free tiers, so you can try them without a financial commitment. Other commercial SDK generators are available and can be found online. 🤓
 
 ## Create a TypeScript SDK { #create-a-typescript-sdk }
 

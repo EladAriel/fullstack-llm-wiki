@@ -4,10 +4,10 @@ framework: "FastAPI"
 source_repo: "https://github.com/fastapi/fastapi.git"
 source_branch: "master"
 source_path: "docs/en/docs/tutorial/first-steps.md"
-source_commit: "0cb4a8e284b450abbccb71c543ad7757de46c0b2"
-source_commit_short: "0cb4a8e2"
-source_commit_date: "2026-06-20T16:31:34Z"
-generated_at: "2026-06-21T07:06:10Z"
+source_commit: "255b912928904e3ba5980425a54d6837c8bd1a1c"
+source_commit_short: "255b9129"
+source_commit_date: "2026-07-24T21:15:37Z"
+generated_at: "2026-07-25T11:50:10Z"
 ---
 
 # First Steps { #first-steps }
@@ -18,12 +18,18 @@ The simplest FastAPI file could look like this:
 
 Copy that to a file `main.py`.
 
+/// tip
+
+FastAPI has an [official extension for VS Code](https://marketplace.visualstudio.com/items?itemName=FastAPILabs.fastapi-vscode) (and Cursor), which provides a lot of features, including a path operation explorer, path operation search, CodeLens navigation in tests (jump to definition from tests), and FastAPI Cloud deployment and logs, all from your editor.
+
+///
+
 Run the live server:
 
 <div class="termy">
 
 ```console
-$ <font color="#4E9A06">fastapi</font> dev
+$ <font color="#4E9A06">uv run fastapi</font> dev
 
   <span style="background-color:#009485"><font color="#D3D7CF"> FastAPI </font></span>  Starting development server 🚀
 
@@ -90,7 +96,7 @@ You will see the automatic interactive API documentation (provided by [Swagger U
 
 And now, go to [http://127.0.0.1:8000/redoc](http://127.0.0.1:8000/redoc).
 
-You will see the alternative automatic documentation (provided by [ReDoc](https://github.com/Rebilly/ReDoc)):
+You will see the alternative automatic documentation (provided by [ReDoc](https://github.com/Redocly/redoc)):
 
 ![ReDoc](https://fastapi.tiangolo.com/img/index/index-02-redoc-simple.png)
 
@@ -197,13 +203,13 @@ from backend.main import app
 You can also pass the file path to the `fastapi dev` command, and it will guess the FastAPI app object to use:
 
 ```console
-$ fastapi dev main.py
+$ uv run fastapi dev main.py
 ```
 
 Or, you can also pass the `--entrypoint` option to the `fastapi dev` command:
 
 ```console
-$ fastapi dev --entrypoint main:app
+$ uv run fastapi dev --entrypoint main:app
 ```
 
 But you would have to remember to pass the correct path\entrypoint every time you call the `fastapi` command.
@@ -217,7 +223,7 @@ You can optionally deploy your FastAPI app to [FastAPI Cloud](https://fastapiclo
 <div class="termy">
 
 ```console
-$ fastapi deploy
+$ uv run fastapi deploy
 
 Deploying to FastAPI Cloud...
 
@@ -244,7 +250,7 @@ That's it! Now you can access your app at that URL. ✨
 
 `FastAPI` is a class that inherits directly from `Starlette`.
 
-You can use all the [Starlette](https://www.starlette.dev/) functionality with `FastAPI` too.
+You can use all the [Starlette](https://starlette.dev/) functionality with `FastAPI` too.
 
 ///
 

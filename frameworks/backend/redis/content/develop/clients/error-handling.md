@@ -4,10 +4,10 @@ framework: "redis"
 source_repo: "https://github.com/redis/docs.git"
 source_branch: "main"
 source_path: "content/develop/clients/error-handling.md"
-source_commit: "bc92ea237bbfc2117c870c904f1a3ca619073ef1"
-source_commit_short: "bc92ea23"
-source_commit_date: "2026-06-18T14:53:00-05:00"
-generated_at: "2026-06-21T11:25:32Z"
+source_commit: "9d30f68c3dad1a6b3b7d30fe604b911348ce8152"
+source_commit_short: "9d30f68c"
+source_commit_date: "2026-07-24T10:52:10-07:00"
+generated_at: "2026-07-25T11:51:22Z"
 ---
 
 ---
@@ -20,7 +20,10 @@ relatedPages:
 - /develop/clients/dotnet/error-handling
 - /develop/clients/nodejs/error-handling
 - /develop/clients/jedis/error-handling
+- /develop/clients/lettuce/error-handling
 - /develop/clients/go/error-handling
+- /develop/clients/php/error-handling
+- /develop/clients/ruby/error-handling
 topics:
 - error-handling
 - resilience
@@ -400,5 +403,8 @@ For detailed information about exceptions in your client library, see:
 - [redis-py error handling]({{< relref "/develop/clients/redis-py/error-handling" >}})
 - [Node.js error handling]({{< relref "/develop/clients/nodejs/error-handling" >}})
 - [Java (Jedis) error handling]({{< relref "/develop/clients/jedis/error-handling" >}})
+- [Java (Lettuce) error handling]({{< relref "/develop/clients/lettuce/error-handling" >}})
 - [Go (go-redis) error handling]({{< relref "/develop/clients/go/error-handling" >}})
 - [.NET (StackExchange.Redis) error handling]({{< relref "/develop/clients/dotnet/error-handling" >}})
+- [PHP (Predis) error handling]({{< relref "/develop/clients/php/error-handling" >}})
+- [Ruby (redis-rb) error handling]({{< relref "/develop/clients/ruby/error-handling" >}})

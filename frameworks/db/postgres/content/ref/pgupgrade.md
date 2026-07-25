@@ -4,10 +4,10 @@ framework: "postgres"
 source_repo: "https://github.com/postgres/postgres.git"
 source_branch: "master"
 source_path: "doc/src/sgml/ref/pgupgrade.sgml"
-source_commit: "031904048aa22e7c70dc8e9c170e2743f9b0f090"
-source_commit_short: "03190404"
-source_commit_date: "2026-06-20T18:20:58+09:00"
-generated_at: "2026-06-21T07:06:11Z"
+source_commit: "38afc3dcb25c45b744d4025029ce0a6c90b7059f"
+source_commit_short: "38afc3dc"
+source_commit_date: "2026-07-25T19:08:27+09:00"
+generated_at: "2026-07-25T11:50:59Z"
 ---
 
 pg_upgrade
@@ -37,7 +37,7 @@ Major PostgreSQL releases regularly add new features that often change the layou
 
 `pg_upgrade` does its best to make sure the old and new clusters are binary-compatible, e.g., by checking for compatible compile-time settings, including 32/64-bit binaries. It is important that any external modules are also binary compatible, though this cannot be checked by `pg_upgrade`.
 
-`pg_upgrade` supports upgrades from 9.2.X and later to the current major release of PostgreSQL, including snapshot and beta releases.
+`pg_upgrade` supports upgrades from 10.X and later to the current major release of PostgreSQL, including snapshot and beta releases.
 
 Upgrading a cluster causes the destination to execute arbitrary code of the source superusers' choice. Ensure that the source superusers are trusted before upgrading.
 
@@ -219,7 +219,7 @@ In general it is unsafe to access tables referenced in rebuild scripts until the
 
 ## Statistics
 
-Unless the `--no-statistics` option is specified, `pg_upgrade` will transfer most optimizer statistics from the old cluster to the new cluster. This does not transfer all statistics, such as those created explicitly with `sql-createstatistics`, custom statistics added by an extension, or statistics collected by the cumulative statistics system.
+Unless the `--no-statistics` option is specified, `pg_upgrade` will transfer most optimizer statistics from the old cluster to the new cluster. This does not transfer all statistics, such as custom statistics added by an extension, or statistics collected by the cumulative statistics system.
 
 Because not all statistics are transferred by `pg_upgrade`, you will be instructed to run commands to regenerate that information at the end of the upgrade. You might need to set connection parameters to match your new cluster.
 

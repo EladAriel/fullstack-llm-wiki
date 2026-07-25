@@ -4,10 +4,10 @@ framework: "mongodb"
 source_repo: "https://github.com/mongodb/docs.git"
 source_branch: "main"
 source_path: "content/manual/manual/source/installation.txt"
-source_commit: "96788e8ed140cbdde184ff82e1066dff4996bde4"
-source_commit_short: "96788e8e"
-source_commit_date: "2026-06-19T21:35:03-06:00"
-generated_at: "2026-06-21T07:41:52Z"
+source_commit: "ab9db26ed3d11618cdb61516d8180337d8e3f679"
+source_commit_short: "ab9db26e"
+source_commit_date: "2026-07-24T16:22:46-06:00"
+generated_at: "2026-07-25T11:51:15Z"
 ---
 
 ===============
@@ -44,31 +44,12 @@ To install MongoDB Enterprise Edition, select the tutorial for your platform and
 
 .. include:: /includes/unicode-checkmark.rst
 
-## Upgrade Community Edition to Enterprise Edition Tutorials
-
-> **Important:** .. include:: /includes/extracts/enterprise-upgrade-edition-only.rst
-
-- `upgrade_to_enterprise_standalone`
-- `upgrade_to_enterprise_rs`
-- `upgrade_to_enterprise_sharded_cluster`
 ## Supported Platforms
 
-> **Important:** MongoDB does not support 32-bit x86 platforms.
+For details on supported platforms, see:
 
-.. include:: includes/platform-support.rst
-
-MongoDB only supports Oracle Linux running the  Red Hat Compatible Kernel (RHCK). MongoDB does **not** support the Unbreakable Enterprise Kernel (UEK).
-
-MongoDB on-premises products released for RHEL version 8.0+ are compatible with and supported on Rocky Linux version 8.0+ and AlmaLinux version 8.0+, contingent upon those distributions meeting their obligation to deliver full RHEL compatibility.
-
-MongoDB versions 5.0 and greater are tested against SLES 12 service pack 5. Earlier versions of MongoDB are tested against SLES 12 with no service pack.
-
-MongoDB versions 7.0 and later are tested against SLES 15 service pack 4. Earlier versions of MongoDB are tested against SLES 15 with no service pack.
-
-MongoDB version 7.0 is built and tested against RHEL 7.9. Earlier versions of MongoDB are tested against RHEL 7 and assume forward compatibility.
-
-.. include:: includes/fact-in-place-os-upgrades.rst
-
+- `landing-enterprise-platform-support`
+- `landing-community-platform-support`
 ## Contents
 
 - Community Edition </administration/install-community>

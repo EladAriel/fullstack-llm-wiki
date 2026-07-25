@@ -4,10 +4,10 @@ framework: "mongodb"
 source_repo: "https://github.com/mongodb/docs.git"
 source_branch: "main"
 source_path: "content/manual/manual/source/tutorial/configure-ssl.txt"
-source_commit: "96788e8ed140cbdde184ff82e1066dff4996bde4"
-source_commit_short: "96788e8e"
-source_commit_date: "2026-06-19T21:35:03-06:00"
-generated_at: "2026-06-21T07:41:52Z"
+source_commit: "ab9db26ed3d11618cdb61516d8180337d8e3f679"
+source_commit_short: "ab9db26e"
+source_commit_date: "2026-07-24T16:22:46-06:00"
+generated_at: "2026-07-25T11:51:15Z"
 ---
 
 ==================================================
@@ -16,7 +16,7 @@ generated_at: "2026-06-21T07:41:52Z"
 
 ## Overview
 
-This document helps you to configure a new MongoDB instance to support TLS/SSL. For instructions on upgrading a cluster currently not using TLS/SSL to using TLS/SSL, see `/tutorial/upgrade-cluster-to-ssl` instead.
+Configure a new MongoDB instance for TLS/SSL. To upgrade an existing cluster to TLS/SSL, see `/tutorial/upgrade-cluster-to-ssl` instead.
 
 To set up a local development environment with TLS/SSL, see `develop-mongodb-locally-with-tls`.
 
@@ -44,11 +44,11 @@ Member Certificate Requirements ```````````````````````````````
 
 When establishing a TLS/SSL connection, the :binary:`mongod` / :binary:`mongos` presents a certificate key file to its clients to establish its identity. [#FIPS]_ The certificate key file contains a public key certificate and its associated private key, but only the public component is revealed to the client.
 
-MongoDB can use any valid TLS/SSL certificate issued by a certificate authority, or a self-signed certificate. If you use a self-signed certificate, although the communications channel will be encrypted to prevent eavesdropping on the connection, there will be no validation of server identity. This leaves you vulnerable to a man-in-the-middle attack. Using a certificate signed by a trusted certificate authority will permit MongoDB drivers to verify the server's identity.
+MongoDB can use any valid TLS/SSL certificate issued by a certificate authority, or a self-signed certificate. Self-signed certificates encrypt the connection but do not validate server identity, leaving you vulnerable to a man-in-the-middle attack. Use a certificate signed by a trusted certificate authority so MongoDB drivers can verify the server's identity.
 
 In general, avoid using self-signed certificates unless the network is trusted.
 
-With regards to certificates for replica set and sharded cluster members, it is advisable to use different certificates on different servers. This minimizes exposure of the private key and allows for hostname validation.
+For replica set and sharded cluster members, use different certificates on different servers to minimize private key exposure and enable hostname validation.
 
 > **Note:** If a MongoDB deployment is not configured to use a CA file, it bypasses client
 certificate validation.
@@ -79,10 +79,7 @@ Additionally, point the `net.tls.CAFile` setting to the full chain file `fullcha
 
 ### Set Up `mongod` and `mongos` with TLS/SSL Certificate and Key
 
-The following section configures :binary:`mongod` / :binary:`mongos` to use TLS/SSL connections. With these TLS/SSL settings, :binary:`mongod` / :binary:`mongos` presents its certificate key file to the client. However, the :binary:`mongod` / :binary:`mongos` does not require a certificate key file from the client to verify the client's identity. To require client's certificate key file, see `ssl-mongod-ca-signed-ssl-cert-key` instead.
-
-> **Note:** The procedure uses the `net.tls` settings. For procedures that use the
-`net.ssl` settings, see `configure-ssl`.
+With the following settings, :binary:`mongod` / :binary:`mongos` presents its certificate key file to the client but does not require one from the client. To require a client certificate, see `ssl-mongod-ca-signed-ssl-cert-key`.
 
 To use TLS/SSL connections, include the following `TLS/SSL settings <net-tls-conf-options>` in your :binary:`mongod` / :binary:`mongos` instance's `configuration file <conf-file>`:
 
@@ -113,9 +110,6 @@ key file to the client for verification.
 
 - :binary:`mongod` / :binary:`mongos` requires a certificate
 key file from the client to verify the client's identity.
-
-> **Note:** The procedure uses the `net.tls` settings For procedures that use the
-`net.ssl` settings, see `configure-ssl`.
 
 To use TLS/SSL connections and perform client certificate validation, include the following `TLS/SSL settings <net-tls-conf-options>` in your :binary:`mongod` / :binary:`mongos` instance's `configuration file <conf-file>`:
 
@@ -166,9 +160,6 @@ configuration file:
 
 Block Revoked Certificates for Clients ``````````````````````````````````````
 
-> **Note:** The procedure uses the `net.tls` settings. For procedures that use the
-`net.ssl` settings, see `configure-ssl`.
-
 .. include:: /includes/security/block-revoked-certificates-intro.rst
 
 To specify a :abbr:`CRL (Certificate Revocation List)` file, include :setting:`net.tls.CRLFile` set to a file that contains revoked certificates.
@@ -196,9 +187,6 @@ command-line option.
 Validate Only if a Client Presents a Certificate ````````````````````````````````````````````````
 
 In most cases, it is important to ensure that clients present valid certificates. However, if you have clients that cannot present a client certificate or are transitioning to using a certificate, you may only want to validate certificates from clients that present a certificate.
-
-> **Note:** The procedure uses the `net.tls` settings. For procedures using the
-`net.ssl` settings, see `configure-ssl`.
 
 To bypass client certificate validation for clients that do not present a certificate, include :setting:`net.tls.allowConnectionsWithoutCertificates` set to `true`.
 
@@ -233,9 +221,6 @@ See `ssl-clients` for more information on TLS/SSL connections for clients.
   --tlsAllowConnectionsWithoutCertificates>`.
 
 ### Disallow Protocols
-
-> **Note:** The procedure uses the `net.tls` settings. For procedures using the
-`net.ssl` settings, see `configure-ssl`.
 
 To prevent MongoDB servers from accepting incoming connections that use specific protocols, include :setting:`net.tls.disabledProtocols` set to the disallowed protocols.
 
@@ -340,7 +325,7 @@ Additionally, point the `net.ssl.CAFile` setting to the full chain file `fullcha
 
 ### Set Up `mongod` and `mongos` with TLS/SSL Certificate and Key
 
-The following section configures :binary:`mongod` / :binary:`mongos` to use TLS/SSL connections. With these TLS/SSL settings, :binary:`mongod` / :binary:`mongos` presents its certificate key file to the client. However, the :binary:`mongod` / :binary:`mongos` does not require a certificate key file from the client to verify the client's identity. To require client's certificate key file, see `client-cert-validation-ssl` instead.
+With the following settings, :binary:`mongod` / :binary:`mongos` presents its certificate key file to the client but does not require one from the client. To require a client certificate, see `client-cert-validation-ssl`.
 
 To use TLS/SSL connections, include the following TLS/SSL settings in your :binary:`mongod` / :binary:`mongos` instance's `configuration file <conf-file>`:
 

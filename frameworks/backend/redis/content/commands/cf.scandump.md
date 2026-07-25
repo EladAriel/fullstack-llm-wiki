@@ -4,10 +4,10 @@ framework: "redis"
 source_repo: "https://github.com/redis/docs.git"
 source_branch: "main"
 source_path: "content/commands/cf.scandump.md"
-source_commit: "bc92ea237bbfc2117c870c904f1a3ca619073ef1"
-source_commit_short: "bc92ea23"
-source_commit_date: "2026-06-18T14:53:00-05:00"
-generated_at: "2026-06-21T11:25:32Z"
+source_commit: "9d30f68c3dad1a6b3b7d30fe604b911348ce8152"
+source_commit_short: "9d30f68c"
+source_commit_date: "2026-07-24T10:52:10-07:00"
+generated_at: "2026-07-25T11:51:22Z"
 ---
 
 ---
@@ -65,29 +65,29 @@ Iterator value; either 0 or the iterator from a previous invocation of this comm
 
 ## Examples
 
-{{< highlight bash >}}
+{{% redis-cli %}}
 redis> CF.RESERVE cf 8
 OK
 redis> CF.ADD cf item1
 (integer) 1
 redis> CF.SCANDUMP cf 0
 1) (integer) 1
-2) "\x01\x00\x00\x00\x00\x00\x00\x00\x04\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x01\x00\x00\x00\x00\x00\x00\x00\x02\x00\x14\x00\x01\x008\x9a\xe0\xd8\xc3\x7f\x00\x00"
+2) "\x01\x00\x00\x00\x00\x00\x00\x00\x04\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x01\x00\x00\x00\x00\x00\x00\x00\x02\x00\x14\x00\x01\x00"
 redis> CF.SCANDUMP cf 1
 1) (integer) 9
 2) "\x00\x00\x00\x00\a\x00\x00\x00"
 redis> CF.SCANDUMP cf 9
 1) (integer) 0
-2) (nil)
-redis> DEL bf
+2) (nil) 
+redis> DEL cf
 (integer) 1
-redis> CF.LOADCHUNK cf 1 "\x01\x00\x00\x00\x00\x00\x00\x00\x04\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x01\x00\x00\x00\x00\x00\x00\x00\x02\x00\x14\x00\x01\x008\x9a\xe0\xd8\xc3\x7f\x00\x00"
+redis> CF.LOADCHUNK cf 1 "\x01\x00\x00\x00\x00\x00\x00\x00\x04\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x01\x00\x00\x00\x00\x00\x00\x00\x02\x00\x14\x00\x01\x00"
 OK
 redis> CF.LOADCHUNK cf 9 "\x00\x00\x00\x00\a\x00\x00\x00"
 OK
 redis> CF.EXISTS cf item1
 (integer) 1
-{{< / highlight >}}
+{{% /redis-cli %}}
 
 Python code:
 {{< highlight bash >}}

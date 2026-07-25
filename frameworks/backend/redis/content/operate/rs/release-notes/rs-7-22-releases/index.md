@@ -4,10 +4,10 @@ framework: "redis"
 directory: "content/operate/rs/release-notes/rs-7-22-releases"
 source_repo: "https://github.com/redis/docs.git"
 source_branch: "main"
-source_commit: "bc92ea237bbfc2117c870c904f1a3ca619073ef1"
-source_commit_short: "bc92ea23"
-source_commit_date: "2026-06-18T14:53:00-05:00"
-generated_at: "2026-06-21T11:25:32Z"
+source_commit: "9d30f68c3dad1a6b3b7d30fe604b911348ce8152"
+source_commit_short: "9d30f68c"
+source_commit_date: "2026-07-24T10:52:10-07:00"
+generated_at: "2026-07-25T11:51:22Z"
 ---
 # Rs 7 22 Releases
 
@@ -35,6 +35,7 @@ This directory contains redis learning pages related to rs 7 22 releases.
 - [Rs 7 22 2 116](rs-7-22-2-116.md)
 - [Rs 7 22 2 133](rs-7-22-2-133.md)
 - [Rs 7 22 2 14](rs-7-22-2-14.md)
+- [Rs 7 22 2 170](rs-7-22-2-170.md)
 - [Rs 7 22 2 20](rs-7-22-2-20.md)
 - [Rs 7 22 2 41](rs-7-22-2-41.md)
 - [Rs 7 22 2 55](rs-7-22-2-55.md)

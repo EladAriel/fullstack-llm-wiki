@@ -4,10 +4,10 @@ framework: "redis"
 source_repo: "https://github.com/redis/docs.git"
 source_branch: "main"
 source_path: "content/operate/rs/references/rest-api/requests/bdbs/availability.md"
-source_commit: "bc92ea237bbfc2117c870c904f1a3ca619073ef1"
-source_commit_short: "bc92ea23"
-source_commit_date: "2026-06-18T14:53:00-05:00"
-generated_at: "2026-06-21T11:25:32Z"
+source_commit: "9d30f68c3dad1a6b3b7d30fe604b911348ce8152"
+source_commit_short: "9d30f68c"
+source_commit_date: "2026-07-24T10:52:10-07:00"
+generated_at: "2026-07-25T11:51:22Z"
 ---
 
 ---
@@ -189,7 +189,7 @@ The following are possible `error_code` values:
 |------|-------------|
 | no_quorum | Master healthcheck failed (no quorum in the cluster) |
 | db_not_found | Database does not exist in the cluster |
-| bdb_unavailable | Database is not available | 
+| bdb_unavailable | Database is not available. The `error_code` identifies why: it appends `_shard_unreachable` when a primary (master) shard is unreachable and `_port_unbound` when the endpoint's listener port is not bound. For example, `bdb_unavailable_shard_unreachable`, `bdb_unavailable_port_unbound`, or `bdb_unavailable_shard_unreachable_port_unbound`. The `description` names the same reasons, for example `Endpoint error status: shard unreachable, port unbound`. |
 
 ### Status codes {#get-db-status-codes}
 

@@ -4,10 +4,10 @@ framework: "mongodb"
 source_repo: "https://github.com/mongodb/docs.git"
 source_branch: "main"
 source_path: "content/manual/manual/source/core/zone-sharding.txt"
-source_commit: "96788e8ed140cbdde184ff82e1066dff4996bde4"
-source_commit_short: "96788e8e"
-source_commit_date: "2026-06-19T21:35:03-06:00"
-generated_at: "2026-06-21T07:41:52Z"
+source_commit: "ab9db26ed3d11618cdb61516d8180337d8e3f679"
+source_commit_short: "ab9db26e"
+source_commit_date: "2026-07-24T16:22:46-06:00"
+generated_at: "2026-07-25T11:51:15Z"
 ---
 
 =====
@@ -34,7 +34,6 @@ The following image illustrates a sharded cluster with three shards and two zone
 - Manage </tutorial/manage-shard-zone>
 - Segment by Location </tutorial/sharding-segmenting-data-by-location>
 - Segment by Application or Customer </tutorial/sharding-segmenting-shards>
-- Distributed Local Writes for Insert-Only Workloads </tutorial/sharding-high-availability-writes>
 - Distribute Collections </tutorial/sharding-distribute-collections-with-zones>
 
 ## Behavior and Operations

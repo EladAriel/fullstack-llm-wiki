@@ -4,10 +4,10 @@ framework: "redis"
 source_repo: "https://github.com/redis/docs.git"
 source_branch: "main"
 source_path: "content/commands/ttl.md"
-source_commit: "bc92ea237bbfc2117c870c904f1a3ca619073ef1"
-source_commit_short: "bc92ea23"
-source_commit_date: "2026-06-18T14:53:00-05:00"
-generated_at: "2026-06-21T11:25:32Z"
+source_commit: "9d30f68c3dad1a6b3b7d30fe604b911348ce8152"
+source_commit_short: "9d30f68c"
+source_commit_date: "2026-07-24T10:52:10-07:00"
+generated_at: "2026-07-25T11:51:22Z"
 ---
 
 ---
@@ -88,20 +88,12 @@ The name of the key.
 
 {{< clients-example set="cmds_generic" step="ttl" description="Foundational: Check remaining time-to-live of a key using TTL (returns seconds remaining, -1 if no expiry, -2 if key doesn't exist)" difficulty="beginner" >}}
 > SET mykey "Hello"
-"OK"
+OK
 > EXPIRE mykey 10
 (integer) 1
 > TTL mykey
 (integer) 10
 {{< /clients-example >}}
-
-Give these commands a try in the interactive console:
-
-{{% redis-cli %}}
-SET mykey "Hello"
-EXPIRE mykey 10
-TTL mykey
-{{% /redis-cli %}}
 
 ## Redis Software and Redis Cloud compatibility
 

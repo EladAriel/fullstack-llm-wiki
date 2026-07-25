@@ -4,10 +4,10 @@ framework: "LangChain"
 source_repo: "https://github.com/langchain-ai/docs"
 source_branch: "main"
 source_path: "src/oss/langchain/multi-agent/skills-sql-assistant.mdx"
-source_commit: "d037cd23f3f298721837c403b2ffd289e31d56d0"
-source_commit_short: "d037cd23"
-source_commit_date: "2026-06-23T11:18:55+02:00"
-generated_at: "2026-06-23T13:53:33Z"
+source_commit: "2aae1dfc98ee953a9a5185fb6fcdd9efb3f4d878"
+source_commit_short: "2aae1dfc"
+source_commit_date: "2026-07-25T00:27:23Z"
+generated_at: "2026-07-25T11:51:05Z"
 ---
 
 ---
@@ -72,7 +72,7 @@ flowchart TD
 **What are skills:** Skills, as popularized by Claude Code, are primarily prompt-based: self-contained units of specialized instructions for specific business tasks. In Claude Code, skills are exposed as directories with files on the file system, discovered through file operations. Skills guide behavior through prompts and can provide information about tool usage or include sample code for a coding agent to execute.
 
 <Tip>
-Skills with progressive disclosure can be viewed as a form of [RAG (Retrieval-Augmented Generation)](/oss/langchain/rag), where each skill is a retrieval unit—though not necessarily backed by embeddings or keyword search, but by tools for browsing content (like file operations or, in this tutorial, direct lookup).
+Skills with progressive disclosure can be viewed as a form of [RAG (Retrieval-Augmented Generation)](/oss/deepagents/rag), where each skill is a retrieval unit—though not necessarily backed by embeddings or keyword search, but by tools for browsing content (like file operations or, in this tutorial, direct lookup).
 </Tip>
 
 **Trade-offs:**
@@ -1308,7 +1308,7 @@ class SkillMiddleware(AgentMiddleware):
 # Example: from langchain_anthropic import ChatAnthropic
 # model = ChatAnthropic(model="claude-3-5-sonnet-20241022")
 from langchain_openai import ChatOpenAI
-model = ChatOpenAI(model="gpt-4")
+model = ChatOpenAI(model="gpt-5.5")
 
 # Create the agent with skill support
 agent = create_agent(

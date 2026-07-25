@@ -4,10 +4,10 @@ framework: "redis"
 source_repo: "https://github.com/redis/docs.git"
 source_branch: "main"
 source_path: "content/operate/rc/databases/configuration/sizing.md"
-source_commit: "bc92ea237bbfc2117c870c904f1a3ca619073ef1"
-source_commit_short: "bc92ea23"
-source_commit_date: "2026-06-18T14:53:00-05:00"
-generated_at: "2026-06-21T11:25:32Z"
+source_commit: "9d30f68c3dad1a6b3b7d30fe604b911348ce8152"
+source_commit_short: "9d30f68c"
+source_commit_date: "2026-07-24T10:52:10-07:00"
+generated_at: "2026-07-25T11:51:22Z"
 ---
 
 ---
@@ -37,6 +37,12 @@ Here are some general guidelines:
 - [Replication]({{< relref "/operate/rc/databases/configuration/high-availability" >}}) doubles memory consumption; that is, 512 MB of data requires at least 1 GB of memory limit when replication is enabled. This affects both Redis Cloud Pro and Redis Cloud Essentials. For example, if you subscribe to a 1 GB Essentials plan, Redis will allocate 512 MB for your dataset and the other 512 MB for replication.
 
 - [Active-Active]({{< relref "/operate/rc/databases/active-active" >}}) also doubles memory consumption and the effect is cumulative with the impact of replication. Since Active-Active requires replication to be turned on, the memory limit impact can be as large as four times (4x) the original data size.
+
+    Active-Active databases also have additional sizing considerations:
+
+    - Active-Active databases begin evicting keys when any one instance reaches 80% of its memory limit, rather than 100%, because eviction must propagate to all participating instances. Size your database so that expected usage stays below this threshold.
+
+    - Each Active-Active instance reserves a replication backlog for shard synchronization and an Active-Active replication backlog for synchronization between instances. By default, each backlog is set to 1% of the database size.
 
 - [Advanced capabilities]({{< relref "/operate/rc/databases/configuration/advanced-capabilities" >}}) also consume memory. For search databases, consider index size when you size your database. See [Search and query sizing]({{< relref "/operate/rc/databases/configuration/advanced-capabilities#search-and-query-sizing" >}}) for more info.
 

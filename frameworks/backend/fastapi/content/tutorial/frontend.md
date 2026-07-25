@@ -4,10 +4,10 @@ framework: "FastAPI"
 source_repo: "https://github.com/fastapi/fastapi.git"
 source_branch: "master"
 source_path: "docs/en/docs/tutorial/frontend.md"
-source_commit: "0cb4a8e284b450abbccb71c543ad7757de46c0b2"
-source_commit_short: "0cb4a8e2"
-source_commit_date: "2026-06-20T16:31:34Z"
-generated_at: "2026-06-21T07:06:10Z"
+source_commit: "255b912928904e3ba5980425a54d6837c8bd1a1c"
+source_commit_short: "255b9129"
+source_commit_date: "2026-07-24T21:15:37Z"
+generated_at: "2026-07-25T11:50:10Z"
 ---
 
 # Frontend { #frontend }
@@ -64,7 +64,9 @@ For that, use `fallback="index.html"`:
 
 {* ../../docs_src/frontend/tutorial002_py310.py hl[5] *}
 
-**FastAPI** uses this fallback only for requests that look like browser navigation. Missing files like JavaScript, CSS, and images still return `404`.
+**FastAPI** uses this fallback only for `GET` and `HEAD` requests that explicitly accept HTML with `Accept: text/html` or `Accept: application/xhtml+xml`, as browser navigation requests normally do. Missing files like JavaScript, CSS, and images still return `404`.
+
+Requests with other methods, like `POST` or `PUT`, to paths that only match the frontend fallback also return `404`. Regular **FastAPI** *path operations* still have higher priority than frontend routes.
 
 /// tip
 
@@ -135,6 +137,12 @@ You can also add frontend files to an `APIRouter` and include it with a prefix:
 In this example, frontend paths are served under `/app`.
 
 Any regular *path operations* in the app will still take precedence, including in other routers.
+
+## Dependencies and Middleware { #dependencies-and-middleware }
+
+Frontend responses run inside the normal **FastAPI** application, so HTTP middleware applies to them.
+
+Dependencies from the app, from an `APIRouter`, and from `include_router()` also apply to frontend responses. This can be useful for protecting a frontend with cookie authentication or similar.
 
 ## Static Build Output Only { #static-build-output-only }
 

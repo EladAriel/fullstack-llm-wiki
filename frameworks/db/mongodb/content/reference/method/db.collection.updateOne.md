@@ -4,10 +4,10 @@ framework: "mongodb"
 source_repo: "https://github.com/mongodb/docs.git"
 source_branch: "main"
 source_path: "content/manual/manual/source/reference/method/db.collection.updateOne.txt"
-source_commit: "96788e8ed140cbdde184ff82e1066dff4996bde4"
-source_commit_short: "96788e8e"
-source_commit_date: "2026-06-19T21:35:03-06:00"
-generated_at: "2026-06-21T07:41:52Z"
+source_commit: "ab9db26ed3d11618cdb61516d8180337d8e3f679"
+source_commit_short: "ab9db26e"
+source_commit_date: "2026-07-24T16:22:46-06:00"
+generated_at: "2026-07-25T11:51:15Z"
 ---
 
 ==========================================
@@ -30,7 +30,7 @@ This method is available in deployments hosted in the following environments:
 
 ## Syntax
 
-The :method:`~db.collection.updateOne()` method has the following syntax:
+The `updateOne()` method has the following syntax:
 
 ```javascript
 db.collection.updateOne(
@@ -52,7 +52,7 @@ db.collection.updateOne(
 
 ### Parameters
 
-The :method:`db.collection.updateOne()` method takes the following parameters:
+The `db.collection.updateOne()` method takes the following parameters:
 
 ### Returns
 
@@ -80,11 +80,11 @@ The built-in role :authrole:`readWrite` provides the required privileges.
 
 ### Updates a Single Document
 
-:method:`db.collection.updateOne()` finds the first document that matches the `filter <update-one-filter>` and applies the specified `update <update-one-update>` modifications.
+`db.collection.updateOne()` finds the first document that matches the `filter <update-one-filter>` and applies the specified `update <update-one-update>` modifications.
 
 ### Update with an Update Operator Expressions Document
 
-For the `update specifications <update-one-update>`, the :method:`db.collection.updateOne()` method can accept a document that only contains `update operator <update-operators>` expressions.
+For the `update specifications <update-one-update>`, the `db.collection.updateOne()` method can accept a document that only contains `update operator <update-operators>` expressions.
 
 For example:
 
@@ -98,7 +98,7 @@ db.collection.updateOne(
 
 ### Update with an Aggregation Pipeline
 
-The :method:`db.collection.updateOne()` method can accept an `aggregation pipeline <aggregation-pipeline>` `[ <stage1>, <stage2>, ... ]` that specifies the modifications to perform. The pipeline can consist of the following stages:
+The `db.collection.updateOne()` method can accept an `aggregation pipeline <aggregation-pipeline>` `[ <stage1>, <stage2>, ... ]` that specifies the modifications to perform. The pipeline can consist of the following stages:
 
 .. include:: /includes/list-update-agg-stages.rst
 
@@ -117,9 +117,7 @@ db.collection.updateOne(
 )
 ```
 
-> **Note:** The `$set` and `$unset` used in the pipeline refers to the
-aggregation stages :pipeline:`$set` and :pipeline:`$unset`
-respectively, and not the update operators :update:`$set` and :update:`$unset`.
+> **Note:** .. include:: /includes/set-aggregation-versus-update.rst
 
 For examples, see `updateOne-example-agg`.
 
@@ -127,9 +125,9 @@ For examples, see `updateOne-example-agg`.
 
 - .. include:: /includes/fact-7-1-sharded-upsert.rst
 - If `upsert: true` and no documents match the `filter`,
-:method:`db.collection.updateOne()` creates a new document based on the `filter` criteria and `update` modifications. See `updateOne-example-update-with-upsert`.
+`db.collection.updateOne()` creates a new document based on the `filter` criteria and `update` modifications. See `updateOne-example-update-with-upsert`.
 
-- For additional :method:`db.collection.updateOne()` behavior on a
+- For additional `db.collection.updateOne()` behavior on a
 sharded collection, see `updateOne-sharded-collection`.
 
 ### Capped Collection
@@ -140,7 +138,7 @@ sharded collection, see `updateOne-sharded-collection`.
 
 `upsert` on a Sharded Collection ``````````````````````````````````
 
-To use :method:`db.collection.updateOne()` on a sharded collection:
+To use `db.collection.updateOne()` on a sharded collection:
 
 - .. include:: /includes/fact-7-1-sharded-upsert.rst
 - If you don't specify `upsert: true`, you must include an exact
@@ -154,7 +152,7 @@ Shard Key Modification ``````````````````````
 
 .. include:: /includes/shard-key-modification-warning.rst
 
-To modify the **existing** shard key value with :method:`db.collection.updateOne()`:
+To modify the **existing** shard key value with `db.collection.updateOne()`:
 
 - You :red:`must` run on a :binary:`~bin.mongos`. Do :red:`not`
 issue the operation directly on the shard.
@@ -173,7 +171,7 @@ Missing Shard Key `````````````````
 or `_id` field in the query specification.
 
 - Documents in a sharded collection can be
-`missing the shard key fields <shard-key-missing>`. To use :method:`db.collection.updateOne()` to set a **missing** shard key, you :red:`must` run on a :binary:`~bin.mongos`. Do :red:`not` issue the operation directly on the shard.
+`missing the shard key fields <shard-key-missing>`. To use `db.collection.updateOne()` to set a **missing** shard key, you :red:`must` run on a :binary:`~bin.mongos`. Do :red:`not` issue the operation directly on the shard.
 
 In addition, the following requirements also apply:
 
@@ -183,7 +181,7 @@ See also:
 - `shard-key-missing`
 ### Explainability
 
-:method:`~db.collection.updateOne()` is not compatible with :method:`db.collection.explain()`.
+`updateOne()` is not compatible with :method:`db.collection.explain()`.
 
 ### Transactions
 
@@ -195,7 +193,7 @@ Upsert within Transactions ``````````````````````````
 
 .. include:: /includes/extracts/transactions-upsert-availability.rst
 
-Write Concerns and Transactions ````````````````````````````````
+Write Concerns and Transactions ```````````````````````````````
 
 .. include:: /includes/extracts/transactions-operations-write-concern.rst
 
@@ -207,7 +205,7 @@ If a `db.collection.updateOne()` operation successfully updates a document, the 
 
 ### Update using Update Operator Expressions
 
-The `restaurant` collection contains the  following documents:
+The `restaurant` collection contains the following documents:
 
 ```javascript
 db.restaurant.insertMany( [
@@ -217,7 +215,7 @@ db.restaurant.insertMany( [
 ] )
 ```
 
-The following operation updates a single document where `name: "Central Perk Cafe"` with the `violations` field:
+The following operation sets the `violations` field on the document where `name` is `Central Perk Cafe`:
 
 ```javascript
 try {
@@ -246,11 +244,7 @@ Setting `upsert: true` would insert the document if no match was found. See `upd
 
 ### Update with Aggregation Pipeline
 
-The :method:`db.collection.updateOne()` can use an aggregation pipeline for the update. The pipeline can consist of the following stages:
-
-.. include:: /includes/list-update-agg-stages.rst
-
-Using the aggregation pipeline allows for a more expressive update statement, such as expressing conditional updates based on current field values or updating one field using the value of another field(s).
+`db.collection.updateOne()` can use an aggregation pipeline to express a more complex update, such as a conditional update based on current field values. For the supported pipeline stages, see `updateOne-behavior-aggregation-pipeline`.
 
 Example 1 `````````
 
@@ -283,14 +277,12 @@ db.students.updateOne(
 )
 ```
 
-> **Note:** The `$set` and `$unset` used in the pipeline refers to the
-aggregation stages :pipeline:`$set` and :pipeline:`$unset`
-respectively, and not the update operators :update:`$set` and :update:`$unset`.
+> **Note:** .. include:: /includes/set-aggregation-versus-update.rst
 
 First Stage The :pipeline:`$set` stage:
 
 - creates a new array field `comments` whose elements are the current
-content of the `misc1` and `misc2` fields and
+content of the `commentsSemester1` and `commentsSemester2` fields and
 
 - sets the field `lastUpdate` to the value of the aggregation
 variable :variable:`NOW`. The aggregation variable :variable:`NOW` resolves to the current datetime value and remains the same throughout the pipeline. To access aggregation variables, prefix the variable with double dollar signs `$$` and enclose in quotes.
@@ -304,11 +296,9 @@ After the command, the collection contains the following documents:
 { _id: 1, student: 'Skye', points: 75, commentsSemester1: 'great at math', commentsSemester2: 'loses temper', lastUpdate: ISODate("2019-01-01T00:00:00.000Z") }
 ```
 
-Note that after introducing a sort, only the first document encountered in the sort order is modified and the remaining documents are left untouched.
-
 Example 2 `````````
 
-The aggregation pipeline allows the update to perform conditional updates based on the current field values as well as use current field values to calculate a separate field value.
+The aggregation pipeline allows the update to perform conditional updates based on the current field values and use current field values to calculate a separate field value.
 
 For example, create a `students3` collection with the following documents:
 
@@ -443,11 +433,11 @@ The collection now contains the following documents:
 { _id: 1, name: "Central Perk Cafe", Borough: "Manhattan", violations: 3 },
 { _id: 2, name: "Rock A Feller Bar and Grill", Borough: "Queens", violations: 2 },
 { _id: 3, name: "Empire State Pub", Borough: "Brooklyn", violations: 4 },
-{ _id: 4, name: "Pizza Rat's Pizzaria", Borough: "Manhattan", grade: 7 }
+{ _id: 4, name: "Pizza Rat's Pizzaria", Borough: "Manhattan", violations: 7 }
 { _id: ObjectId("56310c3c0c5cbb6031cafaea"), Closed: true }
 ```
 
-Since no documents matched the filter, and `upsert` was `true`, :method:`~db.collection.updateOne inserted the document with a generated id` and the `update` criteria only.
+Since no documents matched the filter, and `upsert` was `true`, `updateOne inserted the document with a generated id` and the `update` criteria only.
 
 ### Update with Write Concern
 
@@ -546,7 +536,7 @@ db.students.insertMany( [
 ] )
 ```
 
-To modify all elements that are greater than or equal to `100` in the `grades` array, use the filtered positional operator :update:`$[\<identifier\>]` with the `arrayFilters` option in the :method:`db.collection.updateOne` method:
+To modify all elements that are greater than or equal to `100` in the `grades` array, use the filtered positional operator :update:`$[\<identifier\>]` with the `arrayFilters` option in the `db.collection.updateOne` method:
 
 ```javascript
 db.students.updateOne(
@@ -589,7 +579,7 @@ db.students2.insertMany( [
 ] )
 ```
 
-To modify the value of the `mean` field for all elements in the `grades` array where the grade is greater than or equal to `85`, use the filtered positional operator :update:`$[\<identifier\>]` with the `arrayFilters` in the :method:`db.collection.updateOne` method:
+To modify the value of the `mean` field for all elements in the `grades` array where the grade is greater than or equal to `85`, use the filtered positional operator :update:`$[\<identifier\>]` with the `arrayFilters` in the `db.collection.updateOne` method:
 
 ```javascript
 db.students2.updateOne(
@@ -662,7 +652,7 @@ The update command returns the following:
 
 > **Note:** Even though 3 documents match the criteria of the update, `updateOne` only
 modifies the first document it finds. Therefore, even though the students
-Richard, Ronan, and Adam all meet the criteria, only Richard will be updated.
+Richard, Ronan, and Adam all meet the criteria, only Richard is updated.
 
 To see the index used, run :dbcommand:`explain` on the operation:
 

@@ -4,10 +4,10 @@ framework: "nextjs"
 source_repo: "https://github.com/vercel/next.js/"
 source_branch: "canary"
 source_path: "docs/01-app/02-guides/upgrading/version-16.mdx"
-source_commit: "79142d7806ff4194c8d9885b80fa69db5ecf534a"
-source_commit_short: "79142d78"
-source_commit_date: "2026-06-20T23:40:12Z"
-generated_at: "2026-06-21T12:07:17Z"
+source_commit: "dcf242a17b5d4622bbd9624db531a9d84177619f"
+source_commit_short: "dcf242a1"
+source_commit_date: "2026-07-25T10:16:19+02:00"
+generated_at: "2026-07-25T11:50:53Z"
 ---
 
 ---
@@ -20,15 +20,11 @@ description: Upgrade your Next.js Application from Version 15 to 16.
 
 ## Upgrading from 15 to 16
 
-### Using AI Agents with Next.js DevTools MCP
+### Using AI Agents
 
-If you're using an AI coding assistant that supports the [Model Context Protocol (MCP)](https://modelcontextprotocol.io), you can use the **Next.js DevTools MCP** to automate the upgrade process and migration tasks.
+If you're using an AI coding assistant, it can run the upgrade for you with the [codemod](#using-the-codemod) below and then help resolve any remaining breaking changes.
 
-#### Setup
-
-Add the following configuration to your MCP client, for each coding agent you can read [this section](https://github.com/vercel/next-devtools-mcp#mcp-client-configuration) for configuration details.
-
-**example:**
+For the best results, also configure the [`next-devtools-mcp`](https://github.com/vercel/next-devtools-mcp) server. It lets your agent inspect your running dev server for migration errors and read the version-accurate Next.js docs bundled with your project:
 
 ```json filename=".mcp.json"
 {
@@ -41,31 +37,7 @@ Add the following configuration to your MCP client, for each coding agent you ca
 }
 ```
 
-For more information, visit the [`next-devtools-mcp`](https://github.com/vercel/next-devtools-mcp) documentation to configure with your MCP client.
-
-> **Note:** Using `next-devtools-mcp@latest` ensures that your MCP client will always use the latest version of the Next.js DevTools MCP server.
-
-#### Example Prompts
-
-Once configured, you can use natural language prompts to upgrade your Next.js app:
-
-**To upgrade to Next.js 16:**
-
-Connect to your coding agent and then prompt:
-
-```txt
-Next Devtools, help me upgrade my Next.js app to version 16
-```
-
-**To migrate to Cache Components (after upgrading to v16):**
-
-Connect to your coding agent and then prompt:
-
-```txt
-Next Devtools, migrate my Next.js app to cache components
-```
-
-Learn more in the documentation [here](/docs/app/guides/mcp).
+See the [Next.js MCP guide](/docs/app/guides/mcp) and the [`next-devtools-mcp` documentation](https://github.com/vercel/next-devtools-mcp#mcp-client-configuration) for client setup. Then ask your agent to upgrade your app — it will run the codemod and use the dev server's diagnostics to fix breaking changes.
 
 ### Using the Codemod
 
@@ -938,19 +910,19 @@ Additionally, a lockfile mechanism prevents multiple `next dev` or `next build` 
 The [Turbopack tracing command](/docs/app/guides/local-development#turbopack-tracing) should be:
 
 ```bash package="pnpm"
-pnpm next internal trace .next-profiles/trace-turbopack
+pnpm next internal trace .next-profiles/trace-turbopack.bin
 ```
 
 ```bash package="npm"
-npx next internal trace .next-profiles/trace-turbopack
+npx next internal trace .next-profiles/trace-turbopack.bin
 ```
 
 ```bash package="yarn"
-yarn next internal trace .next-profiles/trace-turbopack
+yarn next internal trace .next-profiles/trace-turbopack.bin
 ```
 
 ```bash package="bun"
-bunx next internal trace .next-profiles/trace-turbopack
+bunx next internal trace .next-profiles/trace-turbopack.bin
 ```
 
 ## Parallel Routes `default.js` requirement

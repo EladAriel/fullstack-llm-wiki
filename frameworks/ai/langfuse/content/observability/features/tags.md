@@ -4,10 +4,10 @@ framework: "Langfuse"
 source_repo: "https://github.com/langfuse/langfuse-docs"
 source_branch: "main"
 source_path: "content/docs/observability/features/tags.mdx"
-source_commit: "4a702ece53852a6af86b3883f434adf3f5cae421"
-source_commit_short: "4a702ece"
-source_commit_date: "2026-06-23T13:41:14Z"
-generated_at: "2026-06-23T13:55:15Z"
+source_commit: "fcd1eca34a924867563c3c4e801254c4e66c0021"
+source_commit_short: "fcd1eca3"
+source_commit_date: "2026-07-25T00:45:45Z"
+generated_at: "2026-07-25T11:51:12Z"
 ---
 
 ---
@@ -227,7 +227,7 @@ chain.invoke(
 
 ```ts /propagateAttributes/
 import { startActiveObservation, propagateAttributes } from "@langfuse/tracing";
-import { CallbackHandler } from "langfuse-langchain";
+import { CallbackHandler } from "@langfuse/langchain";
 
 const langfuseHandler = new CallbackHandler();
 
@@ -261,21 +261,6 @@ const tags = ["tag-1", "tag-2"];
 
 // Pass config to the chain invocation to be parsed as Langfuse trace attributes
 await chain.invoke({ input: "<user_input>" }, { callbacks: [langfuseHandler], tags: tags });
-```
-
-When using the integration with the JS SDK (see [interop docs](/integrations/frameworks/langchain#interoperability)), set tags via `langfuse.trace()`:
-
-```ts
-import { CallbackHandler, Langfuse } from "langfuse-langchain";
-const langfuse = new Langfuse();
-
-const trace = langfuse.trace({
-  tags: ["tag-1", "tag-2"],
-});
-const langfuseHandler = new CallbackHandler({ root: trace });
-
-// Add Langfuse handler as callback to your langchain chain/agent
-await chain.invoke({ input: "<user_input>" }, { callbacks: [langfuseHandler] });
 ```
 
 </Tab>

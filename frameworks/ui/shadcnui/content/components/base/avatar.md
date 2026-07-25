@@ -4,10 +4,10 @@ framework: "shadcnui"
 source_repo: "https://github.com/shadcn-ui/ui"
 source_branch: "main"
 source_path: "apps/v4/content/docs/components/base/avatar.mdx"
-source_commit: "5602b81d8344e0d0d7178e3bf57612662cd42957"
-source_commit_short: "5602b81d"
-source_commit_date: "2026-06-21T15:49:35+04:00"
-generated_at: "2026-06-21T12:47:26Z"
+source_commit: "4baadbc6517070ae8f8feb2c97037adc2b305544"
+source_commit_short: "4baadbc6"
+source_commit_date: "2026-07-23T23:50:36+04:00"
+generated_at: "2026-07-25T11:50:48Z"
 ---
 
 ---
@@ -107,15 +107,13 @@ AvatarGroup
 └── AvatarGroupCount
 ```
 
-## Examples
-
-### Basic
+## Basic
 
 A basic avatar component with an image and a fallback.
 
 <ComponentPreview styleName="base-nova" name="avatar-basic" />
 
-### Badge
+## Badge
 
 Use the `AvatarBadge` component to add a badge to the avatar. The badge is positioned at the bottom right of the avatar.
 
@@ -131,37 +129,37 @@ Use the `className` prop to add custom styles to the badge such as custom colors
 </Avatar>
 ```
 
-### Badge with Icon
+## Badge with Icon
 
 You can also use an icon inside `<AvatarBadge>`.
 
 <ComponentPreview styleName="base-nova" name="avatar-badge-icon" />
 
-### Avatar Group
+## Avatar Group
 
 Use the `AvatarGroup` component to add a group of avatars.
 
 <ComponentPreview styleName="base-nova" name="avatar-group" />
 
-### Avatar Group Count
+## Avatar Group Count
 
 Use `<AvatarGroupCount>` to add a count to the group.
 
 <ComponentPreview styleName="base-nova" name="avatar-group-count" />
 
-### Avatar Group with Icon
+## Avatar Group with Icon
 
 You can also use an icon inside `<AvatarGroupCount>`.
 
 <ComponentPreview styleName="base-nova" name="avatar-group-count-icon" />
 
-### Sizes
+## Sizes
 
 Use the `size` prop to change the size of the avatar.
 
 <ComponentPreview styleName="base-nova" name="avatar-size" />
 
-### Dropdown
+## Dropdown
 
 You can use the `Avatar` component as a trigger for a dropdown menu.
 

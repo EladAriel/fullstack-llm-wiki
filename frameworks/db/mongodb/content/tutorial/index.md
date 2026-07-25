@@ -4,10 +4,10 @@ framework: "mongodb"
 directory: "content/tutorial"
 source_repo: "https://github.com/mongodb/docs.git"
 source_branch: "main"
-source_commit: "96788e8ed140cbdde184ff82e1066dff4996bde4"
-source_commit_short: "96788e8e"
-source_commit_date: "2026-06-19T21:35:03-06:00"
-generated_at: "2026-06-21T07:41:52Z"
+source_commit: "ab9db26ed3d11618cdb61516d8180337d8e3f679"
+source_commit_short: "ab9db26e"
+source_commit_date: "2026-07-24T16:22:46-06:00"
+generated_at: "2026-07-25T11:51:15Z"
 ---
 # Tutorial
 
@@ -25,7 +25,6 @@ This directory contains mongodb learning pages related to tutorial.
 
 - [Aggregation Examples](aggregation-examples/index.md) - pages related to aggregation examples
 - [Manage Shard Zone](manage-shard-zone/index.md) - pages related to manage shard zone
-- [Mongot Sizing](mongot-sizing/index.md) - pages related to mongot sizing
 - [Query Documents](query-documents/index.md) - pages related to query documents
 
 ## Pages in This Directory
@@ -195,7 +194,6 @@ This directory contains mongodb learning pages related to tutorial.
 - [Schedule Backup Window For Sharded Clusters](schedule-backup-window-for-sharded-clusters.md)
 - [Shard Collection With Unique Index](shard-collection-with-unique-index.md)
 - [Sharding Distribute Collections With Zones](sharding-distribute-collections-with-zones.md)
-- [Sharding High Availability Writes](sharding-high-availability-writes.md)
 - [Sharding Segmenting Data By Location](sharding-segmenting-data-by-location.md)
 - [Sharding Segmenting Shards](sharding-segmenting-shards.md)
 - [Sharding Tiered Hardware For Varying Slas](sharding-tiered-hardware-for-varying-slas.md)

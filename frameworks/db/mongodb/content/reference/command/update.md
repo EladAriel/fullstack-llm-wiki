@@ -4,10 +4,10 @@ framework: "mongodb"
 source_repo: "https://github.com/mongodb/docs.git"
 source_branch: "main"
 source_path: "content/manual/manual/source/reference/command/update.txt"
-source_commit: "96788e8ed140cbdde184ff82e1066dff4996bde4"
-source_commit_short: "96788e8e"
-source_commit_date: "2026-06-19T21:35:03-06:00"
-generated_at: "2026-06-21T07:41:52Z"
+source_commit: "ab9db26ed3d11618cdb61516d8180337d8e3f679"
+source_commit_short: "ab9db26e"
+source_commit_date: "2026-07-24T16:22:46-06:00"
+generated_at: "2026-07-25T11:51:15Z"
 ---
 
 =========================
@@ -122,7 +122,7 @@ Then, the :dbcommand:`update` command updates only the corresponding fields in t
 
 ### Update with a Replacement Document
 
-The update statement field `u <update-command-u>` field can accept a replacement document, i.e. the document contains only `field:value` expressions. For example:
+The update statement `u <update-command-u>` field accepts a replacement document that contains only `field:value` expressions. For example:
 
 ```javascript
 updates: [
@@ -135,7 +135,7 @@ updates: [
 ]
 ```
 
-Then the :dbcommand:`update` command replaces the matching document with the update document. The :dbcommand:`update` command can only replace a single matching document; i.e. the `multi` field cannot be `true`. The :dbcommand:`update command does not replace the id` value.
+Then the :dbcommand:`update` command replaces the matching document with the update document. The :dbcommand:`update` command can only replace a single matching document. The `multi` field cannot be `true`. The :dbcommand:`update command does not replace the id` value.
 
 ### Multi-Update Failures
 
@@ -153,7 +153,7 @@ The update statement field `u <update-command-u>` field can accept an `aggregati
 
 .. include:: /includes/list-update-agg-stages.rst
 
-Using the aggregation pipeline allows for a more expressive update statement, such as expressing conditional updates based on current field values or updating one field using the value of another field(s).
+The aggregation pipeline lets you write expressive update statements, such as conditional updates based on current field values or updating one field using the value of another field.
 
 For example:
 
@@ -171,9 +171,9 @@ updates: [
 ]
 ```
 
-> **Note:** The `$set` and `$unset` used in the pipeline refers to the
-aggregation stages :pipeline:`$set` and :pipeline:`$unset`
-respectively, and not the update operators :update:`$set` and :update:`$unset`.
+> **Note:** The `$set` and `$unset` in the pipeline refer to the aggregation
+stages :pipeline:`$set` and :pipeline:`$unset`, not the update
+operators :update:`$set` and :update:`$unset`.
 
 For examples, see `update-command-example-agg`.
 
@@ -183,7 +183,7 @@ For examples, see `update-command-example-agg`.
 
 ### Limits
 
-For each update element in the `updates` array, the sum of the query and the update sizes (i.e. `q` and `u` ) must be less than or equal to the :limit:`maximum BSON document size <BSON Document Size>`.
+For each update element in the `updates` array, the sum of the query and update sizes (that is, `q` and `u`) must be less than or equal to the :limit:`maximum BSON document size <BSON Document Size>`.
 
 The total number of update statements in the `updates` array must be less than or equal to the :limit:`maximum bulk size <Write Command Batch Limit Size>`.
 
@@ -274,7 +274,7 @@ For example, documents in the `movies` collection from the `sample_mflix` databa
 
 The following command uses the :update:`$set` and :update:`$inc` update operators to update the `year` and the `num_mflix_comments` fields of a document where the `title` equals `"The Godfather"`:
 
-Because `<update>` document does not specify the optional `multi` field, the update only modifies one document, even if more than one document matches the `q` match condition.
+Because the `<update>` document does not specify the optional `multi` field, this operation modifies only one document, even if more than one document matches the `q` query.
 
 See `update-command-output` for details.
 
@@ -296,11 +296,11 @@ The :dbcommand:`update` command can use an aggregation pipeline for the update. 
 
 .. include:: /includes/list-update-agg-stages.rst
 
-Using the aggregation pipeline allows for a more expressive update statement, such as expressing conditional updates based on current field values or updating one field using the value of another field(s).
+The aggregation pipeline lets you write expressive update statements, such as conditional updates based on current field values or updating one field using the value of another field.
 
 Example 1 `````````
 
-The following examples uses the aggregation pipeline to modify a field using the values of the other fields in the document.
+The following example uses the aggregation pipeline to modify a field using the values of the other fields in the document.
 
 Documents in the `users` collection from the `sample_mflix` database contain fields such as `name` and `email`.
 
@@ -311,7 +311,7 @@ The following update operation uses an aggregation pipeline to add new fields to
 
 Example 2 `````````
 
-The aggregation pipeline allows the update to perform conditional updates based on the current field values as well as use current field values to calculate a separate field value.
+The aggregation pipeline lets the update perform conditional updates based on current field values and use those values to calculate a separate field value.
 
 Documents in the `movies` collection from the `sample_mflix` database have a `year` field.
 
@@ -331,7 +331,7 @@ The following example performs multiple update operations in a single command to
 - marks highly-rated Horror movies from 2015 as `featured`
 - categorizes short Drama and Romance movies from 2012 as `melodrama`
 - upserts a new Science Fiction movie from 2024 if it doesn't exist
-The returned document shows that the command modified existing documents and inserted a new document via upsert. See `update-command-output` for details.
+The returned document shows that the command modified existing documents and inserted a new document through an upsert. See `update-command-output` for details.
 
 ### Specify Collation
 
@@ -349,7 +349,7 @@ Update Elements Match `arrayFilters` Criteria ``````````````````````````````````
 
 Documents in the `movies` collection from the `sample_mflix` database have a `languages` array field.
 
-The following example updates all movies that have `"English"` in their `languages` array. The operation replaces `"English"` with `"EN"`.
+The following example updates all movies that have `"English"` in their `languages` array. The operation replaces `"English"` with `"EN"`:
 
 Update Specific Elements of an Array of Documents `````````````````````````````````````````````````
 
@@ -382,9 +382,9 @@ within the :query:`$expr` operator.
 
 Documents in the `movies` collection from the `sample_mflix` database have fields such as `title` and `year`.
 
-The following example uses the `let` option to define variables for finding and adding a new field to a movie.
+The following example uses the `let` option to define variables for finding and adding a new field to a movie:
 
-The next example defines `movieTitle` and `franchiseName` variables in `c` and uses the variables to add a `franchise` field.
+The next example defines `movieTitle` and `franchiseName` variables in `c` and uses the variables to add a `franchise` field:
 
 ## Output
 
@@ -404,7 +404,7 @@ See `db.runCommand Response <command-response>` for details on these fields.
 
 Documents in the `movies` collection from the `sample_mflix` database have fields such as `year`, `title`, and `num_mflix_comments`.
 
-The following example finds all movies from 1972 and updates the one with the most comments.
+The following example finds all movies from 1972 and updates the one with the most comments:
 
 ```javascript
 db.runCommand( {

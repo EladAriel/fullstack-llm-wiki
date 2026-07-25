@@ -4,10 +4,10 @@ framework: "postgres"
 source_repo: "https://github.com/postgres/postgres.git"
 source_branch: "master"
 source_path: "doc/src/sgml/func/func-uuid.sgml"
-source_commit: "031904048aa22e7c70dc8e9c170e2743f9b0f090"
-source_commit_short: "03190404"
-source_commit_date: "2026-06-20T18:20:58+09:00"
-generated_at: "2026-06-21T07:06:11Z"
+source_commit: "38afc3dcb25c45b744d4025029ce0a6c90b7059f"
+source_commit_short: "38afc3dc"
+source_commit_date: "2026-07-25T19:08:27+09:00"
+generated_at: "2026-07-25T11:50:59Z"
 ---
 
 ## UUID Functions
@@ -47,7 +47,7 @@ Generates a version 4 (random) UUID
 
 `uuidv7` ( `shift` `interval` ) uuid
 
-Generates a version 7 (time-ordered) UUID. The timestamp is computed using UNIX timestamp with millisecond precision + sub-millisecond timestamp + random. The optional parameter `shift` will shift the computed timestamp by the given `interval`.
+Generates a version 7 (time-ordered) UUID. The timestamp is computed using UNIX timestamp with millisecond precision + sub-millisecond timestamp + random. The optional parameter `shift` will shift the computed timestamp by the given `interval`. Infinite interval values are not accepted. The shifted timestamp must fall within the range supported by UUID version 7's 48-bit millisecond timestamp field: from 1970-01-01 00:00:00 UTC to approximately year 10889. An error is raised if the resulting timestamp is outside this range.
 
 `uuidv7()` 019535d9-3df7-79fb-b466-fa907fa17f9e
 

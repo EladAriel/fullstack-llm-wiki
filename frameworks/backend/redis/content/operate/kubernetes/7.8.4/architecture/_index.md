@@ -4,10 +4,10 @@ framework: "redis"
 source_repo: "https://github.com/redis/docs.git"
 source_branch: "main"
 source_path: "content/operate/kubernetes/7.8.4/architecture/_index.md"
-source_commit: "bc92ea237bbfc2117c870c904f1a3ca619073ef1"
-source_commit_short: "bc92ea23"
-source_commit_date: "2026-06-18T14:53:00-05:00"
-generated_at: "2026-06-21T11:25:32Z"
+source_commit: "9d30f68c3dad1a6b3b7d30fe604b911348ce8152"
+source_commit_short: "9d30f68c"
+source_commit_date: "2026-07-24T10:52:10-07:00"
+generated_at: "2026-07-25T11:51:22Z"
 ---
 
 ---
@@ -29,11 +29,11 @@ Redis Enterprise for Kubernetes gives you the speed and durability of [Redis Ent
 
 ## Lifecycle
 
-Kubernetes is a rapidly evolving platform with a short release cycle (around 4 months). This frequent influx of new features, enhancements and bug fixes means Kubernetes distributions move in and out of support quickly. Redis Enterprise is also a fast-moving product, and is compatible and tested only on distributions listed as [supported distributions.]({{<relref "/operate/kubernetes/7.8.4/reference/supported_k8s_distributions">}})
+Kubernetes is a rapidly evolving platform with a short release cycle (around 4 months). This frequent influx of new features, enhancements and bug fixes means Kubernetes distributions move in and out of support quickly. Redis Enterprise is also a fast-moving product, and is compatible and tested only on distributions listed as [supported distributions.]({{<relref "/operate/kubernetes/7.8.4/reference">}})
 
-Each version of Redis Enterprise for Kubernetes is tested to ensure the version of Redis Enterprise works with the [supported Kubernetes distributions]({{<relref "/operate/kubernetes/7.8.4/reference/supported_k8s_distributions">}}) at the time. Both the Kubernetes version and the Redis Enterprise version must be supported for the operator to function correctly. We encourage you to upgrade Redis Enterprise for Kubernetes frequently, not only to get the benefit of enhancements and bug fixes, but to keep your software supported.
+Each version of Redis Enterprise for Kubernetes is tested to ensure the version of Redis Enterprise works with the [supported Kubernetes distributions]({{<relref "/operate/kubernetes/7.8.4/reference">}}) at the time. Both the Kubernetes version and the Redis Enterprise version must be supported for the operator to function correctly. We encourage you to upgrade Redis Enterprise for Kubernetes frequently, not only to get the benefit of enhancements and bug fixes, but to keep your software supported.
 
-Supported platforms are listed in the [release notes]({{<relref "/operate/kubernetes/release-notes">}}) and in the [supported platforms reference.]({{<relref "/operate/kubernetes/7.8.4/reference/supported_k8s_distributions">}})
+Supported platforms are listed in the [release notes]({{<relref "/operate/kubernetes/release-notes">}}) and in the [supported platforms reference.]({{<relref "/operate/kubernetes/7.8.4/reference">}})
 
 ## Architecture
 

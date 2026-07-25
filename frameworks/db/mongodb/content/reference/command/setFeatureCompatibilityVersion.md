@@ -4,10 +4,10 @@ framework: "mongodb"
 source_repo: "https://github.com/mongodb/docs.git"
 source_branch: "main"
 source_path: "content/manual/manual/source/reference/command/setFeatureCompatibilityVersion.txt"
-source_commit: "96788e8ed140cbdde184ff82e1066dff4996bde4"
-source_commit_short: "96788e8e"
-source_commit_date: "2026-06-19T21:35:03-06:00"
-generated_at: "2026-06-21T07:41:52Z"
+source_commit: "ab9db26ed3d11618cdb61516d8180337d8e3f679"
+source_commit_short: "ab9db26e"
+source_commit_date: "2026-07-24T16:22:46-06:00"
+generated_at: "2026-07-25T11:51:15Z"
 ---
 
 =================================================
@@ -19,10 +19,9 @@ generated_at: "2026-06-21T07:41:52Z"
 > **Warning:** Enabling backwards-incompatible features can complicate the
 downgrade process since you must remove any persisted
 backwards-incompatible features before you downgrade.
-It is recommended that after upgrading, you allow your deployment to
-run without enabling backwards-incompatible features for a burn-in period
-to ensure the likelihood of downgrade is minimal. When you are confident
-that the likelihood of downgrade is minimal, enable these features.
+After upgrading, allow your deployment to run without enabling
+backwards-incompatible features for a burn-in period. Enable these
+features only after you are confident that a downgrade is unlikely.
 
 ## Compatibility
 
@@ -106,15 +105,14 @@ features, then re-run the `setFeatureCompatibilityVersion` command with the upgr
 original downgraded version to set the {+fcv+} back to the original version.
 
 > **Important:**   Setting the {+fcv+} to the original version stops the
-  upgrade procedure and changes the {+fcv+} back to the
-  downgraded version. This procedure does not reset the
-  cluster back to the state before the {+fcv+} upgrade
-  began.
+  upgrade procedure and reverts the {+fcv+} to the
+  downgraded version. The cluster does not return to its
+  state before the {+fcv+} upgrade began.
   If the {+fcv+} upgrade confirms that there is no
   forwards-incompatible data but otherwise stops or fails,
-  any subsequent FCV downgrade attempts will also fail with
-  an error message. You must complete the FCV upgrade before
-  trying to downgrade the FCV.
+  any subsequent FCV downgrade attempts also fail with an
+  error message. You must complete the FCV upgrade before
+  you can downgrade the FCV.
 
 ### Downgrade with Backward-Incompatible Data
 
@@ -129,14 +127,14 @@ features, then re-run the `setFeatureCompatibilityVersion` command with the down
 original upgraded version to set the {+fcv+} back to the original version.
 
 > **Important:**   Setting the {+fcv+} to the original version stops the
-  downgrade procedure and changes the {+fcv+} back to the
-  upgraded version. This procedure does not reset the cluster
-  back to the state before the {+fcv+} downgrade began.
+  downgrade procedure and reverts the {+fcv+} to the
+  upgraded version. The cluster does not return to its
+  state before the {+fcv+} downgrade began.
   If the {+fcv+} downgrade confirms that there is no
   backwards-incompatible data but otherwise stops or fails,
-  any subsequent FCV upgrade attempts will also fail with
-  an error message. You must complete the FCV downgrade before
-  trying to upgrade the FCV.
+  any subsequent FCV upgrade attempts also fail with an
+  error message. You must complete the FCV downgrade before
+  you can upgrade the FCV.
 
 ### Downgrade Policy in MongoDB 8.3
 
@@ -150,7 +148,7 @@ Certain background operations may prevent execution of :dbcommand:`setFeatureCom
 
 ### Sync Failures
 
-If you trigger a :dbcommand:`setFeatureCompatibilityVersion` change during an initial sync, the sync may fail with an `OplogOperationUnsupported` error message when replaying entries on the `oplog` application phase. The sync following this attempt succeeds because the operation phase no longer replays the operation.
+If you change the {+fcv+} during an initial sync, the sync may fail with an `OplogOperationUnsupported` error when replaying entries on the `oplog` application phase. The next sync succeeds because the operation phase no longer replays the operation.
 
 ### Default Values
 
@@ -158,7 +156,7 @@ If you trigger a :dbcommand:`setFeatureCompatibilityVersion` change during an in
 
 ### Idempotency
 
-This command must perform writes to an internal system collection. If for any reason the command does not complete successfully, you can safely retry the command as the operation is idempotent.
+This command must perform writes to an internal system collection. If the command does not complete successfully, you can safely retry it. The operation is idempotent.
 
 ### {+c2c-product-name+} and User Write Blocking
 

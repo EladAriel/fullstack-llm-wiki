@@ -4,10 +4,10 @@ framework: "redis"
 source_repo: "https://github.com/redis/docs.git"
 source_branch: "main"
 source_path: "content/operate/rs/references/rest-api/requests/crdbs/updates.md"
-source_commit: "bc92ea237bbfc2117c870c904f1a3ca619073ef1"
-source_commit_short: "bc92ea23"
-source_commit_date: "2026-06-18T14:53:00-05:00"
-generated_at: "2026-06-21T11:25:32Z"
+source_commit: "9d30f68c3dad1a6b3b7d30fe604b911348ce8152"
+source_commit_short: "9d30f68c"
+source_commit_date: "2026-07-24T10:52:10-07:00"
+generated_at: "2026-07-25T11:51:22Z"
 ---
 
 ---
@@ -25,7 +25,7 @@ weight: $weight
 
 | Method | Path | Description |
 |--------|------|-------------|
-| [POST](#post-crdbs-updates) | `/v1/crdbs/{crdb_guid}/updates` | Modify Active-Active confgurarion |
+| [POST](#post-crdbs-updates) | `/v1/crdbs/{crdb_guid}/updates` | Modify Active-Active configuration |
 
 ## Modify Active-Active configuration {#post-crdbs-updates}
 
@@ -37,11 +37,13 @@ Modify Active-Active configuration.
 This is a very powerful API request and can cause damage if used incorrectly.
 {{</warning>}}
 
-In order to add or remove instances, you must use this API. For simple configuration updates, it is recommended to use PATCH on /crdbs/{crdb_guid} instead.
+To add or remove instances, you must use this API. For simple configuration updates, use [`PATCH /crdbs/{crdb_guid}`]({{<relref "/operate/rs/references/rest-api/requests/crdbs#patch-crdbs">}}) instead.
 
-Updating default_db_config affects both existing and new instances that may be added.
+Updating `default_db_config` affects both existing and new instances.
 
-When you update db_config, it changes the configuration of the database that you specify. This field overrides corresponding fields (if any) in default_db_config.
+When you update `db_config`, it changes the configuration of the specified database instance. This field overrides any corresponding fields in `default_db_config`.
+
+For a list of which settings must be identical across all instances and which to set per instance, see the [CRDB database config object]({{<relref "/operate/rs/references/rest-api/objects/crdb/database_config">}}) reference.
 
 ### Request {#post-request} 
 

@@ -4,10 +4,10 @@ framework: "mongodb"
 source_repo: "https://github.com/mongodb/docs.git"
 source_branch: "main"
 source_path: "content/manual/manual/source/reference/command/delete.txt"
-source_commit: "96788e8ed140cbdde184ff82e1066dff4996bde4"
-source_commit_short: "96788e8e"
-source_commit_date: "2026-06-19T21:35:03-06:00"
-generated_at: "2026-06-21T07:41:52Z"
+source_commit: "ab9db26ed3d11618cdb61516d8180337d8e3f679"
+source_commit_short: "ab9db26e"
+source_commit_date: "2026-07-24T16:22:46-06:00"
+generated_at: "2026-07-25T11:51:15Z"
 ---
 
 =========================
@@ -66,9 +66,9 @@ Each element of the `deletes` array contains the following fields:
 
 ### Limits
 
-The total size of all the queries (i.e. the `q` field values) in the `deletes` array must be less than or equal to the :limit:`maximum BSON document size <BSON Document Size>`.
+The total size of all query documents in the `deletes` array must not exceed the :limit:`maximum BSON document size <BSON Document Size>`.
 
-The total number of delete documents in the `deletes` array must be less than or equal to the :limit:`maximum bulk size <Write Command Batch Limit Size>`.
+The total number of delete documents in the `deletes` array must not exceed the :limit:`maximum bulk size <Write Command Batch Limit Size>`.
 
 ### Transactions
 
@@ -115,7 +115,7 @@ db.runCommand(
 )
 ```
 
-The returned document shows that the command found and deleted `13` documents. See `delete-command-output` for details.
+The returned document shows that the command deleted `13` documents. See `delete-command-output` for details.
 
 ```javascript
 { "ok" : 1, "n" : 13 }
@@ -137,7 +137,7 @@ db.runCommand(
 )
 ```
 
-The returned document shows that the command found and deleted `35` documents in total. See `delete-command-output` for details.
+The returned document shows that the command deleted `35` documents. See `delete-command-output` for details.
 
 ```javascript
 { "ok" : 1, "n" : 35 }
@@ -161,7 +161,7 @@ db.runCommand(
 )
 ```
 
-The returned document shows that the command found and deleted `21` documents in total for the two delete statements. See `delete-command-output` for details.
+The returned document shows that the command deleted `21` documents for the two delete statements. See `delete-command-output` for details.
 
 ```javascript
 { "ok" : 1, "n" : 21 }

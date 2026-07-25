@@ -4,10 +4,10 @@ framework: "mongodb"
 source_repo: "https://github.com/mongodb/docs.git"
 source_branch: "main"
 source_path: "content/manual/manual/source/reference/configuration-options.txt"
-source_commit: "96788e8ed140cbdde184ff82e1066dff4996bde4"
-source_commit_short: "96788e8e"
-source_commit_date: "2026-06-19T21:35:03-06:00"
-generated_at: "2026-06-21T07:41:52Z"
+source_commit: "ab9db26ed3d11618cdb61516d8180337d8e3f679"
+source_commit_short: "ab9db26e"
+source_commit_date: "2026-07-24T16:22:46-06:00"
+generated_at: "2026-07-25T11:51:15Z"
 ---
 
 =======================================
@@ -25,7 +25,7 @@ MongoDB binaries also read operating system environment variables.
 
 ## Configuration File
 
-You can configure :binary:`~bin.mongod` and :binary:`~bin.mongos` instances at startup using a configuration file. The configuration file contains settings that are equivalent to the :binary:`~bin.mongod` and :binary:`~bin.mongos` command-line options. See `conf-file-command-line-mapping`.
+You can configure :binary:`~bin.mongod` and :binary:`~bin.mongos` instances at startup using a configuration file. The configuration file contains settings that are equivalent to the `mongod` and `mongos` command-line options. See `conf-file-command-line-mapping`.
 
 You can also add comments to the configuration file to explain the server's settings.
 
@@ -54,7 +54,7 @@ setParameter:
 ...
 ```
 
-The Linux package init scripts included in the official MongoDB packages depend on specific values for :setting:`systemLog.path`, :setting:`storage.dbPath`, and :setting:`processManagement.fork` or `MONGODB_CONFIG_OVERRIDE_NOFORK` system environment variable. If you modify these settings in the default configuration file, :binary:`~bin.mongod` may not start.
+The Linux package init scripts included in the official MongoDB packages depend on specific values for :setting:`systemLog.path`, :setting:`storage.dbPath`, and :setting:`processManagement.fork` or `MONGODB_CONFIG_OVERRIDE_NOFORK` system environment variable. If you modify these settings in the default configuration file, `mongod` may not start.
 
 Externally Sourced Values `````````````````````````
 
@@ -93,7 +93,7 @@ mongod --config /etc/mongod.conf  --configExpand "rest,exec"
 mongos --config /etc/mongos.conf  --configExpand "rest,exec"
 ```
 
-If the configuration file includes an expansion directive and you start the :binary:`mongod` / :binary:`mongos` without specifying that directive in the :option:`--configExpand <mongod --configExpand>` option, the :binary:`mongod` / :binary:`mongos` fails to start.
+If the configuration file includes an expansion directive and you start the `mongod` / `mongos` without specifying that directive in the `--configExpand` option, the `mongod` / `mongos` fails to start.
 
 ## Core Options
 

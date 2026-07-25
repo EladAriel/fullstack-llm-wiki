@@ -4,10 +4,10 @@ framework: "mongodb"
 source_repo: "https://github.com/mongodb/docs.git"
 source_branch: "main"
 source_path: "content/manual/manual/source/reference/command/aggregate.txt"
-source_commit: "96788e8ed140cbdde184ff82e1066dff4996bde4"
-source_commit_short: "96788e8e"
-source_commit_date: "2026-06-19T21:35:03-06:00"
-generated_at: "2026-06-21T07:41:52Z"
+source_commit: "ab9db26ed3d11618cdb61516d8180337d8e3f679"
+source_commit_short: "ab9db26e"
+source_commit_date: "2026-07-24T16:22:46-06:00"
+generated_at: "2026-07-25T11:51:15Z"
 ---
 
 ============================
@@ -108,18 +108,18 @@ For :dbcommand:`aggregate` operations that do not include the :pipeline:`$out` o
 
 ## Stable API
 
-When using `Stable API <stable-api>` V1:
+When using `Stable API <stable-api>` V1, the :dbcommand:`aggregate` command is supported with the following exceptions:
 
-- You cannot use the following stages in an :dbcommand:`aggregate`
-command:
+- The following aggregation stages are not available in Stable
+API V1:
 
 .. include:: /includes/aggregation/stable-api-unsupported-stages.rst
 
-- Don't include the `explain` field in an :dbcommand:`aggregate`
-command. If you do, the server returns an `APIStrictError <api-strict-resp>` error.
+- The `explain` field is not available in Stable API V1. If
+you include it, the server returns an `APIStrictError <api-strict-resp>` error.
 
-- When using the :pipeline:`$collStats` stage, you can only use the
-`count` field. No other :pipeline:`$collStats` fields are available.
+- When using the :pipeline:`$collStats` stage, only the `count`
+field is available. All other :pipeline:`$collStats` fields are not available in Stable API V1.
 
 ## Example
 

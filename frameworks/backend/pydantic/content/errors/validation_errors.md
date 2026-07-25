@@ -4,14 +4,18 @@ framework: "pydantic"
 source_repo: "https://github.com/pydantic/pydantic"
 source_branch: "main"
 source_path: "docs/errors/validation_errors.md"
-source_commit: "363728fe0b353db1a1fcb44aac5c38fd96a8cc20"
-source_commit_short: "363728fe"
-source_commit_date: "2026-06-20T11:20:58+01:00"
-generated_at: "2026-06-21T11:37:01Z"
+source_commit: "a2a6577d4c329dd574a45dbb01a8feaa16b1ad3d"
+source_commit_short: "a2a6577d"
+source_commit_date: "2026-07-23T15:38:17Z"
+generated_at: "2026-07-25T11:50:12Z"
 ---
 
 Pydantic attempts to provide useful validation errors. Below are details on common validation errors users
 may encounter when working with pydantic, together with some suggestions on how to fix them.
+
+The entries below explain what each error type means. To also see *which input* triggered an error in a
+live service, [Logfire](troubleshooting.md) records the input and structured errors for each validation —
+see [Troubleshooting Validation Errors](troubleshooting.md).
 
 ## `arguments_type`
 
@@ -836,6 +840,48 @@ try:
 except ValidationError as exc:
     print(repr(exc.errors()[0]['type']))
     #> 'float_type'
+```
+
+## `fraction_parsing`
+
+This error is raised when the value provided for an input that could not be parsed as a fraction:
+
+```python
+from fractions import Fraction
+
+from pydantic import BaseModel, ValidationError
+
+
+class Model(BaseModel):
+    x: Fraction
+
+
+try:
+    Model(x='invalid')
+except ValidationError as exc:
+    print(repr(exc.errors()[0]['type']))
+    #> 'fraction_parsing'
+```
+
+## `fraction_type`
+
+This error is raised when the value provided for a [`Fraction`][fractions.Fraction] is of the wrong type:
+
+```python
+from fractions import Fraction
+
+from pydantic import BaseModel, ValidationError
+
+
+class Model(BaseModel):
+    x: Fraction
+
+
+try:
+    Model.model_validate_json('{"x": [1, 2]}')
+except ValidationError as exc:
+    print(repr(exc.errors()[0]['type']))
+    #> 'fraction_type'
 ```
 
 ## `frozen_field`

@@ -4,10 +4,10 @@ framework: "mongodb"
 source_repo: "https://github.com/mongodb/docs.git"
 source_branch: "main"
 source_path: "content/manual/manual/source/reference/method/db.collection.createIndexes.txt"
-source_commit: "96788e8ed140cbdde184ff82e1066dff4996bde4"
-source_commit_short: "96788e8e"
-source_commit_date: "2026-06-19T21:35:03-06:00"
-generated_at: "2026-06-21T07:41:52Z"
+source_commit: "ab9db26ed3d11618cdb61516d8180337d8e3f679"
+source_commit_short: "ab9db26e"
+source_commit_date: "2026-07-24T16:22:46-06:00"
+generated_at: "2026-07-25T11:51:15Z"
 ---
 
 ==============================================
@@ -40,29 +40,7 @@ This method is available in deployments hosted in the following environments:
 
 The `options` document contains a set of options that control the creation of the indexes. Different index types can have additional options specific for that type.
 
-Multiple index options can be specified in the same document. However, if you specify multiple option documents the :method:`db.collection.createIndexes()` operation will fail.
-
-Consider the following :method:`db.collection.createIndexes()` operation:
-
-```javascript
-db.collection.createIndexes(
-   [
-     {
-       "a": 1
-     },
-     {
-       "b": 1
-     }
-   ],
-   {
-     unique: true,
-     sparse: true,
-     expireAfterSeconds: 3600
-   }
- )
-```
-
-If the options specification had been split into multiple documents like this: `{ unique: true }, { sparse: true, expireAfterSeconds: 3600 }` the index creation operation would have failed.
+Multiple index options can be specified in the same document. However, if you specify multiple option documents the :method:`db.collection.createIndexes()` operation fails.
 
 > **Important:** When you specify options to
 :method:`db.collection.createIndexes()`, the options apply to
@@ -77,7 +55,7 @@ arguments. Refer to the option descriptions for more information.
 
 The following options are available for all index types unless otherwise specified:
 
-### Option for Collation
+### Options for Collation
 
 .. include:: /includes/extracts/collation-index-type-restrictions.rst
 
@@ -103,6 +81,10 @@ The following options are available for `2d` indexes only:
 
 The following option is available for `wildcard <wildcard-index-core>` indexes only:
 
+To learn more, see:
+
+- `Wildcard Index Concepts <wildcard-index-core>`
+- `Wildcard Index Restrictions <wildcard-index-restrictions>`
 ## Behaviors
 
 ### Recreating an Existing Index
@@ -129,33 +111,8 @@ To hide or unhide existing indexes, you can use the following :binary:`~bin.mong
 
 - :method:`db.collection.hideIndex()`
 - :method:`db.collection.unhideIndex()`
-For example,
-
-- To change the `hidden` option for an index to `true`, use the
-:method:`db.collection.hideIndex()` method:
-
-```javascript
-  db.restaurants.hideIndex( { borough: 1, ratings: 1 } );
-```
-
-- To change the `hidden` option for an index to `false`, use the
-:method:`db.collection.unhideIndex()` method:
-
-```javascript
-  db.restaurants.unhideIndex( { borough: 1, city: 1 } );
-```
-
 > **Seealso:** `index-type-hidden`
 
-### Wildcard Indexes
-
-- .. include:: /includes/extracts/wildcard-index-id.rst
-- .. include:: /includes/indexes/wildcard-restrictions.rst
-To learn more, see:
-
-- `Concepts <wildcard-index-core>`
-- `Examples <createIndexes-command-wildcard-examples>`
-- `Restrictions <wildcard-index-restrictions>`
 ### Transactions
 
 .. include:: /includes/extracts/transactions-explicit-ddl.rst
@@ -166,7 +123,15 @@ To learn more, see:
 
 .. include:: /includes/index-build-improvements.rst
 
-## Example
+Commit Quorum `````````````
+
+.. include:: /includes/extracts/4.4-changes-index-builds-simultaneous-fcv.rst
+
+.. include:: /includes/extracts/4.4-changes-index-builds-simultaneous.rst
+
+.. include:: /includes/indexes/template-commit-quorum-intro.rst
+
+## Examples
 
 > **Seealso:** :method:`db.collection.createIndex()` for examples of various index
 specifications.
@@ -318,12 +283,6 @@ db.products_catalog.find( { "product_attributes.washable" : true } )
 > **Note:** .. include:: /includes/extracts/wildcard-index-inclusion-exclusion.rst
 
 ### Create Indexes With Commit Quorum
-
-.. include:: /includes/extracts/4.4-changes-index-builds-simultaneous-fcv.rst
-
-.. include:: /includes/extracts/4.4-changes-index-builds-simultaneous.rst
-
-.. include:: /includes/indexes/template-commit-quorum-intro.rst
 
 The following operation creates an index with a `commit quorum <createIndexes-method-commitQuorum>` of `"majority"`:
 

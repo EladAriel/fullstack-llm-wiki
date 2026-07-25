@@ -4,10 +4,10 @@ framework: "FastAPI"
 source_repo: "https://github.com/fastapi/fastapi.git"
 source_branch: "master"
 source_path: "docs/en/docs/deployment/server-workers.md"
-source_commit: "0cb4a8e284b450abbccb71c543ad7757de46c0b2"
-source_commit_short: "0cb4a8e2"
-source_commit_date: "2026-06-20T16:31:34Z"
-generated_at: "2026-06-21T07:06:10Z"
+source_commit: "255b912928904e3ba5980425a54d6837c8bd1a1c"
+source_commit_short: "255b9129"
+source_commit_date: "2026-07-24T21:15:37Z"
+generated_at: "2026-07-25T11:50:10Z"
 ---
 
 # Server Workers - Uvicorn with Workers { #server-workers-uvicorn-with-workers }
@@ -98,7 +98,7 @@ If you prefer to use the `uvicorn` command directly:
 <div class="termy">
 
 ```console
-$ uvicorn main:app --host 0.0.0.0 --port 8080 --workers 4
+$ uv run uvicorn main:app --host 0.0.0.0 --port 8080 --workers 4
 <font color="#A6E22E">INFO</font>:     Uvicorn running on <b>http://0.0.0.0:8080</b> (Press CTRL+C to quit)
 <font color="#A6E22E">INFO</font>:     Started parent process [<font color="#A1EFE4"><b>27365</b></font>]
 <font color="#A6E22E">INFO</font>:     Started server process [<font color="#A1EFE4">27368</font>]

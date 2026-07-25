@@ -8,9 +8,9 @@ This is a local LLM-friendly wiki generated from the official LangGraph document
 - Source repo: `https://github.com/langchain-ai/docs`
 - Source branch: `main`
 - Source docs path: `src/oss/langgraph`
-- Source commit: `d037cd23`
-- Source commit date: `2026-06-23T11:18:55+02:00`
-- Wiki generated at: `2026-06-23T13:54:20Z`
+- Source commit: `2aae1dfc`
+- Source commit date: `2026-07-25T00:27:23Z`
+- Wiki generated at: `2026-07-25T11:51:08Z`
 
 ## How the IDE LLM should use this wiki
 

@@ -4,10 +4,10 @@ framework: "postgres"
 source_repo: "https://github.com/postgres/postgres.git"
 source_branch: "master"
 source_path: "doc/src/sgml/fdwhandler.sgml"
-source_commit: "031904048aa22e7c70dc8e9c170e2743f9b0f090"
-source_commit_short: "03190404"
-source_commit_date: "2026-06-20T18:20:58+09:00"
-generated_at: "2026-06-21T07:06:11Z"
+source_commit: "38afc3dcb25c45b744d4025029ce0a6c90b7059f"
+source_commit_short: "38afc3dc"
+source_commit_date: "2026-07-25T19:08:27+09:00"
+generated_at: "2026-07-25T11:50:59Z"
 ---
 
 ## Writing a Foreign Data Wrapper
@@ -492,7 +492,7 @@ ImportForeignStatistics(Relation relation,
 
 This function is called before the `AnalyzeForeignTable` callback function when `sql-analyze` is executed on a foreign table, and is used to import remotely-calculated statistics (both table-level and column-level) for the foreign table directly to the local server. `relation` is the `Relation` struct describing the target foreign table. `va_cols`, if not NIL, contains the columns specified in the `ANALYZE` command. `elevel` contains a flag indicating a logging level to use. If the function imports the statistics successfully, it should return `true`. Otherwise, return `false`, in which case `AnalyzeForeignTable` callback function is called on the foreign table to collect statistics locally, if supported.
 
-For reference, the logic for calculating statistics in PostgreSQL is found in `src/backend/command/analyze.c`. It's recommended to import table-level and column-level statistics for the foreign table using `pg_restore_relation_stats` and `pg_restore_attribute_stats`, respectively.
+For reference, the logic for calculating statistics in PostgreSQL is found in `src/backend/command/analyze.c`. It's recommended to import table-level and column-level statistics for the foreign table using `import_relation_statistics`, `import_attribute_statistics`, and `delete_attribute_statistics`.
 
 If the FDW does not support importing remotely-calculated statistics for any tables, the `ImportForeignStatistics` pointer can be set to `NULL`.
 

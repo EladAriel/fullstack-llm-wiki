@@ -4,10 +4,10 @@ framework: "LangChain"
 source_repo: "https://github.com/langchain-ai/docs"
 source_branch: "main"
 source_path: "src/oss/langchain/multi-agent/custom-workflow.mdx"
-source_commit: "d037cd23f3f298721837c403b2ffd289e31d56d0"
-source_commit_short: "d037cd23"
-source_commit_date: "2026-06-23T11:18:55+02:00"
-generated_at: "2026-06-23T13:53:33Z"
+source_commit: "2aae1dfc98ee953a9a5185fb6fcdd9efb3f4d878"
+source_commit_short: "2aae1dfc"
+source_commit_date: "2026-07-25T00:27:23Z"
+generated_at: "2026-07-25T11:51:05Z"
 ---
 
 ---
@@ -92,7 +92,7 @@ import { z } from "zod";
 import { createAgent } from "langchain";
 import { StateGraph, START, END, StateSchema, MessagesValue } from "@langchain/langgraph";
 
-const agent = createAgent({ model: "openai:gpt-4o", tools: [...] });
+const agent = createAgent({ model: "openai:gpt-5.5", tools: [...] });
 
 const AgentState = new StateSchema({
   messages: MessagesValue,
@@ -235,6 +235,10 @@ workflow = (
 result = workflow.invoke({"question": "Who won the 2024 WNBA Championship?"})
 print(result["answer"])
 ```
+
+<Info>
+In production, use a persistent vector store such as [Valkey](/oss/integrations/vectorstores/valkey), [Databricks Vector Search](/oss/integrations/vectorstores/databricks_vector_search), or [MongoDB Atlas](/oss/integrations/vectorstores/mongodb_atlas) instead of `InMemoryVectorStore`. See [all vector stores](/oss/integrations/vectorstores).
+</Info>
 :::
 :::js
 ```typescript
@@ -334,6 +338,10 @@ const result = await workflow.invoke({
 });
 console.log(result.answer);
 ```
+
+<Info>
+In production, use a persistent vector store such as [Weaviate](/oss/integrations/vectorstores/weaviate), [Pinecone](/oss/integrations/vectorstores/pinecone), or [MongoDB Atlas](/oss/integrations/vectorstores/mongodb_atlas) instead of `MemoryVectorStore`. See [all vector stores](/oss/integrations/vectorstores).
+</Info>
 :::
 
 </Accordion>

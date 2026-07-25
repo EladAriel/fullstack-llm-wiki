@@ -4,10 +4,10 @@ framework: "Langfuse"
 source_repo: "https://github.com/langfuse/langfuse-docs"
 source_branch: "main"
 source_path: "content/docs/evaluation/evaluation-methods/annotation-queues.mdx"
-source_commit: "4a702ece53852a6af86b3883f434adf3f5cae421"
-source_commit_short: "4a702ece"
-source_commit_date: "2026-06-23T13:41:14Z"
-generated_at: "2026-06-23T13:55:15Z"
+source_commit: "fcd1eca34a924867563c3c4e801254c4e66c0021"
+source_commit_short: "fcd1eca3"
+source_commit_date: "2026-07-25T00:45:45Z"
+generated_at: "2026-07-25T11:51:12Z"
 ---
 
 ---
@@ -85,6 +85,22 @@ You will see an annotation task for each item in the queue.
 2. Click on `Complete + next` to move to the next annotation task or finish the queue
 
 </Steps>
+
+## Keyboard shortcuts [#keyboard-shortcuts]
+
+Processing a queue is fully keyboard-driven, so you can score items without reaching for the mouse. The shortcuts follow a navigate-then-edit model and are suppressed while you are typing in a text field or while a dialog or dropdown is open. Press `?` in the queue to open the in-app cheatsheet.
+
+| Key                    | Action                                                  |
+| ---------------------- | ------------------------------------------------------- |
+| `→` / `←`              | Next / previous item in the queue                       |
+| `↑` / `↓`              | Move between score fields (wraps at the ends)           |
+| `1`–`9`                | Select the Nth option on a categorical or boolean field |
+| `Enter`                | Commit the current value, or open a dropdown            |
+| `Esc`                  | Leave a text field and return to field navigation       |
+| `Cmd`/`Ctrl` + `Enter` | Complete the item and advance to the next               |
+| `?`                    | Open the keyboard shortcuts cheatsheet                  |
+
+Number badges appear on categorical options when a field is focused, and the `⌘↵` / `Ctrl↵` hint is shown on the **Mark Completed** button. The score-field shortcuts (`↑`/`↓`, `1`–`9`, `Enter`, `Esc`) also work in the inline **Annotate** drawer on trace, observation, and session pages; the queue navigation keys (`→`/`←`, `Cmd`/`Ctrl` + `Enter`) apply when processing a queue.
 
 ## Manage Annotation Queues via API
 

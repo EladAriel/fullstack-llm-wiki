@@ -4,26 +4,26 @@ framework: "redis"
 source_repo: "https://github.com/redis/docs.git"
 source_branch: "main"
 source_path: "content/operate/oss_and_stack/stack-with-enterprise/search/config.md"
-source_commit: "bc92ea237bbfc2117c870c904f1a3ca619073ef1"
-source_commit_short: "bc92ea23"
-source_commit_date: "2026-06-18T14:53:00-05:00"
-generated_at: "2026-06-21T11:25:32Z"
+source_commit: "9d30f68c3dad1a6b3b7d30fe604b911348ce8152"
+source_commit_short: "9d30f68c"
+source_commit_date: "2026-07-24T10:52:10-07:00"
+generated_at: "2026-07-25T11:51:22Z"
 ---
 
 ---
-Title: Search and query configuration compatibility with Redis Software
+Title: Redis Search configuration compatibility with Redis Software
 alwaysopen: false
 categories:
 - docs
 - operate
 - stack
-description: Search and query configuration settings supported by Redis Software and Redis Cloud.
+description: Redis Search configuration settings supported by Redis Software and Redis Cloud.
 linkTitle: Configuration
 toc: 'false'
 weight: 15
 ---
 
-To configure RediSearch in [Redis Software]({{< relref "/operate/rs" >}}) or [Redis Cloud]({{< relref "/operate/rc" >}}), use one of the following methods instead of [`FT.CONFIG SET`]({{< relref "commands/ft.config-set" >}}).
+To configure Redis Search in [Redis Software]({{< relref "/operate/rs" >}}) or [Redis Cloud]({{< relref "/operate/rc" >}}), use one of the following methods instead of [`FT.CONFIG SET`]({{< relref "commands/ft.config-set" >}}).
 
 ## Configure search in Redis Cloud
 
@@ -31,7 +31,7 @@ For Redis Cloud:
 
 - _Flexible or Annual [subscriptions]({{< relref "/operate/rc/subscriptions" >}})_: contact [support](https://redis.com/company/support/) to request a configuration change.
     
-- _Free or Fixed subscriptions_: you cannot change RediSearch configuration.
+- _Free or Fixed subscriptions_: you cannot change Redis Search configuration.
 
 ## Configure search in Redis Software
 

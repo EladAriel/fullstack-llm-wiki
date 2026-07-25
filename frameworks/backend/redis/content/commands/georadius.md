@@ -4,10 +4,10 @@ framework: "redis"
 source_repo: "https://github.com/redis/docs.git"
 source_branch: "main"
 source_path: "content/commands/georadius.md"
-source_commit: "bc92ea237bbfc2117c870c904f1a3ca619073ef1"
-source_commit_short: "bc92ea23"
-source_commit_date: "2026-06-18T14:53:00-05:00"
-generated_at: "2026-06-21T11:25:32Z"
+source_commit: "9d30f68c3dad1a6b3b7d30fe604b911348ce8152"
+source_commit_short: "9d30f68c"
+source_commit_date: "2026-07-24T10:52:10-07:00"
+generated_at: "2026-07-25T11:51:22Z"
 ---
 
 ---
@@ -302,10 +302,29 @@ Store the results in `key` as a sorted set of distances from the center, instead
 ## Examples
 
 {{% redis-cli %}}
-GEOADD Sicily 13.361389 38.115556 "Palermo" 15.087269 37.502669 "Catania"
-GEORADIUS Sicily 15 37 200 km WITHDIST
-GEORADIUS Sicily 15 37 200 km WITHCOORD
-GEORADIUS Sicily 15 37 200 km WITHDIST WITHCOORD
+redis> GEOADD Sicily 13.361389 38.115556 "Palermo" 15.087269 37.502669 "Catania"
+(integer) 2
+redis> GEORADIUS Sicily 15 37 200 km WITHDIST
+1) 1) "Palermo"
+   2) "190.4424"
+2) 1) "Catania"
+   2) "56.4413"
+redis> GEORADIUS Sicily 15 37 200 km WITHCOORD
+1) 1) "Palermo"
+   2) 1) "13.361389338970184"
+      2) "38.1155563954963"
+2) 1) "Catania"
+   2) 1) "15.087267458438873"
+      2) "37.50266842333162"
+redis> GEORADIUS Sicily 15 37 200 km WITHDIST WITHCOORD
+1) 1) "Palermo"
+   2) "190.4424"
+   3) 1) "13.361389338970184"
+      2) "38.1155563954963"
+2) 1) "Catania"
+   2) "56.4413"
+   3) 1) "15.087267458438873"
+      2) "37.50266842333162"
 {{% /redis-cli %}}
 
 ## Details

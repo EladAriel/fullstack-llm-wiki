@@ -4,10 +4,10 @@ framework: "tanstack"
 source_repo: "https://github.com/tanstack/query"
 source_branch: "main"
 source_path: "docs/framework/react/guides/parallel-queries.md"
-source_commit: "4f11927ac5f3841984389a07587ee2ae1e0abfbb"
-source_commit_short: "4f11927a"
-source_commit_date: "2026-06-19T13:43:35+02:00"
-generated_at: "2026-06-21T12:31:28Z"
+source_commit: "fd50fa14d283c7d6664a796f758498d1ad5bfce7"
+source_commit_short: "fd50fa14"
+source_commit_date: "2026-07-24T22:22:47+10:00"
+generated_at: "2026-07-25T11:50:41Z"
 ---
 
 ---
@@ -68,3 +68,8 @@ function App({ users }) {
 ```
 
 [//]: # 'Example2'
+[//]: # 'TypeScriptSelect'
+
+> When using TypeScript, an inline `select` written on a query object passed to `useQueries` can't infer its `data` argument from that same object's `queryFn` — it falls back to `unknown`. Annotate the `select` parameter explicitly, or define the query with the [`queryOptions`](../reference/queryOptions.md) helper, to keep type inference. See [this known limitation](https://github.com/TanStack/query/issues/6556).
+
+[//]: # 'TypeScriptSelect'

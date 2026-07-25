@@ -4,10 +4,10 @@ framework: "Langfuse"
 source_repo: "https://github.com/langfuse/langfuse-docs"
 source_branch: "main"
 source_path: "content/docs/observability/features/environments.mdx"
-source_commit: "4a702ece53852a6af86b3883f434adf3f5cae421"
-source_commit_short: "4a702ece"
-source_commit_date: "2026-06-23T13:41:14Z"
-generated_at: "2026-06-23T13:55:15Z"
+source_commit: "fcd1eca34a924867563c3c4e801254c4e66c0021"
+source_commit_short: "fcd1eca3"
+source_commit_date: "2026-07-25T00:45:45Z"
+generated_at: "2026-07-25T11:51:12Z"
 ---
 
 ---
@@ -27,6 +27,8 @@ Environments allow you to organize your traces, observations, and scores from di
 You can configure the environment by setting the `LANGFUSE_TRACING_ENVIRONMENT` environment variable (recommended) or by using the `environment` parameter in the client initialization.
 If both are specified, the initialization parameter takes precedence.
 If nothing is specified, the default environment is `default`.
+
+In the Python SDK, you can also set the environment for a specific trace scope with `propagate_attributes(environment="...")`. This is useful when the environment belongs to the incoming request rather than to the service process itself, for example when one shared LLM proxy handles requests from development, staging, QA, and production. Use `as_baggage=True` to propagate that environment across service boundaries.
 
 ## Data Model
 
@@ -52,7 +54,7 @@ This means:
 <Tab title="Python SDK">
 
 ```python
-from langfuse import get_client, observe
+from langfuse import get_client, observe, propagate_attributes
 import os
 
 # Set the environment variable
@@ -72,6 +74,13 @@ def main():
     return "Hello"
 
 main()
+
+# For request-scoped environments, propagate the environment explicitly.
+# This maps to the first-class langfuse.environment field.
+with langfuse.start_as_current_observation(as_type="span", name="proxy-request"):
+    with propagate_attributes(environment="staging"):
+        # All child observations created here are associated with staging.
+        pass
 ```
 
 </Tab>
@@ -170,9 +179,9 @@ See the Python SDK tab for more details.
 </Callout>
 
 ```python
-from langfuse.callback import CallbackHandler
+from langfuse.langchain import CallbackHandler
 
-# Either set the environment variable or the constructor parameter. The latter takes precedence.
+# Set the environment via environment variable before initializing the client
 os.environ["LANGFUSE_TRACING_ENVIRONMENT"] = "production"
 handler = CallbackHandler()
 ```
@@ -181,12 +190,23 @@ handler = CallbackHandler()
 
 <Tab>
 
-```ts
-import { CallbackHandler } from "langfuse-langchain";
+The environment is configured on the `LangfuseSpanProcessor` (or via the `LANGFUSE_TRACING_ENVIRONMENT` environment variable) — LangChain spans created by the `CallbackHandler` flow through it automatically:
 
-const handler = new CallbackHandler({
-  environment: "production",
+```ts
+import { NodeSDK } from "@opentelemetry/sdk-node";
+import { LangfuseSpanProcessor } from "@langfuse/otel";
+import { CallbackHandler } from "@langfuse/langchain";
+
+const sdk = new NodeSDK({
+  spanProcessors: [
+    new LangfuseSpanProcessor({
+      environment: "production",
+    }),
+  ],
 });
+sdk.start();
+
+const handler = new CallbackHandler();
 ```
 
 See [Langchain Integration (JS/TS)](/integrations/frameworks/langchain) for more details.

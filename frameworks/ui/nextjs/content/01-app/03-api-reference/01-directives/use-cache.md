@@ -4,10 +4,10 @@ framework: "nextjs"
 source_repo: "https://github.com/vercel/next.js/"
 source_branch: "canary"
 source_path: "docs/01-app/03-api-reference/01-directives/use-cache.mdx"
-source_commit: "79142d7806ff4194c8d9885b80fa69db5ecf534a"
-source_commit_short: "79142d78"
-source_commit_date: "2026-06-20T23:40:12Z"
-generated_at: "2026-06-21T12:07:17Z"
+source_commit: "dcf242a17b5d4622bbd9624db531a9d84177619f"
+source_commit_short: "dcf242a1"
+source_commit_date: "2026-07-25T10:16:19+02:00"
+generated_at: "2026-07-25T11:50:53Z"
 ---
 
 ---
@@ -205,7 +205,7 @@ Cached functions execute in an isolated environment. The following constraints e
 
 ### Request-time APIs
 
-Cached functions and components **cannot** directly access runtime APIs like `cookies()`, `headers()`, or `searchParams`. Instead, read these values outside the cached scope and pass them as arguments.
+Cached functions and components **cannot** access runtime APIs like `cookies()`, `headers()`, or `searchParams`, and the restriction follows the call stack: a helper the cached function calls that reads one of these fails the same way, with the [`next-request-in-use-cache`](/docs/messages/next-request-in-use-cache) error. On a dynamically rendered route this surfaces when the route runs, so it can pass `next build` and fail under `next start`. Read these values outside the cached scope and pass them as arguments.
 
 ### Runtime caching considerations
 
@@ -291,23 +291,16 @@ The `x-nextjs-stale-time` response header communicates cache lifetime from serve
 
 ## Revalidation
 
-By default, `use cache` uses the `default` profile with these settings:
+Cached functions revalidate based on the `revalidate` and `expire` times in their `cacheLife` profile, or on-demand through tags. These two approaches are not mutually exclusive and are often paired:
 
-- **stale**: 5 minutes (client-side)
-- **revalidate**: 15 minutes (server-side)
-- **expire**: Never expires by time
+- **[Time-based](#time-based-revalidation)**: refresh automatically after a set duration with [`cacheLife`](/docs/app/api-reference/functions/cacheLife).
+- **[On-demand](#on-demand-revalidation)**: invalidate after a mutation with [`cacheTag`](/docs/app/api-reference/functions/cacheTag) and [`revalidateTag`](/docs/app/api-reference/functions/revalidateTag) or [`updateTag`](/docs/app/api-reference/functions/updateTag).
 
-```tsx filename="lib/data.ts"
-async function getData() {
-  'use cache'
-  // Implicitly uses default profile
-  return fetch('/api/data')
-}
-```
+For example, a blog post that changes only when its author edits it can use a long `cacheLife` like `max` with a `cacheTag`, then invalidate on demand when the post is saved. A list of recent posts that updates throughout the day can use a shorter profile like `hours` to refresh on its own, without manual invalidation.
 
-### Customizing cache lifetime
+### Time-based revalidation
 
-Use the [`cacheLife`](/docs/app/api-reference/functions/cacheLife) function to customize cache duration:
+Set an explicit cache lifetime with [`cacheLife`](/docs/app/api-reference/functions/cacheLife) in every `use cache` scope. It makes the cache behavior clear at the call site, instead of depending on the `default` profile or surrounding caches.
 
 ```tsx filename="lib/data.ts"
 import { cacheLife } from 'next/cache'
@@ -318,6 +311,22 @@ async function getData() {
   return fetch('/api/data')
 }
 ```
+
+If you omit `cacheLife`, the `default` profile applies and the lifetime is no longer explicit at the call site:
+
+- **stale**: 5 minutes (client-side)
+- **revalidate**: 15 minutes (server-side)
+- **expire**: never expires by time
+
+```tsx filename="lib/data.ts"
+async function getData() {
+  'use cache'
+  // Implicitly uses the 'default' profile
+  return fetch('/api/data')
+}
+```
+
+Nesting a short-lived use cache inside one without an explicit [cacheLife](/docs/app/api-reference/functions/cacheLife) fails the build during prerendering. See [Nested short-lived caches](/docs/app/api-reference/functions/cacheLife#nested-short-lived-caches) for the rule and fix.
 
 ### On-demand revalidation
 

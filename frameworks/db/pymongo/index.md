@@ -6,11 +6,11 @@ This is a local LLM-friendly wiki generated from the official pymongo documentat
 
 - Framework: `pymongo`
 - Source repo: `https://github.com/mongodb/mongo-python-driver`
-- Source branch: `master`
+- Source branch: `main`
 - Source docs path: `doc`
-- Source commit: `1215d2f4`
-- Source commit date: `2026-06-18T10:29:26-04:00`
-- Wiki generated at: `2026-06-21T11:44:03Z`
+- Source commit: `78f3a797`
+- Source commit date: `2026-07-24T12:57:51-07:00`
+- Wiki generated at: `2026-07-25T11:51:01Z`
 
 ## How the IDE LLM should use this wiki
 

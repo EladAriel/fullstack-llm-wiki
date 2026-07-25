@@ -4,10 +4,10 @@ framework: "redis"
 source_repo: "https://github.com/redis/docs.git"
 source_branch: "main"
 source_path: "content/operate/rc/context-engine/context-retriever/view-admin-keys.md"
-source_commit: "bc92ea237bbfc2117c870c904f1a3ca619073ef1"
-source_commit_short: "bc92ea23"
-source_commit_date: "2026-06-18T14:53:00-05:00"
-generated_at: "2026-06-21T11:25:32Z"
+source_commit: "9d30f68c3dad1a6b3b7d30fe604b911348ce8152"
+source_commit_short: "9d30f68c"
+source_commit_date: "2026-07-24T10:52:10-07:00"
+generated_at: "2026-07-25T11:51:22Z"
 ---
 
 ---
@@ -25,7 +25,7 @@ weight: 25
 
 After you have [created your first Context Retriever service]({{< relref "/operate/rc/context-engine/context-retriever/create-service" >}}), you can view and manage your admin keys from the **Admin keys** tab in the **Context Retriever** section of the Redis Cloud console.
 
-A Context Retriever **admin key** authorizes administrative operations against Context Retriever in your Redis Cloud account, such as creating, updating, or deleting services and their entity models. You can use it with the [Context Surfaces Python Client](https://pypi.org/project/context-surfaces/) and `cxtctl` CLI to create an Agent key and call your tools.
+A Context Retriever **admin key** authorizes administrative operations against Context Retriever in your Redis Cloud account, such as creating, updating, or deleting services and their entity models. You can use it with the [Context Surfaces Python Client](https://pypi.org/project/redis-context-retriever/) and `cxtctl` CLI to create an Agent key and call your tools.
 
 ## Admin keys tab
 

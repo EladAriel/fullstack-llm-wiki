@@ -4,10 +4,10 @@ framework: "shadcnui"
 source_repo: "https://github.com/shadcn-ui/ui"
 source_branch: "main"
 source_path: "apps/v4/content/docs/components/base/date-picker.mdx"
-source_commit: "5602b81d8344e0d0d7178e3bf57612662cd42957"
-source_commit_short: "5602b81d"
-source_commit_date: "2026-06-21T15:49:35+04:00"
-generated_at: "2026-06-21T12:47:26Z"
+source_commit: "4baadbc6517070ae8f8feb2c97037adc2b305544"
+source_commit_short: "4baadbc6"
+source_commit_date: "2026-07-23T23:50:36+04:00"
+generated_at: "2026-07-25T11:50:48Z"
 ---
 
 ---
@@ -81,39 +81,37 @@ Popover
     └── Calendar
 ```
 
-## Examples
-
-### Basic
+## Basic
 
 A basic date picker component.
 
 <ComponentPreview styleName="base-nova" name="date-picker-basic" />
 
-### Range Picker
+## Range Picker
 
 A date picker component for selecting a range of dates.
 
 <ComponentPreview styleName="base-nova" name="date-picker-range" />
 
-### Date of Birth
+## Date of Birth
 
 A date picker component for selecting a date of birth. This component includes a dropdown caption layout for date and month selection.
 
 <ComponentPreview styleName="base-nova" name="date-picker-dob" />
 
-### Input
+## Input
 
 A date picker component with an input field for selecting a date.
 
 <ComponentPreview styleName="base-nova" name="date-picker-input" />
 
-### Time Picker
+## Time Picker
 
 A date picker component with a time input field for selecting a time.
 
 <ComponentPreview styleName="base-nova" name="date-picker-time" />
 
-### Natural Language Picker
+## Natural Language Picker
 
 This component uses the `chrono-node` library to parse natural language dates.
 

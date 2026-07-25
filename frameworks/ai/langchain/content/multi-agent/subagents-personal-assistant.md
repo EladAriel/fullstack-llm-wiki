@@ -4,10 +4,10 @@ framework: "LangChain"
 source_repo: "https://github.com/langchain-ai/docs"
 source_branch: "main"
 source_path: "src/oss/langchain/multi-agent/subagents-personal-assistant.mdx"
-source_commit: "d037cd23f3f298721837c403b2ffd289e31d56d0"
-source_commit_short: "d037cd23"
-source_commit_date: "2026-06-23T11:18:55+02:00"
-generated_at: "2026-06-23T13:53:33Z"
+source_commit: "2aae1dfc98ee953a9a5185fb6fcdd9efb3f4d878"
+source_commit_short: "2aae1dfc"
+source_commit_date: "2026-07-25T00:27:23Z"
+generated_at: "2026-07-25T11:51:05Z"
 ---
 
 ---
@@ -28,6 +28,12 @@ In this tutorial, you'll build a personal assistant system that demonstrates the
 - An **email agent** that manages communication, drafts messages, and sends notifications.
 
 We will also incorporate [human-in-the-loop review](/oss/langchain/human-in-the-loop) to allow users to approve, edit, and reject actions (such as outbound emails) as desired.
+
+:::python
+<Note>
+If you are migrating from the [`langgraph-supervisor`](https://github.com/langchain-ai/langgraph-supervisor-py) package, see [Migrate from langgraph-supervisor](/oss/migrate/langgraph-supervisor) for before-and-after patterns, including interrupt and resume flows.
+</Note>
+:::
 
 ### Why use a supervisor?
 
@@ -569,7 +575,7 @@ SUPERVISOR_PROMPT = (
     "You are a helpful personal assistant. "
     "You can schedule calendar events and send emails. "
     "Break down user requests into appropriate tool calls and coordinate the results. "
-    "When a request involves multiple actions, use multiple tools in sequence."
+    "When a request involves multiple actions, use multiple tools in sequence or in parallel as appropriate."
 )
 
 supervisor_agent = create_agent(
@@ -586,7 +592,7 @@ const SUPERVISOR_PROMPT = `
 You are a helpful personal assistant.
 You can schedule calendar events and send emails.
 Break down user requests into appropriate tool calls and coordinate the results.
-When a request involves multiple actions, use multiple tools in sequence.
+When a request involves multiple actions, use multiple tools in sequence or in parallel as appropriate.
 `.trim();
 
 const supervisorAgent = createAgent({
@@ -750,6 +756,10 @@ Let me know if you'd like to add more details to the meeting or include addition
 
 The supervisor recognizes this requires both calendar and email actions, calls `schedule_event` for the meeting, then calls `manage_email` for the reminder. Each sub-agent completes its task, and the supervisor synthesizes both results into a coherent response.
 
+<Note>
+The supervisor dispatches tasks to subagents sequentially by default. Each tool call completes before the next one starts. However, many LLMs will issue multiple tool calls in a single response (as shown in the trace above, where both `schedule_event` and `manage_email` are called together), which the runtime executes in parallel. You can also configure explicit parallel dispatch. See the [`create_supervisor` reference docs](https://reference.langchain.com/python/langgraph-supervisor/supervisor/create_supervisor) for details.
+</Note>
+
 <Tip>
 Refer to the [LangSmith trace](https://smith.langchain.com/public/95cd00a3-d1f9-4dba-9731-7bf733fb6a3c/r) to see the detailed information flow for the above run, including individual chat model prompts and responses.
 </Tip>
@@ -891,7 +901,7 @@ supervisor_agent = create_agent(
         "You are a helpful personal assistant. "
         "You can schedule calendar events and send emails. "
         "Break down user requests into appropriate tool calls and coordinate the results. "
-        "When a request involves multiple actions, use multiple tools in sequence."
+        "When a request involves multiple actions, use multiple tools in sequence or in parallel as appropriate."
     )
 )
 

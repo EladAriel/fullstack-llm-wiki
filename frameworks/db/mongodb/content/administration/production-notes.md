@@ -4,10 +4,10 @@ framework: "mongodb"
 source_repo: "https://github.com/mongodb/docs.git"
 source_branch: "main"
 source_path: "content/manual/manual/source/administration/production-notes.txt"
-source_commit: "96788e8ed140cbdde184ff82e1066dff4996bde4"
-source_commit_short: "96788e8e"
-source_commit_date: "2026-06-19T21:35:03-06:00"
-generated_at: "2026-06-21T07:41:52Z"
+source_commit: "ab9db26ed3d11618cdb61516d8180337d8e3f679"
+source_commit_short: "ab9db26e"
+source_commit_date: "2026-07-24T16:22:46-06:00"
+generated_at: "2026-07-25T11:51:15Z"
 ---
 
 =============================================
@@ -78,22 +78,10 @@ for more information.
 
 ## Platform Support Matrix
 
-.. include:: includes/platform-support-updates.rst
+For details on supported platforms, see:
 
-.. include:: includes/platform-support.rst
-
-.. include:: includes/fact-in-place-os-upgrades.rst
-
-MongoDB versions 5.0 and greater are tested against SLES 12 service pack 5. Earlier versions of MongoDB are tested against SLES 12 with no service pack.
-
-MongoDB versions 7.0 and later are tested against SLES 15 service pack 4. Earlier versions of MongoDB are tested against SLES 15 with no service pack.
-
-MongoDB version 7.0 is built and tested against RHEL 7.9. Earlier versions of MongoDB are tested against RHEL 7 and assume forward compatibility.
-
-RHEL 8 on PPC64LE and s390x does not support the updated version of TCMalloc used in MongoDB versions 8.0 and later.  On these architectures, RHEL 8 uses the legacy TCMalloc version. To learn more, see `tcmalloc-performance`.
-
-RHEL 9 on PPC64LE does not support the updated version of TCMalloc used in MongoDB versions 8.0 and later.  On this architecture, RHEL 9 uses the legacy TCMalloc version. To learn more, see `tcmalloc-performance`.
-
+- `landing-enterprise-platform-support`
+- `landing-community-platform-support`
 ### Recommended Platforms
 
 While MongoDB supports a variety of platforms, the following operating systems are recommended for production use on `x86_64` architecture:
@@ -169,7 +157,7 @@ See the `Write Concern <write-concern>` document for more information about choo
 
 ### Use Trusted Networking Environments
 
-Always run MongoDB in a trusted environment, with network rules that prevent access from all unknown machines, systems, and networks. As with any sensitive system that is dependent on network access, your MongoDB deployment should only be accessible to specific systems that require access, such as application servers, monitoring services, and other MongoDB components.
+Always run MongoDB in a trusted environment, with network rules that prevent access from all unknown computers, systems, and networks. Like any sensitive system that depends on network access, restrict your MongoDB deployment to specific systems that require access, such as application servers, monitoring services, and other MongoDB components.
 
 > **Important:** By default, `authorization <authorization>` is not
 enabled, and :binary:`~bin.mongod` assumes a trusted environment. Enable
@@ -198,7 +186,7 @@ See also `prod-notes-ram`.
 
 ### Adjust tcp_keepalive_time
 
-If the TCP keepalive value is greater than the TCP idle timeout on your cloud provider's load balancer, there is a risk that the system might silently drop connections. To reduce this risk, set `tcp_keepalive_time` to 120.
+If the TCP keepalive value is greater than the TCP idle timeout on your cloud provider's load balancer, the system might silently drop connections. To reduce this risk, set `tcp_keepalive_time` to 120.
 
 > **Note:** You need to restart :binary:`~bin.mongod` and :binary:`~bin.mongos`
 processes for new system-wide keepalive settings to take effect.
@@ -209,7 +197,7 @@ processes for new system-wide keepalive settings to take effect.
 
 ## Hardware Considerations
 
-MongoDB is designed specifically with commodity hardware in mind and has few hardware requirements or limitations. MongoDB's core components run on little-endian hardware, primarily x86/x86_64 processors. Client libraries (i.e. drivers) can run on big or little endian systems.
+MongoDB is designed for commodity hardware and has few hardware requirements or limitations. MongoDB's core components run on little-endian hardware, primarily x86/x86_64 processors. Client libraries (drivers) can run on big or little endian systems.
 
 ### Allocate Sufficient RAM and CPU
 
@@ -217,7 +205,7 @@ At a minimum, ensure that each :binary:`~bin.mongod` or :binary:`~bin.mongos` in
 
 WiredTiger ``````````
 
-The `WiredTiger <storage-wiredtiger>` storage engine is multithreaded and can take advantage of additional CPU cores. Specifically, the total number of active threads (i.e. concurrent operations) relative to the number of available CPUs can impact performance:
+The `WiredTiger <storage-wiredtiger>` storage engine is multithreaded and can take advantage of additional CPU cores. Specifically, the total number of active threads (concurrent operations) relative to the number of available CPUs can impact performance:
 
 - Throughput increases as the number of concurrent active operations
 increases up to the number of CPUs.
@@ -292,8 +280,8 @@ On Linux, you must disable zone reclaim and also ensure that your :binary:`~bin.
   for SysV Init includes the necessary steps to start MongoDB
   instances via ``numactl`` by default.
 
-- If you manage your own init scripts (i.e. you are not using either
-  of these init systems), you *must* follow the steps in the
+- If you manage your own init scripts and you are not using either
+  of these init systems, you *must* follow the steps in the
   **Custom init scripts** tab below to edit your custom init
   script(s).
 
@@ -624,7 +612,7 @@ For the **WiredTiger** storage engine:
 - Set the readahead setting between 8 and 32 regardless of storage
 media type (spinning disk, SSD, etc.).
 
-Higher readahead commonly benefits sequential I/O operations. Since MongoDB disk access patterns are generally random, using higher readahead settings provides limited benefit or potential performance degradation. As such, for optimal MongoDB performance, set readahead between 8 and 32, unless testing shows a measurable, repeatable, and reliable benefit in a higher readahead value. [MongoDB commercial support](https://support.mongodb.com/welcome) can provide advice and guidance on alternate readahead configurations.
+Higher readahead commonly benefits sequential I/O operations. Because MongoDB disk access patterns are generally random, if you use higher readahead settings you get limited benefit and it can degrade performance. For optimal MongoDB performance, set readahead between 8 and 32, unless testing shows a measurable, repeatable, and reliable benefit from a higher value. [MongoDB commercial support](https://support.mongodb.com/welcome) can advise on alternate readahead configurations.
 
 MongoDB and TLS/SSL Libraries `````````````````````````````
 
@@ -728,11 +716,11 @@ iostat -xmt 1
 
 Key fields from `iostat`:
 
-- `%util`: this is the most useful field for a quick check, it
-indicates what percent of the time the device/drive is in use.
+- `%util`: the primary field to check. It indicates what
+percent of the time the device or drive is in use.
 
-- `avgrq-sz`: average request size. Smaller number for this value
-reflect more random IO operations.
+- `avgrq-sz`: average request size. Smaller values reflect more
+random IO operations.
 
 ### bwm-ng
 
@@ -740,6 +728,6 @@ reflect more random IO operations.
 
 ## Backups
 
-To make backups of your MongoDB database, please refer to `MongoDB Backup Methods Overview <backup-methods>`.
+To make backups of your MongoDB database, see `MongoDB Backup Methods Overview <backup-methods>`.
 
 .. include:: /includes/unicode-checkmark.rst

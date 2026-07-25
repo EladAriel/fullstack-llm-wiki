@@ -4,10 +4,10 @@ framework: "pydantic"
 source_repo: "https://github.com/pydantic/pydantic"
 source_branch: "main"
 source_path: "docs/concepts/json.md"
-source_commit: "363728fe0b353db1a1fcb44aac5c38fd96a8cc20"
-source_commit_short: "363728fe"
-source_commit_date: "2026-06-20T11:20:58+01:00"
-generated_at: "2026-06-21T11:37:01Z"
+source_commit: "a2a6577d4c329dd574a45dbb01a8feaa16b1ad3d"
+source_commit_short: "a2a6577d"
+source_commit_date: "2026-07-23T15:38:17Z"
+generated_at: "2026-07-25T11:50:12Z"
 ---
 
 # JSON
@@ -70,7 +70,11 @@ in the original JSON input which contained the invalid value.
 
 ### Partial JSON Parsing
 
-**Starting in v2.7.0**, Pydantic's [JSON parser](https://docs.rs/jiter/latest/jiter/) offers support for partial JSON parsing, which is exposed via [`pydantic_core.from_json`][pydantic_core.from_json]. Here's an example of this feature in action:
+/// version-added | v2.7
+///
+
+Pydantic's [JSON parser](https://docs.rs/jiter/latest/jiter/) offers support for partial JSON parsing, which is exposed via [`pydantic_core.from_json()`][pydantic_core.from_json].
+Here's an example of this feature in action:
 
 ```python
 from pydantic_core import from_json
@@ -104,8 +108,10 @@ print(dog_dict)
 ```
 
 !!! tip "Validating LLM Output"
-    This feature is particularly beneficial for validating LLM outputs.
-    We've written some blog posts about this topic, which you can find on [our website](https://pydantic.dev/articles).
+    This feature is particularly beneficial for validating LLM outputs. However, even carefully prompted
+    models produce output that fails validation some fraction of the time. If you're validating LLM output in production,
+    [Logfire](../integrations/logfire.md) can record just the failures, so you can see which generations
+    didn't match your schema, and why.
 
 In future versions of Pydantic, we expect to expand support for this feature through either Pydantic's other JSON validation functions
 ([`pydantic.main.BaseModel.model_validate_json`][pydantic.main.BaseModel.model_validate_json] and

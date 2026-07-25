@@ -4,10 +4,10 @@ framework: "FastAPI"
 source_repo: "https://github.com/fastapi/fastapi.git"
 source_branch: "master"
 source_path: "docs/en/docs/tutorial/security/first-steps.md"
-source_commit: "0cb4a8e284b450abbccb71c543ad7757de46c0b2"
-source_commit_short: "0cb4a8e2"
-source_commit_date: "2026-06-20T16:31:34Z"
-generated_at: "2026-06-21T07:06:10Z"
+source_commit: "255b912928904e3ba5980425a54d6837c8bd1a1c"
+source_commit_short: "255b9129"
+source_commit_date: "2026-07-24T21:15:37Z"
+generated_at: "2026-07-25T11:50:10Z"
 ---
 
 # Security - First Steps { #security-first-steps }
@@ -38,14 +38,14 @@ Copy the example in a file `main.py`:
 
 /// note
 
-The [`python-multipart`](https://github.com/Kludex/python-multipart) package is automatically installed with **FastAPI** when you run the `pip install "fastapi[standard]"` command.
+The [`python-multipart`](https://github.com/Kludex/python-multipart) package is automatically installed with **FastAPI** when you run the `uv add "fastapi[standard]"` command.
 
-However, if you use the `pip install fastapi` command, the `python-multipart` package is not included by default.
+However, if you use the `uv add fastapi` command, the `python-multipart` package is not included by default.
 
-To install it manually, make sure you create a [virtual environment](../../virtual-environments.md), activate it, and then install it with:
+To install it manually, add it to your project with:
 
 ```console
-$ pip install python-multipart
+$ uv add python-multipart
 ```
 
 This is because **OAuth2** uses "form data" for sending the `username` and `password`.
@@ -57,7 +57,7 @@ Run the example with:
 <div class="termy">
 
 ```console
-$ fastapi dev
+$ uv run fastapi dev
 
 <span style="color: green;">INFO</span>:     Uvicorn running on http://127.0.0.1:8000 (Press CTRL+C to quit)
 ```

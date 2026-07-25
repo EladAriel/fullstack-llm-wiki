@@ -4,10 +4,10 @@ framework: "pydantic"
 source_repo: "https://github.com/pydantic/pydantic"
 source_branch: "main"
 source_path: "docs/concepts/validation_decorator.md"
-source_commit: "363728fe0b353db1a1fcb44aac5c38fd96a8cc20"
-source_commit_short: "363728fe"
-source_commit_date: "2026-06-20T11:20:58+01:00"
-generated_at: "2026-06-21T11:37:01Z"
+source_commit: "a2a6577d4c329dd574a45dbb01a8feaa16b1ad3d"
+source_commit_short: "a2a6577d"
+source_commit_date: "2026-07-23T15:38:17Z"
+generated_at: "2026-07-25T11:50:12Z"
 ---
 
 ??? api "API Documentation"
@@ -414,6 +414,10 @@ print(foo())
 Currently upon validation failure, a standard Pydantic [`ValidationError`][pydantic_core.ValidationError] is raised
 (see [model error handling](models.md#error-handling) for details). This is also true for missing required arguments,
 where Python normally raises a [`TypeError`][].
+
+!!! tip "Logfire integration"
+    As with Pydantic models, the [Logfire integration](../integrations/logfire.md) records
+    validation errors for [`@validate_call`][pydantic.validate_call].
 
 ### Performance
 

@@ -4,10 +4,10 @@ framework: "FastAPI"
 source_repo: "https://github.com/fastapi/fastapi.git"
 source_branch: "master"
 source_path: "docs/en/docs/deployment/manually.md"
-source_commit: "0cb4a8e284b450abbccb71c543ad7757de46c0b2"
-source_commit_short: "0cb4a8e2"
-source_commit_date: "2026-06-20T16:31:34Z"
-generated_at: "2026-06-21T07:06:10Z"
+source_commit: "255b912928904e3ba5980425a54d6837c8bd1a1c"
+source_commit_short: "255b9129"
+source_commit_date: "2026-07-24T21:15:37Z"
+generated_at: "2026-07-25T11:50:10Z"
 ---
 
 # Run a Server Manually { #run-a-server-manually }
@@ -64,7 +64,7 @@ The main thing you need to run a **FastAPI** application (or any other ASGI appl
 
 There are several alternatives, including:
 
-* [Uvicorn](https://www.uvicorn.dev/): a high performance ASGI server.
+* [Uvicorn](https://uvicorn.dev): a high performance ASGI server.
 * [Hypercorn](https://hypercorn.readthedocs.io/): an ASGI server compatible with HTTP/2 and Trio among other features.
 * [Daphne](https://github.com/django/daphne): the ASGI server built for Django Channels.
 * [Granian](https://github.com/emmett-framework/granian): A Rust HTTP server for Python applications.
@@ -85,14 +85,14 @@ When you install FastAPI, it comes with a production server, Uvicorn, and you ca
 
 But you can also install an ASGI server manually.
 
-Make sure you create a [virtual environment](../virtual-environments.md), activate it, and then you can install the server application.
+Add the server application to your project.
 
 For example, to install Uvicorn:
 
 <div class="termy">
 
 ```console
-$ pip install "uvicorn[standard]"
+$ uv add "uvicorn[standard]"
 
 ---> 100%
 ```
@@ -107,7 +107,7 @@ By adding the `standard`, Uvicorn will install and use some recommended extra de
 
 That includes `uvloop`, the high-performance drop-in replacement for `asyncio`, that provides the big concurrency performance boost.
 
-When you install FastAPI with something like `pip install "fastapi[standard]"` you already get `uvicorn[standard]` as well.
+When you add FastAPI with something like `uv add "fastapi[standard]"` you already get `uvicorn[standard]` as well.
 
 ///
 
@@ -118,7 +118,7 @@ If you installed an ASGI server manually, you would normally need to pass an imp
 <div class="termy">
 
 ```console
-$ uvicorn main:app --host 0.0.0.0 --port 80
+$ uv run uvicorn main:app --host 0.0.0.0 --port 80
 
 <span style="color: green;">INFO</span>:     Uvicorn running on http://0.0.0.0:80 (Press CTRL+C to quit)
 ```

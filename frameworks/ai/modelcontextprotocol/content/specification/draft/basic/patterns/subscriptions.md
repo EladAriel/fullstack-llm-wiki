@@ -4,10 +4,10 @@ framework: "Model Context Protocol"
 source_repo: "https://github.com/modelcontextprotocol/modelcontextprotocol"
 source_branch: "main"
 source_path: "docs/specification/draft/basic/patterns/subscriptions.mdx"
-source_commit: "47501e4ced7823014b83be168916d4c9e63b594e"
-source_commit_short: "47501e4c"
-source_commit_date: "2026-06-22T09:16:44-07:00"
-generated_at: "2026-06-23T14:04:43Z"
+source_commit: "7634684382c3d14cf7e9f14073fe40a2d8ace3fa"
+source_commit_short: "76346843"
+source_commit_date: "2026-07-23T16:49:30-07:00"
+generated_at: "2026-07-25T11:50:39Z"
 ---
 
 ---
@@ -63,10 +63,15 @@ notification type.
 
 ## Acknowledgment
 
-The server **MUST** send `notifications/subscriptions/acknowledged` as the first
-message on the stream. The `notifications` field in the acknowledgment reflects the
-subset the server agreed to honor — notification types the server does not support are
-omitted.
+The server **MUST** send `notifications/subscriptions/acknowledged` as the first message
+carrying the subscription's ID in `_meta` under `io.modelcontextprotocol/subscriptionId`,
+and **MUST NOT** send any notification on the
+subscription before it. On stdio, where every subscription shares one channel, this
+ordering is defined per subscription ID and not per channel: messages belonging to other
+subscriptions **MAY** be interleaved before it.
+
+The `notifications` field in the acknowledgment reflects the subset the server agreed to
+honor. Notification types the server does not support are omitted.
 
 ```json
 {
@@ -126,11 +131,42 @@ A subscription ends when:
 
 - The **client** cancels it — close the SSE stream (HTTP) or send
   `notifications/cancelled` referencing the `subscriptions/listen` request ID (stdio).
-- The **server** tears it down (e.g., during shutdown) — it **MUST** close the SSE
-  stream (HTTP) or send `notifications/cancelled` referencing the
-  `subscriptions/listen` request ID (stdio).
+- The **server** tears it down (e.g., during shutdown) — it **SHOULD** send the
+  empty `subscriptions/listen` response to signal a graceful end (see
+  [Graceful Closure](#graceful-closure)), then close the stream.
 - The underlying transport closes (HTTP timeout, TCP disconnect, stdio process
   exit).
+
+### Graceful Closure
+
+When the server ends a subscription on its own initiative (for example, during
+shutdown), it **SHOULD** respond to the original `subscriptions/listen` request
+with an empty result before closing the stream. This is the JSON-RPC response to
+the long-lived request, correlated by its `id`, and signals that the subscription
+ended gracefully — as opposed to an abrupt transport drop, which carries no
+response.
+
+```json
+{
+  "jsonrpc": "2.0",
+  "id": 1,
+  "result": {
+    "resultType": "complete",
+    "_meta": {
+      "io.modelcontextprotocol/subscriptionId": 1
+    }
+  }
+}
+```
+
+Like every other message on the stream, the response carries
+`io.modelcontextprotocol/subscriptionId` in `_meta`, identifying which
+subscription it closes. The value matches the JSON-RPC `id` of the originating
+`subscriptions/listen` request.
+
+A client that receives this response knows the subscription closed cleanly; a
+transport that closes without it indicates an unexpected disconnect, which the
+client **MAY** treat as a trigger to reconnect.
 
 On **stdio**, if the connection is terminated and then re-established, the
 client **MUST** re-send `subscriptions/listen` to re-establish its

@@ -4,10 +4,10 @@ framework: "pytest"
 source_repo: "https://github.com/pytest-dev/pytest"
 source_branch: "main"
 source_path: "doc/en/deprecations.rst"
-source_commit: "d2466e3a9655f75d25719bcc4510cdbcb39cf10d"
-source_commit_short: "d2466e3a"
-source_commit_date: "2026-06-21T06:49:47+02:00"
-generated_at: "2026-06-21T11:47:50Z"
+source_commit: "344c23787cdb3431dcc441b8b63ee9950f04b921"
+source_commit_short: "344c2378"
+source_commit_date: "2026-07-24T17:37:16+02:00"
+generated_at: "2026-07-25T11:50:13Z"
 ---
 
 # Deprecations and Removals
@@ -17,6 +17,14 @@ This page lists all pytest features that are currently deprecated or have been r
 ## Deprecated Features
 
 Below is a complete list of all pytest features which are considered deprecated. Using those features will issue `pytest.PytestWarning` or subclasses, which can be filtered using `standard warning filters <warnings>`.
+
+### `_pytest.python.CallSpec2` renamed to `CallSpec`
+
+.. deprecated:: 9.1
+
+The private `_pytest.python.CallSpec2` name has been renamed to `CallSpec`.
+
+Plugins that import `CallSpec2` should update to `CallSpec`. The old `CallSpec2` alias remains available for now and will be removed in pytest 10.
 
 ### Passing `baseid`/`nodeid` strings to fixture registration APIs
 

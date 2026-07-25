@@ -4,10 +4,10 @@ framework: "pydantic"
 source_repo: "https://github.com/pydantic/pydantic"
 source_branch: "main"
 source_path: "docs/concepts/type_adapter.md"
-source_commit: "363728fe0b353db1a1fcb44aac5c38fd96a8cc20"
-source_commit_short: "363728fe"
-source_commit_date: "2026-06-20T11:20:58+01:00"
-generated_at: "2026-06-21T11:37:01Z"
+source_commit: "a2a6577d4c329dd574a45dbb01a8feaa16b1ad3d"
+source_commit_short: "a2a6577d"
+source_commit_date: "2026-07-23T15:38:17Z"
+generated_at: "2026-07-25T11:50:12Z"
 ---
 
 You may have types that are not `BaseModel`s that you want to validate data against.
@@ -102,6 +102,10 @@ handle as fields of a [`BaseModel`][pydantic.main.BaseModel].
     When creating an instance of [`TypeAdapter`][pydantic.type_adapter.TypeAdapter], the provided type must be analyzed and converted into a pydantic-core
     schema. This comes with some non-trivial overhead, so it is recommended to create a `TypeAdapter` for a given type
     just once and reuse it in loops or other performance-critical code.
+
+!!! tip "Logfire integration"
+    As with Pydantic models, the [Logfire integration](../integrations/logfire.md) records
+    validation errors for type adapters.
 
 ## Rebuilding a `TypeAdapter`'s schema
 

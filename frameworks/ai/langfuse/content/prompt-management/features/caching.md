@@ -4,10 +4,10 @@ framework: "Langfuse"
 source_repo: "https://github.com/langfuse/langfuse-docs"
 source_branch: "main"
 source_path: "content/docs/prompt-management/features/caching.mdx"
-source_commit: "4a702ece53852a6af86b3883f434adf3f5cae421"
-source_commit_short: "4a702ece"
-source_commit_date: "2026-06-23T13:41:14Z"
-generated_at: "2026-06-23T13:55:15Z"
+source_commit: "fcd1eca34a924867563c3c4e801254c4e66c0021"
+source_commit_short: "fcd1eca3"
+source_commit_date: "2026-07-25T00:45:45Z"
+generated_at: "2026-07-25T11:51:12Z"
 ---
 
 ---
@@ -222,7 +222,7 @@ const prompt = await langfuse.prompt.get("movie-critic", {
 
 While usually not necessary, you can ensure 100% availability of prompts by pre-fetching them on application startup and providing a fallback prompt. Please follow this [guide](/docs/prompt-management/features/guaranteed-availability) for more information.
 
-## Performance measurement of inital fetch
+## Performance measurement of initial fetch
 
 We measured the execution time of the following snippet with fully disabled caching. You can run [this notebook](/guides/cookbook/prompt_management_performance_benchmark) yourself to verify the results.
 

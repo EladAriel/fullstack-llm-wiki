@@ -4,10 +4,10 @@ framework: "redis"
 source_repo: "https://github.com/redis/docs.git"
 source_branch: "main"
 source_path: "content/develop/data-types/geospatial.md"
-source_commit: "bc92ea237bbfc2117c870c904f1a3ca619073ef1"
-source_commit_short: "bc92ea23"
-source_commit_date: "2026-06-18T14:53:00-05:00"
-generated_at: "2026-06-21T11:25:32Z"
+source_commit: "9d30f68c3dad1a6b3b7d30fe604b911348ce8152"
+source_commit_short: "9d30f68c"
+source_commit_date: "2026-07-24T10:52:10-07:00"
+generated_at: "2026-07-25T11:51:22Z"
 ---
 
 ---
@@ -50,7 +50,7 @@ available in Redis Search.
 Suppose you're building a mobile app that lets you find all of the bike rental stations closest to your current location.
 
 Add several locations to a geospatial index:
-{{< clients-example set="geo_tutorial" step="geoadd" description="Foundational: Add geographic coordinates to a geospatial index using GEOADD to store location data" >}}
+{{< clients-example set="geo_tutorial" step="geoadd" description="Foundational: Add geographic coordinates to a geospatial index using GEOADD to store location data" prereq="true" >}}
 > GEOADD bikes:rentable -122.27652 37.805186 station:1
 (integer) 1
 > GEOADD bikes:rentable -122.2674626 37.8062344 station:2
@@ -60,7 +60,7 @@ Add several locations to a geospatial index:
 {{< /clients-example >}}
 
 Find all locations within a 5 kilometer radius of a given location, and return the distance to each location:
-{{< clients-example set="geo_tutorial" step="geosearch" description="Proximity search: Use GEOSEARCH to find locations within a radius or bounding box when you need to discover nearby points" difficulty="intermediate" buildsUpon="geoadd" >}}
+{{< clients-example set="geo_tutorial" step="geosearch" description="Proximity search: Use GEOSEARCH to find locations within a radius or bounding box when you need to discover nearby points" difficulty="intermediate" buildsUpon="geoadd" needs_prereq="true" >}}
 > GEOSEARCH bikes:rentable FROMLONLAT -122.2612767 37.7936847 BYRADIUS 5 km WITHDIST
 1) 1) "station:1"
    2) "1.8523"

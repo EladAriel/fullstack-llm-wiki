@@ -4,10 +4,10 @@ framework: "mongodb"
 source_repo: "https://github.com/mongodb/docs.git"
 source_branch: "main"
 source_path: "content/manual/manual/source/reference/method/db.setProfilingLevel.txt"
-source_commit: "96788e8ed140cbdde184ff82e1066dff4996bde4"
-source_commit_short: "96788e8e"
-source_commit_date: "2026-06-19T21:35:03-06:00"
-generated_at: "2026-06-21T07:41:52Z"
+source_commit: "ab9db26ed3d11618cdb61516d8180337d8e3f679"
+source_commit_short: "ab9db26e"
+source_commit_date: "2026-07-24T16:22:46-06:00"
+generated_at: "2026-07-25T11:51:15Z"
 ---
 
 =======================================
@@ -114,6 +114,18 @@ The following example sets for a :binary:`~bin.mongod` instance:
 ```javascript
 db.setProfilingLevel( 1, { filter: { op: "query", millis: { $gt: 2000 } } } )
 ```
+
+.. include:: /includes/reference/return-set-profile.rst
+
+### Set a Filter Without Enabling the Profiler
+
+You can set a `filter` without enabling the database profiler. The following example uses a filter with a `profiling level <set-profiling-level-level>` of `0`.
+
+```javascript
+db.setProfilingLevel( 0, { filter: { op: "query", millis: { $gt: 2000 } } } )
+```
+
+Because the profiling level is `0`, the profiler is disabled and does not record matching operations to the profiler collection. The filter still applies to the diagnostic log.
 
 .. include:: /includes/reference/return-set-profile.rst
 

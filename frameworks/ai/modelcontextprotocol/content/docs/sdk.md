@@ -4,10 +4,10 @@ framework: "Model Context Protocol"
 source_repo: "https://github.com/modelcontextprotocol/modelcontextprotocol"
 source_branch: "main"
 source_path: "docs/docs/sdk.mdx"
-source_commit: "47501e4ced7823014b83be168916d4c9e63b594e"
-source_commit_short: "47501e4c"
-source_commit_date: "2026-06-22T09:16:44-07:00"
-generated_at: "2026-06-23T14:04:43Z"
+source_commit: "7634684382c3d14cf7e9f14073fe40a2d8ace3fa"
+source_commit_short: "76346843"
+source_commit_date: "2026-07-23T16:49:30-07:00"
+generated_at: "2026-07-25T11:50:39Z"
 ---
 
 ---
@@ -30,7 +30,7 @@ Build MCP servers and clients using our official SDKs. SDKs are classified into 
 | <Icon icon="swift" size={24} /> &nbsp; Swift                                                    | [modelcontextprotocol/swift-sdk](https://github.com/modelcontextprotocol/swift-sdk)           | <Badge color="orange" shape="pill">Tier&nbsp;3</Badge> |
 | <Icon icon="gem" size={24} /> &nbsp; [Ruby](https://ruby.sdk.modelcontextprotocol.io)           | [modelcontextprotocol/ruby-sdk](https://github.com/modelcontextprotocol/ruby-sdk)             | <Badge color="orange" shape="pill">Tier&nbsp;3</Badge> |
 | <Icon icon="php" size={24} /> &nbsp; [PHP](https://php.sdk.modelcontextprotocol.io)             | [modelcontextprotocol/php-sdk](https://github.com/modelcontextprotocol/php-sdk)               | <Badge color="orange" shape="pill">Tier&nbsp;3</Badge> |
-| <Icon icon="square-k" size={24} /> &nbsp; [Kotlin](https://kotlin.sdk.modelcontextprotocol.io)  | [modelcontextprotocol/kotlin-sdk](https://github.com/modelcontextprotocol/kotlin-sdk)         |           <Badge color="gray" shape="pill">TBD</Badge> |
+| <Icon icon="square-k" size={24} /> &nbsp; [Kotlin](https://kotlin.sdk.modelcontextprotocol.io)  | [modelcontextprotocol/kotlin-sdk](https://github.com/modelcontextprotocol/kotlin-sdk)         | <Badge color="orange" shape="pill">Tier&nbsp;3</Badge> |
 
 See [SDK Tiering System](/community/sdk-tiers) for details on what each tier means.
 

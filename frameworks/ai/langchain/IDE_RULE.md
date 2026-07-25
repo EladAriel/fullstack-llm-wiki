@@ -2,7 +2,7 @@
 
 For implementation questions about LangChain:
 
-1. First read `frameworks/ai/langchain/index.md`.
+1. First read `fullstack-llm-wiki/frameworks/ai/langchain/index.md`.
 2. Then open the nearest relevant folder-level `index.md`.
 3. Use child directory indexes to narrow the topic.
 4. Open the most specific content page.

@@ -4,10 +4,10 @@ framework: "redis"
 source_repo: "https://github.com/redis/docs.git"
 source_branch: "main"
 source_path: "content/operate/oss_and_stack/stack-with-enterprise/release-notes/redisce/redisos-8.2-release-notes.md"
-source_commit: "bc92ea237bbfc2117c870c904f1a3ca619073ef1"
-source_commit_short: "bc92ea23"
-source_commit_date: "2026-06-18T14:53:00-05:00"
-generated_at: "2026-06-21T11:25:32Z"
+source_commit: "9d30f68c3dad1a6b3b7d30fe604b911348ce8152"
+source_commit_short: "9d30f68c"
+source_commit_date: "2026-07-24T10:52:10-07:00"
+generated_at: "2026-07-25T11:51:22Z"
 ---
 
 ---
@@ -23,6 +23,19 @@ min-version-db: blah
 min-version-rs: blah
 weight: 60
 ---
+
+## Redis Open Source 8.2.8 (July 2026)
+
+SECURITY: There are security fixes in the release.
+
+### Security fixes
+
+- Use-after-free when loading a stream consumer group via `RESTORE` may lead to Remote Code Execution.
+- RedisBloom/RedisBloom[#1041](https://github.com/redisbloom/redisbloom/pull/1041) Crafted RESTORE payloads in RedisBloom and TDigest may trigger out-of-bounds writes, potentially leading to remote code execution.
+
+### Bug fixes
+
+- RedisBloom/RedisBloom[#1019](https://github.com/redisbloom/redisbloom/pull/1019) Replicate `CF.LOADCHUNK` data chunks to prevent silent Cuckoo Filter data loss on failover.
 
 ## Redis Open Source 8.2.7 (June 2026)
 

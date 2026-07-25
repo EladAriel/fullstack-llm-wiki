@@ -4,10 +4,10 @@ framework: "mongodb"
 directory: "content/reference/command"
 source_repo: "https://github.com/mongodb/docs.git"
 source_branch: "main"
-source_commit: "96788e8ed140cbdde184ff82e1066dff4996bde4"
-source_commit_short: "96788e8e"
-source_commit_date: "2026-06-19T21:35:03-06:00"
-generated_at: "2026-06-21T07:41:52Z"
+source_commit: "ab9db26ed3d11618cdb61516d8180337d8e3f679"
+source_commit_short: "ab9db26e"
+source_commit_date: "2026-07-24T16:22:46-06:00"
+generated_at: "2026-07-25T11:51:15Z"
 ---
 # Command
 
@@ -133,17 +133,6 @@ This directory contains mongodb learning pages related to command.
 - [Movecollection](moveCollection.md)
 - [Moveprimary](movePrimary.md)
 - [Moverange](moveRange.md)
-- [Nav Administration](nav-administration.md)
-- [Nav Atlas Search](nav-atlas-search.md)
-- [Nav Auditing](nav-auditing.md)
-- [Nav Authentication](nav-authentication.md)
-- [Nav Diagnostic](nav-diagnostic.md)
-- [Nav Plan Cache](nav-plan-cache.md)
-- [Nav Replication](nav-replication.md)
-- [Nav Role Management](nav-role-management.md)
-- [Nav Sessions](nav-sessions.md)
-- [Nav Sharding](nav-sharding.md)
-- [Nav User Management](nav-user-management.md)
 - [Ping](ping.md)
 - [Plancacheclear](planCacheClear.md)
 - [Plancacheclearfilters](planCacheClearFilters.md)

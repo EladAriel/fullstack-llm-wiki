@@ -4,10 +4,10 @@ framework: "redis"
 source_repo: "https://github.com/redis/docs.git"
 source_branch: "main"
 source_path: "content/develop/use-cases/semantic-cache/_index.md"
-source_commit: "bc92ea237bbfc2117c870c904f1a3ca619073ef1"
-source_commit_short: "bc92ea23"
-source_commit_date: "2026-06-18T14:53:00-05:00"
-generated_at: "2026-06-21T11:25:32Z"
+source_commit: "9d30f68c3dad1a6b3b7d30fe604b911348ce8152"
+source_commit_short: "9d30f68c"
+source_commit_date: "2026-07-24T10:52:10-07:00"
+generated_at: "2026-07-25T11:51:22Z"
 ---
 
 ---
@@ -69,7 +69,7 @@ Redis provides the following features that make it a good fit for a semantic cac
 The following libraries, frameworks, and managed services build on Redis for semantic caching:
 
 -   **Python**: [RedisVL](https://github.com/redis/redis-vl-python) provides the `SemanticCache` API with built-in embedding, distance thresholds, TTL, and metadata filters. See the [RedisVL LLM cache user guide]({{< relref "/develop/ai/redisvl/user_guide/how_to_guides/llmcache" >}}) and the [LangCache integration guide]({{< relref "/develop/ai/redisvl/user_guide/how_to_guides/langcache_semantic_cache" >}}).
--   **Frameworks**: [LangChain](https://python.langchain.com/docs/integrations/llm_caching/#redis-cache) (Redis as an LLM cache and vector store), [LlamaIndex](https://docs.llamaindex.ai/en/stable/examples/vector_stores/RedisIndexDemo/), and [LangGraph](https://langchain-ai.github.io/langgraph/) for agent memory and response caching.
+-   **Frameworks**: [LangChain](https://python.langchain.com/docs/integrations/llm_caching/#redis-cache) (Redis as an LLM cache and vector store), [LlamaIndex](https://developers.llamaindex.ai/python/examples/vector_stores/redisindexdemo/), and [LangGraph](https://langchain-ai.github.io/langgraph/) for agent memory and response caching.
 -   **Managed**: [Redis LangCache]({{< relref "/develop/ai/context-engine/langcache" >}}) is a fully managed semantic cache with a REST API, configurable distance thresholds, automatic eviction, and built-in metrics — no index management or embedding wiring required.
 
 ## Code examples to build your own Redis semantic cache

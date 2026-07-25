@@ -4,10 +4,10 @@ framework: "redis"
 directory: "content/operate/rs/references/rest-api/requests"
 source_repo: "https://github.com/redis/docs.git"
 source_branch: "main"
-source_commit: "bc92ea237bbfc2117c870c904f1a3ca619073ef1"
-source_commit_short: "bc92ea23"
-source_commit_date: "2026-06-18T14:53:00-05:00"
-generated_at: "2026-06-21T11:25:32Z"
+source_commit: "9d30f68c3dad1a6b3b7d30fe604b911348ce8152"
+source_commit_short: "9d30f68c"
+source_commit_date: "2026-07-24T10:52:10-07:00"
+generated_at: "2026-07-25T11:51:22Z"
 ---
 # Requests
 
@@ -38,6 +38,7 @@ This directory contains redis learning pages related to requests.
 - [Ldap Mappings](ldap_mappings/index.md) - pages related to ldap mappings
 - [License](license/index.md) - pages related to license
 - [Logs](logs/index.md) - pages related to logs
+- [Metrics Config](metrics_config/index.md) - pages related to metrics config
 - [Migrations](migrations/index.md) - pages related to migrations
 - [Modules](modules/index.md) - pages related to modules
 - [Node Master Healthcheck](node_master_healthcheck/index.md) - pages related to node master healthcheck

@@ -4,10 +4,10 @@ framework: "redis"
 source_repo: "https://github.com/redis/docs.git"
 source_branch: "main"
 source_path: "content/operate/rc/databases/version-management/_index.md"
-source_commit: "bc92ea237bbfc2117c870c904f1a3ca619073ef1"
-source_commit_short: "bc92ea23"
-source_commit_date: "2026-06-18T14:53:00-05:00"
-generated_at: "2026-06-21T11:25:32Z"
+source_commit: "9d30f68c3dad1a6b3b7d30fe604b911348ce8152"
+source_commit_short: "9d30f68c"
+source_commit_date: "2026-07-24T10:52:10-07:00"
+generated_at: "2026-07-25T11:51:22Z"
 ---
 
 ---
@@ -55,8 +55,8 @@ When a Redis version reaches **End-of-Life (EOL)**, Redis Cloud will automatical
 
 | Version | Support model | Status | EOL Date | Plans |
 |---------|--------|--------|----------|-------|
-| **Redis 8.6** | STS | Preview | TBD | Essentials |
-| **Redis 8.4** | STS | GA | TBD | Essentials, Pro | 
+| **Redis 8.6** | STS | GA | TBD | Essentials, Pro |
+| **Redis 8.4** | STS | GA | January 1, 2027 | Essentials, Pro | 
 | **Redis 8.2** | LTS | GA | September 1, 2030 | Essentials, Pro |
 | **Redis 8.0** | STS | Preview | December 1, 2026 | Essentials<sup>[1](#table-note-1)</sup> |
 | **Redis 7.4** | LTS | GA | December 1, 2029 | Essentials, Pro |

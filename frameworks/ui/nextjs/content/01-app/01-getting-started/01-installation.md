@@ -4,10 +4,10 @@ framework: "nextjs"
 source_repo: "https://github.com/vercel/next.js/"
 source_branch: "canary"
 source_path: "docs/01-app/01-getting-started/01-installation.mdx"
-source_commit: "79142d7806ff4194c8d9885b80fa69db5ecf534a"
-source_commit_short: "79142d78"
-source_commit_date: "2026-06-20T23:40:12Z"
-generated_at: "2026-06-21T12:07:17Z"
+source_commit: "dcf242a17b5d4622bbd9624db531a9d84177619f"
+source_commit_short: "dcf242a1"
+source_commit_date: "2026-07-25T10:16:19+02:00"
+generated_at: "2026-07-25T11:50:53Z"
 ---
 
 ---
@@ -360,6 +360,39 @@ You can enable the plugin in VS Code by:
 
 See the [TypeScript reference](/docs/app/api-reference/config/typescript) page for more information.
 
+<AppOnly>
+
+## Set up your editor
+
+The App Router names files by convention, like `page.tsx`, `layout.tsx`, and `route.ts`, so your editor quickly fills with same-named tabs. Label each tab with its enclosing folders, like `blog/[id]`, so you can tell them apart.
+
+In VS Code 1.88+ or Cursor, add [custom editor labels](https://code.visualstudio.com/updates/v1_88#_customize-editor-labels) to `.vscode/settings.json`. Labeling two folders deep keeps dynamic routes like `blog/[id]/page.tsx` from all collapsing to the same `[id]` label:
+
+```json filename=".vscode/settings.json"
+{
+  "workbench.editor.customLabels.patterns": {
+    "**/app/**/page.tsx": "${dirname(1)}/${dirname} - page.tsx",
+    "**/app/**/layout.tsx": "${dirname(1)}/${dirname} - layout.tsx",
+    "**/app/**/loading.tsx": "${dirname(1)}/${dirname} - loading.tsx",
+    "**/app/**/error.tsx": "${dirname(1)}/${dirname} - error.tsx",
+    "**/app/**/not-found.tsx": "${dirname(1)}/${dirname} - not-found.tsx",
+    "**/app/**/template.tsx": "${dirname(1)}/${dirname} - template.tsx",
+    "**/app/**/default.tsx": "${dirname(1)}/${dirname} - default.tsx",
+    "**/app/**/route.ts": "${dirname(1)}/${dirname} - route.ts"
+  }
+}
+```
+
+Or copy this prompt to have your coding agent set it up:
+
+```prompt
+Set up custom editor labels so my Next.js App Router files are easy to tell apart. Read https://nextjs.org/docs/app/getting-started/installation#set-up-your-editor and add the workbench.editor.customLabels.patterns config shown there to my .vscode/settings.json, creating the file if it doesn't exist. Adjust the labels to taste. If I use a different editor, apply the equivalent setting or tell me it's automatic, and leave my other settings untouched.
+```
+
+> **Good to know:** JetBrains IDEs (WebStorm, IntelliJ) show the folder for same-named files automatically, so no setup is needed.
+
+</AppOnly>
+
 ## Set up linting
 
 Next.js supports linting with either ESLint or Biome. Choose a linter and run it directly via `package.json` scripts.
@@ -439,3 +472,31 @@ For example, the following configuration maps `@/components/*` to `components/*`
 ```
 
 Each of the `"paths"` are relative to the `baseUrl` location.
+
+## Upgrade your Next.js app
+
+Keep your Next.js version up to date. Each release ships security patches, bug fixes, and performance optimizations alongside new features, and staying current keeps every individual upgrade small. Run the `upgrade` command:
+
+```bash package="pnpm"
+pnpm next upgrade
+```
+
+```bash package="npm"
+npx next upgrade
+```
+
+```bash package="yarn"
+yarn next upgrade
+```
+
+```bash package="bun"
+bunx next upgrade
+```
+
+Upgrading also updates the documentation bundled inside the `next` package at `node_modules/next/dist/docs/`. New features arrive with their docs, and existing pages pick up new guidance and pitfalls discovered along the way. [AI coding agents](/docs/app/guides/ai-agents) in your project then work from the version you have installed rather than their training data. After an upgrade, you can prompt your agent to catch up:
+
+```prompt
+Let's get our Next.js knowledge up to speed, and give me a summary of what's new for you
+```
+
+See [Upgrading](/docs/app/getting-started/upgrading) for version guides and manual upgrade steps, or the [preview docs](https://preview.nextjs.org) to explore features before they ship in a stable version.

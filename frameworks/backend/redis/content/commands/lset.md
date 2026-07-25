@@ -4,10 +4,10 @@ framework: "redis"
 source_repo: "https://github.com/redis/docs.git"
 source_branch: "main"
 source_path: "content/commands/lset.md"
-source_commit: "bc92ea237bbfc2117c870c904f1a3ca619073ef1"
-source_commit_short: "bc92ea23"
-source_commit_date: "2026-06-18T14:53:00-05:00"
-generated_at: "2026-06-21T11:25:32Z"
+source_commit: "9d30f68c3dad1a6b3b7d30fe604b911348ce8152"
+source_commit_short: "9d30f68c"
+source_commit_date: "2026-07-24T10:52:10-07:00"
+generated_at: "2026-07-25T11:51:22Z"
 ---
 
 ---
@@ -93,12 +93,20 @@ The new value.
 ## Examples
 
 {{% redis-cli %}}
-RPUSH mylist "one"
-RPUSH mylist "two"
-RPUSH mylist "three"
-LSET mylist 0 "four"
-LSET mylist -2 "five"
-LRANGE mylist 0 -1
+redis> RPUSH mylist "one"
+(integer) 1
+redis> RPUSH mylist "two"
+(integer) 2
+redis> RPUSH mylist "three"
+(integer) 3
+redis> LSET mylist 0 "four"
+OK
+redis> LSET mylist -2 "five"
+OK
+redis> LRANGE mylist 0 -1
+1) "four"
+2) "five"
+3) "three"
 {{% /redis-cli %}}
 
 ## Redis Software and Redis Cloud compatibility

@@ -4,10 +4,10 @@ framework: "tanstack"
 source_repo: "https://github.com/tanstack/query"
 source_branch: "main"
 source_path: "docs/community-resources.md"
-source_commit: "4f11927ac5f3841984389a07587ee2ae1e0abfbb"
-source_commit_short: "4f11927a"
-source_commit_date: "2026-06-19T13:43:35+02:00"
-generated_at: "2026-06-21T12:31:28Z"
+source_commit: "fd50fa14d283c7d6664a796f758498d1ad5bfce7"
+source_commit_short: "fd50fa14"
+source_commit_date: "2026-07-24T22:22:47+10:00"
+generated_at: "2026-07-25T11:50:41Z"
 ---
 
 ---
@@ -151,6 +151,11 @@ others:
       title: 'Kubb',
       url: 'https://www.kubb.dev/',
       description: 'Generate SDKs for all your APIs',
+    },
+    {
+      title: '@codewithagents/openapi-react-query',
+      url: 'https://github.com/codewithagents/openapi-zod-ts',
+      description: 'Generate fully typed TanStack/React Query v5 hooks from an OpenAPI 3.1 spec, with Zod v4 runtime validation and an end-to-end pipeline (client, mocks, server).',
     },
     {
       title: 'OpenAPI codegen',

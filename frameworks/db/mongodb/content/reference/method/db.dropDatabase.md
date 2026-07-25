@@ -4,10 +4,10 @@ framework: "mongodb"
 source_repo: "https://github.com/mongodb/docs.git"
 source_branch: "main"
 source_path: "content/manual/manual/source/reference/method/db.dropDatabase.txt"
-source_commit: "96788e8ed140cbdde184ff82e1066dff4996bde4"
-source_commit_short: "96788e8e"
-source_commit_date: "2026-06-19T21:35:03-06:00"
-generated_at: "2026-06-21T07:41:52Z"
+source_commit: "ab9db26ed3d11618cdb61516d8180337d8e3f679"
+source_commit_short: "ab9db26e"
+source_commit_date: "2026-07-24T16:22:46-06:00"
+generated_at: "2026-07-25T11:51:15Z"
 ---
 
 ==================================
@@ -28,11 +28,11 @@ This method is available in deployments hosted in the following environments:
 
 ## Syntax
 
-The :method:`db.dropDatabase()` method takes an optional parameter:
+`db.dropDatabase()` takes an optional parameter:
 
 ## Behavior
 
-The :method:`db.dropDatabase()` wraps the :dbcommand:`dropDatabase` command.
+`dropDatabase()` wraps the :dbcommand:`dropDatabase` command.
 
 ### Locks
 
@@ -50,7 +50,7 @@ The operation takes an exclusive (X) database lock only.
 
 ### Replica Set and Sharded Clusters
 
-Replica Sets At minimum, :method:`db.dropDatabase()` waits until all collection drops in the database have propagated to a majority of the replica set members (i.e. uses the write concern :writeconcern:`"majority"`).
+Replica Sets At minimum, `dropDatabase()` waits until all collection drops in the database have propagated to a majority of the replica set members, using write concern :writeconcern:`"majority"`.
 
 You can specify a write concern to the method. If you specify a write concern that requires acknowledgment from fewer than the majority, the method uses write concern :writeconcern:`"majority"`.
 
@@ -62,11 +62,11 @@ Sharded Clusters
 
 ### Change Streams
 
-The :method:`db.dropDatabase()` method and :dbcommand:`dropDatabase` command create an `change-event-invalidate` for any `/changeStreams` opened on the dropped database or opened on the collections in the dropped database.
+The `db.dropDatabase()` method and :dbcommand:`dropDatabase` command create an `change-event-invalidate` for any `/changeStreams` opened on the dropped database or its collections.
 
 ## Example
 
-The following example in :binary:`~bin.mongosh` uses the `use <database>` operation to switch the current database to the `temp` database and then uses the :method:`db.dropDatabase()` method to drop the `temp` database:
+The following example in :binary:`~bin.mongosh` uses the `use <database>` operation to switch the current database to the `temp` database and then uses `dropDatabase()` to drop the `temp` database:
 
 ```javascript
 use temp

@@ -4,10 +4,10 @@ framework: "redis"
 source_repo: "https://github.com/redis/docs.git"
 source_branch: "main"
 source_path: "content/commands/cf.insertnx.md"
-source_commit: "bc92ea237bbfc2117c870c904f1a3ca619073ef1"
-source_commit_short: "bc92ea23"
-source_commit_date: "2026-06-18T14:53:00-05:00"
-generated_at: "2026-06-21T11:25:32Z"
+source_commit: "9d30f68c3dad1a6b3b7d30fe604b911348ce8152"
+source_commit_short: "9d30f68c"
+source_commit_date: "2026-07-24T10:52:10-07:00"
+generated_at: "2026-07-25T11:51:22Z"
 ---
 
 ---
@@ -105,23 +105,23 @@ This option is mutually exclusive with `CAPACITY`.
 
 ## Examples
 
-{{< highlight bash >}}
+{{% redis-cli %}}
 redis> CF.INSERTNX cf CAPACITY 1000 ITEMS item1 item2 
 1) (integer) 1
 2) (integer) 1
-{{< / highlight >}}
+{{% /redis-cli %}}
 
-{{< highlight bash >}}
+{{% redis-cli %}}
 redis> CF.INSERTNX cf CAPACITY 1000 ITEMS item1 item2 item3
 1) (integer) 0
 2) (integer) 0
 3) (integer) 1
-{{< / highlight >}}
+{{% /redis-cli %}}
 
-{{< highlight bash >}}
+{{% redis-cli %}}
 redis> CF.INSERTNX cf_new CAPACITY 1000 NOCREATE ITEMS item1 item2 
 (error) ERR not found
-{{< / highlight >}}
+{{% /redis-cli %}}
 
 ## Details
 

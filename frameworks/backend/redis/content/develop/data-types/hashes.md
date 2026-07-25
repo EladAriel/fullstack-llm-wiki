@@ -4,16 +4,17 @@ framework: "redis"
 source_repo: "https://github.com/redis/docs.git"
 source_branch: "main"
 source_path: "content/develop/data-types/hashes.md"
-source_commit: "bc92ea237bbfc2117c870c904f1a3ca619073ef1"
-source_commit_short: "bc92ea23"
-source_commit_date: "2026-06-18T14:53:00-05:00"
-generated_at: "2026-06-21T11:25:32Z"
+source_commit: "9d30f68c3dad1a6b3b7d30fe604b911348ce8152"
+source_commit_short: "9d30f68c"
+source_commit_date: "2026-07-24T10:52:10-07:00"
+generated_at: "2026-07-25T11:51:22Z"
 ---
 
 ---
 aliases:
 - /data-types/hashes/
 - /manual/data-types/hashes/
+- /develop/data-types/hash/
 categories:
 - docs
 - develop
@@ -64,6 +65,11 @@ The command [`HSET`]({{< relref "/commands/hset" >}}) sets multiple fields of th
 a single field. [`HMGET`]({{< relref "/commands/hmget" >}}) is similar to [`HGET`]({{< relref "/commands/hget" >}}) but returns an array of values:
 
 {{< clients-example set="hash_tutorial" step="hmget" description="Retrieve multiple field values from a hash using HMGET when you need to reduce round trips to the server" buildsUpon="set_get_all" >}}
+# Recreate the bike:1 hash so this example runs on its own.
+> DEL bike:1
+(integer) 1
+> HSET bike:1 model Deimos brand Ergonom type 'Enduro bikes' price 4972
+(integer) 4
 > HMGET bike:1 model price no-such-field
 1) "Deimos"
 2) "4972"
@@ -74,6 +80,11 @@ There are commands that are able to perform operations on individual fields
 as well, like [`HINCRBY`]({{< relref "/commands/hincrby" >}}):
 
 {{< clients-example set="hash_tutorial" step="hincrby" description="Increment hash field values for counters using HINCRBY (creates field if missing, initializes to 0)" buildsUpon="set_get_all" >}}
+# Recreate the bike:1 hash so this example runs on its own.
+> DEL bike:1
+(integer) 1
+> HSET bike:1 model Deimos brand Ergonom type 'Enduro bikes' price 4972
+(integer) 4
 > HINCRBY bike:1 price 100
 (integer) 5072
 > HINCRBY bike:1 price -100

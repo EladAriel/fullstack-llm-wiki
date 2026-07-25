@@ -4,10 +4,10 @@ framework: "postgres"
 source_repo: "https://github.com/postgres/postgres.git"
 source_branch: "master"
 source_path: "doc/src/sgml/logical-replication.sgml"
-source_commit: "031904048aa22e7c70dc8e9c170e2743f9b0f090"
-source_commit_short: "03190404"
-source_commit_date: "2026-06-20T18:20:58+09:00"
-generated_at: "2026-06-21T07:06:11Z"
+source_commit: "38afc3dcb25c45b744d4025029ce0a6c90b7059f"
+source_commit_short: "38afc3dc"
+source_commit_date: "2026-07-25T19:08:27+09:00"
+generated_at: "2026-07-25T11:50:59Z"
 ---
 
 ## Logical Replication
@@ -73,6 +73,8 @@ The schema definitions are not replicated, and the published tables must exist o
 The tables are matched between the publisher and the subscriber using the fully qualified table name. Replication to differently-named tables on the subscriber is not supported.
 
 Columns of a table are also matched by name. The order of columns in the subscriber table does not need to match that of the publisher. The data types of the columns do not need to match, as long as the text representation of the data can be converted to the target type. For example, you can replicate from a column of type `integer` to a column of type `bigint`. The target table can also have additional columns not provided by the published table. Any such columns will be filled with the default value as specified in the definition of the target table. However, logical replication in binary format is more restrictive. See the binary option of `CREATE SUBSCRIPTION` for details.
+
+Conflicts that occur during replication are, by default, logged as plain text in the server log, which can make automated monitoring and analysis difficult. The `CREATE SUBSCRIPTION` command provides the conflict_log_destination option to record detailed conflict information in a structured, queryable format. When this parameter is set to `table` or `all`, the system automatically manages a dedicated conflict log table, which is created and dropped along with the subscription. This significantly improves post-mortem analysis and operational visibility of the replication setup.
 
 ## Logical Replication Slot Management
 
@@ -1310,7 +1312,7 @@ To synchronize sequences from a publisher to a subscriber, first publish them us
 
  
 
-- use CREATE SUBSCRIPTION to initially synchronize the published sequences. - use ALTER SUBSCRIPTION ... REFRESH PUBLICATION to synchronize only newly added sequences. - use ALTER SUBSCRIPTION ... REFRESH SEQUENCES to re-synchronize all sequences currently known to the subscription.
+- use CREATE SUBSCRIPTION with copy_data = true (the default) to copy the initial sequence values from the publisher. - use ALTER SUBSCRIPTION ... REFRESH PUBLICATION to synchronize only newly added sequences. - use ALTER SUBSCRIPTION ... REFRESH SEQUENCES to re-synchronize all sequences currently known to the subscription.
 
  
 
@@ -1319,6 +1321,10 @@ A sequence synchronization worker will be started after executing any of the abo
  
 
 The ability to launch a sequence synchronization worker is limited by the max_sync_workers_per_subscription configuration.
+
+ 
+
+Sequence synchronization requires the publisher to be running PostgreSQL 19 or later.
 
  
 
@@ -1602,7 +1608,7 @@ Logical replication currently has the following restrictions or missing function
  
 
 - The database schema and DDL commands are not replicated. The initial schema can be copied by hand using `pg_dump --schema-only`. Subsequent schema changes would need to be kept in sync manually. (Note, however, that there is no need for the schemas to be absolutely the same on both sides.) Logical replication is robust when schema definitions change in a live database: When the schema is changed on the publisher and replicated data starts arriving at the subscriber but does not fit into the table schema, replication will error until the schema is updated. In many cases, intermittent errors can be avoided by applying additive schema changes to the subscriber first.
-- Incremental sequence changes are not replicated. Although the data in serial or identity columns backed by sequences will be replicated as part of the table, the sequences themselves do not replicate ongoing changes. On the subscriber, a sequence will retain the last value it synchronized from the publisher. If the subscriber is used as a read-only database, then this should typically not be a problem. If, however, some kind of switchover or failover to the subscriber database is intended, then the sequences would need to be updated to the latest values, either by executing ALTER SUBSCRIPTION ... REFRESH SEQUENCES or by copying the current data from the publisher (perhaps using `pg_dump`) or by determining a sufficiently high value from the tables themselves.
+- Incremental sequence changes are not replicated. Although the data in serial or identity columns backed by sequences will be replicated as part of the table, the sequences themselves do not replicate ongoing changes. On the subscriber, a sequence will retain the last value it synchronized from the publisher. If the subscriber is used as a read-only database, then this should typically not be a problem. If, however, some kind of switchover or failover to the subscriber database is intended, then the sequences would need to be updated to the latest values, either by executing ALTER SUBSCRIPTION ... REFRESH SEQUENCES or by copying the current data from the publisher (perhaps using `pg_dump`) or by determining a sufficiently high value from the tables themselves. Note that ALTER SUBSCRIPTION ... REFRESH SEQUENCES only re-synchronizes sequences that are already known to the subscription (see `logical-replication-sequences`); in particular, it requires the publisher to be running PostgreSQL 19 or later. Before relying on it to prepare for a switchover or failover, confirm that the publisher's version supports sequence replication and that the sequences of interest are already known to the subscription.
 - Replication of `TRUNCATE` commands is supported, but some care must be taken when truncating groups of tables connected by foreign keys. When replicating a truncate action, the subscriber will truncate the same group of tables that was truncated on the publisher, either explicitly specified or implicitly collected via `CASCADE`, minus tables that are not part of the subscription. This will work correctly if all affected tables are part of the same subscription. But if some tables to be truncated on the subscriber have foreign-key links to tables that are not part of the same (or any) subscription, then the application of the truncate action on the subscriber will fail.
 - Large objects (see `largeobjects`) are not replicated. There is no workaround for that, other than storing data in normal tables.
 - Replication is only supported by tables, including partitioned tables. Attempts to replicate other types of relations, such as views, materialized views, or foreign tables, will result in an error.
@@ -1683,7 +1689,7 @@ The role used for the replication connection must have the `REPLICATION` attribu
 
  
 
-In order to be able to copy the initial table or sequence data, the role used for the replication connection must have the `SELECT` privilege on a published table or sequence (or be a superuser).
+In order to be able to copy the initial table data or synchronize sequences, the role used for the replication connection must have the `SELECT` privilege on a published table or sequence (or be a superuser).
 
  
 
@@ -1708,6 +1714,10 @@ The subscription apply process will, at a session level, run with the privileges
  
 
 If the subscription has been configured with `run_as_owner = true`, then no user switching will occur. Instead, all operations will be performed with the permissions of the subscription owner. In this case, the subscription owner only needs privileges to `SELECT`, `INSERT`, `UPDATE`, and `DELETE` from the target table, and does not need privileges to `SET ROLE` to the table owner. However, this also means that any user who owns a table into which replication is happening can execute arbitrary code with the privileges of the subscription owner. For example, they could do this by simply attaching a trigger to one of the tables which they own. Because it is usually undesirable to allow one role to freely assume the privileges of another, this option should be avoided unless user security within the database is of no concern.
+
+ 
+
+When synchronizing sequences with `run_as_owner = true`, the subscription owner similarly needs `UPDATE` privilege on the target sequence and does not need privileges to `SET ROLE` to the sequence owner.
 
  
 
@@ -1827,9 +1837,9 @@ There are some prerequisites for `pg_upgrade` to be able to upgrade the logical 
 
 - The new cluster must have wal_level as `replica` or `logical`.
 - The new cluster must have max_replication_slots configured to a value greater than or equal to the number of slots present in the old cluster.
-- The output plugins referenced by the slots on the old cluster must be installed in the new PostgreSQL executable directory.
+- The output plugins referenced by the slots in the old cluster must be installed in the new PostgreSQL executable directory.
 - The old cluster has replicated all the transactions and logical decoding messages to subscribers.
-- All slots on the old cluster must be usable, i.e., their pg_replication_slots.`conflicting` is `false`.
+- All slots in the old cluster must be usable, i.e., their pg_replication_slots.`conflicting` is `false`.
 - The new cluster must not have any permanent logical slots; i.e., any existing logical slots must have pg_replication_slots.`temporary` set to `true`.
 
  
@@ -1857,7 +1867,7 @@ There are some prerequisites for `pg_upgrade` to be able to upgrade the subscrip
 - All the subscription tables in the old subscriber should be in state `i` (initialize) or `r` (ready). This can be verified by checking pg_subscription_rel.`srsubstate`.
 - The replication origin entry corresponding to each of the subscriptions should exist in the old cluster. This can be found by checking pg_subscription and pg_replication_origin system tables.
 - The new cluster must have max_active_replication_origins configured to a value greater than or equal to the number of subscriptions present in the old cluster.
-- If there are subscriptions with retain_dead_tuples enabled, the reserved replication slot `pg_conflict_detection` must not exist on the new cluster. Additionally, the wal_level on the new cluster must be set to `replica` or `logical`.
+- If there are subscriptions with retain_dead_tuples enabled, the reserved replication slot `pg_conflict_detection` must not exist in the new cluster. Additionally, the wal_level on the new cluster must be set to `replica` or `logical`.
 
  
 

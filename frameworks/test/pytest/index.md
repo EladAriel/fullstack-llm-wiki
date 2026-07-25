@@ -8,9 +8,9 @@ This is a local LLM-friendly wiki generated from the official pytest documentati
 - Source repo: `https://github.com/pytest-dev/pytest`
 - Source branch: `main`
 - Source docs path: `doc/en`
-- Source commit: `d2466e3a`
-- Source commit date: `2026-06-21T06:49:47+02:00`
-- Wiki generated at: `2026-06-21T11:47:50Z`
+- Source commit: `344c2378`
+- Source commit date: `2026-07-24T17:37:16+02:00`
+- Wiki generated at: `2026-07-25T11:50:13Z`
 
 ## How the IDE LLM should use this wiki
 

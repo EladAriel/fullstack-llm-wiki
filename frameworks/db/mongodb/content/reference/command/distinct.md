@@ -4,10 +4,10 @@ framework: "mongodb"
 source_repo: "https://github.com/mongodb/docs.git"
 source_branch: "main"
 source_path: "content/manual/manual/source/reference/command/distinct.txt"
-source_commit: "96788e8ed140cbdde184ff82e1066dff4996bde4"
-source_commit_short: "96788e8e"
-source_commit_date: "2026-06-19T21:35:03-06:00"
-generated_at: "2026-06-21T07:41:52Z"
+source_commit: "ab9db26ed3d11618cdb61516d8180337d8e3f679"
+source_commit_short: "ab9db26e"
+source_commit_date: "2026-07-24T16:22:46-06:00"
+generated_at: "2026-07-25T11:51:15Z"
 ---
 
 ===========================
@@ -50,7 +50,7 @@ The command takes the following fields:
 
 .. include:: /includes/note-distinct-bson-limit-agg-alternative.rst
 
-MongoDB also provides the shell wrapper method :method:`db.collection.distinct()` for the :dbcommand:`distinct` command. Additionally, many MongoDB `drivers <driver>` provide a wrapper method. Refer to the specific driver documentation.
+For the equivalent :program:`mongosh` method, see :method:`db.collection.distinct()`. For driver-specific wrapper methods, see the :driver:`driver documentation </>`.
 
 ## Behavior
 
@@ -107,13 +107,13 @@ The examples use the `inventory` collection that contains the following document
 
 ### Return Distinct Values for a Field
 
-The following example returns the distinct values for the field `dept` from all documents in the `inventory` collection:
+The following example returns distinct `dept` values from the `inventory` collection:
 
 ```javascript
 db.runCommand ( { distinct: "inventory", key: "dept" } )
 ```
 
-The command returns a document with a field named `values` that contains the distinct `dept` values:
+The command returns a document with a `values` field containing the distinct `dept` values:
 
 ```javascript
 {
@@ -124,13 +124,13 @@ The command returns a document with a field named `values` that contains the dis
 
 ### Return Distinct Values for an Embedded Field
 
-The following example returns the distinct values for the field `sku`, embedded in the `item` field, from all documents in the `inventory` collection:
+The following example returns distinct values for the embedded field `item.sku` from the `inventory` collection:
 
 ```javascript
 db.runCommand ( { distinct: "inventory", key: "item.sku" } )
 ```
 
-The command returns a document with a field named `values` that contains the distinct `sku` values:
+The command returns a document with a `values` field containing the distinct `sku` values:
 
 ```javascript
 {
@@ -144,13 +144,13 @@ within embedded documents
 
 ### Return Distinct Values for an Array Field
 
-The following example returns the distinct values for the field `sizes` from all documents in the `inventory` collection:
+The following example returns distinct `sizes` values from the `inventory` collection:
 
 ```javascript
 db.runCommand ( { distinct: "inventory", key: "sizes" } )
 ```
 
-The command returns a document with a field named `values` that contains the distinct `sizes` values:
+The command returns a document with a `values` field containing the distinct `sizes` values:
 
 ```javascript
 {
@@ -210,13 +210,13 @@ returned from the `sensor` collection).
 - `[]` in MongoDB versions earlier than 6.0.
 ### Specify Query with `distinct`
 
-The following example returns the distinct values for the field `sku`, embedded in the `item` field, from the documents whose `dept` is equal to `"A"`:
+The following example returns distinct values for the embedded `item.sku` field where `dept` equals `"A"`:
 
 ```javascript
 db.runCommand ( { distinct: "inventory", key: "item.sku", query: { dept: "A"} } )
 ```
 
-The command returns a document with a field named `values` that contains the distinct `sku` values:
+The command returns a document with a `values` field containing the distinct `sku` values:
 
 ```javascript
 {
@@ -255,7 +255,7 @@ For descriptions on the collation fields, see `collation-document-fields`.
 
 To override the default read concern level of :readconcern:`"local"`, use the `readConcern` option.
 
-The following operation on a replica set specifies a `/reference/read-concern` of :readconcern:`"majority"` to read the most recent copy of the data confirmed as having been written to a majority of the nodes.
+The following operation on a replica set specifies a `read concern <read-concern>` of :readconcern:`"majority"` to read the most recent copy of the data confirmed as having been written to a majority of the nodes.
 
 > **Note:** .. include:: /includes/fact-readConcern-most-recent-data-in-node.rst
 
