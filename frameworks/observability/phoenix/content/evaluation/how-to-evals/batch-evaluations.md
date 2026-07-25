@@ -1,0 +1,114 @@
+---
+type: "Framework Learn Page"
+framework: "Arize Phoenix"
+source_repo: "https://github.com/Arize-ai/phoenix.git"
+source_branch: "main"
+source_path: "docs/phoenix/evaluation/how-to-evals/batch-evaluations.mdx"
+source_commit: "69b3ab92c37ff65812feaa2dbf0b1c0ad5ae55fe"
+source_commit_short: "69b3ab9"
+source_commit_date: "2026-07-25T11:48:12-06:00"
+generated_at: "2026-07-25T19:08:24.933662Z"
+---
+# Batch Evaluations
+
+---
+title: "Batch Evaluations"
+---
+
+## Dataframe Evaluation Methods (Python only)
+
+* `evaluate_dataframe` for synchronous dataframe evaluations
+* `async_evaluate_dataframe` an asynchronous version for optimized speed and ability to specify concurrency.
+
+Both methods run multiple evaluators over a pandas dataframe. The output is an augmented dataframe with two added columns per score:
+
+1. `{score_name}_score` contains the JSON serialized score (or None if the evaluation failed)
+2. `{evaluator_name}_execution_details` contains information about the execution status, duration, and any exceptions that occurred.
+
+#### Notes:
+
+* Bind `input_mappings` to your evaluators beforehand so they match your dataframe columns.
+* Failed evaluations: If an evaluation fails, the failure details will be recorded in the execution\_details column and the score will be None.
+
+#### Examples
+
+1. Evaluator with more than one score returned:
+
+```python
+import pandas as pd
+
+from phoenix.evals import evaluate_dataframe
+from phoenix.evals.metrics import PrecisionRecallFScore
+
+precision_recall_fscore = PrecisionRecallFScore(positive_label="Yes")
+
+df = pd.DataFrame(
+    {
+        "output": [["Yes", "Yes", "No"], ["Yes", "No", "No"]],
+        "expected": [["Yes", "No", "No"], ["Yes", "No", "No"]],
+    }
+)
+
+result = evaluate_dataframe(dataframe=df, evaluators=[precision_recall_fscore])
+result.head()
+```
+
+2. Running multiple evaluators, one bound with an input\_mapping:
+
+```python
+from phoenix.evals import bind_evaluator, evaluate_dataframe
+from phoenix.evals.llm import LLM
+from phoenix.evals.metrics import FaithfulnessEvaluator, exact_match
+
+df = pd.DataFrame(
+    {
+        # exact_match columns
+        "output": ["Yes", "Yes", "No"],
+        "expected": ["Yes", "No", "No"],
+        # faithfulness columns (need mapping)
+        "context": ["This is a test", "This is another test", "This is a third test"],
+        "query": [
+            "What is the name of this test?",
+            "What is the name of this test?",
+            "What is the name of this test?",
+        ],
+        "response": ["First test", "Another test", "Third test"],
+    }
+)
+
+llm = LLM(provider="openai", model="gpt-4o")
+faithfulness_evaluator = bind_evaluator(
+    FaithfulnessEvaluator(llm=llm), {"input": "query", "output": "response"}
+)
+
+result = evaluate_dataframe(dataframe=df, evaluators=[exact_match, faithfulness_evaluator])
+result.head()
+```
+
+3. Asynchronous evaluation
+
+```python
+from phoenix.evals.llm import LLM
+from phoenix.evals.metrics import FaithfulnessEvaluator
+from phoenix.evals import async_evaluate_dataframe
+
+df = pd.DataFrame(
+    {
+        "context": ["This is a test", "This is another test", "This is a third test"],
+        "input": [
+            "What is the name of this test?",
+            "What is the name of this test?",
+            "What is the name of this test?",
+        ],
+        "output": ["First test", "Another test", "Third test"],
+    }
+)
+
+llm = LLM(provider="openai", model="gpt-4o")
+faithfulness_evaluator = FaithfulnessEvaluator(llm=llm)
+
+result = await async_evaluate_dataframe(dataframe=df, evaluators=[faithfulness_evaluator], concurrency=5)
+result.head()
+```
+
+See [Using Evals with Phoenix](/docs/phoenix/evaluation/how-to-evals/using-evals-with-phoenix) to learn how to run evals on project traces and upload them to Phoenix.&#x20;

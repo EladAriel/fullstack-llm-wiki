@@ -1,0 +1,49 @@
+---
+type: "Framework Learn Page"
+framework: "Arize Phoenix"
+source_repo: "https://github.com/Arize-ai/phoenix.git"
+source_branch: "main"
+source_path: "docs/phoenix/self-hosting/deployment-options/terminal.mdx"
+source_commit: "69b3ab92c37ff65812feaa2dbf0b1c0ad5ae55fe"
+source_commit_short: "69b3ab9"
+source_commit_date: "2026-07-25T11:48:12-06:00"
+generated_at: "2026-07-25T19:08:24.941156Z"
+---
+# Terminal
+
+---
+title: "Terminal"
+description: Run Phoenix via the CLI on your local machine
+---
+
+Running Phoenix through your terminal is the fastest way to get Phoenix up and running locally.
+
+<Steps>
+  <Step title={<span className="step-title">Install the Phoenix Library</span>}>
+    Run the following command in your terminal to install Phoenix:
+
+    `pip install arize-phoenix`
+  </Step>
+
+  <Step title={<span className="step-title">Start Phoenix</span>}>
+    Once installed, start the Phoenix server with:
+
+    `phoenix serve`
+
+    This will launch Phoenix locally and make the application available in your browser. It should look something like this:
+
+    <Frame><img src="https://storage.googleapis.com/arize-phoenix-assets/assets/images/phoenix-docs-images/local_phoenix_start.jpeg" alt="Local Phoenix Start" /></Frame>
+  </Step>
+
+  <Step title={<span className="step-title">Open Phoenix UI</span>}>
+    Once Phoenix is running, you can open the UI directly from the links displayed in your terminal. By default, the Phoenix UI will be available at:
+
+    [http://localhost:6006](http://localhost:6006)
+
+    This launches the Phoenix dashboard in your browser, where you can begin exploring logs, traces, and other features.
+
+    **Congratulations!** You now have Phoenix up and running. From here, you can start sending traces, create and upload datasets, run experiments, and explore everything else Phoenix has to offer.
+
+    Continue to the next guide to send your first trace and begin working with Phoenix in action.
+  </Step>
+</Steps>

@@ -1,0 +1,102 @@
+---
+type: "Framework Learn Page"
+framework: "Helicone"
+source_repo: "https://github.com/Helicone/helicone.git"
+source_branch: "main"
+source_path: "docs/integrations/xai/python.mdx"
+source_commit: "67df07b8d807a960f2e53d9ec2a9c49513ca2379"
+source_commit_short: "67df07b"
+source_commit_date: "2026-07-21T05:35:38-07:00"
+generated_at: "2026-07-25T19:08:22.208892Z"
+---
+# Python
+
+---
+title: "xAI with OpenAI Python SDK"
+sidebarTitle: "Python"
+description: "Use the OpenAI Python SDK to integrate with xAI via Helicone to log your xAI usage."
+"twitter:title": "xAI with OpenAI Python SDK - Helicone OSS LLM Observability"
+icon: "python"
+iconType: "solid"
+---
+
+import { strings } from "/snippets/strings.mdx";
+import LegacyWarning from "/snippets/legacy-provider-warning.mdx";
+
+<LegacyWarning />
+
+This integration is used to log usage with the [xAI](https://x.ai) API.
+
+## {strings.howToIntegrate}
+
+<Steps>
+  <Step title={strings.generateKey}>
+    <div dangerouslySetInnerHTML={{ __html: strings.generateKeyInstructions }} />
+  </Step>
+
+  <Step title={strings.setApiKey}>
+    ```bash
+    HELICONE_API_KEY=<your-helicone-api-key>
+    XAI_API_KEY=<your-xai-api-key>
+    ```
+  </Step>
+
+  <Step title={strings.modifyBasePath}>
+
+    ```python OpenAI SDK
+    from openai import OpenAI
+    from dotenv import load_dotenv
+    import os
+
+    load_dotenv()
+
+    helicone_api_key = os.getenv("HELICONE_API_KEY")
+    XAI_API_KEY = os.getenv("XAI_API_KEY")
+
+    client = OpenAI(
+      api_key=XAI_API_KEY,
+      base_url="https://x.helicone.ai/v1",
+      default_headers={
+        "Helicone-Auth": f"Bearer {helicone_api_key}"
+      }
+    )
+
+    chat_completion = client.chat.completions.create(
+      model="grok-4-latest",
+      messages=[{"role": "user", "content": "Hello, how are you?"}],
+      max_tokens=1024,
+      temperature=0.7
+    )
+
+    print(chat_completion)
+    ```
+
+  </Step>
+
+  <Step title={strings.verifyInHelicone}>
+    <div dangerouslySetInnerHTML={{ __html: strings.verifyInHeliconeDesciption("xAI") }} />
+  </Step>
+</Steps>
+
+## {strings.relatedGuides}
+
+<CardGroup cols={2}>
+  <Card
+    title="Building a chatbot with structured outputs"
+    icon="lightbulb"
+    href="/guides/cookbooks/openai-structured-outputs"
+    iconType="light"
+    vertical
+  >
+    {strings.chatbotCookbookDescription}
+  </Card>
+  <Card
+    title="How to Prompt Thinking Models Effectively"
+    icon="arrows-rotate"
+    href="/guides/cookbooks/prompt-thinking-models"
+    iconType="light"
+    vertical
+  >
+    {strings.howToPromptThinkingModelsCookbookDescription}
+  </Card>
+</CardGroup> 

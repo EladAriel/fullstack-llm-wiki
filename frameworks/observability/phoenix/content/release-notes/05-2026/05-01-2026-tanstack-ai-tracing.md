@@ -1,0 +1,54 @@
+---
+type: "Framework Learn Page"
+framework: "Arize Phoenix"
+source_repo: "https://github.com/Arize-ai/phoenix.git"
+source_branch: "main"
+source_path: "docs/phoenix/release-notes/05-2026/05-01-2026-tanstack-ai-tracing.mdx"
+source_commit: "69b3ab92c37ff65812feaa2dbf0b1c0ad5ae55fe"
+source_commit_short: "69b3ab9"
+source_commit_date: "2026-07-25T11:48:12-06:00"
+generated_at: "2026-07-25T19:08:24.906471Z"
+---
+# 05 01 2026 Tanstack Ai Tracing
+
+---
+title: "05.01.2026 TanStack AI Tracing"
+description: "Instrument TanStack AI chat, tool-calling, and agent loops with the new @arizeai/openinference-tanstack-ai middleware."
+---
+
+**Available in @arizeai/openinference-tanstack-ai 0.1.0+**
+
+Phoenix now ships an OpenInference middleware for [TanStack AI](https://tanstack.com/ai/latest/docs/getting-started/overview). Plug `openInferenceMiddleware()` into any `chat()` call to capture an `AGENT` span for the run, an `LLM` span for each model turn, and a `TOOL` span for every executed tool call — across both streaming and non-streaming flows, and across any TanStack AI provider adapter.
+
+<Frame>
+  <img src="https://storage.googleapis.com/arize-phoenix-assets/assets/images/tanstack-ai.png" alt="TanStack AI traces in Phoenix" />
+</Frame>
+
+```bash
+npm install --save @arizeai/openinference-tanstack-ai @tanstack/ai
+```
+
+```typescript
+import { chat } from "@tanstack/ai";
+import { openaiText } from "@tanstack/ai-openai";
+import { openInferenceMiddleware } from "@arizeai/openinference-tanstack-ai";
+
+const stream = chat({
+  adapter: openaiText("gpt-4o-mini"),
+  messages: [{ role: "user", content: "What is OpenInference?" }],
+  middleware: [openInferenceMiddleware()],
+});
+```
+
+<Note>
+This integration is brand new. If you run into issues or have ideas for improvements, please reach out via the [OpenInference repo](https://github.com/Arize-ai/openinference) — we'd love your feedback.
+</Note>
+
+<CardGroup cols={2}>
+  <Card title="TanStack AI Tracing Docs" icon="book" href="/docs/phoenix/integrations/typescript/tanstack-ai/tanstack-ai-tracing">
+    Setup, usage, and a tool-calling example.
+  </Card>
+  <Card title="TanStack AI" icon="globe" href="https://tanstack.com/ai/latest/docs/getting-started/overview">
+    Learn more about TanStack AI.
+  </Card>
+</CardGroup>

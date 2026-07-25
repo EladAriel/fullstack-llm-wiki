@@ -1,0 +1,86 @@
+---
+type: "Framework Learn Page"
+framework: "Arize Phoenix"
+source_repo: "https://github.com/Arize-ai/phoenix.git"
+source_branch: "main"
+source_path: "docs/phoenix/integrations/llm-providers/google-gen-ai/google-gen-ai-evals.mdx"
+source_commit: "69b3ab92c37ff65812feaa2dbf0b1c0ad5ae55fe"
+source_commit_short: "69b3ab9"
+source_commit_date: "2026-07-25T11:48:12-06:00"
+generated_at: "2026-07-25T19:08:24.847998Z"
+---
+# Google Gen Ai Evals
+
+---
+title: "Google Gen AI Evals"
+sidebarTitle: "Google Gen AI Evals"
+---
+
+### Using Google Gen AI with Phoenix Evals
+
+<Note>
+Need to install the extra dependency `google-genai>=1.0.0`
+</Note>
+
+Use the `LLM` wrapper with `provider="google"` to access Google's Gemini models through the Google GenAI SDK.
+
+**Authentication Options**
+
+**Option 1: Using API Key (Developer API)**
+
+Set the `GOOGLE_API_KEY` or `GEMINI_API_KEY` environment variable:
+
+```bash
+export GOOGLE_API_KEY=your_api_key_here
+```
+
+```python
+from phoenix.evals import LLM
+
+llm = LLM(provider="google", model="gemini-2.5-flash")
+```
+
+**Option 2: Using VertexAI**
+
+```python
+from phoenix.evals import LLM
+
+llm = LLM(
+    provider="google",
+    model="gemini-2.5-flash",
+    vertexai=True,
+    project="your-project-id",
+    location="us-central1",
+)
+```
+
+**Basic Usage**
+
+```python
+from phoenix.evals import LLM
+from phoenix.evals.metrics import FaithfulnessEvaluator
+
+llm = LLM(provider="google", model="gemini-2.5-flash")
+
+evaluator = FaithfulnessEvaluator(llm=llm)
+result = evaluator.evaluate(eval_input={
+    "input": "What is the capital of France?",
+    "output": "Paris is the capital of France.",
+    "context": "Paris is the capital and largest city of France.",
+})
+result[0].pretty_print()
+```
+
+**Supported Models**
+
+The Google provider supports all Gemini models available through the Google GenAI SDK, including:
+
+* `gemini-2.5-flash` (default)
+* `gemini-2.5-flash-001`
+* `gemini-2.0-flash-001`
+* `gemini-1.5-pro`
+* `gemini-1.5-flash`
+
+<Note>
+We acknowledge [Siddharth Sahu](https://github.com/sahusiddharth) for this valuable contribution and support.
+</Note>

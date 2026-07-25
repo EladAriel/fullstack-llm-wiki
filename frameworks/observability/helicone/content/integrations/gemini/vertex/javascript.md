@@ -1,0 +1,141 @@
+---
+type: "Framework Learn Page"
+framework: "Helicone"
+source_repo: "https://github.com/Helicone/helicone.git"
+source_branch: "main"
+source_path: "docs/integrations/gemini/vertex/javascript.mdx"
+source_commit: "67df07b8d807a960f2e53d9ec2a9c49513ca2379"
+source_commit_short: "67df07b"
+source_commit_date: "2026-07-21T05:35:38-07:00"
+generated_at: "2026-07-25T19:08:22.213608Z"
+---
+---
+title: "Vertex AI JavaScript SDK Integration"
+sidebarTitle: "JavaScript"
+description: "Use Vertex AI's JavaScript SDK to integrate with Helicone to log your Vertex AI usage."
+"twitter:title": "Vertex AI JavaScript SDK Integration - Helicone OSS LLM Observability"
+icon: "js"
+iconType: "solid"
+---
+
+import LegacyWarning from "/snippets/legacy-provider-warning.mdx";
+
+<LegacyWarning />
+
+# Proxy Integration
+
+## Fetch
+
+<Steps>
+  <Step title="Create an account + Generate an API Key">
+    Log into [helicone](https://www.helicone.ai) or create an account. Once you have an account, you
+    can generate an [API key](https://helicone.ai/developer).
+  </Step>
+  <Step title="Set API keys as environment variables">
+    ```bash
+    export HELICONE_API_KEY=<your API key>
+    export GCLOUD_API_KEY=<your Google Cloud API key>
+    ```
+  </Step>
+  <Step title="Install necessary packages">
+    Ensure you have the necessary packages installed in your Javascript project:
+    ```bash
+    npm install node-fetch
+    ```
+  </Step>
+  <Step title="Send a request using fetch">
+    ```javascript
+    const fetch = require('node-fetch');
+
+    const url = 'https://gateway.helicone.ai/v1/projects/your-project-id/locations/your-location/publishers/google/models/model-name:streamGenerateContent';
+
+    const headers = {
+      'Authorization': `Bearer ${process.env.GCLOUD_API_KEY}`,
+      'Content-Type': 'application/json',
+      'Helicone-Auth': `Bearer ${process.env.HELICONE_API_KEY}`,
+      'Helicone-Target-URL': `https://${LOCATION}-aiplatform.googleapis.com`,
+      'User-Agent': 'node-fetch'
+    };
+
+    const body = JSON.stringify({
+      contents: {
+        role: 'user',
+        parts: { text: 'Which theaters in Mountain View show Barbie movie?' }
+      },
+      generation_config: { maxOutputTokens: 1 }
+    });
+
+    fetch(url, { method: 'POST', headers: headers, body: body })
+      .then(response => response.json())
+      .then(data => console.log(data))
+      .catch(error => console.error('Error:', error));
+    ```
+
+  </Step>
+</Steps>
+
+## VertexAI SDK
+
+<Steps>
+  <Step title="Create an account + Generate an API Key">
+    Log into [helicone](https://www.helicone.ai) or create an account. Once you have an account, you
+    can generate an [API key](https://helicone.ai/developer).
+  </Step>
+  <Step title="Set API keys as environment variables">
+    ```bash
+    export HELICONE_API_KEY=<your API key>
+    export GCLOUD_API_KEY=<your Google Cloud API key>
+    ```
+  </Step>
+  <Step title="Install necessary packages">
+    Ensure you have the necessary packages installed in your Javascript project:
+    ```bash
+    npm install @google-cloud/vertexai
+    ```
+  </Step>
+  <Step title="Import VertexAI and configure the client">
+    ```javascript
+    import { VertexAI } from "@google-cloud/vertexai";
+
+    const vertex_ai = new VertexAI({
+      project: "your-project-id",
+      location: "your-location",
+      apiEndpoint: "gateway.helicone.ai",
+    });
+    ```
+
+  </Step>
+  <Step title="Set up custom headers">
+    ```javascript
+    const customHeaders = new Headers({
+      "Helicone-Auth": `Bearer ${process.env.HELICONE_API_KEY}`,
+      "Helicone-Target-URL": `https://${LOCATION}-aiplatform.googleapis.com`,
+    });
+    ```
+  </Step>
+  <Step title="Define request options">
+    ```javascript
+    const requestOptions = {
+      customHeaders: customHeaders,
+    } as RequestOptions;
+    ```
+  </Step>
+  <Step title="Get the generative model">
+    ```javascript
+    const generativeModel = vertex_ai.preview.getGenerativeModel(
+      {
+        model: "model-name"
+      },
+      requestOptions // Pass request options
+    );
+    ```
+  </Step>
+  <Step title="Generate content">
+    ```javascript
+    const result = await generativeModel.generateContent({
+      contents: [{ role: "user", parts: [{ text: "How are you doing today?" }] }],
+    });
+    console.log(result);
+    ```
+  </Step>
+</Steps>

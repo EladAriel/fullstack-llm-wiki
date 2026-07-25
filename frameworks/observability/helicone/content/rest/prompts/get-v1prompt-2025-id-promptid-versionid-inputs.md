@@ -1,0 +1,89 @@
+---
+type: "Framework Learn Page"
+framework: "Helicone"
+source_repo: "https://github.com/Helicone/helicone.git"
+source_branch: "main"
+source_path: "docs/rest/prompts/get-v1prompt-2025-id-promptid-versionid-inputs.mdx"
+source_commit: "67df07b8d807a960f2e53d9ec2a9c49513ca2379"
+source_commit_short: "67df07b"
+source_commit_date: "2026-07-21T05:35:38-07:00"
+generated_at: "2026-07-25T19:08:22.252886Z"
+---
+# Get V1Prompt 2025 Id Promptid Versionid Inputs
+
+---
+title: "Get Prompt Inputs"
+api: "GET https://api.helicone.ai/v1/prompt-2025/id/{promptId}/{versionId}/inputs"
+description: "Get the inputs used for a specific prompt version in a request"
+---
+
+Returns the input variables that were used when a specific prompt version was executed in a request.
+
+### Path Parameters
+
+<ParamField path="promptId" type="string" required>
+  The unique identifier of the prompt
+</ParamField>
+
+<ParamField path="versionId" type="string" required>
+  The unique identifier of the prompt version
+</ParamField>
+
+### Query Parameters
+
+<ParamField query="requestId" type="string" required>
+  The request ID to retrieve inputs from
+</ParamField>
+
+### Response
+
+<ResponseField name="request_id" type="string">
+  The request ID
+</ResponseField>
+
+<ResponseField name="version_id" type="string">
+  The version ID
+</ResponseField>
+
+<ResponseField name="inputs" type="object">
+  Key-value pairs of input variables and their values used in the request
+</ResponseField>
+
+<RequestExample>
+
+```bash cURL
+curl -X GET "https://api.helicone.ai/v1/prompt-2025/id/prompt_123/version_456/inputs?requestId=req_789" \
+  -H "Authorization: Bearer $HELICONE_API_KEY"
+```
+
+```typescript TypeScript
+const response = await fetch(
+  'https://api.helicone.ai/v1/prompt-2025/id/prompt_123/version_456/inputs?requestId=req_789',
+  {
+    method: 'GET',
+    headers: {
+      'Authorization': `Bearer ${HELICONE_API_KEY}`,
+    },
+  }
+);
+
+const inputs = await response.json();
+```
+
+</RequestExample>
+
+<ResponseExample>
+
+```json Response
+{
+  "request_id": "req_789",
+  "version_id": "version_456",
+  "inputs": {
+    "user_name": "Alice",
+    "product_name": "Pro Plan",
+    "support_level": "premium"
+  }
+}
+```
+
+</ResponseExample>

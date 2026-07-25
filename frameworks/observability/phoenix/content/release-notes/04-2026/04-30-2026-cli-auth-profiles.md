@@ -1,0 +1,84 @@
+---
+type: "Framework Learn Page"
+framework: "Arize Phoenix"
+source_repo: "https://github.com/Arize-ai/phoenix.git"
+source_branch: "main"
+source_path: "docs/phoenix/release-notes/04-2026/04-30-2026-cli-auth-profiles.mdx"
+source_commit: "69b3ab92c37ff65812feaa2dbf0b1c0ad5ae55fe"
+source_commit_short: "69b3ab9"
+source_commit_date: "2026-07-25T11:48:12-06:00"
+generated_at: "2026-07-25T19:08:24.883381Z"
+---
+---
+title: "04.30.2026: CLI Named Auth Profiles"
+description: "px profile commands let you store named Phoenix connection profiles and switch between them without re-exporting environment variables."
+---
+
+**Available in @arizeai/phoenix-cli 1.4.0+**
+
+The `px profile` command group lets you store named connection profiles — each bundling an endpoint, project, API key, and custom headers under a single name like `prod` or `staging`. Activate a profile once and every `px` command picks it up automatically, so you no longer need to re-export environment variables when switching between Phoenix instances.
+
+## Profile resolution order
+
+```text
+CLI flags → environment variables → active profile → built-in defaults
+```
+
+Existing scripts that set `PHOENIX_HOST` / `PHOENIX_API_KEY` / etc. keep working without modification.
+
+## Managing profiles
+
+```bash
+# Create a profile (interactive prompts fill in the details)
+px profile create prod
+
+# Create a profile with all values supplied upfront
+px profile create staging \
+  --endpoint https://staging.phoenix.example.com \
+  --project my-project \
+  --api-key $STAGING_API_KEY
+
+# Switch the active profile
+px profile use prod
+
+# List all profiles (active profile is marked)
+px profile list
+
+# Inspect a specific profile
+px profile show prod
+
+# Edit a profile in $EDITOR
+px profile edit staging
+
+# Delete a profile
+px profile delete staging
+```
+
+## Check which profile is active
+
+`px auth status` now surfaces the active profile name alongside the resolved endpoint and authentication state:
+
+```bash
+px auth status
+# Endpoint:       https://prod.phoenix.example.com
+# Active profile: prod
+# Auth:           API key configured
+```
+
+## Editor autocomplete via JSON Schema
+
+The CLI publishes a JSON Schema for the settings file (`~/.px/profiles.json`). Add a `$schema` key to enable autocomplete and validation in editors that support JSON Schema:
+
+```json
+{
+  "$schema": "https://unpkg.com/@arizeai/phoenix-cli/schemas/phoenix-cli-settings.json",
+  "activeProfile": "prod",
+  "profiles": {
+    "prod": {
+      "endpoint": "https://prod.phoenix.example.com",
+      "apiKey": "...",
+      "project": "production"
+    }
+  }
+}
+```

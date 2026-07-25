@@ -1,0 +1,60 @@
+---
+type: "Framework Learn Page"
+framework: "Arize Phoenix"
+source_repo: "https://github.com/Arize-ai/phoenix.git"
+source_branch: "main"
+source_path: "docs/phoenix/tracing/llm-traces/metrics.mdx"
+source_commit: "69b3ab92c37ff65812feaa2dbf0b1c0ad5ae55fe"
+source_commit_short: "69b3ab9"
+source_commit_date: "2026-07-25T11:48:12-06:00"
+generated_at: "2026-07-25T19:08:24.913401Z"
+---
+# Metrics
+
+---
+title: Metrics Dashboard
+description: Each Phoenix project comes with a pre-defined metrics dashboard
+---
+
+To access the dashboard in a space, navigate to "Dashboards" in the sidebar, then choose your project from the dropdown at the top of the page.
+
+{/* TODO: replace the placeholder URL below with the uploaded image URL (upload to the arize-phoenix-assets GCS bucket under assets/images/) */}
+<Frame caption="The pre-defined metrics dashboard for a Phoenix project">
+  ![Phoenix metrics dashboard showing traces over time and trace latency percentiles](https://storage.googleapis.com/arize-phoenix-assets/assets/images/phoenix-docs-images/ui/phoenix_dashboard.jpg)
+</Frame>
+
+Traces that are sent to a project are automatically indexed for metrics. This lets you quickly identify areas of poor performance. Each dashboard by default includes:
+
+- **Traces** over time
+- **Trace Latency** percentiles
+- **Cost** estimated in USD
+- **Top models by cost**
+- **Top models by tokens**
+- **Token usage** by prompt and completion
+- **Prompt token details** by input, cache, and audio parts
+- **Completion token details** including output, reasoning, and audio parts
+- **LLM span counts** over time
+- **LLM spans with errors** over time
+- **Tool span counts** over time
+- **Tool spans with errors** over time
+- **Average Span annotation scores**
+- **Average trace annotation scores**
+- **Average session annotation scores**
+
+<Info>
+  If you need custom alerting and dashboards on top of your trace data, including metrics tailored for non-developer stakeholders, [Arize AX's Dashboards supports these additional features](https://arize.com/docs/ax/observe/dashboards).
+</Info>
+
+## Next Steps
+
+<CardGroup cols={3}>
+  <Card title="Setup Projects" icon="folder" href="/docs/phoenix/tracing/how-to-tracing/setup-tracing/setup-projects">
+    Organize traces into separate projects
+  </Card>
+  <Card title="Cost Tracking" icon="dollar-sign" href="/docs/phoenix/tracing/how-to-tracing/cost-tracking">
+    Monitor token usage and LLM costs
+  </Card>
+  <Card title="Log Annotations" icon="code" href="/docs/phoenix/tracing/how-to-tracing/feedback-and-annotations/capture-feedback">
+    Add scores, labels, and LLM evals to your traces
+  </Card>
+</CardGroup>

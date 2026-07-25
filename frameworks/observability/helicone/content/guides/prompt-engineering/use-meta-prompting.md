@@ -1,0 +1,67 @@
+---
+type: "Framework Learn Page"
+framework: "Helicone"
+source_repo: "https://github.com/Helicone/helicone.git"
+source_branch: "main"
+source_path: "docs/guides/prompt-engineering/use-meta-prompting.mdx"
+source_commit: "67df07b8d807a960f2e53d9ec2a9c49513ca2379"
+source_commit_short: "67df07b"
+source_commit_date: "2026-07-21T05:35:38-07:00"
+generated_at: "2026-07-25T19:08:22.279773Z"
+---
+# Use Meta Prompting
+
+---
+title: "Use Meta-Prompting"
+sidebarTitle: "Use meta-prompting"
+description: "Use large language models (LLMs) to create and refine prompts dynamically."
+"twitter:title": "Use Meta-Prompting - Prompt Engineering Techniques"
+---
+
+import QuestionsSection from "/snippets/questions-section.mdx";
+
+## What is Meta-Prompting
+
+Meta-Prompting is an advanced prompt engineering method that uses large language models (LLMs) to create and refine prompts dynamically. Unlike traditional prompt engineering, Meta-Prompting guides the LLM to adapt and adjust prompts based on feedback, enabling it to handle more complex tasks and evolving contexts.
+
+## How Meta-Prompting Works
+
+1. Create task-specific prompts using AI
+2. Guide the LLM to understand prompt structure and underlying task requirements
+3. Modify prompting strategies based on context and real-time feedback
+4. Work with high-level prompt design concepts
+5. Instruct the LLM to evaluate and improve its prompting methods
+
+For the official implementation, check out the paper [Meta Prompting for AI Systems](https://arxiv.org/abs/2311.11482).
+
+## Example
+
+**Meta-Prompt:**
+
+> Create a prompt that will guide the LLM to analyze [TOPIC]. This prompt should include instructions for:
+>
+> - Generating a clear, 3-paragraph summary
+> - Identifying top 3 key arguments
+> - Evaluating evidence sources
+> - Suggesting 2 novel research directions. Make sure the prompt is clear and concise.
+
+This example shows how meta-prompting can be used to create a flexible, structured approach to generating clearer prompts that can be applied across domains.
+
+## Why use Meta-Prompting
+
+- Versatile for a wide range of tasks
+- The AI system has more autonomy in how to tackle new challenges
+- More efficient resource usage and prompt optimization
+- Scalability across different problem domains
+- Supports AI's ongoing learning and improvement capabilities
+
+## Tips for effective Meta-Prompting
+
+- Define clear hierarchies and abstraction levels in your meta-prompts
+- Build modular, reusable prompt components
+- Test meta-prompts thoroughly across different use cases
+- Follow ethical guidelines when designing prompts
+- Allow for human oversight and intervention
+- Regularly evaluate and update your prompting strategies
+
+<QuestionsSection />

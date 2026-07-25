@@ -1,0 +1,71 @@
+---
+type: "Framework Learn Page"
+framework: "Arize Phoenix"
+source_repo: "https://github.com/Arize-ai/phoenix.git"
+source_branch: "main"
+source_path: "docs/phoenix/release-notes/04-2026/04-14-2026-cli-annotation-commands.mdx"
+source_commit: "69b3ab92c37ff65812feaa2dbf0b1c0ad5ae55fe"
+source_commit_short: "69b3ab9"
+source_commit_date: "2026-07-25T11:48:12-06:00"
+generated_at: "2026-07-25T19:08:24.883556Z"
+---
+---
+title: "04.14.2026 CLI Annotation Commands"
+description: "Write span and trace annotations from the terminal with px span annotate and px trace annotate."
+---
+
+**Available in @arizeai/phoenix-cli 1.0.4+**
+
+The Phoenix CLI now supports writing annotations to spans and traces. Use `px span annotate` and `px trace annotate` to attach labels, scores, and explanations directly from the terminal — useful for labeling traces in CI pipelines, scripting evaluation workflows, or quick manual review.
+
+## Annotate a Span
+
+```bash
+px span annotate <span-id> \
+  --name correctness \
+  --label correct \
+  --score 1 \
+  --explanation "The response accurately answers the user's question." \
+  --annotator-kind HUMAN
+```
+
+## Annotate a Trace
+
+```bash
+px trace annotate <trace-id> \
+  --name quality \
+  --label good \
+  --score 0.9 \
+  --annotator-kind CODE
+```
+
+Both commands accept:
+
+| Flag | Description |
+|---|---|
+| `--name` | Annotation name (e.g. `correctness`, `quality`) |
+| `--label` | Categorical label (e.g. `correct`, `incorrect`) |
+| `--score` | Numeric score |
+| `--explanation` | Free-text explanation |
+| `--annotator-kind` | `HUMAN`, `LLM`, or `CODE` |
+| `--format` | Output format: `pretty`, `json`, or `raw` |
+
+At least one of `--label` or `--score` is required. Submitting again with the same `--name` updates the existing entry rather than creating a duplicate.
+
+## View Annotations in Output
+
+Pass `--include-annotations` when reading traces or spans to see existing annotations alongside the data:
+
+```bash
+# Fetch a trace with trace-level and span-level annotations
+px trace get <trace-id> --include-annotations
+
+# List spans with their annotations
+px span list --include-annotations
+```
+
+<CardGroup cols={2}>
+  <Card icon="terminal" href="/docs/phoenix/sdk-api-reference/typescript/arizeai-phoenix-cli">
+    TypeScript SDK and CLI reference.
+  </Card>
+</CardGroup>

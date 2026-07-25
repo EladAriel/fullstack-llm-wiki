@@ -20,7 +20,7 @@ Each entry:
 
 - `framework`: machine name (`fastapi`, `langchain`, `react`)
 - `display_name`: human name
-- `category`: one of `ai`, `ui`, `backend`, `db`, `test`
+- `category`: one of `ai`, `ui`, `backend`, `db`, `test`, `observability`
 - `source_repo`: git URL
 - `source_branch`: branch name
 - `source_docs_path`: path inside the repo where docs live

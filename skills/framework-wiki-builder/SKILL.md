@@ -22,7 +22,7 @@ Do not use when:
   - An array of source definitions:
     - `framework` (string): machine name, e.g. `fastapi`, `langchain`, `react`
     - `display_name` (string): human name, e.g. `FastAPI`, `LangChain`
-    - `category` (one of `ai`, `ui`, `backend`, `db`, `test`): determines target area under `frameworks/`
+    - `category` (one of `ai`, `ui`, `backend`, `db`, `test`, `observability`): determines target area under `frameworks/`
     - `source_repo` (string): git URL, e.g. `https://github.com/fastapi/fastapi.git`
     - `source_branch` (string): branch to read, e.g. `master` or `main`
     - `source_docs_path` (string): path within repo where docs live

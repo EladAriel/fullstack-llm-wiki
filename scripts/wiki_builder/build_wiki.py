@@ -35,7 +35,7 @@ FRAMEWORKS_ROOT = REPO_ROOT / "frameworks"
 class Source:
     framework: str
     display_name: str
-    category: str  # ai | ui | backend | db | test
+    category: str  # ai | ui | backend | db | test | observability
     source_repo: str
     source_branch: str
     source_docs_path: str
