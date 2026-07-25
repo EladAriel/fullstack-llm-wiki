@@ -8,9 +8,9 @@ This is a local LLM-friendly wiki generated from the official sqlalchemy documen
 - Source repo: `https://github.com/sqlalchemy/sqlalchemy`
 - Source branch: `main`
 - Source docs path: `doc/build`
-- Source commit: `ddf3b658`
-- Source commit date: `2026-06-18T14:12:36-04:00`
-- Wiki generated at: `2026-06-21T07:22:30Z`
+- Source commit: `aa1a5575`
+- Source commit date: `2026-07-23T18:02:59Z`
+- Wiki generated at: `2026-07-25T11:50:45Z`
 
 ## How the IDE LLM should use this wiki
 
@@ -74,23 +74,23 @@ This is a local LLM-friendly wiki generated from the official sqlalchemy documen
 - [6392](content/changelog/unreleased_13/6392.md)
 - [6589](content/changelog/unreleased_13/6589.md)
 - [7115](content/changelog/unreleased_13/7115.md)
+- [13380](content/changelog/unreleased_20/13380.md)
 - [13386](content/changelog/unreleased_20/13386.md)
-- [10610](content/changelog/unreleased_21/10610.md)
-- [11450](content/changelog/unreleased_21/11450.md)
-- [13260](content/changelog/unreleased_21/13260.md)
-- [13268](content/changelog/unreleased_21/13268.md)
-- [13291](content/changelog/unreleased_21/13291.md)
-- [13293](content/changelog/unreleased_21/13293.md)
-- [13309](content/changelog/unreleased_21/13309.md)
-- [13333](content/changelog/unreleased_21/13333.md)
-- [13339](content/changelog/unreleased_21/13339.md)
-- [13343](content/changelog/unreleased_21/13343.md)
-- [13346](content/changelog/unreleased_21/13346.md)
-- [13350](content/changelog/unreleased_21/13350.md)
-- [13363](content/changelog/unreleased_21/13363.md)
-- [5987](content/changelog/unreleased_21/5987.md)
-- [8068](content/changelog/unreleased_21/8068.md)
-- [8430](content/changelog/unreleased_21/8430.md)
+- [13392](content/changelog/unreleased_20/13392.md)
+- [13396](content/changelog/unreleased_20/13396.md)
+- [13419](content/changelog/unreleased_20/13419.md)
+- [13424](content/changelog/unreleased_20/13424.md)
+- [13429](content/changelog/unreleased_20/13429.md)
+- [13439](content/changelog/unreleased_20/13439.md)
+- [13448](content/changelog/unreleased_20/13448.md)
+- [6274](content/changelog/unreleased_20/6274.md)
+- [10748](content/changelog/unreleased_21/10748.md)
+- [11122](content/changelog/unreleased_21/11122.md)
+- [11297](content/changelog/unreleased_21/11297.md)
+- [12398](content/changelog/unreleased_21/12398.md)
+- [13311](content/changelog/unreleased_21/13311.md)
+- [13420](content/changelog/unreleased_21/13420.md)
+- [2943](content/changelog/unreleased_21/2943.md)
 - [Whatsnew 20](content/changelog/whatsnew_20.md)
 - [Contents](content/contents.md)
 - [Copyright](content/copyright.md)

@@ -4,10 +4,10 @@ framework: "FastAPI"
 source_repo: "https://github.com/fastapi/fastapi.git"
 source_branch: "master"
 source_path: "docs/en/docs/advanced/using-request-directly.md"
-source_commit: "0cb4a8e284b450abbccb71c543ad7757de46c0b2"
-source_commit_short: "0cb4a8e2"
-source_commit_date: "2026-06-20T16:31:34Z"
-generated_at: "2026-06-21T07:06:10Z"
+source_commit: "255b912928904e3ba5980425a54d6837c8bd1a1c"
+source_commit_short: "255b9129"
+source_commit_date: "2026-07-24T21:15:37Z"
+generated_at: "2026-07-25T11:50:10Z"
 ---
 
 # Using the Request Directly { #using-the-request-directly }
@@ -27,7 +27,7 @@ But there are situations where you might need to access the `Request` object dir
 
 ## Details about the `Request` object { #details-about-the-request-object }
 
-As **FastAPI** is actually **Starlette** underneath, with a layer of several tools on top, you can use Starlette's [`Request`](https://www.starlette.dev/requests/) object directly when you need to.
+As **FastAPI** is actually **Starlette** underneath, with a layer of several tools on top, you can use Starlette's [`Request`](https://starlette.dev/requests/) object directly when you need to.
 
 It would also mean that if you get data from the `Request` object directly (for example, read the body) it won't be validated, converted or documented (with OpenAPI, for the automatic API user interface) by FastAPI.
 
@@ -57,7 +57,7 @@ The same way, you can declare any other parameter as normally, and additionally,
 
 ## `Request` documentation { #request-documentation }
 
-You can read more details about the [`Request` object in the official Starlette documentation site](https://www.starlette.dev/requests/).
+You can read more details about the [`Request` object in the official Starlette documentation site](https://starlette.dev/requests/).
 
 /// note | Technical Details
 

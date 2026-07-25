@@ -4,10 +4,10 @@ framework: "redis"
 source_repo: "https://github.com/redis/docs.git"
 source_branch: "main"
 source_path: "content/integrate/redis-data-integration/reference/data-transformation/lookup.md"
-source_commit: "bc92ea237bbfc2117c870c904f1a3ca619073ef1"
-source_commit_short: "bc92ea23"
-source_commit_date: "2026-06-18T14:53:00-05:00"
-generated_at: "2026-06-21T11:25:32Z"
+source_commit: "9d30f68c3dad1a6b3b7d30fe604b911348ce8152"
+source_commit_short: "9d30f68c"
+source_commit_date: "2026-07-24T10:52:10-07:00"
+generated_at: "2026-07-25T11:51:22Z"
 ---
 
 ---
@@ -30,16 +30,16 @@ weight: 10
 
 **Properties**
 
-| Name                              | Type       | Description                                                                                                                                                                                                                                                                              | Required |
-| --------------------------------- | ---------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|----------|
-| **connection**                    | `string`   | Connection name                                                                                                                                                                                                                                                                          | yes      |
-| **cmd**                           | `string`   | The command to execute                                                                                                                                                                                                                                                                   | yes      |
-| [**args**](#args)                 | `string[]` | Redis command arguments                                                                                                                                                                                                                                                                  | yes      |
-| **language**                      | `string`   | Language<br/>Enum: `"jmespath"`, `"sql"`<br/>                                                                                                                                                                                                                                            | yes      |
-| **field**                         | `string`   | The target field to write the result to<br/>                                                                                                                                                                                                                                             | yes      |
-| **cache**                         | `object`   | Cache the result of the argument expressions. See [`cache`]({{< relref "/integrate/redis-data-integration/reference/data-transformation/cache" >}}) for the property list. **Flink processor only.**<br/>                                                                                 | no       |
-| **lookup_cache**                  | `object`   | Cache the lookup results returned by Redis across batches, keyed by the resolved command arguments. Uses the same property list as [`cache`]({{< relref "/integrate/redis-data-integration/reference/data-transformation/cache" >}}). **Flink processor only.**<br/>                       | no       |
-| [**batch**](#batch)               | `object`   | Override the default batching behavior for `redis.lookup` lookups. **Flink processor only.**<br/>                                                                                                                                                                                          | no       |
+| Name                | Type       | Description                                                                                                                                                                                                                                                          | Required |
+| ------------------- | ---------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | -------- |
+| **connection**      | `string`   | Connection name                                                                                                                                                                                                                                                      | yes      |
+| **cmd**             | `string`   | The command to execute                                                                                                                                                                                                                                               | yes      |
+| [**args**](#args)   | `string[]` | Redis command arguments                                                                                                                                                                                                                                              | yes      |
+| **language**        | `string`   | Language<br/>Enum: `"jmespath"`, `"sql"`<br/>                                                                                                                                                                                                                        | yes      |
+| **field**           | `string`   | The target field to write the result to<br/>                                                                                                                                                                                                                         | yes      |
+| **cache**           | `object`   | Cache the result of the argument expressions. See [`cache`]({{< relref "/integrate/redis-data-integration/reference/data-transformation/cache" >}}) for the property list. **Flink processor only.**<br/>                                                            | no       |
+| **lookup_cache**    | `object`   | Cache the lookup results returned by Redis across batches, keyed by the resolved command arguments. Uses the same property list as [`cache`]({{< relref "/integrate/redis-data-integration/reference/data-transformation/cache" >}}). **Flink processor only.**<br/> | no       |
+| [**batch**](#batch) | `object`   | Override the default batching behavior for `redis.lookup` lookups. **Flink processor only.**<br/>                                                                                                                                                                    | no       |
 
 **Additional Properties:** not allowed
 
@@ -53,15 +53,15 @@ weight: 10
 
 **Properties**
 
-| Name           | Type      | Description                                                                                          | Required | Default |
-| -------------- | --------- | ---------------------------------------------------------------------------------------------------- | -------- | ------- |
-| **size**       | `integer` | Maximum number of lookups in a single batch. Must be positive.                                       | no       | `200`   |
-| **timeout_ms** | `integer` | Maximum time in milliseconds to wait before flushing a non-full batch. Must be positive.             | no       | `100`   |
+| Name           | Type      | Description                                                                              | Required | Default |
+| -------------- | --------- | ---------------------------------------------------------------------------------------- | -------- | ------- |
+| **size**       | `integer` | Maximum number of lookups in a single batch. Must be positive.                           | no       | `200`   |
+| **timeout_ms** | `integer` | Maximum time in milliseconds to wait before flushing a non-full batch. Must be positive. | no       | `100`   |
 
 **Additional Properties:** not allowed
 **Example**
 
-Denormalize a hash:
+Read a hash field:
 
 ```yaml
 source:
@@ -73,7 +73,7 @@ transform:
       cmd: HGET
       args:
         - concat(['artist:artistid:', artistid])
-        - '`name`'
+        - "`name`"
       language: jmespath
       field: artist
 output:

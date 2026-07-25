@@ -4,10 +4,10 @@ framework: "mongodb"
 source_repo: "https://github.com/mongodb/docs.git"
 source_branch: "main"
 source_path: "content/manual/manual/source/core/security-ldap-external.txt"
-source_commit: "96788e8ed140cbdde184ff82e1066dff4996bde4"
-source_commit_short: "96788e8e"
-source_commit_date: "2026-06-19T21:35:03-06:00"
-generated_at: "2026-06-21T07:41:52Z"
+source_commit: "ab9db26ed3d11618cdb61516d8180337d8e3f679"
+source_commit_short: "ab9db26e"
+source_commit_date: "2026-07-24T16:22:46-06:00"
+generated_at: "2026-07-25T11:51:15Z"
 ---
 
 ==============================================
@@ -212,3 +212,21 @@ against the `$external` database.
 contain [RFC4514](https://tools.ietf.org/html/rfc4514) escaped
 sequences, the roles you create in the `admin` database must also
 be escaped following RFC4514.
+
+## Use LDAP Authorization with Other Authentication Mechanisms
+
+When LDAP authorization is enabled, MongoDB can have different authorization behavior based on your authentication mechanism.
+
+The following mechanisms always use LDAP authorization if enabled:
+
+- X.509
+- Kerberos
+- LDAP
+- OIDC (when the `useAuthorizationClaim` field in
+:parameter:`oidcIdentityProviders` is `false`)
+
+The following mechanisms use internal authorization, whether LDAP authorization is enabled or not:
+
+- SCRAM
+- OIDC (when the `useAuthorizationClaim` field in
+:parameter:`oidcIdentityProviders` is `true`)

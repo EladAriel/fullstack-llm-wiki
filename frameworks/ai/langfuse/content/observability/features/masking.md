@@ -4,10 +4,10 @@ framework: "Langfuse"
 source_repo: "https://github.com/langfuse/langfuse-docs"
 source_branch: "main"
 source_path: "content/docs/observability/features/masking.mdx"
-source_commit: "4a702ece53852a6af86b3883f434adf3f5cae421"
-source_commit_short: "4a702ece"
-source_commit_date: "2026-06-23T13:41:14Z"
-generated_at: "2026-06-23T13:55:15Z"
+source_commit: "fcd1eca34a924867563c3c4e801254c4e66c0021"
+source_commit_short: "fcd1eca3"
+source_commit_date: "2026-07-25T00:45:45Z"
+generated_at: "2026-07-25T11:51:12Z"
 ---
 
 ---
@@ -271,22 +271,27 @@ See [JS/TS SDK docs](/docs/sdk/typescript/guide) for more details.
 </Tab>
 <Tab title="LangChain (JS/TS)">
 
-When using the [CallbackHandler](/integrations/frameworks/langchain), you can pass `mask` to the constructor:
+Masking is configured on the `LangfuseSpanProcessor` — spans created by the LangChain [CallbackHandler](/integrations/frameworks/langchain) flow through it automatically, so no LangChain-specific masking setup is needed:
 
 ```typescript
-import { CallbackHandler } from "langfuse-langchain";
+import { NodeSDK } from "@opentelemetry/sdk-node";
+import { LangfuseSpanProcessor } from "@langfuse/otel";
+import { CallbackHandler } from "@langfuse/langchain";
 
-function maskingFunction(params: { data: any }) {
-  if (typeof params.data === "string" && params.data.startsWith("SECRET_")) {
-    return "REDACTED";
-  }
+const spanProcessor = new LangfuseSpanProcessor({
+  mask: ({ data }) => {
+    if (typeof data === "string" && data.startsWith("SECRET_")) {
+      return "REDACTED";
+    }
 
-  return params.data;
-}
-
-const handler = new CallbackHandler({
-  mask: maskingFunction,
+    return data;
+  },
 });
+
+const sdk = new NodeSDK({ spanProcessors: [spanProcessor] });
+sdk.start();
+
+const handler = new CallbackHandler();
 ```
 
 </Tab>

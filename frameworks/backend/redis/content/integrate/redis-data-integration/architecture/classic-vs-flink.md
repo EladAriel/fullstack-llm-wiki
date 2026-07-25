@@ -4,10 +4,10 @@ framework: "redis"
 source_repo: "https://github.com/redis/docs.git"
 source_branch: "main"
 source_path: "content/integrate/redis-data-integration/architecture/classic-vs-flink.md"
-source_commit: "bc92ea237bbfc2117c870c904f1a3ca619073ef1"
-source_commit_short: "bc92ea23"
-source_commit_date: "2026-06-18T14:53:00-05:00"
-generated_at: "2026-06-21T11:25:32Z"
+source_commit: "9d30f68c3dad1a6b3b7d30fe604b911348ce8152"
+source_commit_short: "9d30f68c"
+source_commit_date: "2026-07-24T10:52:10-07:00"
+generated_at: "2026-07-25T11:51:22Z"
 ---
 
 ---
@@ -43,10 +43,8 @@ for a step-by-step migration guide.
 | Aspect | Classic processor | Flink processor |
 |---|---|---|
 | Implementation | Python | Java on top of [Apache Flink](https://flink.apache.org/) |
-| Deployment targets | VM and Kubernetes | Kubernetes only |
 | Scaling | Single replica | Horizontal: TaskManager replicas × task slots per TaskManager |
 | Fault tolerance | Source-stream consumer-group replay | Source-stream consumer-group replay plus Flink checkpointing |
-| Supported `data_type` outputs | `hash`, `json`, `set`, `sorted_set`, `stream`, `string` | `hash`, `json` |
 | Metrics endpoint | `rdi-metrics-exporter` service | Flink JobManager `/metrics` (no metrics exporter) |
 | Metric naming | `rdi_*` (e.g., `rdi_incoming_entries`) | `flink_*` (e.g., `flink_jobmanager_job_operator_coordinator_stream_type_rdiRecords`) |
 | End-to-end latency | Bounded by the per-batch read-process-write cycle | Records flow through pipelined operator chains without a per-batch barrier |
@@ -59,16 +57,14 @@ The classic processor runs as a single pod managed by the operator
 and can be deployed on either VMs or Kubernetes through the RDI Helm
 chart.
 
-The Flink processor runs as an Apache Flink application cluster: one
-JobManager pod plus one or more TaskManager pods. Source,
+The Flink processor runs as an Apache Flink application cluster managed by
+RDI: one JobManager pod plus one or more TaskManager pods. Source,
 transformation, and sink operators run as parallel subtasks across
 all task slots in the cluster. The Flink processor scales
 horizontally by changing the number of TaskManager replicas
 (`advanced.resources.taskManager.replicas`); with adaptive
 parallelism, the default parallelism is the product of TaskManager
-replicas and task slots per TaskManager. The Flink processor
-currently runs on Kubernetes only; VM support is planned for a future
-release.
+replicas and task slots per TaskManager.
 
 Both processors retain at-least-once delivery semantics; the Flink
 processor adds Flink checkpointing on top of the shared
@@ -76,7 +72,9 @@ consumer-group replay mechanism.
 
 See
 [Configure the Flink processor]({{< relref "/integrate/redis-data-integration/installation/install-k8s#configure-the-flink-processor" >}})
-for the Helm settings.
+for the Kubernetes Helm settings, and
+[Configure the Flink processor]({{< relref "/integrate/redis-data-integration/installation/install-vm#configure-the-flink-processor" >}})
+for VM installations.
 
 ## Configuration
 
@@ -91,22 +89,14 @@ and are silently ignored by the other implementation. The Flink
 processor exposes additional fine-grained tuning under
 `processors.advanced.*`.
 
-## Supported output formats
-
-The classic processor supports all `data_type` values: `hash`, `json`,
-`set`, `sorted_set`, `stream`, and `string`. The Flink processor
-currently supports only `hash` and `json`. Pipelines that use any other
-output type must remain on the classic processor or rewrite the
-affected jobs. Support for the remaining output types is planned for a
-future release.
-
 ## Transformation extensions
 
 The two processors support the same set of transformation blocks
 (`filter`, `map`, `add_field`, `remove_field`, `rename_field`,
-`redis.lookup`) and the same expression languages (JMESPath and SQL).
-Pipelines written for one processor generally execute on the other
-without changes.
+`redis.lookup`), the same expression languages (JMESPath and SQL),
+and the same data types in output blocks: `hash`, `json`, `set`,
+`sorted_set`, `stream`, and `string`. Pipelines written for one processor
+generally execute on the other without changes.
 
 The Flink processor adds three optional, performance-oriented
 extensions that are not available with the classic processor:

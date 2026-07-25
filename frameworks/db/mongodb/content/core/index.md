@@ -4,10 +4,10 @@ framework: "mongodb"
 directory: "content/core"
 source_repo: "https://github.com/mongodb/docs.git"
 source_branch: "main"
-source_commit: "96788e8ed140cbdde184ff82e1066dff4996bde4"
-source_commit_short: "96788e8e"
-source_commit_date: "2026-06-19T21:35:03-06:00"
-generated_at: "2026-06-21T07:41:52Z"
+source_commit: "ab9db26ed3d11618cdb61516d8180337d8e3f679"
+source_commit_short: "ab9db26e"
+source_commit_date: "2026-07-24T16:22:46-06:00"
+generated_at: "2026-07-25T11:51:15Z"
 ---
 # Core
 
@@ -33,9 +33,9 @@ This directory contains mongodb learning pages related to core.
 - [Oidc](oidc/index.md) - pages related to oidc
 - [Queryable Encryption](queryable-encryption/index.md) - pages related to queryable encryption
 - [Schema Validation](schema-validation/index.md) - pages related to schema validation
-- [Search In Community](search-in-community/index.md) - pages related to search in community
 - [Text Search](text-search/index.md) - pages related to text search
 - [Timeseries](timeseries/index.md) - pages related to timeseries
+- [Tls](tls/index.md) - pages related to tls
 - [Views](views/index.md) - pages related to views
 
 ## Pages in This Directory

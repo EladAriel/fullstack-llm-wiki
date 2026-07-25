@@ -4,10 +4,10 @@ framework: "redis"
 source_repo: "https://github.com/redis/docs.git"
 source_branch: "main"
 source_path: "content/commands/hexpire.md"
-source_commit: "bc92ea237bbfc2117c870c904f1a3ca619073ef1"
-source_commit_short: "bc92ea23"
-source_commit_date: "2026-06-18T14:53:00-05:00"
-generated_at: "2026-06-21T11:25:32Z"
+source_commit: "9d30f68c3dad1a6b3b7d30fe604b911348ce8152"
+source_commit_short: "9d30f68c"
+source_commit_date: "2026-07-24T10:52:10-07:00"
+generated_at: "2026-07-25T11:51:22Z"
 ---
 
 ---
@@ -168,25 +168,17 @@ Starting with Redis 8, Redis Search has enhanced behavior when handling expiring
 ## Examples
 
 {{< clients-example set="cmds_hash" step="hexpire" description="Field expiration: Set TTL on individual hash fields using HEXPIRE with conditional options (NX, XX, GT, LT) when you need fine-grained control over field lifecycle" difficulty="intermediate" >}}
-HEXPIRE no-key 20 NX FIELDS 2 field1 field2
-(nil)
-HSET mykey field1 "hello" field2 "world"
+> HEXPIRE no-key 20 NX FIELDS 2 field1 field2
+1) (integer) -2
+2) (integer) -2
+> HSET mykey field1 "hello" field2 "world"
 (integer) 2
-HEXPIRE mykey 10 FIELDS 3 field1 field2 field3
+> HEXPIRE mykey 10 FIELDS 3 field1 field2 field3
 1) (integer) 1
 2) (integer) 1
 3) (integer) -2
-HGETALL mykey
+> HGETALL mykey
 {{< /clients-example >}}
-
-Give these commands a try in the interactive console:
-
-{{% redis-cli %}}
-HEXPIRE no-key 20 NX FIELDS 2 field1 field2
-HSET mykey field1 "hello" field2 "world"
-HEXPIRE mykey 10 FIELDS 3 field1 field2 field3
-HGETALL mykey
-{{% /redis-cli %}}
 
 ## Redis Software and Redis Cloud compatibility
 

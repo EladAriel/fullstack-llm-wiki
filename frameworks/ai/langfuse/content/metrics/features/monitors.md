@@ -4,10 +4,10 @@ framework: "Langfuse"
 source_repo: "https://github.com/langfuse/langfuse-docs"
 source_branch: "main"
 source_path: "content/docs/metrics/features/monitors.mdx"
-source_commit: "4a702ece53852a6af86b3883f434adf3f5cae421"
-source_commit_short: "4a702ece"
-source_commit_date: "2026-06-23T13:41:14Z"
-generated_at: "2026-06-23T13:55:15Z"
+source_commit: "fcd1eca34a924867563c3c4e801254c4e66c0021"
+source_commit_short: "fcd1eca3"
+source_commit_date: "2026-07-25T00:45:45Z"
+generated_at: "2026-07-25T11:51:12Z"
 ---
 
 ---
@@ -18,8 +18,19 @@ description: Set threshold-based alerts on your LLM application metrics and rout
 
 # Monitors and Alerts
 
+<AvailabilityBanner
+  availability={{
+    hobby: "full",
+    core: "full",
+    pro: "full",
+    enterprise: "full",
+    selfHosted: "v4",
+  }}
+/>
+
 <Callout type="info">
-  Monitors are available on [Langfuse Cloud](https://langfuse.com/pricing) only.
+  On Langfuse Cloud, the number of monitors per organization depends on your
+  plan: **2** (Hobby), **20** (Core), **50** (Pro), and **100** (Enterprise).
 </Callout>
 
 Monitors allow you to catch cost and quality issues before they impact your users.
@@ -40,11 +51,13 @@ Navigate to [**Monitors**](https://cloud.langfuse.com/project/~/monitors) in you
 
 Choose what data the monitor measures.
 
-| Field           | Description                                                       |
-| --------------- | ----------------------------------------------------------------- |
-| **Data source** | `Observations`, `Scores (numeric)`, or `Scores (categorical)`     |
-| **Metric**      | Aggregation + measure — e.g. `avg latency`, `count`, `p95 cost`   |
-| **Filters**     | Narrow the dataset (model name, tags, user ID, environment, etc.) |
+| Field           | Description                                                                       |
+| --------------- | --------------------------------------------------------------------------------- |
+| **Data source** | `Observations`, `Scores (numeric)`, `Scores (categorical)`, or `Scores (boolean)` |
+| **Metric**      | Aggregation + measure — e.g. `avg latency`, `count`, `p95 cost`                   |
+| **Filters**     | Narrow the dataset (model name, tags, user ID, environment, Boolean value, etc.)  |
+
+For Boolean scores, the average value is the share of scores that are `true`. Use it to alert on rates such as policy-check passes or detected hallucinations.
 
 ### Set alert conditions
 

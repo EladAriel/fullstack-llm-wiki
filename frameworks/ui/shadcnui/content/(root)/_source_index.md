@@ -4,10 +4,10 @@ framework: "shadcnui"
 source_repo: "https://github.com/shadcn-ui/ui"
 source_branch: "main"
 source_path: "apps/v4/content/docs/(root)/index.mdx"
-source_commit: "5602b81d8344e0d0d7178e3bf57612662cd42957"
-source_commit_short: "5602b81d"
-source_commit_date: "2026-06-21T15:49:35+04:00"
-generated_at: "2026-06-21T12:47:26Z"
+source_commit: "4baadbc6517070ae8f8feb2c97037adc2b305544"
+source_commit_short: "4baadbc6"
+source_commit_date: "2026-07-23T23:50:36+04:00"
+generated_at: "2026-07-25T11:50:48Z"
 generated_filename: "_source_index.md"
 ---
 
@@ -49,7 +49,7 @@ _In a typical library, if you need to change a button’s behavior, you have to 
       <p>
         shadcn/ui follows a headless component architecture. This means the core
         of your app can receive fixes by updating your dependencies, for
-        instance, radix-ui or input-otp.
+        instance, @base-ui/react or input-otp.
       </p>
       <p className="mt-4">
         The topmost layer, i.e., the one closest to your design system, is not

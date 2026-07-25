@@ -1,0 +1,49 @@
+---
+type: "Framework Learn Directory Index"
+framework: "redis"
+directory: "content/operate/rs/8.0/references/rest-api/requests/bdbs/actions"
+source_repo: "https://github.com/redis/docs.git"
+source_branch: "main"
+source_commit: "9d30f68c3dad1a6b3b7d30fe604b911348ce8152"
+source_commit_short: "9d30f68c"
+source_commit_date: "2026-07-24T10:52:10-07:00"
+generated_at: "2026-07-25T11:51:22Z"
+---
+# Actions
+
+This directory contains redis learning pages related to actions.
+
+## Breadcrumbs
+
+[Wiki Home](../../../../../../../../../index.md) -> [Content](../../../../../../../../index.md) -> [Operate](../../../../../../../index.md) -> [Rs](../../../../../../index.md) -> [8.0](../../../../../index.md) -> [References](../../../../index.md) -> [Rest Api](../../../index.md) -> [Requests](../../index.md) -> [Bdbs](../index.md) -> [Actions](index.md)
+
+## Navigation
+
+- Parent: [Parent Index](../index.md)
+
+## Child Directories
+
+- None
+
+## Pages in This Directory
+
+- [Index](_index.md)
+- [Backup Reset Status](backup_reset_status.md)
+- [Export](export.md)
+- [Export Reset Status](export_reset_status.md)
+- [Import](import.md)
+- [Import Reset Status](import_reset_status.md)
+- [Optimize Shards Placement](optimize_shards_placement.md)
+- [Rebalance](rebalance.md)
+- [Recover](recover.md)
+- [Resume Traffic](resume_traffic.md)
+- [Revamp](revamp.md)
+- [Stop Traffic](stop_traffic.md)
+
+## IDE LLM Guidance
+
+When answering implementation questions related to this directory:
+
+1. Prefer the most specific page listed above.
+2. If the topic is broad, read the child directory index first.
+3. Use source metadata from each page when giving answers.

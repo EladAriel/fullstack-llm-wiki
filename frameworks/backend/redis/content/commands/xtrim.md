@@ -4,10 +4,10 @@ framework: "redis"
 source_repo: "https://github.com/redis/docs.git"
 source_branch: "main"
 source_path: "content/commands/xtrim.md"
-source_commit: "bc92ea237bbfc2117c870c904f1a3ca619073ef1"
-source_commit_short: "bc92ea23"
-source_commit_date: "2026-06-18T14:53:00-05:00"
-generated_at: "2026-06-21T11:25:32Z"
+source_commit: "9d30f68c3dad1a6b3b7d30fe604b911348ce8152"
+source_commit_short: "9d30f68c"
+source_commit_date: "2026-07-24T10:52:10-07:00"
+generated_at: "2026-07-25T11:51:22Z"
 ---
 
 ---
@@ -197,9 +197,20 @@ Specifying the value 0 as `count` disables the limiting mechanism entirely.
 ## Examples
 
 {{% redis-cli %}}
-XADD mystream * field1 A field2 B field3 C field4 D
-XTRIM mystream MAXLEN 2
-XRANGE mystream - +
+redis> XADD mystream * field1 A field2 B field3 C field4 D
+"1784722085136-0"
+redis> XTRIM mystream MAXLEN 2
+(integer) 0
+redis> XRANGE mystream - +
+1) 1) "1784722085136-0"
+   2) 1) "field1"
+      2) "A"
+      3) "field2"
+      4) "B"
+      5) "field3"
+      6) "C"
+      7) "field4"
+      8) "D"
 {{% /redis-cli %}}
 
 ## Redis Software and Redis Cloud compatibility

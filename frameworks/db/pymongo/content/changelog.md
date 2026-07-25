@@ -2,20 +2,32 @@
 type: "Framework Learn Page"
 framework: "pymongo"
 source_repo: "https://github.com/mongodb/mongo-python-driver"
-source_branch: "master"
+source_branch: "main"
 source_path: "doc/changelog.rst"
-source_commit: "1215d2f467d91038cd97a06dc043b74cf3a3edf1"
-source_commit_short: "1215d2f4"
-source_commit_date: "2026-06-18T10:29:26-04:00"
-generated_at: "2026-06-21T11:44:03Z"
+source_commit: "78f3a797d8ebf251bba96508d78a6ca305ef1c04"
+source_commit_short: "78f3a797"
+source_commit_date: "2026-07-24T12:57:51-07:00"
+generated_at: "2026-07-25T11:51:01Z"
 ---
 
 # Changelog
 
-## Changes in Version 4.18.0
+## Changes in Version 4.18.0 (2026/XX/XX)
+
+PyMongo 4.18 brings a number of changes including:
 
 - Improved TLS connection performance by reusing TLS sessions across connections
 to the same server, avoiding a full handshake on each new connection. Session resumption is supported on all Python versions for synchronous clients and on Python 3.11+ for async clients.
+
+- Improved performance for MongoDB 9.0's Intelligent Workload Management (IWM) by only retrying overload errors when doing so is expected to not worsen server conditions.
+- Redacted potentially sensitive authentication mechanism properties, including
+AWS session tokens, from the representations of `pymongo.synchronous.mongo_client.MongoClient` and `pymongo.asynchronous.mongo_client.AsyncMongoClient`.
+
+- Command monitoring events and command log messages for a single logical
+operation now share one stable `operation_id` across all of its retry attempts, so consumers can correlate a retried operation's events. As a result, `operation_id` is no longer equal to the per-attempt `request_id` for these operations.
+
+- Fixed a potential out-of-bounds read in the C extension when decoding an
+array of BSON documents. An embedded document whose declared length exceeds the bytes remaining in the array now raises `bson.errors.InvalidBSON` instead of reading past the end of the buffer.
 
 ## Changes in Version 4.17.0 (2026/04/20)
 
@@ -27,8 +39,8 @@ been deprecated and will be removed in PyMongo 5.0. These methods were deprecate
 - Added the `pymongo.asynchronous.client_session.AsyncClientSession.bind` and `pymongo.client_session.ClientSession.bind` methods
 that allow users to bind a session to all database operations within the scope of a context manager instead of having to explicitly pass the session to each individual operation. See the [Transactions docs](https://www.mongodb.com/docs/languages/python/pymongo-driver/current/crud/transactions/#methods) for examples and more information.
 
-- Added support for MongoDB's Intelligent Workload Management (IWM) and ingress connection rate limiting features.
-The driver now gracefully handles write-blocking scenarios and optimizes connection establishment during high-load conditions to maintain application availability. See the [IWM](https://www.mongodb.com/docs/atlas/production-notes) or [Overload Errors](https://www.mongodb.com/docs/atlas/overload-errors/?interface=driver&language=python) docs for more information.
+- Added support for MongoDB's Intelligent Workload Management (IWM) and ingress connection rate limiting features in MongoDB server version 9.0.
+The driver will gracefully handle write-blocking scenarios and optimizes connection establishment during high-load conditions to maintain application availability.
 
 ## Changes in Version 4.16.0 (2026/01/07)
 

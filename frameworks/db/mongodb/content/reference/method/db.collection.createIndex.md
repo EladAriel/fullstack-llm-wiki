@@ -4,10 +4,10 @@ framework: "mongodb"
 source_repo: "https://github.com/mongodb/docs.git"
 source_branch: "main"
 source_path: "content/manual/manual/source/reference/method/db.collection.createIndex.txt"
-source_commit: "96788e8ed140cbdde184ff82e1066dff4996bde4"
-source_commit_short: "96788e8e"
-source_commit_date: "2026-06-19T21:35:03-06:00"
-generated_at: "2026-06-21T07:41:52Z"
+source_commit: "ab9db26ed3d11618cdb61516d8180337d8e3f679"
+source_commit_short: "ab9db26e"
+source_commit_date: "2026-07-24T16:22:46-06:00"
+generated_at: "2026-07-25T11:51:15Z"
 ---
 
 ============================================
@@ -40,7 +40,7 @@ The :method:`~db.collection.createIndex()` method takes the following parameters
 
 The `options` document contains a set of options that controls the creation of the index. Different index types can have additional options specific for that type.
 
-Multiple index options can be specified in the same document. However, if you specify multiple option documents the :method:`db.collection.createIndex()` operation will fail.
+Multiple index options can be specified in the same document. However, if you specify multiple option documents the :method:`db.collection.createIndex()` operation fails.
 
 Consider the following :method:`db.collection.createIndex()` operation:
 
@@ -50,7 +50,7 @@ If the options specification had been split into multiple documents like this: `
 
 The following options are available for all index types unless otherwise specified:
 
-### Option for Collation
+### Options for Collation
 
 .. include:: /includes/extracts/collation-index-type-restrictions.rst
 
@@ -76,6 +76,10 @@ The following options are available for `2d <2d-index>` indexes only:
 
 `Wildcard indexes <wildcard-index-core>` can use the `wildcardProjection` option.
 
+To learn more, see:
+
+- `About Wildcard Indexes <wildcard-index-core>`
+- `Wildcard Index Restrictions <wildcard-index-restrictions>`
 ## Behaviors
 
 ### Recreating an Existing Index
@@ -122,6 +126,14 @@ For example,
 
 .. include:: /includes/index-build-improvements.rst
 
+Commit Quorum `````````````
+
+.. include:: /includes/extracts/4.4-changes-index-builds-simultaneous-fcv.rst
+
+.. include:: /includes/extracts/4.4-changes-index-builds-simultaneous.rst
+
+.. include:: /includes/indexes/template-commit-quorum-intro.rst
+
 ## Examples
 
 .. include:: /includes/sample-data-usage.rst
@@ -138,40 +150,15 @@ If the `keys` document specifies more than one field, then :method:`~db.collecti
 
 The following example creates a compound index on the `year`, `runtime`, and `title` fields:
 
-Compound indexes can include a single `hashed <index-type-hashed>` field. Compound hashed indexes require `featureCompatibilityVersion <view-fcv>` set to at least `5.0`.
-
 The following example creates a compound index on the `title` field (in ascending order) and the `runtime` field (hashed):
 
-The order of fields in a compound index is important for supporting :method:`~cursor.sort()` operations using the index.
+For more information on hashed indexes, see `index-type-hashed`.
 
-> **Seealso:** - `sort-on-multiple-fields`
-- `sort-index-prefix`
+### Create Indexes with Collation
 
-### Create Indexes with Collation Specified
+.. include:: /includes/collation-index-example.rst
 
-The following example creates an index on the `movies` collection named `title_fr`. The example creates the index with the `collation <create-index-collation>` that specifies the locale `fr` and comparison strength `2`:
-
-The following example creates a compound index named `title_category_fr` with a `collation <create-index-collation>`. The collation applies only to the index keys with string values.
-
-The collation applies to the indexed keys whose values are string.
-
-For queries or sort operations on the indexed keys that uses the same collation rules, MongoDB can use the index. The indexes use collation of `strength: 2`, which results in case-insensitive queries when the index is used. For details, see `createIndex-collation-index-use`.
-
-### Create a Wildcard Index
-
-- .. include:: /includes/extracts/wildcard-index-id.rst
-- .. include:: /includes/indexes/wildcard-restrictions.rst
-To learn more, see:
-
-- `About Wildcard Indexes <wildcard-index-core>`
-- `Wildcard Index Restrictions <wildcard-index-restrictions>`
-For examples, see:
-
-- `createIndex-method-wildcard-onepath`
-- `createIndex-method-wildcard-allpaths`
-- `createIndex-method-wildcard-inclusion`
-- `createIndex-method-wildcard-exclusion`
-Create a Wildcard Index on a Single Field Path ``````````````````````````````````````````````
+### Create a Wildcard Index on a Single Field Path
 
 The following operation creates a wildcard index on the `awards` field:
 
@@ -179,22 +166,13 @@ With this wildcard index, MongoDB indexes all scalar values of `awards`. If the 
 
 The wildcard index can support arbitrary single-field queries on `awards` or one of its nested fields:
 
-> **Note:** The path-specific wildcard index syntax is incompatible with the
-`wildcardProjection` option. See the |projection-ref| for more
-information.
-
-Create a Wildcard Index on All Field Paths ``````````````````````````````````````````
+### Create a Wildcard Index on All Field Paths
 
 The following operation creates a wildcard index on all scalar fields (excluding the `_id` field):
 
 With this wildcard index, MongoDB indexes all scalar fields for each document in the collection. If a given field is a nested document or array, the wildcard index recurses into the document or array and indexes all scalar fields in the document or array.
 
 The created index can support queries on any arbitrary field within documents in the collection:
-
-> **Note:** Wildcard indexes omit the `_id` field by default. To include the
-`_id` field in the wildcard index, you must explicitly include it
-in the `wildcardProjection` document. See |projection-ref| for
-more information.
 
 Include Specific Fields in Wildcard Index Coverage ``````````````````````````````````````````````````
 
@@ -225,12 +203,6 @@ The index can support queries on any scalar field **except** those excluded by `
 > **Note:** .. include:: /includes/extracts/wildcard-index-inclusion-exclusion.rst
 
 ### Create Index With Commit Quorum
-
-.. include:: /includes/extracts/4.4-changes-index-builds-simultaneous-fcv.rst
-
-.. include:: /includes/extracts/4.4-changes-index-builds-simultaneous.rst
-
-.. include:: /includes/indexes/template-commit-quorum-intro.rst
 
 The following operation creates an index with a `commit quorum <createIndex-method-commitQuorum>` of `"majority"`, or a simple majority of data-bearing voting members:
 

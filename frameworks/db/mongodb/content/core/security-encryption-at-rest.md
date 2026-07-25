@@ -4,10 +4,10 @@ framework: "mongodb"
 source_repo: "https://github.com/mongodb/docs.git"
 source_branch: "main"
 source_path: "content/manual/manual/source/core/security-encryption-at-rest.txt"
-source_commit: "96788e8ed140cbdde184ff82e1066dff4996bde4"
-source_commit_short: "96788e8e"
-source_commit_date: "2026-06-19T21:35:03-06:00"
-generated_at: "2026-06-21T07:41:52Z"
+source_commit: "ab9db26ed3d11618cdb61516d8180337d8e3f679"
+source_commit_short: "ab9db26e"
+source_commit_date: "2026-07-24T16:22:46-06:00"
+generated_at: "2026-07-25T11:51:15Z"
 ---
 
 ==================
@@ -28,7 +28,7 @@ MongoDB Enterprise 3.2 introduces a native encryption option for the WiredTiger 
 
 > **Note:** .. include:: /includes/fact-aes.rst
 
-If encryption is enabled, the default encryption mode that MongoDB Enterprise uses is the `AES256-CBC` (or 256-bit Advanced Encryption Standard in Cipher Block Chaining mode) via OpenSSL. AES-256 uses a symmetric key; i.e. the same key to encrypt and decrypt text. MongoDB Enterprise for Linux also supports authenticated encryption `AES256-GCM` (or 256-bit Advanced Encryption Standard in Galois/Counter Mode).
+If encryption is enabled, the default encryption mode that MongoDB Enterprise uses is the `AES256-CBC` (or 256-bit Advanced Encryption Standard in Cipher Block Chaining mode) via OpenSSL. AES-256 uses a symmetric key, meaning the same key to encrypt and decrypt text. MongoDB Enterprise for Linux also supports authenticated encryption `AES256-GCM` (or 256-bit Advanced Encryption Standard in Galois/Counter Mode).
 
 The Encrypted Storage Engine uses the certified cryptography provider of the underlying operating system to perform cryptographic operations. For example, a MongoDB installation on a Linux operating system uses the OpenSSL `libcrypto` FIPS-140 module.
 
@@ -52,7 +52,7 @@ The data encryption process includes:
 - Generating keys for each database.
 - Encrypting data with the database keys.
 - Encrypting the database keys with the master key.
-The encryption occurs transparently in the storage layer; i.e. all data files are fully encrypted from a filesystem perspective, and data only exists in an unencrypted state in memory and during transmission.
+The encryption occurs transparently in the storage layer, meaning all data files are fully encrypted from a filesystem perspective, and data only exists in an unencrypted state in memory and during transmission.
 
 To encrypt all of MongoDB's network traffic, you can use TLS/SSL (Transport Layer Security/Secure Sockets Layer). See `/tutorial/configure-ssl` and `/tutorial/configure-ssl-clients`.
 
@@ -62,7 +62,7 @@ To encrypt all of MongoDB's network traffic, you can use TLS/SSL (Transport Laye
 
 The database keys are internal to the server and are only paged to disk in an encrypted format. MongoDB never pages the master key to disk under any circumstances.
 
-Only the master key is external to the server (i.e. kept separate from the data and the database keys), and requires external management. To manage the master key, MongoDB's encrypted storage engine supports two key management options:
+Only the master key is external to the server (which means it is kept separate from the data and the database keys), and requires external management. To manage the master key, MongoDB's encrypted storage engine supports two key management options:
 
 - Integration with a third party key management appliance via the Key
 Management Interoperability Protocol (KMIP). **Recommended**
@@ -109,7 +109,7 @@ file. `syslog` cannot be used as the destination.
 
 Unencrypted Audit Log and Process Log `````````````````````````````````````
 
-This section applies if you are not using an external Key Management Interoperability Protocol (KMIP) server to manage keys for encrypting the audit log as shown in the previous section.
+Use this section if you are not using a Key Management Interoperability Protocol (KMIP) server for audit log encryption.
 
 The audit log file is not encrypted as a part of MongoDB's encrypted storage engine. A :binary:`~bin.mongod` running with `logging <monitoring-standard-loggging>` may output potentially sensitive information to log files as a part of normal operations, depending on the configured `log verbosity <log-messages-configure-verbosity>`.
 
@@ -119,7 +119,7 @@ See the `log redaction <monitoring-log-redaction>` manual entry for more informa
 
 ## Application Level Encryption
 
-Starting in MongoDB 7.0, you can use `<qe-manual-feature-qe>` to enable end-to-end encryption. For details on getting started, see the `<qe-quick-start>`.
+Starting in MongoDB 7.0, you can use `qe-manual-feature-qe` to enable end-to-end encryption. For details on getting started, see `qe-quick-start`.
 
 .. include:: /includes/partners-security.rst
 

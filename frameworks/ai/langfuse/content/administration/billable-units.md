@@ -4,10 +4,10 @@ framework: "Langfuse"
 source_repo: "https://github.com/langfuse/langfuse-docs"
 source_branch: "main"
 source_path: "content/docs/administration/billable-units.mdx"
-source_commit: "4a702ece53852a6af86b3883f434adf3f5cae421"
-source_commit_short: "4a702ece"
-source_commit_date: "2026-06-23T13:41:14Z"
-generated_at: "2026-06-23T13:55:15Z"
+source_commit: "fcd1eca34a924867563c3c4e801254c4e66c0021"
+source_commit_short: "fcd1eca3"
+source_commit_date: "2026-07-25T00:45:45Z"
+generated_at: "2026-07-25T11:51:12Z"
 ---
 
 ---
@@ -17,15 +17,19 @@ description: Learn how billable units are calculated in Langfuse.
 
 # Billable Units
 
-Langfuse [pricing](/pricing) is based on the number of ingested units per billing period. Units are either [traces](/docs/observability/data-model#traces), [observations](/docs/observability/data-model#observations) or [scores](/docs/evaluation/scores/data-model#scores).
+Langfuse [pricing](/pricing) is based on the number of ingested units per billing period. Units are either [traces](/docs/observability/data-model#observations-and-traces), [observations](/docs/observability/data-model#observations-and-traces) or [scores](/docs/evaluation/scores/data-model#scores).
 
 `Units` = `Count of Traces` + `Count of Observations` + `Count of Scores`
 
+## Langfuse Cloud
+
 For Langfuse Cloud, you can use our [pricing calculator](/pricing?calculatorOpen=true) to estimate your monthly costs based on your expected usage.
 
-## Self-hosted (OSS)
+## Self-hosted (OSS/Enterprise)
 
-Self-hosted Langfuse (OSS) is free under the MIT license, so there is no usage-based bill. The unit definition above is still useful when you want to quantify your data volume, for example to estimate the cost of moving to [Langfuse Cloud](/pricing) or to size a [self-hosted](/self-hosting) deployment.
+Self-hosted Langfuse (OSS) is free under the MIT license, so there is no usage-based billing. For self-hosted Langfuse Enterprise, billable units are one component of the pricing.
+
+The unit definition above is still useful when you want to quantify your data volume, for example to estimate the cost of moving to [Langfuse Cloud](/pricing) or to size a [self-hosted](/self-hosting) deployment.
 
 You can read your unit counts directly from the built-in **Langfuse Usage Management** dashboard, one of Langfuse's curated dashboards (see [Custom Dashboards](/docs/metrics/features/custom-dashboards)).
 

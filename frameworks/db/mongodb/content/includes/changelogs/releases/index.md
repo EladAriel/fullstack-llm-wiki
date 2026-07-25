@@ -4,10 +4,10 @@ framework: "mongodb"
 directory: "content/includes/changelogs/releases"
 source_repo: "https://github.com/mongodb/docs.git"
 source_branch: "main"
-source_commit: "96788e8ed140cbdde184ff82e1066dff4996bde4"
-source_commit_short: "96788e8e"
-source_commit_date: "2026-06-19T21:35:03-06:00"
-generated_at: "2026-06-21T07:41:52Z"
+source_commit: "ab9db26ed3d11618cdb61516d8180337d8e3f679"
+source_commit_short: "ab9db26e"
+source_commit_date: "2026-07-24T16:22:46-06:00"
+generated_at: "2026-07-25T11:51:15Z"
 ---
 # Releases
 
@@ -260,6 +260,7 @@ This directory contains mongodb learning pages related to releases.
 - [7.0.35](7.0.35.md)
 - [7.0.36](7.0.36.md)
 - [7.0.37](7.0.37.md)
+- [7.0.39](7.0.39.md)
 - [7.0.4](7.0.4.md)
 - [7.0.5](7.0.5.md)
 - [7.0.6](7.0.6.md)
@@ -290,6 +291,7 @@ This directory contains mongodb learning pages related to releases.
 - [8.0.24](8.0.24.md)
 - [8.0.25](8.0.25.md)
 - [8.0.26](8.0.26.md)
+- [8.0.28](8.0.28.md)
 - [8.0.3](8.0.3.md)
 - [8.0.4](8.0.4.md)
 - [8.0.5](8.0.5.md)
@@ -303,6 +305,7 @@ This directory contains mongodb learning pages related to releases.
 - [8.2.1](8.2.1.md)
 - [8.2.10](8.2.10.md)
 - [8.2.11](8.2.11.md)
+- [8.2.12](8.2.12.md)
 - [8.2.2](8.2.2.md)
 - [8.2.3](8.2.3.md)
 - [8.2.4](8.2.4.md)
@@ -314,6 +317,7 @@ This directory contains mongodb learning pages related to releases.
 - [8.3.2](8.3.2.md)
 - [8.3.3](8.3.3.md)
 - [8.3.4](8.3.4.md)
+- [8.3.7](8.3.7.md)
 
 ## IDE LLM Guidance
 

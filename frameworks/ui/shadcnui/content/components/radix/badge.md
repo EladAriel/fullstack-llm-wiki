@@ -4,10 +4,10 @@ framework: "shadcnui"
 source_repo: "https://github.com/shadcn-ui/ui"
 source_branch: "main"
 source_path: "apps/v4/content/docs/components/radix/badge.mdx"
-source_commit: "5602b81d8344e0d0d7178e3bf57612662cd42957"
-source_commit_short: "5602b81d"
-source_commit_date: "2026-06-21T15:49:35+04:00"
-generated_at: "2026-06-21T12:47:26Z"
+source_commit: "4baadbc6517070ae8f8feb2c97037adc2b305544"
+source_commit_short: "4baadbc6"
+source_commit_date: "2026-07-23T23:50:36+04:00"
+generated_at: "2026-07-25T11:50:48Z"
 ---
 
 ---
@@ -41,7 +41,11 @@ npx shadcn@latest add badge
 
 <Step>Copy and paste the following code into your project.</Step>
 
-<ComponentSource name="badge" title="components/ui/badge.tsx" />
+<ComponentSource
+  styleName="radix-nova"
+  name="badge"
+  title="components/ui/badge.tsx"
+/>
 
 <Step>Update the import paths to match your project setup.</Step>
 
@@ -61,33 +65,31 @@ import { Badge } from "@/components/ui/badge"
 <Badge variant="default | outline | secondary | destructive">Badge</Badge>
 ```
 
-## Examples
-
-### Variants
+## Variants
 
 Use the `variant` prop to change the variant of the badge.
 
 <ComponentPreview styleName="radix-nova" name="badge-variants" />
 
-### With Icon
+## With Icon
 
 You can render an icon inside the badge. Use `data-icon="inline-start"` to render the icon on the left and `data-icon="inline-end"` to render the icon on the right.
 
 <ComponentPreview styleName="radix-nova" name="badge-icon" />
 
-### With Spinner
+## With Spinner
 
 You can render a spinner inside the badge. Remember to add the `data-icon="inline-start"` or `data-icon="inline-end"` prop to the spinner.
 
 <ComponentPreview styleName="radix-nova" name="badge-spinner" />
 
-### Link
+## Link
 
 Use the `asChild` prop to render a link as a badge.
 
 <ComponentPreview styleName="radix-nova" name="badge-link" />
 
-### Custom Colors
+## Custom Colors
 
 You can customize the colors of a badge by adding custom classes such as `bg-green-50 dark:bg-green-800` to the `Badge` component.
 

@@ -4,10 +4,10 @@ framework: "mongodb"
 source_repo: "https://github.com/mongodb/docs.git"
 source_branch: "main"
 source_path: "content/manual/manual/source/reference/operator/query/all.txt"
-source_commit: "96788e8ed140cbdde184ff82e1066dff4996bde4"
-source_commit_short: "96788e8e"
-source_commit_date: "2026-06-19T21:35:03-06:00"
-generated_at: "2026-06-21T07:41:52Z"
+source_commit: "ab9db26ed3d11618cdb61516d8180337d8e3f679"
+source_commit_short: "ab9db26e"
+source_commit_date: "2026-07-24T16:22:46-06:00"
+generated_at: "2026-07-25T11:51:15Z"
 ---
 
 ===============================
@@ -30,7 +30,7 @@ To specify an :query:`$all` expression, use the following prototype:
 
 ### Equivalent to `$and` Operation
 
-The :query:`$all` is equivalent to an :query:`$and` operation of the specified values; i.e. the following statement:
+The :query:`$all` operator is equivalent to an :query:`$and` operation for the specified values. For example, the following statement:
 
 ```javascript
 { tags: { $all: [ "ssl" , "security" ] } }
@@ -44,8 +44,12 @@ is equivalent to:
 
 ### Nested Array
 
-When passed an array of a nested array (e.g. `[ [ "A" ] ]` ), :query:`$all` matches documents where the field contains the nested array as an element (e.g. `field: [ [ "A" ], ... ]`), or the field equals the nested array (e.g. `field: [ "A" ]`).
+When passed an array containing a nested array (for example, `[ [ "A" ] ]`), :query:`$all` matches documents where the field meets either of these conditions:
 
+- The field contains the nested array as an element, such as
+`field: [ [ "A" ], ... ]`.
+
+- The field equals the nested array, such as `field: [ "A" ]`.
 For example, consider the following query:
 
 ```javascript
@@ -77,7 +81,7 @@ When passed an empty array, :query:`$all` matches no documents.
 
 ## Examples
 
-The exampless in this section use the `inventory` collection that contains the following documents:
+The examples in this section use the `inventory` collection that contains the following documents:
 
 ```javascript
 db.inventory.insertMany ( [
@@ -183,7 +187,7 @@ The query returns the following documents:
    tags: [ "school", "book"],
    qty: [
       { size: "S", num: 10, color: "blue" },
-      { "size: "M", num: 100, color: "blue" },
+      { size: "M", num: 100, color: "blue" },
       { size: "L", num: 100, color: "green" }
    ]
 }
@@ -198,7 +202,7 @@ The query returns the following documents:
 }
 ```
 
-The :query:`$all` operator exists to support queries on arrays. But you may use the :query:`$all` operator to select against a non-array `field`, as in the following example:
+The :query:`$all` operator exists to support queries on arrays. You can also use `$all` to select against a non-array `field`, as in the following example:
 
 ```javascript
 db.inventory.find( { "qty.num": { $all: [ 50 ] } } )
@@ -210,10 +214,9 @@ db.inventory.find( { "qty.num": { $all: [ 50 ] } } )
 db.inventory.find( { "qty.num" : 50 } )
 ```
 
-Both queries will select all documents in the `inventory` collection where the value of the `num` field equals `50`.
+Both queries select all documents in the `inventory` collection where the value of the `num` field equals `50`.
 
-> **Note:** .. Comment -- do we need this note?
-In most cases, MongoDB does not treat arrays as sets. This operator
+> **Note:** In most cases, MongoDB does not treat arrays as sets. This operator
 provides a notable exception to this approach.
 
 ## Additional Examples

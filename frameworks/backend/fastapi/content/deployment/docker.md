@@ -4,10 +4,10 @@ framework: "FastAPI"
 source_repo: "https://github.com/fastapi/fastapi.git"
 source_branch: "master"
 source_path: "docs/en/docs/deployment/docker.md"
-source_commit: "0cb4a8e284b450abbccb71c543ad7757de46c0b2"
-source_commit_short: "0cb4a8e2"
-source_commit_date: "2026-06-20T16:31:34Z"
-generated_at: "2026-06-21T07:06:10Z"
+source_commit: "255b912928904e3ba5980425a54d6837c8bd1a1c"
+source_commit_short: "255b9129"
+source_commit_date: "2026-07-24T21:15:37Z"
+generated_at: "2026-07-25T11:50:10Z"
 ---
 
 # FastAPI in Containers - Docker { #fastapi-in-containers-docker }
@@ -117,36 +117,32 @@ This is what you would want to do in **most cases**, for example:
 
 ### Package Requirements { #package-requirements }
 
-You would normally have the **package requirements** for your application in some file.
+When you manage your project with `uv`, its direct dependencies are declared in `pyproject.toml` and the exact resolved versions are stored in `uv.lock`.
 
-It would depend mainly on the tool you use to **install** those requirements.
-
-The most common way to do it is to have a file `requirements.txt` with the package names and their versions, one per line.
-
-You would of course use the same ideas you read in [About FastAPI versions](versions.md) to set the ranges of versions.
-
-For example, your `requirements.txt` could look like:
-
-```
-fastapi[standard]>=0.113.0,<0.114.0
-pydantic>=2.7.0,<3.0.0
-```
-
-And you would normally install those package dependencies with `pip`, for example:
+You can add the packages your application needs with:
 
 <div class="termy">
 
 ```console
-$ pip install -r requirements.txt
+$ uv add "fastapi[standard]" pydantic
 ---> 100%
-Successfully installed fastapi pydantic
 ```
 
 </div>
 
 /// note
 
-There are other formats and tools to define and install package dependencies.
+The Dockerfile below uses `pip` inside the container. You can export the locked dependencies from your uv project to the `requirements.txt` format it expects:
+
+<div class="termy">
+
+```console
+$ uv export --format requirements-txt --no-dev --no-emit-project --output-file requirements.txt
+```
+
+</div>
+
+The generated `requirements.txt` is an export for the container build. Continue managing dependencies with `uv add` and regenerate it when `uv.lock` changes.
 
 ///
 
@@ -384,7 +380,7 @@ You will see the automatic interactive API documentation (provided by [Swagger U
 
 And you can also go to [http://192.168.99.100/redoc](http://192.168.99.100/redoc) or [http://127.0.0.1/redoc](http://127.0.0.1/redoc) (or equivalent, using your Docker host).
 
-You will see the alternative automatic documentation (provided by [ReDoc](https://github.com/Rebilly/ReDoc)):
+You will see the alternative automatic documentation (provided by [ReDoc](https://github.com/Redocly/redoc)):
 
 ![ReDoc](https://fastapi.tiangolo.com/img/index/index-02-redoc-simple.png)
 

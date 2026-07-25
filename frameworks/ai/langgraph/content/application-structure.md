@@ -4,10 +4,10 @@ framework: "LangGraph"
 source_repo: "https://github.com/langchain-ai/docs"
 source_branch: "main"
 source_path: "src/oss/langgraph/application-structure.mdx"
-source_commit: "d037cd23f3f298721837c403b2ffd289e31d56d0"
-source_commit_short: "d037cd23"
-source_commit_date: "2026-06-23T11:18:55+02:00"
-generated_at: "2026-06-23T13:54:20Z"
+source_commit: "2aae1dfc98ee953a9a5185fb6fcdd9efb3f4d878"
+source_commit_short: "2aae1dfc"
+source_commit_date: "2026-07-25T00:27:23Z"
+generated_at: "2026-07-25T11:51:08Z"
 ---
 
 ---
@@ -24,7 +24,7 @@ LangSmith Deployment is a managed hosting platform for deploying and scaling Lan
 
 ## Key concepts
 
-To deploy using the LangSmith, the following information should be provided:
+To deploy using LangSmith, the following information should be provided:
 
 1. A [LangGraph configuration file](#configuration-file-concepts) (`langgraph.json`) that specifies the dependencies, graphs, and environment variables to use for the application.
 2. The [graphs](#graphs) that implement the logic of the application.

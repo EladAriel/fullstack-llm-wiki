@@ -4,10 +4,10 @@ framework: "redis"
 source_repo: "https://github.com/redis/docs.git"
 source_branch: "main"
 source_path: "content/develop/clients/redis-py/async.md"
-source_commit: "bc92ea237bbfc2117c870c904f1a3ca619073ef1"
-source_commit_short: "bc92ea23"
-source_commit_date: "2026-06-18T14:53:00-05:00"
-generated_at: "2026-06-21T11:25:32Z"
+source_commit: "9d30f68c3dad1a6b3b7d30fe604b911348ce8152"
+source_commit_short: "9d30f68c"
+source_commit_date: "2026-07-24T10:52:10-07:00"
+generated_at: "2026-07-25T11:51:22Z"
 ---
 
 ---
@@ -33,7 +33,7 @@ namespace. It mirrors the synchronous client API, so most code patterns
 translate directly — you `await` commands instead of calling them.
 
 Use the async client for I/O-bound workloads, for integration with async web
-frameworks (such as [FastAPI](https://fastapi.tiangolo.com/), [Starlette](https://www.starlette.io/), [aiohttp](https://docs.aiohttp.org/en/stable/), or [Sanic](https://sanic.dev/en/), or when you need
+frameworks (such as [FastAPI]({{< relref "/integrate/fastapi" >}}), [Starlette](https://www.starlette.io/), [aiohttp](https://docs.aiohttp.org/en/stable/), or [Sanic](https://sanic.dev/en/), or when you need
 to run many concurrent Redis operations from a single process. For simple
 scripts, CPU-bound work, or codebases without an existing event loop, the
 synchronous client is usually a better choice.
@@ -151,7 +151,7 @@ Always close clients and pools when you're done:
   single scope.
 - For longer-lived clients, call `await r.aclose()` explicitly. (The older
   `close()` method is deprecated.)
-- For frameworks with startup/shutdown hooks — for example FastAPI's
+- For frameworks with startup/shutdown hooks — for example [FastAPI]({{< relref "/integrate/fastapi" >}})'s
   `lifespan` — create the client or pool at startup and close it at
   shutdown so connections aren't leaked between process restarts.
 

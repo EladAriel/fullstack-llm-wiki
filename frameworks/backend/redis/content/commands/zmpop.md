@@ -4,10 +4,10 @@ framework: "redis"
 source_repo: "https://github.com/redis/docs.git"
 source_branch: "main"
 source_path: "content/commands/zmpop.md"
-source_commit: "bc92ea237bbfc2117c870c904f1a3ca619073ef1"
-source_commit_short: "bc92ea23"
-source_commit_date: "2026-06-18T14:53:00-05:00"
-generated_at: "2026-06-21T11:25:32Z"
+source_commit: "9d30f68c3dad1a6b3b7d30fe604b911348ce8152"
+source_commit_short: "9d30f68c"
+source_commit_date: "2026-07-24T10:52:10-07:00"
+generated_at: "2026-07-25T11:51:22Z"
 ---
 
 ---
@@ -132,17 +132,43 @@ The number of members to pop. Defaults to 1.
 ## Examples
 
 {{% redis-cli %}}
-ZMPOP 1 notsuchkey MIN
-ZADD myzset 1 "one" 2 "two" 3 "three"
-ZMPOP 1 myzset MIN
-ZRANGE myzset 0 -1 WITHSCORES
-ZMPOP 1 myzset MAX COUNT 10
-ZADD myzset2 4 "four" 5 "five" 6 "six"
-ZMPOP 2 myzset myzset2 MIN COUNT 10
-ZRANGE myzset 0 -1 WITHSCORES
-ZMPOP 2 myzset myzset2 MAX COUNT 10
-ZRANGE myzset2 0 -1 WITHSCORES
-EXISTS myzset myzset2
+redis> ZMPOP 1 notsuchkey MIN
+(nil)
+redis> ZADD myzset 1 "one" 2 "two" 3 "three"
+(integer) 3
+redis> ZMPOP 1 myzset MIN
+1) "myzset"
+2) 1) 1) "one"
+      2) "1"
+redis> ZRANGE myzset 0 -1 WITHSCORES
+1) "two"
+2) "2"
+3) "three"
+4) "3"
+redis> ZMPOP 1 myzset MAX COUNT 10
+1) "myzset"
+2) 1) 1) "three"
+      2) "3"
+   2) 1) "two"
+      2) "2"
+redis> ZADD myzset2 4 "four" 5 "five" 6 "six"
+(integer) 3
+redis> ZMPOP 2 myzset myzset2 MIN COUNT 10
+1) "myzset2"
+2) 1) 1) "four"
+      2) "4"
+   2) 1) "five"
+      2) "5"
+   3) 1) "six"
+      2) "6"
+redis> ZRANGE myzset 0 -1 WITHSCORES
+(empty array)
+redis> ZMPOP 2 myzset myzset2 MAX COUNT 10
+(nil)
+redis> ZRANGE myzset2 0 -1 WITHSCORES
+(empty array)
+redis> EXISTS myzset myzset2
+(integer) 0
 {{% /redis-cli %}}
 
 ## Redis Software and Redis Cloud compatibility

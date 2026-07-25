@@ -4,10 +4,10 @@ framework: "pydantic"
 source_repo: "https://github.com/pydantic/pydantic"
 source_branch: "main"
 source_path: "docs/integrations/aws_lambda.md"
-source_commit: "363728fe0b353db1a1fcb44aac5c38fd96a8cc20"
-source_commit_short: "363728fe"
-source_commit_date: "2026-06-20T11:20:58+01:00"
-generated_at: "2026-06-21T11:37:01Z"
+source_commit: "a2a6577d4c329dd574a45dbb01a8feaa16b1ad3d"
+source_commit_short: "a2a6577d"
+source_commit_date: "2026-07-23T15:38:17Z"
+generated_at: "2026-07-25T11:50:12Z"
 ---
 
 `pydantic` integrates well with AWS Lambda functions. In this guide, we'll discuss how to setup `pydantic` for an AWS Lambda function.
@@ -126,3 +126,10 @@ If you're still struggling with installing `pydantic` for your AWS Lambda, you m
 ### Validating `event` and `context` data
 
 Check out our [blog post](https://pydantic.dev/articles/lambda-intro) to learn more about how to use `pydantic` to validate `event` and `context` data in AWS Lambda functions.
+
+!!! tip "Logfire integration"
+    Validation failures can be particularly hard to debug in Lambda: you can't attach a debugger, and the
+    event that caused the failure disappears with the invocation. If you record validations with
+    [Logfire](../integrations/logfire.md), each failed validation is stored with the payload that caused
+    it, and its [AWS Lambda integration](https://pydantic.dev/docs/logfire/integrations/aws-lambda/)
+    captures the surrounding invocation.

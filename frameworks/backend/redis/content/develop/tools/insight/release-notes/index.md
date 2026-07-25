@@ -4,10 +4,10 @@ framework: "redis"
 directory: "content/develop/tools/insight/release-notes"
 source_repo: "https://github.com/redis/docs.git"
 source_branch: "main"
-source_commit: "bc92ea237bbfc2117c870c904f1a3ca619073ef1"
-source_commit_short: "bc92ea23"
-source_commit_date: "2026-06-18T14:53:00-05:00"
-generated_at: "2026-06-21T11:25:32Z"
+source_commit: "9d30f68c3dad1a6b3b7d30fe604b911348ce8152"
+source_commit_short: "9d30f68c"
+source_commit_date: "2026-07-24T10:52:10-07:00"
+generated_at: "2026-07-25T11:51:22Z"
 ---
 # Release Notes
 
@@ -67,6 +67,7 @@ This directory contains redis learning pages related to release notes.
 - [V.3.4.1](v.3.4.1.md)
 - [V.3.4.2](v.3.4.2.md)
 - [V.3.6.0](v.3.6.0.md)
+- [V.3.8.0](v.3.8.0.md)
 - [V1.0.0](v1.0.0.md)
 - [V1.1.0](v1.1.0.md)
 - [V1.10.0](v1.10.0.md)

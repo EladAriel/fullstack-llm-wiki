@@ -4,10 +4,10 @@ framework: "redis"
 source_repo: "https://github.com/redis/docs.git"
 source_branch: "main"
 source_path: "content/operate/kubernetes/architecture/_index.md"
-source_commit: "bc92ea237bbfc2117c870c904f1a3ca619073ef1"
-source_commit_short: "bc92ea23"
-source_commit_date: "2026-06-18T14:53:00-05:00"
-generated_at: "2026-06-21T11:25:32Z"
+source_commit: "9d30f68c3dad1a6b3b7d30fe604b911348ce8152"
+source_commit_short: "9d30f68c"
+source_commit_date: "2026-07-24T10:52:10-07:00"
+generated_at: "2026-07-25T11:51:22Z"
 ---
 
 ---
@@ -96,25 +96,25 @@ See the [RedisEnterpriseDatabase (REDB) API Reference]({{<relref "/operate/kuber
 
 ## Security
 
-Redis Enterprise for Kubernetes uses [secrets](https://kubernetes.io/docs/concepts/configuration/secret/) to manage your cluster credentials, cluster certificates, and client certificates. You can configure [LDAP]({{<relref "/operate/kubernetes/security/ldap">}}) and [internode encryption]({{<relref "/operate/kubernetes/security/internode-encryption">}}) using the [RedisEnterpriseCluster (REC)](#redisenterprisecluster-rec) spec.
+Redis Enterprise for Kubernetes uses [secrets](https://kubernetes.io/docs/concepts/configuration/secret/) to manage your cluster credentials, cluster certificates, and client certificates. You can configure [LDAP]({{<relref "/operate/kubernetes/security/authentication/ldap">}}) and [internode encryption]({{<relref "/operate/kubernetes/security/certificates/internode-encryption">}}) using the [RedisEnterpriseCluster (REC)](#redisenterprisecluster-rec) spec.
 
 ### REC credentials
 
 Redis Enterprise for Kubernetes uses the [RedisEnterpriseCluster (REC)]({{<relref "/operate/kubernetes/reference/api/redis_enterprise_cluster_api">}}) [custom resource](https://kubernetes.io/docs/concepts/extend-kubernetes/api-extension/custom-resources/) to create a Redis Enterprise cluster. During creation it generates random credentials for the operator to use. The credentials are saved in a Kubernetes (K8s) [secret](https://kubernetes.io/docs/concepts/configuration/secret/). The secret name defaults to the name of the cluster.
 
-See [Manage REC credentials]({{<relref "/operate/kubernetes/security/manage-rec-credentials">}}) for more details.
+See [Manage REC credentials]({{<relref "/operate/kubernetes/security/authentication/manage-rec-credentials">}}) for more details.
 
 ### REC certificates
 
 By default, Redis Enterprise Software for Kubernetes generates TLS certificates for the cluster during creation. These self-signed certificates are generated on the first node of each Redis Enterprise cluster (REC) and are copied to all other nodes in the cluster.
 
-See [Manage REC certificates]({{<relref "/operate/kubernetes/security/manage-rec-certificates">}}) for more details.
+See [Manage REC certificates]({{<relref "/operate/kubernetes/security/certificates/manage-rec-certificates">}}) for more details.
 
 ### Client certificates
 
 For each client certificate you want to use, you need to create a [Kubernetes secret](https://kubernetes.io/docs/concepts/configuration/secret/) to hold it. You can then reference that secret in your [Redis Enterprise database (REDB)](#redisenterprisedatabase-redb) custom resource.
 
-See [Add client certificates]({{<relref "/operate/kubernetes/security/add-client-certificates">}}) for more details.
+See [Add client certificates]({{<relref "/operate/kubernetes/security/certificates/add-client-certificates">}}) for more details.
 
 ## Storage
 

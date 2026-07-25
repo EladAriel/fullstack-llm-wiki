@@ -4,10 +4,10 @@ framework: "shadcnui"
 directory: "content"
 source_repo: "https://github.com/shadcn-ui/ui"
 source_branch: "main"
-source_commit: "5602b81d8344e0d0d7178e3bf57612662cd42957"
-source_commit_short: "5602b81d"
-source_commit_date: "2026-06-21T15:49:35+04:00"
-generated_at: "2026-06-21T12:47:26Z"
+source_commit: "4baadbc6517070ae8f8feb2c97037adc2b305544"
+source_commit_short: "4baadbc6"
+source_commit_date: "2026-07-23T23:50:36+04:00"
+generated_at: "2026-07-25T11:50:48Z"
 ---
 # Content
 
@@ -28,9 +28,12 @@ This directory contains shadcnui learning pages related to content.
 - [Components](components/index.md) - pages related to components
 - [Dark Mode](dark-mode/index.md) - pages related to dark mode
 - [Forms](forms/index.md) - pages related to forms
+- [Helpers](helpers/index.md) - pages related to helpers
 - [Installation](installation/index.md) - pages related to installation
+- [React](react/index.md) - pages related to react
 - [Registry](registry/index.md) - pages related to registry
 - [Rtl](rtl/index.md) - pages related to rtl
+- [Utils](utils/index.md) - pages related to utils
 
 ## Pages in This Directory
 

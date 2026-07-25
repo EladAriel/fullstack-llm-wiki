@@ -4,10 +4,10 @@ framework: "redis"
 source_repo: "https://github.com/redis/docs.git"
 source_branch: "main"
 source_path: "content/integrate/redis-data-integration/reference/cli/redis-di-delete-context.md"
-source_commit: "bc92ea237bbfc2117c870c904f1a3ca619073ef1"
-source_commit_short: "bc92ea23"
-source_commit_date: "2026-06-18T14:53:00-05:00"
-generated_at: "2026-06-21T11:25:32Z"
+source_commit: "9d30f68c3dad1a6b3b7d30fe604b911348ce8152"
+source_commit_short: "9d30f68c"
+source_commit_date: "2026-07-24T10:52:10-07:00"
+generated_at: "2026-07-25T11:51:22Z"
 ---
 
 ---
@@ -20,50 +20,26 @@ categories: ["redis-di"]
 aliases:
 ---
 
+Deletes a context from the `~/.redis-di` context file. Because this is destructive, the command asks
+for confirmation unless you pass `--force`.
+
 ## Usage
 
 ```
-Usage: redis-di delete-context [OPTIONS] CONTEXT_NAME
+redis-di delete-context <name> [flags]
 ```
 
 ## Options
 
-- `log_level`:
-  - Type: Choice(['TRACE', 'DEBUG', 'INFO', 'WARNING', 'ERROR', 'CRITICAL'])
-  - Default: `info`
-  - Usage: `--log-level
--l`
+| Option    | Description                   |
+| :-------- | :---------------------------- |
+| `--force` | Skip the confirmation prompt. |
 
-- `context_name` (REQUIRED):
-  - Type: STRING
-  - Default: `none`
-  - Usage: `context-name`
+This command also accepts the
+[global options]({{< relref "/integrate/redis-data-integration/reference/cli/redis-di#global-options" >}}).
 
-- `force`:
-  - Type: BOOL
-  - Default: `false`
-  - Usage: `--force
--f`
+## Example
 
-  Force operation. Skips verification prompts
-
-- `help`:
-  - Type: BOOL
-  - Default: `false`
-  - Usage: `--help`
-
-  Show this message and exit.
-
-## CLI help
-
-```
-Usage: redis-di delete-context [OPTIONS] CONTEXT_NAME
-
-  Deletes a context
-
-Options:
-  -l, --log-level [TRACE|DEBUG|INFO|WARNING|ERROR|CRITICAL]
-                                  [default: INFO]
-  -f, --force                     Force operation. Skips verification prompts
-  --help                          Show this message and exit.
+```bash
+redis-di delete-context dev --force
 ```

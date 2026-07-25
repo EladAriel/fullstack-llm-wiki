@@ -4,10 +4,10 @@ framework: "redis"
 source_repo: "https://github.com/redis/docs.git"
 source_branch: "main"
 source_path: "content/operate/kubernetes/reference/_index.md"
-source_commit: "bc92ea237bbfc2117c870c904f1a3ca619073ef1"
-source_commit_short: "bc92ea23"
-source_commit_date: "2026-06-18T14:53:00-05:00"
-generated_at: "2026-06-21T11:25:32Z"
+source_commit: "9d30f68c3dad1a6b3b7d30fe604b911348ce8152"
+source_commit_short: "9d30f68c"
+source_commit_date: "2026-07-24T10:52:10-07:00"
+generated_at: "2026-07-25T11:51:22Z"
 ---
 
 ---
@@ -99,6 +99,15 @@ Review complete API specifications for all Redis Enterprise custom resources:
 
 - [Active-Active database API (REAADB)]({{< relref "/operate/kubernetes/reference/api/redis_enterprise_active_active_database_api" >}}) - Manage Active-Active databases
 - [Remote cluster API (RERC)]({{< relref "/operate/kubernetes/reference/api/redis_enterprise_remote_cluster_api" >}}) - Configure remote cluster connections
+
+### Access control resources
+
+- [RedisEnterpriseUser API (REUSER)]({{< relref "/operate/kubernetes/reference/api/redis_enterprise_user_api" >}}) - Manage users for access control
+- [RedisEnterpriseRole API (REROLE)]({{< relref "/operate/kubernetes/reference/api/redis_enterprise_role_api" >}}) - Define roles scoped to selected databases
+- [RedisEnterpriseRoleBinding API (REROLEBINDING)]({{< relref "/operate/kubernetes/reference/api/redis_enterprise_role_binding_api" >}}) - Bind users to a scoped role
+- [RedisEnterpriseClusterRole API (RECROLE)]({{< relref "/operate/kubernetes/reference/api/redis_enterprise_cluster_role_api" >}}) - Define cluster-scoped roles
+- [RedisEnterpriseClusterRoleBinding API (RECROLEBINDING)]({{< relref "/operate/kubernetes/reference/api/redis_enterprise_cluster_role_binding_api" >}}) - Bind users to a cluster-scoped role
+- [RedisEnterpriseACL API (REACL)]({{< relref "/operate/kubernetes/reference/api/redis_enterprise_acl_api" >}}) - Define access control lists
 
 ## Compatibility
 

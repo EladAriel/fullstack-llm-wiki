@@ -4,10 +4,10 @@ framework: "shadcnui"
 source_repo: "https://github.com/shadcn-ui/ui"
 source_branch: "main"
 source_path: "apps/v4/content/docs/components/radix/button.mdx"
-source_commit: "5602b81d8344e0d0d7178e3bf57612662cd42957"
-source_commit_short: "5602b81d"
-source_commit_date: "2026-06-21T15:49:35+04:00"
-generated_at: "2026-06-21T12:47:26Z"
+source_commit: "4baadbc6517070ae8f8feb2c97037adc2b305544"
+source_commit_short: "4baadbc6"
+source_commit_date: "2026-07-23T23:50:36+04:00"
+generated_at: "2026-07-25T11:50:48Z"
 ---
 
 ---
@@ -89,67 +89,65 @@ You can also enable this during project setup with `npx shadcn@latest init --poi
 }
 ```
 
-## Examples
-
-### Size
+## Size
 
 Use the `size` prop to change the size of the button.
 
 <ComponentPreview styleName="radix-nova" name="button-size" />
 
-### Default
+## Default
 
 <ComponentPreview styleName="radix-nova" name="button-default" />
 
-### Outline
+## Outline
 
 <ComponentPreview styleName="radix-nova" name="button-outline" />
 
-### Secondary
+## Secondary
 
 <ComponentPreview styleName="radix-nova" name="button-secondary" />
 
-### Ghost
+## Ghost
 
 <ComponentPreview styleName="radix-nova" name="button-ghost" />
 
-### Destructive
+## Destructive
 
 <ComponentPreview styleName="radix-nova" name="button-destructive" />
 
-### Link
+## Link
 
 <ComponentPreview styleName="radix-nova" name="button-link" />
 
-### Icon
+## Icon
 
 <ComponentPreview styleName="radix-nova" name="button-icon" />
 
-### With Icon
+## With Icon
 
 Remember to add the `data-icon="inline-start"` or `data-icon="inline-end"` attribute to the icon for the correct spacing.
 
 <ComponentPreview styleName="radix-nova" name="button-with-icon" />
 
-### Rounded
+## Rounded
 
 Use the `rounded-full` class to make the button rounded.
 
 <ComponentPreview styleName="radix-nova" name="button-rounded" />
 
-### Spinner
+## Spinner
 
 Render a `<Spinner />` component inside the button to show a loading state. Remember to add the `data-icon="inline-start"` or `data-icon="inline-end"` attribute to the spinner for the correct spacing.
 
 <ComponentPreview styleName="radix-nova" name="button-spinner" />
 
-### Button Group
+## Button Group
 
 To create a button group, use the `ButtonGroup` component. See the [Button Group](/docs/components/radix/button-group) documentation for more details.
 
 <ComponentPreview styleName="radix-nova" name="button-group-demo" />
 
-### As Child
+## As Child
 
 You can use the `asChild` prop on `<Button />` to make another component look like a button. Here's an example of a link that looks like a button.
 

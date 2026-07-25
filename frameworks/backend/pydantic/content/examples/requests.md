@@ -4,10 +4,10 @@ framework: "pydantic"
 source_repo: "https://github.com/pydantic/pydantic"
 source_branch: "main"
 source_path: "docs/examples/requests.md"
-source_commit: "363728fe0b353db1a1fcb44aac5c38fd96a8cc20"
-source_commit_short: "363728fe"
-source_commit_date: "2026-06-20T11:20:58+01:00"
-generated_at: "2026-06-21T11:37:01Z"
+source_commit: "a2a6577d4c329dd574a45dbb01a8feaa16b1ad3d"
+source_commit_short: "a2a6577d"
+source_commit_date: "2026-07-23T15:38:17Z"
+generated_at: "2026-07-25T11:50:12Z"
 ---
 
 Pydantic models are a great way to validate and serialize data for requests and responses.
@@ -81,5 +81,12 @@ pprint([u.name for u in users])
 ```
 
 1. Note, we're querying the `/users/` endpoint here to get a list of users.
+
+!!! tip "Logfire integration"
+    When you validate responses like this, a [`ValidationError`][pydantic_core.ValidationError] is often
+    the first sign that an API you depend on has changed its response format. The useful questions at that
+    point are *what did the response actually contain*, and *when did this start*:
+    [recording failed validations with Logfire](../errors/troubleshooting.md) answers both, since each
+    failure is stored with the data that triggered it.
 
 <!-- TODO: httpx, flask, Django rest framework, FastAPI -->

@@ -4,10 +4,10 @@ framework: "redis"
 source_repo: "https://github.com/redis/docs.git"
 source_branch: "main"
 source_path: "content/operate/oss_and_stack/management/sentinel.md"
-source_commit: "bc92ea237bbfc2117c870c904f1a3ca619073ef1"
-source_commit_short: "bc92ea23"
-source_commit_date: "2026-06-18T14:53:00-05:00"
-generated_at: "2026-06-21T11:25:32Z"
+source_commit: "9d30f68c3dad1a6b3b7d30fe604b911348ce8152"
+source_commit_short: "9d30f68c"
+source_commit_date: "2026-07-24T10:52:10-07:00"
+generated_at: "2026-07-25T11:51:22Z"
 ---
 
 ---
@@ -829,7 +829,30 @@ following directives:
 
 Where `<username>` and `<password>` are the username and password for accessing the group's instances. These credentials should be provisioned on all of the group's Redis instances with the minimal control permissions. For example:
 
-    127.0.0.1:6379> ACL SETUSER sentinel-user ON >somepassword allchannels +multi +slaveof +ping +exec +subscribe +config|rewrite +role +publish +info +client|setname +client|kill +script|kill
+    127.0.0.1:6379> ACL SETUSER sentinel-user ON >somepassword resetchannels &__sentinel__:hello +multi +slaveof +ping +exec +subscribe +config|rewrite +role +publish +info +client|setname +client|kill +script|kill
+
+The only Pub/Sub channel that Sentinel uses on a monitored node is `__sentinel__:hello`, so
+this user is granted access to that channel only (`resetchannels &__sentinel__:hello`) rather
+than to all channels (`allchannels`, equivalently `&*`).
+
+{{< warning >}}
+Sentinel discovery relies on the reserved `__sentinel__:hello` Pub/Sub channel on each
+monitored master and replica. Sentinels periodically publish their presence there and
+subscribe to it to discover other Sentinels and learn the current topology. These messages
+carry no authentication and are trusted by receiving Sentinels, so any client that can
+publish to this channel on a monitored node can inject forged topology information and
+trigger spurious failovers or a denial of service.
+
+Because of this, do not grant broad Pub/Sub access on Sentinel-monitored Redis nodes:
+
+* No user needs access to all channels (`allchannels` / `&*`). The Sentinel `auth-user`
+  needs access only to the `__sentinel__:hello` channel (`&__sentinel__:hello`), and no
+  other user should be able to publish to or subscribe to it. Since Redis 7.0, the default
+  value of `acl-pubsub-default` is `resetchannels`, so newly created ACL users have no
+  channel access unless you grant it explicitly. Be especially careful with the legacy
+  `default` user, which may still have broad access.
+* Treat the `__sentinel__:` channel prefix as reserved for Sentinel's internal use.
+{{< /warning >}}
 
 ### Redis password-only authentication
 

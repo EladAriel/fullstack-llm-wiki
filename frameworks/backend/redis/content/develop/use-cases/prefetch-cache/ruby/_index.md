@@ -4,10 +4,10 @@ framework: "redis"
 source_repo: "https://github.com/redis/docs.git"
 source_branch: "main"
 source_path: "content/develop/use-cases/prefetch-cache/ruby/_index.md"
-source_commit: "bc92ea237bbfc2117c870c904f1a3ca619073ef1"
-source_commit_short: "bc92ea23"
-source_commit_date: "2026-06-18T14:53:00-05:00"
-generated_at: "2026-06-21T11:25:32Z"
+source_commit: "9d30f68c3dad1a6b3b7d30fe604b911348ce8152"
+source_commit_short: "9d30f68c"
+source_commit_date: "2026-07-24T10:52:10-07:00"
+generated_at: "2026-07-25T11:51:22Z"
 ---
 
 ---
@@ -317,9 +317,9 @@ After starting the server, visit `http://localhost:8789`.
 
 The demo server uses only Ruby standard library features for HTTP handling and concurrency:
 
-* [`webrick`](https://docs.ruby-lang.org/en/master/WEBrick.html) for the web server
+* [`webrick`](https://github.com/ruby/webrick) for the web server
 * [`uri`](https://docs.ruby-lang.org/en/master/URI.html) and `req.query` for query and form decoding
-* [`Thread`](https://docs.ruby-lang.org/en/master/Thread.html), [`Mutex`](https://docs.ruby-lang.org/en/master/Mutex.html), [`ConditionVariable`](https://docs.ruby-lang.org/en/master/ConditionVariable.html), and [`Queue`](https://docs.ruby-lang.org/en/master/Thread/Queue.html) for the sync worker daemon
+* [`Thread`](https://docs.ruby-lang.org/en/master/Thread.html), [`Mutex`](https://docs.ruby-lang.org/en/master/Thread/Mutex.html), [`ConditionVariable`](https://docs.ruby-lang.org/en/master/Thread/ConditionVariable.html), and [`Queue`](https://docs.ruby-lang.org/en/master/Thread/Queue.html) for the sync worker daemon
 
 It exposes a small interactive page where you can:
 

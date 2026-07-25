@@ -4,10 +4,10 @@ framework: "FastAPI"
 source_repo: "https://github.com/fastapi/fastapi.git"
 source_branch: "master"
 source_path: "docs/en/docs/advanced/websockets.md"
-source_commit: "0cb4a8e284b450abbccb71c543ad7757de46c0b2"
-source_commit_short: "0cb4a8e2"
-source_commit_date: "2026-06-20T16:31:34Z"
-generated_at: "2026-06-21T07:06:10Z"
+source_commit: "255b912928904e3ba5980425a54d6837c8bd1a1c"
+source_commit_short: "255b9129"
+source_commit_date: "2026-07-24T21:15:37Z"
+generated_at: "2026-07-25T11:50:10Z"
 ---
 
 # WebSockets { #websockets }
@@ -16,12 +16,12 @@ You can use [WebSockets](https://developer.mozilla.org/en-US/docs/Web/API/WebSoc
 
 ## Install `websockets` { #install-websockets }
 
-Make sure you create a [virtual environment](../virtual-environments.md), activate it, and install `websockets` (a Python library that makes it easy to use the "WebSocket" protocol):
+Add `websockets` (a Python library that makes it easy to use the "WebSocket" protocol) to your project:
 
 <div class="termy">
 
 ```console
-$ pip install websockets
+$ uv add websockets
 
 ---> 100%
 ```
@@ -81,7 +81,7 @@ Put your code in a file `main.py` and then run your application:
 <div class="termy">
 
 ```console
-$ fastapi dev
+$ uv run fastapi dev
 
 <span style="color: green;">INFO</span>:     Uvicorn running on http://127.0.0.1:8000 (Press CTRL+C to quit)
 ```
@@ -138,7 +138,7 @@ Run your application:
 <div class="termy">
 
 ```console
-$ fastapi dev
+$ uv run fastapi dev
 
 <span style="color: green;">INFO</span>:     Uvicorn running on http://127.0.0.1:8000 (Press CTRL+C to quit)
 ```
@@ -194,5 +194,5 @@ If you need something easy to integrate with FastAPI but that is more robust, su
 
 To learn more about the options, check Starlette's documentation for:
 
-* [The `WebSocket` class](https://www.starlette.dev/websockets/).
-* [Class-based WebSocket handling](https://www.starlette.dev/endpoints/#websocketendpoint).
+* [The `WebSocket` class](https://starlette.dev/websockets/).
+* [Class-based WebSocket handling](https://starlette.dev/endpoints/#websocketendpoint).

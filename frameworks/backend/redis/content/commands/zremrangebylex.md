@@ -4,10 +4,10 @@ framework: "redis"
 source_repo: "https://github.com/redis/docs.git"
 source_branch: "main"
 source_path: "content/commands/zremrangebylex.md"
-source_commit: "bc92ea237bbfc2117c870c904f1a3ca619073ef1"
-source_commit_short: "bc92ea23"
-source_commit_date: "2026-06-18T14:53:00-05:00"
-generated_at: "2026-06-21T11:25:32Z"
+source_commit: "9d30f68c3dad1a6b3b7d30fe604b911348ce8152"
+source_commit_short: "9d30f68c"
+source_commit_date: "2026-07-24T10:52:10-07:00"
+generated_at: "2026-07-25T11:51:22Z"
 ---
 
 ---
@@ -93,11 +93,28 @@ The maximum member, compared lexicographically. Prefix with `[` for an inclusive
 ## Examples
 
 {{% redis-cli %}}
-ZADD myzset 0 aaaa 0 b 0 c 0 d 0 e
-ZADD myzset 0 foo 0 zap 0 zip 0 ALPHA 0 alpha
-ZRANGE myzset 0 -1
-ZREMRANGEBYLEX myzset [alpha [omega
-ZRANGE myzset 0 -1
+redis> ZADD myzset 0 aaaa 0 b 0 c 0 d 0 e
+(integer) 5
+redis> ZADD myzset 0 foo 0 zap 0 zip 0 ALPHA 0 alpha
+(integer) 5
+redis> ZRANGE myzset 0 -1
+ 1) "ALPHA"
+ 2) "aaaa"
+ 3) "alpha"
+ 4) "b"
+ 5) "c"
+ 6) "d"
+ 7) "e"
+ 8) "foo"
+ 9) "zap"
+10) "zip"
+redis> ZREMRANGEBYLEX myzset [alpha [omega
+(integer) 6
+redis> ZRANGE myzset 0 -1
+1) "ALPHA"
+2) "aaaa"
+3) "zap"
+4) "zip"
 {{% /redis-cli %}}
 
 ## Redis Software and Redis Cloud compatibility

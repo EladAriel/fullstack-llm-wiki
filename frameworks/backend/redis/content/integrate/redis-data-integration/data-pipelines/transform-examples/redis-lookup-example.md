@@ -4,14 +4,14 @@ framework: "redis"
 source_repo: "https://github.com/redis/docs.git"
 source_branch: "main"
 source_path: "content/integrate/redis-data-integration/data-pipelines/transform-examples/redis-lookup-example.md"
-source_commit: "bc92ea237bbfc2117c870c904f1a3ca619073ef1"
-source_commit_short: "bc92ea23"
-source_commit_date: "2026-06-18T14:53:00-05:00"
-generated_at: "2026-06-21T11:25:32Z"
+source_commit: "9d30f68c3dad1a6b3b7d30fe604b911348ce8152"
+source_commit_short: "9d30f68c"
+source_commit_date: "2026-07-24T10:52:10-07:00"
+generated_at: "2026-07-25T11:51:22Z"
 ---
 
 ---
-Title: Denormalization with redis.lookup
+Title: Reading Redis data with redis.lookup
 alwaysopen: false
 categories:
 - docs
@@ -20,7 +20,7 @@ categories:
 - rdi
 description: null
 group: di
-linkTitle: Denormalization with redis.lookup
+linkTitle: Reading Redis data with redis.lookup
 summary: Redis Data Integration keeps Redis in sync with a primary database in near
   real time.
 type: integration
@@ -30,18 +30,41 @@ weight: 40
 You can use the
 [`redis.lookup`]({{< relref "/integrate/redis-data-integration/reference/data-transformation/lookup" >}})
 transformation to read existing data from Redis during the `transform` stage of a
-job. This is useful when you want to denormalize incoming change data by enriching
-a record with values that RDI has already written to Redis from another table
-(see [Data denormalization]({{< relref "/integrate/redis-data-integration/data-pipelines/data-denormalization" >}}) for more information about this technique).
+job. This lets you enrich an incoming record with values that are already present
+in the target database.
 
-For example, a pipeline for the Chinook database might write `artist` records to
-Redis, then use `redis.lookup` in
-an `album` table job to add selected artist details
-to each album record before writing it to the target database. This lets you
-design the structure of your Redis data to fit the read patterns of your
-application while still keeping the source database normalized.
+For example, a pipeline for the Chinook database might read an `artist` record
+that is already stored in Redis and use `redis.lookup` in an `album` table job to
+add selected artist details to each album record before writing it to the target
+database.
 
-## Denormalizing a hash
+{{< warning >}}
+Do not rely on `redis.lookup` to *denormalize* data that RDI writes from another
+table in the **same pipeline**. RDI can't guarantee that the looked-up data will be
+present or up to date when the lookup runs, for the following reasons:
+
+- **Snapshot order isn't guaranteed.** During the initial snapshot, RDI can't
+  guarantee that the table you look up is ingested before the table that depends
+  on it. If a dependent job runs before the referenced key has been written, the
+  lookup misses.
+- **Change (CDC) order isn't guaranteed.** If a parent and child record are
+  inserted or updated at around the same time, RDI has no way to order these
+  events, so the lookup can still miss.
+- **Parent updates don't refresh existing keys.** Even if the lookup succeeds,
+  updating the source record later does *not* update the keys that already copied
+  its values. The denormalized data becomes stale.
+
+The only case where `redis.lookup` is safe for enrichment is when you can guarantee
+that the looked-up data is present in the target database *independently* of the
+RDI pipeline (for example, a reference table that is loaded and maintained
+separately).
+
+To denormalize data that RDI ingests, use a supported technique instead. See
+[Data denormalization]({{< relref "/integrate/redis-data-integration/data-pipelines/data-denormalization" >}})
+for one-to-one joins (using `merge`) and one-to-many joins (using nesting).
+{{< /warning >}}
+
+## Reading a hash field
 
 The `redis.lookup` transformation works by executing a Redis command and adding the
 result to the record. You specify the command and its arguments in the
@@ -80,7 +103,7 @@ output:
         language: jmespath
 ```
 
-Without denormalization, the album hash object contains only the `artistid` field to
+Before the lookup runs, the album hash object contains only the `artistid` field to
 reference the artist:
 
 ```bash
@@ -108,10 +131,10 @@ extra `artist` field obtained by looking up the artist with the `artistid`:
 8) "AC/DC"
 ```
 
-## Denormalizing a JSON document
+## Embedding a JSON document
 
 If you are using [JSON]({{< relref "/develop/data-types/json" >}}) objects,
-you can denormalize to include the whole of one object
+you can read the whole of one object and embed it
 as a field of another. The following example shows how to do this using a temporary field
 to hold the result of the `redis.lookup` command. It then uses
 [`add_field`]({{< relref "/integrate/redis-data-integration/reference/data-transformation/add_field" >}})

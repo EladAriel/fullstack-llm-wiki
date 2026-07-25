@@ -4,10 +4,10 @@ framework: "postgres"
 source_repo: "https://github.com/postgres/postgres.git"
 source_branch: "master"
 source_path: "doc/src/sgml/ref/update.sgml"
-source_commit: "031904048aa22e7c70dc8e9c170e2743f9b0f090"
-source_commit_short: "03190404"
-source_commit_date: "2026-06-20T18:20:58+09:00"
-generated_at: "2026-06-21T07:06:11Z"
+source_commit: "38afc3dcb25c45b744d4025029ce0a6c90b7059f"
+source_commit_short: "38afc3dc"
+source_commit_date: "2026-07-25T19:08:27+09:00"
+generated_at: "2026-07-25T11:50:59Z"
 ---
 
 UPDATE
@@ -49,7 +49,7 @@ The optional `RETURNING` clause causes `UPDATE` to compute and return value(s) b
 
 If the `FOR PORTION OF` clause is used, the update will only affect rows that overlap the given portion. Furthermore, if a row's application time extends outside the `FOR PORTION OF` bounds, then the update will only change the application time within those bounds. In effect, only the history targeted by `FOR PORTION OF` is updated, and no moments outside. Furthermore, after a row is updated, the range or multirange is first shrunk so that its application time no longer extends beyond the targeted `FOR PORTION OF` bounds. Then, new temporal leftovers might be inserted: rows whose range or multirange receives the remaining application time outside the targeted `FROM`/`TO` bounds, with the original values in their other columns. For range columns, there will be zero to two inserted records, depending on whether the original application time was completely updated, extended before/after the change, or both. Multiranges never require two temporal leftovers, because one value can always contain whatever application time remains.
 
-You must have the `UPDATE` privilege on the table, or at least on the column(s) that are listed to be updated. You must also have the `SELECT` privilege on any column whose values are read in the `expressions` or `condition`. When `FOR PORTION OF` is used, the secondary inserts do not require `INSERT` privilege on the table. (This is because conceptually no new information is being added; the inserted rows only preserve existing data about the untargeted time period.)
+You must have the `UPDATE` privilege on the table, or at least on the column(s) that are listed to be updated. You must also have the `SELECT` privilege on any column whose values are read in the `expressions` or `condition`. When `FOR PORTION OF` is used, the secondary inserts do not require `INSERT` privilege on the table. (This is because conceptually no new information is being added; the inserted rows only preserve existing data about the untargeted time period.) Row-level security INSERT policies are still checked for these leftover inserts.
 
 ## Parameters
 
@@ -66,7 +66,7 @@ You must have the `UPDATE` privilege on the table, or at least on the column(s) 
 - A `SELECT` sub-query that produces as many output columns as are listed in the parenthesized column list preceding it. The sub-query must yield no more than one row when executed. If it yields one row, its column values are assigned to the target columns; if it yields no rows, NULL values are assigned to the target columns. The sub-query can refer to old values of the current row of the table being updated.
 - A table expression allowing columns from other tables to appear in the `WHERE` condition and update expressions. This uses the same syntax as the FROM clause of a `SELECT` statement; for example, an alias for the table name can be specified. Do not repeat the target table as a `from_item` unless you intend a self-join (in which case it must appear with an alias in the `from_item`).
 - An expression that returns a value of type `boolean`. Only rows for which this expression returns `true` will be updated.
-- The name of the cursor to use in a `WHERE CURRENT OF` condition. The row to be updated is the one most recently fetched from this cursor. The cursor must be a non-grouping query on the `UPDATE`'s target table. Note that `WHERE CURRENT OF` cannot be specified together with a Boolean condition. See `sql-declare` for more information about using cursors with `WHERE CURRENT OF`.
+- The name of the cursor to use in a `WHERE CURRENT OF` condition. The row to be updated is the one most recently fetched from this cursor. The cursor must be a non-grouping query on the `UPDATE`'s target table. Note that `WHERE CURRENT OF` cannot be specified together with a Boolean condition or `FOR PORTION OF`. See `sql-declare` for more information about using cursors with `WHERE CURRENT OF`.
 - An optional substitute name for `OLD` or `NEW` rows in the `RETURNING` list. By default, old values from the target table can be returned by writing `OLD.column_name` or `OLD.*`, and new values can be returned by writing `NEW.column_name` or `NEW.*`. When an alias is provided, these names are hidden and the old or new rows must be referred to using the alias. For example `RETURNING WITH (OLD AS o, NEW AS n) o.*, n.*`.
 - An expression to be computed and returned by the `UPDATE` command after each row is updated. The expression can use any column names of the table named by `table_name` or table(s) listed in `FROM`. Write `*` to return all columns. A column name or `*` may be qualified using `OLD` or `NEW`, or the corresponding `output_alias` for `OLD` or `NEW`, to cause old or new values to be returned. An unqualified column name, or `*`, or a column name or `*` qualified using the target table name or alias will return new values.
 - A name to use for a returned column.

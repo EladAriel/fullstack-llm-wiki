@@ -4,10 +4,10 @@ framework: "nextjs"
 source_repo: "https://github.com/vercel/next.js/"
 source_branch: "canary"
 source_path: "docs/01-app/03-api-reference/04-functions/cacheLife.mdx"
-source_commit: "79142d7806ff4194c8d9885b80fa69db5ecf534a"
-source_commit_short: "79142d78"
-source_commit_date: "2026-06-20T23:40:12Z"
-generated_at: "2026-06-21T12:07:17Z"
+source_commit: "dcf242a17b5d4622bbd9624db531a9d84177619f"
+source_commit_short: "dcf242a1"
+source_commit_date: "2026-07-25T10:16:19+02:00"
+generated_at: "2026-07-25T11:50:53Z"
 ---
 
 ---
@@ -57,7 +57,7 @@ Add a cache directive (for example, `use cache`) at the file level or at the top
 
 > **Good to know**:
 >
-> - Calling `cacheLife` is optional. If omitted, a default cache lifetime is applied.
+> - We recommend setting a `cacheLife` in every `use cache` scope so its behavior is clear at the call site. Omitting it leaves the lifetime implicit (the `default` profile applies), which makes it harder to reason about, for example in [nested cached scopes](#nested-caching-behavior).
 > - Call `cacheLife` in the same function or component where caching is defined. Avoid abstracting it into shared utilities so the cache behavior remains explicit and easy to reason about.
 > - If you call `cacheLife`, ensure only one call executes per function invocation. You can call it in different control flow branches, but only one should run per request. See the [conditional cache lifetimes](#conditional-cache-lifetimes) example.
 
@@ -157,11 +157,37 @@ If you don't specify a profile, Next.js uses the `default` profile. We recommend
 | `weeks`     | Content updated weekly                 | 5 minutes  | 1 week       | 30 days  |
 | `max`       | Stable content that rarely changes     | 5 minutes  | 30 days      | 1 year   |
 
-### Custom cache profiles
+### Overriding the default cache profiles
 
-Define reusable cache profiles in your `next.config.ts` file:
+The preset profiles map to familiar time periods (`seconds`, `minutes`, `hours`, `days`, `weeks`), alongside `default` and `max`. You can use these as they are, or redefine any of them, including `default` and `max`, in `next.config.ts`. The built-in names keep working with editor autocomplete.
+
+Redefining a built-in is a supported pattern, but document it in your project so a call like `cacheLife('hours')` reflects the values you set, not the presets. The time-named profiles carry an intuitive expectation (`days` reads as roughly 24 hours), so redefining them is more likely to surprise a reader than redefining `default` or `max`, which don't imply a specific duration. An equally valid approach is to define your own [custom profile](#custom-cache-profiles) rather than overloading a built-in name.
+
+Redefining `default` also changes the lifetime applied when a `use cache` scope calls no `cacheLife`. The example below sets `default` to a one hour revalidate:
 
 ```ts filename="next.config.ts"
+const nextConfig = {
+  cacheComponents: true,
+  cacheLife: {
+    // Redefine the 'default' profile
+    default: {
+      stale: 300, // 5 minutes
+      revalidate: 3600, // 1 hour
+      expire: 86400, // 1 day
+    },
+  },
+}
+
+export default nextConfig
+```
+
+> **Good to know:** The `cacheLife` function's type signature is generated from `next.config.ts` during `next dev`, `next build`, or [`next typegen`](/docs/app/api-reference/cli/next#next-typegen-options), so an overridden profile's editor autocomplete and JSDoc hint reflect the values you set, not the presets.
+
+### Custom cache profiles
+
+Define reusable cache profiles with your own names in `next.config.ts`:
+
+```ts filename="next.config.ts" switcher
 import type { NextConfig } from 'next'
 
 const nextConfig: NextConfig = {
@@ -205,30 +231,6 @@ export default async function Page() {
   cacheLife('biweekly')
   return <div>Page</div>
 }
-```
-
-### Overriding the default cache profiles
-
-While the default cache profiles provide a useful way to think about how fresh or stale any given part of cacheable output can be, you may prefer different named profiles to better align with your applications caching strategies.
-
-You can override the default named cache profiles by creating a new configuration with the same name as the defaults.
-
-The example below shows how to override the default `"days"` cache profile:
-
-```ts filename="next.config.ts"
-const nextConfig = {
-  cacheComponents: true,
-  cacheLife: {
-    // Override the 'days' profile
-    days: {
-      stale: 3600, // 1 hour
-      revalidate: 900, // 15 minutes
-      expire: 86400, // 1 day
-    },
-  },
-}
-
-export default nextConfig
 ```
 
 ### Inline cache profiles

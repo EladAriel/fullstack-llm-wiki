@@ -4,10 +4,10 @@ framework: "redis"
 source_repo: "https://github.com/redis/docs.git"
 source_branch: "main"
 source_path: "content/operate/rs/databases/memory-performance/memory-limit.md"
-source_commit: "bc92ea237bbfc2117c870c904f1a3ca619073ef1"
-source_commit_short: "bc92ea23"
-source_commit_date: "2026-06-18T14:53:00-05:00"
-generated_at: "2026-06-21T11:25:32Z"
+source_commit: "9d30f68c3dad1a6b3b7d30fe604b911348ce8152"
+source_commit_short: "9d30f68c"
+source_commit_date: "2026-07-24T10:52:10-07:00"
+generated_at: "2026-07-25T11:51:22Z"
 ---
 
 ---
@@ -99,11 +99,15 @@ The `replication_oom_threshold_percent` setting works as follows:
 
 - If memory reaches `maxmemory` despite the client block, the standard out-of-memory behavior applies to all operations, including replication.
 
-`replication_oom_threshold_percent` defaults to `5`, which means 5% of `maxmemory` is reserved. To adjust the reserved percentage, use an [update database configuration]({{<relref "operate/rs/references/rest-api/requests/bdbs#put-bdbs">}}) REST API request:
+`replication_oom_threshold_percent` defaults to `5`, which means 5% of `maxmemory` is reserved. To adjust the reserved percentage in all participating clusters, use an [update Active-Active database configuration]({{<relref "/operate/rs/references/rest-api/requests/crdbs#patch-crdbs">}}) REST API request:
 
 ```sh
-PUT https://<host>:<port>/v1/bdbs/<database_id>
-{ "replication_oom_threshold_percent": <integer from 0 to 20> }
+PATCH https://<host>:<port>/v1/crdbs/<crdb_guid>
+{ 
+  "default_db_config": { 
+    "replication_oom_threshold_percent": <integer from 0 to 20> 
+  }
+}
 ```
 
 ## Adaptive memory allocation

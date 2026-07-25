@@ -4,10 +4,10 @@ framework: "redis"
 source_repo: "https://github.com/redis/docs.git"
 source_branch: "main"
 source_path: "content/operate/kubernetes/reference/api/_index.md"
-source_commit: "bc92ea237bbfc2117c870c904f1a3ca619073ef1"
-source_commit_short: "bc92ea23"
-source_commit_date: "2026-06-18T14:53:00-05:00"
-generated_at: "2026-06-21T11:25:32Z"
+source_commit: "9d30f68c3dad1a6b3b7d30fe604b911348ce8152"
+source_commit_short: "9d30f68c"
+source_commit_date: "2026-07-24T10:52:10-07:00"
+generated_at: "2026-07-25T11:51:22Z"
 ---
 
 ---
@@ -41,6 +41,12 @@ The operator uses different API versions to indicate stability and feature matur
 | [RedisEnterpriseDatabase (REDB)](redis_enterprise_database_api) | `v1alpha1` | Creates and configures Redis databases |
 | [RedisEnterpriseActiveActiveDatabase (REAADB)](redis_enterprise_active_active_database_api) | `v1alpha1` | Sets up active-active databases across clusters |
 | [RedisEnterpriseRemoteCluster (RERC)](redis_enterprise_remote_cluster_api) | `v1alpha1` | Defines remote cluster connections for active-active |
+| [RedisEnterpriseUser (REUSER)](redis_enterprise_user_api) | `v1alpha1` | Defines users for cluster access control |
+| [RedisEnterpriseRole (REROLE)](redis_enterprise_role_api) | `v1alpha1` | Defines a role scoped to selected databases |
+| [RedisEnterpriseRoleBinding (REROLEBINDING)](redis_enterprise_role_binding_api) | `v1alpha1` | Binds users to a RedisEnterpriseRole |
+| [RedisEnterpriseClusterRole (RECROLE)](redis_enterprise_cluster_role_api) | `v1alpha1` | Defines a cluster-scoped role |
+| [RedisEnterpriseClusterRoleBinding (RECROLEBINDING)](redis_enterprise_cluster_role_binding_api) | `v1alpha1` | Binds users to a RedisEnterpriseClusterRole |
+| [RedisEnterpriseACL (REACL)](redis_enterprise_acl_api) | `v1alpha1` | Defines an access control list (ACL) for a database |
 
 ## Working with the APIs
 

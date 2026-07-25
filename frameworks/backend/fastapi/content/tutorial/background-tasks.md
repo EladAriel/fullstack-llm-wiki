@@ -4,10 +4,10 @@ framework: "FastAPI"
 source_repo: "https://github.com/fastapi/fastapi.git"
 source_branch: "master"
 source_path: "docs/en/docs/tutorial/background-tasks.md"
-source_commit: "0cb4a8e284b450abbccb71c543ad7757de46c0b2"
-source_commit_short: "0cb4a8e2"
-source_commit_date: "2026-06-20T16:31:34Z"
-generated_at: "2026-06-21T07:06:10Z"
+source_commit: "255b912928904e3ba5980425a54d6837c8bd1a1c"
+source_commit_short: "255b9129"
+source_commit_date: "2026-07-24T21:15:37Z"
+generated_at: "2026-07-25T11:50:10Z"
 ---
 
 # Background Tasks { #background-tasks }
@@ -75,7 +75,7 @@ And then another background task generated at the *path operation function* will
 
 ## Technical Details { #technical-details }
 
-The class `BackgroundTasks` comes directly from [`starlette.background`](https://www.starlette.dev/background/).
+The class `BackgroundTasks` comes directly from [`starlette.background`](https://starlette.dev/background/).
 
 It is imported/included directly into FastAPI so that you can import it from `fastapi` and avoid accidentally importing the alternative `BackgroundTask` (without the `s` at the end) from `starlette.background`.
 
@@ -83,7 +83,7 @@ By only using `BackgroundTasks` (and not `BackgroundTask`), it's then possible t
 
 It's still possible to use `BackgroundTask` alone in FastAPI, but you have to create the object in your code and return a Starlette `Response` including it.
 
-You can see more details in [Starlette's official docs for Background Tasks](https://www.starlette.dev/background/).
+You can see more details in [Starlette's official docs for Background Tasks](https://starlette.dev/background/).
 
 ## Caveat { #caveat }
 

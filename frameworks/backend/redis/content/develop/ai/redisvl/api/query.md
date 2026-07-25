@@ -4,10 +4,10 @@ framework: "redis"
 source_repo: "https://github.com/redis/docs.git"
 source_branch: "main"
 source_path: "content/develop/ai/redisvl/api/query.md"
-source_commit: "bc92ea237bbfc2117c870c904f1a3ca619073ef1"
-source_commit_short: "bc92ea23"
-source_commit_date: "2026-06-18T14:53:00-05:00"
-generated_at: "2026-06-21T11:25:32Z"
+source_commit: "9d30f68c3dad1a6b3b7d30fe604b911348ce8152"
+source_commit_short: "9d30f68c"
+source_commit_date: "2026-07-24T10:52:10-07:00"
+generated_at: "2026-07-25T11:51:22Z"
 ---
 
 ---
@@ -2503,6 +2503,14 @@ For TEXT fields with `sql-redis >= 0.4.0`:
 - `fuzzy(field, 'term')` performs typo-tolerant matching
 - `fulltext(field, 'query')` performs tokenized text search
 
+Vector and hybrid search:
+
+- `vector_distance(field, :vec)` / `cosine_distance(field, :vec)` perform
+  KNN vector similarity search (pass the query vector via `params`)
+- `hybrid_vector_search(cosine_distance(field, :vec), fulltext(field, 'query'), rrf())` fuses a text and a vector query server-side via Redis `FT.HYBRID`
+  (requires `sql-redis >= 0.7.0`, Redis 8.4+, and redis-py >= 7.1.0). Use
+  `rrf()` or `linear()` to select the fusion method
+
 ```python
 from redisvl.query import SQLQuery
 from redisvl.index import SearchIndex
@@ -2603,4 +2611,11 @@ SQLQuery accepts a `sql_redis_options` dictionary that is passed through to
   narrow queries cheaper.
 - `"load_all"` eagerly loads all schemas up front, which can help when
   running many SQL queries across many indexes.
+{{< /note >}}
+
+{{< note >}}
+SQLQuery supports hybrid search via `hybrid_vector_search(cosine_distance(...), fulltext(...), rrf())`, which translates to a native Redis `FT.HYBRID` command
+fusing a text and a vector query server-side. This is the SQL front-end to
+`HybridQuery` and requires `sql-redis >= 0.7.0`, Redis 8.4+, and
+redis-py >= 7.1.0.
 {{< /note >}}

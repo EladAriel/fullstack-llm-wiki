@@ -4,10 +4,10 @@ framework: "Langfuse"
 source_repo: "https://github.com/langfuse/langfuse-docs"
 source_branch: "main"
 source_path: "content/docs/prompt-management/get-started.mdx"
-source_commit: "4a702ece53852a6af86b3883f434adf3f5cae421"
-source_commit_short: "4a702ece"
-source_commit_date: "2026-06-23T13:41:14Z"
-generated_at: "2026-06-23T13:55:15Z"
+source_commit: "fcd1eca34a924867563c3c4e801254c4e66c0021"
+source_commit_short: "fcd1eca3"
+source_commit_date: "2026-07-25T00:45:45Z"
+generated_at: "2026-07-25T11:51:12Z"
 ---
 
 ---
@@ -148,6 +148,6 @@ This guide helps you get started with Langfuse Prompt Management manually.
 Now that you've used your first prompt, there are a couple of things we recommend you do next to make the most of Langfuse Prompt Management:
 
 - [Link prompts to traces](/docs/prompt-management/features/link-to-traces) to analyze performance by prompt version
-- [Use version control and labels](/docs/prompt-management/features/prompt-version-control) to manage deployments across environments
+- [Use version control and labels](/docs/prompt-management/features/prompt-version-control#protected-prompt-labels) to manage deployments across environments
 
 Looking for something specific? Take a look under _Features_ for guides on specific topics.

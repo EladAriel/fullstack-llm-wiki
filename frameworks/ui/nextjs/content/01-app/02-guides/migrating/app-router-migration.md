@@ -4,10 +4,10 @@ framework: "nextjs"
 source_repo: "https://github.com/vercel/next.js/"
 source_branch: "canary"
 source_path: "docs/01-app/02-guides/migrating/app-router-migration.mdx"
-source_commit: "79142d7806ff4194c8d9885b80fa69db5ecf534a"
-source_commit_short: "79142d78"
-source_commit_date: "2026-06-20T23:40:12Z"
-generated_at: "2026-06-21T12:07:17Z"
+source_commit: "dcf242a17b5d4622bbd9624db531a9d84177619f"
+source_commit_short: "dcf242a1"
+source_commit_date: "2026-07-25T10:16:19+02:00"
+generated_at: "2026-07-25T11:50:53Z"
 ---
 
 ---
@@ -537,18 +537,20 @@ The `pages` directory uses `getServerSideProps` and `getStaticProps` to fetch da
 
 ```tsx filename="app/page.tsx" switcher
 export default async function Page() {
-  // This request should be cached until manually invalidated.
+  // Opt into the Next.js Data Cache for this request.
+  // The cached response can be reused across requests and revalidated on demand.
   // Similar to `getStaticProps`.
-  // `force-cache` is the default and can be omitted.
-  const staticData = await fetch(`https://...`, { cache: 'force-cache' })
+  const cachedData = await fetch('https://...', { cache: 'force-cache' })
 
-  // This request should be refetched on every request.
+  // Opt out of caching for this request.
+  // Next.js fetches this from the data source on every request.
+  // This is the default fetch behavior.
   // Similar to `getServerSideProps`.
-  const dynamicData = await fetch(`https://...`, { cache: 'no-store' })
+  const uncachedData = await fetch('https://...', { cache: 'no-store' })
 
-  // This request should be cached with a lifetime of 10 seconds.
+  // Cache this request, but revalidate it at most every 10 seconds.
   // Similar to `getStaticProps` with the `revalidate` option.
-  const revalidatedData = await fetch(`https://...`, {
+  const revalidatedData = await fetch('https://...', {
     next: { revalidate: 10 },
   })
 
@@ -558,18 +560,20 @@ export default async function Page() {
 
 ```jsx filename="app/page.js" switcher
 export default async function Page() {
-  // This request should be cached until manually invalidated.
+  // Opt into the Next.js Data Cache for this request.
+  // The cached response can be reused across requests and revalidated on demand.
   // Similar to `getStaticProps`.
-  // `force-cache` is the default and can be omitted.
-  const staticData = await fetch(`https://...`, { cache: 'force-cache' })
+  const cachedData = await fetch('https://...', { cache: 'force-cache' })
 
-  // This request should be refetched on every request.
+  // Opt out of caching for this request.
+  // Next.js fetches this from the data source on every request.
+  // This is the default fetch behavior.
   // Similar to `getServerSideProps`.
-  const dynamicData = await fetch(`https://...`, { cache: 'no-store' })
+  const uncachedData = await fetch('https://...', { cache: 'no-store' })
 
-  // This request should be cached with a lifetime of 10 seconds.
+  // Cache this request, but revalidate it at most every 10 seconds.
   // Similar to `getStaticProps` with the `revalidate` option.
-  const revalidatedData = await fetch(`https://...`, {
+  const revalidatedData = await fetch('https://...', {
     next: { revalidate: 10 },
   })
 

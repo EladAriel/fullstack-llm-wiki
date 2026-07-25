@@ -4,10 +4,10 @@ framework: "react"
 source_repo: "https://github.com/reactjs/react.dev"
 source_branch: "main"
 source_path: "src/content/learn/react-compiler/debugging.md"
-source_commit: "8bb31acb86bf68fa33d97dd0f1b834dfa71e2b1a"
-source_commit_short: "8bb31acb"
-source_commit_date: "2026-06-17T13:38:02-04:00"
-generated_at: "2026-06-21T12:23:02Z"
+source_commit: "7b6c3ceb9dd97249e9dce4a8a94e61aed6424698"
+source_commit_short: "7b6c3ceb"
+source_commit_date: "2026-07-20T15:31:48+02:00"
+generated_at: "2026-07-25T11:50:43Z"
 ---
 
 ---
@@ -55,7 +55,7 @@ Follow these steps when you encounter issues:
 
 ### Compiler Build Errors {/*compiler-build-errors*/}
 
-If you encounter a compiler error that unexpectedly breaks your build, this is likely a bug in the compiler. Report it to the [facebook/react](https://github.com/facebook/react/issues) repository with:
+If you encounter a compiler error that unexpectedly breaks your build, this is likely a bug in the compiler. Report it to the [react/react](https://github.com/react/react/issues) repository with:
 - The error message
 - The code that caused the error
 - Your React and compiler versions
@@ -93,7 +93,7 @@ If you believe you've found a compiler bug:
 1. **Verify it's not a Rules of React violation** - Check with ESLint
 2. **Create a minimal reproduction** - Isolate the issue in a small example
 3. **Test without the compiler** - Confirm the issue only occurs with compilation
-4. **File an [issue](https://github.com/facebook/react/issues/new?template=compiler_bug_report.yml)**:
+4. **File an [issue](https://github.com/react/react/issues/new?template=compiler_bug_report.yml)**:
    - React and compiler versions
    - Minimal reproduction code
    - Expected vs actual behavior

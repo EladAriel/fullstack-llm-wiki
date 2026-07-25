@@ -4,10 +4,10 @@ framework: "postgres"
 source_repo: "https://github.com/postgres/postgres.git"
 source_branch: "master"
 source_path: "doc/src/sgml/func/func-info.sgml"
-source_commit: "031904048aa22e7c70dc8e9c170e2743f9b0f090"
-source_commit_short: "03190404"
-source_commit_date: "2026-06-20T18:20:58+09:00"
-generated_at: "2026-06-21T07:06:11Z"
+source_commit: "38afc3dcb25c45b744d4025029ce0a6c90b7059f"
+source_commit_short: "38afc3dc"
+source_commit_date: "2026-07-25T19:08:27+09:00"
+generated_at: "2026-07-25T11:50:59Z"
 ---
 
 ## System Information Functions and Operators
@@ -881,9 +881,9 @@ Returns statistics about current multixact usage: `num_mxids` is the total numbe
 
 The function reports statistics at the time it is invoked. Values may vary between calls, even within a single transaction.
 
-To use this function, you must have privileges of the `pg_read_all_stats` role.
+By default, all columns are shown as `NULL` unless the user has privileges of the `pg_read_all_stats` role.
 
-The internal transaction ID type `xid` is 32 bits wide and wraps around every 4 billion transactions. However, the functions shown in `functions-pg-snapshot`, except `age`, `mxid_age`, and `pg_get_multixact_members`, use a 64-bit type `xid8` that does not wrap around during the life of an installation and can be converted to `xid` by casting if required; see `transaction-id` for details. The data type `pg_snapshot` stores information about transaction ID visibility at a particular moment in time. Its components are described in `functions-pg-snapshot-parts`. `pg_snapshot`'s textual representation is `xmin:xmax:xip_list`. For example `10:20:10,14,15` means `xmin=10, xmax=20, xip_list=10, 14, 15`.
+The internal transaction ID type `xid` is 32 bits wide and wraps around every 4 billion transactions. However, the functions shown in `functions-pg-snapshot`, except `age`, `mxid_age`, `pg_get_multixact_members`, and `pg_get_multixact_stats`, use a 64-bit type `xid8` that does not wrap around during the life of an installation and can be converted to `xid` by casting if required; see `transaction-id` for details. The data type `pg_snapshot` stores information about transaction ID visibility at a particular moment in time. Its components are described in `functions-pg-snapshot-parts`. `pg_snapshot`'s textual representation is `xmin:xmax:xip_list`. For example `10:20:10,14,15` means `xmin=10, xmax=20, xip_list=10, 14, 15`.
 
 ## Snapshot Components
 
@@ -1026,6 +1026,10 @@ Data Type
 `integer`
 
 `full_page_writes`
+
+`boolean`
+
+`logical_decoding`
 
 `boolean`
 
@@ -1227,7 +1231,7 @@ As a special exception, the WAL summarizer will refuse to generate WAL summary f
 
 ## Get Object DDL Functions
 
-The functions shown in `functions-get-object-ddl-table` reconstruct DDL statements for various global database objects. Each function returns a set of text rows, one SQL statement per row. (This is a decompiled reconstruction, not the original text of the command.) Functions that accept `VARIADIC` options take alternating name/value text pairs; values are parsed as boolean, integer or text.
+The functions shown in `functions-get-object-ddl-table` reconstruct DDL statements for various global database objects. Each function returns a set of text rows, one SQL statement per row. (This is a decompiled reconstruction, not the original text of the command.)
 
 ## Get Object DDL Functions
 
@@ -1235,16 +1239,16 @@ Function
 
 Description
 
-pg_get_role_ddl `pg_get_role_ddl` ( `role` `regrole` , `VARIADIC` `options` `text` ) setof text
+pg_get_database_ddl `pg_get_database_ddl` ( `database` `regdatabase` , `pretty` `boolean` `DEFAULT` false , `owner` `boolean` `DEFAULT` true , `tablespace` `boolean` `DEFAULT` true ) setof text
 
-Reconstructs the `CREATE ROLE` statement and any `ALTER ROLE ... SET` statements for the given role. Each statement is returned as a separate row. Password information is never included in the output. The following options are supported: `pretty` (boolean) for pretty-printed output and `memberships` (boolean, default true) to include `GRANT` statements for role memberships and their options.
+Reconstructs the CREATE DATABASE statement for the specified database, followed by ALTER DATABASE statements for connection limit, template status, and configuration settings. Each statement is returned as a separate row. When `pretty` is true, the output is pretty-printed. When `owner` is false, the `OWNER` clause is omitted. When `tablespace` is false, the `TABLESPACE` clause is omitted.
 
-pg_get_tablespace_ddl `pg_get_tablespace_ddl` ( `tablespace` `oid` , `VARIADIC` `options` `text` ) setof text
+pg_get_role_ddl `pg_get_role_ddl` ( `role` `regrole` , `pretty` `boolean` `DEFAULT` false , `memberships` `boolean` `DEFAULT` true ) setof text
 
-`pg_get_tablespace_ddl` ( `tablespace` `name` , `VARIADIC` `options` `text` ) setof text
+Reconstructs the CREATE ROLE statement and any ALTER ROLE ... SET statements for the given role. Each statement is returned as a separate row. Password information is never included in the output. When `pretty` is true, the output is pretty-printed. When `memberships` is false, GRANT statements for role memberships are omitted.
 
-Reconstructs the `CREATE TABLESPACE` statement for the specified tablespace (by OID or name). If the tablespace has options set, an `ALTER TABLESPACE ... SET` statement is also returned. Each statement is returned as a separate row. The following options are supported: `pretty` (boolean) for formatted output and `owner` (boolean) to include `OWNER`.
+pg_get_tablespace_ddl `pg_get_tablespace_ddl` ( `tablespace` `oid` , `pretty` `boolean` `DEFAULT` false , `owner` `boolean` `DEFAULT` true ) setof text
 
-pg_get_database_ddl `pg_get_database_ddl` ( `database` `regdatabase` , `VARIADIC` `options` `text` ) setof text
+`pg_get_tablespace_ddl` ( `tablespace` `name` , `pretty` `boolean` `DEFAULT` false , `owner` `boolean` `DEFAULT` true ) setof text
 
-Reconstructs the `CREATE DATABASE` statement for the specified database, followed by `ALTER DATABASE` statements for connection limit, template status, and configuration settings. Each statement is returned as a separate row. The following options are supported: `pretty` (boolean) for formatted output, `owner` (boolean) to include `OWNER`, and `tablespace` (boolean) to include `TABLESPACE`.
+Reconstructs the CREATE TABLESPACE statement for the specified tablespace (by OID or name). If the tablespace has options set, an ALTER TABLESPACE ... SET statement is also returned. Each statement is returned as a separate row. When `pretty` is true, the output is pretty-printed. When `owner` is false, the `OWNER` clause is omitted.

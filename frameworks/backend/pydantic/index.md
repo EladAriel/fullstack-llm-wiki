@@ -8,9 +8,9 @@ This is a local LLM-friendly wiki generated from the official pydantic documenta
 - Source repo: `https://github.com/pydantic/pydantic`
 - Source branch: `main`
 - Source docs path: `docs`
-- Source commit: `363728fe`
-- Source commit date: `2026-06-20T11:20:58+01:00`
-- Wiki generated at: `2026-06-21T11:37:01Z`
+- Source commit: `a2a6577d`
+- Source commit date: `2026-07-23T15:38:17Z`
+- Wiki generated at: `2026-07-25T11:50:12Z`
 
 ## How the IDE LLM should use this wiki
 
@@ -96,6 +96,7 @@ This is a local LLM-friendly wiki generated from the official pydantic documenta
 - [Validators](content/concepts/validators.md)
 - [Contributing](content/contributing.md)
 - [Errors](content/errors/errors.md)
+- [Troubleshooting](content/errors/troubleshooting.md)
 - [Usage Errors](content/errors/usage_errors.md)
 - [Validation Errors](content/errors/validation_errors.md)
 - [Custom Validators](content/examples/custom_validators.md)

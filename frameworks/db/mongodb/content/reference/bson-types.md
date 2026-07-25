@@ -4,10 +4,10 @@ framework: "mongodb"
 source_repo: "https://github.com/mongodb/docs.git"
 source_branch: "main"
 source_path: "content/manual/manual/source/reference/bson-types.txt"
-source_commit: "96788e8ed140cbdde184ff82e1066dff4996bde4"
-source_commit_short: "96788e8e"
-source_commit_date: "2026-06-19T21:35:03-06:00"
-generated_at: "2026-06-21T07:41:52Z"
+source_commit: "ab9db26ed3d11618cdb61516d8180337d8e3f679"
+source_commit_short: "ab9db26e"
+source_commit_date: "2026-07-24T16:22:46-06:00"
+generated_at: "2026-07-25T11:51:15Z"
 ---
 
 ==========
@@ -67,7 +67,7 @@ Use the :method:`ObjectId()` methods to set and retrieve ObjectId values.
 
 BSON strings are UTF-8. In general, drivers for each programming language convert from the language's string format to UTF-8 when serializing and deserializing BSON. This makes it possible to store most international characters in BSON strings with ease. [#sort-string-internationalization]_ In addition, MongoDB :query:`$regex` queries support UTF-8 in the regex string.
 
-character sets, using :method:`sort() <cursor.sort()>` on strings will be reasonably correct. However, because internally :method:`sort() <cursor.sort()>` uses the C++ `strcmp` api, the sort order may handle some characters incorrectly.
+character sets, using :method:`sort() <cursor.sort()>` on strings is reasonably correct. However, because internally :method:`sort() <cursor.sort()>` uses the C++ `strcmp` api, the sort order may handle some characters incorrectly.
 
 ## Timestamps
 
@@ -86,9 +86,8 @@ In replication, the `oplog` has a `ts` field. The values in this field reflect t
 Within a single :binary:`~bin.mongod` instance, timestamp values in the `oplog` are always unique.
 
 > **Note:** The BSON timestamp type is for internal MongoDB use. For most
-cases, in application development, you will want to use the BSON
-date type. See `document-bson-type-date` for more
-information.
+cases, in application development, use the BSON date type. See
+`document-bson-type-date` for more information.
 
 ## Date
 
@@ -134,7 +133,7 @@ incorrectly interpreted as unsigned integers, which affected sorts, range querie
 
 `decimal128` is a 128-bit decimal representation for storing very large or very precise numbers, whenever rounding decimals is important. It was created in August 2009 as part of the [IEEE 754-2008](https://en.wikipedia.org/wiki/IEEE_754-2008_revision)_ revision of floating points. When you need high precision when working with BSON data types, you should use `decimal128`.
 
-`decimal128` supports 34 decimal digits of precision, or [significand](https://en.wikipedia.org/wiki/Significand)_ along with an exponent range of -6143 to +6144. The significand is not normalized in the `decimal128` standard, allowing for multiple possible representations: `10 x 10^-1 = 1 x 10^0 = .1 x 10^1 = .01 x 10^2`, etc. Having the ability to store maximum and minimum values in the order of `10^6144` and `10^-6143`, respectively, allows for a lot of precision.
+`decimal128` supports 34 decimal digits of precision, or [significand](https://en.wikipedia.org/wiki/Significand)_ with an exponent range of -6143 to +6144. The significand is not normalized in the `decimal128` standard, allowing for multiple possible representations: `10 x 10^-1 = 1 x 10^0 = .1 x 10^1 = .01 x 10^2`, etc. Having the ability to store maximum and minimum values in the order of `10^6144` and `10^-6143`, respectively, allows for a lot of precision.
 
 ### Use `decimal128` With the `Decimal128()` Constructor
 
@@ -180,7 +179,7 @@ Similarly, the following example in Java produces incorrect output:
 
 The same computations in Python, Ruby, Rust, and other languages produce the same results. This happens because binary floating-point numbers do not represent base 10 values well.
 
-For example, the `0.1` used in the above examples is represented in binary as `0.0001100110011001101`. Most of the time, this does not cause any significant issues. However, in applications such as finance or banking where precision is important, use `decimal128` as your data type.
+For example, the `0.1` used in the above examples is represented in binary as `0.0001100110011001101`. In most cases, this does not cause any significant issues. However, in applications such as finance or banking where precision is important, use `decimal128` as your data type.
 
 ## BSON with MongoDB Drivers
 

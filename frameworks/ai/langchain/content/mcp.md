@@ -4,15 +4,18 @@ framework: "LangChain"
 source_repo: "https://github.com/langchain-ai/docs"
 source_branch: "main"
 source_path: "src/oss/langchain/mcp.mdx"
-source_commit: "d037cd23f3f298721837c403b2ffd289e31d56d0"
-source_commit_short: "d037cd23"
-source_commit_date: "2026-06-23T11:18:55+02:00"
-generated_at: "2026-06-23T13:53:33Z"
+source_commit: "2aae1dfc98ee953a9a5185fb6fcdd9efb3f4d878"
+source_commit_short: "2aae1dfc"
+source_commit_date: "2026-07-25T00:27:23Z"
+generated_at: "2026-07-25T11:51:05Z"
 ---
 
 ---
 title: Model Context Protocol (MCP)
 ---
+
+import McpMultimodalToolContentPy from '/snippets/code-samples/mcp-multimodal-tool-content-py.mdx';
+import McpMultimodalToolContentJs from '/snippets/code-samples/mcp-multimodal-tool-content-js.mdx';
 
 :::python
 [Model Context Protocol (MCP)](https://modelcontextprotocol.io/introduction) is an open protocol that standardizes how applications provide tools and context to LLMs. LangChain agents can use tools defined on MCP servers using the [`langchain-mcp-adapters`](https://github.com/langchain-ai/langchain-mcp-adapters) library.
@@ -651,34 +654,25 @@ client = MultiServerMCPClient({...}, tool_interceptors=[append_structured_conten
 
 MCP tools can return [multimodal content](https://modelcontextprotocol.io/specification/2025-03-26/server/tools#tool-result) (images, text, etc.) in their responses. When an MCP server returns content with multiple parts (e.g., text and images), the adapter converts them to LangChain's [standard content blocks](/oss/langchain/messages#standard-content-blocks). You can access the standardized representation via the `content_blocks` property on the `ToolMessage`:
 
-```python
-from langchain_mcp_adapters.client import MultiServerMCPClient
-from langchain.agents import create_agent
-
-client = MultiServerMCPClient({...})
-tools = await client.get_tools()
-agent = create_agent("claude-sonnet-4-6", tools)
-
-result = await agent.ainvoke(
-    {"messages": [{"role": "user", "content": "Take a screenshot of the current page"}]}
-)
-
-# Access multimodal content from tool messages
-for message in result["messages"]:
-    if message.type == "tool":
-        # Raw content in provider-native format
-        print(f"Raw content: {message.content}")
-
-        # Standardized content blocks  # [!code highlight]
-        for block in message.content_blocks:  # [!code highlight]
-            if block["type"] == "text":  # [!code highlight]
-                print(f"Text: {block['text']}")  # [!code highlight]
-            elif block["type"] == "image":  # [!code highlight]
-                print(f"Image URL: {block.get('url')}")  # [!code highlight]
-                print(f"Image base64: {block.get('base64', '')[:50]}...")  # [!code highlight]
-```
+<McpMultimodalToolContentPy />
 
 This allows you to handle multimodal tool responses in a provider-agnostic way, regardless of how the underlying MCP server formats its content.
+
+:::
+
+:::js
+
+#### Multimodal tool content
+
+MCP tools can return [multimodal content](https://modelcontextprotocol.io/specification/2025-03-26/server/tools#tool-result) (images, text, etc.) in their responses. When an MCP server returns content with multiple parts (e.g., text and images), the adapter converts them to LangChain's [standard content blocks](/oss/langchain/messages#standard-content-blocks). You can access the standardized representation via the `contentBlocks` property on the `ToolMessage`:
+
+<McpMultimodalToolContentJs />
+
+This allows you to handle multimodal tool responses in a provider-agnostic way, regardless of how the underlying MCP server formats its content.
+
+:::
+
+:::python
 
 ### Resources
 

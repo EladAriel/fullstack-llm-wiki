@@ -4,10 +4,10 @@ framework: "nextjs"
 source_repo: "https://github.com/vercel/next.js/"
 source_branch: "canary"
 source_path: "docs/01-app/03-api-reference/05-config/01-next-config-js/headers.mdx"
-source_commit: "79142d7806ff4194c8d9885b80fa69db5ecf534a"
-source_commit_short: "79142d78"
-source_commit_date: "2026-06-20T23:40:12Z"
-generated_at: "2026-06-21T12:07:17Z"
+source_commit: "dcf242a17b5d4622bbd9624db531a9d84177619f"
+source_commit_short: "dcf242a1"
+source_commit_date: "2026-07-25T10:16:19+02:00"
+generated_at: "2026-07-25T11:50:53Z"
 ---
 
 ---
@@ -23,7 +23,7 @@ To set custom HTTP headers you can use the `headers` key in `next.config.js`:
 
 ```js filename="next.config.js"
 module.exports = {
-  async headers() {
+  headers() {
     return [
       {
         source: '/about',
@@ -43,7 +43,7 @@ module.exports = {
 }
 ```
 
-`headers` is an async function that expects an array to be returned holding objects with `source` and `headers` properties:
+`headers` can be defined as a synchronous or async function. It should return, or resolve to, an array of objects with `source` and `headers` properties:
 
 - `source` is the incoming request path pattern.
 - `headers` is an array of response header objects, with `key` and `value` properties.
@@ -60,7 +60,7 @@ If two headers match the same path and set the same header key, the last header 
 
 ```js filename="next.config.js"
 module.exports = {
-  async headers() {
+  headers() {
     return [
       {
         source: '/:path*',
@@ -91,7 +91,7 @@ Path matches are allowed, for example `/blog/:slug` will match `/blog/first-post
 
 ```js filename="next.config.js"
 module.exports = {
-  async headers() {
+  headers() {
     return [
       {
         source: '/blog/:slug',
@@ -123,7 +123,7 @@ To match a wildcard path you can use `*` after a parameter, for example `/blog/:
 
 ```js filename="next.config.js"
 module.exports = {
-  async headers() {
+  headers() {
     return [
       {
         source: '/blog/:slug*',
@@ -149,7 +149,7 @@ To match a regex path you can wrap the regex in parenthesis after a parameter, f
 
 ```js filename="next.config.js"
 module.exports = {
-  async headers() {
+  headers() {
     return [
       {
         source: '/blog/:post(\\d{1,})',
@@ -169,7 +169,7 @@ The following characters `(`, `)`, `{`, `}`, `:`, `*`, `+`, `?` are used for reg
 
 ```js filename="next.config.js"
 module.exports = {
-  async headers() {
+  headers() {
     return [
       {
         // this will match `/english(default)/something` being requested
@@ -198,7 +198,7 @@ To only apply a header when header, cookie, or query values also match the `has`
 
 ```js filename="next.config.js"
 module.exports = {
-  async headers() {
+  headers() {
     return [
       // if the header `x-add-header` is present,
       // the `x-another-header` header will be applied
@@ -308,7 +308,7 @@ When leveraging [`basePath` support](/docs/app/api-reference/config/next-config-
 module.exports = {
   basePath: '/docs',
 
-  async headers() {
+  headers() {
     return [
       {
         source: '/with-basePath', // becomes /docs/with-basePath
@@ -355,7 +355,7 @@ module.exports = {
     defaultLocale: 'en',
   },
 
-  async headers() {
+  headers() {
     return [
       {
         source: '/with-locale', // automatically handles all locales
@@ -498,7 +498,7 @@ export async function getServerSideProps({ req, res }) {
 [Cross-Origin Resource Sharing (CORS)](https://developer.mozilla.org/docs/Web/HTTP/CORS) is a security feature that allows you to control which sites can access your resources. You can set the `Access-Control-Allow-Origin` header to allow a specific origin to access your <PagesOnly>API Endpoints</PagesOnly><AppOnly>Route Handlers</AppOnly>.
 
 ```js
-async headers() {
+headers() {
     return [
       {
         source: "/api/:path*",

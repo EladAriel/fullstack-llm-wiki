@@ -4,10 +4,10 @@ framework: "redis"
 source_repo: "https://github.com/redis/docs.git"
 source_branch: "main"
 source_path: "content/commands/lmpop.md"
-source_commit: "bc92ea237bbfc2117c870c904f1a3ca619073ef1"
-source_commit_short: "bc92ea23"
-source_commit_date: "2026-06-18T14:53:00-05:00"
-generated_at: "2026-06-21T11:25:32Z"
+source_commit: "9d30f68c3dad1a6b3b7d30fe604b911348ce8152"
+source_commit_short: "9d30f68c"
+source_commit_date: "2026-07-24T10:52:10-07:00"
+generated_at: "2026-07-25T11:51:22Z"
 ---
 
 ---
@@ -130,18 +130,49 @@ The number of elements to pop. Defaults to 1.
 ## Examples
 
 {{% redis-cli %}}
-LMPOP 2 non1 non2 LEFT COUNT 10
-LPUSH mylist "one" "two" "three" "four" "five"
-LMPOP 1 mylist LEFT
-LRANGE mylist 0 -1
-LMPOP 1 mylist RIGHT COUNT 10
-LPUSH mylist "one" "two" "three" "four" "five"
-LPUSH mylist2 "a" "b" "c" "d" "e"
-LMPOP 2 mylist mylist2 right count 3
-LRANGE mylist 0 -1
-LMPOP 2 mylist mylist2 right count 5
-LMPOP 2 mylist mylist2 right count 10
-EXISTS mylist mylist2
+redis> LMPOP 2 non1 non2 LEFT COUNT 10
+(nil)
+redis> LPUSH mylist "one" "two" "three" "four" "five"
+(integer) 5
+redis> LMPOP 1 mylist LEFT
+1) "mylist"
+2) 1) "five"
+redis> LRANGE mylist 0 -1
+1) "four"
+2) "three"
+3) "two"
+4) "one"
+redis> LMPOP 1 mylist RIGHT COUNT 10
+1) "mylist"
+2) 1) "one"
+   2) "two"
+   3) "three"
+   4) "four"
+redis> LPUSH mylist "one" "two" "three" "four" "five"
+(integer) 5
+redis> LPUSH mylist2 "a" "b" "c" "d" "e"
+(integer) 5
+redis> LMPOP 2 mylist mylist2 right count 3
+1) "mylist"
+2) 1) "one"
+   2) "two"
+   3) "three"
+redis> LRANGE mylist 0 -1
+1) "five"
+2) "four"
+redis> LMPOP 2 mylist mylist2 right count 5
+1) "mylist"
+2) 1) "four"
+   2) "five"
+redis> LMPOP 2 mylist mylist2 right count 10
+1) "mylist2"
+2) 1) "a"
+   2) "b"
+   3) "c"
+   4) "d"
+   5) "e"
+redis> EXISTS mylist mylist2
+(integer) 0
 {{% /redis-cli %}}
 
 ## Redis Software and Redis Cloud compatibility

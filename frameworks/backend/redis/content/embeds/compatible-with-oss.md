@@ -4,10 +4,10 @@ framework: "redis"
 source_repo: "https://github.com/redis/docs.git"
 source_branch: "main"
 source_path: "content/embeds/compatible-with-oss.md"
-source_commit: "bc92ea237bbfc2117c870c904f1a3ca619073ef1"
-source_commit_short: "bc92ea23"
-source_commit_date: "2026-06-18T14:53:00-05:00"
-generated_at: "2026-06-21T11:25:32Z"
+source_commit: "9d30f68c3dad1a6b3b7d30fe604b911348ce8152"
+source_commit_short: "9d30f68c"
+source_commit_date: "2026-07-24T10:52:10-07:00"
+generated_at: "2026-07-25T11:51:22Z"
 ---
 
 Yes we are. Not only are we are the home of Redis, but most of the core engineers on Redis Open Source also work here.  We contribute extensively to the Redis Open Source project. As a rule, we adhere to Redis Open Source specifications and make every effort to update our service with its latest versions.
@@ -28,7 +28,7 @@ That said, the following Redis features are not applicable in the context of our
     - [SLAVEOF](http://redis.io/commands/SLAVEOF)
     - [SYNC](http://redis.io/commands/SYNC)/[PSYNC](http://redis.io/commands/PSYNC)
 - Redis Enterprise clustering technology is different than the Redis Open Source Cluster and supports clustering in a seamless manner that works with all standard Redis clients. As a result, [all Cluster related commands](http://redis.io/commands#cluster) are blocked and show an error when used.
-- Redis Enterprise clustering technology allows [multiple active proxies](http://docs.redislabs.com/latest/rs/databases/configure/proxy-policy.md). As a result, the CLIENT ID command cannot guarantee incremental IDs between clients who connect to different nodes under multi proxy policies.
+- Redis Enterprise clustering technology allows [multiple active proxies](https://redis.io/docs/latest/operate/rs/databases/configure/proxy-policy/). As a result, the CLIENT ID command cannot guarantee incremental IDs between clients who connect to different nodes under multi proxy policies.
 - Commands that aren’t relevant for a hosted Redis service are blocked:
     - [CONFIG RESETSTAT](http://redis.io/commands/CONFIG-RESETSTAT)
     - [DEBUG OBJECT](http://redis.io/commands/DEBUG-OBJECT)/[SEGFAULT](http://redis.io/commands/DEBUG-SEGFAULT)

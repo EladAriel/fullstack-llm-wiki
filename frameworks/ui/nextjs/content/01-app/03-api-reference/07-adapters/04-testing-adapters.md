@@ -4,10 +4,10 @@ framework: "nextjs"
 source_repo: "https://github.com/vercel/next.js/"
 source_branch: "canary"
 source_path: "docs/01-app/03-api-reference/07-adapters/04-testing-adapters.mdx"
-source_commit: "79142d7806ff4194c8d9885b80fa69db5ecf534a"
-source_commit_short: "79142d78"
-source_commit_date: "2026-06-20T23:40:12Z"
-generated_at: "2026-06-21T12:07:17Z"
+source_commit: "dcf242a17b5d4622bbd9624db531a9d84177619f"
+source_commit_short: "dcf242a1"
+source_commit_date: "2026-07-25T10:16:19+02:00"
+generated_at: "2026-07-25T11:50:53Z"
 ---
 
 ---
@@ -186,14 +186,13 @@ pnpm build
 # Write any metadata needed later to files in the working directory.
 BUILD_ID="$(cat .next/BUILD_ID)"
 DEPLOYMENT_ID="my-adapter-local"
-# If your adapter generates an immutable asset token, set it here.
-# Otherwise use "undefined" to indicate there is none.
-IMMUTABLE_ASSET_TOKEN="undefined"
+# If your adapter enables immutable static assets, set this to "1".
+NEXT_SUPPORTS_IMMUTABLE_ASSETS="0"
 
 {
   echo "BUILD_ID: $BUILD_ID"
   echo "DEPLOYMENT_ID: $DEPLOYMENT_ID"
-  echo "IMMUTABLE_ASSET_TOKEN: $IMMUTABLE_ASSET_TOKEN"
+  echo "NEXT_SUPPORTS_IMMUTABLE_ASSETS: $NEXT_SUPPORTS_IMMUTABLE_ASSETS"
 } >> .adapter-build.log
 
 # Start or deploy the app. Capture the URL at this point or make the script output the URL to stdout.
@@ -213,7 +212,7 @@ Its output must include lines starting with:
 
 - `BUILD_ID:`
 - `DEPLOYMENT_ID:`
-- `IMMUTABLE_ASSET_TOKEN:` (use the value `undefined` if your adapter does not produce one)
+- `NEXT_SUPPORTS_IMMUTABLE_ASSETS:`
 
 After those markers, the logs script can print any additional build or server logs that would help debug failures.
 

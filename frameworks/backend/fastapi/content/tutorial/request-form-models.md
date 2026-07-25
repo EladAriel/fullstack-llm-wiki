@@ -4,10 +4,10 @@ framework: "FastAPI"
 source_repo: "https://github.com/fastapi/fastapi.git"
 source_branch: "master"
 source_path: "docs/en/docs/tutorial/request-form-models.md"
-source_commit: "0cb4a8e284b450abbccb71c543ad7757de46c0b2"
-source_commit_short: "0cb4a8e2"
-source_commit_date: "2026-06-20T16:31:34Z"
-generated_at: "2026-06-21T07:06:10Z"
+source_commit: "255b912928904e3ba5980425a54d6837c8bd1a1c"
+source_commit_short: "255b9129"
+source_commit_date: "2026-07-24T21:15:37Z"
+generated_at: "2026-07-25T11:50:10Z"
 ---
 
 # Form Models { #form-models }
@@ -18,10 +18,10 @@ You can use **Pydantic models** to declare **form fields** in FastAPI.
 
 To use forms, first install [`python-multipart`](https://github.com/Kludex/python-multipart).
 
-Make sure you create a [virtual environment](../virtual-environments.md), activate it, and then install it, for example:
+Add it to your project:
 
 ```console
-$ pip install python-multipart
+$ uv add python-multipart
 ```
 
 ///

@@ -4,10 +4,10 @@ framework: "pydantic"
 source_repo: "https://github.com/pydantic/pydantic"
 source_branch: "main"
 source_path: "docs/install.md"
-source_commit: "363728fe0b353db1a1fcb44aac5c38fd96a8cc20"
-source_commit_short: "363728fe"
-source_commit_date: "2026-06-20T11:20:58+01:00"
-generated_at: "2026-06-21T11:37:01Z"
+source_commit: "a2a6577d4c329dd574a45dbb01a8feaa16b1ad3d"
+source_commit_short: "a2a6577d"
+source_commit_date: "2026-07-23T15:38:17Z"
+generated_at: "2026-07-25T11:50:12Z"
 ---
 
 Installation is as simple as:
@@ -29,6 +29,7 @@ Pydantic has a few dependencies:
 * [`pydantic-core`](https://pypi.org/project/pydantic-core/): Core validation logic for Pydantic written in Rust.
 * [`typing-extensions`](https://pypi.org/project/typing-extensions/): Backport of the standard library [typing][] module.
 * [`annotated-types`](https://pypi.org/project/annotated-types/): Reusable constraint types to use with [`typing.Annotated`][].
+* [`typing-inspection`](https://pypi.org/project/typing-inspection/): Runtime typing introspection tools.
 
 If you've got Python 3.10+ and `pip` installed, you're good to go.
 

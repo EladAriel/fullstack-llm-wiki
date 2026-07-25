@@ -4,10 +4,10 @@ framework: "LangChain"
 source_repo: "https://github.com/langchain-ai/docs"
 source_branch: "main"
 source_path: "src/oss/langchain/knowledge-base.mdx"
-source_commit: "d037cd23f3f298721837c403b2ffd289e31d56d0"
-source_commit_short: "d037cd23"
-source_commit_date: "2026-06-23T11:18:55+02:00"
-generated_at: "2026-06-23T13:53:33Z"
+source_commit: "2aae1dfc98ee953a9a5185fb6fcdd9efb3f4d878"
+source_commit_short: "2aae1dfc"
+source_commit_date: "2026-07-25T00:27:23Z"
+generated_at: "2026-07-25T11:51:05Z"
 ---
 
 ---
@@ -591,7 +591,7 @@ await retriever.batch([
 ```
 :::
 
-Retrievers can easily be incorporated into more complex applications, such as [retrieval-augmented generation (RAG)](/oss/langchain/retrieval) applications that combine a given question with retrieved context into a prompt for a LLM. To learn more about building such an application, check out the [RAG tutorial](/oss/langchain/rag) tutorial.
+Retrievers can easily be incorporated into more complex applications, such as [retrieval-augmented generation (RAG)](/oss/langchain/retrieval) applications that combine a given question with retrieved context into a prompt for a LLM. To learn more about building such an application, check out the [RAG tutorial](/oss/deepagents/rag) tutorial.
 
 
 ## Next steps
@@ -610,4 +610,4 @@ For more on vector stores:
 
 For more on RAG, see:
 
-- [Build a Retrieval Augmented Generation (RAG) App](/oss/langchain/rag/)
+- [Build a Retrieval Augmented Generation (RAG) App](/oss/deepagents/rag)

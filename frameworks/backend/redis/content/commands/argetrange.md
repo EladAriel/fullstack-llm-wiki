@@ -4,10 +4,10 @@ framework: "redis"
 source_repo: "https://github.com/redis/docs.git"
 source_branch: "main"
 source_path: "content/commands/argetrange.md"
-source_commit: "bc92ea237bbfc2117c870c904f1a3ca619073ef1"
-source_commit_short: "bc92ea23"
-source_commit_date: "2026-06-18T14:53:00-05:00"
-generated_at: "2026-06-21T11:25:32Z"
+source_commit: "9d30f68c3dad1a6b3b7d30fe604b911348ce8152"
+source_commit_short: "9d30f68c"
+source_commit_date: "2026-07-24T10:52:10-07:00"
+generated_at: "2026-07-25T11:51:22Z"
 ---
 
 ---
@@ -91,9 +91,18 @@ The zero-based integer index of the last element to return (inclusive). If `end`
 ## Examples
 
 {{% redis-cli %}}
-ARMSET myarray 0 "a" 1 "b" 3 "d"
-ARGETRANGE myarray 0 3
-ARGETRANGE myarray 3 0
+redis> ARMSET myarray 0 "a" 1 "b" 3 "d"
+(integer) 3
+redis> ARGETRANGE myarray 0 3
+1) "a"
+2) "b"
+3) (nil)
+4) "d"
+redis> ARGETRANGE myarray 3 0
+1) "d"
+2) (nil)
+3) "b"
+4) "a"
 {{% /redis-cli %}}
 
 ## Redis Software and Redis Cloud compatibility

@@ -4,10 +4,10 @@ framework: "redis"
 source_repo: "https://github.com/redis/docs.git"
 source_branch: "main"
 source_path: "content/operate/rs/databases/active-active/disaster-recovery/_index.md"
-source_commit: "bc92ea237bbfc2117c870c904f1a3ca619073ef1"
-source_commit_short: "bc92ea23"
-source_commit_date: "2026-06-18T14:53:00-05:00"
-generated_at: "2026-06-21T11:25:32Z"
+source_commit: "9d30f68c3dad1a6b3b7d30fe604b911348ce8152"
+source_commit_short: "9d30f68c"
+source_commit_date: "2026-07-24T10:52:10-07:00"
+generated_at: "2026-07-25T11:51:22Z"
 ---
 
 ---
@@ -92,27 +92,7 @@ You can use an existing connection to the database to check its availability.
 
 #### PING command
 
-The [`PING`]({{<relref "/commands/ping">}}) command checks the following:
-
-- The database is connectable. 
-
-- The database is readable. 
-
-- The dataset is available.
-
-Example response for an available database:
-
-```
-127.0.0.1:6379> PING
-PONG
-```
-
-If a database is connectable but not available for reads, such as when reloading from a snapshot, `PING` returns an error message:
-
-```
-127.0.0.1:6379> PING
-(error) LOADING Redis is loading the dataset in memory
-```
+The [`PING`]({{<relref "/commands/ping">}}) command checks that the database endpoint is available and the application can connect to the database.
 
 #### Connection timeouts or Redis errors
 
@@ -137,5 +117,5 @@ Use multiple write operations with different randomized keys to access different
 | Health check | Connectivity | Readability | Writability | Durability | Notes |
 |--------------|--------------|-------------|--------------|------------|-------|
 | Database availability requests |:white_check_mark: |  |  |  | No guarantees on readability. For example, the shard might be reloading from a snapshot. |
-| `PING` |:white_check_mark: |:white_check_mark: |:white_check_mark: |  | No support for clustered databases. All `PING` requests will be forwarded to shard 1. |
+| `PING` |:white_check_mark: |  |  |  | No guarantees on readability. For example, the shard might be reloading from a snapshot. |
 | Keyspace sampling |:white_check_mark: |:white_check_mark: |:white_check_mark: |:white_check_mark: | Write operations are persisted, increasing disk usage for AOF and RDB. |

@@ -4,10 +4,10 @@ framework: "postgres"
 source_repo: "https://github.com/postgres/postgres.git"
 source_branch: "master"
 source_path: "doc/src/sgml/ref/alter_publication.sgml"
-source_commit: "031904048aa22e7c70dc8e9c170e2743f9b0f090"
-source_commit_short: "03190404"
-source_commit_date: "2026-06-20T18:20:58+09:00"
-generated_at: "2026-06-21T07:06:11Z"
+source_commit: "38afc3dcb25c45b744d4025029ce0a6c90b7059f"
+source_commit_short: "38afc3dc"
+source_commit_date: "2026-07-25T19:08:27+09:00"
+generated_at: "2026-07-25T11:50:59Z"
 ---
 
 ALTER PUBLICATION
@@ -76,7 +76,8 @@ Adding/Setting any schema when the publication also publishes a table with a col
 ## Parameters
 
 - The name of an existing publication whose definition is to be altered.
-- Name of an existing table. If `ONLY` is specified before the table name, only that table is affected. If `ONLY` is not specified, the table and all its descendant tables (if any) are affected. Optionally, `*` can be specified after the table name to explicitly indicate that descendant tables are included. Optionally, a column list can be specified. See `sql-createpublication` for details. Note that a subscription having several publications in which the same table has been published with different column lists is not supported. See `logical-replication-col-list-combining` for details of potential problems when altering column lists. If the optional `WHERE` clause is specified, rows for which the `expression` evaluates to false or null will not be published. Note that parentheses are required around the expression. The `expression` is evaluated with the role used for the replication connection.
+- Name of an existing table. If `ONLY` is specified before the `table_name`, only that table is affected. If `ONLY` is not specified, the table and all its descendant tables (if any) are affected. Optionally, `*` can be specified after the `table_name` to explicitly indicate that descendant tables are included. Optionally, a column list can be specified. See `sql-createpublication` for details. Note that a subscription having several publications in which the same table has been published with different column lists is not supported. See `logical-replication-col-list-combining` for details of potential problems when altering column lists. If the optional `WHERE` clause is specified, rows for which the `expression` evaluates to false or null will not be published. Note that parentheses are required around the expression. The `expression` is evaluated with the role used for the replication connection.
+- Name of an existing column of `table_name`.
 - Name of an existing schema.
 - This clause alters publication parameters originally set by `sql-createpublication`. See there for more information. This clause is not applicable to sequences. Altering the `publish_via_partition_root` parameter can lead to data loss or duplication at the subscriber because it changes the identity and schema of the published tables. Note this happens only when a partition root table is specified as the replication target. This problem can be avoided by refraining from modifying partition leaf tables after the `ALTER PUBLICATION ... SET` until the ALTER SUBSCRIPTION ... REFRESH PUBLICATION is executed and by only refreshing using the `copy_data = off` option.
 - The user name of the new owner of the publication.

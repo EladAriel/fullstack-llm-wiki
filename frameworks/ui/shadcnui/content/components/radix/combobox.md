@@ -4,10 +4,10 @@ framework: "shadcnui"
 source_repo: "https://github.com/shadcn-ui/ui"
 source_branch: "main"
 source_path: "apps/v4/content/docs/components/radix/combobox.mdx"
-source_commit: "5602b81d8344e0d0d7178e3bf57612662cd42957"
-source_commit_short: "5602b81d"
-source_commit_date: "2026-06-21T15:49:35+04:00"
-generated_at: "2026-06-21T12:47:26Z"
+source_commit: "4baadbc6517070ae8f8feb2c97037adc2b305544"
+source_commit_short: "4baadbc6"
+source_commit_date: "2026-07-23T23:50:36+04:00"
+generated_at: "2026-07-25T11:50:48Z"
 ---
 
 ---
@@ -262,63 +262,61 @@ export function ExampleComboboxMultiple() {
 }
 ```
 
-## Examples
-
-### Basic
+## Basic
 
 A simple combobox with a list of frameworks.
 
 <ComponentPreview styleName="base-nova" name="combobox-basic" />
 
-### Multiple
+## Multiple
 
 A combobox with multiple selection using `multiple` and `ComboboxChips`.
 
 <ComponentPreview styleName="base-nova" name="combobox-multiple" />
 
-### Clear Button
+## Clear Button
 
 Use the `showClear` prop to show a clear button.
 
 <ComponentPreview styleName="base-nova" name="combobox-clear" />
 
-### Groups
+## Groups
 
 Use `ComboboxGroup` and `ComboboxSeparator` to group items.
 
 <ComponentPreview styleName="base-nova" name="combobox-groups" />
 
-### Custom Items
+## Custom Items
 
 You can render a custom component inside `ComboboxItem`.
 
 <ComponentPreview styleName="base-nova" name="combobox-custom" />
 
-### Invalid
+## Invalid
 
 Use the `aria-invalid` prop to make the combobox invalid.
 
 <ComponentPreview styleName="base-nova" name="combobox-invalid" />
 
-### Disabled
+## Disabled
 
 Use the `disabled` prop to disable the combobox.
 
 <ComponentPreview styleName="base-nova" name="combobox-disabled" />
 
-### Auto Highlight
+## Auto Highlight
 
 Use the `autoHighlight` prop to automatically highlight the first item on filter.
 
 <ComponentPreview styleName="base-nova" name="combobox-auto-highlight" />
 
-### Popup
+## Popup
 
 You can trigger the combobox from a button or any other component by using the `render` prop. Move the `ComboboxInput` inside the `ComboboxContent`.
 
 <ComponentPreview styleName="base-nova" name="combobox-popup" />
 
-### Input Group
+## Input Group
 
 You can add an addon to the combobox by using the `InputGroupAddon` component inside the `ComboboxInput`.
 

@@ -4,10 +4,10 @@ framework: "redis"
 source_repo: "https://github.com/redis/docs.git"
 source_branch: "main"
 source_path: "content/develop/ai/search-and-query/query/exact-match.md"
-source_commit: "bc92ea237bbfc2117c870c904f1a3ca619073ef1"
-source_commit_short: "bc92ea23"
-source_commit_date: "2026-06-18T14:53:00-05:00"
-generated_at: "2026-06-21T11:25:32Z"
+source_commit: "9d30f68c3dad1a6b3b7d30fe604b911348ce8152"
+source_commit_short: "9d30f68c"
+source_commit_date: "2026-07-24T10:52:10-07:00"
+generated_at: "2026-07-25T11:51:22Z"
 ---
 
 ---
@@ -67,7 +67,7 @@ FT.SEARCH index "*" FILTER field start end
 
 The following examples show you how to query for bicycles with a price of exactly 270 USD:
 
-{{< clients-example set="query_em" step="em1" description="Foundational: Query numeric fields for exact matches using range syntax or equality operators when you need to find documents with specific numeric values" difficulty="beginner" >}}
+{{< clients-example set="query_em" step="em1" description="Foundational: Query numeric fields for exact matches using range syntax or equality operators when you need to find documents with specific numeric values" difficulty="beginner" runnable="false" >}}
 > FT.SEARCH idx:bicycle "@price:[270 270]"
 1) (integer) 1
 2) "bicycle:0"
@@ -114,7 +114,7 @@ The curly brackets are mandatory for tag queries.
 
 This short example shows you how to query for new bicycles:
 
-{{< clients-example set="query_em" step="em2" description="Foundational: Query tag fields for exact matches using curly bracket syntax when you need to find documents with specific categorical values" difficulty="beginner" max_lines="10" >}}
+{{< clients-example set="query_em" step="em2" description="Foundational: Query tag fields for exact matches using curly bracket syntax when you need to find documents with specific categorical values" difficulty="beginner" max_lines="10" runnable="false" >}}
 > FT.SEARCH idx:bicycle "@condition:{new}"
  1) (integer) 5
  2) "bicycle:0"
@@ -164,8 +164,8 @@ You can't use a phrase that starts with a [stop word]({{< relref "/develop/ai/se
 
 Here is an example for finding all bicycles that have a description containing the exact text 'rough terrain':
 
-{{< clients-example set="query_em" step="em4" description="Text fields: Query text fields for exact phrase matches using escaped double quotes when you need to find documents containing specific multi-word phrases" difficulty="intermediate" max_lines="10" >}}
-FT.SEARCH idx:bicycle "@description:\"rough terrain\""
+{{< clients-example set="query_em" step="em4" description="Text fields: Query text fields for exact phrase matches using escaped double quotes when you need to find documents containing specific multi-word phrases" difficulty="intermediate" max_lines="10" runnable="false" >}}
+> FT.SEARCH idx:bicycle "@description:\"rough terrain\""
 1) (integer) 1
 2) "bicycle:8"
 3) 1) "$"

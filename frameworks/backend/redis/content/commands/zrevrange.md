@@ -4,10 +4,10 @@ framework: "redis"
 source_repo: "https://github.com/redis/docs.git"
 source_branch: "main"
 source_path: "content/commands/zrevrange.md"
-source_commit: "bc92ea237bbfc2117c870c904f1a3ca619073ef1"
-source_commit_short: "bc92ea23"
-source_commit_date: "2026-06-18T14:53:00-05:00"
-generated_at: "2026-06-21T11:25:32Z"
+source_commit: "9d30f68c3dad1a6b3b7d30fe604b911348ce8152"
+source_commit_short: "9d30f68c"
+source_commit_date: "2026-07-24T10:52:10-07:00"
+generated_at: "2026-07-25T11:51:22Z"
 ---
 
 ---
@@ -111,12 +111,21 @@ Also return the score of each member.
 ## Examples
 
 {{% redis-cli %}}
-ZADD myzset 1 "one"
-ZADD myzset 2 "two"
-ZADD myzset 3 "three"
-ZREVRANGE myzset 0 -1
-ZREVRANGE myzset 2 3
-ZREVRANGE myzset -2 -1
+redis> ZADD myzset 1 "one"
+(integer) 1
+redis> ZADD myzset 2 "two"
+(integer) 1
+redis> ZADD myzset 3 "three"
+(integer) 1
+redis> ZREVRANGE myzset 0 -1
+1) "three"
+2) "two"
+3) "one"
+redis> ZREVRANGE myzset 2 3
+1) "one"
+redis> ZREVRANGE myzset -2 -1
+1) "two"
+2) "one"
 {{% /redis-cli %}}
 
 ## Redis Software and Redis Cloud compatibility

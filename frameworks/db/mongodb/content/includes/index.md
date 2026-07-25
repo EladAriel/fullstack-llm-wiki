@@ -4,10 +4,10 @@ framework: "mongodb"
 directory: "content/includes"
 source_repo: "https://github.com/mongodb/docs.git"
 source_branch: "main"
-source_commit: "96788e8ed140cbdde184ff82e1066dff4996bde4"
-source_commit_short: "96788e8e"
-source_commit_date: "2026-06-19T21:35:03-06:00"
-generated_at: "2026-06-21T07:41:52Z"
+source_commit: "ab9db26ed3d11618cdb61516d8180337d8e3f679"
+source_commit_short: "ab9db26e"
+source_commit_date: "2026-07-24T16:22:46-06:00"
+generated_at: "2026-07-25T11:51:15Z"
 ---
 # Includes
 
@@ -65,12 +65,14 @@ This directory contains mongodb learning pages related to includes.
 - [Sbe](sbe/index.md) - pages related to sbe
 - [Schema Validation](schema-validation/index.md) - pages related to schema validation
 - [Search In Community](search-in-community/index.md) - pages related to search in community
+- [Search Shared](search-shared/index.md) - pages related to search shared
 - [Security](security/index.md) - pages related to security
 - [Serverstatus](serverStatus/index.md) - pages related to serverstatus
 - [Set Up](set-up/index.md) - pages related to set up
 - [Sharding](sharding/index.md) - pages related to sharding
 - [Stable Api](stable-api/index.md) - pages related to stable api
 - [Time Series](time-series/index.md) - pages related to time series
+- [Tls](tls/index.md) - pages related to tls
 - [Transactions](transactions/index.md) - pages related to transactions
 - [Tutorials](tutorials/index.md) - pages related to tutorials
 - [Views](views/index.md) - pages related to views
@@ -260,6 +262,7 @@ This directory contains mongodb learning pages related to includes.
 - [Collation Agg Example](collation-agg-example.md)
 - [Collation Data Setup](collation-data-setup.md)
 - [Collation Defaults Table](collation-defaults-table.md)
+- [Collation Index Example](collation-index-example.md)
 - [Collation Locale Table](collation-locale-table.md)
 - [Collation Replace Example](collation-replace-example.md)
 - [Collation Variants](collation-variants.md)
@@ -434,6 +437,7 @@ This directory contains mongodb learning pages related to includes.
 - [Fact Allowdiskusebydefault](fact-allowDiskUseByDefault.md)
 - [Fact Arbiter Priority](fact-arbiter-priority.md)
 - [Fact Array Expr](fact-array-expr.md)
+- [Fact Asp Stream Processor Tiers](fact-asp-stream-processor-tiers.md)
 - [Fact Atlas Banner](fact-atlas-banner.md)
 - [Fact Atlas Compatible](fact-atlas-compatible.md)
 - [Fact Atlas Enable Autoscaling](fact-atlas-enable-autoscaling.md)
@@ -478,6 +482,7 @@ This directory contains mongodb learning pages related to includes.
 - [Fact Change Database Context](fact-change-database-context.md)
 - [Fact Change Streams Modify Output](fact-change-streams-modify-output.md)
 - [Fact Changestreamoptions](fact-changeStreamOptions.md)
+- [Fact Charts Activation](fact-charts-activation.md)
 - [Fact Check Amazon Linux Community](fact-check-amazon-linux-community.md)
 - [Fact Check Amazon Linux Enterprise](fact-check-amazon-linux-enterprise.md)
 - [Fact Cleartext Passwords Tls](fact-cleartext-passwords-tls.md)
@@ -766,6 +771,7 @@ This directory contains mongodb learning pages related to includes.
 - [Fact Snapshot Read Concern](fact-snapshot-read-concern.md)
 - [Fact Sort Consistency](fact-sort-consistency.md)
 - [Fact Sort Document Type](fact-sort-document-type.md)
+- [Fact Sort Multiple Indexes](fact-sort-multiple-indexes.md)
 - [Fact Sort Order](fact-sort-order.md)
 - [Fact Sparse Index Hint Count](fact-sparse-index-hint-count.md)
 - [Fact Special Indexes And Text](fact-special-indexes-and-text.md)
@@ -1076,7 +1082,6 @@ This directory contains mongodb learning pages related to includes.
 - [Plan Cache Rename](plan-cache-rename.md)
 - [Plancachestats Querysettings](planCacheStats-querySettings.md)
 - [Platform Support Updates](platform-support-updates.md)
-- [Platform Support](platform-support.md)
 - [Ports](ports.md)
 - [Precision](precision.md)
 - [Primary Shard Enable Sharding Opt](primary-shard-enable-sharding-opt.md)
@@ -1193,6 +1198,7 @@ This directory contains mongodb learning pages related to includes.
 - [Steps Enable Thp Initd](steps-enable-thp-initd.md)
 - [Steps Enable Thp Systemd](steps-enable-thp-systemd.md)
 - [Steps Find Atlas Connection String](steps-find-atlas-connection-string.md)
+- [Steps Load Sample Data Local](steps-load-sample-data-local.md)
 - [Steps Nav Atlas Sample Grades](steps-nav-atlas-sample-grades.md)
 - [Steps Nav Atlas Sample Movies](steps-nav-atlas-sample-movies.md)
 - [Steps Specify Query Filter](steps-specify-query-filter.md)

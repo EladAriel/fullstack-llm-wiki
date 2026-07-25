@@ -4,10 +4,10 @@ framework: "shadcnui"
 source_repo: "https://github.com/shadcn-ui/ui"
 source_branch: "main"
 source_path: "apps/v4/content/docs/components/base/context-menu.mdx"
-source_commit: "5602b81d8344e0d0d7178e3bf57612662cd42957"
-source_commit_short: "5602b81d"
-source_commit_date: "2026-06-21T15:49:35+04:00"
-generated_at: "2026-06-21T12:47:26Z"
+source_commit: "4baadbc6517070ae8f8feb2c97037adc2b305544"
+source_commit_short: "4baadbc6"
+source_commit_date: "2026-07-23T23:50:36+04:00"
+generated_at: "2026-07-25T11:50:48Z"
 ---
 
 ---
@@ -122,57 +122,55 @@ ContextMenu
                 └── ContextMenuItem
 ```
 
-## Examples
-
-### Basic
+## Basic
 
 A simple context menu with a few actions.
 
 <ComponentPreview styleName="base-nova" name="context-menu-basic" />
 
-### Submenu
+## Submenu
 
 Use `ContextMenuSub` to nest secondary actions.
 
 <ComponentPreview styleName="base-nova" name="context-menu-submenu" />
 
-### Shortcuts
+## Shortcuts
 
 Add `ContextMenuShortcut` to show keyboard hints.
 
 <ComponentPreview styleName="base-nova" name="context-menu-shortcuts" />
 
-### Groups
+## Groups
 
 Group related actions and separate them with dividers.
 
 <ComponentPreview styleName="base-nova" name="context-menu-groups" />
 
-### Icons
+## Icons
 
 Combine icons with labels for quick scanning.
 
 <ComponentPreview styleName="base-nova" name="context-menu-icons" />
 
-### Checkboxes
+## Checkboxes
 
 Use `ContextMenuCheckboxItem` for toggles.
 
 <ComponentPreview styleName="base-nova" name="context-menu-checkboxes" />
 
-### Radio
+## Radio
 
 Use `ContextMenuRadioItem` for exclusive choices.
 
 <ComponentPreview styleName="base-nova" name="context-menu-radio" />
 
-### Destructive
+## Destructive
 
 Use `variant="destructive"` to style the menu item as destructive.
 
 <ComponentPreview styleName="base-nova" name="context-menu-destructive" />
 
-### Sides
+## Sides
 
 Control submenu placement with side and align props.
 

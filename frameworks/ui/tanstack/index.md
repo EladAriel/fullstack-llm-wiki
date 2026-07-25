@@ -8,9 +8,9 @@ This is a local LLM-friendly wiki generated from the official tanstack documenta
 - Source repo: `https://github.com/tanstack/query`
 - Source branch: `main`
 - Source docs path: `docs`
-- Source commit: `4f11927a`
-- Source commit date: `2026-06-19T13:43:35+02:00`
-- Wiki generated at: `2026-06-21T12:31:28Z`
+- Source commit: `fd50fa14`
+- Source commit date: `2026-07-24T22:22:47+10:00`
+- Wiki generated at: `2026-07-25T11:50:41Z`
 
 ## How the IDE LLM should use this wiki
 
@@ -204,6 +204,7 @@ This is a local LLM-friendly wiki generated from the official tanstack documenta
 - [Paginated Queries](content/framework/preact/guides/paginated-queries.md)
 - [Parallel Queries](content/framework/preact/guides/parallel-queries.md)
 - [Placeholder Query Data](content/framework/preact/guides/placeholder-query-data.md)
+- [Polling](content/framework/preact/guides/polling.md)
 - [Prefetching](content/framework/preact/guides/prefetching.md)
 - [Queries](content/framework/preact/guides/queries.md)
 - [Query Cancellation](content/framework/preact/guides/query-cancellation.md)

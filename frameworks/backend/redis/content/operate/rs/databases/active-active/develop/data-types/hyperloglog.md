@@ -4,10 +4,10 @@ framework: "redis"
 source_repo: "https://github.com/redis/docs.git"
 source_branch: "main"
 source_path: "content/operate/rs/databases/active-active/develop/data-types/hyperloglog.md"
-source_commit: "bc92ea237bbfc2117c870c904f1a3ca619073ef1"
-source_commit_short: "bc92ea23"
-source_commit_date: "2026-06-18T14:53:00-05:00"
-generated_at: "2026-06-21T11:25:32Z"
+source_commit: "9d30f68c3dad1a6b3b7d30fe604b911348ce8152"
+source_commit_short: "9d30f68c"
+source_commit_date: "2026-07-24T10:52:10-07:00"
+generated_at: "2026-07-25T11:51:22Z"
 ---
 
 ---
@@ -29,7 +29,7 @@ Because it estimates the cardinality by probability, the HyperLogLog algorithm c
 
 ## HyperLogLog in Redis
 
-Redis Open source implements [HyperLogLog](https://redislabs.com/redis-best-practices/counting/hyperloglog/) (HLL) as a native data structure.
+Redis Open source implements [HyperLogLog]({{< relref "/develop/data-types/probabilistic/hyperloglogs" >}}) (HLL) as a native data structure.
 It supports adding elements ([PFADD]({{< relref "/commands/pfadd" >}}) to an HLL, counting elements ([PFCOUNT]({{< relref "/commands/pfcount" >}}) of HLLs, and merging of ([PFMERGE]({{< relref "/commands/pfmerge" >}}) HLLs.
 
 Here is an example of a simple write case:

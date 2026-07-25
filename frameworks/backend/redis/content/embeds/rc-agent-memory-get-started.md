@@ -4,16 +4,12 @@ framework: "redis"
 source_repo: "https://github.com/redis/docs.git"
 source_branch: "main"
 source_path: "content/embeds/rc-agent-memory-get-started.md"
-source_commit: "bc92ea237bbfc2117c870c904f1a3ca619073ef1"
-source_commit_short: "bc92ea23"
-source_commit_date: "2026-06-18T14:53:00-05:00"
-generated_at: "2026-06-21T11:25:32Z"
+source_commit: "9d30f68c3dad1a6b3b7d30fe604b911348ce8152"
+source_commit_short: "9d30f68c"
+source_commit_date: "2026-07-24T10:52:10-07:00"
+generated_at: "2026-07-25T11:51:22Z"
 ---
 
-To set up Agent Memory on Redis Cloud:
-
-1. [Create a database]({{< relref "/operate/rc/databases/create-database" >}}) on Redis Cloud.
-2. [Create an Agent Memory service]({{< relref "/operate/rc/context-engine/agent-memory/create-service" >}}) for your database on Redis Cloud.
-3. [Use the Agent Memory API]({{< relref "/operate/rc/context-engine/agent-memory/use-agent-memory" >}}) from your client app.
+Follow the [Redis Cloud Agent Memory REST quickstart]({{< relref "/operate/rc/context-engine/agent-memory/use-agent-memory" >}}) to create a service and make your first session-memory and long-term-memory requests.
 
 After you set up Agent Memory, you can [view and manage your service]({{< relref "/operate/rc/context-engine/agent-memory/view-service" >}}).

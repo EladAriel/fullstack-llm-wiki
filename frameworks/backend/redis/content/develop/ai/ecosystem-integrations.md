@@ -4,10 +4,10 @@ framework: "redis"
 source_repo: "https://github.com/redis/docs.git"
 source_branch: "main"
 source_path: "content/develop/ai/ecosystem-integrations.md"
-source_commit: "bc92ea237bbfc2117c870c904f1a3ca619073ef1"
-source_commit_short: "bc92ea23"
-source_commit_date: "2026-06-18T14:53:00-05:00"
-generated_at: "2026-06-21T11:25:32Z"
+source_commit: "9d30f68c3dad1a6b3b7d30fe604b911348ce8152"
+source_commit_short: "9d30f68c"
+source_commit_date: "2026-07-24T10:52:10-07:00"
+generated_at: "2026-07-25T11:51:22Z"
 ---
 
 ---
@@ -30,7 +30,7 @@ Redis integrates with a wide range of AI frameworks, platforms, and tools to enh
 | Combine Kong's AI Gateway with Redis for efficient AI request routing, caching, and rate limiting to optimize your AI infrastructure. | Accelerate AI workflows by using Redis to cache document processing results from Unstructured, reducing processing time and costs. | Implement smarter memory management for AI agents with Mem0's integration with Redis, providing persistent, queryable memory for LLMs. |
 | [**LiteLLM & Redis**](https://docs.litellm.ai/docs/caching/all_caches#initialize-cache---in-memory-redis-s3-bucket-redis-semantic-disk-cache-qdrant-semantic) | [**LangGraph & Redis**](https://redis.io/blog/langgraph-redis-build-smarter-ai-agents-with-memory-persistence/) | [**LangChain & Redis**](https://redis.io/blog/langchain-redis-partner-package/) |
 | Optimize LLM performance with LiteLLM's Redis caching capabilities, supporting both traditional and semantic caching to reduce costs and latency. | Build smarter AI agents with LangGraph's Redis integration for memory persistence, state management, and multi-agent coordination. | Leverage LangChain's Redis integration for vector storage, memory, and caching to create more capable AI applications with improved performance. |
-| [**LlamaIndex & Redis**](https://docs.llamaindex.ai/en/stable/examples/vector_stores/RedisIndexDemo/) | [**Amazon Bedrock & Redis**]({{< relref "/integrate/amazon-bedrock/set-up-redis" >}}) | [**NVIDIA NIM & Redis**](https://redis.io/blog/use-redis-with-nvidia-nim-to-deploy-genai-apps-faster/) |
+| [**LlamaIndex & Redis**](https://developers.llamaindex.ai/python/examples/vector_stores/redisindexdemo/) | [**Amazon Bedrock & Redis**]({{< relref "/integrate/amazon-bedrock/set-up-redis" >}}) | [**NVIDIA NIM & Redis**](https://redis.io/blog/use-redis-with-nvidia-nim-to-deploy-genai-apps-faster/) |
 | Use LlamaIndex with Redis as a vector store for efficient document indexing, retrieval, and querying in RAG applications. | Integrate Redis with Amazon Bedrock to enhance your generative AI applications with persistent memory and efficient vector search. | Deploy GenAI applications faster by combining NVIDIA NIM's inference optimization with Redis for vector search, caching, and data management. |
 
 ## Additional integrations

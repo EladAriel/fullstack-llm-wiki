@@ -4,10 +4,10 @@ framework: "postgres"
 source_repo: "https://github.com/postgres/postgres.git"
 source_branch: "master"
 source_path: "doc/src/sgml/xfunc.sgml"
-source_commit: "031904048aa22e7c70dc8e9c170e2743f9b0f090"
-source_commit_short: "03190404"
-source_commit_date: "2026-06-20T18:20:58+09:00"
-generated_at: "2026-06-21T07:06:11Z"
+source_commit: "38afc3dcb25c45b744d4025029ce0a6c90b7059f"
+source_commit_short: "38afc3dc"
+source_commit_date: "2026-07-25T19:08:27+09:00"
+generated_at: "2026-07-25T11:50:59Z"
 ---
 
 ## User-Defined Functions
@@ -2063,7 +2063,7 @@ The `ShmemRequestStruct()` can also be called after system startup, which is use
 
 By default, `RegisterShmemCallbacks()` fails with an error if called after system startup. To use it after startup, you must set the `SHMEM_CALLBACKS_ALLOW_AFTER_STARTUP` flag in the argument `ShmemCallbacks` struct to acknowledge the risk.
 
-When `RegisterShmemCallbacks()` is called after startup, it will immediately call the appropriate callbacks, depending on whether the requested memory areas were already initialized by another backend. The callbacks will be called while holding an internal lock, which prevents concurrent two backends from initializing the memory area concurrently.
+When `RegisterShmemCallbacks()` is called after startup, it will immediately call the appropriate callbacks, depending on whether the requested memory areas were already initialized by another backend. The callbacks will be called while holding an internal lock (ShmemIndexLock), which prevents the race condition of two backends trying to initialize the memory area at the same time.
 
 ## Allocating Dynamic Shared Memory after Startup
 

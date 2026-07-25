@@ -4,10 +4,10 @@ framework: "nextjs"
 source_repo: "https://github.com/vercel/next.js/"
 source_branch: "canary"
 source_path: "docs/01-app/03-api-reference/05-config/01-next-config-js/turbopackMemoryEviction.mdx"
-source_commit: "79142d7806ff4194c8d9885b80fa69db5ecf534a"
-source_commit_short: "79142d78"
-source_commit_date: "2026-06-20T23:40:12Z"
-generated_at: "2026-06-21T12:07:17Z"
+source_commit: "dcf242a17b5d4622bbd9624db531a9d84177619f"
+source_commit_short: "dcf242a1"
+source_commit_date: "2026-07-25T10:16:19+02:00"
+generated_at: "2026-07-25T11:50:53Z"
 ---
 
 ---
@@ -18,12 +18,13 @@ description: Learn how to control Turbopack's memory eviction strategy for the p
 
 ## Usage
 
-`turbopackMemoryEviction` controls how whether Turbopack reclaims memory while the persistent (FileSystem) cache is enabled. After Turbopack writes a snapshot of its cache to disk, it can 'evict' the in-memory copies of that data and reload them from disk on demand.
+`turbopackMemoryEviction` controls whether Turbopack reclaims memory while the persistent (FileSystem) cache is enabled. After Turbopack writes a snapshot of its cache to disk, it can 'evict' the in-memory copies of that data and reload them from disk on demand.
 
-Currently there are two options
+Currently there are three options
 
 - `false`: never evict. Cached data stays in memory for the lifetime of the process.
-- `'full'` (default): after every snapshot, evict all possible data from memory. They are reloaded from disk on demand.
+- `'auto'` (default): evict after a snapshot only once enough memory has been allocated since the last eviction to make it worthwhile. Leverages thresholds and memory pressure feedback from the operating system.
+- `'full'`: evict all possible data from memory every time we save to disk.
 
 > **Good to know:** This option only has an effect in `next dev` sessions when the [FileSystem Cache](/docs/app/api-reference/config/next-config-js/turbopackFileSystemCache) is enabled, since eviction relies on data already being persisted to disk. It is experimental and under active development.
 
@@ -32,8 +33,7 @@ import type { NextConfig } from 'next'
 
 const nextConfig: NextConfig = {
   experimental: {
-    // Evict in-memory cache data after each snapshot to reduce memory usage
-    turbopackMemoryEviction: 'full',
+    turbopackMemoryEviction: 'auto',
   },
 }
 
@@ -44,8 +44,7 @@ export default nextConfig
 /** @type {import('next').NextConfig} */
 const nextConfig = {
   experimental: {
-    // Evict in-memory cache data after each snapshot to reduce memory usage
-    turbopackMemoryEviction: 'full',
+    turbopackMemoryEviction: 'auto',
   },
 }
 

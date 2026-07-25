@@ -4,10 +4,10 @@ framework: "shadcnui"
 source_repo: "https://github.com/shadcn-ui/ui"
 source_branch: "main"
 source_path: "apps/v4/content/docs/components/base/slider.mdx"
-source_commit: "5602b81d8344e0d0d7178e3bf57612662cd42957"
-source_commit_short: "5602b81d"
-source_commit_date: "2026-06-21T15:49:35+04:00"
-generated_at: "2026-06-21T12:47:26Z"
+source_commit: "4baadbc6517070ae8f8feb2c97037adc2b305544"
+source_commit_short: "4baadbc6"
+source_commit_date: "2026-07-23T23:50:36+04:00"
+generated_at: "2026-07-25T11:50:48Z"
 ---
 
 ---
@@ -74,31 +74,29 @@ import { Slider } from "@/components/ui/slider"
 <Slider defaultValue={[33]} max={100} step={1} />
 ```
 
-## Examples
-
-### Range
+## Range
 
 Use an array with two values for a range slider.
 
 <ComponentPreview styleName="base-nova" name="slider-range" />
 
-### Multiple Thumbs
+## Multiple Thumbs
 
 Use an array with multiple values for multiple thumbs.
 
 <ComponentPreview styleName="base-nova" name="slider-multiple" />
 
-### Vertical
+## Vertical
 
 Use `orientation="vertical"` for a vertical slider.
 
 <ComponentPreview styleName="base-nova" name="slider-vertical" />
 
-### Controlled
+## Controlled
 
 <ComponentPreview styleName="base-nova" name="slider-controlled" />
 
-### Disabled
+## Disabled
 
 Use the `disabled` prop to disable the slider.
 

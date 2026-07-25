@@ -8,9 +8,9 @@ This is a local LLM-friendly wiki generated from the official postgres documenta
 - Source repo: `https://github.com/postgres/postgres.git`
 - Source branch: `master`
 - Source docs path: `doc/src/sgml`
-- Source commit: `03190404`
-- Source commit date: `2026-06-20T18:20:58+09:00`
-- Wiki generated at: `2026-06-21T07:06:11Z`
+- Source commit: `38afc3dc`
+- Source commit date: `2026-07-25T19:08:27+09:00`
+- Wiki generated at: `2026-07-25T11:50:59Z`
 
 ## How the IDE LLM should use this wiki
 
@@ -43,6 +43,7 @@ This is a local LLM-friendly wiki generated from the official postgres documenta
 - [Appendix Obsolete Pgresetxlog](content/appendix-obsolete-pgresetxlog.md)
 - [Appendix Obsolete Pgxlogdump](content/appendix-obsolete-pgxlogdump.md)
 - [Appendix Obsolete Recovery Config](content/appendix-obsolete-recovery-config.md)
+- [Appendix Obsolete Refint](content/appendix-obsolete-refint.md)
 - [Appendix Obsolete](content/appendix-obsolete.md)
 - [Arch Dev](content/arch-dev.md)
 - [Archive Modules](content/archive-modules.md)
@@ -423,7 +424,7 @@ This is a local LLM-friendly wiki generated from the official postgres documenta
 - [Wait For](content/ref/wait_for.md)
 - [Reference](content/reference.md)
 - [Regress](content/regress.md)
-- [Release 19](content/release-19.md)
+- [Release 20](content/release-20.md)
 - [Release](content/release.md)
 - [Replication Origins](content/replication-origins.md)
 - [Rowtypes](content/rowtypes.md)

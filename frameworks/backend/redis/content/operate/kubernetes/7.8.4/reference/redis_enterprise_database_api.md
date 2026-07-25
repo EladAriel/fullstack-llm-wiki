@@ -4,10 +4,10 @@ framework: "redis"
 source_repo: "https://github.com/redis/docs.git"
 source_branch: "main"
 source_path: "content/operate/kubernetes/7.8.4/reference/redis_enterprise_database_api.md"
-source_commit: "bc92ea237bbfc2117c870c904f1a3ca619073ef1"
-source_commit_short: "bc92ea23"
-source_commit_date: "2026-06-18T14:53:00-05:00"
-generated_at: "2026-06-21T11:25:32Z"
+source_commit: "9d30f68c3dad1a6b3b7d30fe604b911348ce8152"
+source_commit_short: "9d30f68c"
+source_commit_date: "2026-07-24T10:52:10-07:00"
+generated_at: "2026-07-25T11:51:22Z"
 ---
 
 ---
@@ -156,7 +156,7 @@ RedisEnterpriseDatabaseSpec defines the desired state of RedisEnterpriseDatabase
         <td>evictionPolicy</td>
         <td>string</td>
         <td>
-          Database eviction policy. see more https://docs.redislabs.com/latest/rs/administering/database-operations/eviction-policy/<br/>
+          Database eviction policy. see more https://redis.io/docs/latest/operate/rs/databases/memory-performance/eviction-policy/<br/>
         </td>
         <td>false</td>
       </tr><tr>
@@ -214,7 +214,7 @@ RedisEnterpriseDatabaseSpec defines the desired state of RedisEnterpriseDatabase
         <td>rackAware</td>
         <td>boolean</td>
         <td>
-          Whether database should be rack aware. This improves availability - more information: https://docs.redislabs.com/latest/rs/concepts/high-availability/rack-zone-awareness/<br/>
+          Whether database should be rack aware. This improves availability - more information: https://redis.io/docs/latest/operate/rs/clusters/configure/rack-zone-awareness/<br/>
         </td>
         <td>false</td>
       </tr><tr>

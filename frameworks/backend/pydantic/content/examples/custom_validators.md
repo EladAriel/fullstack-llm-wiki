@@ -4,10 +4,10 @@ framework: "pydantic"
 source_repo: "https://github.com/pydantic/pydantic"
 source_branch: "main"
 source_path: "docs/examples/custom_validators.md"
-source_commit: "363728fe0b353db1a1fcb44aac5c38fd96a8cc20"
-source_commit_short: "363728fe"
-source_commit_date: "2026-06-20T11:20:58+01:00"
-generated_at: "2026-06-21T11:37:01Z"
+source_commit: "a2a6577d4c329dd574a45dbb01a8feaa16b1ad3d"
+source_commit_short: "a2a6577d"
+source_commit_date: "2026-07-23T15:38:17Z"
+generated_at: "2026-07-25T11:50:12Z"
 ---
 
 This page provides example snippets for creating more complex, custom validators in Pydantic.
@@ -102,7 +102,7 @@ except ValidationError as ve:
     'loc': (),
     'msg': 'Assertion failed, Invalid tzinfo: Europe/London, expected: America/Los_Angeles',
     'type': 'assertion_error',
-    'url': 'https://errors.pydantic.dev/2.8/v/assertion_error'}]
+    'url': 'https://errors.pydantic.dev/2/v/assertion_error'}]
     """
 ```
 
@@ -182,7 +182,7 @@ except ValidationError as e:
     'loc': (),
     'msg': 'Assertion failed, Value out of bounds',
     'type': 'assertion_error',
-    'url': 'https://errors.pydantic.dev/2.8/v/assertion_error'}]
+    'url': 'https://errors.pydantic.dev/2/v/assertion_error'}]
     """
 ```
 
@@ -238,7 +238,8 @@ except ValidationError as e:
     """
 ```
 
-Alternatively, a custom validator can be used in the nested model class (`User`), with the forbidden passwords data from the parent model being passed in via validation context.
+Alternatively, a custom validator can be used in the nested model class (`User`), with the forbidden passwords data from the parent model being passed in
+via [validation context](../concepts/validators.md#validation-context).
 
 !!! warning
     The ability to mutate the context within a validator adds a lot of power to nested validation, but can also lead to confusing or hard-to-debug code. Use this approach at your own risk!
@@ -296,6 +297,10 @@ except ValidationError as e:
     """
 ```
 
-Note that if the context property is not included in `model_validate`, then `info.context` will be `None` and the forbidden passwords list will not get added to the context in the above implementation. As such, `validate_user_passwords` would not carry out the desired password validation.
+Note that if the context property is not included in [`model_validate()`][pydantic.main.BaseModel.model_validate], then [`context`][pydantic.ValidationInfo.context] will be `None`
+and the forbidden passwords list will not get added to the context in the above implementation. As such, `validate_user_passwords()` would not carry out the desired password validation.
 
 More details about validation context can be found in the [validators documentation](../concepts/validators.md#validation-context).
+
+!!! tip "Logfire integration"
+    The [Logfire integration](../integrations/logfire.md) also records the message from your custom validators.

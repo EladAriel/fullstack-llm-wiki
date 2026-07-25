@@ -4,10 +4,10 @@ framework: "redis"
 directory: "content/operate/kubernetes/security"
 source_repo: "https://github.com/redis/docs.git"
 source_branch: "main"
-source_commit: "bc92ea237bbfc2117c870c904f1a3ca619073ef1"
-source_commit_short: "bc92ea23"
-source_commit_date: "2026-06-18T14:53:00-05:00"
-generated_at: "2026-06-21T11:25:32Z"
+source_commit: "9d30f68c3dad1a6b3b7d30fe604b911348ce8152"
+source_commit_short: "9d30f68c"
+source_commit_date: "2026-07-24T10:52:10-07:00"
+generated_at: "2026-07-25T11:51:22Z"
 ---
 # Security
 
@@ -23,20 +23,15 @@ This directory contains redis learning pages related to security.
 
 ## Child Directories
 
-- None
+- [Access Control](access-control/index.md) - pages related to access control
+- [Authentication](authentication/index.md) - pages related to authentication
+- [Certificates](certificates/index.md) - pages related to certificates
 
 ## Pages in This Directory
 
 - [Index](_index.md)
-- [Add Client Certificates](add-client-certificates.md)
 - [Allow Resource Adjustment](allow-resource-adjustment.md)
-- [Cert Manager](cert-manager.md)
-- [Configuration Secrets](configuration-secrets.md)
-- [Internode Encryption](internode-encryption.md)
-- [Ldap](ldap.md)
-- [Manage Rec Certificates](manage-rec-certificates.md)
-- [Manage Rec Credentials](manage-rec-credentials.md)
-- [Sso](sso.md)
+- [Fips](fips.md)
 - [Vault](vault.md)
 
 ## IDE LLM Guidance

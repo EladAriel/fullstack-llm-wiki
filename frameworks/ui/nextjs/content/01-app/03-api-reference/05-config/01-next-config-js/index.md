@@ -4,10 +4,10 @@ framework: "nextjs"
 directory: "content/01-app/03-api-reference/05-config/01-next-config-js"
 source_repo: "https://github.com/vercel/next.js/"
 source_branch: "canary"
-source_commit: "79142d7806ff4194c8d9885b80fa69db5ecf534a"
-source_commit_short: "79142d78"
-source_commit_date: "2026-06-20T23:40:12Z"
-generated_at: "2026-06-21T12:07:17Z"
+source_commit: "dcf242a17b5d4622bbd9624db531a9d84177619f"
+source_commit_short: "dcf242a1"
+source_commit_date: "2026-07-25T10:16:19+02:00"
+generated_at: "2026-07-25T11:50:53Z"
 ---
 # 01 Next Config Js
 
@@ -78,6 +78,7 @@ This directory contains nextjs learning pages related to 01 next config js.
 - [Serverexternalpackages](serverExternalPackages.md)
 - [Staletimes](staleTimes.md)
 - [Staticgeneration](staticGeneration.md)
+- [Supportsimmutableassets](supportsImmutableAssets.md)
 - [Taint](taint.md)
 - [Trailingslash](trailingSlash.md)
 - [Transpilepackages](transpilePackages.md)
@@ -86,11 +87,12 @@ This directory contains nextjs learning pages related to 01 next config js.
 - [Turbopackignoreissue](turbopackIgnoreIssue.md)
 - [Turbopacklocalpostcssconfig](turbopackLocalPostcssConfig.md)
 - [Turbopackmemoryeviction](turbopackMemoryEviction.md)
+- [Turbopackrustreactcompiler](turbopackRustReactCompiler.md)
 - [Typedroutes](typedRoutes.md)
 - [Typescript](typescript.md)
 - [Urlimports](urlImports.md)
 - [Uselightningcss](useLightningcss.md)
-- [Viewtransition](viewTransition.md)
+- [Usetypescriptcli](useTypeScriptCli.md)
 - [Webvitalsattribution](webVitalsAttribution.md)
 - [Webpack](webpack.md)
 

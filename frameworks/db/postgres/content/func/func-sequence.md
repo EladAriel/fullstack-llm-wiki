@@ -4,10 +4,10 @@ framework: "postgres"
 source_repo: "https://github.com/postgres/postgres.git"
 source_branch: "master"
 source_path: "doc/src/sgml/func/func-sequence.sgml"
-source_commit: "031904048aa22e7c70dc8e9c170e2743f9b0f090"
-source_commit_short: "03190404"
-source_commit_date: "2026-06-20T18:20:58+09:00"
-generated_at: "2026-06-21T07:06:11Z"
+source_commit: "38afc3dcb25c45b744d4025029ce0a6c90b7059f"
+source_commit_short: "38afc3dc"
+source_commit_date: "2026-07-25T19:08:27+09:00"
+generated_at: "2026-07-25T11:50:59Z"
 ---
 
 ## Sequence Manipulation Functions
@@ -56,9 +56,9 @@ This function requires `USAGE` or `SELECT` privilege on the last used sequence.
 
 pg_get_sequence_data `pg_get_sequence_data` ( `regclass` ) record ( `last_value` `bigint`, `is_called` `bool`, `page_lsn` `pg_lsn` )
 
-Returns information about the sequence. `last_value` is the last sequence value written to disk. If caching is used, this value can be greater than the last value handed out from the sequence. `is_called` indicates whether the sequence has been used. `page_lsn` is the LSN corresponding to the most recent WAL record that modified this sequence relation. This function returns a row of NULL values if the sequence does not exist or if the current user lacks privileges on it.
+Returns information about the sequence. `last_value` is the last sequence value written to disk. If caching is used, this value can be greater than the last value handed out from the sequence. `is_called` indicates whether the sequence has been used. `page_lsn` is the LSN corresponding to the most recent WAL record that modified this sequence relation. This function returns a row of NULL values if the specified relation OID does not exist, if it is not a sequence, if the current user lacks `SELECT` privilege on the sequence, if the sequence is another session's temporary sequence, or if it is an unlogged sequence on a standby server.
 
-This function is primarily intended for internal use by pg_dump and by logical replication to synchronize sequences. It requires `SELECT` privilege on the sequence.
+This function is primarily intended for internal use by pg_dump and by logical replication to synchronize sequences.
 
 To avoid blocking concurrent transactions that obtain numbers from the same sequence, the value obtained by `nextval` is not reclaimed for re-use if the calling transaction later aborts. This means that transaction aborts or database crashes can result in gaps in the sequence of assigned values. That can happen without a transaction abort, too. For example an `INSERT` with an `ON CONFLICT` clause will compute the to-be-inserted tuple, including doing any required `nextval` calls, before detecting any conflict that would cause it to follow the `ON CONFLICT` rule instead. Thus, PostgreSQL sequence objects cannot be used to obtain gapless sequences. Likewise, sequence state changes made by `setval` are immediately visible to other transactions, and are not undone if the calling transaction rolls back. If the database cluster crashes before committing a transaction containing a `nextval` or `setval` call, the sequence state change might not have made its way to persistent storage, so that it is uncertain whether the sequence will have its original or updated state after the cluster restarts. This is harmless for usage of the sequence within the database, since other effects of uncommitted transactions will not be visible either. However, if you wish to use a sequence value for persistent outside-the-database purposes, make sure that the `nextval` call has been committed before doing so.
 

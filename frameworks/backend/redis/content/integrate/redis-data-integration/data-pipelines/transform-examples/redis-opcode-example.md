@@ -4,10 +4,10 @@ framework: "redis"
 source_repo: "https://github.com/redis/docs.git"
 source_branch: "main"
 source_path: "content/integrate/redis-data-integration/data-pipelines/transform-examples/redis-opcode-example.md"
-source_commit: "bc92ea237bbfc2117c870c904f1a3ca619073ef1"
-source_commit_short: "bc92ea23"
-source_commit_date: "2026-06-18T14:53:00-05:00"
-generated_at: "2026-06-21T11:25:32Z"
+source_commit: "9d30f68c3dad1a6b3b7d30fe604b911348ce8152"
+source_commit_short: "9d30f68c"
+source_commit_date: "2026-07-24T10:52:10-07:00"
+generated_at: "2026-07-25T11:51:22Z"
 ---
 
 ---
@@ -33,12 +33,14 @@ The opcode is only available in the [full row format]({{< relref "/integrate/red
 
 It has one of the following values:
 
-- r - Read (applies to only snapshots)
-- c - Create
-- u - Update
-- d - Delete
-- t = Truncate (PostgreSQL specific)
-- m = Message (PostgreSQL specific)
+| Opcode | Operation | Notes |
+|--------|-----------|-------|
+| `c` | Create row |  |
+| `u` | Update row |  |
+| `d` | Delete row |  |
+| `r` | Read row (snapshot) | Applies only to snapshots. |
+| `t` | Truncate table | PostgreSQL specific. |
+| `m` | Message event | PostgreSQL specific. |
 
 
 You can add the value of the operation code to the output, and also use it in a conditional expression to modify the behavior of the job. The following examples demonstrate the different use-cases.

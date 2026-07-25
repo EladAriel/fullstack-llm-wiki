@@ -4,10 +4,10 @@ framework: "postgres"
 source_repo: "https://github.com/postgres/postgres.git"
 source_branch: "master"
 source_path: "doc/src/sgml/monitoring.sgml"
-source_commit: "031904048aa22e7c70dc8e9c170e2743f9b0f090"
-source_commit_short: "03190404"
-source_commit_date: "2026-06-20T18:20:58+09:00"
-generated_at: "2026-06-21T07:06:11Z"
+source_commit: "38afc3dcb25c45b744d4025029ce0a6c90b7059f"
+source_commit_short: "38afc3dc"
+source_commit_date: "2026-07-25T19:08:27+09:00"
+generated_at: "2026-07-25T11:50:59Z"
 ---
 
 ## Monitoring Database Activity
@@ -134,7 +134,7 @@ See `pg_stat_wal_receiver` for details.
 
 `pg_stat_recovery`pg_stat_recovery
 
-Only one row, showing statistics about the state of recovery.
+At most one row, showing statistics about the recovery state.
 See `pg_stat_recovery` for details.
 
 `pg_stat_recovery_prefetch`pg_stat_recovery_prefetch
@@ -201,6 +201,14 @@ See `basebackup-progress-reporting`.
 One row for each backend running `COPY`, showing current progress.
 See `copy-progress-reporting`.
 
+`pg_stat_progress_data_checksums`pg_stat_progress_data_checksums
+
+One row for the data checksum launcher process while data
+checksums are being enabled or disabled. When enabling data
+checksums, the view also has one row for each worker process,
+showing current progress.
+See `data-checksum-progress-reporting`.
+
 ## Collected Statistics Views
 
 View Name
@@ -241,6 +249,12 @@ See `pg_stat_database_conflicts` for details.
 One row for each combination of backend type, context, and target object
 containing cluster-wide I/O statistics.
 See `pg_stat_io` for details.
+
+`pg_stat_kind_info`pg_stat_kind_info
+
+One row for each registered statistics kind, showing information
+about each kind.
+See `pg_stat_kind_info` for details.
 
 `pg_stat_lock`pg_stat_lock
 
@@ -487,7 +501,7 @@ Text of this backend's most recent query. If `state` is `active` this field show
 
 `backend_type` `text`
 
-Type of current backend. Possible types are `autovacuum launcher`, `autovacuum worker`, `logical replication launcher`, `logical replication worker`, `parallel worker`, `background writer`, `client backend`, `checkpointer`, `archiver`, `standalone backend`, `startup`, `walreceiver`, `walsender`, `walwriter` and `walsummarizer`. In addition, background workers registered by extensions may have additional types.
+Type of current backend. Possible types are: - `archiver`: The WAL archiver, active when `guc-archive-mode` is enabled. - `autovacuum launcher`: The background process that launches autovacuum workers, active when `guc-autovacuum` is `on`. - `autovacuum worker`: A background process running `VACUUM` or `ANALYZE` on a single table. - `background writer`: The background process that makes sure that there are enough clean buffers in shared buffers. - `checkpointer`: The background process that performs checkpoints regularly. - `client backend`: The server process performing work for a regular database connection. - `datachecksums launcher`: The background process that launches data checksum workers. - `datachecksums worker`: A background process that calculates data checksums for all pages in one database. - `io worker`: A background process performing asynchronous I/O, active when `guc-io-method` is set to `worker`. - `logical replication apply worker`: A background process that applies data modifications on a logical subscriber. - `logical replication launcher`: The background process that launches logical replication worker processes for subscriptions. - `logical replication parallel worker`: A background process that applies data modifications on a logical subscriber for a subscription with `streaming = parallel`. - `logical replication sequencesync worker`: A background process that replicates sequence data on a logical subscriber. - `logical replication tablesync worker`: A background process that copies table data on a logical subscriber for a subscription with `copy_data = true`. - `parallel worker`: A background process that helps a backend process to perform operations in parallel. - `REPACK decoding worker`: A background process that decodes WAL for `REPACK (CONCURRENTLY)`. - `slotsync worker`: The background process that synchronizes logical replication slots on a streaming replication standby server, active when `guc-sync-replication-slots` is set to `on`. - `standalone backend`: The backend process when PostgreSQL was started in `app-postgres-single-user`. - `startup`: The background process that replays WAL during crash recovery, archive recovery or streaming replication. - `walreceiver`: The background process that receives WAL records from a WAL sender, active in streaming replication standby mode. - `walsender`: A background process that sends WAL records to receivers (during streaming replication) or decodes WAL and sends the decoded information (during logical replication). - `walsummarizer`: The background process that creates summaries from WAL for use with incremental backup, active when `guc-summarize-wal` is `on`. - `walwriter`: The background process that persists WAL records from WAL buffers to disk. In addition, background workers registered by extensions may have additional types.
 
 The `wait_event` and `state` columns are independent. If a backend is in the `active` state, it may or may not be `waiting` on some event. If the state is `active` and `wait_event` is non-null, it means that a query is being executed, but is being blocked somewhere in the system. To keep the reporting overhead low, the system does not attempt to synchronize different aspects of activity data for a backend. As a result, ephemeral discrepancies may exist between the view's columns.
 
@@ -833,7 +847,7 @@ Connection string used by this WAL receiver, with security-sensitive fields obfu
 
 pg_stat_recovery
 
-The `pg_stat_recovery` view will contain only one row, showing statistics about the recovery state of the startup process. This view returns no row when the server is not in recovery.
+The `pg_stat_recovery` view will contain at most one row, showing statistics about the recovery state of the startup process. This view returns no rows when the server is not in recovery or the user does not have privileges of the `pg_read_all_stats` role.
 
 ## `pg_stat_recovery` View
 
@@ -851,7 +865,7 @@ Start write-ahead log location of the last successfully replayed WAL record.
 
 `last_replayed_end_lsn` `pg_lsn`
 
-End write-ahead log location of the last successfully replayed WAL record.
+End write-ahead log location, plus one, of the last successfully replayed WAL record.
 
 `last_replayed_tli` `integer`
 
@@ -863,15 +877,15 @@ Write-ahead log location of the record currently being replayed (end position pl
 
 `replay_end_tli` `integer`
 
-Timeline of the WAL record currently being replayed.
+Timeline of the WAL record currently being replayed. When no record is being actively replayed, equals `last_replayed_tli`.
 
 `recovery_last_xact_time` `timestamp with time zone`
 
-Timestamp of the last transaction commit or abort replayed during recovery. This is the time at which the commit or abort WAL record for that transaction was generated on the primary.
+Timestamp of the last transaction commit or abort record replayed during recovery. This is the time at which the commit or abort WAL record for that transaction was generated on the primary.
 
 `current_chunk_start_time` `timestamp with time zone`
 
-Time when the startup process observed that replay had caught up with the latest received WAL chunk. Used in recovery-conflict timing and replay/apply-lag diagnostics. NULL if not yet available.
+Time when the startup process observed that replay had caught up with the latest WAL chunk received from streaming replication. Used in recovery-conflict timing and replay/apply-lag diagnostics. NULL if streaming WAL has not yet been received or the time is not available.
 
 `pause_state` `text`
 
@@ -1285,6 +1299,46 @@ For the `object` `wal`, `fsyncs` and `fsync_time` track the fsync activity of WA
 
 Columns tracking I/O wait time will only be non-zero when `guc-track-io-timing` is enabled. The user should be careful when referencing these columns in combination with their corresponding I/O operations in case `track_io_timing` was not enabled for the entire time since the last stats reset.
 
+## `pg_stat_kind_info`
+
+pg_stat_kind_info
+
+The `pg_stat_kind_info` view contains one row for each registered statistics kind, including both built-in and custom kinds.
+
+## `pg_stat_kind_info` View
+
+Column Type
+
+Description
+
+`id` `integer`
+
+Numeric identifier of the statistics kind.
+
+`name` `text`
+
+Name of the statistics kind.
+
+`builtin` `boolean`
+
+True if this is a built-in statistics kind, false if it was registered by an extension.
+
+`fixed_amount` `boolean`
+
+True if this kind tracks a fixed amount of data (a single, statically allocated entry), false if it tracks a variable number of entries keyed by object identifier.
+
+`accessed_across_databases` `boolean`
+
+True if entries of this kind are accessed across databases (cluster-wide statistics), false if they are scoped to a single database.
+
+`write_to_file` `boolean`
+
+True if entries of this kind are persisted to the statistics file at shutdown and reloaded on startup, false if they are kept only in shared memory.
+
+`entry_count` `bigint`
+
+Number of tracked entries for this kind. For variable-numbered kinds, this is the number of objects currently tracked. `NULL` for fixed-sized statistics kinds, or if the kind does not track entry counts.
+
 ## `pg_stat_lock`
 
 pg_stat_lock
@@ -1305,13 +1359,13 @@ Type of the lockable object. See pg_locks for details.
 
 Number of times a lock of this type had to wait because of a conflicting lock. Only incremented when the lock was successfully acquired after waiting longer than `guc-deadlock-timeout`.
 
-`wait_time` `bigint`
+`wait_time` `double precision`
 
 Total time spent waiting for locks of this type, in milliseconds. Only incremented when the lock was successfully acquired after waiting longer than `guc-deadlock-timeout`.
 
 `fastpath_exceeded` `bigint`
 
-Number of times a lock of this type could not be acquired via fast path because the fast path slot limit was exceeded. Increasing `guc-max-locks-per-transaction` can reduce this number.
+Number of times a lock of this type could not be acquired via fast path because the fast path slot limit was exceeded. Increasing `guc-max-locks-per-transaction` can reduce this number. See `locking-tables-fast-path` for which locks are eligible for fast-path locking; for ineligible lock types this counter is always zero.
 
 `stats_reset` `timestamp with time zone`
 
@@ -1787,23 +1841,23 @@ Maximum value of all component scores. This is the value that autovacuum would u
 
 `xid_score` `double precision`
 
-Transaction ID age component score. Scores greater than or equal to `guc-autovacuum-freeze-score-weight` indicate that autovacuum would vacuum the table for transaction ID wraparound prevention.
+Transaction ID age component score. Scores greater than `guc-autovacuum-freeze-score-weight` indicate that autovacuum would vacuum the table for transaction ID wraparound prevention.
 
 `mxid_score` `double precision`
 
-Multixact ID age component score. Scores greater than or equal to `guc-autovacuum-multixact-freeze-score-weight` indicate that autovacuum would vacuum the table for multixact ID wraparound prevention.
+Multixact ID age component score. Scores greater than `guc-autovacuum-multixact-freeze-score-weight` indicate that autovacuum would vacuum the table for multixact ID wraparound prevention.
 
 `vacuum_score` `double precision`
 
-Vacuum component score. Scores greater than or equal to `guc-autovacuum-vacuum-score-weight` indicate that autovacuum would vacuum the table (unless autovacuum is disabled).
+Vacuum component score. Scores greater than `guc-autovacuum-vacuum-score-weight` indicate that autovacuum would vacuum the table (unless autovacuum is disabled).
 
 `vacuum_insert_score` `double precision`
 
-Vacuum insert component score. Scores greater than or equal to `guc-autovacuum-vacuum-insert-score-weight` indicate that autovacuum would vacuum the table (unless autovacuum is disabled).
+Vacuum insert component score. Scores greater than `guc-autovacuum-vacuum-insert-score-weight` indicate that autovacuum would vacuum the table (unless autovacuum is disabled).
 
 `analyze_score` `double precision`
 
-Analyze component score. Scores greater than or equal to `guc-autovacuum-analyze-score-weight` indicate that autovacuum would analyze the table (unless autovacuum is disabled).
+Analyze component score. Scores greater than `guc-autovacuum-analyze-score-weight` indicate that autovacuum would analyze the table (unless autovacuum is disabled).
 
 `do_vacuum` `bool`
 
@@ -2135,6 +2189,12 @@ pg_stat_get_activity `pg_stat_get_activity` ( `integer` ) setof record
 
 Returns a record of information about the backend with the specified process ID, or one record for each active backend in the system if `NULL` is specified. The fields returned are a subset of those in the `pg_stat_activity` view.
 
+pg_stat_get_backend_lock `pg_stat_get_backend_lock` ( `integer` ) setof record
+
+Returns lock statistics about the backend with the specified process ID. The output fields are exactly the same as the ones in the `pg_stat_lock` view.
+
+The function does not return lock statistics for the checkpointer, the background writer, the startup process and the autovacuum launcher.
+
 pg_stat_get_backend_wal `pg_stat_get_backend_wal` ( `integer` ) record
 
 Returns WAL statistics about the backend with the specified process ID. The output fields are exactly the same as the ones in the `pg_stat_wal` view.
@@ -2282,7 +2342,7 @@ Another useful tool for monitoring database activity is the `pg_locks` system ta
 
 ## Progress Reporting
 
-PostgreSQL has the ability to report the progress of certain commands during command execution. Currently, the only commands which support progress reporting are `ANALYZE`, `COPY`, `CREATE INDEX`, `REPACK` (and its obsolete spelling `CLUSTER`), `VACUUM`, and `protocol-replication-base-backup` (i.e., replication command that `app-pgbasebackup` issues to take a base backup). This may be expanded in the future.
+PostgreSQL has the ability to report the progress of certain commands during command execution. Currently, the only commands which support progress reporting are `ANALYZE`, `COPY`, `CREATE INDEX`, `REPACK` (and its obsolete spelling `CLUSTER`), `VACUUM`, `protocol-replication-base-backup` (i.e., replication command that `app-pgbasebackup` issues to take a base backup), and online data checksum operations. This may be expanded in the future.
 
 ## ANALYZE Progress Reporting
 
@@ -3053,7 +3113,7 @@ when this phase is completed.
 
 pg_stat_progress_data_checksums
 
-When data checksums are being enabled on a running cluster, the `pg_stat_progress_data_checksums` view will contain a row for the launcher process, and one row for each worker process which is currently calculating and writing checksums for the data pages in a database. The launcher provides overview of the overall progress (how many databases have been processed, how many remain), while the workers track progress for currently processed databases.
+When data checksums are being enabled or disabled on a running cluster, the `pg_stat_progress_data_checksums` view will contain a row for the launcher process. When enabling data checksums, the view will also contain one row for each worker process which is currently calculating and writing checksums for the data pages in a database. The launcher provides an overview of the overall progress, such as how many databases have been processed and how many remain, while the workers track progress for currently processed databases.
 
 ## `pg_stat_progress_data_checksums` View
 
@@ -3077,27 +3137,27 @@ Name of this database, or `NULL` for the launcher process.
 
 Current processing phase, see `datachecksum-phases` for description of the phases.
 
-`databases_total` `integer`
+`databases_total` `bigint`
 
-The total number of databases which will be processed. Only the launcher process has this value set, the worker processes have this set to `NULL`.
+The total number of databases which will be processed. Only the launcher process has this value set when enabling data checksums; otherwise this is set to `NULL`.
 
-`databases_done` `integer`
+`databases_done` `bigint`
 
-The number of databases which have been processed. Only the launcher process has this value set, the worker processes have this set to `NULL`.
+The number of databases which have been processed. Only the launcher process has this value set when enabling data checksums; otherwise this is set to `NULL`.
 
-`relations_total` `integer`
+`relations_total` `bigint`
 
 The total number of relations which will be processed, or `NULL` if the worker process hasn't calculated the number of relations yet. The launcher process has this set to `NULL` since it isn't responsible for processing relations, only launching worker processes.
 
-`relations_done` `integer`
+`relations_done` `bigint`
 
 The number of relations which have been processed. The launcher process has this set to `NULL`.
 
-`blocks_total` `integer`
+`blocks_total` `bigint`
 
 The number of blocks in the current relation which will be processed, or `NULL` if the worker process hasn't calculated the number of blocks yet. The launcher process has this set to `NULL`.
 
-`blocks_done` `integer`
+`blocks_done` `bigint`
 
 The number of blocks in the current relation which have been processed. The launcher process has this set to `NULL`.
 

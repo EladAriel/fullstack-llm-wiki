@@ -4,10 +4,10 @@ framework: "shadcnui"
 source_repo: "https://github.com/shadcn-ui/ui"
 source_branch: "main"
 source_path: "apps/v4/content/docs/components/radix/field.mdx"
-source_commit: "5602b81d8344e0d0d7178e3bf57612662cd42957"
-source_commit_short: "5602b81d"
-source_commit_date: "2026-06-21T15:49:35+04:00"
-generated_at: "2026-06-21T12:47:26Z"
+source_commit: "4baadbc6517070ae8f8feb2c97037adc2b305544"
+source_commit_short: "4baadbc6"
+source_commit_date: "2026-07-23T23:50:36+04:00"
+generated_at: "2026-07-25T11:50:48Z"
 ---
 
 ---
@@ -170,29 +170,27 @@ The `Field` family is designed for composing accessible forms. A typical field i
 
 See the [Form](/docs/forms) documentation for building forms with the `Field` component and [React Hook Form](/docs/forms/react-hook-form), [Tanstack Form](/docs/forms/tanstack-form), or [Formisch](/docs/forms/formisch).
 
-## Examples
-
-### Input
+## Input
 
 <ComponentPreview styleName="radix-nova" name="field-input" />
 
-### Textarea
+## Textarea
 
 <ComponentPreview styleName="radix-nova" name="field-textarea" />
 
-### Select
+## Select
 
 <ComponentPreview styleName="radix-nova" name="field-select" />
 
-### Slider
+## Slider
 
 <ComponentPreview styleName="radix-nova" name="field-slider" />
 
-### Fieldset
+## Fieldset
 
 <ComponentPreview styleName="radix-nova" name="field-fieldset" />
 
-### Checkbox
+## Checkbox
 
 <ComponentPreview
   styleName="radix-nova"
@@ -200,21 +198,21 @@ See the [Form](/docs/forms) documentation for building forms with the `Field` co
   previewClassName="h-[32rem]"
 />
 
-### Radio
+## Radio
 
 <ComponentPreview styleName="radix-nova" name="field-radio" />
 
-### Switch
+## Switch
 
 <ComponentPreview styleName="radix-nova" name="field-switch" />
 
-### Choice Card
+## Choice Card
 
 Wrap `Field` components inside `FieldLabel` to create selectable field groups. This works with `RadioItem`, `Checkbox` and `Switch` components.
 
 <ComponentPreview styleName="radix-nova" name="field-choice-card" />
 
-### Field Group
+## Field Group
 
 Stack `Field` components with `FieldGroup`. Add `FieldSeparator` to divide them.
 

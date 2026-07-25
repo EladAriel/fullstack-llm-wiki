@@ -4,10 +4,10 @@ framework: "redis"
 source_repo: "https://github.com/redis/docs.git"
 source_branch: "main"
 source_path: "content/develop/ai/redisvl/user_guide/installation.md"
-source_commit: "bc92ea237bbfc2117c870c904f1a3ca619073ef1"
-source_commit_short: "bc92ea23"
-source_commit_date: "2026-06-18T14:53:00-05:00"
-generated_at: "2026-06-21T11:25:32Z"
+source_commit: "9d30f68c3dad1a6b3b7d30fe604b911348ce8152"
+source_commit_short: "9d30f68c"
+source_commit_date: "2026-07-24T10:52:10-07:00"
+generated_at: "2026-07-25T11:51:22Z"
 ---
 
 ---
@@ -136,7 +136,7 @@ RedisVL requires Redis with [Redis Search](https://redis.io/docs/latest/develop/
 
 1. [Redis Cloud](https://redis.io/cloud), a fully managed cloud offering with a free tier
 2. [Redis 8+ (Docker)](https://redis.io/downloads/), for local development and testing
-3. [Redis Software](https://redis.com/redis-enterprise/), a commercial self-hosted option
+3. [Redis Software](https://redis.io/software/), a commercial self-hosted option
 
 ### Redis Cloud
 

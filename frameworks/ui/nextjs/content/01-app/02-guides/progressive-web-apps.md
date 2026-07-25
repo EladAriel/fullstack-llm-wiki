@@ -4,10 +4,10 @@ framework: "nextjs"
 source_repo: "https://github.com/vercel/next.js/"
 source_branch: "canary"
 source_path: "docs/01-app/02-guides/progressive-web-apps.mdx"
-source_commit: "79142d7806ff4194c8d9885b80fa69db5ecf534a"
-source_commit_short: "79142d78"
-source_commit_date: "2026-06-20T23:40:12Z"
-generated_at: "2026-06-21T12:07:17Z"
+source_commit: "dcf242a17b5d4622bbd9624db531a9d84177619f"
+source_commit_short: "dcf242a1"
+source_commit_date: "2026-07-25T10:16:19+02:00"
+generated_at: "2026-07-25T11:50:53Z"
 ---
 
 ---
@@ -168,10 +168,13 @@ function PushNotificationManager() {
   }, [])
 
   async function registerServiceWorker() {
-    const registration = await navigator.serviceWorker.register('/sw.js', {
-      scope: '/',
-      updateViaCache: 'none',
-    })
+    const registration = await navigator.serviceWorker.register(
+      new URL('../lib/service-worker.js', import.meta.url),
+      {
+        scope: '/',
+        updateViaCache: 'none',
+      }
+    )
     const sub = await registration.pushManager.getSubscription()
     setSubscription(sub)
   }
@@ -246,10 +249,13 @@ function PushNotificationManager() {
   }, []);
 
   async function registerServiceWorker() {
-    const registration = await navigator.serviceWorker.register('/sw.js', {
-      scope: '/',
-      updateViaCache: 'none',
-    });
+    const registration = await navigator.serviceWorker.register(
+      new URL('../lib/service-worker.js', import.meta.url),
+      {
+        scope: '/',
+        updateViaCache: 'none',
+      }
+    )
     const sub = await registration.pushManager.getSubscription();
     setSubscription(sub);
   }
@@ -556,9 +562,9 @@ VAPID_PRIVATE_KEY=your_private_key_here
 
 ### 5. Creating a Service Worker
 
-Create a `public/sw.js` file for your service worker:
+Create a `lib/service-worker.js` file for your service worker:
 
-```js filename="public/sw.js"
+```js filename="lib/service-worker.js"
 self.addEventListener('push', function (event) {
   if (event.data) {
     const data = event.data.json()

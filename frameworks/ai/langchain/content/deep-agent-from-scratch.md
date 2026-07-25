@@ -4,10 +4,10 @@ framework: "LangChain"
 source_repo: "https://github.com/langchain-ai/docs"
 source_branch: "main"
 source_path: "src/oss/langchain/deep-agent-from-scratch.mdx"
-source_commit: "d037cd23f3f298721837c403b2ffd289e31d56d0"
-source_commit_short: "d037cd23"
-source_commit_date: "2026-06-23T11:18:55+02:00"
-generated_at: "2026-06-23T13:53:33Z"
+source_commit: "2aae1dfc98ee953a9a5185fb6fcdd9efb3f4d878"
+source_commit_short: "2aae1dfc"
+source_commit_date: "2026-07-25T00:27:23Z"
+generated_at: "2026-07-25T11:51:05Z"
 ---
 
 ---
@@ -137,7 +137,14 @@ This runs, but the agent has no filesystem and no way to execute code. If you as
 To analyze data efficiently, the agent needs to run code on files. This requires two things:
 
 - An isolated [sandbox](/oss/deepagents/sandboxes) where the agent can place files and run code on the files without giving the agent access to your host machine.
-- A [backend](/oss/deepagents/backends) which provides the file system tools to work with the sandbox (`read_file`, `write_file`, `edit_file`, `glob`, and `grep`) using the @[`FilesystemMiddleware`]:**. Because the `LangSmithSandbox` backend implements the sandbox protocol, @[`FilesystemMiddleware`] also adds the `execute` tool, which allows the agent to run shell commands.
+
+:::python
+- A [backend](/oss/deepagents/backends) which provides the file system tools to work with the sandbox (`read_file`, `write_file`, `edit_file`, `delete`, `glob`, `grep`) using the @[`FilesystemMiddleware`]:**. Because the `LangSmithSandbox` backend implements the sandbox protocol, @[`FilesystemMiddleware`] also adds the `execute` tool, which allows the agent to run shell commands.
+:::
+
+:::js
+- A [backend](/oss/deepagents/backends) which provides the file system tools to work with the sandbox (`read_file`, `write_file`, `edit_file`, `glob`, `grep`) using the @[`FilesystemMiddleware`]:**. Because the `LangSmithSandbox` backend implements the sandbox protocol, @[`FilesystemMiddleware`] also adds the `execute` tool, which allows the agent to run shell commands.
+:::
 
 @[`LangSmithSandbox`] is where files live and commands run. @[`FilesystemMiddleware`] is what exposes that environment to the model as tools. The same middleware works with other backends if you swap the backend later.
 

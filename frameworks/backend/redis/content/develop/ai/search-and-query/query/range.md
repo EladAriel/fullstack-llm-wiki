@@ -4,10 +4,10 @@ framework: "redis"
 source_repo: "https://github.com/redis/docs.git"
 source_branch: "main"
 source_path: "content/develop/ai/search-and-query/query/range.md"
-source_commit: "bc92ea237bbfc2117c870c904f1a3ca619073ef1"
-source_commit_short: "bc92ea23"
-source_commit_date: "2026-06-18T14:53:00-05:00"
-generated_at: "2026-06-21T11:25:32Z"
+source_commit: "9d30f68c3dad1a6b3b7d30fe604b911348ce8152"
+source_commit_short: "9d30f68c"
+source_commit_date: "2026-07-24T10:52:10-07:00"
+generated_at: "2026-07-25T11:51:22Z"
 ---
 
 ---
@@ -69,7 +69,7 @@ The examples in this section use a schema with the following fields:
 
 The following query finds bicycles within a price range greater than or equal to 500 USD and smaller than or equal to 1000 USD (`500 <= price <= 1000`):
 
-{{< clients-example set="query_range" step="range1" description="Foundational: Query numeric fields with inclusive range syntax when you need to find documents with values between two bounds" difficulty="beginner" max_lines="10" >}}
+{{< clients-example set="query_range" step="range1" description="Foundational: Query numeric fields with inclusive range syntax when you need to find documents with values between two bounds" difficulty="beginner" max_lines="10" runnable="false" >}}
 > FT.SEARCH idx:bicycle "@price:[500 1000]"
 1) (integer) 3
 2) "bicycle:2"
@@ -85,7 +85,7 @@ The following query finds bicycles within a price range greater than or equal to
 
 This is semantically equivalent to:
 
-{{< clients-example set="query_range" step="range2" description="Foundational: Query numeric fields using a FILTER clause when you need an alternative syntax for range queries with different query execution semantics" difficulty="beginner" max_lines="10" >}}
+{{< clients-example set="query_range" step="range2" description="Foundational: Query numeric fields using a FILTER clause when you need an alternative syntax for range queries with different query execution semantics" difficulty="beginner" max_lines="10" runnable="false" >}}
 > FT.SEARCH idx:bicycle "*" FILTER price 500 1000
 1) (integer) 3
 2) "bicycle:2"
@@ -101,7 +101,7 @@ This is semantically equivalent to:
 
 For bicycles with a price greater than 1000 USD (`price > 1000`), you can use:
 
-{{< clients-example set="query_range" step="range3" description="Open ranges: Query numeric fields with open ranges using infinity notation and exclusive bounds when you need to find documents above or below a threshold" difficulty="intermediate" max_lines="10" >}}
+{{< clients-example set="query_range" step="range3" description="Open ranges: Query numeric fields with open ranges using infinity notation and exclusive bounds when you need to find documents above or below a threshold" difficulty="intermediate" max_lines="10" runnable="false" >}}
 > FT.SEARCH idx:bicycle "@price:[(1000 +inf]"
  1) (integer) 5
  2) "bicycle:1"
@@ -123,7 +123,7 @@ For bicycles with a price greater than 1000 USD (`price > 1000`), you can use:
 
 The example below returns bicycles with a price lower than or equal to 2000 USD (`price <= 2000`) by returning the five cheapest bikes:
 
-{{< clients-example set="query_range" step="range4" description="Sorting and pagination: Combine range queries with SORTBY and LIMIT to retrieve sorted results in pages when you need to handle large result sets efficiently" difficulty="intermediate" max_lines="10" >}}
+{{< clients-example set="query_range" step="range4" description="Sorting and pagination: Combine range queries with SORTBY and LIMIT to retrieve sorted results in pages when you need to handle large result sets efficiently" difficulty="intermediate" max_lines="10" runnable="false" >}}
 > FT.SEARCH idx:bicycle "@price:[-inf 2000]" SORTBY price LIMIT 0 5
  1) (integer) 7
  2) "bicycle:0"

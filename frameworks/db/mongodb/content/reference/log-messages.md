@@ -4,10 +4,10 @@ framework: "mongodb"
 source_repo: "https://github.com/mongodb/docs.git"
 source_branch: "main"
 source_path: "content/manual/manual/source/reference/log-messages.txt"
-source_commit: "96788e8ed140cbdde184ff82e1066dff4996bde4"
-source_commit_short: "96788e8e"
-source_commit_date: "2026-06-19T21:35:03-06:00"
-generated_at: "2026-06-21T07:41:52Z"
+source_commit: "ab9db26ed3d11618cdb61516d8180337d8e3f679"
+source_commit_short: "ab9db26e"
+source_commit_date: "2026-07-24T16:22:46-06:00"
+generated_at: "2026-07-25T11:51:15Z"
 ---
 
 ============
@@ -16,7 +16,7 @@ generated_at: "2026-06-21T07:41:52Z"
 
 ## Overview
 
-As part of normal operation, MongoDB maintains a running log of events, including entries such as incoming connections, commands run, and issues encountered. Generally, log messages are useful for diagnosing issues, monitoring your deployment, and tuning performance.
+As part of normal operation, MongoDB maintains a running log of events, including entries such as incoming connections, commands run, and issues encountered. Log messages help diagnose issues, monitor your deployment, and tune performance.
 
 To get your log messages, you can use any of the following methods:
 
@@ -70,7 +70,7 @@ Field descriptions:
 
 Escaping ````````
 
-The **message** and **attributes** fields will escape control characters as necessary according to the Relaxed Extended JSON v2.0 specification:
+The **message** and **attributes** fields escape control characters according to the Relaxed Extended JSON v2.0 specification:
 
 .. include:: /includes/fact-json-escape-sequences.rst
 
@@ -166,7 +166,7 @@ applicable
 - The number of elements that were `omitted` under each sub-object due to
 truncation
 
-Log entries with truncated attributes may also include an additional `size` field at the end of the entry which indicates the original size of the attribute before truncation, in this case `21692` or about 22KB. This final `size` field is only shown if it is different from the `size` field in the `truncated` object, i.e. if the total object size of the attribute is different from the size of the truncated sub-object, as is the case in the example above.
+Log entries with truncated attributes may also include an additional `size` field at the end of the entry which indicates the original size of the attribute before truncation, in this case `21692` or about 22KB. This final `size` field is only shown if it is different from the `size` field in the `truncated` object.
 
 Padding ```````
 
@@ -322,13 +322,13 @@ The component field type indicates the category a logged event is a member of, s
 }
 ```
 
-Each component is individually configurable via its own `verbosity filter <log-messages-configure-verbosity>`. The available components are as follows:
+Each component is individually configurable through its own `verbosity filter <log-messages-configure-verbosity>`. The available components are as follows:
 
 See `log-message-parsing-example-filter-component` for log parsing examples that filter on the component field.
 
 ### Client Data
 
-:driver:`MongoDB Drivers </>` and client applications (including :binary:`~bin.mongosh`) have the ability to send identifying information at the time of connection to the server. After the connection is established, the client does not send the identifying information again unless the connection is dropped and reestablished.
+:driver:`MongoDB Drivers </>` and client applications (including :binary:`~bin.mongosh`) can send identifying information at the time of connection to the server. After the connection is established, the client does not send the identifying information again unless the connection is dropped and reestablished.
 
 This identifying information is contained in the **attributes** field of the log entry. The exact information included varies by client.
 
@@ -458,7 +458,7 @@ You would set this value from :binary:`~bin.mongosh`.
 
 ### Logging Slow Operations
 
-Client operations (such as queries) appear in the log if their duration exceeds the `slow operation threshold <slowms-threshold-option>` or when the `log verbosity level <log-message-verbosity-levels>` is 1 or higher. [#slow-oplogs]_ These log entries include the full command object associated with the operation.
+Client operations (such as queries) appear in the log if their duration exceeds the `slow operation threshold <slowms-threshold-option>` or when the `log verbosity level <log-message-verbosity-levels>` is at least 1. [#slow-oplogs]_ These log entries include the full command object associated with the operation.
 
 .. include:: /includes/extracts/4.2-changes-log-query-shapes-plan-cache-key.rst
 
@@ -485,10 +485,10 @@ Starting in MongoDB 5.0, you can use the `remoteOpWaitMillis` log field to obtai
 To determine if a merge operation or a shard issue is causing a slow query, compare the `workingMillis` and `remoteOpWaitMillis` time fields in the log. `workingMillis` is the total time the query took to complete. Specifically:
 
 - If `workingMillis` is slightly longer than `remoteOpWaitMillis`,
-then most of the time was spent waiting for a shard response. For example, `workingMillis` of 17 and `remoteOpWaitMillis` of 15.
+then waiting for a shard response took the most time. For example, `workingMillis` of 17 and `remoteOpWaitMillis` of 15.
 
 - If `workingMillis` is significantly longer than
-`remoteOpWaitMillis`, then most of the time was spent performing the merge. For example, `workingMillis` of 100 and `remoteOpWaitMillis` of 15.
+`remoteOpWaitMillis`, then performing the merge took the most time. For example, `workingMillis` of 100 and `remoteOpWaitMillis` of 15.
 
 ## Log Redaction
 
@@ -601,7 +601,7 @@ As an example, you might be interested in the following two log events, showing 
 {"t":{"$date":"2020-06-01T13:07:03.490-0500"},"s":"I", "c":"NETWORK", "id":22944, "ctx":"conn157", "svc": "R", "msg":"end connection {remote} ({connectionCount}{word} now open)", "attr":{"remote":"127.0.0.1:61298","connectionCount":10,"word":" connections"}}
 ```
 
-The log IDs for these two entries are `22943` and `22944` respectively. You could then filter your log output to show only these log IDs, effectively showing only client connection activity, using the following `jq` syntax:
+The log IDs for these two entries are `22943` and `22944`. You could then filter your log output to show only these log IDs, effectively showing only client connection activity, using the following `jq` syntax:
 
 ```bash
 jq 'select( .id as $id | [22943, 22944] | index($id) )' /var/log/mongodb/mongod.log

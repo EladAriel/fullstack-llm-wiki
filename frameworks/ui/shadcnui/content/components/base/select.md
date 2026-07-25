@@ -4,10 +4,10 @@ framework: "shadcnui"
 source_repo: "https://github.com/shadcn-ui/ui"
 source_branch: "main"
 source_path: "apps/v4/content/docs/components/base/select.mdx"
-source_commit: "5602b81d8344e0d0d7178e3bf57612662cd42957"
-source_commit_short: "5602b81d"
-source_commit_date: "2026-06-21T15:49:35+04:00"
-generated_at: "2026-06-21T12:47:26Z"
+source_commit: "4baadbc6517070ae8f8feb2c97037adc2b305544"
+source_commit_short: "4baadbc6"
+source_commit_date: "2026-07-23T23:50:36+04:00"
+generated_at: "2026-07-25T11:50:48Z"
 ---
 
 ---
@@ -121,31 +121,29 @@ Select
         └── SelectItem
 ```
 
-## Examples
-
-### Align Item With Trigger
+## Align Item With Trigger
 
 Use `alignItemWithTrigger` on `SelectContent` to control whether the selected item aligns with the trigger. When `true` (default), the popup positions so the selected item appears over the trigger. When `false`, the popup aligns to the trigger edge.
 
 <ComponentPreview styleName="base-nova" name="select-align-item" />
 
-### Groups
+## Groups
 
 Use `SelectGroup`, `SelectLabel`, and `SelectSeparator` to organize items.
 
 <ComponentPreview styleName="base-nova" name="select-groups" />
 
-### Scrollable
+## Scrollable
 
 A select with many items that scrolls.
 
 <ComponentPreview styleName="base-nova" name="select-scrollable" />
 
-### Disabled
+## Disabled
 
 <ComponentPreview styleName="base-nova" name="select-disabled" />
 
-### Invalid
+## Invalid
 
 Add the `data-invalid` attribute to the `Field` component and the `aria-invalid` attribute to the `SelectTrigger` component to show an error state.
 

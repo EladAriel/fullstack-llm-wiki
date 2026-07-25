@@ -4,10 +4,10 @@ framework: "nextjs"
 source_repo: "https://github.com/vercel/next.js/"
 source_branch: "canary"
 source_path: "docs/01-app/02-guides/incremental-static-regeneration.mdx"
-source_commit: "79142d7806ff4194c8d9885b80fa69db5ecf534a"
-source_commit_short: "79142d78"
-source_commit_date: "2026-06-20T23:40:12Z"
-generated_at: "2026-06-21T12:07:17Z"
+source_commit: "dcf242a17b5d4622bbd9624db531a9d84177619f"
+source_commit_short: "dcf242a1"
+source_commit_date: "2026-07-25T10:16:19+02:00"
+generated_at: "2026-07-25T11:50:53Z"
 ---
 
 ---
@@ -106,12 +106,13 @@ export default async function Page({ params }) {
 
 Here's how this example works:
 
-1. During `next build`, all known blog posts are generated
-2. All requests made to these pages (e.g. `/blog/1`) are cached and instantaneous
-3. After 60 seconds has passed, the next request will still return the cached (now stale) page
-4. The cache is invalidated and a new version of the page begins generating in the background
-5. Once generated successfully, the next request will return the updated page and cache it for subsequent requests
-6. If `/blog/26` is requested, and it exists, the page will be generated on-demand. This behavior can be changed by using a different [dynamicParams](/docs/app/api-reference/file-conventions/route-segment-config/dynamicParams) value. However, if the post does not exist, then 404 is returned.
+1. [`generateStaticParams`](/docs/app/api-reference/functions/generate-static-params) enables ISR for the dynamic route by returning the list of posts to prerender
+2. During `next build`, a page is prerendered for each post
+3. All requests made to these pages (e.g. `/blog/1`) are cached and instantaneous
+4. After 60 seconds has passed, the next request will still return the cached (now stale) page
+5. The cache is invalidated and a new version of the page begins generating in the background
+6. Once generated successfully, the next request will return the updated page and cache it for subsequent requests
+7. If `/blog/26` is requested, and it exists, the page will be generated on-demand. This behavior can be changed by using a different [dynamicParams](/docs/app/api-reference/file-conventions/route-segment-config/dynamicParams) value. However, if the post does not exist, then 404 is returned.
 
 </AppOnly>
 
@@ -225,6 +226,7 @@ Here's how this example works:
 
 ### Functions
 
+- [`generateStaticParams`](/docs/app/api-reference/functions/generate-static-params)
 - [`revalidatePath`](/docs/app/api-reference/functions/revalidatePath)
 - [`revalidateTag`](/docs/app/api-reference/functions/revalidateTag)
 

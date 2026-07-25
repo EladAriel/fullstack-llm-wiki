@@ -4,10 +4,10 @@ framework: "redis"
 source_repo: "https://github.com/redis/docs.git"
 source_branch: "main"
 source_path: "content/operate/rc/_index.md"
-source_commit: "bc92ea237bbfc2117c870c904f1a3ca619073ef1"
-source_commit_short: "bc92ea23"
-source_commit_date: "2026-06-18T14:53:00-05:00"
-generated_at: "2026-06-21T11:25:32Z"
+source_commit: "9d30f68c3dad1a6b3b7d30fe604b911348ce8152"
+source_commit_short: "9d30f68c"
+source_commit_date: "2026-07-24T10:52:10-07:00"
+generated_at: "2026-07-25T11:51:22Z"
 ---
 
 ---
@@ -71,6 +71,7 @@ Manage [secure connections]({{< relref "/operate/rc/security" >}}) to cloud data
 Use the [REST API]({{< relref "/operate/rc/api" >}}) to manage Redis Cloud databases and subscriptions.
 - [Get started with the REST API]({{< relref "/operate/rc/api/get-started" >}})
 - REST API [reference]({{< relref "/operate/rc/api/api-reference" >}}) & [examples]({{< relref "/operate/rc/api/examples" >}})
+- [`redisctl`](https://github.com/redis/redisctl) — a CLI tool that wraps the Redis Cloud and Redis Software APIs for terminal-based management
 
 ## Migrate to Redis Cloud
 Follow the step-by-step guide for your source environment:

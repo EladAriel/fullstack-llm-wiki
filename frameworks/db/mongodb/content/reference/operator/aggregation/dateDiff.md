@@ -4,10 +4,10 @@ framework: "mongodb"
 source_repo: "https://github.com/mongodb/docs.git"
 source_branch: "main"
 source_path: "content/manual/manual/source/reference/operator/aggregation/dateDiff.txt"
-source_commit: "96788e8ed140cbdde184ff82e1066dff4996bde4"
-source_commit_short: "96788e8e"
-source_commit_date: "2026-06-19T21:35:03-06:00"
-generated_at: "2026-06-21T07:41:52Z"
+source_commit: "ab9db26ed3d11618cdb61516d8180337d8e3f679"
+source_commit_short: "ab9db26e"
+source_commit_date: "2026-07-24T16:22:46-06:00"
+generated_at: "2026-07-25T11:51:15Z"
 ---
 
 ===============================
@@ -22,11 +22,11 @@ generated_at: "2026-06-21T07:41:52Z"
 
 ### No Fractional Units
 
-The `$dateDiff` expression returns the integer difference between the `startDate` and `endDate` measured in the specified `units`. Durations are measured by counting the number of times a unit boundary is passed. For example, two dates that are 18 months apart would return 1 `year` difference instead of 1.5 `years`.
+The `$dateDiff` expression returns an integer by comparing a specific part of each date. For the `year` unit, it compares the year values: any date in 2022 is one `year` apart from any date in 2023. For the `week` unit, it compares week numbers: any date in week 5 is one `week` apart from any date in week 6.
 
 ### Start Of Week
 
-The start of the `week` is `Sunday` unless modified by the `startOfWeek` parameter. Any week that begins between the `startDate` and `endDate` on the specified day will be counted. The week count is not bounded by calendar `month` or calendar `year`.
+The start of the `week` is `Sunday` unless modified by the `startOfWeek` parameter. `$dateDiff` counts any week that begins between the `startDate` and `endDate` on the specified day. The week count is not bounded by calendar `month` or calendar `year`.
 
 ### Time Zone
 
@@ -192,7 +192,7 @@ db.subscriptions.aggregate(
 
 The results are summarized in this table:
 
-The count only increments when a new `unit` starts, so 18 months are reported as 1 year in the second row and 60 days are reported as one month in the third row.
+In the second row, 2010-01-01 and 2011-07-01 are in different years (2010 and 2011), so `$dateDiff` returns 1 `year`. In the third row, 2010-03-01 (March) and 2010-04-30 (April) differ by one month, so `$dateDiff` returns 1 `month`.
 
 ### Weeks Per Month
 

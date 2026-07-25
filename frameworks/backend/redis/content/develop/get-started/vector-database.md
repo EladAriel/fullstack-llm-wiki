@@ -4,10 +4,10 @@ framework: "redis"
 source_repo: "https://github.com/redis/docs.git"
 source_branch: "main"
 source_path: "content/develop/get-started/vector-database.md"
-source_commit: "bc92ea237bbfc2117c870c904f1a3ca619073ef1"
-source_commit_short: "bc92ea23"
-source_commit_date: "2026-06-18T14:53:00-05:00"
-generated_at: "2026-06-21T11:25:32Z"
+source_commit: "9d30f68c3dad1a6b3b7d30fe604b911348ce8152"
+source_commit_short: "9d30f68c"
+source_commit_date: "2026-07-24T10:52:10-07:00"
+generated_at: "2026-07-25T11:51:22Z"
 ---
 
 ---
@@ -195,7 +195,7 @@ FT.CREATE idx:bikes_vss ON JSON
 Here is a breakdown of the `VECTOR` field definition:
 
 * `$.description_embeddings AS vector`: The vector field's JSON path and its field alias `vector`.
-* `FLAT`: Specifies the indexing method, which is either a flat index or a hierarchical navigable small world graph ([HNSW](https://arxiv.org/ftp/arxiv/papers/1603/1603.09320.pdf)).
+* `FLAT`: Specifies the indexing method, which is either a flat index or a hierarchical navigable small world graph ([HNSW](https://arxiv.org/abs/1603.09320)).
 * `TYPE FLOAT32`: Sets the float precision of a vector component, in this case a 32-bit floating point number.
 * `DIM 768`: The length or dimension of the embeddings, determined by the chosen embedding model.
 * `DISTANCE_METRIC COSINE`: The chosen distance function: [cosine distance](https://en.wikipedia.org/wiki/Cosine_similarity).

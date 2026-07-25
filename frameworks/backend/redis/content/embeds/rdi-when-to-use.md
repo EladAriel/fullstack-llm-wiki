@@ -4,10 +4,10 @@ framework: "redis"
 source_repo: "https://github.com/redis/docs.git"
 source_branch: "main"
 source_path: "content/embeds/rdi-when-to-use.md"
-source_commit: "bc92ea237bbfc2117c870c904f1a3ca619073ef1"
-source_commit_short: "bc92ea23"
-source_commit_date: "2026-06-18T14:53:00-05:00"
-generated_at: "2026-06-21T11:25:32Z"
+source_commit: "9d30f68c3dad1a6b3b7d30fe604b911348ce8152"
+source_commit_short: "9d30f68c"
+source_commit_date: "2026-07-24T10:52:10-07:00"
+generated_at: "2026-07-25T11:51:22Z"
 ---
 
 ### When to use RDI
@@ -37,7 +37,7 @@ RDI is a good fit when:
 
 {{< note >}}The throughput and data-size limits above assume the
 [classic processor]({{< relref "/integrate/redis-data-integration/architecture/classic-vs-flink" >}}).
-The Flink processor (currently in Preview) roughly doubles each limit.{{< /note >}}
+The Flink processor roughly doubles each limit.{{< /note >}}
 
 ### When not to use RDI
 

@@ -4,10 +4,10 @@ framework: "redis"
 source_repo: "https://github.com/redis/docs.git"
 source_branch: "main"
 source_path: "content/operate/kubernetes/security/allow-resource-adjustment.md"
-source_commit: "bc92ea237bbfc2117c870c904f1a3ca619073ef1"
-source_commit_short: "bc92ea23"
-source_commit_date: "2026-06-18T14:53:00-05:00"
-generated_at: "2026-06-21T11:25:32Z"
+source_commit: "9d30f68c3dad1a6b3b7d30fe604b911348ce8152"
+source_commit_short: "9d30f68c"
+source_commit_date: "2026-07-24T10:52:10-07:00"
+generated_at: "2026-07-25T11:51:22Z"
 ---
 
 ---
@@ -18,7 +18,7 @@ categories:
 description: Enable automatic system resource adjustments for Redis Enterprise to increase file descriptor limits.
 linkTitle: Auto resource adjustment
 title: Allow automatic resource adjustment
-weight: 98
+weight: 50
 ---
 
 Redis Enterprise for Kubernetes 7.22.0-6 introduces the ability to run with automatic resource adjustment disabled, which drops all capabilities from the Redis Enterprise container and sets `allowPrivilegeEscalation` to `false`. All other security-related settings remain the same as in automatic resource adjustment enabled. Automatic resource adjustment disabled is the default for installations and upgrades of the Redis Enterprise operator for versions 7.22.0-6 and later.

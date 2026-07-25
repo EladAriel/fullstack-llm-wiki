@@ -4,10 +4,10 @@ framework: "LangGraph"
 source_repo: "https://github.com/langchain-ai/docs"
 source_branch: "main"
 source_path: "src/oss/langgraph/graph-api.mdx"
-source_commit: "d037cd23f3f298721837c403b2ffd289e31d56d0"
-source_commit_short: "d037cd23"
-source_commit_date: "2026-06-23T11:18:55+02:00"
-generated_at: "2026-06-23T13:54:20Z"
+source_commit: "2aae1dfc98ee953a9a5185fb6fcdd9efb3f4d878"
+source_commit_short: "2aae1dfc"
+source_commit_date: "2026-07-25T00:27:23Z"
+generated_at: "2026-07-25T11:51:08Z"
 ---
 
 ---
@@ -24,6 +24,14 @@ import LanggraphGraphApiMultipleSchemasPy from '/snippets/code-samples/langgraph
 import LanggraphGraphApiResumeV2Py from '/snippets/code-samples/langgraph-graph-api-resume-v2-py.mdx';
 import LanggraphGraphApiStreamPrivateChannelJs from '/snippets/code-samples/langgraph-graph-api-stream-private-channel-js.mdx';
 import LanggraphGraphApiStreamPrivateChannelPy from '/snippets/code-samples/langgraph-graph-api-stream-private-channel-py.mdx';
+import LanggraphGraphApiReducersAppendStringsCallJs from '/snippets/code-samples/langgraph-graph-api-reducers-append-strings-call-js.mdx';
+import LanggraphGraphApiReducersAppendStringsCallPy from '/snippets/code-samples/langgraph-graph-api-reducers-append-strings-call-py.mdx';
+import LanggraphGraphApiReducersAppendStringsJs from '/snippets/code-samples/langgraph-graph-api-reducers-append-strings-js.mdx';
+import LanggraphGraphApiReducersAppendStringsPy from '/snippets/code-samples/langgraph-graph-api-reducers-append-strings-py.mdx';
+import LanggraphGraphApiReducersCustomStateJs from '/snippets/code-samples/langgraph-graph-api-reducers-custom-state-js.mdx';
+import LanggraphGraphApiReducersCustomStatePy from '/snippets/code-samples/langgraph-graph-api-reducers-custom-state-py.mdx';
+import LanggraphGraphApiReducersDefaultStateJs from '/snippets/code-samples/langgraph-graph-api-reducers-default-state-js.mdx';
+import LanggraphGraphApiReducersDefaultStatePy from '/snippets/code-samples/langgraph-graph-api-reducers-default-state-py.mdx';
 
 ## Graphs
 
@@ -265,33 +273,68 @@ If you only need the channels a node actually produced each step (rather than th
 
 Reducers are key to understanding how updates from nodes are applied to the `State`. Each key in the `State` has its own independent reducer function. If no reducer function is explicitly specified then it is assumed that all updates to that key should override it. There are a few different types of reducers, starting with the default type of reducer:
 
-#### Default reducer
+#### Reducer arguments
 
-These two examples show how to use the default reducer:
+Every reducer is a binary function with two positional arguments:
+
+- **Left argument**: The current value already stored in state for that key.
+- **Right argument**: The update for that key returned by a node.
+
+When a node returns a partial update, LangGraph calls the reducer for each updated key and saves the return value as the new state value:
+
+:::python
+```python
+new_value = reducer(left=current_state[key], right=node_update[key])
+```
+:::
+
+:::js
+```typescript
+const newValue = reducer(currentState[key], nodeUpdate[key]); // left, right
+```
+:::
+
+The left argument always comes from accumulated state. The right argument always comes from the latest node update. The following example names both arguments explicitly:
 
 :::python
 
-```python Example A
-from typing_extensions import TypedDict
+<LanggraphGraphApiReducersAppendStringsPy />
 
-class State(TypedDict):
-    foo: int
-    bar: list[str]
-```
+Suppose the state is `{"tags": ["draft"]}` and a node returns `{"tags": ["review"]}`. LangGraph calls:
+
+<LanggraphGraphApiReducersAppendStringsCallPy />
+
+The new state value for `tags` is `["draft", "review"]`.
 
 :::
 
 :::js
 
-```typescript Example A
-import { StateSchema } from "@langchain/langgraph";
-import * as z from "zod";
+<LanggraphGraphApiReducersAppendStringsJs />
 
-const State = new StateSchema({
-  foo: z.number(),
-  bar: z.array(z.string()),
-});
-```
+Suppose the state is `{ tags: ["draft"] }` and a node returns `{ tags: ["review"] }`. LangGraph calls:
+
+<LanggraphGraphApiReducersAppendStringsCallJs />
+
+The new state value for `tags` is `["draft", "review"]`.
+
+:::
+
+Custom reducers combine the left and right arguments. The [default reducer](#default-reducer) discards the left argument and keeps only the right.
+
+#### Default reducer
+
+The default reducer ignores the left argument and replaces the state value with the right argument. This example shows how to use the default reducer:
+
+:::python
+
+<LanggraphGraphApiReducersDefaultStatePy />
+
+:::
+
+:::js
+
+<LanggraphGraphApiReducersDefaultStateJs />
 
 :::
 
@@ -305,35 +348,20 @@ In this example, no reducer functions are specified for any key. Let's assume th
 `{ foo: 1, bar: ["hi"] }`. Let's then assume the first `Node` returns `{ foo: 2 }`. This is treated as an update to the state. Notice that the `Node` does not need to return the whole `State` schema - just an update. After applying this update, the `State` would then be `{ foo: 2, bar: ["hi"] }`. If the second node returns `{ bar: ["bye"] }` then the `State` would then be `{ foo: 2, bar: ["bye"] }`
 :::
 
+#### Custom reducers
+
+A custom reducer combines the left and right arguments instead of replacing the state value, which is useful for accumulating values, such as appending updates to a list. This example shows how to specify a custom reducer:
+
 :::python
 
-```python Example B
-from typing import Annotated
-from typing_extensions import TypedDict
-from operator import add
-
-class State(TypedDict):
-    foo: int
-    bar: Annotated[list[str], add]
-```
+<LanggraphGraphApiReducersCustomStatePy />
 
 In this example, we've used the `Annotated` type to specify a reducer function (`operator.add`) for the second key (`bar`). Note that the first key remains unchanged. Let's assume the input to the graph is `{"foo": 1, "bar": ["hi"]}`. Let's then assume the first `Node` returns `{"foo": 2}`. This is treated as an update to the state. Notice that the `Node` does not need to return the whole `State` schema - just an update. After applying this update, the `State` would then be `{"foo": 2, "bar": ["hi"]}`. If the second node returns `{"bar": ["bye"]}` then the `State` would then be `{"foo": 2, "bar": ["hi", "bye"]}`. Notice here that the `bar` key is updated by adding the two lists together.
 :::
 
 :::js
 
-```typescript Example B
-import { StateSchema, ReducedValue } from "@langchain/langgraph";
-import { z } from "zod/v4";
-
-const State = new StateSchema({
-  foo: z.number(),
-  bar: new ReducedValue(
-    z.array(z.string()).default(() => []),
-    { reducer: (x, y) => x.concat(y) }
-  ),
-});
-```
+<LanggraphGraphApiReducersCustomStateJs />
 
 In this example, we've used `ReducedValue` to specify a reducer function for the second key (`bar`). Note that the first key remains unchanged. Let's assume the input to the graph is `{ foo: 1, bar: ["hi"] }`. Let's then assume the first `Node` returns `{ foo: 2 }`. This is treated as an update to the state. Notice that the `Node` does not need to return the whole `State` schema - just an update. After applying this update, the `State` would then be `{ foo: 2, bar: ["hi"] }`. If the second node returns `{ bar: ["bye"] }` then the `State` would then be `{ foo: 2, bar: ["hi", "bye"] }`. Notice here that the `bar` key is updated by concatenating the two arrays together.
 :::
@@ -1247,7 +1275,7 @@ This is particularly useful when implementing [multi-agent handoffs](/oss/langch
 
 <Warning>
 
-`Command(resume=...)` is the **only** `Command` pattern intended as input to `invoke()`/`stream()`. Do not use `Command(update=...)` as input to continue multi-turn conversations—because passing any `Command` as input resumes from the latest checkpoint (i.e. the last step that ran, not `__start__`), the graph will appear stuck if it already finished. To continue a conversation on an existing thread, pass a plain input dict:
+`Command(resume=...)` is the **only** `Command` pattern intended as input to `invoke()`/`stream()` (optionally combined with `update=...` to also apply a state change while resuming). Do not use `Command(update=...)` alone as input to continue multi-turn conversations—because passing any `Command` as input resumes from the latest checkpoint (i.e. the last step that ran, not `__start__`), the graph will appear stuck if it already finished. To continue a conversation on an existing thread, pass a plain input dict:
 
 ```python
 # WRONG - graph resumes from the latest checkpoint
@@ -1270,7 +1298,7 @@ graph.invoke( {  # [!code ++]
 
 <Warning>
 
-`new Command({ resume: ... })` is the **only** `Command` pattern intended as input to `invoke()`/`stream()`. Do not use `new Command({ update: ... })` as input to continue multi-turn conversations—because passing any `Command` as input resumes from the latest checkpoint (i.e. the last step that ran, not `__start__`), the graph will appear stuck if it already finished. To continue a conversation on an existing thread, pass a plain input object:
+`new Command({ resume: ... })` is the **only** `Command` pattern intended as input to `invoke()`/`stream()` (optionally combined with `update` to also apply a state change while resuming). Do not use `new Command({ update: ... })` alone as input to continue multi-turn conversations—because passing any `Command` as input resumes from the latest checkpoint (i.e. the last step that ran, not `__start__`), the graph will appear stuck if it already finished. To continue a conversation on an existing thread, pass a plain input object:
 
 ```typescript
 // WRONG - graph resumes from the latest checkpoint

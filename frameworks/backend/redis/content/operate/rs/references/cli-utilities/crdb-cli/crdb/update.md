@@ -4,10 +4,10 @@ framework: "redis"
 source_repo: "https://github.com/redis/docs.git"
 source_branch: "main"
 source_path: "content/operate/rs/references/cli-utilities/crdb-cli/crdb/update.md"
-source_commit: "bc92ea237bbfc2117c870c904f1a3ca619073ef1"
-source_commit_short: "bc92ea23"
-source_commit_date: "2026-06-18T14:53:00-05:00"
-generated_at: "2026-06-21T11:25:32Z"
+source_commit: "9d30f68c3dad1a6b3b7d30fe604b911348ce8152"
+source_commit_short: "9d30f68c"
+source_commit_date: "2026-07-24T10:52:10-07:00"
+generated_at: "2026-07-25T11:51:22Z"
 ---
 
 ---
@@ -56,7 +56,7 @@ If you want to change the configuration of the local instance only, use [`rladmi
 | compression                                                         | 0-6                                                                                                                           | The level of data compression: <br /><br /> 0 = No compression <br /><br /> 6 = High compression and resource load (Default: 3)                                                        |
 | credentials id=\<id\>,username=\<username\>,password=\<password\> | strings                                                                                                                       | Updates the credentials for access to the instance                                                                                                                       |
 | default-db-config \<configuration\>                                                  |                                                                                                                               | Default database configuration from stdin. For a list of database settings, see the [CRDB database config object]({{<relref "/operate/rs/references/rest-api/objects/crdb/database_config">}}) reference. |
-| default-db-config-file \<filename\>                                | filepath                                                                                                                      | Default database configuration from file                                                                                                                                 |
+| default-db-config-file \<filename\>                                | filepath                                                                                                                      | Default database configuration from file. For a list of database settings, see the [CRDB database config object]({{<relref "/operate/rs/references/rest-api/objects/crdb/database_config">}}) reference.|
 | encryption                                                          | true <br/>false                                                                                                           | Activates or deactivates encryption                                                                                                                                      |
 | force                                                               |                                                                                                                               | Force an update even if there are no changes                                                                                                                             |
 | no-wait                                                             |                                                                                                                               | Do not wait for the command to finish                                                                                                                                    |

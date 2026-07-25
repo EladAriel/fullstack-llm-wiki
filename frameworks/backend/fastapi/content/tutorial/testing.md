@@ -4,15 +4,15 @@ framework: "FastAPI"
 source_repo: "https://github.com/fastapi/fastapi.git"
 source_branch: "master"
 source_path: "docs/en/docs/tutorial/testing.md"
-source_commit: "0cb4a8e284b450abbccb71c543ad7757de46c0b2"
-source_commit_short: "0cb4a8e2"
-source_commit_date: "2026-06-20T16:31:34Z"
-generated_at: "2026-06-21T07:06:10Z"
+source_commit: "255b912928904e3ba5980425a54d6837c8bd1a1c"
+source_commit_short: "255b9129"
+source_commit_date: "2026-07-24T21:15:37Z"
+generated_at: "2026-07-25T11:50:10Z"
 ---
 
 # Testing { #testing }
 
-Thanks to [Starlette](https://www.starlette.dev/testclient/), testing **FastAPI** applications is easy and enjoyable.
+Thanks to [Starlette](https://starlette.dev/testclient/), testing **FastAPI** applications is easy and enjoyable.
 
 It is based on [HTTPX](https://www.python-httpx.org), which in turn is designed based on Requests, so it's very familiar and intuitive.
 
@@ -24,10 +24,10 @@ With it, you can use [pytest](https://docs.pytest.org/) directly with **FastAPI*
 
 To use `TestClient`, first install [`httpx`](https://www.python-httpx.org).
 
-Make sure you create a [virtual environment](../virtual-environments.md), activate it, and then install it, for example:
+Add it to your project:
 
 ```console
-$ pip install httpx
+$ uv add httpx
 ```
 
 ///
@@ -168,12 +168,12 @@ If you have a Pydantic model in your test and you want to send its data to the a
 
 After that, you just need to install `pytest`.
 
-Make sure you create a [virtual environment](../virtual-environments.md), activate it, and then install it, for example:
+Add it to your project:
 
 <div class="termy">
 
 ```console
-$ pip install pytest
+$ uv add pytest
 
 ---> 100%
 ```
@@ -187,7 +187,7 @@ Run the tests with:
 <div class="termy">
 
 ```console
-$ pytest
+$ uv run pytest
 
 ================ test session starts ================
 platform linux -- Python 3.6.9, pytest-5.3.5, py-1.8.1, pluggy-0.13.1

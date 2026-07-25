@@ -8,9 +8,9 @@ This is a local LLM-friendly wiki generated from the official Langfuse documenta
 - Source repo: `https://github.com/langfuse/langfuse-docs`
 - Source branch: `main`
 - Source docs path: `content/docs`
-- Source commit: `4a702ece`
-- Source commit date: `2026-06-23T13:41:14Z`
-- Wiki generated at: `2026-06-23T13:55:15Z`
+- Source commit: `fcd1eca3`
+- Source commit date: `2026-07-25T00:45:45Z`
+- Wiki generated at: `2026-07-25T11:51:12Z`
 
 ## How the IDE LLM should use this wiki
 
@@ -58,8 +58,10 @@ This is a local LLM-friendly wiki generated from the official Langfuse documenta
 - [Observations Api](content/api-and-data-platform/features/observations-api.md)
 - [Public Api](content/api-and-data-platform/features/public-api.md)
 - [Query Via Sdk](content/api-and-data-platform/features/query-via-sdk.md)
+- [Scores Api](content/api-and-data-platform/features/scores-api.md)
 - [Overview](content/api-and-data-platform/overview.md)
 - [Ask Ai](content/ask-ai.md)
+- [Compatibility](content/compatibility.md)
 - [Demo](content/demo.md)
 - [Docs Mcp](content/docs-mcp.md)
 - [Core Concepts](content/evaluation/core-concepts.md)
@@ -79,15 +81,18 @@ This is a local LLM-friendly wiki generated from the official Langfuse documenta
 - [Score Analytics](content/evaluation/scores/score-analytics.md)
 - [Troubleshooting And Faq](content/evaluation/troubleshooting-and-faq.md)
 - [Glossary](content/glossary.md)
+- [Langfuse Assistant](content/langfuse-assistant.md)
 - [Custom Dashboards](content/metrics/features/custom-dashboards.md)
 - [Metrics Api](content/metrics/features/metrics-api.md)
 - [Monitors](content/metrics/features/monitors.md)
 - [Overview](content/metrics/overview.md)
+- [Best Practices](content/observability/best-practices.md)
 - [Data Model](content/observability/data-model.md)
 - [Agent Graphs](content/observability/features/agent-graphs.md)
 - [Comments](content/observability/features/comments.md)
 - [Corrections](content/observability/features/corrections.md)
 - [Environments](content/observability/features/environments.md)
+- [Events Table Charts](content/observability/features/events-table-charts.md)
 - [Filter Search Bar](content/observability/features/filter-search-bar.md)
 - [Full Text Search](content/observability/features/full-text-search.md)
 - [Log Levels](content/observability/features/log-levels.md)

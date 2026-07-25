@@ -4,123 +4,42 @@ framework: "redis"
 source_repo: "https://github.com/redis/docs.git"
 source_branch: "main"
 source_path: "content/integrate/redis-data-integration/reference/cli/redis-di-describe-job.md"
-source_commit: "bc92ea237bbfc2117c870c904f1a3ca619073ef1"
-source_commit_short: "bc92ea23"
-source_commit_date: "2026-06-18T14:53:00-05:00"
-generated_at: "2026-06-21T11:25:32Z"
+source_commit: "9d30f68c3dad1a6b3b7d30fe604b911348ce8152"
+source_commit_short: "9d30f68c"
+source_commit_date: "2026-07-24T10:52:10-07:00"
+generated_at: "2026-07-25T11:51:22Z"
 ---
 
 ---
 Title: redis-di describe-job
 linkTitle: redis-di describe-job
-description: Describes a transformation engine's job
+description: Describes a job of a pipeline
 weight: 10
 alwaysopen: false
 categories: ["redis-di"]
 aliases:
 ---
 
+Describes a single job of a pipeline, printing its source properties followed by tables that
+summarize its transformations and outputs.
+
 ## Usage
 
 ```
-Usage: redis-di describe-job [OPTIONS] JOB_NAME
+redis-di describe-job <name> [flags]
 ```
 
 ## Options
 
-- `log_level`:
-  - Type: Choice(['TRACE', 'DEBUG', 'INFO', 'WARNING', 'ERROR', 'CRITICAL'])
-  - Default: `info`
-  - Usage: `--log-level
--l`
+| Option             | Description                             |
+| :----------------- | :-------------------------------------- |
+| `-p`, `--pipeline` | Pipeline to target (default `default`). |
 
-- `job_name` (REQUIRED):
-  - Type: STRING
-  - Default: `none`
-  - Usage: `job-name`
+This command also accepts the
+[global options]({{< relref "/integrate/redis-data-integration/reference/cli/redis-di#global-options" >}}).
 
-- `rdi_host` (REQUIRED):
-  - Type: STRING
-  - Default: `none`
-  - Usage: `--rdi-host`
+## Example
 
-  Host/IP of RDI Database
-
-- `rdi_port` (REQUIRED):
-  - Type: <IntRange 1<=x<=65535>
-  - Default: `none`
-  - Usage: `--rdi-port`
-
-  Port of RDI Database
-
-- `rdi_user`:
-  - Type: STRING
-  - Default: `none`
-  - Usage: `--rdi-user`
-
-  RDI Database Username
-
-- `rdi_password`:
-  - Type: STRING
-  - Default: `none`
-  - Usage: `--rdi-password`
-
-  RDI Database Password
-
-- `rdi_key`:
-  - Type: STRING
-  - Default: `none`
-  - Usage: `--rdi-key`
-
-  Private key file to authenticate with
-
-- `rdi_cert`:
-  - Type: STRING
-  - Default: `none`
-  - Usage: `--rdi-cert`
-
-  Client certificate file to authenticate with
-
-- `rdi_cacert`:
-  - Type: STRING
-  - Default: `none`
-  - Usage: `--rdi-cacert`
-
-  CA certificate file to verify with
-
-- `rdi_key_password`:
-  - Type: STRING
-  - Default: `none`
-  - Usage: `--rdi-key-password`
-
-  Password for unlocking an encrypted private key
-
-- `help`:
-  - Type: BOOL
-  - Default: `false`
-  - Usage: `--help`
-
-  Show this message and exit.
-
-## CLI help
-
-```
-Usage: redis-di describe-job [OPTIONS] JOB_NAME
-
-  Describes a transformation engine's job
-
-Options:
-  -l, --log-level [TRACE|DEBUG|INFO|WARNING|ERROR|CRITICAL]
-                                  [default: INFO]
-  --rdi-host TEXT                 Host/IP of RDI Database  [required]
-  --rdi-port INTEGER RANGE        Port of RDI Database  [1<=x<=65535;
-                                  required]
-  --rdi-user TEXT                 RDI Database Username
-  --rdi-password TEXT             RDI Database Password
-  --rdi-key TEXT                  Private key file to authenticate with
-  --rdi-cert TEXT                 Client certificate file to authenticate with
-  --rdi-cacert TEXT               CA certificate file to verify with
-  --rdi-key-password TEXT         Password for unlocking an encrypted private
-                                  key
-  --help                          Show this message and exit.
+```bash
+redis-di describe-job customers_hash_job
 ```

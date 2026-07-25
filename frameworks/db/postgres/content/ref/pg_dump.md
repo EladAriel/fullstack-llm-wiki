@@ -4,10 +4,10 @@ framework: "postgres"
 source_repo: "https://github.com/postgres/postgres.git"
 source_branch: "master"
 source_path: "doc/src/sgml/ref/pg_dump.sgml"
-source_commit: "031904048aa22e7c70dc8e9c170e2743f9b0f090"
-source_commit_short: "03190404"
-source_commit_date: "2026-06-20T18:20:58+09:00"
-generated_at: "2026-06-21T07:06:11Z"
+source_commit: "38afc3dcb25c45b744d4025029ce0a6c90b7059f"
+source_commit_short: "38afc3dc"
+source_commit_date: "2026-07-25T19:08:27+09:00"
+generated_at: "2026-07-25T11:50:59Z"
 ---
 
 pg_dump
@@ -53,8 +53,6 @@ Run the dump in parallel by dumping `njobs` tables simultaneously. This option m
 `pg_dump` will open `njobs` + 1 connections to the database, so make sure your `guc-max-connections` setting is high enough to accommodate all connections.
 
 Requesting exclusive locks on database objects while running a parallel dump could cause the dump to fail. The reason is that the `pg_dump` leader process requests shared locks (ACCESS SHARE) on the objects that the worker processes are going to dump later in order to make sure that nobody deletes them and makes them go away while the dump is running. If another client then requests an exclusive lock on a table, that lock will not be granted but will be queued waiting for the shared lock of the leader process to be released. Consequently any other access to the table will not be granted either and will queue after the exclusive lock request. This includes the worker process trying to dump the table. Without any precautions this would be a classic deadlock situation. To detect this conflict, the `pg_dump` worker process requests another shared lock using the `NOWAIT` option. If the worker process is not granted this shared lock, somebody else must have requested an exclusive lock in the meantime and there is no way to continue with the dump, so `pg_dump` has no choice but to abort the dump.
-
-To perform a parallel dump, the database server needs to support synchronized snapshots, a feature that was introduced in PostgreSQL 9.2 for primary servers and 10 for standbys. With this feature, database clients can ensure they see the same data set even though they use different connections. `pg_dump -j` uses multiple database connections; it connects to the database once with the leader process and once again for each worker job. Without the synchronized snapshot feature, the different worker jobs wouldn't be guaranteed to see the same data in each connection, which could lead to an inconsistent backup.
 
 `-n pattern`
 `--schema=pattern`
@@ -398,9 +396,9 @@ When a dump without schema is chosen and the option `--disable-triggers` is used
 
 When creating an archive (non-text) output file, it is advisable not to restrict the set of database objects dumped, but instead plan to apply any desired object filtering when reading the archive with `pg_restore`. This will preserve flexibility and possibly avoid problems at restore time; for details see the `app-pgrestore` documentation. In particular, dumping table data without the corresponding table definition (via `--no-schema` and related options) is not recommended.
 
-When `--statistics` is specified, `pg_dump` will include most optimizer statistics in the resulting dump file. This does not include all statistics, such as those created explicitly with `sql-createstatistics`, custom statistics added by an extension, or statistics collected by the cumulative statistics system. Therefore, it may still be useful to run `ANALYZE` after restoring from a dump file to ensure optimal performance; see `vacuum-for-statistics` and `autovacuum` for more information.
+When `--statistics` is specified, `pg_dump` will include most optimizer statistics in the resulting dump file. This does not include all statistics, such as custom statistics added by an extension, or statistics collected by the cumulative statistics system. Therefore, it may still be useful to run `ANALYZE` after restoring from a dump file to ensure optimal performance; see `vacuum-for-statistics` and `autovacuum` for more information.
 
-Because `pg_dump` is used to transfer data to newer versions of PostgreSQL, the output of `pg_dump` can be expected to load into PostgreSQL server versions newer than `pg_dump`'s version. `pg_dump` can also dump from PostgreSQL servers older than its own version. (Currently, servers back to version 9.2 are supported.) However, `pg_dump` cannot dump from PostgreSQL servers newer than its own major version; it will refuse to even try, rather than risk making an invalid dump. Also, it is not guaranteed that `pg_dump`'s output can be loaded into a server of an older major version -- not even if the dump was taken from a server of that version. Loading a dump file into an older server may require manual editing of the dump file to remove syntax not understood by the older server. Use of the `--quote-all-identifiers` option is recommended in cross-version cases, as it can prevent problems arising from varying reserved-word lists in different PostgreSQL versions.
+Because `pg_dump` is used to transfer data to newer versions of PostgreSQL, the output of `pg_dump` can be expected to load into PostgreSQL server versions newer than `pg_dump`'s version. `pg_dump` can also dump from PostgreSQL servers older than its own version. (Currently, servers back to version 10 are supported.) However, `pg_dump` cannot dump from PostgreSQL servers newer than its own major version; it will refuse to even try, rather than risk making an invalid dump. Also, it is not guaranteed that `pg_dump`'s output can be loaded into a server of an older major version -- not even if the dump was taken from a server of that version. Loading a dump file into an older server may require manual editing of the dump file to remove syntax not understood by the older server. Use of the `--quote-all-identifiers` option is recommended in cross-version cases, as it can prevent problems arising from varying reserved-word lists in different PostgreSQL versions.
 
 When dumping logical replication subscriptions, `pg_dump` will generate `CREATE SUBSCRIPTION` commands that use the `connect = false` option, so that restoring the subscription does not make remote connections for creating a replication slot or for initial table copy. That way, the dump can be restored without requiring network access to the remote servers. It is then up to the user to reactivate the subscriptions in a suitable way. If the involved hosts have changed, the connection information might have to be changed. It might also be appropriate to truncate the target tables before initiating a new full table copy. If users intend to copy initial data during refresh they must create the slot with `two_phase = false`. After the initial sync, the two_phase option will be automatically enabled by the subscriber if the subscription had been originally created with `two_phase = true` option.
 

@@ -4,10 +4,10 @@ framework: "redis"
 source_repo: "https://github.com/redis/docs.git"
 source_branch: "main"
 source_path: "content/operate/rc/security/aws-privatelink.md"
-source_commit: "bc92ea237bbfc2117c870c904f1a3ca619073ef1"
-source_commit_short: "bc92ea23"
-source_commit_date: "2026-06-18T14:53:00-05:00"
-generated_at: "2026-06-21T11:25:32Z"
+source_commit: "9d30f68c3dad1a6b3b7d30fe604b911348ce8152"
+source_commit_short: "9d30f68c"
+source_commit_date: "2026-07-24T10:52:10-07:00"
+generated_at: "2026-07-25T11:51:22Z"
 ---
 
 ---
@@ -35,6 +35,8 @@ AWS PrivateLink provides the following benefits:
 - **Improved Security**: PrivateLink exposes the Redis cluster and database(s) as a unidirectional endpoint inside your consumer VPC, thereby avoiding exposing entire VPC subnets to each other and eliminating some possible attack vectors.
 - **Network Flexibility**: PrivateLink enables cross-account and cross-VPC connectivity and can be configured even when the Redis Cloud VPC and your consumer VPC have overlapping CIDR/IP ranges.
 - **Simplified architecture and low latency**: PrivateLink does not require NAT, internet gateways, or VPNs. It provides simplified network routing, without the need for a network load balancer between the application and the Redis database.
+
+See [Connecting to Redis Cloud with AWS PrivateLink vs. VPC Peering](https://redis.io/blog/connecting-to-redis-cloud-with-aws-privatelink-vs-vpc-peering/) to learn more about the benefits of using AWS PrivateLink to connect to Redis Cloud.
 
 {{< video-link >}}
 See [Connect to Redis Cloud with AWS PrivateLink](https://www.youtube.com/watch?v=i3aTmcyFihY) for a short video tutorial on how to connect to Redis Cloud with AWS PrivateLink.
@@ -84,7 +86,7 @@ In this step, you will associate the Redis Cloud resource share with an AWS Acco
 
 1. From the [Redis Cloud console](https://cloud.redis.io/), select the **Subscriptions** menu and then select your subscription from the list.
 
-1. Select **Connectivity > PrivateLink** to view the PrivateLink settings.
+1. Select **Connectivity > PrivateLink** to view the PrivateLink settings. If you haven't set up AWS PrivateLink before, select **Set up PrivateLink**. 
 
 1. In the **Resource Share** section, select **Manage Principals** to open the **Manage Principals** window.
 
@@ -96,7 +98,7 @@ In this step, you will associate the Redis Cloud resource share with an AWS Acco
 
     {{<image filename="images/rc/icon-add.png" width="30px" alt="The Add button adds principals to the resource share." >}}
 
-1. Enter the account's ID in the **Principal ID** field. You can also add an optional alias in the **AWS principal alias** field.
+1. Enter the account's ID in the **AWS Account** field. You can also add an optional alias in the **AWS principal alias** field.
 
     {{<image filename="images/rc/privatelink-aws-consumer-principals.png" width="80%" alt="The AWS consumer principals section with an AWS account added as a principal." >}}
 
@@ -204,3 +206,19 @@ To disassociate a PrivateLink connection:
 1. Select **Disassociate VPC endpoint** or **Disassociate service network** to confirm.
 
 After disassociating the connection, you can delete the VPC resource endpoint or service network in the AWS console.
+
+## Remove PrivateLink
+
+To remove PrivateLink as a connectivity option from your database:
+
+1. Go to the **Connectivity > PrivateLink** tab in your Redis Cloud subscription. 
+
+1. Select **More Actions > Remove Private Link**.
+
+    {{<image filename="images/rc/privatelink-remove-menu.png" width="200px" alt="The Remove Private Link option in the More Actions menu." >}}
+
+1. Select the **Remove Private Link** button to confirm.
+
+    {{<image filename="images/rc/privatelink-remove-confirm.png" width="50%" alt="The Remove Private Link confirmation pop-up." >}}
+
+All connections that depend on PrivateLink will be immediately rejected as when you remove it from your subscription.

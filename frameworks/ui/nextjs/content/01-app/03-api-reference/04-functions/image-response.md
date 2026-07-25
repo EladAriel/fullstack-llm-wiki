@@ -4,10 +4,10 @@ framework: "nextjs"
 source_repo: "https://github.com/vercel/next.js/"
 source_branch: "canary"
 source_path: "docs/01-app/03-api-reference/04-functions/image-response.mdx"
-source_commit: "79142d7806ff4194c8d9885b80fa69db5ecf534a"
-source_commit_short: "79142d78"
-source_commit_date: "2026-06-20T23:40:12Z"
-generated_at: "2026-06-21T12:07:17Z"
+source_commit: "dcf242a17b5d4622bbd9624db531a9d84177619f"
+source_commit_short: "dcf242a1"
+source_commit_date: "2026-07-25T10:16:19+02:00"
+generated_at: "2026-07-25T11:50:53Z"
 ---
 
 ---
@@ -170,7 +170,7 @@ export default async function Image() {
 
 ### Custom fonts
 
-You can use custom fonts in your `ImageResponse` by providing a `fonts` array in the options.
+You can use custom fonts in your `ImageResponse` by providing a `fonts` array in the options. The font doesn't depend on request data, so read it once at module scope. See [Predictable values](/docs/app/getting-started/caching#predictable-values).
 
 ```tsx filename="app/opengraph-image.tsx"
 import { ImageResponse } from 'next/og'
@@ -186,13 +186,12 @@ export const size = {
 
 export const contentType = 'image/png'
 
+const interSemiBold = await readFile(
+  join(process.cwd(), 'assets/Inter-SemiBold.ttf')
+)
+
 // Image generation
 export default async function Image() {
-  // Font loading, process.cwd() is Next.js project directory
-  const interSemiBold = await readFile(
-    join(process.cwd(), 'assets/Inter-SemiBold.ttf')
-  )
-
   return new ImageResponse(
     (
       // ...

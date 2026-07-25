@@ -4,10 +4,10 @@ framework: "redis"
 source_repo: "https://github.com/redis/docs.git"
 source_branch: "main"
 source_path: "content/develop/ai/redisvl/user_guide/how_to_guides/sql_to_redis_queries.md"
-source_commit: "bc92ea237bbfc2117c870c904f1a3ca619073ef1"
-source_commit_short: "bc92ea23"
-source_commit_date: "2026-06-18T14:53:00-05:00"
-generated_at: "2026-06-21T11:25:32Z"
+source_commit: "9d30f68c3dad1a6b3b7d30fe604b911348ce8152"
+source_commit_short: "9d30f68c"
+source_commit_date: "2026-07-24T10:52:10-07:00"
+generated_at: "2026-07-25T11:51:22Z"
 ---
 
 ---
@@ -707,6 +707,38 @@ results
      {'vector_distance': '1.00401353836', 'user': 'mary', 'region': 'us-central'}]
 
 
+
+### Hybrid search (FT.HYBRID)
+
+Use `hybrid_vector_search()` to fuse a full-text query and a vector query into a single ranking **server-side** with Redis's native `FT.HYBRID`. It composes the `cosine_distance()` (vector leg) and `fulltext()` (text leg) functions, with `rrf()` or `linear()` selecting the fusion method (reciprocal rank fusion or a linear weighting).
+
+This differs from the *pre-filter* hybrid search above (a `WHERE` clause narrowing a KNN search): here both legs are ranked independently and fused, rather than text acting only as a filter.
+
+Requires Redis 8.4+ and `redis-py >= 7.1.0`.
+
+
+```python
+sql_str = """
+    SELECT user, job, job_description,
+           hybrid_vector_search(
+               cosine_distance(job_embedding, :vec),
+               fulltext(job_description, 'principles solve problems'),
+               rrf()
+           ) AS hybrid_score
+    FROM user_simple
+    ORDER BY hybrid_score DESC
+    LIMIT 5
+    """
+
+vec = hf.embed("looking for someone to use base principles to solve problems", as_buffer=True)
+sql_query = SQLQuery(sql_str, params={"vec": vec})
+
+redis_query = sql_query.redis_query_string(redis_url="redis://localhost:6379")
+print("Resulting redis query: ", redis_query)
+results = index.query(sql_query)
+
+results
+```
 
 ### Geographic queries
 

@@ -4,10 +4,10 @@ framework: "Langfuse"
 source_repo: "https://github.com/langfuse/langfuse-docs"
 source_branch: "main"
 source_path: "content/docs/index.mdx"
-source_commit: "4a702ece53852a6af86b3883f434adf3f5cae421"
-source_commit_short: "4a702ece"
-source_commit_date: "2026-06-23T13:41:14Z"
-generated_at: "2026-06-23T13:55:15Z"
+source_commit: "fcd1eca34a924867563c3c4e801254c4e66c0021"
+source_commit_short: "fcd1eca3"
+source_commit_date: "2026-07-25T00:45:45Z"
+generated_at: "2026-07-25T11:51:12Z"
 generated_filename: "_source_index.md"
 ---
 
@@ -158,6 +158,7 @@ We actively develop Langfuse in [open source](/open-source) together with our co
 - Ask questions on [GitHub Discussions](/gh-support) or private [support channels](/support).
 - Report bugs via [GitHub Issues](/issue).
 - Chat with the community on [Discord](/discord).
+- Join a [community hour](/events) to talk to the team and ask questions live.
 - [Why people choose Langfuse?](/why)
 
 Langfuse evolves quickly, check out the [changelog](/changelog) for the latest updates. Subscribe to the **mailing list** to get notified about new major features:

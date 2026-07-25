@@ -4,10 +4,10 @@ framework: "redis"
 source_repo: "https://github.com/redis/docs.git"
 source_branch: "main"
 source_path: "content/commands/arop.md"
-source_commit: "bc92ea237bbfc2117c870c904f1a3ca619073ef1"
-source_commit_short: "bc92ea23"
-source_commit_date: "2026-06-18T14:53:00-05:00"
-generated_at: "2026-06-21T11:25:32Z"
+source_commit: "9d30f68c3dad1a6b3b7d30fe604b911348ce8152"
+source_commit_short: "9d30f68c"
+source_commit_date: "2026-07-24T10:52:10-07:00"
+generated_at: "2026-07-25T11:51:22Z"
 ---
 
 ---
@@ -145,15 +145,24 @@ The aggregate function to apply to all non-empty elements in `[start, end]`. One
 ## Examples
 
 {{% redis-cli %}}
-ARMSET myarray 0 "10" 1 "20" 2 "30"
-AROP myarray 0 2 SUM
-AROP myarray 0 2 MIN
-AROP myarray 0 2 MAX
-AROP myarray 0 2 MATCH "10"
-AROP myarray 0 2 USED
-ARMSET flags 0 "255" 1 "15" 2 "240"
-AROP flags 0 2 AND
-AROP flags 0 2 OR
+redis> ARMSET myarray 0 "10" 1 "20" 2 "30"
+(integer) 3
+redis> AROP myarray 0 2 SUM
+"60"
+redis> AROP myarray 0 2 MIN
+"10"
+redis> AROP myarray 0 2 MAX
+"30"
+redis> AROP myarray 0 2 MATCH "10"
+(integer) 1
+redis> AROP myarray 0 2 USED
+(integer) 3
+redis> ARMSET flags 0 "255" 1 "15" 2 "240"
+(integer) 3
+redis> AROP flags 0 2 AND
+(integer) 0
+redis> AROP flags 0 2 OR
+(integer) 255
 {{% /redis-cli %}}
 
 ## Redis Software and Redis Cloud compatibility

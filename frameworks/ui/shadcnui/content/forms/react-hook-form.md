@@ -4,10 +4,10 @@ framework: "shadcnui"
 source_repo: "https://github.com/shadcn-ui/ui"
 source_branch: "main"
 source_path: "apps/v4/content/docs/forms/react-hook-form.mdx"
-source_commit: "5602b81d8344e0d0d7178e3bf57612662cd42957"
-source_commit_short: "5602b81d"
-source_commit_date: "2026-06-21T15:49:35+04:00"
-generated_at: "2026-06-21T12:47:26Z"
+source_commit: "4baadbc6517070ae8f8feb2c97037adc2b305544"
+source_commit_short: "4baadbc6"
+source_commit_date: "2026-07-23T23:50:36+04:00"
+generated_at: "2026-07-25T11:50:48Z"
 ---
 
 ---
@@ -33,6 +33,7 @@ We are going to build the following form. It has a simple text input and a texta
 </Callout>
 
 <ComponentPreview
+  styleName="new-york-v4"
   name="form-rhf-demo"
   className="sm:[&_.preview]:h-[700px]"
   chromeLessOnMobile
@@ -240,6 +241,7 @@ Display errors next to the field using `<FieldError />`. For styling and accessi
 - To show errors, add the `aria-invalid` prop to the `<Input />` component and the `data-invalid` prop to the `<Field />` component.
 
 <ComponentPreview
+  styleName="new-york-v4"
   name="form-rhf-input"
   className="sm:[&_.preview]:h-[700px]"
   chromeLessOnMobile
@@ -267,6 +269,7 @@ For simple text inputs, spread the `field` object onto the input.
 - To show errors, add the `aria-invalid` prop to the `<Textarea />` component and the `data-invalid` prop to the `<Field />` component.
 
 <ComponentPreview
+  styleName="new-york-v4"
   name="form-rhf-textarea"
   className="sm:[&_.preview]:h-[700px]"
   chromeLessOnMobile
@@ -304,6 +307,7 @@ For textarea fields, spread the `field` object onto the textarea.
 - To show errors, add the `aria-invalid` prop to the `<SelectTrigger />` component and the `data-invalid` prop to the `<Field />` component.
 
 <ComponentPreview
+  styleName="new-york-v4"
   name="form-rhf-select"
   className="sm:[&_.preview]:h-[500px]"
   chromeLessOnMobile
@@ -353,6 +357,7 @@ For textarea fields, spread the `field` object onto the textarea.
 - Remember to add `data-slot="checkbox-group"` to the `<FieldGroup />` component for proper styling and spacing.
 
 <ComponentPreview
+  styleName="new-york-v4"
   name="form-rhf-checkbox"
   className="sm:[&_.preview]:h-[700px]"
   chromeLessOnMobile
@@ -408,6 +413,7 @@ For textarea fields, spread the `field` object onto the textarea.
 - To show errors, add the `aria-invalid` prop to the `<RadioGroupItem />` component and the `data-invalid` prop to the `<Field />` component.
 
 <ComponentPreview
+  styleName="new-york-v4"
   name="form-rhf-radiogroup"
   className="sm:[&_.preview]:h-[700px]"
   chromeLessOnMobile
@@ -456,6 +462,7 @@ For textarea fields, spread the `field` object onto the textarea.
 - To show errors, add the `aria-invalid` prop to the `<Switch />` component and the `data-invalid` prop to the `<Field />` component.
 
 <ComponentPreview
+  styleName="new-york-v4"
   name="form-rhf-switch"
   className="sm:[&_.preview]:h-[500px]"
   chromeLessOnMobile
@@ -493,6 +500,7 @@ For textarea fields, spread the `field` object onto the textarea.
 Here is an example of a more complex form with multiple fields and validation.
 
 <ComponentPreview
+  styleName="new-york-v4"
   name="form-rhf-complex"
   className="sm:[&_.preview]:h-[1300px]"
   chromeLessOnMobile
@@ -513,6 +521,7 @@ Use `form.reset()` to reset the form to its default values.
 React Hook Form provides a `useFieldArray` hook for managing dynamic array fields. This is useful when you need to add or remove fields dynamically.
 
 <ComponentPreview
+  styleName="new-york-v4"
   name="form-rhf-array"
   className="sm:[&_.preview]:h-[700px]"
   chromeLessOnMobile

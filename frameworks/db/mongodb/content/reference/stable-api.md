@@ -4,15 +4,15 @@ framework: "mongodb"
 source_repo: "https://github.com/mongodb/docs.git"
 source_branch: "main"
 source_path: "content/manual/manual/source/reference/stable-api.txt"
-source_commit: "96788e8ed140cbdde184ff82e1066dff4996bde4"
-source_commit_short: "96788e8e"
-source_commit_date: "2026-06-19T21:35:03-06:00"
-generated_at: "2026-06-21T07:41:52Z"
+source_commit: "ab9db26ed3d11618cdb61516d8180337d8e3f679"
+source_commit_short: "ab9db26e"
+source_commit_date: "2026-07-24T16:22:46-06:00"
+generated_at: "2026-07-25T11:51:15Z"
 ---
 
-==========
+==================
 
-# Stable API
+# MongoDB Stable API
 
 ## What is the Stable API, and Should You Use It?
 
@@ -22,7 +22,7 @@ MongoDB 5.0 introduces the Stable API for applications communicating with MongoD
 
 The Stable API provides long-term API stability for applications and supports more frequent releases and automatic server upgrades. This allows your applications to take advantage of rapidly released features without risking backwards-breaking changes.
 
-The default behavior for your driver connection will continue to function as expected, even if you do not explicitly specify an `apiVersion <api-version-desc>`.
+The default behavior for your driver connection continues to function as expected, even if you do not explicitly specify an `apiVersion <api-version-desc>`.
 
 The Stable API encompasses the `subset of MongoDB commands <api-v1-command-list>` that applications use to read and write data, create collections and indexes, and perform other common tasks.
 
@@ -32,7 +32,7 @@ with this naming change.
 
 ## Backward Compatibility Guarantee
 
-Your application will not experience significant behavior changes resulting from server upgrades. This guarantee holds as long as the new server supports your specified API version.
+Your application does not experience significant behavior changes from server upgrades. This guarantee holds if the new server supports your specified API version.
 
 To guarantee backward compatibility, your application must:
 
@@ -51,7 +51,7 @@ To use the Stable API, upgrade to the latest driver and create your application'
 
 `"1"` is currently the only API version available.
 
-By default, clients are non-strict. A non-strict client allows you to run any command, regardless of whether or not it belongs to the Stable API.
+By default, clients are non-strict. A non-strict client allows you to run any command, regardless of whether it belongs to the Stable API.
 
 ## Checking Client API Versions
 
@@ -65,7 +65,7 @@ db.runCommand( { serverStatus: 1 } ).metrics.apiVersions
 
 ## Create a Strict Client
 
-A strict client rejects all commands outside of the Stable API. Attempts to use commands outside of the Stable API will receive the `APIVersionError <api-vers-resp>` response.
+A strict client rejects all commands outside of the Stable API. Attempts to use commands outside of the Stable API receive the `APIVersionError <api-vers-resp>` response.
 
 A strict client also ignores `unsupported index types<create-indexes-stable-api>` during `query planning<query-plans-query-optimization>` and execution.
 
@@ -77,7 +77,7 @@ To migrate your application to use the Stable API, you must:
 
 #. Run your application's test suite with the new MongoClient options. #. Determine which commands and features you're using that are outside of the Stable API. #. Migrate to alternative commands and features in the Stable API.
 
-Once your application uses only commands and features defined in the Stable API, you can redeploy it with the new MongoClient options and be confident that future server upgrades won't negatively impact your application.
+Once your application uses only commands and features defined in the Stable API, you can redeploy it with the new MongoClient options and be confident that future server upgrades do not negatively impact your application.
 
 ## How To Use Commands and Features Outside of the Stable API
 

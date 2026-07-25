@@ -4,10 +4,10 @@ framework: "shadcnui"
 source_repo: "https://github.com/shadcn-ui/ui"
 source_branch: "main"
 source_path: "apps/v4/content/docs/components/base/input-group.mdx"
-source_commit: "5602b81d8344e0d0d7178e3bf57612662cd42957"
-source_commit_short: "5602b81d"
-source_commit_date: "2026-06-21T15:49:35+04:00"
-generated_at: "2026-06-21T12:47:26Z"
+source_commit: "4baadbc6517070ae8f8feb2c97037adc2b305544"
+source_commit_short: "4baadbc6"
+source_commit_date: "2026-07-23T23:50:36+04:00"
+generated_at: "2026-07-25T11:50:48Z"
 ---
 
 ---
@@ -145,9 +145,7 @@ Use `align="block-end"` to position the addon below the input.
   previewClassName="h-[26rem]"
 />
 
-## Examples
-
-### Icon
+## Icon
 
 <ComponentPreview
   styleName="base-nova"
@@ -155,7 +153,7 @@ Use `align="block-end"` to position the addon below the input.
   previewClassName="h-80"
 />
 
-### Text
+## Text
 
 <ComponentPreview
   styleName="base-nova"
@@ -163,7 +161,7 @@ Use `align="block-end"` to position the addon below the input.
   previewClassName="h-80"
 />
 
-### Button
+## Button
 
 <ComponentPreview
   styleName="base-nova"
@@ -171,7 +169,7 @@ Use `align="block-end"` to position the addon below the input.
   previewClassName="h-72"
 />
 
-### Kbd
+## Kbd
 
 <ComponentPreview
   styleName="base-nova"
@@ -179,7 +177,7 @@ Use `align="block-end"` to position the addon below the input.
   previewClassName="h-40"
 />
 
-### Dropdown
+## Dropdown
 
 <ComponentPreview
   styleName="base-nova"
@@ -187,7 +185,7 @@ Use `align="block-end"` to position the addon below the input.
   previewClassName="h-56"
 />
 
-### Spinner
+## Spinner
 
 <ComponentPreview
   styleName="base-nova"
@@ -195,7 +193,7 @@ Use `align="block-end"` to position the addon below the input.
   previewClassName="h-80"
 />
 
-### Textarea
+## Textarea
 
 <ComponentPreview
   styleName="base-nova"
@@ -203,7 +201,7 @@ Use `align="block-end"` to position the addon below the input.
   previewClassName="h-96"
 />
 
-### Custom Input
+## Custom Input
 
 Add the `data-slot="input-group-control"` attribute to your custom input for automatic focus state handling.
 

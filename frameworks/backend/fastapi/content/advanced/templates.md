@@ -4,10 +4,10 @@ framework: "FastAPI"
 source_repo: "https://github.com/fastapi/fastapi.git"
 source_branch: "master"
 source_path: "docs/en/docs/advanced/templates.md"
-source_commit: "0cb4a8e284b450abbccb71c543ad7757de46c0b2"
-source_commit_short: "0cb4a8e2"
-source_commit_date: "2026-06-20T16:31:34Z"
-generated_at: "2026-06-21T07:06:10Z"
+source_commit: "255b912928904e3ba5980425a54d6837c8bd1a1c"
+source_commit_short: "255b9129"
+source_commit_date: "2026-07-24T21:15:37Z"
+generated_at: "2026-07-25T11:50:10Z"
 ---
 
 # Templates { #templates }
@@ -20,12 +20,12 @@ There are utilities to configure it easily that you can use directly in your **F
 
 ## Install dependencies { #install-dependencies }
 
-Make sure you create a [virtual environment](../virtual-environments.md), activate it, and install `jinja2`:
+Add `jinja2` to your project:
 
 <div class="termy">
 
 ```console
-$ pip install jinja2
+$ uv add jinja2
 
 ---> 100%
 ```
@@ -135,4 +135,4 @@ And because you are using `StaticFiles`, that CSS file would be served automatic
 
 ## More details { #more-details }
 
-For more details, including how to test templates, check [Starlette's docs on templates](https://www.starlette.dev/templates/).
+For more details, including how to test templates, check [Starlette's docs on templates](https://starlette.dev/templates/).

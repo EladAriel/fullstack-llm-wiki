@@ -4,10 +4,10 @@ framework: "redis"
 source_repo: "https://github.com/redis/docs.git"
 source_branch: "main"
 source_path: "content/develop/clients/_index.md"
-source_commit: "bc92ea237bbfc2117c870c904f1a3ca619073ef1"
-source_commit_short: "bc92ea23"
-source_commit_date: "2026-06-18T14:53:00-05:00"
-generated_at: "2026-06-21T11:25:32Z"
+source_commit: "9d30f68c3dad1a6b3b7d30fe604b911348ce8152"
+source_commit_short: "9d30f68c"
+source_commit_date: "2026-07-24T10:52:10-07:00"
+generated_at: "2026-07-25T11:51:22Z"
 ---
 
 ---
@@ -58,6 +58,9 @@ Redis does not provide official support for third-party client libraries.
 However, we contribute new features, offer guidance, and collaborate with the community
 on a best-effort basis to help ensure these libraries remain reliable and up-to-date.
 {{< /note >}}
+
+See [Client library support and versioning policy]({{< relref "/develop/clients/version-support" >}})
+for details about how Redis maintains, versions, and tests the official client libraries.
 
 We also provide several higher-level
 [object mapping (OM)]({{< relref "/develop/clients/om-clients" >}})
@@ -121,7 +124,7 @@ between the options for each language.
 -   [`Lettuce`](https://github.com/redis/lettuce) supports synchronous, asynchronous,
     and reactive operations. However, it has a more complex API than Jedis and doesn't currently
     support all Redis features (notably time series and probabilistic data structures).
--   [RedisOM for Java](https://github.com/redis/redis-om-java) is an object mapping library that
+-   [RedisOM for Java](https://github.com/redis/redis-om-spring) is an object mapping library that
     provides a high-level API for working with Redis data structures.
 
 ### C#

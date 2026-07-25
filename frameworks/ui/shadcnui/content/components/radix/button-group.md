@@ -4,10 +4,10 @@ framework: "shadcnui"
 source_repo: "https://github.com/shadcn-ui/ui"
 source_branch: "main"
 source_path: "apps/v4/content/docs/components/radix/button-group.mdx"
-source_commit: "5602b81d8344e0d0d7178e3bf57612662cd42957"
-source_commit_short: "5602b81d"
-source_commit_date: "2026-06-21T15:49:35+04:00"
-generated_at: "2026-06-21T12:47:26Z"
+source_commit: "4baadbc6517070ae8f8feb2c97037adc2b305544"
+source_commit_short: "4baadbc6"
+source_commit_date: "2026-07-23T23:50:36+04:00"
+generated_at: "2026-07-25T11:50:48Z"
 ---
 
 ---
@@ -107,27 +107,25 @@ ButtonGroup
 - Use the `ButtonGroup` component when you want to group buttons that perform an action.
 - Use the `ToggleGroup` component when you want to group buttons that toggle a state.
 
-## Examples
-
-### Orientation
+## Orientation
 
 Set the `orientation` prop to change the button group layout.
 
 <ComponentPreview styleName="radix-nova" name="button-group-orientation" />
 
-### Size
+## Size
 
 Control the size of buttons using the `size` prop on individual buttons.
 
 <ComponentPreview styleName="radix-nova" name="button-group-size" />
 
-### Nested
+## Nested
 
 Nest `<ButtonGroup>` components to create button groups with spacing.
 
 <ComponentPreview styleName="radix-nova" name="button-group-nested" />
 
-### Separator
+## Separator
 
 The `ButtonGroupSeparator` component visually divides buttons within a group.
 
@@ -135,37 +133,37 @@ Buttons with variant `outline` do not need a separator since they have a border.
 
 <ComponentPreview styleName="radix-nova" name="button-group-separator" />
 
-### Split
+## Split
 
 Create a split button group by adding two buttons separated by a `ButtonGroupSeparator`.
 
 <ComponentPreview styleName="radix-nova" name="button-group-split" />
 
-### Input
+## Input
 
 Wrap an `Input` component with buttons.
 
 <ComponentPreview styleName="radix-nova" name="button-group-input" />
 
-### Input Group
+## Input Group
 
 Wrap an `InputGroup` component to create complex input layouts.
 
 <ComponentPreview styleName="radix-nova" name="button-group-input-group" />
 
-### Dropdown Menu
+## Dropdown Menu
 
 Create a split button group with a `DropdownMenu` component.
 
 <ComponentPreview styleName="radix-nova" name="button-group-dropdown" />
 
-### Select
+## Select
 
 Pair with a `Select` component.
 
 <ComponentPreview styleName="radix-nova" name="button-group-select" />
 
-### Popover
+## Popover
 
 Use with a `Popover` component.
 

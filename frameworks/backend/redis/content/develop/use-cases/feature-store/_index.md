@@ -4,10 +4,10 @@ framework: "redis"
 source_repo: "https://github.com/redis/docs.git"
 source_branch: "main"
 source_path: "content/develop/use-cases/feature-store/_index.md"
-source_commit: "bc92ea237bbfc2117c870c904f1a3ca619073ef1"
-source_commit_short: "bc92ea23"
-source_commit_date: "2026-06-18T14:53:00-05:00"
-generated_at: "2026-06-21T11:25:32Z"
+source_commit: "9d30f68c3dad1a6b3b7d30fe604b911348ce8152"
+source_commit_short: "9d30f68c"
+source_commit_date: "2026-07-24T10:52:10-07:00"
+generated_at: "2026-07-25T11:51:22Z"
 ---
 
 ---
@@ -134,8 +134,8 @@ The following libraries and platforms use Redis as their online feature store:
 -   **[Redis Feature Form]({{< relref "/develop/ai/featureform" >}})** is
     Redis's own feature-engineering platform. It defines features, labels, and
     feature views in a Python definitions file, materializes them through a
-    [registered provider]({{< relref "/develop/ai/featureform/providers" >}}),
-    and [serves]({{< relref "/develop/ai/featureform/features-and-labels" >}})
+    [registered provider]({{< relref "/develop/ai/featureform/register-providers" >}}),
+    and [serves]({{< relref "/develop/ai/featureform/serve-features" >}})
     them from Redis as the low-latency online store. See the
     [quickstart]({{< relref "/develop/ai/featureform/quickstart" >}}) for an
     end-to-end walkthrough.

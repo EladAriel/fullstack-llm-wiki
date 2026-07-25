@@ -4,10 +4,10 @@ framework: "Langfuse"
 source_repo: "https://github.com/langfuse/langfuse-docs"
 source_branch: "main"
 source_path: "content/docs/evaluation/scores/overview.mdx"
-source_commit: "4a702ece53852a6af86b3883f434adf3f5cae421"
-source_commit_short: "4a702ece"
-source_commit_date: "2026-06-23T13:41:14Z"
-generated_at: "2026-06-23T13:55:15Z"
+source_commit: "fcd1eca34a924867563c3c4e801254c4e66c0021"
+source_commit_short: "fcd1eca3"
+source_commit_date: "2026-07-25T00:45:45Z"
+generated_at: "2026-07-25T11:51:12Z"
 ---
 
 ---
@@ -22,7 +22,7 @@ Scores are Langfuse's universal data object for storing evaluation results. Any 
 
 Every score has a **name** (like `"correctness"` or `"helpfulness"`), a **value**, and a **[data type](#score-types)**. Scores also support an optional **[comment](#score-comments)** for additional context.
 
-Scores can be attached to [traces](/docs/observability/data-model#traces), [observations](/docs/observability/data-model#observations), [sessions](/docs/observability/data-model#sessions), or [dataset runs](/docs/evaluation/experiments/data-model). Most commonly, scores are attached to traces to evaluate a single end-to-end interaction.
+Scores can be attached to [traces](/docs/observability/data-model#observations-and-traces), [observations](/docs/observability/data-model#observations-and-traces), [sessions](/docs/observability/data-model#sessions), or [dataset runs](/docs/evaluation/experiments/data-model). Most commonly, scores are attached to traces to evaluate a single end-to-end interaction.
 
 Once you have scores, they show up in [score analytics](/docs/evaluation/scores/score-analytics), can be visualized in [custom dashboards](/docs/metrics/features/custom-dashboards), and can be queried via the [API](/docs/api).
 

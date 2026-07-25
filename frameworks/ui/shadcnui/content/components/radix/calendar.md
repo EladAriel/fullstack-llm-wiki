@@ -4,10 +4,10 @@ framework: "shadcnui"
 source_repo: "https://github.com/shadcn-ui/ui"
 source_branch: "main"
 source_path: "apps/v4/content/docs/components/radix/calendar.mdx"
-source_commit: "5602b81d8344e0d0d7178e3bf57612662cd42957"
-source_commit_short: "5602b81d"
-source_commit_date: "2026-06-21T15:49:35+04:00"
-generated_at: "2026-06-21T12:47:26Z"
+source_commit: "4baadbc6517070ae8f8feb2c97037adc2b305544"
+source_commit_short: "4baadbc6"
+source_commit_date: "2026-07-23T23:50:36+04:00"
+generated_at: "2026-07-25T11:50:48Z"
 ---
 
 ---
@@ -145,9 +145,7 @@ export function CalendarWithTimezone() {
 
 **Why client-side?** The timezone is detected using `Intl.DateTimeFormat().resolvedOptions().timeZone` inside a `useEffect` to ensure compatibility with server-side rendering. Detecting the timezone during render would cause hydration mismatches, as the server and client may be in different timezones.
 
-## Examples
-
-### Basic
+## Basic
 
 A basic calendar component. We used `className="rounded-lg border"` to style the calendar.
 
@@ -157,7 +155,7 @@ A basic calendar component. We used `className="rounded-lg border"` to style the
   previewClassName="h-96"
 />
 
-### Range Calendar
+## Range Calendar
 
 Use the `mode="range"` prop to enable range selection.
 
@@ -167,7 +165,7 @@ Use the `mode="range"` prop to enable range selection.
   previewClassName="h-[36rem] md:h-96"
 />
 
-### Month and Year Selector
+## Month and Year Selector
 
 Use `captionLayout="dropdown"` to show month and year dropdowns.
 
@@ -177,7 +175,7 @@ Use `captionLayout="dropdown"` to show month and year dropdowns.
   previewClassName="h-96"
 />
 
-### Presets
+## Presets
 
 <ComponentPreview
   styleName="radix-nova"
@@ -185,7 +183,7 @@ Use `captionLayout="dropdown"` to show month and year dropdowns.
   previewClassName="h-[650px]"
 />
 
-### Date and Time Picker
+## Date and Time Picker
 
 <ComponentPreview
   styleName="radix-nova"
@@ -193,7 +191,7 @@ Use `captionLayout="dropdown"` to show month and year dropdowns.
   previewClassName="h-[600px]"
 />
 
-### Booked dates
+## Booked dates
 
 <ComponentPreview
   styleName="radix-nova"
@@ -201,7 +199,7 @@ Use `captionLayout="dropdown"` to show month and year dropdowns.
   previewClassName="h-96"
 />
 
-### Custom Cell Size
+## Custom Cell Size
 
 <ComponentPreview
   styleName="radix-nova"
@@ -233,7 +231,7 @@ Or use fixed values:
 />
 ```
 
-### Week Numbers
+## Week Numbers
 
 Use `showWeekNumber` to show week numbers.
 

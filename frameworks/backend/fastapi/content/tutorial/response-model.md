@@ -4,10 +4,10 @@ framework: "FastAPI"
 source_repo: "https://github.com/fastapi/fastapi.git"
 source_branch: "master"
 source_path: "docs/en/docs/tutorial/response-model.md"
-source_commit: "0cb4a8e284b450abbccb71c543ad7757de46c0b2"
-source_commit_short: "0cb4a8e2"
-source_commit_date: "2026-06-20T16:31:34Z"
-generated_at: "2026-06-21T07:06:10Z"
+source_commit: "255b912928904e3ba5980425a54d6837c8bd1a1c"
+source_commit_short: "255b9129"
+source_commit_date: "2026-07-24T21:15:37Z"
+generated_at: "2026-07-25T11:50:10Z"
 ---
 
 # Response Model - Return Type { #response-model-return-type }
@@ -88,16 +88,16 @@ Here we are declaring a `UserIn` model, it will contain a plaintext password:
 
 To use `EmailStr`, first install [`email-validator`](https://github.com/JoshData/python-email-validator).
 
-Make sure you create a [virtual environment](../virtual-environments.md), activate it, and then install it, for example:
+Add it to your project:
 
 ```console
-$ pip install email-validator
+$ uv add email-validator
 ```
 
 or with:
 
 ```console
-$ pip install "pydantic[email]"
+$ uv add "pydantic[email]"
 ```
 
 ///
@@ -270,7 +270,7 @@ You can also use:
 * `response_model_exclude_defaults=True`
 * `response_model_exclude_none=True`
 
-as described in [the Pydantic docs](https://docs.pydantic.dev/1.10/usage/exporting_models/#modeldict) for `exclude_defaults` and `exclude_none`.
+as described in [the Pydantic docs](https://pydantic.dev/docs/validation/latest/concepts/serialization/#excluding-and-including-fields-based-on-their-value) for `exclude_defaults` and `exclude_none`.
 
 ///
 

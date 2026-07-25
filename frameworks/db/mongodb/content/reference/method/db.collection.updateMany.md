@@ -4,10 +4,10 @@ framework: "mongodb"
 source_repo: "https://github.com/mongodb/docs.git"
 source_branch: "main"
 source_path: "content/manual/manual/source/reference/method/db.collection.updateMany.txt"
-source_commit: "96788e8ed140cbdde184ff82e1066dff4996bde4"
-source_commit_short: "96788e8e"
-source_commit_date: "2026-06-19T21:35:03-06:00"
-generated_at: "2026-06-21T07:41:52Z"
+source_commit: "ab9db26ed3d11618cdb61516d8180337d8e3f679"
+source_commit_short: "ab9db26e"
+source_commit_date: "2026-07-24T16:22:46-06:00"
+generated_at: "2026-07-25T11:51:15Z"
 ---
 
 ===========================================
@@ -30,7 +30,7 @@ This method is available in deployments hosted in the following environments:
 
 ## Syntax
 
-The :method:`~db.collection.updateMany()` method has the following form:
+The `updateMany()` method has the following form:
 
 ```javascript
 db.collection.updateMany(
@@ -51,7 +51,7 @@ db.collection.updateMany(
 
 ### Parameters
 
-The :method:`~db.collection.updateMany()` method takes the following parameters:
+The `updateMany()` method takes the following parameters:
 
 ### Returns
 
@@ -79,11 +79,11 @@ The built-in role :authrole:`readWrite` provides the required privileges.
 
 `updateMany()` finds all documents in the collection that match the `filter` and applies modifications specified by the `update` parameter.
 
-`updateMany()` modifies each document individually. Each document write is an `atomic operation`, but `updateMany()` as a whole is not atomic. If your use case requires atomicity of writes to multiple documents, use `<transactions>`.
+`updateMany()` modifies each document individually. Each document write is an `atomic operation`, but `updateMany()` as a whole is not atomic. If your use case requires atomicity of writes to multiple documents, use `transactions`.
 
-If a single document update fails, all document updates written before the failure are retained, but any remaining matching documents are not updated. For details on this behavior, see `<multi-update-failures>`.
+If a single document update fails, all document updates written before the failure are retained, but any remaining matching documents are not updated. For details on this behavior, see `multi-update-failures`.
 
-> **Seealso:** `<updateMany-sharded-collection>` for more information about
+> **Seealso:** `updateMany-sharded-collection` for more information about
 `updateMany()` behavior in sharded collections.
 
 ### Limitations
@@ -93,15 +93,15 @@ operations.
 
 ### Upsert
 
-If `upsert: true` and no documents match the `filter`, :method:`db.collection.updateMany()` creates a new document based on the `filter` and `update` parameters.
+If `upsert: true` and no documents match the `filter`, `db.collection.updateMany()` creates a new document based on the `filter` and `update` parameters.
 
-If you specify `upsert: true` on a sharded collection, you must include the full shard key in the `filter`. For additional :method:`db.collection.updateMany()` behavior, see `updateMany-sharded-collection`.
+If you specify `upsert: true` on a sharded collection, you must include the full shard key in the `filter`. For information about `db.collection.updateMany()` behavior in sharded collections, see `updateMany-sharded-collection`.
 
 See `updateMany-example-update-multiple-documents-with-upsert`.
 
 ### Update with an Update Operator Expressions Document
 
-For the modification specification, the :method:`db.collection.updateMany()` method can accept a document that only contains `update operator <update-operators>` expressions to perform.
+For the modification specification, the `db.collection.updateMany()` method can accept a document that only contains `update operator <update-operators>` expressions to perform.
 
 For example:
 
@@ -115,7 +115,7 @@ db.collection.updateMany(
 
 ### Update with an Aggregation Pipeline
 
-The :method:`db.collection.updateMany()` method can accept an `aggregation pipeline <aggregation-pipeline>` `[ <stage1>, <stage2>, ... ]` that specifies the modifications to perform. The pipeline can consist of the following stages:
+The `db.collection.updateMany()` method can accept an `aggregation pipeline <aggregation-pipeline>` `[ <stage1>, <stage2>, ... ]` that specifies the modifications to perform. The pipeline can consist of the following stages:
 
 .. include:: /includes/list-update-agg-stages.rst
 
@@ -144,7 +144,7 @@ For examples, see `updateMany-example-agg`.
 
 ### Time Series Collections
 
-The :method:`~db.collection.updateMany()` method is available for `time series collections <time series collection>` starting in MongoDB 5.1.
+The `updateMany()` method is available for `time series collections <time series collection>` starting in MongoDB 5.1.
 
 Update commands must meet the following requirements:
 
@@ -158,13 +158,13 @@ Update commands must meet the following requirements:
 include the full shard key in the `filter`.
 
 - If you attempt to run `updateMany()` during a
-`<sharding-chunk-migration>` or a `shard key value update <update-shard-key>`, the operation can miss documents in some scenarios. To ensure all documents are updated, use idempotent updates and rerun the command until no further updates are applied. For more information on idempotent updates with `updateMany()`, see `<updateMany-example-idempotent>`.
+`sharding-chunk-migration` or a `shard key value update <update-shard-key>`, the operation can miss documents in some scenarios. To ensure all documents are updated, use idempotent updates and rerun the command until no further updates are applied. For more information on idempotent updates with `updateMany()`, see `updateMany-example-idempotent`.
 
 .. include:: /includes/method-targets-all-shards-if-no-txn.rst
 
 ### Explainability
 
-:method:`~db.collection.updateMany()` is not compatible with :method:`db.collection.explain()`.
+`updateMany()` is not compatible with :method:`db.collection.explain()`.
 
 ### Transactions
 
@@ -176,7 +176,7 @@ Upsert within Transactions ``````````````````````````
 
 .. include:: /includes/extracts/transactions-upsert-availability.rst
 
-Write Concerns and Transactions ````````````````````````````````
+Write Concerns and Transactions ```````````````````````````````
 
 .. include:: /includes/extracts/transactions-operations-write-concern.rst
 
@@ -207,11 +207,7 @@ The following operation finds all movies with more than 100 comments and adds a 
 
 ### Update with Aggregation Pipeline
 
-The :method:`db.collection.updateMany()` can use an aggregation pipeline for the update. The pipeline can consist of the following stages:
-
-.. include:: /includes/list-update-agg-stages.rst
-
-Using the aggregation pipeline allows for a more expressive update statement, such as expressing conditional updates based on current field values or updating one field using the value of another field(s).
+`db.collection.updateMany()` can use an aggregation pipeline to express a more complex update, such as a conditional update based on current field values. For the supported pipeline stages, see `updateMany-behavior-aggregation-pipeline`.
 
 Example 1: Update with Aggregation Pipeline Using Existing Fields `````````````````````````````````````````````````````````````````
 
@@ -262,7 +258,7 @@ After the command, matching movies have a combined score and letter grade.
 
 The following operation updates all movies released after 2020 and directed by Christopher Nolan:
 
-In this example, since no documents match the filter, and `upsert` is `true`, :method:`~db.collection.updateMany inserts a new document with a generated id` as well as the equality conditions from the `filter`, and the `update` modifiers.
+In this example, since no documents match the filter, and `upsert` is `true`, `updateMany inserts a new document with a generated id` and the equality conditions from the `filter`, and the `update` modifiers.
 
 ### Update with Write Concern
 

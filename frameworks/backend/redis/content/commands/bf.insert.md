@@ -4,10 +4,10 @@ framework: "redis"
 source_repo: "https://github.com/redis/docs.git"
 source_branch: "main"
 source_path: "content/commands/bf.insert.md"
-source_commit: "bc92ea237bbfc2117c870c904f1a3ca619073ef1"
-source_commit_short: "bc92ea23"
-source_commit_date: "2026-06-18T14:53:00-05:00"
-generated_at: "2026-06-21T11:25:32Z"
+source_commit: "9d30f68c3dad1a6b3b7d30fe604b911348ce8152"
+source_commit_short: "9d30f68c"
+source_commit_date: "2026-07-24T10:52:10-07:00"
+generated_at: "2026-07-25T11:51:22Z"
 ---
 
 ---
@@ -133,21 +133,27 @@ Otherwise, use an `expansion` of `1` to reduce memory consumption. The default v
 
 Add three items to a filter, then create the filter with default parameters if it does not already exist.
 
-{{< highlight bash >}}
-BF.INSERT filter ITEMS foo bar baz
-{{< / highlight >}}
+{{% redis-cli %}}
+redis> BF.INSERT filter ITEMS foo bar baz
+1) (integer) 1
+2) (integer) 1
+3) (integer) 1
+{{% /redis-cli %}}
 
 Add one item to a filter, then create the filter with a capacity of 10000 if it does not already exist.
 
-{{< highlight bash >}}
-BF.INSERT filter CAPACITY 10000 ITEMS hello
-{{< / highlight >}}
+{{% redis-cli %}}
+redis> BF.INSERT filter CAPACITY 10000 ITEMS hello
+1) (integer) 1
+{{% /redis-cli %}}
 
 Add two items to a filter, then return error if the filter does not already exist.
 
-{{< highlight bash >}}
-BF.INSERT filter NOCREATE ITEMS foo bar
-{{< / highlight >}}
+{{% redis-cli %}}
+redis> BF.INSERT filter NOCREATE ITEMS foo bar
+1) (integer) 0
+2) (integer) 0
+{{% /redis-cli %}}
 
 ## Redis Software and Redis Cloud compatibility
 

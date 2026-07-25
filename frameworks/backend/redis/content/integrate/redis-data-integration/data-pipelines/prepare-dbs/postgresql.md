@@ -4,10 +4,10 @@ framework: "redis"
 source_repo: "https://github.com/redis/docs.git"
 source_branch: "main"
 source_path: "content/integrate/redis-data-integration/data-pipelines/prepare-dbs/postgresql.md"
-source_commit: "bc92ea237bbfc2117c870c904f1a3ca619073ef1"
-source_commit_short: "bc92ea23"
-source_commit_date: "2026-06-18T14:53:00-05:00"
-generated_at: "2026-06-21T11:25:32Z"
+source_commit: "9d30f68c3dad1a6b3b7d30fe604b911348ce8152"
+source_commit_short: "9d30f68c"
+source_commit_date: "2026-07-24T10:52:10-07:00"
+generated_at: "2026-07-25T11:51:22Z"
 ---
 
 ---
@@ -100,7 +100,7 @@ Follow the steps below to enable CDC with [Amazon RDS for PostgreSQL](https://aw
 ## Install the logical decoding output plug-in
 
 As of PostgreSQL 9.4, the only way to read changes to the write-ahead-log is to
-[install a logical decoding output plug-in](https://debezium.io/documentation/reference/2.6/postgres-plugins.html).
+[install a logical decoding output plug-in](https://debezium.io/documentation/reference/stable/postgres-plugins.html).
 These plug-ins are written in C using PostgreSQL-specific APIs, as described in the
 [PostgreSQL documentation](https://www.postgresql.org/docs/current/logicaldecoding-output-plugin.html). 
 The PostgreSQL connector uses one of Debezium’s supported logical decoding
@@ -249,7 +249,7 @@ the replication group using the following commands:
 
 You must also set the value of the `publication.autocreate.mode` parameter to `filtered`
 to allow Debezium to specify the publication configuration. See the
-[Debezium documentation for `publication.autocreate.mode`](https://debezium.io/documentation/reference/2.6/connectors/postgresql.html#postgresql-publication-autocreate-mode)
+[Debezium documentation for `publication.autocreate.mode`](https://debezium.io/documentation/reference/stable/connectors/postgresql.html#postgresql-publication-autocreate-mode)
 to learn more about this setting.
 
 ## Configure PostgreSQL for replication with the Debezium connector host

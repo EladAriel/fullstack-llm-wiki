@@ -4,10 +4,10 @@ framework: "redis"
 source_repo: "https://github.com/redis/docs.git"
 source_branch: "main"
 source_path: "content/operate/rs/security/certificates/certificate-based-authentication.md"
-source_commit: "bc92ea237bbfc2117c870c904f1a3ca619073ef1"
-source_commit_short: "bc92ea23"
-source_commit_date: "2026-06-18T14:53:00-05:00"
-generated_at: "2026-06-21T11:25:32Z"
+source_commit: "9d30f68c3dad1a6b3b7d30fe604b911348ce8152"
+source_commit_short: "9d30f68c"
+source_commit_date: "2026-07-24T10:52:10-07:00"
+generated_at: "2026-07-25T11:51:22Z"
 ---
 
 ---
@@ -174,11 +174,25 @@ PUT /v1/cluster
     POST /v1/users
     {
       "auth_method": "certificate",
-      "certificate_subject_line": "CN=<Common Name>, OU=<Organization Unit>, O=<Organization>, L=<Locality>, ST=<State/Province>, C=<Country>"
+      "certificate_subject_line": "CN=<Common Name>,OU=<Organizational Unit>,O=<Organization>,L=<Locality>,ST=<State/Province>,C=<Country>"
     }
     ```
 
     Replace the placeholder values `<>` with your client certificate's subject values.
+
+    {{<note>}}
+The `certificate_subject_line` must:
+
+- Follow [RFC 2253](https://www.rfc-editor.org/rfc/rfc2253) format.
+
+- List the attributes in reverse order, starting with the Common Name (`CN`).
+
+- Not contain spaces after the commas that separate attributes.
+
+- Exactly match the certificate's RFC 2253 subject.
+
+- Contain only one Organizational Unit (`OU`) value.
+    {{</note>}}
 
 ### Authenticate REST API requests
 
@@ -198,17 +212,31 @@ To set up certificate-based authentication for databases:
 
 1. Enable mutual TLS for the relevant databases. See [Enable TLS]({{<relref "/operate/rs/security/encryption/tls/enable-tls">}}) for detailed instructions.
 
-1. When you [create new users]({{<relref "/operate/rs/references/rest-api/requests/users#post-user">}}), include `"auth_method": "certificate"` and `certificate_subject_line` in the request body :
+1. When you [create new users]({{<relref "/operate/rs/references/rest-api/requests/users#post-user">}}), include `"auth_method": "certificate"` and `certificate_subject_line` in the request body:
 
     ```sh
     POST /v1/users
     {
       "auth_method": "certificate",
-      "certificate_subject_line": "CN=<Common Name>, OU=<Organization Unit>, O=<Organization>, L=<Locality>, ST=<State/Province>, C=<Country>"
+      "certificate_subject_line": "CN=<Common Name>,OU=<Organizational Unit>,O=<Organization>,L=<Locality>,ST=<State/Province>,C=<Country>"
     }
     ```
 
     Replace the placeholder values `<>` with your client certificate's subject values.
+
+    {{<note>}}
+The `certificate_subject_line` must:
+
+- Follow [RFC 2253](https://www.rfc-editor.org/rfc/rfc2253) format.
+
+- List the attributes in reverse order, starting with the Common Name (`CN`).
+
+- Not contain spaces after the commas that separate attributes.
+
+- Exactly match the certificate's RFC 2253 subject.
+
+- Contain only one Organizational Unit (`OU`) value.
+    {{</note>}}
 
 ### Authenticate database connections
 

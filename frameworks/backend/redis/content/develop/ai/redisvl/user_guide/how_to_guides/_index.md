@@ -4,10 +4,10 @@ framework: "redis"
 source_repo: "https://github.com/redis/docs.git"
 source_branch: "main"
 source_path: "content/develop/ai/redisvl/user_guide/how_to_guides/_index.md"
-source_commit: "bc92ea237bbfc2117c870c904f1a3ca619073ef1"
-source_commit_short: "bc92ea23"
-source_commit_date: "2026-06-18T14:53:00-05:00"
-generated_at: "2026-06-21T11:25:32Z"
+source_commit: "9d30f68c3dad1a6b3b7d30fe604b911348ce8152"
+source_commit_short: "9d30f68c"
+source_commit_date: "2026-07-24T10:52:10-07:00"
+generated_at: "2026-07-25T11:51:22Z"
 ---
 
 ---
@@ -50,6 +50,7 @@ How-to guides are **task-oriented** recipes that help you accomplish specific go
 <div class="p-5 border border-redis-pen-300 rounded-lg"><h3 class="mt-0 mb-2">💻 CLI Operations</h3><ul>
 <li><a href="../cli/">Manage Indices with the CLI</a>: create, inspect, and delete indices from your terminal</li>
 <li><a href="mcp/">Run RedisVL MCP</a>: expose an existing Redis index to MCP clients</li>
+<li><a href="mcp_authentication/">Authenticate RedisVL MCP</a>: require JWT bearer tokens and gate read vs write</li>
 </ul></div>
 </div>
 
@@ -71,5 +72,6 @@ How-to guides are **task-oriented** recipes that help you accomplish specific go
 | Decide on storage format | [Choose a Storage Type](hash_vs_json/) |
 | Manage indices from terminal | [Manage Indices with the CLI](../cli/) |
 | Expose an index through MCP | [Run RedisVL MCP](mcp/) |
+| Authenticate the MCP server | [Authenticate RedisVL MCP](mcp_authentication/) |
 | Plan and run a supported index migration | [Migrate an Index](migrate-indexes/) |
 | Quantize vectors with resume, rollback, and the wizard | [Migrate an Index: Quantization, Resume, Backup, Wizard](index_migration/) |

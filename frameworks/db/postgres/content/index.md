@@ -4,10 +4,10 @@ framework: "postgres"
 directory: "content"
 source_repo: "https://github.com/postgres/postgres.git"
 source_branch: "master"
-source_commit: "031904048aa22e7c70dc8e9c170e2743f9b0f090"
-source_commit_short: "03190404"
-source_commit_date: "2026-06-20T18:20:58+09:00"
-generated_at: "2026-06-21T07:06:11Z"
+source_commit: "38afc3dcb25c45b744d4025029ce0a6c90b7059f"
+source_commit_short: "38afc3dc"
+source_commit_date: "2026-07-25T19:08:27+09:00"
+generated_at: "2026-07-25T11:50:59Z"
 ---
 # Content
 
@@ -37,6 +37,7 @@ This directory contains postgres learning pages related to content.
 - [Appendix Obsolete Pgresetxlog](appendix-obsolete-pgresetxlog.md)
 - [Appendix Obsolete Pgxlogdump](appendix-obsolete-pgxlogdump.md)
 - [Appendix Obsolete Recovery Config](appendix-obsolete-recovery-config.md)
+- [Appendix Obsolete Refint](appendix-obsolete-refint.md)
 - [Appendix Obsolete](appendix-obsolete.md)
 - [Arch Dev](arch-dev.md)
 - [Archive Modules](archive-modules.md)
@@ -159,7 +160,7 @@ This directory contains postgres learning pages related to content.
 - [Rangetypes](rangetypes.md)
 - [Reference](reference.md)
 - [Regress](regress.md)
-- [Release 19](release-19.md)
+- [Release 20](release-20.md)
 - [Release](release.md)
 - [Replication Origins](replication-origins.md)
 - [Rowtypes](rowtypes.md)

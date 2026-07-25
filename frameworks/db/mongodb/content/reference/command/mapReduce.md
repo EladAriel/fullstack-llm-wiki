@@ -4,10 +4,10 @@ framework: "mongodb"
 source_repo: "https://github.com/mongodb/docs.git"
 source_branch: "main"
 source_path: "content/manual/manual/source/reference/command/mapReduce.txt"
-source_commit: "96788e8ed140cbdde184ff82e1066dff4996bde4"
-source_commit_short: "96788e8e"
-source_commit_date: "2026-06-19T21:35:03-06:00"
-generated_at: "2026-06-21T07:41:52Z"
+source_commit: "ab9db26ed3d11618cdb61516d8180337d8e3f679"
+source_commit_short: "ab9db26e"
+source_commit_date: "2026-07-24T16:22:46-06:00"
+generated_at: "2026-07-25T11:51:15Z"
 ---
 
 ============================
@@ -145,7 +145,7 @@ If you set the `out <mapreduce-out-cmd>` parameter to output the results inline,
 }
 ```
 
-In addition to the aforementioned command specific return fields, the :method:`db.runCommand()` includes additional information:
+In addition to the command-specific return fields above, :method:`db.runCommand()` includes additional information:
 
 - for replica sets: `$clusterTime`, and `operationTime`.
 - for sharded clusters: `operationTime` and `$clusterTime`.
@@ -153,7 +153,7 @@ See `db.runCommand Response <command-response>` for details on these fields.
 
 ## Additional Information
 
-- `/tutorial/troubleshoot-map-function`
-- `/tutorial/troubleshoot-reduce-function`
+- `troubleshoot-map-function`
+- `troubleshoot-reduce-function`
 - :method:`db.collection.mapReduce()`
 - `aggregation`

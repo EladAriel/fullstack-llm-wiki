@@ -4,10 +4,10 @@ framework: "FastAPI"
 directory: "content"
 source_repo: "https://github.com/fastapi/fastapi.git"
 source_branch: "master"
-source_commit: "0cb4a8e284b450abbccb71c543ad7757de46c0b2"
-source_commit_short: "0cb4a8e2"
-source_commit_date: "2026-06-20T16:31:34Z"
-generated_at: "2026-06-21T07:06:10Z"
+source_commit: "255b912928904e3ba5980425a54d6837c8bd1a1c"
+source_commit_short: "255b9129"
+source_commit_date: "2026-07-24T21:15:37Z"
+generated_at: "2026-07-25T11:50:10Z"
 ---
 # Content
 
@@ -23,17 +23,38 @@ This directory contains FastAPI learning pages related to content.
 
 ## Child Directories
 
+- [About](about/index.md) - pages related to about
 - [Advanced](advanced/index.md) - pages related to advanced
 - [Deployment](deployment/index.md) - pages related to deployment
 - [How To](how-to/index.md) - pages related to how to
+- [Learn](learn/index.md) - pages related to learn
+- [Reference](reference/index.md) - pages related to reference
+- [Resources](resources/index.md) - pages related to resources
 - [Tutorial](tutorial/index.md) - pages related to tutorial
 
 ## Pages in This Directory
 
+- [Llm Test](_llm-test.md)
+- [Original Source Index](_source_index.md)
+- [Alternatives](alternatives.md)
 - [Async](async.md)
+- [Benchmarks](benchmarks.md)
+- [Contributing](contributing.md)
+- [Editor Support](editor-support.md)
 - [Environment Variables](environment-variables.md)
+- [External Links](external-links.md)
 - [Fastapi Cli](fastapi-cli.md)
+- [Fastapi People](fastapi-people.md)
+- [Features](features.md)
+- [Help Fastapi](help-fastapi.md)
+- [History Design Future](history-design-future.md)
+- [Management](management.md)
+- [Newsletter](newsletter.md)
+- [Project Generation](project-generation.md)
 - [Python Types](python-types.md)
+- [Release Notes](release-notes.md)
+- [Translation Banner](translation-banner.md)
+- [Translations](translations.md)
 - [Virtual Environments](virtual-environments.md)
 
 ## IDE LLM Guidance

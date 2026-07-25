@@ -4,10 +4,10 @@ framework: "nextjs"
 source_repo: "https://github.com/vercel/next.js/"
 source_branch: "canary"
 source_path: "docs/01-app/02-guides/local-development.mdx"
-source_commit: "79142d7806ff4194c8d9885b80fa69db5ecf534a"
-source_commit_short: "79142d78"
-source_commit_date: "2026-06-20T23:40:12Z"
-generated_at: "2026-06-21T12:07:17Z"
+source_commit: "dcf242a17b5d4622bbd9624db531a9d84177619f"
+source_commit_short: "dcf242a1"
+source_commit_date: "2026-07-25T10:16:19+02:00"
+generated_at: "2026-07-25T11:50:53Z"
 ---
 
 ---
@@ -248,34 +248,34 @@ It provides detailed information about the time taken for each module to compile
 1. Generate a Turbopack trace file:
 
    ```bash package="pnpm"
-   NEXT_TURBOPACK_TRACING=1 pnpm dev
+   pnpm dev --internal-trace
    ```
 
    ```bash package="npm"
-   NEXT_TURBOPACK_TRACING=1 npm run dev
+   npm run dev -- --internal-trace
    ```
 
    ```bash package="yarn"
-   NEXT_TURBOPACK_TRACING=1 yarn dev
+   yarn dev --internal-trace
    ```
 
    ```bash package="bun"
-   NEXT_TURBOPACK_TRACING=1 bun dev
+   bun dev --internal-trace
    ```
 
 1. Navigate around your application or make edits to files to reproduce the problem.
 1. Stop the Next.js development server.
-1. A file called `trace-turbopack` will be available in the `.next-profiles` folder.
+1. A file called `trace-turbopack.bin` will be available in the `.next-profiles` folder.
 1. You can interpret the file using `npx next internal trace [path-to-file]`:
 
    ```bash
-   npx next internal trace .next-profiles/trace-turbopack
+   npx next internal trace .next-profiles/trace-turbopack.bin
    ```
 
    On versions where `trace` is not available, the command was named `turbo-trace-server`:
 
    ```bash
-   npx next internal turbo-trace-server .next-profiles/trace-turbopack
+   npx next internal turbo-trace-server .next-profiles/trace-turbopack.bin
    ```
 
 1. Once the trace server is running you can view the trace at https://trace.nextjs.org/.

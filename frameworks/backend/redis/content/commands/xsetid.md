@@ -4,10 +4,10 @@ framework: "redis"
 source_repo: "https://github.com/redis/docs.git"
 source_branch: "main"
 source_path: "content/commands/xsetid.md"
-source_commit: "bc92ea237bbfc2117c870c904f1a3ca619073ef1"
-source_commit_short: "bc92ea23"
-source_commit_date: "2026-06-18T14:53:00-05:00"
-generated_at: "2026-06-21T11:25:32Z"
+source_commit: "9d30f68c3dad1a6b3b7d30fe604b911348ce8152"
+source_commit_short: "9d30f68c"
+source_commit_date: "2026-07-24T10:52:10-07:00"
+generated_at: "2026-07-25T11:51:22Z"
 ---
 
 ---
@@ -77,8 +77,9 @@ summary: An internal command for replicating stream values.
 syntax_fmt: "XSETID key last-id [ENTRIESADDED\_entries-added]\n  [MAXDELETEDID\_max-deleted-id]"
 title: XSETID
 ---
-The `XSETID` command is an internal command.
-It is used by a Redis master to replicate the last delivered ID of streams.
+ `XSETID` is an internal command. Users should not call it directly.
+ 
+Redis primary shards use it to replicate the last delivered entry ID of the stream.
 
 ## Required arguments
 

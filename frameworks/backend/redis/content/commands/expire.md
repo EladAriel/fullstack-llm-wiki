@@ -4,10 +4,10 @@ framework: "redis"
 source_repo: "https://github.com/redis/docs.git"
 source_branch: "main"
 source_path: "content/commands/expire.md"
-source_commit: "bc92ea237bbfc2117c870c904f1a3ca619073ef1"
-source_commit_short: "bc92ea23"
-source_commit_date: "2026-06-18T14:53:00-05:00"
-generated_at: "2026-06-21T11:25:32Z"
+source_commit: "9d30f68c3dad1a6b3b7d30fe604b911348ce8152"
+source_commit_short: "9d30f68c"
+source_commit_date: "2026-07-24T10:52:10-07:00"
+generated_at: "2026-07-25T11:51:22Z"
 ---
 
 ---
@@ -164,13 +164,13 @@ Set the expiry only when the new expiry is less than the current one. A non-vola
 
 {{< clients-example set="cmds_generic" step="expire" description="Foundational: Set key expiration time using EXPIRE (supports conditional options NX/XX/GT/LT, returns 1 if set or 0 if not)" difficulty="beginner" >}}
 > SET mykey "Hello"
-"OK"
+OK
 > EXPIRE mykey 10
 (integer) 1
 > TTL mykey
 (integer) 10
 > SET mykey "Hello World"
-"OK"
+OK
 > TTL mykey
 (integer) -1
 > EXPIRE mykey 10 XX
@@ -182,20 +182,6 @@ Set the expiry only when the new expiry is less than the current one. A non-vola
 > TTL mykey
 (integer) 10
 {{< /clients-example >}}
-
-Give these commands a try in the interactive console:
-
-{{% redis-cli %}}
-SET mykey "Hello"
-EXPIRE mykey 10
-TTL mykey
-SET mykey "Hello World"
-TTL mykey
-EXPIRE mykey 10 XX
-TTL mykey
-EXPIRE mykey 10 NX
-TTL mykey
-{{% /redis-cli %}}
 
 ## Details
 

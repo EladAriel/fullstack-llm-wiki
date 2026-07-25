@@ -4,10 +4,10 @@ framework: "redis"
 directory: "content/integrate/redis-data-integration/release-notes"
 source_repo: "https://github.com/redis/docs.git"
 source_branch: "main"
-source_commit: "bc92ea237bbfc2117c870c904f1a3ca619073ef1"
-source_commit_short: "bc92ea23"
-source_commit_date: "2026-06-18T14:53:00-05:00"
-generated_at: "2026-06-21T11:25:32Z"
+source_commit: "9d30f68c3dad1a6b3b7d30fe604b911348ce8152"
+source_commit_short: "9d30f68c"
+source_commit_date: "2026-07-24T10:52:10-07:00"
+generated_at: "2026-07-25T11:51:22Z"
 ---
 # Release Notes
 
@@ -43,6 +43,7 @@ This directory contains redis learning pages related to release notes.
 - [Rdi 1 16 2](rdi-1-16-2.md)
 - [Rdi 1 18 0](rdi-1-18-0.md)
 - [Rdi 1 18 1](rdi-1-18-1.md)
+- [Rdi 1 19 0](rdi-1-19-0.md)
 - [Rdi 1 2 8](rdi-1-2-8.md)
 - [Rdi 1 2](rdi-1-2.md)
 - [Rdi 1 4 0](rdi-1-4-0.md)

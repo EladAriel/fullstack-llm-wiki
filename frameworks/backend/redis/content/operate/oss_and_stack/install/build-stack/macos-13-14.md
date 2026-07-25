@@ -4,10 +4,10 @@ framework: "redis"
 source_repo: "https://github.com/redis/docs.git"
 source_branch: "main"
 source_path: "content/operate/oss_and_stack/install/build-stack/macos-13-14.md"
-source_commit: "bc92ea237bbfc2117c870c904f1a3ca619073ef1"
-source_commit_short: "bc92ea23"
-source_commit_date: "2026-06-18T14:53:00-05:00"
-generated_at: "2026-06-21T11:25:32Z"
+source_commit: "9d30f68c3dad1a6b3b7d30fe604b911348ce8152"
+source_commit_short: "9d30f68c"
+source_commit_date: "2026-07-24T10:52:10-07:00"
+generated_at: "2026-07-25T11:51:22Z"
 ---
 
 ---
@@ -16,12 +16,19 @@ categories:
 - operate
 - stack
 - oss
-linkTitle: macOS 13 / macOS 14
-title: Build and run Redis Open Source on macOS 13 (Ventura) and macOS 14 (Sonoma)
+linkTitle: macOS 14 / 15 / 26
+title: Build and run Redis Open Source on macOS 14 (Sonoma), 15 (Sequoia), and 26 (Tahoe)
 weight: 50
 ---
 
-Follow the steps below to build and run Redis Open Source with all data structures from its source code on a system running macOS 13 (Ventura) and macOS 14 (Sonoma).
+Follow the steps below to build and run Redis Open Source with all data structures from its source code on a system running macOS 14 (Sonoma), macOS 15 (Sequoia), or macOS 26 (Tahoe). These instructions apply to both Intel and Apple Silicon (ARM) Macs.
+
+{{< note >}}
+Three RediSearch-specific build constraints apply on macOS and are handled in the steps below:
+
+- The cross-language LTO that RediSearch enables by default requires Linux; its build script aborts on macOS with `Error: LTO is only supported on Linux`. Step 5 sets `LTO=0` to disable it.
+- RediSearch's Rust workspace uses edition 2024 and features stabilized in Rust 1.94, so the Rust toolchain in step 3 is pinned to `1.94.0`. Older Rust fails with `feature edition2024 is required`.
+{{< /note >}}
 
 ## 1. Install homebrew
 
@@ -48,7 +55,7 @@ brew install wget
 Rust is required to build the JSON package.
 
 ```bash
-RUST_INSTALLER=rust-1.80.1-$(if [ "$(uname -m)" = "arm64" ]; then echo "aarch64"; else echo "x86_64"; fi)-apple-darwin
+RUST_INSTALLER=rust-1.94.0-$(if [ "$(uname -m)" = "arm64" ]; then echo "aarch64"; else echo "x86_64"; fi)-apple-darwin
 wget --quiet -O ${RUST_INSTALLER}.tar.xz https://static.rust-lang.org/dist/${RUST_INSTALLER}.tar.xz
 tar -xf ${RUST_INSTALLER}.tar.xz
 (cd ${RUST_INSTALLER} && sudo ./install.sh)
@@ -90,7 +97,7 @@ cd ~/src/redis-<version>
 export HOMEBREW_PREFIX="$(brew --prefix)"
 export BUILD_WITH_MODULES=yes
 export BUILD_TLS=yes
-export DISABLE_WERRORS=yes
+export LTO=0
 PATH="$HOMEBREW_PREFIX/opt/libtool/libexec/gnubin:$HOMEBREW_PREFIX/opt/llvm@18/bin:$HOMEBREW_PREFIX/opt/make/libexec/gnubin:$HOMEBREW_PREFIX/opt/gnu-sed/libexec/gnubin:$HOMEBREW_PREFIX/opt/coreutils/libexec/gnubin:$PATH"
 export LDFLAGS="-L$HOMEBREW_PREFIX/opt/llvm@18/lib"
 export CPPFLAGS="-I$HOMEBREW_PREFIX/opt/llvm@18/include"

@@ -4,10 +4,10 @@ framework: "Model Context Protocol"
 source_repo: "https://github.com/modelcontextprotocol/modelcontextprotocol"
 source_branch: "main"
 source_path: "docs/specification/draft/architecture/index.mdx"
-source_commit: "47501e4ced7823014b83be168916d4c9e63b594e"
-source_commit_short: "47501e4c"
-source_commit_date: "2026-06-22T09:16:44-07:00"
-generated_at: "2026-06-23T14:04:43Z"
+source_commit: "7634684382c3d14cf7e9f14073fe40a2d8ace3fa"
+source_commit_short: "76346843"
+source_commit_date: "2026-07-23T16:49:30-07:00"
+generated_at: "2026-07-25T11:50:39Z"
 generated_filename: "_source_index.md"
 ---
 
@@ -19,7 +19,7 @@ title: Architecture
 
 The Model Context Protocol (MCP) follows a client-host-server architecture where each
 host can run multiple client instances. MCP is a stateless protocol: every request is
-self-contained and carries its own protocol version, client identity, and capabilities.
+self-contained and carries its own protocol version and capabilities.
 This architecture enables users to integrate AI capabilities across applications while
 maintaining clear security boundaries and isolating concerns. Built on JSON-RPC, MCP
 provides a protocol focused on context exchange and sampling coordination between
@@ -154,7 +154,7 @@ sequenceDiagram
 
     loop Client Requests
         Host->>Client: User- or model-initiated action
-        Client->>Server: Request (with _meta: version, clientInfo, clientCapabilities)
+        Client->>Server: Request (with _meta: version, clientCapabilities)
         alt Server requires client input
             Server-->>Client: InputRequiredResult (e.g. sampling/createMessage)
             Client->>Host: Forward to AI

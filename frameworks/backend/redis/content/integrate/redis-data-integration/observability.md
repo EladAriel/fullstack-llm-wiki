@@ -4,10 +4,10 @@ framework: "redis"
 source_repo: "https://github.com/redis/docs.git"
 source_branch: "main"
 source_path: "content/integrate/redis-data-integration/observability.md"
-source_commit: "bc92ea237bbfc2117c870c904f1a3ca619073ef1"
-source_commit_short: "bc92ea23"
-source_commit_date: "2026-06-18T14:53:00-05:00"
-generated_at: "2026-06-21T11:25:32Z"
+source_commit: "9d30f68c3dad1a6b3b7d30fe604b911348ce8152"
+source_commit_short: "9d30f68c"
+source_commit_date: "2026-07-24T10:52:10-07:00"
+generated_at: "2026-07-25T11:51:22Z"
 ---
 
 ---
@@ -51,7 +51,7 @@ for an introduction to these concepts.
 
 {{< note >}}If you don't use Prometheus or Grafana, you can still see
 RDI metrics with the RDI monitoring screen in Redis Insight or with the
-[`redis-di status`]({{< relref "/integrate/redis-data-integration/reference/cli/redis-di-status" >}})
+[`redis-di describe`]({{< relref "/integrate/redis-data-integration/reference/cli/redis-di-describe" >}})
 command from the CLI.{{< /note >}}
 
 ## Accessing the metrics
@@ -62,7 +62,7 @@ The way you access the metrics endpoints depends on whether you are using a VM i
 
 For VM installations, the metrics are available by default on the following endpoints:
 - Collector metrics: `https://<RDI_HOST>/collector-source/metrics`
-- Stream processor metrics: `https://<RDI_HOST>/metrics`
+- Stream processor metrics: `https://<RDI_HOST>/processor/metrics`
 - Operator metrics: `https://<RDI_HOST>/operator/metrics`
 
 Please note that for RDI versions prior to 1.16.0 the collector metrics are not accessible.

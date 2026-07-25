@@ -4,10 +4,10 @@ framework: "shadcnui"
 source_repo: "https://github.com/shadcn-ui/ui"
 source_branch: "main"
 source_path: "apps/v4/content/docs/components/base/accordion.mdx"
-source_commit: "5602b81d8344e0d0d7178e3bf57612662cd42957"
-source_commit_short: "5602b81d"
-source_commit_date: "2026-06-21T15:49:35+04:00"
-generated_at: "2026-06-21T12:47:26Z"
+source_commit: "4baadbc6517070ae8f8feb2c97037adc2b305544"
+source_commit_short: "4baadbc6"
+source_commit_date: "2026-07-23T23:50:36+04:00"
+generated_at: "2026-07-25T11:50:48Z"
 ---
 
 ---
@@ -106,9 +106,7 @@ Accordion
     └── AccordionContent
 ```
 
-## Examples
-
-### Basic
+## Basic
 
 A basic accordion that shows one item at a time. The first item is open by default.
 
@@ -119,7 +117,7 @@ A basic accordion that shows one item at a time. The first item is open by defau
   previewClassName="*:data-[slot=accordion]:max-w-sm h-[300px]"
 />
 
-### Multiple
+## Multiple
 
 Use the `multiple` prop to allow multiple items to be open at the same time.
 
@@ -130,7 +128,7 @@ Use the `multiple` prop to allow multiple items to be open at the same time.
   previewClassName="*:data-[slot=accordion]:max-w-sm h-[450px]"
 />
 
-### Disabled
+## Disabled
 
 Use the `disabled` prop on `AccordionItem` to disable individual items.
 
@@ -141,7 +139,7 @@ Use the `disabled` prop on `AccordionItem` to disable individual items.
   previewClassName="*:data-[slot=accordion]:max-w-sm h-[300px]"
 />
 
-### Borders
+## Borders
 
 Add `border` to the `Accordion` and `border-b last:border-b-0` to the `AccordionItem` to add borders to the items.
 
@@ -152,7 +150,7 @@ Add `border` to the `Accordion` and `border-b last:border-b-0` to the `Accordion
   previewClassName="*:data-[slot=accordion]:max-w-sm h-[300px]"
 />
 
-### Card
+## Card
 
 Wrap the `Accordion` in a `Card` component.
 

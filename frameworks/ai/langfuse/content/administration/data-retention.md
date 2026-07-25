@@ -4,10 +4,10 @@ framework: "Langfuse"
 source_repo: "https://github.com/langfuse/langfuse-docs"
 source_branch: "main"
 source_path: "content/docs/administration/data-retention.mdx"
-source_commit: "4a702ece53852a6af86b3883f434adf3f5cae421"
-source_commit_short: "4a702ece"
-source_commit_date: "2026-06-23T13:41:14Z"
-generated_at: "2026-06-23T13:55:15Z"
+source_commit: "fcd1eca34a924867563c3c4e801254c4e66c0021"
+source_commit_short: "fcd1eca3"
+source_commit_date: "2026-07-25T00:45:45Z"
+generated_at: "2026-07-25T11:51:12Z"
 ---
 
 ---
@@ -36,8 +36,11 @@ Data retention is configured on a project level, and we accept a number of days 
 Project owners and administrators can change the data retention setting within the Project Settings view.
 
 <Callout type="info">
-  By default, Langfuse stores event data (Traces, Observations, Scores, and
-  Media Assets) indefinitely.
+  Without a retention policy, Langfuse does not automatically delete event data
+  (Traces, Observations, Scores, and Media Assets). On self-hosted instances,
+  data is stored indefinitely by default. On Langfuse Cloud, each plan includes
+  a data access window (Hobby: 30 days, Core: 90 days, Pro and Enterprise: 3
+  years); see [pricing](/pricing) for details.
 </Callout>
 
 <Frame className="my-10" fullWidth>

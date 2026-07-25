@@ -4,10 +4,10 @@ framework: "redis"
 source_repo: "https://github.com/redis/docs.git"
 source_branch: "main"
 source_path: "content/commands/bf.scandump.md"
-source_commit: "bc92ea237bbfc2117c870c904f1a3ca619073ef1"
-source_commit_short: "bc92ea23"
-source_commit_date: "2026-06-18T14:53:00-05:00"
-generated_at: "2026-06-21T11:25:32Z"
+source_commit: "9d30f68c3dad1a6b3b7d30fe604b911348ce8152"
+source_commit_short: "9d30f68c"
+source_commit_date: "2026-07-24T10:52:10-07:00"
+generated_at: "2026-07-25T11:51:22Z"
 ---
 
 ---
@@ -65,11 +65,11 @@ Iterator value; either 0 or the iterator from a previous invocation of this comm
 
 ## Examples
 
-{{< highlight bash >}}
+{{% redis-cli %}}
 redis> BF.RESERVE bf 0.1 10
 OK
 redis> BF.ADD bf item1
-1) (integer) 1
+(integer) 1
 redis> BF.SCANDUMP bf 0
 1) (integer) 1
 2) "\x01\x00\x00\x00\x00\x00\x00\x00\x01\x00\x00\x00\x05\x00\x00\x00\x02\x00\x00\x00\b\x00\x00\x00\x00\x00\x00\x00@\x00\x00\x00\x00\x00\x00\x00\x01\x00\x00\x00\x00\x00\x00\x00\x9a\x99\x99\x99\x99\x99\xa9?J\xf7\xd4\x9e\xde\xf0\x18@\x05\x00\x00\x00\n\x00\x00\x00\x00\x00\x00\x00\x00"
@@ -87,7 +87,7 @@ redis> BF.LOADCHUNK bf 9 "\x01\b\x00\x80\x00\x04 \x00"
 OK
 redis> BF.EXISTS bf item1
 (integer) 1
-{{< / highlight >}}
+{{% /redis-cli %}}
 
 Python code:
 {{< highlight bash >}}

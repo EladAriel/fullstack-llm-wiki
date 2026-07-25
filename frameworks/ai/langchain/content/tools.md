@@ -4,10 +4,10 @@ framework: "LangChain"
 source_repo: "https://github.com/langchain-ai/docs"
 source_branch: "main"
 source_path: "src/oss/langchain/tools.mdx"
-source_commit: "d037cd23f3f298721837c403b2ffd289e31d56d0"
-source_commit_short: "d037cd23"
-source_commit_date: "2026-06-23T11:18:55+02:00"
-generated_at: "2026-06-23T13:53:33Z"
+source_commit: "2aae1dfc98ee953a9a5185fb6fcdd9efb3f4d878"
+source_commit_short: "2aae1dfc"
+source_commit_date: "2026-07-25T00:27:23Z"
+generated_at: "2026-07-25T11:51:05Z"
 ---
 
 ---
@@ -735,6 +735,52 @@ Behavior:
 
 Use this when downstream reasoning benefits from explicit fields instead of free-form text.
 
+#### Return multimodal content
+
+Tools are not limited to plain text. When the model supports multimodal tool results, the tool can return [standard content blocks](/oss/langchain/messages#standard-content-blocks) so the model receives text, images, and other media in one tool result.
+
+:::python
+```python
+from langchain.tools import tool
+
+
+@tool
+def capture_screenshot() -> list[dict]:
+    """Capture a screenshot of the current page."""
+    return [
+        {"type": "text", "text": "Screenshot of the current page:"},
+        {"type": "image", "url": "https://example.com/page.png"},
+    ]
+```
+:::
+
+:::js
+```typescript
+import { tool } from "langchain";
+import { z } from "zod";
+
+const captureScreenshot = tool(
+  async () => [
+    { type: "text", text: "Screenshot of the current page:" },
+    { type: "image", url: "https://example.com/page.png" },
+  ],
+  {
+    name: "capture_screenshot",
+    description: "Capture a screenshot of the current page.",
+    schema: z.object({}),
+  }
+);
+```
+:::
+
+Behavior:
+
+- The return value is converted to a `ToolMessage` with multimodal `content`.
+- Use `message.content_blocks` to read the normalized block list after the tool runs.
+- The model must support the modalities you return. Check your [model's capabilities](/oss/integrations/chat) before returning images, audio, or video.
+
+For block types and provider-specific requirements, see [Multimodal messages](/oss/langchain/messages#multimodal). MCP tools that return images or mixed content are converted the same way; see [Multimodal tool content](/oss/langchain/mcp#multimodal-tool-content).
+
 #### Return a Command
 
 Return a @[`Command`] when the tool needs to update graph state (for example, setting user preferences or app state).
@@ -914,7 +960,7 @@ There are two approaches depending on whether tools are known ahead of time:
         });
 
         const agent = await createDeepAgent({
-            model: "claude-sonnet-4-20250514",
+            model: "claude-sonnet-4-6",
             tools: tools,
             middleware: [stateBasedTools] as any,
         });
@@ -1012,7 +1058,7 @@ There are two approaches depending on whether tools are known ahead of time:
         });
 
         const agent = await createDeepAgent({
-          model: "claude-sonnet-4-20250514",
+          model: "claude-sonnet-4-6",
           backend: new StoreBackend(),
           store,
           checkpointer,
@@ -1111,7 +1157,7 @@ There are two approaches depending on whether tools are known ahead of time:
         });
 
         const agent = await createDeepAgent({
-          model: "claude-sonnet-4-20250514",
+          model: "claude-sonnet-4-6",
           store,
           checkpointer,
           tools,
@@ -1170,7 +1216,7 @@ There are two approaches depending on whether tools are known ahead of time:
             return handler(request)
 
     agent = create_agent(
-        model="gpt-4o",
+        model="gpt-5.5",
         tools=[get_weather],  # Only static tools registered here
         middleware=[DynamicToolMiddleware()],
     )
@@ -1225,7 +1271,7 @@ There are two approaches depending on whether tools are known ahead of time:
     });
 
     const agent = createAgent({
-      model: "gpt-4o",
+      model: "gpt-5.5",
       tools: [getWeather], // Only static tools registered here
       middleware: [dynamicToolMiddleware],
     });

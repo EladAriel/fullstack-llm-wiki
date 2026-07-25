@@ -4,10 +4,10 @@ framework: "postgres"
 source_repo: "https://github.com/postgres/postgres.git"
 source_branch: "master"
 source_path: "doc/src/sgml/spi.sgml"
-source_commit: "031904048aa22e7c70dc8e9c170e2743f9b0f090"
-source_commit_short: "03190404"
-source_commit_date: "2026-06-20T18:20:58+09:00"
-generated_at: "2026-06-21T07:06:11Z"
+source_commit: "38afc3dcb25c45b744d4025029ce0a6c90b7059f"
+source_commit_short: "38afc3dc"
+source_commit_date: "2026-07-25T19:08:27+09:00"
+generated_at: "2026-07-25T11:50:59Z"
 ---
 
 ## Server Programming Interface
@@ -242,7 +242,7 @@ execute a command with out-of-line parameters
 
 ```
 int SPI_execute_with_args(const char *command,
-                          int nargs, Oid *argtypes,
+                          int nargs, const Oid *argtypes,
                           const Datum *values, const char *nulls,
                           bool read_only, long count)
 ```
@@ -280,7 +280,7 @@ SPI_prepare
 prepare a statement, without executing it yet
 
 ```
-SPIPlanPtr SPI_prepare(const char * command, int nargs, Oid * argtypes)
+SPIPlanPtr SPI_prepare(const char * command, int nargs, const Oid * argtypes)
 ```
 
 ## Description
@@ -325,7 +325,7 @@ prepare a statement, without executing it yet
 
 ```
 SPIPlanPtr SPI_prepare_cursor(const char * command, int nargs,
-                              Oid * argtypes, int cursorOptions)
+                              const Oid * argtypes, int cursorOptions)
 ```
 
 ## Description
@@ -607,7 +607,7 @@ SPI_execp
 execute a statement in read/write mode
 
 ```
-int SPI_execp(SPIPlanPtr plan, Datum * values, const char * nulls, long count)
+int SPI_execp(SPIPlanPtr plan, const Datum * values, const char * nulls, long count)
 ```
 
 ## Description
@@ -637,7 +637,7 @@ set up a cursor using a statement created with `SPI_prepare`
 
 ```
 Portal SPI_cursor_open(const char * name, SPIPlanPtr plan,
-                       Datum * values, const char * nulls,
+                       const Datum * values, const char * nulls,
                        bool read_only)
 ```
 
@@ -672,7 +672,7 @@ set up a cursor using a query and parameters
 ```
 Portal SPI_cursor_open_with_args(const char *name,
                                  const char *command,
-                                 int nargs, Oid *argtypes,
+                                 int nargs, const Oid *argtypes,
                                  const Datum *values, const char *nulls,
                                  bool read_only, int cursorOptions)
 ```
@@ -1484,7 +1484,7 @@ create a row by replacing selected fields of a given row
 
 ```
 HeapTuple SPI_modifytuple(Relation rel, HeapTuple row, int ncols,
-                          int * colnum, Datum * values, const char * nulls)
+                          const int * colnum, const Datum * values, const char * nulls)
 ```
 
 ## Description

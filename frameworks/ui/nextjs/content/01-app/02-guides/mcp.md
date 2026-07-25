@@ -4,10 +4,10 @@ framework: "nextjs"
 source_repo: "https://github.com/vercel/next.js/"
 source_branch: "canary"
 source_path: "docs/01-app/02-guides/mcp.mdx"
-source_commit: "79142d7806ff4194c8d9885b80fa69db5ecf534a"
-source_commit_short: "79142d78"
-source_commit_date: "2026-06-20T23:40:12Z"
-generated_at: "2026-06-21T12:07:17Z"
+source_commit: "dcf242a17b5d4622bbd9624db531a9d84177619f"
+source_commit_short: "dcf242a1"
+source_commit_date: "2026-07-25T10:16:19+02:00"
+generated_at: "2026-07-25T11:50:53Z"
 ---
 
 ---
@@ -55,9 +55,7 @@ For more configuration options, see the [next-devtools-mcp repository](https://g
 
 ### Development Tools
 
-- **Next.js Knowledge Base**: Query comprehensive Next.js documentation and best practices
-- **Migration and Upgrade Tools**: Automated helpers for upgrading to Next.js 16 with codemods
-- **Caching Guide**: Setup and configuration assistance for Cache Components
+- **Documentation Gateway**: Points your agent at the version-accurate docs bundled with your installed Next.js (in `node_modules/next/dist/docs/`), so explanations and generated code match the version you are running
 - **Browser Testing**: [Playwright MCP](https://github.com/microsoft/playwright-mcp) integration for verifying pages in the browser
 
 > **Note:** The Next.js team is actively expanding these capabilities. New tools and features are added regularly to improve the agent development experience.
@@ -171,7 +169,7 @@ Get help with Next.js concepts and migrations:
 User: "Help me upgrade my Next.js app to version 16"
 ```
 
-The agent will analyze your current version, guide you through automated migrations with codemods, and provide step-by-step instructions for handling breaking changes.
+The agent will run the official upgrade codemod (`npx @next/codemod@latest upgrade latest`) and provide step-by-step instructions for handling breaking changes.
 
 Ask conceptual questions:
 
@@ -179,7 +177,7 @@ Ask conceptual questions:
 User: "When should I use 'use client' in App Router?"
 ```
 
-The agent will query the Next.js knowledge base and provide documentation-backed explanations with examples from your codebase.
+The agent will read the version-accurate Next.js docs bundled with your project and provide documentation-backed explanations with examples from your codebase.
 
 ## How it works
 

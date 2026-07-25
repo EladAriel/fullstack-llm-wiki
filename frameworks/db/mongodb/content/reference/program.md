@@ -4,10 +4,10 @@ framework: "mongodb"
 source_repo: "https://github.com/mongodb/docs.git"
 source_branch: "main"
 source_path: "content/manual/manual/source/reference/program.txt"
-source_commit: "96788e8ed140cbdde184ff82e1066dff4996bde4"
-source_commit_short: "96788e8e"
-source_commit_date: "2026-06-19T21:35:03-06:00"
-generated_at: "2026-06-21T07:41:52Z"
+source_commit: "ab9db26ed3d11618cdb61516d8180337d8e3f679"
+source_commit_short: "ab9db26e"
+source_commit_date: "2026-07-24T16:22:46-06:00"
+generated_at: "2026-07-25T11:51:15Z"
 ---
 
 ==========================
@@ -25,7 +25,7 @@ The core components in the MongoDB package are:
 
 ## Windows Services
 
-The :binary:`mongod.exe` and :binary:`mongos.exe` describe the options available for configuring MongoDB when running as a Windows Service. The :binary:`mongod.exe` and :binary:`mongos.exe` binaries provide a superset of the :binary:`~bin.mongod` and :binary:`~bin.mongos` options.
+The :binary:`mongod.exe` and :binary:`mongos.exe` binaries configure MongoDB as a Windows Service. They provide a superset of the :binary:`~bin.mongod` and :binary:`~bin.mongos` options.
 
 - `/reference/program/mongod.exe`
 - `/reference/program/mongos.exe`
@@ -36,7 +36,7 @@ The :binary:`mongod.exe` and :binary:`mongos.exe` describe the options available
 
 ## Security Tools
 
-:binary:`~bin.mongoldap` and :binary:`~bin.mongokerberos` provide a method for validating a system's LDAP or Kerberos configuration respectively, and for testing that the authentication process for each succeeds for a given username.
+:binary:`~bin.mongoldap` validates a system's LDAP configuration, and :binary:`~bin.mongokerberos` validates a system's Kerberos configuration. Both tools test that authentication succeeds for a specified username.
 
 ## Contents
 

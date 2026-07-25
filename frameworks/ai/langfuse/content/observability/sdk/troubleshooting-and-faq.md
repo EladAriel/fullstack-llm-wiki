@@ -4,10 +4,10 @@ framework: "Langfuse"
 source_repo: "https://github.com/langfuse/langfuse-docs"
 source_branch: "main"
 source_path: "content/docs/observability/sdk/troubleshooting-and-faq.mdx"
-source_commit: "4a702ece53852a6af86b3883f434adf3f5cae421"
-source_commit_short: "4a702ece"
-source_commit_date: "2026-06-23T13:41:14Z"
-generated_at: "2026-06-23T13:55:15Z"
+source_commit: "fcd1eca34a924867563c3c4e801254c4e66c0021"
+source_commit_short: "fcd1eca3"
+source_commit_date: "2026-07-25T00:45:45Z"
+generated_at: "2026-07-25T11:51:12Z"
 ---
 
 ---
@@ -38,6 +38,7 @@ If you cannot find your issue below, try [Ask AI](/docs/ask-ai), open a [GitHub 
 - Prefer context managers (`with langfuse.start_as_current_observation(...)`) to maintain OTEL context.
 - If using manual spans (`langfuse.start_observation()`), always call `.end()`.
 - In async code, rely on Langfuse helpers to avoid losing context across `await` boundaries.
+- If an observation references a parent that Langfuse never received, it is shown at the trace root instead of under its intended parent. This can happen when the parent was filtered out, dropped, or never sent, so make sure every referenced parent observation is actually exported.
 
 ## LangChain/OpenAI integration issues
 

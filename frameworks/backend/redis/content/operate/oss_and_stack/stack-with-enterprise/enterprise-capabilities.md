@@ -4,10 +4,10 @@ framework: "redis"
 source_repo: "https://github.com/redis/docs.git"
 source_branch: "main"
 source_path: "content/operate/oss_and_stack/stack-with-enterprise/enterprise-capabilities.md"
-source_commit: "bc92ea237bbfc2117c870c904f1a3ca619073ef1"
-source_commit_short: "bc92ea23"
-source_commit_date: "2026-06-18T14:53:00-05:00"
-generated_at: "2026-06-21T11:25:32Z"
+source_commit: "9d30f68c3dad1a6b3b7d30fe604b911348ce8152"
+source_commit_short: "9d30f68c"
+source_commit_date: "2026-07-24T10:52:10-07:00"
+generated_at: "2026-07-25T11:51:22Z"
 ---
 
 ---
@@ -31,7 +31,7 @@ The following table shows which Redis Open Source features are supported by Redi
 
 | Feature | Redis<br/>Software | Redis<br/>Cloud |
 |:-------|:-------------------------|:-----------------------|
-| [Search and query]({{< relref "/operate/oss_and_stack/stack-with-enterprise/search" >}}) | &#x2705; Supported | &#x2705; Supported |
+| [Redis Search]({{< relref "/operate/oss_and_stack/stack-with-enterprise/search" >}}) | &#x2705; Supported | &#x2705; Supported |
 | [JSON]({{< relref "/operate/oss_and_stack/stack-with-enterprise/json" >}})   | &#x2705; Supported | &#x2705; Supported |
 | [Time series]({{< relref "/operate/oss_and_stack/stack-with-enterprise/timeseries" >}}) | &#x2705; Supported | &#x2705; Supported |
 | [Probabilistic]({{< relref "/operate/oss_and_stack/stack-with-enterprise/bloom" >}}) | &#x2705; Supported | &#x2705; Supported |
@@ -48,7 +48,7 @@ Version numbers indicate when the feature was first supported.  If you're using 
 
 For details about individual features, see the corresponding documentation.
 
-| Feature name/capability   | [Search and query]({{< relref "/operate/oss_and_stack/stack-with-enterprise/search" >}}) | [JSON]({{< relref "/operate/oss_and_stack/stack-with-enterprise/json" >}})    | 
+| Feature name/capability   | [Redis Search]({{< relref "/operate/oss_and_stack/stack-with-enterprise/search" >}}) | [JSON]({{< relref "/operate/oss_and_stack/stack-with-enterprise/json" >}})    | 
 |---------------------------|:--------------:|:------------:|
 | Active-Active (CRDB)[^5]  | Yes (v2.0)     | Yes (v2.2)   |
 | Backup/Restore            | Yes (v1.4)     | Yes (v1.0)   |
@@ -69,7 +69,7 @@ For details about individual features, see the corresponding documentation.
 
 [^2]: RediSearch version 1.6 supported Replica Of only between databases with the same number of shards.  This limitation was fixed in v2.0. 
 
-[^3]: You cannot use search and query with the [OSS Cluster API]({{< relref "/operate/rs/databases/configure/oss-cluster-api" >}}). This limitation was fixed in Redis Software version 8.0.
+[^3]: You cannot use Redis Search with the [OSS Cluster API]({{< relref "/operate/rs/databases/configure/oss-cluster-api" >}}). This limitation was fixed in Redis Software version 8.0.
 
 [^4]: You currently cannot combine Auto Tiering with Redis Open Source features in Redis Cloud. 
 

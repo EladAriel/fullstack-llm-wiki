@@ -4,10 +4,10 @@ framework: "Langfuse"
 source_repo: "https://github.com/langfuse/langfuse-docs"
 source_branch: "main"
 source_path: "content/docs/api-and-data-platform/features/public-api.mdx"
-source_commit: "4a702ece53852a6af86b3883f434adf3f5cae421"
-source_commit_short: "4a702ece"
-source_commit_date: "2026-06-23T13:41:14Z"
-generated_at: "2026-06-23T13:55:15Z"
+source_commit: "fcd1eca34a924867563c3c4e801254c4e66c0021"
+source_commit_short: "fcd1eca3"
+source_commit_date: "2026-07-25T00:45:45Z"
+generated_at: "2026-07-25T11:51:12Z"
 ---
 
 ---
@@ -88,7 +88,7 @@ Example:
 curl -u public-key:secret-key https://cloud.langfuse.com/api/public/projects
 ```
 
-## Access via SDKs
+## Access via SDKs [#access-via-sdks]
 
 Both the Langfuse [Python SDK](/docs/sdk/python/sdk-v3) and the [JS/TS SDK](/docs/sdk/typescript/guide) provide a strongly-typed wrapper around our public REST API for your convenience. The API methods are accessible via the `api` property on the Langfuse client instance in both SDKs.
 
@@ -97,12 +97,15 @@ You can use your editor's Intellisense to explore the API methods and their para
 <Callout type="info">
 
 In Python SDK v4 and JS/TS SDK v5, the high-performance resources are the
-defaults: `api.observations`, `api.scores`, and `api.metrics`. Legacy v1
+defaults: `api.observations`, `api.metrics`, and — for score reads —
+`api.scores_v3` / `api.scoresV3` (`api.scores`, the v2 reads, is
+deprecated; see [Migration of deprecated APIs](/faq/all/deprecated-api-migration#scores)). Deprecated v1
 resources moved under `api.legacy.*` (Python: `*_v1`, JS/TS: `*V1`). See
 [Query via SDKs](/docs/api-and-data-platform/features/query-via-sdk) for SDK examples.
 
-Observations API v2 and Metrics API v2 are currently Cloud-only. For self-hosted
-deployments, use the endpoints available in your Langfuse version.
+Observations API v2 and Metrics API v2 are available on Langfuse Cloud and
+self-hosted Langfuse v4. On self-hosted Langfuse v3, use the `api.legacy.*`
+resources. See [Versions & Compatibility](/docs/compatibility#sdk-server).
 
 </Callout>
 
@@ -235,23 +238,25 @@ try {
 <Callout type="info">
   The OpenTelemetry Endpoint will replace the Ingestion API in the future.
   Therefore, it is strongly recommended to switch to the OpenTelemetry Endpoint
-  for trace ingestion. Please refer to the [OpenTelemetry
-  docs](/integrations/native/opentelemetry) for more information.
+  for trace ingestion. Follow the [custom ingestion migration
+  guide](/integrations/native/opentelemetry/migration-to-v4) to map legacy events
+  to v4-ready OTEL spans.
 </Callout>
 
 - [OpenTelemetry Traces Ingestion Endpoint](https://api.reference.langfuse.com/#tag/opentelemetry/POST/api/public/otel/v1/traces) implements the OTLP/HTTP specification for trace ingestion, providing native OpenTelemetry integration for Langfuse Observability.
-- (Legacy) [Ingestion API](https://api.reference.langfuse.com/#tag/ingestion/POST/api/public/ingestion) allows trace ingestion using an API.
+- (Deprecated) [Ingestion API](https://api.reference.langfuse.com/#tag/ingestion/POST/api/public/ingestion) allows trace ingestion using an API.
 
 ## Retrieve Data via the API
 
-For new data extraction workflows, use the v2 data APIs:
+For new data extraction workflows, use the high-performance data APIs:
 
 - [Observations API v2](/docs/api-and-data-platform/features/observations-api#v2) - Retrieve observation data (spans, generations, events) from Langfuse for custom workflows, evaluation pipelines, and analytics.
+- [Scores API v3](/docs/api-and-data-platform/features/scores-api#v3) - Retrieve score data (evaluations, annotations, and API-ingested scores) with a typed value field and cursor-based pagination.
 - [Metrics API v2](/docs/metrics/features/metrics-api#v2) - Retrieve aggregated analytics and metrics from your Langfuse data.
 
 <Callout type="info">
 
-Older trace, observation, and metrics read APIs remain available, but are not recommended as the default for new extraction workflows because they are less performant at scale. See [Observations API v2](/docs/api-and-data-platform/features/observations-api#v2) for row-level data and [Metrics API v2](/docs/metrics/features/metrics-api#v2) for aggregates.
+The deprecated trace, observation, score, and metrics read APIs are documented, with migration steps, in [Migration of deprecated APIs](/faq/all/deprecated-api-migration).
 
 </Callout>
 

@@ -4,10 +4,10 @@ framework: "redis"
 directory: "content/operate/kubernetes/release-notes/7-8-6-releases"
 source_repo: "https://github.com/redis/docs.git"
 source_branch: "main"
-source_commit: "bc92ea237bbfc2117c870c904f1a3ca619073ef1"
-source_commit_short: "bc92ea23"
-source_commit_date: "2026-06-18T14:53:00-05:00"
-generated_at: "2026-06-21T11:25:32Z"
+source_commit: "9d30f68c3dad1a6b3b7d30fe604b911348ce8152"
+source_commit_short: "9d30f68c"
+source_commit_date: "2026-07-24T10:52:10-07:00"
+generated_at: "2026-07-25T11:51:22Z"
 ---
 # 7 8 6 Releases
 
@@ -34,6 +34,7 @@ This directory contains redis learning pages related to 7 8 6 releases.
 - [7 8 6 13 March2026](7-8-6-13-march2026.md)
 - [7 8 6 14 April2026](7-8-6-14-april2026.md)
 - [7 8 6 15 May2026](7-8-6-15-may2026.md)
+- [7 8 6 16 July2026](7-8-6-16-july2026.md)
 - [7 8 6 2 June2025](7-8-6-2-june2025.md)
 - [7 8 6 3 June2025](7-8-6-3-june2025.md)
 - [7 8 6 5 August2025](7-8-6-5-august2025.md)

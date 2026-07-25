@@ -4,10 +4,10 @@ framework: "mongodb"
 source_repo: "https://github.com/mongodb/docs.git"
 source_branch: "main"
 source_path: "content/manual/manual/source/tutorial/upgrade-revision.txt"
-source_commit: "96788e8ed140cbdde184ff82e1066dff4996bde4"
-source_commit_short: "96788e8e"
-source_commit_date: "2026-06-19T21:35:03-06:00"
-generated_at: "2026-06-21T07:41:52Z"
+source_commit: "ab9db26ed3d11618cdb61516d8180337d8e3f679"
+source_commit_short: "ab9db26e"
+source_commit_date: "2026-07-24T16:22:46-06:00"
+generated_at: "2026-07-25T11:51:15Z"
 ---
 
 ===========================================================
@@ -46,7 +46,7 @@ Before you upgrade a production environment, use the procedures in this document
 
 ## Steps
 
-Upgrade each :binary:`~bin.mongod` and :binary:`~bin.mongos` binary separately. Follow this upgrade procedure:
+Upgrade each :binary:`~bin.mongod` and :binary:`~bin.mongos` binary separately:
 
 #. For deployments that use authentication, first upgrade all of your MongoDB Drivers. To upgrade, see the :driver:`documentation for your driver </>`.
 
@@ -68,7 +68,7 @@ To verify the FCV, connect to each member of the replica set and run the followi
 db.adminCommand( { getParameter: 1, featureCompatibilityVersion: 1 } )
 ```
 
-All members should return a result that includes the following:
+All members return a result that includes the following:
 
 ```javascript
 "featureCompatibilityVersion" : { "version" : "{+latest-lts-version+}" }

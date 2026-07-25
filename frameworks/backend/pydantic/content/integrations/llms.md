@@ -4,10 +4,10 @@ framework: "pydantic"
 source_repo: "https://github.com/pydantic/pydantic"
 source_branch: "main"
 source_path: "docs/integrations/llms.md"
-source_commit: "363728fe0b353db1a1fcb44aac5c38fd96a8cc20"
-source_commit_short: "363728fe"
-source_commit_date: "2026-06-20T11:20:58+01:00"
-generated_at: "2026-06-21T11:37:01Z"
+source_commit: "a2a6577d4c329dd574a45dbb01a8feaa16b1ad3d"
+source_commit_short: "a2a6577d"
+source_commit_date: "2026-07-23T15:38:17Z"
+generated_at: "2026-07-25T11:50:12Z"
 ---
 
 The Pydantic documentation is available in the [llms.txt](https://llmstxt.org/) format.
@@ -24,3 +24,9 @@ Two formats are available:
 As of today, these files *cannot* be natively leveraged by LLM frameworks or IDEs. Alternatively,
 a [MCP server](https://modelcontextprotocol.io/) can be implemented to properly parse the `llms.txt`
 file.
+
+Where `llms.txt` gives an AI tool the Pydantic *documentation*, the
+[Logfire MCP server](https://pydantic.dev/docs/logfire/guides/mcp-server/) gives it your
+application's *runtime data*: an agent can query the traces, metrics, and recorded validations from your
+own service and, for example, pull up the input behind a [`ValidationError`][pydantic_core.ValidationError]
+while it's helping you fix it.

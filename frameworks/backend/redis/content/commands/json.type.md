@@ -4,10 +4,10 @@ framework: "redis"
 source_repo: "https://github.com/redis/docs.git"
 source_branch: "main"
 source_path: "content/commands/json.type.md"
-source_commit: "bc92ea237bbfc2117c870c904f1a3ca619073ef1"
-source_commit_short: "bc92ea23"
-source_commit_date: "2026-06-18T14:53:00-05:00"
-generated_at: "2026-06-21T11:25:32Z"
+source_commit: "9d30f68c3dad1a6b3b7d30fe604b911348ce8152"
+source_commit_short: "9d30f68c"
+source_commit_date: "2026-07-24T10:52:10-07:00"
+generated_at: "2026-07-25T11:51:22Z"
 ---
 
 ---
@@ -46,6 +46,21 @@ syntax_fmt: JSON.TYPE key [path]
 title: JSON.TYPE
 ---
 Report the type of JSON value at `path`
+
+The returned type is one of the following strings:
+
+| Type | Description |
+|:-----|:------------|
+| `null` | A JSON null value. |
+| `boolean` | A JSON `true` or `false` value. |
+| `integer` | A number with no fractional part. |
+| `number` | A number with a fractional part (a floating-point value). <sup>[1](#table-note-1)</sup>|
+| `string` | A JSON string value. |
+| `object` | A JSON object (a collection of key-value pairs). |
+| `array` | A JSON array (an ordered list of values). |
+
+1. <a name="table-note-1"></a>
+A floating-point homogeneous array (FPHA) stored with the [`JSON.SET`]({{< relref "commands/json.set/" >}}) `FPHA` argument still reports as `array`, and its elements report as `number`. The FP type (`FP16`, `BF16`, `FP32`, or `FP64`) is an internal storage representation and is not exposed by `JSON.TYPE`.
 
 [Examples](#examples)
 

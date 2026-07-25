@@ -4,10 +4,10 @@ framework: "FastAPI"
 source_repo: "https://github.com/fastapi/fastapi.git"
 source_branch: "master"
 source_path: "docs/en/docs/tutorial/query-params-str-validations.md"
-source_commit: "0cb4a8e284b450abbccb71c543ad7757de46c0b2"
-source_commit_short: "0cb4a8e2"
-source_commit_date: "2026-06-20T16:31:34Z"
-generated_at: "2026-06-21T07:06:10Z"
+source_commit: "255b912928904e3ba5980425a54d6837c8bd1a1c"
+source_commit_short: "255b9129"
+source_commit_date: "2026-07-24T21:15:37Z"
+generated_at: "2026-07-25T11:50:10Z"
 ---
 
 # Query Parameters and String Validations { #query-parameters-and-string-validations }
@@ -382,11 +382,11 @@ There could be cases where you need to do some **custom validation** that can't 
 
 In those cases, you can use a **custom validator function** that is applied after the normal validation (e.g. after validating that the value is a `str`).
 
-You can achieve that using [Pydantic's `AfterValidator`](https://docs.pydantic.dev/latest/concepts/validators/#field-after-validator) inside of `Annotated`.
+You can achieve that using [Pydantic's `AfterValidator`](https://pydantic.dev/docs/validation/latest/concepts/validators/#field-after-validator) inside of `Annotated`.
 
 /// tip
 
-Pydantic also has [`BeforeValidator`](https://docs.pydantic.dev/latest/concepts/validators/#field-before-validator) and others. 🤓
+Pydantic also has [`BeforeValidator`](https://pydantic.dev/docs/validation/latest/concepts/validators/#field-before-validator) and others. 🤓
 
 ///
 

@@ -4,10 +4,10 @@ framework: "shadcnui"
 source_repo: "https://github.com/shadcn-ui/ui"
 source_branch: "main"
 source_path: "apps/v4/content/docs/(root)/cli.mdx"
-source_commit: "5602b81d8344e0d0d7178e3bf57612662cd42957"
-source_commit_short: "5602b81d"
-source_commit_date: "2026-06-21T15:49:35+04:00"
-generated_at: "2026-06-21T12:47:26Z"
+source_commit: "4baadbc6517070ae8f8feb2c97037adc2b305544"
+source_commit_short: "4baadbc6"
+source_commit_date: "2026-07-23T23:50:36+04:00"
+generated_at: "2026-07-25T11:50:48Z"
 ---
 
 ---
@@ -39,7 +39,7 @@ Arguments:
 
 Options:
   -t, --template <template>  the template to use. (next, vite, start, react-router, laravel, astro)
-  -b, --base <base>          the component library to use. (radix, base)
+  -b, --base <base>          the component library to use. (base, radix, aria)
   -p, --preset [name]        use a preset configuration
   -y, --yes                  skip confirmation prompt. (default: true)
   -d, --defaults             use default configuration: --template=next --preset=nova (default: false)
@@ -380,7 +380,7 @@ Arguments:
 
 Options:
   -c, --cwd <cwd>    the working directory. defaults to the current directory.
-  -b, --base <base>  the base to use either 'base' or 'radix'. defaults to project base.
+  -b, --base <base>  the base to use: base, radix, or aria. defaults to project base.
   --json             output as JSON. (default: false)
   -h, --help         display help for command
 ```
@@ -438,11 +438,49 @@ Arguments:
   path             optional path or glob pattern to migrate.
 
 Options:
-  -c, --cwd <cwd>  the working directory. defaults to the current directory.
-  -l, --list       list all migrations. (default: false)
-  -y, --yes        skip confirmation prompt. (default: false)
-  -h, --help       display help for command
+  -c, --cwd <cwd>       the working directory. defaults to the current directory.
+  -l, --list            list all migrations. (default: false)
+  -y, --yes             skip confirmation prompt. (default: false)
+  -f, --from <library>  the icon library to migrate from (icons migration only).
+  -t, --to <library>    the icon library to migrate to (icons migration only).
+  -h, --help            display help for command
 ```
+
+---
+
+### migrate icons
+
+The `icons` migration moves your components from one icon library to another.
+
+```bash
+npx shadcn@latest migrate icons
+```
+
+This will prompt you for the source and target libraries, rewrite icon imports and JSX usage in your `ui` directory, install the target library and update `iconLibrary` in your `components.json` so future `npx shadcn add` installs use the new library.
+
+The following libraries are supported: `lucide`, `tabler`, `hugeicons`, `phosphor`, `remixicon` and `radix` (legacy).
+
+**Non-interactive**
+
+Use `--from` and `--to` to skip the prompts:
+
+```bash
+npx shadcn@latest migrate icons --from lucide --to phosphor --yes
+```
+
+**Migrate specific files**
+
+You can migrate specific files or use glob patterns. Scoped runs do not update `components.json`.
+
+```bash
+# Migrate a specific file.
+npx shadcn@latest migrate icons src/components/ui/button.tsx --from lucide --to tabler
+
+# Migrate files matching a glob pattern.
+npx shadcn@latest migrate icons "src/components/**" --from lucide --to tabler
+```
+
+Icons without an equivalent in the target library are left untouched and reported at the end of the migration.
 
 ---
 

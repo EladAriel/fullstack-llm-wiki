@@ -4,10 +4,10 @@ framework: "mongodb"
 source_repo: "https://github.com/mongodb/docs.git"
 source_branch: "main"
 source_path: "content/manual/manual/source/tutorial/configure-ssl-clients.txt"
-source_commit: "96788e8ed140cbdde184ff82e1066dff4996bde4"
-source_commit_short: "96788e8e"
-source_commit_date: "2026-06-19T21:35:03-06:00"
-generated_at: "2026-06-21T07:41:52Z"
+source_commit: "ab9db26ed3d11618cdb61516d8180337d8e3f679"
+source_commit_short: "ab9db26e"
+source_commit_date: "2026-07-24T16:22:46-06:00"
+generated_at: "2026-07-25T11:51:15Z"
 ---
 
 =================================
@@ -133,7 +133,7 @@ The MongoDB Drivers support encrypted communication. For details, see:
 
 - [C Driver](https://www.mongodb.com/docs/languages/c/c-driver/current/libmongoc/guides/configuring_tls/)
 - [C++ Driver](https://www.mongodb.com/docs/languages/cpp/cpp-driver/current/configuration/#configuring-tls-ssl)
-- [C# Driver](https://www.mongodb.com/docs/drivers/csharp/current/fundamentals/connection/tls/)
+- [.NET/C# Driver](https://www.mongodb.com/docs/drivers/csharp/current/fundamentals/connection/tls/)
 - [Java Driver](https://www.mongodb.com/docs/drivers/java/sync/current/fundamentals/connection/tls/)
 - [Node.js Driver](https://www.mongodb.com/docs/drivers/node/current/fundamentals/connection/tls/)
 - [PHP Driver](https://php.net/manual/en/mongodb-driver-manager.construct.php)

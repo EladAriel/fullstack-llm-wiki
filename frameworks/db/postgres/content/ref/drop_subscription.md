@@ -4,10 +4,10 @@ framework: "postgres"
 source_repo: "https://github.com/postgres/postgres.git"
 source_branch: "master"
 source_path: "doc/src/sgml/ref/drop_subscription.sgml"
-source_commit: "031904048aa22e7c70dc8e9c170e2743f9b0f090"
-source_commit_short: "03190404"
-source_commit_date: "2026-06-20T18:20:58+09:00"
-generated_at: "2026-06-21T07:06:11Z"
+source_commit: "38afc3dcb25c45b744d4025029ce0a6c90b7059f"
+source_commit_short: "38afc3dc"
+source_commit_date: "2026-07-25T19:08:27+09:00"
+generated_at: "2026-07-25T11:50:59Z"
 ---
 
 DROP SUBSCRIPTION
@@ -39,9 +39,11 @@ To execute this command the user must be the owner of the subscription.
 
 ## Notes
 
-When dropping a subscription that is associated with a replication slot on the remote host (the normal state), `DROP SUBSCRIPTION` will connect to the remote host and try to drop the replication slot (and any remaining table synchronization slots) as part of its operation. This is necessary so that the resources allocated for the subscription on the remote host are released. If this fails, either because the remote host is not reachable or because the remote replication slot cannot be dropped or does not exist or never existed, the `DROP SUBSCRIPTION` command will fail. To proceed in this situation, first disable the subscription by executing ALTER SUBSCRIPTION ... DISABLE, and then disassociate it from the replication slot by executing ALTER SUBSCRIPTION ... SET (slot_name = NONE). After that, `DROP SUBSCRIPTION` will no longer attempt any actions on a remote host. Note that if the remote replication slot still exists, it (and any related table synchronization slots) should then be dropped manually; otherwise it/they will continue to reserve WAL and might eventually cause the disk to fill up. See also `logical-replication-subscription-slot`.
+When dropping a subscription that is associated with a replication slot on the remote host (the normal state), `DROP SUBSCRIPTION` will connect to the remote host and try to drop the replication slot (and any remaining table synchronization slots) as part of its operation. This is necessary so that the resources allocated for the subscription on the remote host are released. If this fails, either because the remote host is not reachable or because the remote replication slot cannot be dropped or does not exist or never existed, the `DROP SUBSCRIPTION` command will fail. To proceed in this situation, first disable the subscription by executing ALTER SUBSCRIPTION ... DISABLE, and then disassociate it from the replication slot by executing ALTER SUBSCRIPTION ... SET (slot_name = NONE). After that, `DROP SUBSCRIPTION` will not attempt to drop the subscription's own replication slot. It may still connect to the publisher to drop internally-created table synchronization slots if some table synchronization is left unfinished; if the publisher is unreachable, those slots (and the main slot, if it still exists) must be dropped manually. Otherwise it/they will continue to reserve WAL and might eventually cause the disk to fill up. See also `logical-replication-subscription-slot`.
 
 If a subscription is associated with a replication slot, then `DROP SUBSCRIPTION` cannot be executed inside a transaction block.
+
+If a conflict log table exists for the subscription (that is, when conflict_log_destination is set to `table` or `all`), `DROP SUBSCRIPTION` automatically drops the associated conflict log table.
 
 ## Examples
 

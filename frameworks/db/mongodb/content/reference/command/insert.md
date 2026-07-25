@@ -4,10 +4,10 @@ framework: "mongodb"
 source_repo: "https://github.com/mongodb/docs.git"
 source_branch: "main"
 source_path: "content/manual/manual/source/reference/command/insert.txt"
-source_commit: "96788e8ed140cbdde184ff82e1066dff4996bde4"
-source_commit_short: "96788e8e"
-source_commit_date: "2026-06-19T21:35:03-06:00"
-generated_at: "2026-06-21T07:41:52Z"
+source_commit: "ab9db26ed3d11618cdb61516d8180337d8e3f679"
+source_commit_short: "ab9db26e"
+source_commit_date: "2026-07-24T16:22:46-06:00"
+generated_at: "2026-07-25T11:51:15Z"
 ---
 
 =========================
@@ -52,9 +52,9 @@ The command takes the following fields:
 
 ### Size Limit
 
-The total size of all the `documents` array elements must be less than or equal to the :limit:`maximum BSON document size <BSON Document Size>`.
+The total size of all `documents` array elements must not exceed the :limit:`maximum BSON document size <BSON Document Size>`.
 
-The total number of documents in the `documents` array must be less than or equal to the :limit:`maximum bulk size <Write Command Batch Limit Size>`.
+The total number of documents in the `documents` array must not exceed the :limit:`maximum bulk size <Write Command Batch Limit Size>`.
 
 ### Schema Validation
 
@@ -93,7 +93,7 @@ db.runCommand(
 )
 ```
 
-The returned document shows that the command successfully inserted a document. See `insert-command-output` for details.
+The operation returns the following document:
 
 ```javascript
 { "ok" : 1, "n" : 1 }
@@ -118,7 +118,7 @@ db.runCommand(
 )
 ```
 
-The returned document shows that the command successfully inserted the three documents. See `insert-command-output` for details.
+The operation returns the following document:
 
 ```javascript
 { "ok" : 1, "n" : 3 }
@@ -126,7 +126,7 @@ The returned document shows that the command successfully inserted the three doc
 
 ### Using Insert with `bypassDocumentValidation`
 
-If `schema validation validationActions <schema-validation-overview>` are set to `error`, inserts to a collection return errors for documents that violate the schema validation rules. To insert documents which would violate these rules set `bypassDocumentValidation: true`.
+If `schema validation <schema-validation-overview>` `validationActions` are set to `error`, the insert command returns an error for documents that fail validation. To insert documents that violate validation rules, set `bypassDocumentValidation: true`.
 
 Create the `user` collection with a validation rule on the `status` fields.
 
@@ -143,7 +143,7 @@ db.createCollection("users", {
 })
 ```
 
-Attempt to insert a document which violates the validation rule:
+Insert a document that violates the validation rule:
 
 ```javascript
 db.runCommand({
@@ -177,7 +177,7 @@ The insert returns a write error message:
 }
 ```
 
-Set `bypassDocumentValidation : true` and rerun the insert:
+Set `bypassDocumentValidation: true` and rerun the insert:
 
 ```javascript
 db.runCommand({
@@ -195,13 +195,13 @@ To check for documents that violate schema validation rules, use the :dbcommand:
 
 The returned document contains a subset of the following fields:
 
-The following is an example document returned for a successful :dbcommand:`insert` of a single document:
+The following shows an example output for a successful single-document insert:
 
 ```javascript
 { ok: 1, n: 1 }
 ```
 
-The following is an example document returned for an :dbcommand:`insert` of two documents that successfully inserted one document but encountered an error with the other document:
+The following shows an example output when one document inserts successfully and a second document fails:
 
 ```javascript
 {

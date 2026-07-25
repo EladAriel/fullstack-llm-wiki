@@ -4,10 +4,10 @@ framework: "FastAPI"
 source_repo: "https://github.com/fastapi/fastapi.git"
 source_branch: "master"
 source_path: "docs/en/docs/tutorial/extra-data-types.md"
-source_commit: "0cb4a8e284b450abbccb71c543ad7757de46c0b2"
-source_commit_short: "0cb4a8e2"
-source_commit_date: "2026-06-20T16:31:34Z"
-generated_at: "2026-06-21T07:06:10Z"
+source_commit: "255b912928904e3ba5980425a54d6837c8bd1a1c"
+source_commit_short: "255b9129"
+source_commit_date: "2026-07-24T21:15:37Z"
+generated_at: "2026-07-25T11:50:10Z"
 ---
 
 # Extra Data Types { #extra-data-types }
@@ -48,7 +48,7 @@ Here are some of the additional data types you can use:
 * `datetime.timedelta`:
     * A Python `datetime.timedelta`.
     * In requests and responses will be represented as a `float` of total seconds.
-    * Pydantic also allows representing it as an "ISO 8601 time diff encoding", [see the docs for more info](https://docs.pydantic.dev/latest/concepts/serialization/#custom-serializers).
+    * Pydantic also allows representing it as an "ISO 8601 time diff encoding", [see the docs for more info](https://pydantic.dev/docs/validation/latest/concepts/serialization/#custom-serializers).
 * `frozenset`:
     * In requests and responses, treated the same as a `set`:
         * In requests, a list will be read, eliminating duplicates and converting it to a `set`.
@@ -61,7 +61,7 @@ Here are some of the additional data types you can use:
 * `Decimal`:
     * Standard Python `Decimal`.
     * In requests and responses, handled the same as a `float`.
-* You can check all the valid Pydantic data types here: [Pydantic data types](https://docs.pydantic.dev/latest/usage/types/types/).
+* You can check all the valid Pydantic data types here: [Pydantic data types](https://pydantic.dev/docs/validation/latest/concepts/types/).
 
 ## Example { #example }
 

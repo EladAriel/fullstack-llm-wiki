@@ -4,17 +4,17 @@ framework: "mongodb"
 source_repo: "https://github.com/mongodb/docs.git"
 source_branch: "main"
 source_path: "content/manual/manual/source/tutorial/sort-results-with-indexes.txt"
-source_commit: "96788e8ed140cbdde184ff82e1066dff4996bde4"
-source_commit_short: "96788e8e"
-source_commit_date: "2026-06-19T21:35:03-06:00"
-generated_at: "2026-06-21T07:41:52Z"
+source_commit: "ab9db26ed3d11618cdb61516d8180337d8e3f679"
+source_commit_short: "ab9db26e"
+source_commit_date: "2026-07-24T16:22:46-06:00"
+generated_at: "2026-07-25T11:51:15Z"
 ---
 
 =================================
 
 # Use Indexes to Sort Query Results
 
-Since indexes contain ordered records, MongoDB can obtain the results of a sort from an index that includes the sort fields. MongoDB may use multiple indexes to support a sort operation if the sort uses the same indexes as the query predicate.
+.. include:: /includes/fact-sort-multiple-indexes.rst
 
 If MongoDB cannot use an index or indexes to obtain the sort order, MongoDB must perform an in-memory sort operation on the data.
 

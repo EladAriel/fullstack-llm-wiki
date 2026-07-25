@@ -4,21 +4,21 @@ framework: "mongodb"
 source_repo: "https://github.com/mongodb/docs.git"
 source_branch: "main"
 source_path: "content/manual/manual/source/reference/ulimit.txt"
-source_commit: "96788e8ed140cbdde184ff82e1066dff4996bde4"
-source_commit_short: "96788e8e"
-source_commit_date: "2026-06-19T21:35:03-06:00"
-generated_at: "2026-06-21T07:41:52Z"
+source_commit: "ab9db26ed3d11618cdb61516d8180337d8e3f679"
+source_commit_short: "ab9db26e"
+source_commit_date: "2026-07-24T16:22:46-06:00"
+generated_at: "2026-07-25T11:51:15Z"
 ---
 
 =====================================================
 
 # UNIX `ulimit` Settings for Self-Managed Deployments
 
-Most UNIX-like operating systems, including Linux and macOS, provide ways to limit and control the usage of system resources such as threads, files, and network connections on a per-process and per-user basis. These "ulimits" prevent single users from using too many system resources. Sometimes, these limits have low default values that can cause a number of issues in the course of normal MongoDB operation.
+Most UNIX-like operating systems, including Linux and macOS, provide ways to limit and control the usage of system resources such as threads, files, and network connections on a per-process and per-user basis. These "ulimits" prevent single users from using too many system resources. Sometimes, these limits have low default values that can cause several issues during normal MongoDB operations.
 
-## Resource Utilization
+## Resource Usage
 
-:binary:`~bin.mongod` and :binary:`~bin.mongos` each use threads and file descriptors to track connections and manage internal operations. This section outlines the general resource utilization patterns for MongoDB. Use these figures in combination with the actual information about your deployment and its use to determine ideal `ulimit` settings.
+:binary:`~bin.mongod` and :binary:`~bin.mongos` each use threads and file descriptors to track connections and manage internal operations. This section outlines the general resource usage patterns for MongoDB. Use these figures with your deployment information to determine ideal `ulimit` settings.
 
 Generally, all :binary:`~bin.mongod` and :binary:`~bin.mongos` instances:
 
@@ -37,7 +37,7 @@ instance.
 - In replica sets, each :binary:`~bin.mongod` maintains a connection to
 all other members of the set.
 
-:binary:`~bin.mongod` uses background threads for a number of internal processes, including `TTL collections <ttl-collections>`, replication, and replica set health checks, which may require a small number of additional resources.
+:binary:`~bin.mongod` uses background threads for several internal processes, including `TTL collections <ttl-collections>`, replication, and replica set health checks, which may require several additional resources.
 
 ### `mongos`
 
@@ -77,7 +77,7 @@ $ ulimit -a
 -N 15:                         unlimited
 ```
 
-`ulimit` refers to the per-user limitations for various resources. Therefore, if your :binary:`~bin.mongod` instance executes as a user that is also running multiple processes, or multiple :binary:`~bin.mongod` processes, you might see contention for these resources. Also, be aware that the `processes` value (i.e. `-u`) refers to the combined number of distinct processes and sub-process threads.
+`ulimit` refers to the per-user limitations for various resources. Therefore, if your :binary:`~bin.mongod` instance executes as a user that is also running multiple processes, or multiple :binary:`~bin.mongod` processes, you might see contention for these resources. The `processes` value (that is, `-u`) refers to the combined number of distinct processes and sub-process threads.
 
 On Linux, you can change `ulimit` settings by issuing a command in the following form:
 
@@ -85,11 +85,19 @@ On Linux, you can change `ulimit` settings by issuing a command in the following
 ulimit -n <value>
 ```
 
-There are both "hard" and the "soft" `ulimit`\ s that affect MongoDB's performance. The "hard" `ulimit` refers to the maximum number of processes that a user can have active at any time. This is the ceiling: no non-root process can increase the "hard" `ulimit`. In contrast, the "soft" `ulimit` is the limit that is actually enforced for a session or process, but any process can increase it up to "hard" `ulimit` maximum.
+`ulimit` has two types:
 
-A low "soft" `ulimit` can cause `can't create new thread, closing connection` errors if the number of connections grows too high. For this reason, it is extremely important to set both `ulimit` values to the recommended values.
+- **"hard"** `ulimit`: The maximum number of processes a user can
+have active at any time. No non-root process can increase it.
 
-`ulimit` will modify both "hard" and "soft" values unless the `-H` or `-S` modifiers are specified when modifying limit values.
+- **"soft"** `ulimit`: The limit enforced for a session or process.
+Any process can increase it up to the "hard" `ulimit`.
+
+> **Important:** A low "soft" `ulimit` can cause ``can't create new thread,
+closing connection`` errors if the number of connections grows
+too high. Set both `ulimit` values to the recommended values.
+
+`ulimit` modifies both "hard" and "soft" values unless the `-H` or `-S` modifiers are specified when modifying limit values.
 
 For many distributions of Linux you can change values by substituting the `-n` option for any possible value in the output of `ulimit -a`.
 
@@ -128,7 +136,7 @@ With RHEL / CentOS 8, separate `nproc` values are no longer necessary. The `ulim
 
 ### Recommended `ulimit` Settings
 
-Every deployment may have unique requirements and settings; however, the following thresholds and settings are particularly important for :binary:`~bin.mongod` and :binary:`~bin.mongos` deployments:
+The following settings are particularly important for :binary:`~bin.mongod` and :binary:`~bin.mongos` deployments:
 
 - `-f` (file size): `unlimited`
 - `-t` (cpu time): `unlimited`
@@ -137,7 +145,7 @@ Every deployment may have unique requirements and settings; however, the followi
 - `-n` (open files): `64000`
 - `-m` (memory size): `unlimited` [#memory-size]_ [#rss-linux]_
 - `-u` (processes/threads): `64000`
-Always remember to restart your :binary:`~bin.mongod` and :binary:`~bin.mongos` instances after changing the `ulimit` settings to ensure that the changes take effect.
+Restart your :binary:`~bin.mongod` and :binary:`~bin.mongos` instances after changing the `ulimit` settings to apply the changes.
 
 Considerations ``````````````
 
@@ -147,7 +155,7 @@ which is the maximum configurable value for this platform.
 
 ### Linux distributions using Upstart
 
-For Linux distributions that use Upstart, you can specify limits within service scripts if you start :binary:`~bin.mongod` and/or :binary:`~bin.mongos` instances as Upstart services. You can do this by using `limit` [stanzas](http://upstart.ubuntu.com/wiki/Stanzas#limit).
+For Linux distributions that use Upstart, you can specify limits within service scripts if you start :binary:`~bin.mongod` or :binary:`~bin.mongos` instances as Upstart services. You can do this by using `limit` [stanzas](http://upstart.ubuntu.com/wiki/Stanzas#limit).
 
 Specify the `recommended-ulimit-settings`, as in the following example:
 
@@ -170,7 +178,7 @@ restart <service name>
 
 ### Linux distributions using `systemd`
 
-If you start a :binary:`~bin.mongod` and/or :binary:`~bin.mongos` instance as a `systemd` service, you can specify limits within the `[Service]` section of its service file. The service file has a location like `/etc/systemd/system/<process-name>.service`.
+If you start a :binary:`~bin.mongod` or :binary:`~bin.mongos` instance as a `systemd` service, you can specify limits within the `[Service]` section of its service file. The service file has a location like `/etc/systemd/system/<process-name>.service`.
 
 You can set limits by using [resource limit directives](http://www.freedesktop.org/software/systemd/man/systemd.exec.html#LimitCPU=).
 
@@ -201,7 +209,7 @@ After changing `limit` stanzas, ensure that the changes take effect by restartin
 systemctl restart <service name>
 ```
 
-> **Note:** If you installed MongoDB via a package manager such as `yum` or
+> **Note:** If you installed MongoDB through a package manager such as `yum` or
 `apt`, the service file installed as part of your installation
 already contains these ulimit values.
 
@@ -239,6 +247,6 @@ return-limits mongos
 return-limits mongod mongos
 ```
 
-system running MongoDB the operating system will refuse to honor additional allocation requests.
+system running MongoDB the operating system refuses to honor additional allocation requests.
 
 Linux systems with kernel versions more recent than 2.4.30. You may omit `-m` if you wish.
