@@ -1,0 +1,162 @@
+---
+type: "Framework Learn Page"
+framework: "Tailwind CSS"
+source_repo: "https://github.com/tailwindlabs/tailwindcss.com.git"
+source_branch: "main"
+source_path: "src/docs/accent-color.mdx"
+source_commit: "1e700c43f5f270a1a55c4a33e71f01952f24b8c2"
+source_commit_short: "1e700c4"
+source_commit_date: "2026-07-16T19:14:03+02:00"
+generated_at: "2026-07-25T13:40:03.113023Z"
+---
+# Accent Color
+
+import { ApiTable } from "@/components/api-table.tsx";
+import {
+  CustomizingYourThemeColors,
+  ResponsiveDesign,
+  TargetingSpecificStates,
+  UsingACustomValue,
+} from "@/components/content.tsx";
+import { Example } from "@/components/example.tsx";
+import { Figure } from "@/components/figure.tsx";
+import colors from "./utils/colors";
+
+export const title = "accent-color";
+export const description = "Utilities for controlling the accented color of a form control.";
+
+<ApiTable
+  rows={[
+    ["accent-inherit", "accent-color: inherit;"],
+    ["accent-current", "accent-color: currentColor;"],
+    ["accent-transparent", "accent-color: transparent;"],
+    ...Object.entries(colors).map(([name, value]) => [
+      `accent-${name}`,
+      `accent-color: var(--color-${name}); /* ${value} */`,
+    ]),
+    ["accent-(<custom-property>)", "accent-color: var(<custom-property>);"],
+    ["accent-[<value>]", "accent-color: <value>;"],
+  ]}
+/>
+
+## Examples
+
+### Setting the accent color
+
+Use utilities like `accent-rose-500` and `accent-lime-600` to change the accent color of an element:
+
+<Figure>
+
+<Example>
+  {
+    <div className="flex flex-wrap justify-center gap-6">
+      <label className="flex items-center space-x-2">
+        <input type="checkbox" defaultChecked />
+        <div className="text-sm font-semibold text-gray-900 dark:text-gray-200">Browser default</div>
+      </label>
+      <label className="flex items-center space-x-2">
+        <input type="checkbox" className="accent-pink-500" defaultChecked />
+        <div className="text-sm font-semibold text-gray-900 dark:text-gray-200">Customized</div>
+      </label>
+    </div>
+  }
+</Example>
+
+```html
+<!-- [!code classes:accent-pink-500] -->
+<label>
+  <input type="checkbox" checked />
+  Browser default
+</label>
+<label>
+  <input class="accent-pink-500" type="checkbox" checked />
+  Customized
+</label>
+```
+
+</Figure>
+
+This is helpful for styling elements like checkboxes and radio groups by overriding the browser's default color.
+
+### Changing the opacity
+
+Use the color opacity modifier to control the opacity of an element's accent color:
+
+<Figure>
+
+<Example>
+  {
+    <div className="flex flex-wrap justify-center gap-6">
+      <label className="flex items-center space-x-2">
+        <input type="checkbox" defaultChecked className="accent-purple-500/25" />
+        <div className="text-sm font-semibold text-gray-900 dark:text-gray-200">accent-purple-500/25</div>
+      </label>
+      <label className="flex items-center space-x-2">
+        <input type="checkbox" className="accent-purple-500/75" defaultChecked />
+        <div className="text-sm font-semibold text-gray-900 dark:text-gray-200">accent-purple-500/75</div>
+      </label>
+    </div>
+  }
+</Example>
+
+```html
+<!-- [!code word:/25] -->
+<!-- [!code word:/75] -->
+<input class="accent-purple-500/25" type="checkbox" checked />
+<input class="accent-purple-500/75" type="checkbox" checked />
+```
+
+</Figure>
+
+Setting the accent color opacity has limited browser-support and only works in Firefox at this time.
+
+### Using a custom value
+
+<UsingACustomValue
+  element="input"
+  elementAttributes={{ type: "checkbox" }}
+  utility="accent"
+  value="#50d71e"
+  name="accent color"
+  variable="accent-color"
+/>
+
+### Applying on hover
+
+<TargetingSpecificStates property="accent-color">
+
+<Figure>
+
+<Example>
+  {
+    <div className="flex flex-wrap justify-center gap-6">
+      <label className="flex items-center space-x-2">
+        <input type="checkbox" className="accent-black hover:accent-pink-500" defaultChecked />
+        <div className="text-sm font-semibold text-gray-900 dark:text-gray-200">Agree to terms</div>
+      </label>
+    </div>
+  }
+</Example>
+
+```html
+<!-- [!code classes:hover:accent-pink-500] -->
+<input class="accent-black hover:accent-pink-500" type="checkbox" />
+```
+
+</Figure>
+
+</TargetingSpecificStates>
+
+### Responsive design
+
+<ResponsiveDesign
+  element="input"
+  elementAttributes={{ type: "checkbox" }}
+  property="accent-color"
+  defaultClass="accent-black"
+  featuredClass="accent-pink-500"
+/>
+
+## Customizing your theme
+
+<CustomizingYourThemeColors element="input" elementAttributes={{ type: "checkbox" }} utility="accent" />

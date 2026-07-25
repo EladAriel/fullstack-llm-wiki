@@ -17,6 +17,8 @@ Local Markdown documentation wikis grouped by category.
 - [Zod](ui/zod/index.md)
 - [shadcn/ui](ui/shadcnui/index.md)
 - [Next.js](ui/nextjs/index.md)
+- [Tailwind CSS](ui/tailwindcss/index.md)
+- [Material UI](ui/materialui/index.md)
 
 ## Backend
 

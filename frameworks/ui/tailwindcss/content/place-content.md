@@ -1,0 +1,270 @@
+---
+type: "Framework Learn Page"
+framework: "Tailwind CSS"
+source_repo: "https://github.com/tailwindlabs/tailwindcss.com.git"
+source_branch: "main"
+source_path: "src/docs/place-content.mdx"
+source_commit: "1e700c43f5f270a1a55c4a33e71f01952f24b8c2"
+source_commit_short: "1e700c4"
+source_commit_date: "2026-07-16T19:14:03+02:00"
+generated_at: "2026-07-25T13:40:03.067363Z"
+---
+# Place Content
+
+import { ApiTable } from "@/components/api-table.tsx";
+import { Example } from "@/components/example.tsx";
+import { Figure } from "@/components/figure.tsx";
+import { ResponsiveDesign } from "@/components/content.tsx";
+import { Stripes } from "@/components/stripes.tsx";
+
+export const title = "place-content";
+export const description = "Utilities for controlling how content is justified and aligned at the same time.";
+
+<ApiTable
+  rows={[
+    ["place-content-center", "place-content: center;"],
+    ["place-content-center-safe", "place-content: safe center;"],
+    ["place-content-start", "place-content: start;"],
+    ["place-content-end", "place-content: end;"],
+    ["place-content-end-safe", "place-content: safe end;"],
+    ["place-content-between", "place-content: space-between;"],
+    ["place-content-around", "place-content: space-around;"],
+    ["place-content-evenly", "place-content: space-evenly;"],
+    ["place-content-baseline", "place-content: baseline;"],
+    ["place-content-stretch", "place-content: stretch;"],
+  ]}
+/>
+
+## Examples
+
+### Center
+
+Use `place-content-center` to pack items in the center of the inline and block axes:
+
+<Figure>
+
+<Example>
+  {
+    <div className="grid grid-cols-1">
+      <Stripes border className="col-start-1 row-start-1 rounded-lg" />
+      <div className="col-start-1 row-start-1 grid h-56 grid-cols-[repeat(2,56px)] place-content-center gap-4 rounded-lg font-mono text-sm leading-6 font-bold text-white">
+        <div className="flex h-14 w-14 items-center justify-center rounded-lg bg-sky-500 p-4">01</div>
+        <div className="flex h-14 w-14 items-center justify-center rounded-lg bg-sky-500 p-4">02</div>
+        <div className="flex h-14 w-14 items-center justify-center rounded-lg bg-sky-500 p-4">03</div>
+        <div className="flex h-14 w-14 items-center justify-center rounded-lg bg-sky-500 p-4">04</div>
+      </div>
+    </div>
+  }
+</Example>
+
+```html
+<!-- [!code classes:place-content-center] -->
+<div class="grid h-48 grid-cols-2 place-content-center gap-4 ...">
+  <div>01</div>
+  <div>02</div>
+  <div>03</div>
+  <div>04</div>
+</div>
+```
+
+</Figure>
+
+### Start
+
+Use `place-content-start` to pack items against the start of the inline and block axes:
+
+<Figure>
+
+<Example>
+  {
+    <div className="grid grid-cols-1">
+      <Stripes border className="col-start-1 row-start-1 rounded-lg" />
+      <div className="col-start-1 row-start-1 grid h-56 grid-cols-[repeat(2,56px)] place-content-start gap-4 rounded-lg font-mono text-sm leading-6 font-bold text-white">
+        <div className="flex h-14 w-14 items-center justify-center rounded-lg bg-fuchsia-500 p-4">01</div>
+        <div className="flex h-14 w-14 items-center justify-center rounded-lg bg-fuchsia-500 p-4">02</div>
+        <div className="flex h-14 w-14 items-center justify-center rounded-lg bg-fuchsia-500 p-4">03</div>
+        <div className="flex h-14 w-14 items-center justify-center rounded-lg bg-fuchsia-500 p-4">04</div>
+      </div>
+    </div>
+  }
+</Example>
+
+```html
+<!-- [!code classes:place-content-start] -->
+<div class="grid h-48 grid-cols-2 place-content-start gap-4 ...">
+  <div>01</div>
+  <div>02</div>
+  <div>03</div>
+  <div>04</div>
+</div>
+```
+
+</Figure>
+
+### End
+
+Use `place-content-end` to pack items against the end of the inline and block axes:
+
+<Figure>
+
+<Example>
+  {
+    <div className="grid grid-cols-1">
+      <Stripes border className="col-start-1 row-start-1 rounded-lg" />
+      <div className="col-start-1 row-start-1 grid h-56 grid-cols-[repeat(2,56px)] place-content-end gap-4 rounded-lg font-mono text-sm leading-6 font-bold text-white">
+        <div className="flex h-14 w-14 items-center justify-center rounded-lg bg-indigo-500 p-4">01</div>
+        <div className="flex h-14 w-14 items-center justify-center rounded-lg bg-indigo-500 p-4">02</div>
+        <div className="flex h-14 w-14 items-center justify-center rounded-lg bg-indigo-500 p-4">03</div>
+        <div className="flex h-14 w-14 items-center justify-center rounded-lg bg-indigo-500 p-4">04</div>
+      </div>
+    </div>
+  }
+</Example>
+
+```html
+<!-- [!code classes:place-content-end] -->
+<div class="grid h-48 grid-cols-2 place-content-end gap-4 ...">
+  <div>01</div>
+  <div>02</div>
+  <div>03</div>
+  <div>04</div>
+</div>
+```
+
+</Figure>
+
+### Space between
+
+Use `place-content-between` to distribute grid items along the inline and block axes so that there is an equal amount of space between each row and column on each axis respectively:
+
+<Figure>
+
+<Example>
+  {
+    <div className="grid grid-cols-1">
+      <Stripes border className="col-start-1 row-start-1 rounded-lg" />
+      <div className="col-start-1 row-start-1 grid h-56 grid-cols-[repeat(2,56px)] place-content-between gap-4 rounded-lg font-mono text-sm leading-6 font-bold text-white">
+        <div className="flex h-14 w-14 items-center justify-center rounded-lg bg-purple-500 p-4">01</div>
+        <div className="flex h-14 w-14 items-center justify-center rounded-lg bg-purple-500 p-4">02</div>
+        <div className="flex h-14 w-14 items-center justify-center rounded-lg bg-purple-500 p-4">03</div>
+        <div className="flex h-14 w-14 items-center justify-center rounded-lg bg-purple-500 p-4">04</div>
+      </div>
+    </div>
+  }
+</Example>
+
+```html
+<!-- [!code classes:place-content-between] -->
+<div class="grid h-48 grid-cols-2 place-content-between gap-4 ...">
+  <div>01</div>
+  <div>02</div>
+  <div>03</div>
+  <div>04</div>
+</div>
+```
+
+</Figure>
+
+### Space around
+
+Use `place-content-around` to distribute grid items along the inline and block axes so that there is an equal amount of space around each row and column on each axis respectively:
+
+<Figure>
+
+<Example>
+  {
+    <div className="grid grid-cols-1">
+      <Stripes border className="col-start-1 row-start-1 rounded-lg" />
+      <div className="col-start-1 row-start-1 grid h-56 grid-cols-[repeat(2,56px)] place-content-around gap-x-4 rounded-lg font-mono text-sm leading-6 font-bold text-white">
+        <div className="flex h-14 w-14 items-center justify-center rounded-lg bg-cyan-500 p-4">01</div>
+        <div className="flex h-14 w-14 items-center justify-center rounded-lg bg-cyan-500 p-4">02</div>
+        <div className="flex h-14 w-14 items-center justify-center rounded-lg bg-cyan-500 p-4">03</div>
+        <div className="flex h-14 w-14 items-center justify-center rounded-lg bg-cyan-500 p-4">04</div>
+      </div>
+    </div>
+  }
+</Example>
+
+```html
+<!-- [!code classes:place-content-around] -->
+<div class="grid h-48 grid-cols-2 place-content-around gap-4 ...">
+  <div>01</div>
+  <div>02</div>
+  <div>03</div>
+  <div>04</div>
+</div>
+```
+
+</Figure>
+
+### Space evenly
+
+Use `place-content-evenly` to distribute grid items such that they are evenly spaced on the inline and block axes:
+
+<Figure>
+
+<Example>
+  {
+    <div className="grid grid-cols-1">
+      <Stripes border className="col-start-1 row-start-1 rounded-lg" />
+      <div className="col-start-1 row-start-1 grid h-56 grid-cols-[repeat(2,56px)] place-content-evenly rounded-lg font-mono text-sm leading-6 font-bold text-white">
+        <div className="flex h-14 w-14 items-center justify-center rounded-lg bg-violet-500 p-4">01</div>
+        <div className="flex h-14 w-14 items-center justify-center rounded-lg bg-violet-500 p-4">02</div>
+        <div className="flex h-14 w-14 items-center justify-center rounded-lg bg-violet-500 p-4">03</div>
+        <div className="flex h-14 w-14 items-center justify-center rounded-lg bg-violet-500 p-4">04</div>
+      </div>
+    </div>
+  }
+</Example>
+
+```html
+<!-- [!code classes:place-content-evenly] -->
+<div class="grid h-48 grid-cols-2 place-content-evenly gap-4 ...">
+  <div>01</div>
+  <div>02</div>
+  <div>03</div>
+  <div>04</div>
+</div>
+```
+
+</Figure>
+
+### Stretch
+
+Use `place-content-stretch` to stretch grid items along their grid areas on the inline and block axes:
+
+<Figure>
+
+<Example>
+  {
+    <div className="grid grid-cols-1">
+      <Stripes border className="col-start-1 row-start-1 rounded-lg" />
+      <div className="col-start-1 row-start-1 grid h-56 grid-cols-2 place-content-stretch gap-4 rounded-lg font-mono text-sm leading-6 font-bold text-white">
+        <div className="flex items-center justify-center rounded-lg bg-pink-500 p-4">01</div>
+        <div className="flex items-center justify-center rounded-lg bg-pink-500 p-4">02</div>
+        <div className="flex items-center justify-center rounded-lg bg-pink-500 p-4">03</div>
+        <div className="flex items-center justify-center rounded-lg bg-pink-500 p-4">04</div>
+      </div>
+    </div>
+  }
+</Example>
+
+```html
+<!-- [!code classes:place-content-stretch] -->
+<div class="grid h-48 grid-cols-2 place-content-stretch gap-4 ...">
+  <div>01</div>
+  <div>02</div>
+  <div>03</div>
+  <div>04</div>
+</div>
+```
+
+</Figure>
+
+### Responsive design
+
+<ResponsiveDesign
+  property="place-content"
+  defaultClass="grid place-content-start"
+  featuredClass="place-content-center"
+/>

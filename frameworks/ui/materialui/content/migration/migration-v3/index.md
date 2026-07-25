@@ -1,0 +1,20 @@
+---
+type: "Framework Learn Directory Index"
+framework: "Material UI"
+generated_at: "2026-07-25T13:39:41.096081Z"
+---
+# Migration-V3
+
+This directory contains Material UI learning pages related to migration-v3.
+
+## Breadcrumbs
+
+[Wiki Home](../index.md) -> [Content](index.md)
+
+## Navigation
+
+- Wiki Home: [Root Index](../index.md)
+
+## Pages in This Directory
+
+- [Migration V3](migration-v3.md)

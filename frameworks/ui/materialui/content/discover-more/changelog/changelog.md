@@ -1,0 +1,17 @@
+---
+type: "Framework Learn Page"
+framework: "Material UI"
+source_repo: "https://github.com/mui/material-ui.git"
+source_branch: "master"
+source_path: "docs/data/material/discover-more/changelog/changelog.md"
+source_commit: "4d5fe7254baa7e97e38b516f37c7af13128468b7"
+source_commit_short: "4d5fe725"
+source_commit_date: "2026-07-24T12:25:49+03:00"
+generated_at: "2026-07-25T13:39:41.013306Z"
+---
+# Changelog
+
+<p class="description">Material UI follows Semantic Versioning 2.0.0.</p>
+
+All notable changes of the current major version are described in the [CHANGELOG.md file](https://github.com/mui/material-ui/blob/HEAD/CHANGELOG.md).
+Changes of older versions are described in the [CHANGELOG.old.md file](https://github.com/mui/material-ui/blob/HEAD/CHANGELOG.old.md)

@@ -1,0 +1,26 @@
+---
+type: "Framework Learn Page"
+framework: "Material UI"
+source_repo: "https://github.com/mui/material-ui.git"
+source_branch: "master"
+source_path: "docs/data/material/getting-started/supported-components/supported-components.md"
+source_commit: "4d5fe7254baa7e97e38b516f37c7af13128468b7"
+source_commit_short: "4d5fe725"
+source_commit_date: "2026-07-24T12:25:49+03:00"
+generated_at: "2026-07-25T13:39:40.984925Z"
+---
+# Supported components
+
+<p class="description">The following is a list of Material Design components & features.</p>
+
+While we strive to follow the Material Design guidelines where practical (applying
+common sense where guidelines contradict - a more common occurrence than
+one might expect), we do not expect to support every component, nor every
+feature of every component, but rather to provide the building blocks to
+allow developers to create compelling user interfaces and experiences.
+
+If you wish to add support for a component or feature not highlighted
+here, please search for the relevant [GitHub Issue](https://github.com/mui/material-ui/issues?q=is%3Aopen+is%3Aclosed), or create a new one
+to discuss the approach before submitting a pull request.
+
+{{"demo": "MaterialUIComponents.js", "hideToolbar": true, "bg": true}}
