@@ -1,0 +1,76 @@
+---
+type: "Framework Learn Page"
+framework: "Arize Phoenix"
+source_repo: "https://github.com/Arize-ai/phoenix.git"
+source_branch: "main"
+source_path: "docs/phoenix/release-notes/04-2026/04-03-2026-atif-trajectory-upload.mdx"
+source_commit: "69b3ab92c37ff65812feaa2dbf0b1c0ad5ae55fe"
+source_commit_short: "69b3ab9"
+source_commit_date: "2026-07-25T11:48:12-06:00"
+generated_at: "2026-07-25T19:08:24.880968Z"
+---
+---
+title: "04.03.2026 ATIF Trajectory Upload"
+description: "Upload Harbor ATIF agent trajectories as structured Phoenix traces."
+---
+
+**Available in arize-phoenix-client 2.3.0+ (Python)**
+
+Phoenix now ingests [ATIF (Agent Trajectory Interchange Format)](https://github.com/harbor-ai/agent-trajectory-format) trajectories directly. `upload_atif_trajectories_as_spans` converts ATIF JSON files into OpenTelemetry-compatible span trees and uploads them to any Phoenix project, letting you visualize offline agent runs alongside live instrumented traces.
+
+## Trace Structure
+
+Each trajectory becomes one trace. The span hierarchy follows the causal model used by real-time instrumentors — TOOL spans are siblings of the LLM spans under the AGENT, not children:
+
+```
+AGENT (root)
+  LLM    ← decides to call a tool
+  TOOL   ← agent runtime executes the tool
+  LLM    ← processes the result
+```
+
+Multi-turn conversations get nested per-turn AGENT spans. Trajectories that reference each other via `subagent_trajectory_ref` are linked into a single trace when uploaded together.
+
+## Usage
+
+```python
+import json
+from phoenix.client import Client
+from phoenix.client.helpers.atif import upload_atif_trajectories_as_spans
+
+client = Client()
+
+with open("trajectory.json") as f:
+    trajectory = json.load(f)
+
+result = upload_atif_trajectories_as_spans(
+    client,
+    [trajectory],
+    project_name="my-agent-project",
+)
+# {"total_received": 5, "total_queued": 5}
+```
+
+Upload multiple trajectories in a single call to enable subagent linking:
+
+```python
+with open("parent.json") as f:
+    parent = json.load(f)
+with open("child.json") as f:
+    child = json.load(f)
+
+# Parent and child are linked into one trace automatically
+result = upload_atif_trajectories_as_spans(
+    client,
+    [parent, child],
+    project_name="my-agent-project",
+)
+```
+
+## Key Details
+
+- **Supported versions**: ATIF schema v1.0 through v1.6
+- **Deterministic IDs**: trace and span IDs are derived from `session_id` via SHA-256 — re-uploading the same trajectory is idempotent
+- **Multimodal content (v1.6+)**: image content parts are stored using the OpenInference `message.contents` array format
+- **Continuation merging**: sessions split across files (`session_id` ending in `-cont-N`) are automatically merged into one trace
+- **Attribute mapping**: token counts, cost, model name, tool definitions, and reasoning content are mapped to standard OpenInference attributes

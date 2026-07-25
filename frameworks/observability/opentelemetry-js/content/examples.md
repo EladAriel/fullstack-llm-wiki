@@ -1,0 +1,23 @@
+---
+type: "Framework Learn Page"
+framework: "OpenTelemetry JS"
+source_repo: "https://github.com/open-telemetry/opentelemetry.io.git"
+source_branch: "main"
+source_path: "content/en/docs/languages/js/examples.md"
+source_commit: "8fd99e125e5510385b18b541d97c283e28f76ef2"
+source_commit_short: "8fd99e1"
+source_commit_date: "2026-07-25T10:22:15-04:00"
+generated_at: "2026-07-25T19:07:58.990340Z"
+---
+# Examples
+
+---
+title: Examples
+aliases: [instrumentation_examples]
+description:
+  Explore more examples for OpenTelemetry JavaScript _(external page)_
+redirect: https://github.com/open-telemetry/opentelemetry-js/tree/main/examples
+manualLinkTarget: _blank
+build: { render: link }
+weight: 220
+---

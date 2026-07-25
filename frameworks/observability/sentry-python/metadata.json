@@ -1,0 +1,11 @@
+{
+  "framework": "sentry-python",
+  "display_name": "Sentry Python",
+  "source_repo": "https://github.com/getsentry/sentry-docs.git",
+  "source_branch": "master",
+  "source_docs_path": "docs/platforms/python",
+  "source_commit": "8557ccbd46b02c43301ef74ff54516736ecf9d69",
+  "source_commit_short": "8557ccb",
+  "source_commit_date": "2026-07-24T13:12:02-04:00",
+  "wiki_generated_at": "2026-07-25T19:08:13.539239Z"
+}

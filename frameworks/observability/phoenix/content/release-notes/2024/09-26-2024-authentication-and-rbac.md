@@ -1,0 +1,56 @@
+---
+type: "Framework Learn Page"
+framework: "Arize Phoenix"
+source_repo: "https://github.com/Arize-ai/phoenix.git"
+source_branch: "main"
+source_path: "docs/phoenix/release-notes/2024/09-26-2024-authentication-and-rbac.mdx"
+source_commit: "69b3ab92c37ff65812feaa2dbf0b1c0ad5ae55fe"
+source_commit_short: "69b3ab9"
+source_commit_date: "2026-07-25T11:48:12-06:00"
+generated_at: "2026-07-25T19:08:24.912127Z"
+---
+# 09 26 2024 Authentication And Rbac
+
+---
+title: "09.26.2024: Authentication & RBAC"
+description: Available in Phoenix 5.0+
+---
+
+<Update label="09.26.2024">
+
+## Authentication & RBAC
+
+<Frame>
+    <iframe src="https://cdn.iframe.ly/WQTHhwp" width={1000} height={400} allowFullScreen></iframe>
+</Frame>
+
+We've added Authentication and Rules-based Access Controls to Phoenix. This was a long-requested feature set, and we're excited for the new uses of Phoenix this will unlock!
+
+The auth feature set includes:
+
+* **Secure Access**: All of Phoenix's UI & APIs (REST, GraphQL, gRPC) now require access tokens or API keys. Keep your data safe!
+
+* **RBAC (Role-Based Access Control)**: Admins can manage users; members can update their profiles—simple & secure.
+
+* **API Keys**: Now available for seamless, secure data ingestion & querying.
+
+* **OAuth2 Support**: Easily integrate with Google, AWS Cognito, or Auth0. ✉ Password Resets via SMTP to make security a breeze.
+
+For all the details on authentication, view our [docs](/docs/phoenix/self-hosting/features/authentication).
+
+### Bug Fixes and Improvements 🐛
+
+* Added a new command to easily launch a Phoenix client from the cli: `phoenix serve`
+
+* Implemented simple email sender to simplify dependencies
+
+* Improved error handling for imported spans
+
+* Replaced hdbscan with fast-hdbscan. Added PHOENIX\_CSRF\_TRUSTED\_ORIGINS environment variable to set trusted origins
+
+* Added support for Mistral 1.0
+
+* Fixed an issue that caused px.Client().get\_spans\_dataframe() requests to time out
+</Update>
+
+

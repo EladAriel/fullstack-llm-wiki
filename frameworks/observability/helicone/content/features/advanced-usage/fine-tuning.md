@@ -1,0 +1,48 @@
+---
+type: "Framework Learn Page"
+framework: "Helicone"
+source_repo: "https://github.com/Helicone/helicone.git"
+source_branch: "main"
+source_path: "docs/features/advanced-usage/fine-tuning.mdx"
+source_commit: "67df07b8d807a960f2e53d9ec2a9c49513ca2379"
+source_commit_short: "67df07b"
+source_commit_date: "2026-07-21T05:35:38-07:00"
+generated_at: "2026-07-25T19:08:22.218222Z"
+---
+# Fine Tuning
+
+---
+title: "Fine-Tuning"
+description: "Easily fine-tune a model using your request logs inside of Helicone."
+---
+
+Fine-tuning allows you to reduce your costs and improve your applications performance - all using the data already inside of Helicone. Read more about
+it here: [OpenAI's fine-tuning guide](https://platform.openai.com/docs/guides/fine-tuning)
+
+<Steps>
+  <Step title="Create a dataset">
+    Navigate to the request page and use filters to get your desired dataset
+    <Frame>
+      <img src="/images/features/fine-tuning/filters.png" alt="Filtering requests on the request page to create a dataset in Helicone."/>
+    </Frame>
+
+    Press `Create Dataset` and name it
+    <Frame>
+        <img src="/images/features/fine-tuning/create-dataset.png" alt ="Creating and name your dataset in Helicone." width={400} />
+    </Frame>
+    <Tip>You need at least 10 requests within a dataset to fine-tune.</Tip>
+
+  </Step>
+  <Step title="Start a fine-tuning job">
+    Navigate to the fine-tune page and creete a new fine-tuning job.
+    <Frame>
+        <img src="/images/features/fine-tuning/fine-tune-job.png" alt="Starting a fine-tuning job in Helicone." width={400} />
+    </Frame>
+  </Step>
+  <Step title="Replace your model name">
+    Once your fine-tuning job is completed, all you have to do is replace the model name and you can start using the new fine-tuned model!
+    <Frame caption="Example Python integration">
+        <img src="/images/features/fine-tuning/model.png" alt="Python integration example showing how to replace the model name after fine-tuning in Helicone." width={600} />
+    </Frame>
+  </Step>
+</Steps>

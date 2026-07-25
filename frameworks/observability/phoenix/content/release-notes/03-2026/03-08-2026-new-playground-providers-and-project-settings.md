@@ -1,0 +1,71 @@
+---
+type: "Framework Learn Page"
+framework: "Arize Phoenix"
+source_repo: "https://github.com/Arize-ai/phoenix.git"
+source_branch: "main"
+source_path: "docs/phoenix/release-notes/03-2026/03-08-2026-new-playground-providers-and-project-settings.mdx"
+source_commit: "69b3ab92c37ff65812feaa2dbf0b1c0ad5ae55fe"
+source_commit_short: "69b3ab9"
+source_commit_date: "2026-07-25T11:48:12-06:00"
+generated_at: "2026-07-25T19:08:24.889497Z"
+---
+# 03 08 2026 New Playground Providers And Project Settings
+
+---
+title: "03.08.2026 New Playground Providers and Project Settings"
+description: "Phoenix v13.10.0 adds Cerebras, Fireworks AI, Groq, and Moonshot as first-class playground providers, plus editable project settings."
+---
+
+Phoenix v13.10.0 introduces four new AI providers for the playground and makes project settings editable.
+
+## New playground providers
+
+Phoenix now supports **Cerebras**, **Fireworks AI**, **Groq**, and **Moonshot (Kimi)** as first-class providers in the playground. All four use OpenAI-compatible APIs — no new dependencies required.
+
+![AI Providers in Phoenix](https://storage.googleapis.com/arize-phoenix-assets/assets/images/ai_providers.png)
+
+| Provider | Environment Variable |
+|----------|---------------------|
+| Cerebras | `CEREBRAS_API_KEY` |
+| Fireworks AI | `FIREWORKS_API_KEY` |
+| Groq | `GROQ_API_KEY` |
+| Moonshot (Kimi) | `MOONSHOT_API_KEY` |
+
+Cost tracking is included out of the box with **298 new model entries** across all four providers.
+
+## Editable project settings
+
+You can now edit a project's **description** and **gradient colors** directly from the Project Settings tab.
+
+## Latest OpenAI models
+
+The playground model list now includes new OpenAI models:
+- `gpt-5.4`, `gpt-5.4-pro` (and date-stamped variants)
+- `gpt-5.3-chat-latest`
+- `gpt-5.2-pro`, `gpt-5.2-pro-2025-12-11`
+- `gpt-5-pro`, `gpt-5-chat`, and date-stamped `gpt-5`, `gpt-5-mini`, `gpt-5-nano` variants
+- `o3-pro-2025-06-10`
+
+## UI improvements
+
+- **Experiment recording indicator** — The loading spinner during playground experiments has been replaced with a pulsing red recording icon and an elapsed timer
+- **Restyled Switch & Slider components** — Improved dark mode contrast, smoother transitions, and a cleaner thumb ring on hover/focus
+
+## Get started
+
+```bash
+pip install 'arize-phoenix>=13.10.0'
+```
+
+```bash
+docker pull arizephoenix/phoenix:13.10.0
+```
+
+<CardGroup cols={2}>
+  <Card title="Configure AI Providers" icon="gear" href="/docs/phoenix/prompt-engineering/how-to-prompts/configure-ai-providers">
+    Full provider configuration guide
+  </Card>
+  <Card title="Cost Tracking" icon="dollar-sign" href="/docs/phoenix/tracing/how-to-tracing/cost-tracking">
+    Learn about automatic cost tracking
+  </Card>
+</CardGroup>

@@ -1,0 +1,48 @@
+---
+type: "Framework Learn Page"
+framework: "Arize Phoenix"
+source_repo: "https://github.com/Arize-ai/phoenix.git"
+source_branch: "main"
+source_path: "docs/phoenix/tracing/llm-traces/sessions.mdx"
+source_commit: "69b3ab92c37ff65812feaa2dbf0b1c0ad5ae55fe"
+source_commit_short: "69b3ab9"
+source_commit_date: "2026-07-25T11:48:12-06:00"
+generated_at: "2026-07-25T19:08:24.913612Z"
+---
+# Sessions
+
+---
+title: "Sessions"
+description: Track and analyze multi-turn conversations
+---
+
+<Frame caption="Track multi-turn conversations with a chatbot or assistant using sessions">
+      <video src="https://storage.googleapis.com/arize-phoenix-assets/assets/videos/sessions.mp4" width="100%" height="100%" style={{ display: 'block', objectFit: 'fill', backgroundColor: 'transparent' }} controls autoPlay muted loop />
+</Frame>
+
+Sessions enable tracking and organizing related traces across multi-turn conversations with your AI application. When building conversational AI, maintaining context between interactions is critical - Sessions make this possible from an observability perspective.
+
+With Sessions in Phoenix, you can:
+
+* Track the entire history of a conversation in a single thread
+
+* View conversations in a chatbot-like UI showing inputs and outputs of each turn
+
+* Search through sessions to find specific interactions
+
+* Track token usage and latency per conversation
+
+This feature is particularly valuable for applications where context builds over time, like chatbots, virtual assistants, or any other multi-turn interaction. By tagging spans with a consistent session ID, you create a connected view that reveals how your application performs across an entire user journey.
+
+## Next Steps
+
+<CardGroup cols={2}>
+  <Card title="Setup Sessions" icon="gear" href="/docs/phoenix/tracing/how-to-tracing/setup-tracing/setup-sessions">
+    Configure session tracking in your application
+  </Card>
+  <Card title="Setup Projects" icon="folder" href="/docs/phoenix/tracing/how-to-tracing/setup-tracing/setup-projects">
+    Organize traces into separate projects
+  </Card>
+</CardGroup>
+
+

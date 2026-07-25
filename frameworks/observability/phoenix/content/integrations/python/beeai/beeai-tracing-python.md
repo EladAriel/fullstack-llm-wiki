@@ -1,0 +1,89 @@
+---
+type: "Framework Learn Page"
+framework: "Arize Phoenix"
+source_repo: "https://github.com/Arize-ai/phoenix.git"
+source_branch: "main"
+source_path: "docs/phoenix/integrations/python/beeai/beeai-tracing-python.mdx"
+source_commit: "69b3ab92c37ff65812feaa2dbf0b1c0ad5ae55fe"
+source_commit_short: "69b3ab9"
+source_commit_date: "2026-07-25T11:48:12-06:00"
+generated_at: "2026-07-25T19:08:24.861388Z"
+---
+# Beeai Tracing Python
+
+---
+title: "BeeAI Tracing (Python)"
+description: Instrument and observe BeeAI agents
+---
+
+import RegisterTracerPython from "../../../../snippets/register-tracer-python.mdx";
+
+Phoenix provides seamless observability and tracing for BeeAI agents through the [Python OpenInference instrumentation package](https://pypi.org/project/openinference-instrumentation-beeai/).
+
+## Install
+
+```bash
+pip install openinference-instrumentation-beeai beeai-framework
+```
+
+## Setup
+
+<RegisterTracerPython projectName="beeai-agent" />
+
+## Run BeeAI
+
+Sample agent built using BeeAI with automatic tracing:
+
+```python expandable
+import asyncio
+from beeai_framework.agents.react import ReActAgent
+from beeai_framework.agents.types import AgentExecutionConfig
+from beeai_framework.backend.chat import ChatModel
+from beeai_framework.backend.types import ChatModelParameters
+from beeai_framework.memory import TokenMemory
+from beeai_framework.tools.search.duckduckgo import DuckDuckGoSearchTool
+from beeai_framework.tools.search.wikipedia import WikipediaTool
+from beeai_framework.tools.tool import AnyTool
+from beeai_framework.tools.weather.openmeteo import OpenMeteoTool
+
+llm = ChatModel.from_name(
+    "ollama:granite3.1-dense:8b",
+    ChatModelParameters(temperature=0),
+)
+
+tools: list[AnyTool] = [
+    WikipediaTool(),
+    OpenMeteoTool(),
+    DuckDuckGoSearchTool(),
+]
+
+agent = ReActAgent(llm=llm, tools=tools, memory=TokenMemory(llm))
+
+prompt = "What's the current weather in Las Vegas?"
+
+async def main() -> None:
+    response = await agent.run(
+        prompt=prompt,
+        execution=AgentExecutionConfig(
+            max_retries_per_step=3, total_max_retries=10, max_iterations=20
+        ),
+    )
+
+    print("Agent 🤖 : ", response.result.text)
+
+asyncio.run(main())
+```
+
+## Observe
+
+Phoenix provides visibility into your BeeAI agent operations by automatically tracing all interactions.
+
+<Frame>
+  <img src="https://storage.googleapis.com/arize-phoenix-assets/assets/images/beeai-phoenix-python.png" />
+</Frame>
+
+## Resources
+
+* [OpenInference package for Python](https://pypi.org/project/openinference-instrumentation-beeai/)
+
+

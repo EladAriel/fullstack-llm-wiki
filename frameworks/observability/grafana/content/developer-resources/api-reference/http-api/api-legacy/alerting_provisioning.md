@@ -1,0 +1,38 @@
+---
+type: "Framework Learn Page"
+framework: "Grafana"
+source_repo: "https://github.com/grafana/grafana.git"
+source_branch: "main"
+source_path: "docs/sources/developer-resources/api-reference/http-api/api-legacy/alerting_provisioning.md"
+source_commit: "d18e58d33aa8741f08fbab4aa73bdaf1f04e3be5"
+source_commit_short: "d18e58d3"
+source_commit_date: "2026-07-25T13:50:43+02:00"
+generated_at: "2026-07-25T19:08:09.004813Z"
+---
+---
+aliases:
+  - ../../../../http_api/alerting_provisioning/ # /docs/grafana/next/http_api/alerting_provisioning/
+  - ../../../../developers/http_api/alerting_provisioning/ # /docs/grafana/next/developers/http_api/alerting_provisioning/
+  - ../../../../developer-resources/api-reference/http-api/alerting_provisioning/ #legacy folder
+canonical: https://grafana.com/docs/grafana/latest/developer-resources/api-reference/http-api/api-legacy/alerting_provisioning/
+description: Grafana Alerts HTTP API
+keywords:
+  - grafana
+  - http
+  - documentation
+  - api
+  - alerting
+  - alerts
+labels:
+  products:
+    - cloud
+    - enterprise
+    - oss
+title: 'Alerting Provisioning HTTP API '
+---
+
+# Alerting provisioning HTTP API
+
+{{< docs/shared lookup="developers/deprecated-apis.md" source="grafana" version="<GRAFANA_VERSION>" >}}
+
+{{< docs/shared lookup="alerts/alerting_provisioning.md" source="grafana" version="<GRAFANA_VERSION>" >}}

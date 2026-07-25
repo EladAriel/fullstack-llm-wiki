@@ -1,0 +1,92 @@
+---
+type: "Framework Learn Page"
+framework: "Arize Phoenix"
+source_repo: "https://github.com/Arize-ai/phoenix.git"
+source_branch: "main"
+source_path: "docs/phoenix/integrations/llm-providers/openai/openai-evals.mdx"
+source_commit: "69b3ab92c37ff65812feaa2dbf0b1c0ad5ae55fe"
+source_commit_short: "69b3ab9"
+source_commit_date: "2026-07-25T11:48:12-06:00"
+generated_at: "2026-07-25T19:08:24.849117Z"
+---
+# Openai Evals
+
+---
+title: "OpenAI evals"
+sidebarTitle: "OpenAI Evals"
+description: Configure and run OpenAI for evals
+---
+
+### Using OpenAI with Phoenix Evals
+
+<Info>
+Requires `openai>=1.0.0`
+
+```sh
+pip install "arize-phoenix-evals>=3" openai
+```
+</Info>
+
+Create an `LLM` instance with the OpenAI provider:
+
+```python
+from phoenix.evals import LLM
+
+llm = LLM(provider="openai", model="gpt-4o")
+```
+
+The `LLM` wrapper reads your API key from the `OPENAI_API_KEY` environment variable, or you can pass it directly:
+
+```python
+llm = LLM(provider="openai", model="gpt-4o", api_key="sk-...")
+```
+
+### Using with evaluators
+
+```python
+from phoenix.evals import LLM, evaluate_dataframe
+from phoenix.evals.metrics import FaithfulnessEvaluator
+
+llm = LLM(provider="openai", model="gpt-4o")
+evaluator = FaithfulnessEvaluator(llm=llm)
+
+results_df = evaluate_dataframe(dataframe=df, evaluators=[evaluator])
+```
+
+### Custom parameters
+
+Pass additional parameters to the OpenAI client:
+
+```python
+llm = LLM(
+    provider="openai",
+    model="gpt-4o",
+    temperature=0.0,
+    sync_client_kwargs={"timeout": 60.0},
+    async_client_kwargs={"timeout": 120.0},
+)
+```
+
+### Azure OpenAI
+
+Use the `"azure"` provider for Azure OpenAI deployments:
+
+```python
+llm = LLM(
+    provider="azure",
+    model="gpt-4o",  # This is the deployment name
+    api_key="your-api-key",
+    api_version="2024-02-01",
+    base_url="https://your-resource.openai.azure.com/",
+)
+```
+
+<Info>
+The `model` parameter is the deployment name in Azure. You can find it in the Azure OpenAI playground.
+</Info>
+
+<Frame caption="How to find the model param in Azure">
+  <img src="https://storage.googleapis.com/arize-phoenix-assets/assets/images/phoenix-docs-images/c01cbde1-image.jpeg" />
+</Frame>
+
+For full details on Azure OpenAI, check out the [OpenAI Documentation](https://github.com/openai/openai-python#microsoft-azure-openai).

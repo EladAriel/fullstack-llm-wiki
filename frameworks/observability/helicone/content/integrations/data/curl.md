@@ -1,0 +1,222 @@
+---
+type: "Framework Learn Page"
+framework: "Helicone"
+source_repo: "https://github.com/Helicone/helicone.git"
+source_branch: "main"
+source_path: "docs/integrations/data/curl.mdx"
+source_commit: "67df07b8d807a960f2e53d9ec2a9c49513ca2379"
+source_commit_short: "67df07b"
+source_commit_date: "2026-07-21T05:35:38-07:00"
+generated_at: "2026-07-25T19:08:22.206000Z"
+---
+# Curl
+
+---
+title: "Custom Logs with cURL"
+sidebarTitle: "cURL"
+description: "Log any custom operations to Helicone using cURL for complete observability across your application stack."
+---
+
+Use the custom logging endpoint to log any operation to Helicone - database queries, API calls, ML inference, or any other operation you want to track.
+
+## Example
+
+```bash
+curl -X POST https://api.worker.helicone.ai/custom/v1/log \
+-H "Authorization: Bearer <your-api-key>" \
+-H "Content-Type: application/json" \
+-d '{
+  "providerRequest": {
+    "url": "custom-model-nopath",
+    "json": {
+      "_type": "data",
+      "name": "user_query",
+      "query": "SELECT * FROM users WHERE active = true"
+    }
+  },
+  "providerResponse": {
+    "json": {
+      "_type": "data",
+      "name": "user_query",
+      "status": "success",
+      "data": [...]
+    },
+    "status": 200
+  },
+  "timing": {
+    "startTime": { "seconds": 1625686222, "milliseconds": 500 },
+    "endTime": { "seconds": 1625686223, "milliseconds": 750 }
+  }
+}'
+```
+
+## Understanding the Structure
+
+All custom logs have three main parts:
+
+### 1. Provider Request
+What you're about to do. Must include:
+- `url: "custom-model-nopath"` - Required for custom logs
+- `json._type: "data"` - Identifies this as a custom data log
+- `json.name` - A descriptive name for your operation
+- Any custom fields you want to track (query, endpoint, model, etc.)
+
+### 2. Provider Response
+What happened. Should include:
+- `json._type: "data"` - Identifies this as a custom data response
+- `json.name` - Same name as the request
+- `json.status` - Success or error state
+- `status` - HTTP status code (typically 200)
+- Any result data you want to track
+
+### 3. Timing
+When it happened:
+- `startTime` - When the operation began (Unix epoch)
+- `endTime` - When the operation completed (Unix epoch)
+
+## Examples
+
+### Database Query
+```bash
+curl -X POST https://api.worker.helicone.ai/custom/v1/log \
+-H "Authorization: Bearer <your-api-key>" \
+-H "Content-Type: application/json" \
+-d '{
+  "providerRequest": {
+    "url": "custom-model-nopath",
+    "json": {
+      "_type": "data",
+      "name": "user_query",
+      "query": "SELECT * FROM users WHERE active = true",
+      "database": "production"
+    }
+  },
+  "providerResponse": {
+    "json": {
+      "_type": "data",
+      "name": "user_query",
+      "status": "success",
+      "count": 2,
+      "duration": "45ms"
+    },
+    "status": 200
+  },
+  "timing": {
+    "startTime": { "seconds": 1625686222, "milliseconds": 500 },
+    "endTime": { "seconds": 1625686223, "milliseconds": 750 }
+  }
+}'
+```
+
+### External API Call
+```bash
+curl -X POST https://api.worker.helicone.ai/custom/v1/log \
+-H "Authorization: Bearer <your-api-key>" \
+-H "Content-Type: application/json" \
+-d '{
+  "providerRequest": {
+    "url": "custom-model-nopath",
+    "json": {
+      "_type": "data",
+      "name": "external_api_call",
+      "endpoint": "https://api.example.com/users",
+      "method": "GET"
+    }
+  },
+  "providerResponse": {
+    "json": {
+      "_type": "data",
+      "name": "external_api_call",
+      "status": "success",
+      "result": { "total": 150, "page": 1 }
+    },
+    "status": 200
+  },
+  "timing": {
+    "startTime": { "seconds": 1625686222, "milliseconds": 500 },
+    "endTime": { "seconds": 1625686223, "milliseconds": 750 }
+  }
+}'
+```
+
+### ML Model Inference
+```bash
+curl -X POST https://api.worker.helicone.ai/custom/v1/log \
+-H "Authorization: Bearer <your-api-key>" \
+-H "Content-Type: application/json" \
+-d '{
+  "providerRequest": {
+    "url": "custom-model-nopath",
+    "json": {
+      "_type": "data",
+      "name": "ml_inference",
+      "model": "custom-classifier-v2",
+      "input_features": { "text": "This is a sample text" }
+    }
+  },
+  "providerResponse": {
+    "json": {
+      "_type": "data",
+      "name": "ml_inference",
+      "status": "success",
+      "result": {
+        "classification": "positive",
+        "confidence": 0.92
+      }
+    },
+    "status": 200
+  },
+  "timing": {
+    "startTime": { "seconds": 1625686222, "milliseconds": 500 },
+    "endTime": { "seconds": 1625686223, "milliseconds": 750 }
+  }
+}'
+```
+
+## API Reference
+
+### Endpoint
+
+```
+POST https://api.worker.helicone.ai/custom/v1/log
+```
+
+**Note:** The endpoint may vary depending on your Helicone setup:
+- US: `https://api.us.helicone.ai/custom/v1/log`
+- Elsewhere: `https://api.helicone.ai/custom/v1/log`
+
+### Headers
+
+| Name          | Value              |
+| ------------- | ------------------ |
+| Authorization | Bearer `{API_KEY}` |
+| Content-Type  | application/json   |
+
+### Request Body
+
+```typescript
+{
+  providerRequest: {
+    url: "custom-model-nopath";
+    json: {
+      _type: "data";
+      name: string;
+      [key: string]: any;  // Add any custom fields
+    };
+    meta?: Record<string, string>;  // Optional metadata
+  };
+  providerResponse: {
+    json: {
+      _type?: "data";
+      name?: string;
+      [key: string]: any;  // Add any custom fields
+    };
+    status: number;
+    headers?: Record<string, string>;
+  };
+  timing: {
+    startTime: { seconds: number; milliseconds: number };
+    endTime: { seconds: number; milliseconds: number };
+  };
+}
+```

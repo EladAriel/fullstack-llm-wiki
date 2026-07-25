@@ -1,0 +1,43 @@
+---
+type: "Framework Learn Page"
+framework: "Arize Phoenix"
+source_repo: "https://github.com/Arize-ai/phoenix.git"
+source_branch: "main"
+source_path: "docs/phoenix/integrations/llm-providers/anthropic.mdx"
+source_commit: "69b3ab92c37ff65812feaa2dbf0b1c0ad5ae55fe"
+source_commit_short: "69b3ab9"
+source_commit_date: "2026-07-25T11:48:12-06:00"
+generated_at: "2026-07-25T19:08:24.835317Z"
+---
+# Anthropic
+
+---
+title: "Anthropic"
+sidebarTitle: "Overview"
+description: Anthropic is an AI research company that develops LLMs, including Claude, with a focus on alignment and reliable behavior.
+---
+
+<img noZoom width="400px" style={{margin: "0 auto", borderRadius: "10px"}} src="https://storage.googleapis.com/arize-phoenix-assets/assets/images/phoenix-docs-images/2bc6360a-image.jpeg" />
+
+<Card title="Anthropic" href="https://www.anthropic.com/" icon="globe" horizontal>
+  [](https://www.anthropic.com/)
+</Card>
+
+<Columns cols={2}>
+  <Card img="https://storage.googleapis.com/arize-phoenix-assets/assets/images/phoenix-docs-images/5d0ed01c-image.avif" href="/docs/phoenix/integrations/llm-providers/anthropic/anthropic-tracing" title="Anthropic Tracing (Python)"/>
+  <Card img="https://storage.googleapis.com/arize-phoenix-assets/assets/images/phoenix-docs-images/5d0ed01c-image.avif" href="/docs/phoenix/integrations/llm-providers/anthropic/anthropic-sdk-typescript" title="Anthropic Tracing (TypeScript)"/>
+  <Card img="https://storage.googleapis.com/arize-phoenix-assets/assets/images/phoenix-docs-images/5d0ed01c-image.avif" href="/docs/phoenix/integrations/llm-providers/anthropic/anthropic-sdk-go" title="Anthropic Tracing (Go)"/>
+  <Card img="https://storage.googleapis.com/arize-phoenix-assets/assets/images/phoenix-docs-images/5d0ed01c-image.avif" href="/docs/phoenix/integrations/llm-providers/anthropic/anthropic-evals" title="Anthropic Evals"/>
+</Columns>
+
+### Claude Agent SDK
+
+<Columns cols={2}>
+  <Card img="https://storage.googleapis.com/arize-phoenix-assets/assets/images/card_claude.png" href="/docs/phoenix/integrations/python/claude-agent-sdk" title="Claude Agent SDK Tracing (Python)"/>
+  <Card img="https://storage.googleapis.com/arize-phoenix-assets/assets/images/card_claude.png" href="/docs/phoenix/integrations/typescript/claude-agent-sdk" title="Claude Agent SDK Tracing (TypeScript)"/>
+</Columns>
+
+### Featured Tutorials
+<Columns cols={2}>
+  <Card img="https://storage.googleapis.com/arize-phoenix-assets/assets/images/phoenix-docs-images/a7759586-image.jpeg" href="https://colab.research.google.com/github/Arize-ai/phoenix/blob/3c0ab8b33fdb3d97639fb5863643c3c32fe2d3af/tutorials/tracing/anthropic_tracing_tutorial.ipynb#L22" title="Tracing and Evaluating a Structured Data Extraction Service"/>
+</Columns>

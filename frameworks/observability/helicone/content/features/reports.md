@@ -1,0 +1,108 @@
+---
+type: "Framework Learn Page"
+framework: "Helicone"
+source_repo: "https://github.com/Helicone/helicone.git"
+source_branch: "main"
+source_path: "docs/features/reports.mdx"
+source_commit: "67df07b8d807a960f2e53d9ec2a9c49513ca2379"
+source_commit_short: "67df07b"
+source_commit_date: "2026-07-21T05:35:38-07:00"
+generated_at: "2026-07-25T19:08:22.195245Z"
+---
+# Reports
+
+---
+title: "Reports"
+sidebarTitle: "Reports"
+description: "Get automated weekly summaries of your LLM usage, costs, and performance delivered to email or Slack"
+---
+
+Receive comprehensive insights about your LLM application's performance with automated weekly reports. Stay informed about spending trends, usage patterns, and optimization opportunities without logging into the dashboard.
+
+## Why Reports
+
+<CardGroup cols={3}>
+<Card title="Stay Informed" icon="envelope">
+  Weekly summaries delivered directly to your inbox or Slack
+</Card>
+<Card title="Track Trends" icon="chart-line">
+  Monitor week-over-week changes in usage, costs, and performance
+</Card>
+<Card title="Share Insights" icon="users">
+  Keep stakeholders updated automatically
+</Card>
+</CardGroup>
+
+## What's Included
+
+Weekly reports provide key metrics from the past 7 days:
+
+- **Total cost** and spending trends
+- **Number of requests** processed
+- **Error rate** percentage
+- **Active users** count
+- **Security threats** detected
+- **Sessions** count and average cost per session
+
+## Setting Up Reports
+
+Navigate to **Settings → Reports** in your Helicone dashboard.
+
+<Frame caption="Configure report delivery settings for email and Slack">
+  <img
+    src="/images/enable-reports.webp"
+    alt="Report configuration interface showing email and Slack delivery options"
+  />
+</Frame>
+
+<Steps>
+<Step title="Choose delivery method">
+  - **Email**: Add recipient email addresses (comma-separated for multiple)
+  - **Slack**: Select channels from connected Slack workspace
+  - **Both**: Configure email and Slack for maximum visibility
+</Step>
+
+<Step title="Select frequency">
+  - **Weekly** (Recommended): Every Monday morning with previous week's data
+  - **Daily**: For high-volume applications needing close monitoring
+  - **Monthly**: For quarterly planning and budgeting
+</Step>
+
+<Step title="Enable reports">
+  Toggle the report status to active and save your configuration
+</Step>
+</Steps>
+
+## Report Format
+
+<Frame caption="Example weekly report showing key metrics and trends">
+  <img
+    src="/images/reports-example.webp"
+    alt="Helicone weekly report showing cost, requests, error rate, and session metrics"
+  />
+</Frame>
+
+### Email Reports
+Formatted HTML emails with your weekly metrics, trends, and direct links to the dashboard for deeper analysis.
+
+### Slack Reports
+Concise summaries posted to your team channels with key metrics and interactive buttons to view details in the dashboard.
+
+## Understanding Your Report
+
+Reports show week-over-week comparisons of your key metrics, helping you identify trends in usage, spending, and performance. All metrics cover the previous 7-day period.
+
+<Note>
+Reports rely on accurate cost data. If costs show as "not supported" for your model, [contact support](https://discord.com/invite/HwUbV3Q8qz) to add pricing.
+</Note>
+
+## Related Features
+
+<CardGroup cols={2}>
+<Card title="Alerts" icon="bell" href="/features/alerts">
+  Real-time notifications for cost spikes and errors
+</Card>
+<Card title="Cost Tracking" icon="dollar-sign" href="/guides/cookbooks/cost-tracking">
+  Deep dive into cost analysis and optimization
+</Card>
+</CardGroup>
