@@ -23,7 +23,7 @@ Also use this skill when the user asks to "search in the llm wiki", "look in the
 
 1. Identify the framework wiki directory.
    - Use `frameworks/index.md` to choose the category and framework.
-   - AI examples: LangChain uses `frameworks/ai/langchain/`, LangGraph uses `frameworks/ai/langgraph/`, Langfuse uses `frameworks/ai/langfuse/`, Model Context Protocol uses `frameworks/ai/modelcontextprotocol/`, and Ragas uses `frameworks/ai/ragas/`.
+   - AI examples: LangChain uses `frameworks/ai/langchain/`, LangGraph uses `frameworks/ai/langgraph/`, Langfuse uses `frameworks/ai/langfuse/`, FastMCP uses `frameworks/ai/fastmcp/`, Model Context Protocol uses `frameworks/ai/modelcontextprotocol/`, and Ragas uses `frameworks/ai/ragas/`.
    - Observability examples: OpenTelemetry Python uses `frameworks/observability/opentelemetry-python/`, Prometheus uses `frameworks/observability/prometheus/`, Grafana uses `frameworks/observability/grafana/`, Helicone uses `frameworks/observability/helicone/`, and LangSmith uses `frameworks/observability/langsmith/`.
    - Other examples: FastAPI uses `frameworks/backend/fastapi/`, React uses `frameworks/ui/react/`, and SQLAlchemy uses `frameworks/db/sqlalchemy/`.
 2. Open the framework root index first.

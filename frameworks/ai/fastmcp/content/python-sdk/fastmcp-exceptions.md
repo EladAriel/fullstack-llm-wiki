@@ -1,0 +1,145 @@
+---
+type: "Framework Learn Page"
+framework: "FastMCP"
+source_repo: "https://github.com/PrefectHQ/fastmcp.git"
+source_branch: "main"
+source_path: "docs/python-sdk/fastmcp-exceptions.mdx"
+source_commit: "44c0907dda78618f882b08de26e31c4428bd74b8"
+source_commit_short: "44c0907"
+source_commit_date: "2026-07-29T10:22:17-05:00"
+generated_at: "2026-07-30T03:45:36.545869Z"
+---
+---
+title: exceptions
+sidebarTitle: exceptions
+---
+
+# `fastmcp.exceptions`
+
+
+Custom exceptions for FastMCP.
+
+## Functions
+
+### `to_mcp_error` <sup><a href="https://github.com/PrefectHQ/fastmcp/blob/main/fastmcp_slim/fastmcp/exceptions.py#L122" target="_blank"><Icon icon="github" style="width: 14px; height: 14px;" /></a></sup>
+
+```python
+to_mcp_error(exc: Exception) -> MCPError
+```
+
+
+Translate a FastMCP exception into a wire-format ``MCPError``.
+
+Central mapping from FastMCP's public exception types to the JSON-RPC error
+codes defined by the MCP spec (imported from ``mcp_types``). Request-handler
+adapters call this instead of hand-rolling ``MCPError(code=..., ...)`` per
+call site, so the wire codes stay spec-correct and consistent across
+resources, prompts, and tools.
+
+``NotFoundError`` and ``DisabledError`` map to ``INVALID_PARAMS`` (-32602):
+per SEP-2164 a request naming a component that does not exist (or is
+disabled) is an invalid-params error, which matches the SDK's own
+``ResourceNotFoundError -> INVALID_PARAMS`` mapping in ``mcp.server.mcpserver``.
+``ValidationError`` is also an invalid-params error. Everything else falls
+back to ``default_code`` (``INTERNAL_ERROR`` by default).
+
+If ``exc`` is already an ``MCPError``, it is returned unchanged so an
+explicit code chosen upstream survives translation.
+
+
+## Classes
+
+### `FastMCPDeprecationWarning` <sup><a href="https://github.com/PrefectHQ/fastmcp/blob/main/fastmcp_slim/fastmcp/exceptions.py#L34" target="_blank"><Icon icon="github" style="width: 14px; height: 14px;" /></a></sup>
+
+
+Deprecation warning for FastMCP APIs.
+
+Subclass of DeprecationWarning so that standard warning filters
+still apply, but FastMCP can selectively enable its own warnings
+without affecting other libraries in the process.
+
+
+### `FastMCPError` <sup><a href="https://github.com/PrefectHQ/fastmcp/blob/main/fastmcp_slim/fastmcp/exceptions.py#L43" target="_blank"><Icon icon="github" style="width: 14px; height: 14px;" /></a></sup>
+
+
+Base error for FastMCP.
+
+
+### `ValidationError` <sup><a href="https://github.com/PrefectHQ/fastmcp/blob/main/fastmcp_slim/fastmcp/exceptions.py#L51" target="_blank"><Icon icon="github" style="width: 14px; height: 14px;" /></a></sup>
+
+
+Error in validating parameters or return values.
+
+
+### `ResourceError` <sup><a href="https://github.com/PrefectHQ/fastmcp/blob/main/fastmcp_slim/fastmcp/exceptions.py#L55" target="_blank"><Icon icon="github" style="width: 14px; height: 14px;" /></a></sup>
+
+
+Error in resource operations.
+
+
+### `ToolError` <sup><a href="https://github.com/PrefectHQ/fastmcp/blob/main/fastmcp_slim/fastmcp/exceptions.py#L59" target="_blank"><Icon icon="github" style="width: 14px; height: 14px;" /></a></sup>
+
+
+Error in tool operations.
+
+
+### `PromptError` <sup><a href="https://github.com/PrefectHQ/fastmcp/blob/main/fastmcp_slim/fastmcp/exceptions.py#L63" target="_blank"><Icon icon="github" style="width: 14px; height: 14px;" /></a></sup>
+
+
+Error in prompt operations.
+
+
+### `InvalidSignature` <sup><a href="https://github.com/PrefectHQ/fastmcp/blob/main/fastmcp_slim/fastmcp/exceptions.py#L67" target="_blank"><Icon icon="github" style="width: 14px; height: 14px;" /></a></sup>
+
+
+Invalid signature for use with FastMCP.
+
+
+### `ClientError` <sup><a href="https://github.com/PrefectHQ/fastmcp/blob/main/fastmcp_slim/fastmcp/exceptions.py#L71" target="_blank"><Icon icon="github" style="width: 14px; height: 14px;" /></a></sup>
+
+
+Error in client operations.
+
+
+### `NotFoundError` <sup><a href="https://github.com/PrefectHQ/fastmcp/blob/main/fastmcp_slim/fastmcp/exceptions.py#L75" target="_blank"><Icon icon="github" style="width: 14px; height: 14px;" /></a></sup>
+
+
+Object not found.
+
+
+### `DisabledError` <sup><a href="https://github.com/PrefectHQ/fastmcp/blob/main/fastmcp_slim/fastmcp/exceptions.py#L79" target="_blank"><Icon icon="github" style="width: 14px; height: 14px;" /></a></sup>
+
+
+Object is disabled.
+
+
+### `ResourceSecurityError` <sup><a href="https://github.com/PrefectHQ/fastmcp/blob/main/fastmcp_slim/fastmcp/exceptions.py#L83" target="_blank"><Icon icon="github" style="width: 14px; height: 14px;" /></a></sup>
+
+
+A templated resource parameter failed path-security screening.
+
+Subclasses ``NotFoundError`` so the read handler surfaces a
+non-leaky ``INVALID_PARAMS`` (-32602) "resource not found" error to
+the client — a traversal attempt is indistinguishable from a request
+for a resource that does not exist, and never reveals which parameter
+or policy tripped.
+
+
+### `AuthorizationError` <sup><a href="https://github.com/PrefectHQ/fastmcp/blob/main/fastmcp_slim/fastmcp/exceptions.py#L94" target="_blank"><Icon icon="github" style="width: 14px; height: 14px;" /></a></sup>
+
+
+Error when authorization check fails.
+
+
+### `InsufficientScopeError` <sup><a href="https://github.com/PrefectHQ/fastmcp/blob/main/fastmcp_slim/fastmcp/exceptions.py#L98" target="_blank"><Icon icon="github" style="width: 14px; height: 14px;" /></a></sup>
+
+
+Authorization failed because the token is missing required OAuth scopes.
+
+Unlike a bare ``AuthorizationError``, this carries the specific scopes the
+caller must obtain. A component-level scope shortfall can then be signalled
+as a spec-correct ``insufficient_scope`` step-up (SEP-2350 / RFC 6750 §3),
+naming exactly what to re-authorize for instead of an opaque denial. The
+named scopes are only the *unmet* ones, so an existing grant is accumulated
+rather than replaced when the caller re-authorizes.
+
