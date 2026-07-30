@@ -1,92 +1,12 @@
 [
   {
-    "framework": "opentelemetry-python",
-    "display_name": "OpenTelemetry Python",
-    "category": "observability",
-    "source_repo": "https://github.com/open-telemetry/opentelemetry.io.git",
-    "source_branch": "main",
-    "source_docs_path": "content/en/docs/languages/python",
-    "include_globs": ["**/*.md", "**/*.mdx"],
-    "exclude_globs": ["_includes/**"]
-  },
-  {
-    "framework": "opentelemetry-js",
-    "display_name": "OpenTelemetry JS",
-    "category": "observability",
-    "source_repo": "https://github.com/open-telemetry/opentelemetry.io.git",
-    "source_branch": "main",
-    "source_docs_path": "content/en/docs/languages/js",
-    "include_globs": ["**/*.md", "**/*.mdx"],
-    "exclude_globs": ["_includes/**"]
-  },
-  {
-    "framework": "prometheus",
-    "display_name": "Prometheus",
-    "category": "observability",
-    "source_repo": "https://github.com/prometheus/docs.git",
+    "framework": "fastmcp",
+    "display_name": "FastMCP",
+    "category": "ai",
+    "source_repo": "https://github.com/PrefectHQ/fastmcp.git",
     "source_branch": "main",
     "source_docs_path": "docs",
     "include_globs": ["**/*.md", "**/*.mdx"],
-    "exclude_globs": []
-  },
-  {
-    "framework": "grafana",
-    "display_name": "Grafana",
-    "category": "observability",
-    "source_repo": "https://github.com/grafana/grafana.git",
-    "source_branch": "main",
-    "source_docs_path": "docs/sources",
-    "include_globs": ["**/*.md", "**/*.mdx"],
-    "exclude_globs": ["shared/**", "whatsnew/**"]
-  },
-  {
-    "framework": "sentry-python",
-    "display_name": "Sentry Python",
-    "category": "observability",
-    "source_repo": "https://github.com/getsentry/sentry-docs.git",
-    "source_branch": "master",
-    "source_docs_path": "docs/platforms/python",
-    "include_globs": ["**/*.md", "**/*.mdx"],
-    "exclude_globs": []
-  },
-  {
-    "framework": "sentry-javascript",
-    "display_name": "Sentry JavaScript (React)",
-    "category": "observability",
-    "source_repo": "https://github.com/getsentry/sentry-docs.git",
-    "source_branch": "master",
-    "source_docs_path": "docs/platforms/javascript/guides/react",
-    "include_globs": ["**/*.md", "**/*.mdx"],
-    "exclude_globs": []
-  },
-  {
-    "framework": "helicone",
-    "display_name": "Helicone",
-    "category": "observability",
-    "source_repo": "https://github.com/Helicone/helicone.git",
-    "source_branch": "main",
-    "source_docs_path": "docs",
-    "include_globs": ["**/*.md", "**/*.mdx"],
-    "exclude_globs": ["images/**", "snippets/**"]
-  },
-  {
-    "framework": "phoenix",
-    "display_name": "Arize Phoenix",
-    "category": "observability",
-    "source_repo": "https://github.com/Arize-ai/phoenix.git",
-    "source_branch": "main",
-    "source_docs_path": "docs/phoenix",
-    "include_globs": ["**/*.md", "**/*.mdx"],
-    "exclude_globs": ["snippets/**"]
-  },
-  {
-    "framework": "langsmith",
-    "display_name": "LangSmith",
-    "category": "observability",
-    "source_repo": "https://github.com/langchain-ai/docs.git",
-    "source_branch": "main",
-    "source_docs_path": "src/langsmith",
-    "include_globs": ["**/*.md", "**/*.mdx"],
-    "exclude_globs": ["snippets/**"]
+    "exclude_globs": ["snippets/**", "public/**", "css/**"]
   }
 ]

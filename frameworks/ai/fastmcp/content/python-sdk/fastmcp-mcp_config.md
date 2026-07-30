@@ -1,0 +1,199 @@
+---
+type: "Framework Learn Page"
+framework: "FastMCP"
+source_repo: "https://github.com/PrefectHQ/fastmcp.git"
+source_branch: "main"
+source_path: "docs/python-sdk/fastmcp-mcp_config.mdx"
+source_commit: "44c0907dda78618f882b08de26e31c4428bd74b8"
+source_commit_short: "44c0907"
+source_commit_date: "2026-07-29T10:22:17-05:00"
+generated_at: "2026-07-30T03:45:36.545336Z"
+---
+---
+title: mcp_config
+sidebarTitle: mcp_config
+---
+
+# `fastmcp.mcp_config`
+
+
+Canonical MCP Configuration Format.
+
+This module defines the standard configuration format for Model Context Protocol (MCP) servers.
+It provides a client-agnostic, extensible format that can be used across all MCP implementations.
+
+The configuration format supports both stdio and remote (HTTP/SSE) transports, with comprehensive
+field definitions for server metadata, authentication, and execution parameters.
+
+Example configuration:
+```json
+{
+    "mcpServers": {
+        "my-server": {
+            "command": "npx",
+            "args": ["-y", "@my/mcp-server"],
+            "env": {"API_KEY": "secret"},
+            "timeout": 30000,
+            "description": "My MCP server"
+        }
+    }
+}
+```
+
+
+## Functions
+
+### `infer_transport_type_from_url` <sup><a href="https://github.com/PrefectHQ/fastmcp/blob/main/fastmcp_slim/fastmcp/mcp_config.py#L54" target="_blank"><Icon icon="github" style="width: 14px; height: 14px;" /></a></sup>
+
+```python
+infer_transport_type_from_url(url: str | AnyUrl) -> Literal['http', 'sse']
+```
+
+
+Infer the appropriate transport type from the given URL.
+
+
+### `update_config_file` <sup><a href="https://github.com/PrefectHQ/fastmcp/blob/main/fastmcp_slim/fastmcp/mcp_config.py#L373" target="_blank"><Icon icon="github" style="width: 14px; height: 14px;" /></a></sup>
+
+```python
+update_config_file(file_path: Path, server_name: str, server_config: CanonicalMCPServerTypes) -> None
+```
+
+
+Update an MCP configuration file from a server object, preserving existing fields.
+
+This is used for updating the mcpServer configurations of third-party tools so we do not
+worry about transforming server objects here.
+
+
+## Classes
+
+### `StdioMCPServer` <sup><a href="https://github.com/PrefectHQ/fastmcp/blob/main/fastmcp_slim/fastmcp/mcp_config.py#L179" target="_blank"><Icon icon="github" style="width: 14px; height: 14px;" /></a></sup>
+
+
+MCP server configuration for stdio transport.
+
+This is the canonical configuration format for MCP servers using stdio transport.
+
+
+**Methods:**
+
+#### `to_transport` <sup><a href="https://github.com/PrefectHQ/fastmcp/blob/main/fastmcp_slim/fastmcp/mcp_config.py#L212" target="_blank"><Icon icon="github" style="width: 14px; height: 14px;" /></a></sup>
+
+```python
+to_transport(self) -> StdioTransport
+```
+
+### `TransformingStdioMCPServer` <sup><a href="https://github.com/PrefectHQ/fastmcp/blob/main/fastmcp_slim/fastmcp/mcp_config.py#L224" target="_blank"><Icon icon="github" style="width: 14px; height: 14px;" /></a></sup>
+
+
+A Stdio server with tool transforms.
+
+
+### `RemoteMCPServer` <sup><a href="https://github.com/PrefectHQ/fastmcp/blob/main/fastmcp_slim/fastmcp/mcp_config.py#L228" target="_blank"><Icon icon="github" style="width: 14px; height: 14px;" /></a></sup>
+
+
+MCP server configuration for HTTP/SSE transport.
+
+This is the canonical configuration format for MCP servers using remote transports.
+
+
+**Methods:**
+
+#### `to_transport` <sup><a href="https://github.com/PrefectHQ/fastmcp/blob/main/fastmcp_slim/fastmcp/mcp_config.py#L264" target="_blank"><Icon icon="github" style="width: 14px; height: 14px;" /></a></sup>
+
+```python
+to_transport(self) -> StreamableHttpTransport | SSETransport
+```
+
+### `TransformingRemoteMCPServer` <sup><a href="https://github.com/PrefectHQ/fastmcp/blob/main/fastmcp_slim/fastmcp/mcp_config.py#L291" target="_blank"><Icon icon="github" style="width: 14px; height: 14px;" /></a></sup>
+
+
+A Remote server with tool transforms.
+
+
+### `MCPConfig` <sup><a href="https://github.com/PrefectHQ/fastmcp/blob/main/fastmcp_slim/fastmcp/mcp_config.py#L302" target="_blank"><Icon icon="github" style="width: 14px; height: 14px;" /></a></sup>
+
+
+A configuration object for MCP Servers that conforms to the canonical MCP configuration format
+while adding additional fields for enabling FastMCP-specific features like tool transformations
+and filtering by tags.
+
+For an MCPConfig that is strictly canonical, see the `CanonicalMCPConfig` class.
+
+
+**Methods:**
+
+#### `wrap_servers_at_root` <sup><a href="https://github.com/PrefectHQ/fastmcp/blob/main/fastmcp_slim/fastmcp/mcp_config.py#L316" target="_blank"><Icon icon="github" style="width: 14px; height: 14px;" /></a></sup>
+
+```python
+wrap_servers_at_root(cls, values: dict[str, Any]) -> dict[str, Any]
+```
+
+If there's no mcpServers key but there are server configs at root, wrap them.
+
+
+#### `add_server` <sup><a href="https://github.com/PrefectHQ/fastmcp/blob/main/fastmcp_slim/fastmcp/mcp_config.py#L329" target="_blank"><Icon icon="github" style="width: 14px; height: 14px;" /></a></sup>
+
+```python
+add_server(self, name: str, server: MCPServerTypes) -> None
+```
+
+Add or update a server in the configuration.
+
+
+#### `from_dict` <sup><a href="https://github.com/PrefectHQ/fastmcp/blob/main/fastmcp_slim/fastmcp/mcp_config.py#L334" target="_blank"><Icon icon="github" style="width: 14px; height: 14px;" /></a></sup>
+
+```python
+from_dict(cls, config: dict[str, Any]) -> Self
+```
+
+Parse MCP configuration from dictionary format.
+
+
+#### `to_dict` <sup><a href="https://github.com/PrefectHQ/fastmcp/blob/main/fastmcp_slim/fastmcp/mcp_config.py#L338" target="_blank"><Icon icon="github" style="width: 14px; height: 14px;" /></a></sup>
+
+```python
+to_dict(self) -> dict[str, Any]
+```
+
+Convert MCPConfig to dictionary format, preserving all fields.
+
+
+#### `write_to_file` <sup><a href="https://github.com/PrefectHQ/fastmcp/blob/main/fastmcp_slim/fastmcp/mcp_config.py#L342" target="_blank"><Icon icon="github" style="width: 14px; height: 14px;" /></a></sup>
+
+```python
+write_to_file(self, file_path: Path) -> None
+```
+
+Write configuration to JSON file.
+
+
+#### `from_file` <sup><a href="https://github.com/PrefectHQ/fastmcp/blob/main/fastmcp_slim/fastmcp/mcp_config.py#L348" target="_blank"><Icon icon="github" style="width: 14px; height: 14px;" /></a></sup>
+
+```python
+from_file(cls, file_path: Path) -> Self
+```
+
+Load configuration from JSON file.
+
+
+### `CanonicalMCPConfig` <sup><a href="https://github.com/PrefectHQ/fastmcp/blob/main/fastmcp_slim/fastmcp/mcp_config.py#L358" target="_blank"><Icon icon="github" style="width: 14px; height: 14px;" /></a></sup>
+
+
+Canonical MCP configuration format.
+
+This defines the standard configuration format for Model Context Protocol servers.
+The format is designed to be client-agnostic and extensible for future use cases.
+
+
+**Methods:**
+
+#### `add_server` <sup><a href="https://github.com/PrefectHQ/fastmcp/blob/main/fastmcp_slim/fastmcp/mcp_config.py#L368" target="_blank"><Icon icon="github" style="width: 14px; height: 14px;" /></a></sup>
+
+```python
+add_server(self, name: str, server: CanonicalMCPServerTypes) -> None
+```
+
+Add or update a server in the configuration.
+

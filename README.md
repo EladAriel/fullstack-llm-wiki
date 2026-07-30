@@ -4,7 +4,7 @@ Local Markdown documentation wikis for AI coding assistants.
 
 Current wikis:
 
-- `frameworks/ai/` - LangChain, LangGraph, Langfuse, Model Context Protocol, and Ragas documentation
+- `frameworks/ai/` - LangChain, LangGraph, Langfuse, FastMCP, Model Context Protocol, and Ragas documentation
 - `frameworks/ui/` - React, TanStack, Zod, shadcn/ui, and Next.js documentation
 - `frameworks/backend/` - FastAPI, Pydantic, and Redis documentation
 - `frameworks/db/` - Beanie, MongoDB, PostgreSQL, PyMongo, SQLAlchemy, and Alembic documentation

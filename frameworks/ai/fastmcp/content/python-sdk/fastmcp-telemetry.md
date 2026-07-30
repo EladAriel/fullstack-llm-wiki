@@ -1,0 +1,165 @@
+---
+type: "Framework Learn Page"
+framework: "FastMCP"
+source_repo: "https://github.com/PrefectHQ/fastmcp.git"
+source_branch: "main"
+source_path: "docs/python-sdk/fastmcp-telemetry.mdx"
+source_commit: "44c0907dda78618f882b08de26e31c4428bd74b8"
+source_commit_short: "44c0907"
+source_commit_date: "2026-07-29T10:22:17-05:00"
+generated_at: "2026-07-30T03:45:36.542808Z"
+---
+---
+title: telemetry
+sidebarTitle: telemetry
+---
+
+# `fastmcp.telemetry`
+
+
+OpenTelemetry instrumentation for FastMCP.
+
+This module provides native OpenTelemetry integration for FastMCP servers and clients.
+It uses only the opentelemetry-api package, so telemetry is a no-op unless the user
+installs an OpenTelemetry SDK and configures exporters.
+
+Example usage with SDK:
+    ```python
+    from opentelemetry import trace
+    from opentelemetry.sdk.trace import TracerProvider
+    from opentelemetry.sdk.trace.export import ConsoleSpanExporter, SimpleSpanProcessor
+
+    # Configure the SDK (user responsibility)
+    provider = TracerProvider()
+    provider.add_span_processor(SimpleSpanProcessor(ConsoleSpanExporter()))
+    trace.set_tracer_provider(provider)
+
+    # Now FastMCP will emit traces
+    from fastmcp import FastMCP
+    mcp = FastMCP("my-server")
+    ```
+
+
+## Functions
+
+### `get_tracer` <sup><a href="https://github.com/PrefectHQ/fastmcp/blob/main/fastmcp_slim/fastmcp/telemetry.py#L81" target="_blank"><Icon icon="github" style="width: 14px; height: 14px;" /></a></sup>
+
+```python
+get_tracer(version: str | None = None) -> Tracer
+```
+
+
+Get the FastMCP tracer for creating spans.
+
+Instrumentation is on by default. FastMCP uses only the OpenTelemetry API,
+so span creation is a no-op with negligible overhead unless an OpenTelemetry
+SDK and exporter are configured. Set `fastmcp.settings.enable_telemetry` to
+False (env `FASTMCP_ENABLE_TELEMETRY=false`) to turn instrumentation off
+entirely, in which case this returns a pass-through tracer that leaves the
+current OTel context untouched even when an SDK is configured.
+
+**Args:**
+- `version`: Optional version string for the instrumentation
+
+**Returns:**
+- A tracer instance. Returns a non-attaching pass-through tracer if
+- telemetry is disabled; span creation is otherwise a no-op unless an SDK
+- is configured.
+
+
+### `inject_trace_context` <sup><a href="https://github.com/PrefectHQ/fastmcp/blob/main/fastmcp_slim/fastmcp/telemetry.py#L106" target="_blank"><Icon icon="github" style="width: 14px; height: 14px;" /></a></sup>
+
+```python
+inject_trace_context(meta: dict[str, Any] | None = None) -> dict[str, Any] | None
+```
+
+
+Inject current trace context into a meta dict for MCP request propagation.
+
+**Args:**
+- `meta`: Optional existing meta dict to merge with trace context
+
+**Returns:**
+- A new dict containing the original meta (if any) plus trace context keys,
+- or None if no trace context to inject and meta was None
+
+
+### `record_span_error` <sup><a href="https://github.com/PrefectHQ/fastmcp/blob/main/fastmcp_slim/fastmcp/telemetry.py#L132" target="_blank"><Icon icon="github" style="width: 14px; height: 14px;" /></a></sup>
+
+```python
+record_span_error(span: Span, exception: BaseException) -> None
+```
+
+
+Record an exception on a span and set error status.
+
+
+### `restore_dropped_attributes` <sup><a href="https://github.com/PrefectHQ/fastmcp/blob/main/fastmcp_slim/fastmcp/telemetry.py#L158" target="_blank"><Icon icon="github" style="width: 14px; height: 14px;" /></a></sup>
+
+```python
+restore_dropped_attributes(span: Span, attrs: Mapping[str, otel_types.AttributeValue]) -> None
+```
+
+
+Restore FastMCP attributes a non-forwarding sampler dropped entirely.
+
+`Tracer.start_span` builds the span from `SamplingResult.attributes`, not
+the `attributes=` kwarg it was given for creation — a custom `Sampler`
+whose `SamplingResult.attributes` defaults to `None` silently discards
+every attribute FastMCP passed at creation time. Call this immediately
+after span creation to recover from that case.
+
+The restore only fires when the span has *no* attributes at all AND the
+SDK hasn't evicted anything (`dropped_attributes == 0`):
+
+- A bare, non-forwarding sampler (the regression this exists to fix)
+  leaves the span with an empty attribute mapping, so everything is
+  restored.
+- A sampler that supplied any attributes of its own — whether by
+  forwarding ours untouched, redacting or replacing some of our values,
+  or substituting its own attributes entirely (e.g. to strip component
+  names or resource URIs for privacy or cardinality control) — leaves
+  the span non-empty, so it is left alone entirely. This is what makes
+  the gate precise: a sampler that deliberately supplies only its own
+  attributes must not have them clobbered by a restore that assumes
+  "no FastMCP keys" means "sampler forwarding failed."
+- A sampler that forwards most of our attributes but deliberately drops
+  one is still non-empty, so it's covered by the same "leave alone"
+  branch — a dropped key here is indistinguishable from the SDK's
+  bounded attribute map evicting it, and reinserting it would just push
+  the map's bound and evict a *different* retained key, churning which
+  attributes survive without changing how many are lost. No attempt is
+  made to restore individual missing keys; the gate is all-or-nothing.
+- A low `OTEL_SPAN_ATTRIBUTE_COUNT_LIMIT` that evicts every attribute a
+  forwarding sampler passed through is indistinguishable, from the
+  span's attribute state alone, from a bare non-forwarding sampler —
+  both leave an empty mapping. `dropped_attributes == 0` is what tells
+  them apart: eviction always increments it, so that case is correctly
+  excluded from the restore and the SDK's bounded map is left as
+  computed.
+
+Callers are expected to guard this with `if span.is_recording():`; it
+does no work worth skipping for non-recording spans, but the check is
+kept at call sites so it reads alongside the sibling `is_recording()`
+guards already in those functions.
+
+
+### `extract_trace_context` <sup><a href="https://github.com/PrefectHQ/fastmcp/blob/main/fastmcp_slim/fastmcp/telemetry.py#L212" target="_blank"><Icon icon="github" style="width: 14px; height: 14px;" /></a></sup>
+
+```python
+extract_trace_context(meta: dict[str, Any] | None) -> Context
+```
+
+
+Extract trace context from an MCP request meta dict.
+
+If already in a valid trace (e.g., from HTTP propagation), the existing
+trace context is preserved and meta is not used.
+
+**Args:**
+- `meta`: The meta dict from an MCP request (ctx.request_context.meta)
+
+**Returns:**
+- An OpenTelemetry Context with the extracted trace context,
+- or the current context if no trace context found or already in a trace
+

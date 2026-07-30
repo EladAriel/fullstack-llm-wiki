@@ -7,6 +7,7 @@ Local Markdown documentation wikis grouped by category.
 - [LangChain](ai/langchain/index.md)
 - [LangGraph](ai/langgraph/index.md)
 - [Langfuse](ai/langfuse/index.md)
+- [FastMCP](ai/fastmcp/index.md)
 - [Model Context Protocol](ai/modelcontextprotocol/index.md)
 - [Ragas](ai/ragas/index.md)
 
