@@ -1,0 +1,27 @@
+---
+type: "Framework Learn Page"
+framework: "Pydantic AI"
+source_repo: "https://github.com/pydantic/pydantic-ai.git"
+source_branch: "main"
+source_path: "docs/capabilities/tool-search.md"
+source_commit: "bf2c7315ecc26d446b872c544bb501a01066b4e2"
+source_commit_short: "bf2c731"
+source_commit_date: "2026-08-01T09:04:12+00:00"
+generated_at: "2026-08-01T12:41:00.864173Z"
+---
+# Tool Search
+
+The [`ToolSearch`][pydantic_ai.capabilities.ToolSearch] [capability](overview.md) handles model-driven discovery of tools marked with `defer_loading=True`, so agents with large toolsets only pay tokens for the tools the model needs. Like the [provider-adaptive tools](overview.md#provider-adaptive-tools) above, it picks the best path for the active model — native server-executed search on Anthropic and OpenAI Responses, a local `search_tools` function tool elsewhere — and is auto-injected into every agent with zero overhead when no deferred tools exist. Deferred [on-demand capabilities](on-demand.md) are application-revealed through `load_capability`; when all deferred tools are capability-owned, Anthropic does not advertise a tool-search surface.
+
+Pass an explicit [`ToolSearch`][pydantic_ai.capabilities.ToolSearch] to pick a specific [`strategy`][pydantic_ai.capabilities.ToolSearch.strategy] (`'keywords'`, `'bm25'`, `'regex'`, or a custom callable) or tune the local fallback:
+
+```python {title="tool_search_capability.py"}
+from pydantic_ai import Agent
+from pydantic_ai.capabilities import ToolSearch
+
+agent = Agent('anthropic:claude-sonnet-4-6', capabilities=[ToolSearch(strategy='keywords')])
+```
+
+When the local `search_tools` function tool is used, its retry budget follows the agent's tool budget — so `Agent(retries={'tools': N})` gives the model `N` attempts to correct a malformed `queries` argument, on the same [precedence ladder](../tools-advanced.md#which-retry-limit-wins) as any other tool. A search that finds no matches returns normally and never spends a retry.
+
+See [Tool Search](../tools-advanced.md#tool-search) for when to reach for it, the full strategy table, and provider support details.

@@ -1,12 +1,19 @@
 [
   {
-    "framework": "fastmcp",
-    "display_name": "FastMCP",
+    "framework": "pydantic-ai",
+    "display_name": "Pydantic AI",
     "category": "ai",
-    "source_repo": "https://github.com/PrefectHQ/fastmcp.git",
+    "source_repo": "https://github.com/pydantic/pydantic-ai.git",
     "source_branch": "main",
     "source_docs_path": "docs",
     "include_globs": ["**/*.md", "**/*.mdx"],
-    "exclude_globs": ["snippets/**", "public/**", "css/**"]
+    "exclude_globs": [
+      ".cursor/**",
+      ".hooks/**",
+      ".overrides/**",
+      ".partials/**",
+      "img/**",
+      "javascripts/**"
+    ]
   }
 ]
