@@ -1,0 +1,103 @@
+---
+type: "Framework Learn Page"
+framework: "Pydantic AI"
+source_repo: "https://github.com/pydantic/pydantic-ai.git"
+source_branch: "main"
+source_path: "docs/models/cohere.md"
+source_commit: "bf2c7315ecc26d446b872c544bb501a01066b4e2"
+source_commit_short: "bf2c731"
+source_commit_date: "2026-08-01T09:04:12+00:00"
+generated_at: "2026-08-01T12:41:00.859589Z"
+---
+# Cohere
+
+## Install
+
+To use `CohereModel`, you need to either install `pydantic-ai`, or install `pydantic-ai-slim` with the `cohere` optional group:
+
+```bash
+pip/uv-add "pydantic-ai-slim[cohere]"
+```
+
+## Configuration
+
+To use [Cohere](https://cohere.com/) through their API, go to [dashboard.cohere.com/api-keys](https://dashboard.cohere.com/api-keys) and follow your nose until you find the place to generate an API key.
+
+`CohereModelName` contains a list of the most popular Cohere models.
+
+## Environment variable
+
+Once you have the API key, you can set it as an environment variable:
+
+```bash
+export CO_API_KEY='your-api-key'
+```
+
+You can then use `CohereModel` by name:
+
+```python
+from pydantic_ai import Agent
+
+agent = Agent('cohere:command-r7b-12-2024')
+...
+```
+
+Or initialise the model directly with just the model name:
+
+```python
+from pydantic_ai import Agent
+from pydantic_ai.models.cohere import CohereModel
+
+model = CohereModel('command-r7b-12-2024')
+agent = Agent(model)
+...
+```
+
+## `provider` argument
+
+You can provide a custom `Provider` via the `provider` argument:
+
+```python
+from pydantic_ai import Agent
+from pydantic_ai.models.cohere import CohereModel
+from pydantic_ai.providers.cohere import CohereProvider
+
+model = CohereModel('command-r7b-12-2024', provider=CohereProvider(api_key='your-api-key'))
+agent = Agent(model)
+...
+```
+
+You can also customize the `CohereProvider` with a custom `http_client`:
+
+```python
+from httpx import AsyncClient
+
+from pydantic_ai import Agent
+from pydantic_ai.models.cohere import CohereModel
+from pydantic_ai.providers.cohere import CohereProvider
+
+custom_http_client = AsyncClient(timeout=30)
+model = CohereModel(
+    'command-r7b-12-2024',
+    provider=CohereProvider(api_key='your-api-key', http_client=custom_http_client),
+)
+agent = Agent(model)
+...
+```
+
+## Model settings
+
+You can customize model behavior using [`CohereModelSettings`][pydantic_ai.models.cohere.CohereModelSettings]:
+
+```python
+from pydantic_ai import Agent
+from pydantic_ai.models.cohere import CohereModel, CohereModelSettings
+
+model = CohereModel('command-r7b-12-2024')
+settings = CohereModelSettings(
+    temperature=0.2,
+    top_k=40,
+)
+agent = Agent(model, model_settings=settings)
+...
+```

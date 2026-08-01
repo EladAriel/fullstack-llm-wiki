@@ -10,6 +10,7 @@ Local Markdown documentation wikis grouped by category.
 - [FastMCP](ai/fastmcp/index.md)
 - [Model Context Protocol](ai/modelcontextprotocol/index.md)
 - [Ragas](ai/ragas/index.md)
+- [Pydantic AI](ai/pydantic-ai/index.md)
 
 ## UI
 
