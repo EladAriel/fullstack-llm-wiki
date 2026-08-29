@@ -1,95 +1,120 @@
 ---
 type: "Framework Learn Page"
-framework: "mongodb"
+framework: "MongoDB"
 source_repo: "https://github.com/mongodb/docs.git"
 source_branch: "main"
 source_path: "content/manual/manual/source/core/indexes/index-types/index-multikey/create-multikey-index-basic.txt"
-source_commit: "ab9db26ed3d11618cdb61516d8180337d8e3f679"
-source_commit_short: "ab9db26e"
-source_commit_date: "2026-07-24T16:22:46-06:00"
-generated_at: "2026-07-25T11:51:15Z"
+source_commit: "b9f2bc487a2878b65e3c1f80024bebab76954f27"
+source_commit_short: "b9f2bc48"
+source_commit_date: "2026-08-28T17:09:45-05:00"
+generated_at: "2026-08-29T09:39:19.837436Z"
 ---
-
-=================================
+.. _index-create-multikey-basic:
+.. _index-create-multikey:
+.. _index-create-multikey-scalar:
 
 # Create an Index on an Array Field
 
-You can create an index on a field containing an array value to improve performance for queries on that field. When you create an index on a field containing an array value, MongoDB stores that index as a multikey index.
+**meta:** :description: Create a multikey index on an array field to enhance query performance for documents with array values.
 
-To create an index, use the :method:`db.collection.createIndex()` method. Your operation should resemble this prototype:
+.. default-domain:: mongodb
 
-```javascript
-db.<collection>.createIndex( { <field>: <sortOrder> } )
-```
+**contents:** On this page
+   :local:
+   :backlinks: none
+   :depth: 2
+   :class: singlecol
+
+You can create an index on a field containing an array value to improve
+performance for queries on that field. When you create an index on a
+field containing an array value, MongoDB stores that index as a multikey
+index.
+
+To create an index, use the :method:`db.collection.createIndex()`
+method. Your operation should resemble this prototype:
+
+.. code-block:: javascript
+
+   db.<collection>.createIndex( { <field>: <sortOrder> } )
 
 ## About this Task
 
-The example on this page uses a `students` collection that contains these documents:
+The example on this page uses a ``students`` collection that contains
+these documents:
 
-```javascript
-db.students.insertMany( [
-   {
-      "name": "Andre Robinson",
-      "test_scores": [ 88, 97 ]
-   },
-   {
-      "name": "Wei Zhang",
-      "test_scores": [ 62, 73 ]
-   },
-   {
-      "name": "Jacob Meyer",
-      "test_scores": [ 92, 89 ]
-   }
-] )
-```
+.. code-block:: javascript
 
-You regularly run a query that returns students with at least one `test_score` greater than `90`. You can create an index on the `test_scores` field to improve performance for this query.
+   db.students.insertMany( [
+      {
+         "name": "Andre Robinson",
+         "test_scores": [ 88, 97 ]
+      },
+      {
+         "name": "Wei Zhang",
+         "test_scores": [ 62, 73 ]
+      },
+      {
+         "name": "Jacob Meyer",
+         "test_scores": [ 92, 89 ]
+      }
+   ] )
+
+You regularly run a query that returns students with at least one
+``test_score`` greater than ``90``. You can create an index on the
+``test_scores`` field to improve performance for this query.
 
 ## Procedure
 
-The following operation creates an ascending multikey index on the `test_scores` field of the `students` collection:
+The following operation creates an ascending multikey index on the
+``test_scores`` field of the ``students`` collection:
 
-```javascript
-db.students.createIndex( { test_scores: 1 } )
-```
+.. code-block:: javascript
 
-Because `test_scores` contains an array value, MongoDB stores this index as a multikey index.
+   db.students.createIndex( { test_scores: 1 } )
+
+Because ``test_scores`` contains an array value, MongoDB stores this
+index as a multikey index.
 
 ## Results
 
-The index contains a key for each individual value that appears in the `test_scores` field. The index is ascending, meaning the keys are stored in this order: `[ 62, 73, 88, 89, 92, 97 ]`.
+The index contains a key for each individual value that appears in the
+``test_scores`` field. The index is ascending, meaning the keys are
+stored in this order: ``[ 62, 73, 88, 89, 92, 97 ]``.
 
-The index supports queries that select on the `test_scores` field. For example, the following query returns documents where at least one element in the `test_scores` array is greater than 90:
+The index supports queries that select on the ``test_scores`` field. For
+example, the following query returns documents where at least one
+element in the ``test_scores`` array is greater than 90:
 
-```javascript
-db.students.find(
-   {
-      test_scores: { $elemMatch: { $gt: 90 } }
-   }
-)
-```
+.. code-block:: javascript
+
+   db.students.find(
+      {
+         test_scores: { $elemMatch: { $gt: 90 } }
+      }
+   )
 
 Output:
 
-```javascript
-[
-   {
-      _id: ObjectId("632240a20646eaee87a56a80"),
-      name: 'Andre Robinson',
-      test_scores: [ 88, 97 ]
-   },
-   {
-      _id: ObjectId("632240a20646eaee87a56a82"),
-      name: 'Jacob Meyer',
-      test_scores: [ 92, 89 ]
-   }
-]
-```
+.. code-block:: javascript
+   :copyable: false
+
+   [
+      {
+         _id: ObjectId("632240a20646eaee87a56a80"),
+         name: 'Andre Robinson',
+         test_scores: [ 88, 97 ]
+      },
+      {
+         _id: ObjectId("632240a20646eaee87a56a82"),
+         name: 'Jacob Meyer',
+         test_scores: [ 92, 89 ]
+      }
+   ]
 
 ## Learn More
 
 - To learn how to create a multikey index on embedded document fields,
-see `index-create-multikey-embedded`.
+  see :ref:`index-create-multikey-embedded`.
 
 - To learn about multikey index bounds, see
-`indexes-multikey-bounds`.
+  :ref:`indexes-multikey-bounds`.

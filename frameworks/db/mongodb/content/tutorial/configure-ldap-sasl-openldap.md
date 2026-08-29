@@ -1,37 +1,51 @@
 ---
 type: "Framework Learn Page"
-framework: "mongodb"
+framework: "MongoDB"
 source_repo: "https://github.com/mongodb/docs.git"
 source_branch: "main"
 source_path: "content/manual/manual/source/tutorial/configure-ldap-sasl-openldap.txt"
-source_commit: "ab9db26ed3d11618cdb61516d8180337d8e3f679"
-source_commit_short: "ab9db26e"
-source_commit_date: "2026-07-24T16:22:46-06:00"
-generated_at: "2026-07-25T11:51:15Z"
+source_commit: "b9f2bc487a2878b65e3c1f80024bebab76954f27"
+source_commit_short: "b9f2bc48"
+source_commit_date: "2026-08-28T17:09:45-05:00"
+generated_at: "2026-08-29T09:39:19.631171Z"
 ---
-
-===========================================================
-
 # Authenticate Using Self-Managed SASL and LDAP with OpenLDAP
 
-.. include:: /includes/LDAP-deprecated.rst
+.. default-domain:: mongodb
 
-MongoDB Enterprise provides support for proxy authentication of users. This allows administrators to configure a MongoDB cluster to authenticate users by proxying authentication requests to a specified Lightweight Directory Access Protocol (LDAP) service.
+**meta:** :keywords: on-prem
+   :description: Configure SASL and LDAP with OpenLDAP for proxy authentication in MongoDB, including setting up `saslauthd` and MongoDB server options.
+                    
+**contents:** On this page
+   :local:
+   :backlinks: none
+   :depth: 1
+   :class: singlecol
 
-> **Note:** .. include:: /includes/extracts/4.2-changes-libldap.rst
+**include:** /includes/LDAP-deprecated.rst
+   
+MongoDB Enterprise provides support for proxy authentication of users.
+This allows administrators to configure a MongoDB cluster to
+authenticate users by proxying authentication requests to a specified
+Lightweight Directory Access Protocol (LDAP) service.
+
+**note:** .. include:: /includes/extracts/4.2-changes-libldap.rst
 
 ## Considerations
 
-> **Warning:** .. include:: /includes/admonition-mongodb-enterprise-windows-ldap.rst
+**warning:** .. include:: /includes/admonition-mongodb-enterprise-windows-ldap.rst
 
-.. include:: /includes/admonition-saslauthd-ldap-considerations.rst
+**include:** /includes/admonition-saslauthd-ldap-considerations.rst
 
-## Configure `saslauthd`
+## Configure ``saslauthd``
 
-LDAP support for user authentication requires proper configuration of the `saslauthd` daemon process as well as the MongoDB server.
+LDAP support for user authentication requires proper configuration of
+the ``saslauthd`` daemon process as well as the MongoDB server.
 
-.. include:: /includes/steps/configure-ldap-saslauthd-openldap.rst
+**include:** /includes/steps/configure-ldap-saslauthd-openldap.rst
+
+.. _configure-mongodb-auth-users-openldap:
 
 ## Configure MongoDB
 
-.. include:: /includes/steps/configure-ldap-mongodb.rst
+**include:** /includes/steps/configure-ldap-mongodb.rst

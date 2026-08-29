@@ -1,31 +1,34 @@
 ---
 type: "Framework Learn Page"
-framework: "sqlalchemy"
+framework: "SQLAlchemy"
 source_repo: "https://github.com/sqlalchemy/sqlalchemy"
 source_branch: "main"
 source_path: "doc/build/contents.rst"
-source_commit: "aa1a5575358d3aa14953b04dced02f4763fed2e7"
-source_commit_short: "aa1a5575"
-source_commit_date: "2026-07-23T18:02:59Z"
-generated_at: "2026-07-25T11:50:45Z"
+source_commit: "85cafd1a131fa8afeeeab23151940480b3fb0042"
+source_commit_short: "85cafd1"
+source_commit_date: "2026-08-28T20:17:49+00:00"
+generated_at: "2026-08-29T09:39:27.500870Z"
 ---
+.. _contents:
 
 # Table of Contents
 
-Full table of contents.  For a high level overview of all documentation, see `index_toplevel`.
+Full table of contents.  For a high level overview of all
+documentation, see :ref:`index_toplevel`.
 
-## Contents
+**toctree:** :titlesonly:
+   :includehidden:
 
-- intro
-- tutorial/index
-- orm/index
-- core/index
-- dialects/index
-- faq/index
-- errors
-- changelog/index
+   intro
+   tutorial/index
+   orm/index
+   core/index
+   dialects/index
+   faq/index
+   errors
+   changelog/index
 
 ## Indices and tables
 
-- `glossary`
-- `genindex`
+* :ref:`glossary`
+* :ref:`genindex`

@@ -1,27 +1,31 @@
 ---
 type: "Framework Learn Page"
-framework: "tanstack"
+framework: "TanStack"
 source_repo: "https://github.com/tanstack/query"
 source_branch: "main"
 source_path: "docs/framework/preact/reference/functions/useSuspenseQuery.md"
-source_commit: "fd50fa14d283c7d6664a796f758498d1ad5bfce7"
-source_commit_short: "fd50fa14"
-source_commit_date: "2026-07-24T22:22:47+10:00"
-generated_at: "2026-07-25T11:50:41Z"
+source_commit: "2969edf32f7e0c48e2a108d84712d6e01edfde21"
+source_commit_short: "2969edf"
+source_commit_date: "2026-08-28T01:03:02+09:00"
+generated_at: "2026-08-29T09:40:33.375049Z"
 ---
+# Usesuspensequery
 
 ---
 id: useSuspenseQuery
 title: useSuspenseQuery
 ---
 
-# Function: useSuspenseQuery()
-
 ```ts
 function useSuspenseQuery<TQueryFnData, TError, TData, TQueryKey>(options, queryClient?): UseSuspenseQueryResult<TData, TError>;
 ```
 
-Defined in: [preact-query/src/useSuspenseQuery.ts:7](https://github.com/theVedanta/query/blob/main/packages/preact-query/src/useSuspenseQuery.ts#L7)
+Defined in: [preact-query/src/useSuspenseQuery.ts:55](https://github.com/TanStack/query/blob/main/packages/preact-query/src/useSuspenseQuery.ts#L55)
+
+The options for `useSuspenseQuery` are the same as for `useQuery`, except for `throwOnError`, `enabled`, and
+`placeholderData`.
+
+Caveat: cancellation does not work.
 
 ## Type Parameters
 
@@ -47,10 +51,57 @@ Defined in: [preact-query/src/useSuspenseQuery.ts:7](https://github.com/theVedan
 
 [`UseSuspenseQueryOptions`](../interfaces/UseSuspenseQueryOptions.md)\<`TQueryFnData`, `TError`, `TData`, `TQueryKey`\>
 
+The [UseSuspenseQueryOptions](../interfaces/UseSuspenseQueryOptions.md) to use — the same options as `useQuery`, minus the ones listed above.
+
 ### queryClient?
 
 `QueryClient`
 
+Use this to use a custom `QueryClient`. Otherwise, the one from the nearest context will
+be used.
+
 ## Returns
 
 [`UseSuspenseQueryResult`](../type-aliases/UseSuspenseQueryResult.md)\<`TData`, `TError`\>
+
+The same object as `useQuery`, except that `data` is guaranteed to be defined, `isPlaceholderData`
+is missing, and `status` is either `success` or `error` (with the derived flags set accordingly).
+
+## Remarks
+
+Multiple `useSuspenseQuery` calls in the same component suspend serially, causing a request
+waterfall — each one blocks rendering until it resolves, so the next doesn't even start fetching until then.
+Use [useSuspenseQueries](useSuspenseQueries.md) instead when you have more than one suspenseful query in a component, so they
+fetch in parallel.
+
+## Example
+
+```tsx
+import { Suspense } from 'preact/compat'
+import { useSuspenseQuery } from '@tanstack/preact-query'
+
+function Posts() {
+  // `data` is guaranteed to be defined here — no `isPending` check needed.
+  const { data, isFetching } = useSuspenseQuery({
+    queryKey: ['posts'],
+    queryFn: fetchPosts,
+  })
+
+  return (
+    <div>
+      <h1>Posts {isFetching ? <Spinner /> : null}</h1>
+      {data.map((post) => (
+        <p key={post.id}>{post.title}</p>
+      ))}
+    </div>
+  )
+}
+
+function App() {
+  return (
+    <Suspense fallback={<h1>Loading posts...</h1>}>
+      <Posts />
+    </Suspense>
+  )
+}
+```

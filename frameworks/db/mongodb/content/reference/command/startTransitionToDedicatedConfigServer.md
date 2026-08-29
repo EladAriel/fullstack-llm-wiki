@@ -1,63 +1,83 @@
 ---
 type: "Framework Learn Page"
-framework: "mongodb"
+framework: "MongoDB"
 source_repo: "https://github.com/mongodb/docs.git"
 source_branch: "main"
 source_path: "content/manual/manual/source/reference/command/startTransitionToDedicatedConfigServer.txt"
-source_commit: "ab9db26ed3d11618cdb61516d8180337d8e3f679"
-source_commit_short: "ab9db26e"
-source_commit_date: "2026-07-24T16:22:46-06:00"
-generated_at: "2026-07-25T11:51:15Z"
+source_commit: "b9f2bc487a2878b65e3c1f80024bebab76954f27"
+source_commit_short: "b9f2bc48"
+source_commit_date: "2026-08-28T17:09:45-05:00"
+generated_at: "2026-08-29T09:39:20.043092Z"
 ---
-
-=========================================================
-
 # startTransitionToDedicatedConfigServer (database command)
+**meta:** :description: Starts the transition from an embedded config server to a dedicated config server.
+
+.. default-domain:: mongodb
+
+**contents:** On this page
+   :local:
+   :backlinks: none
+   :depth: 1
+   :class: singlecol
 
 ## Definition
 
-.. include:: /includes/command/startTransitionToDedicatedConfigServer.rst
+**dbcommand:** startTransitionToDedicatedConfigServer
 
-When the command runs, it tells the balancer that you want to start the transition to a dedicated config server. Asynchronously, the balancer then begins moving chunks from the shard to other shards in the cluster. Once the balancer has finished this process and you have manually migrated any unsharded collections to a different shard, you can safely remove it from the cluster because it no longer contains data. See the :dbcommand:`moveCollection` command for more information.
+**include:** /includes/command/startTransitionToDedicatedConfigServer.rst
 
-> **Note:** You must enable the balancer for `startTransitionToDedicatedConfigServer`
-to move chunks off the embedded config server shard. If you disable the
-balancer, no chunks migrate and :dbcommand:`getTransitionToDedicatedConfigServerStatus`
-continues to report remaining work on the shard.
+When the command runs, it tells the balancer that you want to
+start the transition to a dedicated config server. Asynchronously,
+the balancer then begins moving chunks from the shard to other shards in the
+cluster. Once the balancer has finished this process and you have manually 
+migrated any unsharded collections to a different shard, you can safely remove 
+it from the cluster because it no longer contains data. See the
+:dbcommand:`moveCollection` command for more information. 
 
-The command returns an error if the transition fails, otherwise it returns `ok`.
+**note:** You must enable the balancer for ``startTransitionToDedicatedConfigServer``
+   to move chunks off the embedded config server shard. If you disable the 
+   balancer, no chunks migrate and :dbcommand:`getTransitionToDedicatedConfigServerStatus`
+   continues to report remaining work on the shard.
 
-To stop the in-progress transition from an embedded config server to a dedicated config server, see the :dbcommand:`stopTransitionToDedicatedConfigServer` command.
+The command returns an error if the transition fails, otherwise it returns 
+``ok``.
 
-To show the status of the transition from an embedded config server to a dedicated config server, see the :dbcommand:`getTransitionToDedicatedConfigServerStatus` command.
+To stop the in-progress transition from an embedded config server to a 
+dedicated config server, see the :dbcommand:`stopTransitionToDedicatedConfigServer` 
+command.
 
-To commit the transition from an embedded config server to a dedicated config server, see the :dbcommand:`commitTransitionToDedicatedConfigServer` command.
+To show the status of the transition from an embedded config server to a 
+dedicated config server, see the 
+:dbcommand:`getTransitionToDedicatedConfigServerStatus` command.
 
-.. versionadded:: 8.3
+To commit the transition from an embedded config server to a dedicated config 
+server, see the :dbcommand:`commitTransitionToDedicatedConfigServer` command.
+
+**versionadded:** 8.3
 
 ## Compatibility
 
-This command is available in deployments hosted in the following environments:
+This command is available in deployments hosted in the following environments: 
 
-.. include:: /includes/fact-environments-onprem-only.rst
+**include:** /includes/fact-environments-onprem-only.rst
 
-> **Note:** .. include:: /includes/fact-transaction-sharded.rst
+**note:** .. include:: /includes/fact-transaction-sharded.rst
 
 ## Syntax
 
 The command has the following syntax:
 
-```javascript
-db.adminCommand( { 
-     startTransitionToDedicatedConfigServer: 1
-} )
-```
+.. code-block:: javascript
+
+   db.adminCommand( { 
+        startTransitionToDedicatedConfigServer: 1
+   } )
 
 ## Behavior
 
 ### Access Requirements
 
-.. include:: /includes/removeShard-access-requirements.rst
+**include:** /includes/removeShard-access-requirements.rst
 
 ### No Cluster Back Ups During Shard Drain
 
@@ -65,39 +85,49 @@ You cannot back up the cluster while starting the transition.
 
 ### Database Migration Requirements
 
-.. include:: /includes/config-server-database-migration-requirements.rst
+**include:** /includes/config-server-database-migration-requirements.rst
 
 ### Collection Migration Requirements
 
-.. include:: /includes/config-server-collection-migration-requirements.rst
+**include:** /includes/config-server-collection-migration-requirements.rst
 
 ### Chunk Balancing
 
-When you transition to a dedicated config server and the cluster has an uneven chunk distribution, the balancer first removes the chunks from the draining shard and then balances the remaining uneven chunk distribution.
+When you transition to a dedicated config server and the cluster has an uneven 
+chunk distribution, the balancer first removes the chunks from the draining
+shard and then balances the remaining uneven chunk distribution.
 
-> **Seealso:** :dbcommand:`balancerCollectionStatus`
+**seealso:** :dbcommand:`balancerCollectionStatus`
 
 ### Write Concern
 
-:program:`mongos` converts the `write concern <write-concern>` of the `startTransitionToDedicatedConfigServer` command to :writeconcern:`"majority"`.
+:program:`mongos` converts the :ref:`write concern
+<write-concern>` of the ``startTransitionToDedicatedConfigServer`` command to
+:writeconcern:`"majority"`.
 
 ### Change Streams
 
-Draining the embedded config server may cause an open `change stream cursor <changeStreams>` to close, and the closed change stream cursor may not be fully resumable.
+Draining the embedded config server may cause an open :ref:`change stream cursor
+<changeStreams>` to close, and the closed change stream cursor may
+not be fully resumable.
 
 ### DDL Operations
 
-If you run `startTransitionToDedicatedConfigServer` while your cluster is executing a DDL operation (operation that modifies a collection such as :dbcommand:`reshardCollection`), the transition only executes after the concurrent DDL operation finishes.
+If you run ``startTransitionToDedicatedConfigServer`` while your cluster is
+executing a DDL operation (operation that modifies a collection
+such as :dbcommand:`reshardCollection`), the transition only
+executes after the concurrent DDL operation finishes. 
 
 ## Examples
 
-To start the transition, use the :method:`db.adminCommand` method:
+To start the transition, use the :method:`db.adminCommand`
+method:
 
-```javascript
-db.adminCommand( {
-   startTransitionToDedicatedConfigServer: 1
-} )
-```
+.. code-block:: javascript
+
+   db.adminCommand( {
+      startTransitionToDedicatedConfigServer: 1
+   } )
 
 ## Learn More
 

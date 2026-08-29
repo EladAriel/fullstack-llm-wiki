@@ -1,28 +1,42 @@
 ---
 type: "Framework Learn Page"
-framework: "mongodb"
+framework: "MongoDB"
 source_repo: "https://github.com/mongodb/docs.git"
 source_branch: "main"
 source_path: "content/manual/manual/source/reference/method/Mongo.getDBNames.txt"
-source_commit: "ab9db26ed3d11618cdb61516d8180337d8e3f679"
-source_commit_short: "ab9db26e"
-source_commit_date: "2026-07-24T16:22:46-06:00"
-generated_at: "2026-07-25T11:51:15Z"
+source_commit: "b9f2bc487a2878b65e3c1f80024bebab76954f27"
+source_commit_short: "b9f2bc48"
+source_commit_date: "2026-08-28T17:09:45-05:00"
+generated_at: "2026-08-29T09:39:19.969456Z"
 ---
-
-===================================
-
 # Mongo.getDBNames() (mongosh method)
+
+**meta:** :description: Retrieve a list of available databases using the `Mongo.getDBNames()` method, which calls the `listDatabases` command.
+
+.. default-domain:: mongodb
+
+**contents:** On this page
+   :local:
+   :backlinks: none
+   :depth: 1
+   :class: singlecol
 
 ## Description
 
+**method:** Mongo.getDBNames()
+
+   Returns a list of available databases. :method:`Mongo.getDBNames()`
+   calls the :dbcommand:`listDatabases` command.
+
+   The :method:`Mongo.getDBNames()` method doesn't take any parameters.
+
 ## Compatibility
 
-This method is available in deployments hosted in the following environments:
+This method is available in deployments hosted in the following environments: 
 
-.. include:: /includes/fact-environments-atlas-only.rst
+**include:** /includes/fact-environments-atlas-only.rst
 
-.. include:: /includes/fact-environments-onprem-only.rst
+**include:** /includes/fact-environments-onprem-only.rst
 
 ## Examples
 
@@ -30,69 +44,71 @@ This method is available in deployments hosted in the following environments:
 
 List the available databases for the current MongoDB instance:
 
-```javascript
-db.getMongo().getDBNames()
-```
+.. code-block:: javascript
 
-The :method:`db.getMongo()` method creates a connection to the instance. :method:`Mongo.getDBNames()` returns:
+   db.getMongo().getDBNames()
 
-```javascript
-[ 'admin', 'config', 'local', 'test' ]
-```
+The :method:`db.getMongo()` method creates a connection to the
+instance. :method:`Mongo.getDBNames()` returns:
+
+.. code-block:: javascript
+   :copyable: false
+
+   [ 'admin', 'config', 'local', 'test' ]
 
 ### Map Database List to Another Method
 
 Use :method:`Mongo.getDBNames()` to get a list of collections:
 
-```javascript
-db.getMongo().getDBNames().map( 
-   name => db.getSiblingDB( name ).getCollectionNames()
-)
-```
+.. code-block:: javascript
+
+   db.getMongo().getDBNames().map( 
+      name => db.getSiblingDB( name ).getCollectionNames()
+   )
 
 Example output:
 
-```javascript
-[
-   [ 'system.users', 'system.keys', 'system.version' ],
+.. code-block:: javascript
+   :copyable: false
+
    [
-     'settings',
-     'tenantMigrationRecipients',
-     'system.sessions',
-     'transactions',
-     'external_validation_keys',
-     'image_collection',
-     'tenantMigrationDonors',
-     'system.indexBuilds'
-   ],
-   [
-     'replset.minvalid',
-     'system.views',
-     'oplog.rs',
-     'replset.initialSyncId',
-     'startup_log',
-     'system.replset',
-     'system.rollback.id',
-     'replset.oplogTruncateAfterPoint',
-     'replset.election',
-     'system.tenantMigration.oplogView'
-   ],
-   [
-     'feedback',
-     'inventory',
-     'engineers',
-     'clothes'
+      [ 'system.users', 'system.keys', 'system.version' ],
+      [
+        'settings',
+        'tenantMigrationRecipients',
+        'system.sessions',
+        'transactions',
+        'external_validation_keys',
+        'image_collection',
+        'tenantMigrationDonors',
+        'system.indexBuilds'
+      ],
+      [
+        'replset.minvalid',
+        'system.views',
+        'oplog.rs',
+        'replset.initialSyncId',
+        'startup_log',
+        'system.replset',
+        'system.rollback.id',
+        'replset.oplogTruncateAfterPoint',
+        'replset.election',
+        'system.tenantMigration.oplogView'
+      ],
+      [
+        'feedback',
+        'inventory',
+        'engineers',
+        'clothes'
+      ]
    ]
-]
-```
 
 - :method:`Mongo.getDBNames()` returns a list of databases.
-- `map` defines a function that iterates over the list of databases.
-Each iteration of `map`:
+- ``map`` defines a function that iterates over the list of databases.
+  Each iteration of ``map``:
 
-- assigns a database to the `name` variable,
-- connects to the database currently stored in `name` using
-:method:`db.getSiblingDB()`,
-
-- returns the collections in the current database using
-:method:`db.getCollectionNames()`.
+  - assigns a database to the ``name`` variable,
+  - connects to the database currently stored in ``name`` using
+    :method:`db.getSiblingDB()`,
+  - returns the collections in the current database using
+    :method:`db.getCollectionNames()`.

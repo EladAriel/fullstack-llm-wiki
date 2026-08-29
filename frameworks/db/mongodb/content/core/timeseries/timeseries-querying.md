@@ -1,71 +1,117 @@
 ---
 type: "Framework Learn Page"
-framework: "mongodb"
+framework: "MongoDB"
 source_repo: "https://github.com/mongodb/docs.git"
 source_branch: "main"
 source_path: "content/manual/manual/source/core/timeseries/timeseries-querying.txt"
-source_commit: "ab9db26ed3d11618cdb61516d8180337d8e3f679"
-source_commit_short: "ab9db26e"
-source_commit_date: "2026-07-24T16:22:46-06:00"
-generated_at: "2026-07-25T11:51:15Z"
+source_commit: "b9f2bc487a2878b65e3c1f80024bebab76954f27"
+source_commit_short: "b9f2bc48"
+source_commit_date: "2026-08-28T17:09:45-05:00"
+generated_at: "2026-08-29T09:39:19.795134Z"
 ---
+**meta:** :keywords: querying
 
-===============================
+**facet:** :name: genre
+   :values: reference
+
+**facet:** :name: programming_language
+   :values: javascript/typescript
+
+
+.. _timeseries-querying:
 
 # About Querying Time Series Data
+   
+**contents:** On this page
+   :local:
+   :backlinks: none
+   :depth: 2
+   :class: singlecol
 
-MongoDB groups documents with matching `metaFields <timeseries-collections-metafield>` to optimize the storage and query latency of time series data. Your choice of `metaField` has the biggest impact on optimizing queries in your application.
+MongoDB groups documents with matching :ref:`metaFields
+<timeseries-collections-metafield>` to optimize the storage and query
+latency of time series data. Your choice of ``metaField`` has the biggest 
+impact on optimizing queries in your application.
+
 
 ## Querying the metaField
 
-You query a time series collection the same way you query a standard MongoDB collection. For an example query and example aggregation pipeline, see `timeseries-query-example`. For a list of querying best practices, see `tsc-best-practice-optimize-query-performance`.
+You query a time series collection the same way you query a standard MongoDB
+collection. For an example query and example aggregation pipeline, see
+:ref:`timeseries-query-example`. For a list of querying best practices, see 
+:ref:`tsc-best-practice-optimize-query-performance`.
 
-Queries against time series data typically focus on a single time series in the collection. For example, consider a time series collection that tracks stock data using the following schema:
+Queries against time series data typically focus on a single time series in the
+collection. For example, consider a time series collection that tracks stock
+data using the following schema:
 
-```javascript
-{
-   _id: 573a1397f29313caabce8347,
+.. code-block:: javascript
 
-   "ticker": "MDB",
-   "timestamp": ISODate("2024-07-24T13:45:00.000Z"),
-   "price": 248.21,
-   "volume": 6930
-}
-```
+   {
+      _id: 573a1397f29313caabce8347,
+
+      "ticker": "MDB",
+      "timestamp": ISODate("2024-07-24T13:45:00.000Z"),
+      "price": 248.21,
+      "volume": 6930
+   }
 
 The collection has the following settings:
 
-```javascript
-timeseries: {
-   timeField: "timestamp",
-   metaField: "ticker",
-   granularity: "seconds"
-}
-```
+.. code-block:: javascript
 
-MongoDB groups documents with matching `ticker` values. Instead of having to check for matches across all fields in all documents, the server only has to check against the `metaField`, in this case `ticker`, to narrow down the search range to a unique time series. This fits the expected use case, which is searching for activity on a single stock. A user searching for information on MongoDB stock (MDB) doesn't need to consider results for Amazon (AMZN).
+   timeseries: {
+      timeField: "timestamp",
+      metaField: "ticker",
+      granularity: "seconds"
+   }
+
+MongoDB groups documents with matching ``ticker`` values. Instead of having to
+check for matches across all fields in all documents, the server only has to
+check against the ``metaField``, in this case ``ticker``, to narrow down
+the search range to a unique time series. This fits the expected use
+case, which is searching for activity on a single stock. A user searching for
+information on MongoDB stock (MDB) doesn't need to consider results for Amazon
+(AMZN).
 
 ## Querying the timeField
 
-The second major dimension for querying time series data is time. Since MongoDB groups documents that have both an identical `metaField` value and close `timeField` values, this further narrows the scope of a query to a range of buckets. Recent transactions are kept in memory, so it's easy to stream data in real time.
+The second major dimension for querying time series data is time. Since MongoDB
+groups documents that have both an identical ``metaField`` value and close
+``timeField`` values, this further narrows the scope of a query to a range of
+buckets. Recent transactions are kept in memory, so it's easy to stream data in
+real time.
+
+.. _timeseries-querying-block-processing:
 
 ## Block Processing
 
-.. include:: /includes/fact-block-processing.rst
+**include:** /includes/fact-block-processing.rst
 
-Block processing significantly improves performance and reduces overhead for long running aggregation pipelines that begin with the following stages:
+Block processing significantly improves performance and reduces overhead
+for long running aggregation pipelines that begin with the following stages:
 
 - :pipeline:`$match`
-- :pipeline:`$sort`, if used on the `timeField`
+- :pipeline:`$sort`, if used on the ``timeField``
 - :pipeline:`$group`
-Compared to time series queries run on MongoDB 7.0 or earlier, block processing for time series data in MongoDB 8.0 may handle higher volumes of data and improve throughput in some cases by more than 200% for :pipeline:`$group` operations and analytical queries. To learn more about performance improvements in MongoDB 8.0, see `8.0-performance-improvements`.
 
-.. include:: /includes/fact-perf-improvement-vary.rst
+Compared to time series queries run on MongoDB 7.0 or earlier, block processing 
+for time series data in MongoDB 8.0 may handle higher volumes of data and 
+improve throughput in some cases by more than 200% for :pipeline:`$group` 
+operations and analytical queries. To learn more about performance improvements 
+in MongoDB 8.0, see :ref:`8.0-performance-improvements`.
 
-MongoDB automatically enables block processing for eligible time series queries. You cannot manually specify whether a query uses block processing. To see if your time series query uses block processing, see `explain.queryPlanner.winningPlan.slotBasedPlan.stages` in the explain plan output.
+**include:** /includes/fact-perf-improvement-vary.rst
 
-## Contents
+MongoDB automatically enables block processing for eligible time series queries. 
+You cannot manually specify whether a query uses block processing. To see if 
+your time series query uses block processing, see 
+:data:`~explain.queryPlanner.winningPlan.slotBasedPlan.stages` in the explain 
+plan output.
 
-- Aggregations & Operators </core/timeseries/timeseries-aggregations-operators>
-- List Time Series Collections </core/timeseries/timeseries-check-type>
-- Build Materialized Views </core/timeseries/timeseries-build-materialized-views>
+**toctree:** :titlesonly:
+
+   Aggregations & Operators </core/timeseries/timeseries-aggregations-operators>
+   List Time Series Collections </core/timeseries/timeseries-check-type>
+   Build Materialized Views </core/timeseries/timeseries-build-materialized-views>
+   

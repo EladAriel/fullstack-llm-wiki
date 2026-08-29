@@ -1,66 +1,124 @@
 ---
 type: "Framework Learn Page"
-framework: "mongodb"
+framework: "MongoDB"
 source_repo: "https://github.com/mongodb/docs.git"
 source_branch: "main"
 source_path: "content/manual/manual/source/reference/operator/query/in.txt"
-source_commit: "ab9db26ed3d11618cdb61516d8180337d8e3f679"
-source_commit_short: "ab9db26e"
-source_commit_date: "2026-07-24T16:22:46-06:00"
-generated_at: "2026-07-25T11:51:15Z"
+source_commit: "b9f2bc487a2878b65e3c1f80024bebab76954f27"
+source_commit_short: "b9f2bc48"
+source_commit_date: "2026-08-28T17:09:45-05:00"
+generated_at: "2026-08-29T09:39:20.253849Z"
 ---
-
-==============================
-
 # $in (query predicate operator)
+
+.. default-domain:: mongodb
+
+**meta:** :description: Use the $in operator to select documents where a field's value equals any value in a specified array, and also query for multiple possible values.
+
+**contents:** On this page
+   :local:
+   :backlinks: none
+   :depth: 2
+   :class: singlecol
+
+**query:** $in
+
+   The ``$in`` operator selects the documents where the value
+   of a field equals any value in the specified array.
 
 ## Compatibility
 
-.. include:: /includes/fact-compatibility.rst
+.. |operator-method| replace:: ``$in``
+
+**include:** /includes/fact-compatibility.rst
 
 ## Syntax
 
-The `$in` operator has the following form:
+The ``$in`` operator has the following form:
 
-```javascript
-{ field: { $in: [ <value1>, <value2>, ... <valueN> ] } }
-```
+.. code-block:: javascript
 
-.. include:: /includes/fact-comparison-order.rst
+   { field: { $in: [ <value1>, <value2>, ... <valueN> ] } }
 
-If `field` has an array, the `$in` operator selects the documents whose `field` has an array that contains at least one element that matches a value in the specified array. For example, `<value1>`, `<value2>`, and so on.
+**include:** /includes/fact-comparison-order.rst
 
-`$in` compares each parameter to each document in the collection, which can cause performance issues. To improve performance, create an index on the `field` you want to query. An index allows MongoDB to create bounds for each `$in` element and search more efficiently.
+If ``field`` has an array, the ``$in`` operator
+selects the documents whose ``field`` has an array that contains
+at least one element that matches a value in the specified array.
+For example, ``<value1>``, ``<value2>``, and so on.
 
-> **Note:** This document describes the `$in` query operator.
-For the `$in` aggregation operator, see
-`/reference/operator/aggregation/in`.
+``$in`` compares each parameter to each document in the
+collection, which can cause performance issues. To improve
+performance, create an index on the ``field`` you want to
+query. An index allows MongoDB to create bounds for each
+``$in`` element and search more efficiently.
+
+**note:** This document describes the ``$in`` query operator.
+   For the ``$in`` aggregation operator, see
+   :doc:`/reference/operator/aggregation/in`.
 
 ## Query Data on Atlas by Using {+fts+}
 
-.. include:: /includes/fact-atlas-search-operator.rst
+.. |search-operator| replace:: :ref:`in-ref` 
+.. |manual-operator| replace:: ``$in``
+
+**include:** /includes/fact-atlas-search-operator.rst
 
 ## Examples
-
-.. include:: /includes/sample-data-usage.rst
+**include:** /includes/sample-data-usage.rst
 
 ### Match Values
 
-This query selects documents in the `movies` collection where the value of the `rated` field is `"G"` or `"TV-G"`:
+This query selects documents in the ``movies`` collection where the
+value of the ``rated`` field is ``"G"`` or ``"TV-G"``:
 
-Although you can write the query using the :query:`$or` operator, use the `$in` operator rather than the :query:`$or` operator when performing equality checks on the same field.
+.. io-code-block:: 
+   :copyable: true
+   
+   .. input:: /code-examples/tested/command-line/mongosh/operators/in/in-find/in-find.snippet.in-find.js  
+      :language: javascript
+
+   .. output:: /code-examples/tested/command-line/mongosh/operators/in/in-find/output.sh
+
+Although you can write the query using the :query:`$or` operator,
+use the ``$in`` operator rather than the :query:`$or` operator
+when performing equality checks on the same field.
 
 ### Match Values in an Array
 
-The following :method:`~db.collection.updateMany()` operation sets the `familyFriendly` field to `true` when the `rated` array has at least one element that matches either `"G"` or `"TV-G"`:
+The following :method:`~db.collection.updateMany()` operation sets the
+``familyFriendly`` field to ``true`` when the ``rated`` array has at least one
+element that matches either ``"G"`` or ``"TV-G"``:
 
-.. include:: /includes/arrays-additional-examples.rst
+.. io-code-block::
+   :copyable: true
+   
+   .. input:: /code-examples/tested/command-line/mongosh/operators/in/in-update/in-update.snippet.in-update.js   
+      :language: javascript
+      :category: usage example
 
-### Use `$in` with a Regular Expression
+   .. output:: /code-examples/tested/command-line/mongosh/operators/in/in-update/output.sh
 
-The `$in` operator can select documents using regular expressions of the form `/pattern/`.
+**include:** /includes/arrays-additional-examples.rst
 
-This query selects documents in the `movies` collection where the `plot` field either starts with `Alien` or contains `sci-fi`:
+.. _query-in-regex:
+
+### Use ``$in`` with a Regular Expression
+
+The ``$in`` operator can select documents using regular expressions
+of the form ``/pattern/``. 
+
+This query selects documents in the ``movies`` collection where the
+``plot`` field either starts with ``Alien`` or contains ``sci-fi``:
+
+.. io-code-block::
+   :copyable: true
+
+   .. input:: /code-examples/tested/command-line/mongosh/operators/in/in-regex/in-regex.snippet.in-regex.js
+      :language: javascript
+      :category: usage example
+
+   .. output:: /code-examples/tested/command-line/mongosh/operators/in/in-regex/output.sh
 
 ## Learn More
 

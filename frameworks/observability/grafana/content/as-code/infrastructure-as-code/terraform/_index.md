@@ -4,10 +4,10 @@ framework: "Grafana"
 source_repo: "https://github.com/grafana/grafana.git"
 source_branch: "main"
 source_path: "docs/sources/as-code/infrastructure-as-code/terraform/_index.md"
-source_commit: "d18e58d33aa8741f08fbab4aa73bdaf1f04e3be5"
-source_commit_short: "d18e58d3"
-source_commit_date: "2026-07-25T13:50:43+02:00"
-generated_at: "2026-07-25T19:08:09.051904Z"
+source_commit: "5e3a02f81d2aadf4bf24fe49ed97d872556f5bf9"
+source_commit_short: "5e3a02f8"
+source_commit_date: "2026-08-29T10:58:19+09:00"
+generated_at: "2026-08-29T09:39:37.539292Z"
 ---
 ---
 keywords:
@@ -35,3 +35,4 @@ The following guides help you get started using Terraform to manage your Grafana
 - [Manage Cloud Provider Observability in Grafana Cloud using Terraform](terraform-cloud-provider-o11y/): Learn how to manage Amazon CloudWatch and Microsoft Azure resources in Cloud Provider Observability using Terraform.
 - [Manage Knowledge Graph in Grafana Cloud using Terraform](terraform-knowledge-graph/): Learn how to create and manage notification alerts, suppressed assertions, custom model rules, log, trace, and profile configurations, threshold configurations, and Prometheus rules in Grafana Cloud Knowledge Graph using Terraform.
 - [Install plugins in Grafana Cloud using Terraform](terraform-plugins): Learn how to install plugins in Grafana Cloud using Terraform.
+- [Manage saved queries using Terraform](manage-saved-queries/): Learn how to create and import saved queries, also known as the query library, using Terraform.

@@ -1,80 +1,241 @@
 ---
 type: "Framework Learn Page"
-framework: "mongodb"
+framework: "MongoDB"
 source_repo: "https://github.com/mongodb/docs.git"
 source_branch: "main"
 source_path: "content/manual/manual/source/reference/command/removeQuerySettings.txt"
-source_commit: "ab9db26ed3d11618cdb61516d8180337d8e3f679"
-source_commit_short: "ab9db26e"
-source_commit_date: "2026-07-24T16:22:46-06:00"
-generated_at: "2026-07-25T11:51:15Z"
+source_commit: "b9f2bc487a2878b65e3c1f80024bebab76954f27"
+source_commit_short: "b9f2bc48"
+source_commit_date: "2026-08-28T17:09:45-05:00"
+generated_at: "2026-08-29T09:39:20.051273Z"
 ---
-
-======================================
-
 # removeQuerySettings (database command)
+
+.. default-domain:: mongodb
+
+**contents:** On this page
+   :local:
+   :backlinks: none
+   :depth: 1
+   :class: singlecol
 
 ## Definition
 
-.. versionadded:: 8.0
+**dbcommand:** removeQuerySettings
 
-Deletes query settings previously added with :dbcommand:`setQuerySettings`.
+**versionadded:** 8.0
 
-To delete query settings, you must provide either a `query shape <query-shapes>` hash string or a query shape to `removeQuerySettings`.
+Deletes query settings previously added with
+:dbcommand:`setQuerySettings`.
 
-To find a hash string or query shape, you can use a :pipeline:`$querySettings` stage in an aggregation pipeline. The hash string is named `queryShapeHash` in the `$querySettings` output.
+To delete query settings, you must provide either a :ref:`query shape
+<query-shapes>` hash string or a query shape to ``removeQuerySettings``.
 
-If you provide a query shape to `removeQuerySettings`, include the fields for the existing query settings shape to delete. The field values don't have to match. For example, if you have existing query settings for `find x=1` and provide `find x=100` to `removeQuerySettings`, `removeQuerySettings` deletes the query settings for `find x=1`.
+To find a hash string or query shape, you can use a
+:pipeline:`$querySettings` stage in an aggregation pipeline. The hash
+string is named ``queryShapeHash`` in the ``$querySettings`` output.
 
-For more information about query shapes, see `query-shapes`.
+If you provide a query shape to ``removeQuerySettings``, include the
+fields for the existing query settings shape to delete. The field values
+don't have to match. For example, if you have existing query settings
+for ``find x=1`` and provide ``find x=100`` to ``removeQuerySettings``,
+``removeQuerySettings`` deletes the query settings for ``find x=1``.
+
+For more information about query shapes, see :ref:`query-shapes`.
 
 ## Syntax
 
-You can delete query settings using either of the following syntax specifications.
+You can delete query settings using either of the following syntax
+specifications.
 
 ### Provide a Query Shape Hash String
 
-In the following syntax, you provide a query shape hash string in `removeQuerySettings`:
+In the following syntax, you provide a query shape hash string
+in ``removeQuerySettings``:
 
-```javascript
-db.adminCommand( {
-   removeQuerySettings: <string>  // Provide an existing query shape hash string
-} )
-```
+.. code-block:: javascript
+
+   db.adminCommand( {
+      removeQuerySettings: <string>  // Provide an existing query shape hash string
+   } )
 
 ### Provide a Query Shape
 
 In the following syntax, you provide:
 
 - The same fields as a :dbcommand:`find`, :dbcommand:`distinct`, or
-:dbcommand:`aggregate` command. See the syntax sections on the pages for those commands for the fields you can include in `removeQuerySettings`.
+  :dbcommand:`aggregate` command. See the syntax sections on the pages
+  for those commands for the fields you can include in
+  ``removeQuerySettings``.
+- A ``$db`` field that specifies the database name associated with the
+  original command.
 
-- A `$db` field that specifies the database name associated with the
-original command.
+.. code-block:: javascript
 
-```javascript
-db.adminCommand( {
-   removeQuerySettings: {
-      <fields>,  // Provide fields for 
-                 // find, distinct, or aggregate command
-      $db: <string>  // Provide a database name
-   }
-} )
-```
+   db.adminCommand( {
+      removeQuerySettings: {
+         <fields>,  // Provide fields for 
+                    // find, distinct, or aggregate command
+         $db: <string>  // Provide a database name
+      }
+   } )
+
 
 ## Command Fields
 
 The command takes this field:
 
+.. list-table::
+   :header-rows: 1
+   :widths: 10 15 10 55
+
+   * - Field
+     - Type
+     - Necessity
+     - Description
+
+   * - ``removeQuerySettings``
+     - document or string
+     - Required
+     - You can provide either:
+
+       - The same fields as those in a :dbcommand:`find`,
+         :dbcommand:`distinct`, or :dbcommand:`aggregate` command, and a
+         ``$db`` field with the database associated with the original
+         command.
+
+       - An existing query shape hash string.
+
 ## Examples
 
-The following examples create a collection, add query settings, and delete the settings:
+The following examples create a collection, add query settings, and
+delete the settings:
+
+**procedure:** :style: normal
+
+   .. step:: Create the example collection and index
+
+      Run:
+
+      .. code-block:: javascript
+
+         // Create pizzaOrders collection
+         db.pizzaOrders.insertMany( [
+            { _id: 0, type: "pepperoni", totalNumber: 5,
+              orderDate: new Date( "2024-01-15T12:00:00Z" ) },
+            { _id: 1, type: "cheese", totalNumber: 15,
+              orderDate: new Date( "2024-01-23T11:12:32Z" ) },
+            { _id: 2, type: "vegan", totalNumber: 20,
+              orderDate: new Date( "2024-03-20T10:01:12Z" ) }
+         ] )
+
+         // Create ascending index on orderDate field
+         db.pizzaOrders.createIndex( { orderDate: 1 } )
+
+      The index has the default name ``orderDate_1``.
+
+   .. step:: Add the query settings
+
+      The following ``setQuerySettings`` example adds query settings:
+
+      .. code-block:: javascript
+
+         db.adminCommand( {
+            setQuerySettings: {
+               find: "pizzaOrders",
+               filter: {
+                  orderDate: { $gt: ISODate( "2024-01-20T00:00:00Z" ) }
+               },
+               sort: {
+                  totalNumber: 1
+               },
+               $db: "test"
+            },
+            settings: {
+               indexHints: {
+                  ns: { db: "test", coll: "pizzaOrders" },
+                  allowedIndexes: [ "orderDate_1" ]
+               },
+               queryFramework: "classic",
+               comment: "Index hint for orderDate_1 index to improve query performance"
+            }
+         } )
+
+   .. step:: Return the query settings
+
+      The following example uses ``$querySettings`` to return the
+      query settings:
+
+      .. code-block:: javascript
+         :emphasize-lines: 2
+         
+         db.aggregate( [
+            { $querySettings: {} }
+         ] )
+
+      To locate the query settings to delete, use the ``queryShapeHash``
+      string in this output:
+
+      .. code-block:: javascript
+         :copyable: false
+         :emphasize-lines: 3
+
+         [
+            {
+               queryShapeHash: 'F42757F1AEB68B4C5A6DE6182B29B01947C829C926BCC01226BDA4DDE799766C',
+               settings: {
+                  indexHints: {
+                     ns: { db: 'test', coll: 'pizzaOrders' },
+                     allowedIndexes: [ 'orderDate_1' ]
+                  },
+                  queryFramework: 'classic',
+                  comment: 'Index hint for orderDate_1 index to improve query performance'
+               },
+               representativeQuery: {
+                  find: 'pizzaOrders',
+                  filter: { orderDate: { '$gt': ISODate('2024-01-20T00:00:00.000Z') } },
+                  sort: { totalNumber: 1 },
+                  '$db': 'test'
+               }
+            }
+         ]
+
+   .. step:: Delete the query settings
+
+      The following example uses ``removeQuerySettings`` to delete the
+      query settings identified using ``queryShapeHash`` from
+      the previous output:
+
+      .. code-block:: javascript
+         :emphasize-lines: 2
+
+         db.adminCommand( {
+            removeQuerySettings: "F42757F1AEB68B4C5A6DE6182B29B01947C829C926BCC01226BDA4DDE799766C"
+         } )
+
+      You can also delete query settings using a query shape. For
+      example:
+
+      .. code-block:: javascript
+
+         db.adminCommand( {
+            removeQuerySettings: {
+               find: "pizzaOrders",
+               filter: {
+                  orderDate: { $gt: ISODate( "2023-01-20T00:00:00Z" ) }
+               },
+               sort: {
+                  totalNumber: 1
+               },
+               $db: "test"
+            }
+         } )
 
 ## Learn More
 
-- `query-plans-query-optimization`
+- :ref:`query-plans-query-optimization`
 - :dbcommand:`setQuerySettings`
 - :pipeline:`$querySettings`
-- `query-shapes`
-- `Query statistics for query shapes <queryStats-queryShape>`
-- `operation-rejection-filters`
+- :ref:`query-shapes`
+- :ref:`Query statistics for query shapes <queryStats-queryShape>`
+- :ref:`operation-rejection-filters`

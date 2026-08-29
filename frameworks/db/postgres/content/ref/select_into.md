@@ -1,25 +1,34 @@
 ---
 type: "Framework Learn Page"
-framework: "postgres"
+framework: "PostgreSQL"
 source_repo: "https://github.com/postgres/postgres.git"
 source_branch: "master"
 source_path: "doc/src/sgml/ref/select_into.sgml"
-source_commit: "38afc3dcb25c45b744d4025029ce0a6c90b7059f"
-source_commit_short: "38afc3dc"
-source_commit_date: "2026-07-25T19:08:27+09:00"
-generated_at: "2026-07-25T11:50:59Z"
+source_commit: "6c5f1d6074208146930b67c2054509c3e82f6f7f"
+source_commit_short: "6c5f1d6"
+source_commit_date: "2026-08-28T23:24:47+02:00"
+generated_at: "2026-08-29T09:39:24.570653Z"
 ---
-
 SELECT INTO
+ 
 
-SELECT INTO
-7
-SQL - Language Statements
+ 
+  
+# SELECT INTO
 
-SELECT INTO
-define a new table from the results of a query
+  7
+  SQL - Language Statements
+ 
 
-```
+ 
+  
+# SELECT INTO
+
+  define a new table from the results of a query
+ 
+
+ 
+
 [ WITH [ RECURSIVE ] with_query [, ...] ]
 SELECT [ ALL | DISTINCT [ ON ( expression [, ...] ) ] ]
     [ { * | expression [ [ AS ] output_name ] } [, ...] ]
@@ -35,36 +44,129 @@ SELECT [ ALL | DISTINCT [ ON ( expression [, ...] ) ] ]
     [ OFFSET start [ ROW | ROWS ] ]
     [ FETCH { FIRST | NEXT } [ count ] { ROW | ROWS } { ONLY | WITH TIES } ]
     [ FOR { UPDATE | NO KEY UPDATE | SHARE | KEY SHARE } [ OF from_reference [, ...] ] [ NOWAIT | SKIP LOCKED ] [...] ]
+
+ 
+
+ 
+  
+# Description
+
+  
+   SELECT INTO creates a new table and fills it
+   with data computed by a query.  The data is not returned to the
+   client, as it is with a normal SELECT.  The new
+   table's columns have the names and data types associated with the
+   output columns of the SELECT.
+  
+
+ 
+
+ 
+  
+# Parameters
+
+  
+  
+   TEMPORARY or TEMP
+   
+    
+     If specified, the table is created as a temporary table.  Refer
+     to  for details.
+    
+
+   
+  
+
+  
+   UNLOGGED
+   
+    
+     If specified, the table is created as an unlogged table.  Refer
+     to  for details.
+    
+
+   
+  
+
+   
+    new_table
+    
+     
+      The name (optionally schema-qualified) of the table to be created.
+     
+
+    
+   
+  
+
+  
+   All other parameters are described in detail under .
+  
+
+ 
+
+ 
+  
+# Notes
+
+  
+   CREATE TABLE AS is functionally similar to
+   SELECT INTO.  CREATE TABLE AS
+   is the recommended syntax, since this form of SELECT
+   INTO is not available in ECPG
+   or PL/pgSQL, because they interpret the
+   INTO clause differently. Furthermore,
+   CREATE TABLE AS offers a superset of the
+   functionality provided by SELECT INTO.
+  
+
+  
+   In contrast to CREATE TABLE AS, SELECT
+   INTO does not allow specifying properties like a table's access
+   method with  or the table's
+   tablespace with . Use
+   CREATE TABLE AS if necessary.  Therefore, the default table
+   access method is chosen for the new table. See  for more information.
+  
+
+ 
+
+ 
+  
+# Examples
+
+  
+   Create a new table films_recent consisting of only
+   recent entries from the table films:
+
 ```
 
-## Description
-
-`SELECT INTO` creates a new table and fills it with data computed by a query. The data is not returned to the client, as it is with a normal `SELECT`. The new table's columns have the names and data types associated with the output columns of the `SELECT`.
-
-## Parameters
-
-- If specified, the table is created as a temporary table. Refer to `sql-createtable` for details.
-- If specified, the table is created as an unlogged table. Refer to `sql-createtable` for details.
-- The name (optionally schema-qualified) of the table to be created.
-
-All other parameters are described in detail under `sql-select`.
-
-## Notes
-
-CREATE TABLE AS is functionally similar to `SELECT INTO`. `CREATE TABLE AS` is the recommended syntax, since this form of `SELECT INTO` is not available in `ECPG` or `PL/pgSQL`, because they interpret the `INTO` clause differently. Furthermore, `CREATE TABLE AS` offers a superset of the functionality provided by `SELECT INTO`.
-
-In contrast to `CREATE TABLE AS`, `SELECT INTO` does not allow specifying properties like a table's access method with `sql-createtable-method` or the table's tablespace with `sql-createtable-tablespace`. Use `CREATE TABLE AS` if necessary. Therefore, the default table access method is chosen for the new table. See `guc-default-table-access-method` for more information.
-
-## Examples
-
-Create a new table `films_recent` consisting of only recent entries from the table `films`:
-
-```
 SELECT * INTO films_recent FROM films WHERE date_prod >= '2002-01-01';
+
 ```
 
-## Compatibility
+ 
 
-The SQL standard uses `SELECT INTO` to represent selecting values into scalar variables of a host program, rather than creating a new table. This indeed is the usage found in `ECPG` (see `ecpg`) and `PL/pgSQL` (see `plpgsql`). The PostgreSQL usage of `SELECT INTO` to represent table creation is historical. Some other SQL implementations also use `SELECT INTO` in this way (but most SQL implementations support `CREATE TABLE AS` instead). Apart from such compatibility considerations, it is best to use `CREATE TABLE AS` for this purpose in new code.
+ 
+  
+# Compatibility
 
-## See Also
+  
+   The SQL standard uses SELECT INTO to
+   represent selecting values into scalar variables of a host program,
+   rather than creating a new table.  This indeed is the usage found
+   in ECPG (see ) and
+   PL/pgSQL (see ).
+   The PostgreSQL usage of SELECT
+   INTO to represent table creation is historical.  Some other SQL
+   implementations also use SELECT INTO in this way (but
+   most SQL implementations support CREATE TABLE AS
+   instead).  Apart from such compatibility considerations, it is best to use
+   CREATE TABLE AS for this purpose in new code.
+  
+
+ 
+
+ 
+  
+# See Also

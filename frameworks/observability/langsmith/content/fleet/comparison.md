@@ -4,10 +4,10 @@ framework: "LangSmith"
 source_repo: "https://github.com/langchain-ai/docs.git"
 source_branch: "main"
 source_path: "src/langsmith/fleet/comparison.mdx"
-source_commit: "2aae1dfc98ee953a9a5185fb6fcdd9efb3f4d878"
-source_commit_short: "2aae1df"
-source_commit_date: "2026-07-25T00:27:23+00:00"
-generated_at: "2026-07-25T19:08:33.442620Z"
+source_commit: "a174f9cf7c91ee5eb14ee2382eb48bfe6e4956e9"
+source_commit_short: "a174f9c"
+source_commit_date: "2026-08-28T17:04:12-07:00"
+generated_at: "2026-08-29T09:39:50.696371Z"
 ---
 # Comparison
 
@@ -35,17 +35,17 @@ description: Compare LangSmith Fleet with Claude Cowork, Amazon Quick, Google Wo
 
 - ❌ Not available
 - ⚠️ Partial or limited
-- — Not confirmed from public documentation
+- ❓ Not confirmed from public documentation.
 
 <div className="compact-first-col">
 
 | **Aspect** | **LangSmith Fleet** | **Claude Cowork** | **Amazon Quick** | **Google Workspace Studio** | **Microsoft Copilot** |
 | - | ------------------- | ----------------- | ---------------- | --------------------------- | --------------------- |
 | **Primary use case** | Teams building purpose-built agents to share across an organization, with no-code creation and code export for custom deployments; individuals using a general-purpose chat agent for any task | Individual desktop knowledge work | Enterprise AI with AWS data integration | No-code agents for Google Workspace | Low-code agents for Microsoft 365 |
-| **Model support** | Model-agnostic: any LLM with an OpenAI-compatible or Anthropic-compatible API | Claude only | — | Gemini 3 | Curated OpenAI + Anthropic models; bring-your-own via Azure AI Foundry |
+| **Model support** | Model-agnostic: any LLM with an OpenAI-compatible or Anthropic-compatible API | Claude only | ❓ | Gemini 3 | Curated OpenAI + Anthropic models; bring-your-own via Azure AI Foundry |
 | **Interface** | Web app, Slack app, Teams app, API | Desktop, mobile, Slack, M365 connectors | Web, desktop, browser extensions, Slack, Teams | Web app, Gmail and Chat sidebars | Teams, M365 apps, web, mobile, Windows, Copilot Studio |
 | **Deployment** | Cloud (LangSmith) or self-hosted | Local by default; remote on Anthropic cloud | Cloud (AWS) | Cloud (Google) | Cloud (Microsoft) |
-| **Self-hosting** | ✅ [beta](/langsmith/deploy-self-hosted-full-platform#enable-fleet-insights-and-chat), [contact sales](https://www.langchain.com/contact-sales) for production readiness details | ❌ | ❌ | ❌ | ❌ |
+| **Self-hosting** | ✅ [beta](/langsmith/deploy-self-hosted-full-platform#enable-fleet-insights-and-chat), [contact our sales team](https://www.langchain.com/contact-sales) for production readiness details | ❌ | ❌ | ❌ | ❌ |
 | **Code export** | ✅ [Export to Deep Agents](/langsmith/fleet/code) | ❌ | ❌ | ❌ | ❌ |
 | **Observability** | LangSmith tracing and evaluations at scale | OpenTelemetry to SIEM | CloudTrail + run logs | Activity tab + audit logs | App Insights + Purview |
 | **Platform license** | Proprietary | Proprietary | Proprietary | Proprietary | Proprietary |
@@ -80,7 +80,7 @@ description: Compare LangSmith Fleet with Claude Cowork, Amazon Quick, Google Wo
 
 **Fleet** provides RBAC, attribute-based access control, and per-agent sharing permissions (Clone, Run, and Edit). Among the platforms compared here, only Fleet documents per-MCP-server attribute-based access control. All platforms offer some form of RBAC, but granularity varies.
 
-**Fleet** manages spending at the workspace level. For enterprise billing options, [contact sales](https://www.langchain.com/contact-sales).
+**Fleet** manages spending at the workspace level. For enterprise billing options, [contact our sales team](https://www.langchain.com/contact-sales).
 
 <div className="compact-first-col">
 
@@ -141,7 +141,7 @@ Of the platforms compared here, only Fleet works with any OpenAI- or Anthropic-c
 | Feature | **Fleet** | **Claude Cowork** | **Amazon Quick** | **Google Workspace Studio** | **Microsoft Copilot** |
 | ------- | --------- | ----------------- | ---------------- | --------------------------- | --------------------- |
 | Cloud-hosted | ✅ | ⚠️ | ✅ | ✅ | ✅ |
-| Self-hosted | ✅ [beta](/langsmith/deploy-self-hosted-full-platform#enable-fleet-insights-and-chat), [contact sales](https://www.langchain.com/contact-sales) for production readiness details | ❌ | ❌ | ❌ | ❌ |
+| Self-hosted | ✅ [beta](/langsmith/deploy-self-hosted-full-platform#enable-fleet-insights-and-chat), [contact our sales team](https://www.langchain.com/contact-sales) for production readiness details | ❌ | ❌ | ❌ | ❌ |
 | Custom models | ⚠️ [Enterprise only](/langsmith/fleet/essentials#custom-models) | ❌ | ❌ | ⚠️ | ⚠️ |
 | Call agents from your app | ✅ [API access](/langsmith/fleet/code) | ✅ | ⚠️ | ❌ | ✅ |
 | Export to code | ✅ [Export to Deep Agents](/langsmith/fleet/code) | ❌ | ❌ | ❌ | ❌ |
@@ -167,7 +167,7 @@ A ✅ indicates the integration is available; supported actions and depth vary b
 
 </div>
 
-For pricing and SLA information, [contact sales](https://www.langchain.com/contact-sales).
+For pricing and SLA information, [contact our sales team](https://www.langchain.com/contact-sales).
 
 <Note>
     Last updated May 5, 2026. These products evolve quickly. If something has changed, please [file an issue](https://github.com/langchain-ai/docs/issues) to help us keep this page current.

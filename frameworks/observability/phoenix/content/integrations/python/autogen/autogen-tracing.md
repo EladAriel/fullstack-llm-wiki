@@ -4,10 +4,10 @@ framework: "Arize Phoenix"
 source_repo: "https://github.com/Arize-ai/phoenix.git"
 source_branch: "main"
 source_path: "docs/phoenix/integrations/python/autogen/autogen-tracing.mdx"
-source_commit: "69b3ab92c37ff65812feaa2dbf0b1c0ad5ae55fe"
-source_commit_short: "69b3ab9"
-source_commit_date: "2026-07-25T11:48:12-06:00"
-generated_at: "2026-07-25T19:08:24.860496Z"
+source_commit: "c48e50e9906fcc56c1c103ebd93ef3c95ed6b6e7"
+source_commit_short: "c48e50e"
+source_commit_date: "2026-08-29T01:45:20-06:00"
+generated_at: "2026-08-29T09:39:58.931707Z"
 ---
 # Autogen Tracing
 
@@ -16,6 +16,13 @@ title: "AutoGen Tracing"
 ---
 
 import RegisterTracerPython from "../../../../snippets/register-tracer-python.mdx";
+
+<Warning>
+`openinference-instrumentation-autogen` is now a thin, deprecated compatibility facade that
+delegates to `AG2Instrumentor`. For new applications, install
+`openinference-instrumentation-ag2` and follow the [AG2 Tracing](/docs/phoenix/integrations/python/ag2/ag2-tracing)
+guide instead.
+</Warning>
 
 <Card horizontal href="https://colab.research.google.com/github/Arize-ai/phoenix/blob/main/tutorials/tracing/autogen_tutorial.ipynb" title="Google Colab" icon="https://storage.googleapis.com/arize-phoenix-assets/assets/images/phoenix-docs-images/gc.ico" horizontal>
 colab.research.google.com

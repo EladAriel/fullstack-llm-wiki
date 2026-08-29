@@ -1,131 +1,183 @@
 ---
 type: "Framework Learn Page"
-framework: "mongodb"
+framework: "MongoDB"
 source_repo: "https://github.com/mongodb/docs.git"
 source_branch: "main"
 source_path: "content/manual/manual/source/reference/command/killCursors.txt"
-source_commit: "ab9db26ed3d11618cdb61516d8180337d8e3f679"
-source_commit_short: "ab9db26e"
-source_commit_date: "2026-07-24T16:22:46-06:00"
-generated_at: "2026-07-25T11:51:15Z"
+source_commit: "b9f2bc487a2878b65e3c1f80024bebab76954f27"
+source_commit_short: "b9f2bc48"
+source_commit_date: "2026-08-28T17:09:45-05:00"
+generated_at: "2026-08-29T09:39:20.065779Z"
 ---
-
-==============================
+.. _killcursors-database-command:
 
 # killCursors (database command)
 
+**meta:** :description: Execute the `killCursors` command to terminate specified cursors in a collection, typically managed automatically by MongoDB drivers.
+
+.. default-domain:: mongodb
+
+**contents:** On this page
+   :local:
+   :backlinks: none
+   :depth: 1
+   :class: singlecol
+
 ## Definition
+
+**dbcommand:** killCursors
+
+   Kills the specified cursor or cursors for a collection. MongoDB
+   drivers use the :dbcommand:`killCursors` command as part of the
+   client-side cursor implementation.
+
+   .. warning::
+
+      Applications typically should not run the ``killCursors``
+      command directly. Instead, let the driver automatically
+      handle cursor management.
+
+   .. |command| replace:: killCursors
+
+   The ``killCursors`` command must be run against the database of the
+   collection whose cursors you wish to kill.
+
+   .. include:: /includes/fact-dbcommand.rst
 
 ## Compatibility
 
-This command is available in deployments hosted in the following environments:
+This command is available in deployments hosted in the following environments: 
 
-.. include:: /includes/fact-environments-atlas-only.rst
+**include:** /includes/fact-environments-atlas-only.rst
 
-.. include:: /includes/fact-environments-atlas-support-all.rst
+**include:** /includes/fact-environments-atlas-support-all.rst
 
-.. include:: /includes/fact-environments-onprem-only.rst
+**include:** /includes/fact-environments-onprem-only.rst
 
 ## Syntax
 
 The command has the following syntax:
 
-```javascript
-db.runCommand( 
-   { 
-     killCursors: <collection>, 
-     cursors: [ <cursor id1>, ... ], comment: <any> 
-   } 
-)
-```
+.. code-block:: javascript
+
+   db.runCommand( 
+      { 
+        killCursors: <collection>, 
+        cursors: [ <cursor id1>, ... ], comment: <any> 
+      } 
+   )
 
 ## Command Fields
 
 The command takes the following fields:
 
+.. list-table::
+   :header-rows: 1
+   :widths: 20 20 80
+ 
+   * - Field
+     - Type
+     - Description
+ 
+   * - ``killCursors``
+     - string
+     - The name of the collection.
+       
+   * - ``cursors``
+     - array
+     - The ids of the cursors to kill.
+       
+   * - ``comment``
+     - any
+     - .. include:: /includes/extracts/comment-content.rst
+
 ## Required Access
 
 ### Kill Own Cursors
 
-Users can always kill their own cursors regardless of whether they have the :authaction:`killCursors` privilege. Cursors are associated with the users at the time of cursor creation.
+Users can always kill their own cursors regardless of whether they have
+the :authaction:`killCursors` privilege. Cursors are associated with the
+users at the time of cursor creation.
 
 ### Kill Any Cursor
 
-If a user has the :authaction:`killAnyCursor` privilege, they can kill cursors created by any user.
+If a user has the :authaction:`killAnyCursor` privilege, they can kill
+cursors created by any user.
 
-## `killCursors` and Transactions
+## ``killCursors`` and Transactions
 
-.. include:: /includes/extracts/transactions-killop-change.rst
+**include:** /includes/extracts/transactions-killop-change.rst
 
 ## Example
 
-Consider the following :dbcommand:`find` operation on the `test.restaurants` collection:
+Consider the following :dbcommand:`find` operation on the
+``test.restaurants`` collection:
 
-```javascript
-use test
-db.runCommand(
-   { find: "restaurants",
-     filter: { stars: 5 },
-     projection: { name: 1, rating: 1, address: 1 },
-     sort: { name: 1 },
-     batchSize: 5
-   }
-)
-```
+.. code-block:: javascript
+
+   use test
+   db.runCommand(
+      { find: "restaurants",
+        filter: { stars: 5 },
+        projection: { name: 1, rating: 1, address: 1 },
+        sort: { name: 1 },
+        batchSize: 5
+      }
+   )
 
 which returns the following:
 
-```javascript
-{
-   "waitedMS" : Long(0),
-   "cursor" : {
-      "firstBatch" : [
-         {
-            "_id" : ObjectId("57506d63f578028074723dfd"),
-            "name" : "Cakes and more"
-         },
-         {
-            "_id" : ObjectId("57506d63f578028074723e0b"),
-            "name" : "Pies and things"
-         },
-         {
-            "_id" : ObjectId("57506d63f578028074723e1d"),
-            "name" : "Ice Cream Parlour"
-         },
-         {
-            "_id" : ObjectId("57506d63f578028074723e65"),
-            "name" : "Cream Puffs"
-         },
-         {
-            "_id" : ObjectId("57506d63f578028074723e66"),
-            "name" : "Cakes and Rolls"
-         }
-      ],
-      "id" : Long("18314637080"),
-      "ns" : "test.restaurants"
-   },
-   "ok" : 1
-}
-```
+.. code-block:: javascript
+
+   {
+      "waitedMS" : Long(0),
+      "cursor" : {
+         "firstBatch" : [
+            {
+               "_id" : ObjectId("57506d63f578028074723dfd"),
+               "name" : "Cakes and more"
+            },
+            {
+               "_id" : ObjectId("57506d63f578028074723e0b"),
+               "name" : "Pies and things"
+            },
+            {
+               "_id" : ObjectId("57506d63f578028074723e1d"),
+               "name" : "Ice Cream Parlour"
+            },
+            {
+               "_id" : ObjectId("57506d63f578028074723e65"),
+               "name" : "Cream Puffs"
+            },
+            {
+               "_id" : ObjectId("57506d63f578028074723e66"),
+               "name" : "Cakes and Rolls"
+            }
+         ],
+         "id" : Long("18314637080"),
+         "ns" : "test.restaurants"
+      },
+      "ok" : 1
+   }
 
 To kill this cursor, use the :dbcommand:`killCursors` command.
 
-```javascript
-use test
+.. code-block:: javascript
 
-db.runCommand( { killCursors: "restaurants", cursors: [ Long("18314637080") ] } )
-```
+   use test
+
+   db.runCommand( { killCursors: "restaurants", cursors: [ Long("18314637080") ] } )
 
 :dbcommand:`killCursors` returns the following operation details:
 
-```javascript
-{
-   "cursorsKilled" : [
-      Long("18314637080")
-   ],
-   "cursorsNotFound" : [ ],
-   "cursorsAlive" : [ ],
-   "cursorsUnknown" : [ ],
-   "ok" : 1
-}
-```
+.. code-block:: javascript
+
+   {
+      "cursorsKilled" : [
+         Long("18314637080")
+      ],
+      "cursorsNotFound" : [ ],
+      "cursorsAlive" : [ ],
+      "cursorsUnknown" : [ ],
+      "ok" : 1
+   }

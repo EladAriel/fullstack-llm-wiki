@@ -1,89 +1,124 @@
 ---
 type: "Framework Learn Page"
-framework: "mongodb"
+framework: "MongoDB"
 source_repo: "https://github.com/mongodb/docs.git"
 source_branch: "main"
 source_path: "content/manual/manual/source/reference/database-users.txt"
-source_commit: "ab9db26ed3d11618cdb61516d8180337d8e3f679"
-source_commit_short: "ab9db26e"
-source_commit_date: "2026-07-24T16:22:46-06:00"
-generated_at: "2026-07-25T11:51:15Z"
+source_commit: "b9f2bc487a2878b65e3c1f80024bebab76954f27"
+source_commit_short: "b9f2bc48"
+source_commit_date: "2026-08-28T17:09:45-05:00"
+generated_at: "2026-08-29T09:39:19.704763Z"
 ---
-
-==============
+.. _security-database-users:
 
 # Database Users
 
-MongoDB uses database users to authenticate clients and grant access to your deployment. Assign `roles <authorization>` to database users based on the level of access and tasks they need to perform.
+**meta:** :keywords: on-prem, atlas
+
+**contents:** On this page
+   :local:
+   :backlinks: none
+   :depth: 1
+   :class: singlecol
+
+MongoDB uses database users to authenticate clients and grant
+access to your deployment. Assign :ref:`roles <authorization>` to
+database users based on the level of access and tasks they need to
+perform.
 
 ## Use Cases
 
 Create database users to:
 
 - Allow reads and writes to the database but restrict
-administrative access.
+  administrative access.
 
 - Assign administrative privileges to manage the database, perform
-backups, and configure settings.
+  backups, and configure settings.
 
 - Grant read-only access for reporting and analytics.
+
 ## Behavior
 
-Roles govern database user permissions. Use MongoDB's `built-in roles <built-in-roles>` or create custom roles.
+Roles govern database user permissions. Use MongoDB's
+:ref:`built-in roles <built-in-roles>` or create custom roles.
+
+.. _db-users-self-managed:
 
 ### Database Users in Self-Managed Deployments
 
-Grant database users in self-managed deployments one or more roles. Roles grant users `privileges <security-user-actions>` to perform actions on specified `resources <resource-document>`.
+Grant database users in self-managed deployments one or more roles.
+Roles grant users :ref:`privileges <security-user-actions>` to
+perform actions on specified :ref:`resources <resource-document>`.
 
 Users can perform actions on the following resources:
 
 - Collections
 - Databases
 - Clusters
-To create and manage users in your self-managed deployment, use the :dbcommand:`createUser` command or the :method:`db.createUser()` method.
+
+To create and manage users in your self-managed deployment, use the
+:dbcommand:`createUser` command or the :method:`db.createUser()`
+method.
+
+.. _db-users-atlas:
 
 ### Database Users in {+atlas+}
 
-Database users in {+atlas+} have different built-in roles than self-managed deployments. When you create a database user in {+atlas+}, Atlas built-in roles apply to all databases in your project.
+Database users in {+atlas+} have different built-in roles than
+self-managed deployments. When you create a database user in
+{+atlas+}, Atlas built-in roles apply to all databases in your
+project.
 
-> **Note:** Database users are separate from Atlas users. Database users
-access MongoDB databases. Atlas users access the Atlas
-application.
+**note:** Database users are separate from Atlas users. Database users
+   access MongoDB databases. Atlas users access the Atlas
+   application.
 
-Create database users, assign built-in roles, and create custom roles in the :atlascli:`{+atlas-cli+} </install-atlas-cli/>`, `atlas-admin-api-overview`, or the `Atlas UI <atlas-ui>`. To learn more, see :atlas:`Add Database Users </security-add-mongodb-users/#add-database-users>`.
+Create database users, assign built-in roles, and create custom
+roles in the :atlascli:`{+atlas-cli+} </install-atlas-cli/>`,
+:ref:`atlas-admin-api-overview`, or the :ref:`Atlas UI <atlas-ui>`.
+To learn more, see :atlas:`Add Database Users
+</security-add-mongodb-users/#add-database-users>`.
 
 ## Get Started
 
-To create and manage database users, see:
+To create and manage database users, see:  
 
-- `manage-users-and-roles`.
-- `Configure Database Users on Atlas <mongodb-users>`.
+- :ref:`manage-users-and-roles`.
+- :ref:`Configure Database Users on Atlas <mongodb-users>`.
+
 ## Details
 
 ### Authentication
 
-Specify the authentication mechanism when you create a user. MongoDB supports the following authentication mechanisms:
+Specify the authentication mechanism when you create a user. MongoDB
+supports the following authentication mechanisms:
 
-.. include:: /includes/fact-authentication-compat-table.rst
+**include:** /includes/fact-authentication-compat-table.rst
 
 To learn more, see:
 
-- `authentication`
+- :ref:`authentication`
 - :atlas:`Configure Cluster Authentication and Authorization on
-Atlas </security/config-db-auth/>`
+  Atlas </security/config-db-auth/>`
 
 ### Authorization
 
-MongoDB uses Role-Based Access Control to verify user access to resources and operations. Database users in {+atlas+} have different built-in roles than self-hosted deployments. However, MongoDB builds all built-in roles from the same set of `privilege actions <security-user-actions>`.
+MongoDB uses Role-Based Access Control to verify user access to
+resources and operations. Database users in {+atlas+} have different
+built-in roles than self-hosted deployments. However, MongoDB builds
+all built-in roles from the same set of :ref:`privilege actions
+<security-user-actions>`.
 
 To learn more, see:
 
-- `authorization`
+- :ref:`authorization`
 - :ref:`Built-In Roles and Privileges on Atlas
-<mongodb-users-roles-and-privileges>`
+  <mongodb-users-roles-and-privileges>`
 
-## Contents
+**toctree:** :titlesonly:
+   :hidden:
 
-- Built-In Roles </reference/built-in-roles>
-- Privilege Actions </reference/privilege-actions>
-- Non-Root User Permissions </reference/non-root-user-permissions>
+   Built-In Roles </reference/built-in-roles>
+   Privilege Actions </reference/privilege-actions>
+   Non-Root User Permissions </reference/non-root-user-permissions>

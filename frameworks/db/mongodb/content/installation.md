@@ -1,59 +1,112 @@
 ---
 type: "Framework Learn Page"
-framework: "mongodb"
+framework: "MongoDB"
 source_repo: "https://github.com/mongodb/docs.git"
 source_branch: "main"
 source_path: "content/manual/manual/source/installation.txt"
-source_commit: "ab9db26ed3d11618cdb61516d8180337d8e3f679"
-source_commit_short: "ab9db26e"
-source_commit_date: "2026-07-24T16:22:46-06:00"
-generated_at: "2026-07-25T11:51:15Z"
+source_commit: "b9f2bc487a2878b65e3c1f80024bebab76954f27"
+source_commit_short: "b9f2bc48"
+source_commit_date: "2026-08-28T17:09:45-05:00"
+generated_at: "2026-08-29T09:39:19.471345Z"
 ---
-
-===============
+.. _tutorials-installation:
+.. _tutorial-installation:
 
 # Install MongoDB
 
-MongoDB is available in two server editions: Community and Enterprise.
+.. default-domain:: mongodb
+
+**meta:** :description: Install MongoDB Community and Enterprise Editions on Linux, macOS, and Windows. The links on this page have additional installation information and resources.
+   :keywords: on-prem
+                 
+**facet:** :name: genre
+   :values: reference
+
+**contents:** On this page
+   :local:
+   :backlinks: none
+   :depth: 1
+   :class: singlecol
+
+.. dismissible-skills-card::
+   :skill: MongoDB Architecture Essentials
+   :url: https://learn.mongodb.com/skills?openTab=architecture
+
+MongoDB is available in two server editions: *Community* and
+*Enterprise*.
+
+.. _`MongoDB Download Center`: https://www.mongodb.com/try/download/community
 
 This section contains information on installing MongoDB.
 
 - To upgrade your current deployment to MongoDB {+version+}, see
-`{+version+} Upgrade Procedures <{+version+}-upgrade>`.
+  :ref:`{+version+} Upgrade Procedures <{+version+}-upgrade>`.
 
 - To upgrade to the latest patch release for your current version,
-see `upgrade-to-latest-revision`.
+  see :ref:`upgrade-to-latest-revision`.
 
 ## MongoDB Installation Tutorials
 
-> **Note:** If you installed MongoDB using a package manager such as APT, DNF,
-or Zypper, use your operating system's package management tool to
-upgrade within `Patch Releases <versions-patch-release>`.
-For `Major <major-releases>` and `Minor <minor-releases>`
-releases, follow the installation instructions for your OS.
+**note:** If you installed MongoDB using a package manager such as APT, DNF,
+   or Zypper, use your operating system's package management tool to
+   upgrade within :ref:`Patch Releases <versions-patch-release>`.
+   For :ref:`Major <major-releases>` and :ref:`Minor <minor-releases>`
+   releases, follow the installation instructions for your OS.
 
-MongoDB installation tutorials are available for both Community Edition and Enterprise Edition on the following platforms:
+MongoDB installation tutorials are available for both Community
+Edition and Enterprise Edition on the following platforms:
 
 ### Community Edition
 
-To install MongoDB Community Edition, see `Install MongoDB Community Edition <install-mdb-community-edition>`. Select your platform and follow the instructions for your operating system.
+To install MongoDB Community Edition, see
+:ref:`Install MongoDB Community Edition <install-mdb-community-edition>`.
+Select your platform and follow the instructions for your operating
+system.
 
 ### Enterprise Edition
 
-To install MongoDB Enterprise Edition, select the tutorial for your platform and follow the instructions for your operating system.
+To install MongoDB Enterprise Edition, select the tutorial for your
+platform and follow the instructions for your operating system.
 
-.. include:: /includes/unicode-checkmark.rst
+.. list-table::
+   :header-rows: 1
+   :widths: 15 85
+
+   * - Platform
+     - Tutorial
+
+   * - Linux
+     - | :ref:`install-mdb-enterprise-redhat-centos`
+       | :ref:`install-mdb-enterprise-ubuntu`
+       | :ref:`install-mdb-enterprise-debian`
+       | :ref:`install-mdb-enterprise-suse`
+       | :ref:`install-mdb-enterprise-amazon-linux`
+
+   * - macOS
+     - :ref:`install-enterprise-macos`
+
+   * - Windows
+     - :ref:`install-enterprise-windows`
+
+   * - Docker
+     - :ref:`docker-mongodb-enterprise-install`
+
+**include:** /includes/unicode-checkmark.rst
+
+.. _mongodb-supported-platforms:
 
 ## Supported Platforms
 
 For details on supported platforms, see:
 
-- `landing-enterprise-platform-support`
-- `landing-community-platform-support`
-## Contents
+- :ref:`landing-enterprise-platform-support`
 
-- Community Edition </administration/install-community>
-- Enterprise </administration/install-enterprise>
-- Upgrade Community to Enterprise </administration/upgrade-community-to-enterprise>
-- Verify Package Integrity </tutorial/verify-mongodb-packages>
-- MongoDB Package Components </reference/program>
+- :ref:`landing-community-platform-support`
+
+**toctree:** :hidden:
+
+   Community Edition </administration/install-community>
+   Enterprise </administration/install-enterprise>
+   Upgrade Community to Enterprise </administration/upgrade-community-to-enterprise>
+   Verify Package Integrity </tutorial/verify-mongodb-packages>
+   MongoDB Package Components </reference/program>

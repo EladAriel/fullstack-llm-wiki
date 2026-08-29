@@ -1,56 +1,340 @@
 ---
 type: "Framework Learn Page"
-framework: "mongodb"
+framework: "MongoDB"
 source_repo: "https://github.com/mongodb/docs.git"
 source_branch: "main"
 source_path: "content/manual/manual/source/core/timeseries/timeseries-quick-start.txt"
-source_commit: "ab9db26ed3d11618cdb61516d8180337d8e3f679"
-source_commit_short: "ab9db26e"
-source_commit_date: "2026-07-24T16:22:46-06:00"
-generated_at: "2026-07-25T11:51:15Z"
+source_commit: "b9f2bc487a2878b65e3c1f80024bebab76954f27"
+source_commit_short: "b9f2bc48"
+source_commit_date: "2026-08-28T17:09:45-05:00"
+generated_at: "2026-08-29T09:39:19.797225Z"
 ---
+**facet:** :name: genre
+   :values: tutorial
 
-=======================
+**facet:** :name: programming_language
+   :values: csharp, java, javascript/typescript, python, shell
+
+**meta:** :description: Quick start for creating a time series collection with self-managed MongoDB or Atlas
+   :keywords: code example, shell, .NET, PyMongo
+
+.. _timeseries-quick-start:
 
 # Time Series Quick Start
 
-Configure, create, and query a time series collection with MongoDB Atlas or a self-managed deployment.
+**contents:** On this page
+   :local:
+   :backlinks: none
+   :depth: 2
+   :class: singlecol
 
-Time required: 30 minutes
+Configure, create, and query a time series collection with MongoDB
+Atlas or a self-managed deployment.
+
+*Time required: 30 minutes*
+
+.. |service| replace:: {+service+}
+
+.. composable-tutorial::
+   :options: deployment-type, interface, language
+   :defaults: atlas, driver, python
+
+   .. selected-content::
+      :selections: atlas, driver, csharp
+
+      .. procedure::
+         :style: normal
+
+         .. include:: /includes/steps-ts-quick-start-atlas.rst
+
+         .. step:: Get .NET/C# Driver connection details.
+
+            a. Under Connect to your application, click :guilabel:`Driver`.
+               Select C#.
+
+               If you haven't already, follow the steps provided to download and
+               install the :driver:`.NET/C# Driver </csharp>`.
+
+            #. Copy your connection string and click :guilabel:`Done`.
+
+         .. include:: /includes/steps-ts-quick-start-csharp.rst
+
+   .. selected-content::
+      :selections: local, driver, csharp
+
+      .. procedure::
+         :style: normal
+
+         .. include:: /includes/steps-ts-quick-start-atlas-cli.rst
+
+         .. step:: Install the .NET/C# driver.
+
+            Follow the directions on the `.NET/C# Driver Get Started <https://www.mongodb.com/docs/drivers/csharp/current/get-started/>`__
+            page to create a new project and install driver dependencies.
+
+         .. include:: /includes/steps-ts-quick-start-csharp.rst
+
+   .. selected-content::
+      :selections: self, driver, csharp
+
+      .. procedure::
+         :style: normal
+
+         .. include:: /includes/steps-ts-quick-start-self-managed.rst
+
+         .. step:: Install the .NET/C# driver.
+
+            Follow the directions on the `.NET/C# Driver Get Started <https://www.mongodb.com/docs/drivers/csharp/current/get-started/>`__
+            page to create a new project and install driver dependencies.
+
+         .. include:: /includes/steps-ts-quick-start-csharp.rst
+
+   .. selected-content::
+      :selections: atlas, driver, java-sync
+
+      .. procedure::
+         :style: normal
+
+         .. include:: /includes/steps-ts-quick-start-atlas.rst
+
+         .. step:: Get Java Sync Driver connection details.
+
+            a. Under Connect to your application, click :guilabel:`Driver`.
+               Select Java (Sync).
+
+               If you haven't already, follow the steps provided to download and
+               install the :driver:`Java Sync Driver </java/sync>`.
+
+            #. Copy your connection string and click :guilabel:`Done`.
+
+         .. include:: /includes/steps-ts-quick-start-java-sync.rst
+
+   .. selected-content::
+      :selections: local, driver, java-sync
+
+      .. procedure::
+         :style: normal
+
+         .. include:: /includes/steps-ts-quick-start-atlas-cli.rst
+
+         .. step:: Install the Java Sync Driver.
+
+            Follow the directions on the `Java Sync Driver Get Started <https://www.mongodb.com/docs/drivers/java/sync/current/get-started/>`__
+            page to create a new project and install driver dependencies.
+
+         .. include:: /includes/steps-ts-quick-start-java-sync.rst
+
+   .. selected-content::
+      :selections: self, driver, java-sync
+
+      .. procedure::
+         :style: normal
+
+         .. include:: /includes/steps-ts-quick-start-self-managed.rst
+
+         .. step:: Install the Java Sync Driver.
+
+            Follow the directions on the `Java Sync Driver Get Started <https://www.mongodb.com/docs/drivers/java/sync/current/get-started/>`__
+            page to create a new project and install driver dependencies.
+
+         .. include:: /includes/steps-ts-quick-start-java-sync.rst
+
+   .. selected-content::
+      :selections: atlas, mongosh, None
+
+      .. procedure::
+         :style: normal
+
+         .. include:: /includes/steps-ts-quick-start-atlas.rst
+
+         .. step:: Get mongosh connection details.
+
+            a. Under Access your data through tools, click :guilabel:`Shell`.
+
+               If you haven't already, follow the steps provided to download and
+               install :binary:`mongosh`.
+
+            #. Copy your connection string and click :guilabel:`Done`.
+
+         .. include:: /includes/steps-ts-quick-start-mongosh.rst
+
+   .. selected-content::
+      :selections: local, mongosh, None
+
+      .. procedure::
+         :style: normal
+
+         .. include:: /includes/steps-ts-quick-start-atlas-cli.rst
+
+         .. step:: Install mongosh.
+
+            Go to the :binary:`mongosh` page and click
+            :guilabel:`Download mongosh`. Check that the platform matches
+            your system and click :guilabel:`Download`.
+
+         .. include:: /includes/steps-ts-quick-start-mongosh.rst
+
+   .. selected-content::
+      :selections: self, mongosh, None
+
+      .. procedure::
+         :style: normal
+
+         .. include:: /includes/steps-ts-quick-start-self-managed.rst
+
+         .. step:: Install mongosh.
+
+            Go to the :binary:`mongosh` page and click
+            :guilabel:`Download mongosh`. Check that the platform matches
+            your system and click :guilabel:`Download`.
+
+         .. include:: /includes/steps-ts-quick-start-mongosh.rst
+
+   .. selected-content::
+      :selections: atlas, driver, nodejs
+
+      .. procedure::
+         :style: normal
+
+         .. include:: /includes/steps-ts-quick-start-atlas.rst
+
+         .. step:: Get Node.js Driver connection details.
+
+            a. Under Connect to your application, click :guilabel:`Driver`.
+               Select Node.js.
+
+               If you haven't already, follow the steps provided to download and
+               install the :driver:`Node.js Driver </node>`.
+
+            #. Copy your connection string and click :guilabel:`Done`.
+
+         .. include:: /includes/steps-ts-quick-start-node.rst
+
+   .. selected-content::
+      :selections: local, driver, nodejs
+
+      .. procedure::
+         :style: normal
+
+         .. include:: /includes/steps-ts-quick-start-atlas-cli.rst
+
+         .. step:: Install the Node.js Driver.
+
+            Follow the directions on the `Node.js Get Started <https://www.mongodb.com/docs/drivers/node/current/get-started/>`__
+            page to create a new project directory and install driver dependencies.
+
+         .. include:: /includes/steps-ts-quick-start-node.rst
+
+   .. selected-content::
+      :selections: self, driver, nodejs
+
+      .. procedure::
+         :style: normal
+
+         .. include:: /includes/steps-ts-quick-start-self-managed.rst
+
+         .. step:: Install the Node.js Driver.
+
+            Follow the directions on the `Node.js Get Started <https://www.mongodb.com/docs/drivers/node/current/get-started/>`__
+            page to create a new project directory and install driver dependencies.
+
+         .. include:: /includes/steps-ts-quick-start-node.rst
+
+   .. selected-content::
+      :selections: atlas, driver, python
+
+      .. procedure::
+         :style: normal
+
+         .. include:: /includes/steps-ts-quick-start-atlas.rst
+
+         .. step:: Get PyMongo connection details.
+
+            a. Under Connect to your application, click :guilabel:`Driver`.
+               Select Python.
+
+               If you haven't already, follow the steps provided to download and
+               install the :driver:`PyMongo Driver </pymongo/>`.
+
+            #. Copy your connection string and click :guilabel:`Done`.
+
+         .. include:: /includes/steps-ts-quick-start-python.rst
+
+   .. selected-content::
+      :selections: local, driver, python
+
+      .. procedure::
+         :style: normal
+
+         .. include:: /includes/steps-ts-quick-start-atlas-cli.rst
+
+         .. step:: Install the PyMongo Driver.
+
+            Follow the directions on the `PyMongo Get Started <https://www.mongodb.com/docs/languages/python/pymongo-driver/current/get-started/>`__
+            page to create a new project directory and install driver dependencies.
+
+         .. include:: /includes/steps-ts-quick-start-python.rst
+
+   .. selected-content::
+      :selections: self, driver, python
+
+      .. procedure::
+         :style: normal
+
+         .. include:: /includes/steps-ts-quick-start-self-managed.rst
+
+         .. step:: Install the PyMongo Driver.
+
+            Follow the directions on the `PyMongo Get Started <https://www.mongodb.com/docs/languages/python/pymongo-driver/current/get-started/>`__
+            page to create a new project directory and install driver dependencies.
+
+         .. include:: /includes/steps-ts-quick-start-python.rst
+
+.. _ts-quick-start-sample-data:
 
 ## Sample Data
 
-The following example shows the `stocks` time series collection structure used in this quick start.
+The following example shows the ``stocks`` time series collection
+structure used in this quick start.
 
-```javascript
-{
-   _id: ObjectId(...),
-   ticker: <string>,
-   date: ISODate(...),
-   close: <double>,
-   volume: <double>
-}
-```
+.. code-block:: javascript
+   :copyable: false
+   :category: example configuration object
+
+   {
+      _id: ObjectId(...),
+      ticker: <string>,
+      date: ISODate(...),
+      close: <double>,
+      volume: <double>
+   }
+
 
 ## Learning Summary
 
-Time series collections are optimized for time data, so performance depends heavily on how you configure them at creation. For more information, see `Time Series Collection Considerations <manual-timeseries-considerations>`.
+Time series collections are optimized for time data, so performance
+depends heavily on how you configure them at creation. For more
+information, see :ref:`Time Series Collection Considerations
+<manual-timeseries-considerations>`.
+
 
 ## Next Steps
 
-- To migrate existing data into a time series collection, see :ref:`Migrate
-Data into a Time Series Collection <migrate-data-into-a-timeseries-collection>`.
+* To migrate existing data into a time series collection, see :ref:`Migrate
+  Data into a Time Series Collection
+  <migrate-data-into-a-timeseries-collection>`.
 
-- To shard a time series collection, see :ref:`Shard a Time Series Collection
-<manual-timeseries-shard-collection>`.
+* To shard a time series collection, see :ref:`Shard a Time Series Collection
+  <manual-timeseries-shard-collection>`.
 
-- For aggregation and query behaviors specific to time series
-collections, see `Aggregation and Operator Considerations <manual-timeseries-aggregations-operators>`.
+* For aggregation and query behaviors specific to time series
+  collections, see :ref:`Aggregation and Operator Considerations
+  <manual-timeseries-aggregations-operators>`.
 
 ## Learn More
 
-- To learn how MongoDB stores time series data internally, see
-`About Time Series Data <timeseries-bucketing>`.
+* To learn how MongoDB stores time series data internally, see
+  :ref:`About Time Series Data <timeseries-bucketing>`.
 
-- To learn about custom bucketing parameters in MongoDB 6.3 and later,
-see `Using Custom Bucketing Parameters <flexible-bucketing>`.
+* To learn about custom bucketing parameters in MongoDB 6.3 and later,
+  see :ref:`Using Custom Bucketing Parameters <flexible-bucketing>`.

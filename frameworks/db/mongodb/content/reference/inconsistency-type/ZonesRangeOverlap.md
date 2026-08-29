@@ -1,68 +1,125 @@
 ---
 type: "Framework Learn Page"
-framework: "mongodb"
+framework: "MongoDB"
 source_repo: "https://github.com/mongodb/docs.git"
 source_branch: "main"
 source_path: "content/manual/manual/source/reference/inconsistency-type/ZonesRangeOverlap.txt"
-source_commit: "ab9db26ed3d11618cdb61516d8180337d8e3f679"
-source_commit_short: "ab9db26e"
-source_commit_date: "2026-07-24T16:22:46-06:00"
-generated_at: "2026-07-25T11:51:15Z"
+source_commit: "b9f2bc487a2878b65e3c1f80024bebab76954f27"
+source_commit_short: "b9f2bc48"
+source_commit_date: "2026-08-28T17:09:45-05:00"
+generated_at: "2026-08-29T09:39:19.857206Z"
 ---
+# ZonesRangeOverlap
 
-################# ZonesRangeOverlap #################
+**meta:** :description: Identify and understand the `ZonesRangeOverlap` inconsistency in MongoDB, which occurs when overlapping zones exist for the same collection.
+
+.. default-domain:: mongodb
+
+**contents:** On this page
+   :local:
+   :backlinks: none
+   :depth: 1
+   :class: singlecol
+
+.. |incon-type| replace:: ``ZonesRangeOverlap``
 
 # Description
 
+**data:** ZonesRangeOverlap
+
+   .. include:: /includes/inconsistency-type/ZonesRangeOverlap
+
 # Format
 
-```json
-{
-   type: "ZonesRangeOverlap",
-   description: "<string>",
-   details: {
-      namespace: "<string>",
-      collectionUUID: <string>,
-      zoneA: {<document>},
-      zoneB: {<document>}
+.. code-block:: json
+   :copyable: false
+
+   {
+      type: "ZonesRangeOverlap",
+      description: "<string>",
+      details: {
+         namespace: "<string>",
+         collectionUUID: <string>,
+         zoneA: {<document>},
+         zoneB: {<document>}
+      }
    }
-}
-```
 
 |incon-type| inconsistency documents contain the following fields:
 
+.. list-table::
+   :header-rows: 1
+   :widths: 20 20 60
+
+   * - Field
+     - Type
+     - Description
+
+   * - ``type``
+     - string
+     - .. include:: /includes/inconsistency-type/type
+
+
+   * - ``description``
+     - string
+     - .. include:: /includes/inconsistency-type/descr
+
+
+   * - ``details``
+     - document
+     - .. include:: /includes/inconsistency-type/details
+
+
+   * - ``details.namespace``
+     - string
+     - .. include:: /includes/inconsistency-type/details.namespace
+
+   * - ``details.collectionUUID``
+     - UUID
+     - .. include:: /includes/inconsistency-type/details.collectionUUID
+
+   * - ``details.zoneA``
+     - document
+     - The first zone that overlaps with the second zone.
+
+   * - ``details.zoneB``
+     - document
+     - The second zone that overlaps with the first zone.
+
 # Example
 
-.. include:: /includes/inconsistency-type/example
+**include:** /includes/inconsistency-type/example
 
-```json
-{
-   cursor: {
-      id: Long("0"),
-      ns: "test.$cmd.aggregate",
-      firstBatch: [
-         {
-            type: "ZonesRangeOverlap",
-            description: "Found two overlapping zones",
-            details: {
-               namespace: "test.authors",
-               collectionUUID: new UUID("62ebdb7e-a7bb-4151-a620-49d44cef097f"),
-               zoneA: { 
-                  ns: "test.authors", 
-                  tag: "64ddec77e0d32b766bb8d5fe", 
-                  min: { x: MinKey }, 
-                  max: { x: 0 } 
-               },
-               zoneB: { 
-                  ns: "test.authors", 
-                  tag: "64ddec77e0d32b766bb8d5ff", 
-                  min: { x: -10 }, 
-                  max: { x: MaxKey }
-               }
+.. code-block:: json
+   :emphasize-lines: 6-25
+   :copyable: false
+
+   {
+      cursor: {
+         id: Long("0"),
+         ns: "test.$cmd.aggregate",
+         firstBatch: [
+            {
+               type: "ZonesRangeOverlap",
+               description: "Found two overlapping zones",
+               details: {
+                  namespace: "test.authors",
+                  collectionUUID: new UUID("62ebdb7e-a7bb-4151-a620-49d44cef097f"),
+                  zoneA: { 
+                     ns: "test.authors", 
+                     tag: "64ddec77e0d32b766bb8d5fe", 
+                     min: { x: MinKey }, 
+                     max: { x: 0 } 
+                  },
+                  zoneB: { 
+                     ns: "test.authors", 
+                     tag: "64ddec77e0d32b766bb8d5ff", 
+                     min: { x: -10 }, 
+                     max: { x: MaxKey }
+                  }
+                }
              }
-          }
-      ],
-   },
-   ok: 1
-}
-```
+         ],
+      },
+      ok: 1
+   }

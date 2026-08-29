@@ -1,44 +1,116 @@
 ---
 type: "Framework Learn Page"
-framework: "mongodb"
+framework: "MongoDB"
 source_repo: "https://github.com/mongodb/docs.git"
 source_branch: "main"
 source_path: "content/manual/manual/source/reference/method/rs.remove.txt"
-source_commit: "ab9db26ed3d11618cdb61516d8180337d8e3f679"
-source_commit_short: "ab9db26e"
-source_commit_date: "2026-07-24T16:22:46-06:00"
-generated_at: "2026-07-25T11:51:15Z"
+source_commit: "b9f2bc487a2878b65e3c1f80024bebab76954f27"
+source_commit_short: "b9f2bc48"
+source_commit_date: "2026-08-28T17:09:45-05:00"
+generated_at: "2026-08-29T09:39:19.892448Z"
 ---
-
-============================
-
 # rs.remove() (mongosh method)
 
+**meta:** :description: Remove a member from a replica set using `rs.remove(hostname)` and manage connections accordingly.
+
+.. default-domain:: mongodb
+
+**contents:** On this page
+   :local:
+   :backlinks: none
+   :depth: 1
+   :class: singlecol
+
 ## Definition
+
+**method:** rs.remove(hostname)
+
+   Removes the member described by the ``hostname`` parameter from the
+   current :term:`replica set`. This function will disconnect the
+   shell briefly and forces a reconnection as the :term:`replica set`
+   renegotiates which member will be :term:`primary`. As a
+   result, the shell will display an error even if this command
+   succeeds.
+
+   The :method:`rs.remove()` method has the following parameter:
+
+
+   .. list-table::
+      :header-rows: 1
+      :widths: 20 20 80
+   
+      * - Parameter
+   
+        - Type
+   
+        - Description
+   
+      * - ``hostname``
+   
+        - string
+   
+        - The hostname of a system in the replica set.
+
+   .. note::
+
+      Before running the :method:`rs.remove()` operation, it is good
+      practice to *shut down* the replica set member that you are
+      removing.
 
 ## Compatibility
 
 This method is available in deployments hosted in the following environments:
 
-.. include:: /includes/fact-environments-onprem-only.rst
+**include:** /includes/fact-environments-onprem-only.rst
 
 ## Behavior
 
-.. This behavior will change once SERVER-36417 closes.
+### Global Write Concern
 
-By default, replica set members wait for 5 minutes before dropping connections to the removed member. In sharded replica sets, you can modify this timeout using the :parameter:`ShardingTaskExecutorPoolHostTimeoutMS` server parameter.
+Removing a member changes the number of voting members in the replica
+set, which can change the :ref:`implicit default write concern
+<wc-default-behavior>`. 
 
-To immediately drop all outgoing connections from the replica set to the removed member, run the :dbcommand:`dropConnections` administrative command  on each remaining member on the replica set:
+**include:** /includes/fact-set-global-write-concern-before-reconfig.rst
 
-```javascript
-db.adminCommand( 
-  {
-    "dropConnections" : 1,
-    "hostAndPort" : [
-      "<hostname>:<port>"
-    ] 
-  } 
-)
-```
+### Removal Waits Until a Majority of Members Install the Replica Configuration
 
-Replace `<hostname>` with the hostname of the removed member and `<port>` with the port the :binary:`~bin.mongod` listened on.
+:method:`rs.remove()` runs the :dbcommand:`replSetReconfig` command
+with a configuration that omits the removed member. The method waits
+until a majority of voting replica set members install the new replica
+configuration before it returns success. A voting member is any replica
+set member where :rsconf:`members[n].votes` is ``1``, including
+arbiters. To learn how replica set members install a new configuration,
+see :ref:`replSetReconfig-cmd-majority-install`.
+
+:method:`rs.remove()` does not accept a :ref:`maxTimeMS
+<replSetReconfig-cmd-maxTimeMS>` limit. If a majority of voting members
+never install the new configuration, the operation waits indefinitely.
+
+### Connections to the Removed Member
+
+..
+  This behavior will change once SERVER-36417 closes. 
+
+By default, replica set members wait for 5 minutes before dropping
+connections to the removed member. In sharded replica sets, you can
+modify this timeout using the
+:parameter:`ShardingTaskExecutorPoolHostTimeoutMS` server parameter.
+
+To immediately drop all outgoing connections from the replica set to
+the removed member, run the :dbcommand:`dropConnections`
+administrative command  on each remaining member on the replica set:
+
+.. code-block:: javascript
+
+   db.adminCommand( 
+     {
+       "dropConnections" : 1,
+       "hostAndPort" : [
+         "<hostname>:<port>"
+       ] 
+     } 
+   )
+
+Replace ``<hostname>`` with the hostname of the removed member and
+``<port>`` with the port the :binary:`~bin.mongod` listened on.

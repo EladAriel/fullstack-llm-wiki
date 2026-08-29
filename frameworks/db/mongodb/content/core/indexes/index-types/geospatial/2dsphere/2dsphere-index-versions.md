@@ -1,41 +1,83 @@
 ---
 type: "Framework Learn Page"
-framework: "mongodb"
+framework: "MongoDB"
 source_repo: "https://github.com/mongodb/docs.git"
 source_branch: "main"
 source_path: "content/manual/manual/source/core/indexes/index-types/geospatial/2dsphere/2dsphere-index-versions.txt"
-source_commit: "ab9db26ed3d11618cdb61516d8180337d8e3f679"
-source_commit_short: "ab9db26e"
-source_commit_date: "2026-07-24T16:22:46-06:00"
-generated_at: "2026-07-25T11:51:15Z"
+source_commit: "b9f2bc487a2878b65e3c1f80024bebab76954f27"
+source_commit_short: "b9f2bc48"
+source_commit_date: "2026-08-28T17:09:45-05:00"
+generated_at: "2026-08-29T09:39:19.843683Z"
 ---
-
-=======================
+.. _2dsphere-index-versions:
 
 # 2dsphere Index Versions
 
+**meta:** :description: Explore different versions of 2dsphere indexes in MongoDB and learn how to specify a version when creating an index.
+
+.. default-domain:: mongodb
+
+**contents:** On this page
+   :local:
+   :backlinks: none
+   :depth: 1
+   :class: singlecol
+
 2dsphere indexes are available in the following versions:
+
+.. list-table::
+   :header-rows: 1
+   :widths: 25 75
+
+   * - 2dsphere Index Version
+     - Description
+
+   * - Version 4
+
+     - MongoDB 8.3 introduces version 4 of 2dsphere indexes.
+       Version 4 is the default version for 2dsphere indexes created
+       in MongoDB 8.3 and later.
+
+   * - Version 3
+
+     - MongoDB 3.2 introduces version 3 of 2dsphere indexes.
+       Version 3 is the default version for 2dsphere indexes created
+       in MongoDB 3.2 and later.
+
+   * - Version 2
+
+     - MongoDB 2.6 introduces version 2 of 2dsphere indexes.
+       Version 2 is the default version for 2dsphere indexes created
+       in MongoDB 2.6 to 3.0.
+
+   * - Version 1
+
+     - MongoDB 2.4 introduces version 1 of 2dsphere indexes.
+       MongoDB 2.4 only supports version 1.
 
 ## Change Index Version
 
-> **Important:** .. include:: /includes/indexes/index-version-callout.rst
+**important:** .. include:: /includes/indexes/index-version-callout.rst
 
-To override the default version and specify a different version for your 2dsphere index, set the `2dsphereIndexVersion` option when you create an index:
+To override the default version and specify a different version for your
+2dsphere index, set the ``2dsphereIndexVersion`` option when you create
+an index:
 
-```javascript
-db.<collection>.createIndex( 
-   { <field>: "2dsphere" }, 
-   { "2dsphereIndexVersion": <version> } 
-)
-```
+.. code-block:: javascript 
+
+   db.<collection>.createIndex( 
+      { <field>: "2dsphere" }, 
+      { "2dsphereIndexVersion": <version> } 
+   )
 
 ### Example
 
-The following command creates a version 2 2dsphere index on the `address` field:
+The following command creates a version 2 2dsphere index on the
+``address`` field:
 
-```javascript
-db.test.createIndex(
-   { "address": "2dsphere" },
-   { "2dsphereIndexVersion": 2 }
- )
-```
+.. code-block:: javascript
+
+   db.test.createIndex(
+      { "address": "2dsphere" },
+      { "2dsphereIndexVersion": 2 }
+    )

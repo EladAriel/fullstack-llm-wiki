@@ -1,38 +1,68 @@
 ---
 type: "Framework Learn Page"
-framework: "mongodb"
+framework: "MongoDB"
 source_repo: "https://github.com/mongodb/docs.git"
 source_branch: "main"
 source_path: "content/manual/manual/source/administration/self-managed-configuration-and-maintenance.txt"
-source_commit: "ab9db26ed3d11618cdb61516d8180337d8e3f679"
-source_commit_short: "ab9db26e"
-source_commit_date: "2026-07-24T16:22:46-06:00"
-generated_at: "2026-07-25T11:51:15Z"
+source_commit: "b9f2bc487a2878b65e3c1f80024bebab76954f27"
+source_commit_short: "b9f2bc48"
+source_commit_date: "2026-08-28T17:09:45-05:00"
+generated_at: "2026-08-29T09:39:19.768616Z"
 ---
-
-================================================
+.. _self-managed-configuration-and-maintenance:
 
 # Configure and Maintain a Self-Managed Deployment
 
-These documents provide instructions on how to configure and administer a self-managed MongoDB database.
+.. default-domain:: mongodb
 
-`configuration-file` Outlines common MongoDB configurations and examples of best-practice configurations for common use cases.
+**facet:** :name: genre
+   :values: reference
 
-`upgrade-to-latest-revision` Upgrade a MongoDB deployment to a different patch release within the same major release series.
+**meta:** :description: Learn how to configure and administer self-managed MongoDB document database deployments.
+   :keywords: on-prem
+                 
+**contents:** On this page
+   :local:
+   :backlinks: none
+   :depth: 1
+   :class: singlecol
 
-`/tutorial/manage-mongodb-processes` Start, configure, and manage running :binary:`~bin.mongod` process.
+These documents provide instructions on how to configure and administer a 
+self-managed MongoDB database.
 
-`configuration-options` Full documentation of the configuration file and available run-time operations.
+:ref:`configuration-file`
+   Outlines common MongoDB configurations and examples of
+   best-practice configurations for common use cases.
 
-`server-parameters` Documentation of all :binary:`~bin.mongod` and :binary:`~bin.mongos` parameters that are available in the :dbcommand:`setParameter` (command) and :setting:`setParameter` run-time interface.
+:ref:`upgrade-to-latest-revision`
+   Upgrade a MongoDB deployment to a different patch release
+   within the same major release series.
 
-`cluster-parameters` Documentation of all :binary:`~bin.mongod` and :binary:`~bin.mongos` parameters that are available in the :dbcommand:`setClusterParameter`.
+:doc:`/tutorial/manage-mongodb-processes`
+   Start, configure, and manage running :binary:`~bin.mongod`
+   process.
 
-## Contents
+:ref:`configuration-options`
+   Full documentation of the configuration file and available
+   run-time operations.
+   
+:ref:`server-parameters`
+   Documentation of all :binary:`~bin.mongod` and
+   :binary:`~bin.mongos` parameters that are available in the
+   :dbcommand:`setParameter` (command) and :setting:`setParameter`
+   run-time interface.
 
-- Run-time Database Configuration </administration/configuration>
-- Upgrade to the Latest Patch Release </tutorial/upgrade-revision>
-- Manage mongod Processes </tutorial/manage-mongodb-processes>
-- Configuration File Options </reference/configuration-options>
-- Server Parameters </reference/parameters>
-- Cluster Parameters </reference/cluster-parameters>
+:ref:`cluster-parameters`
+   Documentation of all :binary:`~bin.mongod` and
+   :binary:`~bin.mongos` parameters that are available in the
+   :dbcommand:`setClusterParameter`.
+
+**toctree:** :titlesonly:
+   :hidden:
+
+   Run-time Database Configuration </administration/configuration>
+   Upgrade to the Latest Patch Release </tutorial/upgrade-revision>
+   Manage mongod Processes </tutorial/manage-mongodb-processes>
+   Configuration File Options </reference/configuration-options>
+   Server Parameters </reference/parameters>
+   Cluster Parameters </reference/cluster-parameters>

@@ -1,14 +1,15 @@
 ---
 type: "Framework Learn Page"
-framework: "redis"
+framework: "Redis"
 source_repo: "https://github.com/redis/docs.git"
 source_branch: "main"
 source_path: "content/develop/use-cases/recommendation-engine/dotnet/_index.md"
-source_commit: "9d30f68c3dad1a6b3b7d30fe604b911348ce8152"
-source_commit_short: "9d30f68c"
-source_commit_date: "2026-07-24T10:52:10-07:00"
-generated_at: "2026-07-25T11:51:22Z"
+source_commit: "f8693349287b0efbef3c865b6f6a2aceca88594d"
+source_commit_short: "f869334"
+source_commit_date: "2026-08-28T10:01:19-05:00"
+generated_at: "2026-08-29T09:38:56.130336Z"
 ---
+# _Index
 
 ---
 aliases:
@@ -26,7 +27,7 @@ title: Redis recommendation engine with NRedisStack
 weight: 5
 ---
 
-This guide shows you how to build a small Redis-backed product recommendation service in C# with [`NRedisStack`]({{< relref "/develop/clients/dotnet" >}}) (the Redis Stack wrapper on top of [StackExchange.Redis](https://stackexchange.github.io/StackExchange.Redis/)) and the [`SmartComponents.LocalEmbeddings`](https://www.nuget.org/packages/SmartComponents.LocalEmbeddings) library, which ships a bundled 384-dimensional [BAAI `bge-micro-v2`](https://huggingface.co/TaylorAI/bge-micro-v2) ONNX model (no API key, no shared library to install). The other ports in this guide series use [`sentence-transformers/all-MiniLM-L6-v2`](https://huggingface.co/sentence-transformers/all-MiniLM-L6-v2), also a 384-dim encoder; the index schema is identical, so the same `FT.SEARCH` query shape works for both. It includes a local web server built on `System.Net.HttpListener` so you can embed a natural-language query, run a KNN retrieval with structured pre-filters in one round trip, feed clicks back as a session signal, and watch the next recommendation incorporate them immediately.
+This guide shows you how to build a small Redis-backed product recommendation service in C# with [`NRedisStack`]({{< relref "/develop/clients/dotnet" >}}) (the Redis Stack wrapper on top of [StackExchange.Redis](https://seredis.dev/)) and the [`SmartComponents.LocalEmbeddings`](https://www.nuget.org/packages/SmartComponents.LocalEmbeddings) library, which ships a bundled 384-dimensional [BAAI `bge-micro-v2`](https://huggingface.co/TaylorAI/bge-micro-v2) ONNX model (no API key, no shared library to install). The other ports in this guide series use [`sentence-transformers/all-MiniLM-L6-v2`](https://huggingface.co/sentence-transformers/all-MiniLM-L6-v2), also a 384-dim encoder; the index schema is identical, so the same `FT.SEARCH` query shape works for both. It includes a local web server built on `System.Net.HttpListener` so you can embed a natural-language query, run a KNN retrieval with structured pre-filters in one round trip, feed clicks back as a session signal, and watch the next recommendation incorporate them immediately.
 
 ## Overview
 

@@ -4,10 +4,10 @@ framework: "LangSmith"
 source_repo: "https://github.com/langchain-ai/docs.git"
 source_branch: "main"
 source_path: "src/langsmith/release-versions.mdx"
-source_commit: "2aae1dfc98ee953a9a5185fb6fcdd9efb3f4d878"
-source_commit_short: "2aae1df"
-source_commit_date: "2026-07-25T00:27:23+00:00"
-generated_at: "2026-07-25T19:08:33.384245Z"
+source_commit: "a174f9cf7c91ee5eb14ee2382eb48bfe6e4956e9"
+source_commit_short: "a174f9c"
+source_commit_date: "2026-08-28T17:04:12-07:00"
+generated_at: "2026-08-29T09:39:50.602793Z"
 ---
 # Release Versions
 
@@ -25,7 +25,7 @@ Self-hosted LangSmith ships on two release channels: a stable channel that custo
 
 The current generally available major version. LangSmith recommends this channel for production. Stable receives weekly patch releases containing critical bug fixes and security patches only. No new features, data migrations, or infrastructure changes land on stable between major versions.
 
-At any given time, the latest major version (N) is the preview channel and the previous major version (N-1) is stable.
+Throughout this page, `N` refers to the current stable major version. Preview tracks the next major version, `N+1`.
 
 ### Preview
 
@@ -56,19 +56,33 @@ Service additions, service removals, and breaking changes only land in a new maj
 
 ## Version numbering
 
-Self-hosted LangSmith uses the following scheme:
+Every self-hosted release has two version numbers:
 
-- `v0.X.0`: Major version (stable GA release)
-- `v0.X.Y`: Stable patch release (critical fixes only)
-- `v0.X.0-rcN`: Preview build (release candidate) for the next major version, where `N` is an incrementing build number
+- The **chart version** is the Helm chart version you install and pin. Releases are named after it, both in the [self-hosted changelog](/langsmith/self-hosted-changelog) and as [Helm repository](https://github.com/langchain-ai/helm/releases) release tags, for example `langsmith-0.15.17`.
+- The **LangSmith version** is the application version the chart deploys, recorded as `appVersion` in the chart.
+
+|  | Chart version | LangSmith version |
+|--|--|--|
+| Stable | `0.15.17` | `0.15.24` |
+| Preview (release candidate) | `0.16.0-rc.15` | `0.16.19rc1` |
+
+- Stable chart versions are `0.X.Y`, where `X` is the major version and `Y` increments with each patch release.
+- Preview chart versions are `0.X.0-rc.N`, where `N` increments with each release candidate.
+- The two numbers advance independently. The chart patch number and the LangSmith patch number are not expected to match.
+
+The `vX` shorthand used for release trains (`v15`, `v16`) refers to the major version, so `v15` means chart version `0.15.Y`.
 
 ## Version support
 
-LangSmith supports the current stable major version and the two previous stable major versions. When `N` represents the current stable major version:
+LangSmith supports the current stable major version (`N`) and the previous stable major version (`N-1`):
 
-- `N` receives active support, including critical bug fixes, security patches, and new patch releases.
-- `N-1` and `N-2` receive critical support, including critical bug fixes and security patches.
-- Versions older than `N-2` are end of life and do not receive new patch releases, bug fixes, or security updates.
+- `N` receives active support: critical bug fixes, security patches, and weekly patch releases.
+- `N-1` receives critical support only: critical bug fixes and security patches, released ad hoc rather than weekly.
+- Versions older than `N-1` are end of life and do not receive new patch releases, bug fixes, or security updates.
+
+Because a new major version ships approximately every 6 weeks, a version reaches end of life roughly 6 weeks after it is superseded as stable. Fixes are not backported to a version once it is end of life; upgrade to a supported major version to pick them up.
+
+Alongside the two supported stable versions, the next major version is available on the preview channel as a series of release candidates, for example `0.16.0-rc.15`. Preview builds are published continuously and always carry the newest fixes, but they are intended for evaluation in test and staging environments rather than production. Running preview in a non-production environment is the recommended way to validate the next major version before it becomes stable.
 
 ## Recommendations
 
@@ -80,3 +94,8 @@ LangSmith supports the current stable major version and the two previous stable 
 ## Current version
 
 To check the current stable and preview versions, refer to the [self-hosted changelog](/langsmith/self-hosted-changelog).
+
+## See also
+
+- [Release stages](/langsmith/release-stages) for how features move from alpha to GA
+- [API and SDK deprecation policy](/langsmith/endpoint-deprecation) for how deprecated endpoints and methods are removed

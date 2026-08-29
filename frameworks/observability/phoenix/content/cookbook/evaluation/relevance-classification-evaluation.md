@@ -4,10 +4,10 @@ framework: "Arize Phoenix"
 source_repo: "https://github.com/Arize-ai/phoenix.git"
 source_branch: "main"
 source_path: "docs/phoenix/cookbook/evaluation/relevance-classification-evaluation.mdx"
-source_commit: "69b3ab92c37ff65812feaa2dbf0b1c0ad5ae55fe"
-source_commit_short: "69b3ab9"
-source_commit_date: "2026-07-25T11:48:12-06:00"
-generated_at: "2026-07-25T19:08:24.869819Z"
+source_commit: "c48e50e9906fcc56c1c103ebd93ef3c95ed6b6e7"
+source_commit_short: "c48e50e"
+source_commit_date: "2026-08-29T01:45:20-06:00"
+generated_at: "2026-08-29T09:39:58.874222Z"
 ---
 ---
 description: "Evaluate the relevance of documents retrieved by RAG applications using Phoenix's evaluation framework."
@@ -60,21 +60,24 @@ df_sample = df_sample.rename(columns={
 ## Run Relevance Classification
 
 ```python
-from phoenix.evals import LLM, async_evaluate_dataframe
-from phoenix.evals.metrics import DocumentRelevanceEvaluator
+from phoenix.evals import LLM, async_evaluate_dataframe, bind_evaluator
+from phoenix.evals.metrics import RetrievalRelevanceEvaluator
 
 llm = LLM(provider="openai", model="gpt-4")
-relevance_evaluator = DocumentRelevanceEvaluator(llm=llm)
+relevance_evaluator = RetrievalRelevanceEvaluator(llm=llm)
+# Score each document on its own by mapping the evaluator's `context` field to
+# the dataframe's `reference` column (one document per row).
+relevance_evaluator = bind_evaluator(evaluator=relevance_evaluator, input_mapping={"context": "reference"})
 
 evals_df = await async_evaluate_dataframe(dataframe=df_sample, evaluators=[relevance_evaluator], concurrency=10)
-relevance_classifications = evals_df["document_relevance_score"].str["label"].tolist()
-choices = relevance_evaluator.CHOICES
+relevance_classifications = evals_df["retrieval_relevance_score"].str["label"].tolist()
+choices = relevance_evaluator.labels
 ```
 
 ## Evaluate Results
 
 ```python
-true_labels = df_sample["relevant"].map({True: "relevant", False: "unrelated"}).tolist()
+true_labels = df_sample["relevant"].map({True: "relevant", False: "irrelevant"}).tolist()
 
 print(classification_report(true_labels, relevance_classifications, labels=choices))
 confusion_matrix = ConfusionMatrix(
@@ -99,11 +102,11 @@ relevance_classifications_df = await async_evaluate_dataframe(
     evaluators=[relevance_evaluator],
     concurrency=10,
 )
-relevance_classifications_df["label"] = relevance_classifications_df["document_relevance_score"].str[
+relevance_classifications_df["label"] = relevance_classifications_df["retrieval_relevance_score"].str[
     "label"
 ]
 relevance_classifications_df["explanation"] = relevance_classifications_df[
-    "document_relevance_score"
+    "retrieval_relevance_score"
 ].str["explanation"]
 ```
 

@@ -1,125 +1,167 @@
 ---
 type: "Framework Learn Page"
-framework: "mongodb"
+framework: "MongoDB"
 source_repo: "https://github.com/mongodb/docs.git"
 source_branch: "main"
 source_path: "content/manual/manual/source/reference/operator/update/bit.txt"
-source_commit: "ab9db26ed3d11618cdb61516d8180337d8e3f679"
-source_commit_short: "ab9db26e"
-source_commit_date: "2026-07-24T16:22:46-06:00"
-generated_at: "2026-07-25T11:51:15Z"
+source_commit: "b9f2bc487a2878b65e3c1f80024bebab76954f27"
+source_commit_short: "b9f2bc48"
+source_commit_date: "2026-08-28T17:09:45-05:00"
+generated_at: "2026-08-29T09:39:20.108895Z"
 ---
-
-======================
+.. _update-bit:
 
 # $bit (update operator)
 
+**meta:** :description: Perform bitwise updates on integer fields using the `$bit` operator with `and`, `or`, and `xor` operations in MongoDB.
+
+.. default-domain:: mongodb
+
+**contents:** On this page
+   :local:
+   :backlinks: none
+   :depth: 1
+   :class: singlecol
+
 ## Definition
+
+**update:** $bit
+
+   The :update:`$bit` operator performs a bitwise update of a field.
+   The operator supports bitwise ``and``, bitwise
+   ``or``, and bitwise ``xor`` (i.e. exclusive or) operations. To
+   specify a :update:`$bit` operator expression, use the following
+   prototype:
+
+   .. code-block:: javascript
+
+      { $bit: { <field>: { <and|or|xor>: <int> } } }
+
+   Only use this operator with integer fields (either 32-bit integer or
+   64-bit integer).
+
+   .. include:: /includes/use-dot-notation.rst
+
+   .. include:: /includes/fact-mongosh-integer-long-constructors.rst
 
 ## Behavior
 
-.. include:: /includes/extracts/update-operation-empty-operand-expressions-bit.rst
+**include:** /includes/extracts/update-operation-empty-operand-expressions-bit.rst
 
-.. include:: /includes/fact-update-operator-processing-order.rst
+**include:** /includes/fact-update-operator-processing-order.rst
 
 ## Examples
 
-The following examples use the `switches` collection:
+The following examples use the ``switches`` collection:
 
-```javascript
-db.switches.insertMany( [
-   { _id: 1, expdata: Int32(13) },
-   { _id: 2, expdata: Int32(3) },
-   { _id: 3, expdata: Int32(1) }
-] )
-```
+.. code-block:: javascript
+
+   db.switches.insertMany( [
+      { _id: 1, expdata: Int32(13) },
+      { _id: 2, expdata: Int32(3) },
+      { _id: 3, expdata: Int32(1) }
+   ] )
 
 ### Bitwise AND
 
-Use a bitwise `and` in the :method:`~db.collection.updateOne()` operation to update `expdata`.
+Use a bitwise ``and`` in the :method:`~db.collection.updateOne()`
+operation to update ``expdata``.
 
-```javascript
-db.switches.updateOne(
-   { _id: 1 },
-   { $bit: { expdata: { and: Int32( 10 ) } } }
-)
-```
+.. code-block:: javascript
 
-The bitwise `and` operation:
+   db.switches.updateOne(
+      { _id: 1 },
+      { $bit: { expdata: { and: Int32( 10 ) } } }
+   )
 
-- gets the bitwise value of `expdata`
-- uses `and` to apply the bitwise value of Int32(10)
-- updates `expdata` with the result, 1000
-```javascript
-1101   // expdata
-1010   // Int32(10)
-----
-1000
-```
+The bitwise ``and`` operation:
 
-Binary 1000 is equivalent to Int32(8). The `db.switches.find( { _id: 1 } )` command returns the following document:
+- gets the bitwise value of ``expdata``
+- uses ``and`` to apply the bitwise value of Int32(10)
+- updates ``expdata`` with the result, 1000
 
-```javascript
-{ "_id" : 1, "expdata" : 8 }
-```
+.. code-block:: javascript
+   :copyable: false
+
+   1101   // expdata
+## 1010   // Int32(10)
+   1000
+
+Binary 1000 is equivalent to Int32(8). The
+``db.switches.find( { _id: 1 } )`` command returns the following
+document:
+
+.. code-block:: javascript
+
+   { "_id" : 1, "expdata" : 8 }
+
 
 ### Bitwise OR
 
-Use a bitwise `or` in the :method:`~db.collection.updateOne()` operation to update `expdata`.
+Use a bitwise ``or`` in the :method:`~db.collection.updateOne()`
+operation to update ``expdata``.
 
-```javascript
-db.switches.updateOne(
-   { _id: 2 },
-   { $bit: { expdata: { or: Int32( 5 ) } } }
-)
-```
+.. code-block:: javascript
 
-The bitwise `or` operation:
+   db.switches.updateOne(
+      { _id: 2 },
+      { $bit: { expdata: { or: Int32( 5 ) } } }
+   )
 
-- gets the bitwise value of `expdata`
-- uses `or` to apply the bitwise value of Int32(5)
-- updates `expdata` with the result, 0111
-```javascript
-0111   // expdata
-0101   // Int32(5)
-----
-0111
-```
+The bitwise ``or`` operation:
 
-Binary 0111 is equivalent to Int32(7). The `db.switches.find( { _id: 2 } )` command returns the following document:
+- gets the bitwise value of ``expdata``
+- uses ``or`` to apply the bitwise value of Int32(5)
+- updates ``expdata`` with the result, 0111
 
-```javascript
-{ "_id" : 2, "expdata" : 7 }
-```
+.. code-block:: javascript
+   :copyable: false
+
+   0111   // expdata
+## 0101   // Int32(5)
+   0111
+
+Binary 0111 is equivalent to Int32(7). The 
+``db.switches.find( { _id: 2 } )`` command returns the following
+document:
+
+.. code-block:: javascript
+
+   { "_id" : 2, "expdata" : 7 }
+
 
 ### Bitwise XOR
 
-Use a bitwise `xor` in the :method:`~db.collection.updateOne()` operation to update `expdata`.
+Use a bitwise ``xor`` in the :method:`~db.collection.updateOne()`
+operation to update ``expdata``.
 
-```javascript
-db.switches.updateOne(
-   { _id: 3 },
-   { $bit: { expdata: { xor: Int32( 5 ) } } }
-)
-```
+.. code-block:: javascript
 
-The bitwise `and` operation:
+   db.switches.updateOne(
+      { _id: 3 },
+      { $bit: { expdata: { xor: Int32( 5 ) } } }
+   )
 
-- gets the bitwise value of `expdata`
-- uses `and` to apply the bitwise value of Int32(5)
-- updates `expdata` with the result, 0100
-```javascript
-0001   // expdata
-0101   // Int32(5)
-----
-0100
-```
+The bitwise ``and`` operation:
 
-Binary 0100 is equivalent to `Int32(4)`. The `db.switches.find( { _id: 3 } )` command returns the following document:
+- gets the bitwise value of ``expdata``
+- uses ``and`` to apply the bitwise value of Int32(5)
+- updates ``expdata`` with the result, 0100
 
-```javascript
-{ "_id" : 1, "expdata" : 4 }
-```
+.. code-block:: javascript
+   :copyable: false
 
-> **Seealso:** - :method:`db.collection.updateOne()`
-- :method:`db.collection.findAndModify()`
+   0001   // expdata
+## 0101   // Int32(5)
+   0100
+
+Binary 0100 is equivalent to ``Int32(4)``. The
+``db.switches.find( { _id: 3 } )`` command returns the following
+document:
+
+.. code-block:: javascript
+
+   { "_id" : 1, "expdata" : 4 }
+
+**seealso:** - :method:`db.collection.updateOne()`
+   - :method:`db.collection.findAndModify()`

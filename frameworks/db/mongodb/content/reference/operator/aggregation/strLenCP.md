@@ -1,70 +1,128 @@
 ---
 type: "Framework Learn Page"
-framework: "mongodb"
+framework: "MongoDB"
 source_repo: "https://github.com/mongodb/docs.git"
 source_branch: "main"
 source_path: "content/manual/manual/source/reference/operator/aggregation/strLenCP.txt"
-source_commit: "ab9db26ed3d11618cdb61516d8180337d8e3f679"
-source_commit_short: "ab9db26e"
-source_commit_date: "2026-07-24T16:22:46-06:00"
-generated_at: "2026-07-25T11:51:15Z"
+source_commit: "b9f2bc487a2878b65e3c1f80024bebab76954f27"
+source_commit_short: "b9f2bc48"
+source_commit_date: "2026-08-28T17:09:45-05:00"
+generated_at: "2026-08-29T09:39:20.132787Z"
 ---
-
-===============================
-
 # $strLenCP (expression operator)
 
+**meta:** :description: Calculate the number of UTF-8 code points in a string using the `$strLenCP` operator in MongoDB aggregation.
+
+.. default-domain:: mongodb
+
+**contents:** On this page
+   :local:
+   :backlinks: none
+   :depth: 1
+   :class: singlecol
+   
 ## Definition
+
+**expression:** $strLenCP
+   
+   Returns the number of UTF-8 `code points
+   <http://www.unicode.org/glossary/#code_point>`_ in the specified string.
+
+   :expression:`$strLenCP` has the following :ref:`operator expression
+   syntax <agg-quick-ref-operator-expressions>`:
+
+   .. code-block:: javascript
+      :copyable: false
+
+      { $strLenCP: <string expression> }
+
+   The argument can be any valid :ref:`expression
+   <aggregation-expressions>` that resolves to a string.
+
+   .. include:: /includes/extracts/agg-expression-null-operand-strLenCP.rst
+
+   .. list-table::
+      :header-rows: 1
+      :widths: 95 5
+   
+      * - Example
+        - Results
+   
+      * - ``{ $strLenCP: "abcde" }``
+        - ``5``
+        
+      * - ``{ $strLenCP: "Hello World!" }``
+        - ``12``
+   
+      * - ``{ $strLenCP: "cafeteria" }``
+        - ``9``
+   
+      * - ``{ $strLenCP: "cafétéria" }``
+        - ``9``
+      
+      * - ``{ $strLenCP: "" }``
+        - ``0``
+      
+      * - ``{ $strLenCP: "$€λA" }``
+        - ``4``
+
+      * - ``{ $strLenCP: "寿司" }``
+        - ``2``
 
 ## Behavior
 
-The :expression:`$strLenCP` operator counts the number of code points in the specified string. This behavior differs from the :expression:`$strLenBytes` operator that counts the number of bytes in the string, where each character uses between one and four bytes.
+The :expression:`$strLenCP` operator counts the number of code points
+in the specified string. This behavior differs from the
+:expression:`$strLenBytes` operator that counts the number of bytes in
+the string, where each character uses between one and four bytes.
 
 ## Example
 
 ### Single-Byte and Multibyte Character Set
 
-Create a `food` collection:
+Create a ``food`` collection:
 
-```javascript
-db.food.insertMany( [
-   { _id: 1, name: "apple" },
-   { _id: 2, name: "banana" },
-   { _id: 3, name: "éclair" },
-   { _id: 4, name: "hamburger" },
-   { _id: 5, name: "jalapeño" },
-   { _id: 6, name: "pizza" },
-   { _id: 7, name: "tacos" },
-   { _id: 8, name: "寿司" }
-] )
-```
+.. code-block:: javascript
 
-The following example uses the `$strLenCP` operator to calculate the `length` of each `name` value:
+   db.food.insertMany( [
+      { _id: 1, name: "apple" },
+      { _id: 2, name: "banana" },
+      { _id: 3, name: "éclair" },
+      { _id: 4, name: "hamburger" },
+      { _id: 5, name: "jalapeño" },
+      { _id: 6, name: "pizza" },
+      { _id: 7, name: "tacos" },
+      { _id: 8, name: "寿司" }
+   ] )
 
-```javascript
-db.food.aggregate( [
-   {
-      $project: {
-         name: 1,
-         length: { $strLenCP: "$name" }
+The following example uses the ``$strLenCP`` operator to calculate
+the ``length`` of each ``name`` value:
+
+.. code-block:: javascript
+
+   db.food.aggregate( [
+      {
+         $project: {
+            name: 1,
+            length: { $strLenCP: "$name" }
+         }
       }
-   }
-] )
-```
+   ] )
 
 Example output:
 
-```javascript
-[
-   { _id: 1, name: 'apple', length: 5 },
-   { _id: 2, name: 'banana', length: 6 },
-   { _id: 3, name: 'éclair', length: 6 },
-   { _id: 4, name: 'hamburger', length: 9 },
-   { _id: 5, name: 'jalapeño', length: 8 },
-   { _id: 6, name: 'pizza', length: 5 },
-   { _id: 7, name: 'tacos', length: 5 },
-   { _id: 8, name: '寿司', length: 2 }
-]
-```
+.. code-block:: javascript
+   :copyable: false
 
-> **Seealso:** :expression:`$strLenBytes`
+   [
+      { _id: 1, name: 'apple', length: 5 },
+      { _id: 2, name: 'banana', length: 6 },
+      { _id: 3, name: 'éclair', length: 6 },
+      { _id: 4, name: 'hamburger', length: 9 },
+      { _id: 5, name: 'jalapeño', length: 8 },
+      { _id: 6, name: 'pizza', length: 5 },
+      { _id: 7, name: 'tacos', length: 5 },
+      { _id: 8, name: '寿司', length: 2 }
+   ]
+
+**seealso:** :expression:`$strLenBytes`

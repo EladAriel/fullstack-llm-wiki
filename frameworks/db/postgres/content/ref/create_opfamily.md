@@ -1,47 +1,124 @@
 ---
 type: "Framework Learn Page"
-framework: "postgres"
+framework: "PostgreSQL"
 source_repo: "https://github.com/postgres/postgres.git"
 source_branch: "master"
 source_path: "doc/src/sgml/ref/create_opfamily.sgml"
-source_commit: "38afc3dcb25c45b744d4025029ce0a6c90b7059f"
-source_commit_short: "38afc3dc"
-source_commit_date: "2026-07-25T19:08:27+09:00"
-generated_at: "2026-07-25T11:50:59Z"
+source_commit: "6c5f1d6074208146930b67c2054509c3e82f6f7f"
+source_commit_short: "6c5f1d6"
+source_commit_date: "2026-08-28T23:24:47+02:00"
+generated_at: "2026-08-29T09:39:24.555571Z"
 ---
-
 CREATE OPERATOR FAMILY
+ 
 
-CREATE OPERATOR FAMILY
-7
-SQL - Language Statements
+ 
+  
+# CREATE OPERATOR FAMILY
 
-CREATE OPERATOR FAMILY
-define a new operator family
+  7
+  SQL - Language Statements
+ 
 
-```
+ 
+  
+# CREATE OPERATOR FAMILY
+
+  define a new operator family
+ 
+
+ 
+
 CREATE OPERATOR FAMILY name USING index_method
-```
 
-## Description
+ 
 
-`CREATE OPERATOR FAMILY` creates a new operator family. An operator family defines a collection of related operator classes, and perhaps some additional operators and support functions that are compatible with these operator classes but not essential for the functioning of any individual index. (Operators and functions that are essential to indexes should be grouped within the relevant operator class, rather than being loose in the operator family. Typically, single-data-type operators are bound to operator classes, while cross-data-type operators can be loose in an operator family containing operator classes for both data types.)
+ 
+  
+# Description
 
-The new operator family is initially empty. It should be populated by issuing subsequent `CREATE OPERATOR CLASS` commands to add contained operator classes, and optionally `ALTER OPERATOR FAMILY` commands to add loose operators and their corresponding support functions.
+  
+   CREATE OPERATOR FAMILY creates a new operator family.
+   An operator family defines a collection of related operator classes,
+   and perhaps some additional operators and support functions that are
+   compatible with these operator classes but not essential for the
+   functioning of any individual index.  (Operators and functions that
+   are essential to indexes should be grouped within the relevant operator
+   class, rather than being loose in the operator family.
+   Typically, single-data-type operators are bound to operator classes,
+   while cross-data-type operators can be loose in an operator family
+   containing operator classes for both data types.)
+  
 
-If a schema name is given then the operator family is created in the specified schema. Otherwise it is created in the current schema. Two operator families in the same schema can have the same name only if they are for different index methods.
+  
+   The new operator family is initially empty.  It should be populated
+   by issuing subsequent CREATE OPERATOR CLASS commands
+   to add contained operator classes, and optionally
+   ALTER OPERATOR FAMILY commands to add loose
+   operators and their corresponding support functions.
+  
 
-The user who defines an operator family becomes its owner. Presently, the creating user must be a superuser. (This restriction is made because an erroneous operator family definition could confuse or even crash the server.)
+  
+   If a schema name is given then the operator family is created in the
+   specified schema.  Otherwise it is created in the current schema.
+   Two operator families in the same schema can have the same name only if they
+   are for different index methods.
+  
 
-Refer to `xindex` for further information.
+  
+   The user who defines an operator family becomes its owner.  Presently,
+   the creating user must be a superuser.  (This restriction is made because
+   an erroneous operator family definition could confuse or even crash the
+   server.)
+  
 
-## Parameters
+  
+   Refer to  for further information.
+  
 
-- The name of the operator family to be created. The name can be schema-qualified.
-- The name of the index method this operator family is for.
+ 
 
-## Compatibility
+ 
+  
+# Parameters
 
-`CREATE OPERATOR FAMILY` is a PostgreSQL extension. There is no `CREATE OPERATOR FAMILY` statement in the SQL standard.
+  
+   
+    name
+    
+     
+      The name of the operator family to be created.  The name can be
+      schema-qualified.
+     
 
-## See Also
+    
+   
+
+   
+    index_method
+    
+     
+      The name of the index method this operator family is for.
+     
+
+    
+   
+  
+ 
+
+ 
+  
+# Compatibility
+
+  
+   CREATE OPERATOR FAMILY is a
+   PostgreSQL extension.  There is no
+   CREATE OPERATOR FAMILY statement in the SQL
+   standard.
+  
+
+ 
+
+ 
+  
+# See Also

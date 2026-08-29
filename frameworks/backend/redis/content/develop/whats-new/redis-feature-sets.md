@@ -1,14 +1,15 @@
 ---
 type: "Framework Learn Page"
-framework: "redis"
+framework: "Redis"
 source_repo: "https://github.com/redis/docs.git"
 source_branch: "main"
 source_path: "content/develop/whats-new/redis-feature-sets.md"
-source_commit: "9d30f68c3dad1a6b3b7d30fe604b911348ce8152"
-source_commit_short: "9d30f68c"
-source_commit_date: "2026-07-24T10:52:10-07:00"
-generated_at: "2026-07-25T11:51:22Z"
+source_commit: "f8693349287b0efbef3c865b6f6a2aceca88594d"
+source_commit_short: "f869334"
+source_commit_date: "2026-08-28T10:01:19-05:00"
+generated_at: "2026-08-29T09:38:55.797795Z"
 ---
+# Redis Feature Sets
 
 ---
 title: Redis feature sets
@@ -29,6 +30,7 @@ To use a new feature introduced in a later feature set, you must upgrade the cor
 
 | Redis feature set | What's new |
 |-------------------|------------|
+| **Feature set version:** 8.10| See [here]({{< relref "/develop/whats-new/8-10" >}})|
 | **Feature set version:** 8.8| See [here]({{< relref "/develop/whats-new/8-8" >}})|
 | **Feature set version:** 8.6| See [here]({{< relref "/develop/whats-new/8-6" >}})|
 | **Feature set version:** 8.4| See [here]({{< relref "/develop/whats-new/8-4" >}})|

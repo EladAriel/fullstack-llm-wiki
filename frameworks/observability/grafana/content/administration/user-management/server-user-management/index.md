@@ -1,7 +1,7 @@
 ---
 type: "Framework Learn Directory Index"
 framework: "Grafana"
-generated_at: "2026-07-25T19:08:09.143253Z"
+generated_at: "2026-08-29T09:39:37.604804Z"
 ---
 # Server-User-Management
 
@@ -18,3 +18,9 @@ This directory contains Grafana learning pages related to server-user-management
 ## Pages in This Directory
 
 - [_Index](_index.md)
+
+## Subdirectories
+
+- [Add Remove User To Org](add-remove-user-to-org/index.md)
+- [Assign Remove Server Admin Privileges](assign-remove-server-admin-privileges/index.md)
+- [Change User Org Permissions](change-user-org-permissions/index.md)

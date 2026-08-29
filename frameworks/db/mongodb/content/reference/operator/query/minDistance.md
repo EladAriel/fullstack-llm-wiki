@@ -1,29 +1,53 @@
 ---
 type: "Framework Learn Page"
-framework: "mongodb"
+framework: "MongoDB"
 source_repo: "https://github.com/mongodb/docs.git"
 source_branch: "main"
 source_path: "content/manual/manual/source/reference/operator/query/minDistance.txt"
-source_commit: "ab9db26ed3d11618cdb61516d8180337d8e3f679"
-source_commit_short: "ab9db26e"
-source_commit_date: "2026-07-24T16:22:46-06:00"
-generated_at: "2026-07-25T11:51:15Z"
+source_commit: "b9f2bc487a2878b65e3c1f80024bebab76954f27"
+source_commit_short: "b9f2bc48"
+source_commit_date: "2026-08-28T17:09:45-05:00"
+generated_at: "2026-08-29T09:39:20.246803Z"
 ---
-
-=======================================
-
 # $minDistance (query predicate operator)
+
+**meta:** :description: Filter geospatial query results to include only documents at least a specified distance from a center point using `$minDistance`.
+
+.. default-domain:: mongodb
+
+**contents:** On this page
+   :local:
+   :backlinks: none
+   :depth: 1
+   :class: singlecol
 
 ## Definition
 
+**query:** $minDistance
+
+  Filters the results of a geospatial :query:`$near` or
+  :query:`$nearSphere` query to those documents that are *at least* the
+  specified distance from the center point.
+
+  If :query:`$near` or :query:`$nearSphere` query specifies the center
+  point as a :ref:`GeoJSON point <geojson-point>`, specify the distance
+  as a non-negative number in *meters*.
+
+  If :query:`$nearSphere` query specifies the center point as
+  :term:`legacy coordinate pair <legacy coordinate pairs>`, specify
+  the distance as a non-negative number in *radians*. :query:`$near`
+  can only use the :ref:`2dsphere <2dsphere-index>` index if the query
+  specifies the center point as a :ref:`GeoJSON point <geojson-point>`.
+
 ## Examples
 
-### Use with `$near`
+### Use with ``$near``
 
-.. include:: /includes/example-near-minDistance.rst
+**include:** /includes/example-near-minDistance.rst
 
-### Use with `$nearSphere`
+### Use with ``$nearSphere``
 
-.. include:: /includes/example-nearSphere-minDistance.rst
+**include:** /includes/example-nearSphere-minDistance.rst
 
-For an example that specifies the center point as legacy coordinate pair, see :query:`$nearSphere`
+For an example that specifies the center point as legacy coordinate
+pair, see :query:`$nearSphere`

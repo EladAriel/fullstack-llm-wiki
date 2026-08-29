@@ -4,10 +4,10 @@ framework: "Sentry Python"
 source_repo: "https://github.com/getsentry/sentry-docs.git"
 source_branch: "master"
 source_path: "docs/platforms/python/integrations/aiohttp/aiohttp-client.mdx"
-source_commit: "8557ccbd46b02c43301ef74ff54516736ecf9d69"
-source_commit_short: "8557ccb"
-source_commit_date: "2026-07-24T13:12:02-04:00"
-generated_at: "2026-07-25T19:08:13.526462Z"
+source_commit: "8b4e4a23b18ee70f5fdb05bcda48869c10be2f60"
+source_commit_short: "8b4e4a2"
+source_commit_date: "2026-08-28T22:17:56+00:00"
+generated_at: "2026-08-29T09:40:09.063603Z"
 ---
 # Aiohttp Client
 
@@ -22,6 +22,8 @@ Use this integration to create spans for outgoing requests and ensure traces are
 
 This integration also supports AIOHTTP servers. See <PlatformLink to="/integrations/aiohttp/">AIOHTTP server documentation</PlatformLink> for details.
 
+<Include name="python-stream-mode-general-callout.mdx" />
+
 ## Install
 
 Install `sentry-sdk` from PyPI:
@@ -29,6 +31,7 @@ Install `sentry-sdk` from PyPI:
 ```bash {tabTitle:pip}
 pip install sentry-sdk
 ```
+
 ```bash {tabTitle:uv}
 uv add sentry-sdk
 ```
@@ -48,6 +51,7 @@ import aiohttp
 async def main():
     sentry_sdk.init(...)  # same as above
 
+    # or sentry_sdk.traces.start_span(name="your_span_name", parent_span=None) in stream mode
     with sentry_sdk.start_transaction(name="testing_sentry"):
         async with aiohttp.ClientSession() as session:
             async with session.get("https://sentry.io/") as response:

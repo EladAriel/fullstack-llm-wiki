@@ -4,10 +4,10 @@ framework: "LangSmith"
 source_repo: "https://github.com/langchain-ai/docs.git"
 source_branch: "main"
 source_path: "src/langsmith/evaluation.mdx"
-source_commit: "2aae1dfc98ee953a9a5185fb6fcdd9efb3f4d878"
-source_commit_short: "2aae1df"
-source_commit_date: "2026-07-25T00:27:23+00:00"
-generated_at: "2026-07-25T19:08:33.357529Z"
+source_commit: "a174f9cf7c91ee5eb14ee2382eb48bfe6e4956e9"
+source_commit_short: "a174f9c"
+source_commit_date: "2026-08-28T17:04:12-07:00"
+generated_at: "2026-08-29T09:39:50.678750Z"
 ---
 # Evaluation
 
@@ -15,11 +15,17 @@ generated_at: "2026-07-25T19:08:33.357529Z"
 title: LangSmith Evaluation
 sidebarTitle: Overview
 mode: wide
+description: Evaluate and test agent quality at scale with datasets, evaluators, prompts, and Studio.
 ---
 
+import AccountApiKeyQuickstart from '/snippets/langsmith/account-api-key-quickstart.mdx';
 import HostingSetup from '/snippets/langsmith/platform-setup-note.mdx';
 
-LangSmith supports two types of evaluations based on when and where they run:
+LangSmith's testing tools help you measure agent quality, iterate on prompts, and debug live in an interactive environment. Evaluation is the core of testing: it scores your agent's outputs against datasets and criteria so you can benchmark versions, catch regressions, and track quality over time.
+
+Add real traces to a dataset so a failure you saw once becomes a test you run every time.
+
+LangSmith supports two types of evaluation based on when and where they run:
 
 <CardGroup cols={2}>
   <Card
@@ -41,6 +47,11 @@ LangSmith supports two types of evaluations based on when and where they run:
   </Card>
 </CardGroup>
 
+## Set up your account
+
+<AccountApiKeyQuickstart />
+
+Once your account and API key are ready, [run your first evaluation](/langsmith/evaluation-quickstart).
 
 ## Evaluation workflow
 
@@ -154,6 +165,15 @@ For more on the differences between offline and online evaluation, refer to the 
     arrow="true"
   >
     Learn by following step-by-step tutorials, from simple chatbots to complex agent evaluations.
+  </Card>
+
+  <Card
+    title="Studio"
+    icon="window"
+    href="/langsmith/studio"
+    arrow="true"
+  >
+    Use an interactive environment for developing and debugging agents.
   </Card>
 
 </Columns>

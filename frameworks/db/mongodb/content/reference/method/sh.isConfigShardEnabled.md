@@ -1,53 +1,106 @@
 ---
 type: "Framework Learn Page"
-framework: "mongodb"
+framework: "MongoDB"
 source_repo: "https://github.com/mongodb/docs.git"
 source_branch: "main"
 source_path: "content/manual/manual/source/reference/method/sh.isConfigShardEnabled.txt"
-source_commit: "ab9db26ed3d11618cdb61516d8180337d8e3f679"
-source_commit_short: "ab9db26e"
-source_commit_date: "2026-07-24T16:22:46-06:00"
-generated_at: "2026-07-25T11:51:15Z"
+source_commit: "b9f2bc487a2878b65e3c1f80024bebab76954f27"
+source_commit_short: "b9f2bc48"
+source_commit_date: "2026-08-28T17:09:45-05:00"
+generated_at: "2026-08-29T09:39:19.985583Z"
 ---
-
-==========================================
-
 # sh.isConfigShardEnabled() (mongosh method)
+
+**contents:** On this page
+   :local:
+   :backlinks: none
+   :depth: 1
+   :class: singlecol
 
 ## Definition
 
-The `sh.isConfigShardEnabled()` method returns whether a cluster has a `config shard <config-shard-concept>`. If it does, then `sh.isConfigShardEnabled()` also returns the config shard's host and tag information.
+**method:** sh.isConfigShardEnabled()
+
+The ``sh.isConfigShardEnabled()`` method returns whether
+a cluster has a :ref:`config shard <config-shard-concept>`.
+If it does, then ``sh.isConfigShardEnabled()`` also
+returns the config shard's host and tag
+information.
 
 ## Syntax
 
-`sh.isConfigShardEnabled()` has the following syntax:
+``sh.isConfigShardEnabled()`` has the following 
+syntax:
 
-```javascript
-sh.isConfigShardEnabled()
-```
+.. code-block:: javascript
+
+   sh.isConfigShardEnabled()
 
 ## Behavior
 
-`sh.isConfigShardEnabled()` returns a document that contains the following fields:
+``sh.isConfigShardEnabled()`` returns a document
+that contains the following fields:
 
-```javascript
-{
-   enabled: <boolean>,
-   host: <string>,
-   tags: [<string>]
-}
-```
+.. code-block:: javascript
+   
+   {
+      enabled: <boolean>,
+      host: <string>,
+      tags: [<string>]
+   }
+
+.. list-table::
+   :header-rows: 1
+   :widths: 30 20 50
+
+   * - Field
+     - Type
+     - Description
+
+   * - ``enabled``
+     - boolean
+     - ``true`` if the cluster has a config
+       shard, ``false`` if it does not.
+
+   * - ``host``
+     - string
+     - Hostname of config shard.
+       Only present if ``enabled`` is ``true``.
+       
+
+   * - ``tags``
+     - array of strings
+     - List of :term:`zones <zone>` to which the shard belongs.
 
 ## Example
 
-The following example shows how to run `sh.isConfigShardEnabled()`. It shows the output when you run the method on a cluster that has a config shard, but this shard does not have any associated tags:
+The following example shows how to run 
+``sh.isConfigShardEnabled()``. 
+It shows the output when you run the method on
+a cluster that has a config shard, but this shard
+does not have any associated tags:
 
-The following example shows the output if you run `sh.isConfigShardEnabled()` on a cluster that has a config shard with associated tags:
+.. io-code-block:: 
 
-```javascript
-{ 
-  enabled: true, 
-  host: 'shard3/localhost:27017',
-  tags: ['tag1', 'tag2'] 
-}
-```
+   .. input:: 
+      :language: javascript
+
+      sh.isConfigShardEnabled()
+
+   .. output::
+      :visible: true
+      :language: javascript
+
+      { enabled: true, host: 'shard3/localhost:27017' }
+
+The following example shows the output if you
+run ``sh.isConfigShardEnabled()`` on a cluster
+that has a config shard with associated tags:
+
+.. code-block:: javascript
+
+   { 
+     enabled: true, 
+     host: 'shard3/localhost:27017',
+     tags: ['tag1', 'tag2'] 
+   }

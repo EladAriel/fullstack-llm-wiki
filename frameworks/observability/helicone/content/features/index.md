@@ -1,7 +1,7 @@
 ---
 type: "Framework Learn Directory Index"
 framework: "Helicone"
-generated_at: "2026-07-25T19:08:22.288272Z"
+generated_at: "2026-08-29T09:39:42.361594Z"
 ---
 # Features
 
@@ -28,3 +28,9 @@ This directory contains Helicone learning pages related to features.
 - [Streaming](streaming.md)
 - [Webhooks Testing](webhooks-testing.md)
 - [Webhooks](webhooks.md)
+
+## Subdirectories
+
+- [Advanced Usage](advanced-usage/index.md)
+- [Jobs](jobs/index.md)
+- [Prompts Legacy](prompts-legacy/index.md)

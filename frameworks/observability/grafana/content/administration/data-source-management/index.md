@@ -1,7 +1,7 @@
 ---
 type: "Framework Learn Directory Index"
 framework: "Grafana"
-generated_at: "2026-07-25T19:08:09.120972Z"
+generated_at: "2026-08-29T09:39:37.586793Z"
 ---
 # Data-Source-Management
 
@@ -18,3 +18,7 @@ This directory contains Grafana learning pages related to data-source-management
 ## Pages in This Directory
 
 - [_Index](_index.md)
+
+## Subdirectories
+
+- [Teamlbac](teamlbac/index.md)

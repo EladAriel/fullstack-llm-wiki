@@ -1,257 +1,338 @@
 ---
 type: "Framework Learn Page"
-framework: "mongodb"
+framework: "MongoDB"
 source_repo: "https://github.com/mongodb/docs.git"
 source_branch: "main"
 source_path: "content/manual/manual/source/reference/operator/aggregation/percentile.txt"
-source_commit: "ab9db26ed3d11618cdb61516d8180337d8e3f679"
-source_commit_short: "ab9db26e"
-source_commit_date: "2026-07-24T16:22:46-06:00"
-generated_at: "2026-07-25T11:51:15Z"
+source_commit: "b9f2bc487a2878b65e3c1f80024bebab76954f27"
+source_commit_short: "b9f2bc48"
+source_commit_date: "2026-08-28T17:09:45-05:00"
+generated_at: "2026-08-29T09:39:20.196909Z"
 ---
-
-==================================
+.. _percentile-aggregation:
 
 # $percentile (accumulator operator)
 
+**meta:** :description: Calculate percentile values using the `$percentile` operator in MongoDB aggregation stages like `$group`, `$project`, and `$setWindowFields`.
+
+.. default-domain:: mongodb
+
+**contents:** On this page
+  :local:
+  :backlinks: none
+  :depth: 1
+  :class: singlecol
+
+.. Substitution used in includes and in the body of this text
+.. |operatorName| replace:: ``$percentile``
+
 ## Definition
+
+**group:** $percentile
+
+   .. versionadded:: 7.0
+
+   .. include:: /includes/aggregation/fact-return-percentile.rst
+
+   You can use |operatorName| as an :ref:`accumulator
+   <accumulators-group>` in the :pipeline:`$group <$group>` stage or as
+   an :ref:`aggregation expression <aggregation-expressions>`.
 
 ## Syntax
 
 The syntax for |operatorName| is:
 
-```javascript
-{
-   $percentile: {
-      input: <expression>,
-      p: [ <expression1>, <expression2>, ... ],
-      method: <string>
+.. code-block:: javascript
+   :copyable: false
+
+   {
+      $percentile: {
+         input: <expression>,
+         p: [ <expression1>, <expression2>, ... ],
+         method: <string>
+      }
    }
-}
-```
 
 ## Command Fields
 
 |operatorName| takes the following fields:
 
+.. list-table::
+   :header-rows: 1
+   :widths: 15 17 17 51
+
+   * - Field
+     - Type
+     - Necessity
+     - Description
+
+   * - ``input``
+     - Expression
+     - Required
+     - |operatorName| calculates the percentile values of this data.
+       ``input`` must be a field name or an expression that evaluates to
+       a numeric type. If the expression cannot be converted to a
+       numeric type, the |operatorName| calculation ignores it.
+
+   * - ``p``
+     - Expression
+     - Required
+     - |operatorName| calculates a percentile value for each element in
+       ``p``. The elements represent percentages and must evaluate to
+       numeric values in the range ``0.0`` to ``1.0``, inclusive.
+
+       |operatorName| returns results in the same order as the elements
+       in ``p``.
+
+   * - ``method``
+     - String
+     - Required
+     - The method that ``mongod`` uses to calculate the percentile
+       value. The method must be ``'approximate'``.
+
 ## Behavior
 
-.. include:: /includes/aggregation/fact-behavior-percent-median.rst
+**include:** /includes/aggregation/fact-behavior-percent-median.rst
 
 ### Type of Operation
 
-.. include:: /includes/aggregation/fact-type-of-operation.rst
+**include:** /includes/aggregation/fact-type-of-operation.rst
+
+.. _percentile-calculation-considerations:
 
 ### Calculation Considerations
 
-.. include:: /includes/aggregation/fact-calc-considerations.rst
+**include:** /includes/aggregation/fact-calc-considerations.rst
 
-|operatorName| returns the minimum value for `p = 0.0`.
+|operatorName| returns the minimum value for ``p = 0.0``.
 
-|operatorName| returns the maximum value for `p = 1.0`.
+|operatorName| returns the maximum value for ``p = 1.0``.
 
 ### Array Input
 
-If you use |operatorName| as an aggregation expression in a :pipeline:`$project <$project>` stage, you can use an array as input. The syntax is:
+If you use |operatorName| as an aggregation expression in a
+:pipeline:`$project <$project>` stage, you can use an array as input.
+The syntax is:
 
-```javascript
-{
-   $percentile: {
-      input: [ <expression1, <expression2>, .., <expressionN> ],
-      p: [ <expression1>, <expression2>, ... ],
-      method: <string>
+.. code-block:: javascript
+   :copyable: false
+
+   {
+      $percentile: {
+         input: [ <expression1, <expression2>, .., <expressionN> ],
+         p: [ <expression1>, <expression2>, ... ],
+         method: <string>
+      }
    }
-}
-```
 
 ### Window Functions
 
-.. include:: /includes/aggregation/fact-setwindowfield.rst
+**include:** /includes/aggregation/fact-setwindowfield.rst
 
 ## Examples
 
-.. include:: /includes/aggregation/example-setup-01.rst
+**include:** /includes/aggregation/example-setup-01.rst
 
 ### Calculate a Single Value as an Accumulator
 
 Create an accumulator that calculates a single percentile value:
 
-```javascript
-db.testScores.aggregate( [
-   {
-      $group: {
-         _id: null,
-         test01_percentiles: {
-            $percentile: {
-               input: "$test01",
-               p: [ 0.95 ],
-               method: 'approximate'
-            }
-         },
+.. code-block:: javascript
+
+   db.testScores.aggregate( [
+      {
+         $group: {
+            _id: null,
+            test01_percentiles: {
+               $percentile: {
+                  input: "$test01",
+                  p: [ 0.95 ],
+                  method: 'approximate'
+               }
+            },
+         }
       }
-   }
-] )
-```
+   ] )
 
 Output:
 
-```javascript
-{ _id: null, test01_percentiles: [ 67 ] }
-```
+.. code-block:: javascript
+   :copyable: false
 
-The `_id` field value is `null` so `$group` selects all the documents in the collection.
+   { _id: null, test01_percentiles: [ 67 ] }
 
-The `percentile` accumulator takes its input data from the `test01` field.
+The ``_id`` field value is ``null`` so ``$group`` selects all the
+documents in the collection.
 
-In this example, the percentiles array, `p`, has one value so the `$percentile` operator only calculates one term for the `test01` data. The 95th percentile value is `67`.
+The ``percentile`` accumulator takes its input data from the ``test01``
+field.
+
+In this example, the percentiles array, ``p``, has one value so the
+``$percentile`` operator only calculates one term for the ``test01``
+data. The 95th percentile value is ``67``.
 
 ### Calculate Multiple Values as an Accumulator
 
 Create an accumulator that calculates multiple percentile values:
 
-```javascript
-db.testScores.aggregate( [
-   {
-       $group: {
-          _id: null,
-          test01_percentiles: {
-             $percentile: {
-                input: "$test01",
-                p: [ 0.5, 0.75, 0.9, 0.95 ],
-                method: 'approximate'
-             }
-          },
-          test02_percentiles: {
-             $percentile: {
-                input: "$test02",
-                p: [ 0.5, 0.75, 0.9, 0.95 ],
-                method: 'approximate'
-             }
-          },
-          test03_percentiles: {
-             $percentile: {
-                input: "$test03",
-                p: [ 0.5, 0.75, 0.9, 0.95 ],
-                method: 'approximate'
-             }
-          },
-          test03_percent_alt: {
-             $percentile: {
-                input: "$test03",
-                p: [ 0.9, 0.5, 0.75, 0.95 ],
-                method: 'approximate'
-             }
-          },
+.. code-block:: javascript
+
+   db.testScores.aggregate( [
+      {
+          $group: {
+             _id: null,
+             test01_percentiles: {
+                $percentile: {
+                   input: "$test01",
+                   p: [ 0.5, 0.75, 0.9, 0.95 ],
+                   method: 'approximate'
+                }
+             },
+             test02_percentiles: {
+                $percentile: {
+                   input: "$test02",
+                   p: [ 0.5, 0.75, 0.9, 0.95 ],
+                   method: 'approximate'
+                }
+             },
+             test03_percentiles: {
+                $percentile: {
+                   input: "$test03",
+                   p: [ 0.5, 0.75, 0.9, 0.95 ],
+                   method: 'approximate'
+                }
+             },
+             test03_percent_alt: {
+                $percentile: {
+                   input: "$test03",
+                   p: [ 0.9, 0.5, 0.75, 0.95 ],
+                   method: 'approximate'
+                }
+             },
+          }
        }
-    }
-] )
-```
+   ] )
 
 Output:
 
-```javascript
-{
-   _id: null,
-  test01_percentiles: [ 62, 64, 67, 67 ],
-  test02_percentiles: [ 81, 82, 83, 83 ],
-  test03_percentiles: [ 78, 79, 80, 80 ],
-  test03_percent_alt: [ 80, 78, 79, 80 ]
-}
-```
+.. code-block:: javascript
+   :copyable: false
 
-The `_id` field value is `null` so `$group` selects all the documents in the collection.
+  {
+      _id: null,
+     test01_percentiles: [ 62, 64, 67, 67 ],
+     test02_percentiles: [ 81, 82, 83, 83 ],
+     test03_percentiles: [ 78, 79, 80, 80 ],
+     test03_percent_alt: [ 80, 78, 79, 80 ]
+  }
 
-The `percentile` accumulator calculates values for three fields, `test01`, `test02`, and `test03`.
+The ``_id`` field value is ``null`` so ``$group`` selects all the
+documents in the collection.
 
-The accumulator calculates the 50th, 75th, 90th, and 95th percentile values for each input field.
+The ``percentile`` accumulator calculates values for three fields,
+``test01``, ``test02``, and ``test03``.
 
-The percentile values are returned in the same order as the elements of `p`. The values in `test03_percentiles` and `test03_percent_alt` are the same, but their order is different. The order of elements in each result array matches the corresponding order of elements in `p`.
+The accumulator calculates the 50th, 75th, 90th, and 95th percentile
+values for each input field. 
 
-### Use |operatorName| in a `$project` Stage
+The percentile values are returned in the same order as the elements of
+``p``. The values in ``test03_percentiles`` and ``test03_percent_alt``
+are the same, but their order is different. The order of elements in
+each result array matches the corresponding order of elements in ``p``. 
 
-In a `$project` stage, |operatorName| is an aggregation expression and calculates values for each document.
+### Use |operatorName| in a ``$project`` Stage
 
-You can use a field name or an array as input in a `$project` stage.
+In a ``$project`` stage, |operatorName| is an aggregation expression and
+calculates values for each document.
 
-```javascript
-db.testScores.aggregate( [
-   {
-      $project: {
-         _id: 0,
-         studentId: 1,
-         testPercentiles: {
-            $percentile: {
-               input: [ "$test01", "$test02", "$test03" ],
-               p: [ 0.5, 0.95 ],
-               method: 'approximate'
-            }
-         }
-      }
-   }
-] )
-```
+You can use a field name or an array as input in a ``$project`` stage.
 
-Output:
+.. code-block:: javascript
 
-```javascript
-{ studentId: '2345', testPercentiles: [ 80, 81 ] },
-{ studentId: '2356', testPercentiles: [ 79, 83 ] },
-{ studentId: '2358', testPercentiles: [ 78, 82 ] },
-{ studentId: '2367', testPercentiles: [ 72, 77 ] },
-{ studentId: '2369', testPercentiles: [ 60, 72 ] }
-```
-
-When |operatorName| is an aggregation expression there is a result for each `studentId`.
-
-### Use |operatorName| in a `$setWindowField` Stage
-
-To base your percentile values on local data trends, use |operatorName| in a `$setWindowField` aggregation pipeline stage.
-
-This example creates a window to filter scores:
-
-```javascript
-db.testScores.aggregate( [
-   {
-      $setWindowFields: {
-         sortBy: { test01: 1 },
-         output: {
-            test01_95percentile: {
+   db.testScores.aggregate( [
+      {
+         $project: {
+            _id: 0,
+            studentId: 1,
+            testPercentiles: {
                $percentile: {
-                  input: "$test01",
-                  p: [ 0.95 ],
+                  input: [ "$test01", "$test02", "$test03" ],
+                  p: [ 0.5, 0.95 ],
                   method: 'approximate'
-               },
-               window: {
-                  range: [ -3, 3 ]
                }
             }
          }
       }
-   },
-   {
-      $project: {
-         _id: 0,
-         studentId: 1,
-         test01_95percentile: 1
-      }
-   }
-] )
-```
+   ] )
 
 Output:
 
-```javascript
-{ studentId: '2356', test01_95percentile: [ 62 ] },
-{ studentId: '2369', test01_95percentile: [ 62 ] },
-{ studentId: '2345', test01_95percentile: [ 64 ] },
-{ studentId: '2367', test01_95percentile: [ 67 ] },
-{ studentId: '2358', test01_95percentile: [ 67 ] }
-```
+.. code-block:: javascript
+   :copyable: false
 
-In this example, the percentile calculation for each document also incorporates data from the three documents before and after it.
+   { studentId: '2345', testPercentiles: [ 80, 81 ] },
+   { studentId: '2356', testPercentiles: [ 79, 83 ] },
+   { studentId: '2358', testPercentiles: [ 78, 82 ] },
+   { studentId: '2367', testPercentiles: [ 72, 77 ] },
+   { studentId: '2369', testPercentiles: [ 60, 72 ] }
+
+When |operatorName| is an aggregation expression there is a result for
+each ``studentId``.
+
+### Use |operatorName| in a ``$setWindowField`` Stage
+
+To base your percentile values on local data trends, use |operatorName|
+in a ``$setWindowField`` aggregation pipeline stage.
+
+This example creates a window to filter scores:
+
+.. code-block:: javascript
+
+   db.testScores.aggregate( [
+      {
+         $setWindowFields: {
+            sortBy: { test01: 1 },
+            output: {
+               test01_95percentile: {
+                  $percentile: {
+                     input: "$test01",
+                     p: [ 0.95 ],
+                     method: 'approximate'
+                  },
+                  window: {
+                     range: [ -3, 3 ]
+                  }
+               }
+            }
+         }
+      },
+      {
+         $project: {
+            _id: 0,
+            studentId: 1,
+            test01_95percentile: 1
+         }
+      }
+   ] )
+
+Output:
+
+.. code-block:: javascript
+   :copyable: false
+
+   { studentId: '2356', test01_95percentile: [ 62 ] },
+   { studentId: '2369', test01_95percentile: [ 62 ] },
+   { studentId: '2345', test01_95percentile: [ 64 ] },
+   { studentId: '2367', test01_95percentile: [ 67 ] },
+   { studentId: '2358', test01_95percentile: [ 67 ] }
+
+In this example, the percentile calculation for each document also
+incorporates data from the three documents before and after it.
 
 ## Learn More
 
-The :group:`$median <$median>` operator is a special case of the |operatorName| operator that uses a fixed value of `p: [ 0.5 ]`.
+The :group:`$median <$median>` operator is a special case of the
+|operatorName| operator that uses a fixed value of ``p: [ 0.5 ]``.
 
-For more information on window functions, see: :pipeline:`$setWindowFields`.
+For more information on window functions, see:
+:pipeline:`$setWindowFields`.

@@ -1,28 +1,39 @@
 ---
 type: "Framework Learn Page"
-framework: "mongodb"
+framework: "MongoDB"
 source_repo: "https://github.com/mongodb/docs.git"
 source_branch: "main"
 source_path: "content/manual/manual/source/sample-data/sample-guides.txt"
-source_commit: "ab9db26ed3d11618cdb61516d8180337d8e3f679"
-source_commit_short: "ab9db26e"
-source_commit_date: "2026-07-24T16:22:46-06:00"
-generated_at: "2026-07-25T11:51:15Z"
+source_commit: "b9f2bc487a2878b65e3c1f80024bebab76954f27"
+source_commit_short: "b9f2bc48"
+source_commit_date: "2026-08-28T17:09:45-05:00"
+generated_at: "2026-08-29T09:39:19.731306Z"
 ---
-
-=====================
+.. _sample-guides:
 
 # Sample Guides Dataset
 
-The `sample_guides` database contains data used in :guides:`our guided tutorials <>`.
+**meta:** :description: Explore the `sample_guides` database in Atlas, featuring the `planets` collection with data on Solar System planets.
 
-.. include:: /includes/search-shared/fact-how-to-load-sample-data.rst
+.. default-domain:: mongodb
+
+**contents:** On this page
+   :local:
+   :backlinks: none
+   :depth: 2
+   :class: singlecol
+
+The ``sample_guides`` database contains data used in :guides:`our guided
+tutorials <>`.
+
+**include:** /includes/search-shared/fact-how-to-load-sample-data.rst
 
 ## Collections
 
-This database contains a single collection called `planets`.
+This database contains a single collection called ``planets``.
 
-The `sample_guides.planets` collection contains documents that represent a planet in our Solar System.
+The ``sample_guides.planets`` collection contains documents that
+represent a planet in our Solar System. 
 
 Each document includes the following information about the planet:
 
@@ -30,19 +41,32 @@ Each document includes the following information about the planet:
 - Whether it has rings
 - The composition of its atmosphere
 - Its surface temperature
+
 ### Indexes
 
-The `sample_guides.planets` collection contains the following indexes:
+The ``sample_guides.planets`` collection contains the following indexes:
+
+.. list-table::
+   :header-rows: 1
+
+   * - Name
+     - Index
+     - Description
+
+   * - ``_id_``
+     - ``{ "_id": 1 }``
+     - Primary key index on the ``_id`` field.
 
 ### Sample Document
 
-```json
-{
-  _id: new ObjectId("6220f6b78a733c51b416c80e"),
-  name: 'Uranus',
-  orderFromSun: 7,
-  hasRings: true,
-  mainAtmosphere: [ 'H2', 'He', 'CH4' ],
-  surfaceTemperatureC: { min: null, max: null, mean: -197.2 }
-}
-```
+.. code-block:: json
+   :copyable: false
+
+   {
+     _id: new ObjectId("6220f6b78a733c51b416c80e"),
+     name: 'Uranus',
+     orderFromSun: 7,
+     hasRings: true,
+     mainAtmosphere: [ 'H2', 'He', 'CH4' ],
+     surfaceTemperatureC: { min: null, max: null, mean: -197.2 }
+   }

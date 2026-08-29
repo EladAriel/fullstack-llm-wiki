@@ -1,65 +1,87 @@
 ---
 type: "Framework Learn Page"
-framework: "mongodb"
+framework: "MongoDB"
 source_repo: "https://github.com/mongodb/docs.git"
 source_branch: "main"
 source_path: "content/manual/manual/source/core/indexes/index-types/geospatial/2d/create.txt"
-source_commit: "ab9db26ed3d11618cdb61516d8180337d8e3f679"
-source_commit_short: "ab9db26e"
-source_commit_date: "2026-07-24T16:22:46-06:00"
-generated_at: "2026-07-25T11:51:15Z"
+source_commit: "b9f2bc487a2878b65e3c1f80024bebab76954f27"
+source_commit_short: "b9f2bc48"
+source_commit_date: "2026-08-28T17:09:45-05:00"
+generated_at: "2026-08-29T09:39:19.844980Z"
 ---
-
-=================
+.. _2d-index-create:
+.. _create-2d-index:
 
 # Create a 2d Index
 
-2d indexes support queries on location data in a `flat, Euclidean plane <geospatial-geometry>`.
+**meta:** :description: Create a 2d index for querying location data on a flat, Euclidean plane using legacy coordinate pairs.
 
-To create a 2d index, use the :method:`db.collection.createIndex()` method. The index type is `"2d"`:
+.. default-domain:: mongodb
 
-.. include:: /includes/indexes/code-examples/create-2d-index.rst
+**facet:** :name: genre
+   :values: tutorial
+
+**contents:** On this page
+   :local:
+   :backlinks: none
+   :depth: 1
+   :class: singlecol
+
+2d indexes support queries on location data in a :ref:`flat, Euclidean
+plane <geospatial-geometry>`.
+
+To create a 2d index, use the :method:`db.collection.createIndex()`
+method. The index type is ``"2d"``:
+
+**include:** /includes/indexes/code-examples/create-2d-index.rst
 
 ## About this Task
 
-- The values in the `<location field>` must be :ref:`legacy coordinate
-pairs <geospatial-legacy>`.
+- The values in the ``<location field>`` must be :ref:`legacy coordinate
+  pairs <geospatial-legacy>`.
 
 - When specifying legacy coordinate pairs, list the **longitude** first,
-and then **latitude**.
+  and then **latitude**.
 
-- Valid longitude values are between `-180` and `180`, both
-inclusive.
+  - Valid longitude values are between ``-180`` and ``180``, both
+    inclusive.
 
-- Valid latitude values are between `-90` and `90`, both
-inclusive.
+  - Valid latitude values are between ``-90`` and ``90``, both
+    inclusive.
 
 ## Before You Begin
 
-.. include:: /includes/indexes/2d-sample-docs.rst
+**include:** /includes/indexes/2d-sample-docs.rst
 
 ## Procedure
 
-Create a 2d index on the `address` field:
+Create a 2d index on the ``address`` field:
 
-```javascript
-db.contacts.createIndex( { address : "2d" } )
-```
+.. code-block:: javascript
+
+   db.contacts.createIndex( { address : "2d" } )
 
 ## Next Steps
 
-After you create a 2d index, you can use your 2d index to support calculations on location data. To see examples of queries that use 2d indexes, see:
+After you create a 2d index, you can use your 2d index to support
+calculations on location data. To see examples of queries that use 2d
+indexes, see:
 
-- `2d-index-proximity-query`
+-  :ref:`2d-index-proximity-query`
+
 ## Learn More
 
-- `2d-index-define-location-precision`
-- `2d-index-define-location-range`
-- `geospatial-restrictions`
+- :ref:`2d-index-define-location-precision`
+
+- :ref:`2d-index-define-location-range`
+
+- :ref:`geospatial-restrictions`
+
 - To create an index that supports calculations on spherical surfaces,
-see `2dsphere-index`.
+  see :ref:`2dsphere-index`.
 
-## Contents
+**toctree:** :titlesonly:
+   :hidden:
 
-- Location Precision </core/indexes/index-types/geospatial/2d/create/define-location-precision>
-- Location Range </core/indexes/index-types/geospatial/2d/create/define-location-range>
+   Location Precision </core/indexes/index-types/geospatial/2d/create/define-location-precision>
+   Location Range </core/indexes/index-types/geospatial/2d/create/define-location-range>

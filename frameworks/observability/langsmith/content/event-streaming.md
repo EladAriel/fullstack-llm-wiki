@@ -4,10 +4,10 @@ framework: "LangSmith"
 source_repo: "https://github.com/langchain-ai/docs.git"
 source_branch: "main"
 source_path: "src/langsmith/event-streaming.mdx"
-source_commit: "2aae1dfc98ee953a9a5185fb6fcdd9efb3f4d878"
-source_commit_short: "2aae1df"
-source_commit_date: "2026-07-25T00:27:23+00:00"
-generated_at: "2026-07-25T19:08:33.344977Z"
+source_commit: "a174f9cf7c91ee5eb14ee2382eb48bfe6e4956e9"
+source_commit_short: "a174f9c"
+source_commit_date: "2026-08-28T17:04:12-07:00"
+generated_at: "2026-08-29T09:39:50.673515Z"
 ---
 # Event Streaming
 
@@ -743,10 +743,10 @@ To resume across a process boundary—a page reload, a worker handoff, or a sepa
 
 ## Related
 
-- [Streaming API](/langsmith/streaming) — the `stream_mode`-based streaming API. Also supported by `langgraph-api>=0.10.0`.
-- [LangGraph event streaming](/oss/langgraph/event-streaming) — the same concepts applied to an in-process LangGraph application.
-- [LangChain agent event streaming](/oss/langchain/event-streaming) — agent-focused projections for messages, tool calls, and middleware updates.
-- [Deep Agents event streaming](/oss/deepagents/event-streaming) — subagent streams, nested messages, and subagent tool calls.
-- [LangSmith Deployment API](/langsmith/server-api-ref) — wire-level reference for `POST /threads/{thread_id}/stream/events` and related endpoints.
+- [Streaming API](/langsmith/streaming): the `stream_mode`-based streaming API. Also supported by `langgraph-api>=0.10.0`.
+- [LangGraph event streaming](/oss/langgraph/event-streaming): the same concepts applied to an in-process LangGraph application.
+- [LangChain agent event streaming](/oss/langchain/event-streaming): agent-focused projections for messages, tool calls, and middleware updates.
+- [Deep Agents event streaming](/oss/deepagents/event-streaming): subagent streams, nested messages, and subagent tool calls.
+- [LangSmith Deployment API](/langsmith/server-api-ref): wire-level reference for `POST /threads/{thread_id}/stream/events` and related endpoints.
 
 The wire-level event and command formats are defined in the [Agent Protocol](https://github.com/langchain-ai/agent-protocol) repository.

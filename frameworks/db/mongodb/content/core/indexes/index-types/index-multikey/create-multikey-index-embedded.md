@@ -1,153 +1,182 @@
 ---
 type: "Framework Learn Page"
-framework: "mongodb"
+framework: "MongoDB"
 source_repo: "https://github.com/mongodb/docs.git"
 source_branch: "main"
 source_path: "content/manual/manual/source/core/indexes/index-types/index-multikey/create-multikey-index-embedded.txt"
-source_commit: "ab9db26ed3d11618cdb61516d8180337d8e3f679"
-source_commit_short: "ab9db26e"
-source_commit_date: "2026-07-24T16:22:46-06:00"
-generated_at: "2026-07-25T11:51:15Z"
+source_commit: "b9f2bc487a2878b65e3c1f80024bebab76954f27"
+source_commit_short: "b9f2bc48"
+source_commit_date: "2026-08-28T17:09:45-05:00"
+generated_at: "2026-08-29T09:39:19.836328Z"
 ---
-
-================================================
+.. _index-create-multikey-embedded:
 
 # Create an Index on an Embedded Field in an Array
 
-You can create indexes on embedded document fields within arrays. These indexes improve performance for queries on specific embedded fields that appear in arrays. When you create an index on a field inside an array, MongoDB stores that index as a multikey index.
+**meta:** :description: Create a multikey index on an embedded field in an array to improve query performance for specific fields within arrays in MongoDB.
 
-To create an index, use the :method:`db.collection.createIndex()` method. Your operation should resemble this prototype:
+.. default-domain:: mongodb
 
-```javascript
-db.<collection>.createIndex( { <field>: <sortOrder> } )
-```
+**contents:** On this page
+   :local:
+   :backlinks: none
+   :depth: 2
+   :class: singlecol
+
+You can create indexes on embedded document fields within arrays. These
+indexes improve performance for queries on specific embedded fields that
+appear in arrays. When you create an index on a field inside an array,
+MongoDB stores that index as a multikey index.
+
+To create an index, use the :method:`db.collection.createIndex()`
+method. Your operation should resemble this prototype:
+
+.. code-block:: javascript
+
+   db.<collection>.createIndex( { <field>: <sortOrder> } )
 
 ## About this Task
 
-The example on this page uses an `inventory` collection that contains these documents:
+The example on this page uses an ``inventory`` collection that contains
+these documents:
 
-```javascript
-db.inventory.insertMany( [
-   {
-      "item": "t-shirt",
-      "stock": [
-         {
-            "size": "small",
-            "quantity": 8
-         },
-         {
-            "size": "large",
-            "quantity": 10
-         },
-       ]
-   },
-   {
-      "item": "sweater",
-      "stock": [
-         {
-            "size": "small",
-            "quantity": 4
-         },
-         {
-            "size": "large",
-            "quantity": 7
-         },
-       ]
-   },
-   {
-      "item": "vest",
-      "stock": [
-         {
-            "size": "small",
-            "quantity": 6
-         },
-         {
-            "size": "large",
-            "quantity": 1
-         }
-       ]
-   }
-] )
-```
+.. code-block:: javascript
 
-You need to order more inventory any time you have less than five of an item in stock. To find which items to reorder, you query for documents where an element in the `stock` array has a `quantity` less than `5`. To improve performance for this query, you can create an index on the `stock.quantity` field.
+   db.inventory.insertMany( [
+      {
+         "item": "t-shirt",
+         "stock": [
+            {
+               "size": "small",
+               "quantity": 8
+            },
+            {
+               "size": "large",
+               "quantity": 10
+            },
+          ]
+      },
+      {
+         "item": "sweater",
+         "stock": [
+            {
+               "size": "small",
+               "quantity": 4
+            },
+            {
+               "size": "large",
+               "quantity": 7
+            },
+          ]
+      },
+      {
+         "item": "vest",
+         "stock": [
+            {
+               "size": "small",
+               "quantity": 6
+            },
+            {
+               "size": "large",
+               "quantity": 1
+            }
+          ]
+      }
+   ] )
+
+You need to order more inventory any time you have less than five of an
+item in stock. To find which items to reorder, you query for documents
+where an element in the ``stock`` array has a ``quantity`` less than
+``5``. To improve performance for this query, you can create an index on
+the ``stock.quantity`` field. 
 
 ## Procedure
 
-The following operation creates an ascending multikey index on the `stock.quantity` field of the `inventory` collection:
+The following operation creates an ascending multikey index on the
+``stock.quantity`` field of the ``inventory`` collection:
 
-```javascript
-db.inventory.createIndex( { "stock.quantity": 1 } )
-```
+.. code-block:: javascript
 
-Because `stock` contains an array value, MongoDB stores this index as a multikey index.
+   db.inventory.createIndex( { "stock.quantity": 1 } )
+
+Because ``stock`` contains an array value, MongoDB stores this
+index as a multikey index.
 
 ## Results
 
-The index contains a key for each individual value that appears in the `stock.quantity` field. The index is ascending, meaning the keys are stored in this order: `[ 1, 4, 6, 7, 8, 10 ]`.
+The index contains a key for each individual value that appears in the
+``stock.quantity`` field. The index is ascending, meaning the keys are
+stored in this order: ``[ 1, 4, 6, 7, 8, 10 ]``.
 
-The index supports queries that select on the `stock.quantity` field. For example, the following query returns documents where at least one element in the `stock` array has a `quantity` less than `5`:
+The index supports queries that select on the ``stock.quantity`` field. For
+example, the following query returns documents where at least one
+element in the ``stock`` array has a ``quantity`` less than ``5``:
 
-```javascript
-db.inventory.find(
-   {
-      "stock.quantity": { $lt: 5 }
-   }
-)
-```
+.. code-block:: javascript
+
+   db.inventory.find(
+      {
+         "stock.quantity": { $lt: 5 }
+      }
+   )
 
 Output:
 
-```javascript
-[
-  {
-    _id: ObjectId("63449793b1fac2ee2e957ef3"),
-    item: 'vest',
-    stock: [ { size: 'small', quantity: 6 }, { size: 'large', quantity: 1 } ]
-  },
-  {
-    _id: ObjectId("63449793b1fac2ee2e957ef2"),
-    item: 'sweater',
-    stock: [ { size: 'small', quantity: 4 }, { size: 'large', quantity: 7 } ]
-  }
-]
-```
+.. code-block:: javascript
+   :copyable: false
+
+   [
+     {
+       _id: ObjectId("63449793b1fac2ee2e957ef3"),
+       item: 'vest',
+       stock: [ { size: 'small', quantity: 6 }, { size: 'large', quantity: 1 } ]
+     },
+     {
+       _id: ObjectId("63449793b1fac2ee2e957ef2"),
+       item: 'sweater',
+       stock: [ { size: 'small', quantity: 4 }, { size: 'large', quantity: 7 } ]
+     }
+   ]
+
 
 ### Sort Results
 
-The index also supports sort operations on the `stock.quantity` field, such as this query:
+The index also supports sort operations on the ``stock.quantity`` field,
+such as this query:
 
-```javascript
-db.inventory.find().sort( { "stock.quantity": -1 } )
-```
+.. code-block:: javascript
+
+   db.inventory.find().sort( { "stock.quantity": -1 } )
 
 Output:
 
-```javascript
-[
-  {
-    _id: ObjectId("63449793b1fac2ee2e957ef1"),
-    item: 't-shirt',
-    stock: [ { size: 'small', quantity: 8 }, { size: 'large', quantity: 10 } ]
-  },
-  {
-    _id: ObjectId("63449793b1fac2ee2e957ef2"),
-    item: 'sweater',
-    stock: [ { size: 'small', quantity: 4 }, { size: 'large', quantity: 7 } ]
-  },
-  {
-    _id: ObjectId("63449793b1fac2ee2e957ef3"),
-    item: 'vest',
-    stock: [ { size: 'small', quantity: 6 }, { size: 'large', quantity: 1 } ]
-  }
-]
-```
+.. code-block:: javascript
+   :copyable: false
 
-When sorting an array of objects, in a descending sort, MongoDB sorts based on the field with the highest-valued element first.
+   [
+     {
+       _id: ObjectId("63449793b1fac2ee2e957ef1"),
+       item: 't-shirt',
+       stock: [ { size: 'small', quantity: 8 }, { size: 'large', quantity: 10 } ]
+     },
+     {
+       _id: ObjectId("63449793b1fac2ee2e957ef2"),
+       item: 'sweater',
+       stock: [ { size: 'small', quantity: 4 }, { size: 'large', quantity: 7 } ]
+     },
+     {
+       _id: ObjectId("63449793b1fac2ee2e957ef3"),
+       item: 'vest',
+       stock: [ { size: 'small', quantity: 6 }, { size: 'large', quantity: 1 } ]
+     }
+   ]
+
+When sorting an array of objects, in a descending sort, MongoDB sorts
+based on the field with the highest-valued element first. 
 
 ## Learn More
 
 - :ref:`Create a multikey index on an array of scalar values
-<index-create-multikey-basic>`.
+  <index-create-multikey-basic>`.
 
-- `Learn about multikey index bounds <indexes-multikey-bounds>`.
+- :ref:`Learn about multikey index bounds <indexes-multikey-bounds>`.

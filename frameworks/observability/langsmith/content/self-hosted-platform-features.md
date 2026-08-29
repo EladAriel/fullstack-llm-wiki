@@ -4,10 +4,10 @@ framework: "LangSmith"
 source_repo: "https://github.com/langchain-ai/docs.git"
 source_branch: "main"
 source_path: "src/langsmith/self-hosted-platform-features.mdx"
-source_commit: "2aae1dfc98ee953a9a5185fb6fcdd9efb3f4d878"
-source_commit_short: "2aae1df"
-source_commit_date: "2026-07-25T00:27:23+00:00"
-generated_at: "2026-07-25T19:08:33.348578Z"
+source_commit: "a174f9cf7c91ee5eb14ee2382eb48bfe6e4956e9"
+source_commit_short: "a174f9c"
+source_commit_date: "2026-08-28T17:04:12-07:00"
+generated_at: "2026-08-29T09:39:50.592421Z"
 ---
 # Self Hosted Platform Features
 
@@ -22,13 +22,13 @@ This page describes the platform features that apply only to [self-hosted](/lang
 
 ## Custom PostgreSQL
 
-A custom PostgreSQL instance can be used instead of the [one automatically created by the control plane](/langsmith/cloud-platform-features#database-provisioning). Specify the [`POSTGRES_URI_CUSTOM`](/langsmith/env-var-self-hosted) environment variable to use a custom PostgreSQL instance.
+A custom PostgreSQL instance can be used instead of the [one automatically created by the control plane](/langsmith/cloud-platform-features#database-provisioning). Specify the [`POSTGRES_URI_CUSTOM`](/langsmith/env-var-self-hosted) environment variable to use a custom PostgreSQL instance. To authenticate with a cloud workload identity instead of a static password, see [Configure IAM authentication for data stores](/langsmith/configure-iam-auth).
 
 Multiple deployments can share the same PostgreSQL instance. For example, for `Deployment A`, `POSTGRES_URI_CUSTOM` can be set to `postgres://<user>:<password>@/<database_name_1>?host=<hostname_1>` and for `Deployment B`, `POSTGRES_URI_CUSTOM` can be set to `postgres://<user>:<password>@/<database_name_2>?host=<hostname_1>`. `<database_name_1>` and `<database_name_2>` are different databases within the same instance, but `<hostname_1>` is shared. **The same database cannot be used for separate deployments**.
 
 ## Custom Redis
 
-A custom Redis instance can be used instead of the one automatically created by the control plane. Specify the [`REDIS_URI_CUSTOM`](/langsmith/env-var-self-hosted) environment variable to use a custom Redis instance.
+A custom Redis instance can be used instead of the one automatically created by the control plane. Specify the [`REDIS_URI_CUSTOM`](/langsmith/env-var-self-hosted) environment variable to use a custom Redis instance. To authenticate with a cloud workload identity instead of a static password, see [Configure IAM authentication for data stores](/langsmith/configure-iam-auth).
 
 Multiple deployments can share the same Redis instance. For example, for `Deployment A`, `REDIS_URI_CUSTOM` can be set to `redis://<hostname_1>:<port>/1` and for `Deployment B`, `REDIS_URI_CUSTOM` can be set to `redis://<hostname_1>:<port>/2`. `1` and `2` are different database numbers within the same instance, but `<hostname_1>` is shared. **The same database number cannot be used for separate deployments**.
 

@@ -1,32 +1,55 @@
 ---
 type: "Framework Learn Page"
-framework: "postgres"
+framework: "PostgreSQL"
 source_repo: "https://github.com/postgres/postgres.git"
 source_branch: "master"
 source_path: "doc/src/sgml/tcn.sgml"
-source_commit: "38afc3dcb25c45b744d4025029ce0a6c90b7059f"
-source_commit_short: "38afc3dc"
-source_commit_date: "2026-07-25T19:08:27+09:00"
-generated_at: "2026-07-25T11:50:59Z"
+source_commit: "6c5f1d6074208146930b67c2054509c3e82f6f7f"
+source_commit_short: "6c5f1d6"
+source_commit_date: "2026-08-28T23:24:47+02:00"
+generated_at: "2026-08-29T09:39:24.319511Z"
 ---
+# tcn — a trigger function to notify listeners of changes to table content
 
-## tcn -- a trigger function to notify listeners of changes to table content
+ 
+  tcn
+ 
 
-tcn
+ 
+  triggered_change_notification
+ 
 
-triggered_change_notification
+ 
+  The tcn module provides a trigger function that notifies
+  listeners of changes to any table on which it is attached.  It must be
+  used as an AFTER trigger FOR EACH ROW.
+ 
 
-The `tcn` module provides a trigger function that notifies listeners of changes to any table on which it is attached. It must be used as an `AFTER` trigger `FOR EACH ROW`.
+ 
+  This module is considered trusted, that is, it can be
+  installed by non-superusers who have CREATE privilege
+  on the current database.
+ 
 
-This module is considered trusted, that is, it can be installed by non-superusers who have `CREATE` privilege on the current database.
+ 
+  Only one parameter may be supplied to the function in a
+  CREATE TRIGGER statement, and that is optional.  If supplied
+  it will be used for the channel name for the notifications.  If omitted
+  tcn will be used for the channel name.
+ 
 
-Only one parameter may be supplied to the function in a `CREATE TRIGGER` statement, and that is optional. If supplied it will be used for the channel name for the notifications. If omitted `tcn` will be used for the channel name.
+ 
+  The payload of the notifications consists of the table name, a letter to
+  indicate which type of operation was performed, and column name/value pairs
+  for primary key columns.  Each part is separated from the next by a comma.
+  For ease of parsing using regular expressions, table and column names are
+  always wrapped in double quotes, and data values are always wrapped in
+  single quotes.  Embedded quotes are doubled.
+ 
 
-The payload of the notifications consists of the table name, a letter to indicate which type of operation was performed, and column name/value pairs for primary key columns. Each part is separated from the next by a comma. For ease of parsing using regular expressions, table and column names are always wrapped in double quotes, and data values are always wrapped in single quotes. Embedded quotes are doubled.
+ 
+  A brief example of using the extension follows.
 
-A brief example of using the extension follows.
-
-```
 test=# CREATE TABLE tcndata
 test-#   (
 test(#     a int NOT NULL,
@@ -55,4 +78,3 @@ Asynchronous notification "tcn" with payload ""tcndata",U,"a"='1',"b"='2012-12-2
 test=# DELETE FROM tcndata WHERE a = 1 AND b = date '2012-12-22';
 DELETE 1
 Asynchronous notification "tcn" with payload ""tcndata",D,"a"='1',"b"='2012-12-22'" received from server process with PID 22770.
-```

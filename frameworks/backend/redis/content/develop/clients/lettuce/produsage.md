@@ -1,14 +1,15 @@
 ---
 type: "Framework Learn Page"
-framework: "redis"
+framework: "Redis"
 source_repo: "https://github.com/redis/docs.git"
 source_branch: "main"
 source_path: "content/develop/clients/lettuce/produsage.md"
-source_commit: "9d30f68c3dad1a6b3b7d30fe604b911348ce8152"
-source_commit_short: "9d30f68c"
-source_commit_date: "2026-07-24T10:52:10-07:00"
-generated_at: "2026-07-25T11:51:22Z"
+source_commit: "f8693349287b0efbef3c865b6f6a2aceca88594d"
+source_commit_short: "f869334"
+source_commit_date: "2026-08-28T10:01:19-05:00"
+generated_at: "2026-08-29T09:38:56.082659Z"
 ---
+# Produsage
 
 ---
 categories:
@@ -39,6 +40,7 @@ progress in implementing the recommendations.
 ```checklist {id="lettuceprodlist"}
 - [ ] [Timeouts](#timeouts)
 - [ ] [Cluster topology refresh](#cluster-topology-refresh)
+- [ ] [Warm up cluster connections](#warm-up-cluster-connections)
 - [ ] [DNS cache and Redis](#dns-cache-and-redis)
 - [ ] [Exception handling](#exception-handling)
 - [ ] [Connection and execution reliability](#connection-and-execution-reliability)
@@ -224,6 +226,91 @@ try (RedisClusterClient clusterClient = RedisClusterClient.create(redisURI)) {
 Learn more about topology refresh configuration settings in [the reference guide](https://redis.github.io/lettuce/ha-sharding/#redis-cluster).
 
 
+## Warm up cluster connections
+
+With a Redis Cluster, Lettuce opens connections to individual nodes *lazily* -
+the connection to a given shard is created the first time a command is routed
+to it. This keeps the connection footprint minimal, but it means the *first*
+requests after startup each pay the cost of establishing a new connection
+(a TCP connection plus, when TLS is enabled, a TLS handshake) to a node that
+has not been contacted yet. On a TLS cluster with several shards, this can add
+a noticeable latency spike to a freshly started application's first burst of
+traffic. Under constrained CPU (for example, a container that is CPU-throttled
+during startup) that spike can be large enough to breach command timeouts.
+
+To avoid this, open the per-node connections *before* your application starts
+serving traffic. The `upstream()` node selection targets every primary node;
+sending a `PING` to the selection forces each per-node connection to be
+established:
+
+```java
+RedisURI redisURI = RedisURI.Builder
+        .redis("localhost")
+        .withSsl(true)
+        .build();
+
+try (RedisClusterClient clusterClient = RedisClusterClient.create(redisURI)) {
+
+    StatefulRedisClusterConnection<String, String> connection = clusterClient.connect();
+
+    // Warm up: open a connection to every primary node before serving traffic.
+    // upstream() selects all primaries; the PING forces each per-node connection to open.
+    connection.sync().upstream().commands().ping();
+
+    // If you read from replicas (ReadFrom.REPLICA / REPLICA_PREFERRED),
+    // warm the replica connections too:
+    // connection.sync()
+    //         .readonly(node -> node.is(RedisClusterNode.NodeFlag.REPLICA))
+    //         .commands().ping();
+
+    System.out.println(connection.sync().ping());
+}
+```
+
+Because the cluster topology can change at runtime, connections to *new* nodes
+are still opened lazily after a topology change. If you want those warmed as
+well, re-run the warm-up when the topology changes (for example, from a
+`ClusterTopologyChangedEvent` listener).
+
+### Warming up connections in Spring Data Redis
+
+With [Spring Data Redis]({{< relref "/integrate/spring-framework-cache" >}}), run the warm-up once at startup, before the instance is
+marked ready. Obtain the shared native cluster connection from the
+`LettuceConnectionFactory` and warm it with the same `upstream()` call:
+
+```java
+@Component
+class RedisClusterWarmUp {
+
+    private final LettuceConnectionFactory factory;
+
+    RedisClusterWarmUp(RedisConnectionFactory factory) {
+        this.factory = (LettuceConnectionFactory) factory;
+    }
+
+    // Runs after the context starts. To keep traffic off the instance until the
+    // warm-up completes, gate your readiness probe on it (for example, with a
+    // HealthIndicator that reports "up" only after this method succeeds).
+    @EventListener(ApplicationStartedEvent.class)
+    void warmUp() {
+        try (RedisClusterConnection clusterConnection = factory.getClusterConnection()) {
+            @SuppressWarnings("unchecked")
+            StatefulRedisClusterConnection<byte[], byte[]> connection =
+                    ((RedisAdvancedClusterAsyncCommands<byte[], byte[]>) clusterConnection.getNativeConnection())
+                            .getStatefulConnection();
+            connection.sync().upstream().commands().ping();
+        }
+    }
+}
+```
+
+{{< note >}}The `LettuceConnectionFactory` `eagerInitialization` option is not
+sufficient on its own. It establishes the cluster topology and a single
+connection at startup, but the remaining per-node connections are still opened
+lazily on first use. Use the warm-up shown above to open connections to all
+nodes.{{< /note >}}
+
+
 ## DNS cache and Redis
 
 When you connect to a Redis server with multiple endpoints, such as [Redis Software Active-Active](https://redis.com/redis-enterprise/technology/active-active-geo-distribution/), you *must*
@@ -282,7 +369,7 @@ The example below shows a filter that retries all commands except for
 [`DECR`]({{< relref "/commands/decr" >}})
 (this command is not [idempotent](https://en.wikipedia.org/wiki/Idempotence) and
 so you might need to avoid executing it more than once). Note that
-replay filters are only available in in Lettuce v6.6 and above.
+replay filters are only available in Lettuce v6.6 and above.
 
 ```java
 Predicate<RedisCommand<?, ?, ?> > filter =

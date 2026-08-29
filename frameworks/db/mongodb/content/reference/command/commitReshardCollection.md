@@ -1,55 +1,77 @@
 ---
 type: "Framework Learn Page"
-framework: "mongodb"
+framework: "MongoDB"
 source_repo: "https://github.com/mongodb/docs.git"
 source_branch: "main"
 source_path: "content/manual/manual/source/reference/command/commitReshardCollection.txt"
-source_commit: "ab9db26ed3d11618cdb61516d8180337d8e3f679"
-source_commit_short: "ab9db26e"
-source_commit_date: "2026-07-24T16:22:46-06:00"
-generated_at: "2026-07-25T11:51:15Z"
+source_commit: "b9f2bc487a2878b65e3c1f80024bebab76954f27"
+source_commit_short: "b9f2bc48"
+source_commit_date: "2026-08-28T17:09:45-05:00"
+generated_at: "2026-08-29T09:39:20.026829Z"
 ---
-
-==========================================
-
 # commitReshardCollection (database command)
+
+**meta:** :description: Force the completion of a resharding operation by blocking writes with the `commitReshardCollection` command.
+
+.. default-domain:: mongodb
+
+**contents:** On this page
+   :local:
+   :backlinks: none
+   :depth: 1
+   :class: singlecol
 
 ## Definition
 
+**dbcommand:** commitReshardCollection
+
+   .. versionadded:: 5.0
+
+   .. |method-or-command| replace:: ``commitReshardCollection``
+   .. include:: /includes/fact-reshard-block-writes-duration.rst
+
+   .. |method| replace:: :method:`sh.commitReshardCollection` 
+      helper method
+   .. include:: /includes/fact-dbcommand-tip
+
 ## Compatibility
 
-This command is available in deployments hosted in the following environments:
+This command is available in deployments hosted in the following environments: 
 
-.. include:: /includes/fact-environments-atlas-only.rst
+**include:** /includes/fact-environments-atlas-only.rst
 
-.. include:: /includes/fact-environments-atlas-support-all.rst
+**include:** /includes/fact-environments-atlas-support-all.rst
 
-.. include:: /includes/fact-environments-onprem-only.rst
+**include:** /includes/fact-environments-onprem-only.rst
+
 
 ## Syntax
 
 The command has the following syntax:
 
-```javascript
-db.adminCommand(
-   {
-     commitReshardCollection: "<database>.<collection>"
-   }
-)
-```
+.. code-block:: javascript
 
-The :binary:`~bin.mongosh` provides a wrapper method :method:`sh.commitReshardCollection()`.
+   db.adminCommand(
+      {
+        commitReshardCollection: "<database>.<collection>"
+      }
+   )
+
+The :binary:`~bin.mongosh` provides a wrapper method
+:method:`sh.commitReshardCollection()`.
 
 ## Example
 
 ### Commit a Resharding Operation
 
-The following command forces the `resharding operation <sharding-resharding>` on the `sales.orders` to block writes and complete:
+The following command forces the :ref:`resharding
+operation <sharding-resharding>` on the ``sales.orders`` to block writes
+and complete:
 
-```javascript
-db.adminCommand({
-  commitReshardCollection: "sales.orders"
-})
-```
+.. code-block:: javascript
 
-> **Seealso:** `sharding-resharding`
+   db.adminCommand({
+     commitReshardCollection: "sales.orders"
+   })
+
+**seealso:** :ref:`sharding-resharding`

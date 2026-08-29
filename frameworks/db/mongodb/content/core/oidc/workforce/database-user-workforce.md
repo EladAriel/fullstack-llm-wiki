@@ -1,40 +1,57 @@
 ---
 type: "Framework Learn Page"
-framework: "mongodb"
+framework: "MongoDB"
 source_repo: "https://github.com/mongodb/docs.git"
 source_branch: "main"
 source_path: "content/manual/manual/source/core/oidc/workforce/database-user-workforce.txt"
-source_commit: "ab9db26ed3d11618cdb61516d8180337d8e3f679"
-source_commit_short: "ab9db26e"
-source_commit_date: "2026-07-24T16:22:46-06:00"
-generated_at: "2026-07-25T11:51:15Z"
+source_commit: "b9f2bc487a2878b65e3c1f80024bebab76954f27"
+source_commit_short: "b9f2bc48"
+source_commit_date: "2026-08-28T17:09:45-05:00"
+generated_at: "2026-08-29T09:39:19.826701Z"
 ---
-
-==================================================
+.. _database-user-workforce:
 
 # Authorize Users with Workforce Identity Federation
 
-You can add a database user to MongoDB using Workforce authentication. This process allows your organization’s |idp-abbr| to manage user access, ensuring secure and centralized authentication for database operations.
+.. default-domain:: mongodb
+
+**facet:** :name: genre
+   :values: tutorial
+
+**contents:** On this page
+   :local:
+   :backlinks: none
+   :depth: 1
+   :class: singlecol
+
+You can add a database user to MongoDB using Workforce authentication. 
+This process allows your organization’s |idp-abbr| to manage user 
+access, ensuring secure and centralized authentication for database 
+operations.
 
 ## Before you Begin
 
-- You must `workforce-external-provider`.
-- You must `configure-oidc`.
-.. include:: /includes/note-oidc-add-users-internal-auth.rst
+- You must :ref:`workforce-external-provider`. 
+- You must :ref:`configure-oidc`.
+
+**include:** /includes/note-oidc-add-users-internal-auth.rst
 
 ## Steps
 
-.. include:: /includes/oidc-add-user.rst
+**include:** /includes/oidc-add-user.rst
 
 ## Next Steps
 
-You can connect an application to MongoDB using Workforce Identity Federation in the following ways:
+You can connect an application to MongoDB using Workforce Identity 
+Federation in the following ways:
 
 - :compass:`Compass </connect/#connect-with-openid-connect>`
 - :mongosh:`MongoDB Shell </connect/#connect-with-openid-connect>`
-For more details on MongoDB Shell OIDC options, see :mongosh:`Authentication Options </reference/options/#std-option-mongosh.--oidcFlows>`
+
+  For more details on MongoDB Shell OIDC options, see :mongosh:`Authentication 
+  Options </reference/options/#std-option-mongosh.--oidcFlows>`
 
 ## Learn More
 
-- `workforce`
-- `workload`
+- :ref:`workforce`
+- :ref:`workload`

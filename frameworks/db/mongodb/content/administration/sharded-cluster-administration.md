@@ -1,61 +1,89 @@
 ---
 type: "Framework Learn Page"
-framework: "mongodb"
+framework: "MongoDB"
 source_repo: "https://github.com/mongodb/docs.git"
 source_branch: "main"
 source_path: "content/manual/manual/source/administration/sharded-cluster-administration.txt"
-source_commit: "ab9db26ed3d11618cdb61516d8180337d8e3f679"
-source_commit_short: "ab9db26e"
-source_commit_date: "2026-07-24T16:22:46-06:00"
-generated_at: "2026-07-25T11:51:15Z"
+source_commit: "b9f2bc487a2878b65e3c1f80024bebab76954f27"
+source_commit_short: "b9f2bc48"
+source_commit_date: "2026-08-28T17:09:45-05:00"
+generated_at: "2026-08-29T09:39:19.767515Z"
 ---
-
-==============================
+.. _sharded-cluster-admin:
 
 # Sharded Cluster Administration
 
-## Contents
+**meta:** :description: Manage sharded clusters by adding shards, migrating data, and configuring servers for metadata and application data storage.
 
-- Scaling Strategies </core/sharding-scaling-strategies>
-- View Cluster Configuration </tutorial/view-sharded-cluster-configuration>
-- Add Shards </tutorial/add-shards-to-shard-cluster>
-- Add a Member to a Shard </tutorial/add-member-to-shard>
-- Remove Shards </tutorial/remove-shards-from-cluster>
-- Embedded to Dedicated Config Server </tutorial/embedded-to-dedicated>
-- Unsharded Collections </core/unsharded-collections>
-- Clear jumbo Flag </tutorial/clear-jumbo-flag>
-- Drop Hashed Shard Key Index </tutorial/drop-a-hashed-shard-key-index>
-- Config Shard </core/config-shard>
-- Start with a Config Shard </tutorial/start-a-sharded-cluster-with-config-shard>
-- Reshard to the Same Shard Key </core/reshard-to-same-key>
-- Reshard a Collection back to the Same Shard Key </tutorial/resharding-back-to-same-key>
-- Resharding for Adding and Removing Shards </tutorial/resharding-for-adding-and-removing-shards>
-- Troubleshoot Stuck Chunk Migrations </troubleshooting/chunk-migrations-stuck>
+.. default-domain:: mongodb
 
-`/core/sharding-scaling-strategies` View horizontal scaling strategies and best practices for sharding collections.
+**contents:** On this page
+   :local:
+   :backlinks: none
+   :depth: 1
+   :class: singlecol
 
-`/tutorial/view-sharded-cluster-configuration` View status information about the cluster's databases, shards, and chunks.
 
-`/tutorial/add-shards-to-shard-cluster` Add a shard to add capacity to a sharded cluster.
+**toctree:** :titlesonly: 
+   :hidden: 
 
-`/tutorial/add-member-to-shard` Add a member to a shard in a sharded cluster.
+   Scaling Strategies </core/sharding-scaling-strategies>
+   View Cluster Configuration </tutorial/view-sharded-cluster-configuration>
+   Add Shards </tutorial/add-shards-to-shard-cluster>
+   Add a Member to a Shard </tutorial/add-member-to-shard>
+   Remove Shards </tutorial/remove-shards-from-cluster>
+   Embedded to Dedicated Config Server </tutorial/embedded-to-dedicated>
+   Unsharded Collections </core/unsharded-collections>
+   Clear jumbo Flag </tutorial/clear-jumbo-flag>
+   Drop Hashed Shard Key Index </tutorial/drop-a-hashed-shard-key-index>
+   Config Shard </core/config-shard>
+   Start with a Config Shard </tutorial/start-a-sharded-cluster-with-config-shard>
+   Reshard to the Same Shard Key </core/reshard-to-same-key>
+   Reshard a Collection back to the Same Shard Key </tutorial/resharding-back-to-same-key>
+   Resharding for Adding and Removing Shards </tutorial/resharding-for-adding-and-removing-shards>
+   Troubleshoot Stuck Chunk Migrations </troubleshooting/chunk-migrations-stuck>
 
-`/tutorial/remove-shards-from-cluster` Migrate a single shard's data and remove the shard.
+:doc:`/core/sharding-scaling-strategies`
+   View horizontal scaling strategies and best practices for sharding 
+   collections.
 
-`embedded-to-dedicated-tutorial` Transition from an embedded config server to a dedicated config server.
+:doc:`/tutorial/view-sharded-cluster-configuration`
+   View status information about the cluster's databases, shards, and
+   chunks.
 
-`/tutorial/unshard-collection` Manually unshard a sharded collection.
+:doc:`/tutorial/add-shards-to-shard-cluster`
+   Add a shard to add capacity to a sharded cluster.
 
-`/tutorial/clear-jumbo-flag` Manually clear `jumbo` flag from a chunk.
+:doc:`/tutorial/add-member-to-shard`
+   Add a member to a shard in a sharded cluster.
 
-`/tutorial/drop-a-hashed-shard-key-index` Drop a Hashed Shard Key Index.
+:doc:`/tutorial/remove-shards-from-cluster`
+   Migrate a single shard's data and remove the shard.
 
-`/core/config-shard` You can configure a config server to store both application data and the usual sharded cluster metadata.
+:ref:`embedded-to-dedicated-tutorial`
+   Transition from an embedded config server to a dedicated config server.
 
-`/tutorial/start-a-sharded-cluster-with-config-shard` Start a Sharded Cluster with a Config Shard.
+:doc:`/tutorial/unshard-collection`
+   Manually unshard a sharded collection.
 
-`/core/reshard-to-same-key` Reshard to the Same Shard Key.
+:doc:`/tutorial/clear-jumbo-flag`
+   Manually clear ``jumbo`` flag from a chunk.
 
-`/tutorial/resharding-back-to-same-key` Reshard a Collection back to the Same Shard Key.
+:doc:`/tutorial/drop-a-hashed-shard-key-index`
+   Drop a Hashed Shard Key Index.
 
-`/tutorial/resharding-for-adding-and-removing-shards` Resharding for Adding and Removing Shards.
+:doc:`/core/config-shard`
+   You can configure a config server to store both application data 
+   *and* the usual sharded cluster metadata.
+
+:doc:`/tutorial/start-a-sharded-cluster-with-config-shard`
+   Start a Sharded Cluster with a Config Shard.
+
+:doc:`/core/reshard-to-same-key`
+   Reshard to the Same Shard Key.
+
+:doc:`/tutorial/resharding-back-to-same-key`
+   Reshard a Collection back to the Same Shard Key.
+
+:doc:`/tutorial/resharding-for-adding-and-removing-shards`
+   Resharding for Adding and Removing Shards.

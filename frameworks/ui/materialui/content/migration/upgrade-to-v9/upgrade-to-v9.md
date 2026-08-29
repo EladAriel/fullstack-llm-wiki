@@ -4,10 +4,10 @@ framework: "Material UI"
 source_repo: "https://github.com/mui/material-ui.git"
 source_branch: "master"
 source_path: "docs/data/material/migration/upgrade-to-v9/upgrade-to-v9.md"
-source_commit: "4d5fe7254baa7e97e38b516f37c7af13128468b7"
-source_commit_short: "4d5fe725"
-source_commit_date: "2026-07-24T12:25:49+03:00"
-generated_at: "2026-07-25T13:39:41.005369Z"
+source_commit: "fc3a3a0a8b7c8f20274eca4758ea07a33e25c1b4"
+source_commit_short: "fc3a3a0a"
+source_commit_date: "2026-08-28T09:03:39+07:00"
+generated_at: "2026-08-29T09:40:18.271290Z"
 ---
 # Upgrade to v9
 
@@ -184,6 +184,33 @@ The main API differences are:
 See the [Grid v2 migration guide](/material-ui/migration/upgrade-to-grid-v2/) for more details.
 
 `MuiGridLegacy` has also been removed from the theme `components` types (`ComponentsProps`, `ComponentsOverrides`, and `ComponentsVariants`).
+
+### Grid
+
+#### `direction="column"` and `direction="column-reverse"` removed
+
+The `Grid` component no longer accepts `direction="column"` or `direction="column-reverse"`.
+These values were unsupported in practice in earlier versions and are now removed from the TypeScript types and prop validation.
+
+`Grid` is designed to subdivide a layout into **columns**, not rows.
+For vertical stacking, use the [`Stack`](/material-ui/react-stack/) component instead (including inside a `Grid` item when needed).
+See the [Grid column direction limitation](/material-ui/react-grid/#column-direction) for details.
+
+```diff
+-import Grid from '@mui/material/Grid';
++import Stack from '@mui/material/Stack';
+
+-<Grid container direction="column" spacing={2}>
+-  <Grid size={12}>First item</Grid>
+-  <Grid size={12}>Second item</Grid>
+-</Grid>
++<Stack spacing={2}>
++  <div>First item</div>
++  <div>Second item</div>
++</Stack>
+```
+
+If you still need horizontal column subdivision, keep using `Grid` with `direction="row"` (the default) or `direction="row-reverse"`.
 
 ### List
 

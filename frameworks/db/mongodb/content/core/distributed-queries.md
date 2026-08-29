@@ -1,95 +1,161 @@
 ---
 type: "Framework Learn Page"
-framework: "mongodb"
+framework: "MongoDB"
 source_repo: "https://github.com/mongodb/docs.git"
 source_branch: "main"
 source_path: "content/manual/manual/source/core/distributed-queries.txt"
-source_commit: "ab9db26ed3d11618cdb61516d8180337d8e3f679"
-source_commit_short: "ab9db26e"
-source_commit_date: "2026-07-24T16:22:46-06:00"
-generated_at: "2026-07-25T11:51:15Z"
+source_commit: "b9f2bc487a2878b65e3c1f80024bebab76954f27"
+source_commit_short: "b9f2bc48"
+source_commit_date: "2026-08-28T17:09:45-05:00"
+generated_at: "2026-08-29T09:39:19.551525Z"
 ---
-
-===================
+.. _read-operations-architecture:
 
 # Distributed Queries
 
-Learn how MongoDB handles read and write operations in replica sets and sharded clusters. This page explains the importance of cluster architecture on query routing and data consistency.
+**meta:** :description: Explore how read and write operations are handled in replica sets and sharded clusters, including read preferences and shard key usage.
+
+**contents:** On this page
+   :local:
+   :backlinks: none
+   :depth: 1
+   :class: singlecol
+
+Learn how MongoDB handles read and write operations in replica sets and
+sharded clusters. This page explains the importance of cluster
+architecture on query routing and data consistency.
 
 ## Read Operations to Replica Sets
 
-By default, clients read from a replica set's `primary`. However, you can specify a `read preference </core/read-preference>` to direct read operations to other members. For example, configure read preferences to read from secondaries or from the nearest member to:
+By default, clients read from a replica set's :term:`primary`. However,
+you can specify a :doc:`read preference </core/read-preference>` to direct
+read operations to other members. For example, configure read preferences
+to read from secondaries or from the nearest member to:
 
 - Reduce latency in deployments with multiple data centers.
 - Perform backup operations.
-- Allow reads until a `new primary is elected <replica-set-failover>`.
-.. include:: /images/replica-set-read-preference.rst
+- Allow reads until a :ref:`new primary is elected <replica-set-failover>`.
 
-Read operations from secondary members of replica sets may not reflect the current state of the primary. Read preferences that direct read operations to different servers may result in non-monotonic reads.
+**include:** /images/replica-set-read-preference.rst
 
-Clients can use `causally consistent <causal-consistency>` sessions, which provides various guarantees including monotonic reads.
+Read operations from secondary members of replica sets may not reflect
+the current state of the primary. Read preferences that direct read
+operations to different servers may result in non-monotonic reads.
 
-You can configure the read preference on a per-connection or per-operation basis. For more information on read preference or on the read preference modes, see `/core/read-preference` and `replica-set-read-preference-modes`.
+Clients can use :ref:`causally consistent <causal-consistency>`
+sessions, which provides various guarantees including monotonic reads.
+
+You can configure the read preference on a per-connection or
+per-operation basis. For more information on read preference or on the
+read preference modes, see :doc:`/core/read-preference` and
+:ref:`replica-set-read-preference-modes`.
+
+.. _write-operations-replica-sets:
 
 ## Write Operations on Replica Sets
 
-In `replica sets <replica set>`, all write operations go to the set's `primary`. The primary applies the write operation and records the operations on the primary's operation log or `oplog`. The oplog is a reproducible sequence of operations to the data set. `secondary` members of the set continuously replicate the oplog and apply the operations to themselves in an asynchronous process.
+In :term:`replica sets <replica set>`, all write operations go to the
+set's :term:`primary`. The primary applies the write operation and
+records the operations on the primary's operation log or :term:`oplog`.
+The oplog is a reproducible sequence of operations to the data set.
+:term:`secondary` members of the set continuously replicate the oplog
+and apply the operations to themselves in an asynchronous process.
 
-.. include:: /images/replica-set-read-write-operations-primary.rst
+**include:** /images/replica-set-read-write-operations-primary.rst
 
-For more information on replica sets and write operations, see `/replication` and `/reference/write-concern`.
+For more information on replica sets and write operations, see
+:doc:`/replication` and
+:doc:`/reference/write-concern`.
+
+.. _read-operations-sharded-clusters:
 
 ## Read Operations to Sharded Clusters
 
-`Sharded clusters <sharded cluster>` allow you to partition a data set among a cluster of :binary:`~bin.mongod` instances in a way that is nearly transparent to the application. For an overview of sharded clusters, see the `/sharding` section of this manual.
+:term:`Sharded clusters <sharded cluster>` allow you to partition a data
+set among a cluster of :binary:`~bin.mongod` instances in a way that is
+nearly transparent to the application. For an overview of sharded
+clusters, see the :doc:`/sharding` section of this manual.
 
-For a sharded cluster, applications issue operations to one of the :binary:`~bin.mongos` instances associated with the cluster.
+For a sharded cluster, applications issue operations to one of the
+:binary:`~bin.mongos` instances associated with the cluster.
 
-.. include:: /images/sharded-cluster.rst
+**include:** /images/sharded-cluster.rst
 
-Read operations on sharded clusters are most efficient when directed to a specific shard. Queries to sharded collections should include the collection's `shard key <sharding-shard-key>`. When a query includes a shard key, the :binary:`~bin.mongos` can use cluster metadata from the `config database <sharding-config-server>` to route the queries to shards.
+Read operations on sharded clusters are most efficient when directed to
+a specific shard. Queries to sharded collections should include the
+collection's :ref:`shard key <sharding-shard-key>`. When a query
+includes a shard key, the :binary:`~bin.mongos` can use cluster metadata
+from the :ref:`config database <sharding-config-server>` to route the
+queries to shards.
 
-.. include:: /images/sharded-cluster-targeted-query.rst
+**include:** /images/sharded-cluster-targeted-query.rst
 
-If a query does not include the shard key, the :binary:`~bin.mongos` must direct the query to all shards in the cluster. These scatter gather queries can be inefficient. On larger clusters, scatter gather queries are unfeasible for routine operations.
+If a query does not include the shard key, the :binary:`~bin.mongos` must
+direct the query to *all* shards in the cluster. These *scatter
+gather* queries can be inefficient. On larger clusters, scatter gather
+queries are unfeasible for routine operations.
 
-.. include:: /images/sharded-cluster-scatter-gather-query.rst
+**include:** /images/sharded-cluster-scatter-gather-query.rst
 
-For replica set shards, read operations from secondary members of replica sets may not reflect the current state of the primary. Read preferences that direct read operations to different servers may result in non-monotonic reads.
+For replica set shards, read operations from secondary members of
+replica sets may not reflect the current state of the primary. Read
+preferences that direct read operations to different servers may result
+in non-monotonic reads.
 
-> **Note:** - Clients can use `causally consistent <causal-consistency>`
-  sessions, which provides various guarantees, including monotonic
-  reads.
-- All members of a shard replica set, not just the primary, maintain
-  the metadata regarding chunk metadata. This prevents reads from
-  the secondaries from returning :term:`orphaned data <orphaned
-  document>` if not using read concern :readconcern:`"available"`.
-  In earlier versions, reads from secondaries, regardless of the
-  read concern, could return orphaned documents.
+**note:** - Clients can use :ref:`causally consistent <causal-consistency>`
+     sessions, which provides various guarantees, including monotonic
+     reads.
 
-For more information on read operations in sharded clusters, see the `/core/sharded-cluster-query-router` and `sharding-shard-key` sections.
+   - All members of a shard replica set, not just the primary, maintain
+     the metadata regarding chunk metadata. This prevents reads from
+     the secondaries from returning :term:`orphaned data <orphaned
+     document>` if not using read concern :readconcern:`"available"`.
+     In earlier versions, reads from secondaries, regardless of the
+     read concern, could return orphaned documents.
+
+For more information on read operations in sharded clusters, see the
+:doc:`/core/sharded-cluster-query-router` and :ref:`sharding-shard-key`
+sections.
+
+.. _write-operations-sharded-clusters:
 
 ## Write Operations on Sharded Clusters
 
-For sharded collections in a `sharded cluster`, the :binary:`~bin.mongos` directs write operations from applications to the shards that are responsible for the specific portion of the data set. The :binary:`~bin.mongos` uses the cluster metadata from the `config database <sharding-config-server>` to route the write operation to the appropriate shards.
+For sharded collections in a :term:`sharded cluster`, the
+:binary:`~bin.mongos` directs write operations from applications to the
+shards that are responsible for the specific *portion* of the data
+set. The :binary:`~bin.mongos` uses the cluster metadata from the
+:ref:`config database <sharding-config-server>` to route the write
+operation to the appropriate shards.
 
-.. include:: /images/sharded-cluster.rst
+**include:** /images/sharded-cluster.rst
 
-MongoDB partitions data in a sharded collection into ranges based on the values of the `shard key`. Then, MongoDB distributes these chunks to shards. The shard key determines the distribution of chunks to shards. This can affect the performance of write operations in the cluster.
+MongoDB partitions data in a sharded collection into *ranges* based on
+the values of the :term:`shard key`. Then, MongoDB distributes these
+chunks to shards. The shard key determines the distribution of chunks to
+shards. This can affect the performance of write operations in the
+cluster.
 
-.. include:: /images/sharding-range-based.rst
+**include:** /images/sharding-range-based.rst
 
-> **Important:** **must** include the `shard key or the id`
-field. Updates that affect multiple documents are more efficient in
-some situations if they have the `shard key`, but can be
-broadcast to all shards.
+**important:** Update operations that affect a *single* document
+   **must** include the :term:`shard key` or the ``_id``
+   field. Updates that affect multiple documents are more efficient in
+   some situations if they have the :term:`shard key`, but can be
+   broadcast to all shards.
 
-If the value of the shard key increases or decreases with every insert, all insert operations target a single shard. As a result, the capacity of a single shard becomes the limit for the insert capacity of the sharded cluster.
+If the value of the shard key increases or decreases with every
+insert, all insert operations target a single shard. As a result, the
+capacity of a single shard becomes the limit for the insert capacity
+of the sharded cluster.
 
-For more information, see `/sharding` and `/core/bulk-write-operations`.
+For more information, see :doc:`/sharding` and
+:doc:`/core/bulk-write-operations`.
 
-> **Seealso:** `retryable-writes`
+**seealso:** :ref:`retryable-writes`
 
 ## Change Streams and Orphan Documents
 
-.. include:: /includes/change-streams-and-orphans.rst
+**include:** /includes/change-streams-and-orphans.rst
+
+.. _read-operations-connection-pooling:

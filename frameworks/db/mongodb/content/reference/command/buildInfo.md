@@ -1,78 +1,165 @@
 ---
 type: "Framework Learn Page"
-framework: "mongodb"
+framework: "MongoDB"
 source_repo: "https://github.com/mongodb/docs.git"
 source_branch: "main"
 source_path: "content/manual/manual/source/reference/command/buildInfo.txt"
-source_commit: "ab9db26ed3d11618cdb61516d8180337d8e3f679"
-source_commit_short: "ab9db26e"
-source_commit_date: "2026-07-24T16:22:46-06:00"
-generated_at: "2026-07-25T11:51:15Z"
+source_commit: "b9f2bc487a2878b65e3c1f80024bebab76954f27"
+source_commit_short: "b9f2bc48"
+source_commit_date: "2026-08-28T17:09:45-05:00"
+generated_at: "2026-08-29T09:39:20.023157Z"
 ---
-
-============================
+.. _buildinfo-database-command:
 
 # buildInfo (database command)
 
+**meta:** :description: Retrieve a build summary for the current `mongod` using the `buildInfo` command, detailing version, storage engines, and more.
+
+.. default-domain:: mongodb
+
+**contents:** On this page
+   :local:
+   :backlinks: none
+   :depth: 1
+   :class: singlecol
+
 ## Definition
+
+**dbcommand:** buildInfo
+
+   The :dbcommand:`buildInfo` command returns a build summary for the current
+   :binary:`~bin.mongod`. 
 
 ## Compatibility
 
-This command is available in deployments hosted in the following environments:
+This command is available in deployments hosted in the following environments: 
 
-.. include:: /includes/fact-environments-atlas-only.rst
+**include:** /includes/fact-environments-atlas-only.rst
 
-.. include:: /includes/fact-environments-atlas-support-all.rst
+**include:** /includes/fact-environments-atlas-support-all.rst
 
-.. include:: /includes/fact-environments-onprem-only.rst
+**include:** /includes/fact-environments-onprem-only.rst
 
 ## Syntax
 
 The command has the following syntax:
 
-```javascript
-db.runCommand(
-   { 
-     buildInfo: 1 
-   }
-)
-```
+.. code-block:: javascript
+   
+   db.runCommand(
+      { 
+        buildInfo: 1 
+      }
+   )
 
 ## Usage
 
-In :binary:`~bin.mongosh`, call :dbcommand:`buildInfo` in the following form:
+In :binary:`~bin.mongosh`, call :dbcommand:`buildInfo` in the
+following form:
 
-```javascript
-db.runCommand( { buildInfo: 1 } )
-```
+.. code-block:: javascript
 
-The output document of :dbcommand:`buildInfo` has the following form:
+   db.runCommand( { buildInfo: 1 } )
 
-```javascript
-{
-  "version" : "<string>",
-  "gitVersion" : "<string>",
-  "sysInfo" : "<string>",
-  "loaderFlags" : "<string>",
-  "compilerFlags" : "<string>",
-  "allocator" : "<string>",
-  "versionArray" : [ <num>, <num>, <...> ],
-  "openssl" : <document>,
-  "javascriptEngine" : "<string>",
-  "bits" : <num>,
-  "debug" : <boolean>,
-  "maxBsonObjectSize" : <num>,
-  "storageEngines" : [ "<string>", "<string>", "<...>" ],
-  "ok" : <num>
-}
-```
+The output document of :dbcommand:`buildInfo` has the following
+form:
+
+.. code-block:: javascript
+
+   {
+     "version" : "<string>",
+     "gitVersion" : "<string>",
+     "sysInfo" : "<string>",
+     "loaderFlags" : "<string>",
+     "compilerFlags" : "<string>",
+     "allocator" : "<string>",
+     "versionArray" : [ <num>, <num>, <...> ],
+     "openssl" : <document>,
+     "javascriptEngine" : "<string>",
+     "bits" : <num>,
+     "debug" : <boolean>,
+     "maxBsonObjectSize" : <num>,
+     "storageEngines" : [ "<string>", "<string>", "<...>" ],
+     "ok" : <num>
+   }
 
 ## Output
+
+**data:** buildInfo
+
+   The document returned by the :dbcommand:`buildInfo` command.
 
 ### Supported
 
 These fields are stable and should provide consistent behavior.
 
+**data:** buildInfo.gitVersion
+
+   The commit identifier that identifies the state of the code used
+   to build the :binary:`~bin.mongod`.
+
+**data:** buildInfo.versionArray
+
+   An array that conveys version information about the
+   :binary:`~bin.mongod` instance. See :data:`~buildInfo.version` for a
+   more readable version of this string.
+
+**data:** buildInfo.version
+
+   A string that conveys version information about the
+   :binary:`~bin.mongod` instance. If you need to present version information to
+   a human, this field is preferable to :data:`~buildInfo.versionArray`.
+
+   This string will take the format ``<major>.<minor>.<patch>`` in the case of
+   a release, but development builds may contain additional information.
+
+**data:** buildInfo.storageEngines
+
+   A list of :ref:`storage engines <faq-storage>` available to the
+   :binary:`~bin.mongod` server.
+
+**data:** buildInfo.javascriptEngine
+
+   A string that reports the JavaScript engine used in the
+   :binary:`~bin.mongod` instance. By default, this is ``mozjs``.
+
+**data:** buildInfo.bits
+
+   A number that reflects the target processor architecture of the
+   :binary:`~bin.mongod` binary.
+
+**data:** buildInfo.debug
+
+   A boolean. ``true`` when built with debugging options.
+
+**data:** buildInfo.maxBsonObjectSize
+
+   A number that reports the :limit:`Maximum BSON Document Size
+   <BSON Document Size>`.
+
+**data:** buildInfo.openssl
+
+   An embedded document describing the version of the TLS/SSL library
+   that :binary:`~bin.mongod` was built with and is currently using.
+
+**data:** buildInfo.modules
+
+   A list of add-on modules that :binary:`~bin.mongod` was built with. Possible
+   values currently include "enterprise" and "rocksdb".
+
 ### Unstable
 
-These fields are for internal use only, and you should not expect their behavior or existence to remain consistent on any level.
+These fields are for internal use only, and you should not expect their behavior
+or existence to remain consistent on any level.
+
+**data:** buildInfo.allocator
+
+   The memory allocator that :binary:`~bin.mongod` uses. By default
+   this is ``tcmalloc``.
+
+   .. include:: /includes/fact-tcmalloc-upgrade-note.rst
+
+**data:** buildInfo.buildEnvironment
+
+   An embedded document containing various debugging information about the
+   :binary:`~bin.mongod` build environment.

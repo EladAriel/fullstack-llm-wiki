@@ -1,23 +1,33 @@
 ---
 type: "Framework Learn Page"
-framework: "sqlalchemy/alembic"
+framework: "Alembic"
 source_repo: "https://github.com/sqlalchemy/alembic"
 source_branch: "main"
 source_path: "docs/build/api/script.rst"
-source_commit: "7b2af57eba318a712b7b4f79c7bc6b3669055636"
-source_commit_short: "7b2af57e"
-source_commit_date: "2026-07-16T13:04:26-04:00"
-generated_at: "2026-07-25T11:47:25Z"
+source_commit: "c116cbc0f39d9df2b4ce5f1871043a622ca8774f"
+source_commit_short: "c116cbc"
+source_commit_date: "2026-08-14T03:25:08-04:00"
+generated_at: "2026-08-29T09:39:28.246105Z"
 ---
-
-================
+.. _alembic.script.toplevel:
 
 # Script Directory
 
-The `.ScriptDirectory` object provides programmatic access to the Alembic version files present in the filesystem.
+The :class:`.ScriptDirectory` object provides programmatic access
+to the Alembic version files present in the filesystem.
+
+**automodule:** alembic.script
+    :members:
 
 # Revision
 
-The `.RevisionMap` object serves as the basis for revision management, used exclusively by `.ScriptDirectory`.
+The :class:`.RevisionMap` object serves as the basis for revision
+management, used exclusively by :class:`.ScriptDirectory`.
+
+**automodule:** alembic.script.revision
+    :members:
 
 # Write Hooks
+
+**automodule:** alembic.script.write_hooks
+    :members:

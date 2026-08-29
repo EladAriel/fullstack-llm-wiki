@@ -1,91 +1,134 @@
 ---
 type: "Framework Learn Page"
-framework: "mongodb"
+framework: "MongoDB"
 source_repo: "https://github.com/mongodb/docs.git"
 source_branch: "main"
 source_path: "content/manual/manual/source/reference/command/grantRolesToUser.txt"
-source_commit: "ab9db26ed3d11618cdb61516d8180337d8e3f679"
-source_commit_short: "ab9db26e"
-source_commit_date: "2026-07-24T16:22:46-06:00"
-generated_at: "2026-07-25T11:51:15Z"
+source_commit: "b9f2bc487a2878b65e3c1f80024bebab76954f27"
+source_commit_short: "b9f2bc48"
+source_commit_date: "2026-08-28T17:09:45-05:00"
+generated_at: "2026-08-29T09:39:20.054182Z"
 ---
-
-===================================
-
 # grantRolesToUser (database command)
+
+**meta:** :description: Grant additional roles to a user in MongoDB using the `grantRolesToUser` command, specifying roles, write concern, and optional comments.
+
+.. default-domain:: mongodb
+
+**contents:** On this page
+   :local:
+   :backlinks: none
+   :depth: 1
+   :class: singlecol
 
 ## Definition
 
+**dbcommand:** grantRolesToUser
+
+   Grants additional roles to a user.
+
+   .. |method| replace:: :method:`db.grantRolesToUser` helper method
+   .. include:: /includes/fact-dbcommand-tip
+
 ## Compatibility
 
-This command is available in deployments hosted in the following environments:
+This command is available in deployments hosted in the following environments: 
 
-.. include:: /includes/fact-environments-onprem-only.rst
+**include:** /includes/fact-environments-onprem-only.rst
 
-.. include:: /includes/fact-environments-no-atlas-support.rst
+**include:** /includes/fact-environments-no-atlas-support.rst
 
 ## Syntax
 
 The :dbcommand:`grantRolesToUser` command uses the following syntax:
 
-```javascript
-db.runCommand(
-   {  
-     grantRolesToUser: "<user>",
-     roles: [ <roles> ],
-     writeConcern: { <write concern> },
-     comment: <any>
-   }
-)
-```
+.. code-block:: javascript
+
+   db.runCommand(
+      {  
+        grantRolesToUser: "<user>",
+        roles: [ <roles> ],
+        writeConcern: { <write concern> },
+        comment: <any>
+      }
+   )
 
 ## Command Fields
 
 The command takes the following fields:
 
-.. include:: /includes/fact-roles-array-contents.rst
+.. list-table::
+  :header-rows: 1
+  :widths: 20 20 80
+
+  * - Field
+    - Type
+    - Description
+
+  * - ``grantRolesToUser``
+    - string
+    - The name of the user to give additional roles.
+
+  * - ``roles``
+    - array
+    - An array of additional roles to grant to the user.
+
+  * - ``writeConcern``
+    - document
+    - .. include:: /includes/fact-write-concern-spec-link.rst
+
+  * - ``comment``
+    - any
+    - .. include:: /includes/extracts/comment-content.rst
+
+.. |local-cmd-name| replace:: :dbcommand:`grantRolesToUser`
+**include:** /includes/fact-roles-array-contents.rst
 
 ## Required Access
 
-.. include:: /includes/access-grant-roles.rst
+**include:** /includes/access-grant-roles.rst
 
 ## Example
 
-Given a user `accountUser01` in the `products` database with the following roles:
+Given a user ``accountUser01`` in the ``products`` database with the following
+roles:
 
-```javascript
-"roles" : [
-    { "role" : "assetsReader",
-      "db" : "assets"
-    }
-]
-```
+.. code-block:: javascript
 
-The following :dbcommand:`grantRolesToUser` operation gives `accountUser01` the :authrole:`read` role on the `stock` database and the :authrole:`readWrite` role on the `products` database.
+   "roles" : [
+       { "role" : "assetsReader",
+         "db" : "assets"
+       }
+   ]
 
-```javascript
-use products
-db.runCommand( { grantRolesToUser: "accountUser01",
-                 roles: [
-                    { role: "read", db: "stock"},
-                    "readWrite"
-                 ],
-                 writeConcern: { w: "majority" , wtimeout: 2000 }
-             } )
-```
+The following :dbcommand:`grantRolesToUser` operation gives ``accountUser01`` the
+:authrole:`read` role on the ``stock`` database and the
+:authrole:`readWrite` role on the ``products`` database.
 
-The user `accountUser01` in the `products` database now has the following roles:
+.. code-block:: javascript
 
-```javascript
-"roles" : [
-    { "role" : "assetsReader",
-      "db" : "assets"
-    },
-    { "role" : "read",
-      "db" : "stock"
-    },
-    { "role" : "readWrite",
-      "db" : "products"
-    }
-]
-```
+   use products
+   db.runCommand( { grantRolesToUser: "accountUser01",
+                    roles: [
+                       { role: "read", db: "stock"},
+                       "readWrite"
+                    ],
+                    writeConcern: { w: "majority" , wtimeout: 2000 }
+                } )
+
+The user ``accountUser01`` in the ``products`` database now has the following
+roles:
+
+.. code-block:: javascript
+
+   "roles" : [
+       { "role" : "assetsReader",
+         "db" : "assets"
+       },
+       { "role" : "read",
+         "db" : "stock"
+       },
+       { "role" : "readWrite",
+         "db" : "products"
+       }
+   ]

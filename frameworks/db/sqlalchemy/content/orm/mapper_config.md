@@ -1,38 +1,43 @@
 ---
 type: "Framework Learn Page"
-framework: "sqlalchemy"
+framework: "SQLAlchemy"
 source_repo: "https://github.com/sqlalchemy/sqlalchemy"
 source_branch: "main"
 source_path: "doc/build/orm/mapper_config.rst"
-source_commit: "aa1a5575358d3aa14953b04dced02f4763fed2e7"
-source_commit_short: "aa1a5575"
-source_commit_date: "2026-07-23T18:02:59Z"
-generated_at: "2026-07-25T11:50:45Z"
+source_commit: "85cafd1a131fa8afeeeab23151940480b3fb0042"
+source_commit_short: "85cafd1"
+source_commit_date: "2026-08-28T20:17:49+00:00"
+generated_at: "2026-08-29T09:39:27.563403Z"
 ---
-
-===============================
+.. _mapper_config_toplevel:
 
 # ORM Mapped Class Configuration
 
-Detailed reference for ORM configuration, not including relationships, which are detailed at `relationship_config_toplevel`.
+Detailed reference for ORM configuration, not including
+relationships, which are detailed at
+:ref:`relationship_config_toplevel`.
 
-For a quick look at a typical ORM configuration, start with `orm_quickstart`.
+For a quick look at a typical ORM configuration, start with
+:ref:`orm_quickstart`.
 
-For an introduction to the concept of object relational mapping as implemented in SQLAlchemy, it's first introduced in the `unified_tutorial` at `tutorial_orm_table_metadata`.
+For an introduction to the concept of object relational mapping as implemented
+in SQLAlchemy, it's first introduced in the :ref:`unified_tutorial` at
+:ref:`tutorial_orm_table_metadata`.
 
-## Contents
 
-- mapping_styles
-- declarative_mapping
-- dataclasses
-- mapped_sql_expr
-- mapped_attributes
-- composites
-- inheritance
-- nonstandard_mappings
-- versioning
-- mapping_api
+**toctree:** :maxdepth: 4
 
-## Contents
+    mapping_styles
+    declarative_mapping
+    dataclasses
+    mapped_sql_expr
+    mapped_attributes
+    composites
+    inheritance
+    nonstandard_mappings
+    versioning
+    mapping_api
 
-- scalar_mapping
+**toctree:** :hidden:
+
+    scalar_mapping

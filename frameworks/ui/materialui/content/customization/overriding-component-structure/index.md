@@ -1,7 +1,7 @@
 ---
 type: "Framework Learn Directory Index"
 framework: "Material UI"
-generated_at: "2026-07-25T13:39:41.082786Z"
+generated_at: "2026-08-29T09:40:18.320534Z"
 ---
 # Overriding-Component-Structure
 

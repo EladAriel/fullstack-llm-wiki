@@ -1,127 +1,203 @@
 ---
 type: "Framework Learn Page"
-framework: "mongodb"
+framework: "MongoDB"
 source_repo: "https://github.com/mongodb/docs.git"
 source_branch: "main"
 source_path: "content/manual/manual/source/reference/operator/update/slice.txt"
-source_commit: "ab9db26ed3d11618cdb61516d8180337d8e3f679"
-source_commit_short: "ab9db26e"
-source_commit_date: "2026-07-24T16:22:46-06:00"
-generated_at: "2026-07-25T11:51:15Z"
+source_commit: "b9f2bc487a2878b65e3c1f80024bebab76954f27"
+source_commit_short: "b9f2bc48"
+source_commit_date: "2026-08-28T17:09:45-05:00"
+generated_at: "2026-08-29T09:39:20.108496Z"
 ---
-
-========================
-
 # $slice (update operator)
+
+**meta:** :description: Limit array elements during a `$push` operation using the `$slice` modifier, which must be used with `$each`.
+
+.. default-domain:: mongodb
+
+**contents:** On this page
+   :local:
+   :backlinks: none
+   :depth: 1
+   :class: singlecol
+
+**update:** $slice
+
+   The :update:`$slice` modifier limits the number of array
+   elements during a :update:`$push` operation. To project, or return,
+   a specified number of array elements from a read operation, see the
+   :projection:`$slice` projection operator instead.
+
+   To use the :update:`$slice` modifier, it **must** appear with the
+   :update:`$each` modifier. You can pass an empty array ``[]`` to the
+   :update:`$each` modifier such that only the :update:`$slice`
+   modifier has an effect.
+
+   .. code-block:: javascript
+
+      {
+        $push: {
+           <field>: {
+             $each: [ <value1>, <value2>, ... ],
+             $slice: <num>
+           }
+        }
+      }
+
+   The ``<num>`` can be:
+
+   .. list-table::
+      :header-rows: 1
+      :widths: 20 80
+
+      * - Value
+        - Description
+
+      * - Zero
+        - To update the array ``<field>`` to an empty array.
+
+      * - Negative
+
+        - To update the array ``<field>`` to contain only the last
+          ``<num>`` elements.
+
+      * - Positive
+
+        - To update the array ``<field>`` contain only the first ``<num>``
+          elements.
 
 ## Behavior
 
-.. include:: /includes/fact-update-operator-processing-order.rst
+**include:** /includes/fact-update-operator-processing-order.rst
 
-The order in which the modifiers appear is immaterial. Previous versions required the :update:`$each` modifier to appear as the first modifier if used in conjunction with :update:`$slice`. For a list of modifiers available for :update:`$push`, see `push-modifiers`.
+The order in which the modifiers appear is immaterial. Previous
+versions required the :update:`$each` modifier to appear as the first
+modifier if used in conjunction with :update:`$slice`. For a list of
+modifiers available for :update:`$push`, see :ref:`push-modifiers`.
 
-Trying to use the :update:`$slice` modifier without the :update:`$each` modifier results in an error.
+Trying to use the :update:`$slice` modifier without the :update:`$each`
+modifier results in an error.
 
 ## Examples
 
 ### Slice from the End of the Array
 
-A collection `students` contains the following document:
+A collection ``students`` contains the following document:
 
-```javascript
-db.students.insertOne([
-   { _id : 1, "scores" : [ 40, 50, 60 ] }
-] )
-```
+.. code-block:: javascript
+   :copyable: true
 
-The following operation adds new elements to the `scores` array, and then uses the :update:`$slice` modifier to trim the array to the last five elements:
+   db.students.insertOne([
+      { _id : 1, "scores" : [ 40, 50, 60 ] }
+   ] )
 
-```javascript
-db.students.updateOne(
-   { _id: 1 },
-   {
-     $push: {
-       scores: {
-         $each: [ 80, 78, 86 ],
-         $slice: -5
-       }
-     }
-   }
-)
-```
 
-The result of the operation is slice the elements of the updated `scores` array to the last five elements:
+The following operation adds new elements to the ``scores`` array, and
+then uses the :update:`$slice` modifier to trim the array to the
+last five elements:
 
-```javascript
-{ "_id" : 1, "scores" : [  50,  60,  80,  78,  86 ] }
-```
+.. code-block:: javascript
+   :copyable: true
+
+   db.students.updateOne(
+      { _id: 1 },
+      {
+        $push: {
+          scores: {
+            $each: [ 80, 78, 86 ],
+            $slice: -5
+          }
+        }
+      }
+   )
+
+The result of the operation is slice the elements of the updated
+``scores`` array to the last five elements:
+
+.. code-block:: javascript
+
+   { "_id" : 1, "scores" : [  50,  60,  80,  78,  86 ] }
 
 ### Slice from the Front of the Array
 
-A collection `students` contains the following document:
+A collection ``students`` contains the following document:
 
-```javascript
-db.students.insertOne( [
-   { _id : 2, "scores" : [ 89, 90 ] }
-] )
-```
+.. code-block:: javascript
+   :copyable: true
 
-The following operation adds new elements to the `scores` array, and then uses the :update:`$slice` modifier to trim the array to the first three elements.
+   db.students.insertOne( [
+      { _id : 2, "scores" : [ 89, 90 ] }
+   ] )
 
-```javascript
-db.students.updateOne(
-   { _id: 2 },
-   {
-     $push: {
-       scores: {
-         $each: [ 100, 20 ],
-         $slice: 3
-       }
-     }
-   }
-)
-```
 
-The result of the operation is to slice the elements of the updated `scores` array to the first three elements:
+The following operation adds new elements to the ``scores`` array, and
+then uses the :update:`$slice` modifier to trim the array to the
+first three elements.
 
-```javascript
-{ "_id" : 2, "scores" : [  89,  90,  100 ] }
-```
+.. code-block:: javascript
+   :copyable: true
+
+   db.students.updateOne(
+      { _id: 2 },
+      {
+        $push: {
+          scores: {
+            $each: [ 100, 20 ],
+            $slice: 3
+          }
+        }
+      }
+   )
+
+The result of the operation is to slice the elements of the updated
+``scores`` array to the first three elements:
+
+.. code-block:: javascript
+
+   { "_id" : 2, "scores" : [  89,  90,  100 ] }
 
 ### Update Array Using Slice Only
 
-A collection `students` contains the following document:
+A collection ``students`` contains the following document:
 
-```javascript
-db.students.insertOne( [
-   { _id : 3, "scores" : [  89,  70,  100,  20 ] }
-] )
-```
+.. code-block:: javascript
+   :copyable: true
 
-To update the `scores` field with just the effects of the :update:`$slice` modifier, specify the number of elements to slice (e.g. `-3`) for the :update:`$slice` modifier and an empty array `[]` for the :update:`$each` modifier, as in the following:
+   db.students.insertOne( [
+      { _id : 3, "scores" : [  89,  70,  100,  20 ] }
+   ] )
 
-```javascript
-db.students.updateOne(
-  { _id: 3 },
-  {
-    $push: {
-      scores: {
-         $each: [ ],
-         $slice: -3
-      }
-    }
-  }
-)
-```
 
-The result of the operation is to slice the elements of the `scores` array to the last three elements:
+To update the ``scores`` field with just the effects of the
+:update:`$slice` modifier, specify the number of elements to slice
+(e.g. ``-3``) for the :update:`$slice` modifier and an empty
+array ``[]`` for the :update:`$each` modifier, as in the following:
 
-```javascript
-{ "_id" : 3, "scores" : [  70,  100,  20 ] }
-```
+.. code-block:: javascript
+   :copyable: true
 
-### Use `$slice` with Other `$push` Modifiers
+   db.students.updateOne(
+     { _id: 3 },
+     {
+       $push: {
+         scores: {
+            $each: [ ],
+            $slice: -3
+         }
+       }
+     }
+   )
 
-.. include:: /includes/example-push-with-multiple-modifiers.rst
+The result of the operation is to slice the elements of the ``scores``
+array to the last three elements:
 
-The order of the modifiers is immaterial to the order in which the modifiers are processed. See `push-modifiers` for details.
+.. code-block:: javascript
+
+   { "_id" : 3, "scores" : [  70,  100,  20 ] }
+
+### Use ``$slice`` with Other ``$push`` Modifiers
+
+**include:** /includes/example-push-with-multiple-modifiers.rst
+
+The order of the modifiers is immaterial to the order in which the
+modifiers are processed. See :ref:`push-modifiers` for details.

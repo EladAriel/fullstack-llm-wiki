@@ -1,14 +1,15 @@
 ---
 type: "Framework Learn Page"
-framework: "redis"
+framework: "Redis"
 source_repo: "https://github.com/redis/docs.git"
 source_branch: "main"
 source_path: "content/commands/expire.md"
-source_commit: "9d30f68c3dad1a6b3b7d30fe604b911348ce8152"
-source_commit_short: "9d30f68c"
-source_commit_date: "2026-07-24T10:52:10-07:00"
-generated_at: "2026-07-25T11:51:22Z"
+source_commit: "f8693349287b0efbef3c865b6f6a2aceca88594d"
+source_commit_short: "f869334"
+source_commit_date: "2026-08-28T10:01:19-05:00"
+generated_at: "2026-08-29T09:38:55.077211Z"
 ---
+# Expire
 
 ---
 acl_categories:
@@ -112,11 +113,8 @@ inherit all the characteristics of `Key_B`.
 
 Note that calling `EXPIRE`/[`PEXPIRE`]({{< relref "/commands/pexpire" >}}) with a non-positive timeout or
 [`EXPIREAT`]({{< relref "/commands/expireat" >}})/[`PEXPIREAT`]({{< relref "/commands/pexpireat" >}}) with a time in the past will result in the key being
-[deleted][del] rather than expired (accordingly, the emitted [key event][ntf]
+[deleted]({{< relref "/commands/del" >}}) rather than expired (accordingly, the emitted [key event]({{< relref "/develop/pubsub/keyspace-notifications" >}})
 will be `del`, not `expired`).
-
-[del]: /commands/del
-[ntf]: /develop/use/keyspace-notifications
 
 ## Required arguments
 

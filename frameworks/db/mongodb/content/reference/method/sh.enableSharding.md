@@ -1,67 +1,125 @@
 ---
 type: "Framework Learn Page"
-framework: "mongodb"
+framework: "MongoDB"
 source_repo: "https://github.com/mongodb/docs.git"
 source_branch: "main"
 source_path: "content/manual/manual/source/reference/method/sh.enableSharding.txt"
-source_commit: "ab9db26ed3d11618cdb61516d8180337d8e3f679"
-source_commit_short: "ab9db26e"
-source_commit_date: "2026-07-24T16:22:46-06:00"
-generated_at: "2026-07-25T11:51:15Z"
+source_commit: "b9f2bc487a2878b65e3c1f80024bebab76954f27"
+source_commit_short: "b9f2bc48"
+source_commit_date: "2026-08-28T17:09:45-05:00"
+generated_at: "2026-08-29T09:39:19.990996Z"
 ---
-
-====================================
-
 # sh.enableSharding() (mongosh method)
+
+**meta:** :description: Enable sharding for a database using `sh.enableSharding()` in MongoDB, with optional primary shard specification.
+
+.. default-domain:: mongodb
+
+**contents:** On this page
+   :local:
+   :backlinks: none
+   :depth: 1
+   :class: singlecol
 
 ## Definition
 
+**method:** sh.enableSharding(database, primaryShard)
+
+   .. note::
+
+      .. versionchanged:: 6.0
+
+      Starting in MongoDB 6.0, this method is **not** required to
+      :ref:`shard <sharding-background>` a collection.
+
+   Explicitly creates a database.  Use the :binary:`~bin.mongosh` method
+   :method:`sh.shardCollection()` to shard collections on the database.
+   The :binary:`~bin.mongosh` method :method:`sh.enableSharding()` wraps the
+   :dbcommand:`enableSharding` command.
+
+   .. |dbcommand| replace:: :dbcommand:`enableSharding` command
+   .. include:: /includes/fact-mongosh-shell-method-alt.rst
+
+
 ## Compatibility
 
-This method is available in deployments hosted in the following environments:
+This method is available in deployments hosted in the following environments: 
 
-.. include:: /includes/fact-environments-atlas-only.rst
+**include:** /includes/fact-environments-atlas-only.rst
 
-.. include:: /includes/fact-environments-atlas-support-no-free.rst
+**include:** /includes/fact-environments-atlas-support-no-free.rst
 
-.. include:: /includes/fact-environments-onprem-only.rst
+**include:** /includes/fact-environments-onprem-only.rst
 
 ## Syntax
 
 The :method:`sh.enableSharding` has the following form:
 
-```javascript
-sh.enableSharding( 
-   <database>,
-   <primary shard>  // Optional. 
-)
-```
+.. code-block:: javascript
+
+   sh.enableSharding( 
+      <database>,
+      <primary shard>  // Optional. 
+   )
 
 ### Parameter
 
 The :method:`sh.enableSharding()` method takes the following parameter:
 
+.. list-table::
+   :header-rows: 1
+   :widths: 20 20 60
+
+   * - Parameter
+     - Type
+     - Description
+
+   * - :ref:`database <method-enableSharding-db>`
+
+     - String
+
+     - .. _method-enableSharding-db:
+
+       The name of the database you want to create.
+
+   * - :ref:`primaryShard <method-enableSharding-primaryShard>`
+
+     - String
+
+     - .. _method-enableSharding-primaryShard:
+
+       .. include:: /includes/primary-shard-enable-sharding-opt.rst
+
 ## Behavior
 
 ### Write Concern
 
-.. include:: /includes/extracts/mongos-operations-wc-enable-sharding.rst
+**include:** /includes/extracts/mongos-operations-wc-enable-sharding.rst
 
 ### Primary Shard
 
-In general, you should not need to specify the `primaryShard <method-enableSharding-primaryShard>` in the command. Instead, allow the balancer to select the primary shard.
+In general, you should not need to specify the :ref:`primaryShard
+<method-enableSharding-primaryShard>` in the command. Instead, allow the
+balancer to select the primary shard. 
 
-However, if you do specify the `primary shard <method-enableSharding-primaryShard>` for a database and the database is already enabled for sharding with a different primary shard, the operation returns an error and the primary shard for the database remains as before. To change the primary shard for a database, use the :dbcommand:`movePrimary` command instead.
+However, if you do specify the :ref:`primary shard
+<method-enableSharding-primaryShard>` for a database and the database
+is already enabled for sharding with a different primary shard, the
+operation returns an error and the primary shard for the database
+remains as before. To change the primary shard for a database, use the
+:dbcommand:`movePrimary` command instead.
+
 
 ## Example
 
-The following example, run from a :binary:`~bin.mongos`, explicitly creates the `shardTest` database:
+The following example, run from a :binary:`~bin.mongos`, explicitly
+creates the ``shardTest`` database:
 
-```javascript
-sh.enableSharding("shardTest")
-```
+.. code-block:: javascript
+
+   sh.enableSharding("shardTest")
 
 To verify, run :method:`sh.status()`.
 
-> **Seealso:** - :method:`sh.shardCollection()`
-- `/tutorial/deploy-shard-cluster`
+**seealso:** - :method:`sh.shardCollection()`
+   - :doc:`/tutorial/deploy-shard-cluster`

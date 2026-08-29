@@ -1,136 +1,170 @@
 ---
 type: "Framework Learn Page"
-framework: "mongodb"
+framework: "MongoDB"
 source_repo: "https://github.com/mongodb/docs.git"
 source_branch: "main"
 source_path: "content/manual/manual/source/core/indexes/index-types/index-text/create-text-index.txt"
-source_commit: "ab9db26ed3d11618cdb61516d8180337d8e3f679"
-source_commit_short: "ab9db26e"
-source_commit_date: "2026-07-24T16:22:46-06:00"
-generated_at: "2026-07-25T11:51:15Z"
+source_commit: "b9f2bc487a2878b65e3c1f80024bebab76954f27"
+source_commit_short: "b9f2bc48"
+source_commit_date: "2026-08-28T17:09:45-05:00"
+generated_at: "2026-08-29T09:39:19.833340Z"
 ---
-
-===============================================
+.. _create-text-index:
 
 # Create a Text Index on Self-Managed Deployments
 
-.. include:: /includes/fact-fts-avs-text-index.rst
+.. default-domain:: mongodb
 
-.. include:: /includes/indexes/text-index-intro.rst
+**meta:** :keywords: on-prem
+   :description: Create text indexes on self-managed MongoDB deployments to enhance search performance on string fields.
+                    
+**contents:** On this page
+   :local:
+   :backlinks: none
+   :depth: 2
+   :class: singlecol
 
-To create a text index, use the :method:`db.collection.createIndex()` method. To index a field that contains a string or an array of string elements, specify the string `"text"` as the index key:
+**include:** /includes/fact-fts-avs-text-index.rst
 
-.. include:: /includes/indexes/code-examples/create-text-index.rst
+**include:** /includes/indexes/text-index-intro.rst
+
+To create a text index, use the :method:`db.collection.createIndex()`
+method. To index a field that contains a string or an array of string
+elements, specify the string ``"text"`` as the index key:
+
+**include:** /includes/indexes/code-examples/create-text-index.rst
 
 ## About this Task
 
 - .. include:: /includes/fact-text-index-limit-one.rst
+
 - You can index multiple fields in a single text index. A text index can
-contain up to 32 fields. To see an example, see `compound-text-index-example`.
+  contain up to 32 fields. To see an example, see
+  :ref:`compound-text-index-example`.
 
 ## Before You Begin
 
-.. include:: /includes/indexes/text-search-blog-example-documents.rst
+**include:** /includes/indexes/text-search-blog-example-documents.rst
 
 ## Procedures
 
 The following examples show you how to:
 
-- `single-text-index-example`
-- `compound-text-index-example`
+- :ref:`single-text-index-example`
+
+- :ref:`compound-text-index-example`
+
+.. _single-text-index-example:
+
 ### Create a Single-Field Text Index
 
-Create a text index on the `content` field:
+Create a text index on the ``content`` field:
 
-```javascript
-db.blog.createIndex( { "content": "text" } )
-```
+.. code-block:: javascript
 
-The index supports `$text` queries on the `content` field. For example, the following query returns documents where the `content` field contains the string `coffee`:
+   db.blog.createIndex( { "content": "text" } )
 
-```javascript
-db.blog.find(
-   {
-      $text: { $search: "coffee" }
-   }
-)
-```
+The index supports ``$text`` queries on the ``content`` field. For 
+example, the following query returns documents where the ``content``
+field contains the string ``coffee``:
+
+.. code-block:: javascript
+
+   db.blog.find(
+      {
+         $text: { $search: "coffee" }
+      }
+   )
 
 Output:
 
-```javascript
-[
-   {
-     _id: 1,
-     content: 'This morning I had a cup of coffee.',
-     about: 'beverage',
-     keywords: [ 'coffee' ]
-   },
-   {
-     _id: 3,
-     content: 'My favorite flavors are strawberry and coffee',
-     about: 'ice cream',
-     keywords: [ 'food', 'dessert' ]
-   }
-]
-```
+.. code-block:: javascript
+   :copyable: false
 
-Matches on Non-Indexed Fields `````````````````````````````
+   [
+      {
+        _id: 1,
+        content: 'This morning I had a cup of coffee.',
+        about: 'beverage',
+        keywords: [ 'coffee' ]
+      },
+      {
+        _id: 3,
+        content: 'My favorite flavors are strawberry and coffee',
+        about: 'ice cream',
+        keywords: [ 'food', 'dessert' ]
+      }
+   ]
 
-The `{ "content": "text" }` index only includes the `content` field, and does not return matches on non-indexed fields. For example, the following query searches the `blog` collection for the string `food`:
+### Matches on Non-Indexed Fields
 
-```javascript
-db.blog.find(
-   {
-      $text: { $search: "food" }
-   }
-)
-```
+The ``{ "content": "text" }`` index only includes the ``content`` field,
+and does not return matches on non-indexed fields. For example, the
+following query searches the ``blog`` collection for the string
+``food``:
 
-The preceding query returns no documents. Although the string `food appears in documents id: 2 and id: 3`, it appears in the `about` and `keywords` fields respectively. The `about` and `keywords` fields are not included in the text index, and therefore do not affect `$text` query results.
+.. code-block:: javascript
+ 
+   db.blog.find(
+      {
+         $text: { $search: "food" }
+      }
+   )
+
+The preceding query returns no documents. Although the string ``food``
+appears in documents ``_id: 2`` and ``_id: 3``, it appears in the
+``about`` and ``keywords`` fields respectively. The ``about`` and
+``keywords`` fields are not included in the text index, and therefore do
+not affect ``$text`` query results.
+
+.. _compound-text-index-example:
 
 ### Create a Compound Text Index
 
-> **Note:** Before you can create the index in this example, you must :ref:`drop
-any existing text indexes <drop-an-index>` on the `blog`
-collection.
+**note:** Before you can create the index in this example, you must :ref:`drop
+   any existing text indexes <drop-an-index>` on the ``blog``
+   collection.
 
-Create a compound text index on the `about` and `keywords` fields in the `blog` collection:
+Create a compound text index on the ``about`` and ``keywords`` fields in
+the ``blog`` collection:
 
-```javascript
-db.blog.createIndex(
-   {
-      "about": "text",
-      "keywords": "text"
-   }
-)
-```
+.. code-block:: javascript
 
-The index supports `$text` queries on the `about` and `keywords` fields. For example, the following query returns documents where the string `food` appears in either the `about` or `keywords` field:
+   db.blog.createIndex(
+      {
+         "about": "text",
+         "keywords": "text"
+      }
+   )
 
-```javascript
-db.blog.find(
-   {
-      $text: { $search: "food" }
-   }
-)
-```
+The index supports ``$text`` queries on the ``about`` and ``keywords``
+fields. For example, the following query returns documents where the
+string ``food`` appears in either the ``about`` or ``keywords`` field:
+
+.. code-block:: javascript
+
+   db.blog.find(
+      {
+         $text: { $search: "food" }
+      }
+   )
 
 Output:
 
-```javascript
-[
-  {
-    _id: 3,
-    content: 'My favorite flavors are strawberry and coffee',
-    about: 'ice cream',
-    keywords: [ 'food', 'dessert' ]
-  },
-  {
-    _id: 2,
-    content: 'Who likes chocolate ice cream for dessert?',
-    about: 'food',
-    keywords: [ 'poll' ]
-  }
-]
-```
+.. code-block:: javascript
+   :copyable: false
+
+   [
+     {
+       _id: 3,
+       content: 'My favorite flavors are strawberry and coffee',
+       about: 'ice cream',
+       keywords: [ 'food', 'dessert' ]
+     },
+     {
+       _id: 2,
+       content: 'Who likes chocolate ice cream for dessert?',
+       about: 'food',
+       keywords: [ 'poll' ]
+     }
+   ]

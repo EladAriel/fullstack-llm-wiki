@@ -1,7 +1,7 @@
 ---
 type: "Framework Learn Directory Index"
 framework: "Sentry Python"
-generated_at: "2026-07-25T19:08:13.542685Z"
+generated_at: "2026-08-29T09:40:09.068530Z"
 ---
 # Usage
 
@@ -17,3 +17,7 @@ This directory contains Sentry Python learning pages related to usage.
 
 ## Pages in This Directory
 
+
+## Subdirectories
+
+- [Sdk Fingerprinting](sdk-fingerprinting/index.md)

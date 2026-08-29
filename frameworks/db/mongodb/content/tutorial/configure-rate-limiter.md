@@ -1,20 +1,30 @@
 ---
 type: "Framework Learn Page"
-framework: "mongodb"
+framework: "MongoDB"
 source_repo: "https://github.com/mongodb/docs.git"
 source_branch: "main"
 source_path: "content/manual/manual/source/tutorial/configure-rate-limiter.txt"
-source_commit: "ab9db26ed3d11618cdb61516d8180337d8e3f679"
-source_commit_short: "ab9db26e"
-source_commit_date: "2026-07-24T16:22:46-06:00"
-generated_at: "2026-07-25T11:51:15Z"
+source_commit: "b9f2bc487a2878b65e3c1f80024bebab76954f27"
+source_commit_short: "b9f2bc48"
+source_commit_date: "2026-08-28T17:09:45-05:00"
+generated_at: "2026-08-29T09:39:19.589170Z"
 ---
-
-===========================================================
+.. _configure-rate-limiter:
 
 # Configure the Ingress Connection Establishment Rate Limiter
 
-This procedure describes how to configure rate limiting using the :parameter:`ingressConnectionEstablishmentRateLimiterEnabled` parameter in MongoDB. The rate limiter helps protect your deployment from connection storms that can impact system stability and performance.
+**meta:** :description: Configure the ingress connection rate limiter for MongoDB deployments by setting values for parameters like ``ingressConnectionEstablishmentRatePerSec``.
+
+**contents:** On this page
+   :local:
+   :backlinks: none
+   :depth: 1
+   :class: singlecol
+
+This procedure describes how to configure rate limiting using 
+the :parameter:`ingressConnectionEstablishmentRateLimiterEnabled` 
+parameter in MongoDB. The rate limiter helps protect your deployment from 
+connection storms that can impact system stability and performance.
 
 ## Before You Begin
 
@@ -23,15 +33,86 @@ Before you begin this procedure, ensure you meet the following requirements:
 - You have administrative privileges on your MongoDB deployment
 - You understand your system's connection load patterns and requirements
 - You know your driver's :urioption:`connectTimeoutMS` setting
+
 ## Procedure
+
+**procedure:** :style: normal
+   
+   .. step:: Enable the rate limiter
+   
+      To begin using the rate limiter, first enable it by setting the
+      :parameter:`ingressConnectionEstablishmentRateLimiterEnabled` parameter to
+      ``true``:
+      
+      .. code-block:: javascript
+      
+         db.adminCommand( {
+            setParameter: 1,
+            ingressConnectionEstablishmentRateLimiterEnabled: true
+         } )
+   
+   .. step:: Set the connection establishment rate
+      
+      Set :parameter:`ingressConnectionEstablishmentRatePerSec` to the maximum rate
+      that your cluster can handle without negatively impacting throughput. This should 
+      be a fixed number that doesn't vary based on other workload dynamics.
+      
+      .. code-block:: javascript
+      
+         db.adminCommand( {
+            setParameter: 1,
+            ingressConnectionEstablishmentRatePerSec: 20
+         } )
+   
+   .. step:: Configure the connection queue depth
+      
+      Set :parameter:`ingressConnectionEstablishmentMaxQueueDepth` according to
+      the following formula:
+      
+      ``maxQueueDepth < (establishmentRatePerSec / 1000) * (connectTimeoutMs - ((averageTimeToCompletedHelloMicros-averageTimeQueuedMicros)*1000))``
+      
+      This formula ensures that:
+      
+      - New connection attempts do not remain in the queue past the time that the
+        driver has abandoned them.
+      - Most ``hello+auth`` attempts succeed, rather than failing due to a timeout
+        error.
+      
+      The ``averageTimeQueuedMicros`` metric can assist in tuning 
+      :parameter:`ingressConnectionEstablishmentMaxQueueDepth`, 
+      as it equals approximately ``(maxQueueDepth / establishRatePerSec) * 1e6``.
+      
+      .. important::
+      
+         When tuning the queue size, prioritize a longer queue size, rather than a shorter 
+         queue size. Drivers clearing their connection pools due to closed connections
+         are a larger risk than connections remaining in the queue for too long and timing out.
+   
+   .. step:: Configure driver settings
+
+      If you observe connection failures, decrease your driver's :urioption:`maxPoolSize` and 
+      :urioption:`maxConnecting` settings. If you decrease these settings, the driver 
+      reuses connections, rather than opening more connections to the server during 
+      periods of increased latency, which can lead to connection storms.
+
+      .. note:: 
+
+         If you decrease ``maxPoolSize`` and ``maxConnecting``, queries may spend a 
+         longer time at the driver layer waiting for a connection to be returned 
+         to the pool. Decreasing these settings helps maintain availability 
+         at the cost of increased latency during load spikes.
 
 ## Monitoring and Troubleshooting
 
-Monitor the following metrics to ensure you properly configure your rate limiter:
+Monitor the following metrics to ensure you properly configure
+your rate limiter: 
 
 - :serverstatus:`queues.ingressSessionEstablishment`
 - :serverstatus:`connections.establishmentRateLimit.rejected`
+
 If you observe increasing numbers of rejected connections, consider:
 
 1. Increasing :parameter:`ingressConnectionEstablishmentRatePerSec` if the cluster appears
-to have sufficient CPU resources to handle this load. #. Adjusting :parameter:`ingressConnectionEstablishmentMaxQueueDepth` based on the formula. #. Reviewing driver connection pool settings.
+   to have sufficient CPU resources to handle this load.
+#. Adjusting :parameter:`ingressConnectionEstablishmentMaxQueueDepth` based on the formula.
+#. Reviewing driver connection pool settings.

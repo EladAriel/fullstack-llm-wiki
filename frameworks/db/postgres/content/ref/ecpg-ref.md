@@ -1,73 +1,305 @@
 ---
 type: "Framework Learn Page"
-framework: "postgres"
+framework: "PostgreSQL"
 source_repo: "https://github.com/postgres/postgres.git"
 source_branch: "master"
 source_path: "doc/src/sgml/ref/ecpg-ref.sgml"
-source_commit: "38afc3dcb25c45b744d4025029ce0a6c90b7059f"
-source_commit_short: "38afc3dc"
-source_commit_date: "2026-07-25T19:08:27+09:00"
-generated_at: "2026-07-25T11:50:59Z"
+source_commit: "6c5f1d6074208146930b67c2054509c3e82f6f7f"
+source_commit_short: "6c5f1d6"
+source_commit_date: "2026-08-28T23:24:47+02:00"
+generated_at: "2026-08-29T09:39:24.570133Z"
 ---
-
 ecpg
+ 
 
-`ecpg`
-1
-Application
+ 
+  
+# ecpg
 
-`ecpg`
-embedded SQL C preprocessor
+  1
+  Application
+ 
 
-`ecpg`
-`option`
-`file`
+ 
+  
+# ecpg
 
-## Description
+  embedded SQL C preprocessor
+ 
 
-`ecpg` is the embedded SQL preprocessor for C programs. It converts C programs with embedded SQL statements to normal C code by replacing the SQL invocations with special function calls. The output files can then be processed with any C compiler tool chain.
+ 
+  
+   ecpg
+   option
+   file
+  
+ 
 
-`ecpg` will convert each input file given on the command line to the corresponding C output file. If an input file name does not have any extension, `.pgc` is assumed. The file's extension will be replaced by `.c` to construct the output file name. But the output file name can be overridden using the `-o` option.
+ 
+  
+# Description
 
-If an input file name is just `-`, `ecpg` reads the program from standard input (and writes to standard output, unless that is overridden with `-o`).
+  
+   ecpg is the embedded SQL preprocessor for C
+   programs.  It converts C programs with embedded SQL statements to
+   normal C code by replacing the SQL invocations with special
+   function calls.  The output files can then be processed with any C
+   compiler tool chain.
+  
 
-This reference page does not describe the embedded SQL language. See `ecpg` for more information on that topic.
+  
+   ecpg will convert each input file given on the
+   command line to the corresponding C output file.  If an input file
+   name does not have any extension, .pgc is
+   assumed.  The file's extension will be replaced
+   by .c to construct the output file name.
+   But the output file name can be overridden using the
+   -o option.
+  
 
-## Options
+  
+   If an input file name is just -,
+   ecpg reads the program from standard input
+   (and writes to standard output, unless that is overridden
+   with -o).
+  
 
-`ecpg` accepts the following command-line arguments: - Automatically generate certain C code from SQL code. Currently, this works for `EXEC SQL TYPE`. - Set a compatibility mode. `mode` can be `INFORMIX`, `INFORMIX_SE`, or `ORACLE`. - Define a preprocessor symbol, equivalently to the `EXEC SQL DEFINE` directive. If no `value` is specified, the symbol is defined with the value `1`. - Process header files. When this option is specified, the output file extension becomes `.h` not `.c`, and the default input file extension is `.pgh` not `.pgc`. Also, the `-c` option is forced on. - Parse system include files as well. - Specify an additional include path, used to find files included via `EXEC SQL INCLUDE`. Defaults are `.` (current directory), `/usr/local/include`, the PostgreSQL include directory which is defined at compile time (default: `/usr/local/pgsql/include`), and `/usr/include`, in that order. - Specifies that `ecpg` should write all its output to the given `filename`. Write `-o -` to send all output to standard output. - Selects run-time behavior. `Option` can be one of the following: `no_indicator` Do not use indicators but instead use special values to represent null values. Historically there have been databases using this approach. - Prepare all statements before using them. Libecpg will keep a cache of prepared statements and reuse a statement if it gets executed again. If the cache runs full, libecpg will free the least used statement. - Allow question mark as placeholder for compatibility reasons. This used to be the default long ago.
+  
+   This reference page does not describe the embedded SQL language.
+   See  for more information on that topic.
+  
 
-`-t`
+ 
 
-Turn on autocommit of transactions. In this mode, each SQL command is automatically committed unless it is inside an explicit transaction block. In the default mode, commands are committed only when `EXEC SQL COMMIT` is issued.
+ 
+  
+# Options
 
-`-v`
+  
+   ecpg accepts the following command-line
+   arguments:
 
-Print additional information including the version and the "include" path.
+   
+    
+     -c
+     
+      
+       Automatically generate certain C code from SQL code.  Currently, this
+       works for EXEC SQL TYPE.
+      
 
-`--version`
+     
+    
 
-Print the `ecpg` version and exit.
+    
+     -C mode
+     
+      
+       Set a compatibility mode.  mode can
+       be INFORMIX,
+       INFORMIX_SE, or ORACLE.
+      
 
-`-?`
-`--help`
+     
+    
 
-Show help about `ecpg` command line arguments, and exit.
+    
+     -D symbol[=value]
+     
+      
+       Define a preprocessor symbol, equivalently to the EXEC SQL
+       DEFINE directive.  If no value is
+       specified, the symbol is defined with the value 1.
+      
 
-## Notes
+     
+    
 
-When compiling the preprocessed C code files, the compiler needs to be able to find the `ECPG` header files in the PostgreSQL include directory. Therefore, you might have to use the `-I` option when invoking the compiler (e.g., `-I/usr/local/pgsql/include`).
+    
+     -h
+     
+      
+       Process header files.  When this option is specified, the output file
+       extension becomes .h not .c,
+       and the default input file extension is .pgh
+       not .pgc.  Also, the -c option is
+       forced on.
+      
 
-Programs using C code with embedded SQL have to be linked against the `libecpg` library, for example using the linker options `-L/usr/local/pgsql/lib -lecpg`.
+     
+    
 
-The value of either of these directories that is appropriate for the installation can be found out using `app-pgconfig`.
+    
+     -i
+     
+      
+       Parse system include files as well.
+      
 
-## Examples
+     
+    
 
-If you have an embedded SQL C source file named `prog1.pgc`, you can create an executable program using the following sequence of commands:
+    
+     -I directory
+     
+      
+       Specify an additional include path, used to find files included
+       via EXEC SQL INCLUDE.  Defaults are
+       . (current directory),
+       /usr/local/include, the
+       PostgreSQL include directory which
+       is defined at compile time (default:
+       /usr/local/pgsql/include), and
+       /usr/include, in that order.
+      
+
+     
+    
+
+    
+     -o filename
+     
+      
+       Specifies that ecpg should write all
+       its output to the given filename.
+       Write -o - to send all output to standard output.
+      
+
+     
+    
+
+    
+     -r option
+     
+      
+       Selects run-time behavior.  Option can be
+       one of the following:
+       
+        
+         no_indicator
+         
+         
+         Do not use indicators but instead use special values to represent
+         null values. Historically there have been databases using this approach.
+         
+
+         
+        
+        
+         prepare
+         
+         
+         Prepare all statements before using them. Libecpg will keep a cache of
+         prepared statements and reuse a statement if it gets executed again. If the
+         cache runs full, libecpg will free the least used statement.
+         
+
+         
+        
+        
+         questionmarks
+         
+         
+         Allow question mark as placeholder for compatibility reasons.
+         This used to be the default long ago.
+         
+
+         
+        
+       
+
+     
+    
+
+    
+     -t
+     
+      
+       Turn on autocommit of transactions. In this mode, each SQL command is
+       automatically committed unless it is inside an explicit
+       transaction block. In the default mode, commands are committed
+       only when EXEC SQL COMMIT is issued.
+      
+
+     
+    
+
+    
+     -v
+     
+      
+       Print additional information including the version and the
+       "include" path.
+      
+
+     
+    
+
+    
+     --version
+     
+      
+       Print the ecpg version and exit.
+      
+
+     
+    
+
+    
+     -?
+     --help
+     
+      
+       Show help about ecpg command line
+       arguments, and exit.
+      
+
+     
+    
+
+   
+  
+
+ 
+
+ 
+  
+# Notes
+
+  
+   When compiling the preprocessed C code files, the compiler needs to
+   be able to find the ECPG header files in the
+   PostgreSQL include directory.  Therefore, you might
+   have to use the -I option when invoking the compiler
+   (e.g., -I/usr/local/pgsql/include).
+  
+
+  
+   Programs using C code with embedded SQL have to be linked against
+   the libecpg library, for example using the
+   linker options -L/usr/local/pgsql/lib -lecpg.
+  
+
+  
+   The value of either of these directories that is appropriate for
+   the installation can be found out using .
+  
+
+ 
+
+ 
+  
+# Examples
+
+  
+   If you have an embedded SQL C source file named
+   prog1.pgc, you can create an executable
+   program using the following sequence of commands:
 
 ```
+
 ecpg prog1.pgc
 cc -I/usr/local/pgsql/include -c prog1.c
 cc -o prog1 prog1.o -L/usr/local/pgsql/lib -lecpg
+
 ```

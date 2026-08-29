@@ -1,58 +1,122 @@
 ---
 type: "Framework Learn Page"
-framework: "mongodb"
+framework: "MongoDB"
 source_repo: "https://github.com/mongodb/docs.git"
 source_branch: "main"
 source_path: "content/manual/manual/source/reference/method/sp.processor.start.txt"
-source_commit: "ab9db26ed3d11618cdb61516d8180337d8e3f679"
-source_commit_short: "ab9db26e"
-source_commit_date: "2026-07-24T16:22:46-06:00"
-generated_at: "2026-07-25T11:51:15Z"
+source_commit: "b9f2bc487a2878b65e3c1f80024bebab76954f27"
+source_commit_short: "b9f2bc48"
+source_commit_date: "2026-08-28T17:09:45-05:00"
+generated_at: "2026-08-29T09:39:19.916897Z"
 ---
-
-=====================================
-
 # sp.processor.start() (mongosh method)
+
+**meta:** :description: Start a named Stream Processor on a Stream Processing Workspace using `sp.processor.start()`.
+
+.. default-domain:: mongodb
+
+**contents:** On this page
+   :local:
+   :backlinks: none
+   :depth: 2
+   :class: singlecol
 
 ## Definition
 
-.. versionadded:: 7.0
+**method:** sp.processor.start()
+
+**versionadded:** 7.0
+
+   Starts a named
+   :atlas:`Stream Processor
+   </atlas-sp/overview/#mongodb-expression-exp.Stream-Processor>` on
+   the current :atlas:`Stream Processing Workspace
+   </atlas-sp/overview/#mongodb-expression-exp.Stream-Processing-Instance>`.
 
 ## Compatibility
 
-.. include:: /includes/fact-environments-atlas-support-stream-processing-only.rst
+**include:** /includes/fact-environments-atlas-support-stream-processing-only.rst
 
 ## Syntax
-
+   
 The :method:`sp.processor.start()` method has the following syntax:
 
-```json
-sp.processor.start(
-  {
-    <options>
-  }
-)
-```
+.. code-block:: json
+
+   sp.processor.start(
+     {
+       <options>
+     }
+   )
+
 
 ## Command Fields
 
-`sp.processor.start()` takes a generic, optional `<options>` document whose fields are passed to the underlying start command. These fields can be:
+``sp.processor.start()`` takes a generic, optional ``<options>`` document 
+whose fields are passed to the underlying start command. These fields can be:
+
+.. list-table::
+   :header-rows: 1
+   :widths: 15 10 10 65
+
+   * - Field
+     - Type
+     - Necessity	  
+     - Description
+
+   * - ``startAfter``
+     - token
+     - Conditional
+     - See :ref:`<atlas-sp-agg-source-syntax-coll>`
+
+   * - ``startAtOperationTime``
+     - timestamp
+     - Conditional
+     - See :ref:`<atlas-sp-agg-source-syntax-coll>`
+
+   * - ``tier``
+     - string
+     - Optional
+     - The tier to which {+atlas-sp+} assigns the
+       processor. If you do not declare this option,
+       {+atlas-sp+} assigns the processor to the
+       {+spw+}'s tier. Must be one of the following:
+
+       .. include:: /includes/fact-asp-stream-processor-tiers.rst
+
+   * - ``clearCheckpoints``
+     - boolean
+     - Optional
+     - Specifies whether this start request skips checkpoint recovery.
+       When set to ``true``, the processor starts without recovering a
+       checkpoint. By default, this field is ``false``.
+
+   * - ``resumeFromCheckpoint``
+     - boolean
+     - Optional
+     - Specifies if the processor resumes from its most recent
+       checkpoint when it starts. By default, this field is ``true``,
+       and the processor resumes from its most recent checkpoint. 
 
 ## Behavior
 
-`sp.processor.start()` starts a named stream processor on the current stream processing workspace. The stream processor must be in a `STOPPED` state. If you invoke `sp.processor.start()` for a stream processor that is not `STOPPED`, `mongosh` will return an error.
+``sp.processor.start()`` starts a named stream processor on the
+current stream processing workspace. The stream processor must be in a
+``STOPPED`` state. If you invoke ``sp.processor.start()`` for a
+stream processor that is not ``STOPPED``, ``mongosh`` will return an error.
 
 ## Access Control
 
-The user running `sp.processor.start()` must have the :atlasrole:`atlasAdmin` role.
+The user running ``sp.processor.start()`` must have the
+:atlasrole:`atlasAdmin` role.
 
 ## Example
 
-The following example starts a stream processor named `solarDemo`.
+The following example starts a stream processor named ``solarDemo``.
 
-```sh
-sp.solarDemo.start()
-```
+.. code-block:: sh
+
+   sp.solarDemo.start()
 
 ## Learn More
 

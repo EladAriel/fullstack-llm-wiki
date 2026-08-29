@@ -1,15 +1,15 @@
 ---
 type: "Framework Learn Page"
-framework: "redis"
+framework: "Redis"
 source_repo: "https://github.com/redis/docs.git"
 source_branch: "main"
 source_path: "content/operate/oss_and_stack/management/optimization/benchmarks/index.md"
-source_commit: "9d30f68c3dad1a6b3b7d30fe604b911348ce8152"
-source_commit_short: "9d30f68c"
-source_commit_date: "2026-07-24T10:52:10-07:00"
-generated_at: "2026-07-25T11:51:22Z"
-generated_filename: "_source_index.md"
+source_commit: "f8693349287b0efbef3c865b6f6a2aceca88594d"
+source_commit_short: "f869334"
+source_commit_date: "2026-08-28T10:01:19-05:00"
+generated_at: "2026-08-29T09:38:55.242721Z"
 ---
+# Index
 
 ---
 aliases:
@@ -139,7 +139,7 @@ specified with `-c`) sends the next command only when the reply of the previous
 command is received, this means that the server will likely need a read call
 in order to read each command from every client. Also RTT is paid as well.
 
-Redis supports [pipelining](/topics/pipelining), so it is possible to send
+Redis supports [pipelining](/develop/using-commands/pipelining), so it is possible to send
 multiple commands at once, a feature often exploited by real world applications.
 Redis pipelining is able to dramatically improve the number of operations per
 second a server is able to deliver.

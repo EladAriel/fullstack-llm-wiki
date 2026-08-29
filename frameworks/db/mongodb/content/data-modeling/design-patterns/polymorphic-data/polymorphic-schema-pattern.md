@@ -1,33 +1,158 @@
 ---
 type: "Framework Learn Page"
-framework: "mongodb"
+framework: "MongoDB"
 source_repo: "https://github.com/mongodb/docs.git"
 source_branch: "main"
 source_path: "content/manual/manual/source/data-modeling/design-patterns/polymorphic-data/polymorphic-schema-pattern.txt"
-source_commit: "ab9db26ed3d11618cdb61516d8180337d8e3f679"
-source_commit_short: "ab9db26e"
-source_commit_date: "2026-07-24T16:22:46-06:00"
-generated_at: "2026-07-25T11:51:15Z"
+source_commit: "b9f2bc487a2878b65e3c1f80024bebab76954f27"
+source_commit_short: "b9f2bc48"
+source_commit_date: "2026-08-28T17:09:45-05:00"
+generated_at: "2026-08-29T09:39:20.301697Z"
 ---
-
-======================
+.. _polymorphic-schema-pattern:
 
 # Store Polymorphic Data
 
-Store polymorphic data when you need to access documents that have different fields or data types together in the same query.
+.. default-domain:: mongodb
 
-.. include:: /includes/data-modeling/polymorphic-overview.rst
+**contents:** On this page
+   :local:
+   :backlinks: none
+   :depth: 1
+   :class: singlecol
+
+Store polymorphic data when you need to access documents that have
+different fields or data types together in the same query.
+
+**include:** /includes/data-modeling/polymorphic-overview.rst
 
 ## About this Task
 
-In this example, your application stores professional athletes who play different sports. Your queries access all athletes, but the attributes stored for each athlete vary depending on their sport.
+In this example, your application stores professional athletes who play
+different sports. Your queries access all athletes, but the attributes
+stored for each athlete vary depending on their sport.
 
-The polymorphic pattern stores different document shapes in the same collection, which improves performance for queries that need to access all athletes regardless of sport.
+The polymorphic pattern stores different document shapes in the same
+collection, which improves performance for queries that need to access
+all athletes regardless of sport.
 
 ## Steps
 
+**procedure:** :style:  normal
+
+   .. step:: Insert the sample data.
+
+      .. code-block:: javascript
+
+         db.athletes.insertMany( [
+            {
+               sport: "bowling",
+               name: "Earl Anthony",
+               career_earnings: 1440000,
+               perfect_games: 25,
+               pba_championships: 43,
+               events: [
+                  {
+                     name: "japan_pba",
+                     score: 300,
+                     year: 1972
+                  }
+               ]
+            },
+            {
+               sport: "tennis",
+               name: "Steffi Graf",
+               career_earnings: 21000000,
+               grand_slam_wins: 22,
+               surfaces: [ "grass", "clay", "hard court" ]
+            },
+            {
+               sport: "cricket",
+               name: "Sachin Tendulkar",
+               career_earnings: 8000000,
+               runs: 15921,
+               centuries: 51,
+               teammates: [ "Arshad Ayub", "Kapil Dev" ]
+            }
+         ] )
+
+   .. step:: Query all documents.
+
+      Even though the documents in the ``athletes`` collection have
+      different fields, you can return all documents with a single
+      query:
+
+      .. code-block:: javascript
+
+         db.athletes.find()
+
+      Output:
+
+      .. code-block:: javascript
+         :copyable: false
+
+         [
+            {
+               _id: ObjectId('6706dcd66fd2c3b24f2e7e92'),
+               sport: 'bowling',
+               name: 'Earl Anthony',
+               career_earnings: 1440000,
+               perfect_games: 25,
+               pba_championships: 43,
+               events: [ { name: 'japan_pba', score: 300, year: 1972 } ]
+            },
+            {
+               _id: ObjectId('6706dcd66fd2c3b24f2e7e93'),
+               sport: 'tennis',
+               name: 'Steffi Graf',
+               career_earnings: 21000000,
+               grand_slam_wins: 22,
+               surfaces: [ 'grass', 'clay', 'hard court' ]
+            },
+            {
+               _id: ObjectId('6706dcd66fd2c3b24f2e7e94'),
+               sport: 'cricket',
+               name: 'Sachin Tendulkar',
+               career_earnings: 8000000,
+               runs: 15921,
+               centuries: 51,
+               teammates: [ 'Arshad Ayub', 'Kapil Dev' ]
+            }
+         ]
+
+   .. step:: Query unique fields.
+
+      The polymorphic pattern does not require additional logic to query
+      on fields that are specific to a particular sport. For example,
+      the following query returns athletes that have more than 20 grand
+      slam wins, which only applies to athletes who play tennis:
+
+      .. code-block:: javascript
+         
+         db.athletes.find(
+            { grand_slam_wins: { $gt: 20 } }
+         )
+
+      Output:
+
+      .. code-block:: javascript
+         :copyable: false
+
+         [
+            {
+               _id: ObjectId('6706cd8a6fd2c3b24f2e7e8d'),
+               sport: 'tennis',
+               name: 'Steffi Graf',
+               career_earnings: 21000000,
+               grand_slam_wins: 22,
+               surfaces: [ 'grass', 'clay', 'hard court' ]
+            }
+         ]
+
 ## Learn More
 
-- `inheritance-schema-pattern`
-- `schema-validation-overview`
-- `create-indexes-to-support-queries`
+- :ref:`inheritance-schema-pattern`
+
+- :ref:`schema-validation-overview`
+
+- :ref:`create-indexes-to-support-queries`

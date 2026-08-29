@@ -1,14 +1,15 @@
 ---
 type: "Framework Learn Page"
-framework: "react"
+framework: "React"
 source_repo: "https://github.com/reactjs/react.dev"
 source_branch: "main"
 source_path: "src/content/community/conferences.md"
-source_commit: "7b6c3ceb9dd97249e9dce4a8a94e61aed6424698"
-source_commit_short: "7b6c3ceb"
-source_commit_date: "2026-07-20T15:31:48+02:00"
-generated_at: "2026-07-25T11:50:43Z"
+source_commit: "7c36f7ac329fe3cf2e11222edce9a535158c2cab"
+source_commit_short: "7c36f7a"
+source_commit_date: "2026-08-24T10:33:57-07:00"
+generated_at: "2026-08-29T09:40:25.473309Z"
 ---
+# Conferences
 
 ---
 title: React Conferences
@@ -22,27 +23,41 @@ Do you know of a local React.js conference? Add it here! (Please keep the list c
 
 ## Upcoming Conferences {/*upcoming-conferences*/}
 
-### React Paris 2026 {/*react-paris-2026*/}
-March 26 - 27, 2026. In-person in Paris, France (hybrid event)
-
-[Website](https://react.paris/) - [Twitter](https://x.com/BeJS_)
-
-### CityJS London 2026 {/*cityjs-london-2026*/}
-April 14-17,  2026. In-person in London
-
-[Website](https://india.cityjsconf.org/) - [Twitter](https://x.com/cityjsconf) - [Bluesky](https://bsky.app/profile/cityjsconf.bsky.social)
-
 ### ZurichJS Conf 2026 {/*zurichjs-conf-2026*/}
 September 10-11,  2026. In-person in Zurich, Switzerland
 
 [Website](https://conf.zurichjs.com?utm_campaign=ZurichJS_Conf&utm_source=referral&utm_content=reactjs_community_conferences) - [Twitter](https://x.com/zurichjs) - [LinkedIn](https://www.linkedin.com/company/zurichjs/)
+
+### React Alicante 2026 {/*react-alicante-2026*/}
+Sep 24 - 26,  2026. In-person in Alicante
+
+[Website](https://reactalicante.es//) - [Twitter](https://x.com/ReactAlicante)
+
+### CityJS Athens 2026 {/*cityjs-athens-2026*/}
+October 21-23,  2026. In-person in Athens
+
+[Website](https://athens.cityjsconf.org/) - [Twitter](https://x.com/cityjsconf) - [Bluesky](https://bsky.app/profile/cityjsconf.bsky.social)
+
+
+## Past Conferences {/*past-conferences*/}
+
 
 ### React Conf Japan 2027 {/*react-conf-japan-2027*/}
 April 24,  2027. In-person in Tokyo, Japan
 
 [Website](https://reactconf.jp/) - [Twitter](https://x.com/reactconfjp)
 
-## Past Conferences {/*past-conferences*/}
+### CityJS London 2026 {/*cityjs-london-2026*/}
+April 14-17,  2026. In-person in London
+
+[Website](https://india.cityjsconf.org/) - [Twitter](https://x.com/cityjsconf) - [Bluesky](https://bsky.app/profile/cityjsconf.bsky.social)
+
+
+### React Paris 2026 {/*react-paris-2026*/}
+March 26 - 27, 2026. In-person in Paris, France (hybrid event)
+
+[Website](https://react.paris/) - [Twitter](https://x.com/BeJS_)
+
 
 ### CityJS New Delhi 2026 {/*cityjs-newdelhi-2026*/}
 February 12-13,  2026. In-person in New Delhi, India

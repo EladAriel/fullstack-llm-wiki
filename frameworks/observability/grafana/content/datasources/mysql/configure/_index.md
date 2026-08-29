@@ -4,10 +4,10 @@ framework: "Grafana"
 source_repo: "https://github.com/grafana/grafana.git"
 source_branch: "main"
 source_path: "docs/sources/datasources/mysql/configure/_index.md"
-source_commit: "d18e58d33aa8741f08fbab4aa73bdaf1f04e3be5"
-source_commit_short: "d18e58d3"
-source_commit_date: "2026-07-25T13:50:43+02:00"
-generated_at: "2026-07-25T19:08:08.975092Z"
+source_commit: "5e3a02f81d2aadf4bf24fe49ed97d872556f5bf9"
+source_commit_short: "5e3a02f8"
+source_commit_date: "2026-08-29T10:58:19+09:00"
+generated_at: "2026-08-29T09:39:37.520237Z"
 ---
 ---
 aliases:
@@ -26,7 +26,7 @@ labels:
 menuTitle: Configure
 title: Configure the MySQL data source
 weight: 10
-review_date: 2026-05-11
+review_date: 2026-08-10
 ---
 
 # Configure the MySQL data source
@@ -39,7 +39,7 @@ Before configuring the MySQL data source, ensure you have the following:
 
 - **Grafana permissions:** You must have the Organization administrator role to configure data sources. Organization administrators can also [configure the data source via YAML](#provision-the-data-source) with the Grafana provisioning system.
 
-- **A running MySQL instance:** MySQL 5.7 or newer, MariaDB 10.2 or newer, or a compatible MySQL-based database such as Percona Server.
+- **A running MySQL instance:** MySQL 5.7 or newer, MariaDB 10.5 or newer, or a compatible MySQL-based database such as Percona Server.
 
 - **Network access:** Grafana must be able to reach your MySQL server. The default port is `3306`.
 
@@ -48,7 +48,7 @@ Before configuring the MySQL data source, ensure you have the following:
 - **Security certificates:** If using encrypted connections, gather any necessary TLS/SSL certificates.
 
 {{< admonition type="note" >}}
-Grafana ships with a built-in MySQL data source plugin. No additional installation is required.
+The MySQL data source plugin is preinstalled in Grafana, so no additional installation is required. As of Grafana 13.2, it's packaged as a standalone plugin that updates independently of Grafana releases. Refer to [Plugin updates](https://grafana.com/docs/grafana/<GRAFANA_VERSION>/datasources/mysql/#plugin-updates) for details.
 {{< /admonition >}}
 
 {{< admonition type="tip" >}}
@@ -77,7 +77,7 @@ To add the MySQL data source complete the following steps:
 1. Select the **MySQL data source** option.
 1. Click **Add new data source** in the upper right.
 
-You are taken to the **Settings** tab where you will configure the data source.
+You are taken to the **Settings** tab where you configure the data source.
 
 ## MySQL configuration options
 
@@ -89,7 +89,7 @@ Following is a list of MySQL configuration options:
 
 **Connection:**
 
-- **Host URL** - Enter the IP address/hostname and optional port of your MySQL instance. If the port is omitted the default `3306` port will be used.
+- **Host URL** - Enter the IP address/hostname and optional port of your MySQL instance. If the port is omitted, Grafana uses the default `3306` port.
 - **Database** - Enter the name of your MySQL database.
 
 **Authentication:**
@@ -109,7 +109,7 @@ The following are additional MySQL settings.
 
 **MySQL options:**
 
-- **Session Timezone** - Specifies the timezone used in the database session, such as `Europe/Berlin` or `+02:00`. Required if the timezone of the database (or the host of the database) is set to something other than UTC. Set this to `+00:00` so Grafana can handle times properly. Set the value used in the session with `SET time_zone='...'`. If you leave this field empty, the timezone will not be updated. For more information, refer to [MySQL Server Time Zone Support](https://dev.mysql.com/doc/en/time-zone-support.html).
+- **Session Timezone** - Specifies the timezone used in the database session, such as `Europe/Berlin` or `+02:00`. Required if the timezone of the database (or the host of the database) is set to something other than UTC. Set this to `+00:00` so Grafana can handle times properly. Set the value used in the session with `SET time_zone='...'`. If you leave this field empty, the timezone isn't updated. For more information, refer to [MySQL Server Time Zone Support](https://dev.mysql.com/doc/en/time-zone-support.html).
 - **Min time interval** - Defines a lower limit for the [`$__interval`](https://grafana.com/docs/grafana/<GRAFANA_VERSION>/dashboards/variables/add-template-variables/#__interval) and [`$__interval_ms`](https://grafana.com/docs/grafana/<GRAFANA_VERSION>/dashboards/variables/add-template-variables/#__interval_ms) variables. Grafana recommends aligning this setting with the data write frequency. For example, set it to `1m` if your data is written every minute. Refer to [Min time interval](#min-time-interval) for format examples.
 
 **Connection limits:**

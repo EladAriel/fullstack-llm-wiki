@@ -1,136 +1,255 @@
 ---
 type: "Framework Learn Page"
-framework: "mongodb"
+framework: "MongoDB"
 source_repo: "https://github.com/mongodb/docs.git"
 source_branch: "main"
 source_path: "content/manual/manual/source/reference/command/explain.txt"
-source_commit: "ab9db26ed3d11618cdb61516d8180337d8e3f679"
-source_commit_short: "ab9db26e"
-source_commit_date: "2026-07-24T16:22:46-06:00"
-generated_at: "2026-07-25T11:51:15Z"
+source_commit: "b9f2bc487a2878b65e3c1f80024bebab76954f27"
+source_commit_short: "b9f2bc48"
+source_commit_date: "2026-08-28T17:09:45-05:00"
+generated_at: "2026-08-29T09:39:20.013823Z"
 ---
-
-==========================
+.. _explain-database-command:
 
 # explain (database command)
 
+**meta:** :description: Use the `explain` command to analyze execution plans for various MongoDB operations, including query planning and execution statistics.
+
+.. default-domain:: mongodb
+
+**contents:** On this page
+   :local:
+   :backlinks: none
+   :depth: 1
+   :class: singlecol
+
+.. dismissible-skills-card::
+   :skill: Query Optimization
+   :url: https://learn.mongodb.com/skills?openTab=query
+
 ## Definition
+
+**dbcommand:** explain
+
+   The :dbcommand:`explain` command provides information on the
+   execution of the following commands: :dbcommand:`aggregate`,
+   :dbcommand:`count`, :dbcommand:`distinct`, :dbcommand:`find`,
+   :dbcommand:`findAndModify`, :dbcommand:`delete`,
+   :dbcommand:`mapReduce`, and :dbcommand:`update`.
+
+   .. |method| replace:: :method:`db.collection.explain()` and 
+      :method:`cursor.explain()` helper methods
+
+   .. include:: /includes/fact-dbcommand-tip
+
+   .. include:: includes/explain-ignores-cache-plan.rst
 
 ## Compatibility
 
-This command is available in deployments hosted in the following environments:
+This command is available in deployments hosted in the following environments: 
 
-.. include:: /includes/fact-environments-atlas-only.rst
+**include:** /includes/fact-environments-atlas-only.rst
 
-.. include:: /includes/fact-environments-atlas-support-all.rst
+**include:** /includes/fact-environments-atlas-support-all.rst
 
-.. include:: /includes/fact-environments-onprem-only.rst
+**include:** /includes/fact-environments-onprem-only.rst
 
 ## Required Access
 
-.. include:: /includes/explain-required-access.rst
+**include:** /includes/explain-required-access.rst
 
 ## Syntax
 
 The command has the following syntax:
 
-```javascript
-db.runCommand(
-   {
-     explain: <command>,
-     verbosity: <string>,
-     comment: <any>
-   }
-)
-```
+.. code-block:: javascript
+
+   db.runCommand(
+      {
+        explain: <command>,
+        verbosity: <string>,
+        comment: <any>
+      }
+   )
 
 ## Command Fields
 
 The command takes the following fields:
 
-> **Note:** The default verbosity of `explain` and
-:method:`db.collection.explain()` differs. `explain` defaults
-to `allPlansExecution` while `db.collection.explain()`
-defaults to `queryPlanner`.
+.. list-table::
+   :header-rows: 1
+   :widths: 20 20 80
+ 
+   * - Field
+     - Type
+     - Description
+ 
+   * - ``explain``
+     - document
+     - A document specifying the command for which to return the execution
+       information. For details on the specific command document, see :dbcommand:`aggregate`, :dbcommand:`count`,
+       :dbcommand:`distinct`, :dbcommand:`find`,
+       :dbcommand:`findAndModify`, :dbcommand:`delete`, :dbcommand:`mapReduce`, and :dbcommand:`update`.
+       
+   * - ``verbosity``
+     - string
+     - Optional. A string specifying the mode in which to run :dbcommand:`explain`.
+       The mode affects the behavior of :dbcommand:`explain` and determines
+       the amount of information to return.
+       
+       The possible modes are: 
+          
+       - ``"queryPlanner"``
+       - ``"executionStats"``
+       - ``"allPlansExecution"`` (Default)
+       
+       For more information on the modes, see :ref:`explain behavior
+       <explain-command-behavior>`.
+       
+   * - ``comment``
+     - any
+     - .. include:: /includes/extracts/comment-content.rst
+
+       If you specify ``explain`` without a ``comment``, it inherits
+       any ``comment`` in the command specified to ``explain``.
+
+**note:** The default verbosity of ``explain`` and
+   :method:`db.collection.explain()` differs. ``explain`` defaults
+   to ``allPlansExecution`` while ``db.collection.explain()``
+   defaults to ``queryPlanner``.
+
+.. _explain-command-behavior:
 
 ## Behavior
 
+.. |explain| replace:: :dbcommand:`explain`
+.. |operation| replace:: ``<command>``
+
+.. _explain-queryPlanner:
+
+.. _explain-executionStats:
+
+.. _explain-allPlansExecution:
+
 ### Verbosity Modes
 
-The behavior of :dbcommand:`explain` and the amount of information returned depend on the `verbosity` mode.
+The behavior of :dbcommand:`explain` and the amount of information
+returned depend on the ``verbosity`` mode.
+
+**tabs:** tabs:
+
+     - id: queryplanner
+       name: "queryPlanner Mode"
+       content: |
+
+         .. include:: /includes/fact-explain-verbosity-queryPlanner.rst
+
+     - id: executionstats
+       name: "executionStats Mode"
+       content: |
+
+          .. include:: /includes/fact-explain-verbosity-executionStats.rst
+
+     - id: allplans
+       name: "allPlansExecution Mode (Default)"
+       content: |
+
+          By default, :dbcommand:`explain` runs in
+          ``"allPlansExecution"`` verbosity mode.
+
+          .. include:: /includes/fact-explain-verbosity-allPlansExecution.rst
 
 ### Explain and Write Operations
 
-For write operations, the :dbcommand:`explain` command returns information about the write operation that would be performed but does not actually modify the database.
+For write operations, the :dbcommand:`explain` command returns
+information about the write operation that would be performed but does
+not actually modify the database.
 
 ### Stable API
 
-The `Stable API <stable-api>` V1 supports the following verbosity modes for the `explain` command:
+The :ref:`Stable API <stable-api>` V1 supports the following
+verbosity modes for the ``explain`` command:
 
-- `allPlansExecution <ex-allPlansExecution>`
-- `executionStats <ex-executionStats>`
-- `queryPlanner<ex-queryPlanner>`
-> **Warning:** .. include:: /includes/fact-stable-api-explain.rst
+- :ref:`allPlansExecution <ex-allPlansExecution>`
+- :ref:`executionStats <ex-executionStats>`
+- :ref:`queryPlanner<ex-queryPlanner>`
+
+**warning:** .. include:: /includes/fact-stable-api-explain.rst
 
 ### Restrictions
 
-.. include:: /includes/extracts/4.2-changes-agg-out-explain.rst
+**include:** /includes/extracts/4.2-changes-agg-out-explain.rst
+
+.. _explain-command-output:
 
 ## Output
 
-.. include:: /includes/fact-explain-results-categories.rst
+**include:** /includes/fact-explain-results-categories.rst
 
-For details on the output, see `/reference/explain-results`.
+For details on the output, see :doc:`/reference/explain-results`.
 
 ## Examples
 
-### `queryPlanner` Mode
+.. _ex-queryPlanner:
 
-The following :dbcommand:`explain` command runs in `"queryPlanner"` verbosity mode to return the query planning information for a :dbcommand:`count` command:
+### ``queryPlanner`` Mode
 
-```javascript
-db.runCommand(
-   {
-     explain: { count: "products", query: { quantity: { $gt: 50 } } },
-     verbosity: "queryPlanner"
-   }
-)
-```
+The following :dbcommand:`explain` command runs in ``"queryPlanner"``
+verbosity mode to return the query planning information for a
+:dbcommand:`count` command:
 
-### `executionStats` Mode
+.. code-block:: javascript
 
-The following :dbcommand:`explain` operation runs in `"executionStats"` verbosity mode to return the query planning and execution information for a :dbcommand:`count` command:
+   db.runCommand(
+      {
+        explain: { count: "products", query: { quantity: { $gt: 50 } } },
+        verbosity: "queryPlanner"
+      }
+   )
 
-```javascript
-db.runCommand(
-   {
-      explain: { count: "products", query: { quantity: { $gt: 50 } } },
-      verbosity: "executionStats"
-   }
-)
-```
+.. _ex-executionStats:
 
-### `allPlansExecution` Mode
+### ``executionStats`` Mode
 
-By default, :dbcommand:`explain` runs in `"allPlansExecution"` verbosity mode. The following :dbcommand:`explain` command returns the `explain.queryPlanner` and `explain.executionStats` for all considered plans for an :dbcommand:`update` command:
+The following :dbcommand:`explain` operation runs in ``"executionStats"``
+verbosity mode to return the query planning and execution information
+for a :dbcommand:`count` command:
 
-> **Note:** The execution of this explain will not modify data but runs the
-query predicate of the update operation. For candidate plans,
-MongoDB returns the execution information captured during the
-`plan selection phase <query-plans-query-optimization>`.
+.. code-block:: javascript
 
-```javascript
-db.runCommand(
-   {
-     explain: {
-        update: "products",
-        updates: [
-           {
-               q: { quantity: 1057, category: "apparel" },
-               u: { $set: { reorder: true } }
-           }
-        ]
-     }
-   }
-)
-```
+   db.runCommand(
+      {
+         explain: { count: "products", query: { quantity: { $gt: 50 } } },
+         verbosity: "executionStats"
+      }
+   )
+
+.. _ex-allPlansExecution:
+
+### ``allPlansExecution`` Mode
+
+By default, :dbcommand:`explain` runs in ``"allPlansExecution"`` verbosity
+mode. The following :dbcommand:`explain` command returns the
+:data:`~explain.queryPlanner` and :data:`~explain.executionStats` for
+all considered plans for an :dbcommand:`update` command:
+
+**note:** The execution of this explain will *not* modify data but runs the
+   query predicate of the update operation. For candidate plans,
+   MongoDB returns the execution information captured during the
+   :ref:`plan selection phase <query-plans-query-optimization>`.
+
+.. code-block:: javascript
+
+   db.runCommand(
+      {
+        explain: {
+           update: "products",
+           updates: [
+              {
+                  q: { quantity: 1057, category: "apparel" },
+                  u: { $set: { reorder: true } }
+              }
+           ]
+        }
+      }
+   )

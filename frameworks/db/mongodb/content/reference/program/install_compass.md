@@ -1,69 +1,102 @@
 ---
 type: "Framework Learn Page"
-framework: "mongodb"
+framework: "MongoDB"
 source_repo: "https://github.com/mongodb/docs.git"
 source_branch: "main"
 source_path: "content/manual/manual/source/reference/program/install_compass.txt"
-source_commit: "ab9db26ed3d11618cdb61516d8180337d8e3f679"
-source_commit_short: "ab9db26e"
-source_commit_date: "2026-07-24T16:22:46-06:00"
-generated_at: "2026-07-25T11:51:15Z"
+source_commit: "b9f2bc487a2878b65e3c1f80024bebab76954f27"
+source_commit_short: "b9f2bc48"
+source_commit_date: "2026-08-28T17:09:45-05:00"
+generated_at: "2026-08-29T09:39:19.872550Z"
 ---
+.. _install-compass:
 
-===================
+# ``install_compass``
 
-# `install_compass`
+.. default-domain:: mongodb
+
+**meta:** :keywords: on-prem
+   :description: Install MongoDB Compass using platform-specific scripts, which replace any existing versions, on Linux, macOS, or Windows.
+
+**contents:** On this page
+   :local:
+   :backlinks: none
+   :depth: 1
+   :class: singlecol
 
 ## Synopsis
 
-`install_compass` (`Install-Compass` in Windows) is a platform-specific installation script for `MongoDB Compass <compass-index>`.
+``install_compass`` (``Install-Compass`` in Windows) is a
+platform-specific installation script for
+:ref:`MongoDB Compass <compass-index>`.
 
-If downloaded as a part of the [MongoDB Enterprise Server](https://www.mongodb.com/try/download/enterprise) package, the `install_compass` script installs the standard edition of `MongoDB Compass <compass-index>`.
+If downloaded as a part of the
+`MongoDB Enterprise Server <https://www.mongodb.com/try/download/enterprise>`_
+package, the ``install_compass`` script installs the standard edition
+of :ref:`MongoDB Compass <compass-index>`.
 
-If downloaded as part of the [MongoDB Community Server](https://www.mongodb.com/try/download/community) package, the `install_compass` script installs `MongoDB Compass Community edition <compass-index>`.
+If downloaded as part of the
+`MongoDB Community Server <https://www.mongodb.com/try/download/community>`_
+package, the ``install_compass`` script installs
+:ref:`MongoDB Compass Community edition <compass-index>`.
 
 ## Installation
 
-> **Note:** The `install_compass` script first removes and replaces any
-previously installed versions of the same |compass| edition (either
-|compass| or |compass| Community).
-For example, if you run the `install_compass` script installed as part of
-MongoDB Community Server 5.0, the script removes any installed
-versions of |compass| Community and installs a compatible
-version of Compass Community.
+**note:** The ``install_compass`` script first removes and replaces any
+   previously installed versions of the same |compass| edition (either
+   |compass| or |compass| Community).
+
+   For example, if you run the ``install_compass`` script installed as part of
+   MongoDB Community Server 5.0, the script removes any installed
+   versions of |compass| Community and installs a compatible
+   version of Compass Community.
 
 ### Linux / macOS
 
-On Linux and macOS platforms the `install_compass` script is a Unix executable script included in the MongoDB Server download. The script is packaged with the download for each platform.
+On Linux and macOS platforms the ``install_compass`` script is a Unix
+executable script included in the MongoDB Server download. The script
+is packaged with the download for each platform.
 
-1. Change to the `bin` directory under the MongoDB Server
-download directory:
+1. Change to the ``bin`` directory under the MongoDB Server
+   download directory:
 
-```bash
-   cd <installDirectory>/bin
-```
 
-2. Install |compass| using the `install_compass` script:
-```bash
-   ./install_compass
-```
+   .. code-block:: bash
+
+      cd <installDirectory>/bin
+
+2. Install |compass| using the ``install_compass`` script:
+
+
+   .. code-block:: bash
+
+      ./install_compass
 
 ### Windows
 
-On Windows platforms the `Install-Compass` script is a PowerShell script included in both the MongoDB Server `.zip` archive and `.msi` installer downloads.
+On Windows platforms the ``Install-Compass`` script is a PowerShell
+script included in both the MongoDB Server ``.zip`` archive and
+``.msi`` installer downloads.
 
 From the Windows Command Prompt:
 
-1. Change to the `bin` directory under the MongoDB Server
-download directory:
+1. Change to the ``bin`` directory under the MongoDB Server
+   download directory:
 
-```none
-   cd <installDirectory>\bin
-```
 
-2. Install |compass| using the `install_compass` script:
-```none
-   powershell .\Install-Compass.ps1
-```
+   .. code-block:: none
 
-Alternatively, if using the `.msi` installer for MongoDB Server for Windows, during installation you are presented with a checkbox indicating whether to install |compass| with MongoDB server. If checked, the installer automatically executes the `install_compass` script.
+      cd <installDirectory>\bin
+
+2. Install |compass| using the ``install_compass`` script:
+
+
+   .. code-block:: none
+
+      powershell .\Install-Compass.ps1
+
+Alternatively, if using the ``.msi`` installer for MongoDB Server for
+Windows, during installation you are presented with a checkbox
+indicating whether to install |compass| with MongoDB server. If
+checked, the installer automatically executes the ``install_compass``
+script.

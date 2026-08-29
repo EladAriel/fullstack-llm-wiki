@@ -1,14 +1,15 @@
 ---
 type: "Framework Learn Page"
-framework: "tanstack"
+framework: "TanStack"
 source_repo: "https://github.com/tanstack/query"
 source_branch: "main"
 source_path: "docs/framework/react/reference/useInfiniteQuery.md"
-source_commit: "fd50fa14d283c7d6664a796f758498d1ad5bfce7"
-source_commit_short: "fd50fa14"
-source_commit_date: "2026-07-24T22:22:47+10:00"
-generated_at: "2026-07-25T11:50:41Z"
+source_commit: "2969edf32f7e0c48e2a108d84712d6e01edfde21"
+source_commit_short: "2969edf"
+source_commit_date: "2026-08-28T01:03:02+09:00"
+generated_at: "2026-08-29T09:40:33.415656Z"
 ---
+# Useinfinitequery
 
 ---
 id: useInfiniteQuery
@@ -23,7 +24,6 @@ const {
   hasPreviousPage,
   isFetchingNextPage,
   isFetchingPreviousPage,
-  promise,
   ...result
 } = useInfiniteQuery({
   queryKey,
@@ -98,9 +98,4 @@ The returned properties for `useInfiniteQuery` are identical to the [`useQuery` 
   - Is the same as `isFetching && !isPending && !isFetchingNextPage && !isFetchingPreviousPage`
 - `isRefetchError: boolean`
   - Will be `true` if the query failed while refetching a page.
-- `promise: Promise<TData>`
-  - A stable promise that resolves to the query result.
-  - This can be used with `React.use()` to fetch data
-  - Requires the `experimental_prefetchInRender` feature flag to be enabled on the `QueryClient`.
-
 Keep in mind that imperative fetch calls, such as `fetchNextPage`, may interfere with the default refetch behaviour, resulting in outdated data. Make sure to call these functions only in response to user actions, or add conditions like `hasNextPage && !isFetching`.

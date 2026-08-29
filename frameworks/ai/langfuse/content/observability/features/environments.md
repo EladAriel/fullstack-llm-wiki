@@ -4,12 +4,11 @@ framework: "Langfuse"
 source_repo: "https://github.com/langfuse/langfuse-docs"
 source_branch: "main"
 source_path: "content/docs/observability/features/environments.mdx"
-source_commit: "fcd1eca34a924867563c3c4e801254c4e66c0021"
-source_commit_short: "fcd1eca3"
-source_commit_date: "2026-07-25T00:45:45Z"
-generated_at: "2026-07-25T11:51:12Z"
+source_commit: "ba26344559edee69ba55c5d3aa80e632f56c1626"
+source_commit_short: "ba26344"
+source_commit_date: "2026-08-29T02:57:18+00:00"
+generated_at: "2026-08-29T09:38:37.753546Z"
 ---
-
 ---
 title: Environments
 description: Configure environments to organize your traces, observations, and scores.
@@ -24,13 +23,36 @@ Environments allow you to organize your traces, observations, and scores from di
 - Filter and analyze data by environment
 - Reuse datasets and prompts across environments
 
+## Filtering
+
+In the Langfuse UI, you can filter events by environment using the environment filter in the navigation bar. This filter applies across all views in Langfuse.
+
+See our [API Reference](/docs/api) for details on how to filter by environment on our API.
+
+## Managing Environments
+
+Environments are created the first time data is ingested with a given `environment` value and are persistent. They cannot currently be deleted or renamed via the UI.
+
+For guidance on how to structure, separate, and work with multiple environments across projects and stages, see the FAQ: [Managing different environments](/faq/all/managing-different-environments).
+
+## Configure environments [#configure-environments]
+
 You can configure the environment by setting the `LANGFUSE_TRACING_ENVIRONMENT` environment variable (recommended) or by using the `environment` parameter in the client initialization.
 If both are specified, the initialization parameter takes precedence.
 If nothing is specified, the default environment is `default`.
 
 In the Python SDK, you can also set the environment for a specific trace scope with `propagate_attributes(environment="...")`. This is useful when the environment belongs to the incoming request rather than to the service process itself, for example when one shared LLM proxy handles requests from development, staging, QA, and production. Use `as_baggage=True` to propagate that environment across service boundaries.
 
-## Data Model
+### Naming constraints
+
+The environment must be a string that follows this regex pattern: `^(?!langfuse)[a-z0-9-_]+$` with at most 40 characters.
+
+This means:
+
+- Cannot start with "langfuse"
+- Can only contain lowercase letters, numbers, hyphens, and underscores
+
+### Data Model
 
 The `environment` attribute is available on all events in Langfuse:
 
@@ -40,15 +62,6 @@ The `environment` attribute is available on all events in Langfuse:
 - Sessions
 
 See [Data Model](/docs/observability/data-model) for more details.
-
-The environment must be a string that follows this regex pattern: `^(?!langfuse)[a-z0-9-_]+$` with at most 40 characters.
-
-This means:
-
-- Cannot start with "langfuse"
-- Can only contain lowercase letters, numbers, hyphens, and underscores
-
-## Usage
 
 <LangTabs items={["Python SDK", "JS/TS SDK", "OpenTelemetry", "OpenAI (Python)", "OpenAI (JS/TS)", "Langchain (Python)", "Langchain (JS/TS)", "Vercel AI SDK (JS/TS)"]}>
 <Tab title="Python SDK">
@@ -232,18 +245,6 @@ export function register() {
 </Tab>
 
 </LangTabs>
-
-## Filtering
-
-In the Langfuse UI, you can filter events by environment using the environment filter in the navigation bar. This filter applies across all views in Langfuse.
-
-See our [API Reference](/docs/api) for details on how to filter by environment on our API.
-
-## Managing Environments
-
-Environments are created the first time data is ingested with a given `environment` value and are persistent. They cannot currently be deleted or renamed via the UI.
-
-For guidance on how to structure, separate, and work with multiple environments across projects and stages, see the FAQ: [Managing different environments](/faq/all/managing-different-environments).
 
 ## Best Practices
 

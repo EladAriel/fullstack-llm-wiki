@@ -1,51 +1,97 @@
 ---
 type: "Framework Learn Page"
-framework: "mongodb"
+framework: "MongoDB"
 source_repo: "https://github.com/mongodb/docs.git"
 source_branch: "main"
 source_path: "content/manual/manual/source/reference/operator/aggregation/ln.txt"
-source_commit: "ab9db26ed3d11618cdb61516d8180337d8e3f679"
-source_commit_short: "ab9db26e"
-source_commit_date: "2026-07-24T16:22:46-06:00"
-generated_at: "2026-07-25T11:51:15Z"
+source_commit: "b9f2bc487a2878b65e3c1f80024bebab76954f27"
+source_commit_short: "b9f2bc48"
+source_commit_date: "2026-08-28T17:09:45-05:00"
+generated_at: "2026-08-29T09:39:20.230616Z"
 ---
-
-=========================
-
 # $ln (expression operator)
+
+**meta:** :description: Calculate the natural logarithm of a number using the `$ln` operator in MongoDB aggregation.
+
+.. default-domain:: mongodb
+
+**contents:** On this page
+   :local:
+   :backlinks: none
+   :depth: 1
+   :class: singlecol
 
 ## Definition
 
+**expression:** $ln 
+
+   Calculates the natural logarithm *ln* (i.e log\ :sub:`e`) of a number and
+   returns the result as a double.
+
+   :expression:`$ln` has the following syntax:
+
+   .. code-block:: javascript
+
+      { $ln: <number> }
+
+   The ``<number>`` expression can be any valid :ref:`expression
+   <aggregation-expressions>` as long as it resolves to a non-negative
+   number. For more information on expressions, see
+   :ref:`aggregation-expressions`.
+
+   :expression:`$ln` is equivalent to ``$log: [ <number>, Math.E ]``
+   expression, where ``Math.E`` is a JavaScript representation for
+   Euler's number *e*.
+
 ## Behavior
 
-.. include:: /includes/agg-expression-double-unless-decimal-behavior.rst
+**include:** /includes/agg-expression-double-unless-decimal-behavior.rst
 
-.. include:: /includes/extracts/agg-expression-null-operand-ln.rst
+**include:** /includes/extracts/agg-expression-null-operand-ln.rst
+
+.. list-table::
+   :header-rows: 1
+   :widths: 85 15
+
+   * - Example
+     - Results
+
+   * - ``{ $ln: 1 }``
+
+     - ``0``
+
+   * - ``{ $ln: Math.E }`` where ``Math.E`` is a JavaScript representation for *e*.
+
+     - ``1``
+
+   * - ``{ $ln: 10  }``
+     - ``2.302585092994046``
 
 ## Example
 
-A collection `sales` contains the following documents:
+A collection ``sales`` contains the following documents:
 
-```javascript
-db.sales.insertMany( [
-   { _id: 1, year: "2000", sales: 8700000 },
-   { _id: 2, year: "2005", sales: 5000000 },
-   { _id: 3, year: "2010", sales: 6250000 }
-] )
-```
+.. code-block:: javascript
+   :copyable: true
 
-The following example transforms the `sales` data:
+   db.sales.insertMany( [
+      { _id: 1, year: "2000", sales: 8700000 },
+      { _id: 2, year: "2005", sales: 5000000 },
+      { _id: 3, year: "2010", sales: 6250000 }
+   ] )
 
-```javascript
-db.sales.aggregate( [ { $project: { x: "$year", y: { $ln: "$sales"  } } } ] )
-```
+The following example transforms the ``sales`` data:
+
+.. code-block:: javascript
+
+   db.sales.aggregate( [ { $project: { x: "$year", y: { $ln: "$sales"  } } } ] )
 
 The operation returns the following results:
 
-```javascript
-{ "_id" : 1, "x" : "2000", "y" : 15.978833583624812 }
-{ "_id" : 2, "x" : "2005", "y" : 15.424948470398375 }
-{ "_id" : 3, "x" : "2010", "y" : 15.648092021712584 }
-```
+.. code-block:: javascript
 
-> **Seealso:** :expression:`$log`
+   { "_id" : 1, "x" : "2000", "y" : 15.978833583624812 }
+   { "_id" : 2, "x" : "2005", "y" : 15.424948470398375 }
+   { "_id" : 3, "x" : "2010", "y" : 15.648092021712584 }
+
+**seealso:** :expression:`$log`

@@ -1,14 +1,15 @@
 ---
 type: "Framework Learn Page"
-framework: "redis"
+framework: "Redis"
 source_repo: "https://github.com/redis/docs.git"
 source_branch: "main"
 source_path: "content/integrate/redis-data-integration/data-pipelines/prepare-dbs/aws-aurora-rds/aws-aur-mysql.md"
-source_commit: "9d30f68c3dad1a6b3b7d30fe604b911348ce8152"
-source_commit_short: "9d30f68c"
-source_commit_date: "2026-07-24T10:52:10-07:00"
-generated_at: "2026-07-25T11:51:22Z"
+source_commit: "f8693349287b0efbef3c865b6f6a2aceca88594d"
+source_commit_short: "f869334"
+source_commit_date: "2026-08-28T10:01:19-05:00"
+generated_at: "2026-08-29T09:38:56.183494Z"
 ---
+# Aws Aur Mysql
 
 ---
 Title: Prepare AWS Aurora MySQL/AWS RDS MySQL for RDI
@@ -51,7 +52,7 @@ To add a reader node to an existing database, select **Add reader** from the **A
 
 You can also create one during database creation by selecting **Create an Aurora Replica or Reader node in a different AZ (recommended for scaled availability)** under **Availability & durability > Multi-AZ deployment**. 
 
-## <a id="aurora-create-and-apply-parameter-group"></a>Create and apply parameter group
+## Create and apply parameter group {#aurora-create-and-apply-parameter-group}
 
 RDI requires some changes to database parameters. On AWS Aurora, you change these parameters via a parameter group.
 
@@ -120,7 +121,7 @@ RDI requires some changes to database parameters. On AWS Aurora, you change thes
 - [ ] [Create Debezium user](#rds-create-debezium-user)
 ```
 
-## <a id="rds-create-and-apply-parameter-group"></a>Create and apply parameter group
+## Create and apply parameter group {#rds-create-and-apply-parameter-group}
 
 RDI requires some changes to database parameters. On AWS RDS, you change these parameters via a parameter group.
 

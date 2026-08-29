@@ -4,11 +4,12 @@ framework: "Model Context Protocol"
 source_repo: "https://github.com/modelcontextprotocol/modelcontextprotocol"
 source_branch: "main"
 source_path: "docs/community/sdk-tiers.mdx"
-source_commit: "7634684382c3d14cf7e9f14073fe40a2d8ace3fa"
-source_commit_short: "76346843"
-source_commit_date: "2026-07-23T16:49:30-07:00"
-generated_at: "2026-07-25T11:50:39Z"
+source_commit: "ca4ab3027f7c844cd3039c956438d72e8253f7f5"
+source_commit_short: "ca4ab30"
+source_commit_date: "2026-08-28T21:24:44-07:00"
+generated_at: "2026-08-29T09:38:48.010607Z"
 ---
+# Sdk Tiers
 
 ---
 title: SDK Tiering System
@@ -37,7 +38,7 @@ SDKs are classified into three tiers based on feature completeness, maintenance 
 - **Tier 2**: Actively-maintained SDKs working toward full protocol specification support
 - **Tier 3**: Experimental, partially implemented, or specialized SDKs
 
-Experimental features (such as Tasks) and protocol extensions (such as MCP Apps) are not required
+Experimental features and protocol extensions (such as Tasks and MCP Apps) are not required
 for any tier.
 
 ## Tier Requirements

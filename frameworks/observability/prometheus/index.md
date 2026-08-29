@@ -1,6 +1,6 @@
-# prometheus Learn Wiki
+# Prometheus Learn Wiki
 
-This is a local LLM-friendly wiki generated from the official prometheus documentation.
+This is a local LLM-friendly wiki generated from the official Prometheus documentation.
 
 ## Status
 
@@ -8,9 +8,10 @@ This is a local LLM-friendly wiki generated from the official prometheus documen
 - Source repo: `https://github.com/prometheus/docs.git`
 - Source branch: `main`
 - Source docs path: `docs`
-- Source commit: `9d9e034`
-- Source commit date: `2026-07-21T23:07:09+02:00`
-- Wiki generated at: `2026-07-25T19:07:59.770586Z`
+- Source commit: `9ece2ea`
+- Source commit date: `2026-08-27T10:23:11+02:00`
+- Wiki generated at: `2026-08-29T09:39:59.855273Z`
+- Page count: `71`
 
 ## How the IDE LLM should use this wiki
 
@@ -29,3 +30,14 @@ This is a local LLM-friendly wiki generated from the official prometheus documen
 ## Top-Level Wiki Areas
 
 - [Content Index](content/index.md)
+- [Alerting](content/alerting/index.md)
+- [Concepts](content/concepts/index.md)
+- [Guides](content/guides/index.md)
+- [Instrumenting](content/instrumenting/index.md)
+- [Introduction](content/introduction/index.md)
+- [Operating](content/operating/index.md)
+- [Practices](content/practices/index.md)
+- [Prometheus](content/prometheus/index.md)
+- [Specs](content/specs/index.md)
+- [Tutorials](content/tutorials/index.md)
+- [Visualization](content/visualization/index.md)

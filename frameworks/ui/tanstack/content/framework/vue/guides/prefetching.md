@@ -1,38 +1,45 @@
 ---
 type: "Framework Learn Page"
-framework: "tanstack"
+framework: "TanStack"
 source_repo: "https://github.com/tanstack/query"
 source_branch: "main"
 source_path: "docs/framework/vue/guides/prefetching.md"
-source_commit: "fd50fa14d283c7d6664a796f758498d1ad5bfce7"
-source_commit_short: "fd50fa14"
-source_commit_date: "2026-07-24T22:22:47+10:00"
-generated_at: "2026-07-25T11:50:41Z"
+source_commit: "2969edf32f7e0c48e2a108d84712d6e01edfde21"
+source_commit_short: "2969edf"
+source_commit_date: "2026-08-28T01:03:02+09:00"
+generated_at: "2026-08-29T09:40:33.433880Z"
 ---
+# Prefetching
 
 ---
 id: prefetching
 title: Prefetching
 ---
 
-If you're lucky enough, you may know enough about what your users will do to be able to prefetch the data they need before it's needed! If this is the case, you can use the `prefetchQuery` method to prefetch the results of a query to be placed into the cache:
+If you're lucky enough, you may know enough about what your users will do to be able to prefetch the data they need before it's needed. If this is the case, use `queryClient.query` or `queryClient.infiniteQuery` to warm the cache ahead of time:
 
 [//]: # 'ExamplePrefetching'
 
 ```tsx
+import { noop } from '@tanstack/vue-query'
+
 const prefetchTodos = async () => {
   // The results of this query will be cached like a normal query
-  await queryClient.prefetchQuery({
-    queryKey: ['todos'],
-    queryFn: fetchTodos,
-  })
+  await queryClient
+    .query({
+      queryKey: ['todos'],
+      queryFn: fetchTodos,
+    })
+    .catch(noop)
 }
 ```
 
 [//]: # 'ExamplePrefetching'
 
 - If **fresh** data for this query is already in the cache, the data will not be fetched
-- If a `staleTime` is passed eg. `prefetchQuery({ queryKey: ['todos'], queryFn: fn, staleTime: 5000 })` and the data is older than the specified `staleTime`, the query will be fetched
+- If a `staleTime` is passed e.g. `queryClient.query({ queryKey: ['todos'], queryFn: fn, staleTime: 5000 })` and the data is older than the specified `staleTime`, the query will be fetched
+- As `useQuery` will retry fetches and handle errors, you can use `void` to ignore the promise from `query` and `.catch(noop)` to ignore errors.
+- If you want to always return cached data when it exists, use `staleTime: 'static'`
 - If no instances of `useQuery` appear for a prefetched query, it will be deleted and garbage collected after the time specified in `gcTime`.
 
 ## Prefetching Infinite Queries
@@ -42,15 +49,19 @@ Infinite Queries can be prefetched like regular Queries. Per default, only the f
 [//]: # 'ExampleInfiniteQuery'
 
 ```tsx
+import { noop } from '@tanstack/vue-query'
+
 const prefetchProjects = async () => {
   // The results of this query will be cached like a normal query
-  await queryClient.prefetchInfiniteQuery({
-    queryKey: ['projects'],
-    queryFn: fetchProjects,
-    initialPageParam: 0,
-    getNextPageParam: (lastPage, pages) => lastPage.nextCursor,
-    pages: 3, // prefetch the first 3 pages
-  })
+  await queryClient
+    .infiniteQuery({
+      queryKey: ['projects'],
+      queryFn: fetchProjects,
+      initialPageParam: 0,
+      getNextPageParam: (lastPage, pages) => lastPage.nextCursor,
+      pages: 3, // prefetch the first 3 pages
+    })
+    .catch(noop)
 }
 ```
 

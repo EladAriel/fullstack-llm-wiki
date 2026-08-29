@@ -1,129 +1,176 @@
 ---
 type: "Framework Learn Page"
-framework: "mongodb"
+framework: "MongoDB"
 source_repo: "https://github.com/mongodb/docs.git"
 source_branch: "main"
 source_path: "content/manual/manual/source/reference/command/dropConnections.txt"
-source_commit: "ab9db26ed3d11618cdb61516d8180337d8e3f679"
-source_commit_short: "ab9db26e"
-source_commit_date: "2026-07-24T16:22:46-06:00"
-generated_at: "2026-07-25T11:51:15Z"
+source_commit: "b9f2bc487a2878b65e3c1f80024bebab76954f27"
+source_commit_short: "b9f2bc48"
+source_commit_date: "2026-08-28T17:09:45-05:00"
+generated_at: "2026-08-29T09:39:20.011440Z"
 ---
-
-==================================
-
 # dropConnections (database command)
+
+**meta:** :description: Drop outgoing connections from `mongod` or `mongos` instances to specified hosts using the `dropConnections` command in the admin database.
+
+.. default-domain:: mongodb
+
+**contents:** On this page
+   :local:
+   :backlinks: none
+   :depth: 1
+   :class: singlecol
 
 ## Definition
 
+**dbcommand:** dropConnections
+
+   The :dbcommand:`dropConnections` command drops the 
+   :binary:`mongod` / :binary:`mongos` instance's outgoing
+   connections to the specified hosts. The :dbcommand:`dropConnections`
+   must be run  against the ``admin`` database. 
+
 ## Compatibility
 
-This command is available in deployments hosted in the following environments:
+This command is available in deployments hosted in the following environments: 
 
-.. include:: /includes/fact-environments-onprem-only.rst
+**include:** /includes/fact-environments-onprem-only.rst
 
 ## Syntax
 
 The command has following syntax:
 
-```javascript
-db.adminCommand(
-   { 
-     dropConnections: 1, 
-     hostAndPort : [ "host1:port1", "host2:port2", ... ],
-     comment: <any>
-   }
-)
-```
+.. code-block:: javascript
+
+   db.adminCommand(
+      { 
+        dropConnections: 1, 
+        hostAndPort : [ "host1:port1", "host2:port2", ... ],
+        comment: <any>
+      }
+   )
 
 ## Command Fields
 
 The command requires the following field:
 
+.. list-table::
+   :header-rows: 1
+   :widths: 20 10 70
+ 
+   * - Field
+     - Type
+     - Description
+ 
+   * - ``hostAndPort``
+     - array
+     - Each array element represents the hostname and
+       port of a remote machine.
+ 
+   * - ``comment``
+     - any
+     - .. include:: /includes/extracts/comment-content.rst
+
 ## Access Control
 
-If the deployment enforces `authentication/authorization <authentication>`, the :dbcommand:`dropConnections` command requires the :authaction:`dropConnections` action on the `cluster <resource-cluster>` resource.
+If the deployment enforces 
+:ref:`authentication/authorization <authentication>`,
+the :dbcommand:`dropConnections` command requires the 
+:authaction:`dropConnections` action on the 
+:ref:`cluster <resource-cluster>` resource. 
 
-Create a `user-defined role <user-defined-roles>` in the `admin` database  where the `privilege` array includes the following document:
+Create a :ref:`user-defined role <user-defined-roles>` in the ``admin``
+database  where the ``privilege`` array includes the following document:
 
-```javascript
-{ "resource" : { "cluster" : true } }, "actions" : [ "dropConnections" ] }
-```
+.. code-block:: javascript
 
-- Use :method:`db.createUser()` to create a user on the `admin`
-database with the custom role.
+   { "resource" : { "cluster" : true } }, "actions" : [ "dropConnections" ] }
 
-or
+- Use :method:`db.createUser()` to create a user on the ``admin``
+  database with the custom role.
 
-- Use :method:`db.grantRolesToUser()` to grant the role to an  existing
-user on the `admin` database.
+  *or* 
 
-For example, the following operation creates a user-defined role on the `admin` database with the privileges to support :dbcommand:`dropConnections`:
+- Use :method:`db.grantRolesToUser()` to grant the role to an  existing 
+  user on the ``admin`` database.
 
-```javascript
-db.getSiblingDB("admin").createRole(
-  {
-    "role" : "dropConnectionsRole",
-    "privileges" : [
-      { 
-        "resource" : { "cluster" : true }, 
-        "actions" : [ "dropConnections" ] 
-      }
-    ],
-    "roles" : []
-  }
-)
-```
+For example, the following operation creates a
+user-defined role on the ``admin`` database with the privileges
+to support :dbcommand:`dropConnections`:
 
-Assign the custom role to a user on the `admin` database:
+.. code-block:: javascript
 
-```javascript
-db.getSiblingDB("admin").createUser(
-  {
-    "user" : "dropConnectionsUser",
-    "pwd" : "replaceThisWithASecurePassword",
-    "roles" : [ "dropConnectionsRole" ]
-  }
-)
-```
+   db.getSiblingDB("admin").createRole(
+     {
+       "role" : "dropConnectionsRole",
+       "privileges" : [
+         { 
+           "resource" : { "cluster" : true }, 
+           "actions" : [ "dropConnections" ] 
+         }
+       ],
+       "roles" : []
+     }
+   )
 
-The created user can execute :dbcommand:`dropConnections`.
+Assign the custom role to a user on the ``admin`` database:
 
-For more examples of user creation, see `/tutorial/create-users`. For a tutorial on adding privileges to an existing database user, see `modify-existing-user-access`.
+.. code-block:: javascript
+
+   db.getSiblingDB("admin").createUser(
+     {
+       "user" : "dropConnectionsUser",
+       "pwd" : "replaceThisWithASecurePassword",
+       "roles" : [ "dropConnectionsRole" ]
+     }
+   )
+
+The created user can execute :dbcommand:`dropConnections`. 
+
+For more examples of user creation, see :doc:`/tutorial/create-users`.
+For a tutorial on adding privileges to an existing database user, see 
+:ref:`modify-existing-user-access`.
 
 ## Behavior
 
-:dbcommand:`dropConnections` silently ignores `hostAndPort` elements that do not include both the hostname and port of the remote machine.
+:dbcommand:`dropConnections` silently ignores ``hostAndPort`` elements
+that do not include both the hostname and port of the remote machine.
 
 ## Example
 
-Consider a replica set with a recently removed member at `oldhost.example.com:27017`. Running the following :dbcommand:`dropConnections` command against each active replica set member ensures there are no remaining outgoing connections to `oldhost.example.com:27017`:
+Consider a replica set with a recently removed member at
+``oldhost.example.com:27017``. Running the following 
+:dbcommand:`dropConnections` command against each active
+replica set member ensures there are no remaining outgoing connections 
+to ``oldhost.example.com:27017``:
 
-```javascript
-db.adminCommand( 
-  {
-    "dropConnections" : 1,
-    "hostAndPort" : [
-      "oldhost.example.com:27017"
-    ] 
-  } 
-)
-```
+.. code-block:: javascript
+
+   db.adminCommand( 
+     {
+       "dropConnections" : 1,
+       "hostAndPort" : [
+         "oldhost.example.com:27017"
+       ] 
+     } 
+   )
 
 The command returns output similar to the following:
 
-```javascript
-{
- "ok" : 1,
- "$clusterTime" : {
-   "clusterTime" : Timestamp(1551375968, 1),
-   "signature" : {
-     "hash" : BinData(0,"AAAAAAAAAAAAAAAAAAAAAAAAAAA="),
-     "keyId" : Long(0)
-   }
- },
- "operationTime" : Timestamp(1551375968, 1)
-}
-```
+.. code-block:: javascript
 
-You can confirm the status of the connection pool for the :binary:`~bin.mongod` or :binary:`~bin.mongos` using the :dbcommand:`connPoolStats` command.
+   {
+    "ok" : 1,
+    "$clusterTime" : {
+      "clusterTime" : Timestamp(1551375968, 1),
+      "signature" : {
+        "hash" : BinData(0,"AAAAAAAAAAAAAAAAAAAAAAAAAAA="),
+        "keyId" : Long(0)
+      }
+    },
+    "operationTime" : Timestamp(1551375968, 1)
+   }
+
+You can confirm the status of the connection pool for the
+:binary:`~bin.mongod` or :binary:`~bin.mongos` using the
+:dbcommand:`connPoolStats` command. 

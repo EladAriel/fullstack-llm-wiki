@@ -1,14 +1,15 @@
 ---
 type: "Framework Learn Page"
-framework: "tanstack"
+framework: "TanStack"
 source_repo: "https://github.com/tanstack/query"
 source_branch: "main"
 source_path: "docs/framework/vue/guides/ssr.md"
-source_commit: "fd50fa14d283c7d6664a796f758498d1ad5bfce7"
-source_commit_short: "fd50fa14"
-source_commit_date: "2026-07-24T22:22:47+10:00"
-generated_at: "2026-07-25T11:50:41Z"
+source_commit: "2969edf32f7e0c48e2a108d84712d6e01edfde21"
+source_commit_short: "2969edf"
+source_commit_date: "2026-08-28T01:03:02+09:00"
+generated_at: "2026-08-29T09:40:33.433415Z"
 ---
+# Ssr
 
 ---
 id: ssr
@@ -62,12 +63,13 @@ export default defineNuxtPlugin((nuxt) => {
 
 Now you are ready to prefetch some data in your pages with `onServerPrefetch`.
 
-- Prefetch all the queries that you need with `queryClient.prefetchQuery` or `suspense`
+- Prefetch all the queries that you need with `queryClient.query`, `queryClient.infiniteQuery`, or `suspense`
 
 ```ts
 export default defineComponent({
   setup() {
-    const { data, suspense } = useQuery({
+    const queryClient = useQueryClient()
+    const { data } = useQuery({
       queryKey: ['test'],
       queryFn: fetcher,
     })
@@ -122,7 +124,7 @@ Now you are ready to prefetch some data in your pages with `onServerPrefetch`.
 
 - Use `useContext` to get nuxt context
 - Use `useQueryClient` to get server-side instance of `queryClient`
-- Prefetch all the queries that you need with `queryClient.prefetchQuery` or `suspense`
+- Prefetch all the queries that you need with `queryClient.query`, `queryClient.infiniteQuery`, or `suspense`
 - Dehydrate `queryClient` to the `nuxtContext`
 
 ```vue
@@ -161,7 +163,7 @@ export default defineComponent({
     // This won't be prefetched, it will start fetching on client side
     const { data2 } = useQuery(
       {
-        queryKey: 'todos2',
+        queryKey: ['todos2'],
         queryFn: getTodos,
       },
       queryClient,
@@ -181,7 +183,7 @@ export default defineComponent({
 </script>
 ```
 
-As demonstrated, it's fine to prefetch some queries and let others fetch on the queryClient. This means you can control what content server renders or not by adding or removing `prefetchQuery` or `suspense` for a specific query.
+As demonstrated, it's fine to prefetch some queries and let others fetch on the client. This means you can control what content server renders or not by adding or removing `queryClient.query` or `suspense` for a specific query.
 
 ## Using Vite SSR
 
@@ -249,7 +251,7 @@ Then, call VueQuery from any component using Vue's `onServerPrefetch`:
 
 Any query with an error is automatically excluded from dehydration. This means that the default behavior is to pretend these queries were never loaded on the server, usually showing a loading state instead, and retrying the queries on the queryClient. This happens regardless of error.
 
-Sometimes this behavior is not desirable, maybe you want to render an error page with a correct status code instead on certain errors or queries. In those cases, use `fetchQuery` and catch any errors to handle those manually.
+Sometimes this behavior is not desirable, maybe you want to render an error page with a correct status code instead on certain errors or queries. In those cases, use `queryClient.query` and catch any errors to handle those manually.
 
 ### Staleness is measured from when the query was fetched on the server
 

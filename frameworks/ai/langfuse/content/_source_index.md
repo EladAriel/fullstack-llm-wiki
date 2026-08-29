@@ -4,21 +4,19 @@ framework: "Langfuse"
 source_repo: "https://github.com/langfuse/langfuse-docs"
 source_branch: "main"
 source_path: "content/docs/index.mdx"
-source_commit: "fcd1eca34a924867563c3c4e801254c4e66c0021"
-source_commit_short: "fcd1eca3"
-source_commit_date: "2026-07-25T00:45:45Z"
-generated_at: "2026-07-25T11:51:12Z"
-generated_filename: "_source_index.md"
+source_commit: "ba26344559edee69ba55c5d3aa80e632f56c1626"
+source_commit_short: "ba26344"
+source_commit_date: "2026-08-29T02:57:18+00:00"
+generated_at: "2026-08-29T09:38:37.746587Z"
 ---
-
 ---
 title: Overview
-description: Langfuse is an open-source AI engineering platform (GitHub) that helps teams collaboratively debug, analyze, and iterate on their LLM applications. All platform features are natively integrated to accelerate the development workflow.
+description: Langfuse is an open-source AI engineering platform (GitHub) that helps teams collaboratively debug, analyze, and iterate on their AI agent applications. All platform features are natively integrated to accelerate the development workflow.
 ---
 
 # Langfuse Overview
 
-Langfuse is an open-source AI engineering platform ([GitHub](https://github.com/langfuse/langfuse)) that helps teams collaboratively debug, analyze, and iterate on their LLM applications. All platform features are natively integrated to accelerate the development workflow. Langfuse is open, self-hostable, and extensible ([_why langfuse?_](/why)).
+Langfuse is an open-source AI engineering platform ([GitHub](https://github.com/langfuse/langfuse)) that helps teams collaboratively debug, analyze, and iterate on their AI agent applications. All platform features are natively integrated to accelerate the development workflow. Langfuse is open, self-hostable, and extensible ([_why langfuse?_](/why)).
 
 import { FeatureOverview } from "@/components/FeatureOverview";
 import {
@@ -32,7 +30,7 @@ import {
 
 ## Observability [#observability]
 
-[Observability](/docs/observability/overview) is essential for understanding and debugging LLM applications. Unlike traditional software, LLM applications involve complex, non-deterministic interactions that can be challenging to monitor and debug. Langfuse provides comprehensive tracing capabilities that help you understand exactly what's happening in your application.
+[Observability](/docs/observability/overview) is essential for understanding and debugging AI agent applications. Unlike traditional software, AI agent applications involve complex, non-deterministic interactions that can be challenging to monitor and debug. Langfuse provides comprehensive tracing capabilities that help you understand exactly what's happening in your application.
 
 - Traces include all LLM and non-LLM calls, including retrieval, embedding, API calls, and more
 - Support for tracking multi-turn conversations as sessions and user tracking
@@ -40,11 +38,9 @@ import {
 - Capture traces via our native SDKs for Python/JS, 100+ library/framework integrations, OpenTelemetry, or via an LLM Gateway such as LiteLLM
 - Based on OpenTelemetry to increase compatibility and reduce vendor lock-in
 
-Want to see an example? Play with the [interactive demo](/docs/demo).
+<Callout type="info" emoji="🚀" title="Want to see it in action?">
 
-<Callout type="info" emoji="🎥" title="Want to learn more?">
-
-[Watch end-to-end walkthrough](/watch-demo) of Langfuse Observability and how to integrate it with your application.
+[Create a free account](/cloud) and explore Langfuse Observability in the [interactive example project](/docs/demo).
 
 </Callout>
 
@@ -55,16 +51,16 @@ import TracingOverview from "@/components-mdx/tracing-overview-gifs.mdx";
 
 ## Prompt Management [#prompts]
 
-[Prompt Management](/docs/prompt-management/overview) is critical in building effective LLM applications. Langfuse provides tools to help you manage, version, and optimize your prompts throughout the development lifecycle.
+[Prompt Management](/docs/prompt-management/overview) is critical in building effective AI applications. Langfuse provides tools to help you manage, version, and optimize your prompts throughout the development lifecycle.
 
 - [Get started](/docs/prompt-management/get-started) with prompt management
 - Manage, version, and optimize your prompts throughout the development lifecycle
 - Test prompts interactively in the [LLM Playground](/docs/prompt-management/features/playground)
 - Run [Experiments](/docs/evaluation/features/prompt-experiments) against datasets to test new prompt versions directly within Langfuse
 
-<Callout type="info" emoji="🎥">
+<Callout type="info" emoji="🚀">
 
-Want to learn more? [**Watch end-to-end walkthrough**](/watch-demo?tab=prompt) of Langfuse Prompt Management and how to integrate it with your application.
+Want to see it in action? [**Create a free account**](/cloud) and explore Langfuse Prompt Management in the [interactive example project](/docs/demo).
 
 </Callout>
 
@@ -82,9 +78,9 @@ import PromptOverview from "@/components-mdx/prompt-overview-gifs.mdx";
 - Create and manage [Datasets](/docs/evaluation/features/datasets) for systematic testing in development that ensure your application performs reliably across different scenarios
 - Run [Experiments](/docs/evaluation/core-concepts#experiments) to systematically test your LLM application
 
-<Callout type="info" emoji="🎥">
+<Callout type="info" emoji="🚀">
 
-Want to learn more? [**Watch end-to-end walkthrough**](/watch-demo?tab=evaluation) of Langfuse Evaluation and how to use it to improve your LLM application.
+Want to see it in action? [**Create a free account**](/cloud) and explore Langfuse Evaluation in the [interactive example project](/docs/demo).
 
 </Callout>
 
@@ -95,28 +91,19 @@ import EvaluationOverview from "@/components-mdx/evaluation-overview-gifs.mdx";
 
 ## Where to start?
 
-Setting up the full process of online tracing, prompt management, production evaluations to identify issues, and offline evaluations on datasets requires some time. This guide is meant to help you figure out what is most important for your use case.
+Setting up the full process of online tracing, prompt management, production evaluations to identify issues, and offline evaluations on datasets requires some time. Most teams eventually end up with a process that looks like this:
 
-_Simplified lifecycle from PoC to production:_
+<LoopDiagram />
 
-<Frame
-  transparent
-  fullWidth
-  className="mt-2 pt-4 rounded ring-primary/20 ring-1 dark:hidden"
->
-  ![Langfuse Features along the development
-  lifecycle](/images/docs/features-light.png)
-</Frame>
-<Frame
-  transparent
-  fullWidth
-  className="mt-2 pt-4 rounded ring-primary/20 ring-1 hidden dark:block"
->
-  ![Langfuse Features along the development
-  lifecycle](/images/docs/features-dark.png)
-</Frame>
+If you're new to AI engineering, take a look at the [Academy](/academy), where you'll find conceptual guidance on how to approach AI engineering, trade-offs, and best practices. If you already know what you want, [the getting-started guides below](#quickstarts) will get you going.
 
-## Quickstarts
+<Callout type="info" emoji="💡">
+
+Tip: let your coding agent do the setup and work with Langfuse through the [Agent Skill](/docs/api-and-data-platform/features/agent-skill), [CLI](/docs/api-and-data-platform/features/cli), or [MCP server](/docs/api-and-data-platform/features/mcp-server). On Langfuse Cloud, you can also ask the [Langfuse Assistant](/docs/langfuse-assistant) about your project data from inside the app.
+
+</Callout>
+
+## Quickstarts [#quickstarts]
 
 Get up and running with Langfuse in minutes. Choose the path that best fits your current needs:
 

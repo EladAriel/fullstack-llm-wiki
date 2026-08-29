@@ -1,57 +1,86 @@
 ---
 type: "Framework Learn Page"
-framework: "mongodb"
+framework: "MongoDB"
 source_repo: "https://github.com/mongodb/docs.git"
 source_branch: "main"
 source_path: "content/manual/manual/source/reference/operator/aggregation/toHashedIndexKey.txt"
-source_commit: "ab9db26ed3d11618cdb61516d8180337d8e3f679"
-source_commit_short: "ab9db26e"
-source_commit_date: "2026-07-24T16:22:46-06:00"
-generated_at: "2026-07-25T11:51:15Z"
+source_commit: "b9f2bc487a2878b65e3c1f80024bebab76954f27"
+source_commit_short: "b9f2bc48"
+source_commit_date: "2026-08-28T17:09:45-05:00"
+generated_at: "2026-08-29T09:39:20.146154Z"
 ---
-
-=======================================
-
 # $toHashedIndexKey (expression operator)
+
+**meta:** :description: Compute hash values in an aggregation pipeline using `$toHashedIndexKey`, which uses the same hash function as MongoDB's hashed index but without collation.
+
+.. default-domain:: mongodb
+
+**contents:** On this page
+   :local:
+   :backlinks: none
+   :depth: 1
+   :class: singlecol
 
 ## Definition
 
+**expression:** $toHashedIndexKey
+   
+   Computes and returns the hash value of the input expression using 
+   the same hash function that MongoDB uses to create a hashed index.
+   A hash function maps a key or string to a fixed-size numeric 
+   value.
+
+   .. note::
+
+      Unlike hashed indexes, the ``$toHashedIndexKey``
+      aggregation operator does **not** account for collation.
+      This means the operator can produce a hash that does not
+      match that of a hashed index based on the same data.
+
 ## Syntax
 
-`$toHashedIndexKey` has the following syntax:
+``$toHashedIndexKey`` has the following syntax:
 
-```javascript
-{ $toHashedIndexKey: <key or string to hash> }
-```
+.. code-block:: javascript
+
+   { $toHashedIndexKey: <key or string to hash> }
 
 ## Example
 
-You can use `$toHashedIndexKey` to compute the hashed value of a string in an aggregation pipeline. This example computes the hashed value of the string `"string to hash"`:
+You can use ``$toHashedIndexKey`` to compute the hashed value of a 
+string in an aggregation pipeline. This example computes the hashed
+value of the string ``"string to hash"``:
 
-```javascript
-db.aggregate(
-   [ 
-      { $documents: [ { val: "string to hash" } ] },
-      { $addFields: { hashedVal: { $toHashedIndexKey: "$val" } } }
-   ]
- )
-```
+.. code-block:: javascript
+   :emphasize-lines: 4
+
+   db.aggregate(
+      [ 
+         { $documents: [ { val: "string to hash" } ] },
+         { $addFields: { hashedVal: { $toHashedIndexKey: "$val" } } }
+      ]
+    )
 
 Example output:
 
-```javascript
-[ { val: 'string to hash', hashedVal: Long("763543691661428748") } ]
-```
+.. code-block:: javascript
+   :copyable: false
+
+   [ { val: 'string to hash', hashedVal: Long("763543691661428748") } ]
 
 ## Learn More
 
-For general-purpose hashing in an aggregation pipeline, see :expression:`$hash` and :expression:`$hexHash`. These operators differ from `$toHashedIndexKey` as follows:
+For general-purpose hashing in an aggregation pipeline, see
+:expression:`$hash` and :expression:`$hexHash`. These operators
+differ from ``$toHashedIndexKey`` as follows:
 
 - :expression:`$hash` and :expression:`$hexHash` are general-purpose
-hashing expressions. The expressions return `null` when the input is `null` or missing.
-
-- `$toHashedIndexKey` applies hashed index semantics. Unlike
-`$hash` and `$hexHash`, it hashes `null` and missing values to a `Long` numeric value rather than returning `null`.
+  hashing expressions. The expressions return ``null`` when the input is
+  ``null`` or missing.
+- ``$toHashedIndexKey`` applies hashed index semantics. Unlike
+  ``$hash`` and ``$hexHash``, it hashes ``null`` and missing
+  values to a ``Long`` numeric value rather than returning
+  ``null``.
 
 To learn more, see:
 

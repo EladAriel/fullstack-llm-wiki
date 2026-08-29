@@ -1,131 +1,192 @@
 ---
 type: "Framework Learn Page"
-framework: "mongodb"
+framework: "MongoDB"
 source_repo: "https://github.com/mongodb/docs.git"
 source_branch: "main"
 source_path: "content/manual/manual/source/faq/fundamentals.txt"
-source_commit: "ab9db26ed3d11618cdb61516d8180337d8e3f679"
-source_commit_short: "ab9db26e"
-source_commit_date: "2026-07-24T16:22:46-06:00"
-generated_at: "2026-07-25T11:51:15Z"
+source_commit: "b9f2bc487a2878b65e3c1f80024bebab76954f27"
+source_commit_short: "b9f2bc48"
+source_commit_date: "2026-08-28T17:09:45-05:00"
+generated_at: "2026-08-29T09:39:19.659282Z"
 ---
-
 :orphan:
 
-=========================
+.. _faq-fundamentals:
 
 # FAQ: MongoDB Fundamentals
+
+**meta:** :description: Explore answers to common questions about MongoDB fundamentals, including platform support, collection schema, transactions, and caching.
+
+.. default-domain:: mongodb
+
+**contents:** On this page
+   :local:
+   :backlinks: none
+   :depth: 1
+   :class: singlecol
 
 This document answers some common questions about MongoDB.
 
 ## What platforms does MongoDB support?
 
-For the list of supported platforms, see `prod-notes-supported-platforms`.
+For the list of supported platforms, see
+:ref:`prod-notes-supported-platforms`.
 
 ## Is MongoDB offered as a hosted service?
 
-Yes. [MongoDB Atlas](https://www.mongodb.com/atlas/database) is a cloud-hosted database-as-a-service.
+Yes. `MongoDB Atlas <https://www.mongodb.com/atlas/database>`_ is
+a cloud-hosted database-as-a-service.
 
 ## How does a collection differ from a table?
 
-Instead of tables, a MongoDB database stores its data in `collections <collection>`. A collection holds one or more `BSON documents <bson-document-format>`. Documents are analogous to records or rows in a relational database table. Each document has `one or more fields <document-structure>`; fields are similar to the columns in a relational database table.
+Instead of tables, a MongoDB database stores its data in
+:term:`collections <collection>`. A collection holds one or more
+:ref:`BSON documents <bson-document-format>`. Documents are analogous
+to records or rows in a relational database table. Each document has
+:ref:`one or more fields <document-structure>`; fields are similar to
+the columns in a relational database table.
 
-> **Seealso:** - `/reference/sql-comparison`
-- `/introduction`
+**seealso:** - :doc:`/reference/sql-comparison`
+   - :doc:`/introduction`
 
 ## How do I create a database and a collection?
 
-> **Note:** You can enter the commands in this FAQ using :binary:`~bin.mongosh`, an
-interactive JavaScript interface to MongoDB.
+**note:** You can enter the commands in this FAQ using :binary:`~bin.mongosh`, an 
+   interactive JavaScript interface to MongoDB.
 
-If a database does not exist, MongoDB creates the database when you first store data for that database.
+If a database does not exist, MongoDB creates the database when you
+first store data for that database.
 
-If a collection does not exist, MongoDB creates the collection when you first store data for that collection.
+If a collection does not exist, MongoDB creates the collection when you
+first store data for that collection.
 
-As such, you can switch to a non-existent database (`use <dbname>`) and perform the following operation:
+As such, you can switch to a non-existent database (``use <dbname>``)
+and perform the following operation:
 
-```javascript
-use myNewDB;
+.. code-block:: javascript
 
-db.myNewCollection1.insertOne( { x: 1 } );
-db.myNewCollection2.createIndex( { a: 1 } );
-```
+   use myNewDB;
 
-- The :method:`db.collection.insertOne()` method creates
-the collection `myNewCollection1` if it does not already exist.
+   db.myNewCollection1.insertOne( { x: 1 } );
+   db.myNewCollection2.createIndex( { a: 1 } );
 
-- The :method:`db.collection.createIndex()` method creates the index and
-the collection `myNewCollection2` if it does not already exist.
+- The :method:`db.collection.insertOne()` method creates 
+  the collection ``myNewCollection1`` if it does not already exist.
 
-- If the `myNewDb` database did not exist, either the
-:method:`db.collection.createIndex()` method or :method:`db.collection.insertOne()` method would have created the `myNewDb` database automatically.
+- The :method:`db.collection.createIndex()` method creates the index and 
+  the collection ``myNewCollection2`` if it does not already exist. 
 
-You can also create a collection explicitly using :method:`db.createCollection` method if you want to specify specific `options<create_collection_parameters>`, such as maximum size or schema validation rules:
+- If the ``myNewDb`` database did not exist, either the
+  :method:`db.collection.createIndex()` method or 
+  :method:`db.collection.insertOne()` method would have created
+  the ``myNewDb`` database automatically.
 
-```javascript
-use myNewDB;
+You can also create a collection explicitly using
+:method:`db.createCollection` method if you want to specify specific
+:ref:`options<create_collection_parameters>`, such as maximum size
+or schema validation rules:
 
-db.createCollection("myNewCollection1");
-```
+.. code-block:: javascript
+
+   use myNewDB;
+
+   db.createCollection("myNewCollection1");
+
+.. _faq-schema-free:
 
 ## How do I define or alter the collection schema?
 
-You do not need to specify a schema for a collection in MongoDB. Although it is common for documents in a collection to have a largely homogeneous structure, they don't need to have the same set of fields. The data type for a field can differ across documents in a collection as well.
+You do not need to specify a schema for a collection in MongoDB.
+Although it is common for documents in a collection to have a
+largely homogeneous structure, they don't need to have the same
+set of fields. The data type for a field can differ across documents
+in a collection as well.
 
-To change the structure of the documents in a collection, update the documents to the new structure. For instance, add new fields, remove existing ones, or update the value of a field to a new type.
+To change the structure of the documents in a collection, update the
+documents to the new structure. For instance, add new fields, remove
+existing ones, or update the value of a field to a new type.
 
-> **Note:** You can enforce `schema validation rules </core/schema-validation>`
-for a collection during update and insert operations.
+**note:** You can enforce :doc:`schema validation rules </core/schema-validation>` 
+   for a collection during update and insert operations.
 
-Some collection properties, such as maximum size, can be set during explicit collection creation, using the :method:`db.createCollection` method, and  modified later with the :dbcommand:`collMod` command. If you don't need to set these properties, you don't need to explicitly create the collection. MongoDB creates new collections when you first store data for them.
+Some collection properties, such as maximum size, can be set during
+explicit collection creation, using the :method:`db.createCollection` method, 
+and  modified later with the :dbcommand:`collMod` command. If you don't need to 
+set these properties, you don't need to explicitly create the collection. 
+MongoDB creates new collections when you first store data for them.
 
 ## Does MongoDB support SQL?
 
-No, but MongoDB supports a rich query language of its own. For examples on using MongoDB's query language, see `crud`.
+No, but MongoDB supports a rich query language of its own. For examples on using
+MongoDB's query language, see :ref:`crud`.
 
-You can also use the [MongoDB Connector for BI](https://www.mongodb.com/products/bi-connector) to query MongoDB collections with SQL.
+You can also use the `MongoDB Connector for BI
+<https://www.mongodb.com/products/bi-connector>`_ to query
+MongoDB collections with SQL.
 
-> **Seealso:** `/reference/sql-comparison`
+**seealso:** :doc:`/reference/sql-comparison`
+
+.. _faq-transactions:
 
 ## Does MongoDB support transactions?
 
-.. include:: /includes/extracts/transactions-faq.rst
+**include:** /includes/extracts/transactions-faq.rst
 
-.. include:: /includes/extracts/transactions-usage.rst
+**include:** /includes/extracts/transactions-usage.rst
+
+
+.. _faq-database-and-caching:
 
 ## Does MongoDB handle caching?
 
-Yes. MongoDB keeps most recently used data in RAM. If you have created indexes for your queries and your working data set fits in RAM, MongoDB serves all queries from memory.
+Yes. MongoDB keeps most recently used data in RAM. If you have created
+indexes for your queries and your working data set fits in RAM, MongoDB
+serves all queries from memory.
 
-MongoDB does not cache the query results in order to return the cached results for identical queries.
+MongoDB does not cache the query results in order to return the cached
+results for identical queries.
 
-For more information on MongoDB and memory use, see `WiredTiger and Memory Use <wiredtiger-RAM>`.
+For more information on MongoDB and memory use, see :ref:`WiredTiger
+and Memory Use <wiredtiger-RAM>`.
 
 ## How does MongoDB address SQL or Query injection?
 
 ### BSON
 
-As a client program assembles a query in MongoDB, it builds a BSON object, not a string. Thus traditional SQL injection attacks are not a problem. More details and some nuances are covered below.
+As a client program assembles a query in MongoDB, it builds a BSON
+object, not a string. Thus traditional SQL injection attacks are not a
+problem. More details and some nuances are covered below.
 
-MongoDB represents queries as `BSON` objects. Typically :driver:`client libraries </>` provide a convenient, injection free, process to build these objects. Consider the following C++ example:
+MongoDB represents queries as :term:`BSON` objects. Typically
+:driver:`client libraries </>` provide a convenient,
+injection free, process to build these objects. Consider the following
+C++ example:
 
-```cpp
-BSONObj my_query = BSON( "name" << a_name );
-auto_ptr<DBClientCursor> cursor = c.query("tutorial.persons", my_query);
-```
+.. code-block:: cpp
 
-Here, `my_query` then will have a value such as `{ name : "Joe" }`. If `my_query` contained special characters, for example `,`, `:`, and `{`, the query simply wouldn't match any documents. For example, users cannot hijack a query and convert it to a delete.
+   BSONObj my_query = BSON( "name" << a_name );
+   auto_ptr<DBClientCursor> cursor = c.query("tutorial.persons", my_query);
+
+Here, ``my_query`` then will have a value such as ``{ name : "Joe"
+}``. If ``my_query`` contained special characters, for example
+``,``, ``:``, and ``{``, the query simply wouldn't match any
+documents. For example, users cannot hijack a query and convert it to
+a delete.
 
 ### JavaScript
 
-> **Note:** .. include:: /includes/fact-disable-javascript-with-noscript.rst
+**note:** .. include:: /includes/fact-disable-javascript-with-noscript.rst
 
-The following MongoDB operations permit you to run arbitrary JavaScript expressions directly on the server:
+The following MongoDB operations permit you to run arbitrary JavaScript
+expressions directly on the server:
 
 - :query:`$where`
 - :dbcommand:`mapReduce`
 - :group:`$accumulator`
 - :expression:`$function`
-You must exercise care in these cases to prevent users from submitting malicious JavaScript.
 
-Fortunately, you can express most operations in MongoDB without JavaScript.
+You must exercise care in these cases to prevent users from
+submitting malicious JavaScript.
+
+Fortunately, you can express most operations in MongoDB without
+JavaScript. 

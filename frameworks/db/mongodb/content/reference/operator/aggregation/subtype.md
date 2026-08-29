@@ -1,67 +1,80 @@
 ---
 type: "Framework Learn Page"
-framework: "mongodb"
+framework: "MongoDB"
 source_repo: "https://github.com/mongodb/docs.git"
 source_branch: "main"
 source_path: "content/manual/manual/source/reference/operator/aggregation/subtype.txt"
-source_commit: "ab9db26ed3d11618cdb61516d8180337d8e3f679"
-source_commit_short: "ab9db26e"
-source_commit_date: "2026-07-24T16:22:46-06:00"
-generated_at: "2026-07-25T11:51:15Z"
+source_commit: "b9f2bc487a2878b65e3c1f80024bebab76954f27"
+source_commit_short: "b9f2bc48"
+source_commit_date: "2026-08-28T17:09:45-05:00"
+generated_at: "2026-08-29T09:39:20.195918Z"
 ---
-
-==============================
-
 # $subtype (expression operator)
+
+**meta:** :description: Use the `$subtype` operator in MongoDB to return the subtype of a value in aggregation expressions.
+
+**contents:** On this page
+   :local:
+   :backlinks: none
+   :depth: 1
+   :class: singlecol
 
 ## Definition
 
-.. versionadded:: 8.3
+**versionadded:** 8.3
+
+**expression:** $subtype 
+
+   Returns the subtype of a given value as an integer.
 
 ## Syntax
 
 :expression:`$subtype` has the following syntax:
 
-```javascript
-{ $subtype: <expression> }
-```
+.. code-block:: javascript
 
-The `<expression>` can be any valid `expression <aggregation-expressions>` that contains a subtype.
+   { $subtype: <expression> }
 
-> **Note:** In MongoDB 8.3, the only expression that contains a subtype is a
-:bsontype:`BinData <data_binary>` expression.
+The ``<expression>`` can be any valid :ref:`expression
+<aggregation-expressions>` that contains a subtype. 
+
+**note:** In MongoDB 8.3, the only expression that contains a subtype is a
+   :bsontype:`BinData <data_binary>` expression. 
 
 ## Behavior
 
 ### Null or Missing Values
 
-`$subtype` operations on null or missing values return `null`.
+``$subtype`` operations on null or missing values return ``null``. 
 
 ### Unaccepted Expressions
 
-`$subtype` operations on expressions that do not have a subtype return an error.
+``$subtype`` operations on expressions that do not have a subtype return an
+error. 
 
 ### BinData Output
 
-`$subtype` operations on  :bsontype:`BinData <data_binary>` expressions return the binary subtype of the expression. For more information, see `binData-subtype`.
+``$subtype`` operations on  :bsontype:`BinData <data_binary>` expressions return
+the binary subtype of the expression. For more information, see
+:ref:`binData-subtype`. 
 
 ## Example
 
-Use the :method:`BinData()` constructor to create a `bdata` variable.
+Use the :method:`BinData()` constructor to create a ``bdata`` variable.
 
-```javascript
-var bdata = BinData(0, "gf1UcxdHTJ2HQ/EGQrO7mQ==")
-```
+.. code-block:: javascript
+
+   var bdata = BinData(0, "gf1UcxdHTJ2HQ/EGQrO7mQ==")
 
 The following operation outputs the subtype of the bdata object:
 
-```javascript
-{ $subtype: bdata }
-```
+.. code-block:: javascript
 
-The expression returns `0`.
+   { $subtype: bdata }
+
+The expression returns ``0``. 
 
 ## Learn More
 
-- `server-binData-method`
-- `Binary.createFromBase64`
+- :ref:`server-binData-method`
+- :ref:`Binary.createFromBase64`

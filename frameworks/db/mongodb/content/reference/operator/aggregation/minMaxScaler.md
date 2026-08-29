@@ -1,113 +1,192 @@
 ---
 type: "Framework Learn Page"
-framework: "mongodb"
+framework: "MongoDB"
 source_repo: "https://github.com/mongodb/docs.git"
 source_branch: "main"
 source_path: "content/manual/manual/source/reference/operator/aggregation/minMaxScaler.txt"
-source_commit: "ab9db26ed3d11618cdb61516d8180337d8e3f679"
-source_commit_short: "ab9db26e"
-source_commit_date: "2026-07-24T16:22:46-06:00"
-generated_at: "2026-07-25T11:51:15Z"
+source_commit: "b9f2bc487a2878b65e3c1f80024bebab76954f27"
+source_commit_short: "b9f2bc48"
+source_commit_date: "2026-08-28T17:09:45-05:00"
+generated_at: "2026-08-29T09:39:20.238040Z"
 ---
-
-=====================================================
-
 # $minMaxScaler (Window Function) (expression operator)
+
+**meta:** :description: Explore how to use the `$minMaxScaler` operator in MongoDB to normalize a numeric expression within a window of values.
+
+.. default-domain:: mongodb
+
+**contents:** On this page
+   :local:
+   :backlinks: none
+   :depth: 1
+   :class: singlecol
 
 ## Definition
 
-.. versionadded:: 8.2
+**versionadded:** 8.2
 
-Normalizes a numeric expression within a window of values. By default, values can range between zero and one. The smallest value becomes zero, the largest value becomes one, and all other values scale proportionally in between zero and one. You can also specify a custom minimum and maximum value for the normalized output range.
+**group:** $minMaxScaler
 
-:group:`$minMaxScaler` is only available in the :pipeline:`$setWindowFields` stage.
+Normalizes a numeric expression within a window of values. By default,
+values can range between zero and one. The smallest value becomes zero,
+the largest value becomes one, and all other values scale proportionally
+in between zero and one. You can also specify a custom minimum and
+maximum value for the normalized output range. 
+
+:group:`$minMaxScaler` is only available in the
+:pipeline:`$setWindowFields` stage.
 
 :group:`$minMaxScaler` window operator has the following syntax:
 
-```none
-{ $minMaxScaler: <numeric expression> }
-```
+.. code-block:: none
+   :copyable: false
 
-The value can be:
+   { $minMaxScaler: <numeric expression> }
+
+The value can be: 
 
 - A numeric expression, which is the value that you want to normalize. It
-can be a specific numeric field or value calculated from your documents.
-
+  can be a specific numeric field or value calculated from your documents.  
 - A document in the following format:
-```none
-  { 
-    input: <numeric expression>,
-    min: <constant numeric expression>,
-    max: <constant numeric expression>
-  }
 
-.. list-table:: 
-  :header-rows: 1
+  .. code-block:: none
+     :copyable: false
 
-  * - Field 
-    - Description 
+     { 
+       input: <numeric expression>,
+       min: <constant numeric expression>,
+       max: <constant numeric expression>
+     }
 
-  * - ``input``
-    - Numeric expression, which contains the value that you want to normalize.
 
-  * - ``min``
-    - Minimum value that you want in the output. If omitted, defaults to ``0``.
+  .. list-table:: 
+     :header-rows: 1
+     
+     * - Field 
+       - Description 
+     
+     * - ``input``
+       - Numeric expression, which contains the value that you want to normalize.
 
-  * - ``max``
-    - Maximum value that you want in the output. If omitted, defaults to ``1``.
-```
+     * - ``min``
+       - Minimum value that you want in the output. If omitted, defaults to ``0``.
+
+     * - ``max``
+       - Maximum value that you want in the output. If omitted, defaults to ``1``.
+
+.. _minMaxScaler-behavior:
 
 ## Behavior
 
-:group:`$minMaxScaler` uses the following formula to normalize the numeric expression:
+:group:`$minMaxScaler` uses the following formula to normalize the
+numeric expression: 
 
-```shell
-minMaxScaler(x, min, max) = ((x - min(X)) / (max(X) - min(X))) * (max - min) + min 
-```
+.. code-block:: shell 
 
-Where:
+   minMaxScaler(x, min, max) = ((x - min(X)) / (max(X) - min(X))) * (max - min) + min 
+   
+Where: 
 
-The :group:`$minMaxScaler` returns an error if the `input` value is any of the following:
+.. list-table:: 
+   :stub-columns: 1 
+
+   * - ``x``
+     - Value to normalize. 
+
+   * - ``min``
+     - Desired minimum value of outputs.
+
+   * - ``max``
+     - Desired maximum value of outputs.
+
+   * - ``min(X)``
+     - Minimum value in the range.
+
+   * - ``max(X)``
+     - Maximum value in the range.
+
+The :group:`$minMaxScaler` returns an error if the ``input`` value is
+any of the following: 
 
 - Non-numeric
 - Null
 - Empty arrays
 - Strings
+
 ## Examples
 
-Suppose your documents in your collection have a field named `a` with the following values:
+Suppose your documents in your collection have a field named ``a`` with
+the following values: 
 
-```json
-{ "_id": 1, "a": 1 } 
-{ "_id": 2, "a": 5 }
-{ "_id": 3, "a": 13 } 
-{ "_id": 4, "a": 21 } 
-```
+.. code-block:: json 
+   :copyable: false 
 
-Consider the following pipeline stage and the output:
+   { "_id": 1, "a": 1 } 
+   { "_id": 2, "a": 5 }
+   { "_id": 3, "a": 13 } 
+   { "_id": 4, "a": 21 } 
 
-In the preceding example, the pipeline uses the :group:`$minMaxScaler` to calculate two scaled values:
+Consider the following pipeline stage and the output: 
 
-- `scaled`, which applies the default values, `0` and `1`, to scale.
-- `scaledTo100`, which applies a range between `0` and `100` to scale.
-The output shows the original value of `a` and the two scaled values. The :group:`$minMaxScaler` uses the following for the documents, where `min(X)` is `1` and `max(X)` is `21` (calculated from the documents), to return the scaled values:
+.. io-code-block:: 
+   :copyable: true 
+   
+   .. input:: 
+      :language: json 
 
-```javascript
-scaled = ((1 - 1) / (21 - 1)) * (1 - 0) + 0 = 0
-scaledTo100 = ((1 - 1) / (21 - 1)) * (100 - 0) + 0 = 0
-```
+      db.example.aggregate([
+        {$setWindowFields: {
+          sortBy: {a: 1},
+          output: {
+            scaled: {$minMaxScaler: "$a"},
+            scaledTo100: {$minMaxScaler: {input: "$a", min: 0, max: 100}},
+          }
+        }}
+      ])
 
-```javascript
-scaled = ((5 - 1) / (21 - 1)) * (1 - 0) + 0 = (4 / 20) * 1 + 0 = 0.2
-scaledTo100 = ((5 - 1) / (21 - 1)) * (100 - 0) + 0 = (4 / 20) * 100 + 0 = 20
-```
+   .. output:: 
+      :language: javascript 
 
-```javascript
-scaled = ((13 - 1) / (21 - 1)) * (1 - 0) + 0 = (12 / 20) * 1 + 0 = 0.6
-scaledTo100 = ((13 - 1) / (21 - 1)) * (100 - 0) + 0 = (12 / 20) * 100 + 0 = 60
-```
+      {a: 1, scaled: 0, scaledTo100: 0}
+      {a: 5, scaled: 0.2, scaledTo100: 20}
+      {a: 13, scaled: 0.6, scaledTo100: 60}
+      {a: 21, scaled: 1, scaledTo100: 100}
 
-```javascript
-scaled = ((21 - 1) / (21 - 1)) * (1 - 0) + 0 = (20 / 20) * 1 + 0 = 1
-scaledTo100 = ((21 - 1) / (21 - 1)) * (100 - 0) + 0 = (20 / 20) * 100 + 0 = 100
-```
+In the preceding example, the pipeline uses the :group:`$minMaxScaler`
+to calculate two scaled values: 
+
+- ``scaled``, which applies the default values, ``0`` and ``1``, to scale.
+- ``scaledTo100``, which applies a range between ``0`` and ``100`` to scale.
+
+The output shows the original value of ``a`` and the two scaled values.
+The :group:`$minMaxScaler` uses the following for the documents, where
+``min(X)`` is ``1`` and ``max(X)`` is ``21`` (calculated from the
+documents), to return the scaled values: 
+
+.. code-block:: javascript 
+   :copyable: false 
+   :caption: {a: 1}
+
+   scaled = ((1 - 1) / (21 - 1)) * (1 - 0) + 0 = 0
+   scaledTo100 = ((1 - 1) / (21 - 1)) * (100 - 0) + 0 = 0
+
+.. code-block:: javascript 
+   :copyable: false 
+   :caption: {a: 5}
+
+   scaled = ((5 - 1) / (21 - 1)) * (1 - 0) + 0 = (4 / 20) * 1 + 0 = 0.2
+   scaledTo100 = ((5 - 1) / (21 - 1)) * (100 - 0) + 0 = (4 / 20) * 100 + 0 = 20
+
+.. code-block:: javascript 
+   :copyable: false 
+   :caption: {a: 13}
+
+   scaled = ((13 - 1) / (21 - 1)) * (1 - 0) + 0 = (12 / 20) * 1 + 0 = 0.6
+   scaledTo100 = ((13 - 1) / (21 - 1)) * (100 - 0) + 0 = (12 / 20) * 100 + 0 = 60
+
+.. code-block:: javascript 
+   :copyable: false 
+   :caption: {a: 21}
+
+   scaled = ((21 - 1) / (21 - 1)) * (1 - 0) + 0 = (20 / 20) * 1 + 0 = 1
+   scaledTo100 = ((21 - 1) / (21 - 1)) * (100 - 0) + 0 = (20 / 20) * 100 + 0 = 100

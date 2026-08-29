@@ -1,189 +1,244 @@
 ---
 type: "Framework Learn Page"
-framework: "mongodb"
+framework: "MongoDB"
 source_repo: "https://github.com/mongodb/docs.git"
 source_branch: "main"
 source_path: "content/manual/manual/source/core/indexes/index-types/index-wildcard/reference/embedded-object-behavior.txt"
-source_commit: "ab9db26ed3d11618cdb61516d8180337d8e3f679"
-source_commit_short: "ab9db26e"
-source_commit_date: "2026-07-24T16:22:46-06:00"
-generated_at: "2026-07-25T11:51:15Z"
+source_commit: "b9f2bc487a2878b65e3c1f80024bebab76954f27"
+source_commit_short: "b9f2bc48"
+source_commit_date: "2026-08-28T17:09:45-05:00"
+generated_at: "2026-08-29T09:39:19.849081Z"
 ---
-
-===============================================
+.. _wildcard-index-embedded-object-behavior:
 
 # Wildcard Indexes on Embedded Objects and Arrays
 
-Wildcard indexes have specific behavior when indexing embedded object and array fields:
+**meta:** :description: Understand how wildcard indexes handle embedded objects and arrays, including their behavior with nested structures and explicit array indices.
+
+.. default-domain:: mongodb
+
+**contents:** On this page
+   :local:
+   :backlinks: none
+   :depth: 1
+   :class: singlecol
+
+Wildcard indexes have specific behavior when indexing embedded object
+and array fields:
 
 - If the field is an object, the wildcard index descends into
-the object and indexes its contents. The wildcard index continues descending into any additional embedded documents it encounters.
+  the object and indexes its contents. The wildcard index continues
+  descending into any additional embedded documents it encounters.
 
 - If the field is an array, the wildcard index traverses the array
-and indexes each element:
+  and indexes each element:
 
-- If the element is an object, the wildcard index descends into the
-object to index its contents.
-
-- If the element is an array (that is, an array which is embedded
-directly within the parent array), the wildcard index does not traverse the embedded array, but indexes the entire array as a single value.
+  - If the element is an object, the wildcard index descends into the
+    object to index its contents.
+    
+  - If the element is an array (that is, an array which is embedded
+    directly within the parent array), the wildcard index does not
+    traverse the embedded array, but indexes the *entire* array as a
+    single value.
 
 - For all other fields, the index stores the **primitive value**. A
-primitive value is a non-object, non-array value.
+  primitive value is a non-object, non-array value.
 
-The wildcard index continues traversing any additional embedded objects or arrays until it reaches a primitive value. It then indexes the primitive value, along with the full path to that field.
+The wildcard index continues traversing any additional embedded objects
+or arrays until it reaches a primitive value. It then indexes the
+primitive value, along with the full path to that field.
+
+.. _wildcard-index-nested-objects:
 
 ## Wildcard Indexes on Embedded Objects
 
-When a wildcard index encounters an embedded object, it descends into the object and indexes its contents. For example, consider this document:
+When a wildcard index encounters an embedded object, it descends into
+the object and indexes its contents. For example, consider this
+document:
 
-```javascript
-db.users.insertOne( {
-   account: {
-      username: "SuperAdmin01",
-      contact: {
-         phone: "123-456-7890",
-         email: "xyz@example.com"
-      },
-      access: {
-         group: "admin"
+.. code-block:: javascript
+
+   db.users.insertOne( {
+      account: {
+         username: "SuperAdmin01",
+         contact: {
+            phone: "123-456-7890",
+            email: "xyz@example.com"
+         },
+         access: {
+            group: "admin"
+         }
       }
-   }
-} )
-```
+   } )
 
-A wildcard index that includes the `account` field descends into the `account` object to traverse and index its contents:
+A wildcard index that includes the ``account`` field descends into the
+``account`` object to traverse and index its contents:
 
 - For each subfield which is itself an object (for example,
-`account.contact` and `account.access`), the index descends into the object and records its contents.
+  ``account.contact`` and ``account.access``), the index descends into
+  the object and records its contents.
 
 - For all other subfields, the index records the primitive value into
-the index.
+  the index.
 
-Given the sample document, the wildcard index adds the following records to the index:
+Given the sample document, the wildcard index adds the following records
+to the index:
 
-- `"account.username" : "SuperAdmin01"`
-- `"account.contact.phone" : "123-456-7890"`
-- `"account.contact.email" : "xyz@example.com"`
-- `"account.access.group" : "admin"`
+- ``"account.username" : "SuperAdmin01"`` 
+- ``"account.contact.phone" : "123-456-7890"``
+- ``"account.contact.email" : "xyz@example.com"``
+- ``"account.access.group" : "admin"``
+
+.. _wildcard-index-nested-arrays:
+
 ## Wildcard Indexes on Arrays
 
-When a wildcard index encounters an array, it traverses the array to index its elements. If the array element is itself an array (an embedded array), the index records the entire embedded array as a value instead of traversing its contents.
+When a wildcard index encounters an array, it traverses the array to
+index its elements. If the array element is itself an array (an embedded
+array), the index records the *entire* embedded array as a value
+instead of traversing its contents.
 
 For example, consider this document:
 
-```javascript
-db.fleet.insertOne( {
-   "ship": {
-      "coordinates" : [
-         [-5, 10],
-         [-7, 8]
-      ],
-      "type": "Cargo Ship",
-      "captains": [
-         {
-            "name": "Francis Drake",
-            "crew": [ "first mate", "carpenter" ]
-         }
-      ]
-   }
-} )
-```
+.. code-block:: javascript
 
-A wildcard index which includes the `ship` field descends into the object to traverse and index its contents:
+   db.fleet.insertOne( {
+      "ship": {
+         "coordinates" : [
+            [-5, 10],
+            [-7, 8]
+         ],
+         "type": "Cargo Ship",
+         "captains": [
+            {
+               "name": "Francis Drake",
+               "crew": [ "first mate", "carpenter" ]
+            }
+         ]
+      }
+  } )
+
+A wildcard index which includes the ``ship`` field descends into the
+object to traverse and index its contents:
 
 - For each element which is an array:
-- If the element is itself an array (as in an embedded array), the
-index records the entire array as a value.
 
-- If the element is an object, the index descends into the object to
-traverse and index its contents.
+  - If the element is itself an array (as in an embedded array), the
+    index records the *entire* array as a value.
 
-- If the element is a primitive value, the index records that value.
+  - If the element is an object, the index descends into the object to
+    traverse and index its contents.
+
+  - If the element is a primitive value, the index records that value.
+
 - For non-array, non-object fields, the index records the primitive
-value into the index.
+  value into the index.
 
-Given the sample document, the wildcard index adds the following records to the index:
+Given the sample document, the wildcard index adds the following records
+to the index:
 
-- `"ship.coordinates" : [-5, 10]`
-- `"ship.coordinates" : [-7, 8]`
-- `"ship.type" : "Cargo Ship"`
-- `"ship.captains.name" : "Francis Drake"`
-- `"ship.captains.crew" : "first mate"`
-- `"ship.captains.crew" : "carpenter"`
+- ``"ship.coordinates" : [-5, 10]`` 
+- ``"ship.coordinates" : [-7, 8]`` 
+- ``"ship.type" : "Cargo Ship"``
+- ``"ship.captains.name" : "Francis Drake"``
+- ``"ship.captains.crew" : "first mate"``
+- ``"ship.captains.crew" : "carpenter"``
+
+.. _wildcard-query-support-explicit-array-indices:
+
 ### Queries with Explicit Array Indices
 
-Wildcard indexes do not record the array position of any given element in an array during indexing. However, MongoDB may still use the wildcard index to fulfill a query that includes a field path with one or more explicit array indices.
+Wildcard indexes do not record the array position of any given element
+in an array during indexing. However, MongoDB may still use the wildcard
+index to fulfill a query that includes a field path with one or more
+explicit array indices.
 
 For example, consider this document:
 
-```javascript
-db.fleet.insertOne( {
-   "ship": {
-      "coordinates" : [
-         [-5, 10],
-         [-7, 8]
-      ],
-      "type": "Cargo Ship",
-      "captains": [
-         {
-            "name": "Francis Drake",
-            "crew": [ "first mate", "carpenter" ]
-         }
-      ]
-   }
-} )
-```
+.. code-block:: javascript
 
-Create a wildcard index that includes the `ship` field:
+   db.fleet.insertOne( {
+      "ship": {
+         "coordinates" : [
+            [-5, 10],
+            [-7, 8]
+         ],
+         "type": "Cargo Ship",
+         "captains": [
+            {
+               "name": "Francis Drake",
+               "crew": [ "first mate", "carpenter" ]
+            }
+         ]
+      }
+  } )
 
-```javascript
-db.fleet.createIndex( { "ship.$**": 1 } )
-```
+Create a wildcard index that includes the ``ship`` field:
 
-The index records for `ship.coordinates` and `ship.captains` do not include the array position for each element. Wildcard indexes ignore array element positions when recording the element into the index. However, wildcard indexes can still support queries that include explicit array indices.
+.. code-block:: javascript
+
+   db.fleet.createIndex( { "ship.$**": 1 } )
+
+The index records for ``ship.coordinates`` and ``ship.captains`` do not
+include the array position for each element. Wildcard indexes ignore
+array element positions when recording the element into the index.
+However, wildcard indexes can still support queries that include
+explicit array indices.
 
 MongoDB can use the wildcard index to fulfill this query:
 
-```javascript
-db.fleet.find( { "ship.captains.0.name": "Francis Drake" } )
-```
+.. code-block:: javascript
+   
+   db.fleet.find( { "ship.captains.0.name": "Francis Drake" } )
 
 The query returns the sample document:
 
-```javascript
-[
-  {
-    _id: ObjectId("6350537db1fac2ee2e957efc"),
-    ship: {
-      coordinates: [ [ -5, 10 ], [ -7, 8 ] ],
-      type: 'Cargo Ship',
-      captains: [
-        { name: 'Francis Drake', crew: [ 'first mate', 'carpenter' ] }
-      ]
-    }
-  }
-]
-```
+.. code-block:: javascript
+   :copyable: false
+
+   [
+     {
+       _id: ObjectId("6350537db1fac2ee2e957efc"),
+       ship: {
+         coordinates: [ [ -5, 10 ], [ -7, 8 ] ],
+         type: 'Cargo Ship',
+         captains: [
+           { name: 'Francis Drake', crew: [ 'first mate', 'carpenter' ] }
+         ]
+       }
+     }
+   ]
 
 MongoDB **cannot** use the wildcard index to fulfill this query:
 
-```javascript
-db.fleet.find( { "ship.coordinates.0.1": 10 } )
-```
+.. code-block:: javascript
+   
+   db.fleet.find( { "ship.coordinates.0.1": 10 } )
 
-The `ship.coordinates` field contains embedded arrays. Wildcard indexes do not record individual values of embedded arrays. Instead, they record the entire embedded array. As a result, the wildcard index cannot support a match on an embedded array value, and MongoDB fulfills the query with a collection scan.
+The ``ship.coordinates`` field contains embedded arrays. Wildcard
+indexes do not record individual values of embedded arrays. Instead,
+they record the entire embedded array. As a result, the wildcard index
+cannot support a match on an embedded array value, and MongoDB fulfills
+the query with a collection scan.
 
-Array Index Limitation ``````````````````````
+### Array Index Limitation
 
-MongoDB can only use a wildcard index to fulfill a given field path in the query if the path contains 8 or fewer explicit array indices. If the field path contains more than 8 explicit indices, to fulfill the query, MongoDB either:
+MongoDB can only use a wildcard index to fulfill a given field path in
+the query if the path contains 8 or fewer explicit array indices. If the
+field path contains more than 8 explicit indices, to fulfill the query,
+MongoDB either:
 
 - Selects another eligible index.
 - Performs a collection scan.
-Wildcard indexes themselves do not have limits on the depth to which they traverse a document while indexing it. The limitation only applies to queries which explicitly specify exact array indices.
+
+Wildcard indexes themselves do not have limits on the depth to which
+they traverse a document while indexing it. The limitation only applies
+to queries which explicitly specify exact array indices.
 
 ## Learn More
 
-- `BSON Depth Limit <limit-nested-depth>`
-- `document-dot-notation`
-- `wildcard-index-restrictions`
+- :ref:`BSON Depth Limit <limit-nested-depth>`
+
+- :ref:`document-dot-notation`
+
+- :ref:`wildcard-index-restrictions`

@@ -1,122 +1,225 @@
 ---
 type: "Framework Learn Page"
-framework: "mongodb"
+framework: "MongoDB"
 source_repo: "https://github.com/mongodb/docs.git"
 source_branch: "main"
 source_path: "content/manual/manual/source/reference/command/configureQueryAnalyzer.txt"
-source_commit: "ab9db26ed3d11618cdb61516d8180337d8e3f679"
-source_commit_short: "ab9db26e"
-source_commit_date: "2026-07-24T16:22:46-06:00"
-generated_at: "2026-07-25T11:51:15Z"
+source_commit: "b9f2bc487a2878b65e3c1f80024bebab76954f27"
+source_commit_short: "b9f2bc48"
+source_commit_date: "2026-08-28T17:09:45-05:00"
+generated_at: "2026-08-29T09:39:20.053377Z"
 ---
-
-=========================================
+.. _configureQueryAnalyzer:
 
 # configureQueryAnalyzer (database command)
 
+**meta:** :description: Configure query sampling for collections to analyze shard key metrics in replica sets or sharded clusters.
+
+**contents:** On this page
+   :local:
+   :backlinks: none
+   :depth: 1
+   :class: singlecol
+
 ## Definition
+
+**dbcommand:** configureQueryAnalyzer
+
+   .. versionadded:: 7.0
+
+   Configures query sampling for a collection on a replica set or
+   sharded cluster. Sampled queries provide information to
+   :dbcommand:`analyzeShardKey` to calculate metrics about read and 
+   write distribution of a shard key.
 
 ## Compatibility
 
-This command is available in deployments hosted in the following environments:
+This command is available in deployments hosted in the following environments: 
 
-.. include:: /includes/fact-environments-atlas-only.rst
+**include:** /includes/fact-environments-atlas-only.rst
 
-.. include:: /includes/fact-environments-atlas-support-all.rst
+**include:** /includes/fact-environments-atlas-support-all.rst
 
-.. include:: /includes/fact-environments-onprem-only.rst
+**include:** /includes/fact-environments-onprem-only.rst
 
+   
 ## Syntax
 
 The command has the following syntax:
 
-```javascript
-db.adminCommand( 
-   {
-     configureQueryAnalyzer: <string>,
-     mode: <string>,
-     samplesPerSecond: <double>
-   } 
-)
-```
+.. code-block:: javascript
+
+   db.adminCommand( 
+      {
+        configureQueryAnalyzer: <string>,
+        mode: <string>,
+        samplesPerSecond: <double>
+      } 
+   )
 
 ### Command Fields
 
+.. |CQA| replace:: ``configureQueryAnalyzer``
+
 |CQA| has the following fields:
+
+.. list-table::
+   :header-rows: 1
+   :widths: 10 10 10 70 
+ 
+   * - Field
+     - Type
+     - Necessity
+     - Description
+   
+   * - ``configureQueryAnalyzer``
+     - string
+     - Required
+     - :term:`namespace` of the collection to configure for query
+       sampling.
+
+   * - ``mode``
+     - string
+     - Required
+     - Mode the query analyzer runs in. Must be set to either
+       ``"full"`` or ``"off"``.
+
+   * - ``samplesPerSecond``
+     - double
+     - Optional
+     - Number of samples per second.
+
+       - When ``mode`` is set to ``"full"``, ``samplesPerSecond`` must
+         be set between ``0`` and ``50``.
+       - When ``mode`` is set to ``"off"``, the server ignores
+         ``samplesPerSecond``.
+
+       For details, see :ref:`samplesPerSecond Upper Limit 
+       <samplesPerSecond-limit>`.
+
+.. _cqa-access-control:
 
 ## Access Control
 
 |CQA| requires one of the following roles:
 
-- :authrole:`dbAdmin` role against the database that contains the
-collection being analyzed
-
+- :authrole:`dbAdmin` role against the database that contains the 
+  collection being analyzed 
 - :authrole:`clusterManager` role against the cluster
+
+.. _cqa-behavior:
+
 ## Behavior
 
 Consider the following behavior when running |CQA|:
 
-.. include:: /includes/cqa-behavior-colls.rst
+**include:** /includes/cqa-behavior-colls.rst
 
 ### Conversion to Sharded Cluster
 
-.. include:: /includes/fact-convert-shard-query-analysis.rst
+**include:** /includes/fact-convert-shard-query-analysis.rst
 
-.. include:: /includes/cqa-samplesPerSecond-limit.rst
+.. _samplesPerSecond-limit:
 
-.. include:: /includes/cqa-queryAnalysisSampleExpirationSecs.rst
+**include:** /includes/cqa-samplesPerSecond-limit.rst
 
-.. include:: /includes/cqa-currentOp.rst
+**include:** /includes/cqa-queryAnalysisSampleExpirationSecs.rst
+
+**include:** /includes/cqa-currentOp.rst
 
 ### View Sampled Queries
 
-To see sampled queries for all collections or a specific collection, use the :pipeline:`$listSampledQueries` aggregation stage.
+To see sampled queries for all collections or a specific collection, use
+the :pipeline:`$listSampledQueries` aggregation stage.
 
 To see the count of every command type captured by the query analyzer, use:
 
+.. io-code-block::
+    :copyable: true
+
+    .. input::
+        :language: javascript
+
+        db.getSiblingDB("admin").aggregate( [
+          { "$listSampledQueries": { ns: "<db.collectionName>" } },
+          {
+            "$group": {
+              "_id": {
+                ns: "$ns",
+                cmdName: "$cmdName"
+              },
+              count: { "$sum": 1 }
+            }
+          },
+          {
+           "$project": {
+             "_id.ns": 1,
+              "_id.cmdName": 1,
+              "count": 1 // Explicitly include fields to output
+            }
+          },
+          { "$sort": { "_id.ns": 1 } }
+        ] );
+
+    .. output:: 
+        :language: javascript
+
+        [{ count: 10, cmdName: 'aggregate' },
+          { count: 51, cmdName: 'delete' },
+          { count: 25, cmdName: 'distinct' },
+          { count: 100, cmdName: 'find' },
+          { count: 24, cmdName: 'findAndModify' },
+          { count: 7, cmdName: 'update' }]
+
 When you have enough samples, you can disable the query analyzer.
+
 
 ### Limitations
 
-.. include:: /includes/cqa-limitations.rst
+**include:** /includes/cqa-limitations.rst
+
+.. _cqa-output:
 
 ## Output
 
-.. include:: /includes/cqa-output.rst
+**include:** /includes/cqa-output.rst
+
+.. _cqa-examples:
 
 ## Examples
 
 ### Enable Query Sampling
 
-To enable query sampling on the `test.students` collection at a rate of five samples per second, use the following command:
+To enable query sampling on the ``test.students`` collection at a 
+rate of five samples per second, use the following command:
 
-```javascript
-db.adminCommand(
-   {
-     configureQueryAnalyzer: "test.students",
-     mode: "full",
-     samplesPerSecond: 5
-   } 
-)
-```
+.. code-block:: javascript
+
+   db.adminCommand(
+      {
+        configureQueryAnalyzer: "test.students",
+        mode: "full",
+        samplesPerSecond: 5
+      } 
+   )
 
 ### Disable Query Sampling
 
-To disable query sampling on the `test.students` collection, use the following command:
+To disable query sampling on the ``test.students`` collection,
+use the following command:
 
-```javascript
-db.adminCommand(
-   {
-     configureQueryAnalyzer: "test.students",
-     mode: "off"
-   } 
-)
-```
+.. code-block:: javascript
+
+   db.adminCommand(
+      {
+        configureQueryAnalyzer: "test.students",
+        mode: "off"
+      } 
+   )
 
 ## Learn More
 
 - :method:`db.collection.configureQueryAnalyzer()`
-- :ref:`currentOp Query Sampling Metrics
-<currentOp-agg-query-sampling-fields>`
-
+- :ref:`currentOp Query Sampling Metrics 
+  <currentOp-agg-query-sampling-fields>`
 - :pipeline:`$listSampledQueries`

@@ -1,14 +1,15 @@
 ---
 type: "Framework Learn Page"
-framework: "redis"
+framework: "Redis"
 source_repo: "https://github.com/redis/docs.git"
 source_branch: "main"
 source_path: "content/operate/rs/monitoring/metrics_stream_engine/db-tags-in-metrics.md"
-source_commit: "9d30f68c3dad1a6b3b7d30fe604b911348ce8152"
-source_commit_short: "9d30f68c"
-source_commit_date: "2026-07-24T10:52:10-07:00"
-generated_at: "2026-07-25T11:51:22Z"
+source_commit: "f8693349287b0efbef3c865b6f6a2aceca88594d"
+source_commit_short: "f869334"
+source_commit_date: "2026-08-28T10:01:19-05:00"
+generated_at: "2026-08-29T09:38:55.618423Z"
 ---
+# Db Tags In Metrics
 
 ---
 Title: Database tags in metrics
@@ -26,37 +27,66 @@ weight: 50
 tocEmbedHeaders: true
 ---
 
-## Overview
+Redis Software can expose selected [database tags]({{<relref "/operate/rs/databases/configure/db-tags">}}) as labels in the [v2 metrics]({{<relref "/operate/rs/monitoring/metrics_stream_engine/prometheus-metrics-v2">}}) scraping endpoint. This lets you group, filter, and alert on database metrics by ownership, environment, service, tier, or any other metadata you store as tags.
 
-You can [expose](#enable-database-tags-in-metrics) selected [database tags]({{<relref "/operate/rs/databases/configure/db-tags">}}) as labels in the [v2 metrics]({{<relref "/operate/rs/monitoring/metrics_stream_engine/prometheus-metrics-v2">}}) scraping endpoint through a dedicated `db_tags` metric. Then [join `db_tags` onto your database metrics](#use-database-tags-in-observability-platforms) at query time, or enrich them in your observability pipeline, to group, filter, and alert on metrics by ownership, environment, service, tier, or any other metadata you store as tags.
+Redis Software exposes tags through a dedicated `db_tags` metric rather than adding them as labels to every metric. You then join `db_tags` onto your other database metrics in your observability tool.
+
+The workflow has three parts:
+
+1. [Enable database tags in metrics](#enable-database-tags-in-metrics) and list the tag keys you want to expose.
+1. Redis Software emits a [`db_tags` metric](#exported-metric) for each database, with one label per exposed tag.
+1. In your observability platform, [join `db_tags` onto your database metrics](#use-database-tags-in-observability-platforms) using the shared `cluster` and `db` labels.
 
 ## Enable database tags in metrics
 
-Database tag exposure is controlled by two fields in the cluster's [metrics configuration]({{<relref "/operate/rs/monitoring/metrics_stream_engine/metrics-configuration">}}):
+### Before you begin
+
+- The databases whose tags you want to expose must already have [tags]({{<relref "/operate/rs/databases/configure/db-tags">}}) set. Only tags that follow the [tag validation rules]({{<relref "/operate/rs/databases/configure/db-tags#tag-validation-rules">}}) can be exposed.
+- You must be scraping the [v2 metrics endpoint]({{<relref "/operate/rs/monitoring/metrics_stream_engine/prometheus-metrics-v2">}}), where the `db_tags` metric appears.
+
+### Configuration fields
+
+Two fields in the cluster's [metrics configuration]({{<relref "/operate/rs/monitoring/metrics_stream_engine/metrics-configuration">}}) control database tag exposure:
 
 | Field | Type | Default | Description |
 |-------|------|---------|-------------|
 | `expose_db_tags` | boolean | `false` | When `true`, enables export of database tags through the `db_tags` metric. |
 | `metrics_tag_keys_exposed` | list of strings | `[]` | The database tag keys that are eligible to be exported as labels. Can contain at most 50 keys. |
 
-To expose database tags in metrics:
-
-1. Set `expose_db_tags` to `true`.
-
-1. Add the tag keys you want to expose to `metrics_tag_keys_exposed`. Only tags whose keys appear in this list are considered for export.
-
-Example configuration:
-
-```json
-{
-  "expose_db_tags": true,
-  "metrics_tag_keys_exposed": ["env", "team", "tier"]
-}
-```
+Set both fields: turn on `expose_db_tags`, and add the tag keys you want to expose to `metrics_tag_keys_exposed`. Redis Software exports only the tags whose keys appear in this list.
 
 {{<warning>}}
 `metrics_tag_keys_exposed` is replaced in full whenever you update it. To add a key while keeping the current ones, send the complete list. For example, to add `tier` to `["env", "team"]`, send `["env", "team", "tier"]`; sending only `["tier"]` removes `env` and `team`.
 {{</warning>}}
+
+### Set the configuration
+
+Update the [metrics configuration]({{<relref "/operate/rs/monitoring/metrics_stream_engine/metrics-configuration">}}) with either the REST API or `rladmin`. The following examples enable database tags and expose the `env`, `team`, and `tier` tag keys.
+
+**REST API** — send a [`PUT /v1/metrics_config`]({{<relref "/operate/rs/references/rest-api/requests/metrics_config#put-metrics-config">}}) request. This is a partial update, so the fields you omit keep their current values:
+
+```sh
+curl -X PUT -H "accept: application/json" \
+     -H "content-type: application/json" \
+     -u "[username]:[password]" \
+     https://[host]:[port]/v1/metrics_config \
+     -d '{ "expose_db_tags": true, "metrics_tag_keys_exposed": ["env", "team", "tier"] }' -k -i
+```
+
+**rladmin** — use [`rladmin metrics config`]({{<relref "/operate/rs/references/cli-utilities/rladmin/metrics#metrics-config">}}). On the command line, boolean fields take `enabled` or `disabled`, and list fields take a comma-separated set of values:
+
+```sh
+rladmin metrics config expose_db_tags enabled metrics_tag_keys_exposed env,team,tier
+```
+
+### Verify the configuration
+
+Confirm that the settings were applied:
+
+- **REST API**: send a [`GET /v1/metrics_config`]({{<relref "/operate/rs/references/rest-api/requests/metrics_config#get-metrics-config">}}) request and check that `expose_db_tags` is `true` and `metrics_tag_keys_exposed` lists your keys.
+- **rladmin**: run [`rladmin info metrics`]({{<relref "/operate/rs/references/cli-utilities/rladmin/info#info-metrics">}}).
+
+Then scrape the [v2 metrics endpoint]({{<relref "/operate/rs/monitoring/metrics_stream_engine/prometheus-metrics-v2">}}) and confirm that `db_tags` series appear (see [Exported metric](#exported-metric)). If no `db_tags` series appear for a database, check the [emission rules](#emission-rules).
 
 ## Exported metric
 
@@ -85,7 +115,7 @@ Redis Software emits `db_tags` per database according to these rules:
 
 Because tags are exported through the separate `db_tags` metric, you combine them with other database metrics by matching on the shared `cluster` and `db` labels. Match on both labels in every platform so each database is uniquely identified: database IDs can repeat across clusters.
 
-The examples below use the sample tags `env`, `team`, and `tier`, and the [`redis_server_used_memory`]({{<relref "/operate/rs/monitoring/metrics_stream_engine/prometheus-metrics-v2">}}) metric.
+The following examples use the sample tags `env`, `team`, and `tier`, and the [`redis_server_used_memory`]({{<relref "/operate/rs/monitoring/metrics_stream_engine/prometheus-metrics-v2">}}) metric.
 
 ### Prometheus and Grafana
 
@@ -135,7 +165,7 @@ Replace `THRESHOLD` with a value appropriate for your deployment.
 
 The Datadog OpenMetrics check can copy labels between collected metrics with the [`share_labels`](https://docs.datadoghq.com/integrations/openmetrics/) option. In your OpenMetrics instance configuration, share the `db_tags` labels with the metrics that match on `cluster` and `db`.
 
-Transformation (OpenMetrics instance configuration):
+Add the following to your OpenMetrics instance configuration:
 
 ```yaml
 share_labels:
@@ -155,7 +185,7 @@ sum:rdse.redis_server_used_memory{*} by {env,team}
 
 The New Relic [Prometheus OpenMetrics integration](https://docs.newrelic.com/docs/infrastructure/prometheus-integrations/install-configure-openmetrics/configure-prometheus-openmetrics-integrations/) can copy labels between metrics scraped from the same endpoint with the [`copy_attributes`](https://docs.newrelic.com/docs/infrastructure/prometheus-integrations/install-configure-openmetrics/add-rename-or-copy-prometheus-attributes/) transformation. Copy the `db_tags` labels onto the Redis database metrics, matching on `cluster` and `db`. The `to_metrics` prefix selects the target metrics, so adjust `redis_` to match the Redis metric names in your environment.
 
-Transformation (Prometheus OpenMetrics integration config):
+Add the following to your Prometheus OpenMetrics integration configuration:
 
 ```yaml
 transformations:
@@ -197,30 +227,26 @@ Query the metric in Dynatrace with DQL, using the metric and dimension names as 
 timeseries avg(redis_server_used_memory), by:{env, team}
 ```
 
-## Cardinality and performance considerations
+## Manage cardinality and performance
 
-Redis Software exports tags through one dedicated `db_tags` metric per database instead of adding tag labels to every database metric (which would multiply the number of series by your tag labels), so the performance overhead on the Redis cluster and the metric footprint are already small. However, the tags you expose can still negatively affect performance and cardinality, e.g. Selecting many tag keys, using high-cardinality tag values, or frequently changing tag values. Consider the following when choosing which tags to expose:
+Redis Software exports tags through one dedicated `db_tags` metric per database instead of adding tag labels to every database metric, which would multiply the number of series by your tag labels. As a result, the performance overhead on the Redis cluster and the metric footprint are already small. Even so, the tags you expose can affect performance and cardinality, for example when you select many tag keys, use high-cardinality tag values, or change tag values frequently.
+
+When choosing which tags to expose:
+
+- Expose only the tags you need for dashboards, alerts, routing, or ownership. Exposing unnecessary tags increases monitoring costs and query load.
 - Start with a small set of stable, low-cardinality tags such as `env`, `team`, `service`, or `tier`.
 - Avoid user IDs, request IDs, timestamps, build numbers, and other frequently changing or high-cardinality values.
 
-## Security considerations
+## Avoid exposing sensitive data
 
-Tags that you expose in metrics are sent to external monitoring tools. Do not use secrets, credentials, personal data, or confidential business data as tag keys or values.
+Redis Software sends the tags you expose in metrics to external monitoring tools. Do not use secrets, credentials, personal data, or confidential business data as tag keys or values.
 
-## Troubleshooting and FAQ
+## Troubleshooting
 
-### Why aren't my tags exposed to metrics?
+### Tags don't appear in metrics
 
-Check if your tags adhere to the [emission rules](#emission-rules).
+Confirm that your tags meet the [emission rules](#emission-rules). A tag is exported only when database tags are enabled, the tag follows the [tag validation rules]({{<relref "/operate/rs/databases/configure/db-tags#tag-validation-rules">}}), and its key exactly matches (case-sensitive) a key in `metrics_tag_keys_exposed`.
 
-### Why do I see increased cardinality?
+### You see more time series than expected
 
-The tag labels you expose create additional time series in your monitoring backend. To keep cardinality under control, see [Cardinality and performance considerations](#cardinality-and-performance-considerations).
-
-### Why aren't database tags added directly to every database metric?
-
-To keep the performance overhead and metrics footprint small. See [Cardinality and performance considerations](#cardinality-and-performance-considerations).
-
-### Can I expose all my tags?
-
-You can list multiple tag keys in `metrics_tag_keys_exposed`, up to a limit of 50, but you should expose only the tags you need for dashboards, alerts, routing, or ownership. Exposing unnecessary or high-cardinality tags increases monitoring costs and query load.
+The tag labels you expose create additional time series in your monitoring backend. To keep the number of series under control, expose fewer or lower-cardinality tags. See [Manage cardinality and performance](#manage-cardinality-and-performance).

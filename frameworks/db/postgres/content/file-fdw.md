@@ -1,71 +1,295 @@
 ---
 type: "Framework Learn Page"
-framework: "postgres"
+framework: "PostgreSQL"
 source_repo: "https://github.com/postgres/postgres.git"
 source_branch: "master"
 source_path: "doc/src/sgml/file-fdw.sgml"
-source_commit: "38afc3dcb25c45b744d4025029ce0a6c90b7059f"
-source_commit_short: "38afc3dc"
-source_commit_date: "2026-07-25T19:08:27+09:00"
-generated_at: "2026-07-25T11:50:59Z"
+source_commit: "6c5f1d6074208146930b67c2054509c3e82f6f7f"
+source_commit_short: "6c5f1d6"
+source_commit_date: "2026-08-28T23:24:47+02:00"
+generated_at: "2026-08-29T09:39:24.474665Z"
 ---
+# file_fdw — access data files in the server's file system
 
-## file_fdw -- access data files in the server's file system
+ 
+  file_fdw
+ 
 
-file_fdw
+ 
+  The file_fdw module provides the foreign-data wrapper
+  file_fdw, which can be used to access data
+  files in the server's file system, or to execute programs on the server
+  and read their output.  The data file or program output must be in a format
+  that can be read by COPY FROM;
+  see  for details.
+  Access to data files is currently read-only.
+ 
 
-The `file_fdw` module provides the foreign-data wrapper `file_fdw`, which can be used to access data files in the server's file system, or to execute programs on the server and read their output. The data file or program output must be in a format that can be read by `COPY FROM`; see `sql-copy` for details. Access to data files is currently read-only.
+ 
+  A foreign table created using this wrapper can have the following options:
+ 
 
-A foreign table created using this wrapper can have the following options:
+ 
 
-- Specifies the file to be read. Relative paths are relative to the data directory. Either `filename` or `program` must be specified, but not both.
-- Specifies the command to be executed. The standard output of this command will be read as though `COPY FROM PROGRAM` were used. Either `program` or `filename` must be specified, but not both.
-- Specifies the data format, the same as `COPY`'s `FORMAT` option.
-- Specifies whether to skip a header line, or how many header lines to skip, the same as `COPY`'s `HEADER` option.
-- Specifies the data delimiter character, the same as `COPY`'s `DELIMITER` option.
-- Specifies the data quote character, the same as `COPY`'s `QUOTE` option.
-- Specifies the data escape character, the same as `COPY`'s `ESCAPE` option.
-- Specifies the data null string, the same as `COPY`'s `NULL` option.
-- Specifies the string that represents a default value, the same as `COPY`'s `DEFAULT` option.
-- Specifies the data encoding, the same as `COPY`'s `ENCODING` option.
-- Specifies how to behave when encountering an error converting a column's input value into its data type, the same as `COPY`'s `ON_ERROR` option.
-- Specifies the maximum number of errors tolerated while converting a column's input value to its data type, the same as `COPY`'s `REJECT_LIMIT` option.
-- Specifies the amount of messages emitted by `file_fdw`, the same as `COPY`'s `LOG_VERBOSITY` option.
+  
+   filename
 
-Note that while `COPY` allows options such as `HEADER` to be specified without a corresponding value, the foreign table option syntax requires a value to be present in all cases. To activate `COPY` options typically written without a value, you can pass the value TRUE, since all such options accept Booleans.
+   
+    
+     Specifies the file to be read.  Relative paths are relative to the
+     data directory.
+     Either filename or program must be
+     specified, but not both.
+    
+   
+  
 
-A column of a foreign table created using this wrapper can have the following options:
+  
+   program
 
-- This is a Boolean option. If true, it specifies that values of the column should not be matched against the null string (that is, the table-level `null` option). This has the same effect as listing the column in `COPY`'s `FORCE_NOT_NULL` option.
-- This is a Boolean option. If true, it specifies that values of the column which match the null string are returned as `NULL` even if the value is quoted. Without this option, only unquoted values matching the null string are returned as `NULL`. This has the same effect as listing the column in `COPY`'s `FORCE_NULL` option.
+   
+    
+     Specifies the command to be executed.  The standard output of this
+     command will be read as though COPY FROM PROGRAM were used.
+     Either program or filename must be
+     specified, but not both.
+    
+   
+  
 
-`COPY`'s `FORCE_QUOTE` option is currently not supported by `file_fdw`.
+  
+   format
 
-These options can only be specified for a foreign table or its columns, not in the options of the `file_fdw` foreign-data wrapper, nor in the options of a server or user mapping using the wrapper.
+   
+    
+     Specifies the data format,
+     the same as COPY's FORMAT option.
+    
+   
+  
 
-Changing table-level options requires being a superuser or having the privileges of the role `pg_read_server_files` (to use a filename) or the role `pg_execute_server_program` (to use a program), for security reasons: only certain users should be able to control which file is read or which program is run. In principle regular users could be allowed to change the other options, but that's not supported at present.
+  
+   header
 
-When specifying the `program` option, keep in mind that the option string is executed by the shell. If you need to pass any arguments to the command that come from an untrusted source, you must be careful to strip or escape any characters that might have special meaning to the shell. For security reasons, it is best to use a fixed command string, or at least avoid passing any user input in it.
+   
+    
+     Specifies whether to skip a header line, or how many header lines to skip,
+     the same as COPY's HEADER option.
+    
+   
+  
 
-For a foreign table using `file_fdw`, `EXPLAIN` shows the name of the file to be read or program to be run. For a file, unless `COSTS OFF` is specified, the file size (in bytes) is shown as well.
+  
+   delimiter
 
-## Create a Foreign Table for PostgreSQL CSV Logs
+   
+    
+     Specifies the data delimiter character,
+     the same as COPY's DELIMITER option.
+    
+   
+  
 
-One of the obvious uses for `file_fdw` is to make the PostgreSQL activity log available as a table for querying. To do this, first you must be logging to a CSV file, which here we will call `pglog.csv`. First, install `file_fdw` as an extension:
+  
+   quote
 
-```
+   
+    
+     Specifies the data quote character,
+     the same as COPY's QUOTE option.
+    
+   
+  
+
+  
+   escape
+
+   
+    
+     Specifies the data escape character,
+     the same as COPY's ESCAPE option.
+    
+   
+  
+
+  
+   null
+
+   
+    
+     Specifies the data null string,
+     the same as COPY's NULL option.
+    
+   
+  
+
+  
+   default
+
+   
+    
+     Specifies the string that represents a default value,
+     the same as COPY's DEFAULT option.
+    
+   
+  
+
+  
+   encoding
+
+   
+    
+     Specifies the data encoding,
+     the same as COPY's ENCODING option.
+    
+   
+  
+
+  
+   on_error
+
+   
+    
+     Specifies how to behave when encountering an error converting a column's
+     input value into its data type,
+     the same as COPY's ON_ERROR option.
+    
+   
+  
+
+  
+   reject_limit
+
+   
+    
+     Specifies the maximum number of errors tolerated while converting a column's
+     input value to its data type, the same as COPY's
+    REJECT_LIMIT option.
+    
+   
+  
+
+  
+   log_verbosity
+
+   
+    
+     Specifies the amount of messages emitted by file_fdw,
+     the same as COPY's LOG_VERBOSITY option.
+    
+   
+  
+
+ 
+
+ 
+  Note that while COPY allows options such as HEADER
+  to be specified without a corresponding value, the foreign table option
+  syntax requires a value to be present in all cases.  To activate
+  COPY options typically written without a value, you can pass
+  the value TRUE, since all such options accept Booleans.
+ 
+
+ 
+  A column of a foreign table created using this wrapper can have the
+  following options:
+ 
+
+ 
+
+  
+   force_not_null
+
+   
+    
+     This is a Boolean option.  If true, it specifies that values of the
+     column should not be matched against the null string (that is, the
+     table-level null option).  This has the same effect
+     as listing the column in COPY's
+     FORCE_NOT_NULL option.
+    
+   
+  
+
+  
+   force_null
+
+   
+    
+     This is a Boolean option.  If true, it specifies that values of the
+     column which match the null string are returned as NULL
+     even if the value is quoted. Without this option, only unquoted
+     values matching the null string are returned as NULL.
+     This has the same effect  as listing the column in
+     COPY's FORCE_NULL option.
+    
+   
+  
+
+ 
+
+ 
+  COPY's FORCE_QUOTE option is
+  currently not supported by file_fdw.
+ 
+
+ 
+  These options can only be specified for a foreign table or its columns, not
+  in the options of the file_fdw foreign-data wrapper, nor in the
+  options of a server or user mapping using the wrapper.
+ 
+
+ 
+  Changing table-level options requires being a superuser or having the privileges
+  of the role pg_read_server_files (to use a filename) or
+  the role pg_execute_server_program (to use a program),
+  for security reasons: only certain users should be able to control which file is
+  read or which program is run.  In principle regular users could be allowed to
+  change the other options, but that's not supported at present.
+ 
+
+ 
+  When specifying the program option, keep in mind that the option
+  string is executed by the shell.  If you need to pass any arguments to the
+  command that come from an untrusted source, you must be careful to strip or
+  escape any characters that might have special meaning to the shell.
+  For security reasons, it is best to use a fixed command string, or at least
+  avoid passing any user input in it.
+ 
+
+ 
+  For a foreign table using file_fdw, EXPLAIN shows
+  the name of the file to be read or program to be run.
+  For a file, unless COSTS OFF is
+  specified, the file size (in bytes) is shown as well.
+ 
+
+ 
+  Create a Foreign Table for PostgreSQL CSV Logs
+
+  
+   One of the obvious uses for file_fdw is to make
+   the PostgreSQL activity log available as a table for querying.  To
+   do this, first you must be logging to a CSV file,
+   which here we
+   will call pglog.csv.  First, install file_fdw
+   as an extension:
+  
+
 CREATE EXTENSION file_fdw;
-```
 
-Then create a foreign server:
+  
+   Then create a foreign server:
 
-```
 CREATE SERVER pglog FOREIGN DATA WRAPPER file_fdw;
-```
 
-Now you are ready to create the foreign data table. Using the `CREATE FOREIGN TABLE` command, you will need to define the columns for the table, the CSV file name, and its format:
+  
 
-```
+  
+   Now you are ready to create the foreign data table.  Using the
+   CREATE FOREIGN TABLE command, you will need to define
+   the columns for the table, the CSV file name, and its format:
+
 CREATE FOREIGN TABLE pglog (
   log_time timestamp(3) with time zone,
   user_name text,
@@ -95,19 +319,25 @@ CREATE FOREIGN TABLE pglog (
   query_id bigint
 ) SERVER pglog
 OPTIONS ( filename 'log/pglog.csv', format 'csv' );
-```
 
-That's it -- now you can query your log directly. In production, of course, you would need to define some way to deal with log rotation.
+  
 
-## Create a Foreign Table with an Option on a Column
+  
+   That's it — now you can query your log directly. In production, of
+   course, you would need to define some way to deal with log rotation.
+  
+ 
 
-To set the `force_null` option for a column, use the `OPTIONS` keyword.
+ 
+  Create a Foreign Table with an Option on a Column
+  
+   To set the force_null option for a column, use the
+   OPTIONS keyword.
+  
 
-```
 CREATE FOREIGN TABLE films (
  code char(5) NOT NULL,
  title text NOT NULL,
  rating text OPTIONS (force_null 'true')
 ) SERVER film_server
 OPTIONS ( filename 'films/db.csv', format 'csv' );
-```

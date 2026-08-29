@@ -1,41 +1,73 @@
 ---
 type: "Framework Learn Page"
-framework: "mongodb"
+framework: "MongoDB"
 source_repo: "https://github.com/mongodb/docs.git"
 source_branch: "main"
 source_path: "content/manual/manual/source/tutorial/deploy-replica-set.txt"
-source_commit: "ab9db26ed3d11618cdb61516d8180337d8e3f679"
-source_commit_short: "ab9db26e"
-source_commit_date: "2026-07-24T16:22:46-06:00"
-generated_at: "2026-07-25T11:51:15Z"
+source_commit: "b9f2bc487a2878b65e3c1f80024bebab76954f27"
+source_commit_short: "b9f2bc48"
+source_commit_date: "2026-08-28T17:09:45-05:00"
+generated_at: "2026-08-29T09:39:19.617989Z"
 ---
+**facet:** :name: genre
+   :values: tutorial
 
-=================================
+**meta:** :keywords: code example, shell, on-prem
+   :description: Deploy a MongoDB replica set for redundancy and distributed reads. Ensure an odd number of members for smooth elections.
+
+.. _server-replica-set-deploy:
 
 # Deploy a Self-Managed Replica Set
 
-.. include:: /includes/introduction-deploy-replica-set.rst
+.. default-domain:: mongodb
 
-.. include:: /includes/fact-self-managed.rst
+**facet:** :name: programming_language
+   :values: shell
 
-.. include:: /includes/fact-atlas-link.rst
+**contents:** On this page
+   :local:
+   :backlinks: none
+   :depth: 1
+   :class: singlecol
+
+**include:** /includes/introduction-deploy-replica-set.rst
+
+.. |page-topic| replace:: how to deploy a replica set
+.. |link-topic-ing| replace:: deploying a replica set
+.. |atlas-url| replace:: :atlas:`Create a Cluster </tutorial/create-new-cluster>`
+
+**include:** /includes/fact-self-managed.rst
+**include:** /includes/fact-atlas-link.rst
 
 ## Requirements
 
-For production deployments, host each :binary:`~bin.mongod` instance on a separate machine serviced by redundant power circuits and redundant network paths. This includes instances running on virtual machines.
+For production deployments, host each :binary:`~bin.mongod` instance on
+a separate machine serviced by redundant power circuits and redundant
+network paths. This includes instances running on virtual machines.
 
-Before you can deploy a replica set, you must install MongoDB on each system that will be part of your `replica set`. If you have not already installed MongoDB, see the `installation tutorials <tutorial-installation>`.
+Before you can deploy a replica set, you must install MongoDB on
+each system that will be part of your :term:`replica set`.
+If you have not already installed MongoDB, see the :ref:`installation tutorials <tutorial-installation>`.
+
+.. _considerations-when-deploying-rs:
 
 ## Considerations When Deploying a Replica Set
 
-.. include:: /includes/considerations-deploying-replica-set.rst
+**include:** /includes/considerations-deploying-replica-set.rst
 
 ## Deploy a Replica Set in the Terminal
 
-Use the following steps to create a three-member `replica set` from three existing :binary:`~bin.mongod` instances running with `access control <authorization>` disabled.
+Use the following steps to create a three-member
+:term:`replica set` from three existing :binary:`~bin.mongod` instances
+running with :ref:`access control <authorization>` disabled.
 
-To deploy a replica set with enabled `access control <authorization>`, see `deploy-repl-set-with-auth`. If you want to deploy a replica set from a single MongoDB instance, see `server-replica-set-deploy-convert`. For more information on replica set deployments, see the `replication` and `replica-set-architecture` documentation.
+To deploy a replica set with enabled :ref:`access control <authorization>`, see
+:ref:`deploy-repl-set-with-auth`. If you want to deploy a
+replica set from a single MongoDB instance, see
+:ref:`server-replica-set-deploy-convert`. For more
+information on replica set deployments, see the :ref:`replication` and
+:ref:`replica-set-architecture` documentation.
 
-.. include:: /includes/steps/deploy-replica-set.rst
+**include:** /includes/steps/deploy-replica-set.rst
 
-> **Seealso:** `deploy-repl-set-with-auth`
+**seealso:** :ref:`deploy-repl-set-with-auth`

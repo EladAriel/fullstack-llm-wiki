@@ -1,14 +1,15 @@
 ---
 type: "Framework Learn Page"
-framework: "nextjs"
+framework: "Next.js"
 source_repo: "https://github.com/vercel/next.js/"
 source_branch: "canary"
 source_path: "docs/01-app/01-getting-started/11-css.mdx"
-source_commit: "dcf242a17b5d4622bbd9624db531a9d84177619f"
-source_commit_short: "dcf242a1"
-source_commit_date: "2026-07-25T10:16:19+02:00"
-generated_at: "2026-07-25T11:50:53Z"
+source_commit: "33a5d542e519fe4e05c8c8c2c2845da9f741699b"
+source_commit_short: "33a5d542"
+source_commit_date: "2026-08-29T00:04:45-07:00"
+generated_at: "2026-08-29T09:40:24.263207Z"
 ---
+# 11 Css
 
 ---
 title: CSS
@@ -233,14 +234,14 @@ export default function Page() {
 
 To start using CSS Modules, create a new file with the extension `.module.css` and import it into any component inside the `pages` directory:
 
-```css filename="/styles/blog.module.css"
+```css filename="styles/blog.module.css"
 .blog {
   padding: 24px;
 }
 ```
 
 ```tsx filename="pages/blog/index.tsx" switcher
-import styles from './blog.module.css'
+import styles from '@/styles/blog.module.css'
 
 export default function Page() {
   return <main className={styles.blog}></main>
@@ -248,7 +249,7 @@ export default function Page() {
 ```
 
 ```jsx filename="pages/blog/index.js" switcher
-import styles from './blog.module.css'
+import styles from '@/styles/blog.module.css'
 
 export default function Page() {
   return <main className={styles.blog}></main>
@@ -311,7 +312,7 @@ export default function RootLayout({ children }) {
 
 Import the stylesheet in the `pages/_app.js` file to apply the styles to **every route** in your application:
 
-```tsx filename="pages/_app.js"
+```jsx filename="pages/_app.js"
 import '@/styles/global.css'
 
 export default function MyApp({ Component, pageProps }) {

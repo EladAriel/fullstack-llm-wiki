@@ -4,10 +4,10 @@ framework: "LangSmith"
 source_repo: "https://github.com/langchain-ai/docs.git"
 source_branch: "main"
 source_path: "src/langsmith/billing.mdx"
-source_commit: "2aae1dfc98ee953a9a5185fb6fcdd9efb3f4d878"
-source_commit_short: "2aae1df"
-source_commit_date: "2026-07-25T00:27:23+00:00"
-generated_at: "2026-07-25T19:08:33.415294Z"
+source_commit: "a174f9cf7c91ee5eb14ee2382eb48bfe6e4956e9"
+source_commit_short: "a174f9c"
+source_commit_date: "2026-08-28T17:04:12-07:00"
+generated_at: "2026-08-29T09:39:50.662713Z"
 ---
 # Billing
 
@@ -28,7 +28,7 @@ This page describes how to manage billing for your LangSmith organization:
 <Note>
 Before using this guide, note the following:
 
-- If you are interested in the [Enterprise](https://www.langchain.com/pricing) plan, please [contact sales](https://www.langchain.com/contact-sales). This guide is only for our self-serve billing plans.
+- If you are interested in the [Enterprise](https://www.langchain.com/pricing) plan, [contact our sales team](https://www.langchain.com/contact-sales). This guide is only for our self-serve billing plans.
 </Note>
 
 To set up billing for your LangSmith organization, navigate to the [Billing and Usage](https://smith.langchain.com/settings/payments) page under **Settings**. Depending on your organization's settings, there are different setup guides:
@@ -62,7 +62,7 @@ Contract usage tracking is available for [**Enterprise plan**](/langsmith/pricin
 For details on viewing your prepaid contract consumption, refer to [Contract usage](/langsmith/view-usage#contract-usage).
 
 <Note>
-For more details on the Enterprise plan, [contact the sales team](https://www.langchain.com/contact-sales).
+For more details on the Enterprise plan, [contact our sales team](https://www.langchain.com/contact-sales).
 </Note>
 
 ## Update your information (Paid plans only)
@@ -198,7 +198,7 @@ For current LCU and LSU rates, and to estimate the cost of a deployment, see the
 This usage-based model replaces the previous per-run and uptime pricing. Existing customers remain on their current pricing until October 1, 2026, then move to the new model. Scale to zero is available only for deployments on the new pricing. The inactivity window before a Serverless deployment scales to zero may change as the feature rolls out. For questions about the transition, contact support via [support.langchain.com](https://support.langchain.com).
 </Note>
 
-For high-volume deployment usage, [contact the sales team](https://www.langchain.com/contact-sales) to discuss custom pricing options.
+For high-volume deployment usage, [contact our sales team](https://www.langchain.com/contact-sales) to discuss custom pricing options.
 
 ### Summary
 

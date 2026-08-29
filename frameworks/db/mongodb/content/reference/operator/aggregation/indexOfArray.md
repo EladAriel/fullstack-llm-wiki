@@ -1,91 +1,209 @@
 ---
 type: "Framework Learn Page"
-framework: "mongodb"
+framework: "MongoDB"
 source_repo: "https://github.com/mongodb/docs.git"
 source_branch: "main"
 source_path: "content/manual/manual/source/reference/operator/aggregation/indexOfArray.txt"
-source_commit: "ab9db26ed3d11618cdb61516d8180337d8e3f679"
-source_commit_short: "ab9db26e"
-source_commit_date: "2026-07-24T16:22:46-06:00"
-generated_at: "2026-07-25T11:51:15Z"
+source_commit: "b9f2bc487a2878b65e3c1f80024bebab76954f27"
+source_commit_short: "b9f2bc48"
+source_commit_date: "2026-08-28T17:09:45-05:00"
+generated_at: "2026-08-29T09:39:20.180617Z"
 ---
-
-===================================
-
 # $indexOfArray (expression operator)
+
+**meta:** :description: Search an array for a specified value using `$indexOfArray` and return the index of its first occurrence.
+
+.. default-domain:: mongodb
+
+**contents:** On this page
+   :local:
+   :backlinks: none
+   :depth: 1
+   :class: singlecol
 
 ## Definition
 
+**expression:** $indexOfArray
+
+   Searches an array for an occurrence of a specified value and returns
+   the array index of the first occurrence. Array indexes start at zero.
+
+   :expression:`$indexOfArray` has the following :ref:`operator
+   expression syntax <agg-quick-ref-operator-expressions>`:
+
+   .. code-block:: javascript
+
+      { $indexOfArray: [ <array expression>, <search expression>, <start>, <end> ] }
+
+   .. list-table::
+      :header-rows: 1
+      :widths: 20 20 80
+   
+      * - Field
+        - Type
+        - Description
+   
+      * - ``<array>``   
+        - array
+        - Can be any valid :ref:`expression <aggregation-expressions>` as long
+          as it resolves to an array. For more information on expressions, see
+          :ref:`aggregation-expressions`.
+          
+          If the array expression resolves to a value of ``null`` or refers to
+          a field that is missing, :expression:`$indexOfArray` returns
+          ``null``.
+          
+          If the array expression does not resolve to an array or ``null`` nor
+          refers to a missing field, :expression:`$indexOfArray` returns an
+          error.
+
+      * - ``<search value>``   
+        - string
+        - Can be any valid :ref:`expression <aggregation-expressions>`. For
+          more information on expressions, see :ref:`aggregation-expressions`.
+   
+      * - ``<start>``
+        - integer
+        - Optional. An integer, or a number that can be represented as integers (such as
+          2.0), that specifies the starting index position for the search. Can
+          be any valid :ref:`expression <aggregation-expressions>` that
+          resolves to a non-negative integral number.
+          
+          If unspecified, the starting index position for the search is the
+          beginning of the string.
+
+      * - ``<end>``   
+        - integer
+        - Optional. An integer, or a number that can be represented as integers (such as
+          2.0), that specifies the ending index position for the search. Can
+          be any valid :ref:`expression <aggregation-expressions>` that
+          resolves to a non-negative integral number. If you specify a
+          ``<end>`` index value, you should also specify a ``<start>`` index
+          value; otherwise, :expression:`$indexOfArray` uses the ``<end>``
+          value as the ``<start>`` index value instead of the ``<end>`` value.
+          
+          If unspecified, the ending index position for the search is the
+          end of the string.
+
 ## Behavior
 
-If the `<search expression>` is found multiple times within the `<array expression>`, then :expression:`$indexOfArray` returns the index of the first `<search expression>` from the starting index position.
+If the ``<search expression>`` is found multiple times within the
+``<array expression>``, then :expression:`$indexOfArray` returns the
+index of the first ``<search expression>`` from the starting index
+position.
 
-:expression:`$indexOfArray` returns `null`:
+:expression:`$indexOfArray` returns ``null``:
 
-- If `<array expression>` is null, or
-- If `<array expression>` refers to a non-existing field in the input
-document.
+- If ``<array expression>`` is null, or
+
+- If ``<array expression>`` refers to a non-existing field in the input
+  document.
 
 :expression:`$indexOfArray` returns an error:
 
-- If `<array expression>` is not an array and not null, or
-- If `<start>` or `<end>` is a negative integer (or a value that
-can be represented as a negative integer, like -5.0).
+- If ``<array expression>`` is not an array and not null, or
 
-:expression:`$indexOfArray` returns `-1`:
+- If ``<start>`` or ``<end>`` is a negative integer (or a value that
+  can be represented as a negative integer, like -5.0).
+
+:expression:`$indexOfArray` returns ``-1``:
 
 - If the <search expression> is not found in the array, or
-- If `<start>` is a number greater than `<end>`, or
-- If `<start>` is a number greater than the length of the array.
+ 
+- If ``<start>`` is a number greater than ``<end>``, or
+
+- If ``<start>`` is a number greater than the length of the array.
+
+.. list-table::
+   :header-rows: 1
+   :widths: 95 5
+
+   * - Example
+     - Results
+
+   * - ``{ $indexOfArray: [ [ "a", "abc" ], "a" ] }``
+     - ``0``
+
+   * - ``{ $indexOfArray: [ [ "a", "abc", "de", ["de"] ], ["de"] ] }``
+     - ``3``
+
+   * - ``{ $indexOfArray: [ [ 1, 2 ], 5 ] }``
+     - ``-1``
+
+   * - ``{ $indexOfArray: [ [ 1, 2, 3 ], [1, 2] ] }``
+     - ``-1``
+
+   * - ``{ $indexOfArray: [ [ 10, 9, 9, 8, 9 ], 9, 3 ] }``
+     - ``4``
+
+   * - ``{ $indexOfArray: [ [ "a", "abc", "b" ], "b", 0, 1 ] }``
+     - ``-1``
+
+   * - ``{ $indexOfArray: [ [ "a", "abc", "b" ], "b", 1, 0 ] }``
+     - ``-1``
+
+   * - ``{ $indexOfArray: [ [ "a", "abc", "b" ], "b", 20 ] }``
+     - ``-1``
+
+   * - ``{ $indexOfArray: [ [ null, null, null ], null ] }``
+     - ``0``
+
+   * - ``{ $indexOfArray: [ null, "foo" ] }``
+     - ``null``
+
+   * - ``{ $indexOfArray: [ "foo", "foo" ] }``
+     - Error
+
 ## Example
 
-The example uses this `inventory` collection:
+The example uses this ``inventory`` collection:
 
-```javascript
-db.inventory.insertMany( [
-   { _id: 0, items: [ "one", "two", "three" ] },
-   { _id: 1, items: [ 1, 2, 3 ] },
-   { _id: 2, items: [ 1, 2, 3, 2 ] },
-   { _id: 3, items: [ null, null, 2 ] },
-   { _id: 4, items: [ 2, null, null, 2 ] },
-   { _id: 5, items: null },
-   { _id: 6, amount: 3 }
-] )
-```
+.. code-block:: javascript
 
-The following example uses :expression:`$indexOfArray` to find `2` in the `items` array:
+   db.inventory.insertMany( [
+      { _id: 0, items: [ "one", "two", "three" ] },
+      { _id: 1, items: [ 1, 2, 3 ] },
+      { _id: 2, items: [ 1, 2, 3, 2 ] },
+      { _id: 3, items: [ null, null, 2 ] },
+      { _id: 4, items: [ 2, null, null, 2 ] },
+      { _id: 5, items: null },
+      { _id: 6, amount: 3 }
+   ] )
 
-```javascript
-db.inventory.aggregate( [ {
-   $project: {
-      index: { $indexOfArray: [ "$items", 2 ] }
-   }
-} ] )
-```
+The following example uses :expression:`$indexOfArray` to find ``2`` in
+the ``items`` array:
+
+.. code-block:: javascript
+
+   db.inventory.aggregate( [ {
+      $project: {
+         index: { $indexOfArray: [ "$items", 2 ] }
+      }
+   } ] )
 
 The example returns:
 
-- The first array index for the value `2` in each `items` array, if
-found. Array indexes start at `0`.
-
-- `-1` for the index if `2` is not in the `items` array.
-- `null` for the index if `items` is not an array or `items` does
-not exist.
+- The first array index for the value ``2`` in each ``items`` array, if
+  found. Array indexes start at ``0``.
+- ``-1`` for the index if ``2`` is not in the ``items`` array.
+- ``null`` for the index if ``items`` is not an array or ``items`` does
+  not exist.
 
 Example output:
 
-```javascript
-[
-   { _id: 0, index: -1 },
-   { _id: 1, index: 1 },
-   { _id: 2, index: 1 },
-   { _id: 3, index: 2 },
-   { _id: 4, index: 0 },
-   { _id: 5, index: null },
-   { _id: 6, index: null }
-]
-```
+.. code-block:: javascript
+   :copyable: false
 
-> **Seealso:** - :expression:`$indexOfBytes`
-- :expression:`$indexOfCP`
-- :expression:`$in`
+   [
+      { _id: 0, index: -1 },
+      { _id: 1, index: 1 },
+      { _id: 2, index: 1 },
+      { _id: 3, index: 2 },
+      { _id: 4, index: 0 },
+      { _id: 5, index: null },
+      { _id: 6, index: null }
+   ]
+
+**seealso:** - :expression:`$indexOfBytes`
+   - :expression:`$indexOfCP`
+   - :expression:`$in`

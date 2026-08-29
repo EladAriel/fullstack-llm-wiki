@@ -1,7 +1,7 @@
 ---
 type: "Framework Learn Directory Index"
 framework: "Grafana"
-generated_at: "2026-07-25T19:08:09.120140Z"
+generated_at: "2026-08-29T09:39:37.586985Z"
 ---
 # User-Management
 
@@ -18,3 +18,10 @@ This directory contains Grafana learning pages related to user-management.
 ## Pages in This Directory
 
 - [_Index](_index.md)
+
+## Subdirectories
+
+- [Manage Dashboard Permissions](manage-dashboard-permissions/index.md)
+- [Manage Org Users](manage-org-users/index.md)
+- [Server User Management](server-user-management/index.md)
+- [User Preferences](user-preferences/index.md)

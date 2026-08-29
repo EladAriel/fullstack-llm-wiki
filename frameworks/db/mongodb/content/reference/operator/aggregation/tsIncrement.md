@@ -1,159 +1,192 @@
 ---
 type: "Framework Learn Page"
-framework: "mongodb"
+framework: "MongoDB"
 source_repo: "https://github.com/mongodb/docs.git"
 source_branch: "main"
 source_path: "content/manual/manual/source/reference/operator/aggregation/tsIncrement.txt"
-source_commit: "ab9db26ed3d11618cdb61516d8180337d8e3f679"
-source_commit_short: "ab9db26e"
-source_commit_date: "2026-07-24T16:22:46-06:00"
-generated_at: "2026-07-25T11:51:15Z"
+source_commit: "b9f2bc487a2878b65e3c1f80024bebab76954f27"
+source_commit_short: "b9f2bc48"
+source_commit_date: "2026-08-28T17:09:45-05:00"
+generated_at: "2026-08-29T09:39:20.202845Z"
 ---
-
-===================================
-
 # $tsIncrement  (expression operator)
+
+**meta:** :description: Use `$tsIncrement` to obtain the incrementing ordinal from a timestamp, uniquely identifying events occurring within the same second.
+
+.. default-domain:: mongodb
+
+**contents:** On this page
+   :local:
+   :backlinks: none
+   :depth: 1
+   :class: singlecol
 
 ## Definition
 
-.. versionadded:: 5.1
+**expression:** $tsIncrement
 
-.. include:: /includes/tsIncrement-introduction.rst
+**versionadded:** 5.1
 
-When multiple events happen within the same second, the incrementing ordinal uniquely identifies each event.
+**include:** /includes/tsIncrement-introduction.rst
+
+When multiple events happen within the same second, the incrementing
+ordinal uniquely identifies each event.
 
 :expression:`$tsIncrement` syntax:
 
-```none
-{ $tsIncrement: <expression> }
-```
+.. code-block:: none
+   :copyable: false
 
-The `expression <aggregation-expressions>` must resolve to a `timestamp <document-bson-type-timestamp>`.
+   { $tsIncrement: <expression> }
 
-> **Seealso:** - `aggregation-expressions`
-- `bson-types`
-- :expression:`$tsSecond`
+The :ref:`expression <aggregation-expressions>` must resolve to a
+:ref:`timestamp <document-bson-type-timestamp>`.
+
+**seealso:** - :ref:`aggregation-expressions`
+   - :ref:`bson-types`
+   - :expression:`$tsSecond`
 
 ## Behavior
 
 :expression:`$tsIncrement` returns:
 
-- `Null` if the input `expression <aggregation-expressions>`
-evaluates to `null` or refers to a field that is missing.
+- ``Null`` if the input :ref:`expression <aggregation-expressions>`
+  evaluates to ``null`` or refers to a field that is missing.
 
-- An error if the input `expression <aggregation-expressions>` does
-not evaluate to a `timestamp <document-bson-type-timestamp>`.
+- An error if the input :ref:`expression <aggregation-expressions>` does
+  not evaluate to a :ref:`timestamp <document-bson-type-timestamp>`.
 
 ## Examples
 
 ### Obtain the Incrementing Ordinal from a Timestamp Field
 
-.. include:: /includes/stockSales-example-collection.rst
+**include:** /includes/stockSales-example-collection.rst
 
-The following example uses :expression:`$tsIncrement` in a :pipeline:`$project` stage to return the incrementing ordinal from the stock sales `saleTimestamp` field:
+The following example uses :expression:`$tsIncrement` in a
+:pipeline:`$project` stage to return the incrementing ordinal from the
+stock sales ``saleTimestamp`` field:
 
-```javascript
-db.stockSales.aggregate( [
-   {
-      $project:
+.. code-block:: javascript
+
+   db.stockSales.aggregate( [
       {
-         _id: 0, saleTimestamp: 1, saleIncrement: { $tsIncrement: "$saleTimestamp" }
-      }
-   }
-] )
-```
-
-In the example, :pipeline:`$project` only includes the `saleTimestamp` and `saleIncrement` fields as shown in the following output:
-
-```javascript
-{
-  saleTimestamp: Timestamp({ t: 1622731060, i: 1 }),
-  saleIncrement: Long("1")
-},
-{
-  saleTimestamp: Timestamp({ t: 1622731060, i: 2 }),
-  saleIncrement: Long("2")
-},
-{
-  saleTimestamp: Timestamp({ t: 1714124193, i: 1 }),
-  saleIncrement: Long("1")
-},
-{
-  saleTimestamp: Timestamp({ t: 1714124193, i: 2 }),
-  saleIncrement: Long("2")
-},
-{
-  saleTimestamp: Timestamp({ t: 1714124193, i: 3 }),
-  saleIncrement: Long("3")
-}
-```
-
-### Use `$tsIncrement` in a Change Stream Cursor to Monitor Collection Changes
-
-The example in this section uses :expression:`$tsIncrement` in a `change stream cursor <changeStreams>` to return every other change made to a collection in the same second of time.
-
-Create a `change stream cursor <changeStreams>` on a collection named `cakeSales` that you will see later in this section:
-
-```javascript
-cakeSalesCursor = db.cakeSales.watch( [
-   {
-      $match: {
-         $expr: {
-            $eq: [
-               { $mod: [ { $tsIncrement: "$clusterTime" } , 2 ] },
-               0
-            ]
+         $project:
+         {
+            _id: 0, saleTimestamp: 1, saleIncrement: { $tsIncrement: "$saleTimestamp" }
          }
       }
+   ] )
+
+In the example, :pipeline:`$project` only includes the ``saleTimestamp``
+and ``saleIncrement`` fields as shown in the following output:
+
+.. code-block:: javascript
+   :copyable: false
+
+   {
+     saleTimestamp: Timestamp({ t: 1622731060, i: 1 }),
+     saleIncrement: Long("1")
+   },
+   {
+     saleTimestamp: Timestamp({ t: 1622731060, i: 2 }),
+     saleIncrement: Long("2")
+   },
+   {
+     saleTimestamp: Timestamp({ t: 1714124193, i: 1 }),
+     saleIncrement: Long("1")
+   },
+   {
+     saleTimestamp: Timestamp({ t: 1714124193, i: 2 }),
+     saleIncrement: Long("2")
+   },
+   {
+     saleTimestamp: Timestamp({ t: 1714124193, i: 3 }),
+     saleIncrement: Long("3")
    }
-] )
-```
+
+### Use ``$tsIncrement`` in a Change Stream Cursor to Monitor Collection Changes
+
+The example in this section uses :expression:`$tsIncrement` in a
+:ref:`change stream cursor <changeStreams>` to return every other change
+made to a collection in the same second of time.
+
+Create a :ref:`change stream cursor <changeStreams>` on a collection
+named ``cakeSales`` that you will see later in this section:
+
+.. code-block:: javascript
+
+   cakeSalesCursor = db.cakeSales.watch( [
+      {
+         $match: {
+            $expr: {
+               $eq: [
+                  { $mod: [ { $tsIncrement: "$clusterTime" } , 2 ] },
+                  0
+               ]
+            }
+         }
+      }
+   ] )
 
 In the example, the:
 
 - :method:`db.collection.watch()` method creates a :ref:`change stream
-cursor <changeStreams>` for the `cakeSales` collection and stores the cursor in `cakeSalesCursor`.
+  cursor <changeStreams>` for the ``cakeSales`` collection and stores
+  the cursor in ``cakeSalesCursor``.
 
 - :pipeline:`$match` stage filters the documents to those
-returned by the :query:`$expr` operator.
+  returned by the :query:`$expr` operator.
 
 - :query:`$expr` operator:
-- Applies :expression:`$mod` `2` to the `$clusterTime` variable's
-incrementing ordinal returned by :expression:`$tsIncrement`.
 
-`$clusterTime` is the timestamp from the `oplog <replica-set-oplog>` entry when the `cakeSales` collection is modified. See `Command Response <command-response>`.
+  - Applies :expression:`$mod` ``2`` to the ``$clusterTime`` variable's
+    incrementing ordinal returned by :expression:`$tsIncrement`.
+  
+    ``$clusterTime`` is the timestamp from the :ref:`oplog
+    <replica-set-oplog>` entry when the ``cakeSales`` collection is
+    modified. See :ref:`Command Response <command-response>`.
 
-- Compares the returned value from :expression:`$mod` to `0` using
-:expression:`$eq`.
+  - Compares the returned value from :expression:`$mod` to ``0`` using
+    :expression:`$eq`.
 
-.. include:: /includes/cakeSales-example-collection.rst
+**include:** /includes/cakeSales-example-collection.rst
 
-To monitor the `cakeSales` collection changes, use `cakeSalesCursor`. For example, to obtain the next document from `cakeSalesCursor`, use the :method:`~cursor.next()` method:
+To monitor the ``cakeSales`` collection changes, use
+``cakeSalesCursor``. For example, to obtain the next document from
+``cakeSalesCursor``, use the :method:`~cursor.next()` method:
 
-```javascript
-cakeSalesCursor.next()
-```
+.. code-block:: javascript
 
-Depending on the second when the documents were added to `cakeSales`, the output from `cakeSalesCursor.next()` varies. For example, the document additions might span more than one second.
+   cakeSalesCursor.next()
 
-The following `cakeSalesCursor.next()` example output shows the `insert` details for the first document added to the `cakeSales` collection. Notice the incrementing ordinal `i` is `2` in the `clusterTime` field.
+Depending on the second when the documents were added to ``cakeSales``,
+the output from ``cakeSalesCursor.next()`` varies. For example, the
+document additions might span more than one second.
 
-```javascript
-_id: {
-  _data: '82613A4F25000000022B022C0100296E5A100454C5BFAF538C47AB950614F43889BE00461E5F696400290004'
-},
-operationType: 'insert',
-clusterTime: Timestamp({ t: 1631211301, i: 2 }),
-fullDocument: {
-  _id: 0,
-  type: 'chocolate',
-  orderDate: ISODate("2020-05-18T14:10:30.000Z"),
-  state: 'CA',
-  price: 13,
-  quantity: 120
-},
-ns: { db: 'test', coll: 'cakeSales' },
-documentKey: { _id: 0 }
-```
+The following ``cakeSalesCursor.next()`` example output shows the
+``insert`` details for the first document added to the ``cakeSales``
+collection. Notice the incrementing ordinal ``i`` is ``2`` in the
+``clusterTime`` field.
 
-Running `cakeSalesCursor.next()` again returns the `cakeSales` document for which the `clusterTime` incrementing ordinal `i` is `4`, omitting the document where `i` is `3`.
+.. code-block:: javascript
+   :copyable: false
+
+   _id: {
+     _data: '82613A4F25000000022B022C0100296E5A100454C5BFAF538C47AB950614F43889BE00461E5F696400290004'
+   },
+   operationType: 'insert',
+   clusterTime: Timestamp({ t: 1631211301, i: 2 }),
+   fullDocument: {
+     _id: 0,
+     type: 'chocolate',
+     orderDate: ISODate("2020-05-18T14:10:30.000Z"),
+     state: 'CA',
+     price: 13,
+     quantity: 120
+   },
+   ns: { db: 'test', coll: 'cakeSales' },
+   documentKey: { _id: 0 }
+
+Running ``cakeSalesCursor.next()`` again returns the ``cakeSales``
+document for which the ``clusterTime`` incrementing ordinal ``i`` is
+``4``, omitting the document where ``i`` is ``3``.

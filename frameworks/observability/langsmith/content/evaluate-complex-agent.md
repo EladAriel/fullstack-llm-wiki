@@ -4,10 +4,10 @@ framework: "LangSmith"
 source_repo: "https://github.com/langchain-ai/docs.git"
 source_branch: "main"
 source_path: "src/langsmith/evaluate-complex-agent.mdx"
-source_commit: "2aae1dfc98ee953a9a5185fb6fcdd9efb3f4d878"
-source_commit_short: "2aae1df"
-source_commit_date: "2026-07-25T00:27:23+00:00"
-generated_at: "2026-07-25T19:08:33.411384Z"
+source_commit: "a174f9cf7c91ee5eb14ee2382eb48bfe6e4956e9"
+source_commit_short: "a174f9c"
+source_commit_date: "2026-08-28T17:04:12-07:00"
+generated_at: "2026-08-29T09:39:50.650837Z"
 ---
 ---
 title: Evaluate a complex agent
@@ -615,7 +615,7 @@ def trajectory_subsequence(outputs: dict, reference_outputs: dict) -> float:
     return i / len(reference_outputs['trajectory'])
 ```
 
-Now we can run our evaluation. Our evaluator assumes that our target function returns a 'trajectory' key, so lets define a target function that does so. We'll need to usage [LangGraph's streaming capabilities](https://langchain-ai.github.io/langgra/langsmith/observability-concepts/streaming/) to record the trajectory.
+Now we can run our evaluation. Our evaluator assumes that our target function returns a 'trajectory' key, so lets define a target function that does so. We'll need to usage [LangGraph's streaming capabilities](/oss/langgraph/streaming) to record the trajectory.
 
 Note that we are reusing the same dataset as for our final response evaluation, so we could have run both evaluators together and defined a target function that returns both "response" and "trajectory". In practice it's often useful to have separate datasets for each type of evaluation, which is why we show them separately here:
 
@@ -623,8 +623,8 @@ Note that we are reusing the same dataset as for our final response evaluation, 
 async def run_graph(inputs: dict) -> dict:
     """Run graph and track the trajectory it takes along with the final response."""
     trajectory = []
-    # Set subgraph=True to stream events from subgraphs of the main graph: https://langchain-ai.github.io/langgraph/how-tos/streaming-subgraphs/
-    # Set stream_mode="debug" to stream all possible events: https://langchain-ai.github.io/langgra/langsmith/observability-concepts/streaming
+    # Set subgraph=True to stream events from subgraphs of the main graph: https://docs.langchain.com/oss/langgraph/streaming#subgraph-outputs
+    # Set stream_mode="debug" to stream all possible events: https://docs.langchain.com/oss/langgraph/streaming#debug
     async for namespace, chunk in graph.astream({"messages": [
             {
                 "role": "user",
@@ -1499,8 +1499,8 @@ def trajectory_subsequence(outputs: dict, reference_outputs: dict) -> float:
 async def run_graph(inputs: dict) -> dict:
     """Run graph and track the trajectory it takes along with the final response."""
     trajectory = []
-    # Set subgraph=True to stream events from subgraphs of the main graph: https://langchain-ai.github.io/langgraph/how-tos/streaming-subgraphs/
-    # Set stream_mode="debug" to stream all possible events: https://langchain-ai.github.io/langgra/langsmith/observability-concepts/streaming
+    # Set subgraph=True to stream events from subgraphs of the main graph: https://docs.langchain.com/oss/langgraph/streaming#subgraph-outputs
+    # Set stream_mode="debug" to stream all possible events: https://docs.langchain.com/oss/langgraph/streaming#debug
     async for namespace, chunk in graph.astream(
         {
             "messages": [

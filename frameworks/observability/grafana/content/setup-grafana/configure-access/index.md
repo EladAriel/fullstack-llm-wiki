@@ -1,7 +1,7 @@
 ---
 type: "Framework Learn Directory Index"
 framework: "Grafana"
-generated_at: "2026-07-25T19:08:09.122489Z"
+generated_at: "2026-08-29T09:39:37.579337Z"
 ---
 # Configure-Access
 
@@ -20,3 +20,8 @@ This directory contains Grafana learning pages related to configure-access.
 - [_Index](_index.md)
 - [Configure Team Sync](configure-team-sync.md)
 - [Multi Team Access](multi-team-access.md)
+
+## Subdirectories
+
+- [Configure Authentication](configure-authentication/index.md)
+- [Configure Scim Provisioning](configure-scim-provisioning/index.md)

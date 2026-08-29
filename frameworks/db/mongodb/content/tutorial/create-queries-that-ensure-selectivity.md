@@ -1,22 +1,40 @@
 ---
 type: "Framework Learn Page"
-framework: "mongodb"
+framework: "MongoDB"
 source_repo: "https://github.com/mongodb/docs.git"
 source_branch: "main"
 source_path: "content/manual/manual/source/tutorial/create-queries-that-ensure-selectivity.txt"
-source_commit: "ab9db26ed3d11618cdb61516d8180337d8e3f679"
-source_commit_short: "ab9db26e"
-source_commit_date: "2026-07-24T16:22:46-06:00"
-generated_at: "2026-07-25T11:51:15Z"
+source_commit: "b9f2bc487a2878b65e3c1f80024bebab76954f27"
+source_commit_short: "b9f2bc48"
+source_commit_date: "2026-08-28T17:09:45-05:00"
+generated_at: "2026-08-29T09:39:19.629074Z"
 ---
-
-======================================================
+.. _index-selectivity:
 
 # Create Selective Indexes to Answer Queries Efficiently
 
-Selectivity is a query property that describes the ratio of documents matching the query versus the total number of documents in a collection. The selectivity of an index describes how many documents a unique index key matches. A query or index has high selectivity when proportionally few documents match a query or a given index key.
+**meta:** :description: Ensure query selectivity by creating indexes that narrow results, improving efficiency and performance in MongoDB queries.
 
-Because indexes can have different selectivities depending on the index keys used, ensure that the most selective indexes are available based on the predicates contained in a query. To ensure the most efficient query execution, create indexes that most uniquely match the predicates contained in a query.
+.. default-domain:: mongodb
+
+**contents:** On this page
+   :local:
+   :backlinks: none
+   :depth: 1
+   :class: singlecol
+
+Selectivity is a query property that describes the ratio of documents
+matching the query versus the total number of documents in a collection.
+The selectivity of an index describes how many documents a unique index
+key matches. A query or index has high selectivity when 
+proportionally few documents match a query or a given index key.
+
+Because indexes can have different selectivities depending on the index 
+keys used, ensure that the most selective indexes are
+available based on the predicates contained in a query. To ensure 
+the most efficient query execution, create indexes 
+that most uniquely match the predicates contained in a query.
+
 
 ## Examples
 
@@ -24,55 +42,84 @@ Because indexes can have different selectivities depending on the index keys use
 
 Consider a collection of documents that have the following form:
 
-```javascript
-{
-   status: "processed",
-   product_type: "electronics"
-}
-```
+.. code-block:: javascript
 
-In this example, the `status` of 99% of documents in the collection is `processed`. If you add an index on `status` and query for documents with the `status` of `processed`, both the index and the query have low selectivity. However, if you want to query for documents that do **not** have the `status` of `processed`, the index and the query have high selectivity because the query only returns 1% of the documents in a collection.
+   {
+      status: "processed",
+      product_type: "electronics"
+   }
+
+In this example, the ``status`` of 99% of documents in the collection is
+``processed``. If you add an index on ``status`` and query for documents
+with the ``status`` of ``processed``, both the index and the query have low 
+selectivity. However, if you want to query for documents that do **not**
+have the ``status`` of ``processed``, the index and the query have high selectivity
+because the query only returns 1% of the documents in a collection.
 
 ### Selectivity When Values are Distributed
 
-Consider a collection of documents where the `status` field has three values distributed across the collection:
+Consider a collection of documents where the ``status`` field has three
+values distributed across the collection:
 
-```javascript
-[
-   { _id: ObjectId(), status: "processed", product_type: "electronics" },
-   { _id: ObjectId(), status: "processed", product_type: "grocery" },
-   { _id: ObjectId(), status: "processed", product_type: "household" },
-   { _id: ObjectId(), status: "pending", product_type: "electronics" },
-   { _id: ObjectId(), status: "pending", product_type: "grocery" },
-   { _id: ObjectId(), status: "pending", product_type: "household" },
-   { _id: ObjectId(), status: "new", product_type: "electronics" },
-   { _id: ObjectId(), status: "new", product_type: "grocery" },
-   { _id: ObjectId(), status: "new", product_type: "household" }
-]
-```
+.. code-block:: javascript
 
-If you add an index on `status` and query for `{ "status": "pending", "product_type": "electronics" }`, MongoDB must read three index keys, retrieve three documents matching that status, and filter those documents further on `product_type` to return the one matching document. Similarly, a query for `{ "status": {$in: ["processed", "pending"] }, "product_type" : "electronics" }` must read six documents to return the two matching documents.
+   [
+      { _id: ObjectId(), status: "processed", product_type: "electronics" },
+      { _id: ObjectId(), status: "processed", product_type: "grocery" },
+      { _id: ObjectId(), status: "processed", product_type: "household" },
+      { _id: ObjectId(), status: "pending", product_type: "electronics" },
+      { _id: ObjectId(), status: "pending", product_type: "grocery" },
+      { _id: ObjectId(), status: "pending", product_type: "household" },
+      { _id: ObjectId(), status: "new", product_type: "electronics" },
+      { _id: ObjectId(), status: "new", product_type: "grocery" },
+      { _id: ObjectId(), status: "new", product_type: "household" }
+   ]
 
-Consider the same index on a collection where `status` has nine values distributed across the collection:
+If you add an index on ``status`` and query for ``{ "status": "pending",
+"product_type": "electronics" }``, MongoDB must read three index keys, 
+retrieve three documents matching that status, and filter those 
+documents further on ``product_type`` to return the one matching document. 
+Similarly, a query for ``{ "status": {$in: ["processed", "pending"] }, "product_type" : "electronics" }``
+must read six documents to return the two matching documents. 
 
-```javascript
-[
-   { _id: ObjectId(), status: 1, product_type: "electronics" },
-   { _id: ObjectId(), status: 2, product_type: "grocery" },
-   { _id: ObjectId(), status: 3, product_type: "household"},
-   { _id: ObjectId(), status: 4, product_type: "electronics"  },
-   { _id: ObjectId(), status: 5, product_type: "grocery"},
-   { _id: ObjectId(), status: 6, product_type: "household"},
-   { _id: ObjectId(), status: 7, product_type: "electronics"  },
-   { _id: ObjectId(), status: 8, product_type: "grocery" },
-   { _id: ObjectId(), status: 9, product_type: "household" }
-]
-```
+Consider the same index on a collection where ``status`` has *nine*
+values distributed across the collection:
 
-If you query for `{ "status": 2, "product_type": "grocery" }`, MongoDB only reads one document matching the index key, indicating the index is highly selective. By using this index, you can receive a query response more efficiently, since MongoDB must only further filter one document matching the index value. In this case, the filter also matches, and the query only returns one document.
+.. code-block:: javascript
 
-Although this example's query on `status` equality is more selective, a query such as `{ "status": { $gt: 5 }, "product_type": "grocery" }` still needs to read four documents if you use the same index on `status`. However, if you create a compound index on `product_type` and `status`, MongoDB can more efficiently answer a query for `{"status": { $gt: 5 }, "product_type": "grocery" }` via the compound index, as the query returns only one matching document.
+   [
+      { _id: ObjectId(), status: 1, product_type: "electronics" },
+      { _id: ObjectId(), status: 2, product_type: "grocery" },
+      { _id: ObjectId(), status: 3, product_type: "household"},
+      { _id: ObjectId(), status: 4, product_type: "electronics"  },
+      { _id: ObjectId(), status: 5, product_type: "grocery"},
+      { _id: ObjectId(), status: 6, product_type: "household"},
+      { _id: ObjectId(), status: 7, product_type: "electronics"  },
+      { _id: ObjectId(), status: 8, product_type: "grocery" },
+      { _id: ObjectId(), status: 9, product_type: "household" }
+   ]
 
-To improve query performance, you can create a `compound index <index-type-compound>` that narrows the documents that queries read. For example, if you want to improve performance for queries on `status` and `product_type`, you could create a compound index on those two fields.
+If you query for ``{ "status": 2, "product_type": "grocery" }``, MongoDB
+only reads one document matching the index key, indicating the index is 
+highly selective. By using this index, you can receive a query response more
+efficiently, since MongoDB must only further filter one document 
+matching the index value. In this case, the 
+filter also matches, and the query only returns one document.
 
-If MongoDB reads a relatively large number of documents to return results, some queries may perform faster without indexes. To determine performance, see `indexes-measuring-use`.
+Although this example's query on ``status`` equality is more selective,
+a query such as ``{ "status": { $gt: 5 }, "product_type": "grocery" }``
+still needs to read four documents if you use the 
+same index on ``status``. However, if you create a compound index 
+on ``product_type`` and ``status``, MongoDB can more efficiently
+answer a query for ``{"status": { $gt: 5 }, "product_type": "grocery" }`` 
+via the compound index, as the query returns only one matching document.
+
+To improve query performance, you can create a :ref:`compound index
+<index-type-compound>` that narrows the documents that queries read. For
+example, if you want to improve performance for queries on ``status``
+and ``product_type``, you could create a compound index on those two
+fields. 
+
+If MongoDB reads a relatively large number of documents to return results, some
+queries may perform faster without indexes. To determine performance,
+see :ref:`indexes-measuring-use`.

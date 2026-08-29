@@ -4,10 +4,10 @@ framework: "Arize Phoenix"
 source_repo: "https://github.com/Arize-ai/phoenix.git"
 source_branch: "main"
 source_path: "docs/phoenix/tracing/how-to-tracing/feedback-and-annotations/evaluating-phoenix-traces.mdx"
-source_commit: "69b3ab92c37ff65812feaa2dbf0b1c0ad5ae55fe"
-source_commit_short: "69b3ab9"
-source_commit_date: "2026-07-25T11:48:12-06:00"
-generated_at: "2026-07-25T19:08:24.917611Z"
+source_commit: "c48e50e9906fcc56c1c103ebd93ef3c95ed6b6e7"
+source_commit_short: "c48e50e"
+source_commit_date: "2026-08-29T01:45:20-06:00"
+generated_at: "2026-08-29T09:39:58.905665Z"
 ---
 ---
 title: "Running Evals on Traces"
@@ -218,7 +218,7 @@ Client().spans.log_span_annotations_dataframe(dataframe=annotation_df)
 
 From here you can continue collecting and evaluating traces, or move on to one of these other guides:
 
-* If you're interested in more complex evaluation and evaluators, start with [how to use LLM as a Judge evaluators](/docs/phoenix/evaluation/running-pre-tested-evals)
+* If you're interested in more complex evaluation and evaluators, start with [how to use LLM as a Judge evaluators](/docs/phoenix/evaluation/concepts-evals/llm-as-a-judge)
 
 * If you're ready to start testing your application in a more rigorous manner, check out [how to run structured experiments](/docs/phoenix/datasets-and-experiments/how-to-experiments/run-experiments)
 

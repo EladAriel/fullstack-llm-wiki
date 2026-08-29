@@ -1,16 +1,17 @@
-# zod Learn Wiki
+# Zod Learn Wiki
 
-This is a local LLM-friendly wiki generated from the official zod documentation.
+This is a local LLM-friendly wiki generated from the official Zod documentation.
 
 ## Status
 
-- Framework: `zod`
+- Framework: `Zod`
 - Source repo: `https://github.com/colinhacks/zod`
 - Source branch: `main`
 - Source docs path: `packages/docs/content`
-- Source commit: `912f0f51`
-- Source commit date: `2026-06-10T10:17:29-07:00`
-- Wiki generated at: `2026-06-21T11:57:59Z`
+- Source commit: `e6b6ab3`
+- Source commit date: `2026-08-28T17:35:38-07:00`
+- Wiki generated at: `2026-08-29T09:40:34.224376Z`
+- Page count: `22`
 
 ## How the IDE LLM should use this wiki
 
@@ -32,23 +33,3 @@ This is a local LLM-friendly wiki generated from the official zod documentation.
 - [Blog](content/blog/index.md)
 - [Packages](content/packages/index.md)
 - [V4](content/v4/index.md)
-
-## All Pages
-
-- [Original Source Index](content/_source_index.md)
-- [Api](content/api.md)
-- [Basics](content/basics.md)
-- [Clerk Fellowship](content/blog/clerk-fellowship.md)
-- [Codecs](content/codecs.md)
-- [Ecosystem](content/ecosystem.md)
-- [Error Customization](content/error-customization.md)
-- [Error Formatting](content/error-formatting.md)
-- [Json Schema](content/json-schema.md)
-- [Library Authors](content/library-authors.md)
-- [Metadata](content/metadata.md)
-- [Core](content/packages/core.md)
-- [Mini](content/packages/mini.md)
-- [Zod](content/packages/zod.md)
-- [Original Source Index](content/v4/_source_index.md)
-- [Changelog](content/v4/changelog.md)
-- [Versioning](content/v4/versioning.md)

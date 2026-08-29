@@ -1,51 +1,81 @@
 ---
 type: "Framework Learn Page"
-framework: "mongodb"
+framework: "MongoDB"
 source_repo: "https://github.com/mongodb/docs.git"
 source_branch: "main"
 source_path: "content/manual/manual/source/core/tailable-cursors.txt"
-source_commit: "ab9db26ed3d11618cdb61516d8180337d8e3f679"
-source_commit_short: "ab9db26e"
-source_commit_date: "2026-07-24T16:22:46-06:00"
-generated_at: "2026-07-25T11:51:15Z"
+source_commit: "b9f2bc487a2878b65e3c1f80024bebab76954f27"
+source_commit_short: "b9f2bc48"
+source_commit_date: "2026-08-28T17:09:45-05:00"
+generated_at: "2026-08-29T09:39:19.529242Z"
 ---
-
-================
+.. _tailable-cursors-landing-page:
 
 # Tailable Cursors
 
-By default, MongoDB automatically closes a cursor when the client exhausts all results in the cursor. However, for `capped collections <manual-capped-collection>` you can use a `tailable cursor` that remains open after the client exhausts the results in the initial cursor. Tailable cursors are conceptually equivalent to the `tail` Unix command with the `-f` option ("follow" mode). After clients insert additional documents into a capped collection, the tailable cursor continues to retrieve documents.
+**meta:** :description: Explore how tailable cursors in MongoDB allow continuous retrieval of documents from capped collections, similar to the Unix `tail -f` command.
+
+.. default-domain:: mongodb
+
+**facet:** :name: genre
+   :values: reference
+
+**contents:** On this page
+   :local:
+   :backlinks: none
+   :depth: 2
+   :class: singlecol
+
+By default, MongoDB automatically closes a cursor when the client
+exhausts all results in the cursor. However, for :ref:`capped
+collections <manual-capped-collection>` you can use a :term:`tailable
+cursor` that remains open after the client exhausts the results in the
+initial cursor. Tailable cursors are conceptually equivalent to the
+``tail`` Unix command with the ``-f`` option ("follow" mode). After
+clients insert additional documents into a capped collection, the
+tailable cursor continues to retrieve documents.
 
 ## Use Cases
 
-Use tailable cursors on capped collections that have high write volumes where indexes aren't practical. For instance, MongoDB `replication <replication>` uses tailable cursors to tail the primary's `oplog`.
+Use tailable cursors on capped collections that have high write
+volumes where indexes aren't practical. For instance,
+MongoDB :ref:`replication <replication>` uses tailable cursors to
+tail the primary's :term:`oplog`.
 
-> **Note:** If your query is on an indexed field, use a regular cursor instead of
-a tailable cursor. Keep track of the last value of the indexed field
-returned by the query. To retrieve the newly added documents, query
-the collection again using the last value of the indexed field in the
-query criteria. For example:
-.. code-block:: javascript
-   db.<collection>.find( { indexedField: { $gt: <lastvalue> } } )
+**note:** If your query is on an indexed field, use a regular cursor instead of
+   a tailable cursor. Keep track of the last value of the indexed field
+   returned by the query. To retrieve the newly added documents, query
+   the collection again using the last value of the indexed field in the
+   query criteria. For example:
+
+   .. code-block:: javascript
+
+      db.<collection>.find( { indexedField: { $gt: <lastvalue> } } )
 
 ## Get Started
 
-To create a tailable cursor in :binary:`mongosh`, see :method:`cursor.tailable()`.
+To create a tailable cursor in :binary:`mongosh`, see
+:method:`cursor.tailable()`.
 
-To see tailable cursor methods for your driver, see your :driver:`driver documentation </>`.
+To see tailable cursor methods for your driver, see your :driver:`driver
+documentation </>`.
 
 ## Behavior
 
 Consider the following behaviors related to tailable cursors:
 
 - Tailable cursors do not use indexes. They return documents in
-`natural order`.
+  :term:`natural order`.
 
 - Because tailable cursors do not use indexes, the initial scan for the
-query may be expensive. After initially exhausting the cursor, subsequent retrievals of the newly added documents are inexpensive.
+  query may be expensive. After initially exhausting the cursor,
+  subsequent retrievals of the newly added documents are inexpensive.
 
 - A tailable cursor can become invalid if the data at its current
-position is overwritten by new data. For example, this can happen if the speed of data insertion is faster than the speed of cursor iteration.
+  position is overwritten by new data. For example, this can happen if
+  the speed of data insertion is faster than the speed of cursor
+  iteration.
 
-- By default, `mongosh` prints a warning when you use a blocking call
-on a tailable cursor, such as `.next()` or `.hasNext()`. To silence these warnings, use :method:`cursor.disableBlockWarnings()`.
+- By default, ``mongosh`` prints a warning when you use a blocking call
+  on a tailable cursor, such as ``.next()`` or ``.hasNext()``. To
+  silence these warnings, use :method:`cursor.disableBlockWarnings()`.

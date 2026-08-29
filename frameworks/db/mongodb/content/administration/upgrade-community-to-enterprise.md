@@ -1,37 +1,66 @@
 ---
 type: "Framework Learn Page"
-framework: "mongodb"
+framework: "MongoDB"
 source_repo: "https://github.com/mongodb/docs.git"
 source_branch: "main"
 source_path: "content/manual/manual/source/administration/upgrade-community-to-enterprise.txt"
-source_commit: "ab9db26ed3d11618cdb61516d8180337d8e3f679"
-source_commit_short: "ab9db26e"
-source_commit_date: "2026-07-24T16:22:46-06:00"
-generated_at: "2026-07-25T11:51:15Z"
+source_commit: "b9f2bc487a2878b65e3c1f80024bebab76954f27"
+source_commit_short: "b9f2bc48"
+source_commit_date: "2026-08-28T17:09:45-05:00"
+generated_at: "2026-08-29T09:39:19.764687Z"
 ---
-
-===============================================
+.. _upgrade-community-to-enterprise:
 
 # Upgrade MongoDB Community to MongoDB Enterprise
 
-.. include:: /includes/minor-release.rst
+**meta:** :keywords: on-prem
+   :description: Upgrade from MongoDB Community to Enterprise Edition to access features like in-memory storage, auditing, and encryption at rest.
 
-.. include:: /includes/extracts/enterprise-additional-features.rst
+**contents:** On this page
+   :local:
+   :backlinks: none
+   :depth: 1
+   :class: singlecol
 
-The documents in this section provide instructions to upgrade from MongoDB Community Edition to MongoDB Enterprise Edition.
+**include:** /includes/minor-release.rst
 
-> **Important:** .. include:: /includes/extracts/enterprise-upgrade-edition-only.rst
+**include:** /includes/extracts/enterprise-additional-features.rst
 
-> **Note:** If you use `{+atlas+}
-<https://www.mongodb.com/docs/atlas>`__, the fully
-managed service for MongoDB deployments in the cloud, you can
-easily :atlas:`upgrade your MongoDB version
-</tutorial/major-version-change/>`. To migrate from
-MongoDB Community Edition to {+atlas+}, see
-:atlas:`Migrate or Import Data </import>`.
+The documents in this section provide instructions to upgrade from
+MongoDB Community Edition to MongoDB Enterprise Edition.
 
-## Contents
+**important:** .. include:: /includes/extracts/enterprise-upgrade-edition-only.rst
 
-- Standalone </tutorial/upgrade-to-enterprise-standalone>
-- Replica Set </tutorial/upgrade-to-enterprise-replica-set>
-- Sharded Cluster </tutorial/upgrade-to-enterprise-sharded-cluster>
+**note:** If you use `{+atlas+} 
+   <https://www.mongodb.com/docs/atlas>`__, the fully
+   managed service for MongoDB deployments in the cloud, you can 
+   easily :atlas:`upgrade your MongoDB version 
+   </tutorial/major-version-change/>`. To migrate from
+   MongoDB Community Edition to {+atlas+}, see 
+   :atlas:`Migrate or Import Data </import>`.
+
+.. list-table::
+   :header-rows: 1
+
+   * - Deployment
+
+     - Tutorial
+
+   * - Standalone
+
+     - :ref:`upgrade_to_enterprise_standalone`
+
+   * - Replica Set
+
+     - :ref:`upgrade_to_enterprise_rs`
+
+   * - Sharded Cluster
+
+     - :ref:`upgrade_to_enterprise_sharded_cluster`
+
+**toctree:** :titlesonly:
+   :hidden:
+
+   Standalone </tutorial/upgrade-to-enterprise-standalone>
+   Replica Set </tutorial/upgrade-to-enterprise-replica-set>
+   Sharded Cluster </tutorial/upgrade-to-enterprise-sharded-cluster>

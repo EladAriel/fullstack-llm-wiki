@@ -1,78 +1,94 @@
 ---
 type: "Framework Learn Page"
-framework: "mongodb"
+framework: "MongoDB"
 source_repo: "https://github.com/mongodb/docs.git"
 source_branch: "main"
 source_path: "content/manual/manual/source/reference/operator/aggregation/bitNot.txt"
-source_commit: "ab9db26ed3d11618cdb61516d8180337d8e3f679"
-source_commit_short: "ab9db26e"
-source_commit_date: "2026-07-24T16:22:46-06:00"
-generated_at: "2026-07-25T11:51:15Z"
+source_commit: "b9f2bc487a2878b65e3c1f80024bebab76954f27"
+source_commit_short: "b9f2bc48"
+source_commit_date: "2026-08-28T17:09:45-05:00"
+generated_at: "2026-08-29T09:39:20.172993Z"
 ---
-
-=============================
-
 # $bitNot (expression operator)
+
+**meta:** :description: Perform a bitwise `not` operation on an `int` or `long` value using the `$bitNot` aggregation operator.
+
+.. default-domain:: mongodb
+
+**contents:** On this page
+  :local:
+  :backlinks: none
+  :depth: 1
+  :class: singlecol
 
 ## Definition
 
-.. versionadded:: 6.3
+**versionadded:** 6.3
+
+**expression:** $bitNot
+
+    Returns the result of a bitwise ``not`` operation on a single ``int`` or 
+    ``long`` value. 
 
 ## Syntax
 
-The `$bitNot` operator has the following syntax:
+The ``$bitNot`` operator has the following syntax: 
 
-```javascript
-   { $bitNot: <expression> }
-```
+.. code-block:: javascript
 
-The expression can be a single argument or an array with one `int` or `long` element.
+      { $bitNot: <expression> }
+
+The expression can be a single argument or an array with one ``int`` or ``long`` 
+element.
 
 ## Behavior
 
-.. include:: /includes/fact-mongosh-integer-long-constructors.rst
+**include:** /includes/fact-mongosh-integer-long-constructors.rst
 
-.. include:: /includes/fact-bitwise-type-error.rst
+**include:** /includes/fact-bitwise-type-error.rst
 
-If the expression evalutates to `null`, the operation returns `null`.
+If the expression evalutates to ``null``, the operation returns ``null``. 
 
 ## Example
 
-The example on this page uses the `switches` collection:
+The example on this page uses the ``switches`` collection: 
 
-```javascript
- db.switches.insertMany( [
-     { _id: 0, a: Int32(0), b: Int32(127) },
-     { _id: 1, a: Int32(2), b: Int32(3) },
-     { _id: 2, a: Int32(3), b: Int32(5) }
- ] )
-```
+.. code-block:: javascript 
 
-The following aggregation uses the `$bitNot` operator in the :pipeline:`$project` stage:
+    db.switches.insertMany( [
+        { _id: 0, a: Int32(0), b: Int32(127) },
+        { _id: 1, a: Int32(2), b: Int32(3) },
+        { _id: 2, a: Int32(3), b: Int32(5) }
+    ] )
 
-```javascript
- db.switches.aggregate( [
-   { 
-     $project: { 
-       result: { 
-         $bitNot: "$a"
-       }
-     }
-   }
- ])
-```
+The following aggregation uses the ``$bitNot`` operator in the 
+:pipeline:`$project` stage:
+
+.. code-block:: javascript 
+
+    db.switches.aggregate( [
+      { 
+        $project: { 
+          result: { 
+            $bitNot: "$a"
+          }
+        }
+      }
+    ])
 
 The operation returns the following results:
 
-```javascript
- [
-   { _id: 0, result: -1 },
-   { _id: 1, result: -3 },
-   { _id: 2, result: -4 }
- ]
-```
+.. code-block:: javascript 
+  :copyable: false
+
+    [
+      { _id: 0, result: -1 },
+      { _id: 1, result: -3 },
+      { _id: 2, result: -4 }
+    ]
 
 ## Learn More
 
-- `aggregation-pipeline-operators`
-- `update-bit`
+- :ref:`aggregation-pipeline-operators`
+
+- :ref:`update-bit`

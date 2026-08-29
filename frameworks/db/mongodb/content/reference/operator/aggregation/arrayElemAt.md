@@ -1,95 +1,141 @@
 ---
 type: "Framework Learn Page"
-framework: "mongodb"
+framework: "MongoDB"
 source_repo: "https://github.com/mongodb/docs.git"
 source_branch: "main"
 source_path: "content/manual/manual/source/reference/operator/aggregation/arrayElemAt.txt"
-source_commit: "ab9db26ed3d11618cdb61516d8180337d8e3f679"
-source_commit_short: "ab9db26e"
-source_commit_date: "2026-07-24T16:22:46-06:00"
-generated_at: "2026-07-25T11:51:15Z"
+source_commit: "b9f2bc487a2878b65e3c1f80024bebab76954f27"
+source_commit_short: "b9f2bc48"
+source_commit_date: "2026-08-28T17:09:45-05:00"
+generated_at: "2026-08-29T09:39:20.116587Z"
 ---
-
-==================================
-
 # $arrayElemAt (expression operator)
+
+.. default-domain:: mongodb
+
+**facet:** :name: programming_language
+   :values: shell
+
+**meta:** :description: Learn how to use an aggregation operator to return an array element at a specific index.
+
+**contents:** On this page
+   :local:
+   :backlinks: none
+   :depth: 1
+   :class: singlecol
 
 ## Definition
 
+**expression:** $arrayElemAt
+
+   Returns the element at the specified array index.
+
 ## Compatibility
 
-.. include:: /includes/fact-compatibility.rst
+.. |operator-method| replace:: ``$arrayElemAt``
+
+**include:** /includes/fact-compatibility.rst
 
 ## Syntax
 
 :expression:`$arrayElemAt` has the following syntax:
 
-```javascript
-{ $arrayElemAt: [ <array>, <idx> ] }
-```
+.. code-block:: javascript
 
-The `<array>` expression can be any valid `expression <aggregation-expressions>` that resolves to an array.
+   { $arrayElemAt: [ <array>, <idx> ] }
 
-The `<idx>` expression can be any valid `expression <aggregation-expressions>` that resolves to an integer.
+The ``<array>`` expression can be any valid :ref:`expression
+<aggregation-expressions>` that resolves to an array.
 
-For more information on expressions, see `aggregation-expressions`.
+The ``<idx>`` expression can be any valid :ref:`expression
+<aggregation-expressions>` that resolves to an integer.
+
+For more information on expressions, see
+:ref:`aggregation-expressions`.
 
 ## Behavior
 
-- If the `<idx>` expression resolves to zero or a positive integer,
-:expression:`$arrayElemAt` returns the element at the `idx` position, counting from the start of the array.
+- If the ``<idx>`` expression resolves to zero or a positive integer,
+  :expression:`$arrayElemAt` returns the element at the ``idx``
+  position, counting from the start of the array.
 
-- If the `<idx>` expression resolves to a negative integer,
-:expression:`$arrayElemAt` returns the element at the `idx` position, counting from the end of the array.
+- If the ``<idx>`` expression resolves to a negative integer,
+  :expression:`$arrayElemAt` returns the element at the ``idx``
+  position, counting from the end of the array.
 
-- If `idx` exceeds the array bounds, :expression:`$arrayElemAt` does
-not return a result.
+- If ``idx`` exceeds the array bounds, :expression:`$arrayElemAt` does
+  not return a result.
 
-- If the `<array>` expression resolves to an undefined array,
-:expression:`$arrayElemAt` returns `null`.
+- If the ``<array>`` expression resolves to an undefined array,
+  :expression:`$arrayElemAt` returns ``null``.
+
+.. list-table::
+   :header-rows: 1
+   :widths: 90 10
+
+   * - Example
+     - Results
+
+   * - ``{ $arrayElemAt: [ [ 1, 2, 3 ], 0 ] }``
+     - ``1``
+
+   * - ``{ $arrayElemAt: [ [ 1, 2, 3 ], -2 ] }``
+     - ``2``
+
+   * - ``{ $arrayElemAt: [ [ 1, 2, 3 ], 15 ] }``
+
+   * - ``{ $arrayElemAt: [ "$undefinedField", 0 ] }``
+     - ``null``
 
 ## Example
 
-A collection named `users` contains the following documents:
+A collection named ``users`` contains the following documents:
 
-```javascript
-db.users.insertMany( [
-   { _id: 1, name: "dave123", favorites: [ "chocolate", "cake", "butter", "apples" ] },
-   { _id: 2, name: "li", favorites: [ "apples", "pudding", "pie" ] },
-   { _id: 3, name: "ahn", favorites: [ "pears", "pecans", "chocolate", "cherries" ] },
-   { _id: 4, name: "ty", favorites: [ "ice cream" ] }
-] )
-```
+.. code-block:: javascript
 
-The following example returns the first and last element in the `favorites` array:
+   db.users.insertMany( [
+      { _id: 1, name: "dave123", favorites: [ "chocolate", "cake", "butter", "apples" ] },
+      { _id: 2, name: "li", favorites: [ "apples", "pudding", "pie" ] },
+      { _id: 3, name: "ahn", favorites: [ "pears", "pecans", "chocolate", "cherries" ] },
+      { _id: 4, name: "ty", favorites: [ "ice cream" ] }
+   ] )
 
-```javascript
-db.users.aggregate([
-   {
-     $project:
+The following example returns the first and last element in the
+``favorites`` array:
+
+.. code-block:: javascript
+
+   db.users.aggregate([
       {
-         name: 1,
-         first: { $arrayElemAt: [ "$favorites", 0 ] },
-         last: { $arrayElemAt: [ "$favorites", -1 ] }
+        $project:
+         {
+            name: 1,
+            first: { $arrayElemAt: [ "$favorites", 0 ] },
+            last: { $arrayElemAt: [ "$favorites", -1 ] }
+         }
       }
-   }
-])
-```
+   ])
 
 The operation returns the following results:
 
-```javascript
-[
-   { _id: 1, name: "dave123", first: "chocolate", "last" : "apples" },
-   { _id: 2, name: "li", first: "apples", "last" : "pie" },
-   { _id: 3, name: "ahn", first: "pears", "last" : "cherries" },
-   { _id: 4, name: "ty", first: "ice cream", "last" : "ice cream" }
-]
-```
+.. code-block:: javascript
+   :copyable: false
+
+   [
+      { _id: 1, name: "dave123", first: "chocolate", "last" : "apples" },
+      { _id: 2, name: "li", first: "apples", "last" : "pie" },
+      { _id: 3, name: "ahn", first: "pears", "last" : "cherries" },
+      { _id: 4, name: "ty", first: "ice cream", "last" : "ice cream" }
+   ]
+
+
 
 ## See Also
 
 - :expression:`$slice`
+
 - :group:`$first`
+
 - :group:`$last`
-- `agg-quick-ref-operator-array`
+
+- :ref:`agg-quick-ref-operator-array`

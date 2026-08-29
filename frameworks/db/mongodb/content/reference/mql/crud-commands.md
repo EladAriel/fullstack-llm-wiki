@@ -1,31 +1,82 @@
 ---
 type: "Framework Learn Page"
-framework: "mongodb"
+framework: "MongoDB"
 source_repo: "https://github.com/mongodb/docs.git"
 source_branch: "main"
 source_path: "content/manual/manual/source/reference/mql/crud-commands.txt"
-source_commit: "ab9db26ed3d11618cdb61516d8180337d8e3f679"
-source_commit_short: "ab9db26e"
-source_commit_date: "2026-07-24T16:22:46-06:00"
-generated_at: "2026-07-25T11:51:15Z"
+source_commit: "b9f2bc487a2878b65e3c1f80024bebab76954f27"
+source_commit_short: "b9f2bc48"
+source_commit_date: "2026-08-28T17:09:45-05:00"
+generated_at: "2026-08-29T09:39:19.862131Z"
 ---
-
-=============
+.. _crud-commands-ref:
+.. _query-and-write-commands:
 
 # CRUD Commands
 
-CRUD commands create, read, update, and delete `documents <bson-document-format>`.
+**meta:** :description: Reference for MongoDB CRUD commands including aggregate, find, insert, update, delete, and bulkWrite. Use these commands to create, read, update, and delete documents.
 
-## Contents
+**contents:** On this page
+   :local:
+   :backlinks: none
+   :depth: 1
+   :class: singlecol
 
-- aggregate </reference/command/aggregate>
-- bulkWrite </reference/command/bulkWrite>
-- count </reference/command/count>
-- delete </reference/command/delete>
-- distinct </reference/command/distinct>
-- find </reference/command/find>
-- findAndModify </reference/command/findAndModify>
-- getMore </reference/command/getMore>
-- insert </reference/command/insert>
-- mapReduce </reference/command/mapReduce>
-- update </reference/command/update>
+CRUD commands *create*, *read*, *update*, and *delete* :ref:`documents
+<bson-document-format>`.
+
+.. list-table::
+   :widths: 30 70
+   :header-rows: 1
+
+   * - Name
+     - Description
+
+   * - :dbcommand:`aggregate`
+     - Runs an :ref:`aggregation pipeline <aggregation-pipeline>` on a
+       collection or view.
+
+   * - :dbcommand:`bulkWrite`
+     - Performs many insert, update, and delete operations on multiple
+       collections in one request.
+
+       .. versionadded:: 8.0
+
+   * - :dbcommand:`count`
+     - Counts documents in a collection or view.
+
+   * - :dbcommand:`delete`
+     - Deletes one or more documents.
+
+   * - :dbcommand:`distinct`
+     - Returns distinct values in a specified field from a collection or
+       view.
+
+   * - :dbcommand:`find`
+     - Selects documents in a collection or view.
+
+   * - :dbcommand:`findAndModify`
+     - Returns and modifies a single document.
+
+   * - :dbcommand:`insert`
+     - Inserts one or more documents.
+
+   * - :dbcommand:`mapReduce`
+     - Performs :ref:`map-reduce <map-reduce>` aggregation.
+
+   * - :dbcommand:`update`
+     - Updates one or more documents.
+
+**toctree:** :hidden:
+
+   aggregate </reference/command/aggregate>
+   bulkWrite </reference/command/bulkWrite>
+   count </reference/command/count>
+   delete </reference/command/delete>
+   distinct </reference/command/distinct>
+   find </reference/command/find>
+   findAndModify </reference/command/findAndModify>
+   getMore </reference/command/getMore>
+   insert </reference/command/insert>
+   mapReduce </reference/command/mapReduce>
+   update </reference/command/update>

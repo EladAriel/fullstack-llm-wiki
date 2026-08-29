@@ -4,12 +4,11 @@ framework: "LangGraph"
 source_repo: "https://github.com/langchain-ai/docs"
 source_branch: "main"
 source_path: "src/oss/langgraph/use-graph-api.mdx"
-source_commit: "2aae1dfc98ee953a9a5185fb6fcdd9efb3f4d878"
-source_commit_short: "2aae1dfc"
-source_commit_date: "2026-07-25T00:27:23Z"
-generated_at: "2026-07-25T11:51:08Z"
+source_commit: "a174f9cf7c91ee5eb14ee2382eb48bfe6e4956e9"
+source_commit_short: "a174f9c"
+source_commit_date: "2026-08-28T17:04:12-07:00"
+generated_at: "2026-08-29T09:38:45.962871Z"
 ---
-
 ---
 title: Use the graph API
 sidebarTitle: Use the graph API
@@ -765,7 +764,7 @@ Output of graph invocation: {"a":"set by node3"}
 :::python
 ### Use pydantic models for graph state
 
-A [StateGraph](https://langchain-ai.github.io/langgraph/reference/graphs.md#langgraph.graph.StateGraph) accepts a @[`state_schema`] argument on initialization that specifies the "shape" of the state that the nodes in the graph can access and update.
+A @[StateGraph] accepts a @[`state_schema`] argument on initialization that specifies the "shape" of the state that the nodes in the graph can access and update.
 
 In our examples, we typically use a python-native `TypedDict` or [`dataclass`](https://docs.python.org/3/library/dataclasses.html) for `state_schema`, but @[`state_schema`] can be any [type](https://docs.python.org/3/library/stdtypes.html#type-objects).
 
@@ -1666,6 +1665,35 @@ builder.add_node(
 
 See [Fault tolerance](/oss/langgraph/fault-tolerance#error-handling) for compensation patterns and `Command` routing.
 
+## Set graph-wide node defaults
+
+<Note>
+Requires `langgraph>=1.2`.
+</Note>
+
+Use @[`set_node_defaults`] to set `retry_policy`, `timeout`, `cache_policy`, or `error_handler` once for every node in a graph, instead of repeating them on each @[`add_node`] call. Per-node values always win, and defaults are applied at @[`StateGraph.compile`] time:
+
+```python
+from langgraph.types import RetryPolicy, TimeoutPolicy
+
+graph = (
+    StateGraph(State)
+    .set_node_defaults(
+        retry_policy=RetryPolicy(max_attempts=3),
+        timeout=TimeoutPolicy(run_timeout=30),
+        error_handler=fallback_handler,
+    )
+    .add_node("a", node_a)
+    .add_node("b", node_b, retry_policy=RetryPolicy(max_attempts=5))  # overrides default
+    .add_edge(START, "a")
+    .compile()
+)
+```
+
+`retry_policy` and `timeout` defaults apply to every node, including error-handler nodes. `cache_policy` and `error_handler` defaults apply only to regular nodes—handlers never catch themselves, and caching a handler result is unsafe. Defaults are not inherited by subgraphs.
+
+See [Fault tolerance](/oss/langgraph/fault-tolerance#graph-defaults) for the full precedence rules and applicability table.
+
 :::
 
 :::python
@@ -2226,7 +2254,7 @@ graph.invoke({"value_1": "c"})
 
 ## Create branches
 
-Parallel execution of nodes is essential to speed up overall graph operation. LangGraph offers native support for parallel execution of nodes, which can significantly enhance the performance of graph-based workflows. This parallelization is achieved through fan-out and fan-in mechanisms, utilizing both standard edges and [conditional_edges](https://langchain-ai.github.io/langgraph/reference/graphs.md#langgraph.graph.MessageGraph.add_conditional_edges). Below are some examples showing how to add create branching dataflows that work for you.
+Parallel execution of nodes is essential to speed up overall graph operation. LangGraph offers native support for parallel execution of nodes, which can significantly enhance the performance of graph-based workflows. This parallelization is achieved through fan-out and fan-in mechanisms, utilizing both standard edges and @[conditional_edges][add_conditional_edges]. Below are some examples showing how to add create branching dataflows that work for you.
 
 ### Run graph nodes in parallel
 
@@ -2592,7 +2620,7 @@ const nodeC: GraphNode<typeof State> = (state) => {
   return { aggregate: ["C"] };  // [!code highlight]
 };
 
-const conditionalEdge: ConditionalEdgeRouter<typeof State, "b" | "c"> = (state) => {
+const conditionalEdge: ConditionalEdgeRouter<{ InputSchema: typeof State; Nodes: "b" | "c" }> = (state) => {
   // Fill in arbitrary logic here that uses the state
   // to determine the next node
   return state.which as "b" | "c";
@@ -2645,7 +2673,7 @@ def route_bc_or_cd(state: State) -> Sequence[str]:
 
 :::js
 ```typescript
-const routeBcOrCd: ConditionalEdgeRouter<typeof State, "b" | "c" | "d"> = (state) => {
+const routeBcOrCd: ConditionalEdgeRouter<{ InputSchema: typeof State; Nodes: "b" | "c" | "d" }> = (state) => {
   if (state.which === "cd") {
     return ["c", "d"];
   }
@@ -2753,7 +2781,7 @@ const generateJoke: GraphNode<typeof OverallState> = (state) => {
   return { jokes: [jokeMap[state.subject]] };
 };
 
-const continueToJokes: ConditionalEdgeRouter<typeof OverallState, "generateJoke"> = (state) => {
+const continueToJokes: ConditionalEdgeRouter<{ InputSchema: typeof OverallState; Nodes: "generateJoke" }> = (state) => {
   return state.subjects.map((subject) => new Send("generateJoke", { subject }));
 };
 
@@ -2836,7 +2864,7 @@ graph = builder.compile()
 
 :::js
 ```typescript
-const route: ConditionalEdgeRouter<typeof State, "b"> = (state) => {
+const route: ConditionalEdgeRouter<{ InputSchema: typeof State; Nodes: "b" }> = (state) => {
   if (terminationCondition(state)) {
     return END;
   } else {
@@ -2953,7 +2981,7 @@ const nodeB: GraphNode<typeof State> = (state) => {
 };
 
 // Define edges
-const route: ConditionalEdgeRouter<typeof State, "b"> = (state) => {
+const route: ConditionalEdgeRouter<{ InputSchema: typeof State; Nodes: "b" }> = (state) => {
   if (state.aggregate.length < 7) {
     return "b";
   } else {
@@ -3273,7 +3301,7 @@ See the [streaming guide](/oss/langgraph/streaming) for examples of streaming wi
 
 ## Combine control flow and state updates with `Command`
 
-It can be useful to combine control flow (edges) and state updates (nodes). For example, you might want to BOTH perform state updates AND decide which node to go to next in the SAME node. LangGraph provides a way to do so by returning a [Command](https://langchain-ai.github.io/langgraph/reference/types/#langgraph.types.Command) object from node functions:
+It can be useful to combine control flow (edges) and state updates (nodes). For example, you might want to BOTH perform state updates AND decide which node to go to next in the SAME node. LangGraph provides a way to do so by returning a @[Command] object from node functions:
 
 :::python
 ```python
@@ -3392,7 +3420,7 @@ const State = new StateSchema({
 
 // Define the nodes
 
-const nodeA: GraphNode<typeof State, "nodeB" | "nodeC"> = (state) => {
+const nodeA: GraphNode<{ InputSchema: typeof State; Nodes: "nodeB" | "nodeC" }> = (state) => {
   console.log("Called A");
   const value = Math.random() > 0.5 ? "b" : "c";
   // this is a replacement for a conditional edge function
@@ -3465,7 +3493,7 @@ If you are using [subgraphs](/oss/langgraph/use-subgraphs), you might want to na
 
 :::python
 ```python
-def my_node(state: State) -> Command[Literal["my_other_node"]]:
+def my_node(state: State) -> Command[Literal["other_subgraph"]]:
     return Command(
         update={"foo": "bar"},
         goto="other_subgraph",  # where `other_subgraph` is a node in the parent graph
@@ -3565,7 +3593,7 @@ const State = new StateSchema({
   ),
 });
 
-const nodeA: GraphNode<typeof State, "nodeB" | "nodeC"> = (state) => {
+const nodeA: GraphNode<{ InputSchema: typeof State; Nodes: "nodeB" | "nodeC" }> = (state) => {
   console.log("Called A");
   const value = Math.random() > 0.5 ? "nodeB" : "nodeC";
 
@@ -3765,7 +3793,7 @@ const node2: GraphNode<typeof State> = (state) => {
   return { value: state.value * 2 };
 };
 
-const router: ConditionalEdgeRouter<typeof State, "node2"> = (state) => {
+const router: ConditionalEdgeRouter<{ InputSchema: typeof State; Nodes: "node2" }> = (state) => {
   if (state.value < 10) {
     return "node2";
   }

@@ -1,50 +1,100 @@
 ---
 type: "Framework Learn Page"
-framework: "mongodb"
+framework: "MongoDB"
 source_repo: "https://github.com/mongodb/docs.git"
 source_branch: "main"
 source_path: "content/manual/manual/source/reference/operator/query/nin.txt"
-source_commit: "ab9db26ed3d11618cdb61516d8180337d8e3f679"
-source_commit_short: "ab9db26e"
-source_commit_date: "2026-07-24T16:22:46-06:00"
-generated_at: "2026-07-25T11:51:15Z"
+source_commit: "b9f2bc487a2878b65e3c1f80024bebab76954f27"
+source_commit_short: "b9f2bc48"
+source_commit_date: "2026-08-28T17:09:45-05:00"
+generated_at: "2026-08-29T09:39:20.238474Z"
 ---
-
-===============================
-
 # $nin (query predicate operator)
+
+.. default-domain:: mongodb
+
+**facet:** :name: programming_language
+   :values: shell
+
+**meta:** :description: Use the $nin query operator to select documents where a field value is not in a given array or the field does not exist. Works with query and update operations.
+
+**contents:** On this page
+   :local:
+   :backlinks: none
+   :depth: 1
+   :class: singlecol
+
+**query:** $nin
+
+   :query:`$nin` selects documents where:
+
+   - the specified field value is not in the specified array **or**
+   - the specified field does not exist.
 
 ## Compatibility
 
-.. include:: /includes/fact-compatibility.rst
+.. |operator-method| replace:: ``$nin``
+
+**include:** /includes/fact-compatibility.rst
 
 ## Syntax
 
 The :query:`$nin` operator has the following form:
 
-```javascript
-{ field: { $nin: [ <value1>, <value2> ... <valueN> ] } }
-```
+.. code-block:: javascript
 
-If `field` has an array, the :query:`$nin` operator selects the documents whose `field` has an array with **no** element equal to a value in the specified array. For example, `<value1>`, `<value2>`, and so on.
+   { field: { $nin: [ <value1>, <value2> ... <valueN> ] } }
 
-.. include:: /includes/fact-comparison-order.rst
+If ``field`` has an array, the :query:`$nin` operator selects
+the documents whose ``field`` has an array with **no** element equal to
+a value in the specified array. For example, ``<value1>``,
+``<value2>``, and so on.
+
+**include:** /includes/fact-comparison-order.rst
 
 ## Examples
 
-.. include:: /includes/sample-data-usage.rst
+**include:** /includes/sample-data-usage.rst
 
 ### Select on Unmatching Documents
 
-The following example returns movies where `runtime` is greater than `1000` minutes and `rated` is not in `[ "G", "PG" ]`. Because `$nin` also matches documents that don't contain the `rated` field, the query returns movies even when the rating data is unavailable:
+The following example returns movies where ``runtime`` is greater
+than ``1000`` minutes and ``rated`` is not in ``[ "G", "PG" ]``.
+Because ``$nin`` also matches documents that don't contain the
+``rated`` field, the query returns movies even when the rating data
+is unavailable:
+
+.. io-code-block::
+   :copyable: true
+
+   .. input:: /code-examples/tested/command-line/mongosh/query/operators/nin/nin-find.snippet.nin-find.js
+      :language: javascript
+      :category: usage example
+
+   .. output:: /code-examples/tested/command-line/mongosh/query/operators/nin/nin-find-output.sh
+      :language: javascript
+      :visible: false
 
 ### Select on Elements Not in an Array
 
-The following example sets the `exclude` field to `true` for movies that don't have `"Drama"` in their `genres` array:
+The following example sets the ``exclude`` field to ``true`` for
+movies that don't have ``"Drama"`` in their ``genres`` array:
 
-:method:`~db.collection.updateMany()` also selects a document when the document does not contain the field :query:`$nin` is matching on.
+.. io-code-block::
+   :copyable: true
 
-.. include:: /includes/extracts/nin_operators_selectivity.rst
+   .. input:: /code-examples/tested/command-line/mongosh/query/operators/nin/nin-update.snippet.nin-update.js
+      :language: javascript
+      :category: usage example
+
+   .. output:: /code-examples/tested/command-line/mongosh/query/operators/nin/nin-update-output.sh
+      :language: javascript
+      :visible: false
+
+:method:`~db.collection.updateMany()` also selects a document when the
+document does not contain the field :query:`$nin` is matching on.
+
+**include:** /includes/extracts/nin_operators_selectivity.rst
 
 ## Learn More
 

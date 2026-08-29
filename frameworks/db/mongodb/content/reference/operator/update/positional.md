@@ -1,262 +1,350 @@
 ---
 type: "Framework Learn Page"
-framework: "mongodb"
+framework: "MongoDB"
 source_repo: "https://github.com/mongodb/docs.git"
 source_branch: "main"
 source_path: "content/manual/manual/source/reference/operator/update/positional.txt"
-source_commit: "ab9db26ed3d11618cdb61516d8180337d8e3f679"
-source_commit_short: "ab9db26e"
-source_commit_date: "2026-07-24T16:22:46-06:00"
-generated_at: "2026-07-25T11:51:15Z"
+source_commit: "b9f2bc487a2878b65e3c1f80024bebab76954f27"
+source_commit_short: "b9f2bc48"
+source_commit_date: "2026-08-28T17:09:45-05:00"
+generated_at: "2026-08-29T09:39:20.100847Z"
 ---
-
-====================
-
 # \$ (update operator)
+
+**meta:** :description: Use the positional `$` operator to update specific elements in an array without specifying their position, applicable in various MongoDB environments.
+
+.. default-domain:: mongodb
+
+**facet:** :name: programming_language
+   :values: shell
+
+**contents:** On this page
+   :local:
+   :backlinks: none
+   :depth: 1
+   :class: singlecol
 
 ## Definition
 
+**update:** $
+
+   Use the positional :update:`$` operator to identify an element in
+   an array to update without explicitly specifying the position of the
+   element in the array.
+
+   .. note:: Disambiguation
+   
+      - To project, or return, an array element from a read operation,
+        see the :projection:`$` projection operator instead.
+
+      - To update all elements in an array, see the all positional
+        operator  :update:`$[]` instead.
+
+      - To update all elements that match an array filter condition or
+        conditions, see the filtered positional operator instead
+        :update:`$[\<identifier\>]`.
+
 ## Compatibility
 
-.. include:: /includes/fact-compatibility.rst
+.. |operator-method| replace:: the positional ``$`` operator
+
+**include:** /includes/fact-compatibility.rst
 
 ## Syntax
 
 The positional :update:`$` operator has the form:
 
-```javascript
-{ "<array>.$" : value }
-```
+.. code-block:: javascript
 
-When you use update operations, such as :method:`db.collection.updateOne()` and :method:`db.collection.findAndModify()`, both of the following conditions must be true:
+   { "<array>.$" : value }
+
+When you use update operations, such as
+:method:`db.collection.updateOne()` and
+:method:`db.collection.findAndModify()`, both of the following conditions
+must be true:
 
 - The positional :update:`$` operator acts as a placeholder for
-the **first** element that matches the `query document`.
-
-- The `array` field **must** appear as part of the ``query
-document``.
+  the **first** element that matches the ``query document``.
+- The ``array`` field **must** appear as part of the ``query
+  document``.
 
 For example:
 
-```javascript
-db.collection.updateOne(
-   { <array>: value ... },
-   { <update operator>: { "<array>.$" : value } }
-)
-```
+.. code-block:: javascript
+
+   db.collection.updateOne(
+      { <array>: value ... },
+      { <update operator>: { "<array>.$" : value } }
+   )
 
 ## Behavior
 
-.. include:: /includes/fact-update-operator-processing-order.rst
+**include:** /includes/fact-update-operator-processing-order.rst
 
 ### upsert
 
-Do not use the `$` operator in `upsert` operations. If the update query does not match any existing documents, the upsert fails because the `$` operator requires a matching array element.
+Do not use the ``$`` operator in :term:`upsert` operations. If the
+update query does not match any existing documents, the upsert fails
+because the ``$`` operator requires a matching array element.
 
 ### Nested Arrays
 
-You cannot use the positional :update:`$` operator for queries that traverse more than one array, such as queries that traverse arrays nested within other arrays, because the replacement for the :update:`$` placeholder is a single value.
+You cannot use the positional :update:`$` operator for queries that
+traverse more than one array, such as queries that traverse arrays
+nested within other arrays, because the replacement for the
+:update:`$` placeholder is a single value.
 
 ### Unsets
 
-When you use the positional :update:`$` operator with the :update:`$unset` operator, the positional operator does not remove the matching element from the array. Instead, it sets the element to `null`.
+When you use the positional :update:`$` operator with the
+:update:`$unset` operator, the positional operator does not remove
+the matching element from the array. Instead, it sets the element
+to ``null``.
 
 ### Negations
 
-If the query matches the array using a negation operator, such as :query:`$ne`, :query:`$not`, or :query:`$nin`, then you cannot use the positional operator to update values from this array.
+.. see SERVER-6982
 
-You can use the positional operator if the negated portion of the query is inside an :query:`$elemMatch` expression.
+If the query matches the array using a negation operator, such as
+:query:`$ne`, :query:`$not`, or :query:`$nin`, then you cannot use the
+positional operator to update values from this array.
+
+You can use the positional operator if the negated portion of the
+query is inside an :query:`$elemMatch` expression.
 
 ### Multiple Array Matches
 
-The positional :update:`$` update operator behaves ambiguously when you filter on multiple array fields.
+The positional :update:`$` update operator behaves ambiguously when you filter
+on multiple array fields.
 
-When the server executes an update method, it first runs a query to determine which documents to update. If the update filters documents on multiple array fields, the positional :update:`$` update operator might not update the correct position in the array.
+When the server executes an update method, it first runs a query to determine
+which documents to update. If the update filters documents on multiple
+array fields, the positional :update:`$` update operator might not update the
+correct position in the array.
 
-For more information, see the `example <multiple-array-match>`.
+For more information, see the :ref:`example <multiple-array-match>`.
 
 ## Examples
 
 ### Update Values in an Array
 
-Create the `students` collection with the following documents:
+Create the ``students`` collection with the following documents:
 
-```javascript
-db.students.insertMany( [
-   { "_id" : 1, "grades" : [ 85, 80, 80 ] },
-   { "_id" : 2, "grades" : [ 88, 90, 92 ] },
-   { "_id" : 3, "grades" : [ 85, 100, 90 ] }
-] )
-```
+.. code-block:: javascript
+   :copyable: true
 
-To update the first element whose value is `80` to `82` in the in the `grades` array, use the positional :update:`$` operator if you do not know the position of the element in the array:
+   db.students.insertMany( [
+      { "_id" : 1, "grades" : [ 85, 80, 80 ] },
+      { "_id" : 2, "grades" : [ 88, 90, 92 ] },
+      { "_id" : 3, "grades" : [ 85, 100, 90 ] }
+   ] )
 
-> **Important:** You must include the array field as part of the `query` document.
+To update the first element whose value is ``80`` to ``82`` in the in
+the ``grades`` array, use the positional :update:`$` operator if you do
+not know the position of the element in the array:
 
-```javascript
-db.students.updateOne(
-   { _id: 1, grades: 80 },
-   { $set: { "grades.$" : 82 } }
-)
-```
+**important:** You must include the array field as part of the ``query`` document.
 
-The positional :update:`$` operator acts as a placeholder for the **first match** of the update `query document <read-operations-query-document>`.
+.. code-block:: javascript
+   :copyable: true
 
-After the operation, the `students` collection contains the following documents:
+   db.students.updateOne(
+      { _id: 1, grades: 80 },
+      { $set: { "grades.$" : 82 } }
+   )
 
-```javascript
-db.students.insertMany ( [
-   { _id : 1, "grades" : [ 85, 82, 80 ] },
-   { _id : 2, "grades" : [ 88, 90, 92 ] },
-   { _id : 3, "grades" : [ 85, 100, 90 ] }
-] )
-```
+The positional :update:`$` operator acts as a placeholder for the
+**first match** of the update :ref:`query document
+<read-operations-query-document>`.
+
+After the operation, the ``students`` collection contains the following
+documents:
+
+.. code-block:: javascript
+   :copyable: true
+
+   db.students.insertMany ( [
+      { _id : 1, "grades" : [ 85, 82, 80 ] },
+      { _id : 2, "grades" : [ 88, 90, 92 ] },
+      { _id : 3, "grades" : [ 85, 100, 90 ] }
+   ] )
 
 ### Update Documents in an Array
 
-The positional :update:`$` operator allows updates to arrays that have embedded documents. Use the positional :update:`$` operator to access fields in embedded documents. Use `dot notation <document-dot-notation>` on the :update:`$` operator.
+The positional :update:`$` operator allows updates to arrays
+that have embedded documents. Use the positional :update:`$`
+operator to access fields in embedded documents. Use
+:ref:`dot notation <document-dot-notation>` on the
+:update:`$` operator.
 
-```javascript
-db.collection.updateOne(
-   { <query selector> },
-   { <update operator>: { "array.$.field" : value } }
-)
-```
+.. code-block:: javascript
 
-Consider the following document in the `students` collection whose `grades` element value is an array of embedded documents:
+   db.collection.updateOne(
+      { <query selector> },
+      { <update operator>: { "array.$.field" : value } }
+   )
 
-```javascript
-db.students.insertOne( [
-   {
-      _id: 4,
-      grades: [
-         { grade: 80, mean: 75, std: 8 },
-         { grade: 85, mean: 90, std: 5 },
-         { grade: 85, mean: 85, std: 8 }
-      ]
-   }
-] )
-```
+Consider the following document in the ``students`` collection whose
+``grades`` element value is an array of embedded documents:
 
-Use the positional :update:`$` operator to update the `std` field of the first array element that matches the `grade` equal to `85` condition:
+.. code-block:: javascript
+   :copyable: true
 
-> **Important:** You must include the array field as part of the `query` document.
+   db.students.insertOne( [
+      {
+         _id: 4,
+         grades: [
+            { grade: 80, mean: 75, std: 8 },
+            { grade: 85, mean: 90, std: 5 },
+            { grade: 85, mean: 85, std: 8 }
+         ]
+      }
+   ] )
 
-```javascript
-db.students.updateOne(
-   { _id: 4, "grades.grade": 85 },
-   { $set: { "grades.$.std" : 6 } }
-)
-```
+Use the positional :update:`$` operator to update the ``std`` field of
+the first array element that matches the ``grade`` equal to ``85``
+condition:
+
+**important:** You must include the array field as part of the ``query`` document.
+
+.. code-block:: javascript
+
+   db.students.updateOne(
+      { _id: 4, "grades.grade": 85 },
+      { $set: { "grades.$.std" : 6 } }
+   )
 
 After the operation, the document has the following updated values:
 
-```javascript
-{ 
-   "_id" : 4,
-   "grades" : [
-      { "grade" : 80, "mean" : 75, "std" : 8 },
-      { "grade" : 85, "mean" : 90, "std" : 6 },
-      { "grade" : 85, "mean" : 85, "std" : 8 }
-   ]
-}
-```
+.. code-block:: javascript
+
+   { 
+      "_id" : 4,
+      "grades" : [
+         { "grade" : 80, "mean" : 75, "std" : 8 },
+         { "grade" : 85, "mean" : 90, "std" : 6 },
+         { "grade" : 85, "mean" : 85, "std" : 8 }
+      ]
+   }
+
+.. _multiple-point-matches:
 
 ### Update Embedded Documents Using Multiple Field Matches
 
-Use the :update:`$` operator to update the first array element that matches multiple query criteria specified with the :query:`$elemMatch` operator.
+Use the :update:`$` operator to update the first array element that matches
+multiple query criteria specified with the :query:`$elemMatch` operator.
 
-Consider the following document in the `students` collection whose `grades` field value is an array of embedded documents:
+Consider the following document in the ``students`` collection whose
+``grades`` field value is an array of embedded documents:
 
-```javascript
-db.students.insertOne( [
+.. code-block:: javascript
+   :copyable: true
+
+   db.students.insertOne( [
+      {
+        _id: 5,
+         grades: [
+            { grade: 80, mean: 75, std: 8 },
+            { grade: 85, mean: 90, std: 5 },
+            { grade: 90, mean: 85, std: 3 }
+         ]
+      }
+   ] )
+
+In the following example, the :update:`$` operator updates the value of the
+``std`` field in the first embedded document that has a ``grade`` field with
+a value less than or equal to ``90`` and a ``mean`` field with a value
+greater than ``80``:
+
+.. code-block:: javascript
+
+   db.students.updateOne(
+      {
+        _id: 5,
+        grades: { $elemMatch: { grade: { $lte: 90 }, mean: { $gt: 80 } } }
+      },
+      { $set: { "grades.$.std" : 6 } }
+   )
+
+This operation updates the first embedded document that matches the
+criteria, namely the second embedded document in the array:
+
+.. code-block:: javascript
+   :emphasize-lines: 5
+
    {
      _id: 5,
-      grades: [
-         { grade: 80, mean: 75, std: 8 },
-         { grade: 85, mean: 90, std: 5 },
-         { grade: 90, mean: 85, std: 3 }
-      ]
+     grades: [
+       { grade: 80, mean: 75, std: 8 },
+       { grade: 85, mean: 90, std: 6 },
+       { grade: 90, mean: 85, std: 3 }
+     ]
    }
-] )
-```
 
-In the following example, the :update:`$` operator updates the value of the `std` field in the first embedded document that has a `grade` field with a value less than or equal to `90` and a `mean` field with a value greater than `80`:
-
-```javascript
-db.students.updateOne(
-   {
-     _id: 5,
-     grades: { $elemMatch: { grade: { $lte: 90 }, mean: { $gt: 80 } } }
-   },
-   { $set: { "grades.$.std" : 6 } }
-)
-```
-
-This operation updates the first embedded document that matches the criteria, namely the second embedded document in the array:
-
-```javascript
-{
-  _id: 5,
-  grades: [
-    { grade: 80, mean: 75, std: 8 },
-    { grade: 85, mean: 90, std: 6 },
-    { grade: 90, mean: 85, std: 3 }
-  ]
-}
-```
+.. _multiple-array-match:
 
 ### Update with Multiple Array Matches
 
-The positional :update:`$` update operator behaves ambiguously when the query has multiple array fields to filter documents in the collection.
+The positional :update:`$` update operator behaves ambiguously when the
+query has multiple array fields to filter documents in the collection.
 
-Consider a document in the `students_deans_list` collection, which holds arrays of student information:
+Consider a document in the ``students_deans_list`` collection, which holds
+arrays of student information:
 
-```javascript
-db.students_deans_list.insertMany( [
+.. code-block:: javascript
+
+   db.students_deans_list.insertMany( [
+      {
+         _id: 8,
+         activity_ids: [ 1, 2 ],
+         grades: [ 90, 95 ],
+         deans_list: [ 2021, 2020 ]
+      }
+   ] )
+
+In the following example, the user attempts to modify the ``deans_list`` field.
+The example filters documents using the ``activity_ids``, ``deans_list``, and
+``grades`` fields, and updates the 2021 value in the ``deans_list`` field to 2022:
+
+.. code-block:: javascript
+
+   db.students_deans_list.updateOne(
+      { activity_ids: 1, grades: 95, deans_list: 2021 },
+      { $set: { "deans_list.$": 2022 } }
+   )
+
+When the server executes the preceding ``updateOne`` method, it filters
+the available documents using values in the supplied array fields.
+Although the ``deans_list`` field is used in the filter, it is not the field
+used by the positional :update:`$` update operator to determine which position
+in the array to update:
+
+.. code-block:: javascript
+
+   db.students_deans_list.find( { _id: 8 } )
+
+Example output:
+
+.. code-block:: javascript
+
    {
       _id: 8,
       activity_ids: [ 1, 2 ],
       grades: [ 90, 95 ],
-      deans_list: [ 2021, 2020 ]
+      deans_list: [ 2021, 2022 ]
    }
-] )
-```
 
-In the following example, the user attempts to modify the `deans_list` field. The example filters documents using the `activity_ids`, `deans_list`, and `grades` fields, and updates the 2021 value in the `deans_list` field to 2022:
+The ``updateOne`` method matched the ``deans_list`` field on 2021, but the
+positional :update:`$` update operator instead changed the 2020 value to 2022.
 
-```javascript
-db.students_deans_list.updateOne(
-   { activity_ids: 1, grades: 95, deans_list: 2021 },
-   { $set: { "deans_list.$": 2022 } }
-)
-```
+To avoid unexpected results when matching on multiple arrays, use the
+filtered positional operator :update:`$[<identifier>]`.
 
-When the server executes the preceding `updateOne` method, it filters the available documents using values in the supplied array fields. Although the `deans_list` field is used in the filter, it is not the field used by the positional :update:`$` update operator to determine which position in the array to update:
-
-```javascript
-db.students_deans_list.find( { _id: 8 } )
-```
-
-Example output:
-
-```javascript
-{
-   _id: 8,
-   activity_ids: [ 1, 2 ],
-   grades: [ 90, 95 ],
-   deans_list: [ 2021, 2022 ]
-}
-```
-
-The `updateOne` method matched the `deans_list` field on 2021, but the positional :update:`$` update operator instead changed the 2020 value to 2022.
-
-To avoid unexpected results when matching on multiple arrays, use the filtered positional operator :update:`$[<identifier>]`.
-
-> **Seealso:** - :method:`db.collection.updateMany()`
-- :method:`db.collection.findAndModify()`
-- :query:`$elemMatch`
+**seealso:** - :method:`db.collection.updateMany()`
+   - :method:`db.collection.findAndModify()`
+   - :query:`$elemMatch`
 
 ## Learn More
 
-For examples that use the :update:`$` operator to update arrays, see `array-updates-mql`.
+For examples that use the :update:`$` operator to update arrays, see
+:ref:`array-updates-mql`.

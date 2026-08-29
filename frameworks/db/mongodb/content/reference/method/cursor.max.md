@@ -1,132 +1,192 @@
 ---
 type: "Framework Learn Page"
-framework: "mongodb"
+framework: "MongoDB"
 source_repo: "https://github.com/mongodb/docs.git"
 source_branch: "main"
 source_path: "content/manual/manual/source/reference/method/cursor.max.txt"
-source_commit: "ab9db26ed3d11618cdb61516d8180337d8e3f679"
-source_commit_short: "ab9db26e"
-source_commit_date: "2026-07-24T16:22:46-06:00"
-generated_at: "2026-07-25T11:51:15Z"
+source_commit: "b9f2bc487a2878b65e3c1f80024bebab76954f27"
+source_commit_short: "b9f2bc48"
+source_commit_date: "2026-08-28T17:09:45-05:00"
+generated_at: "2026-08-29T09:39:19.992981Z"
 ---
-
-=============================
-
 # cursor.max() (mongosh method)
 
+**meta:** :description: Specify an exclusive upper bound for index keys using `cursor.max()` to constrain `find()` query results in MongoDB.
+
+.. default-domain:: mongodb
+
+**contents:** On this page
+   :local:
+   :backlinks: none
+   :depth: 1
+   :class: singlecol
+
 ## Definition
+
+**method:** cursor.max()
+
+
+   .. include:: /includes/fact-mongosh-shell-method.rst
+
+
+   Specifies the *exclusive* upper bound for a specific index in order
+   to constrain the results of
+   :method:`~db.collection.find()`. :method:`~cursor.max()` provides a
+   way to specify an upper bound on compound key indexes.
 
 ### Parameters
 
 The :method:`~cursor.max()` method has the following parameter:
 
-The `indexBounds` parameter has the following prototype form:
 
-```javascript
-{ field1: <max value>, field2: <max value2> ... fieldN:<max valueN> }
-```
+.. list-table::
+   :header-rows: 1
+   :widths: 20 20 80
 
-The fields correspond to all the keys of a particular index in order.
+   * - Parameter
 
-.. include:: /includes/cursor-index-use
+     - Type
 
-> **Seealso:** :method:`~cursor.min()`
+     - Description
 
-:method:`~cursor.max()` exists primarily to support the :binary:`~bin.mongos` (sharding) process.
+   * - ``indexBounds``
+
+     - document
+
+     - The exclusive upper bound for the index keys.
+          
+          
+   
+
+
+The ``indexBounds`` parameter has the following prototype form:
+
+.. code-block:: javascript
+
+   { field1: <max value>, field2: <max value2> ... fieldN:<max valueN> }
+
+The fields correspond to *all* the keys of a particular index *in
+order*. 
+
+**include:** /includes/cursor-index-use
+
+**seealso:** :method:`~cursor.min()`
+
+:method:`~cursor.max()` exists primarily to support the
+:binary:`~bin.mongos` (sharding) process.
 
 ## Compatibility
 
-This method is available in deployments hosted in the following environments:
+This method is available in deployments hosted in the following environments: 
 
-.. include:: /includes/fact-environments-atlas-only.rst
+**include:** /includes/fact-environments-atlas-only.rst
 
-.. include:: /includes/fact-environments-atlas-support-all.rst
+**include:** /includes/fact-environments-atlas-support-all.rst
 
-.. include:: /includes/fact-environments-onprem-only.rst
+**include:** /includes/fact-environments-onprem-only.rst
 
 ## Behavior
 
 ### Interaction with Index Selection
 
-Because :method:`~cursor.max()` requires an index on a field, and forces the query to use this index, you may prefer the :query:`$lt` operator for the query if possible. Consider the following example:
+Because :method:`~cursor.max()` requires an index on a field,
+and forces the query to use this index, you may prefer the
+:query:`$lt` operator for the query if possible. Consider the
+following example:
 
-```javascript
-db.products.find( { _id: { $in: [ 6, 7 ] } } ).max( { price: Decimal128("1.39") } ).hint( { price: 1 } )
-```
+.. code-block:: javascript
 
-The query will use the index on the `price field, even if the index on id` may be better.
+   db.products.find( { _id: { $in: [ 6, 7 ] } } ).max( { price: Decimal128("1.39") } ).hint( { price: 1 } )
+
+The query will use the index on the ``price`` field, even if
+the index on ``_id`` may be better.
 
 ### Index Bounds
 
-If you use :method:`~cursor.max()` with :method:`~cursor.min()` to specify a range:
+If you use :method:`~cursor.max()` with :method:`~cursor.min()` to
+specify a range:
 
 - the index bounds specified in :method:`~cursor.min()` and
-:method:`~cursor.max()` must both refer to the keys of the same index.
+  :method:`~cursor.max()` must both refer to the keys of the same index.
 
 - the bound specified by :method:`~cursor.max()` must be greater than
-the bound specified by :method:`~cursor.min()`.
+  the bound specified by :method:`~cursor.min()`.
 
-### `max()` without `min()`
+### ``max()`` without ``min()``
 
-.. include:: /includes/fact-query-min-max.rst
+**include:** /includes/fact-query-min-max.rst
 
 ## Example
 
-> **Note:** You must explicitly specify the particular index with the
-:method:`~cursor.hint()` method to run :method:`~cursor.max()` with the
-following exception: you do not need to hint if the
-:method:`~db.collection.find()` query is an equality condition on the
-`_id` field `{ _id: <value> }`.
+**note:** You must explicitly specify the particular index with the 
+   :method:`~cursor.hint()` method to run :method:`~cursor.max()` with the 
+   following exception: you do not need to hint if the 
+   :method:`~db.collection.find()` query is an equality condition on the 
+   ``_id`` field ``{ _id: <value> }``.
 
-For the examples below, create a sample collection named `products` that holds the following documents:
+For the examples below, create a sample collection named ``products`` that holds the
+following documents:
 
-```javascript
-db.products.insertMany([
-   { "_id" : 1, "item" : "apple", "type" : "honey crisp", "price" : Decimal128("1.99") },
-   { "_id" : 2, "item" : "apple", "type" : "fuji", "price" : Decimal128("1.99") },
-   { "_id" : 3, "item" : "apple", "type" : "jonagold", "price" : Decimal128("1.29") },
-   { "_id" : 4, "item" : "apple", "type" : "jonathan", "price" : Decimal128("1.29") },
-   { "_id" : 5, "item" : "apple", "type" : "mcintosh", "price" : Decimal128("1.29") },
-   { "_id" : 6, "item" : "apple", "type" : "cortland", "price" : Decimal128("1.29") },
-   { "_id" : 7, "item" : "orange", "type" : "cara cara", "price" : Decimal128("2.99") },
-   { "_id" : 9, "item" : "orange", "type" : "satsuma", "price" : Decimal128("1.99") },
-   { "_id" : 8, "item" : "orange", "type" : "valencia", "price" : Decimal128("0.99") },
-   { "_id" : 10, "item" : "orange", "type" : "navel", "price" : Decimal128("1.39") }
-])
-```
+.. code-block:: javascript
+
+   db.products.insertMany([
+      { "_id" : 1, "item" : "apple", "type" : "honey crisp", "price" : Decimal128("1.99") },
+      { "_id" : 2, "item" : "apple", "type" : "fuji", "price" : Decimal128("1.99") },
+      { "_id" : 3, "item" : "apple", "type" : "jonagold", "price" : Decimal128("1.29") },
+      { "_id" : 4, "item" : "apple", "type" : "jonathan", "price" : Decimal128("1.29") },
+      { "_id" : 5, "item" : "apple", "type" : "mcintosh", "price" : Decimal128("1.29") },
+      { "_id" : 6, "item" : "apple", "type" : "cortland", "price" : Decimal128("1.29") },
+      { "_id" : 7, "item" : "orange", "type" : "cara cara", "price" : Decimal128("2.99") },
+      { "_id" : 9, "item" : "orange", "type" : "satsuma", "price" : Decimal128("1.99") },
+      { "_id" : 8, "item" : "orange", "type" : "valencia", "price" : Decimal128("0.99") },
+      { "_id" : 10, "item" : "orange", "type" : "navel", "price" : Decimal128("1.39") }
+   ])
 
 Create the following indexes for the collection:
 
-```javascript
-db.products.createIndexes( [
-   { "item" : 1, "type" : 1 },
-   { "item" : 1, "type" : -1 },
-   { "price" : 1 } 
-] )
-```
-
-- Using the ordering of `{ item: 1, type: 1 }` index,
-:method:`~cursor.max()` limits the query to the documents that are below the bound of `item` equal to `apple` and `type` equal to `jonagold`:
-
-```javascript
-  db.products.find().max( { item: 'apple', type: 'jonagold' } ).hint( { item: 1, type: 1 } )
-
-The query returns the following documents:
-
 .. code-block:: javascript
 
-{ "_id" : 6, "item" : "apple", "type" : "cortland", "price" : Decimal128("1.29") }
-{ "_id" : 2, "item" : "apple", "type" : "fuji", "price" : Decimal128("1.99") }
-{ "_id" : 1, "item" : "apple", "type" : "honey crisp", "price" : Decimal128("1.99") }
-```
+   db.products.createIndexes( [
+      { "item" : 1, "type" : 1 },
+      { "item" : 1, "type" : -1 },
+      { "price" : 1 } 
+   ] )
 
-- Using the ordering of the index `{ price: 1 }`, :method:`~cursor.max()`
-limits the query to the documents that are below the index key bound of `price` equal to `Decimal128("1.99")` and :method:`~cursor.min()` limits the query to the documents that are at or above the index key bound of `price` equal to `Decimal128("1.39")`:
+- Using the ordering of ``{ item: 1, type: 1 }`` index,
+  :method:`~cursor.max()` limits the query to the documents
+  that are below the bound of ``item`` equal to ``apple`` and
+  ``type`` equal to ``jonagold``:
 
-> **Note:**   The bound specified by :method:`~cursor.max()` must be greater than
-  the bound specified by :method:`~cursor.min()`.
-.. code-block:: javascript
-  db.products.find().min( { price: Decimal128("1.39") } ).max( { price:  Decimal128("1.99") } ).hint( { price: 1 } )
-The query returns the following documents:
-.. code-block:: javascript
-  { "_id" : 10, "item" : "orange", "type" : "navel", "price" : Decimal128("1.39") }
+  .. code-block:: javascript
+
+     db.products.find().max( { item: 'apple', type: 'jonagold' } ).hint( { item: 1, type: 1 } )
+
+  The query returns the following documents:
+
+  .. code-block:: javascript
+
+   { "_id" : 6, "item" : "apple", "type" : "cortland", "price" : Decimal128("1.29") }
+   { "_id" : 2, "item" : "apple", "type" : "fuji", "price" : Decimal128("1.99") }
+   { "_id" : 1, "item" : "apple", "type" : "honey crisp", "price" : Decimal128("1.99") }
+
+- Using the ordering of the index ``{ price: 1 }``, :method:`~cursor.max()` 
+  limits the query to the documents that are below
+  the index key bound of ``price`` equal to ``Decimal128("1.99")`` and
+  :method:`~cursor.min()` limits the query to the documents
+  that are at or above the index key bound of ``price`` equal to
+  ``Decimal128("1.39")``:
+
+  .. note::
+
+     The bound specified by :method:`~cursor.max()` must be greater than 
+     the bound specified by :method:`~cursor.min()`.
+
+  .. code-block:: javascript
+
+     db.products.find().min( { price: Decimal128("1.39") } ).max( { price:  Decimal128("1.99") } ).hint( { price: 1 } )
+
+  The query returns the following documents:
+
+  .. code-block:: javascript
+
+     { "_id" : 10, "item" : "orange", "type" : "navel", "price" : Decimal128("1.39") }

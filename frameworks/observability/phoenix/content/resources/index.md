@@ -1,7 +1,7 @@
 ---
 type: "Framework Learn Directory Index"
 framework: "Arize Phoenix"
-generated_at: "2026-07-25T19:08:24.985234Z"
+generated_at: "2026-08-29T09:39:58.962714Z"
 ---
 # Resources
 
@@ -24,3 +24,7 @@ This directory contains Arize Phoenix learning pages related to resources.
 - [Phoenix To Arize Ax Migration](phoenix-to-arize-ax-migration.md)
 - [Python Api](python-api.md)
 - [Typescript Api](typescript-api.md)
+
+## Subdirectories
+
+- [Frequently Asked Questions](frequently-asked-questions/index.md)

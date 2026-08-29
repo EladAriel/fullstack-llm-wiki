@@ -1,82 +1,148 @@
 ---
 type: "Framework Learn Page"
-framework: "mongodb"
+framework: "MongoDB"
 source_repo: "https://github.com/mongodb/docs.git"
 source_branch: "main"
 source_path: "content/manual/manual/source/tutorial/resync-replica-set-member.txt"
-source_commit: "ab9db26ed3d11618cdb61516d8180337d8e3f679"
-source_commit_short: "ab9db26e"
-source_commit_date: "2026-07-24T16:22:46-06:00"
-generated_at: "2026-07-25T11:51:15Z"
+source_commit: "b9f2bc487a2878b65e3c1f80024bebab76954f27"
+source_commit_short: "b9f2bc48"
+source_commit_date: "2026-08-28T17:09:45-05:00"
+generated_at: "2026-08-29T09:39:19.642084Z"
 ---
-
-=============================================
+.. _resync-replica-member:
 
 # Resync a Member of a Self-Managed Replica Set
 
-A replica set member becomes "stale" when its replication process falls so far behind that the `primary` overwrites oplog entries the member has not yet replicated. The member cannot catch up and becomes "stale." When this occurs, you must completely resynchronize the member by removing its data and performing an `initial sync <replica-set-initial-sync>`.
+**meta:** :keywords: on-prem
+   :description: Resync a stale replica set member by removing its data and performing an initial sync or by copying data files from another member.
 
-This tutorial addresses both resyncing a stale member and creating a new member using seed data from another member, both of which can be used to restore a replica set member. When syncing a member, choose a time when the system has the bandwidth to move a large amount of data. Schedule the synchronization during a time of low usage or during a maintenance window.
+.. default-domain:: mongodb
 
-> **Important:** Resync from the most up to date member in the replica set.
-If you resync a node with stale data, the node rejoins the
-replica set at a point behind where it was previously. A
-write that was majority committed before the resync may no
-longer be majority committed. This can result in data loss.
+**contents:** On this page
+   :local:
+   :backlinks: none
+   :depth: 1
+   :class: singlecol
+
+A replica set member becomes "stale" when its replication
+process falls so far behind that the :term:`primary` overwrites oplog
+entries the member has not yet replicated. The member cannot catch up
+and becomes "stale." When this occurs, you must completely
+resynchronize the member by removing its data and performing an
+:ref:`initial sync <replica-set-initial-sync>`.
+
+This tutorial addresses both resyncing a stale member and creating a
+new member using seed data from another member, both of which can be
+used to restore a replica set member. When syncing a member, choose a
+time when the system has the bandwidth to move a large amount of data.
+Schedule the synchronization during a time of low usage or during a
+maintenance window.
+
+**important:** Resync from the most up to date member in the replica set.
+
+   If you resync a node with stale data, the node rejoins the
+   replica set at a point behind where it was previously. A
+   write that was majority committed before the resync may no
+   longer be majority committed. This can result in data loss.
 
 MongoDB provides two options for performing an initial sync:
 
 - Restart the :binary:`~bin.mongod` with an empty data directory and let
-MongoDB's normal initial syncing feature restore the data. This is the more simple option but may take longer to replace the data.
+  MongoDB's normal initial syncing feature restore the data. This
+  is the more simple option but may take longer to replace the data.
 
-See `replica-set-auto-resync-stale-member`.
+  See :ref:`replica-set-auto-resync-stale-member`.
 
 - Restart the machine with a copy of a recent data directory from
-another member in the replica set. This procedure can replace the data more quickly but requires more manual steps.
+  another member in the replica set. This procedure can replace
+  the data more quickly but requires more manual steps.
 
-See `replica-set-resync-by-copying`.
+  See :ref:`replica-set-resync-by-copying`.
+
+
+
 
 ## Procedures
 
-> **Note:** To prevent changing the write quorum, never rotate more than one
-replica set member at a time.
+**note:** To prevent changing the write quorum, never rotate more than one
+   replica set member at a time.
+
+.. _replica-set-auto-resync-stale-member:
 
 ### Automatically Sync a Member
 
-> **Warning:** During initial sync, :binary:`~bin.mongod` removes the contents of the
-:setting:`~storage.dbPath` directory.
+**warning:** During initial sync, :binary:`~bin.mongod` removes the contents of the
+   :setting:`~storage.dbPath` directory.
 
-This procedure relies on MongoDB's regular process for `Replica Set Syncing <replica-set-sync>`. This stores the current data on the member. For an overview of MongoDB initial sync process, see the `Replica Set Syncing <replica-set-sync>` section.
+This procedure relies on MongoDB's regular process for
+:ref:`Replica Set Syncing <replica-set-sync>`. This stores the current
+data on the member. For an overview of MongoDB initial sync process, see 
+the :ref:`Replica Set Syncing <replica-set-sync>` section.
 
-Initial sync operations can impact the other members of the set and create additional traffic to the source member. The syncing member requires another member of the set that is accessible and up to date.
+Initial sync operations can impact the other members of the set and
+create additional traffic to the source member. The syncing member requires 
+another member of the set that is accessible and up to date.
 
-If the instance has no data, you can follow the `server-replica-set-deploy-expand` or `server-replica-set-replace-member` procedure to add a new member to a replica set.
+If the instance has no data, you can follow the
+:ref:`server-replica-set-deploy-expand` or
+:ref:`server-replica-set-replace-member` procedure to add a new member to 
+a replica set.
 
-You can also force a :binary:`~bin.mongod` that is already a member of the set to perform an initial sync by restarting the instance without the contents of the :setting:`~storage.dbPath` directory:
+You can also force a :binary:`~bin.mongod` that is already a member of the set to
+perform an initial sync by restarting the instance without the contents of the
+:setting:`~storage.dbPath` directory:
 
 1. Stop the member's :binary:`~bin.mongod` instance.
-To ensure a clean shutdown, use the :method:`db.shutdownServer()` method from :binary:`~bin.mongosh` or on Linux systems, the :option:`mongod --shutdown` option.
+   To ensure a clean shutdown, use the :method:`db.shutdownServer()`
+   method from :binary:`~bin.mongosh` or on Linux systems, the
+   :option:`mongod --shutdown` option.
 
-#. (Optional) Make a backup of all data and sub-directories from the member's :setting:`~storage.dbPath` directory. If a full backup is not required, consider backing up just the `diagnostic.data` directory to preserve potentially-useful troubleshooting data in the event of an issue. See `ftdc-stub` for more information.
+#. (Optional) Make a backup of all data and sub-directories from the
+   member's :setting:`~storage.dbPath` directory. If a full backup is
+   not required, consider backing up just the ``diagnostic.data``
+   directory to preserve potentially-useful troubleshooting data in the
+   event of an issue. See :ref:`ftdc-stub` for more information.
 
-#. Delete all data and sub-directories from the member's :setting:`~storage.dbPath` directory.
+#. Delete all data and sub-directories from the member's
+   :setting:`~storage.dbPath` directory.
 
-#. `Restart the mongod process <manage-mongodb-processes>`.
+#. :ref:`Restart the mongod process <manage-mongodb-processes>`.
 
-At this point, the :binary:`~bin.mongod` performs an initial sync. The length of the initial sync process depends on the size of the database and the network latency between members of the replica set.
+At this point, the :binary:`~bin.mongod` performs an initial sync. The length of
+the initial sync process depends on the size of the database and the network
+latency between members of the replica set.
+
+
+.. _replica-set-resync-by-copying:
 
 ### Sync by Copying Data Files from Another Member
 
-This approach "seeds" a new or stale member using the data files from an existing member of the replica set. The data files **must** be sufficiently recent to allow the new member to catch up with the `oplog`. Otherwise the member would need to perform an initial sync.
+This approach "seeds" a new or stale member using the data files from
+an existing member of the replica set. The data files **must** be
+sufficiently recent to allow the new member to catch up with the
+:term:`oplog`. Otherwise the member would need to perform an initial
+sync.
 
-Copy the Data Files ```````````````````
+### Copy the Data Files
 
-You can capture the data files as either a snapshot or a direct copy. However, in most cases you cannot copy data files from a running :binary:`~bin.mongod` instance to another because the data files will change during the file copy operation.
+You can capture the data files as either a snapshot or a direct copy.
+However, in most cases you cannot copy data files from a running
+:binary:`~bin.mongod` instance to another because the data files will change
+during the file copy operation.
 
-> **Important:** the content of the `local` database.
+**important:** If copying data files, ensure that your copy includes
+   the content of the ``local`` database.
 
-You cannot use a :binary:`~bin.mongodump` backup for the data files: **only a snapshot backup**. For approaches to capturing a consistent snapshot of a running :binary:`~bin.mongod` instance, see the `backup-methods` documentation.
+You *cannot* use a :binary:`~bin.mongodump` backup for the data files:
+**only a snapshot backup**. For approaches to capturing a consistent
+snapshot of a running :binary:`~bin.mongod` instance, see the
+:ref:`backup-methods` documentation.
 
-Sync the Member ```````````````
+### Sync the Member
 
-After you have copied the data files from the "seed" source, start the :binary:`~bin.mongod` instance with a new :rsconf:`members[n]._id` and allow it to apply all operations from the oplog until it reflects the current state of the replica set. To see the current status of the replica set, use :method:`rs.printSecondaryReplicationInfo()` or :method:`rs.status()`.
+After you have copied the data files from the "seed" source, start the
+:binary:`~bin.mongod` instance with a new :rsconf:`members[n]._id` and
+allow it to apply all operations from the oplog until it reflects the
+current state of the replica set. To see the current status of the
+replica set, use :method:`rs.printSecondaryReplicationInfo()` or
+:method:`rs.status()`.

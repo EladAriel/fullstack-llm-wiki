@@ -1,52 +1,87 @@
 ---
 type: "Framework Learn Page"
-framework: "mongodb"
+framework: "MongoDB"
 source_repo: "https://github.com/mongodb/docs.git"
 source_branch: "main"
 source_path: "content/manual/manual/source/tutorial/mitigate-psa-performance-issues.txt"
-source_commit: "ab9db26ed3d11618cdb61516d8180337d8e3f679"
-source_commit_short: "ab9db26e"
-source_commit_date: "2026-07-24T16:22:46-06:00"
-generated_at: "2026-07-25T11:51:15Z"
+source_commit: "b9f2bc487a2878b65e3c1f80024bebab76954f27"
+source_commit_short: "b9f2bc48"
+source_commit_date: "2026-08-28T17:09:45-05:00"
+generated_at: "2026-08-29T09:39:19.625115Z"
 ---
-
-============================================================
+.. _performance-issues-psa:
 
 # Mitigate Performance Issues in Self-Managed PSA Replica Sets
 
+**meta:** :keywords: on-prem
+   :description: Mitigate performance issues in a PSA replica set by adjusting node configurations to reduce cache pressure and improve write performance.
+
+.. default-domain:: mongodb
+
+**contents:** On this page
+   :local:
+   :backlinks: none
+   :depth: 1
+   :class: singlecol
+
 ## Overview
 
-In a three-member replica set with a primary-secondary-arbiter (PSA) architecture or a sharded cluster with three-member PSA shards, a data-bearing node that is down or lagged can lead to performance issues.
+In a three-member replica set with a primary-secondary-arbiter (PSA)
+architecture or a sharded cluster with three-member PSA shards, a
+data-bearing node that is down or lagged can lead to performance issues.
 
-If one data-bearing node goes down, the other node becomes the primary. Writes with :writeconcern:`w:1 <\<number\>>` continue to succeed in this state but writes with write concern :writeconcern:`"majority"` cannot succeed and the commit point starts to lag. If your PSA replica set contains a lagged secondary and your replica set requires two nodes to majority commit a change, your commit point also lags.
+If one data-bearing node goes down, the other node becomes the primary.
+Writes with :writeconcern:`w:1 <\<number\>>` continue to succeed in this
+state but writes with write concern :writeconcern:`"majority"` cannot
+succeed and the commit point starts to lag. If your PSA replica set
+contains a lagged secondary and your replica set requires two nodes to
+majority commit a change, your commit point also lags.
 
-With a lagged commit point, two things can affect your cluster performance:
+With a lagged commit point, two things can affect your cluster
+performance:
 
 - The storage engine keeps **all** changes that happen after the commit
-point on disk to retain a `durable` history. The extra I/O from these writes tends to increase over time. This can greatly impact write performance and increase cache pressure.
+  point on disk to retain a :term:`durable` history. The extra I/O from
+  these writes tends to increase over time. This can greatly impact
+  write performance and increase cache pressure.
+- MongoDB allows the :ref:`oplog <replica-set-oplog>` to grow past its
+  configured size limit to avoid deleting the :data:`majority commit
+  point <replSetGetStatus.optimes.lastCommittedOpTime>`.
 
-- MongoDB allows the `oplog <replica-set-oplog>` to grow past its
-configured size limit to avoid deleting the `majority commit point <replSetGetStatus.optimes.lastCommittedOpTime>`.
+To reduce the cache pressure and increased write traffic, set
+:rsconf:`votes: 0 <members[n].votes>` and :rsconf:`priority: 0
+<members[n].priority>` for the node that is unavailable or lagging. For
+write operations issued with "majority", only voting members are
+considered to determine the number of nodes needed to perform a majority
+commit. Setting the configuration of the node to :rsconf:`votes: 0
+<members[n].votes>` reduces the number of nodes required to commit a
+write with write concern :writeconcern:`"majority"` from two to one and
+allows these writes to succeed.
 
-To reduce the cache pressure and increased write traffic, set :rsconf:`votes: 0 <members[n].votes>` and :rsconf:`priority: 0 <members[n].priority>` for the node that is unavailable or lagging. For write operations issued with "majority", only voting members are considered to determine the number of nodes needed to perform a majority commit. Setting the configuration of the node to :rsconf:`votes: 0 <members[n].votes>` reduces the number of nodes required to commit a write with write concern :writeconcern:`"majority"` from two to one and allows these writes to succeed.
+Once the secondary is caught up, you can use the
+:method:`rs.reconfigForPSASet()` method to set :rsconf:`votes
+<members[n].votes>` back to ``1``.
 
-Once the secondary is caught up, you can use the :method:`rs.reconfigForPSASet()` method to set :rsconf:`votes <members[n].votes>` back to `1`.
-
-> **Note:** In earlier versions of MongoDB,
-:setting:`~replication.enableMajorityReadConcern` and
-:option:`--enableMajorityReadConcern` were configurable allowing you
-to disable the default read concern :readconcern:`"majority"` which
-had a similar effect.
+**note:** In earlier versions of MongoDB,
+   :setting:`~replication.enableMajorityReadConcern` and
+   :option:`--enableMajorityReadConcern` were configurable allowing you
+   to disable the default read concern :readconcern:`"majority"` which
+   had a similar effect.
 
 ## Procedure
 
-To reduce the cache pressure and increased write traffic for a deployment with a three-member primary-secondary-arbiter (PSA) architecture, set `{ votes: 0, priority: 0 }` for the secondary that is unavailable or lagging:
+To reduce the cache pressure and increased write traffic for a
+deployment with a three-member primary-secondary-arbiter (PSA)
+architecture, set ``{ votes: 0, priority: 0 }`` for the secondary that
+is unavailable or lagging:
 
-```javascript
-cfg = rs.conf();
-cfg["members"][<array_index>]["votes"] = 0;
-cfg["members"][<array_index>]["priority"] = 0;
-rs.reconfig(cfg);
-```
+.. code-block:: javascript
 
-If you want to change the configuration of the secondary later, use the :method:`rs.reconfigForPSASet()` method.
+   cfg = rs.conf();
+   cfg["members"][<array_index>]["votes"] = 0;
+   cfg["members"][<array_index>]["priority"] = 0;
+   rs.reconfig(cfg);
+
+
+If you want to change the configuration of the secondary later, use the
+:method:`rs.reconfigForPSASet()` method.

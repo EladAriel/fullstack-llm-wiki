@@ -1,71 +1,102 @@
 ---
 type: "Framework Learn Page"
-framework: "mongodb"
+framework: "MongoDB"
 source_repo: "https://github.com/mongodb/docs.git"
 source_branch: "main"
 source_path: "content/manual/manual/source/reference/bson-type-comparison-order.txt"
-source_commit: "ab9db26ed3d11618cdb61516d8180337d8e3f679"
-source_commit_short: "ab9db26e"
-source_commit_date: "2026-07-24T16:22:46-06:00"
-generated_at: "2026-07-25T11:51:15Z"
+source_commit: "b9f2bc487a2878b65e3c1f80024bebab76954f27"
+source_commit_short: "b9f2bc48"
+source_commit_date: "2026-08-28T17:09:45-05:00"
+generated_at: "2026-08-29T09:39:19.691896Z"
 ---
-
-=====================
+.. _faq-dev-compare-order-for-BSON-types:
+.. _bson-types-comparison-order:
 
 # Comparison/Sort Order
 
-.. include:: /includes/fact-sort-order.rst
+**meta:** :description: Understand the BSON type comparison order used by MongoDB for sorting and querying operations, including type-specific rules for arrays, objects, and strings.
 
-Aggregation expressions make comparisons across types. For more information, see `aggregation-comparison-operators`.
+.. default-domain:: mongodb
 
-> **Note:** MongoDB enforces comparisons with `query-selectors-comparison`
-only on documents where the BSON type of the target field
-matches the query operand type through `type-bracketing`.
+**contents:** On this page
+   :local:
+   :backlinks: none
+   :depth: 1
+   :class: singlecol
+
+**include:** /includes/fact-sort-order.rst
+
+Aggregation expressions make comparisons across types. 
+For more information, see :ref:`aggregation-comparison-operators`.
+
+**note:** MongoDB enforces comparisons with :ref:`query-selectors-comparison`
+   only on documents where the BSON type of the target field 
+   matches the query operand type through :ref:`type-bracketing`.
 
 ## Numeric Types
 
-MongoDB treats some types as equivalent for comparison purposes. For instance, all numeric types are considered equivalent in comparisons.
+MongoDB treats some types as equivalent for comparison purposes.
+For instance, all numeric types are considered equivalent in comparisons.
 
 ## Strings
 
 ### Binary Comparison
 
-By default, MongoDB uses the simple binary comparison to compare strings.
+By default, MongoDB uses the simple binary comparison to compare
+strings.
 
 ### Collation
 
-.. include:: /includes/extracts/collation-description.rst
+**include:** /includes/extracts/collation-description.rst
+
 
 Collation specification has the following syntax:
 
-.. include:: /includes/extracts/collation-document.rst
+**include:** /includes/extracts/collation-document.rst
 
-.. include:: /includes/extracts/collation-unspecified.rst
+**include:** /includes/extracts/collation-unspecified.rst
+
+.. _bson-type-comparison-order-arrays:
 
 ## Arrays
 
-.. include:: /includes/sorting-arrays.rst
-
-> **Note:** `query-selectors-comparison` enforce type-bracketing when
-the query is an array. If the indexed value is an array,
-the operator performs a type-bracketed comparison
-element-wise over the indexed array.
+**include:** /includes/sorting-arrays.rst
 
 ## Objects
 
-MongoDB's comparison of `BSON` objects uses the following order:
+MongoDB's comparison of :term:`BSON` objects uses the following order:
 
-#. Recursively compare key-value pairs in the order that they appear within the BSON object.
+#. Recursively compare key-value pairs in the order that they appear
+   within the BSON object.
 
-#. Compare the field types. MongoDB uses the following comparison order for field types, from lowest to highest:
+#. Compare the field types. MongoDB uses the following comparison
+   order for field types, from lowest to highest:
 
-a. MinKey (internal type) #. Null #. Numbers (ints, longs, doubles, decimals) #. Symbol, String #. Object #. Array #. BinData #. ObjectId #. Boolean #. Date #. Timestamp #. Regular Expression #. JavaScript Code #. JavaScript Code with Scope #. MaxKey (internal type)
+   a. MinKey (internal type)
+   #. Null
+   #. Numbers (ints, longs, doubles, decimals)
+   #. Symbol, String
+   #. Object
+   #. Array
+   #. BinData
+   #. ObjectId
+   #. Boolean
+   #. Date
+   #. Timestamp
+   #. Regular Expression
+   #. JavaScript Code
+   #. JavaScript Code with Scope
+   #. MaxKey (internal type)
 
-#. If the field types are equal, compare the `key field names <document-field-names>`.
+#. If the field types are equal, compare the
+   :ref:`key field names <document-field-names>`.
 
 #. If the key field names are equal, compare the field values.
 
-#. If the field values are equal, compare the next key/value pair (return to step 1). An object without further pairs is less than an object with further pairs.
+#. If the field values are equal, compare the next key/value pair
+   (return to step 1). An object without further pairs is less than an
+   object with further pairs.
+
 
 ## Dates and Timestamps
 
@@ -73,11 +104,13 @@ Date objects sort before Timestamp objects.
 
 ## Non-existent Fields
 
-The comparison treats a non-existent field as if it were null. A sort on the `a` field in documents `{ }` and `{ a: null }` would treat the documents as equivalent in sort order.
+The comparison treats a non-existent field as if it were null. A
+sort on the ``a`` field in documents ``{ }`` and ``{ a: null }`` 
+would treat the documents as equivalent in sort order.
 
 ## BinData
 
-MongoDB sorts `BinData` in the following order:
+MongoDB sorts ``BinData`` in the following order:
 
 #. First, the length or size of the data.
 

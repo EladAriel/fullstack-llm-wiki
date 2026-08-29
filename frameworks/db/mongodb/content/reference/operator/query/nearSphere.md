@@ -1,61 +1,141 @@
 ---
 type: "Framework Learn Page"
-framework: "mongodb"
+framework: "MongoDB"
 source_repo: "https://github.com/mongodb/docs.git"
 source_branch: "main"
 source_path: "content/manual/manual/source/reference/operator/query/nearSphere.txt"
-source_commit: "ab9db26ed3d11618cdb61516d8180337d8e3f679"
-source_commit_short: "ab9db26e"
-source_commit_date: "2026-07-24T16:22:46-06:00"
-generated_at: "2026-07-25T11:51:15Z"
+source_commit: "b9f2bc487a2878b65e3c1f80024bebab76954f27"
+source_commit_short: "b9f2bc48"
+source_commit_date: "2026-08-28T17:09:45-05:00"
+generated_at: "2026-08-29T09:39:20.239322Z"
 ---
-
-======================================
-
 # $nearSphere (query predicate operator)
 
+**meta:** :description: Use the `$nearSphere` operator in MongoDB to perform geospatial queries that return documents ordered by proximity, requiring a geospatial index.
+
+.. default-domain:: mongodb
+
+**contents:** On this page
+   :local:
+   :backlinks: none
+   :depth: 1
+   :class: singlecol
+
 ## Definition
+
+**query:** $nearSphere
+
+   Specifies a point for which a :term:`geospatial` query returns the
+   documents from nearest to farthest. MongoDB calculates distances for
+   :query:`$nearSphere` using spherical geometry.
+
+   :query:`$nearSphere` *requires* a geospatial index:
+
+   - :ref:`2dsphere <2dsphere-index>` index for location data defined
+     as GeoJSON points.
+
+   - :ref:`2d <2d-index>` index for location data defined as legacy
+     coordinate pairs. To use a ``2d`` index on
+     :ref:`GeoJSON points <geojson-point>`, create the index on the
+     ``coordinates`` field of the GeoJSON object.
+
+   The :query:`$nearSphere` operator can specify either a
+   :term:`GeoJSON` point or legacy coordinate point.
+
+   To specify a :ref:`GeoJSON Point <geojson-point>`, use the following
+   syntax:
+
+   .. code-block:: javascript
+
+      {
+        $nearSphere: {
+           $geometry: {
+              type : "Point",
+              coordinates : [ <longitude>, <latitude> ]
+           },
+           $minDistance: <distance in meters>,
+           $maxDistance: <distance in meters>
+        }
+      }
+
+   - The *optional* :query:`$minDistance` limits the results to those
+     documents that are *at least* the specified distance from the
+     center point.
+
+   - The *optional* :query:`$maxDistance` is available for either index.
+
+   To specify a point using legacy coordinates, use the following
+   syntax:
+
+   .. code-block:: javascript
+
+      {
+        $nearSphere: [ <x>, <y> ],
+        $minDistance: <distance in radians>,
+        $maxDistance: <distance in radians>
+      }
+
+   - The *optional* :query:`$minDistance` is available only if the
+     query uses the :ref:`2dsphere <2dsphere-index>` index.
+     :query:`$minDistance` limits the results to those documents that
+     are *at least* the specified distance from the center point.
+
+   - The *optional* :query:`$maxDistance` is available for either index.
+
+   If you use longitude and latitude for legacy coordinates, specify
+   the longitude first, then latitude.
 
 ## Behavior
 
 ### Special Indexes Restriction
 
-.. include:: /includes/fact-geo-near-special-indexes.rst
+**include:** /includes/fact-geo-near-special-indexes.rst
 
 ### Sort Operation
 
-.. include:: /includes/fact-geo-near-returns-sorted-results.rst
+**include:** /includes/fact-geo-near-returns-sorted-results.rst
+
+.. |geo-operation| replace:: :query:`$nearSphere`
 
 ### Validation
 
-.. include:: /includes/fact-geo-near-geojson-validation.rst
+**include:** /includes/fact-geo-near-geojson-validation.rst
+
 
 ## Examples
 
 ### Specify Center Point Using GeoJSON
 
-.. include:: /includes/example-nearSphere-minDistance.rst
+**include:** /includes/example-nearSphere-minDistance.rst
 
 ### Specify Center Point Using Legacy Coordinates
 
-`2d` Index ````````````
+### ``2d`` Index
 
-Consider a collection `legacyPlaces` that contains documents with legacy coordinates pairs in the `location` field and has a `2d <2d-index>` index.
+Consider a collection ``legacyPlaces`` that contains documents with
+legacy coordinates pairs in the ``location`` field and has a :ref:`2d
+<2d-index>` index.
 
-Then, the following example returns those documents whose `location` is at most `0.10` radians from the specified point, ordered from nearest to farthest:
+Then, the following example returns those documents whose ``location``
+is at most ``0.10`` radians from the specified point, ordered from
+nearest to farthest:
 
-```javascript
-db.legacyPlaces.find(
-   { location : { $nearSphere : [ -73.9667, 40.78 ], $maxDistance: 0.10 } }
-)
-```
+.. code-block:: javascript
 
-`2dsphere` Index ``````````````````
+   db.legacyPlaces.find(
+      { location : { $nearSphere : [ -73.9667, 40.78 ], $maxDistance: 0.10 } }
+   )
 
-If the collection has a `2dsphere` index instead, you can also specify the optional :query:`$minDistance` specification. For example, the following example returns the documents whose `location` is at least `0.0004` radians from the specified point, ordered from nearest to farthest:
+### ``2dsphere`` Index
 
-```javascript
-db.legacyPlaces.find(
-   { location : { $nearSphere : [ -73.9667, 40.78 ], $minDistance: 0.0004 } }
-)
-```
+If the collection has a ``2dsphere`` index instead, you can also
+specify the optional :query:`$minDistance` specification. For example,
+the following example returns the documents whose ``location`` is at
+least ``0.0004`` radians from the specified point, ordered from nearest
+to farthest:
+
+.. code-block:: javascript
+
+   db.legacyPlaces.find(
+      { location : { $nearSphere : [ -73.9667, 40.78 ], $minDistance: 0.0004 } }
+   )

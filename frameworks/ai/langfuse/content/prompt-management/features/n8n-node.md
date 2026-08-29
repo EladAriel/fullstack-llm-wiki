@@ -4,12 +4,11 @@ framework: "Langfuse"
 source_repo: "https://github.com/langfuse/langfuse-docs"
 source_branch: "main"
 source_path: "content/docs/prompt-management/features/n8n-node.mdx"
-source_commit: "fcd1eca34a924867563c3c4e801254c4e66c0021"
-source_commit_short: "fcd1eca3"
-source_commit_date: "2026-07-25T00:45:45Z"
-generated_at: "2026-07-25T11:51:12Z"
+source_commit: "ba26344559edee69ba55c5d3aa80e632f56c1626"
+source_commit_short: "ba26344"
+source_commit_date: "2026-08-29T02:57:18+00:00"
+generated_at: "2026-08-29T09:38:37.761960Z"
 ---
-
 ---
 title: n8n Node
 sidebarTitle: n8n Node
@@ -44,7 +43,7 @@ n8n Cloud: Use the node directly in your workflows by searching for `Langfuse`.
 ## GitHub Readme
 
 <div className="p-6 mt-6 border bg-card rounded-md">
-  <FetchReadme url="https://raw.githubusercontent.com/langfuse/n8n-nodes-langfuse/refs/heads/master/README.md" />
+  <GitHubReadme url="https://raw.githubusercontent.com/langfuse/n8n-nodes-langfuse/refs/heads/master/README.md" />
 </div>
 
 Source: [langfuse/n8n-nodes-langfuse](https://github.com/langfuse/n8n-nodes-langfuse)

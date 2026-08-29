@@ -1,62 +1,87 @@
 ---
 type: "Framework Learn Page"
-framework: "mongodb"
+framework: "MongoDB"
 source_repo: "https://github.com/mongodb/docs.git"
 source_branch: "main"
 source_path: "content/manual/manual/source/tutorial/restore-replica-set-from-backup.txt"
-source_commit: "ab9db26ed3d11618cdb61516d8180337d8e3f679"
-source_commit_short: "ab9db26e"
-source_commit_date: "2026-07-24T16:22:46-06:00"
-generated_at: "2026-07-25T11:51:15Z"
+source_commit: "b9f2bc487a2878b65e3c1f80024bebab76954f27"
+source_commit_short: "b9f2bc48"
+source_commit_date: "2026-08-28T17:09:45-05:00"
+generated_at: "2026-08-29T09:39:19.647112Z"
 ---
-
-=======================================================
-
 # Restore a Self-Managed Replica Set from MongoDB Backups
 
-This procedure outlines the process for taking MongoDB data and restoring that data into a new `replica set`. Use this approach for seeding test deployments from production backups or as part of disaster recovery.
+.. default-domain:: mongodb
 
-> **Important:** You cannot restore a single data set to three new :binary:`~bin.mongod`
-instances and **then** create a replica set. If you copy the data set
-to each :binary:`~bin.mongod` instance and then create the replica set,
-MongoDB will force the secondaries to perform an :term:`initial
-sync`. The procedures in this document describe the correct and
-efficient ways to deploy a restored replica set.
+**meta:** :keywords: on-prem
+   :description: Restore a replica set from backups by seeding test deployments or for disaster recovery, using efficient procedures to deploy restored data.
 
-You can also use :binary:`~bin.mongorestore` to restore database files using data created with :binary:`~bin.mongodump`. See `/tutorial/backup-and-restore-tools` for more information.
+**contents:** On this page
+   :local:
+   :backlinks: none
+   :depth: 1
+   :class: singlecol
+
+This procedure outlines the process for taking MongoDB data and
+restoring that data into a new :term:`replica set`. Use this approach
+for seeding test deployments from production backups or as part
+of disaster recovery.
+
+**important:** You *cannot* restore a single data set to three new :binary:`~bin.mongod`
+   instances and **then** create a replica set. If you copy the data set
+   to each :binary:`~bin.mongod` instance and then create the replica set,
+   MongoDB will force the secondaries to perform an :term:`initial
+   sync`. The procedures in this document describe the correct and
+   efficient ways to deploy a restored replica set.
+
+You can also use :binary:`~bin.mongorestore` to restore database files
+using data created with :binary:`~bin.mongodump`. See
+:doc:`/tutorial/backup-and-restore-tools` for more information.
 
 ## Considerations
 
-.. include:: /includes/fact-stale-backup
+**include:** /includes/fact-stale-backup
 
 ## Restore Database into a Single Node Replica Set
 
-.. include:: /includes/steps/restore-primary-from-backup.rst
+**include:** /includes/steps/restore-primary-from-backup.rst
 
-.. include:: /includes/replacement-mms.rst
+**include:** /includes/replacement-mms.rst
+
+.. _restore-add-members:
 
 ## Add Members to the Replica Set
 
-MongoDB provides two options for restoring secondary members of a replica set:
+MongoDB provides two options for restoring secondary members of a
+replica set:
 
-- `Manually copy the database files <restore-rs-copy-db-files>`
-to each data directory.
+- :ref:`Manually copy the database files <restore-rs-copy-db-files>`
+  to each data directory.
 
-- `Allow initial sync <restore-rs-initial-sync>` to distribute
-data automatically.
+- :ref:`Allow initial sync <restore-rs-initial-sync>` to distribute
+  data automatically.
 
-> **Note:** If your database is large, initial sync can take a long time to
-complete. For large databases, it might be preferable to copy the
-database files onto each host.
+**note:** If your database is large, initial sync can take a long time to
+   complete. For large databases, it might be preferable to copy the
+   database files onto each host.
+
+
+.. _restore-rs-copy-db-files:
 
 ### Copy Database Files and Restart :binary:`~bin.mongod` Instance
 
-Use the following sequence of operations to "seed" additional members of the replica set with the restored data by copying MongoDB data files directly.
+Use the following sequence of operations to "seed" additional members
+of the replica set with the restored data by copying MongoDB data
+files directly.
 
-.. include:: /includes/steps/restore-secondary-from-backup-directly.rst
+**include:** /includes/steps/restore-secondary-from-backup-directly.rst
+
+.. _restore-rs-initial-sync:
 
 ### Update Secondaries using Initial Sync
 
-Use the following sequence of operations to "seed" additional members of the replica set with the restored data using the default `initial sync <replica-set-initial-sync>` operation.
+Use the following sequence of operations to "seed" additional members
+of the replica set with the restored data using the default :ref:`initial
+sync <replica-set-initial-sync>` operation.
 
-.. include:: /includes/steps/restore-secondary-from-backup-initial-sync.rst
+**include:** /includes/steps/restore-secondary-from-backup-initial-sync.rst

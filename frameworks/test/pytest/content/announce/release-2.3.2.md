@@ -4,12 +4,11 @@ framework: "pytest"
 source_repo: "https://github.com/pytest-dev/pytest"
 source_branch: "main"
 source_path: "doc/en/announce/release-2.3.2.rst"
-source_commit: "344c23787cdb3431dcc441b8b63ee9950f04b921"
-source_commit_short: "344c2378"
-source_commit_date: "2026-07-24T17:37:16+02:00"
-generated_at: "2026-07-25T11:50:13Z"
+source_commit: "fdba12e1708313f56e9cf713d260c029764ca2b7"
+source_commit_short: "fdba12e"
+source_commit_date: "2026-08-27T21:55:50+02:00"
+generated_at: "2026-08-29T09:40:11.207668Z"
 ---
-
 # pytest-2.3.2: some fixes and more traceback-printing speed
 
 pytest-2.3.2 is another stabilization release:
@@ -20,39 +19,48 @@ pytest-2.3.2 is another stabilization release:
 - fix unittest and trial compat behaviour with respect  to runTest() methods
 - issue 206 and others: some improvements to packaging
 - fix issue127 and others: improve some docs
+
 See
 
-http://pytest.org/
+     http://pytest.org/
 
 for general information.  To install or upgrade pytest:
 
-pip install -U pytest # or easy_install -U pytest
+    pip install -U pytest # or
+    easy_install -U pytest
 
-best, holger krekel
+best,
+holger krekel
+
 
 ## Changes between 2.3.1 and 2.3.2
 
 - fix issue208 and fix issue29 use new py version to avoid long pauses
-when printing tracebacks in long modules
+  when printing tracebacks in long modules
 
 - fix issue205 - conftests in subdirs customizing
-pytest_pycollect_makemodule and pytest_pycollect_makeitem now work properly
+  pytest_pycollect_makemodule and pytest_pycollect_makeitem
+  now work properly
 
 - fix teardown-ordering for parametrized setups
+
 - fix issue127 - better documentation for pytest_addoption
-and related objects.
+  and related objects.
 
 - fix unittest behaviour: TestCase.runtest only called if there are
-test methods defined
+  test methods defined
 
 - improve trial support: don't collect its empty
-unittest.TestCase.runTest() method
+  unittest.TestCase.runTest() method
 
 - "python setup.py test" now works with pytest itself
-- fix/improve internal/packaging related bits:
-- exception message check of test_nose.py now passes on python33 as well
-- issue206 - fix test_assertrewrite.py to work when a global
-PYTHONDONTWRITEBYTECODE=1 is present
 
-- add tox.ini to pytest distribution so that ignore-dirs and others config
-bits are properly distributed for maintainers who run pytest-own tests
+- fix/improve internal/packaging related bits:
+
+  - exception message check of test_nose.py now passes on python33 as well
+
+  - issue206 - fix test_assertrewrite.py to work when a global
+    PYTHONDONTWRITEBYTECODE=1 is present
+
+  - add tox.ini to pytest distribution so that ignore-dirs and others config
+    bits are properly distributed for maintainers who run pytest-own tests

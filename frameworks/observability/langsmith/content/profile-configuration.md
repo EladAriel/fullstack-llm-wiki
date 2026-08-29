@@ -4,10 +4,10 @@ framework: "LangSmith"
 source_repo: "https://github.com/langchain-ai/docs.git"
 source_branch: "main"
 source_path: "src/langsmith/profile-configuration.mdx"
-source_commit: "2aae1dfc98ee953a9a5185fb6fcdd9efb3f4d878"
-source_commit_short: "2aae1df"
-source_commit_date: "2026-07-25T00:27:23+00:00"
-generated_at: "2026-07-25T19:08:33.376602Z"
+source_commit: "a174f9cf7c91ee5eb14ee2382eb48bfe6e4956e9"
+source_commit_short: "a174f9c"
+source_commit_date: "2026-08-28T17:04:12-07:00"
+generated_at: "2026-08-29T09:39:50.655002Z"
 ---
 # Profile Configuration
 
@@ -146,10 +146,10 @@ Common profile commands:
 | `langsmith profile set-workspace <workspace-id>` | Set the default workspace for the selected profile. |
 | `langsmith profile delete <name>` | Delete a saved profile. |
 
-Use `--format pretty` for human-readable tables:
+Output is a human-readable table by default. Use `--format json` for scriptable output:
 
 ```shell
-langsmith --format pretty profile list
+langsmith --format json profile list
 ```
 
 ## Authenticate with `langsmith auth login`
@@ -157,7 +157,7 @@ langsmith --format pretty profile list
 Run `langsmith auth login` to authenticate with OAuth instead of manually creating an API-key profile. The command starts a browser-based device authorization flow, stores OAuth tokens in the selected profile, and sets that profile as current.
 
 <Note>
-`langsmith auth login` currently supports LangSmith Cloud (SaaS) only. For self-hosted or other non-SaaS LangSmith endpoints, create an API-key profile instead.
+`langsmith auth login` also works against self-hosted instances from LangSmith CLI `v0.2.46` and later, provided the deployment is on LangSmith `0.16` or later with the OAuth authorization server enabled. The OAuth authorization server is enabled automatically when `config.hostname` is set in your Helm chart **and** a signing JWKS is configured (`config.signingJwks` or key `langsmith_signing_jwks` in `config.existingSecretName`). On earlier deployments, or if no signing JWKS is configured, create an API-key profile instead.
 </Note>
 
 ```shell
@@ -169,6 +169,13 @@ Choose the profile with `--profile` or `LANGSMITH_PROFILE`:
 ```shell
 langsmith auth login --profile dev
 ```
+
+For a self-hosted instance, pass its base URL. The CLI reads the deployment's authorization server metadata to find the OAuth endpoints:
+
+```shell
+langsmith auth login --api-url https://langsmith.example.com --profile self-hosted
+```
+Self-hosted OAuth login requires Helm chart `0.16.0` or later with a signing JWKS. For configuration, see [Enabling Remote MCP](/langsmith/langsmith-remote-mcp#enabling-remote-mcp). Otherwise create an API-key profile.
 
 For a headless environment, suppress automatic browser opening and pass a workspace ID:
 

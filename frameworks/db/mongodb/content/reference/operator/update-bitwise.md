@@ -1,21 +1,56 @@
 ---
 type: "Framework Learn Page"
-framework: "mongodb"
+framework: "MongoDB"
 source_repo: "https://github.com/mongodb/docs.git"
 source_branch: "main"
 source_path: "content/manual/manual/source/reference/operator/update-bitwise.txt"
-source_commit: "ab9db26ed3d11618cdb61516d8180337d8e3f679"
-source_commit_short: "ab9db26e"
-source_commit_date: "2026-07-24T16:22:46-06:00"
-generated_at: "2026-07-25T11:51:15Z"
+source_commit: "b9f2bc487a2878b65e3c1f80024bebab76954f27"
+source_commit_short: "b9f2bc48"
+source_commit_date: "2026-08-28T17:09:45-05:00"
+generated_at: "2026-08-29T09:39:19.865288Z"
 ---
-
-=======================
-
 # Bitwise Update Operator
 
-.. include:: /includes/extracts/operators-toc-explanation.rst
+**meta:** :description: Explore the `$bit` operator for performing bitwise `AND`, `OR`, and `XOR` updates on integer values in MongoDB.
 
-## Contents
+.. default-domain:: mongodb
 
-- $bit </reference/operator/update/bit>
+**contents:** On this page
+   :local:
+   :backlinks: none
+   :depth: 1
+   :class: singlecol
+
+**include:** /includes/extracts/operators-toc-explanation.rst
+
+.. list-table::
+   :widths: 30,70
+   :header-rows: 1
+
+   * - Name
+
+     - Description
+
+   * - :update:`$bit`
+
+     - Performs bitwise ``AND``, ``OR``, and ``XOR`` (exclusive OR)
+       updates of integer values. The ``$bit`` operator performs a
+       bitwise update of a field.
+       
+       The ``$bit`` operator can only be used with integer and long
+       values. The integers must be 32-bit integer or 64-bit integer
+       values.
+
+       All numbers in :binary:`~bin.mongosh` are double precision
+       floating point numbers, not integers. To define integers in
+       :binary:`~bin.mongosh`, use the ``Int32()`` or ``Long()``
+       constructors. For example, ``Int32(5)``, ``Long(23455)``.
+       
+       To learn more about integers and long numbers, see
+       :ref:`shell-type-int` and :ref:`shell-type-long`.
+
+
+**toctree:** :titlesonly: 
+   :hidden: 
+
+   $bit </reference/operator/update/bit>

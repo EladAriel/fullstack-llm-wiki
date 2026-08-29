@@ -1,16 +1,14 @@
 ---
 type: "Framework Learn Page"
-framework: "redis"
+framework: "Redis"
 source_repo: "https://github.com/redis/docs.git"
 source_branch: "main"
 source_path: "content/embeds/rs-prometheus-grafana-quickstart.md"
-source_commit: "9d30f68c3dad1a6b3b7d30fe604b911348ce8152"
-source_commit_short: "9d30f68c"
-source_commit_date: "2026-07-24T10:52:10-07:00"
-generated_at: "2026-07-25T11:51:22Z"
+source_commit: "f8693349287b0efbef3c865b6f6a2aceca88594d"
+source_commit_short: "f869334"
+source_commit_date: "2026-08-28T10:01:19-05:00"
+generated_at: "2026-08-29T09:38:55.101930Z"
 ---
-
-
 You can use Prometheus and Grafana to collect and visualize your Redis Software metrics.
 
 Metrics are exposed at the cluster, node, database, shard, and proxy levels.
@@ -144,6 +142,12 @@ scrape_configs:
 ```
     {{< /multitabs >}}
 
+    {{< note >}}
+
+**Use a single scrape target.** The v2 endpoint is cluster-wide. Every node aggregates metrics from all nodes and returns the same complete result, so one target is enough. If you list one target per node, Prometheus stores every series once per target and multiplies each `sum()`-based dashboard panel by the number of targets. This produces no error. Prometheus reports every target as up and Grafana renders normally. Use your cluster FQDN as the single target so metrics remain available if a node goes down.
+
+    {{< /note >}}
+
 1. Set up your Prometheus and Grafana servers. See the official [Prometheus installation](https://prometheus.io/docs/prometheus/latest/installation/) and [Grafana installation](https://grafana.com/docs/grafana/latest/setup-grafana/installation/) documentation for help.
 
     {{< note >}}
@@ -206,6 +210,8 @@ We recommend running Prometheus in Docker only for development and testing.
         {{<image filename="images/rs/prometheus-target.png" alt="The Redis Software target showing that Prometheus is connected to the Redis Software Cluster.">}}
 
         If Prometheus is connected to the cluster, you can type **node_up** in the Expression field on the Prometheus home page to see the cluster metrics.
+
+        To confirm you are not scraping duplicate targets, query `count(up{job="redis-enterprise"})`. A correct configuration returns `1`. To confirm the cluster can reach every node, query `node_metrics_up`, which reports `0` for any node the aggregator failed to scrape.
 
 1. Configure the Grafana datasource:
 

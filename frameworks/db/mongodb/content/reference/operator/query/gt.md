@@ -1,44 +1,85 @@
 ---
 type: "Framework Learn Page"
-framework: "mongodb"
+framework: "MongoDB"
 source_repo: "https://github.com/mongodb/docs.git"
 source_branch: "main"
 source_path: "content/manual/manual/source/reference/operator/query/gt.txt"
-source_commit: "ab9db26ed3d11618cdb61516d8180337d8e3f679"
-source_commit_short: "ab9db26e"
-source_commit_date: "2026-07-24T16:22:46-06:00"
-generated_at: "2026-07-25T11:51:15Z"
+source_commit: "b9f2bc487a2878b65e3c1f80024bebab76954f27"
+source_commit_short: "b9f2bc48"
+source_commit_date: "2026-08-28T17:09:45-05:00"
+generated_at: "2026-08-29T09:39:20.245978Z"
 ---
-
-==============================
-
 # $gt (query predicate operator)
+
+.. default-domain:: mongodb
+
+**facet:** :name: programming_language
+   :values: shell
+
+**meta:** :description: Use the $gt operator to select documents where the value of the specified field is greater than (>) the specified value.
+
+**contents:** On this page
+   :local:
+   :backlinks: none
+   :depth: 1
+   :class: singlecol
 
 ## Definition
 
+**query:** $gt
+
+   ``$gt`` selects documents where the value of the field is
+   greater than (``>``) the specified value.
+
+   .. include:: /includes/fact-type-bracketing.rst
+
 ## Compatibility
 
-.. include:: /includes/fact-compatibility.rst
+.. |operator-method| replace:: ``$gt``
+
+**include:** /includes/fact-compatibility.rst
 
 ## Syntax
 
-The `$gt` operator has this form:
+The ``$gt`` operator has this form:
 
-```javascript
-{ field: { $gt: value } }
-```
+.. code-block:: javascript
+
+   { field: { $gt: value } }
 
 ## Examples
 
-.. include:: /includes/sample-data-usage.rst
+**include:** /includes/sample-data-usage.rst
 
 ### Match Document Fields
 
-This example selects documents in the `movies` collection where `runtime` is greater than `1000` minutes:
+This example selects documents in the ``movies`` collection where
+``runtime`` is greater than ``1000`` minutes:
+
+.. io-code-block::
+   :copyable: true
+
+   .. input:: /code-examples/tested/command-line/mongosh/operators/gt/gt-find/gt-find.snippet.gt-find.js
+      :language: javascript
+      :category: usage example
+
+   .. output:: /code-examples/tested/command-line/mongosh/operators/gt/gt-find/output.sh
 
 ### Perform an Update Based on Embedded Document Fields
 
-This :method:`~db.collection.updateMany()` operation matches an embedded document named `imdb`, with a subfield named `rating`. The operation sets `{ highestRated: true }` in documents where `rating` is greater than `9.5`.
+This :method:`~db.collection.updateMany()` operation matches an embedded
+document named ``imdb``, with a subfield named ``rating``. The operation
+sets ``{ highestRated: true }`` in documents where ``rating`` is greater
+than ``9.5``.
+
+.. io-code-block::
+   :copyable: true
+
+   .. input:: /code-examples/tested/command-line/mongosh/operators/gt/gt-update/gt-update.snippet.gt-update.js
+      :language: javascript
+      :category: usage example
+
+   .. output:: /code-examples/tested/command-line/mongosh/operators/gt/gt-update/output.sh
 
 ## Learn More
 

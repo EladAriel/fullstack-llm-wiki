@@ -1,27 +1,35 @@
 ---
 type: "Framework Learn Page"
-framework: "tanstack"
+framework: "TanStack"
 source_repo: "https://github.com/tanstack/query"
 source_branch: "main"
 source_path: "docs/framework/preact/reference/functions/usePrefetchQuery.md"
-source_commit: "fd50fa14d283c7d6664a796f758498d1ad5bfce7"
-source_commit_short: "fd50fa14"
-source_commit_date: "2026-07-24T22:22:47+10:00"
-generated_at: "2026-07-25T11:50:41Z"
+source_commit: "2969edf32f7e0c48e2a108d84712d6e01edfde21"
+source_commit_short: "2969edf"
+source_commit_date: "2026-08-28T01:03:02+09:00"
+generated_at: "2026-08-29T09:40:33.373466Z"
 ---
+# Useprefetchquery
 
 ---
 id: usePrefetchQuery
 title: usePrefetchQuery
 ---
 
-# Function: usePrefetchQuery()
-
 ```ts
-function usePrefetchQuery<TQueryFnData, TError, TData, TQueryKey>(options, queryClient?): void;
+function usePrefetchQuery<TQueryFnData, TError, TData, TQueryData, TQueryKey>(options, queryClient?): void;
 ```
 
-Defined in: [preact-query/src/usePrefetchQuery.tsx:5](https://github.com/theVedanta/query/blob/main/packages/preact-query/src/usePrefetchQuery.tsx#L5)
+Defined in: [preact-query/src/usePrefetchQuery.tsx:42](https://github.com/TanStack/query/blob/main/packages/preact-query/src/usePrefetchQuery.tsx#L42)
+
+`usePrefetchQuery` does not return anything, it should be used just to fire a prefetch during render, before
+a suspense boundary that wraps a component that uses `useSuspenseQuery`. You can pass everything to
+`usePrefetchQuery` that you can pass to `queryClient.query`, though `queryKey` is always required, and
+`queryFn` is required unless a default query function has been defined.
+
+The prefetch is skipped if the query already has any cached state — including a `pending`/`error` state left
+over from a previous attempt — so calling this on every render is cheap and won't refetch data that's
+already there or already in flight.
 
 ## Type Parameters
 
@@ -37,6 +45,10 @@ Defined in: [preact-query/src/usePrefetchQuery.tsx:5](https://github.com/theVeda
 
 `TData` = `TQueryFnData`
 
+### TQueryData
+
+`TQueryData` = `TQueryFnData`
+
 ### TQueryKey
 
 `TQueryKey` *extends* readonly `unknown`[] = readonly `unknown`[]
@@ -45,12 +57,40 @@ Defined in: [preact-query/src/usePrefetchQuery.tsx:5](https://github.com/theVeda
 
 ### options
 
-[`UsePrefetchQueryOptions`](../interfaces/UsePrefetchQueryOptions.md)\<`TQueryFnData`, `TError`, `TData`, `TQueryKey`\>
+[`UsePrefetchQueryOptions`](../type-aliases/UsePrefetchQueryOptions.md)\<`TQueryFnData`, `TError`, `TData`, `TQueryData`, `TQueryKey`\>
+
+The [UsePrefetchQueryOptions](../type-aliases/UsePrefetchQueryOptions.md) to use — everything you can pass to `queryClient.query`.
 
 ### queryClient?
 
 `QueryClient`
 
+Use this to use a custom `QueryClient`. Otherwise, the one from the nearest context will
+be used.
+
 ## Returns
 
 `void`
+
+`void` — nothing is returned.
+
+## Example
+
+```tsx
+import { Suspense } from 'preact/compat'
+import { usePrefetchQuery } from '@tanstack/preact-query'
+
+function App() {
+  // Fire the prefetch during render, before the suspense boundary below.
+  usePrefetchQuery({
+    queryKey: ['posts'],
+    queryFn: fetchPosts,
+  })
+
+  return (
+    <Suspense fallback={<h1>Loading posts...</h1>}>
+      <Posts />
+    </Suspense>
+  )
+}
+```

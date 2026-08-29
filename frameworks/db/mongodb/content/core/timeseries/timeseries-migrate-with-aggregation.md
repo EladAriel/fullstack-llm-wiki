@@ -1,31 +1,128 @@
 ---
 type: "Framework Learn Page"
-framework: "mongodb"
+framework: "MongoDB"
 source_repo: "https://github.com/mongodb/docs.git"
 source_branch: "main"
 source_path: "content/manual/manual/source/core/timeseries/timeseries-migrate-with-aggregation.txt"
-source_commit: "ab9db26ed3d11618cdb61516d8180337d8e3f679"
-source_commit_short: "ab9db26e"
-source_commit_date: "2026-07-24T16:22:46-06:00"
-generated_at: "2026-07-25T11:51:15Z"
+source_commit: "b9f2bc487a2878b65e3c1f80024bebab76954f27"
+source_commit_short: "b9f2bc48"
+source_commit_date: "2026-08-28T17:09:45-05:00"
+generated_at: "2026-08-29T09:39:19.795487Z"
 ---
-
-===========================================================
+.. _migrate-data-into-a-timeseries-collection-with-aggregation:
 
 # Migrate Data into a Time Series Collection with Aggregation
 
-Starting in MongoDB version 7.0, you can use the :pipeline:`$out` aggregation stage to migrate data from an existing collection into a `time series collection <manual-timeseries-collection>`.
+.. default-domain:: mongodb
 
-> **Note:** MongoDB does not guarantee output order when you use :pipeline:`$out` to
-migrate data into a times series collection. To maintain order, sort
-your data before you migrate with an aggregation pipeline.
+**contents:** On this page
+   :local:
+   :backlinks: none
+   :depth: 2
+   :class: singlecol
 
-For more information on additional considerations for migrating your data, see `timeseries-best-practices`.
+**meta:** :keywords: IOT, code example
+   :description: Migrate data into a time series collection using aggregation pipelines with the $out stage for improved performance and storage.
+
+**facet:** :name: genre
+   :values: tutorial
+
+**facet:** :name: programming_language
+   :values: csharp, javascript/typescript, java, python, shell
+
+Starting in MongoDB version 7.0, you can use the :pipeline:`$out`
+aggregation stage to migrate data from an existing collection into a
+:ref:`time series collection <manual-timeseries-collection>`.
+
+**note:** MongoDB does not guarantee output order when you use :pipeline:`$out` to
+   migrate data into a times series collection. To maintain order, sort
+   your data before you migrate with an aggregation pipeline.
+
+
+.. composable-tutorial::
+   :options: interface, language
+   :defaults: mongosh, None
+
+## Before you Begin
+
+   Consider a ``weather_data`` collection that contains time and metadata information:
+
+   .. selected-content::
+      :selections: driver, csharp
+
+      .. literalinclude:: /code-examples/tested/csharp/driver/TimeSeries/MigrateWithAggregation/MigrateTimeSeriesCollection.snippet.add-sample-data.cs
+         :language: csharp
+         :category: usage example
+
+   .. selected-content::
+      :selections: driver, java-sync
+
+      .. literalinclude:: /code-examples/tested/java/driver-sync/timeseries/MigrateWithAggregation/Tutorial.snippet.add-sample-data.java
+         :language: java
+         :category: usage example
+
+   .. selected-content::
+      :selections: mongosh, None
+
+      .. literalinclude:: /code-examples/tested/command-line/mongosh/timeseries/migrate-with-aggregation/insert-weather-data.js
+         :language: javascript
+         :category: usage example
+
+   .. selected-content::
+      :selections: driver, nodejs
+
+      .. literalinclude:: /code-examples/tested/javascript/driver/time-series/migrate-with-aggregation/load-sample-data.snippet.load-sample-data.js
+         :language: javascript
+         :category: usage example
+
+   .. selected-content::
+      :selections: driver, python
+
+      .. literalinclude:: /code-examples/tested/python/pymongo/timeseries/migrate_with_aggregation.snippet.add-sample-data.py
+         :language: python
+         :category: usage example
+
+## Steps
+
+   .. selected-content::
+      :selections: driver, csharp
+
+      .. include:: /includes/time-series/steps-ts-migrate-with-aggregation-csharp.rst
+
+   .. selected-content::
+      :selections: driver, java-sync
+
+      .. include:: /includes/time-series/steps-ts-migrate-with-aggregation-java.rst
+
+   .. selected-content::
+      :selections: mongosh, None
+
+      .. include:: /includes/time-series/steps-ts-migrate-with-aggregation-mongosh.rst
+
+   .. selected-content::
+      :selections: driver, nodejs
+
+      .. include:: /includes/time-series/steps-ts-migrate-with-aggregation-javascript.rst
+
+   .. selected-content::
+      :selections: driver, python
+
+      .. include:: /includes/time-series/steps-ts-migrate-with-aggregation-python.rst
+
+For more information on additional considerations for migrating your data, see
+:ref:`timeseries-best-practices`.
 
 ## Next Steps
 
-If your original collection had secondary indexes, manually recreate them now.
+If your original collection had secondary indexes, manually recreate
+them now.
 
-If your time series collection includes `timeField` values before `1970-01-01T00:00:00.000Z` or after `2038-01-19T03:14:07.000Z`, MongoDB logs a warning and disables some query optimizations that make use of the `internal clustered index <manual-timeseries-internal-index>`. To regain query performance and resolve the log warning, `create a secondary index <timeseries-add-secondary-index>` on the `timeField`.
+If your time series collection includes ``timeField`` values before
+``1970-01-01T00:00:00.000Z`` or after ``2038-01-19T03:14:07.000Z``,
+MongoDB logs a warning and disables some query optimizations that make
+use of the :ref:`internal clustered index
+<manual-timeseries-internal-index>`. To regain query performance and
+resolve the log warning, :ref:`create a secondary index
+<timeseries-add-secondary-index>` on the ``timeField``.
 
-> **Seealso:** `timeseries-add-secondary-index`
+**seealso:** :ref:`timeseries-add-secondary-index`

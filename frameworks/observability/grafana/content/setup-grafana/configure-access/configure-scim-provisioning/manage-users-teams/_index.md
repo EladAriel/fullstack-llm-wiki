@@ -4,10 +4,10 @@ framework: "Grafana"
 source_repo: "https://github.com/grafana/grafana.git"
 source_branch: "main"
 source_path: "docs/sources/setup-grafana/configure-access/configure-scim-provisioning/manage-users-teams/_index.md"
-source_commit: "d18e58d33aa8741f08fbab4aa73bdaf1f04e3be5"
-source_commit_short: "d18e58d3"
-source_commit_date: "2026-07-25T13:50:43+02:00"
-generated_at: "2026-07-25T19:08:09.081735Z"
+source_commit: "5e3a02f81d2aadf4bf24fe49ed97d872556f5bf9"
+source_commit_short: "5e3a02f8"
+source_commit_date: "2026-08-29T10:58:19+09:00"
+generated_at: "2026-08-29T09:39:37.411935Z"
 ---
 ---
 aliases:
@@ -171,7 +171,7 @@ reject_non_provisioned_users = true
 
    ```bash
    curl --location 'https://{$GRAFANA_URL}/apis/scim.grafana.app/v0alpha1/namespaces/{$STACK_ID}/Users?filter=userName eq "existing.user@company.com"' \
-   --header 'Authorization: Bearer glsa_REDACTED_SERVICE_ACCOUNT_TOKEN'
+   --header 'Authorization: Bearer glsa_xxxxxxxxxxxxxxxxxxxxxxxx'
    ```
 
    - This should return exactly one user record for each existing user

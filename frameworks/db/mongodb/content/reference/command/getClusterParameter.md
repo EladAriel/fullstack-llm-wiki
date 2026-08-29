@@ -1,97 +1,142 @@
 ---
 type: "Framework Learn Page"
-framework: "mongodb"
+framework: "MongoDB"
 source_repo: "https://github.com/mongodb/docs.git"
 source_branch: "main"
 source_path: "content/manual/manual/source/reference/command/getClusterParameter.txt"
-source_commit: "ab9db26ed3d11618cdb61516d8180337d8e3f679"
-source_commit_short: "ab9db26e"
-source_commit_date: "2026-07-24T16:22:46-06:00"
-generated_at: "2026-07-25T11:51:15Z"
+source_commit: "b9f2bc487a2878b65e3c1f80024bebab76954f27"
+source_commit_short: "b9f2bc48"
+source_commit_date: "2026-08-28T17:09:45-05:00"
+generated_at: "2026-08-29T09:39:20.008921Z"
 ---
-
-======================================
-
 # getClusterParameter (database command)
+
+**meta:** :description: Retrieve cluster parameter values using the `getClusterParameter` command in MongoDB environments.
+
+.. default-domain:: mongodb
+
+**contents:** On this page
+   :local:
+   :backlinks: none
+   :depth: 1
+   :class: singlecol
 
 ## Definition
 
+**dbcommand:** getClusterParameter
+
+   :dbcommand:`getClusterParameter` is an administrative command for
+   retrieving the values of **cluster parameters**. Cluster parameters
+   are configurable parameters that affect all nodes in a sharded cluster.
+
+   To run ``getClusterParameter``, use the ``db.adminCommand( { command } )``
+   method.
+
 ## Compatibility
 
-This command is available in deployments hosted in the following environments:
+This command is available in deployments hosted in the following environments: 
 
-.. include:: /includes/fact-environments-atlas-only.rst
+**include:** /includes/fact-environments-atlas-only.rst
 
-.. include:: /includes/fact-environments-atlas-support-all.rst
+**include:** /includes/fact-environments-atlas-support-all.rst
 
-.. include:: /includes/fact-environments-onprem-only.rst
+**include:** /includes/fact-environments-onprem-only.rst
 
 ## Syntax
 
 The command has the following syntax:
 
-```javascript
-db.adminCommand(
-   {
-     getClusterParameter: <parameter> | [<parameter>, <parameter>] | "'*'"
-   }
-)
-```
+.. code-block:: javascript
 
+   db.adminCommand(
+      {
+        getClusterParameter: <parameter> | [<parameter>, <parameter>] | "'*'"
+      }
+   )
+ 
 ## Command Fields
 
 The command takes the following fields:
 
+.. list-table::
+   :header-rows: 1
+   :widths: 20 20 80
+
+   * - Field
+     - Type
+     - Description
+ 
+   * - ``<parameter>``
+     - String or array of strings 
+     - You can specify one of the following: 
+
+       - The name of the parameter you want to retrieve.
+
+       - An array with the names of multiple parameters.
+
+       - ``'*'``, to return values for all parameters available to
+         ``getClusterParameter``.
+
 ## Behavior
 
-- You can only run `getClusterParameter` on the `admin` database. If
-you run the command on any other database, MongoDB returns an error.
+- You can only run ``getClusterParameter`` on the ``admin`` database. If
+  you run the command on any other database, MongoDB returns an error.
 
-- You can run `getClusterParameter` on any node in a replica set or
-sharded cluster.
+- You can run ``getClusterParameter`` on any node in a replica set or
+  sharded cluster.
 
-- When you run `getClusterParameter` on :binary:`~bin.mongod`,
-`getClusterParameter` returns cached parameter values.
+- When you run ``getClusterParameter`` on :binary:`~bin.mongod`,
+  ``getClusterParameter`` returns cached parameter values.
 
-- When you run `getClusterParameter` on :binary:`~bin.mongos`,
-`getClusterParameter` returns the `durable` value of the cluster parameter from the `config server <sharding-config-server>`.
+- When you run ``getClusterParameter`` on :binary:`~bin.mongos`,
+  ``getClusterParameter`` returns the :term:`durable` value of the
+  cluster parameter from the :ref:`config server <sharding-config-server>`.
 
 ### Access Control
 
-When `authentication <authentication>` is enabled, `getClusterParameter` only works when authenticated as a user with a role that has access to the `getClusterParameter` action.
+When :ref:`authentication <authentication>` is enabled, ``getClusterParameter`` 
+only works when authenticated as a user with a role that has access to the 
+``getClusterParameter`` action.
 
 {+atlas+} users must have the :atlasrole:`atlasAdmin` role.
 
 ## Examples
 
-> **Note:** The output of the following examples may vary depending on the specific
-configuration of the running MongoDB deployment.
+**note:** The output of the following examples may vary depending on the specific
+   configuration of the running MongoDB deployment.
 
 ### Retrieve Single Cluster Parameter
 
-The following operation runs `getClusterParameter` on the `admin` database using a value of `hostName` to retrieve the value for a hypothetical cluster parameter named `hostName`:
+The following operation runs ``getClusterParameter`` on the ``admin``
+database using a value of ``hostName`` to retrieve the value for
+a hypothetical cluster parameter named ``hostName``:
 
-```javascript
-use admin
-db.adminCommand( { getClusterParameter : "hostName" } )
-```
+.. code-block:: javascript
+
+   use admin
+   db.adminCommand( { getClusterParameter : "hostName" } )
+
 
 ### Retrieve Multiple Cluster Parameters
 
-The following operation runs `getClusterParameter` on the `admin` database using the values `hostName` and `testParameter` to retrieve the values for hypothetical cluster parameters named `hostName` and `testParameter`:
+The following operation runs ``getClusterParameter`` on the ``admin`` 
+database using the values ``hostName`` and ``testParameter`` to retrieve the 
+values for hypothetical cluster parameters named ``hostName`` and 
+``testParameter``:
 
-```javascript
-use admin
-db.adminCommand( { getClusterParameter: [ "hostName", "testParameter" ] } )
-```
+.. code-block:: javascript
+
+   use admin
+   db.adminCommand( { getClusterParameter: [ "hostName", "testParameter" ] } )
 
 ### Retrieve All Cluster Parameters
 
-The following operation runs `getClusterParameter` with a value of `'*'` to retrieve the values from all cluster parameters:
+The following operation runs ``getClusterParameter`` with a value of
+``'*'`` to retrieve the values from all cluster parameters:
 
-```javascript
-use admin
-db.adminCommand( { getClusterParameter : '*' } )
-```
+.. code-block:: javascript
 
-> **Seealso:** :dbcommand:`setClusterParameter` for more about these parameters.
+   use admin
+   db.adminCommand( { getClusterParameter : '*' } )
+
+**seealso:** :dbcommand:`setClusterParameter` for more about these parameters.

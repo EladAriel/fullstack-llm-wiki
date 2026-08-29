@@ -4,12 +4,11 @@ framework: "LangChain"
 source_repo: "https://github.com/langchain-ai/docs"
 source_branch: "main"
 source_path: "src/oss/langchain/short-term-memory.mdx"
-source_commit: "2aae1dfc98ee953a9a5185fb6fcdd9efb3f4d878"
-source_commit_short: "2aae1dfc"
-source_commit_date: "2026-07-25T00:27:23Z"
-generated_at: "2026-07-25T11:51:05Z"
+source_commit: "a174f9cf7c91ee5eb14ee2382eb48bfe6e4956e9"
+source_commit_short: "a174f9c"
+source_commit_date: "2026-08-28T17:04:12-07:00"
+generated_at: "2026-08-29T09:38:24.254031Z"
 ---
-
 ---
 title: Short-term memory
 ---
@@ -27,7 +26,7 @@ Short term memory lets your application remember previous interactions within a 
     A thread organizes multiple interactions in a session, similar to the way email groups messages in a single conversation.
 </Note>
 
-Conversation history is the most common form of short-term memory. Long conversations pose a challenge to today's LLMs; a full history may not fit inside an LLM's context window, resulting in an context loss or errors.
+Conversation history is the most common form of short-term memory. Long conversations pose a challenge to today's LLMs; a full history may not fit inside an LLM's context window, resulting in a context loss or errors.
 
 Even if your model supports the full context length, most LLMs still perform poorly over long contexts. They get "distracted" by stale or off-topic content, all while suffering from slower response times and higher costs.
 
@@ -68,9 +67,19 @@ In production, use a checkpointer backed by a database:
 
 
 :::python
-```shell
-pip install langgraph-checkpoint-postgres
+<CodeGroup>
+```bash pip
+pip install -U langgraph-checkpoint-postgres "psycopg[binary]"
 ```
+
+```bash uv
+uv add langgraph-checkpoint-postgres "psycopg[binary]"
+```
+</CodeGroup>
+
+<Note>
+By default, `langgraph-checkpoint-postgres` installs `psycopg` (Psycopg 3) without extras. The install above adds `psycopg[binary]`, which is recommended for most users. For other options, see the [Psycopg installation docs](https://www.psycopg.org/psycopg3/docs/basic/install.html).
+</Note>
 
 ```python
 from langchain.agents import create_agent
@@ -764,6 +773,7 @@ import * as z from "zod";
 
 const CustomState = new StateSchema({
   userId: z.string().optional(),
+  userName: z.string().optional(),
 });
 
 const updateUserInfo = tool(
@@ -791,8 +801,8 @@ const updateUserInfo = tool(
 );
 
 const greet = tool(
-  async (_, config) => {
-    const userName = config.context?.userName;
+  async (_, config: ToolRuntime<typeof CustomState.State>) => {
+    const userName = config.state.userName;
     return `Hello ${userName}!`;
   },
   {
@@ -814,7 +824,7 @@ const result = await agent.invoke({
 });
 
 console.log(result.messages.at(-1)?.content);
-// Output: "Hello! I’m here to help — what would you like to do today?"
+// Output: "Hello John Smith! It's great to meet you. How can I help you today?"
 ```
 :::
 

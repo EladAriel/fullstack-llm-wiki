@@ -1,39 +1,25 @@
 ---
 type: "Framework Learn Directory Index"
-framework: "redis"
-directory: "content/integrate/write-behind/data-transformation"
-source_repo: "https://github.com/redis/docs.git"
-source_branch: "main"
-source_commit: "9d30f68c3dad1a6b3b7d30fe604b911348ce8152"
-source_commit_short: "9d30f68c"
-source_commit_date: "2026-07-24T10:52:10-07:00"
-generated_at: "2026-07-25T11:51:22Z"
+framework: "Redis"
+generated_at: "2026-08-29T09:38:56.492278Z"
 ---
-# Data Transformation
+# Data-Transformation
 
-This directory contains redis learning pages related to data transformation.
+This directory contains Redis learning pages related to data-transformation.
 
 ## Breadcrumbs
 
-[Wiki Home](../../../../index.md) -> [Content](../../../index.md) -> [Integrate](../../index.md) -> [Write Behind](../index.md) -> [Data Transformation](index.md)
+[Wiki Home](../index.md) -> [Content](index.md)
 
 ## Navigation
 
-- Parent: [Parent Index](../index.md)
-
-## Child Directories
-
-- [Transformation Examples](transformation-examples/index.md) - pages related to transformation examples
+- Wiki Home: [Root Index](../index.md)
 
 ## Pages in This Directory
 
-- [Index](_index.md)
+- [_Index](_index.md)
 - [Data Transformation Pipeline](data-transformation-pipeline.md)
 
-## IDE LLM Guidance
+## Subdirectories
 
-When answering implementation questions related to this directory:
-
-1. Prefer the most specific page listed above.
-2. If the topic is broad, read the child directory index first.
-3. Use source metadata from each page when giving answers.
+- [Transformation Examples](transformation-examples/index.md)

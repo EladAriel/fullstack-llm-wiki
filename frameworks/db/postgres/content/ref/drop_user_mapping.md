@@ -1,50 +1,124 @@
 ---
 type: "Framework Learn Page"
-framework: "postgres"
+framework: "PostgreSQL"
 source_repo: "https://github.com/postgres/postgres.git"
 source_branch: "master"
 source_path: "doc/src/sgml/ref/drop_user_mapping.sgml"
-source_commit: "38afc3dcb25c45b744d4025029ce0a6c90b7059f"
-source_commit_short: "38afc3dc"
-source_commit_date: "2026-07-25T19:08:27+09:00"
-generated_at: "2026-07-25T11:50:59Z"
+source_commit: "6c5f1d6074208146930b67c2054509c3e82f6f7f"
+source_commit_short: "6c5f1d6"
+source_commit_date: "2026-08-28T23:24:47+02:00"
+generated_at: "2026-08-29T09:39:24.593484Z"
 ---
-
 DROP USER MAPPING
+ 
 
-DROP USER MAPPING
-7
-SQL - Language Statements
+ 
+  
+# DROP USER MAPPING
 
-DROP USER MAPPING
-remove a user mapping for a foreign server
+  7
+  SQL - Language Statements
+ 
 
-```
+ 
+  
+# DROP USER MAPPING
+
+  remove a user mapping for a foreign server
+ 
+
+ 
+
 DROP USER MAPPING [ IF EXISTS ] FOR { user_name | USER | CURRENT_ROLE | CURRENT_USER | PUBLIC } SERVER server_name
+
+ 
+
+ 
+  
+# Description
+
+  
+   DROP USER MAPPING removes an existing user
+   mapping from foreign server.
+  
+
+  
+   The owner of a foreign server can drop user mappings for that server
+   for any user.  Also, a user can drop a user mapping for their own
+   user name if USAGE privilege on the server has been
+   granted to the user.
+  
+
+ 
+
+ 
+  
+# Parameters
+
+  
+   
+    IF EXISTS
+    
+     
+      Do not throw an error if the user mapping does not exist.  A
+      notice is issued in this case.
+     
+
+    
+   
+
+   
+    user_name
+    
+     
+      User name of the mapping.  CURRENT_ROLE, CURRENT_USER,
+      and USER match the name of the current
+      user.  PUBLIC is used to match all present and
+      future user names in the system.
+     
+
+    
+   
+
+   
+    server_name
+    
+     
+      Server name of the user mapping.
+     
+
+    
+   
+    
+ 
+
+ 
+  
+# Examples
+
+  
+   Drop a user mapping bob, server foo if it exists:
+
 ```
 
-## Description
-
-`DROP USER MAPPING` removes an existing user mapping from foreign server.
-
-The owner of a foreign server can drop user mappings for that server for any user. Also, a user can drop a user mapping for their own user name if `USAGE` privilege on the server has been granted to the user.
-
-## Parameters
-
-- Do not throw an error if the user mapping does not exist. A notice is issued in this case.
-- User name of the mapping. `CURRENT_ROLE`, `CURRENT_USER`, and `USER` match the name of the current user. `PUBLIC` is used to match all present and future user names in the system.
-- Server name of the user mapping.
-
-## Examples
-
-Drop a user mapping `bob`, server `foo` if it exists:
-
-```
 DROP USER MAPPING IF EXISTS FOR bob SERVER foo;
+
 ```
 
-## Compatibility
+ 
 
-`DROP USER MAPPING` conforms to ISO/IEC 9075-9 (SQL/MED). The `IF EXISTS` clause is a PostgreSQL extension.
+ 
+  
+# Compatibility
 
-## See Also
+  
+   DROP USER MAPPING conforms to ISO/IEC 9075-9
+   (SQL/MED).  The IF EXISTS clause is
+   a PostgreSQL extension.
+  
+
+ 
+
+ 
+  
+# See Also

@@ -4,10 +4,10 @@ framework: "Arize Phoenix"
 source_repo: "https://github.com/Arize-ai/phoenix.git"
 source_branch: "main"
 source_path: "docs/phoenix/use-cases/rag-evaluation.mdx"
-source_commit: "69b3ab92c37ff65812feaa2dbf0b1c0ad5ae55fe"
-source_commit_short: "69b3ab9"
-source_commit_date: "2026-07-25T11:48:12-06:00"
-generated_at: "2026-07-25T19:08:24.822950Z"
+source_commit: "c48e50e9906fcc56c1c103ebd93ef3c95ed6b6e7"
+source_commit_short: "c48e50e"
+source_commit_date: "2026-08-29T01:45:20-06:00"
+generated_at: "2026-08-29T09:39:58.805222Z"
 ---
 ---
 title: "Evaluate RAG"
@@ -409,11 +409,14 @@ retrieved_documents_df
 Let's now use Phoenix's LLM Evals to evaluate the relevance of the retrieved documents with regards to the query. Note, we've turned on `explanations` which prompts the LLM to explain its reasoning. This can be useful for debugging and for figuring out potential corrective actions.
 
 ```python
-from phoenix.evals import LLM, async_evaluate_dataframe
-from phoenix.evals.metrics import DocumentRelevanceEvaluator
+from phoenix.evals import LLM, async_evaluate_dataframe, bind_evaluator
+from phoenix.evals.metrics import RetrievalRelevanceEvaluator
 
 llm = LLM(provider="openai", model="gpt-4o")
-relevance_evaluator = DocumentRelevanceEvaluator(llm=llm)
+relevance_evaluator = RetrievalRelevanceEvaluator(llm=llm)
+# Score each retrieved document on its own by mapping the evaluator's `context`
+# field to the dataframe's `reference` column (one document per row).
+relevance_evaluator = bind_evaluator(evaluator=relevance_evaluator, input_mapping={"context": "reference"})
 
 retrieved_documents_relevance_df = await async_evaluate_dataframe(
     evaluators=[relevance_evaluator],
@@ -588,7 +591,7 @@ qa_with_reference_df
 
 174 rows × 3 columns
 
-Now that we have a dataset of the question, context, and response (input, reference, and output), we now can measure how well the LLM is responding to the queries. For details on the QA correctness evaluation, see the [LLM Evals documentation](/docs/phoenix/evaluation/running-pre-tested-evals/q-and-a-on-retrieved-data).
+Now that we have a dataset of the question, context, and response (input, reference, and output), we now can measure how well the LLM is responding to the queries. For details on the correctness evaluation, see the [Correctness evaluator documentation](/docs/phoenix/evaluation/pre-built-metrics/correctness).
 
 ```python
 from phoenix.evals import LLM, async_evaluate_dataframe

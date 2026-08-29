@@ -5,12 +5,10 @@ source_repo: "https://github.com/vibrantlabsai/ragas"
 source_branch: "main"
 source_path: "docs/howtos/integrations/amazon_bedrock.md"
 source_commit: "298b68274234c060deacab3cf5fb52aa3a20e885"
-source_commit_short: "298b6827"
+source_commit_short: "298b682"
 source_commit_date: "2026-02-24T13:17:18+05:30"
-generated_at: "2026-06-23T13:55:50Z"
+generated_at: "2026-08-29T09:38:15.983075Z"
 ---
-
-
 # Create and Evaluate an Amazon Bedrock Agent Integrated with an Amazon Bedrock Knowledge Base and Action Groups
 
 In this notebook, you will learn how to evaluate an Amazon Bedrock Agent. The agent we'll evaluate is a restaurant agent that provides clients with information about adult and children's menus and manages the table booking system. This agent is inspired by a [features example notebooks](https://github.com/aws-samples/amazon-bedrock-samples/tree/main/agents-and-function-calling/bedrock-agents/features-examples/05-create-agent-with-knowledge-base-and-action-group) of [Amazon Bedrock Agents](https://aws.amazon.com/bedrock/agents/) with minor changes. You can learn more about the agent creation process [here](https://github.com/aws-samples/amazon-bedrock-samples/tree/main/agents-and-function-calling/bedrock-agents/features-examples/05-create-agent-with-knowledge-base-and-action-group).

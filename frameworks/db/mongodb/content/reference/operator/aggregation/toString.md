@@ -1,88 +1,186 @@
 ---
 type: "Framework Learn Page"
-framework: "mongodb"
+framework: "MongoDB"
 source_repo: "https://github.com/mongodb/docs.git"
 source_branch: "main"
 source_path: "content/manual/manual/source/reference/operator/aggregation/toString.txt"
-source_commit: "ab9db26ed3d11618cdb61516d8180337d8e3f679"
-source_commit_short: "ab9db26e"
-source_commit_date: "2026-07-24T16:22:46-06:00"
-generated_at: "2026-07-25T11:51:15Z"
+source_commit: "b9f2bc487a2878b65e3c1f80024bebab76954f27"
+source_commit_short: "b9f2bc48"
+source_commit_date: "2026-08-28T17:09:45-05:00"
+generated_at: "2026-08-29T09:39:20.188383Z"
 ---
-
-================================
-
 # $toString  (expression operator)
+
+**meta:** :description: Convert values to strings using `$toString` in MongoDB aggregation, with examples of input types and conversion results.
+
+.. default-domain:: mongodb
+
+**contents:** On this page
+   :local:
+   :backlinks: none
+   :depth: 1
+   :class: singlecol
 
 ## Definition
 
+**expression:** $toString
+
+   Converts a value to a string. If the value cannot be converted
+   to a string, :expression:`$toString` errors. If the value is null or
+   missing, :expression:`$toString` returns null.
+
+   :expression:`$toString` has the following syntax:
+
+   .. code-block:: javascript
+
+      {
+         $toString: <expression>
+      }
+
+   The :expression:`$toString` takes any valid :ref:`expression
+   <aggregation-expressions>`.
+
+   The :expression:`$toString` is a shorthand for the following
+   :expression:`$convert` expression:
+
+   .. code-block:: javascript
+
+      { $convert: { input: <expression>, to: "string" } }
+
+   .. seealso::
+
+      - :expression:`$convert`
+      - :expression:`$dateToString`
+
 ## Behavior
 
-.. include:: /includes/convert-string-types.rst
+**include:** /includes/convert-string-types.rst
 
-.. include:: /includes/strings-to-non-decimal.rst
+**include:** /includes/strings-to-non-decimal.rst
 
 The following table lists some conversion to string examples:
 
+.. list-table::
+   :header-rows: 1
+   :widths: 50 50
+
+   * - Example
+     - Results
+
+   * - ``{ $toString: true }``
+     - ``"true"``
+
+   * - ``{ $toString: false }``
+     - ``"false"``
+
+   * - ``{ $toString: 2.5 }``
+     - ``"2.5"``
+
+   * - ``{ $toString: Int32(2) }``
+     - ``"2"``
+
+   * - ``{ $toString: Long(1000) }``
+     - ``"1000"``
+
+   * - ``{ $toString: ObjectId("5ab9c3da31c2ab715d421285") }``
+     - ``"5ab9c3da31c2ab715d421285"``
+
+   * - ``{ $toString:  ISODate("2018-03-27T16:58:51.538Z") }``
+     - ``"2018-03-27T16:58:51.538Z"``
+
+   * - ``{ $toString: BinData(4, "hn3f") }``
+     - ``"hn3f"``
+
+   * - ``{ $toString: /^ABC/i }``
+     - ``"/^ABC/i"``
+
+       .. versionadded:: 8.3
+
+   * - ``{ $toString: new Timestamp(1565545664, 1) }``
+     - ``"Timestamp(1565545664, 1)"``
+
+       .. versionadded:: 8.3
+
+   * - ``{ $toString:  [["pizza", {type: "cheese"}]] }``
+     - ``"[\"pizza\",{\"type\":\"cheese\"}]"``
+
+       .. versionadded:: 8.3
+
+   * - ``{ $toString: {pizza: {type: "cheese"}} }``
+     - ``"{\"pizza\":{\"type\":\"cheese\"}}"``
+
+       .. versionadded:: 8.3
+
+   * - ``{ $toString: MinKey }``
+     - ``"MinKey"``
+
+       .. versionadded:: 8.3
+
+   * - ``{ $toString: MaxKey }``
+     - ``"MaxKey"``
+
+       .. versionadded:: 8.3
+
 ## Example
 
-Create a collection `orders` with the following documents:
+Create a collection ``orders`` with the following documents:
 
-```javascript
-db.orders.insertMany( [
-   { _id: 1, item: "apple",  qty: 5, zipcode: 93445 },
-   { _id: 2, item: "almonds", qty: 2, zipcode: "12345-0030" },
-   { _id: 3, item: "peaches",  qty: 5, zipcode: 12345 },
-] )
-```
+.. code-block:: javascript
 
-The following aggregation operation on the `orders` collection converts the `zipcode` to string before sorting by the string value:
+   db.orders.insertMany( [
+      { _id: 1, item: "apple",  qty: 5, zipcode: 93445 },
+      { _id: 2, item: "almonds", qty: 2, zipcode: "12345-0030" },
+      { _id: 3, item: "peaches",  qty: 5, zipcode: 12345 },
+   ] )
 
-```javascript
-// Define stage to add convertedZipCode field with the converted zipcode value
+The following aggregation operation on the ``orders`` collection
+converts the ``zipcode`` to string before sorting by the string value:
 
-zipConversionStage = {
-   $addFields: {
-      convertedZipCode: { $toString: "$zipcode" }
-   }
-};
+.. code-block:: javascript
 
-// Define stage to sort documents by the converted zipcode
+   // Define stage to add convertedZipCode field with the converted zipcode value
 
-sortStage = {
-   $sort: { "convertedZipCode": 1 }
-};
+   zipConversionStage = {
+      $addFields: {
+         convertedZipCode: { $toString: "$zipcode" }
+      }
+   };
 
-db.orders.aggregate( [
-  zipConversionStage,
-  sortStage
-] )
-```
+   // Define stage to sort documents by the converted zipcode
+
+   sortStage = {
+      $sort: { "convertedZipCode": 1 }
+   };
+
+   db.orders.aggregate( [
+     zipConversionStage,
+     sortStage
+   ] )
 
 The operation returns the following documents:
 
-```javascript
-{
-  _id: 3,
-  item: 'peaches',
-  qty: 5,
-  zipcode: 12345,
-  convertedZipCode: '12345'
-},
-{
-  _id: 2,
-  item: 'almonds',
-  qty: 2,
-  zipcode: '12345-0030',
-  convertedZipCode: '12345-0030'
-},
-{
-  _id: 1,
-  item: 'apple',
-  qty: 5,
-  zipcode: 93445,
-  convertedZipCode: '93445'
-}
-```
+.. code-block:: javascript
 
-.. include:: /includes/note-conversion-error-use-convert.rst
+   {
+     _id: 3,
+     item: 'peaches',
+     qty: 5,
+     zipcode: 12345,
+     convertedZipCode: '12345'
+   },
+   {
+     _id: 2,
+     item: 'almonds',
+     qty: 2,
+     zipcode: '12345-0030',
+     convertedZipCode: '12345-0030'
+   },
+   {
+     _id: 1,
+     item: 'apple',
+     qty: 5,
+     zipcode: 93445,
+     convertedZipCode: '93445'
+   }
+
+**include:** /includes/note-conversion-error-use-convert.rst

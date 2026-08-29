@@ -1,14 +1,15 @@
 ---
 type: "Framework Learn Page"
-framework: "redis"
+framework: "Redis"
 source_repo: "https://github.com/redis/docs.git"
 source_branch: "main"
 source_path: "content/develop/clients/redis-py/async.md"
-source_commit: "9d30f68c3dad1a6b3b7d30fe604b911348ce8152"
-source_commit_short: "9d30f68c"
-source_commit_date: "2026-07-24T10:52:10-07:00"
-generated_at: "2026-07-25T11:51:22Z"
+source_commit: "f8693349287b0efbef3c865b6f6a2aceca88594d"
+source_commit_short: "f869334"
+source_commit_date: "2026-08-28T10:01:19-05:00"
+generated_at: "2026-08-29T09:38:56.076346Z"
 ---
+# Async
 
 ---
 categories:
@@ -33,7 +34,7 @@ namespace. It mirrors the synchronous client API, so most code patterns
 translate directly — you `await` commands instead of calling them.
 
 Use the async client for I/O-bound workloads, for integration with async web
-frameworks (such as [FastAPI]({{< relref "/integrate/fastapi" >}}), [Starlette](https://www.starlette.io/), [aiohttp](https://docs.aiohttp.org/en/stable/), or [Sanic](https://sanic.dev/en/), or when you need
+frameworks (such as [FastAPI](/content/integrate/fastapi/_index.md), [Starlette](https://www.starlette.io/), [aiohttp](https://docs.aiohttp.org/en/stable/), or [Sanic](https://sanic.dev/en/), or when you need
 to run many concurrent Redis operations from a single process. For simple
 scripts, CPU-bound work, or codebases without an existing event loop, the
 synchronous client is usually a better choice.
@@ -62,7 +63,7 @@ which ensures `aclose()` runs even if an exception is raised:
 
 For production usage, you should manage connections with a connection pool
 rather than opening and closing them individually.
-See [Connection pools and multiplexing]({{< relref "/develop/clients/pools-and-muxing" >}})
+See [Connection pools and multiplexing](/content/develop/clients/pools-and-muxing.md)
 for more information about how this works.
 
 A `Redis` client instance already creates and manages its own connection
@@ -105,7 +106,7 @@ through a single connection instead.)
 ## Pipelines and transactions
 
 Pipelines and transactions work the same way as in the synchronous client
-(see [Pipelines and transactions]({{< relref "/develop/clients/redis-py/transpipe" >}})
+(see [Pipelines and transactions](/content/develop/clients/redis-py/transpipe.md)
 for the conceptual background). The only difference is that you create the
 pipeline inside an `async with` block and `await pipe.execute()`.
 
@@ -137,7 +138,7 @@ consuming task its own subscription.
 
 To connect to a Redis cluster asynchronously, import `RedisCluster` from
 `redis.asyncio.cluster`. The API matches the synchronous cluster client
-(see [Connect to a Redis cluster]({{< relref "/develop/clients/redis-py/connect#connect-to-a-redis-cluster" >}})),
+(see [Connect to a Redis cluster](/content/develop/clients/redis-py/connect.md#connect-to-a-redis-cluster)),
 with `await` in front of each command.
 
 {{< clients-example set="async_intro" step="cluster" lang_filter="Python" description="Foundational: Connect to a Redis cluster with the async client" difficulty="beginner" >}}
@@ -151,7 +152,7 @@ Always close clients and pools when you're done:
   single scope.
 - For longer-lived clients, call `await r.aclose()` explicitly. (The older
   `close()` method is deprecated.)
-- For frameworks with startup/shutdown hooks — for example [FastAPI]({{< relref "/integrate/fastapi" >}})'s
+- For frameworks with startup/shutdown hooks — for example [FastAPI](/content/integrate/fastapi/_index.md)'s
   `lifespan` — create the client or pool at startup and close it at
   shutdown so connections aren't leaked between process restarts.
 
@@ -190,6 +191,6 @@ client, apply these rules:
 
 - The [`redis-py` asyncio examples](https://redis.readthedocs.io/en/stable/examples/asyncio_examples.html)
   on Read the Docs cover further patterns.
-- See [Error handling]({{< relref "/develop/clients/redis-py/error-handling" >}}) and
-  [Client-side geographic failover]({{< relref "/develop/clients/redis-py/failover" >}}) for
+- See [Error handling](/content/develop/clients/redis-py/error-handling.md) and
+  [Client-side geographic failover](/content/develop/clients/redis-py/failover.md) for
   resiliency patterns that apply to both sync and async clients.

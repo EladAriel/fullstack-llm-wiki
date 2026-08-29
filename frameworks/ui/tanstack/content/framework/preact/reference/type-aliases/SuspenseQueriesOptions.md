@@ -1,29 +1,31 @@
 ---
 type: "Framework Learn Page"
-framework: "tanstack"
+framework: "TanStack"
 source_repo: "https://github.com/tanstack/query"
 source_branch: "main"
 source_path: "docs/framework/preact/reference/type-aliases/SuspenseQueriesOptions.md"
-source_commit: "fd50fa14d283c7d6664a796f758498d1ad5bfce7"
-source_commit_short: "fd50fa14"
-source_commit_date: "2026-07-24T22:22:47+10:00"
-generated_at: "2026-07-25T11:50:41Z"
+source_commit: "2969edf32f7e0c48e2a108d84712d6e01edfde21"
+source_commit_short: "2969edf"
+source_commit_date: "2026-08-28T01:03:02+09:00"
+generated_at: "2026-08-29T09:40:33.376452Z"
 ---
+# Suspensequeriesoptions
 
 ---
 id: SuspenseQueriesOptions
 title: SuspenseQueriesOptions
 ---
 
-# Type Alias: SuspenseQueriesOptions\<T, TResults, TDepth\>
-
 ```ts
 type SuspenseQueriesOptions<T, TResults, TDepth> = TDepth["length"] extends MAXIMUM_DEPTH ? UseSuspenseQueryOptions[] : T extends [] ? [] : T extends [infer Head] ? [...TResults, GetUseSuspenseQueryOptions<Head>] : T extends [infer Head, ...(infer Tails)] ? SuspenseQueriesOptions<[...Tails], [...TResults, GetUseSuspenseQueryOptions<Head>], [...TDepth, 1]> : unknown[] extends T ? T : T extends UseSuspenseQueryOptions<infer TQueryFnData, infer TError, infer TData, infer TQueryKey>[] ? UseSuspenseQueryOptions<TQueryFnData, TError, TData, TQueryKey>[] : UseSuspenseQueryOptions[];
 ```
 
-Defined in: [preact-query/src/useSuspenseQueries.ts:109](https://github.com/theVedanta/query/blob/main/packages/preact-query/src/useSuspenseQueries.ts#L109)
+Defined in: [preact-query/src/useSuspenseQueries.ts:119](https://github.com/TanStack/query/blob/main/packages/preact-query/src/useSuspenseQueries.ts#L119)
 
-SuspenseQueriesOptions reducer recursively unwraps function arguments to infer/enforce type param
+The `queries` array accepted by `useSuspenseQueries`. Recursively unwraps each tuple element so every
+entry's `queryFn`/`select` are inferred individually, up to 20 elements. An opaque array (e.g. `unknown[]`)
+is returned as-is; a non-tuple array of a known element type, or a tuple past 20 elements, falls back to a
+single homogeneous [UseSuspenseQueryOptions](../interfaces/UseSuspenseQueryOptions.md) type.
 
 ## Type Parameters
 
@@ -31,10 +33,18 @@ SuspenseQueriesOptions reducer recursively unwraps function arguments to infer/e
 
 `T` *extends* `any`[]
 
+The type of the `queries` array as written at the call site.
+
 ### TResults
 
 `TResults` *extends* `any`[] = \[\]
 
+The internal accumulator that this type builds during recursion. It is not meant
+to be set explicitly.
+
 ### TDepth
 
 `TDepth` *extends* `ReadonlyArray`\<`number`\> = \[\]
+
+The internal recursion-depth counter, checked against the 20-element limit. It is not
+meant to be set explicitly.

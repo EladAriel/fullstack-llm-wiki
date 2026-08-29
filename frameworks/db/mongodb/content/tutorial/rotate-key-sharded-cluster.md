@@ -1,45 +1,61 @@
 ---
 type: "Framework Learn Page"
-framework: "mongodb"
+framework: "MongoDB"
 source_repo: "https://github.com/mongodb/docs.git"
 source_branch: "main"
 source_path: "content/manual/manual/source/tutorial/rotate-key-sharded-cluster.txt"
-source_commit: "ab9db26ed3d11618cdb61516d8180337d8e3f679"
-source_commit_short: "ab9db26e"
-source_commit_date: "2026-07-24T16:22:46-06:00"
-generated_at: "2026-07-25T11:51:15Z"
+source_commit: "b9f2bc487a2878b65e3c1f80024bebab76954f27"
+source_commit_short: "b9f2bc48"
+source_commit_date: "2026-08-28T17:09:45-05:00"
+generated_at: "2026-08-29T09:39:19.606300Z"
 ---
-
-=============================================
-
 # Rotate Keys for Self-Managed Sharded Clusters
 
-Sharded cluster members can use `keyfiles <internal-auth-keyfile>` to authenticate each other as memers of the same deployment.
+**meta:** :keywords: on-prem
+   :description: Update the key for a sharded cluster without downtime by modifying keyfiles and restarting members.
 
-.. include:: /includes/fact-keyfile-common-key.rst
+.. default-domain:: mongodb
 
-The following tutorial steps through the process to update, without any downtime, the key for a sharded cluster. [#exclude-encryption-keyfile]_
+Sharded cluster members can use :ref:`keyfiles <internal-auth-keyfile>`
+to authenticate each other as memers of the same deployment.
 
-> **Warning:** The example keys in this tutorial are for illustrative purposes
-only. Do :red:`NOT` use for your deployment. Instead, generate a
-keyfile using any method you choose (e.g. ``openssl rand -base64
-756``, etc.).
+**include:** /includes/fact-keyfile-common-key.rst
 
-Consider a sharded cluster where each member's keyfile contains the following key:
+The following tutorial steps through the process to update, without any
+downtime, the key for a sharded cluster. [#exclude-encryption-keyfile]_
 
-.. figure:: /images/example-key1.png
+**warning:** The example keys in this tutorial are for illustrative purposes
+   only. Do :red:`NOT` use for your deployment. Instead, generate a
+   keyfile using any method you choose (e.g. ``openssl rand -base64
+   756``, etc.).
 
-The following procedure updates the sharded cluster members to use a new key:
+Consider a sharded cluster where each member's keyfile contains the
+following key:
 
-.. figure:: /images/example-key2.png
+**figure:** /images/example-key1.png
+   :alt: Image of current key to replace.
+   :figwidth: 568px
 
-This tutorial is not applicable to the `keyfile <encrypt-local-key-mgmt>` used for the `MongoDB's encrypted storage engine </core/security-encryption-at-rest>` local key management. That `keyfile <encrypt-local-key-mgmt>` can only contain a single key.
+The following procedure updates the sharded cluster members to use a
+new key:
+
+**figure:** /images/example-key2.png
+   :alt: Image of new key.
+   :figwidth: 568px
+
+.. [#exclude-encryption-keyfile]
+
+   This tutorial is not applicable to the :ref:`keyfile
+   <encrypt-local-key-mgmt>` used for the :doc:`MongoDB's encrypted
+   storage engine </core/security-encryption-at-rest>` local key
+   management. That :ref:`keyfile <encrypt-local-key-mgmt>` can only
+   contain a single key.
 
 ## Before You Begin
 
-.. include:: /includes/dSO-role-intro.rst
+**include:** /includes/dSO-role-intro.rst
 
-.. include:: /includes/dSO-warning.rst
+**include:** /includes/dSO-warning.rst
 
 ## Procedure
 
@@ -47,29 +63,34 @@ This tutorial is not applicable to the `keyfile <encrypt-local-key-mgmt>` used f
 
 Modify each member's keyfile to include both the old and new keys.
 
-> **Warning:** The example keys in this tutorial are for illustrative purposes
-only. Do :red:`NOT` use for your deployment. Instead, generate a
-keyfile using any method you choose (e.g. ``openssl rand -base64
-756``, etc.).
+**warning:** The example keys in this tutorial are for illustrative purposes
+   only. Do :red:`NOT` use for your deployment. Instead, generate a
+   keyfile using any method you choose (e.g. ``openssl rand -base64
+   756``, etc.).
 
-You can specify multiple key strings as a sequence of key strings (optionally enclosed in quotes):
+You can specify multiple key strings as a sequence of key strings (optionally 
+enclosed in quotes):
 
-.. figure:: /images/example-multiple-keys2.png
+**figure:** /images/example-multiple-keys2.png
+   :alt: Image of multiple key string sequence.
+   :figwidth: 600px
 
 ### 1. Restart Each Member
 
-Once all the keyfiles contain both the old and new keys, restart each member one at a time.
+Once all the keyfiles contain both the old and new keys, restart each
+member one at a time.
 
-Config Servers ``````````````
+### Config Servers
 
-**For each secondary of the config server replica set (CSRS)**, connect :binary:`~bin.mongosh` to the member and:
+**For each secondary of the config server replica set (CSRS)**,
+connect :binary:`~bin.mongosh` to the member and:
 
 a. Use the :method:`db.shutdownServer()` method to shut down the member:
 
-```javascript
-   use admin
-   db.shutdownServer()
-```
+   .. code-block:: javascript
+
+      use admin
+      db.shutdownServer()
 
 b.   Restart the member.
 
@@ -77,89 +98,100 @@ b.   Restart the member.
 
 a. Use :method:`rs.stepDown()` to step down the member:
 
-```javascript
-   rs.stepDown()
-```
+   .. code-block:: javascript
+
+      rs.stepDown()
+
 
 #. Use the :method:`db.shutdownServer()` method to shut down the member:
 
-```javascript
-   use admin
-   db.shutdownServer()
-```
+   .. code-block:: javascript
+
+      use admin
+      db.shutdownServer()
 
 #. Restart the member.
 
-Shard Replica Sets ``````````````````
+### Shard Replica Sets
 
-**For each secondary member of the shard replica sets**, connect :binary:`~bin.mongosh` to the member and:
+**For each secondary member of the shard replica sets**, connect
+:binary:`~bin.mongosh` to the member and:
 
 a. Use the :method:`db.shutdownServer()` method to shut down the member:
 
-```javascript
-   use admin
-   db.shutdownServer()
-```
+   .. code-block:: javascript
+
+      use admin
+      db.shutdownServer()
 
 b.   Restart the member.
 
-**For the primary of each shard replica set**, connect :binary:`~bin.mongosh` to the member and
+**For the primary of each shard replica set**, connect
+:binary:`~bin.mongosh` to the member and
 
 a. Use :method:`rs.stepDown()` to step down the member:
 
-```javascript
-   rs.stepDown()
-```
+   .. code-block:: javascript
+
+      rs.stepDown()
+
 
 #. Use the :method:`db.shutdownServer()` method to shut down the member:
 
-```javascript
-   use admin
-   db.shutdownServer()
-```
+   .. code-block:: javascript
+
+      use admin
+      db.shutdownServer()
 
 #. Restart the member.
 
-`mongos` Routers ``````````````````
 
-**For each mongos/router instance**, connect :binary:`~bin.mongosh` to the :binary:`~bin.mongos` instance and:
+### ``mongos`` Routers
+
+**For each mongos/router instance**, connect
+:binary:`~bin.mongosh` to the :binary:`~bin.mongos` instance and:
 
 a. Use the :method:`db.shutdownServer()` method to shut down the member:
 
-```javascript
-   use admin
-   db.shutdownServer()
-```
+   .. code-block:: javascript
+
+      use admin
+      db.shutdownServer()
 
 b.   Restart the member.
 
-Once all members have been restarted, the members now accept either the old or new key for membership authentication.
+Once all members have been restarted, the members now accept either the
+old or new key for membership authentication.
 
 ### 3. Update Keyfile Content to the New Key Only
 
-> **Warning:** The example keys in this tutorial are for illustrative purposes
-only. Do :red:`NOT` use for your deployment. Instead, generate a
-keyfile using any method you choose (e.g. ``openssl rand -base64
-756``, etc.).
+**warning:** The example keys in this tutorial are for illustrative purposes
+   only. Do :red:`NOT` use for your deployment. Instead, generate a
+   keyfile using any method you choose (e.g. ``openssl rand -base64
+   756``, etc.).
 
 Modify each member's keyfile to include only the new password.
 
-.. figure:: /images/example-key2.png
+**figure:** /images/example-key2.png
+   :alt: Image of new key.
+   :figwidth: 558px
 
 ### 4. Restart Each Member
 
-Once all the keyfiles contain the new key only, restart each member one at a time.
+Once all the keyfiles contain the new key only, restart each member one
+at a time.
 
-Config Servers ``````````````
+### Config Servers
 
-**For each secondary of the config server replica set (CSRS)**, connect :binary:`~bin.mongosh` to the member and:
+**For each secondary of the config server replica set (CSRS)**,
+connect :binary:`~bin.mongosh` to the member and:
 
 a. Use the :method:`db.shutdownServer()` method to shut down the member:
 
-```javascript
-   use admin
-   db.shutdownServer()
-```
+   .. code-block:: javascript
+
+      use admin
+      db.shutdownServer()
 
 b.   Restart the member.
 
@@ -167,60 +199,66 @@ b.   Restart the member.
 
 a. Use :method:`rs.stepDown()` to step down the member:
 
-```javascript
-   rs.stepDown()
-```
+   .. code-block:: javascript
+
+      rs.stepDown()
+
 
 #. Use the :method:`db.shutdownServer()` method to shut down the member:
 
-```javascript
-   use admin
-   db.shutdownServer()
-```
+   .. code-block:: javascript
+
+      use admin
+      db.shutdownServer()
 
 #. Restart the member.
 
-Shard Replica Sets ``````````````````
+### Shard Replica Sets
 
-**For each secondary member of the shard replica sets**, connect :binary:`~bin.mongosh` to the member and:
+**For each secondary member of the shard replica sets**, connect
+:binary:`~bin.mongosh` to the member and:
 
 a. Use the :method:`db.shutdownServer()` method to shut down the member:
 
-```javascript
-   use admin
-   db.shutdownServer()
-```
+   .. code-block:: javascript
+
+      use admin
+      db.shutdownServer()
 
 b.   Restart the member.
 
-**For the primary of each shard replica set**, connect :binary:`~bin.mongosh` to the member and
+**For the primary of each shard replica set**, connect
+:binary:`~bin.mongosh` to the member and
 
 a. Use :method:`rs.stepDown()` to step down the member:
 
-```javascript
-   rs.stepDown()
-```
+   .. code-block:: javascript
+
+      rs.stepDown()
+
 
 #. Use the :method:`db.shutdownServer()` method to shut down the member:
 
-```javascript
-   use admin
-   db.shutdownServer()
-```
+   .. code-block:: javascript
+
+      use admin
+      db.shutdownServer()
 
 #. Restart the member.
 
-`mongos` Routers ``````````````````
+### ``mongos`` Routers
 
-**For each mongos/router instance**, connect :binary:`~bin.mongosh` to the :binary:`~bin.mongos` instance and:
+**For each mongos/router instance**, connect
+:binary:`~bin.mongosh` to the :binary:`~bin.mongos` instance and:
 
 a. Use the :method:`db.shutdownServer()` method to shut down the member:
 
-```javascript
-   use admin
-   db.shutdownServer()
-```
+   .. code-block:: javascript
+
+      use admin
+      db.shutdownServer()
 
 b.   Restart the member.
 
-Once all members have been restarted, the members now accept only the new key for membership authentication.
+Once all members have been restarted, the members now accept only the
+new key for membership authentication.

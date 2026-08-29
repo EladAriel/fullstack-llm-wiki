@@ -1,20 +1,33 @@
 ---
 type: "Framework Learn Page"
-framework: "mongodb"
+framework: "MongoDB"
 source_repo: "https://github.com/mongodb/docs.git"
 source_branch: "main"
 source_path: "content/manual/manual/source/core/csfle/reference/supported-operations.txt"
-source_commit: "ab9db26ed3d11618cdb61516d8180337d8e3f679"
-source_commit_short: "ab9db26e"
-source_commit_date: "2026-07-24T16:22:46-06:00"
-generated_at: "2026-07-25T11:51:15Z"
+source_commit: "b9f2bc487a2878b65e3c1f80024bebab76954f27"
+source_commit_short: "b9f2bc48"
+source_commit_date: "2026-08-28T17:09:45-05:00"
+generated_at: "2026-08-29T09:39:19.811448Z"
 ---
-
-=============================================
+.. _csfle-reference-automatic-encryption-supported-operations:
 
 # Supported Operations for Automatic Encryption
 
-This page documents the specific commands, query operators, update operators, aggregation stages, and aggregation expressions supported by drivers configured for automatic {+csfle+}.
+**meta:** :description: Explore supported operations for automatic Client-Side Field Level Encryption, including commands, query operators, and aggregation stages.
+
+.. default-domain:: mongodb
+
+**contents:** On this page
+   :local:
+   :backlinks: none
+   :depth: 2
+   :class: singlecol
+
+This page documents the specific commands, query operators, update
+operators, aggregation stages, and aggregation expressions supported by
+drivers configured for automatic {+csfle+}.
+
+.. _csfle-commands-supported-automatic-encryption:
 
 ## Supported Read and Write Commands
 
@@ -29,13 +42,20 @@ Drivers using automatic {+csfle+} support the following commands:
 - :dbcommand:`findAndModify`
 - :dbcommand:`insert`
 - :dbcommand:`update`
-For any supported command, drivers return an error if the command uses an unsupported operator, aggregation stage, or aggregation expression. For a complete list of the supported operators, stages, and expressions, see the following sections of this page:
 
-- `Supported Query Operators <csfle-supported-query-operators>`
-- `Supported Update Operators <csfle-supported-update-operators>`
-- `Supported Aggregation Stages <csfle-supported-aggregation-stages>`
-- `Supported Aggregation Expressions <csfle-supported-aggregation-expressions>`
-The following commands do not require automatic encryption. Drivers configured for automatic {+csfle+} pass these commands directly to the :binary:`~bin.mongod`:
+For any supported command, drivers return an error if the command uses
+an unsupported operator, aggregation stage, or aggregation expression.
+For a complete list of the supported operators, stages, and expressions,
+see the following sections of this page:
+
+- :ref:`Supported Query Operators <csfle-supported-query-operators>`
+- :ref:`Supported Update Operators <csfle-supported-update-operators>`
+- :ref:`Supported Aggregation Stages <csfle-supported-aggregation-stages>`
+- :ref:`Supported Aggregation Expressions <csfle-supported-aggregation-expressions>`
+
+The following commands do not require automatic encryption. Drivers
+configured for automatic {+csfle+} pass these commands directly to the
+:binary:`~bin.mongod`:
 
 - :dbcommand:`getMore` [#]_
 - :dbcommand:`authenticate`
@@ -56,86 +76,136 @@ The following commands do not require automatic encryption. Drivers configured f
 - :dbcommand:`listIndexes`
 - :dbcommand:`renameCollection`
 - :dbcommand:`ping`
-Issuing any other `command <database-commands>` through a driver configured for automatic {+csfle+} returns an error.
 
-While automatic {+csfle+} ({+csfle-abbrev+}) does not encrypt the :dbcommand:`getMore` command, the response to the command may contain encrypted field values.
+Issuing any other :ref:`command <database-commands>` through a driver
+configured for automatic {+csfle+} returns an error.
 
-- Applications configured with the correct {+csfle-abbrev+} options
-automatically decrypt those values.
+.. [#]
 
-- Applications without the correct {+csfle-abbrev+} options only see
-the encrypted values.
+   While automatic {+csfle+} ({+csfle-abbrev+}) does not encrypt the
+   :dbcommand:`getMore` command, the response to the command may contain
+   encrypted field values.
+   
+   - Applications configured with the correct {+csfle-abbrev+} options
+     automatically decrypt those values.
+
+   - Applications without the correct {+csfle-abbrev+} options only see
+     the encrypted values.
+
+.. _csfle-supported-query-operators:
 
 ## Supported Query Operators
 
-Drivers configured for automatic {+csfle+} allow the following query operators when issued against `deterministically encrypted <csfle-deterministic-encryption>` fields:
+Drivers configured for automatic {+csfle+} allow the following query
+operators when issued against :ref:`deterministically encrypted
+<csfle-deterministic-encryption>` fields:
 
-- :query:`$eq`
-- :query:`$ne`
-- :query:`$in`
+- :query:`$eq` 
+- :query:`$ne` 
+- :query:`$in` 
 - :query:`$nin`
 - :query:`$and`
 - :query:`$or`
 - :query:`$not`
 - :query:`$nor`
-Queries that compare an encrypted field to `null` or a regular expression always return an error even when using a supported query operator. Queries issuing these operators against a `randomly encrypted <csfle-random-encryption>` field return an error.
 
-The :query:`$exists` operator has normal behavior when issued against both deterministically and randomly encrypted fields.
+Queries that compare an encrypted field to ``null`` or a regular
+expression always return an error even when using a supported query
+operator. Queries issuing these operators against a :ref:`randomly
+encrypted <csfle-random-encryption>` field return an error.
 
-Queries specifying any other query operator against an encrypted field return an error.
+The :query:`$exists` operator has normal behavior when issued against
+both deterministically and randomly encrypted fields.
 
-The following query operators return an error even if not issued against an encrypted field:
+Queries specifying any other query operator against an encrypted field
+return an error.
+
+The following query operators return an error *even if* not issued
+against an encrypted field:
 
 - :query:`$text`
 - :query:`$where`
 - :query:`$jsonSchema`
-> **Warning:** MongoDB stores client-side field level encrypted fields as a
-:bsontype:`BinData <data_binary>` blob. Read and write operations
-issued against the encrypted `BinData` value may have unexpected or
-incorrect behavior as compared to issuing that same operation against
-the decrypted value. Certain operations have strict BSON type support
-where issuing them against a `BinData` value returns an error.
-- Drivers using automatic {+csfle+} parse read and write operations
-  for operators or expressions that do not support `BinData` values
-  or that have unexpected behavior when issued against `BinData`
-  values.
-- Applications using explicit (manual) {+csfle+} may use this page
-  as guidance for issuing read and write operations against encrypted
-  fields.
+
+**warning:** Unexpected Behavior with BinData
+
+   MongoDB stores client-side field level encrypted fields as a
+   :bsontype:`BinData <data_binary>` blob. Read and write operations
+   issued against the encrypted ``BinData`` value may have unexpected or
+   incorrect behavior as compared to issuing that same operation against
+   the decrypted value. Certain operations have strict BSON type support
+   where issuing them against a ``BinData`` value returns an error.
+
+   - Drivers using automatic {+csfle+} parse read and write operations
+     for operators or expressions that do not support ``BinData`` values
+     *or* that have unexpected behavior when issued against ``BinData``
+     values.
+
+   - Applications using explicit (manual) {+csfle+} *may* use this page
+     as guidance for issuing read and write operations against encrypted
+     fields.
+
+.. _csfle-supported-insert-operation:
 
 ## Unsupported Insert Operations
 
-Drivers configured for automatic {+csfle+} do not support insert commands with the following behavior:
+Drivers configured for automatic {+csfle+} do *not* support insert
+commands with the following behavior: 
 
-- Inserting a document with `Timestamp(0,0)` associated to an
-encrypted field. The `(0,0)` value indicates that the :binary:`~bin.mongod` should generate the Timestamp. When the :binary:`~bin.mongod` cannot generated encrypted fields, the resulting timestamp is unencrypted.
+- Inserting a document with ``Timestamp(0,0)`` associated to an
+  encrypted field. The ``(0,0)`` value indicates that the
+  :binary:`~bin.mongod` should generate the Timestamp. When the
+  :binary:`~bin.mongod` cannot generated encrypted fields, the resulting
+  timestamp is unencrypted.
 
-- Inserting a document without an encrypted `_id` if the configured
-automatic schema specifies an encrypted `_id` field. When the :binary:`~bin.mongod` automatically generates an unencrypted `ObjectId <objectid>, omitting id` from documents results in documents that do not conform to the automatic encryption rules.
+- Inserting a document without an encrypted ``_id`` *if* the configured
+  automatic schema specifies an encrypted ``_id`` field. When the
+  :binary:`~bin.mongod` automatically generates an unencrypted
+  :ref:`ObjectId <objectid>`, omitting ``_id`` from documents results in
+  documents that do not conform to the automatic encryption rules.
 
 - Inserting a document with an array associated to a
-`deterministically encrypted <csfle-deterministic-encryption>` field. Automatic {+csfle+} does not support deterministically encrypting arrays.
+  :ref:`deterministically encrypted <csfle-deterministic-encryption>`
+  field. Automatic {+csfle+} does not support deterministically
+  encrypting arrays.
+
+.. _csfle-supported-update-operators:
 
 ## Supported Update Operators
 
-Drivers configured for automatic {+csfle+} allow the following update operators when issued against `deterministically encrypted <csfle-deterministic-encryption>` fields:
+Drivers configured for automatic {+csfle+} allow the following update
+operators when issued against :ref:`deterministically encrypted
+<csfle-deterministic-encryption>` fields:
 
 - :update:`$set`
 - :update:`$unset`
 - :update:`$rename`
-When you use the :update:`$rename` operator on encrypted fields, the automatic JSON schema must specify the same encryption metadata for the source and target field names.
 
-Updates specifying any other update operator against an encrypted field return an error.
+When you use the :update:`$rename` operator on encrypted fields, the
+automatic JSON schema must specify the same encryption metadata for the
+source and target field names.
 
-Update operations with the following behavior return an error even if using a supported operator:
+Updates specifying any other update operator against an encrypted field
+return an error.
 
-- The update operation produces an array inside of an encrypted path.
+Update operations with the following behavior return an error
+*even if* using a supported operator:
+
+- The update operation produces an array inside of an encrypted path. 
+
 - The update operation uses aggregation expression syntax.
-For update operations specifying a `query filter <update-command-q>` on deterministically encrypted fields, the query filter must use only `supported operators <csfle-supported-query-operators>` on those fields.
+
+For update operations specifying a :ref:`query filter
+<update-command-q>` on deterministically encrypted fields, the query
+filter must use only :ref:`supported operators
+<csfle-supported-query-operators>` on those fields.
+
+.. _csfle-supported-aggregation-stages:
 
 ## Supported Aggregation Stages
 
-Drivers configured for automatic {+csfle+} support the following aggregation pipeline stages:
+Drivers configured for automatic {+csfle+} support the following
+aggregation pipeline stages:
 
 - :pipeline:`$addFields`
 - :pipeline:`$bucket`
@@ -143,17 +213,14 @@ Drivers configured for automatic {+csfle+} support the following aggregation pip
 - :pipeline:`$collStats`
 - :pipeline:`$count`
 - :pipeline:`$geoNear`
-- :pipeline:`$graphLookup` (For usage requirements, see
-`csfle-lookup-graphLookup-behavior`)
-
+- :pipeline:`$graphLookup` (For usage requirements, see 
+  :ref:`csfle-lookup-graphLookup-behavior`)
 - :pipeline:`$group` (For usage requirements, see
-`csfle-group-behavior`)
-
+  :ref:`csfle-group-behavior`)
 - :pipeline:`$indexStats`
 - :pipeline:`$limit`
-- :pipeline:`$lookup` (For usage requirements, see
-`csfle-lookup-graphLookup-behavior`)
-
+- :pipeline:`$lookup` (For usage requirements, see 
+  :ref:`csfle-lookup-graphLookup-behavior`)
 - :pipeline:`$match`
 - :pipeline:`$project`
 - :pipeline:`$redact`
@@ -163,13 +230,22 @@ Drivers configured for automatic {+csfle+} support the following aggregation pip
 - :pipeline:`$sort`
 - :pipeline:`$sortByCount`
 - :pipeline:`$unwind`
-Pipelines operating on collections configured for automatic encryption that specify any other stage return an error.
 
-For each supported pipeline stage, MongoDB tracks fields that must be encrypted as they pass through the supported pipelines and marks them for encryption.
+Pipelines operating on collections configured for automatic encryption
+that specify any other stage return an error.
 
-Each supported stage must specify only supported `query operators <csfle-supported-query-operators>` and `aggregation expressions <csfle-supported-aggregation-expressions>`.
+For each supported pipeline stage, MongoDB tracks fields that
+*must* be encrypted as they pass through the supported pipelines and
+marks them for encryption. 
 
-### `$group` Behavior
+Each supported stage must specify only supported
+:ref:`query operators <csfle-supported-query-operators>` and
+:ref:`aggregation expressions
+<csfle-supported-aggregation-expressions>`.
+
+.. _csfle-group-behavior:
+
+### ``$group`` Behavior
 
 :pipeline:`$group` has the following behaviors specific to {+csfle+}:
 
@@ -177,32 +253,43 @@ Each supported stage must specify only supported `query operators <csfle-support
 
 - Grouping on deterministically encrypted fields.
 - Using :group:`$addToSet` and :group:`$push` accumulators on
-encrypted fields.
-
+  encrypted fields.
+  
 $group does not support:
 
 - Matching on the array returned by  :group:`$addToSet` and
-:group:`$push` accumulators.
-
+  :group:`$push` accumulators.
 - Arithmetic accumulators on encrypted fields.
-### `$lookup` and `$graphLookup` Behavior
 
-Starting in MongoDB 8.1, you can reference multiple encrypted collections in a :pipeline:`$lookup` stage. However, `$lookup` does not support:
+.. _csfle-lookup-graphLookup-behavior:
 
-- Using an encrypted field as the join field in the `localField` or
-`foreignField` unless you are performing a self-join operation.
+### ``$lookup`` and ``$graphLookup`` Behavior
 
-- Using any field in an encrypted array. An array is considered as encrypted if
-it contains any encrypted elements.
+Starting in MongoDB 8.1, you can reference multiple encrypted collections in a 
+:pipeline:`$lookup` stage. However, ``$lookup`` does not support: 
 
-- For example, you can't use any field within the resulting
-`as <lookup-subquery-as>` array of the `$lookup` operation unless you :pipeline:`$unwind` the `as` field.
+- Using an encrypted field as the join field in the ``localField`` or 
+  ``foreignField`` unless you are performing a self-join operation. 
 
-Automatic {+csfle+} supports the :pipeline:`$graphLookup` stage only if the `from` collection matches the collection on which the aggregation runs against (specifically, self-lookup operations). :pipeline:`$graphLookup` stages that reference a different `from` collection return an error.
+- Using any field in an encrypted array. An array is considered as encrypted if 
+  it contains any encrypted elements. 
+
+  - For example, you can't use any field within the resulting 
+    :ref:`as <lookup-subquery-as>` array of the ``$lookup`` 
+    operation unless you :pipeline:`$unwind` the ``as`` field.
+
+Automatic {+csfle+} supports the :pipeline:`$graphLookup` stage *only if* the 
+``from`` collection matches the collection on which the aggregation runs against 
+(specifically, self-lookup operations). :pipeline:`$graphLookup` stages that 
+reference a different ``from`` collection return an error.
+
+.. _csfle-supported-aggregation-expressions:
 
 ### Supported Aggregation Expressions
 
-Drivers configured for automatic {+csfle+} allow aggregation stages using the following expressions against `deterministically encrypted <csfle-deterministic-encryption>` fields:
+Drivers configured for automatic {+csfle+} allow aggregation stages
+using the following expressions against :ref:`deterministically
+encrypted <csfle-deterministic-encryption>` fields:
 
 - :expression:`$cond`
 - :expression:`$eq`
@@ -212,26 +299,141 @@ Drivers configured for automatic {+csfle+} allow aggregation stages using the fo
 - :expression:`$literal`
 - :expression:`$ne`
 - :expression:`$switch`
-All other aggregation expressions return an error if issued against encrypted fields.
 
-Aggregation stages with the following behavior return an error even if using a supported aggregation expression:
+All other aggregation expressions return an error if issued against
+encrypted fields.
+
+Aggregation stages with the following behavior return an error
+*even if* using a supported aggregation expression:
+
+.. list-table::
+   :widths: 10 30 60
+   :header-rows: 1
+
+   * - Expressions
+     - Rejected Behavior
+     - Example
+
+   * - :expression:`$cond`
+       
+       :expression:`$switch`
+     - The expression specifies a field whose encryption properties
+       cannot be known until runtime *and* a subsequent aggregation
+       stage includes an expression referencing that field.
+     - .. code-block:: javascript
+          :copyable: false
+
+          $addFields : {
+            "valueWithUnknownEncryption" : {
+              $cond : {
+                if : { "$encryptedField" : "value" },
+                then : "$encryptedField",
+                else: "unencryptedValue"
+              }
+            }
+          },
+          {
+            $match : {
+              "valueWithUnknownEncryption" : "someNewValue"
+            }
+          }
+
+   * - :expression:`$eq`
+
+       :expression:`$ne`
+     - The expression creates a new field that references an
+       encrypted field *and* operates on that new field in the same
+       expression.
+     - .. code-block:: javascript
+          :copyable: false
+
+          {
+            $eq : [
+              {"newField" : "$encryptedField"},
+              {"newField" : "value"
+            ]
+          }
+
+   * - :expression:`$eq`
+       
+       :expression:`$ne`
+     - The expression references the prefix of an encrypted field
+       within the comparison expression.
+     - .. code-block:: javascript
+          :copyable: false
+
+          { $eq : [ "$prefixOfEncryptedField" , "value"] }
+
+   * - :expression:`$eq`
+       
+       :expression:`$ne`
+     - The result of the expression is compared to an encrypted field.
+     - .. code-block:: javascript
+          :copyable: false
+
+          { 
+            $eq : [ 
+                "$encryptedField" , 
+                { $ne : [ "field", "value" ] } 
+            ] 
+          }
+
+   * - :expression:`$let`
+     - The expression binds a variable to an encrypted 
+       field or attempts to rebind :variable:`$$CURRENT <CURRENT>`.
+     - .. code-block:: javascript
+          :copyable: false
+
+          { 
+            $let: {
+              "vars" : {
+                "newVariable" : "$encryptedField"
+              }
+            }
+          }
+
+   * - :expression:`$in`
+     - The first argument to the expression *is* an encrypted field, 
+       *and*
+       
+       - The second argument to the expression is *not* an array literal
+      
+         *-OR-* 
+
+       - The second argument to the expression is an encrypted field.
+     - .. code-block:: javascript
+          :copyable: false
+
+          { 
+            $in : [ 
+              "$encryptedField" , 
+              "$otherEncryptedField" 
+            ] 
+          }
 
 ## Unsupported Field Types
 
-Drivers configured for automatic {+csfle+} ({+csfle-abbrev+}) do not support any read or write operation that requires encrypting the following value types:
+Drivers configured for automatic {+csfle+} ({+csfle-abbrev+}) do *not* support any
+read or write operation that requires encrypting the following value
+types:
 
 - :bsontype:`MaxKey`
 - :bsontype:`MinKey`
-- `null`
-- `undefined`
-Encryption does not adequately hide the type information for these values.
+- ``null``
+- ``undefined``
 
-{+csfle-abbrev+} does not support automatic encryption on fields within an array of documents.
+Encryption does not adequately hide the type information for these
+values.
 
-Automatic {+csfle-abbrev+} also does not support read or write operations on a deterministically encrypted field where the operation compares the encrypted field to the following value types:
+{+csfle-abbrev+} does not support automatic encryption on fields within an 
+array of documents.
 
-- `array`
-- `bool`
-- `decimal128`
-- `double`
-- `object`
+Automatic {+csfle-abbrev+} *also* does not support read or write operations on a
+deterministically encrypted field where the operation compares the
+encrypted field to the following value types:
+
+- ``array``
+- ``bool``
+- ``decimal128``
+- ``double``
+- ``object``

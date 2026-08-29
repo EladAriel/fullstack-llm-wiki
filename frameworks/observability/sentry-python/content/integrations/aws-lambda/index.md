@@ -1,7 +1,7 @@
 ---
 type: "Framework Learn Directory Index"
 framework: "Sentry Python"
-generated_at: "2026-07-25T19:08:13.544169Z"
+generated_at: "2026-08-29T09:40:09.073752Z"
 ---
 # Aws-Lambda
 
@@ -17,3 +17,9 @@ This directory contains Sentry Python learning pages related to aws-lambda.
 
 ## Pages in This Directory
 
+
+## Subdirectories
+
+- [Container Image](container-image/index.md)
+- [Manual Instrumentation](manual-instrumentation/index.md)
+- [Manual Layer](manual-layer/index.md)

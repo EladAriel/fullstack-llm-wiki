@@ -4,21 +4,20 @@ framework: "Langfuse"
 source_repo: "https://github.com/langfuse/langfuse-docs"
 source_branch: "main"
 source_path: "content/docs/observability/features/filter-search-bar.mdx"
-source_commit: "fcd1eca34a924867563c3c4e801254c4e66c0021"
-source_commit_short: "fcd1eca3"
-source_commit_date: "2026-07-25T00:45:45Z"
-generated_at: "2026-07-25T11:51:12Z"
+source_commit: "ba26344559edee69ba55c5d3aa80e632f56c1626"
+source_commit_short: "ba26344"
+source_commit_date: "2026-08-29T02:57:18+00:00"
+generated_at: "2026-08-29T09:38:37.750982Z"
 ---
-
 ---
-title: Filter Search Bar
+title: Filter search bar
 description: Filter and search traces and observations by typing — fields, operators, wildcards, aliases, and full-text search in one query bar with autocomplete.
 sidebarTitle: Filter Search Bar
 ---
 
-# Filter Search Bar
+# Filter search bar
 
-The Filter Search Bar lets you filter and search the Observations and Traces tables by typing a single line of text instead of assembling filters in the sidebar. It parses your query into the same filters the sidebar produces, autocompletes fields and values as you type, and serializes the full query into the URL so you can share an exact view with a link.
+The filter search bar lets you filter and search the Observations and Traces tables by typing a single line of text instead of assembling filters in the sidebar. It parses your query into the same filters the sidebar produces, autocompletes fields and values as you type, and serializes the full query into the URL so you can share an exact view with a link.
 
 <Video
   src="https://static.langfuse.com/docs-videos/2026-06-19-filter-search-bar.mp4"
@@ -30,15 +29,15 @@ level:ERROR type:TOOL environment:production latency:>2 name:*checkout*
 ```
 
 <Callout type="info">
-  The Filter Search Bar runs on the [Langfuse v4](/docs/v4) data model. On
-  Langfuse Cloud, turn on **Fast** on the Observations or Traces table to use
-  it. On self-hosted deployments, it is available after [upgrading to Langfuse
+  The filter search bar runs on the [Langfuse v4](/docs/v4) data model. On
+  Langfuse Cloud, turn on the **Langfuse v4 preview** to use it. On
+  self-hosted deployments, it is available after [upgrading to Langfuse
   v4](/self-hosting/upgrade/upgrade-guides/upgrade-v3-to-v4).
 </Callout>
 
 The bar runs next to the existing filter sidebar and time-range selector. Because the bar and the sidebar are two editors over the same filter state, anything you type appears as sidebar filters and vice versa. Type a field name and autocomplete suggests operators and observed values; press Enter to apply.
 
-Once you have narrowed the table to the rows you want, you can [chart that same query](/docs/observability/features/events-table-charts) without leaving the page.
+Once you have narrowed the table to the rows you want, you can [chart that same query](/docs/observability/features/events-table-charts) without leaving the page, and the [Pulse](/docs/observability/features/pulse) strip above the table plots the same filtered query as outliers over time.
 
 ## Query syntax [#syntax]
 
@@ -147,6 +146,10 @@ Some operator-like tokens are not supported yet and are flagged instead of being
 ## Incomplete filters
 
 A bare field name with no value, such as `type`, `level`, or `env` on its own, is not yet a complete expression. The bar flags it as invalid and does not apply it to the query until you finish it, for example `type:TOOL`. To search for one of these words as literal text instead, quote it (`"type"`).
+
+## Facet counts [#facet-counts]
+
+The filter sidebar shows a count next to each facet value. Those counts are computed against the filters you already have active, not just the selected time range, so the count matches what the table actually returns. Narrow to `environment:production` and the Level facet recounts within production, so a value you pick from it never comes back with no results.
 
 ## GitHub Discussions
 

@@ -1,74 +1,127 @@
 ---
 type: "Framework Learn Page"
-framework: "mongodb"
+framework: "MongoDB"
 source_repo: "https://github.com/mongodb/docs.git"
 source_branch: "main"
 source_path: "content/manual/manual/source/reference/method/db.grantRolesToUser.txt"
-source_commit: "ab9db26ed3d11618cdb61516d8180337d8e3f679"
-source_commit_short: "ab9db26e"
-source_commit_date: "2026-07-24T16:22:46-06:00"
-generated_at: "2026-07-25T11:51:15Z"
+source_commit: "b9f2bc487a2878b65e3c1f80024bebab76954f27"
+source_commit_short: "b9f2bc48"
+source_commit_date: "2026-08-28T17:09:45-05:00"
+generated_at: "2026-08-29T09:39:19.925969Z"
 ---
-
-======================================
-
 # db.grantRolesToUser() (mongosh method)
+
+**meta:** :description: Grant additional roles to a user using the `db.grantRolesToUser()` method in MongoDB.
+
+.. default-domain:: mongodb
+
+**contents:** On this page
+   :local:
+   :backlinks: none
+   :depth: 1
+   :class: singlecol
 
 ## Definition
 
+**method:** db.grantRolesToUser(username, roles, writeConcern)
+
+   Grants additional roles to a user.
+
+   .. |dbcommand| replace:: :dbcommand:`grantRolesToUser` command
+   .. include:: /includes/fact-mongosh-shell-method-alt.rst
+
+   The :method:`db.grantRolesToUser()` method uses the following syntax:
+
+   .. code-block:: javascript
+
+      db.grantRolesToUser( "<username>", [ <roles> ], { <writeConcern> } )
+
+   The :method:`db.grantRolesToUser()` method takes the following arguments:
+
+
+   .. list-table::
+      :header-rows: 1
+      :widths: 20 20 80
+   
+      * - Parameter
+        - Type
+        - Description
+      * - ``user``
+        - string
+        - The name of the user to whom to grant roles.
+      * - ``roles``
+        - array
+        - An array of additional roles to grant to the user.
+      * - ``writeConcern``
+        - document
+        - .. include:: /includes/fact-write-concern-spec-link.rst
+
+   .. |local-cmd-name| replace:: :method:`db.grantRolesToUser()`
+   .. include:: /includes/fact-roles-array-contents.rst
+
+   The :method:`db.grantRolesToUser()` method wraps the
+   :dbcommand:`grantRolesToUser` command.
+
 ## Compatibility
 
-This method is available in deployments hosted in the following environments:
+This method is available in deployments hosted in the following
+environments:
 
-.. include:: /includes/fact-environments-no-atlas-support.rst
+**include:** /includes/fact-environments-no-atlas-support.rst
 
-.. include:: /includes/fact-environments-onprem-only.rst
+**include:** /includes/fact-environments-onprem-only.rst
 
 ## Behavior
 
 ### Replica set
 
-.. include:: /includes/fact-management-methods-write-concern.rst
+.. |command| replace:: :method:`db.grantRolesToUser()`
+
+**include:** /includes/fact-management-methods-write-concern.rst
 
 ## Required Access
 
-.. include:: /includes/access-grant-roles.rst
+**include:** /includes/access-grant-roles.rst
 
 ## Example
 
-Given a user `accountUser01` in the `products` database with the following roles:
+Given a user ``accountUser01`` in the ``products`` database with the following
+roles:
 
-```javascript
-"roles" : [
-    { "role" : "assetsReader",
-      "db" : "assets"
-    }
-]
-```
+.. code-block:: javascript
 
-The following :method:`db.grantRolesToUser()` operation gives `accountUser01` the :authrole:`readWrite` role on the `products` database and the :authrole:`read` role on the `stock` database.
+   "roles" : [
+       { "role" : "assetsReader",
+         "db" : "assets"
+       }
+   ]
 
-```javascript
-use products
-db.grantRolesToUser(
-   "accountUser01",
-   [ "readWrite" , { role: "read", db: "stock" } ],
-   { w: "majority" , wtimeout: 4000 }
-)
-```
+The following :method:`db.grantRolesToUser()` operation gives ``accountUser01``
+the :authrole:`readWrite` role on the ``products`` database and the
+:authrole:`read` role on the ``stock`` database.
 
-The user `accountUser01` in the `products` database now has the following roles:
+.. code-block:: javascript
 
-```javascript
-"roles" : [
-    { "role" : "assetsReader",
-      "db" : "assets"
-    },
-    { "role" : "read",
-      "db" : "stock"
-    },
-    { "role" : "readWrite",
-      "db" : "products"
-    }
-]
-```
+   use products
+   db.grantRolesToUser(
+      "accountUser01",
+      [ "readWrite" , { role: "read", db: "stock" } ],
+      { w: "majority" , wtimeout: 4000 }
+   )
+
+The user ``accountUser01`` in the ``products`` database now has the following
+roles:
+
+.. code-block:: javascript
+
+   "roles" : [
+       { "role" : "assetsReader",
+         "db" : "assets"
+       },
+       { "role" : "read",
+         "db" : "stock"
+       },
+       { "role" : "readWrite",
+         "db" : "products"
+       }
+   ]

@@ -1,34 +1,60 @@
 ---
 type: "Framework Learn Page"
-framework: "mongodb"
+framework: "MongoDB"
 source_repo: "https://github.com/mongodb/docs.git"
 source_branch: "main"
 source_path: "content/manual/manual/source/tutorial/deploy-geographically-distributed-replica-set.txt"
-source_commit: "ab9db26ed3d11618cdb61516d8180337d8e3f679"
-source_commit_short: "ab9db26e"
-source_commit_date: "2026-07-24T16:22:46-06:00"
-generated_at: "2026-07-25T11:51:15Z"
+source_commit: "b9f2bc487a2878b65e3c1f80024bebab76954f27"
+source_commit_short: "b9f2bc48"
+source_commit_date: "2026-08-28T17:09:45-05:00"
+generated_at: "2026-08-29T09:39:19.638985Z"
 ---
-
-==========================================================
+.. _server-replica-set-deploy-geo:
 
 # Deploy a Geographically Redundant Self-Managed Replica Set
 
+**meta:** :keywords: on-prem
+   :description: Deploy a geographically redundant replica set with multiple members across different locations for high availability and fault tolerance.
+
+.. default-domain:: mongodb
+
+**contents:** On this page
+   :local:
+   :backlinks: none
+   :depth: 1
+   :class: singlecol
+
 ## Overview
 
-This tutorial outlines the process for deploying a `replica set` with `members in multiple locations <replica-set-geographical-distribution>`. The tutorial addresses three-member replica sets and five-member replica sets. If you have an even number of replica set members, add another data bearing member, if possible, to deploy an odd number of voting members. [#arbiter-alternative]_
+This tutorial outlines the process for deploying a :term:`replica set`
+with :ref:`members in multiple locations
+<replica-set-geographical-distribution>`. The tutorial addresses
+three-member replica sets and five-member replica sets. If you have an
+even number of replica set members, add another data bearing member, if
+possible, to deploy an odd number of voting members.
+[#arbiter-alternative]_
 
-For more information on distributed replica sets, see `replica-set-geographical-distribution`. See also `replica-set-architecture` and see `replication-toc`.
+For more information on distributed replica sets, see
+:ref:`replica-set-geographical-distribution`. See also
+:ref:`replica-set-architecture` and see :ref:`replication-toc`.
 
-If circumstances prohibit another data bearing member and you have an even number of voting members, you can add an arbiter instead. For considerations when using an arbiter, see `replica-set-arbiter-configuration`.
+.. [#arbiter-alternative]
+
+   If circumstances prohibit another data bearing member and you have
+   an even number of voting members, you can add an arbiter instead.
+   For considerations when using an arbiter, see
+   :ref:`replica-set-arbiter-configuration`.
 
 ## Considerations
 
-.. include:: /includes/considerations-deploying-replica-set.rst
+**include:** /includes/considerations-deploying-replica-set.rst
 
 ### Distribution of the Members
 
-If possible, use an odd number of data centers, and choose a distribution of members that maximizes the likelihood that even with a loss of a data center, the remaining replica set members can form a majority or at minimum, provide a copy of your data.
+If possible, use an odd number of data centers, and choose a
+distribution of members that maximizes the likelihood that even with a
+loss of a data center, the remaining replica set members can form a
+majority or at minimum, provide a copy of your data.
 
 ### Voting Members
 
@@ -36,42 +62,59 @@ Never deploy more than seven voting members.
 
 ## Prerequisites
 
-For all configurations in this tutorial, deploy each replica set member on a separate system. Although you may deploy more than one replica set member on a single system, doing so reduces the redundancy and capacity of the replica set. Such deployments are typically for testing purposes.
+For all configurations in this tutorial, deploy each replica set member
+on a separate system. Although you may deploy more than one replica set member on a
+single system, doing so reduces the redundancy and capacity
+of the replica set. Such deployments are typically for testing
+purposes.
 
-This tutorial assumes you have installed MongoDB on each system that will be part of your replica set. If you have not already installed MongoDB, see the `installation tutorials <tutorial-installation>`.
+This tutorial assumes you have installed MongoDB on each system that
+will be part of your replica set. If you have not already installed
+MongoDB, see the :ref:`installation tutorials <tutorial-installation>`.
 
 ## Procedures
 
+.. _replica-set-deploy-distributed-three-member:
+
 ### Deploy a Geographically Redundant Three-Member Replica Set
 
-.. include:: /includes/important-hostnames.rst
+**include:** /includes/important-hostnames.rst
 
-For a geographically redundant three-member replica set deployment, you must decide how to distribute your system. Some possible distributions for the three members are:
+For a geographically redundant three-member replica set deployment, you
+must decide how to distribute your system. Some possible distributions
+for the three members are:
 
-- Across Three Data Centers: One member to each site.
+- Across Three Data Centers: One member to each site. 
+
 - Across Two Data Centers: Two members to Site A and one member to Site
-B. If one of the members of the replica set is an arbiter [#arbiter-alternative]_, distribute the arbiter to Site A with a data-bearing member.
+  B. If one of the members of the replica set is an arbiter
+  [#arbiter-alternative]_, distribute the arbiter to Site A with a
+  data-bearing member.
+  
+**include:** /includes/note-csrs-distribution.rst
 
-.. include:: /includes/note-csrs-distribution.rst
-
-.. include:: /includes/steps/deploy-geographically-distributed-replica-set-3member.rst
+**include:** /includes/steps/deploy-geographically-distributed-replica-set-3member.rst
 
 ### Deploy a Geographically Redundant Five-Member Replica Set
 
-.. include:: /includes/important-hostnames.rst
+**include:** /includes/important-hostnames.rst
 
-For a geographically redundant five-member replica set deployment, you must decide how to distribute your system. Some possible distributions for the five members are:
+For a geographically redundant five-member replica set deployment, you
+must decide how to distribute your system. Some possible distributions
+for the five members are:
 
 - Across Three Data Centers: Two members in Site A, two members in Site
-B, one member in Site C.
+  B, one member in Site C.
 
 - Across Four Data Centers: Two members in one site, and one member in
-the other three sites.
+  the other three sites.
 
 - Across Five Data Centers: One member in each site.
+
 - Across Two Data Centers: Three members in Site A and two members in
-Site B. If possible, avoid distributing config server replica set across only two data centers.
+  Site B. If possible, avoid distributing config server replica set across only
+  two data centers.
 
-.. include:: /includes/note-csrs-distribution.rst
+**include:** /includes/note-csrs-distribution.rst
 
-.. include:: /includes/steps/deploy-geographically-distributed-replica-set-5member.rst
+**include:** /includes/steps/deploy-geographically-distributed-replica-set-5member.rst

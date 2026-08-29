@@ -1,40 +1,187 @@
 ---
 type: "Framework Learn Page"
-framework: "mongodb"
+framework: "MongoDB"
 source_repo: "https://github.com/mongodb/docs.git"
 source_branch: "main"
 source_path: "content/manual/manual/source/reference/sharding.txt"
-source_commit: "ab9db26ed3d11618cdb61516d8180337d8e3f679"
-source_commit_short: "ab9db26e"
-source_commit_date: "2026-07-24T16:22:46-06:00"
-generated_at: "2026-07-25T11:51:15Z"
+source_commit: "b9f2bc487a2878b65e3c1f80024bebab76954f27"
+source_commit_short: "b9f2bc48"
+source_commit_date: "2026-08-28T17:09:45-05:00"
+generated_at: "2026-08-29T09:39:19.666093Z"
 ---
-
-==================
+.. _sharding-reference:
 
 # Sharding Reference
 
-## Sharding Methods in `mongosh`
+**meta:** :description: Explore sharding methods and database commands in MongoDB, including operations like adding shards, enabling sharding, and managing shard zones.
 
-.. include:: /includes/mongosh-sharding-methods.rst
+.. default-domain:: mongodb
+
+**contents:** On this page
+   :local:
+   :backlinks: none
+   :depth: 1
+   :class: singlecol
+
+## Sharding Methods in ``mongosh``
+
+**include:** /includes/mongosh-sharding-methods.rst
 
 ## Sharding Database Commands
 
-The following database commands support `sharded clusters <sharded cluster>`.
+The following database commands support :term:`sharded clusters
+<sharded cluster>`.
+
+.. list-table::
+   :widths: 30,70
+   :header-rows: 1
+
+   * - Name
+
+     - Description
+
+   * - :dbcommand:`abortMoveCollection`
+
+     - .. include:: /includes/command/abortMoveCollection.rst
+
+   * - :dbcommand:`abortReshardCollection`
+
+     - Aborts a :ref:`resharding operation <sharding-resharding>`.
+
+       .. versionadded:: 5.0
+
+   * - :dbcommand:`addShard`
+
+     - Adds a :term:`shard` to a :term:`sharded cluster`.
+
+   * - :dbcommand:`addShardToZone`
+
+     - Associates a shard with a :term:`zone`. Supports configuring :ref:`zones <zone-sharding>` in sharded clusters.
+
+   * - :dbcommand:`balancerCollectionStatus`
+
+     - Returns information on whether the chunks of a sharded
+       collection are balanced.
+
+   * - :dbcommand:`balancerStart`
+
+     - Starts a balancer thread.
+
+   * - :dbcommand:`balancerStatus`
+
+     - Returns information on the balancer status.
+
+   * - :dbcommand:`balancerStop`
+
+     - Stops the balancer thread.
+
+   * - :dbcommand:`clearJumboFlag`
+
+     - Clears the ``jumbo`` flag for a chunk.
+
+   * - :dbcommand:`commitReshardCollection`
+
+     - Forces a :ref:`resharding operation <sharding-resharding>` to
+       block writes and complete.
+
+       .. versionadded:: 5.0
+
+   * - :dbcommand:`enableSharding`
+
+     - Enables sharding on a specific database.
+
+   * - :dbcommand:`flushRouterConfig`
+
+     - Forces a :binary:`mongod` / :binary:`mongos` instance to update its cached routing metadata.
+
+   * - :dbcommand:`getShardMap`
+
+     - Internal command that reports on the state of a sharded cluster.
+
+   * - :dbcommand:`isdbgrid`
+
+     - Verifies that a process is a :binary:`~bin.mongos`.
+
+   * - :dbcommand:`listShards`
+
+     - Returns a list of configured shards.
+
+   * - :dbcommand:`moveChunk`
+
+     - Internal command that migrates chunks between shards.
+
+   * - :dbcommand:`moveCollection`
+
+     - Moves a single unsharded collection to a different shard.
+
+   * - :dbcommand:`movePrimary`
+
+     - Reassigns the :term:`primary shard` when removing a shard from a sharded cluster.
+   
+   * - :dbcommand:`moveRange`
+
+     - Command that migrates ranges between shards.
+
+   * - :dbcommand:`mergeChunks`
+
+     - Provides the ability to combine chunks on a single shard.
+
+   * - :dbcommand:`removeShard`
+
+     - Starts the process of removing a shard from a sharded cluster.
+
+   * - :dbcommand:`removeShardFromZone`
+
+     - Removes the association between a shard and a :term:`zone`. Supports configuring :ref:`zones <zone-sharding>` in sharded clusters.
+
+   * - :dbcommand:`reshardCollection`
+
+     - Initiates a :ref:`resharding operation <sharding-resharding>` to change the
+       shard key for a collection, changing the distribution of your data.
+
+       .. versionadded:: 5.0
+
+   * - :dbcommand:`shardCollection`
+
+     - Enables the sharding functionality for a collection, allowing the collection to be sharded.
+
+   * - :dbcommand:`shardingState`
+
+     - Reports whether the :binary:`~bin.mongod` is a member of a sharded cluster.
+
+   * - :dbcommand:`split`
+
+     - Creates a new :term:`chunk`.
+
+   * - :dbcommand:`unsetSharding`
+
+     - *Removed in MongoDB 5.0.* Internal command that affects
+       connections between instances in a MongoDB deployment.
+
+   * - :dbcommand:`updateZoneKeyRange`
+
+     - Adds or removes the association between a range of sharded data and a :term:`zone`. Supports configuring :ref:`zones <zone-sharding>` in sharded clusters.
+
 
 ## Reference Documentation
 
-`Operational Restrictions <sharding-fundamentals>` Requirement for deploying a sharded cluster
+:ref:`Operational Restrictions <sharding-fundamentals>`
+   Requirement for deploying a sharded cluster
 
-`sharding-high-availability` Common strategies for troubleshooting sharded cluster deployments.
+:ref:`sharding-high-availability`
+   Common strategies for troubleshooting sharded cluster deployments.
 
-`config-database` Complete documentation of the content of the `local` database that MongoDB uses to store sharded cluster metadata.
+:ref:`config-database`
+   Complete documentation of the content of the ``local`` database
+   that MongoDB uses to store sharded cluster metadata.
 
-## Contents
 
-- /reference/config-database
-- /core/defragment-sharded-collections
-- /reference/inconsistency-type
-- Operational Restrictions </core/sharded-cluster-requirements>
-- /tutorial/troubleshoot-sharded-clusters
-- Shard Direct Commands </reference/supported-shard-direct-commands>
+**toctree:** :titlesonly: 
+   :hidden: 
+
+   /reference/config-database
+   /core/defragment-sharded-collections
+   /reference/inconsistency-type
+   Operational Restrictions </core/sharded-cluster-requirements>
+   /tutorial/troubleshoot-sharded-clusters
+   Shard Direct Commands </reference/supported-shard-direct-commands>

@@ -1,7 +1,7 @@
 ---
 type: "Framework Learn Directory Index"
 framework: "Helicone"
-generated_at: "2026-07-25T19:08:22.288810Z"
+generated_at: "2026-08-29T09:39:42.361039Z"
 ---
 # Getting-Started
 
@@ -22,3 +22,8 @@ This directory contains Helicone learning pages related to getting-started.
 - [Platform Overview](platform-overview.md)
 - [Quick Start](quick-start.md)
 - [Third Party](third-party.md)
+
+## Subdirectories
+
+- [Integration Method](integration-method/index.md)
+- [Self Host](self-host/index.md)

@@ -1,14 +1,15 @@
 ---
 type: "Framework Learn Page"
-framework: "redis"
+framework: "Redis"
 source_repo: "https://github.com/redis/docs.git"
 source_branch: "main"
 source_path: "content/operate/rs/references/cli-utilities/crdb-cli/crdb/add-instance.md"
-source_commit: "9d30f68c3dad1a6b3b7d30fe604b911348ce8152"
-source_commit_short: "9d30f68c"
-source_commit_date: "2026-07-24T10:52:10-07:00"
-generated_at: "2026-07-25T11:51:22Z"
+source_commit: "f8693349287b0efbef3c865b6f6a2aceca88594d"
+source_commit_short: "f869334"
+source_commit_date: "2026-08-28T10:01:19-05:00"
+generated_at: "2026-08-29T09:38:55.574530Z"
 ---
+# Add Instance
 
 ---
 Title: crdb-cli crdb add-instance
@@ -26,7 +27,7 @@ Adds a peer replica to an existing Active-Active database in order to host the d
 
 ```sh
 crdb-cli crdb add-instance --crdb-guid <guid>
-         --instance fqdn=<cluster_fqdn>,username=<username>,password=<password>[,url=https://<hostname-or-IP>:9443,replication_endpoint=<hostname-or-IP>:<port>,replication_tls_sni=<hostname>]
+         --instance fqdn=<cluster_fqdn>,{ username=<username>,password=<password> | client_cert=<cert>,client_key=<key>[,trusted_ca=<ca>] }[,url=https://<hostname-or-IP>:9443,replication_endpoint=<hostname-or-IP>:<port>,replication_tls_sni=<hostname>]
          [--compression <0-6>]
          [--wait | --no-wait]
 ```
@@ -36,7 +37,7 @@ crdb-cli crdb add-instance --crdb-guid <guid>
 | Parameter | Value   | Description |
 |-----------|---------|-------------|
 | crdb-guid | string  | The GUID of the database (required) |
-| instance fqdn=\<cluster_fqdn\>,username=\<username\>,password=\<password\>,url=https://\<hostname-or-IP\>:9443,replication_endpoint=\<hostname-or-IP\>:\<port\>,replication_tls_sni=\<hostname\> | strings | The connection information for the new participating cluster (required)<br/><br/>**Required:**<br/>• `fqdn` - Cluster fully qualified domain name<br/>• `username` - Cluster username<br/>• `password` - Cluster password<br/><br/>**Optional:**<br/>• `url` - URL to access the cluster's REST API<br/>• `replication_endpoint` - Address to access the database instance for peer replication<br/>• `replication_tls_sni` - Cluster [Server Name Indication (SNI)](https://en.wikipedia.org/wiki/Server_Name_Indication) hostname for TLS connections |
+| instance fqdn=\<cluster_fqdn\>,username=\<username\>,password=\<password\>,url=https://\<hostname-or-IP\>:9443,replication_endpoint=\<hostname-or-IP\>:\<port\>,replication_tls_sni=\<hostname\> | strings | The connection information for the new participating cluster (required)<br/><br/>**Required:**<br/>• `fqdn` - Cluster fully qualified domain name<br/>• Either a username and password, or certificate credentials:<br/>&nbsp;&nbsp;- `username` and `password` - Cluster username and password<br/>&nbsp;&nbsp;- `client_cert` and `client_key` - Client certificate and its private key, as PEM strings<br/><br/>Don't provide both for the same cluster. The command fails with `Use either username/password or client_cert/client_key/trusted_ca, not both`.<br/><br/>**Optional:**<br/>• `trusted_ca` - CA that validates the API certificate the peer cluster presents, as a PEM string. Only valid with certificate credentials. If you omit it, the cluster uses the certificates in its `mtls_trusted_ca.pem` file.<br/>• `url` - URL to access the cluster's REST API<br/>• `replication_endpoint` - Address to access the database instance for peer replication<br/>• `replication_tls_sni` - Cluster [Server Name Indication (SNI)](https://en.wikipedia.org/wiki/Server_Name_Indication) hostname for TLS connections<br/><br/>See [Certificate-based authentication for cluster management]({{<relref "/operate/rs/security/certificates/certificate-based-authentication#certificate-based-authentication-for-cluster-management">}}). |
 | compression | 0-6 | The level of data compression: <br /><br > 0 = No compression <br /><br > 6 = High compression and resource load (Default: 3) |
 | wait | | Prevents `crdb-cli` from running another command before this command finishes |
 | no-wait | | `crdb-cli` can run another command before this command finishes |

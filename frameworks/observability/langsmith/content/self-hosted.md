@@ -4,10 +4,10 @@ framework: "LangSmith"
 source_repo: "https://github.com/langchain-ai/docs.git"
 source_branch: "main"
 source_path: "src/langsmith/self-hosted.mdx"
-source_commit: "2aae1dfc98ee953a9a5185fb6fcdd9efb3f4d878"
-source_commit_short: "2aae1df"
-source_commit_date: "2026-07-25T00:27:23+00:00"
-generated_at: "2026-07-25T19:08:33.431656Z"
+source_commit: "a174f9cf7c91ee5eb14ee2382eb48bfe6e4956e9"
+source_commit_short: "a174f9c"
+source_commit_date: "2026-08-28T17:04:12-07:00"
+generated_at: "2026-08-29T09:39:50.658591Z"
 ---
 # Self Hosted
 
@@ -17,11 +17,10 @@ sidebarTitle: Overview
 ---
 
 <Note>
-**Important**<br></br>
 Self-hosted LangSmith is an add-on to the Enterprise plan designed for our largest, most security-conscious customers. For more details, refer to [Pricing](https://www.langchain.com/pricing). [Contact our sales team](https://www.langchain.com/contact-sales) if you want to get a license key to trial LangSmith in your environment.
 </Note>
 
-Host an instance of LangSmith in your own infrastructure for [observability](/langsmith/observability), [evaluation](/langsmith/evaluation), and [prompt engineering](/langsmith/prompt-engineering). You can optionally enable [LangSmith Deployment](/langsmith/deploy-self-hosted-full-platform) to deploy and manage agents through the LangSmith UI.
+Host an instance of LangSmith in your own infrastructure for [observability](/langsmith/observability), [evaluation](/langsmith/evaluation), and [prompt engineering](/langsmith/prompt-context-hub#prompts). You can optionally enable [LangSmith Deployment](/langsmith/deploy-self-hosted-full-platform) to deploy and manage agents through the LangSmith UI.
 
 <Tip>
 **For step-by-step setup instructions for self-hosted LangSmith on AWS, GCP, or Azure**, refer to our cloud architecture guides: [AWS](/langsmith/aws-self-hosted), [GCP](/langsmith/gcp-self-hosted), or [Azure](/langsmith/azure-self-hosted).
@@ -94,4 +93,5 @@ To install, follow the [Kubernetes setup guide](/langsmith/kubernetes).
 ## Next steps
 
 - **[Enable LangSmith Deployment](/langsmith/deploy-self-hosted-full-platform)**: add a [control plane](/langsmith/control-plane) and [data plane](/langsmith/data-plane) to deploy and manage agents through the LangSmith UI.
+- **[Enable LangSmith Sandboxes](/langsmith/deploy-self-hosted-full-platform#enable-sandboxes)**: allow users to run code, expose temporary services, and create memory snapshots from self-hosted LangSmith.
 - **[Deploy standalone Agent Servers](/langsmith/deploy-standalone-server)**: deploy Agent Servers directly without enabling LangSmith Deployment.

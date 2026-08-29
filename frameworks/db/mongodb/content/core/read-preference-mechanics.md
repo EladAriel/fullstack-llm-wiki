@@ -1,46 +1,86 @@
 ---
 type: "Framework Learn Page"
-framework: "mongodb"
+framework: "MongoDB"
 source_repo: "https://github.com/mongodb/docs.git"
 source_branch: "main"
 source_path: "content/manual/manual/source/core/read-preference-mechanics.txt"
-source_commit: "ab9db26ed3d11618cdb61516d8180337d8e3f679"
-source_commit_short: "ab9db26e"
-source_commit_date: "2026-07-24T16:22:46-06:00"
-generated_at: "2026-07-25T11:51:15Z"
+source_commit: "b9f2bc487a2878b65e3c1f80024bebab76954f27"
+source_commit_short: "b9f2bc48"
+source_commit_date: "2026-08-28T17:09:45-05:00"
+generated_at: "2026-08-29T09:39:19.508583Z"
 ---
-
-==========================
+.. _replica-set-read-preference-behavior:
 
 # Server Selection Algorithm
 
-MongoDB drivers use a Server Selection algorithm to choose which replica set member to use or, when connected to multiple :binary:`~bin.mongos` instances, which :binary:`~bin.mongos` instance to use.
+**meta:** :description: Explore how MongoDB drivers use server selection algorithms to choose replica set members or `mongos` instances based on read preferences and latency.
+
+.. default-domain:: mongodb
+
+**contents:** On this page
+   :local:
+   :backlinks: none
+   :depth: 1
+   :class: singlecol
+
+MongoDB drivers use a Server Selection algorithm to choose which
+replica set member to use or, when connected to multiple
+:binary:`~bin.mongos` instances, which :binary:`~bin.mongos` instance to use.
 
 Server selection occurs once per operation.
 
-> **Note:** .. include:: /includes/extracts/transactions-read-pref.rst
+**note:** .. include:: /includes/extracts/transactions-read-pref.rst
+
+.. _replica-set-read-preference-behavior-ping-time:
+.. _replica-set-read-preference-behavior-nearest:
+.. _replica-set-read-preference-behavior-member-selection:
 
 ## Read Preference for Replica Sets
 
-Server selection occurs once per operation and is governed by the `read preference <read-preference>` and `localThresholdMS` settings to determine member eligibility for reads. The read preference is re-evaluated for each operation.
+Server selection occurs once per operation and is governed by the
+:ref:`read preference <read-preference>` and ``localThresholdMS``
+settings to determine member eligibility for reads. The read preference
+is re-evaluated for each operation.
 
-.. include:: /includes/extracts/server-selection-read-preference-replica-sets.rst
+**include:** /includes/extracts/server-selection-read-preference-replica-sets.rst
+
+
+
+.. _replica-set-read-preference-behavior-sharding:
+.. _replica-set-read-preference-behavior-mongos:
 
 ## Read Preference for Sharded Clusters
 
+.. _read-preference-mechanics-multiple-mongos:
+
 ### Load Balancing
 
-If there is more than one :binary:`~bin.mongos` instance in the connection seed list, the driver determines which :binary:`~bin.mongos` is the "closest" (that is, the member with the lowest average network round-trip-time) and calculates the latency window by adding the average round-trip-time of this "closest" :binary:`~bin.mongos` instance and the `localThresholdMS`. The driver load balances randomly across the :binary:`~bin.mongos` instances that fall within the latency window.
+If there is more than one :binary:`~bin.mongos` instance in the connection
+seed list, the driver determines which :binary:`~bin.mongos` is the
+"closest" (that is, the member with the lowest average network
+round-trip-time) and calculates the latency window by adding the
+average round-trip-time of this "closest" :binary:`~bin.mongos` instance
+and the ``localThresholdMS``. The driver load balances randomly
+across the :binary:`~bin.mongos` instances that fall within the latency
+window.
 
-> **Note:** `localThresholdMS` biases server selection toward
-lower-latency local targets. The setting can't remove the
-cross-region network topology that a single private endpoint
-creates or guarantee all connections remain in the local
-region. In this configuration, a client can still connect
-through a :binary:`~bin.mongos` in another region.
+**note:** ``localThresholdMS`` biases server selection toward
+   lower-latency local targets. The setting can't remove the
+   cross-region network topology that a single private endpoint
+   creates or guarantee all connections remain in the local
+   region. In this configuration, a client can still connect
+   through a :binary:`~bin.mongos` in another region.
+
+.. _read-preference-mechanics-sharded-cluster:
 
 ### Read Preference and Shards
 
-For sharded clusters that have replica set shards, :binary:`~bin.mongos` applies the read preference when reading from the shards. Server selection is governed by the `read preference </core/read-preference>` and :setting:`replication.localPingThresholdMs` settings. The read preference is re-evaluated for each operation.
+For sharded clusters that have replica set shards, :binary:`~bin.mongos`
+applies the read preference when reading from the shards. Server
+selection is governed by the :doc:`read preference
+</core/read-preference>` and :setting:`replication.localPingThresholdMs`
+settings. The read preference is re-evaluated for each operation.
 
-.. include:: /includes/extracts/server-selection-read-preference-sharded-clusters.rst
+**include:** /includes/extracts/server-selection-read-preference-sharded-clusters.rst
+
+.. [#default-threshold]  The default threshold value is 15 milliseconds.

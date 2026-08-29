@@ -1,30 +1,72 @@
 ---
 type: "Framework Learn Page"
-framework: "mongodb"
+framework: "MongoDB"
 source_repo: "https://github.com/mongodb/docs.git"
 source_branch: "main"
 source_path: "content/manual/manual/source/reference/mql/query-predicates/comparison.txt"
-source_commit: "ab9db26ed3d11618cdb61516d8180337d8e3f679"
-source_commit_short: "ab9db26e"
-source_commit_date: "2026-07-24T16:22:46-06:00"
-generated_at: "2026-07-25T11:51:15Z"
+source_commit: "b9f2bc487a2878b65e3c1f80024bebab76954f27"
+source_commit_short: "b9f2bc48"
+source_commit_date: "2026-08-28T17:09:45-05:00"
+generated_at: "2026-08-29T09:39:20.099648Z"
 ---
-
-====================================
+.. _query-selectors-comparison:
+.. _query-comparison:
 
 # Comparison Query Predicate Operators
 
-Comparison operators filter data with value comparisons such as less than and greater than.
+**meta:** :description: Learn about the comparison query operators in MongoDB. The $eq, $gt, $gte, $in, $lt, $lte, $ne, and $nin operators filter documents based on value conditions.
 
-.. include:: /includes/fact-comparison-order.rst
+**contents:** On this page
+   :local:
+   :backlinks: none
+   :depth: 1
+   :class: singlecol
 
-## Contents
+Comparison operators filter data with value comparisons such as less
+than and greater than.
 
-- $eq </reference/operator/query/eq>
-- $gt </reference/operator/query/gt>
-- $gte </reference/operator/query/gte>
-- $in </reference/operator/query/in>
-- $lt </reference/operator/query/lt>
-- $lte </reference/operator/query/lte>
-- $ne </reference/operator/query/ne>
-- $nin </reference/operator/query/nin>
+**include:** /includes/fact-comparison-order.rst
+
+.. list-table::
+   :widths: 30 70
+   :header-rows: 1
+
+   * - Operator
+     - Description
+
+   * - :query:`$eq`
+     - Matches values equal to a specified value.
+
+   * - :query:`$gt`
+     - Matches values greater than a specified value.
+
+   * - :query:`$gte`
+     - Matches values greater than or equal to a specified value.
+
+   * - :query:`$in`
+     - Matches any values specified in an array.
+
+   * - :query:`$lt`
+     - Matches values less than a specified value.
+
+   * - :query:`$lte`
+     - Matches values less than or equal to a specified value.
+
+   * - :query:`$ne`
+     - Matches all values not equal to a specified value.
+
+   * - :query:`$nin`
+
+     - .. include:: /includes/query-predicates/nin-desc.rst
+
+**toctree:** :titlesonly: 
+   :hidden: 
+
+   $eq </reference/operator/query/eq>
+   $gt </reference/operator/query/gt>
+   $gte </reference/operator/query/gte>
+   $in </reference/operator/query/in>
+   $lt </reference/operator/query/lt>
+   $lte </reference/operator/query/lte>
+   $ne </reference/operator/query/ne>
+   $nin </reference/operator/query/nin>

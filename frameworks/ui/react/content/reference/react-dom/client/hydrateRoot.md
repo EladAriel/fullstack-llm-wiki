@@ -1,14 +1,15 @@
 ---
 type: "Framework Learn Page"
-framework: "react"
+framework: "React"
 source_repo: "https://github.com/reactjs/react.dev"
 source_branch: "main"
 source_path: "src/content/reference/react-dom/client/hydrateRoot.md"
-source_commit: "7b6c3ceb9dd97249e9dce4a8a94e61aed6424698"
-source_commit_short: "7b6c3ceb"
-source_commit_date: "2026-07-20T15:31:48+02:00"
-generated_at: "2026-07-25T11:50:43Z"
+source_commit: "7c36f7ac329fe3cf2e11222edce9a535158c2cab"
+source_commit_short: "7c36f7a"
+source_commit_date: "2026-08-24T10:33:57-07:00"
+generated_at: "2026-08-29T09:40:25.515653Z"
 ---
+# Hydrateroot
 
 ---
 title: hydrateRoot
@@ -286,6 +287,8 @@ This only works one level deep, and is intended to be an escape hatch. Don’t o
 
 ---
 
+{/* TODO: Remove this subsection when browser is available in Stable. */}
+
 ### Handling different client and server content {/*handling-different-client-and-server-content*/}
 
 If you intentionally need to render something different on the server and the client, you can do a two-pass rendering. Components that render something different on the client can read a [state variable](/reference/react/useState) like `isClient`, which you can set to `true` in an [Effect](/reference/react/useEffect):
@@ -330,6 +333,10 @@ export default function App() {
 </Sandpack>
 
 This way the initial render pass will render the same content as the server, avoiding mismatches, but an additional pass will happen synchronously right after hydration.
+
+Use this approach when you want the client-rendered content to be different from the initial server-rendered HTML.
+
+<Canary>If a component should render only in the browser, call [`use(browser())`](/reference/react/use#use-browser) instead of waiting for an Effect.</Canary>
 
 <Pitfall>
 

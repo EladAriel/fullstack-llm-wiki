@@ -1,51 +1,123 @@
 ---
 type: "Framework Learn Page"
-framework: "mongodb"
+framework: "MongoDB"
 source_repo: "https://github.com/mongodb/docs.git"
 source_branch: "main"
 source_path: "content/manual/manual/source/reference/operator/query/near.txt"
-source_commit: "ab9db26ed3d11618cdb61516d8180337d8e3f679"
-source_commit_short: "ab9db26e"
-source_commit_date: "2026-07-24T16:22:46-06:00"
-generated_at: "2026-07-25T11:51:15Z"
+source_commit: "b9f2bc487a2878b65e3c1f80024bebab76954f27"
+source_commit_short: "b9f2bc48"
+source_commit_date: "2026-08-28T17:09:45-05:00"
+generated_at: "2026-08-29T09:39:20.240615Z"
 ---
-
-================================
-
 # $near (query predicate operator)
 
+**meta:** :description: Specify a point for geospatial queries using `$near` to return documents sorted by distance, requiring a geospatial index.
+
+.. default-domain:: mongodb
+
+**contents:** On this page
+   :local:
+   :backlinks: none
+   :depth: 1
+   :class: singlecol
+
 ## Definition
+
+**query:** $near
+
+   Specifies a point for which a :term:`geospatial` query returns the
+   documents from nearest to farthest. The :query:`$near` operator can
+   specify either a :term:`GeoJSON` point or legacy coordinate point.
+
+   :query:`$near` requires a geospatial index:
+
+   - :ref:`2dsphere <2dsphere-index>` index if specifying a
+     :term:`GeoJSON` point.
+
+   - :ref:`2d <2d-index>` index if specifying a point using legacy
+     coordinates.
+
+   To specify a :term:`GeoJSON` point, :query:`$near` operator requires
+   a :ref:`2dsphere <2dsphere-index>` index and has the following
+   syntax:
+
+   .. code-block:: javascript
+
+      {
+         <location field>: {
+           $near: {
+             $geometry: {
+                type: "Point" ,
+                coordinates: [ <longitude> , <latitude> ]
+             },
+             $maxDistance: <distance in meters>,
+             $minDistance: <distance in meters>
+           }
+         }
+      }
+
+   .. include::  /includes/extracts/geospatial-long-lat-values.rst
+
+   When specifying a :term:`GeoJSON` point, you can use the *optional*
+   :query:`$minDistance` and :query:`$maxDistance` specifications to
+   limit the :query:`$near` results by distance in *meters*:
+
+   - :query:`$minDistance` limits the results to those documents that
+     are *at least* the specified distance from the center point.
+
+   - :query:`$maxDistance` limits the results to those documents that
+     are *at most* the specified distance from the center point.
+
+   To specify a point using legacy coordinates, :query:`$near` requires
+   a :ref:`2d <2d-index>` index and has the following syntax:
+
+   .. code-block:: javascript
+
+      {
+        $near: [ <x>, <y> ],
+        $maxDistance: <distance in radians>
+      }
+
+   When specifying a legacy coordinate, you can use the *optional*
+   :query:`$maxDistance` specification to limit the :query:`$near`
+   results by distance in *radians*. :query:`$maxDistance` limits the
+   results to those documents that are *at most* the specified distance
+   from the center point.
 
 ## Behavior
 
 ### Special Indexes Restriction
 
-.. include:: /includes/fact-geo-near-special-indexes.rst
+**include:** /includes/fact-geo-near-special-indexes.rst
 
 ### Sort Operation
 
-.. include:: /includes/fact-geo-near-returns-sorted-results.rst
+**include:** /includes/fact-geo-near-returns-sorted-results.rst
+
+.. |geo-operation| replace:: :query:`$near`
 
 ### Validation
 
-.. include:: /includes/fact-geo-near-geojson-validation.rst
+**include:** /includes/fact-geo-near-geojson-validation.rst
 
 ## Examples
 
 ### Query on GeoJSON Data
 
-.. include:: /includes/example-near-minDistance.rst
+**include:** /includes/example-near-minDistance.rst
 
 ### Query on Legacy Coordinates
 
-.. include::  /includes/extracts/geospatial-long-lat-values.rst
+**include:** /includes/extracts/geospatial-long-lat-values.rst
 
-Consider a collection `legacy2d` that has a `2d` index.
+Consider a collection ``legacy2d`` that has a ``2d`` index.
 
-The following example returns documents that are at most `0.10` radians from the specified legacy coordinate pair, sorted from nearest to farthest:
+The following example returns documents that are at most ``0.10``
+radians from the specified legacy coordinate pair, sorted from nearest
+to farthest:
 
-```javascript
-db.legacy2d.find(
-   { location : { $near : [ -73.9667, 40.78 ], $maxDistance: 0.10 } }
-)
-```
+.. code-block:: javascript
+
+   db.legacy2d.find(
+      { location : { $near : [ -73.9667, 40.78 ], $maxDistance: 0.10 } }
+   )

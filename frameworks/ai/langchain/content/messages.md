@@ -4,15 +4,17 @@ framework: "LangChain"
 source_repo: "https://github.com/langchain-ai/docs"
 source_branch: "main"
 source_path: "src/oss/langchain/messages.mdx"
-source_commit: "2aae1dfc98ee953a9a5185fb6fcdd9efb3f4d878"
-source_commit_short: "2aae1dfc"
-source_commit_date: "2026-07-25T00:27:23Z"
-generated_at: "2026-07-25T11:51:05Z"
+source_commit: "a174f9cf7c91ee5eb14ee2382eb48bfe6e4956e9"
+source_commit_short: "a174f9c"
+source_commit_date: "2026-08-28T17:04:12-07:00"
+generated_at: "2026-08-29T09:38:24.252268Z"
 ---
-
 ---
 title: Messages
 ---
+
+import MessageSerializationPy from '/snippets/code-samples/message-serialization-py.mdx';
+import MessageSerializationJs from '/snippets/code-samples/message-serialization-js.mdx';
 
 {/* TODO: section on metadata types (response and usage) */}
 
@@ -606,7 +608,7 @@ const response = await model.invoke(messages);  // Model processes the result
     The `artifact` field stores supplementary data that won't be sent to the model but can be accessed programmatically. This is useful for storing raw results, debugging information, or data for downstream processing without cluttering the model's context.
 
     <Accordion title="Example: Using artifact for retrieval metadata">
-        For example, a [retrieval](/oss/langchain/retrieval) tool could retrieve a passage from a document for reference by a model. Where message `content` contains text that the model will reference, an `artifact` can contain document identifiers or other metadata that an application can use (e.g., to render a page). See example below:
+        For example, a [retrieval](/oss/deepagents/retrieval) tool could retrieve a passage from a document for reference by a model. Where message `content` contains text that the model will reference, an `artifact` can contain document identifiers or other metadata that an application can use (e.g., to render a page). See example below:
 
         :::python
 
@@ -1822,6 +1824,34 @@ const imageBlock: ContentBlock.Multimodal.Image = {
 
     Content blocks are not a replacement for the @[`content`][BaseMessage(content)] property, but rather a new property that can be used to access the content of a message in a standardized format.
 </Info>
+
+## Serialization
+
+You can serialize messages to plain objects for storage and deserialize back to message instances. This is useful for persisting conversation history and resuming sessions.
+
+:::python
+
+<MessageSerializationPy />
+
+:::
+
+:::js
+
+<MessageSerializationJs />
+
+:::
+
+:::python
+<Warning>
+**`load()` instantiates Python objects and can trigger side effects during deserialization. Never call `load()` on data from an untrusted or unauthenticated source.**
+</Warning>
+:::
+
+:::js
+<Warning>
+**`load()` deserializes data by instantiating classes and invoking constructors. Never call `load()` on untrusted or user-supplied input.** Only deserialize data that originates from a source you control, such as your own database.
+</Warning>
+:::
 
 ## Use with chat models
 

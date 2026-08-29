@@ -1,65 +1,99 @@
 ---
 type: "Framework Learn Page"
-framework: "mongodb"
+framework: "MongoDB"
 source_repo: "https://github.com/mongodb/docs.git"
 source_branch: "main"
 source_path: "content/manual/manual/source/tutorial/add-replica-set-arbiter.txt"
-source_commit: "ab9db26ed3d11618cdb61516d8180337d8e3f679"
-source_commit_short: "ab9db26e"
-source_commit_date: "2026-07-24T16:22:46-06:00"
-generated_at: "2026-07-25T11:51:15Z"
+source_commit: "b9f2bc487a2878b65e3c1f80024bebab76954f27"
+source_commit_short: "b9f2bc48"
+source_commit_date: "2026-08-28T17:09:45-05:00"
+generated_at: "2026-08-29T09:39:19.628389Z"
 ---
-
-============================================
+.. _server-replica-set-deploy-arbiter:
 
 # Add an Arbiter to a Self-Managed Replica Set
 
-In some circumstances (such as you have a primary and a secondary but cost constraints prohibit adding another secondary), you may choose to add a :binary:`~bin.mongod` instance to a replica set as an `arbiter <replica-set-arbiter-configuration>` to vote in elections.
+**meta:** :keywords: on-prem
+   :description: Add an arbiter to a replica set to participate in elections without holding data, ensuring minimal resource use and avoiding multiple arbiters in one set.
 
-Arbiters are :binary:`~bin.mongod` instances that are part of a `replica set` but do not hold data (i.e. do not provide data redundancy). They can, however, participate in `elections <replica-set-elections>`.
+.. default-domain:: mongodb
 
-Arbiters have minimal resource requirements and do not require dedicated hardware. You can deploy an arbiter on an application server or a monitoring host.
+**contents:** On this page
+   :local:
+   :backlinks: none
+   :depth: 1
+   :class: singlecol
 
-> **Important:** Do not run an arbiter on systems that also host the
-primary or the secondary members of the replica set.
+In some circumstances (such as you have a primary and a secondary but
+cost constraints prohibit adding another secondary), you may choose to
+add a :binary:`~bin.mongod` instance to a replica set as an
+:ref:`arbiter <replica-set-arbiter-configuration>` to vote in elections.
 
-.. include:: /includes/admonition-multiple-arbiters.rst
+Arbiters are :binary:`~bin.mongod` instances that are part of a
+:term:`replica set` but do not hold data (i.e. do not provide data
+redundancy). They can, however, participate in :ref:`elections
+<replica-set-elections>`.
+
+Arbiters have minimal resource requirements and do not require
+dedicated hardware. You can deploy an arbiter on an application
+server or a monitoring host.
+
+**important:** Do not run an arbiter on systems that also host the
+   primary or the secondary members of the replica set.
+
+**include:** /includes/admonition-multiple-arbiters.rst
 
 ## Primary-Secondary-Arbiter Replica Sets
 
-.. include:: /includes/fact-psa-performance-issues.rst
+**include:** /includes/fact-psa-performance-issues.rst
 
 ### Arbiter
 
-An arbiter does not store data, but until the arbiter's :binary:`~bin.mongod` process is added to the replica set, the arbiter will act like any other :binary:`~bin.mongod` process and start up with a set of data files and with a full-sized `journal`.
+An arbiter does not store data, but until the arbiter's :binary:`~bin.mongod`
+process is added to the replica set, the arbiter will act like any other
+:binary:`~bin.mongod` process and start up with a set of data files and with a
+full-sized :term:`journal`.
+
 
 ### IP Binding
 
-.. include:: /includes/fact-default-bind-ip.rst
+**include:** /includes/fact-default-bind-ip.rst
 
-.. include:: /includes/important-hostnames.rst
+**include:** /includes/important-hostnames.rst
 
 ## Add an Arbiter
 
-.. include:: /includes/admonition-multiple-arbiters.rst
+**include:** /includes/admonition-multiple-arbiters.rst
 
-.. include:: /includes/important-hostnames.rst
+**include:** /includes/important-hostnames.rst
 
-#. Create a data directory (e.g. :setting:`storage.dbPath`) for the arbiter. The :binary:`~bin.mongod` instance uses the directory for configuration data. The directory will not hold the data set. For example, create the `/var/lib/mongodb/arb` directory:
+#. Create a data directory (e.g. :setting:`storage.dbPath`) for the
+   arbiter. The :binary:`~bin.mongod` instance uses the directory for
+   configuration data. The directory *will not* hold the data set. For
+   example, create the ``/var/lib/mongodb/arb`` directory:
 
-```bash
-   mkdir /var/lib/mongodb/arb
-```
+   .. code-block:: bash
 
-#. Start the arbiter, specifying the data directory and the name of the replica set to join. The following starts an arbiter using the `/var/lib/mongodb/arb` as the :setting:`~storage.dbPath` and  `rs` for the replica set name:
+      mkdir /var/lib/mongodb/arb
 
-.. include:: /includes/warning-bind-ip-security-considerations.rst
+#. Start the arbiter, specifying the data directory and the name of the replica set
+   to join. The following starts an arbiter using the ``/var/lib/mongodb/arb``
+   as the :setting:`~storage.dbPath` and  ``rs`` for the replica set name:
 
-#. Connect to the primary and add the arbiter to the replica set. Use the :method:`rs.addArb()` method, as in the following example which assumes that `m1.example.net` is the hostname associated with the specified ip address for the arbiter:
+   .. include:: /includes/warning-bind-ip-security-considerations.rst
 
-```javascript
-   rs.addArb("m1.example.net:27017")
+   .. code-block:: bash
 
-This operation adds the arbiter running on port ``27017`` on the
-``m1.example.net`` host.
-```
+      mongod --port 27017 --dbpath /var/lib/mongodb/arb --replSet rs --bind_ip localhost,<hostname(s)|ip address(es)>
+
+#. Connect to the primary and add the arbiter to the replica set. Use
+   the :method:`rs.addArb()` method, as in the following example which
+   assumes that ``m1.example.net`` is the hostname associated with the
+   specified ip address for the arbiter:
+
+   .. code-block:: javascript
+
+      rs.addArb("m1.example.net:27017")
+
+   This operation adds the arbiter running on port ``27017`` on the
+   ``m1.example.net`` host.

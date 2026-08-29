@@ -1,27 +1,38 @@
 ---
 type: "Framework Learn Page"
-framework: "mongodb"
+framework: "MongoDB"
 source_repo: "https://github.com/mongodb/docs.git"
 source_branch: "main"
 source_path: "content/manual/manual/source/core/queryable-encryption/reference.txt"
-source_commit: "ab9db26ed3d11618cdb61516d8180337d8e3f679"
-source_commit_short: "ab9db26e"
-source_commit_date: "2026-07-24T16:22:46-06:00"
-generated_at: "2026-07-25T11:51:15Z"
+source_commit: "b9f2bc487a2878b65e3c1f80024bebab76954f27"
+source_commit_short: "b9f2bc48"
+source_commit_date: "2026-08-28T17:09:45-05:00"
+generated_at: "2026-08-29T09:39:19.776953Z"
 ---
-
-==============================
+.. _qe-reference:
 
 # {+qe+} Reference
 
-Read the following sections to learn about components of {+qe+}:
+**meta:** :description: Explore components of Queryable Encryption, including supported operations and MongoClient options.
+   :robots: noindex, nosnippet
 
-- `qe-reference-automatic-encryption-supported-operations`
-- `qe-reference-mongo-client`
+**contents:** On this page
+   :local:
+   :backlinks: none
+   :depth: 2
+   :class: singlecol
+
+Read the following sections to learn about components
+of {+qe+}:
+
+- :ref:`qe-reference-automatic-encryption-supported-operations`
+- :ref:`qe-reference-mongo-client`
+
 To learn about aggregation operators specific to {+qe+} enabled collections, refer to the following section of the MQL reference for aggregation operators:
 
-- `qe-aggregation-operators`
-## Contents
+- :ref:`qe-aggregation-operators`
 
-- Supported Operations </core/queryable-encryption/reference/supported-operations>
-- MongoClient Options </core/queryable-encryption/reference/qe-options-clients>
+**toctree:** :titlesonly:
+
+   Supported Operations </core/queryable-encryption/reference/supported-operations>
+   MongoClient Options </core/queryable-encryption/reference/qe-options-clients>

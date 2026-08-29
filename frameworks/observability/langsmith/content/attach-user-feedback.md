@@ -4,10 +4,10 @@ framework: "LangSmith"
 source_repo: "https://github.com/langchain-ai/docs.git"
 source_branch: "main"
 source_path: "src/langsmith/attach-user-feedback.mdx"
-source_commit: "2aae1dfc98ee953a9a5185fb6fcdd9efb3f4d878"
-source_commit_short: "2aae1df"
-source_commit_date: "2026-07-25T00:27:23+00:00"
-generated_at: "2026-07-25T19:08:33.347869Z"
+source_commit: "a174f9cf7c91ee5eb14ee2382eb48bfe6e4956e9"
+source_commit_short: "a174f9c"
+source_commit_date: "2026-08-28T17:04:12-07:00"
+generated_at: "2026-08-29T09:39:50.684587Z"
 ---
 ---
 title: Log user feedback using the SDK
@@ -57,11 +57,15 @@ with trace(name="foobar", inputs=inputs) as root_run:
     trace_id = root_run.id
     child_runs = root_run.child_runs
 
+# Resolve the UUID of the project that owns the trace
+session_id = client.create_project(project_name=root_run.session_name, upsert=True).id
+
 # Provide feedback for a trace (a.k.a. a root run)
 client.create_feedback(
     key="user_feedback",
     score=1,
     trace_id=trace_id,
+    session_id=session_id,
     comment="the user said that ..."
 )
 
@@ -74,6 +78,7 @@ client.create_feedback(
     # trace_id= is optional but recommended to enable batched and backgrounded
     # feedback ingestion.
     trace_id=trace_id,
+    session_id=session_id,
 )
 ```
 
@@ -84,14 +89,16 @@ const client = new Client();
     // ... Run your application and get the run_id...
     // This information can be the result of a user-facing feedback form
 
-await client.createFeedback(
+// Resolve the UUID of the project that owns the trace
+const { id: sessionId } = await client.createProject({ projectName: "default", upsert: true });
+
+await client.createFeedback({
     runId,
-    "feedback-key",
-    {
-        score: 1.0,
-        comment: "comment",
-    }
-);
+    sessionId,
+    key: "feedback-key",
+    score: 1.0,
+    comment: "comment",
+});
 ```
 
 </CodeGroup>

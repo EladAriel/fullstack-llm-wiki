@@ -1,99 +1,131 @@
 ---
 type: "Framework Learn Page"
-framework: "mongodb"
+framework: "MongoDB"
 source_repo: "https://github.com/mongodb/docs.git"
 source_branch: "main"
 source_path: "content/manual/manual/source/reference/operator/update/max.txt"
-source_commit: "ab9db26ed3d11618cdb61516d8180337d8e3f679"
-source_commit_short: "ab9db26e"
-source_commit_date: "2026-07-24T16:22:46-06:00"
-generated_at: "2026-07-25T11:51:15Z"
+source_commit: "b9f2bc487a2878b65e3c1f80024bebab76954f27"
+source_commit_short: "b9f2bc48"
+source_commit_date: "2026-08-28T17:09:45-05:00"
+generated_at: "2026-08-29T09:39:20.107135Z"
 ---
-
-======================
-
 # $max (update operator)
+
+**meta:** :description: Update a field to a specified value using `$max` if the specified value is greater than the current field value.
+
+.. default-domain:: mongodb
+
+**contents:** On this page
+   :local:
+   :backlinks: none
+   :depth: 1
+   :class: singlecol
 
 ## Definition
 
+**update:** $max
+
+   The :update:`$max` operator updates the value of the field to a
+   specified value *if* the specified value is **greater than** the
+   current value of the field. The :update:`$max` operator can compare
+   values of different types, using the :ref:`BSON comparison order
+   <faq-dev-compare-order-for-BSON-types>`.
+
+   The :update:`$max` operator expression has the form:
+
+   .. code-block:: javascript
+
+      { $max: { <field1>: <value1>, ... } }
+
+   .. include:: /includes/use-dot-notation.rst
+
 ## Behavior
 
-.. include:: /includes/fact-update-operator-processing-order.rst
+**include:** /includes/fact-update-operator-processing-order.rst
 
-If the field does not exists, the :update:`$max` operator sets the field to the specified value.
+If the field does not exists, the :update:`$max` operator sets the
+field to the specified value.
 
-.. include:: /includes/extracts/update-operation-empty-operand-expressions-max.rst
+**include:** /includes/extracts/update-operation-empty-operand-expressions-max.rst
 
 ## Examples
 
-### Use `$max` to Compare Numbers
+### Use ``$max`` to Compare Numbers
 
-Create the `scores` collection:
+Create the ``scores`` collection:
 
-```javascript
-db.scores.insertOne( { _id: 1, highScore: 800, lowScore: 200 } )
-```
+.. code-block:: javascript
 
-The `highScore` for the document currently has the value 800. The following operation:
+   db.scores.insertOne( { _id: 1, highScore: 800, lowScore: 200 } )
 
-- Compares the `highscore`, 800, to the specified value, 950
-- Updates `highScore` to 950 since 950 is greater than 800
-```javascript
-db.scores.updateOne( { _id: 1 }, { $max: { highScore: 950 } } )
-```
+The ``highScore`` for the document currently has the value 800. The
+following operation:
 
-The `scores` collection now contains the following modified document:
+- Compares the ``highscore``, 800, to the specified value, 950
+- Updates ``highScore`` to 950 since 950 is greater than 800
 
-```javascript
-{ _id: 1, highScore: 950, lowScore: 200 }
-```
+.. code-block:: javascript
 
-The next operation has no effect since the value of `highScore`, 950, is greater than 870:
+   db.scores.updateOne( { _id: 1 }, { $max: { highScore: 950 } } )
 
-```javascript
-db.scores.updateOne( { _id: 1 }, { $max: { highScore: 870 } } )
-```
+The ``scores`` collection now contains the following modified document:
 
-The document remains unchanged in the `scores` collection:
+.. code-block:: javascript
 
-```javascript
-{ _id: 1, highScore: 950, lowScore: 200 }
-```
+   { _id: 1, highScore: 950, lowScore: 200 }
 
-### Use `$max` to Compare Dates
+The next operation has no effect since the value of ``highScore``, 950,
+is greater than 870:
 
-Create the `tags` collection:
+.. code-block:: javascript
 
-```javascript
-db.tags.insertOne(
+   db.scores.updateOne( { _id: 1 }, { $max: { highScore: 870 } } )
+
+The document remains unchanged in the ``scores`` collection:
+
+.. code-block:: javascript
+
+   { _id: 1, highScore: 950, lowScore: 200 }
+
+### Use ``$max`` to Compare Dates
+
+Create the ``tags`` collection:
+
+.. code-block:: javascript
+
+   db.tags.insertOne(
+      {
+        _id: 1,
+        desc: "crafts",
+        dateEntered: ISODate("2013-10-01T05:00:00Z"),
+        dateExpired: ISODate("2013-10-01T16:38:16.163Z")
+      }
+   )
+
+The following operation compares the current value of the
+``dateExpired`` field, ``ISODate("2013-10-01T16:38:16.163Z")``, with
+the specified date ``new Date("2013-09-30")`` to determine whether to
+update the field:
+
+.. code-block:: javascript
+
+   db.tags.updateOne(
+      { _id: 1 },
+      { $max: { dateExpired: new Date("2013-09-30") } }
+   )
+
+``new Date("2013-09-30")`` is not the newest date, so the operation
+does *not* update the ``dateExpired`` field:
+
+.. code-block:: javascript
+   :emphasize-lines: 5
+
    {
-     _id: 1,
-     desc: "crafts",
-     dateEntered: ISODate("2013-10-01T05:00:00Z"),
-     dateExpired: ISODate("2013-10-01T16:38:16.163Z")
+      _id: 1,
+      desc: "decorative arts",
+      dateEntered: ISODate("2013-10-01T05:00:00Z"),
+      dateExpired: ISODate("2013-10-01T16:38:16.163Z")
    }
-)
-```
 
-The following operation compares the current value of the `dateExpired` field, `ISODate("2013-10-01T16:38:16.163Z")`, with the specified date `new Date("2013-09-30")` to determine whether to update the field:
-
-```javascript
-db.tags.updateOne(
-   { _id: 1 },
-   { $max: { dateExpired: new Date("2013-09-30") } }
-)
-```
-
-`new Date("2013-09-30")` is not the newest date, so the operation does not update the `dateExpired` field:
-
-```javascript
-{
-   _id: 1,
-   desc: "decorative arts",
-   dateEntered: ISODate("2013-10-01T05:00:00Z"),
-   dateExpired: ISODate("2013-10-01T16:38:16.163Z")
-}
-```
-
-> **Seealso:** - :method:`db.collection.updateMany()`
-- :method:`db.collection.findAndModify()`
+**seealso:** - :method:`db.collection.updateMany()`
+   - :method:`db.collection.findAndModify()`

@@ -1,14 +1,15 @@
 ---
 type: "Framework Learn Page"
-framework: "redis"
+framework: "Redis"
 source_repo: "https://github.com/redis/docs.git"
 source_branch: "main"
 source_path: "content/commands/hlen.md"
-source_commit: "9d30f68c3dad1a6b3b7d30fe604b911348ce8152"
-source_commit_short: "9d30f68c"
-source_commit_date: "2026-07-24T10:52:10-07:00"
-generated_at: "2026-07-25T11:51:22Z"
+source_commit: "f8693349287b0efbef3c865b6f6a2aceca88594d"
+source_commit_short: "f869334"
+source_commit_date: "2026-08-28T10:01:19-05:00"
+generated_at: "2026-08-29T09:38:55.025931Z"
 ---
+# Hlen
 
 ---
 acl_categories:
@@ -69,14 +70,14 @@ The name of the key that holds the hash.
 
 ## Examples
 
-{{% redis-cli %}}
+{{< clients-example set="cmds_hash" step="hlen" description="Foundational: Count the fields in a hash with HLEN when you need a hash's size without transferring its contents" difficulty="beginner" >}}
 redis> HSET myhash field1 "Hello"
 (integer) 1
 redis> HSET myhash field2 "World"
 (integer) 1
 redis> HLEN myhash
 (integer) 2
-{{% /redis-cli %}}
+{{< /clients-example >}}
 
 ## Redis Software and Redis Cloud compatibility
 

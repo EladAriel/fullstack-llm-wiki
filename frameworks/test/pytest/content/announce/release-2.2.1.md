@@ -4,38 +4,47 @@ framework: "pytest"
 source_repo: "https://github.com/pytest-dev/pytest"
 source_branch: "main"
 source_path: "doc/en/announce/release-2.2.1.rst"
-source_commit: "344c23787cdb3431dcc441b8b63ee9950f04b921"
-source_commit_short: "344c2378"
-source_commit_date: "2026-07-24T17:37:16+02:00"
-generated_at: "2026-07-25T11:50:13Z"
+source_commit: "fdba12e1708313f56e9cf713d260c029764ca2b7"
+source_commit_short: "fdba12e"
+source_commit_date: "2026-08-27T21:55:50+02:00"
+generated_at: "2026-08-29T09:40:11.205935Z"
 ---
-
 # pytest-2.2.1: bug fixes, perfect teardowns
 
-pytest-2.2.1 is a minor backward-compatible release of the py.test testing tool.   It contains bug fixes and little improvements, including documentation fixes.  If you are using the distributed testing pluginmake sure to upgrade it to pytest-xdist-1.8.
+
+pytest-2.2.1 is a minor backward-compatible release of the py.test
+testing tool.   It contains bug fixes and little improvements, including
+documentation fixes.  If you are using the distributed testing
+pluginmake sure to upgrade it to pytest-xdist-1.8.
 
 For general information see here:
 
-http://pytest.org/
+     http://pytest.org/
 
 To install or upgrade pytest:
 
-pip install -U pytest # or easy_install -U pytest
+    pip install -U pytest # or
+    easy_install -U pytest
 
-Special thanks for helping on this release to Ronny Pfannschmidt, Jurko Gospodnetic and Ralf Schmitt.
+Special thanks for helping on this release to Ronny Pfannschmidt, Jurko
+Gospodnetic and Ralf Schmitt.
 
-best, holger krekel
+best,
+holger krekel
+
 
 ## Changes between 2.2.0 and 2.2.1
 
 - fix issue99 (in pytest and py) internallerrors with resultlog now
-produce better output - fixed by normalizing pytest_internalerror input arguments.
-
+  produce better output - fixed by normalizing pytest_internalerror
+  input arguments.
 - fix issue97 / traceback issues (in pytest and py) improve traceback output
-in conjunction with jinja2 and cython which hack tracebacks
-
+  in conjunction with jinja2 and cython which hack tracebacks
 - fix issue93 (in pytest and pytest-xdist) avoid "delayed teardowns":
-the final test in a test node will now run its teardown directly instead of waiting for the end of the session. Thanks Dave Hunt for the good reporting and feedback.  The pytest_runtest_protocol as well as the pytest_runtest_teardown hooks now have "nextitem" available which will be None indicating the end of the test run.
-
+  the final test in a test node will now run its teardown directly
+  instead of waiting for the end of the session. Thanks Dave Hunt for
+  the good reporting and feedback.  The pytest_runtest_protocol as well
+  as the pytest_runtest_teardown hooks now have "nextitem" available
+  which will be None indicating the end of the test run.
 - fix collection crash due to unknown-source collected items, thanks
-to Ralf Schmitt (fixed by depending on a more recent pylib)
+  to Ralf Schmitt (fixed by depending on a more recent pylib)

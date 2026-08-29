@@ -4,10 +4,10 @@ framework: "Arize Phoenix"
 source_repo: "https://github.com/Arize-ai/phoenix.git"
 source_branch: "main"
 source_path: "docs/phoenix/tracing/concepts-tracing/otel-openinference/phoenix-otel-helpers.mdx"
-source_commit: "69b3ab92c37ff65812feaa2dbf0b1c0ad5ae55fe"
-source_commit_short: "69b3ab9"
-source_commit_date: "2026-07-25T11:48:12-06:00"
-generated_at: "2026-07-25T19:08:24.923896Z"
+source_commit: "c48e50e9906fcc56c1c103ebd93ef3c95ed6b6e7"
+source_commit_short: "c48e50e"
+source_commit_date: "2026-08-29T01:45:20-06:00"
+generated_at: "2026-08-29T09:39:58.901949Z"
 ---
 ---
 title: "The phoenix.otel Helpers"
@@ -67,6 +67,17 @@ The convenience function handles four things for you. Each one has additional ca
 | **Span Processor** | Configured and pre-attached. `SimpleSpanProcessor` by default, `BatchSpanProcessor` when you pass `batch=True`. |
 | **Span Exporter** | Auto-detects gRPC or HTTP from the endpoint URL and configures the matching OTLP exporter. If `api_key` is set, it adds the `Authorization: Bearer <key>` header for you. |
 | **Resource** | Sets the project name automatically from your `project_name` argument (or the `PHOENIX_PROJECT` environment variable, with `PHOENIX_PROJECT_NAME` accepted as an alias). |
+
+# Version Compatibility
+
+`arize-phoenix-otel` is versioned independently of the Phoenix server, and the two are **not coupled** — any recent SDK version works with any server version. You do not need to upgrade the server when you upgrade the SDK, or match version numbers between them.
+
+This works because `register()` never calls a version-gated server endpoint. Everything it wires up rests on two backward-compatible contracts:
+
+- **OTLP transport** — the exporter sends spans over the OpenTelemetry Protocol, which every Phoenix server version accepts.
+- **[OpenInference semantic conventions](/docs/phoenix/tracing/concepts-tracing/otel-openinference)** — the attribute names both sides agree on, tracked in the `openinference-semantic-conventions` package and evolved additively.
+
+Because compatibility rests on these stable layers rather than matched version pairs, there is no `arize-phoenix-otel` × Phoenix server version table to consult. (Individual *features* — not the SDK as a whole — may carry a minimum server version; those are noted on the relevant feature pages.)
 
 # Auto-instrumentation
 

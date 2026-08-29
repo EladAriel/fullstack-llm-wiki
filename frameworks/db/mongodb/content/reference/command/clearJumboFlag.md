@@ -1,216 +1,319 @@
 ---
 type: "Framework Learn Page"
-framework: "mongodb"
+framework: "MongoDB"
 source_repo: "https://github.com/mongodb/docs.git"
 source_branch: "main"
 source_path: "content/manual/manual/source/reference/command/clearJumboFlag.txt"
-source_commit: "ab9db26ed3d11618cdb61516d8180337d8e3f679"
-source_commit_short: "ab9db26e"
-source_commit_date: "2026-07-24T16:22:46-06:00"
-generated_at: "2026-07-25T11:51:15Z"
+source_commit: "b9f2bc487a2878b65e3c1f80024bebab76954f27"
+source_commit_short: "b9f2bc48"
+source_commit_date: "2026-08-28T17:09:45-05:00"
+generated_at: "2026-08-29T09:39:20.075907Z"
 ---
-
-=================================
-
 # clearJumboFlag (database command)
+
+**meta:** :description: Clear the jumbo flag for a chunk in a sharded collection using the `clearJumboFlag` command on a `mongos` instance.
+
+.. default-domain:: mongodb
+
+**contents:** On this page
+   :local:
+   :backlinks: none
+   :depth: 1
+   :class: singlecol
 
 ## Definition
 
+**dbcommand:** clearJumboFlag
+
+   Clears the :ref:`jumbo <jumbo-chunks>` flag for a chunk. To use the
+   command, issue the :dbcommand:`clearJumboFlag` command on a
+   :binary:`~bin.mongos` instance.
+
 ## Compatibility
 
-This command is available in deployments hosted in the following environments:
+This command is available in deployments hosted in the following environments: 
 
-.. include:: /includes/fact-environments-atlas-only.rst
+**include:** /includes/fact-environments-atlas-only.rst
 
-.. include:: /includes/fact-environments-onprem-only.rst
+**include:** /includes/fact-environments-onprem-only.rst
+
 
 ## Syntax
 
 Th command has the following syntax:
 
-```javascript
-db.adminCommand( 
-   {
-     clearJumboFlag: "<database>.<collection>",
-     bounds: <array>
-   } 
-)
-```
+.. code-block:: javascript
+
+   db.adminCommand( 
+      {
+        clearJumboFlag: "<database>.<collection>",
+        bounds: <array>
+      } 
+   )
 
 **-OR-**
 
-```javascript
-// Cannot use for collections with hashed shard keys
+.. code-block:: javascript
 
-db.adminCommand( 
-   {
-     clearJumboFlag: "<database>.<collection>",
-     find: <query>
-   } 
-)
-```
+   // Cannot use for collections with hashed shard keys
+   
+   db.adminCommand( 
+      {
+        clearJumboFlag: "<database>.<collection>",
+        find: <query>
+      } 
+   )
 
 ### Command Fields
 
-The :dbcommand:`clearJumboFlag` command takes the following fields as arguments:
+The :dbcommand:`clearJumboFlag` command takes the following fields as
+arguments:
+
+
+.. list-table::
+   :header-rows: 1
+   :widths: 25 20 80
+
+   * - Field
+
+     - Type
+
+     - Description
+
+   * - :ref:`clearJumboFlag <clearJumboFlag-namespace>`
+
+     - string
+
+     - .. _clearJumboFlag-namespace:
+     
+       The :term:`namespace` of the sharded :term:`collection` with the
+       jumbo chunk(s).
+
+       Specify the collection's full namespace, including the
+       database name (i.e. "<database>.<collection>")
+
+   * - :ref:`bounds <clearJumboFlag-bounds>`
+
+     - array
+
+     - .. _clearJumboFlag-bounds:
+     
+       The exact bounds of a specific chunk. The array must consist of two
+       documents that specify the lower and upper shard key values of a chunk
+       to move:
+       
+       ``[ { <shardKey> : <minValue> },{ <shardKey> : <maxValue> } ]``
+       
+       
+       - Specify either the :ref:`bounds <clearJumboFlag-bounds>`
+         field or the :ref:`find <clearJumboFlag-find>` field but
+         not both.
+
+       - If the collection uses a :term:`hashed shard key`, use the
+         :ref:`bounds <clearJumboFlag-bounds>` field.
+
+   * - :ref:`find <clearJumboFlag-find>`
+
+     - document
+
+     - .. _clearJumboFlag-find:
+
+       A specific shard key and its value contained in the jumbo chunk.
+
+       ``{ <shardKey> : <value> }``
+
+       - Specify either the :ref:`bounds <clearJumboFlag-bounds>`
+         field or the ``find`` field but not both.
+
+       - If the collection uses a :term:`hashed shard key`, do
+         **not** use the :ref:`find <clearJumboFlag-find>` field.
+         Use :ref:`bounds <clearJumboFlag-bounds>` instead.
 
 ## Access Control
 
-On systems running with :setting:`~security.authorization`, the user must have the :authaction:`clearJumboFlag` privilege actions on the `{ db: "", collection: "" }` `resource <resource-all-but-system-collections>`.
+On systems running with :setting:`~security.authorization`, the user
+must have the :authaction:`clearJumboFlag` privilege actions on the ``{
+db: "", collection: "" }`` :ref:`resource
+<resource-all-but-system-collections>`.
 
-The built-in role :authrole:`clusterManager` provides the appropriate privileges.
+The built-in role :authrole:`clusterManager` provides the appropriate
+privileges.
 
 ## Example
 
 ### Clear Jumbo Flag for a Chunk (Range-Based Shard Key)
 
-The :method:`sh.status()` includes the following `sh.status.databases.<collection>.chunk-details` for the `test.jumbo` collection.
+The :method:`sh.status()` includes the following
+:data:`sh.status.databases.<collection>.chunk-details` for the
+``test.jumbo`` collection.
 
-```javascript
-... // Content omitted for brevity
+.. code-block:: javascript
+   :copyable: false
+   :emphasize-lines: 11-12
 
-test.jumbo
-         shard key: { "x" : 1 }
-         unique: false
-         balancing: true
-         chunks:
-                  shardA   2
-                  shardB   2
-         { "x" : { "$minKey" : 1 } } -->> { "x" : 1 } on : shardB Timestamp(3, 0) 
-         { "x" : 1 } -->> { "x" : 2 } on : shardA Timestamp(6, 1) jumbo 
-         { "x" : 2 } -->> { "x" : 3 } on : shardA Timestamp(5, 1) jumbo 
-         { "x" : 3 } -->> { "x" : { "$maxKey" : 1 } } on : shardB Timestamp(6, 0) 
-```
+   ... // Content omitted for brevity
 
-The following :dbcommand:`clearJumboFlag` command specifies the `bounds <clearJumboFlag-bounds>` of the `{ "x" : 1 } -->> { "x" : 2 }` chunk:
+   test.jumbo
+            shard key: { "x" : 1 }
+            unique: false
+            balancing: true
+            chunks:
+                     shardA   2
+                     shardB   2
+            { "x" : { "$minKey" : 1 } } -->> { "x" : 1 } on : shardB Timestamp(3, 0) 
+            { "x" : 1 } -->> { "x" : 2 } on : shardA Timestamp(6, 1) jumbo 
+            { "x" : 2 } -->> { "x" : 3 } on : shardA Timestamp(5, 1) jumbo 
+            { "x" : 3 } -->> { "x" : { "$maxKey" : 1 } } on : shardB Timestamp(6, 0) 
 
-```javascript
-db.adminCommand( {
-   clearJumboFlag: "test.jumbo",
-   bounds: [{ "x" : 1 }, { "x" : 2 }]
-} )
-```
+The following :dbcommand:`clearJumboFlag` command specifies the
+:ref:`bounds <clearJumboFlag-bounds>` of the ``{ "x" : 1 } -->> { "x" :
+2 }`` chunk:
 
-Upon success, the command returns `"ok": 1` in its output:
+.. code-block:: javascript
 
-```javascript
-{
-   "ok" : 1,
-   "operationTime" : Timestamp(1580190080, 5),
-   "$clusterTime" : {
-      "clusterTime" : Timestamp(1580190080, 5),
-      "signature" : {
-         "hash" : BinData(0,"0cYT49s72MHUYV1F2WpoEwlyeVs="),
-         "keyId" : Long("6786859092951433239")
+   db.adminCommand( {
+      clearJumboFlag: "test.jumbo",
+      bounds: [{ "x" : 1 }, { "x" : 2 }]
+   } )
+
+Upon success, the command returns ``"ok": 1`` in its output:
+
+.. code-block:: javascript
+   :copyable: false
+
+   {
+      "ok" : 1,
+      "operationTime" : Timestamp(1580190080, 5),
+      "$clusterTime" : {
+         "clusterTime" : Timestamp(1580190080, 5),
+         "signature" : {
+            "hash" : BinData(0,"0cYT49s72MHUYV1F2WpoEwlyeVs="),
+            "keyId" : Long("6786859092951433239")
+         }
       }
    }
-}
-```
 
-The following :dbcommand:`clearJumboFlag` command specifies the `find <clearJumboFlag-bounds>` field to find the chunk that contains the shard key `{ "x" : 2 }` :
+The following :dbcommand:`clearJumboFlag` command specifies the
+:ref:`find <clearJumboFlag-bounds>` field to find the chunk that
+contains the shard key ``{ "x" : 2 }`` :
 
-```javascript
-db.adminCommand( {
-   clearJumboFlag: "test.jumbo",
-   find: { "x" : 2 }
-} )
-```
+.. code-block:: javascript
 
-Upon success, the command returns `"ok": 1` in its output:
+   db.adminCommand( {
+      clearJumboFlag: "test.jumbo",
+      find: { "x" : 2 }
+   } )
 
-```javascript
-{
-   "ok" : 1,
-   "operationTime" : Timestamp(1580191819, 5),
-   "$clusterTime" : {
-      "clusterTime" : Timestamp(1580191819, 5),
-      "signature" : {
-         "hash" : BinData(0,"N6x6drN7HUq5MR5ezUJns1rfeqY="),
-         "keyId" : Long("6786859092951433239")
+Upon success, the command returns ``"ok": 1`` in its output:
+
+.. code-block:: javascript
+   :copyable: false
+
+   {
+      "ok" : 1,
+      "operationTime" : Timestamp(1580191819, 5),
+      "$clusterTime" : {
+         "clusterTime" : Timestamp(1580191819, 5),
+         "signature" : {
+            "hash" : BinData(0,"N6x6drN7HUq5MR5ezUJns1rfeqY="),
+            "keyId" : Long("6786859092951433239")
+         }
       }
    }
-}
-```
 
-To verify the operation, run :method:`sh.status()` again. The `jumbo` flag should no longer appear in its output.
+To verify the operation, run :method:`sh.status()` again. The ``jumbo``
+flag should no longer appear in its output.
 
-```javascript
-... // Content omitted for brevity
+.. code-block:: javascript
+   :copyable: false
+   :emphasize-lines: 11-12
 
-test.jumbo
-         shard key: { "x" : 1 }
-         unique: false
-         balancing: true
-         chunks:
-                  shardA   2
-                  shardB   2
-         { "x" : { "$minKey" : 1 } } -->> { "x" : 1 } on : shardB Timestamp(3, 0) 
-         { "x" : 1 } -->> { "x" : 2 } on : shardA Timestamp(7, 0) 
-         { "x" : 2 } -->> { "x" : 3 } on : shardA Timestamp(8, 0) 
-         { "x" : 3 } -->> { "x" : { "$maxKey" : 1 } } on : shardB Timestamp(6, 0) 
-```
+   ... // Content omitted for brevity
+
+   test.jumbo
+            shard key: { "x" : 1 }
+            unique: false
+            balancing: true
+            chunks:
+                     shardA   2
+                     shardB   2
+            { "x" : { "$minKey" : 1 } } -->> { "x" : 1 } on : shardB Timestamp(3, 0) 
+            { "x" : 1 } -->> { "x" : 2 } on : shardA Timestamp(7, 0) 
+            { "x" : 2 } -->> { "x" : 3 } on : shardA Timestamp(8, 0) 
+            { "x" : 3 } -->> { "x" : { "$maxKey" : 1 } } on : shardB Timestamp(6, 0) 
 
 ### Clear Jumbo Flag for a Chunk (Hashed Shard Key)
 
-The :method:`sh.status()` includes the following `sh.status.databases.<collection>.chunk-details` for the `test.jumboHashed` collection. The collection uses a hashed shard key.
+The :method:`sh.status()` includes the following
+:data:`sh.status.databases.<collection>.chunk-details` for the
+``test.jumboHashed`` collection. The collection uses a hashed shard
+key.
 
-```javascript
-... // Content omitted for brevity
+.. code-block:: javascript
+   :copyable: false
+   :emphasize-lines: 12
 
-test.jumboHashed
-         shard key: { "x" : "hashed" }
-         unique: false
-         balancing: true
-         chunks:
-                  shardA   2
-                  shardB   2
-         { "x" : { "$minKey" : 1 } } -->> { "x" : Long(0) } on : shardA Timestamp(1, 0) 
-         { "x" : Long(0) } -->> { "x" : Long("848411777775835583") } on : shardA Timestamp(4, 0) 
-         { "x" : Long("848411777775835583") } -->> { "x" : Long("5902408780260971510") } on : shardB Timestamp(4, 1) jumbo 
-         { "x" : Long("5902408780260971510") } -->> { "x" : { "$maxKey" : 1 } } on : shardB Timestamp(2, 2) 
-```
+   ... // Content omitted for brevity
 
-To clear the `jumbo` flag for a chunk if the collection uses a `hashed shard key`, use :dbcommand:`clearJumboFlag` with the `bounds <clearJumboFlag-bounds>` field:
+   test.jumboHashed
+            shard key: { "x" : "hashed" }
+            unique: false
+            balancing: true
+            chunks:
+                     shardA   2
+                     shardB   2
+            { "x" : { "$minKey" : 1 } } -->> { "x" : Long(0) } on : shardA Timestamp(1, 0) 
+            { "x" : Long(0) } -->> { "x" : Long("848411777775835583") } on : shardA Timestamp(4, 0) 
+            { "x" : Long("848411777775835583") } -->> { "x" : Long("5902408780260971510") } on : shardB Timestamp(4, 1) jumbo 
+            { "x" : Long("5902408780260971510") } -->> { "x" : { "$maxKey" : 1 } } on : shardB Timestamp(2, 2) 
 
-```javascript
-db.adminCommand( {
-   clearJumboFlag: "test.jumboHashed",
-   bounds: [{ "x" : Long("848411777775835583") }, { "x" : Long("5902408780260971510") }]
-} )
-```
+To clear the ``jumbo`` flag for a chunk if the collection uses a
+:term:`hashed shard key`, use :dbcommand:`clearJumboFlag` with the
+:ref:`bounds <clearJumboFlag-bounds>` field:
 
-Upon success, the command returns `"ok": 1` in its output:
+.. code-block:: javascript
 
-```javascript
-{
-   "ok" : 1,
-   "operationTime" : Timestamp(1580194290, 5),
-   "$clusterTime" : {
-      "clusterTime" : Timestamp(1580194290, 5),
-      "signature" : {
-         "hash" : BinData(0,"nWCqOYVrab7NEGHWoo2NYENqHR4="),
-         "keyId" : Long("6786875525496307742")
+   db.adminCommand( {
+      clearJumboFlag: "test.jumboHashed",
+      bounds: [{ "x" : Long("848411777775835583") }, { "x" : Long("5902408780260971510") }]
+   } )
+
+Upon success, the command returns ``"ok": 1`` in its output:
+
+.. code-block:: javascript
+   :copyable: false
+
+   {
+      "ok" : 1,
+      "operationTime" : Timestamp(1580194290, 5),
+      "$clusterTime" : {
+         "clusterTime" : Timestamp(1580194290, 5),
+         "signature" : {
+            "hash" : BinData(0,"nWCqOYVrab7NEGHWoo2NYENqHR4="),
+            "keyId" : Long("6786875525496307742")
+         }
       }
    }
-}
-```
 
-To verify the operation, run :method:`sh.status()` again. The `jumbo` flag should no longer appear in its output.
+To verify the operation, run :method:`sh.status()` again. The
+``jumbo`` flag should no longer appear in its output.
 
-```javascript
-... // Content omitted for brevity
+.. code-block:: javascript
+   :copyable: false
+   :emphasize-lines: 12
 
-test.jumboHashed
-         shard key: { "x" : "hashed" }
-         unique: false
-         balancing: true
-         chunks:
-                  shardA	2
-                  shardB	2
-         { "x" : { "$minKey" : 1 } } -->> { "x" : Long(0) } on : shardA Timestamp(1, 0) 
-         { "x" : Long(0) } -->> { "x" : Long("848411777775835583") } on : shardA Timestamp(4, 0) 
-         { "x" : Long("848411777775835583") } -->> { "x" : Long("5902408780260971510") } on : shardB Timestamp(5, 0) 
-         { "x" : Long("5902408780260971510") } -->> { "x" : { "$maxKey" : 1 } } on : shardB Timestamp(2, 2)
-```
+   ... // Content omitted for brevity
 
-> **Seealso:** `/tutorial/clear-jumbo-flag`
+   test.jumboHashed
+            shard key: { "x" : "hashed" }
+            unique: false
+            balancing: true
+            chunks:
+                     shardA	2
+                     shardB	2
+            { "x" : { "$minKey" : 1 } } -->> { "x" : Long(0) } on : shardA Timestamp(1, 0) 
+            { "x" : Long(0) } -->> { "x" : Long("848411777775835583") } on : shardA Timestamp(4, 0) 
+            { "x" : Long("848411777775835583") } -->> { "x" : Long("5902408780260971510") } on : shardB Timestamp(5, 0) 
+            { "x" : Long("5902408780260971510") } -->> { "x" : { "$maxKey" : 1 } } on : shardB Timestamp(2, 2)
+
+**seealso:** :doc:`/tutorial/clear-jumbo-flag`

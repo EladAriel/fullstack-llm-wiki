@@ -1,44 +1,82 @@
 ---
 type: "Framework Learn Page"
-framework: "mongodb"
+framework: "MongoDB"
 source_repo: "https://github.com/mongodb/docs.git"
 source_branch: "main"
 source_path: "content/manual/manual/source/reference/command/startShardDraining.txt"
-source_commit: "ab9db26ed3d11618cdb61516d8180337d8e3f679"
-source_commit_short: "ab9db26e"
-source_commit_date: "2026-07-24T16:22:46-06:00"
-generated_at: "2026-07-25T11:51:15Z"
+source_commit: "b9f2bc487a2878b65e3c1f80024bebab76954f27"
+source_commit_short: "b9f2bc48"
+source_commit_date: "2026-08-28T17:09:45-05:00"
+generated_at: "2026-08-29T09:39:20.064685Z"
 ---
-
-=====================================
-
 # startShardDraining (database command)
+
+**meta:** :description: Starts draining chunks from a shard in a sharded cluster using the balancer.
+
+.. default-domain:: mongodb
+
+**contents:** On this page
+   :local:
+   :backlinks: none
+   :depth: 1
+   :class: singlecol
 
 ## Definition
 
+**dbcommand:** startShardDraining
+
+   .. include:: /includes/command/startShardDraining.rst
+
+   When the command runs, it tells the balancer that you want to
+   drain the given shard. Asynchronously, the balancer then
+   begins moving chunks from the shard to other shards in the
+   cluster. When the balancer completes this process, the shard
+   contains no data and can be safely removed from the cluster.
+
+   .. note::
+
+      The balancer must be enabled for ``startShardDraining`` to move
+      chunks off the shard. If the balancer is disabled, no chunks are
+      migrated and :dbcommand:`shardDrainingStatus` continues to report
+      remaining work on the shard.
+
+   The command returns an error if the shard doesn't exist,
+   otherwise it returns ``ok``.
+
+   To check the status of a draining shard, use the
+   :dbcommand:`shardDrainingStatus` command.
+
+   To stop draiing a shard, see the
+   :dbcommand:`stopShardDraining` command.
+
+   To remove a drained shard, see the
+   :dbcommand:`commitShardRemoval` command.
+
+   .. versionadded:: 8.3
+
 ## Compatibility
 
-This command is available in deployments hosted in the following environments:
+This command is available in deployments hosted in the following environments: 
 
-.. include:: /includes/fact-environments-onprem-only.rst
+**include:** /includes/fact-environments-onprem-only.rst
 
-> **Note:** .. include:: /includes/edit-shards-atlas-compatibility.rst
+**note:** .. include:: /includes/edit-shards-atlas-compatibility.rst
 
 ## Syntax
 
 The command has the following syntax:
 
-```javascript
-db.adminCommand( { 
-     startShardDraining: <shardToDrain> 
-} )
-```
+.. code-block:: javascript
+
+   db.adminCommand( { 
+        startShardDraining: <shardToDrain> 
+   } )
 
 ## Behavior
 
 ### Access Requirements
 
-.. include:: /includes/removeShard-access-requirements.rst
+**include:** /includes/removeShard-access-requirements.rst
 
 ### No Cluster Back Ups During Shard Drain
 
@@ -46,47 +84,62 @@ You cannot back up the cluster while draining the shard.
 
 ### Concurrent Drain Shard Operations
 
-You can have more than one shard draining operation in progress at a time.
+You can have more than one shard draining operation in progress
+at a time.
 
 ### Database Migration Requirements
 
-.. include:: /includes/sharding-database-migration-requirements.rst
+**include:** /includes/sharding-database-migration-requirements.rst
 
 ### Collection Migration Requirements
 
-.. include:: /includes/sharding-collection-migration-requirements.rst
+**include:** /includes/sharding-collection-migration-requirements.rst
 
 ### Chunk Balancing
 
-When you drain a shard in a cluster with an uneven chunk distribution, the balancer first removes the chunks from the draining shard and then balances the remaining uneven chunk distribution.
+When you drain a shard in a cluster with an uneven chunk
+distribution, the balancer first removes the chunks from the
+draining shard and then balances the remaining uneven chunk
+distribution.
 
-> **Seealso:** :dbcommand:`balancerCollectionStatus`
+**seealso:** :dbcommand:`balancerCollectionStatus`
 
 ### Write Concern
 
-:program:`mongos` converts the `write concern <write-concern>` of the `startShardDraining` command to :writeconcern:`"majority"`.
+:program:`mongos` converts the :ref:`write concern
+<write-concern>` of the ``startShardDraining`` command to
+:writeconcern:`"majority"`.
 
 ### Change Streams
 
-Draining a shard may cause an open `change stream cursor <changeStreams>` to close, and the closed change stream cursor may not be fully resumable.
+Draining a shard may cause an open :ref:`change stream cursor
+<changeStreams>` to close, and the closed change stream cursor may
+not be fully resumable.
 
 ### DDL Operations
 
-If you run `startShardDraining` while your cluster is executing a DDL operation (operation that modifies a collection such as :dbcommand:`reshardCollection`), the shard draining only executes after the concurrent DDL operation finishes.
+If you run ``startShardDraining`` while your cluster is
+executing a DDL operation (operation that modifies a collection
+such as :dbcommand:`reshardCollection`), the shard draining only
+executes after the concurrent DDL operation finishes. 
 
 ## Examples
 
-To start draining a shard, use the :method:`db.adminCommand` method:
+To start draining a shard, use the :method:`db.adminCommand`
+method:
 
-```javascript
-db.adminCommand( {
-   startShardDraining: "shard04"
-} )
-```
+.. code-block:: javascript
+
+   db.adminCommand( {
+      startShardDraining: "shard04"
+   } )
 
 ## Learn More
 
-- `remove-shards-from-cluster-tutorial`
+- :ref:`remove-shards-from-cluster-tutorial`
+
 - :dbcommand:`shardDrainingStatus`
+
 - :dbcommand:`commitShardRemoval`
+
 - :dbcommand:`stopShardDraining`

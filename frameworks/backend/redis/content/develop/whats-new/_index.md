@@ -1,14 +1,15 @@
 ---
 type: "Framework Learn Page"
-framework: "redis"
+framework: "Redis"
 source_repo: "https://github.com/redis/docs.git"
 source_branch: "main"
 source_path: "content/develop/whats-new/_index.md"
-source_commit: "9d30f68c3dad1a6b3b7d30fe604b911348ce8152"
-source_commit_short: "9d30f68c"
-source_commit_date: "2026-07-24T10:52:10-07:00"
-generated_at: "2026-07-25T11:51:22Z"
+source_commit: "f8693349287b0efbef3c865b6f6a2aceca88594d"
+source_commit_short: "f869334"
+source_commit_date: "2026-08-28T10:01:19-05:00"
+generated_at: "2026-08-29T09:38:55.798136Z"
 ---
+# _Index
 
 ---
 title: What's new?
@@ -23,6 +24,12 @@ linkTitle: What's new?
 hideListLinks: true
 weight: 10
 ---
+
+## Q3 2026 (July - September) Updates
+
+### Redis Version Updates
+
+- [Redis 8.10]({{< relref "/develop/whats-new/8-10" >}}) - New commands (`LMOVEM`/`BLMOVEM`, `SUNIONCARD`/`SDIFFCARD`, `FT.ALIASLIST`, `TS.NRANGE`/`TS.NREVRANGE`, `TS.READ`), hash templates, `FT.AGGREGATE` `COLLECT` reducer and stricter query timeout enforcement, extensive JSONPath extensions, plus core, Search, and JSON performance improvements.
 
 ## Q2 2026 (April - June) Updates
 

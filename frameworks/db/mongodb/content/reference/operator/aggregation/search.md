@@ -1,31 +1,38 @@
 ---
 type: "Framework Learn Page"
-framework: "mongodb"
+framework: "MongoDB"
 source_repo: "https://github.com/mongodb/docs.git"
 source_branch: "main"
 source_path: "content/manual/manual/source/reference/operator/aggregation/search.txt"
-source_commit: "ab9db26ed3d11618cdb61516d8180337d8e3f679"
-source_commit_short: "ab9db26e"
-source_commit_date: "2026-07-24T16:22:46-06:00"
-generated_at: "2026-07-25T11:51:15Z"
+source_commit: "b9f2bc487a2878b65e3c1f80024bebab76954f27"
+source_commit_short: "b9f2bc48"
+source_commit_date: "2026-08-28T17:09:45-05:00"
+generated_at: "2026-08-29T09:39:20.156610Z"
 ---
-
-===========================
-
 # $search (aggregation stage)
 
-`$search` aggregation pipeline stage performs a full-text search of the field or fields in an Atlas collection. The fields must be covered by a :atlas:`{+fts+} </reference/atlas-search/index-definitions/>` index.
+**meta:** :description: Perform full-text searches in Atlas collections using the `$search` aggregation pipeline stage with {+fts+} indexes.
 
-> **Important:** The `$search` aggregation pipeline stage is available for collections
-hosted on:
-- :atlas:`MongoDB Atlas </>`.
-- `MongoDB Enterprise <install-mdb-enterprise>` deployments running
-  version 8.2 or later with the `{+k8s-op-short+} <k8s-operator>`.
-- `MongoDB Community <install-mdb-community-edition>` deployments
-  running version 8.2 or later.
-To learn more, see :atlas:`{+fts+} </atlas-search/>`.
+.. default-domain:: mongodb
 
-For example, you can use `$search` to perform the following types of operations:
+``$search`` aggregation pipeline stage performs a full-text search of 
+the field or fields in an Atlas collection. The fields must be covered 
+by a :atlas:`{+fts+} 
+</reference/atlas-search/index-definitions/>` index.
+
+**important:** The ``$search`` aggregation pipeline stage is available for collections 
+   hosted on: 
+   
+   - :atlas:`MongoDB Atlas </>`.
+   - :ref:`MongoDB Enterprise <install-mdb-enterprise>` deployments running 
+     version 8.2 or later with the :ref:`{+k8s-op-short+} <k8s-operator>`. 
+   - :ref:`MongoDB Community <install-mdb-community-edition>` deployments 
+     running version 8.2 or later.
+    
+   To learn more, see :atlas:`{+fts+} </atlas-search/>`.
+
+For example, you can use ``$search`` to perform the following types of
+operations:
 
 - Searches to match text fields with various patterns.
 - Fuzzy matches to find terms with spelling variations.
@@ -33,13 +40,15 @@ For example, you can use `$search` to perform the following types of operations:
 - Relevance scoring to rank results.
 - Return snippets of matching text.
 - Vector searches to find documents using vector similarities.
+
 For more details, see:
 
 - :atlas:`Index Definitions
-</reference/atlas-search/index-definitions/>` to learn more about creating and managing {+fts+} indexes.
-
+  </reference/atlas-search/index-definitions/>` to learn more about 
+  creating and managing {+fts+} indexes.
 - :atlas:`{+fts+} Aggregation Pipeline Stages
-</reference/atlas-search/query-syntax/>` to learn more about the `$search` pipeline stage syntax and usage.
-
-- :atlas:`$search Operators </reference/atlas-search/operators/>` to
-learn more about the `$search` aggregation pipeline stage operators.
+  </reference/atlas-search/query-syntax/>` to learn more about the 
+  ``$search`` pipeline stage syntax and usage.
+- :atlas:`$search Operators </reference/atlas-search/operators/>` to 
+  learn more about the ``$search`` aggregation pipeline stage 
+  operators.

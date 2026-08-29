@@ -4,10 +4,10 @@ framework: "LangSmith"
 source_repo: "https://github.com/langchain-ai/docs.git"
 source_branch: "main"
 source_path: "src/langsmith/self-host-dependency-versions.mdx"
-source_commit: "2aae1dfc98ee953a9a5185fb6fcdd9efb3f4d878"
-source_commit_short: "2aae1df"
-source_commit_date: "2026-07-25T00:27:23+00:00"
-generated_at: "2026-07-25T19:08:33.366844Z"
+source_commit: "a174f9cf7c91ee5eb14ee2382eb48bfe6e4956e9"
+source_commit_short: "a174f9c"
+source_commit_date: "2026-08-28T17:04:12-07:00"
+generated_at: "2026-08-29T09:39:50.652218Z"
 ---
 # Self Host Dependency Versions
 
@@ -28,12 +28,12 @@ If you are using a managed service (such as Amazon RDS, Google Cloud SQL, or Azu
 | Dependency | Minimum version | Notes |
 |------------|------------------|-------|
 | [PostgreSQL](/langsmith/self-host-external-postgres) | 14 | Primary relational store for operational data. Required for both LangSmith and standalone Agent Server deployments. Used to install the `btree_gin`, `btree_gist`, `pgcrypto`, `citext`, `ltree`, and `pg_trgm` extensions. |
-| [Redis](/langsmith/self-host-external-redis) | 5 | Used for queueing and caching. Standalone and Redis Cluster modes are both supported. |
+| [Redis](/langsmith/self-host-external-redis) | 6.2 | Used for queueing and caching. Standalone and Redis Cluster modes are both supported. As of Agent Server 0.8.0, the Redis-backed run queue requires Redis 6.2 or later: it enqueues runs with the `ZADD ... LT` flag, which was added in 6.2. |
 | [Valkey](/langsmith/self-host-external-redis) | 8 | Officially supported as a drop-in replacement for Redis. Standalone and Cluster modes are both supported. |
 | [ClickHouse](/langsmith/self-host-external-clickhouse) | Version specified in the [LangSmith Helm chart](https://github.com/langchain-ai/helm/releases) or greater | Stores traces and feedback. ClickHouse versions >= 24.2 require LangSmith v0.6 or later. Downgrades are not supported. |
 
 <Warning>
-**Redis < 5 and PostgreSQL < 14 are not supported.** A LangSmith installation pointed at an older Redis or PostgreSQL instance may fail to start or behave unpredictably. Upgrade your datastore before installing or upgrading LangSmith.
+**Redis < 6.2 and PostgreSQL < 14 are not supported.** A LangSmith installation pointed at an older Redis or PostgreSQL instance may fail to start or behave unpredictably. Upgrade your datastore before installing or upgrading LangSmith.
 </Warning>
 
 ## Compute and orchestration
@@ -55,7 +55,7 @@ If you are using a managed service (such as Amazon RDS, Google Cloud SQL, or Azu
 ## Where these versions are enforced
 
 - PostgreSQL `>= 14`: refer to [Connect to an external PostgreSQL database](/langsmith/self-host-external-postgres#requirements).
-- Redis `>= 5` and Valkey `8`: refer to [Connect to an external Redis or Valkey database](/langsmith/self-host-external-redis#requirements).
+- Redis `>= 6.2` and Valkey `8`: refer to [Connect to an external Redis or Valkey database](/langsmith/self-host-external-redis#requirements).
 - ClickHouse: use the version specified in the [LangSmith Helm chart](https://github.com/langchain-ai/helm/releases) or greater: refer to [Connect to an external ClickHouse database](/langsmith/self-host-external-clickhouse#requirements).
 - Kubernetes cluster prerequisites: refer to [Self-host LangSmith on Kubernetes](/langsmith/kubernetes#prerequisites).
 

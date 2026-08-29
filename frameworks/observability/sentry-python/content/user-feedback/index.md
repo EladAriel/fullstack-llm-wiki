@@ -1,7 +1,7 @@
 ---
 type: "Framework Learn Directory Index"
 framework: "Sentry Python"
-generated_at: "2026-07-25T19:08:13.543137Z"
+generated_at: "2026-08-29T09:40:09.068441Z"
 ---
 # User-Feedback
 
@@ -17,3 +17,7 @@ This directory contains Sentry Python learning pages related to user-feedback.
 
 ## Pages in This Directory
 
+
+## Subdirectories
+
+- [Configuration](configuration/index.md)

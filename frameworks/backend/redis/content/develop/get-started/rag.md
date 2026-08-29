@@ -1,14 +1,15 @@
 ---
 type: "Framework Learn Page"
-framework: "redis"
+framework: "Redis"
 source_repo: "https://github.com/redis/docs.git"
 source_branch: "main"
 source_path: "content/develop/get-started/rag.md"
-source_commit: "9d30f68c3dad1a6b3b7d30fe604b911348ce8152"
-source_commit_short: "9d30f68c"
-source_commit_date: "2026-07-24T10:52:10-07:00"
-generated_at: "2026-07-25T11:51:22Z"
+source_commit: "f8693349287b0efbef3c865b6f6a2aceca88594d"
+source_commit_short: "f869334"
+source_commit_date: "2026-08-28T10:01:19-05:00"
+generated_at: "2026-08-29T09:38:55.796945Z"
 ---
+# Rag
 
 ---
 categories:
@@ -26,9 +27,11 @@ linkTitle: RAG with Redis
 stack: true
 title: RAG with Redis
 weight: 4
+aliases:
+- /develop/ai/rag/
 ---
 ### What is Retrieval Augmented Generation (RAG)?
-Large Language Models (LLMs) generate human-like text but are limited by the data they were trained on. RAG enhances LLMs by integrating them with external, domain-specific data stored in a Redis [vector database]({{< relref "/develop/get-started/vector-database" >}}).
+Large Language Models (LLMs) generate human-like text but are limited by the data they were trained on. RAG enhances LLMs by integrating them with external, domain-specific data stored in a Redis [vector database]({{< relref "/develop/get-started/search-tutorial/vector-search" >}}).
 
 RAG involves three main steps:
 
@@ -38,6 +41,10 @@ RAG involves three main steps:
 
 RAG enables LLMs to use real-time information, improving the accuracy and relevance of generated content.
 Redis is ideal for RAG due to its speed, versatility, and familiarity.
+
+{{< tip >}}
+To generate a complete RAG agent with document ingestion, hybrid retrieval, and citations, open the [AI agent builder]({{< relref "/develop/ai/agent-builder" >}}) and choose the **Knowledge Assistant** template.
+{{< /tip >}}
 
 ### The role of Redis in RAG
 

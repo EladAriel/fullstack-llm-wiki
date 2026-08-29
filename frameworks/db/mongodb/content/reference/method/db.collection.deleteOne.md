@@ -1,110 +1,292 @@
 ---
 type: "Framework Learn Page"
-framework: "mongodb"
+framework: "MongoDB"
 source_repo: "https://github.com/mongodb/docs.git"
 source_branch: "main"
 source_path: "content/manual/manual/source/reference/method/db.collection.deleteOne.txt"
-source_commit: "ab9db26ed3d11618cdb61516d8180337d8e3f679"
-source_commit_short: "ab9db26e"
-source_commit_date: "2026-07-24T16:22:46-06:00"
-generated_at: "2026-07-25T11:51:15Z"
+source_commit: "b9f2bc487a2878b65e3c1f80024bebab76954f27"
+source_commit_short: "b9f2bc48"
+source_commit_date: "2026-08-28T17:09:45-05:00"
+generated_at: "2026-08-29T09:39:19.950525Z"
 ---
-
-==========================================
-
 # db.collection.deleteOne() (mongosh method)
 
-.. include:: /includes/wayfinding/mongosh-method-deleteOne.rst
+.. default-domain:: mongodb
+
+**meta:** :description: Use the mongosh db.collection.deleteOne() method to delete a single document from a MongoDB collection. Learn about syntax, parameters, and see code examples.
+
+**facet:** :name: programming_language 
+   :values: shell
+
+**contents:** On this page
+   :local:
+   :backlinks: none
+   :depth: 1
+   :class: singlecol
+
+**include:** /includes/wayfinding/mongosh-method-deleteOne.rst
 
 ## Definition
 
+**method:** db.collection.deleteOne()
+
+
+   Removes a single document from a collection.
+
+   :returns:
+      
+      A document containing:
+
+      - A boolean ``acknowledged`` as ``true`` if the operation ran with 
+        :term:`write concern` or ``false`` if write concern was disabled    
+      - ``deletedCount`` containing the number of deleted documents
+
 ## Compatibility
+
+.. |operator-method| replace:: ``db.collection.deleteOne()``
 
 This method is available in deployments hosted in the following environments:
 
-.. include:: /includes/fact-environments-atlas-only.rst
+**include:** /includes/fact-environments-atlas-only.rst
 
-.. include:: /includes/fact-environments-atlas-support-all.rst
+**include:** /includes/fact-environments-atlas-support-all.rst
 
-.. include:: /includes/fact-environments-onprem-only.rst
+**include:** /includes/fact-environments-onprem-only.rst
 
 ## Syntax
 
-`db.collection.deleteOne()` has the following form:
+``db.collection.deleteOne()`` has the following form:
 
-```javascript
-db.collection.deleteOne(
-    <filter>,
-    {
-      writeConcern: <document>,
-      collation: <document>,
-      hint: <document|string>,
-      maxTimeMS: <int>,
-      let: <document>
-    }
-)
-```
+.. code-block:: javascript
 
-`db.collection.deleteOne()` takes the following parameters:
+   db.collection.deleteOne(
+       <filter>,
+       {
+         writeConcern: <document>,
+         collation: <document>,
+         hint: <document|string>,
+         maxTimeMS: <int>,
+         let: <document>
+       }
+   )
+
+``db.collection.deleteOne()`` takes the following
+parameters:
+
+.. list-table::
+   :header-rows: 1
+   :widths: 20 20 80
+
+   * - Parameter
+     - Type
+     - Description
+
+   * - :ref:`filter <deleteOne-filter>`
+     - document
+     - .. _deleteOne-filter:
+    
+       Specifies deletion criteria using a :ref:`query predicate
+       <query-predicates-ref>`. 
+      
+       Specify an empty document ``{ }`` to delete the first document returned in 
+       the collection.
+      
+   * - :ref:`writeConcern <deleteOne-wc>`
+     - document
+     - .. _deleteOne-wc:
+    
+       Optional. A document expressing the :doc:`write concern
+       </reference/write-concern>`. Omit to use the default write concern.
+      
+       .. include:: /includes/extracts/transactions-operations-write-concern.rst
+      
+   * - :ref:`collation <deleteOne-collation>`
+     - document
+     - .. _deleteOne-collation:
+  
+       Optional. 
+      
+       .. include:: /includes/extracts/collation-option.rst
+      
+   * - :ref:`hint <deleteOne-hint>`
+     - document
+     - .. _deleteOne-hint:
+ 
+       Optional. A document or string that specifies the :ref:`index
+       <indexes>` to use to support the :ref:`query predicate
+       <deleteOne-filter>`.
+      
+       The option can take an index specification document or the
+       index name string.
+      
+       If you specify an index that does not exist, the operation
+       errors.
+
+       For an example, see :ref:`ex-deleteOne-hint`.
+
+   * - :ref:`maxTimeMS <deleteOne-maxTimeMS>`
+     - integer
+     - .. _deleteOne-maxTimeMS:
+        
+       Optional. Specifies the time limit in milliseconds for the
+       delete operation to run before timing out.
+
+   * - :ref:`let <deleteOne-let>`
+     
+     - Document
+
+     - .. _deleteOne-let:
+     
+       Optional.
+
+       .. include:: /includes/let-variables-syntax.rst
+ 
+       .. include:: /includes/let-variables-syntax-note.rst
+
+       For a complete example using ``let`` and variables,
+       see :ref:`updateMany-let-example`.
 
 ## Behavior
 
+.. _deleteOne-deletion-order:
+
 ### Deletion Order
 
-`deleteOne()` deletes the first document that matches the filter. Use a field that is part of a `unique index such as id` for precise deletions.
+``deleteOne()`` deletes the first document that matches
+the filter. Use a field that is part of a :term:`unique index` such as ``_id``
+for precise deletions.
+
 
 ### Sharded Collections
 
-To use `deleteOne()` on a sharded collection:
+To use ``deleteOne()`` on a sharded collection:
 
-- If you only target one shard, you can use a partial shard key in the query
-specification.
-
-- You do not need to provide the `shard key or id` field in the query
-specification, because `deleteOne()` inherently uses a limit of 1.
+- If you only target one shard, you can use a partial shard key in the query 
+  specification.
+- You do not need to provide the :term:`shard key` or ``_id`` field in the query 
+  specification, because ``deleteOne()`` inherently uses a limit of 1.
 
 ### Transactions
 
-.. include:: /includes/extracts/transactions-supported-operation.rst
+**include:** /includes/extracts/transactions-supported-operation.rst
 
-.. include:: /includes/extracts/transactions-operations-write-concern.rst
+**include:** /includes/extracts/transactions-operations-write-concern.rst
 
-.. include:: /includes/extracts/transactions-usage.rst
+**include:** /includes/extracts/transactions-usage.rst
+
+.. |operation| replace:: ``deleteOne()``
 
 ### Oplog Entries
 
-If a `db.collection.deleteOne()` operation successfully deletes a document, the operation adds an entry on the `oplog` (operations log). If the operation fails or does not find a document to delete, the operation does not add an entry on the oplog.
+If a ``db.collection.deleteOne()`` operation successfully deletes a
+document, the operation adds an entry on the :term:`oplog` (operations
+log). If the operation fails or does not find a document to delete, the
+operation does not add an entry on the oplog. 
 
 ## Examples
 
-.. include:: /includes/sample-data-usage.rst
+**include:** /includes/sample-data-usage.rst
+
+.. _deleteOne-example-delete-single-document:
 
 ### Delete a Single Document
 
-The following operation deletes the first document where `year` is earlier than `1910`:
+The following operation deletes the first document where
+``year`` is earlier than ``1910``:
+
+.. io-code-block::
+   :copyable: true
+
+   .. input:: /code-examples/tested/command-line/mongosh/mongosh-commands/db.collection.deleteOne/delete-by-year.snippet.delete-by-year.js
+      :language: javascript
+      :category: usage example
+
+   .. output:: /code-examples/tested/command-line/mongosh/mongosh-commands/db.collection.deleteOne/delete-by-year-output.sh
+      :language: javascript
 
 ### deleteOne() with a Timeout and Query Variables
 
-The following operation deletes the first document where `year` is earlier than the `cutoffYear` variable and sets a time limit of 3 seconds:
+The following operation deletes the first document where ``year``
+is earlier than the ``cutoffYear`` variable and sets a time limit
+of 3 seconds:
+
+.. io-code-block::
+   :copyable: true
+
+   .. input:: /code-examples/tested/command-line/mongosh/mongosh-commands/db.collection.deleteOne/delete-with-let.snippet.delete-with-let.js
+      :language: javascript
+      :category: usage example
+
+   .. output:: /code-examples/tested/command-line/mongosh/mongosh-commands/db.collection.deleteOne/delete-with-let-output.sh
+      :language: javascript
+
+.. _deleteOne-example-update-with-write-concern:
 
 ### deleteOne() with Write Concern
 
-Given a three member replica set, the following operation specifies a `w` of `majority` and `wtimeout` of `100`:
+Given a three member replica set, the following operation specifies a
+``w`` of ``majority`` and ``wtimeout`` of ``100``:
+
+.. io-code-block::
+   :copyable: true
+
+   .. input:: /code-examples/tested/command-line/mongosh/mongosh-commands/db.collection.deleteOne/write-concern.snippet.write-concern.js
+      :language: javascript
+      :category: usage example
+
+   .. output:: /code-examples/tested/command-line/mongosh/mongosh-commands/db.collection.deleteOne/write-concern-output.sh
+      :language: javascript
 
 ### Specify Collation
 
-.. include:: /includes/extracts/collation-description.rst
+**include:** /includes/extracts/collation-description.rst
 
-The following operation uses the `collation <collation>` option with English locale and `strength: 2`, which makes comparisons case-insensitive. The filter `title: "the dark knight"` matches the document with the title `"The Dark Knight"` in the collection:
+The following operation uses the :ref:`collation <collation>` option
+with English locale and ``strength: 2``, which makes comparisons
+case-insensitive. The filter ``title: "the dark knight"`` matches
+the document with the title ``"The Dark Knight"`` in the collection:
 
-### Specify `hint` for Delete Operations
+.. io-code-block::
+   :copyable: true
 
-Create indexes on the `rated` and `metacritic` fields:
+   .. input:: /code-examples/tested/command-line/mongosh/mongosh-commands/db.collection.deleteOne/collation-delete.snippet.collation-delete.js
+      :language: javascript
+      :category: usage example
 
-The following delete operation explicitly hints to use the index `{ rated: 1 }`:
+   .. output:: /code-examples/tested/command-line/mongosh/mongosh-commands/db.collection.deleteOne/collation-delete-output.sh
+      :language: javascript
 
-> **Note:** If you specify an index that does not exist, the operation errors.
+.. _ex-deleteOne-hint:
 
-To view the indexes used, you can use the :pipeline:`$indexStats` pipeline:
+### Specify ``hint`` for Delete Operations
 
-The `accesses.ops` field in the :pipeline:`$indexStats` output indicates the number of operations that used the index.
+Create indexes on the ``rated`` and ``metacritic`` fields:
+
+**literalinclude:** /code-examples/tested/command-line/mongosh/mongosh-commands/db.collection.deleteOne/hint-create-index.js
+   :language: javascript
+   :category: usage example
+
+The following delete operation explicitly hints to use the index
+``{ rated: 1 }``:
+
+.. io-code-block::
+   :copyable: true
+
+   .. input:: /code-examples/tested/command-line/mongosh/mongosh-commands/db.collection.deleteOne/hint-delete.snippet.hint-delete.js
+      :language: javascript
+      :category: usage example
+
+   .. output:: /code-examples/tested/command-line/mongosh/mongosh-commands/db.collection.deleteOne/hint-delete-output.sh
+      :language: javascript
+
+**note:** If you specify an index that does not exist, the operation errors.
+
+To view the indexes used, you can use the :pipeline:`$indexStats`
+pipeline:
+
+**literalinclude:** /code-examples/tested/command-line/mongosh/mongosh-commands/db.collection.deleteOne/index-stats.snippet.index-stats.js
+   :language: javascript
+   :category: usage example
+
+The ``accesses.ops`` field in the :pipeline:`$indexStats` output
+indicates the number of operations that used the index.

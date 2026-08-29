@@ -1,78 +1,98 @@
 ---
 type: "Framework Learn Page"
-framework: "mongodb"
+framework: "MongoDB"
 source_repo: "https://github.com/mongodb/docs.git"
 source_branch: "main"
 source_path: "content/manual/manual/source/reference/command/stopTransitionToDedicatedConfigServer.txt"
-source_commit: "ab9db26ed3d11618cdb61516d8180337d8e3f679"
-source_commit_short: "ab9db26e"
-source_commit_date: "2026-07-24T16:22:46-06:00"
-generated_at: "2026-07-25T11:51:15Z"
+source_commit: "b9f2bc487a2878b65e3c1f80024bebab76954f27"
+source_commit_short: "b9f2bc48"
+source_commit_date: "2026-08-28T17:09:45-05:00"
+generated_at: "2026-08-29T09:39:20.017326Z"
 ---
-
-========================================================
-
 # stopTransitionToDedicatedConfigServer (database command)
+**meta:** :description: Stops the in-progress transition from an embedded config server to a dedicated config server. 
+
+.. default-domain:: mongodb
+
+**contents:** On this page
+   :local:
+   :backlinks: none
+   :depth: 1
+   :class: singlecol
 
 ## Definition
 
-.. include:: /includes/command/stopTransitionToDedicatedConfigServer.rst
+**dbcommand:** stopTransitionToDedicatedConfigServer
 
-The shard resumes its role in the sharded cluster and is included in rebalancing operations.
+**include:** /includes/command/stopTransitionToDedicatedConfigServer.rst
 
-When the command runs, the in-progress transition from an embedded config server to a dedicated config server stops by terminating the draining of chunks from the config shard. The config shard then resumes its normal role in balancing.
+The shard resumes its role in the sharded cluster and is included in 
+rebalancing operations.
 
-The command returns `ok: 1` on success, otherwise it returns `ok: 0` with a related error message.
+When the command runs, the in-progress transition from an embedded config server
+to a dedicated config server stops by terminating the draining of chunks from the
+config shard. The config shard then resumes its normal role in balancing. 
 
-To start transitioning to a dedicated config server, see the :dbcommand:`startTransitionToDedicatedConfigServer` command.
+The command returns ``ok: 1`` on success, otherwise it returns ``ok: 0`` with a
+related error message. 
 
-To show the status of the transition from an embedded config server to a dedicated config server, see the :dbcommand:`getTransitionToDedicatedConfigServerStatus` command.
+To start transitioning to a dedicated config server, see the 
+:dbcommand:`startTransitionToDedicatedConfigServer` command.
 
-To commit the transition from an embedded config server to a dedicated config server, see the :dbcommand:`commitTransitionToDedicatedConfigServer` command.
+To show the status of the transition from an embedded config server to a 
+dedicated config server, see the 
+:dbcommand:`getTransitionToDedicatedConfigServerStatus` command.
 
-.. versionadded:: 8.3
+To commit the transition from an embedded config server to a dedicated config 
+server, see the :dbcommand:`commitTransitionToDedicatedConfigServer` command.
+
+**versionadded:** 8.3
 
 ## Compatibility
 
-This command is available in deployments hosted in the following environments:
+This command is available in deployments hosted in the following environments: 
 
-.. include:: /includes/fact-environments-onprem-only.rst
+**include:** /includes/fact-environments-onprem-only.rst
 
-> **Note:** This command is not supported in [{+atlas+}](https://www.mongodb.com/docs/atlas)_.
-Contact MongoDB support to stop the transition from an embedded to dedicated
-config server.
+**note:** This command is not supported in `{+atlas+} <https://www.mongodb.com/docs/atlas>`__.
+   Contact MongoDB support to stop the transition from an embedded to dedicated
+   config server. 
 
 ## Syntax
 
 The command has the following syntax:
 
-```javascript
-db.adminCommand( { 
-     stopTransitionToDedicatedConfigServer: 1
-} )
-```
+.. code-block:: javascript
+
+   db.adminCommand( { 
+        stopTransitionToDedicatedConfigServer: 1
+   } )
 
 ## Behavior
 
 ### Access Requirements
 
-.. include:: /includes/removeShard-access-requirements.rst
+**include:** /includes/removeShard-access-requirements.rst
 
 ## Examples
 
-To start transitioning from an embedded to a dedicated config server, use the :method:`db.adminCommand` method to run the :dbcommand:`startTransitionToDedicatedConfigServer` command:
+To start transitioning from an embedded to a dedicated config server, use 
+the :method:`db.adminCommand` method to run the 
+:dbcommand:`startTransitionToDedicatedConfigServer` command:
 
-```javascript
-db.adminCommand( { startTransitionToDedicatedConfigServer: 1 } )
-```
+.. code-block:: javascript
 
-To stop transitioning from an embedded to a dedicated config server, use the :method:`db.adminCommand` method to run the :dbcommand:`stopTransitionToDedicatedConfigServer` command:
+   db.adminCommand( { startTransitionToDedicatedConfigServer: 1 } )
 
-```javascript
-db.adminCommand( { stopTransitionToDedicatedConfigServer: 1 } )
-```
+To stop transitioning from an embedded to a dedicated config server, use 
+the :method:`db.adminCommand` method to run the 
+:dbcommand:`stopTransitionToDedicatedConfigServer` command:
+
+.. code-block:: javascript
+
+   db.adminCommand( { stopTransitionToDedicatedConfigServer: 1 } )
 
 ## Learn More
 
 - :dbcommand:`startTransitionToDedicatedConfigServer`
-- :dbcommand:`getTransitionToDedicatedConfigServerStatus`
+- :dbcommand:`getTransitionToDedicatedConfigServerStatus` 

@@ -1,14 +1,15 @@
 ---
 type: "Framework Learn Page"
-framework: "pydantic"
+framework: "Pydantic"
 source_repo: "https://github.com/pydantic/pydantic"
 source_branch: "main"
 source_path: "docs/concepts/strict_mode.md"
-source_commit: "a2a6577d4c329dd574a45dbb01a8feaa16b1ad3d"
-source_commit_short: "a2a6577d"
-source_commit_date: "2026-07-23T15:38:17Z"
-generated_at: "2026-07-25T11:50:12Z"
+source_commit: "4bc21c0fa28323c0f3e0be93c9ad114b705029c6"
+source_commit_short: "4bc21c0"
+source_commit_date: "2026-08-29T11:30:40+02:00"
+generated_at: "2026-08-29T09:38:50.590439Z"
 ---
+# Strict_Mode
 
 ??? api "API Documentation"
     [`pydantic.types.Strict`][pydantic.types.Strict]<br>
@@ -54,6 +55,11 @@ except ValidationError as exc:
       Input should be a valid integer [type=int_type, input_value='123', input_type=str]
     """
 ```
+
+One caveat when enabling strict mode on models an existing application relies on: inputs that were
+being quietly coerced will start failing. If you can't audit every caller, it helps to watch validation
+failures while you roll the change out. [Logfire](../integrations/logfire.md) counts successful and
+failed validations as metrics, and can record the rejected values included in structured errors.
 
 Strict mode can be enabled in various ways:
 

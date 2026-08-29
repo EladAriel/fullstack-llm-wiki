@@ -4,16 +4,15 @@ framework: "Langfuse"
 source_repo: "https://github.com/langfuse/langfuse-docs"
 source_branch: "main"
 source_path: "content/docs/observability/best-practices.mdx"
-source_commit: "fcd1eca34a924867563c3c4e801254c4e66c0021"
-source_commit_short: "fcd1eca3"
-source_commit_date: "2026-07-25T00:45:45Z"
-generated_at: "2026-07-25T11:51:12Z"
+source_commit: "ba26344559edee69ba55c5d3aa80e632f56c1626"
+source_commit_short: "ba26344"
+source_commit_date: "2026-08-29T02:57:18+00:00"
+generated_at: "2026-08-29T09:38:37.747178Z"
 ---
-
 ---
 title: What does a good trace look like?
 sidebarTitle: Best Practices
-description: Best practices for structuring Langfuse traces — scope, naming, input/output, and attributes — so that debugging, evaluation, and cost tracking work well.
+description: Best practices for structuring Langfuse traces — scope, nesting, naming, input/output, and attributes — so that debugging, evaluation, and cost tracking work well.
 ---
 
 import { Fan, Wrench } from "lucide-react";
@@ -55,7 +54,7 @@ A trace shows up in the Langfuse UI as a trace tree and an [agent graph](/docs/o
 
 ## Look at the trace tree
 
-When you click on a trace, you see the trace tree. There are two things you can check:
+When you click on a trace, you see the trace tree. There are a few things you can check:
 
 ### Are the right steps showing up?
 
@@ -72,7 +71,36 @@ Framework integrations typically set these types automatically. If you're instru
 
 A tool call should nest under the `agent` or `span` that orchestrates the step, as a sibling of the `generation` that requested it, so the tree shows which step each action belongs to instead of leaving tool calls dangling at the trace root.
 
+<Callout type="info">
+
 Framework integrations usually get this right automatically. If you're instrumenting manually, see [nesting observations](/docs/observability/sdk/instrumentation#nesting-observations).
+
+</Callout>
+
+**Beware of aggregating LLM calls.** You should see a <Fan size={16} className="text-muted-magenta inline" /> `generation` for each model invocation in an agent loop, interleaved with the <Wrench size={16} className="text-orange-600 inline" /> `tool` calls it requested. Avoid wrapping the whole loop in one parent generation that only records the final output. This would make it impossible to:
+
+- see what the agent decided after each tool result
+- see which tool call has blown up your agent's context window (useful when optimizing cost)
+
+<div className="grid grid-cols-1 md:grid-cols-2 mt-4 gap-4">
+
+<div>
+
+**One generation wrapping the whole loop.** You only see aggregated cost and the final output.
+
+![Agent loop collapsed into one generation](/images/docs/faq/good-trace-agent-collapsed-generation.png)
+
+</div>
+
+<div>
+
+**Each model invocation as its own generation.** You can see reasoning, tokens, cost after every step.
+
+![Agent loop with interleaved generations](/images/docs/faq/good-trace-agent-interleaved-generations.png)
+
+</div>
+
+</div>
 
 ### Is there noise you don't need?
 

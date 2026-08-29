@@ -1,7 +1,7 @@
 ---
 type: "Framework Learn Directory Index"
 framework: "Material UI"
-generated_at: "2026-07-25T13:39:41.060460Z"
+generated_at: "2026-08-29T09:40:18.313874Z"
 ---
 # Guides
 
@@ -17,3 +17,16 @@ This directory contains Material UI learning pages related to guides.
 
 ## Pages in This Directory
 
+
+## Subdirectories
+
+- [Api](api/index.md)
+- [Building Extensible Themes](building-extensible-themes/index.md)
+- [Composition](composition/index.md)
+- [Content Security Policy](content-security-policy/index.md)
+- [Localization](localization/index.md)
+- [Minimizing Bundle Size](minimizing-bundle-size/index.md)
+- [Responsive Ui](responsive-ui/index.md)
+- [Server Rendering](server-rendering/index.md)
+- [Testing](testing/index.md)
+- [Typescript](typescript/index.md)

@@ -1,133 +1,251 @@
 ---
 type: "Framework Learn Page"
-framework: "mongodb"
+framework: "MongoDB"
 source_repo: "https://github.com/mongodb/docs.git"
 source_branch: "main"
 source_path: "content/manual/manual/source/reference/operator/query/mod.txt"
-source_commit: "ab9db26ed3d11618cdb61516d8180337d8e3f679"
-source_commit_short: "ab9db26e"
-source_commit_date: "2026-07-24T16:22:46-06:00"
-generated_at: "2026-07-25T11:51:15Z"
+source_commit: "b9f2bc487a2878b65e3c1f80024bebab76954f27"
+source_commit_short: "b9f2bc48"
+source_commit_date: "2026-08-28T17:09:45-05:00"
+generated_at: "2026-08-29T09:39:20.250608Z"
 ---
-
-===============================
-
 # $mod (query predicate operator)
+
+.. default-domain:: mongodb
+
+**facet:** :name: genre
+   :values: reference
+
+**meta:** :keywords: code example
+   :description: Select documents using the `$mod` operator to perform modulo operations, specifying a divisor and remainder for field values.
+
+**contents:** On this page
+   :local:
+   :backlinks: none
+   :depth: 1
+   :class: singlecol
 
 ## Definition
 
+**query:** $mod
+
+   Select documents where the value of a field divided by a divisor has
+   the specified remainder. That is, ``$mod`` performs a modulo 
+   operation to select documents. The first argument is the dividend, 
+   and the second argument is the remainder.
+
 ## Syntax
 
-To specify a `$mod` expression, use the following syntax:
+To specify a ``$mod`` expression, use the following syntax:
 
-```javascript
-{ field: { $mod: [ divisor, remainder ] } }
-```
+.. code-block:: javascript
+
+   { field: { $mod: [ divisor, remainder ] } }
+
+.. _mod-behavior:
 
 ## Behavior
 
-`$mod` returns an error if the `[ divisor, remainder ]` array doesn't contain two elements. For examples, see `mod-not-enough-elements` and `mod-too-many-elements` respectively.
+``$mod`` returns an error if the ``[ divisor, remainder ]`` array
+doesn't contain two elements. For examples, see
+:ref:`mod-not-enough-elements` and :ref:`mod-too-many-elements`
+respectively.
 
-Also, starting in MongoDB 5.1 (and 5.0.4), `$mod` returns an error if the `divisor` or `remainder` values evaluate to:
+Also, starting in MongoDB 5.1 (and 5.0.4), ``$mod``
+returns an error if the ``divisor`` or ``remainder`` values evaluate to:
 
-- `NaN` (not a number).
-- `Infinity`.
+- ``NaN`` (not a number).
+
+- ``Infinity``.
+
 - A value that can't be represented using a 64-bit integer.
-If a document in the collection contains a field where the value is  `NaN` (not a number) or `Infinity`, `$mod` doesn't include the document in the output.
+
+If a document in the collection contains a field where the value is  ``NaN`` 
+(not a number) or ``Infinity``, ``$mod`` doesn't include the document in the 
+output.
 
 ### Negative Dividend
 
-.. include:: /includes/negative-dividend.rst
+**include:** /includes/negative-dividend.rst
 
-For an example, see `<mod-qo-negative-dividend-example>`.
+For an example, see :ref:`<mod-qo-negative-dividend-example>`.
 
 ## Examples
 
-### Use `$mod` to Select Documents
+### Use ``$mod`` to Select Documents
 
-Create an `inventory` collection:
+Create an ``inventory`` collection:
 
-```javascript
-db.inventory.insertMany( [
-   { _id: 1, item: "abc123", qty: 0 },
-   { _id: 2, item: "xyz123", qty: 5 },
-   { _id: 3, item: "ijk123", qty: 12 }
-] )
-```
+.. code-block:: javascript
 
-Then, the following query selects those documents in the `inventory` collection where value of the `qty` field modulo `4` equals `0`:
+   db.inventory.insertMany( [
+      { _id: 1, item: "abc123", qty: 0 },
+      { _id: 2, item: "xyz123", qty: 5 },
+      { _id: 3, item: "ijk123", qty: 12 }
+   ] )
 
-```javascript
-db.inventory.find( { qty: { $mod: [ 4, 0 ] } } )
-```
+Then, the following query selects those documents in the
+``inventory`` collection where value of the ``qty`` field modulo
+``4`` equals ``0``:
+
+.. code-block:: javascript
+
+   db.inventory.find( { qty: { $mod: [ 4, 0 ] } } )
 
 The query returns the following documents:
 
-```json
-[
-  { _id: 1, item: 'abc123', qty: 0 },
-  { _id: 3, item: 'ijk123', qty: 12 }
-]
-```
+.. code-block:: json
+   :copyable: false
+
+   [
+     { _id: 1, item: 'abc123', qty: 0 },
+     { _id: 3, item: 'ijk123', qty: 12 }
+   ]
+
+.. _mod-not-enough-elements:
 
 ### Not Enough Elements Error
 
-The :query:`$mod` operator errors when passed an array with fewer than two elements.
+The :query:`$mod` operator errors when passed an array with fewer than
+two elements.
 
-Array with Single Element `````````````````````````
+### Array with Single Element
 
-The following operation incorrectly passes the :query:`$mod` operator an array that contains a single element:
+The following operation incorrectly passes the :query:`$mod` operator
+an array that contains a single element:
 
-```javascript
-db.inventory.find( { qty: { $mod: [ 4 ] } } )
-```
+.. code-block:: javascript
 
-The statement results in the following error:
-
-```javascript
-MongoServerError: malformed mod, not enough elements
-```
-
-Empty Array ```````````
-
-The following operation incorrectly passes the :query:`$mod` operator an empty array:
-
-```javascript
-db.inventory.find( { qty: { $mod: [ ] } } )
-```
+   db.inventory.find( { qty: { $mod: [ 4 ] } } )
 
 The statement results in the following error:
 
-```javascript
-MongoServerError: malformed mod, not enough elements
-```
+.. code-block:: javascript
+   :copyable: false
+
+   MongoServerError: malformed mod, not enough elements
+
+### Empty Array
+
+The following operation incorrectly passes the :query:`$mod` operator
+an empty array:
+
+.. code-block:: javascript
+
+   db.inventory.find( { qty: { $mod: [ ] } } )
+
+The statement results in the following error:
+
+.. code-block:: javascript
+   :copyable: false
+
+   MongoServerError: malformed mod, not enough elements
+
+.. _mod-too-many-elements:
 
 ### Too Many Elements Error
 
-The :query:`$mod` operator errors when passed an array with more than two elements.
+The :query:`$mod` operator errors when passed an array with more than
+two elements.
 
-For example, the following operation attempts to use the :query:`$mod` operator with an array that contains four elements:
+For example, the following operation attempts to use the :query:`$mod`
+operator with an array that contains four elements:
 
-```javascript
-db.inventory.find( { qty: { $mod: [ 4, 1, 2, 3 ] } } )
-```
+.. code-block:: javascript
+
+   db.inventory.find( { qty: { $mod: [ 4, 1, 2, 3 ] } } )
 
 The statement results in the following error:
 
-```javascript
-MongoServerError: malformed mod, too many elements
-```
+.. code-block:: javascript
+   :copyable: false
+
+   MongoServerError: malformed mod, too many elements
 
 ### Floating Point Arguments
 
-The `$mod` expression rounds decimal input towards zero.
+The ``$mod`` expression rounds decimal input towards zero.
 
 The following examples demonstrate this behavior:
 
-Each query applies `4` to the `$mod` expression regardless of decimal points, resulting in the same result set.
+**example:** Input query:
+
+   .. code-block:: javascript
+
+      db.inventory.find( { qty: { $mod: [ 4.0, 0 ] } } )
+
+   Results:
+
+   .. code-block:: json
+      :copyable: false
+
+      [
+        { _id: 1, item: 'abc123', qty: 0 },
+        { _id: 3, item: 'ijk123', qty: 12 }
+      ]
+
+**example:** Input query:
+
+   .. code-block:: javascript
+
+      db.inventory.find( { qty: { $mod: [ 4.5, 0 ] } } )
+
+   Results:
+
+   .. code-block:: json
+      :copyable: false
+
+      [
+        { _id: 1, item: 'abc123', qty: 0 },
+        { _id: 3, item: 'ijk123', qty: 12 }
+      ]
+
+**example:** Input query:
+
+   .. code-block:: javascript
+
+      db.inventory.find( { qty: { $mod: [ 4.99, 0 ] } } )
+
+   Results:
+
+   .. code-block:: json
+      :copyable: false
+
+      [
+        { _id: 1, item: 'abc123', qty: 0 },
+        { _id: 3, item: 'ijk123', qty: 12 }
+      ]
+
+Each query applies ``4`` to the ``$mod`` expression regardless of 
+decimal points, resulting in the same result set.
+
+.. _mod-qo-negative-dividend-example:
 
 ### Negative Dividend
 
-The `$mod` expression produces a negative result when the dividend is negative.
+The ``$mod`` expression produces a negative result when the dividend
+is negative. 
 
 The following example demonstrates this behavior:
+
+**example:** Input query:
+
+   .. code-block:: javascript
+
+      db.inventory.find( { qty: { $mod: [ -4, -0 ] } } )
+
+   This query returns two documents because the ``qty`` has a remainder
+   of ``-0`` when the dividend is negative and ``-0`` equals ``0`` in 
+   JavaScript. For details on this equality, see the 
+   `official JavaScript documentation 
+   <https://developer.mozilla.org/en-US/docs/Web/JavaScript/Data_structures#number_type>`_.
+
+   Results:
+
+   .. code-block:: json
+      :copyable: false
+
+      [
+        { _id: 1, item: 'abc123', qty: 0 },
+        { _id: 3, item: 'ijk123', qty: 12 }
+      ]

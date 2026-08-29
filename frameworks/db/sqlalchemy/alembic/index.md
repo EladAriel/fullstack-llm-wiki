@@ -1,16 +1,17 @@
-# sqlalchemy/alembic Learn Wiki
+# Alembic Learn Wiki
 
-This is a local LLM-friendly wiki generated from the official sqlalchemy/alembic documentation.
+This is a local LLM-friendly wiki generated from the official Alembic documentation.
 
 ## Status
 
-- Framework: `sqlalchemy/alembic`
+- Framework: `Alembic`
 - Source repo: `https://github.com/sqlalchemy/alembic`
 - Source branch: `main`
 - Source docs path: `docs/build`
-- Source commit: `7b2af57e`
-- Source commit date: `2026-07-16T13:04:26-04:00`
-- Wiki generated at: `2026-07-25T11:47:25Z`
+- Source commit: `c116cbc`
+- Source commit date: `2026-08-14T03:25:08-04:00`
+- Wiki generated at: `2026-08-29T09:39:28.249277Z`
+- Page count: `22`
 
 ## How the IDE LLM should use this wiki
 
@@ -30,28 +31,3 @@ This is a local LLM-friendly wiki generated from the official sqlalchemy/alembic
 
 - [Content Index](content/index.md)
 - [Api](content/api/index.md)
-
-## All Pages
-
-- [Original Source Index](content/_source_index.md)
-- [Original Source Index](content/api/_source_index.md)
-- [Autogenerate](content/api/autogenerate.md)
-- [Commands](content/api/commands.md)
-- [Config](content/api/config.md)
-- [Ddl](content/api/ddl.md)
-- [Exceptions](content/api/exceptions.md)
-- [Operations](content/api/operations.md)
-- [Overview](content/api/overview.md)
-- [Plugins](content/api/plugins.md)
-- [Runtime](content/api/runtime.md)
-- [Script](content/api/script.md)
-- [Autogenerate](content/autogenerate.md)
-- [Batch](content/batch.md)
-- [Branches](content/branches.md)
-- [Changelog](content/changelog.md)
-- [Cookbook](content/cookbook.md)
-- [Front](content/front.md)
-- [Naming](content/naming.md)
-- [Offline](content/offline.md)
-- [Ops](content/ops.md)
-- [Tutorial](content/tutorial.md)

@@ -1,65 +1,86 @@
 ---
 type: "Framework Learn Page"
-framework: "mongodb"
+framework: "MongoDB"
 source_repo: "https://github.com/mongodb/docs.git"
 source_branch: "main"
 source_path: "content/manual/manual/source/reference/method/ObjectId.createFromHexString.txt"
-source_commit: "ab9db26ed3d11618cdb61516d8180337d8e3f679"
-source_commit_short: "ab9db26e"
-source_commit_date: "2026-07-24T16:22:46-06:00"
-generated_at: "2026-07-25T11:51:15Z"
+source_commit: "b9f2bc487a2878b65e3c1f80024bebab76954f27"
+source_commit_short: "b9f2bc48"
+source_commit_date: "2026-08-28T17:09:45-05:00"
+generated_at: "2026-08-29T09:39:19.896231Z"
 ---
-
-===============================================
+.. _ObjectId.createFromHexString:
 
 # ObjectId.createFromHexString() (mongosh method)
 
+**meta:** :description: Create an ObjectId from a hexadecimal string using `ObjectId.createFromHexString()` for MongoDB deployments.
+
+.. default-domain:: mongodb
+
+**contents:** On this page
+   :local:
+   :backlinks: none
+   :depth: 1
+   :class: singlecol
+
 ## Definition
 
-Creates an `ObjectId` from a hexadecimal value.
+Creates an :term:`ObjectId` from a hexadecimal value.
 
 ## Compatibility
 
-This method is available in deployments hosted in the following environments:
+This method is available in deployments hosted in the following environments: 
 
-.. include:: /includes/fact-environments-atlas-only.rst
+**include:** /includes/fact-environments-atlas-only.rst
 
-.. include:: /includes/fact-environments-onprem-only.rst
+**include:** /includes/fact-environments-onprem-only.rst
 
 ## Syntax
 
-The `hexadecimalString` field specifies a string that contains a 24 character hexadecimal value. For example, `"64c13ab08edf48a008793cac"`.
+**method:** ObjectId.createFromHexString( <hexadecimalString> )
+
+The ``hexadecimalString`` field specifies a string that contains a 24
+character hexadecimal value. For example,
+``"64c13ab08edf48a008793cac"``.
 
 ## Examples
 
-The following examples show how to add an object identifier to a document using `ObjectId.createFromHexString()` and how the object identifier appears in the output when retrieved.
+The following examples show how to add an object identifier to a
+document using ``ObjectId.createFromHexString()`` and how the object
+identifier appears in the output when retrieved.
 
 ### Create Collection Containing Document with Object Identifier
 
-The following example creates a collection named `objectIdentifierValuesFromHex`:
+The following example creates a collection named
+``objectIdentifierValuesFromHex``:
 
-```javascript
-db.objectIdentifierValuesFromHex.insertOne( {
-   _id: 0,
-   objectIdentifierValue: ObjectId.createFromHexString( "64c13ab08edf48a008793cac" )
-} )
-```
+.. code-block:: javascript
+   :emphasize-lines: 3
 
-The `objectIdentifierValue` field contains the object identifier created from the hexadecimal string specified in `ObjectId.createFromHexString()`.
+   db.objectIdentifierValuesFromHex.insertOne( {
+      _id: 0,
+      objectIdentifierValue: ObjectId.createFromHexString( "64c13ab08edf48a008793cac" )
+   } )
+
+The ``objectIdentifierValue`` field contains the object identifier
+created from the hexadecimal string specified in
+``ObjectId.createFromHexString()``.
 
 ### Retrieve Document from Collection with Object Identifier
 
 The following example retrieves the document:
 
-```javascript
-db.objectIdentifierValuesFromHex.findOne( { _id: 0 } )
-```
+.. code-block:: javascript
+
+   db.objectIdentifierValuesFromHex.findOne( { _id: 0 } )
 
 Example output:
 
-```javascript
-{
-   _id: 0,
-   objectIdentifierValue: ObjectId("64c13ab08edf48a008793cac")
-}
-```
+.. code-block:: javascript
+   :copyable: false
+   :emphasize-lines: 3
+
+   {
+      _id: 0,
+      objectIdentifierValue: ObjectId("64c13ab08edf48a008793cac")
+   }

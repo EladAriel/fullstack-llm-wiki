@@ -1,15 +1,14 @@
 ---
 type: "Framework Learn Page"
-framework: "redis"
+framework: "Redis"
 source_repo: "https://github.com/redis/docs.git"
 source_branch: "main"
 source_path: "content/develop/use-cases/streaming/dotnet/_index.md"
-source_commit: "9d30f68c3dad1a6b3b7d30fe604b911348ce8152"
-source_commit_short: "9d30f68c"
-source_commit_date: "2026-07-24T10:52:10-07:00"
-generated_at: "2026-07-25T11:51:22Z"
+source_commit: "f8693349287b0efbef3c865b6f6a2aceca88594d"
+source_commit_short: "f869334"
+source_commit_date: "2026-08-28T10:01:19-05:00"
+generated_at: "2026-08-29T09:38:56.120057Z"
 ---
-
 ---
 aliases:
 - /develop/use-cases/streaming/stackexchange.redis
@@ -26,7 +25,7 @@ title: Redis streaming with StackExchange.Redis
 weight: 6
 ---
 
-This guide shows you how to build a Redis-backed event-streaming pipeline in C# with [StackExchange.Redis](https://stackexchange.github.io/StackExchange.Redis/). It includes a small local web server built with ASP.NET Core's minimal API so you can produce events into a single Redis Stream, watch two independent consumer groups read it at their own pace, and recover stuck deliveries with `XAUTOCLAIM` after simulating a consumer crash.
+This guide shows you how to build a Redis-backed event-streaming pipeline in C# with [StackExchange.Redis](https://seredis.dev/). It includes a small local web server built with ASP.NET Core's minimal API so you can produce events into a single Redis Stream, watch two independent consumer groups read it at their own pace, and recover stuck deliveries with `XAUTOCLAIM` after simulating a consumer crash.
 
 ## Overview
 
@@ -518,4 +517,4 @@ This example uses the following Redis commands:
   [`XINFO GROUPS`]({{< relref "/commands/xinfo-groups" >}}), and
   [`XINFO CONSUMERS`]({{< relref "/commands/xinfo-consumers" >}}) for observability.
 
-See the [StackExchange.Redis docs](https://stackexchange.github.io/StackExchange.Redis/) for the full client reference, and the [Streams overview]({{< relref "/develop/data-types/streams" >}}) for the deeper conceptual model — consumer groups, the PEL, claim semantics, capped streams, and the differences with Kafka partitions.
+See the [StackExchange.Redis docs](https://seredis.dev/) for the full client reference, and the [Streams overview]({{< relref "/develop/data-types/streams" >}}) for the deeper conceptual model — consumer groups, the PEL, claim semantics, capped streams, and the differences with Kafka partitions.

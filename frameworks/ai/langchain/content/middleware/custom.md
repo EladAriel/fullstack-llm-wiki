@@ -4,12 +4,11 @@ framework: "LangChain"
 source_repo: "https://github.com/langchain-ai/docs"
 source_branch: "main"
 source_path: "src/oss/langchain/middleware/custom.mdx"
-source_commit: "2aae1dfc98ee953a9a5185fb6fcdd9efb3f4d878"
-source_commit_short: "2aae1dfc"
-source_commit_date: "2026-07-25T00:27:23Z"
-generated_at: "2026-07-25T11:51:05Z"
+source_commit: "a174f9cf7c91ee5eb14ee2382eb48bfe6e4956e9"
+source_commit_short: "a174f9c"
+source_commit_date: "2026-08-28T17:04:12-07:00"
+generated_at: "2026-08-29T09:38:24.254869Z"
 ---
-
 ---
 title: Custom middleware
 ---
@@ -1183,6 +1182,35 @@ console.log(result.messages.at(-1)?.content);
 ```
 :::
 
+:::python
+
+## Configure tracing
+
+<Note>Requires `langchain>=1.3.15`.</Note>
+
+Middleware hook spans trace their inputs and outputs by default. Set a `trace_policy` to shape what they record. `TracePolicy` accepts callables such as `process_inputs` and `process_outputs` that transform the traced value; `omit_payload` drops it entirely. This can be useful as an optimization when the full message history is uninformative to the function of the middleware.
+
+To omit the input payload from a middleware's trace:
+
+```python
+from langchain.agents.middleware import AgentMiddleware, TracePolicy, omit_payload
+
+class MyMiddleware(AgentMiddleware):
+    trace_policy = TracePolicy(process_inputs=omit_payload)
+```
+
+To apply a policy to all middleware, configure a global default:
+
+```python
+from langchain.agents.middleware import configure_trace_policy, TracePolicy, omit_payload
+
+configure_trace_policy(TracePolicy(process_inputs=omit_payload))  # pass None to clear
+```
+
+A middleware's own `trace_policy` overrides the global default.
+
+:::
+
 ## Best practices
 
 1. Keep middleware focused - each should do one thing well
@@ -1497,7 +1525,7 @@ const myOtherMiddleware = createMiddleware({
 });
 
 const agent = createAgent({
-  model: "google_genai:gemini-3.5-flash",
+  model: "google_genai:gemini-3.6-flash",
   systemPrompt: "You are a helpful assistant.",
   middleware: [myMiddleware, myOtherMiddleware],
 });

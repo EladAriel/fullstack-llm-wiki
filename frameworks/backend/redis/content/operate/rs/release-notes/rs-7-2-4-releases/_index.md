@@ -1,14 +1,15 @@
 ---
 type: "Framework Learn Page"
-framework: "redis"
+framework: "Redis"
 source_repo: "https://github.com/redis/docs.git"
 source_branch: "main"
 source_path: "content/operate/rs/release-notes/rs-7-2-4-releases/_index.md"
-source_commit: "9d30f68c3dad1a6b3b7d30fe604b911348ce8152"
-source_commit_short: "9d30f68c"
-source_commit_date: "2026-07-24T10:52:10-07:00"
-generated_at: "2026-07-25T11:51:22Z"
+source_commit: "f8693349287b0efbef3c865b6f6a2aceca88594d"
+source_commit_short: "f869334"
+source_commit_date: "2026-08-28T10:01:19-05:00"
+generated_at: "2026-08-29T09:38:55.549277Z"
 ---
+# _Index
 
 ---
 Title: Redis Enterprise Software release notes 7.2.4
@@ -28,6 +29,17 @@ linkTitle: 7.2.4 releases
 toc: 'true'
 weight: 71
 ---
+
+{{< warning >}}
+Redis Software 7.2 reached end of life on February 28, 2026. It no longer
+receives security patches, bug fixes, or maintenance releases.
+Support for 7.2-specific issues is limited per your subscription agreement,
+and you may be asked to upgrade before an issue can be investigated.
+
+Upgrade to a supported version. See the
+[supported upgrade paths]({{< relref "/operate/rs/references/upgrade-paths" >}})
+and the [Redis Software product lifecycle]({{< relref "/operate/rs/installing-upgrading/product-lifecycle#endoflife-schedule" >}}).
+{{< /warning >}}
 
 ​[​Redis Enterprise Software version 7.2.4](https://redis.io/downloads/#software) is now available!
 

@@ -1,125 +1,298 @@
 ---
 type: "Framework Learn Page"
-framework: "mongodb"
+framework: "MongoDB"
 source_repo: "https://github.com/mongodb/docs.git"
 source_branch: "main"
 source_path: "content/manual/manual/source/tutorial/build-indexes-on-replica-sets.txt"
-source_commit: "ab9db26ed3d11618cdb61516d8180337d8e3f679"
-source_commit_short: "ab9db26e"
-source_commit_date: "2026-07-24T16:22:46-06:00"
-generated_at: "2026-07-25T11:51:15Z"
+source_commit: "b9f2bc487a2878b65e3c1f80024bebab76954f27"
+source_commit_short: "b9f2bc48"
+source_commit_date: "2026-08-28T17:09:45-05:00"
+generated_at: "2026-08-29T09:39:19.571372Z"
 ---
-
-============================================
+.. _index-build-on-replica-sets:
+.. _index-building-replica-sets:
 
 # Create a Rolling Index Build on Replica Sets
 
+**meta:** :description: Create indexes on replica sets using a rolling build process to manage CPU and cache utilization.
+
+.. default-domain:: mongodb
+
+**contents:** On this page
+   :local:
+   :backlinks: none
+   :depth: 1
+   :class: singlecol
+
 ## About this Task
 
-Rolling index builds are an alternative to `default index builds <index-operations>`.
+Rolling index builds are an alternative to :ref:`default index builds
+<index-operations>`.
 
-.. include:: /includes/rolling-index-build-cases.rst
+**include:** /includes/rolling-index-build-cases.rst
 
 ## Considerations
 
 ### Unique Indexes
 
-To create `unique indexes <index-type-unique>` using the following procedure, you must stop all writes to the collection during this procedure.
+To create :ref:`unique indexes <index-type-unique>` using the following
+procedure, you must stop all writes to the collection during this
+procedure.
 
-If you cannot stop all writes to the collection during this procedure, do not use the procedure on this page. Instead, build your unique index on the collection by issuing :method:`db.collection.createIndex()` on the primary for a replica set.
+If you cannot stop all writes to the collection during this procedure,
+do not use the procedure on this page. Instead, build your unique index
+on the collection by issuing :method:`db.collection.createIndex()` on
+the primary for a replica set.
 
 ### Oplog Size
 
-Ensure that your `oplog` is large enough to permit the indexing or re-indexing operation to complete without falling too far behind to catch up. See the `oplog sizing <replica-set-oplog-sizing>` documentation for additional information.
+Ensure that your :term:`oplog` is large enough to permit the indexing
+or re-indexing operation to complete without falling too far behind to
+catch up. See the :ref:`oplog sizing <replica-set-oplog-sizing>`
+documentation for additional information. 
 
-Rolling index builds lower the resiliency of your cluster and increase build duration.
+Rolling index builds lower the resiliency of your cluster and increase build 
+duration.
 
 ## Prerequisites
 
-For building unique indexes To create `unique indexes <index-type-unique>` using the following procedure, you must stop all writes to the collection during the index build. Otherwise, you may end up with inconsistent data across the replica set members.
+For building unique indexes
+   To create :ref:`unique indexes <index-type-unique>` using the
+   following procedure, you must stop all writes to the collection
+   during the index build. Otherwise, you may end up with inconsistent
+   data across the replica set members. 
 
-> **Warning:**    If you cannot stop all writes to the collection, do not use the
-   following procedure to create unique indexes.
+   .. warning::
+
+      If you cannot stop all writes to the collection, do not use the
+      following procedure to create unique indexes.
 
 ## Procedure
 
-> **Important:** The following procedure to build indexes in a rolling fashion
-applies to replica set deployments, and not sharded clusters. For
-the procedure for sharded clusters, see
-`/tutorial/build-indexes-on-sharded-clusters` instead.
+**important:** The following procedure to build indexes in a rolling fashion
+   applies to replica set deployments, and not sharded clusters. For
+   the procedure for sharded clusters, see
+   :doc:`/tutorial/build-indexes-on-sharded-clusters` instead.
+
+.. _tutorial-index-on-replica-sets-stop-one-member:
 
 ### 1. Hide and Restart One Secondary.
 
-Run the following commands on your primary node to hide the secondary that will build the new index.
+Run the following commands on your primary node to hide the secondary
+that will build the new index.
 
-In this example, the secondary that will build the new index is the third node in `cfg.members`.
+In this example, the secondary that will build the new index is the
+third node in ``cfg.members``.
 
-```bash
-var cfg = rs.conf();
-// Record originalPriority so that you can reset it later.
-var originalPriority = cfg.members[2].priority;
-cfg.members[2].priority = 0;
-cfg.members[2].hidden = 1;
-rs.reconfig(cfg);
-```
+.. code-block:: bash
+
+   var cfg = rs.conf();
+   // Record originalPriority so that you can reset it later.
+   var originalPriority = cfg.members[2].priority;
+   cfg.members[2].priority = 0;
+   cfg.members[2].hidden = 1;
+   rs.reconfig(cfg);
 
 ### 2. Stop One Secondary and Restart as a Standalone.
 
-Stop the :binary:`~bin.mongod` process associated with a secondary. Restart after making the following configuration updates:
+Stop the :binary:`~bin.mongod` process associated with a secondary.
+Restart after making the following configuration updates:
 
-port, you ensure that the other members of the replica set and all clients will not contact the member while you are building the index.
+**tabs:** tabs:
+      - id: config-file
+        name: Configuration File
+        content: |
+
+          If you are using a configuration file, make the following
+          configuration updates:
+
+          - Comment out the :setting:`replication.replSetName` option.
+
+          - Change the :setting:`net.port` to a different port. [#different-port]_
+            Make a note of the original port setting as a comment.
+
+          - Set parameter ``disableLogicalSessionCacheRefresh`` to
+            ``true`` in the :setting:`setParameter` section.
+
+          For example, the updated configuration file for a replica
+          set member will include content like the following example:
+
+          .. code-block:: yaml
+
+             net:
+                bindIp: localhost,<hostname(s)|ip address(es)>
+                port: 27217
+             #   port: 27017
+             #replication:
+             #   replSetName: myRepl
+             setParameter:
+                disableLogicalSessionCacheRefresh: true
+
+          Other settings (e.g. :setting:`storage.dbPath`, etc.) remain the same.
+
+          And restart:
+
+          .. code-block:: bash
+
+             mongod --config <path/To/ConfigFile>
+
+      - id: command-line
+        name: Command-line Options
+        content: |
+
+          If using command-line options, make the following
+          configuration updates:
+
+          - Remove :option:`--replSet <mongod --replSet>`.
+
+          - Modify :option:`--port <mongod --port>` to a different port. [#different-port]_
+
+          - Set parameter ``disableLogicalSessionCacheRefresh``
+            to ``true`` in the :option:`--setParameter <mongod
+            --setParameter>` option.
+
+          For example, if your replica set member *normally* runs
+          with on the default port of ``27017`` and the
+          :option:`--replSet <mongod --replSet>` option, you would
+          specify a different port, omit the ``--replSet`` option,
+          and set ``disableLogicalSessionCacheRefresh`` parameter
+          to true:
+
+          .. code-block:: bash
+
+             mongod --port 27217 --setParameter disableLogicalSessionCacheRefresh=true
+
+          Other settings (e.g. :option:`--dbpath <mongod --dbpath>`, etc.) remain the same.
+
+.. [#different-port] By running the :binary:`~bin.mongod` on a different
+   port, you ensure that the other members of the replica set and all
+   clients will not contact the member while you are building the
+   index.
+
+.. _tutorial-index-on-replica-sets-build-index:
 
 ### 3. Build the Index.
 
-Connect directly to the :binary:`~bin.mongod` instance running as a standalone on the new port and create the new index for this instance.
+Connect directly to the :binary:`~bin.mongod` instance running as a
+standalone on the new port and create the new index for this
+instance.
 
-For example, connect :binary:`~bin.mongosh` to the instance, and use the :method:`~db.collection.createIndex()` to create an ascending index on the `username` field of the `records` collection:
+For example, connect :binary:`~bin.mongosh` to the instance, and
+use the :method:`~db.collection.createIndex()` to create an ascending
+index on the ``username`` field of the ``records`` collection:
 
-```bash
-db.records.createIndex( { username: 1 } )
-```
+.. code-block:: bash
 
-### 4. Restart the Program `mongod` as a Replica Set Member.
+   db.records.createIndex( { username: 1 } )
 
-When the index build completes, shutdown the :binary:`~bin.mongod` instance. To return the node to its original configuration, undo the configuration changes that you made when you started the node as a standalone. Then, restart the node as a member of the replica set.
+.. _tutorial-index-on-replica-sets-restart-mongod:
 
-> **Important:** Be sure to remove the `disableLogicalSessionCacheRefresh`
-parameter.
+### 4. Restart the Program ``mongod`` as a Replica Set Member.
 
+When the index build completes, shutdown the :binary:`~bin.mongod`
+instance. To return the node to its original configuration, undo the
+configuration changes that you made when you started the node as a
+standalone. Then, restart the node as a member of the replica set.
+
+**important:** Be sure to remove the ``disableLogicalSessionCacheRefresh``
+   parameter.
+   
 For example, to restart your replica set member:
 
-> **Important:** Allow replication to catch up on this member before you begin the
-next step.
+**tabs:** tabs:
+      - id: config-file
+        name: Configuration File
+        content: |
+
+          If you are using a configuration file:
+
+          - Revert to the original port number.
+
+          - Uncomment the :setting:`replication.replSetName`.
+
+          - Remove parameter ``disableLogicalSessionCacheRefresh``
+            in the :setting:`setParameter` section.
+
+          For example:
+
+          .. code-block:: yaml
+
+             net:
+                bindIp: localhost,<hostname(s)|ip address(es)>
+                port: 27017
+             replication:
+                replSetName: myRepl
+
+          Other settings (e.g. :setting:`storage.dbPath`, etc.) remain the same.
+
+          And restart:
+
+          .. code-block:: bash
+
+             mongod --config <path/To/ConfigFile>
+
+      - id: command-line
+        name: Command-line Options
+        content: |
+
+          If you are using command-line options, 
+
+          - Revert to the original port number
+
+          - Include the :option:`--replSet <mongod --replSet>`
+            option.
+
+          - Remove parameter ``disableLogicalSessionCacheRefresh``.
+
+          For example:
+
+          .. code-block:: bash
+
+             mongod --port 27017 --replSet myRepl
+
+          Other settings (e.g. :option:`--dbpath <mongod --dbpath>`, etc.) remain the same.
+
+**important:** Allow replication to catch up on this member before you begin the
+   next step. 
 
 ### 5. Unhide the Secondary.
 
-Run the following command on your primary to unhide the secondary node that built the index. In this example, the secondary node that built the index is the third node in `cfg.members`.
+Run the following command on your primary to unhide the secondary node
+that built the index. In this example, the secondary node that built the
+index is the third node in ``cfg.members``. 
 
-```bash
-var cfg = rs.conf();
-cfg.members[2].priority = originalPriority;
-cfg.members[2].hidden = false;
-rs.reconfig(cfg);
-```
+.. code-block:: bash
+
+   var cfg = rs.conf();
+   cfg.members[2].priority = originalPriority;
+   cfg.members[2].hidden = false;
+   rs.reconfig(cfg);
+
+
 
 ### 6. Repeat the Procedure for the Remaining Secondaries.
 
-Once the member catches up with the other members of the set, repeat the procedure one member at a time for the remaining secondary members:
+Once the member catches up with the other members of the set, repeat
+the procedure one member at a time for the remaining secondary members:
 
-A. `Hide and restart one secondary. <tutorial-index-on-replica-sets-stop-one-member>`
+A. :ref:`Hide and restart one secondary. <tutorial-index-on-replica-sets-stop-one-member>`
 
-B. `Build the index. <tutorial-index-on-replica-sets-build-index>`
+B. :ref:`Build the index. <tutorial-index-on-replica-sets-build-index>`
 
-C. `Restart the Program mongod as a replica set member. <tutorial-index-on-replica-sets-restart-mongod>`
+C. :ref:`Restart the Program mongod as a replica set member. <tutorial-index-on-replica-sets-restart-mongod>`
 
 ### 7. Build the Index on the Primary.
 
-When all the secondaries have the new index, step down the primary, restart it as a standalone using the procedure described above, and build the index on the former primary:
+When all the secondaries have the new index, step down the primary,
+restart it as a standalone using the procedure described above, 
+and build the index on the former primary:
 
-A. Use the :method:`rs.stepDown()` method in :binary:`~bin.mongosh` to step down the primary. Upon successful stepdown, the current primary becomes a secondary and the replica set members elect a new primary.
+A. Use the :method:`rs.stepDown()` method in :binary:`~bin.mongosh`
+   to step down the primary. Upon successful stepdown, the current primary
+   becomes a secondary and the replica set members elect a new primary.
 
-B. `Hide and restart one secondary. <tutorial-index-on-replica-sets-stop-one-member>`
+B. :ref:`Hide and restart one secondary. <tutorial-index-on-replica-sets-stop-one-member>`
 
-C. `Build the index. <tutorial-index-on-replica-sets-build-index>`
+C. :ref:`Build the index. <tutorial-index-on-replica-sets-build-index>`
 
-D. `Restart the Program mongod as a replica set member. <tutorial-index-on-replica-sets-restart-mongod>`
+D. :ref:`Restart the Program mongod as a replica set member. <tutorial-index-on-replica-sets-restart-mongod>`

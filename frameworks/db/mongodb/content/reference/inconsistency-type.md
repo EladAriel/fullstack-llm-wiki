@@ -1,40 +1,111 @@
 ---
 type: "Framework Learn Page"
-framework: "mongodb"
+framework: "MongoDB"
 source_repo: "https://github.com/mongodb/docs.git"
 source_branch: "main"
 source_path: "content/manual/manual/source/reference/inconsistency-type.txt"
-source_commit: "ab9db26ed3d11618cdb61516d8180337d8e3f679"
-source_commit_short: "ab9db26e"
-source_commit_date: "2026-07-24T16:22:46-06:00"
-generated_at: "2026-07-25T11:51:15Z"
+source_commit: "b9f2bc487a2878b65e3c1f80024bebab76954f27"
+source_commit_short: "b9f2bc48"
+source_commit_date: "2026-08-28T17:09:45-05:00"
+generated_at: "2026-08-29T09:39:19.718059Z"
 ---
+.. _inconsistency-types:
 
-################### Inconsistency Types ###################
+# Inconsistency Types
 
-.. versionadded:: 7.0
+**meta:** :description: Explore various inconsistency types identified by the `checkMetadataConsistency` command in sharding metadata and indexes.
 
-The :dbcommand:`checkMetadataConsistency` command performs a series of consistency checks on sharding metadata and indexes and returns an array of inconsistency documents.
+**versionadded:** 7.0
 
-## Contents
+The :dbcommand:`checkMetadataConsistency` command performs a series of consistency 
+checks on sharding metadata and indexes and returns an array of inconsistency
+documents.
 
-- /reference/inconsistency-type/CollectionAuxiliaryMetadataMismatch
-- /reference/inconsistency-type/CollectionOptionsMismatch
-- /reference/inconsistency-type/CollectionUUIDMismatch
-- /reference/inconsistency-type/CorruptedChunkShardKey
-- /reference/inconsistency-type/CorruptedZoneShardKey
-- /reference/inconsistency-type/HiddenShardedCollection
-- /reference/inconsistency-type/InconsistentIndex
-- /reference/inconsistency-type/MisplacedCollection
-- /reference/inconsistency-type/MissingLocalCollection
-- /reference/inconsistency-type/MissingRoutingTable
-- /reference/inconsistency-type/MissingShardKeyIndex
-- /reference/inconsistency-type/RangeDeletionMissingShardKeyIndex
-- /reference/inconsistency-type/RoutingTableMissingMaxKey
-- /reference/inconsistency-type/RoutingTableMissingMinKey
-- /reference/inconsistency-type/RoutingTableRangeGap
-- /reference/inconsistency-type/RoutingTableRangeOverlap
-- /reference/inconsistency-type/ShardCatalogCacheCollectionMetadataMismatch
-- /reference/inconsistency-type/TrackedUnshardedCollectionHasInvalidKey
-- /reference/inconsistency-type/TrackedUnshardedCollectionHasMultipleChunks
-- /reference/inconsistency-type/ZonesRangeOverlap
+.. list-table::
+   :header-rows: 1
+
+   * - Inconsistency Type
+     - Description
+
+   * - :data:`CollectionAuxiliaryMetadataMismatch`
+     - .. include:: /includes/inconsistency-type/CollectionAuxiliaryMetadataMismatch
+
+   * - :data:`CollectionOptionsMismatch`
+     - .. include:: /includes/inconsistency-type/CollectionOptionsMismatch
+   
+   * - :data:`CollectionUUIDMismatch`
+     - .. include:: /includes/inconsistency-type/CollectionUUIDMismatch
+
+   * - :data:`CorruptedChunkShardKey`
+     - .. include:: /includes/inconsistency-type/CorruptedChunkShardKey
+
+   * - :data:`CorruptedZoneShardKey`
+     - .. include:: /includes/inconsistency-type/CorruptedZoneShardKey
+
+   * - :data:`HiddenShardedCollection`
+     - .. include:: /includes/inconsistency-type/HiddenShardedCollection
+
+   * - :data:`InconsistentIndex`
+     - .. include:: /includes/inconsistency-type/InconsistentIndex
+
+   * - :data:`MisplacedCollection`
+     - .. include:: /includes/inconsistency-type/MisplacedCollection
+
+   * - :data:`MissingLocalCollection`
+     - .. include:: /includes/inconsistency-type/MissingLocalCollection
+   
+   * - :data:`MissingRoutingTable`
+     - .. include:: /includes/inconsistency-type/MissingRoutingTable
+
+   * - :data:`MissingShardKeyIndex`
+     - .. include:: /includes/inconsistency-type/MissingShardKeyIndex
+
+   * - :data:`RangeDeletionMissingShardKeyIndex`
+     - .. include:: /includes/inconsistency-type/RangeDeletionMissingShardKeyIndex
+
+   * - :data:`RoutingTableMissingMaxKey`
+     - .. include:: /includes/inconsistency-type/RoutingTableMissingMaxKey
+
+   * - :data:`RoutingTableMissingMinKey`
+     - .. include:: /includes/inconsistency-type/RoutingTableMissingMinKey
+
+   * - :data:`RoutingTableRangeGap`
+     - .. include:: /includes/inconsistency-type/RoutingTableRangeGap
+
+   * - :data:`RoutingTableRangeOverlap`
+     - .. include:: /includes/inconsistency-type/RoutingTableRangeOverlap
+
+   * - :data:`ShardCatalogCacheCollectionMetadataMismatch`
+     - .. include:: /includes/inconsistency-type/ShardCatalogCacheCollectionMetadataMismatch
+
+   * - :data:`TrackedUnshardedCollectionHasInvalidKey`
+     - .. include:: /includes/inconsistency-type/TrackedUnshardedCollectionHasInvalidKey
+
+   * - :data:`TrackedUnshardedCollectionHasMultipleChunks`
+     - .. include:: /includes/inconsistency-type/TrackedUnshardedCollectionHasMultipleChunks
+
+   * - :data:`ZonesRangeOverlap`
+     - .. include:: /includes/inconsistency-type/ZonesRangeOverlap
+
+**toctree:** :hidden:
+
+   /reference/inconsistency-type/CollectionAuxiliaryMetadataMismatch
+   /reference/inconsistency-type/CollectionOptionsMismatch
+   /reference/inconsistency-type/CollectionUUIDMismatch
+   /reference/inconsistency-type/CorruptedChunkShardKey
+   /reference/inconsistency-type/CorruptedZoneShardKey
+   /reference/inconsistency-type/HiddenShardedCollection
+   /reference/inconsistency-type/InconsistentIndex
+   /reference/inconsistency-type/MisplacedCollection
+   /reference/inconsistency-type/MissingLocalCollection
+   /reference/inconsistency-type/MissingRoutingTable
+   /reference/inconsistency-type/MissingShardKeyIndex
+   /reference/inconsistency-type/RangeDeletionMissingShardKeyIndex
+   /reference/inconsistency-type/RoutingTableMissingMaxKey
+   /reference/inconsistency-type/RoutingTableMissingMinKey
+   /reference/inconsistency-type/RoutingTableRangeGap
+   /reference/inconsistency-type/RoutingTableRangeOverlap
+   /reference/inconsistency-type/ShardCatalogCacheCollectionMetadataMismatch
+   /reference/inconsistency-type/TrackedUnshardedCollectionHasInvalidKey
+   /reference/inconsistency-type/TrackedUnshardedCollectionHasMultipleChunks
+   /reference/inconsistency-type/ZonesRangeOverlap

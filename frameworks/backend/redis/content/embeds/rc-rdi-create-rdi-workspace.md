@@ -1,14 +1,15 @@
 ---
 type: "Framework Learn Page"
-framework: "redis"
+framework: "Redis"
 source_repo: "https://github.com/redis/docs.git"
 source_branch: "main"
 source_path: "content/embeds/rc-rdi-create-rdi-workspace.md"
-source_commit: "9d30f68c3dad1a6b3b7d30fe604b911348ce8152"
-source_commit_short: "9d30f68c"
-source_commit_date: "2026-07-24T10:52:10-07:00"
-generated_at: "2026-07-25T11:51:22Z"
+source_commit: "f8693349287b0efbef3c865b6f6a2aceca88594d"
+source_commit_short: "f869334"
+source_commit_date: "2026-08-28T10:01:19-05:00"
+generated_at: "2026-08-29T09:38:55.093904Z"
 ---
+# Rc Rdi Create Rdi Workspace
 
 To create a Data Integration workspace for an existing [Pro subscription]({{< relref "/operate/rc/databases/create-database/create-pro-database-new" >}}):
 
@@ -28,7 +29,16 @@ To create a Data Integration workspace for an existing [Pro subscription]({{< re
 
     {{<image filename="images/rc/rdi/rdi-create-workspace-select-subscription.png" alt="The select pro subscription drop down." width=80% >}}
 
-3. A **Data Integration subnet (CIDR)** is automatically generated for you. If, for any reason, a CIDR is not generated, enter a valid CIDR that does not conflict with your applications or other databases.
+3. A **Data Integration subnet (CIDR)** is automatically generated for you. Each RDI workspace uses a dedicated `/22` CIDR.
+
+    For AWS, the RDI workspace CIDR must:
+
+    - Be in the same [RFC 1918 private address range](https://datatracker.ietf.org/doc/html/rfc1918#section-3) as the subscription VPC's primary CIDR: `10.0.0.0/8`, `172.16.0.0/12`, or `192.168.0.0/16`.
+    - Not overlap with existing subscription, peering, transit gateway (TGW), application, database, or RDI workspace CIDR ranges.
+
+    For example, if the subscription VPC's primary CIDR is `10.238.252.0/24`, then `192.168.0.0/22` is invalid because it is in a different RFC 1918 range. An unused range such as `10.239.0.0/22` is valid.
+
+    If the automatic suggestion is missing or unsuitable, select another unused `/22` CIDR in the same private range. For more information, see [VPC CIDR block association restrictions](https://docs.aws.amazon.com/vpc/latest/userguide/vpc-cidr-blocks.html#vpc-resize).
 
     {{<image filename="images/rc/rdi/rdi-create-workspace-cidr.png" alt="The select pro subscription drop down." width=80% >}}
 

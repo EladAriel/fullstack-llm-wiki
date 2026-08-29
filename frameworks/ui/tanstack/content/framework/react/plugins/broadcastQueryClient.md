@@ -1,14 +1,15 @@
 ---
 type: "Framework Learn Page"
-framework: "tanstack"
+framework: "TanStack"
 source_repo: "https://github.com/tanstack/query"
 source_branch: "main"
 source_path: "docs/framework/react/plugins/broadcastQueryClient.md"
-source_commit: "fd50fa14d283c7d6664a796f758498d1ad5bfce7"
-source_commit_short: "fd50fa14"
-source_commit_date: "2026-07-24T22:22:47+10:00"
-generated_at: "2026-07-25T11:50:41Z"
+source_commit: "2969edf32f7e0c48e2a108d84712d6e01edfde21"
+source_commit_short: "2969edf"
+source_commit_date: "2026-08-28T01:03:02+09:00"
+generated_at: "2026-08-29T09:40:33.405918Z"
 ---
+# Broadcastqueryclient
 
 ---
 id: broadcastQueryClient
@@ -61,6 +62,26 @@ interface BroadcastQueryClientOptions {
   broadcastChannel?: string
   /** Options for the BroadcastChannel API */
   options?: BroadcastChannelOptions
+  /**
+   * Called when a query event fails to broadcast to other tabs — most
+   * commonly because the query's data, error, or key contains a value the
+   * structured-clone algorithm cannot serialize (e.g. `ReadableStream`,
+   * `File`, functions, Vue `reactive` proxies).
+   *
+   * If omitted, a `console.warn` is emitted in development so failures
+   * are never entirely silent. May return a `Promise`; any rejection is
+   * caught internally.
+   */
+  onBroadcastError?: (
+    error: unknown,
+    event: BroadcastErrorEvent,
+  ) => void | Promise<void>
+}
+
+interface BroadcastErrorEvent {
+  type: 'updated' | 'removed' | 'added'
+  queryHash: string
+  queryKey: QueryKey
 }
 ```
 
@@ -70,4 +91,26 @@ The default options are:
 {
   broadcastChannel = 'tanstack-query',
 }
+```
+
+## Handling broadcast errors
+
+If your cache can hold values that are not structured-cloneable — such as `ReadableStream` (from `Response.body`, streaming APIs, or AI SDKs), `File`, functions, or framework proxies like Vue `reactive` — the underlying `BroadcastChannel.postMessage` call will reject for that query. Cross-tab sync is skipped for that query; the rest of the cache continues to broadcast normally.
+
+By default, a `console.warn` is emitted in development so failures are never silent. Provide `onBroadcastError` to route failures to your own error tracker:
+
+```tsx
+import * as Sentry from '@sentry/browser'
+import { broadcastQueryClient } from '@tanstack/query-broadcast-client-experimental'
+
+broadcastQueryClient({
+  queryClient,
+  broadcastChannel: 'my-app',
+  onBroadcastError: (error, event) => {
+    Sentry.captureException(error, {
+      tags: { broadcastEvent: event.type },
+      extra: { queryHash: event.queryHash, queryKey: event.queryKey },
+    })
+  },
+})
 ```

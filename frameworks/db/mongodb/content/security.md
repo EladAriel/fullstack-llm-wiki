@@ -1,37 +1,141 @@
 ---
 type: "Framework Learn Page"
-framework: "mongodb"
+framework: "MongoDB"
 source_repo: "https://github.com/mongodb/docs.git"
 source_branch: "main"
 source_path: "content/manual/manual/source/security.txt"
-source_commit: "ab9db26ed3d11618cdb61516d8180337d8e3f679"
-source_commit_short: "ab9db26e"
-source_commit_date: "2026-07-24T16:22:46-06:00"
-generated_at: "2026-07-25T11:51:15Z"
+source_commit: "b9f2bc487a2878b65e3c1f80024bebab76954f27"
+source_commit_short: "b9f2bc48"
+source_commit_date: "2026-08-28T17:09:45-05:00"
+generated_at: "2026-08-29T09:39:19.472733Z"
 ---
-
-========
+.. _security:
 
 # Security
 
-MongoDB provides various features, such as authentication, access control, encryption, to secure your MongoDB deployments. Some key security features include:
+**contents:** On this page
+   :local:
+   :backlinks: none
+   :depth: 1
+   :class: singlecol
+  
+.. default-domain:: mongodb
+
+**facet:** :name: genre
+   :values: reference
+
+**meta:** :description: Secure MongoDB deployments. Use authentication, access control, and encryption features to safeguard data.
+
+MongoDB provides various features, such as authentication, access
+control, encryption, to secure your MongoDB deployments. Some key
+security features include:
+
+.. list-table::
+   :header-rows: 1
+   :widths: 20 20 20 20 20
+
+   * - Authentication
+     - Authorization
+     - TLS/SSL
+     - Enterprise Only
+     - Encryption
+
+   * - :doc:`/core/authentication`
+
+       :doc:`/reference/database-users`
+
+       :doc:`/core/security-scram`
+
+       :doc:`/core/security-x.509`
+
+     - :doc:`/core/authorization`
+
+       :doc:`/tutorial/enable-authentication`
+
+       :doc:`/tutorial/manage-users-and-roles`
+
+     - :doc:`/core/security-transport-encryption`
+
+       :doc:`/tutorial/configure-ssl`
+
+       :doc:`/tutorial/configure-ssl-clients`
+
+     - :doc:`/core/kerberos`
+
+       :doc:`/core/security-ldap`
+
+       :doc:`/core/oidc/security-oidc`
+
+       :doc:`/core/auditing`
+
+       :ref:`log-message-log-redaction`
+
+     - :ref:`qe-manual-feature-qe`
+
+       :ref:`manual-csfle-feature`
+
+       :ref:`security-encryption-at-rest`
+
+       :ref:`transport-encryption`
 
 ## Secure Your {+atlas+} Deployments
 
-{+atlas+}, the fully managed service for MongoDB deployments in the cloud, comes preconfigured with secure default settings. Atlas also provides the following key security features:
+{+atlas+}, the fully managed service for MongoDB deployments 
+in the cloud, comes preconfigured with secure default settings.
+Atlas also provides the following key security features:
 
-For a full list of security features in Atlas, see :atlas:`Security Features for Clusters </setup-cluster-security/>`.
+.. list-table::
+   :header-rows: 1
+   :widths: 30 70
+
+   * - Security Feature
+     - Description
+
+   * - Authentication and Authorization 
+     - In Atlas, you configure database users to access your
+       deployments. Atlas provides various ways to perform 
+       user authentication and authorization, 
+       including LDAP, OIDC, and X.509. To learn more, see 
+       :atlas:`Configure Authentication and Authorization
+       </security/config-db-auth/>`.
+  
+   * - Encryption
+     - By default, Atlas encrypts all data stored in your 
+       deployments and uses TLS/SSL to encrypt the connections to your 
+       databases. To add another layer of security, you can configure 
+       :atlas:`Encryption at Rest using Customer Key Management
+       </security-kms-encryption>`.
+
+   * - IP Access List
+     - Atlas allows connections only from addresses specified in 
+       the IP access list. To learn how to manage client connections
+       in Atlas, see :atlas:`Configure IP Access List Entries 
+       </security/ip-access-list/>`.
+   
+   * - Cloud Provider Support
+     - Atlas supports network peering connections and private endpoints
+       to secure your deployments hosted on AWS, Azure, and Google Cloud.
+       To learn more, see :atlas:`Set Up a Network Peering Connection 
+       </security-vpc-peering/>` and :atlas:`Configure Private Endpoints
+       </security-configure-private-endpoints/>`.
+
+For a full list of security features in Atlas, see 
+:atlas:`Security Features for Clusters </setup-cluster-security/>`.
 
 ## Report Suspected Security Bugs
 
-If you suspect you have [identified a security bug](https://www.mongodb.com/company/contact/mongodb-vulnerability-disclosure-policy) on any MongoDB products, please submit the issue using our [Security Bug Submission Form](https://www.mongodb.com/bug-submission-form).
+If you suspect you have `identified a security bug 
+<https://www.mongodb.com/company/contact/mongodb-vulnerability-disclosure-policy>`_ 
+on any MongoDB products, please submit the issue using our 
+`Security Bug Submission Form <https://www.mongodb.com/bug-submission-form>`_.
 
-## Contents
+**toctree:** :titlesonly:
+   :hidden:
 
-- Database Users </reference/database-users>
-- SCRAM </core/security-scram>
-- x.509 </core/security-x.509>
-- Encryption </core/security-data-encryption>
-- Auditing </core/auditing>
-- Use Field Level Redaction </tutorial/implement-field-level-redaction>
-- Create a Vulnerability Report </tutorial/create-a-vulnerability-report>
+   Database Users </reference/database-users>
+   SCRAM </core/security-scram>
+   x.509 </core/security-x.509>
+   Encryption </core/security-data-encryption>
+   Auditing </core/auditing>
+   Use Field Level Redaction </tutorial/implement-field-level-redaction>
+   Create a Vulnerability Report </tutorial/create-a-vulnerability-report>

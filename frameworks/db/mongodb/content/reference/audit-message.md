@@ -1,41 +1,59 @@
 ---
 type: "Framework Learn Page"
-framework: "mongodb"
+framework: "MongoDB"
 source_repo: "https://github.com/mongodb/docs.git"
 source_branch: "main"
 source_path: "content/manual/manual/source/reference/audit-message.txt"
-source_commit: "ab9db26ed3d11618cdb61516d8180337d8e3f679"
-source_commit_short: "ab9db26e"
-source_commit_date: "2026-07-24T16:22:46-06:00"
-generated_at: "2026-07-25T11:51:15Z"
+source_commit: "b9f2bc487a2878b65e3c1f80024bebab76954f27"
+source_commit_short: "b9f2bc48"
+source_commit_date: "2026-08-28T17:09:45-05:00"
+generated_at: "2026-08-29T09:39:19.680322Z"
 ---
-
-===========================
+.. _audit-message:
+.. _audit-message-format:
 
 # System Event Audit Messages
 
-> **Note:** System Event Audit Messages are available in
-`MongoDB Enterprise <install-mdb-enterprise>`
-and :atlas:`{+atlas+} </>`.
-To learn more about this feature in {+atlas+}, see
-the Atlas documentation for `<set-up-database-auditing>`
-and `<mongodb-logs>`.
+.. default-domain:: mongodb
 
-When the MongoDB auditing facility captures events, you can specify the schema that MongoDB uses for log message output:
+**meta:** :keywords: on-prem
+   :description: Explore how to configure and use system event audit messages in MongoDB Enterprise and Atlas, including schema options for log message output.
+                    
+**contents:** On this page
+   :local:
+   :backlinks: none
+   :depth: 1
+   :class: singlecol
 
-- The `mongo` schema writes logs in a format designed by MongoDB. This
-is the default log output schema.
+**note:** System Event Audit Messages are available in 
+   :ref:`MongoDB Enterprise <install-mdb-enterprise>`
+   and :atlas:`{+atlas+} </>`.
 
-- The `OCSF` schema writes logs in {+ocsf+} format. This option
-provides logs in a more widely-used standardized format compatible with log processors.
+   To learn more about this feature in {+atlas+}, see 
+   the Atlas documentation for :ref:`<set-up-database-auditing>`
+   and :ref:`<mongodb-logs>`.
 
-To set the schema used for log messages, use the :setting:`auditLog.schema` configuration file option.
+When the MongoDB auditing facility captures events, you can specify the
+schema that MongoDB uses for log message output:
 
-For examples and details on the messages returned in each schema, see these pages:
+- The ``mongo`` schema writes logs in a format designed by MongoDB. This
+  is the default log output schema.
 
-- `event-audit-messages-mongo`
-- `event-audit-messages-ocsf`
-## Contents
+- The ``OCSF`` schema writes logs in {+ocsf+} format. This option
+  provides logs in a more widely-used standardized format compatible
+  with log processors.
 
-- mongo Schema </reference/audit-message/mongo>
-- OSCF Schema </reference/audit-message/ocsf>
+To set the schema used for log messages, use the
+:setting:`auditLog.schema` configuration file option.
+
+For examples and details on the messages returned in each schema, see
+these pages:
+
+- :ref:`event-audit-messages-mongo`
+
+- :ref:`event-audit-messages-ocsf`
+
+**toctree:** :titlesonly:
+
+   mongo Schema </reference/audit-message/mongo>
+   OSCF Schema </reference/audit-message/ocsf>

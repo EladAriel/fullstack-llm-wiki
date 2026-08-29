@@ -1,35 +1,86 @@
 ---
 type: "Framework Learn Page"
-framework: "postgres"
+framework: "PostgreSQL"
 source_repo: "https://github.com/postgres/postgres.git"
 source_branch: "master"
 source_path: "doc/src/sgml/pgfreespacemap.sgml"
-source_commit: "38afc3dcb25c45b744d4025029ce0a6c90b7059f"
-source_commit_short: "38afc3dc"
-source_commit_date: "2026-07-25T19:08:27+09:00"
-generated_at: "2026-07-25T11:50:59Z"
+source_commit: "6c5f1d6074208146930b67c2054509c3e82f6f7f"
+source_commit_short: "6c5f1d6"
+source_commit_date: "2026-08-28T23:24:47+02:00"
+generated_at: "2026-08-29T09:39:24.473511Z"
 ---
+# pg_freespacemap — examine the free space map
 
-## pg_freespacemap -- examine the free space map
+ 
+  pg_freespacemap
+ 
 
-pg_freespacemap
+ 
+  The pg_freespacemap module provides a means for examining the
+  free space map (FSM).
+  It provides a function called pg_freespace, or two
+  overloaded functions, to be precise. The functions show the value recorded in
+  the free space map for a given page, or for all pages in the relation.
+ 
 
-The `pg_freespacemap` module provides a means for examining the free space map (FSM). It provides a function called `pg_freespace`, or two overloaded functions, to be precise. The functions show the value recorded in the free space map for a given page, or for all pages in the relation.
+ 
+  By default use is restricted to superusers and roles with privileges of the
+  pg_stat_scan_tables role. Access may be granted to others
+  using GRANT.
+ 
 
-By default use is restricted to superusers and roles with privileges of the `pg_stat_scan_tables` role. Access may be granted to others using `GRANT`.
+ 
+  Functions
 
-## Functions
+  
+   
+    
+     pg_freespace(rel regclass IN, blkno bigint IN) returns int2
+     
+      pg_freespace
+     
+    
 
-- Returns the amount of free space on the page of the relation, specified by `blkno`, according to the FSM.
-- Displays the amount of free space on each page of the relation, according to the FSM. A set of `(blkno bigint, avail int2)` tuples is returned, one tuple for each page in the relation.
+    
+     
+      Returns the amount of free space on the page of the relation, specified
+      by blkno, according to the FSM.
+     
+    
+   
 
-The values stored in the free space map are not exact. They're rounded to precision of 1/256th of `BLCKSZ` (32 bytes with default `BLCKSZ`), and they're not kept fully up-to-date as tuples are inserted and updated.
+   
+    
+     pg_freespace(rel regclass IN, blkno OUT bigint, avail OUT int2)
+    
 
-For indexes, what is tracked is entirely-unused pages, rather than free space within pages. Therefore, the values are not meaningful, just whether a page is in-use or empty.
+    
+     
+      Displays the amount of free space on each page of the relation,
+      according to the FSM. A set of
+      (blkno bigint, avail int2)
+      tuples is returned, one tuple for each page in the relation.
+     
+    
+   
+  
 
-## Sample Output
+  
+   The values stored in the free space map are not exact. They're rounded
+   to precision of 1/256th of BLCKSZ (32 bytes with default BLCKSZ), and
+   they're not kept fully up-to-date as tuples are inserted and updated.
+  
 
-```
+  
+   For indexes, what is tracked is entirely-unused pages, rather than free
+   space within pages.  Therefore, the values are not meaningful, just
+   whether a page is in-use or empty.
+  
+ 
+
+ 
+  Sample Output
+
 postgres=# SELECT * FROM pg_freespace('foo');
  blkno | avail
 -------+-------
@@ -60,8 +111,13 @@ postgres=# SELECT * FROM pg_freespace('foo', 7);
 --------------
          1216
 (1 row)
-```
 
-## Author
+ 
 
-Original version by Mark Kirkwood markir@paradise.net.nz. Rewritten in version 8.4 to suit new FSM implementation by Heikki Linnakangas heikki@enterprisedb.com
+ 
+  Author
+
+  
+   Original version by Mark Kirkwood markir@paradise.net.nz.
+   Rewritten in version 8.4 to suit new FSM implementation
+   by Heikki Linnakangas heikki@enterprisedb.com

@@ -4,10 +4,10 @@ framework: "LangSmith"
 source_repo: "https://github.com/langchain-ai/docs.git"
 source_branch: "main"
 source_path: "src/langsmith/big-query-bulk-export.mdx"
-source_commit: "2aae1dfc98ee953a9a5185fb6fcdd9efb3f4d878"
-source_commit_short: "2aae1df"
-source_commit_date: "2026-07-25T00:27:23+00:00"
-generated_at: "2026-07-25T19:08:33.371778Z"
+source_commit: "a174f9cf7c91ee5eb14ee2382eb48bfe6e4956e9"
+source_commit_short: "a174f9c"
+source_commit_date: "2026-08-28T17:04:12-07:00"
+generated_at: "2026-08-29T09:39:50.657149Z"
 ---
 # Big Query Bulk Export
 
@@ -20,7 +20,7 @@ description: Load LangSmith trace data into BigQuery using bulk export to GCS.
 <Info>
 **Plan restrictions apply**
 
-Bulk export is only available on [LangSmith Plus or Enterprise tiers](https://www.langchain.com/pricing-langsmith).
+For customers who signed up after August 3, 2026, bulk export is only available on the [LangSmith Enterprise plan](https://www.langchain.com/pricing-langsmith). Customers who signed up on or before August 3, 2026, can use bulk export on Plus or Enterprise plans until February 1, 2027.
 </Info>
 
 LangSmith can export trace data to a Google Cloud Storage (GCS) bucket in Parquet format. From there, you can load it into BigQuery as an external table (queried in place from GCS) or as a native table (copied into BigQuery storage).

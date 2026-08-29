@@ -1,29 +1,19 @@
 ---
 type: "Framework Learn Directory Index"
-framework: "postgres"
-directory: "content/func"
-source_repo: "https://github.com/postgres/postgres.git"
-source_branch: "master"
-source_commit: "38afc3dcb25c45b744d4025029ce0a6c90b7059f"
-source_commit_short: "38afc3dc"
-source_commit_date: "2026-07-25T19:08:27+09:00"
-generated_at: "2026-07-25T11:50:59Z"
+framework: "PostgreSQL"
+generated_at: "2026-08-29T09:39:24.627885Z"
 ---
 # Func
 
-This directory contains postgres learning pages related to func.
+This directory contains PostgreSQL learning pages related to func.
 
 ## Breadcrumbs
 
-[Wiki Home](../../index.md) -> [Content](../index.md) -> [Func](index.md)
+[Wiki Home](../index.md) -> [Content](index.md)
 
 ## Navigation
 
-- Parent: [Parent Index](../index.md)
-
-## Child Directories
-
-- None
+- Wiki Home: [Root Index](../index.md)
 
 ## Pages in This Directory
 
@@ -61,11 +51,3 @@ This directory contains postgres learning pages related to func.
 - [Func Window](func-window.md)
 - [Func Xml](func-xml.md)
 - [Func](func.md)
-
-## IDE LLM Guidance
-
-When answering implementation questions related to this directory:
-
-1. Prefer the most specific page listed above.
-2. If the topic is broad, read the child directory index first.
-3. Use source metadata from each page when giving answers.

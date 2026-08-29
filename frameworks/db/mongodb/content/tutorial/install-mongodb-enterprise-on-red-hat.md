@@ -1,114 +1,168 @@
 ---
 type: "Framework Learn Page"
-framework: "mongodb"
+framework: "MongoDB"
 source_repo: "https://github.com/mongodb/docs.git"
 source_branch: "main"
 source_path: "content/manual/manual/source/tutorial/install-mongodb-enterprise-on-red-hat.txt"
-source_commit: "ab9db26ed3d11618cdb61516d8180337d8e3f679"
-source_commit_short: "ab9db26e"
-source_commit_date: "2026-07-24T16:22:46-06:00"
-generated_at: "2026-07-25T11:51:15Z"
+source_commit: "b9f2bc487a2878b65e3c1f80024bebab76954f27"
+source_commit_short: "b9f2bc48"
+source_commit_date: "2026-08-28T17:09:45-05:00"
+generated_at: "2026-08-29T09:39:19.638143Z"
 ---
+**meta:** :description: Install MongoDB Enterprise Edition on Red Hat, CentOS, Oracle, Rocky, or AlmaLinux using the yum package manager.
+   :keywords: on-prem
 
-=======================================================
+.. _install-mdb-enterprise-redhat-centos:
 
 # Install MongoDB Enterprise Edition on Red Hat or CentOS
 
-.. include:: /includes/minor-release.rst
+.. default-domain:: mongodb
+
+**contents:** On this page
+   :local:
+   :backlinks: none
+   :depth: 1
+   :class: twocols
+
+.. |arrow| unicode:: U+27A4
+.. |edition| replace:: Enterprise
+.. |package-name| replace:: ``{+package-name-enterprise+}``
+.. |distro-name| replace:: Red Hat
+.. |package-manager| replace:: ``yum``
+.. |executable-name| replace:: ``mongod``
+
+**include:** /includes/minor-release.rst
 
 ## Overview
 
-Use this tutorial to install MongoDB {+version+} |edition| Edition on Red Hat Enterprise Linux, CentOS Linux, or Oracle Linux [#oracle-linux]_ using the |package-manager| package manager.
+Use this tutorial to install MongoDB {+version+} |edition| Edition on
+Red Hat Enterprise Linux, CentOS Linux, or Oracle Linux [#oracle-linux]_
+using the |package-manager| package manager.
 
-:products:`MongoDB Enterprise Edition</mongodb-enterprise-advanced>` is available on select platforms and contains support for features related to security and monitoring.
+:products:`MongoDB Enterprise Edition</mongodb-enterprise-advanced>`
+is available on select platforms and contains support for features
+related to security and monitoring.
 
 ### MongoDB Version
 
-.. include:: /includes/fact-install-past-mongodb.rst
+**include:** /includes/fact-install-past-mongodb.rst
 
 ## Considerations
 
 ### Platform Support
 
-.. include:: /includes/fact-platform-support-enterprise-red-hat.rst
+**include:** /includes/fact-platform-support-enterprise-red-hat.rst
 
 ### Production Notes
 
-.. include:: /includes/fact-see-production-notes.rst
+**include:** /includes/fact-see-production-notes.rst
+
+.. _install-enterprise-redhat-pkg:
 
 ## Install MongoDB Enterprise Edition
 
-Follow these steps to install MongoDB |edition| Edition using the |package-manager| package manager.
+Follow these steps to install MongoDB |edition| Edition using the
+|package-manager| package manager.
 
-.. include:: /includes/deploy/enterprise-rhel
+**include:** /includes/deploy/enterprise-rhel
 
-> **Note:** .. include:: /includes/install-mongodb-yum-commands.rst
+**note:** .. include:: /includes/install-mongodb-yum-commands.rst
 
 ## Run MongoDB Enterprise Edition
 
 ### ulimit
 
-.. include:: /includes/fact-installation-ulimit.rst
+**include:** /includes/fact-installation-ulimit.rst
 
 ### Directory Paths
 
-To Use Default Directories ``````````````````````````
+### To Use Default Directories
 
-By default, MongoDB runs using the |mongod-user| user account and uses the following default directories:
+By default, MongoDB runs using the |mongod-user| user account and
+uses the following default directories:
 
 - |mongod-datadir| (the data directory)
-- `/var/log/mongodb` (the log directory)
-The package manager creates the default directories during installation. The owner and group name are |mongod-user|.
 
-To Use Non-Default Directories ``````````````````````````````
+- ``/var/log/mongodb`` (the log directory)
 
-To use a data directory and/or log directory other than the default directories:
+The package manager creates the default directories during
+installation. The owner and group name are |mongod-user|.
+
+### To Use Non-Default Directories
+
+To use a data directory and/or log directory other than the default
+directories:
 
 #. Create the new directory or directories.
 
-#. Edit the configuration file `/etc/mongod.conf` and modify the following fields accordingly:
+#. Edit the configuration file ``/etc/mongod.conf`` and modify the
+   following fields accordingly:
 
-- :setting:`storage.dbPath` to specify a new data directory path, such as `/some/data/directory`
-- :setting:`systemLog.path` to specify a new log file path, such as `/some/log/directory/mongod.log`
-#. Ensure that the user running MongoDB has access to the directory or directories:
+   - :setting:`storage.dbPath` to specify a new data directory path, such as ``/some/data/directory``
 
-```bash
-   sudo chown -R mongod:mongod <directory>
+   - :setting:`systemLog.path` to specify a new log file path, such as ``/some/log/directory/mongod.log``
 
-If you change the user that runs the MongoDB process, you **must**
-give the new user access to these directories.
-```
+#. Ensure that the user running MongoDB has access to the directory or
+   directories:
 
-#. Configure SELinux if enforced. See `install-enterprise-rhel-configure-selinux`.
+   .. code-block:: bash
+
+      sudo chown -R mongod:mongod <directory>
+
+   If you change the user that runs the MongoDB process, you **must**
+   give the new user access to these directories.
+
+#. Configure SELinux if enforced. See
+   :ref:`install-enterprise-rhel-configure-selinux`.
+
+.. _install-enterprise-selinux-data-directory:
+
+.. _install-enterprise-rhel-configure-selinux:
 
 ### Configure SELinux
 
-.. include:: /includes/fact-selinux-redhat-with-policy.rst
+**include:** /includes/fact-selinux-redhat-with-policy.rst
+
+.. |mongod-user| replace:: ``mongod``
+.. |mongod-datadir| replace:: ``/var/lib/mongo``
+
 
 ### Procedure
 
-Follow these steps to run MongoDB |edition| Edition on your system. These instructions assume that you are using the default settings.
+Follow these steps to run MongoDB |edition| Edition on your system.
+These instructions assume that you are using the default settings.
 
 **Init System**
 
-.. include:: /includes/fact-systemd-vs-initd.rst
+**include:** /includes/fact-systemd-vs-initd.rst
+
+**tabs:** .. tab:: systemd (systemctl)
+      :tabid: systemd-systemctl
+
+      .. include:: /includes/steps/run-mongodb-on-a-linux-distribution-systemd.rst
+
+   .. tab:: System V Init (service)
+      :tabid: systemvinit-service
+
+      .. include:: /includes/steps/run-mongodb-on-a-linux-distribution.rst
 
 ## Uninstall MongoDB
 
-.. include:: /includes/fact-uninstall.rst
+**include:** /includes/fact-uninstall.rst
 
-.. include:: /includes/steps/uninstall-mongodb-enterprise-on-redhat.rst
+**include:** /includes/steps/uninstall-mongodb-enterprise-on-redhat.rst
 
 ## Additional Information
 
 ### Localhost Binding by Default
 
-.. include:: /includes/fact-installation-bind-ip-default-in-config.rst
+**include:** /includes/fact-installation-bind-ip-default-in-config.rst
 
 ### MongoDB Enterprise Edition Packages
 
-.. include:: /includes/list-mongodb-enterprise-packages.rst
+**include:** /includes/list-mongodb-enterprise-packages.rst
 
-## Contents
+**toctree:** :hidden:
+   :titlesonly:
 
-- Install using .tgz Tarball </tutorial/install-mongodb-enterprise-on-red-hat-tarball>
+   Install using .tgz Tarball </tutorial/install-mongodb-enterprise-on-red-hat-tarball>

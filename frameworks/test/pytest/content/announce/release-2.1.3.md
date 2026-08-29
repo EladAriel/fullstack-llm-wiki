@@ -4,30 +4,33 @@ framework: "pytest"
 source_repo: "https://github.com/pytest-dev/pytest"
 source_branch: "main"
 source_path: "doc/en/announce/release-2.1.3.rst"
-source_commit: "344c23787cdb3431dcc441b8b63ee9950f04b921"
-source_commit_short: "344c2378"
-source_commit_date: "2026-07-24T17:37:16+02:00"
-generated_at: "2026-07-25T11:50:13Z"
+source_commit: "fdba12e1708313f56e9cf713d260c029764ca2b7"
+source_commit_short: "fdba12e"
+source_commit_date: "2026-08-27T21:55:50+02:00"
+generated_at: "2026-08-29T09:40:11.193416Z"
 ---
-
 # py.test 2.1.3: just some more fixes
 
-pytest-2.1.3 is a minor backward compatible maintenance release of the popular py.test testing tool.  It is commonly used for unit, functional- and integration testing.  See extensive docs with examples here:
+pytest-2.1.3 is a minor backward compatible maintenance release of the
+popular py.test testing tool.  It is commonly used for unit, functional-
+and integration testing.  See extensive docs with examples here:
 
-http://pytest.org/
+     http://pytest.org/
 
-The release contains another fix to the perfected assertions introduced with the 2.1 series as well as the new possibility to customize reporting for assertion expressions on a per-directory level.
+The release contains another fix to the perfected assertions introduced
+with the 2.1 series as well as the new possibility to customize reporting
+for assertion expressions on a per-directory level.
 
-If you want to install or upgrade pytest, just type one of:
+If you want to install or upgrade pytest, just type one of::
 
-```
-pip install -U pytest # or
-easy_install -U pytest
-```
+    pip install -U pytest # or
+    easy_install -U pytest
 
-Thanks to the bug reporters and to Ronny Pfannschmidt, Benjamin Peterson and Floris Bruynooghe who implemented the fixes.
+Thanks to the bug reporters and to Ronny Pfannschmidt, Benjamin Peterson
+and Floris Bruynooghe who implemented the fixes.
 
-best, holger krekel
+best,
+holger krekel
 
 ## Changes between 2.1.2 and 2.1.3
 

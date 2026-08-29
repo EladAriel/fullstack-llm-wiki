@@ -4,10 +4,10 @@ framework: "Arize Phoenix"
 source_repo: "https://github.com/Arize-ai/phoenix.git"
 source_branch: "main"
 source_path: "docs/phoenix/sdk-api-reference/typescript/packages/phoenix-client/overview.mdx"
-source_commit: "69b3ab92c37ff65812feaa2dbf0b1c0ad5ae55fe"
-source_commit_short: "69b3ab9"
-source_commit_date: "2026-07-25T11:48:12-06:00"
-generated_at: "2026-07-25T19:08:24.948982Z"
+source_commit: "c48e50e9906fcc56c1c103ebd93ef3c95ed6b6e7"
+source_commit_short: "c48e50e"
+source_commit_date: "2026-08-29T01:45:20-06:00"
+generated_at: "2026-08-29T09:39:58.813098Z"
 ---
 # Overview
 
@@ -55,7 +55,7 @@ That gives the agent version-matched docs plus the exact implementation and gene
 | `@arizeai/phoenix-client/experiments` | Experiment execution and lifecycle |
 | `@arizeai/phoenix-client/spans` | Span search, notes, and span/document annotations |
 | `@arizeai/phoenix-client/sessions` | Session listing, retrieval, and session annotations |
-| `@arizeai/phoenix-client/traces` | Project trace retrieval and trace annotations |
+| `@arizeai/phoenix-client/traces` | Project trace retrieval, transfers, and trace annotations |
 | `@arizeai/phoenix-client/vitest` | Vitest entrypoint for dataset-backed eval tests |
 | `@arizeai/phoenix-client/vitest/reporter` | Vitest reporter for Phoenix eval summaries |
 | `@arizeai/phoenix-client/jest` | Jest entrypoint for dataset-backed eval tests |
@@ -63,18 +63,18 @@ That gives the agent version-matched docs plus the exact implementation and gene
 
 ## Configuration
 
-`createClient()` resolves Phoenix client options in this order: library defaults, environment variables, then explicit options. In most applications, the normal setup is to set `PHOENIX_HOST` and `PHOENIX_API_KEY` in the environment and call `createClient()` with no overrides.
+`createClient()` resolves Phoenix client options in this order: library defaults, environment variables, then explicit options. In most applications, the normal setup is to set `PHOENIX_ENDPOINT` and `PHOENIX_API_KEY` in the environment and call `createClient()` with no overrides.
 
 ### Recommended Setup
 
 Use the environment-driven path unless you have a specific reason to override client options in code.
 
 ```bash
-export PHOENIX_HOST=http://localhost:6006
+export PHOENIX_ENDPOINT=http://localhost:6006
 export PHOENIX_API_KEY=<your-api-key>
 ```
 
-For a remote deployment, `PHOENIX_HOST` is that instance's base URL, e.g. `https://your-phoenix.example.com`.
+For a remote deployment, `PHOENIX_ENDPOINT` is that instance's base URL, e.g. `https://your-phoenix.example.com`.
 
 ```ts
 import { createClient } from "@arizeai/phoenix-client";
@@ -116,7 +116,7 @@ These are the Phoenix-specific options this package resolves before creating the
 
 | Option | Type | Description |
 |--------|------|-------------|
-| `baseUrl` | `string` | Base Phoenix URL. Defaults to `http://localhost:6006`, or `PHOENIX_HOST` when that environment variable is set. |
+| `baseUrl` | `string` | Base Phoenix URL. Defaults to `http://localhost:6006`, or `PHOENIX_ENDPOINT` when that environment variable is set. |
 | `headers` | `ClientOptions["headers"]` | Headers sent on every request. `PHOENIX_API_KEY` populates `Authorization` automatically. Explicit `headers` replace environment-derived headers. |
 
 ### Header Override Rule
@@ -137,7 +137,7 @@ const client = createClient({
 
 | Variable | Maps to | Description |
 |--------|---------|-------------|
-| `PHOENIX_HOST` | `options.baseUrl` | Base Phoenix URL, for example `http://localhost:6006`. |
+| `PHOENIX_ENDPOINT` | `options.baseUrl` | Base Phoenix URL, for example `http://localhost:6006`. |
 | `PHOENIX_API_KEY` | `options.headers.Authorization` | Bearer token for authenticated environments. |
 | `PHOENIX_CLIENT_HEADERS` | `options.headers` | Optional JSON-encoded object of additional headers to send on every request. Most setups do not need this. |
 

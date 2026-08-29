@@ -4,12 +4,11 @@ framework: "Langfuse"
 source_repo: "https://github.com/langfuse/langfuse-docs"
 source_branch: "main"
 source_path: "content/docs/prompt-management/features/webhooks-slack-integrations.mdx"
-source_commit: "fcd1eca34a924867563c3c4e801254c4e66c0021"
-source_commit_short: "fcd1eca3"
-source_commit_date: "2026-07-25T00:45:45Z"
-generated_at: "2026-07-25T11:51:12Z"
+source_commit: "ba26344559edee69ba55c5d3aa80e632f56c1626"
+source_commit_short: "ba26344"
+source_commit_date: "2026-08-29T02:57:18+00:00"
+generated_at: "2026-08-29T09:38:37.761813Z"
 ---
-
 ---
 title: Webhooks
 sidebarTitle: Webhooks
@@ -66,7 +65,7 @@ Choose the prompt‑version actions that should fire the webhook:
 - **Headers**: Default headers include:
   - `Content-Type: application/json`
   - `User-Agent: Langfuse/1.0`
-  - `x-langfuse-signature: <sig>` (see note on HMAC signature verification below)
+  - `x-langfuse-signature: t=<timestamp>,v1=<signature>` (see note on HMAC signature verification below)
 - **Add custom static headers if required.**
 
 ### Inspect the payload
@@ -131,7 +130,7 @@ def verify_langfuse_signature(
     raw_body : str
         The request body exactly as received (no decoding or reformatting).
     signature_header : str
-        The value of the `Langfuse-Signature` header, e.g. "t=1720701136,s=0123abcd...".
+        The value of the `x-langfuse-signature` header, e.g. "t=1720701136,v1=0123abcd...".
     secret : str
         Your Langfuse signing secret.
 
@@ -140,7 +139,7 @@ def verify_langfuse_signature(
     bool
         True if the signature is valid, otherwise False.
     """
-    # Split "t=timestamp,s=signature" into the two expected key/value chunks
+    # Split "t=timestamp,v1=signature" into the two expected key/value chunks
     try:
         ts_pair, sig_pair = signature_header.split(",", 1)
     except ValueError:  # wrong format / missing comma

@@ -1,67 +1,560 @@
 ---
 type: "Framework Learn Page"
-framework: "postgres"
+framework: "PostgreSQL"
 source_repo: "https://github.com/postgres/postgres.git"
 source_branch: "master"
 source_path: "doc/src/sgml/ref/pg_recvlogical.sgml"
-source_commit: "38afc3dcb25c45b744d4025029ce0a6c90b7059f"
-source_commit_short: "38afc3dc"
-source_commit_date: "2026-07-25T19:08:27+09:00"
-generated_at: "2026-07-25T11:50:59Z"
+source_commit: "6c5f1d6074208146930b67c2054509c3e82f6f7f"
+source_commit_short: "6c5f1d6"
+source_commit_date: "2026-08-28T23:24:47+02:00"
+generated_at: "2026-08-29T09:39:24.557315Z"
 ---
-
 pg_recvlogical
+ 
 
-`pg_recvlogical`
-1
-Application
+ 
+  
+# pg_recvlogical
 
-pg_recvlogical
-control PostgreSQL logical decoding streams
+  1
+  Application
+ 
 
-`pg_recvlogical`
-`option`
+ 
+  
+# pg_recvlogical
 
-## Description
+  control PostgreSQL logical decoding streams
+ 
 
-`pg_recvlogical` controls logical decoding replication slots and streams data from such replication slots.
+ 
+  
+   pg_recvlogical
+   option
+  
+ 
 
-It creates a replication-mode connection, so it is subject to the same constraints as `app-pgreceivewal`, plus those for logical replication (see `logicaldecoding`).
+ 
+  
+# Description
 
-`pg_recvlogical` has no equivalent to the logical decoding SQL interface's peek and get modes. It sends replay confirmations for data lazily as it receives it and on clean exit. To examine pending data on a slot without consuming it, use pg_logical_slot_peek_changes.
+  
+   pg_recvlogical controls logical decoding replication
+   slots and streams data from such replication slots.
+  
 
-In the absence of fatal errors, `pg_recvlogical` will run until terminated by the `SIGINT` (ControlC) or `SIGTERM` signal.
+  
+   It creates a replication-mode connection, so it is subject to the same
+   constraints as , plus those for logical
+   replication (see ).
+  
 
-When `pg_recvlogical` receives a `SIGHUP` signal, it closes the current output file and opens a new one using the filename specified by the `--file` option. This allows us to rotate the output file by first renaming the current file and then sending a `SIGHUP` signal to `pg_recvlogical`.
+  
+   pg_recvlogical has no equivalent to the logical decoding
+   SQL interface's peek and get modes. It sends replay confirmations for
+   data lazily as it receives it and on clean exit. To examine pending data on
+    a slot without consuming it, use
+   pg_logical_slot_peek_changes.
+  
 
-## Options
+  
+   In the absence of fatal errors, pg_recvlogical
+   will run until terminated by the SIGINT
+   (ControlC)
+   or SIGTERM signal.
+  
 
-At least one of the following options must be specified to select an action: - Create a new logical replication slot with the name specified by `--slot`, using the output plugin specified by `--plugin`, for the database specified by `--dbname`. The `--slot` and `--dbname` options are required for this action. The `--enable-two-phase` and `--enable-failover` options can be specified with `--create-slot`. - Drop the replication slot with the name specified by `--slot`, then exit. The `--slot` option is required for this action. - Begin streaming changes from the logical replication slot specified by `--slot`, continuing until terminated by a signal. If the server side change stream ends with a server shutdown or disconnect, retry in a loop unless `--no-loop` is specified. The `--slot`, `--dbname`, and `--file` options are required for this action. The stream format is determined by the output plugin specified when the slot was created. The connection must be to the same database used to create the slot.
+  
+   When pg_recvlogical receives
+   a SIGHUP signal, it closes the current output file
+   and opens a new one using the filename specified by
+   the --file option.  This allows us to rotate
+   the output file by first renaming the current file and then sending
+   a SIGHUP signal to
+   pg_recvlogical.
+  
 
-`--create-slot` and `--start` can be specified together. `--drop-slot` cannot be combined with another action.
+ 
 
-The following command-line options control the location and format of the output and other replication behavior: - In `--start` mode, automatically stop replication and exit with normal exit status 0 when receiving reaches the specified LSN. If specified when not in `--start` mode, an error is raised. If there's a record with LSN exactly equal to `lsn`, the record will be output. The `--endpos` option is not aware of transaction boundaries and may truncate output partway through a transaction. Any partially output transaction will not be consumed and will be replayed again when the slot is next read from. Individual messages are never truncated. - Enables the slot to be synchronized to the standbys. This option may only be specified with `--create-slot`. - Write received and decoded transaction data into this file. Use `-` for `stdout`. This parameter is required for `--start`. - Specifies how often `pg_recvlogical` should issue `fsync()` calls to ensure the output file is safely flushed to disk. The default value is 10 seconds. The server will occasionally request the client to perform a flush and report the flush position to the server. This setting is in addition to that, to perform flushes more frequently. Specifying an interval of `0` disables issuing `fsync()` calls altogether, while still reporting progress to the server. In this case, data could be lost in the event of a crash. - In `--start` mode, start replication from the given LSN. For details on the effect of this, see the documentation in `logicaldecoding` and `protocol-replication`. Ignored in other modes. - Do not error out when `--create-slot` is specified and a slot with the specified name already exists. - When the connection to the server is lost, do not retry in a loop, just exit. - Pass the option `name` to the output plugin with, if specified, the option value `value`. Which options exist and their effects depends on the used output plugin. - When creating a slot, use the specified logical decoding output plugin. See `logicaldecoding-output-plugin` for information about the plugins PostgreSQL provides. The default is `test-decoding`. This option has no effect if the slot already exists. - This option has the same effect as the option of the same name in `app-pgreceivewal`. See the description there. - In `--start` mode, use the existing logical replication slot named `slot_name`. In `--create-slot` mode, create the slot with this name. In `--drop-slot` mode, delete the slot with this name. This parameter is required for any of actions. - Enables decoding of prepared transactions. This option may only be specified with `--create-slot`. - Enables verbose mode.
+ 
+  
+# Options
 
-The following command-line options control the database connection parameters. - The database to connect to. See the description of the actions for what this means in detail. The `dbname` can be a connection string. If so, connection string parameters will override any conflicting command line options. This parameter is required for `--create-slot` and `--start`. - Specifies the host name of the machine on which the server is running. If the value begins with a slash, it is used as the directory for the Unix domain socket. The default is taken from the `PGHOST` environment variable, if set, else a Unix domain socket connection is attempted. - Specifies the TCP port or local Unix domain socket file extension on which the server is listening for connections. Defaults to the `PGPORT` environment variable, if set, or a compiled-in default. - User name to connect as. Defaults to current operating system user name. - Never issue a password prompt. If the server requires password authentication and a password is not available by other means such as a `.pgpass` file, the connection attempt will fail. This option can be useful in batch jobs and scripts where no user is present to enter a password. - Force `pg_recvlogical` to prompt for a password before connecting to a database. This option is never essential, since `pg_recvlogical` will automatically prompt for a password if the server demands password authentication. However, `pg_recvlogical` will waste a connection attempt finding out that the server wants a password. In some cases it is worth typing `-W` to avoid the extra connection attempt.
+   
+    At least one of the following options must be specified to select an action:
 
-The following additional options are available: - Print the `pg_recvlogical` version and exit. - Show help about `pg_recvlogical` command line arguments, and exit.
+    
 
-## Exit Status
+     
+      --create-slot
+      
+       
+        Create a new logical replication slot with the name specified by
+        --slot, using the output plugin specified by
+        --plugin, for the database specified
+        by --dbname.
+       
 
-`pg_recvlogical` will exit with status 0 when terminated by the `SIGINT` or `SIGTERM` signal. (That is the normal way to end it. Hence it is not an error.) For fatal errors or other signals, the exit status will be nonzero.
+       
+        The --slot and --dbname options are required
+        for this action.
+       
 
-## Environment
+       
+        The --enable-two-phase and --enable-failover
+        options can be specified with --create-slot.
+       
 
-This utility, like most other PostgreSQL utilities, uses the environment variables supported by `libpq` (see `libpq-envars`).
+      
+     
 
-The environment variable `PG_COLOR` specifies whether to use color in diagnostic messages. Possible values are `always`, `auto` and `never`.
+     
+      --drop-slot
+      
+       
+        Drop the replication slot with the name specified
+        by --slot, then exit.
+       
 
-## Notes
+       
+        The --slot option is required for this action.
+       
 
-`pg_recvlogical` will preserve group permissions on the output files if group permissions are enabled on the source cluster.
+      
+     
 
-## Examples
+     
+      --start
+      
+       
+        Begin streaming changes from the logical replication slot specified
+        by --slot, continuing until terminated by a
+        signal. If the server side change stream ends with a server shutdown
+        or disconnect, retry in a loop unless
+        --no-loop is specified.
+       
 
-See `logicaldecoding-example` for an example.
+       
+        The --slot, --dbname, and
+        --file options are required for this action.
+       
 
-## See Also
+       
+        The stream format is determined by the output plugin specified when
+        the slot was created.
+       
+
+       
+        The connection must be to the same database used to create the slot.
+       
+
+      
+     
+    
+   
+
+   
+    --create-slot and --start can be
+    specified together.  --drop-slot cannot be combined with
+    another action.
+   
+
+   
+    The following command-line options control the location and format of the
+    output and other replication behavior:
+
+    
+     
+      -E lsn
+      --endpos=lsn
+      
+       
+        In --start mode, automatically stop replication
+        and exit with normal exit status 0 when receiving reaches the
+        specified LSN.  If specified when not in --start
+        mode, an error is raised.
+       
+
+       
+        If there's a record with LSN exactly equal to lsn,
+        the record will be output.
+       
+
+       
+        The --endpos option is not aware of transaction
+        boundaries and may truncate output partway through a transaction.
+        Any partially output transaction will not be consumed and will be
+        replayed again when the slot is next read from. Individual messages
+        are never truncated.
+       
+
+      
+     
+
+     
+      --enable-failover
+      
+       
+        Enables the slot to be synchronized to the standbys. This option may
+        only be specified with --create-slot.
+       
+
+      
+     
+
+     
+      -f filename
+      --file=filename
+      
+       
+        Write received and decoded transaction data into this
+        file. Use - for stdout.
+       
+
+       
+        This parameter is required for --start.
+       
+
+      
+     
+
+     
+      -F interval_seconds
+      --fsync-interval=interval_seconds
+      
+       
+        Specifies how often pg_recvlogical should
+        issue fsync() calls to ensure the output file is
+        safely flushed to disk. The default value is 10 seconds.
+       
+
+       
+        The server will occasionally request the client to perform a flush and
+        report the flush position to the server.  This setting is in addition
+        to that, to perform flushes more frequently.
+       
+
+       
+        Specifying an interval of 0 disables
+        issuing fsync() calls altogether, while still
+        reporting progress to the server.  In this case, data could be lost in
+        the event of a crash.
+       
+
+      
+     
+
+     
+      -I lsn
+      --startpos=lsn
+      
+       
+        In --start mode, start replication from the given
+        LSN.  For details on the effect of this, see the documentation
+        in 
+        and . Ignored in other modes.
+       
+
+      
+     
+
+     
+      --if-not-exists
+      
+       
+        Do not error out when --create-slot is specified
+        and a slot with the specified name already exists.
+       
+
+      
+     
+
+     
+      -n
+      --no-loop
+      
+       
+        When the connection to the server is lost, do not retry in a loop, just exit.
+       
+
+      
+     
+
+     
+      -o name[=value]
+      --option=name[=value]
+      
+       
+        Pass the option name to the output plugin with,
+        if specified, the option value value. Which
+        options exist and their effects depends on the used output plugin.
+       
+
+      
+     
+
+     
+      -P plugin
+      --plugin=plugin
+      
+       
+        When creating a slot, use the specified logical decoding output
+        plugin. See  for
+        information about the plugins PostgreSQL
+        provides. The default is .
+        This option has no effect if the slot already exists.
+       
+
+      
+     
+
+     
+      -s interval_seconds
+      --status-interval=interval_seconds
+      
+       
+        This option has the same effect as the option of the same name
+        in .  See the description there.
+       
+
+      
+     
+
+     
+      -S slot_name
+      --slot=slot_name
+      
+       
+        In --start mode, use the existing logical replication slot named
+        slot_name. In --create-slot
+        mode, create the slot with this name. In --drop-slot
+        mode, delete the slot with this name.
+       
+
+       
+        This parameter is required for any of actions.
+       
+
+      
+     
+
+     
+       -t
+       --enable-two-phase
+       --two-phase (deprecated)
+       
+       
+        Enables decoding of prepared transactions. This option may only be specified with
+        --create-slot.
+       
+
+       
+     
+
+     
+       -v
+       --verbose
+       
+       
+        Enables verbose mode.
+       
+
+       
+     
+    
+   
+
+   
+    The following command-line options control the database connection parameters.
+
+    
+      
+       -d dbname
+       --dbname=dbname
+       
+        
+         The database to connect to.  See the description
+         of the actions for what this means in detail.
+         The dbname can be a connection string.  If so,
+         connection string parameters will override any conflicting
+         command line options.
+        
+
+        
+         This parameter is required for --create-slot
+         and --start.
+        
+
+       
+      
+
+      
+       -h hostname-or-ip
+       --host=hostname-or-ip
+       
+        
+         Specifies the host name of the machine on which the server is
+         running.  If the value begins with a slash, it is used as the
+         directory for the Unix domain socket. The default is taken
+         from the PGHOST environment variable, if set,
+         else a Unix domain socket connection is attempted.
+        
+
+       
+      
+
+      
+       -p port
+       --port=port
+       
+        
+         Specifies the TCP port or local Unix domain socket file
+         extension on which the server is listening for connections.
+         Defaults to the PGPORT environment variable, if
+         set, or a compiled-in default.
+        
+
+       
+      
+
+      
+       -U user
+       --username=user
+       
+        
+         User name to connect as.  Defaults to current operating system user
+         name.
+        
+
+       
+      
+
+      
+       -w
+       --no-password
+       
+        
+         Never issue a password prompt.  If the server requires
+         password authentication and a password is not available by
+         other means such as a .pgpass file, the
+         connection attempt will fail.  This option can be useful in
+         batch jobs and scripts where no user is present to enter a
+         password.
+        
+
+       
+      
+
+      
+       -W
+       --password
+       
+        
+         Force pg_recvlogical to prompt for a
+         password before connecting to a database.
+        
+
+        
+         This option is never essential, since
+         pg_recvlogical will automatically prompt
+         for a password if the server demands password authentication.
+         However, pg_recvlogical will waste a
+         connection attempt finding out that the server wants a password.
+         In some cases it is worth typing -W to avoid the extra
+         connection attempt.
+        
+
+      
+     
+     
+   
+
+   
+    The following additional options are available:
+
+    
+     
+       -V
+       --version
+       
+       
+        Print the pg_recvlogical version and exit.
+       
+
+       
+     
+
+     
+      -?
+      --help
+       
+        
+         Show help about pg_recvlogical command line
+         arguments, and exit.
+        
+
+       
+      
+    
+   
+
+ 
+
+ 
+  
+# Exit Status
+
+  
+   pg_recvlogical will exit with status 0 when
+   terminated by the SIGINT or
+   SIGTERM signal.  (That is the
+   normal way to end it.  Hence it is not an error.)  For fatal errors or
+   other signals, the exit status will be nonzero.
+  
+
+ 
+
+ 
+  
+# Environment
+
+  
+   This utility, like most other PostgreSQL utilities,
+   uses the environment variables supported by libpq
+   (see ).
+  
+
+  
+   The environment variable PG_COLOR specifies whether to use
+   color in diagnostic messages. Possible values are
+   always, auto and
+   never.
+  
+
+ 
+
+ 
+  
+# Notes
+
+  
+   pg_recvlogical will preserve group permissions on
+   the output files if group permissions are enabled on the source
+   cluster.
+  
+
+ 
+
+ 
+  
+# Examples
+
+  
+   See  for an example.
+  
+
+ 
+
+ 
+  
+# See Also

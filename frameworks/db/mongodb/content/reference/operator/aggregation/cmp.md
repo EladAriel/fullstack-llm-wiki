@@ -1,51 +1,77 @@
 ---
 type: "Framework Learn Page"
-framework: "mongodb"
+framework: "MongoDB"
 source_repo: "https://github.com/mongodb/docs.git"
 source_branch: "main"
 source_path: "content/manual/manual/source/reference/operator/aggregation/cmp.txt"
-source_commit: "ab9db26ed3d11618cdb61516d8180337d8e3f679"
-source_commit_short: "ab9db26e"
-source_commit_date: "2026-07-24T16:22:46-06:00"
-generated_at: "2026-07-25T11:51:15Z"
+source_commit: "b9f2bc487a2878b65e3c1f80024bebab76954f27"
+source_commit_short: "b9f2bc48"
+source_commit_date: "2026-08-28T17:09:45-05:00"
+generated_at: "2026-08-29T09:39:20.200198Z"
 ---
-
-==========================
-
 # $cmp (expression operator)
+
+**meta:** :description: Compare two values using the `$cmp` operator in MongoDB aggregation, returning -1, 0, or 1 based on their relationship.
+
+**contents:** On this page
+   :local:
+   :backlinks: none
+   :depth: 1
+   :class: singlecol
 
 ## Definition
 
+**expression:** $cmp
+
+   Compares two values and returns:
+
+   - ``-1`` if the first value is less than the second.
+
+   - ``1`` if the first value is greater than the second.
+
+   - ``0`` if the two values are equivalent.
+
+   .. include:: /includes/extracts/fact-agg-comparison-expression-cmp.rst
+
+   ``$cmp`` has this syntax:
+
+   .. code-block:: javascript
+
+      { $cmp: [ <expression1>, <expression2> ] }
+
+   For more information on expressions, see :ref:`aggregation-expressions`.
+
 ## Example
 
-Create an `inventory` collection with these documents:
+Create an ``inventory`` collection with these documents:
 
-.. include:: /includes/examples-create-inventory-2.rst
+**include:** /includes/examples-create-inventory-2.rst
 
-Use the `$cmp` operator to compare the `qty` value with `250`:
+Use the ``$cmp`` operator to compare the ``qty`` value with ``250``:
 
-```javascript
-db.inventory.aggregate(
-   [
-     {
-       $project:
-          {
-            item: 1,
-            qty: 1,
-            cmpTo250: { $cmp: [ "$qty", 250 ] },
-            _id: 0
-          }
-     }
-   ]
-)
-```
+.. code-block:: javascript
+
+   db.inventory.aggregate(
+      [
+        {
+          $project:
+             {
+               item: 1,
+               qty: 1,
+               cmpTo250: { $cmp: [ "$qty", 250 ] },
+               _id: 0
+             }
+        }
+      ]
+   )
 
 Output:
 
-```javascript
-{ item : "abc1", qty : 300, cmpTo250 : 1 }
-{ item : "abc2", qty : 200, cmpTo250 : -1 }
-{ item : "xyz1", qty : 250, cmpTo250 : 0 }
-{ item : "VWZ1", qty : 300, cmpTo250 : 1 }
-{ item : "VWZ2", qty : 180, cmpTo250 : -1 }
-```
+.. code-block:: javascript
+   :copyable: false
+
+   { item : "abc1", qty : 300, cmpTo250 : 1 }
+   { item : "abc2", qty : 200, cmpTo250 : -1 }
+   { item : "xyz1", qty : 250, cmpTo250 : 0 }
+   { item : "VWZ1", qty : 300, cmpTo250 : 1 }
+   { item : "VWZ2", qty : 180, cmpTo250 : -1 }

@@ -1,92 +1,186 @@
 ---
 type: "Framework Learn Page"
-framework: "mongodb"
+framework: "MongoDB"
 source_repo: "https://github.com/mongodb/docs.git"
 source_branch: "main"
 source_path: "content/manual/manual/source/reference/command/setIndexCommitQuorum.txt"
-source_commit: "ab9db26ed3d11618cdb61516d8180337d8e3f679"
-source_commit_short: "ab9db26e"
-source_commit_date: "2026-07-24T16:22:46-06:00"
-generated_at: "2026-07-25T11:51:15Z"
+source_commit: "b9f2bc487a2878b65e3c1f80024bebab76954f27"
+source_commit_short: "b9f2bc48"
+source_commit_date: "2026-08-28T17:09:45-05:00"
+generated_at: "2026-08-29T09:39:20.098069Z"
 ---
-
-=======================================
-
 # setIndexCommitQuorum (database command)
+
+**meta:** :description: Set the minimum number of data-bearing members required to commit index builds before the primary node marks the index as ready.
+
+.. default-domain:: mongodb
+
+**contents:** On this page
+   :local:
+   :backlinks: none
+   :depth: 1
+   :class: singlecol
+
+**dbcommand:** setIndexCommitQuorum
+
+   The ``setIndexCommitQuorum`` command sets minimum number of
+   data-bearing members that must be prepared to commit their local
+   index builds before the primary node will commit the index.
 
 ## Compatibility
 
-This command is available in deployments hosted in the following environments:
+This command is available in deployments hosted in the following environments: 
 
-.. include:: /includes/fact-environments-atlas-only.rst
+**include:** /includes/fact-environments-atlas-only.rst
 
-.. include:: /includes/fact-environments-atlas-support-all.rst
+**include:** /includes/fact-environments-atlas-support-all.rst
 
-.. include:: /includes/fact-environments-onprem-only.rst
+**include:** /includes/fact-environments-onprem-only.rst
 
 ## Syntax
 
 The command has the following syntax:
 
-```javascript
-db.runCommand(
-   { 
-     setIndexCommitQuorum: <string>,
-     indexNames: [ <document> ],
-     commitQuorum: <int> | <string>,
-     comment: <any>
-   }     
-)
-```
+.. code-block:: javascript
+
+   db.runCommand(
+      { 
+        setIndexCommitQuorum: <string>,
+        indexNames: [ <document> ],
+        commitQuorum: <int> | <string>,
+        comment: <any>
+      }     
+   )
 
 ## Command Fields
 
 The command takes the following fields:
 
+.. list-table::
+   :header-rows: 1
+   :widths: 20 20 60
+ 
+   * - Field
+     - Type
+     - Description
+ 
+   * - :ref:`setIndexCommitQuorum <setIndexCommitQuorum-cmd-coll>`
+     - ``string``
+     - .. _setIndexCommitQuorum-cmd-coll:
+       
+       The name of the collection for which the indexes are being 
+       built.
+ 
+   * - :ref:`indexNames <setIndexCommitQuorum-cmd-indexNames>`
+     - ``array``
+     - .. _setIndexCommitQuorum-cmd-indexNames:
+     
+       An array of in-progress index builds to modify. Each 
+       element of the array must be the *name* of the index. 
+      
+       The indexes specified to ``indexNames`` must be the entire set
+       of in-progress builds associated to a given index builder,
+       i.e. the indexes built by a single :dbcommand:`createIndexes`
+       or :method:`db.collection.createIndexes()` operation.
+ 
+   * - :ref:`commitQuorum <setIndexCommitQuorum-cmd-commitQuorum>`
+     - ``int`` or ``string``
+     - .. _setIndexCommitQuorum-cmd-commitQuorum:
+     
+       The minimum number of data-bearing replica
+       set members (i.e. commit quorum), including the primary, that
+       must report a successful :ref:`index build
+       <index-operations-replicated-build>` before the primary
+       marks the ``indexes`` as ready.
+       
+       You can resume some
+       :ref:`interrupted index builds <index-operations-build-failure>`
+       when the commit quorum is set to the default
+       ``"votingMembers"``.
+       
+       To update the commitQuorum, member replica set nodes must have
+       :rsconf:`members[n].buildIndexes` set to ``true``. If any voting
+       nodes have ``members[n].buildIndexes`` 
+       set to ``false``, you can't use the default ``"votingMembers"`` commit 
+       quorum. Either configure all nodes with ``members[n].buildIndexes`` 
+       set to ``true``, or select a different commit quorum. 
+ 
+       Supports the following values:
+ 
+       - ``"votingMembers"`` - all data-bearing voting replica set
+         members (*Default*). A "voting" member is any replica set member 
+         where :rsconf:`members[n].votes` is greater than ``0``.
+ 
+       - ``"majority"`` - a simple majority of data-bearing
+         replica set members.
+ 
+       - ``<int>`` - a specific number of data-bearing 
+         replica set members. Specify an integer greater than 
+         ``0``.
+ 
+       - A replica set :doc:`tag name
+         </tutorial/configure-replica-set-tag-sets>`.
+ 
+ 
+   * - ``comment``
+     - any
+     - .. include:: /includes/extracts/comment-content.rst
+
 ## Behavior
 
-.. include:: /includes/extracts/4.4-changes-index-builds-simultaneous-fcv.rst
+**include:** /includes/extracts/4.4-changes-index-builds-simultaneous-fcv.rst
 
-.. include:: /includes/indexes/commit-quorum.rst
+**include:** /includes/indexes/commit-quorum.rst
 
-Issuing :dbcommand:`setIndexCommitQuorum` has no effect on index builds started with `commitQuorum <createIndexes-cmd-commitQuorum>` of `0`.
+Issuing :dbcommand:`setIndexCommitQuorum` has no effect on index builds
+started with :ref:`commitQuorum <createIndexes-cmd-commitQuorum>` of
+``0``. 
 
-> **Important:** Replica set nodes with `buildIndexes <replica-set-configuration-buildIndexes>`
-set to `false` can't be included in a commit quorum.
+**important:** Replica set nodes with :ref:`buildIndexes <replica-set-configuration-buildIndexes>` 
+   set to ``false`` can't be included in a commit quorum.
+
+.. _commit-quorum-contrasted-with-write-concern:
 
 ### Commit Quorum Contrasted with Write Concern
 
-.. include:: /includes/indexes/commit-quorum-vs-write-concern.rst
+**include:** /includes/indexes/commit-quorum-vs-write-concern.rst
+
 
 ## Examples
 
-.. include:: /includes/extracts/4.4-changes-index-builds-simultaneous.rst
+**include:** /includes/extracts/4.4-changes-index-builds-simultaneous.rst
 
 The following operation starts an index build of two indexes:
 
-```javascript
-db.getSiblingDB("examples").invoices.createIndexes(
-  [
-    { "invoices" : 1 },
-    { "fulfillmentStatus" : 1 }
-  ]
-)
-```
+.. code-block:: javascript
 
-By default, index builds use `"votingMembers"` commit quorum, or all data-bearing voting replica set members. The following operation modifies the index build commit quorum to `"majority"`, or a simple majority of data-bearing voting members:.
+   db.getSiblingDB("examples").invoices.createIndexes(
+     [
+       { "invoices" : 1 },
+       { "fulfillmentStatus" : 1 }
+     ]
+   )
 
-```javascript
-db.getSiblingDB("examples").runCommand(
-  {
-    "setIndexCommitQuorum" : "invoices", 
-    "indexNames" : ["invoices_1", "fullfillmentStatus_1"], 
-    "commitQuorum" : "majority"
-  }
-)
-```
+By default, index builds use ``"votingMembers"`` commit quorum, or all
+data-bearing voting replica set members. The following operation
+modifies the index build commit quorum to ``"majority"``, or a 
+simple majority of data-bearing voting members:. 
 
-- The indexes specified to `indexNames` must be the entire set
-of in-progress builds associated to a given index builder, i.e. the :method:`~db.collection.createIndexes()` operation.
+.. code-block:: javascript
 
-- The `indexNames` field specifies the names of the indexes. Since
-the indexes were created without an explicit name, MongoDB generated an index name by concatenating the names of the indexed fields and the sort order.
+   db.getSiblingDB("examples").runCommand(
+     {
+       "setIndexCommitQuorum" : "invoices", 
+       "indexNames" : ["invoices_1", "fullfillmentStatus_1"], 
+       "commitQuorum" : "majority"
+     }
+   )
+
+- The indexes specified to ``indexNames`` must be the entire set
+  of in-progress builds associated to a given index builder, 
+  i.e. the :method:`~db.collection.createIndexes()` operation. 
+
+- The ``indexNames`` field specifies the *names* of the indexes. Since
+  the indexes were created without an explicit name, MongoDB generated
+  an index name by concatenating the names of the indexed fields and the
+  sort order. 

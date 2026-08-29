@@ -1,53 +1,92 @@
 ---
 type: "Framework Learn Page"
-framework: "mongodb"
+framework: "MongoDB"
 source_repo: "https://github.com/mongodb/docs.git"
 source_branch: "main"
 source_path: "content/manual/manual/source/reference/operator/aggregation/abs.txt"
-source_commit: "ab9db26ed3d11618cdb61516d8180337d8e3f679"
-source_commit_short: "ab9db26e"
-source_commit_date: "2026-07-24T16:22:46-06:00"
-generated_at: "2026-07-25T11:51:15Z"
+source_commit: "b9f2bc487a2878b65e3c1f80024bebab76954f27"
+source_commit_short: "b9f2bc48"
+source_commit_date: "2026-08-28T17:09:45-05:00"
+generated_at: "2026-08-29T09:39:20.153198Z"
 ---
-
-==========================
-
 # $abs (expression operator)
+
+**meta:** :description: Use the `$abs` operator in MongoDB to return the absolute value of a number in aggregation expressions.
+
+.. default-domain:: mongodb
+
+**contents:** On this page
+   :local:
+   :backlinks: none
+   :depth: 1
+   :class: singlecol
 
 ## Definition
 
+**expression:** $abs 
+
+   Returns the absolute value of a number.
+
+   :expression:`$abs` has the following syntax:
+
+   .. code-block:: javascript
+
+      { $abs: <number> }
+
+   The ``<number>`` expression can be any valid :ref:`expression
+   <aggregation-expressions>` as long as it resolves to a number. For
+   more information on expressions, see :ref:`aggregation-expressions`.
+
 ## Behavior
 
-.. include:: /includes/extracts/agg-expression-null-operand-abs.rst
+**include:** /includes/extracts/agg-expression-null-operand-abs.rst
+
+.. list-table::
+   :header-rows: 1
+   :widths: 85 15
+
+   * - Example
+     - Results
+
+   * - ``{ $abs: -1 }``
+     - ``1``
+
+   * - ``{ $abs: 1 }``
+     - ``1``
+
+   * - ``{ $abs: null }``
+     - ``null``
 
 ## Example
 
-A collection `temperatureChange` contains the following documents:
+A collection ``temperatureChange`` contains the following documents:
 
-```javascript
-db.temperatureChange.insertMany( [
-   { _id: 1, startTemp: 50, endTemp: 80 },
-   { _id: 2, startTemp: 40, endTemp: 40 },
-   { _id: 3, startTemp: 90, endTemp: 70 },
-   { _id: 4, startTemp: 60, endTemp: 70 }
-] )
-```
+.. code-block:: javascript
+   
+   db.temperatureChange.insertMany( [
+      { _id: 1, startTemp: 50, endTemp: 80 },
+      { _id: 2, startTemp: 40, endTemp: 40 },
+      { _id: 3, startTemp: 90, endTemp: 70 },
+      { _id: 4, startTemp: 60, endTemp: 70 }
+   ] )
 
-The following example calculates the magnitude of difference between the `startTemp` and `endTemp` ratings:
+The following example calculates the magnitude of difference between
+the ``startTemp`` and ``endTemp`` ratings:
 
-```javascript
-db.temperatureChange.aggregate([
-   {
-      $project: { delta: { $abs: { $subtract: [ "$startTemp", "$endTemp" ] } } }
-   }
-])
-```
+.. code-block:: javascript
+
+   db.temperatureChange.aggregate([
+      {
+         $project: { delta: { $abs: { $subtract: [ "$startTemp", "$endTemp" ] } } }
+      }
+   ])
 
 The operation returns the following results:
 
-```javascript
-{ "_id" : 1, "delta" : 30 }
-{ "_id" : 2, "delta" : 0 }
-{ "_id" : 3, "delta" : 20 }
-{ "_id" : 4, "delta" : 10 }
-```
+.. code-block:: javascript
+   :copyable: false
+
+   { "_id" : 1, "delta" : 30 }
+   { "_id" : 2, "delta" : 0 }
+   { "_id" : 3, "delta" : 20 }
+   { "_id" : 4, "delta" : 10 }

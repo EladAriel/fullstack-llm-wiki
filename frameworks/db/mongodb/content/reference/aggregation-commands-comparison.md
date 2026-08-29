@@ -1,23 +1,146 @@
 ---
 type: "Framework Learn Page"
-framework: "mongodb"
+framework: "MongoDB"
 source_repo: "https://github.com/mongodb/docs.git"
 source_branch: "main"
 source_path: "content/manual/manual/source/reference/aggregation-commands-comparison.txt"
-source_commit: "ab9db26ed3d11618cdb61516d8180337d8e3f679"
-source_commit_short: "ab9db26e"
-source_commit_date: "2026-07-24T16:22:46-06:00"
-generated_at: "2026-07-25T11:51:15Z"
+source_commit: "b9f2bc487a2878b65e3c1f80024bebab76954f27"
+source_commit_short: "b9f2bc48"
+source_commit_date: "2026-08-28T17:09:45-05:00"
+generated_at: "2026-08-29T09:39:19.716740Z"
 ---
-
-===============================
-
 # Aggregation Commands Comparison
 
-> **Note:** .. include:: /includes/fact-use-aggregation-not-map-reduce.rst
+**meta:** :description: Compare MongoDB's aggregation pipeline and map-reduce, highlighting performance, flexibility, and output differences.
+
+.. default-domain:: mongodb
+
+**contents:** On this page
+   :local:
+   :backlinks: none
+   :depth: 1
+   :class: singlecol
+
+**note:** Aggregation Pipeline as Alternative to Map-Reduce
+
+   .. include:: /includes/fact-use-aggregation-not-map-reduce.rst
 
 ## Aggregation Commands Comparison Table
 
-The following table compares the features of MongoDB aggregation commands.
+The following table compares the features of MongoDB aggregation
+commands.
 
-> **Seealso:** `map-reduce-to-agg-pipeline`
+.. list-table::
+   :header-rows: 1
+   :stub-columns: 1
+   :widths: 30 40 40 
+
+   * -  
+
+     - :dbcommand:`aggregate` / :method:`db.collection.aggregate()`
+
+     - :dbcommand:`mapReduce` / :method:`db.collection.mapReduce()`
+
+   * - Description
+
+       Designed with specific goals of improving performance and
+       usability for aggregation tasks.
+       
+       Uses a "pipeline" approach where objects are transformed as they
+       pass through a series of pipeline stages such as
+       :pipeline:`$group`, :pipeline:`$match`, and :pipeline:`$sort`.
+       
+       For more information on pipeline stages, see
+       :ref:`aggregation-pipeline-operator-reference`.
+       
+
+     - Implements the Map-Reduce aggregation for processing large data sets.
+       
+
+   * - Key Features
+
+     - Pipeline operators can be repeated as needed.
+       
+       Pipeline operators need not produce one output document for every
+       input document.
+       
+       Can also generate new documents or filter out documents.
+
+       Using the :pipeline:`$merge` stage, you can create on-demand materialized 
+       views, where the content of the output collection can be updated 
+       incrementally the pipeline is run. :pipeline:`$merge` can incorporate 
+       results (insert new documents, merge documents, replace documents, keep 
+       existing documents, fail the operation, process documents with a custom
+       update pipeline) into an existing collection.
+
+     - In addition to grouping operations, can perform complex
+       aggregation tasks as well as perform incremental aggregation on
+       continuously growing datasets.
+       
+       See :ref:`map-reduce-examples` and
+       :ref:`incremental-map-reduce`.
+       
+
+   * - Flexibility
+
+     - You can define custom accumulators with :group:`$accumulator` 
+       and custom expressions with :expression:`$function`.
+    
+       You can also use the :pipeline:`$project` pipeline stage to add
+       computed fields and reshape existing document fields.
+       
+       See :pipeline:`$project` for more information as well as
+       :ref:`aggregation-pipeline-operator-reference` for more
+       information on all the available pipeline stages.
+       
+
+     - Custom ``map``, ``reduce`` and ``finalize`` JavaScript
+       functions offer flexibility to aggregation logic.
+       
+       See :dbcommand:`mapReduce` for details and restrictions
+       on the functions.
+       
+
+   * - Output Results
+
+     - Returns results as a cursor. If the pipeline includes the
+       :pipeline:`$out` stage or :pipeline:`$merge` stage, the cursor
+       is empty.
+       
+       With :pipeline:`$out`, you can replace an existing output
+       collection completely or output to a new collection. See
+       :pipeline:`$out` for details.
+
+       With :pipeline:`$merge`, you can output to a new or existing
+       collection. For existing collections, you can specify how to
+       incorporate the results into the output collection (insert new
+       documents, merge documents, replace documents, keep existing
+       documents, fail the operation, process documents with a custom
+       update pipeline). See :pipeline:`$merge` for details.
+ 
+     - Returns results in various options (inline, new collection, merge,
+       replace, reduce). See :dbcommand:`mapReduce` for details on the
+       output options.
+       
+
+   * - Sharding
+
+     - Supports non-sharded and sharded input collections.
+     
+       :pipeline:`$merge` can output to a non-sharded or sharded
+       collection.
+
+     - Supports non-sharded and sharded input collections.
+
+
+   * - More Information
+
+       - :ref:`aggregation-pipeline` 
+       - :method:`db.collection.aggregate()`
+       - :dbcommand:`aggregate`
+
+       - :doc:`/core/map-reduce`
+       - :method:`db.collection.mapReduce()` 
+       - :dbcommand:`mapReduce`.
+
+**seealso:** :ref:`map-reduce-to-agg-pipeline`

@@ -1,43 +1,128 @@
 ---
 type: "Framework Learn Page"
-framework: "mongodb"
+framework: "MongoDB"
 source_repo: "https://github.com/mongodb/docs.git"
 source_branch: "main"
 source_path: "content/manual/manual/source/core/csfle/tutorials/kmip/kmip-automatic.txt"
-source_commit: "ab9db26ed3d11618cdb61516d8180337d8e3f679"
-source_commit_short: "ab9db26e"
-source_commit_date: "2026-07-24T16:22:46-06:00"
-generated_at: "2026-07-25T11:51:15Z"
+source_commit: "b9f2bc487a2878b65e3c1f80024bebab76954f27"
+source_commit_short: "b9f2bc48"
+source_commit_date: "2026-08-28T17:09:45-05:00"
+generated_at: "2026-08-29T09:39:19.817357Z"
 ---
+**facet:** :name: programming_language
+   :values: csharp, go, java, javascript/typescript, python
 
-===========================================================
+**meta:** :keywords: code example, node.js, compass, java sync
+   :description: Build a CSFLE-enabled application using a KMIP-compliant key provider to insert documents with encrypted fields.
+
+.. _csfle-tutorial-automatic-kmip:
 
 # Use Automatic {+csfle+} with KMIP
 
+.. default-domain:: mongodb
+
+**contents:** On this page
+   :local:
+   :backlinks: none
+   :depth: 2
+   :class: singlecol
+
 ## Overview
 
-This guide shows you how to build a {+csfle+} ({+csfle-abbrev+})-enabled application using a Key Management Interoperability Protocol (KMIP)-compliant key provider.
+This guide shows you how to build a {+csfle+} ({+csfle-abbrev+})-enabled
+application using a Key Management Interoperability Protocol
+(KMIP)-compliant key provider.
 
 After you complete the steps in this guide, you should have:
 
 - A {+cmk-long+} hosted on a {+kmip-kms+}.
 - A working client application that inserts {+in-use-docs+}
-using your {+cmk-long+}.
+  using your {+cmk-long+}.
 
 ## Before You Get Started
 
-.. include:: /includes/set-up-section.rst
+**include:** /includes/set-up-section.rst
 
-.. include:: /includes/fact-csfle-placeholder.rst
+**include:** /includes/fact-csfle-placeholder.rst
 
-Select the programming language for which you want to see code examples for from the dropdown menu below.
+Select the programming language for which you want to see code examples for from
+the dropdown menu below. 
+
+.. composable-tutorial::
+   :options: language-no-dependencies
+   :defaults: nodejs
+
+### Full Application Code
+
+   .. selected-content::
+      :selections: java-sync
+
+      `Complete Java Application <{+sample-app-url-csfle+}/java/kmip/reader/>`__
+   
+   .. selected-content::
+      :selections: nodejs
+
+      `Complete Node.js Application <{+sample-app-url-csfle+}/node/kmip/reader/>`__
+
+   .. selected-content::
+      :selections: python
+
+      `Complete Python Application <{+sample-app-url-csfle+}/python/kmip/reader/>`__
+
+   .. selected-content::
+      :selections: csharp
+
+      `Complete C# Application <{+sample-app-url-csfle+}/dotnet/kmip/reader/CSFLE/>`__
+
+   .. selected-content::
+      :selections: go
+
+      `Complete Go Application <{+sample-app-url-csfle+}/go/kmip/reader/>`__
+
+### Set Up the KMS
+
+   .. note::
+
+      ``mongod`` reads the KMIP configuration at startup. By default, the
+      server uses KMIP protocol version 1.2.
+
+      To connect to a version 1.0 or 1.1 KMIP server, use the 
+      :setting:`useLegacyProtocol <security.kmip.useLegacyProtocol>`
+      setting.
+
+   .. selected-content::
+      :selections: nodejs
+
+      .. include:: /includes/csfle/nodejs-kmip.rst
+
+   .. selected-content::
+      :selections: java-sync
+
+      .. include:: /includes/csfle/java-sync-kmip.rst
+
+   .. selected-content::
+      :selections: python
+
+      .. include:: /includes/csfle/python-kmip.rst
+
+   .. selected-content::
+      :selections: csharp
+
+      .. include:: /includes/csfle/csharp-kmip.rst
+
+   .. selected-content::
+      :selections: go
+
+      .. include:: /includes/csfle/go-kmip.rst
 
 ## Learn More
 
-To learn how {+csfle-abbrev+} works, see `<csfle-fundamentals>`.
+To learn how {+csfle-abbrev+} works, see
+:ref:`<csfle-fundamentals>`.
 
-To learn more about the topics mentioned in this guide, see the following links:
+To learn more about the topics mentioned in this guide, see the
+following links:
 
-- Learn more about CSFLE components on the `Reference <csfle-reference>` page.
-- Learn how {+cmk-long+}s and {+dek-long+}s work on the `<qe-reference-keys-key-vaults>` page.
-- See how KMS Providers manage your CSFLE keys on the `<qe-fundamentals-kms-providers>` page.
+- Learn more about CSFLE components on the :ref:`Reference <csfle-reference>` page.
+- Learn how {+cmk-long+}s and {+dek-long+}s work on the :ref:`<qe-reference-keys-key-vaults>` page.
+- See how KMS Providers manage your CSFLE keys on the :ref:`<qe-fundamentals-kms-providers>` page.

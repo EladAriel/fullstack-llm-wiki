@@ -1,6 +1,6 @@
-# langsmith Learn Wiki
+# LangSmith Learn Wiki
 
-This is a local LLM-friendly wiki generated from the official langsmith documentation.
+This is a local LLM-friendly wiki generated from the official LangSmith documentation.
 
 ## Status
 
@@ -8,9 +8,10 @@ This is a local LLM-friendly wiki generated from the official langsmith document
 - Source repo: `https://github.com/langchain-ai/docs.git`
 - Source branch: `main`
 - Source docs path: `src/langsmith`
-- Source commit: `2aae1df`
-- Source commit date: `2026-07-25T00:27:23+00:00`
-- Wiki generated at: `2026-07-25T19:08:33.450900Z`
+- Source commit: `a174f9c`
+- Source commit date: `2026-08-28T17:04:12-07:00`
+- Wiki generated at: `2026-08-29T09:39:50.705441Z`
+- Page count: `501`
 
 ## How the IDE LLM should use this wiki
 
@@ -29,3 +30,4 @@ This is a local LLM-friendly wiki generated from the official langsmith document
 ## Top-Level Wiki Areas
 
 - [Content Index](content/index.md)
+- [Fleet](content/fleet/index.md)

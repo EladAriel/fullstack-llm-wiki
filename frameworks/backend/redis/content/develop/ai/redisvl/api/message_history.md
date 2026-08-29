@@ -1,14 +1,15 @@
 ---
 type: "Framework Learn Page"
-framework: "redis"
+framework: "Redis"
 source_repo: "https://github.com/redis/docs.git"
 source_branch: "main"
 source_path: "content/develop/ai/redisvl/api/message_history.md"
-source_commit: "9d30f68c3dad1a6b3b7d30fe604b911348ce8152"
-source_commit_short: "9d30f68c"
-source_commit_date: "2026-07-24T10:52:10-07:00"
-generated_at: "2026-07-25T11:51:22Z"
+source_commit: "f8693349287b0efbef3c865b6f6a2aceca88594d"
+source_commit_short: "f869334"
+source_commit_date: "2026-08-28T10:01:19-05:00"
+generated_at: "2026-08-29T09:38:55.839001Z"
 ---
+# Message_History
 
 ---
 linkTitle: LLM message history
@@ -22,7 +23,7 @@ aliases:
 
 <a id="semantic-message-history-api"></a>
 
-### `class SemanticMessageHistory(name, session_tag=None, prefix=None, vectorizer=None, distance_threshold=0.3, redis_client=None, redis_url='redis://localhost:6379', connection_kwargs={}, overwrite=False, **kwargs)`
+### `class SemanticMessageHistory(name, session_tag=None, prefix=None, vectorizer=None, distance_threshold=0.3, redis_client=None, redis_url='redis://localhost:6379', connection_kwargs={}, overwrite=False, create_index=True, **kwargs)`
 
 Bases: `BaseMessageHistory`
 
@@ -49,6 +50,16 @@ responses.
     for the redis client. Defaults to empty {}.
   * **overwrite** (*bool*) – Whether or not to force overwrite the schema for
     the semantic message index. Defaults to false.
+  * **create_index** (*bool*) – Whether RedisVL creates and validates the index.
+    When False the constructor issues no index command at all: the
+    index must already exist with a compatible schema, and a live
+    index whose prefix or storage type differs is not detected –
+    which produces empty results rather than an error. See
+    [`SemanticCache`]({{< relref "cache/#semanticcache" >}}) for a worked
+    example, and [Install RedisVL]({{< relref "../user_guide/installation" >}}) for the ACL details.
+    Defaults to True.
+* **Raises:**
+  **ValueError** – If both create_index is False and overwrite is True.
 
 The proposed schema will support a single vector embedding constructed
 from either the prompt or response in a single string.
@@ -192,7 +203,7 @@ Returns the full message history.
 
 <a id="message-history-api"></a>
 
-### `class MessageHistory(name, session_tag=None, prefix=None, redis_client=None, redis_url='redis://localhost:6379', connection_kwargs={}, **kwargs)`
+### `class MessageHistory(name, session_tag=None, prefix=None, redis_client=None, redis_url='redis://localhost:6379', connection_kwargs={}, create_index=True, **kwargs)`
 
 Bases: `BaseMessageHistory`
 
@@ -214,6 +225,16 @@ responses.
   * **redis_url** (*str* *,* *optional*) – The redis url. Defaults to redis://localhost:6379.
   * **connection_kwargs** (*Dict* *[* *str* *,* *Any* *]*) – The connection arguments
     for the redis client. Defaults to empty {}.
+  * **create_index** (*bool*) – Whether RedisVL creates the index. When False
+    the constructor issues no index command at all: the index must
+    already exist over this name and prefix. This class never
+    validates an existing index’s schema, so nothing further is
+    verified either way – and as elsewhere, a live index whose
+    prefix or storage type differs from this one is not detected and
+    produces empty results rather than an error. See
+    [`SemanticCache`]({{< relref "cache/#semanticcache" >}}) for a worked
+    example, and [Install RedisVL]({{< relref "../user_guide/installation" >}}) for the ACL details.
+    Defaults to True.
 
 #### `add_message(message, session_tag=None)`
 

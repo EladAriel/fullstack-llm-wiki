@@ -1,14 +1,15 @@
 ---
 type: "Framework Learn Page"
-framework: "pydantic"
+framework: "Pydantic"
 source_repo: "https://github.com/pydantic/pydantic"
 source_branch: "main"
 source_path: "docs/api/standard_library_types.md"
-source_commit: "a2a6577d4c329dd574a45dbb01a8feaa16b1ad3d"
-source_commit_short: "a2a6577d"
-source_commit_date: "2026-07-23T15:38:17Z"
-generated_at: "2026-07-25T11:50:12Z"
+source_commit: "4bc21c0fa28323c0f3e0be93c9ad114b705029c6"
+source_commit_short: "4bc21c0"
+source_commit_date: "2026-08-29T11:30:40+02:00"
+generated_at: "2026-08-29T09:38:50.580016Z"
 ---
+# Standard_Library_Types
 
 ---
 description: Support for common types from the Python standard library.
@@ -435,7 +436,7 @@ Standard library type: [`datetime.datetime`][].
 * Strings and bytes are validated in two ways:
     * Strings complying to the [RFC 3339](https://datatracker.ietf.org/doc/html/rfc3339) format (both datetime and date).
       See the [speedate](https://docs.rs/speedate/) documentation for more details.
-    * Unix timestamps, both as seconds or milliseconds sinch the [epoch](https://en.wikipedia.org/wiki/Unix_time).
+    * Unix timestamps, both as seconds or milliseconds since the [epoch](https://en.wikipedia.org/wiki/Unix_time).
       See the [`val_temporal_unit`][pydantic.ConfigDict.val_temporal_unit] configuration value for more details.
 * Integers and floats (or types that can be coerced as integers or floats) are validated as unix timestamps, following the
   same semantics as strings.
@@ -518,7 +519,7 @@ Standard library type: [`datetime.date`][].
 * Strings and bytes are validated in two ways:
     * Strings complying to the [RFC 3339](https://datatracker.ietf.org/doc/html/rfc3339) date format.
       See the [speedate](https://docs.rs/speedate/) documentation for more details.
-    * Unix timestamps, both as seconds or milliseconds sinch the [epoch](https://en.wikipedia.org/wiki/Unix_time).
+    * Unix timestamps, both as seconds or milliseconds since the [epoch](https://en.wikipedia.org/wiki/Unix_time).
       See the [`val_temporal_unit`][pydantic.ConfigDict.val_temporal_unit] configuration value for more details.
 * If the validation fails, the input can be [validated as a datetime](#datetimes) (including as numbers),
   provided that the time component is 0 and that it is naive.
@@ -892,6 +893,7 @@ Standard library type: [`typing.NamedTuple`][] (and types created by the [`colle
 
 * Allows [`tuple`][] and [`list`][] instances. Validate each item according to the field definition.
 * Allows [`dict`][] instances. Keys must match the named tuple field names, and values are validated according to the field definition.
+* Allows instances of the named tuple class (fields are revalidated).
 
 <h4>Serialization</h4>
 
@@ -1140,6 +1142,63 @@ except ValidationError as e:
     1 validation error for Model
     x
       Input should be a valid dictionary [type=dict_type, input_value='test', input_type=str]
+    """
+```
+
+### Frozen dictionaries
+
+Built-in type: `frozendict`.
+
+/// version-added | v2.14
+The `frozendict` type, new in Python 3.15, is supported by Pydantic.
+///
+
+<h4>Validation</h4>
+
+* `frozendict` instances are accepted as is.
+* [`dict`][] and [mappings][mapping] instances are accepted and coerced to a `frozendict`.
+* If generic parameters for keys and values are provided, the appropriate validation is applied.
+
+<h4>Constraints</h4>
+
+As with [dictionaries](#dictionaries), frozen dictionaries support the following constraints:
+
+| Constraint   | Description                                       | JSON Schema                                                                                    |
+|--------------|---------------------------------------------------|------------------------------------------------------------------------------------------------|
+| `min_length` | The dictionary must have at least this many items | [`minItems`](https://json-schema.org/understanding-json-schema/reference/array#length) keyword |
+| `max_length` | The dictionary must have at most this many items  | [`maxItems`](https://json-schema.org/understanding-json-schema/reference/array#length) keyword |
+
+These constraints can be provided using the [`Field()`][pydantic.Field] function.
+The `MinLen` and `MaxLen` metadata types from the [`annotated-types`](https://github.com/annotated-types/annotated-types)
+library can also be used.
+
+<h4>Strictness</h4>
+
+In [strict mode](../concepts/strict_mode.md), only `frozendict` instances are valid. Strict mode does *not* apply to the keys and values of the frozen dictionaries.
+The strict constraint must be applied to the parameter types for this to work.
+
+<h4>Example</h4>
+
+```python {requires="3.15" lint="skip"}
+from pydantic import BaseModel, ValidationError
+
+
+class Model(BaseModel):
+    x: frozendict[str, int]
+
+
+m = Model(x={'foo': 1})
+print(m.model_dump())
+#> {'x': frozendict({'foo': 1})}
+
+try:
+    Model(x='test')
+except ValidationError as e:
+    print(e)
+    """
+    1 validation error for Model
+    x
+      Input should be a valid frozendict [type=frozen_dict_type, input_value='test', input_type=str]
     """
 ```
 

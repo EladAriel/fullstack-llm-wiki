@@ -1,32 +1,49 @@
 ---
 type: "Framework Learn Page"
-framework: "mongodb"
+framework: "MongoDB"
 source_repo: "https://github.com/mongodb/docs.git"
 source_branch: "main"
 source_path: "content/manual/manual/source/reference/operator/query/expr.txt"
-source_commit: "ab9db26ed3d11618cdb61516d8180337d8e3f679"
-source_commit_short: "ab9db26e"
-source_commit_date: "2026-07-24T16:22:46-06:00"
-generated_at: "2026-07-25T11:51:15Z"
+source_commit: "b9f2bc487a2878b65e3c1f80024bebab76954f27"
+source_commit_short: "b9f2bc48"
+source_commit_date: "2026-08-28T17:09:45-05:00"
+generated_at: "2026-08-29T09:39:20.241918Z"
 ---
-
-================================
-
 # $expr (query predicate operator)
+
+.. default-domain:: mongodb
+
+**facet:** :name: programming_language
+   :values: shell
+
+**meta:** :description: Use the $expr operator to use aggregation expressions in queries. $expr allows for advanced filtering and comparison based on document fields.
+
+**contents:** On this page
+   :local:
+   :backlinks: none
+   :depth: 1
+   :class: singlecol
 
 ## Definition
 
-.. versionchanged:: 5.0
+**versionchanged:** 5.0
+
+**query:** $expr
+
+   Allows the use of :ref:`expressions <aggregation-expressions>` within
+   a :term:`query predicate`.
 
 ## Compatibility
 
-.. include:: /includes/fact-compatibility.rst
+.. |operator-method| replace:: ``$expr``
+
+**include:** /includes/fact-compatibility.rst
 
 ## Syntax
 
-```javascript
-{ $expr: { <expression> } }
-```
+.. code-block:: javascript
+
+   { $expr: { <expression> } }
 
 The argument can be any valid expression.
 
@@ -34,36 +51,87 @@ The argument can be any valid expression.
 
 ### $expr in $lookup Operations
 
-When `$expr` appears in a :pipeline:`$match` stage that is part of a :pipeline:`$lookup` subpipeline, `$expr` can refer to `let` variables defined by the `$lookup` stage. For an example, see `lookup-multiple-joins`.
+When ``$expr`` appears in a :pipeline:`$match` stage that is part of a
+:pipeline:`$lookup` subpipeline, ``$expr`` can refer to ``let``
+variables defined by the ``$lookup`` stage. For an example, see
+:ref:`lookup-multiple-joins`.
 
-.. include:: /includes/expr-operators-and-indexes.rst
+**include:** /includes/expr-operators-and-indexes.rst
 
 ## Examples
 
-.. include:: /includes/sample-data-usage.rst
+**include:** /includes/sample-data-usage.rst
+
+.. _expr-reference-single-document-example:
 
 ### Compare Two Fields from a Single Document
 
-.. include:: /includes/use-expr-in-find-query.rst
+**include:** /includes/use-expr-in-find-query.rst
 
 ### Use $expr With Conditional Statements
 
-Some queries need to execute conditional logic when defining a query filter. The aggregation pipeline provides the :expression:`$cond` operator to express conditional statements. By using `$expr` with the :expression:`$cond` operator, you can specify a conditional filter for your query statement.
+Some queries need to execute conditional logic when 
+defining a query filter. The aggregation pipeline provides the
+:expression:`$cond` operator to express conditional statements. By using
+``$expr`` with the :expression:`$cond` operator, you can
+specify a conditional filter for your query statement.
 
-Assume you want to calculate a weighted score for movies so that highly-rated movies with few votes do not dominate the results:
+Assume you want to calculate a weighted score for movies so that
+highly-rated movies with few votes do not dominate the results:
 
-- If `imdb.votes` is greater than or equal to 1000, the weighted
-score is the full `imdb.rating`.
+- If ``imdb.votes`` is greater than or equal to 1000, the weighted
+  score is the full ``imdb.rating``.
 
-- If `imdb.votes` is less than 1000, the weighted score is 0.5 of
-the `imdb.rating`.
+- If ``imdb.votes`` is less than 1000, the weighted score is 0.5 of
+  the ``imdb.rating``.
 
-You would like to know which movies in the `movies` collection have a weighted score greater than `9`.
+You would like to know which movies in the ``movies`` collection have a
+weighted score greater than ``9``.
 
-The following example uses `$expr` with :expression:`$cond` to calculate the weighted score based on `imdb.votes` and :expression:`$gt` to return documents whose calculated weighted score is greater than `9`:
+The following example uses ``$expr`` with :expression:`$cond` to
+calculate the weighted score based on ``imdb.votes`` and 
+:expression:`$gt` to return documents whose calculated weighted score
+is greater than ``9``:
 
-The following table shows the weighted score for selected documents and whether the weighted score is greater than `9` (i.e. whether the document meets the query condition).
+**literalinclude:** /code-examples/tested/command-line/mongosh/aggregation/expressions/expr/weighted-score.snippet.expr-weighted-score.js
+   :language: javascript
+   :category: usage example
 
-The :method:`db.collection.find()` operation returns 5 documents whose calculated weighted score is greater than `9`:
+The following table shows the weighted score for selected documents and
+whether the weighted score is greater than ``9`` (i.e. whether the
+document meets the query condition).
 
-Even though :expression:`$cond` calculates a weighted score, that score is not reflected in the returned documents. Instead, the returned documents represent the matching documents in their original state.
+.. list-table::
+ :header-rows: 1
+ :widths: 60 10 30
+
+ * - Document
+   - Weighted Score
+   - > 9
+ * - ``{ title: "The Shawshank Redemption", imdb: { rating: 9.3, votes: 1521105 } }``
+   - 9.3
+   - ``true``
+ * - ``{ title: "The Godfather", imdb: { rating: 9.2, votes: 1038358 } }``
+   - 9.2
+   - ``true``
+ * - ``{ title: "Fight Club", imdb: { rating: 8.9, votes: 1191784 } }``
+   - 8.9
+   - ``false``
+ * - ``{ title: "Planet Earth", imdb: { rating: 9.5, votes: 82896 } }``
+   - 9.5
+   - ``true``
+ * - ``{ title: "Hollywood", imdb: { rating: 9.1, votes: 511 } }``
+   - 4.55
+   - ``false``
+
+The :method:`db.collection.find()` operation returns 5 documents whose
+calculated weighted score is greater than ``9``:
+
+
+**literalinclude:** /code-examples/tested/command-line/mongosh/aggregation/expressions/expr/weighted-score-output.sh
+   :language: javascript
+   :category: example return object
+
+Even though :expression:`$cond` calculates a weighted score, that score
+is not reflected in the returned documents. Instead, the returned
+documents represent the matching documents in their original state. 

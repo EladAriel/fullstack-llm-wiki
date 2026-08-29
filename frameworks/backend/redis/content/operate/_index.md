@@ -1,14 +1,15 @@
 ---
 type: "Framework Learn Page"
-framework: "redis"
+framework: "Redis"
 source_repo: "https://github.com/redis/docs.git"
 source_branch: "main"
 source_path: "content/operate/_index.md"
-source_commit: "9d30f68c3dad1a6b3b7d30fe604b911348ce8152"
-source_commit_short: "9d30f68c"
-source_commit_date: "2026-07-24T10:52:10-07:00"
-generated_at: "2026-07-25T11:51:22Z"
+source_commit: "f8693349287b0efbef3c865b6f6a2aceca88594d"
+source_commit_short: "f869334"
+source_commit_date: "2026-08-28T10:01:19-05:00"
+generated_at: "2026-08-29T09:38:54.990068Z"
 ---
+# _Index
 
 ---
 title: Redis products
@@ -24,6 +25,8 @@ hideListLinks: true
 | <ul><li> [Install Redis 8 in Redis Open Source]({{< relref "/operate/oss_and_stack/install/install-stack" >}}) </li><li> [Install Redis Stack]({{< relref "/operate/oss_and_stack/install/archive/install-stack/" >}}) (&#8804; 7.4) </li><li> [Manage Redis]({{< relref "/operate/oss_and_stack/management" >}}) </li></ul> | <ul><li> [Deploy Redis for Kubernetes]({{< relref "/operate/kubernetes/deployment" >}}) </li><li> [Architecture]({{< relref "/operate/kubernetes/architecture" >}}) </li><li> [API Reference]({{< relref "/operate/kubernetes/reference" >}}) </li></ul> |
 | {{<color-bubble color="bg-red-bubble">}} **Redis Insight** | {{<color-bubble color="bg-white-bubble">}} **Redis Data Integration (RDI)** |
 | <ul><li> [Install Redis Insight]({{< relref "/operate/redisinsight/install" >}}) </li><li> [Use Redis Insight]({{< relref "/develop/tools/insight" >}}) </li><li> [Download Redis Insight](https://redis.io/downloads/#insight) </li></ul> | <ul><li> [RDI overview]({{< relref "/integrate/redis-data-integration/" >}}) </li><li> [Install RDI]({{< relref "/integrate/redis-data-integration/installation" >}}) </li> <li> [RDI pipelines]({{< relref "/integrate/redis-data-integration/data-pipelines" >}}) </li> </ul> |
+| {{<color-bubble color="bg-indigo-bubble">}} **Redis Iris context engine** | {{<color-bubble color="bg-blue-gray-bubble">}} **Redis Feature Form** |
+| <ul><li> [Redis Iris context engine overview]({{< relref "/operate/iris" >}}) </li><li> [Redis Agent Memory]({{< relref "/operate/iris/agent-memory" >}}) </li><li> [Redis Context Retriever]({{< relref "/operate/iris/context-retriever" >}}) </li><li> [LangCache]({{< relref "/operate/iris/langcache" >}}) </li></ul> | <ul><li> [Feature Form overview]({{< relref "/operate/featureform" >}}) </li><li> [Deploy Feature Form]({{< relref "/operate/featureform/deploy" >}}) </li><li> [Configure authentication]({{< relref "/operate/featureform/configure-auth" >}}) </li></ul> |
 
 ## Product features
 

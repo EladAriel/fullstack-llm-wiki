@@ -1,43 +1,25 @@
 ---
 type: "Framework Learn Directory Index"
-framework: "redis"
-directory: "content/operate/kubernetes/8.0.18/reference/yaml"
-source_repo: "https://github.com/redis/docs.git"
-source_branch: "main"
-source_commit: "9d30f68c3dad1a6b3b7d30fe604b911348ce8152"
-source_commit_short: "9d30f68c"
-source_commit_date: "2026-07-24T10:52:10-07:00"
-generated_at: "2026-07-25T11:51:22Z"
+framework: "Redis"
+generated_at: "2026-08-29T09:38:56.359684Z"
 ---
 # Yaml
 
-This directory contains redis learning pages related to yaml.
+This directory contains Redis learning pages related to yaml.
 
 ## Breadcrumbs
 
-[Wiki Home](../../../../../../index.md) -> [Content](../../../../../index.md) -> [Operate](../../../../index.md) -> [Kubernetes](../../../index.md) -> [8.0.18](../../index.md) -> [Reference](../index.md) -> [Yaml](index.md)
+[Wiki Home](../index.md) -> [Content](index.md)
 
 ## Navigation
 
-- Parent: [Parent Index](../index.md)
-
-## Child Directories
-
-- None
+- Wiki Home: [Root Index](../index.md)
 
 ## Pages in This Directory
 
-- [Index](_index.md)
+- [_Index](_index.md)
 - [Active Active](active-active.md)
 - [Basic Deployment](basic-deployment.md)
 - [Log Collector Rbac](log-collector-rbac.md)
 - [Multi Namespace](multi-namespace.md)
 - [Rack Awareness](rack-awareness.md)
-
-## IDE LLM Guidance
-
-When answering implementation questions related to this directory:
-
-1. Prefer the most specific page listed above.
-2. If the topic is broad, read the child directory index first.
-3. Use source metadata from each page when giving answers.

@@ -1,29 +1,103 @@
 ---
 type: "Framework Learn Page"
-framework: "mongodb"
+framework: "MongoDB"
 source_repo: "https://github.com/mongodb/docs.git"
 source_branch: "main"
 source_path: "content/manual/manual/source/core/csfle/install.txt"
-source_commit: "ab9db26ed3d11618cdb61516d8180337d8e3f679"
-source_commit_short: "ab9db26e"
-source_commit_date: "2026-07-24T16:22:46-06:00"
-generated_at: "2026-07-25T11:51:15Z"
+source_commit: "b9f2bc487a2878b65e3c1f80024bebab76954f27"
+source_commit_short: "b9f2bc48"
+source_commit_date: "2026-08-28T17:09:45-05:00"
+generated_at: "2026-08-29T09:39:19.773348Z"
 ---
+**facet:** :name: programming_language
+   :values: csharp, go, java, javascript/typescript, python
 
-=========================
+**meta:** :keywords: code example, node.js, compass, java sync
+   :description: Install necessary applications and libraries to enable Client-Side Field Level Encryption in your development environment.
+
+.. _csfle-install:
+.. _csfle-implementation:
 
 # Installation Requirements
 
+
+.. default-domain:: mongodb
+
+**contents:** On this page
+   :local:
+   :backlinks: none
+   :depth: 2
+   :class: singlecol
+
 ## Overview
 
-Learn about the applications and libraries you must install to use {+csfle+} ({+csfle-abbrev+}).
+Learn about the applications and libraries you must install to use
+{+csfle+} ({+csfle-abbrev+}).
+
+.. _csfle-quick-start-driver-dependencies:
 
 ## What You Need
 
-Before you can use {+csfle-abbrev+}, you must set up the following items in your development environment:
+Before you can use {+csfle-abbrev+}, you must set up the following items
+in your development environment:
+
+.. composable-tutorial::
+   :options: language-no-dependencies
+   :defaults: java-sync
+
+   .. selected-content::
+      :selections: java-sync
+
+      .. include:: /includes/set-up/cross-driver-steps.rst
+
+      - Install `mongodb-crypt <https://mvnrepository.com/artifact/org.mongodb/mongodb-crypt>`__.
+        The ``mongodb-crypt`` library contains bindings to communicate
+        with the native library that manages the encryption.
+
+   .. selected-content::
+      :selections: nodejs
+
+      .. include:: /includes/set-up/cross-driver-steps.rst
+
+      - Install `mongodb-client-encryption <https://www.npmjs.com/package/mongodb-client-encryption>`__,
+        a Node.js wrapper for the ``libmongocrypt`` encryption library.
+        The ``libmongocrypt`` library contains bindings to communicate
+        with the native library that manages the encryption.
+
+      .. include:: /includes/in-use-encryption/node-mongodb-client-encryption-note.rst
+
+   .. selected-content::
+      :selections: python
+
+      .. include:: /includes/set-up/cross-driver-steps.rst
+
+      - Install `pymongocrypt <https://pypi.org/project/pymongocrypt/>`__, a Python
+        wrapper for the ``libmongocrypt`` encryption library.
+        The ``libmongocrypt`` library contains bindings to communicate
+        with the native library that manages the encryption.
+
+   .. selected-content::
+      :selections: csharp
+
+      .. include:: /includes/set-up/cross-driver-steps.rst
+
+      - Ensure that you're using an x64 operating system. {+csfle-abbrev+} requires
+        x64 support.
+
+      .. include:: /includes/installation/libmongocrypt-csharp.rst
+
+   .. selected-content::
+      :selections: go
+
+      .. include:: /includes/set-up/cross-driver-steps.rst
+
+      - Install :ref:`libmongocrypt <csfle-reference-libmongocrypt>`.
+        The ``libmongocrypt`` library contains bindings to communicate
+        with the native library that manages the encryption.
 
 ## Learn More
 
-To start using {+csfle-abbrev+}, see `csfle-quick-start`.
+To start using {+csfle-abbrev+}, see :ref:`csfle-quick-start`.
 
-To learn how to use {+csfle-abbrev+} with a remote {+kms-long+} provider, see `csfle-tutorial-automatic-encryption`.
+To learn how to use {+csfle-abbrev+} with a remote {+kms-long+}
+provider, see :ref:`csfle-tutorial-automatic-encryption`.

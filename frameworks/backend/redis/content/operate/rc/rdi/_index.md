@@ -1,14 +1,15 @@
 ---
 type: "Framework Learn Page"
-framework: "redis"
+framework: "Redis"
 source_repo: "https://github.com/redis/docs.git"
 source_branch: "main"
 source_path: "content/operate/rc/rdi/_index.md"
-source_commit: "9d30f68c3dad1a6b3b7d30fe604b911348ce8152"
-source_commit_short: "9d30f68c"
-source_commit_date: "2026-07-24T10:52:10-07:00"
-generated_at: "2026-07-25T11:51:22Z"
+source_commit: "f8693349287b0efbef3c865b6f6a2aceca88594d"
+source_commit_short: "f869334"
+source_commit_date: "2026-08-28T10:01:19-05:00"
+generated_at: "2026-08-29T09:38:55.287391Z"
 ---
+# _Index
 
 ---
 Title: Data Integration
@@ -96,7 +97,8 @@ RDI is not a good fit when:
 - You need complex stream processing of data (aggregations, sliding window processing, complex 
   custom logic).
 - You need to write data to multiple targets from the same pipeline (Redis supports other
-  ways to replicate data across Redis databases such as replicaOf and  Active Active).
+  ways to replicate data across Redis databases such as replicaOf).
+- Your target Redis database is configured with Active-Active topology. Active-Active is not supported as an RDI Cloud target database.
 - Your database administrator has rejected RDI's requirements for the source database.
 <!-- End of embed replacement -->
 
@@ -126,7 +128,8 @@ Before you can create a data pipeline, you must have:
 | Oracle | 19c, 21c | 19c, 21c |
 | MariaDB | 10.5, 11.4.3 | 10.4 to 10.11, 11.4.3 |
 | MySQL | 5.7, 8.0.x, 8.2 | 8.0.x |
-| PostgreSQL | 10, 11, 12, 13, 14, 15, 16 | 11, 12, 13, 14, 15, 16 |
+| PostgreSQL | 10, 11, 12, 13, 14, 15, 16, 17, 18 | 11, 12, 13, 14, 15, 16, 17, 18 |
+| Supabase (uses PostgreSQL) | 10, 11, 12, 13, 14, 15, 16, 17 | - |
 | AWS Aurora PostgreSQL | 15 | 15 |
 | SQL Server | 2017, 2019, 2022 | 2016, 2017, 2019, 2022 |
 | MongoDB | 6.0, 7.0, 8.0 | - |
@@ -158,3 +161,11 @@ To create a new data pipeline, you need to:
 1. [Define the source connection and data pipeline]({{<relref "/operate/rc/rdi/define">}}) by selecting which tables to sync.
 
 Once your data pipeline is defined, you can [view and edit]({{<relref "/operate/rc/rdi/view-edit">}}) it.
+
+For complete production setups, including SQL Server failover handling, see [Production use cases]({{<relref "/operate/rc/rdi/use-cases">}}).
+
+## Maintenance windows
+
+RDI Cloud maintenance follows the same subscription-wide maintenance window as your Redis Cloud Pro subscription. During a maintenance window, your data pipeline may experience brief interruptions as Redis applies updates.
+
+To control when maintenance occurs, [set a manual maintenance window]({{< relref "/operate/rc/subscriptions/maintenance/set-maintenance-windows" >}}) for your Redis Cloud Pro subscription. Any maintenance window you configure applies to both your databases and your RDI data pipeline.

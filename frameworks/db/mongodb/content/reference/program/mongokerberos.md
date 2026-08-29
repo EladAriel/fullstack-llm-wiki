@@ -1,168 +1,366 @@
 ---
 type: "Framework Learn Page"
-framework: "mongodb"
+framework: "MongoDB"
 source_repo: "https://github.com/mongodb/docs.git"
 source_branch: "main"
 source_path: "content/manual/manual/source/reference/program/mongokerberos.txt"
-source_commit: "ab9db26ed3d11618cdb61516d8180337d8e3f679"
-source_commit_short: "ab9db26e"
-source_commit_date: "2026-07-24T16:22:46-06:00"
-generated_at: "2026-07-25T11:51:15Z"
+source_commit: "b9f2bc487a2878b65e3c1f80024bebab76954f27"
+source_commit_short: "b9f2bc48"
+source_commit_date: "2026-08-28T17:09:45-05:00"
+generated_at: "2026-08-29T09:39:19.871850Z"
 ---
+.. _mongokerberos:
 
-=================
+.. default-domain:: mongodb
 
-# `mongokerberos`
+**binary:** mongokerberos
+
+**program:** mongokerberos
+
+**meta:** :keywords: on-prem
+   :description: Test MongoDB's Kerberos and GSSAPI configurations using `mongokerberos` in server or client mode for authentication verification.
+
+# ``mongokerberos``
+
+**contents:** On this page
+   :local:
+   :backlinks: none
+   :depth: 1
+   :class: singlecol
+
+.. |tool-binary| replace:: :binary:`~bin.mongokerberos`
 
 ## Synopsis
 
-MongoDB Enterprise provides :binary:`~bin.mongokerberos` for testing MongoDB's Kerberos and GSSAPI `configuration options <security.sasl.options>` against a running Kerberos deployment. :binary:`~bin.mongokerberos` can be used in one of two modes: server and client.
+MongoDB Enterprise provides :binary:`~bin.mongokerberos` for testing MongoDB's 
+Kerberos and GSSAPI :ref:`configuration options <security.sasl.options>` 
+against a running Kerberos deployment. :binary:`~bin.mongokerberos` can be used
+in one of two modes: *server* and *client*.
 
-Error messages for both modes include information on specific errors encountered and potential advice for resolving the error.
+.. list-table::
+   :widths: 30 70
+   :header-rows: 1
 
-:binary:`~bin.mongokerberos` supports the following deployment types, in both server and client modes:
+   * - Mode
+
+     - Description
+
+   * - Server
+
+     - In *server mode*, :binary:`~bin.mongokerberos` analyzes
+       Kerberos-related configurations on the server, and returns a
+       report which includes error messages for any configurations that
+       are problematic. For usage, see :ref:`mongokeberos-usage-server`
+
+   * - Client
+
+     - In *client mode*, :binary:`~bin.mongokerberos` tests Kerberos
+       authentication for a provided username, and returns a report
+       which includes the success or failure of each step in the
+       Kerberos authentication procedure. For usage, see
+       :ref:`mongokeberos-usage-client`
+
+Error messages for both modes include information on specific errors
+encountered and potential advice for resolving the error.
+
+:binary:`~bin.mongokerberos` supports the following deployment types,
+in both server and client modes:
 
 - Linux MongoDB clients authenticating to MIT Kerberos deployments on
-`supported Linux platforms <prod-notes-supported-platforms>`.
+  :ref:`supported Linux platforms <prod-notes-supported-platforms>`.
 
 - Windows MongoDB clients authenticating to Windows Active Directory
-deployments on `supported Windows platforms <prod-notes-supported-platforms>`.
+  deployments on 
+  :ref:`supported Windows platforms <prod-notes-supported-platforms>`.
 
 - Linux MongoDB clients authenticating to Windows Active Directory
-deployments.
+  deployments.
 
-> **Note:** MongoDB Enterprise and :binary:`~bin.mongokerberos` only support the
-[MIT implementation](https://kerberos.org/)_
-of Kerberos.
+**note:** MongoDB Enterprise and :binary:`~bin.mongokerberos` only support the
+   `MIT implementation <https://kerberos.org/>`__
+   of Kerberos.
 
-Generally, when configuring options related to `Kerberos authentication <security-kerberos>`, it is good practice to verify your configuration with :binary:`~bin.mongokerberos`.
+Generally, when configuring options related to
+:ref:`Kerberos authentication <security-kerberos>`, it is good practice
+to verify your configuration with :binary:`~bin.mongokerberos`.
 
-:binary:`~bin.mongokerberos` is a testing and verification tool; it does not edit any files or configure any services. For configuring Kerberos on your platform please consult the [MIT Kerberos documentation](https://web.mit.edu/kerberos/krb5-latest/doc/)_, or your platform's documentation. For configuring MongoDB to authenticate using Kerberos, please reference the following tutorials:
+:binary:`~bin.mongokerberos` is a testing and verification tool; it does not
+edit any files or configure any services. For configuring Kerberos on
+your platform please consult the `MIT Kerberos documentation
+<https://web.mit.edu/kerberos/krb5-latest/doc/>`__, or your platform's
+documentation. For configuring MongoDB to authenticate using Kerberos,
+please reference the following tutorials:
 
-- `/tutorial/control-access-to-mongodb-with-kerberos-authentication`
-- `/tutorial/control-access-to-mongodb-windows-with-kerberos-authentication`.
-This document provides a complete overview of all command line options for :binary:`~bin.mongokerberos`.
+- :doc:`/tutorial/control-access-to-mongodb-with-kerberos-authentication`
+- :doc:`/tutorial/control-access-to-mongodb-windows-with-kerberos-authentication`.
+
+This document provides a complete overview of all command line options
+for :binary:`~bin.mongokerberos`.
 
 ## Installation
 
-The |tool-binary| tool is part of the MongoDB Database Tools Extra package, and can be `installed with the MongoDB Server <mongokerberos-installed-with-server>` or as a `standalone installation <mongokerberos-standalone-installation>`.
+The |tool-binary| tool is part of the *MongoDB Database Tools Extra*
+package, and can be :ref:`installed with the MongoDB Server
+<mongokerberos-installed-with-server>` or as a
+:ref:`standalone installation <mongokerberos-standalone-installation>`.
+
+.. _mongokerberos-installed-with-server:
 
 ### Install with Server
 
-.. include:: /includes/fact-download-dbtools-extra-server.rst
+**include:** /includes/fact-download-dbtools-extra-server.rst
+
+.. _mongokerberos-standalone-installation:
 
 ### Install as Standalone
 
-.. include:: /includes/fact-download-dbtools-extra-standalone.rst
+**include:** /includes/fact-download-dbtools-extra-standalone.rst
+
+.. _mongokeberos-usage:
 
 ## Usage
 
-:binary:`~bin.mongokerberos` can be run in two modes: server and client.
+:binary:`~bin.mongokerberos` can be run in two modes: *server* and
+*client*.
 
-.. include:: /includes/extracts/require-cmd-line-mongokerberos.rst
+**include:** /includes/extracts/require-cmd-line-mongokerberos.rst
+
+.. _mongokeberos-usage-server:
 
 ### Server Mode
 
-Running :binary:`~bin.mongokerberos` in server mode performs a series of verification steps against your system's Kerberos configuration, including checking for proper DNS resolution, validation of the Kerberos system keytab file, and testing against the MongoDB service principal for your :binary:`~bin.mongod` or :binary:`~bin.mongos` instance.
+Running :binary:`~bin.mongokerberos` in server mode performs a series of
+verification steps against your system's Kerberos configuration,
+including checking for proper DNS resolution, validation of the Kerberos
+system keytab file, and testing against the MongoDB service principal
+for your :binary:`~bin.mongod` or :binary:`~bin.mongos` instance.
 
 Before you can use :binary:`~bin.mongokerberos` in server mode, you must:
 
-#. Configure Kerberos on your platform according to your platform's documentation.
+#. Configure Kerberos on your platform according to your platform's
+   documentation.
 
-#. Create the MongoDB service principal for use with your :binary:`~bin.mongod` or :binary:`~bin.mongos` instance, as described in the following steps:
+#. Create the MongoDB service principal for use with your
+   :binary:`~bin.mongod` or :binary:`~bin.mongos` instance, as described
+   in the following steps:
 
-- `Configure Service Principal on Linux <kerberos-linux-prerequisites>`
-- `Configure Service Principal on Windows <assign-service-principal-name>`
-Once you have completed these steps, you can run :binary:`~bin.mongokerberos` in server mode using the `--server` flag as follows:
+   - :ref:`Configure Service Principal on Linux <kerberos-linux-prerequisites>`
 
-```bash
-mongokerberos --server
-```
+   - :ref:`Configure Service Principal on Windows <assign-service-principal-name>`
 
-If Kerberos has been configured properly on the server, and the service principal created successfully, the output might resemble the following:
+Once you have completed these steps, you can run
+:binary:`~bin.mongokerberos` in server mode using the
+``--server`` flag as follows:
 
-```none
-Resolving kerberos environment...
-[OK] Kerberos environment resolved without errors.
+.. code-block:: bash
 
-Verifying DNS resolution works with Kerberos service at <hostname>...
-[OK] DNS test successful.
+   mongokerberos --server
+   
+If Kerberos has been configured properly on the server, and the service
+principal created successfully, the output might resemble the following:
 
-Getting MIT Kerberos KRB5 environment variables...
-  * KRB5CCNAME: not set.
-  * KRB5_CLIENT_KTNAME: not set.
-  * KRB5_CONFIG: not set.
-  * KRB5_KTNAME: not set.
-  * KRB5_TRACE: not set.
-[OK]
+.. code-block:: none
+   :copyable: false
 
-Verifying existence of KRB5 keytab FILE:/etc/krb5.keytab...
-[OK] KRB5 keytab exists and is populated.
+   Resolving kerberos environment...
+   [OK] Kerberos environment resolved without errors.
 
-Checking principal(s) in KRB5 keytab...
-Found the following principals for MongoDB service mongodb:
-  * mongodb/server.example.com@SERVER.EXAMPLE.COM
-Found the following kvnos in keytab entries for service mongodb:
-  * 3
-[OK] KRB5 keytab is valid.
+   Verifying DNS resolution works with Kerberos service at <hostname>...
+   [OK] DNS test successful.
 
-Fetching KRB5 Config...
-KRB5 config profile resolved as:
-   <Your Kerberos profile file will be output here>
-[OK] KRB5 config profile resolved without errors.
+   Getting MIT Kerberos KRB5 environment variables...
+     * KRB5CCNAME: not set.
+     * KRB5_CLIENT_KTNAME: not set.
+     * KRB5_CONFIG: not set.
+     * KRB5_KTNAME: not set.
+     * KRB5_TRACE: not set.
+   [OK]
 
-Attempting to initiate security context with service credentials...
-[OK] Security context initiated successfully.
-```
+   Verifying existence of KRB5 keytab FILE:/etc/krb5.keytab...
+   [OK] KRB5 keytab exists and is populated.
 
-The final message indicates that the system's Kerberos configuration is ready to be used with MongoDB. If any errors are encountered with the configuration, they will be presented as part of the above output.
+   Checking principal(s) in KRB5 keytab...
+   Found the following principals for MongoDB service mongodb:
+     * mongodb/server.example.com@SERVER.EXAMPLE.COM
+   Found the following kvnos in keytab entries for service mongodb:
+     * 3
+   [OK] KRB5 keytab is valid.
+
+   Fetching KRB5 Config...
+   KRB5 config profile resolved as:
+      <Your Kerberos profile file will be output here>
+   [OK] KRB5 config profile resolved without errors.
+
+   Attempting to initiate security context with service credentials...
+   [OK] Security context initiated successfully.
+
+The final message indicates that the system's Kerberos configuration is
+ready to be used with MongoDB. If any errors are encountered with
+the configuration, they will be presented as part of the above output.
+
+.. _mongokeberos-usage-client:
 
 ### Client Mode
 
-Running :binary:`~bin.mongokerberos` in client mode tests authentication against your system's Kerberos environment, performing each step in the Kerberos authentication process, including checking for proper DNS resolution, verification of the Kerberos client keytab file, and testing whether a ticket can be successfully granted. Running :binary:`~bin.mongokerberos` in client mode simulates the client authentication procedure of :binary:`~bin.mongosh`.
+Running :binary:`~bin.mongokerberos` in client mode tests authentication
+against your system's Kerberos environment, performing each step in the
+Kerberos authentication process, including checking for proper DNS
+resolution, verification of the Kerberos client keytab file, and testing
+whether a ticket can be successfully granted. Running
+:binary:`~bin.mongokerberos` in client mode simulates the client
+authentication procedure of :binary:`~bin.mongosh`.
 
-Before you can use :binary:`~bin.mongokerberos` in client mode, you must first have configured Kerberos on your platform according to your platform's documentation. Optionally, you may also choose to run :binary:`~bin.mongokerberos` in `server mode <mongokeberos-usage-server>` first to verify that your platform's Kerberos configuration is valid before using client mode.
+Before you can use :binary:`~bin.mongokerberos` in client mode, you must
+first have configured Kerberos on your platform according to your
+platform's documentation. Optionally, you may also choose to run
+:binary:`~bin.mongokerberos` in
+:ref:`server mode <mongokeberos-usage-server>` first to verify that your
+platform's Kerberos configuration is valid before using client mode.
 
-Once you have completed these steps, you can run :binary:`~bin.mongokerberos` in client mode to test user authentication, using the `--client` flag as follows:
+Once you have completed these steps, you can run
+:binary:`~bin.mongokerberos` in client mode to test user authentication,
+using the ``--client`` flag as follows:
 
-```bash
-mongokerberos --client --username <username>
-```
+.. code-block:: bash
 
-You must provide a valid username, which is used to request a Kerberos ticket as part of the authentication procedure. Your platform's Kerberos infrastructure must be aware of this user.
+   mongokerberos --client --username <username>
+   
+You must provide a valid username, which is used to request a Kerberos
+ticket as part of the authentication procedure. Your platform's
+Kerberos infrastructure must be aware of this user.
 
-If the provided credentials are valid, and the Kerberos options in the configuration files are valid, the output might resemble the following:
+If the provided credentials are valid, and the Kerberos options in the
+configuration files are valid, the output might resemble the following:
 
-```none
-Resolving kerberos environment...
-[OK] Kerberos environment resolved without errors.
+.. code-block:: none
+  :copyable: false
 
-Verifying DNS resolution works with Kerberos service at <hostname>...
-[OK] DNS test successful.
+   Resolving kerberos environment...
+   [OK] Kerberos environment resolved without errors.
 
-Getting MIT Kerberos KRB5 environment variables...
-  * KRB5CCNAME: not set.
-  * KRB5_CLIENT_KTNAME: not set.
-  * KRB5_CONFIG: not set.
-  * KRB5_KTNAME: not set.
-  * KRB5_TRACE: not set.
-[OK]
+   Verifying DNS resolution works with Kerberos service at <hostname>...
+   [OK] DNS test successful.
 
-Verifying existence of KRB5 client keytab FILE:/path/to/client.keytab...
-[OK] KRB5 client keytab exists and is populated.
+   Getting MIT Kerberos KRB5 environment variables...
+     * KRB5CCNAME: not set.
+     * KRB5_CLIENT_KTNAME: not set.
+     * KRB5_CONFIG: not set.
+     * KRB5_KTNAME: not set.
+     * KRB5_TRACE: not set.
+   [OK]
 
-Checking principal(s) in KRB5 keytab...
-[OK] KRB5 keytab is valid.
+   Verifying existence of KRB5 client keytab FILE:/path/to/client.keytab...
+   [OK] KRB5 client keytab exists and is populated.
 
-Fetching KRB5 Config...
-KRB5 config profile resolved as:
-   <Your Kerberos profile file will be output here>
-[OK] KRB5 config profile resolved without errors.
+   Checking principal(s) in KRB5 keytab...
+   [OK] KRB5 keytab is valid.
 
-Attempting client half of GSSAPI conversation...
-[OK] Client half of GSSAPI conversation completed successfully.
-```
+   Fetching KRB5 Config...
+   KRB5 config profile resolved as:
+      <Your Kerberos profile file will be output here>
+   [OK] KRB5 config profile resolved without errors.
 
-The final message indicates that client authentication completed successfully for the user provided.  If any errors are encountered during the authentication steps, they will be presented as part of the above output.
+   Attempting client half of GSSAPI conversation...
+   [OK] Client half of GSSAPI conversation completed successfully.
+
+The final message indicates that client authentication completed
+successfully for the user provided.  If any errors are encountered
+during the authentication steps, they will be presented as part of the
+above output.
 
 ## Options
+
+.. _mongokeberos-option-server:
+
+**option:** --server
+
+   Runs :binary:`~bin.mongokerberos` in server mode to test that your
+   platform's Kerberos configuration is valid for use with MongoDB.
+
+   See :ref:`mongokeberos-usage-server` for example usage and expected
+   output.
+
+.. _mongokeberos-option-client:
+
+**option:** --client
+
+   Runs :binary:`~bin.mongokerberos` in client mode to test client
+   authentication against your system's Kerberos environment. Requires
+   specifying a valid username with :option:`--username` when running in
+   client mode. :binary:`~bin.mongokerberos` will request a Kerberos ticket
+   for this username as part of the validation procedure. Running
+   :binary:`~bin.mongokerberos` in client mode simulates the client
+   authentication procedure of :binary:`~bin.mongosh`. 
+
+   See :ref:`mongokeberos-usage-client` for example usage and expected
+   output.
+
+**option:** --config <filename>, -f <filename>
+
+   Specifies a configuration file for runtime configuration options. 
+   The options are equivalent to the command-line
+   configuration options. See :doc:`/reference/configuration-options` for
+   more information.
+
+   :binary:`~bin.mongokerberos` will read the values for
+   :parameter:`saslHostName` and :parameter:`saslServiceName` from this
+   file if present. These values can alteratively be specified with the
+   :option:`--setParameter` option instead.
+
+   Ensure the configuration file uses ASCII encoding. The
+   :binary:`~bin.mongokerberos` instance does not support configuration
+   files with non-ASCII encoding, including UTF-8.
+
+   Only valid in :ref:`server mode <mongokeberos-usage-server>`.
+
+**option:** --setParameter <options>
+
+   Sets a configurable parameter. You can specify multiple
+   ``setParameter`` fields.
+
+   While you can use any supported parameters with ``setParameter``,
+   :binary:`~bin.mongokerberos` only checks for the value of the following:
+
+   - :parameter:`saslHostName`
+   - :parameter:`saslServiceName`
+
+   If using the :option:`--config` option with a configuration file that
+   also contains these values, the ``setParameter`` values will
+   override the values from the configuration file.
+
+   Valid in both :ref:`server mode <mongokeberos-usage-server>`
+   and :ref:`client mode <mongokeberos-usage-client>`.
+
+**option:** --host <hostname>
+
+   Specify the hostname of the MongoDB server to connect to when testing
+   authentication.
+   
+   If :option:`--host` is not specified, :binary:`~bin.mongokerberos` does
+   not perform any DNS validation of the hostname (i.e. PTR record
+   verification)
+
+   Only valid in :ref:`client mode <mongokeberos-usage-client>`.
+
+**option:** --username <username>, -u <username>
+
+   Username for :binary:`~bin.mongokerberos` to use when attempting Kerberos
+   authentication. This value is required when running in
+   :ref:`client mode<mongokeberos-usage-client>`.
+
+   Only valid in :ref:`client mode <mongokeberos-usage-client>`.
+
+**option:** --gssapiServiceName <servicename>
+
+   *default: 'mongodb'*
+
+   Service principal name to use when authenticating using
+   GSSAPI/Kerberos.
+
+   Only valid in :ref:`client mode <mongokeberos-usage-client>`.
+
+**option:** --gssapiHostName <hostname>
+
+   Remote hostname to use for purpose of GSSAPI/Kerberos authentication.
+
+   Only valid in :ref:`client mode <mongokeberos-usage-client>`.

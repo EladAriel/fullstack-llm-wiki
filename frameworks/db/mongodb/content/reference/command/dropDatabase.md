@@ -1,50 +1,96 @@
 ---
 type: "Framework Learn Page"
-framework: "mongodb"
+framework: "MongoDB"
 source_repo: "https://github.com/mongodb/docs.git"
 source_branch: "main"
 source_path: "content/manual/manual/source/reference/command/dropDatabase.txt"
-source_commit: "ab9db26ed3d11618cdb61516d8180337d8e3f679"
-source_commit_short: "ab9db26e"
-source_commit_date: "2026-07-24T16:22:46-06:00"
-generated_at: "2026-07-25T11:51:15Z"
+source_commit: "b9f2bc487a2878b65e3c1f80024bebab76954f27"
+source_commit_short: "b9f2bc48"
+source_commit_date: "2026-08-28T17:09:45-05:00"
+generated_at: "2026-08-29T09:39:20.062564Z"
 ---
-
-===============================
-
 # dropDatabase (database command)
+
+**meta:** :description: Execute the `dropDatabase` command to delete the current database and its data files, with options for write concern and comments.
+
+.. default-domain:: mongodb
+
+**contents:** On this page
+   :local:
+   :backlinks: none
+   :depth: 1
+   :class: singlecol
 
 ## Definition
 
+**dbcommand:** dropDatabase
+
+   The :dbcommand:`dropDatabase` command drops the current database, deleting
+   the associated data files.
+
 ## Compatibility
 
-This command is available in deployments hosted in the following environments:
+This command is available in deployments hosted in the following environments: 
 
-.. include:: /includes/fact-environments-atlas-only.rst
+**include:** /includes/fact-environments-atlas-only.rst
 
-.. include:: /includes/fact-environments-atlas-support-all.rst
+**include:** /includes/fact-environments-atlas-support-all.rst
 
-.. include:: /includes/fact-environments-onprem-only.rst
+**include:** /includes/fact-environments-onprem-only.rst
 
+   
 ## Syntax
 
 The command has the following syntax:
 
-```javascript
-db.runCommand(
-   {   
-     dropDatabase: 1, 
-     writeConcern: <document>, 
-     comment: <any> 
-   }
-)
-```
+.. code-block:: javascript
+   
+   db.runCommand(
+      {   
+        dropDatabase: 1, 
+        writeConcern: <document>, 
+        comment: <any> 
+      }
+   )
 
 ## Command Fields
 
 The command takes the following optional fields:
 
-:binary:`~bin.mongosh` also provides the helper method :method:`db.dropDatabase()`.
+.. list-table::
+   :header-rows: 1
+   :widths: 20 80
+ 
+   * - Field
+     - Description
+ 
+   * - ``writeConcern``
+     - Optional. A document expressing the :doc:`write concern
+       </reference/write-concern>` to use if greater than
+       :writeconcern:`"majority"`
+ 
+       .. code-block:: javascript
+ 
+          { w: <value>, j: <boolean>, wtimeout: <number> }
+ 
+       Omit to use the default/minimum write concern of
+       :writeconcern:`"majority"`.
+ 
+       When issued on a replica set, if the specified write concern
+       results in fewer member acknowledgments than write concern
+       :writeconcern:`"majority"`, the operation uses
+       :writeconcern:`"majority"`. Otherwise, the specified write
+       concern is used.
+ 
+       .. include:: /includes/extracts/mongos-operations-wc-drop-database.rst
+ 
+       See also :ref:`Behavior <dropDatabase-wc>`.
+ 
+   * - ``comment``
+     - .. include:: /includes/extracts/comment-content.rst
+
+:binary:`~bin.mongosh` also provides the helper method
+:method:`db.dropDatabase()`.
 
 ## Behavior
 
@@ -54,37 +100,56 @@ The operation takes an exclusive (X) database lock only.
 
 ### User Management
 
-.. include:: /includes/fact-drop-database-users.rst
+**include:** /includes/fact-drop-database-users.rst
 
 ### Indexes
 
-.. include:: /includes/extracts/4.4-changes-drop-database-in-progress-indexes.rst
+**include:** /includes/extracts/4.4-changes-drop-database-in-progress-indexes.rst
 
-.. include:: /includes/fact-abort-index-build-replica-sets.rst
+**include:** /includes/fact-abort-index-build-replica-sets.rst
+
+.. _dropDatabase-wc:
 
 ### Replica Set and Sharded Clusters
 
-Replica Sets At minimum, :dbcommand:`dropDatabase` waits until all collections drops in the database have propagated to a majority of the replica set members (i.e. uses the write concern :writeconcern:`"majority"`).
+Replica Sets
+   At minimum, :dbcommand:`dropDatabase` waits until all collections
+   drops in the database have propagated to a majority of the replica
+   set members (i.e. uses the write concern :writeconcern:`"majority"`).
 
-If you specify a write concern that requires acknowledgment from fewer than the majority, the command uses write concern :writeconcern:`"majority"`.
+   If you specify a write concern that requires acknowledgment from
+   fewer than the majority, the command uses write concern
+   :writeconcern:`"majority"`.
 
-If you specify a write concern that requires acknowledgment from more than the majority, the command uses the specified write concern.
+   If you specify a write concern that requires acknowledgment from
+   more than the majority, the command uses the specified write concern.
 
 Sharded Clusters
+   .. include:: /includes/extracts/mongos-operations-wc-drop-database.rst
 
-.. include:: /includes/extracts/mongos-operations-wc-drop-database.rst
+   .. include:: /includes/warning-dropDatabase-shardedCluster.rst
+
+   .. include:: /includes/extracts/5.0-changes-dropdatabase-sharding.rst
 
 ### Change Streams
 
-The :method:`db.dropDatabase()` method and :dbcommand:`dropDatabase` create an `change-event-invalidate` for any `/changeStreams` opened on the dropped database or opened on the collections in the dropped database.
+The :method:`db.dropDatabase()` method and :dbcommand:`dropDatabase`
+create an :ref:`change-event-invalidate` for any :doc:`/changeStreams`
+opened on the dropped database or opened on the collections in the
+dropped database.
 
 ## Example
 
-The following example in :binary:`~bin.mongosh` uses the `use <database>` operation to switch the current database to the `temp` database and then uses the :dbcommand:`dropDatabase` command to drop the `temp` database:
+The following example in :binary:`~bin.mongosh` uses the ``use
+<database>`` operation to switch the current database to the ``temp``
+database and then uses the :dbcommand:`dropDatabase` command to drop
+the ``temp`` database:
 
-```javascript
-use temp
-db.runCommand( { dropDatabase: 1 } )
-```
+.. code-block:: javascript
 
-> **Seealso:** :dbcommand:`dropAllUsersFromDatabase`
+   use temp
+   db.runCommand( { dropDatabase: 1 } )
+
+.. write-lock
+
+**seealso:** :dbcommand:`dropAllUsersFromDatabase`

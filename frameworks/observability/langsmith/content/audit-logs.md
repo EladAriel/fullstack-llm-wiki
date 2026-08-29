@@ -4,10 +4,10 @@ framework: "LangSmith"
 source_repo: "https://github.com/langchain-ai/docs.git"
 source_branch: "main"
 source_path: "src/langsmith/audit-logs.mdx"
-source_commit: "2aae1dfc98ee953a9a5185fb6fcdd9efb3f4d878"
-source_commit_short: "2aae1df"
-source_commit_date: "2026-07-25T00:27:23+00:00"
-generated_at: "2026-07-25T19:08:33.403194Z"
+source_commit: "a174f9cf7c91ee5eb14ee2382eb48bfe6e4956e9"
+source_commit_short: "a174f9c"
+source_commit_date: "2026-08-28T17:04:12-07:00"
+generated_at: "2026-08-29T09:39:50.647656Z"
 ---
 # Audit Logs
 
@@ -38,6 +38,22 @@ Audit logs are useful for security reviews, compliance requirements, and general
 ## What gets logged
 
 Audit logs record changes to organization settings, membership, credentials, workspaces, and other resources. Each event includes the timestamp, the actor, the operation name, the affected resources, and whether it succeeded. For the complete list of operation names, see the [tracked operations reference](#tracked-operations-reference).
+
+## View audit logs in the UI
+
+Organization Admins and Organization Operators can browse audit logs from **Organization Settings > Audit logs**.
+
+The table shows the time, actor, workspace, operation, status, and affected resources for each event. Click a row's timestamp to open the full raw event as JSON in a side panel.
+
+Use the filters above the table to narrow results:
+
+- **Time range**
+- **Workspace**
+- **Operation**
+- **Actor**—a specific user, API key, or service key
+- **Resource ID**
+
+Audit logs are also available via the [API](#query-audit-logs-via-api).
 
 ## Retention
 
@@ -194,7 +210,7 @@ No. Audit logs are an Enterprise feature. See [pricing](https://www.langchain.co
 </Accordion>
 
 <Accordion title="Is there a UI for viewing audit logs?">
-Not currently. Audit logs are available via the [API](#query-audit-logs-via-api).
+Yes. See [View audit logs in the UI](#view-audit-logs-in-the-ui). Audit logs are also available via the [API](#query-audit-logs-via-api).
 </Accordion>
 
 <Accordion title="Are read operations logged?">

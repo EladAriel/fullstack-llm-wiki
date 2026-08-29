@@ -1,68 +1,109 @@
 ---
 type: "Framework Learn Page"
-framework: "mongodb"
+framework: "MongoDB"
 source_repo: "https://github.com/mongodb/docs.git"
 source_branch: "main"
 source_path: "content/manual/manual/source/data-modeling/referencing.txt"
-source_commit: "ab9db26ed3d11618cdb61516d8180337d8e3f679"
-source_commit_short: "ab9db26e"
-source_commit_date: "2026-07-24T16:22:46-06:00"
-generated_at: "2026-07-25T11:51:15Z"
+source_commit: "b9f2bc487a2878b65e3c1f80024bebab76954f27"
+source_commit_short: "b9f2bc48"
+source_commit_date: "2026-08-28T17:09:45-05:00"
+generated_at: "2026-08-29T09:39:19.771125Z"
 ---
-
-=====================================
+.. _data-modeling-referencing: 
 
 # Reference Data in Your MongoDB Schema
 
-References store relationships between data by including links, called **references**, from one document to another. Applications can resolve these references to access the related data. In the following example, the `contact` and `access` documents contain a reference to the `user` document.
+**meta:** :description: Decide if using references in your MongoDB schema design will optimize application performance and data retrieval.
 
-.. include:: /images/data-model-normalized.rst
+**contents:** On this page
+   :local:
+   :backlinks: none
+   :depth: 2
+   :class: singlecol
 
-References result in **normalized** data models because data is divided into multiple collections and not duplicated.
+.. dismissible-skills-card::
+   :skill: Relational to Document Model
+   :url: https://learn.mongodb.com/skills?openTab=data%20modeling
+
+References store relationships between data by including links, called
+**references**, from one document to another. Applications can resolve these
+references to access the related data. In the following example,
+the ``contact`` and ``access`` documents contain a reference to the
+``user`` document.
+
+**include:** /images/data-model-normalized.rst
+
+References result in **normalized** data models because data is divided
+into multiple collections and not duplicated.
 
 ## Use Cases
 
-Although a denormalized data models work for most use cases in MongoDB, consider using references instead of embedded data if:
+Although a denormalized data models work for most use cases in MongoDB, consider 
+using references instead of embedded data if:
 
 - Embedding would result in duplication of data but would not
-provide sufficient read performance advantages to outweigh the implications of the duplication. For example, when the embedded data frequently changes.
+  provide sufficient read performance advantages to outweigh the
+  implications of the duplication. For example, when the embedded data
+  frequently changes. 
 
-- You need to represent complex many-to-many relationships or large hierarchical
-data sets.
+- You need to represent complex many-to-many relationships or large hierarchical 
+  data sets. 
 
 - You need to frequently query the related entity on its own.
+
+.. _data-model-large-number-of-collections:
+
 ### Large Number of Collections
 
-In certain situations, you might choose to store related information in several collections rather than in a single collection.
+In certain situations, you might choose to store related information in
+several collections rather than in a single collection.
 
-Consider a sample collection `logs` that stores log documents for various environment and applications. The `logs` collection contains documents of the following form:
+Consider a sample collection ``logs`` that stores log documents for
+various environment and applications. The ``logs`` collection contains
+documents of the following form:
 
-```javascript
-{ log: "dev", ts: ..., info: ... }
-{ log: "debug", ts: ..., info: ...}
-```
+.. code-block:: javascript
 
-If the total number of documents is low, you may group documents into collection by type. For logs, consider maintaining distinct log collections, such as `logs_dev` and `logs_debug`.
+   { log: "dev", ts: ..., info: ... }
+   { log: "debug", ts: ..., info: ...}
 
-Generally, having a large number of collections has no significant performance penalty and results in good performance. Distinct collections are very important for high-throughput batch processing.
+If the total number of documents is low, you may group documents into
+collection by type. For logs, consider maintaining distinct log
+collections, such as ``logs_dev`` and ``logs_debug``.
 
-When using models that have a large number of collections, consider the following behaviors:
+Generally, having a large number of collections has no significant performance 
+penalty and results in good performance. Distinct collections are very important 
+for high-throughput batch processing.
+
+When using models that have a large number of collections, consider
+the following behaviors:
 
 - Each collection has a certain minimum overhead of a few kilobytes.
-- Unindexed read operations might consume a large amount of memory.
-- For each `database`, a single namespace file (such as
-`<database>.ns`) stores all metadata for that database. Each index and collection has its own entry in the namespace file. See places `namespace length limits <limit-namespace-length>` for specific limitations.
+
+- Unindexed read operations might consume a large amount of memory. 
+
+- For each :term:`database`, a single namespace file (such as
+  ``<database>.ns``) stores all metadata for that database. Each
+  index and collection has its own entry in the namespace file. See
+  places :ref:`namespace length limits <limit-namespace-length>` for
+  specific limitations.
 
 ## Query Normalized Data Models
 
-To query normalized data in multiple collections, MongoDB provides the following aggregation stages:
+To query normalized data in multiple collections, MongoDB provides the
+following aggregation stages:
 
 - :pipeline:`$lookup`
+
 - :pipeline:`$graphLookup`
-For an example of normalized data models, see `data-modeling-publisher-and-books`.
 
-For examples of various tree models, see `data-model-tree-structure`.
+For an example of normalized data models, see
+:ref:`data-modeling-publisher-and-books`.
 
-## Contents
+For examples of various tree models, see
+:ref:`data-model-tree-structure`.
 
-- /reference/database-references
+**toctree:** :titlesonly: 
+   :hidden: 
+
+   /reference/database-references

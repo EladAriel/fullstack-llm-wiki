@@ -1,34 +1,56 @@
 ---
 type: "Framework Learn Page"
-framework: "mongodb"
+framework: "MongoDB"
 source_repo: "https://github.com/mongodb/docs.git"
 source_branch: "main"
 source_path: "content/manual/manual/source/reference/mongodb-extended-json.txt"
-source_commit: "ab9db26ed3d11618cdb61516d8180337d8e3f679"
-source_commit_short: "ab9db26e"
-source_commit_date: "2026-07-24T16:22:46-06:00"
-generated_at: "2026-07-25T11:51:15Z"
+source_commit: "b9f2bc487a2878b65e3c1f80024bebab76954f27"
+source_commit_short: "b9f2bc48"
+source_commit_date: "2026-08-28T17:09:45-05:00"
+generated_at: "2026-08-29T09:39:19.713658Z"
 ---
-
-==========================
+.. _mongodb-extended-json-v2:
 
 # MongoDB Extended JSON (v2)
 
-> **Important:** The following page discusses MongoDB Extended JSON v2. For
-discussion on the Legacy MongoDB Extended JSON v1, see
-`/reference/mongodb-extended-json-v1`.
-For supported data types in :binary:`~bin.mongosh`, see
-:mongosh:`mongosh Data Types </reference/data-types/>`.
+.. default-domain:: mongodb
 
-`JSON` can only directly represent a subset of the types supported by `BSON`. To preserve type information, MongoDB adds the following extensions to the JSON format.
+**meta:** :description: MongoDB Extended JSON v2 extends standard JSON to preserve BSON type information. Learn about canonical and relaxed modes, supported drivers, and serialization methods.
+
+**contents:** On this page
+   :local:
+   :backlinks: none
+   :depth: 1
+   :class: singlecol
+
+.. _extended-json-high-level-ref-v2:
+
+**important:** Disambiguation
+
+   The following page discusses MongoDB Extended JSON v2. For
+   discussion on the Legacy MongoDB Extended JSON v1, see
+   :doc:`/reference/mongodb-extended-json-v1`.
+
+   For supported data types in :binary:`~bin.mongosh`, see
+   :mongosh:`mongosh Data Types </reference/data-types/>`.
+
+:term:`JSON` can only directly represent a subset of the types
+supported by :term:`BSON`. To preserve type information, MongoDB adds
+the following extensions to the JSON format.
 
 - Canonical Mode
-A string format that emphasizes type preservation at the expense of readability and interoperability. That is, conversion from canonical to BSON generally preserves type information except in certain specific cases.
+      A string format that emphasizes type preservation at the expense
+      of readability and interoperability. That is, conversion from
+      canonical to BSON generally preserves type information except in
+      certain specific cases.
 
 - Relaxed Mode
-A string format that emphasizes readability and interoperability at the expense of type preservation. That is, conversion from relaxed format to BSON can lose type information.
+      A string format that emphasizes readability and interoperability
+      at the expense of type preservation. That is, conversion from
+      relaxed format to BSON can lose type information.
 
-Both formats conform to the [JSON RFC](http://www.json.org) and can be parsed by the various MongoDB drivers and tools.
+Both formats conform to the `JSON RFC <http://www.json.org>`_ and can be
+parsed by the various MongoDB drivers and tools.
 
 ## MongoDB Extended JSON v2 Usage
 
@@ -36,172 +58,706 @@ Both formats conform to the [JSON RFC](http://www.json.org) and can be parsed by
 
 The following drivers support Extended JSON v2.0:
 
+**hlist:** :columns: 3
+
+   - C
+   - C#
+   - C++
+   - Go
+   - Java
+   - Kotlin
+   - Node
+   - Perl
+   - PHPC
+   - Python
+   - Ruby
+   - Scala
+
 ### Extended JSON Methods
 
 MongoDB provides the following methods for Extended JSON:
 
-For usage examples, see `ex-obj-conversions` below.
+.. list-table::
+   :header-rows: 1
+   :widths: 20 80
+
+   * - Method
+     - Description
+
+   * - ``serialize``
+     - Serializes a BSON object and returns the data in Extended JSON
+       format.
+
+       .. code-block:: javascript
+
+          EJSON.serialize( db.<collection>.findOne() )
+
+   * - ``deserialize``
+     - Converts a serialized document to field and value pairs. The
+       values have :ref:`BSON types <type-representations>`.
+
+       .. code-block:: javascript
+
+          EJSON.deserialize( <serialized object> )
+
+   * - ``stringify``
+     - Converts the element and :ref:`type <type-representations>`
+       pairs in a deserialized object to strings.
+
+       .. code-block:: javascript
+
+          EJSON.stringify( <deserialized object> )
+
+   * - ``parse``
+     - Converts strings into element and :ref:`type
+       <type-representations>` pairs.
+
+       .. code-block:: javascript
+
+          EJSON.parse( <string> )
+
+For usage examples, see :ref:`ex-obj-conversions` below.
 
 For additional details, see the documentation for:
 
 - `MongoDB NodeJS Driver
-<https://mongodb.github.io/node-mongodb-native/4.0/>`__
+  <https://mongodb.github.io/node-mongodb-native/4.0/>`__
+- `BSON Parser <https://github.com/mongodb-js/bson-ext>`__
+- `BSON-EXT Parser <https://github.com/mongodb-js/bson-ext>`__
 
-- [BSON Parser](https://github.com/mongodb-js/bson-ext)_
-- [BSON-EXT Parser](https://github.com/mongodb-js/bson-ext)_
 ### MongoDB Database Tools
 
-.. include:: /includes/extracts/4.2-changes-extended-json-v2.rst
+**include:** /includes/extracts/4.2-changes-extended-json-v2.rst
+
+.. _bsontype-list-of-types:
 
 ## BSON Data Types and Associated Representations
 
-The following presents some common BSON data types and the associated representations in Canonical and Relaxed.
+The following presents some common BSON data types and the associated
+representations in *Canonical* and *Relaxed*.
 
-The complete list is [here](https://github.com/mongodb/specifications/blob/master/source/extended-json/extended-json.md)_.
+.. list-table::
+   :widths: 15 15 15 30
 
----------------------------------------------------
+   * - - :bsontype:`Array`
+       - :bsontype:`Binary`
+       - :bsontype:`Date`
+
+     - - :bsontype:`Decimal128`
+       - :bsontype:`Document`
+       - :bsontype:`Double`
+
+     - - :bsontype:`Int32`
+       - :bsontype:`Int64`
+       - :bsontype:`MaxKey`
+
+     - - :bsontype:`MinKey`
+       - :bsontype:`ObjectId`
+       - :bsontype:`Regular Expression`
+       - :bsontype:`Timestamp`
+
+The complete list is `here
+<https://github.com/mongodb/specifications/blob/master/source/extended-json/extended-json.md>`__.
+
+**bsontype:** Array
+
+
+.. list-table::
+   :header-rows: 1
+   :class: border-table
+
+   * - Canonical
+     - Relaxed
+
+   * - .. code-block:: none
+          :copyable: false
+
+          [ <elements> ]
+
+     - .. code-block:: none
+          :copyable: false
+
+          <Same as Canonical>
 
 Where the array elements are as follows:
 
-- `<elements>`
-- Array elements use Extended JSON.
-- To specify an empty array, omit the content `[ ]`.
----------------------------------------------------
+- ``<elements>``
+
+  - Array elements use Extended JSON.
+  - To specify an empty array, omit the content ``[ ]``.
+
+.. _extended-json-binary:
+
+**bsontype:** Binary
+
+
+.. list-table::
+   :header-rows: 1
+   :class: border-table
+
+   * - Canonical
+     - Relaxed
+
+   * - .. code-block:: none
+          :copyable: false
+
+          { "$binary": 
+             {
+                "base64": "<payload>",
+                "subType": "<t>" 
+             }
+          }
+
+     - .. code-block:: none
+          :copyable: false
+     
+          <Same as Canonical>
 
 Where the values are as follows:
 
-- `"<payload>"`
-- Base64 encoded (with padding as "=") payload string.
-- `"<t>"`
-- A one- or two-character hex string that corresponds to a BSON binary
-subtype. See the extended bson documentation http://bsonspec.org/spec.html for subtypes available.
+- ``"<payload>"``
 
----------------------------------------------------
+  - Base64 encoded (with padding as "=") payload string.
 
-For dates between years 1970 and 9999, inclusive:
+- ``"<t>"``
 
-For dates before year 1970 or after year 9999:
+  - A one- or two-character hex string that corresponds to a BSON binary
+    subtype. See the extended bson documentation
+    http://bsonspec.org/spec.html for subtypes available.
+
+.. _extended-json-date:
+
+**bsontype:** Date
+
+
+*For dates between years 1970 and 9999, inclusive*:
+
+.. list-table::
+   :header-rows: 1
+   :class: border-table
+ 
+   * - Canonical
+
+     - Relaxed
+
+   * - .. code-block:: none
+          :copyable: false
+
+          {"$date": {"$numberLong": "<millis>"}}
+
+     - .. code-block:: none
+          :copyable: false
+     
+          {"$date": "<ISO-8601 Date/Time Format>"}
+
+*For dates before year 1970 or after year 9999*:
+
+.. list-table::
+   :header-rows: 1
+   :class: border-table
+ 
+   * - Canonical
+
+     - Relaxed
+
+   * - .. code-block:: none
+          :copyable: false
+
+          {"$date": {"$numberLong": "<millis>"}}
+     
+     - .. code-block:: none
+          :copyable: false
+     
+          <Same as Canonical>
 
 Where the values are as follows:
 
-- `"<millis>"`
-- A 64-bit signed integer as string. The value represents milliseconds
-relative to the epoch.
+- ``"<millis>"``
 
-- `"<ISO-8601 Date/Time Format>"`
-- A date in `ISO-8601 Internet Date/Time Format
-<https://tools.ietf.org/html/rfc3339#section-5.6>`__ as string.
+  - A 64-bit signed integer as string. The value represents milliseconds
+    relative to the epoch.
 
-- The date/time has a maximum time precision of milliseconds:
-- Fractional seconds have exactly 3 decimal places if the fractional
-part is non-zero.
+- ``"<ISO-8601 Date/Time Format>"``
 
-- Otherwise, fractional seconds SHOULD be omitted if zero.
----------------------------------------------------
+  - A date in `ISO-8601 Internet Date/Time Format
+    <https://tools.ietf.org/html/rfc3339#section-5.6>`__ as string.
+
+  - The date/time has a maximum time precision of milliseconds:
+
+    - Fractional seconds have exactly 3 decimal places if the fractional
+      part is non-zero.
+
+    - Otherwise, fractional seconds SHOULD be omitted if zero.
+
+**bsontype:** Decimal128
+
+
+.. list-table::
+   :header-rows: 1
+   :class: border-table
+
+   * - Canonical
+
+     - Relaxed
+
+   * - .. code-block:: none
+          :copyable: false
+
+          { "$numberDecimal": "<number>" }
+
+     - .. code-block:: none
+          :copyable: false
+
+          <Same as Canonical>
 
 Where the values are as follows:
 
-- `"<number>"`
-- A `high-precision decimal
-<https://github.com/mongodb/specifications/blob/master/source/bson-decimal128/decimal128.rst>`_ as a string.
+- ``"<number>"``
 
----------------------------------------------------
+  - A `high-precision decimal
+    <https://github.com/mongodb/specifications/blob/master/source/bson-decimal128/decimal128.rst>`_ 
+    as a string.
+
+**bsontype:** Document
+
+
+.. list-table::
+   :header-rows: 1
+   :class: border-table
+
+   * - Canonical
+
+     - Relaxed
+
+   * - .. code-block:: none
+          :copyable: false
+
+          { <content> }
+
+     - .. code-block:: none
+          :copyable: false
+
+          <Same as Canonical>
 
 Where the document contents are as follows:
 
-- `<content>`
-- Name:value pairs that use Extended JSON.
-- To specify an empty document, omit the content `{ }`.
----------------------------------------------------
+- ``<content>``
 
-For finite numbers:
+  - Name:value pairs that use Extended JSON.
 
-For infinite numbers or NAN:
+  - To specify an empty document, omit the content ``{ }``.
 
-Where the values are as follows:
+**bsontype:** Double
 
-- `"<decimal string>"`
-- A 64-bit signed floating point as a string.
-- `<non-integer number>`
-- A non-integer number. Integer numbers are parsed as an integer
-instead of a double.
 
----------------------------------------------------
+*For finite numbers*:
 
-Where the values are as follows:
+.. list-table::
+   :header-rows: 1
+   :class: border-table
+ 
+   * - Canonical
 
-- `"<number>"`
-- A 64-bit signed integer as string.
-- `<integer>`
-- A 64-bit signed integer.
----------------------------------------------------
+     - Relaxed
 
-Where the values are as follows:
+   * - .. code-block:: none
+          :copyable: false
 
-- `"<number>"`
-- A 32-bit signed integer as a string.
-- `<integer>`
-- A 32-bit signed integer.
----------------------------------------------------
+          {"$numberDouble": "<decimal string>" }
 
-The MaxKey BSON data type compares higher than all other types. See `faq-dev-compare-order-for-BSON-types` for more information on comparison order for BSON types.
+     - .. code-block:: none
+          :copyable: false
 
----------------------------------------------------
+          <non-integer number>
 
-The MinKey BSON data type compares lower than all other types. See `faq-dev-compare-order-for-BSON-types` for more information on comparison order for BSON types.
+*For infinite numbers or NAN*:
 
----------------------------------------------------
+.. list-table::
+   :header-rows: 1
+   :class: border-table
+ 
+   * - Canonical
 
-Where the values are as follows:
+     - Relaxed
 
-- `"<ObjectId bytes>"`
-- A 24-character, big-endian hexadecimal string that represents the
-ObjectId bytes.
+   * - .. code-block:: none
+          :copyable: false
 
----------------------------------------------------
+          {"$numberDouble": <"Infinity"|"-Infinity"|"NaN"> }
+     
+     - .. code-block:: none
+          :copyable: false
+     
+          <Same as Canonical>
 
 Where the values are as follows:
 
-- `"<regexPattern>"`
-- A string that corresponds to the regular expression pattern. The
-string can contain valid JSON characters and unescaped double quote (`"`) characters, but may not contain unescaped forward slash (`/`) characters.
+- ``"<decimal string>"``
 
-- `"<options>"`
-- A string that specifies BSON regular expression options. You must specify
-the options in alphabetical order. For information on the supported options, see :query:`$options`.
+  - A 64-bit signed floating point as a string.
 
----------------------------------------------------
+- ``<non-integer number>``
+
+  - A non-integer number. Integer numbers are parsed as an integer
+    instead of a double.
+
+**bsontype:** Int64
+
+
+.. list-table::
+   :header-rows: 1
+   :class: border-table
+
+   * - Canonical
+
+     - Relaxed
+
+   * - .. code-block:: none
+          :copyable: false
+
+          { "$numberLong": "<number>" }
+
+     - .. code-block:: none
+          :copyable: false
+
+          <integer>
 
 Where the values are as follows:
 
-- `<t>`
-- A positive integer for the seconds since epoch.
-- `<i>`
-- A positive integer for the increment.
+- ``"<number>"``
+
+  - A 64-bit signed integer as string.
+
+- ``<integer>``
+
+  - A 64-bit signed integer.
+
+**bsontype:** Int32
+
+
+.. list-table::
+   :header-rows: 1
+   :class: border-table
+
+   * - Canonical
+
+     - Relaxed
+
+   * - .. code-block:: none
+          :copyable: false
+
+          { "$numberInt": "<number>" }
+
+     - .. code-block:: none
+          :copyable: false
+
+          <integer>
+
+Where the values are as follows:
+
+- ``"<number>"``
+
+  - A 32-bit signed integer as a string.
+
+- ``<integer>``
+
+  - A 32-bit signed integer.
+
+**bsontype:** MaxKey
+
+
+.. list-table::
+   :header-rows: 1
+   :class: border-table
+
+   * - Canonical
+
+     - Relaxed
+
+   * - .. code-block:: none
+          :copyable: false
+
+          { "$maxKey": 1 }
+
+     - .. code-block:: none
+          :copyable: false
+
+          <Same as Canonical>
+
+The MaxKey BSON data type compares higher than all other types. See
+:ref:`faq-dev-compare-order-for-BSON-types` for more information on
+comparison order for BSON types.
+
+**bsontype:** MinKey
+
+
+.. list-table::
+   :header-rows: 1
+   :class: border-table
+
+   * - Canonical
+
+     - Relaxed
+
+   * - .. code-block:: none
+          :copyable: false
+
+          { "$minKey": 1 }
+
+     - .. code-block:: none
+          :copyable: false
+
+          <Same as Canonical>
+
+The MinKey BSON data type compares lower than all other types. See
+:ref:`faq-dev-compare-order-for-BSON-types` for more information on
+comparison order for BSON types.
+
+**bsontype:** ObjectId
+
+
+.. list-table::
+   :header-rows: 1
+   :class: border-table
+
+   * - Canonical
+     - Relaxed
+
+   * - .. code-block:: none
+          :copyable: false
+
+          { "$oid": "<ObjectId bytes>" }
+
+     - .. code-block:: none
+          :copyable: false
+
+          <Same as Canonical>
+
+Where the values are as follows:
+
+- ``"<ObjectId bytes>"``
+
+  - A 24-character, big-endian hexadecimal string that represents the
+    ObjectId bytes.
+
+**bsontype:** Regular Expression
+
+
+.. list-table::
+   :header-rows: 1
+   :class: border-table
+
+   * - Canonical
+
+     - Relaxed
+
+   * - .. code-block:: none
+          :copyable: false
+
+          { "$regularExpression": 
+             {
+                "pattern": "<regexPattern>", 
+                "options": "<options>"
+            }
+          }
+
+     - .. code-block:: none
+          :copyable: false
+
+          <Same as Canonical>
+
+Where the values are as follows:
+
+- ``"<regexPattern>"``
+
+  - A string that corresponds to the regular expression pattern. The
+    string can contain valid JSON characters and unescaped double quote
+    (``"``) characters, but may not contain unescaped forward slash
+    (``/``) characters.
+
+- ``"<options>"``
+
+  - A string that specifies BSON regular expression options. You must specify 
+    the options in alphabetical order. For information on the supported options, 
+    see :query:`$options`.
+
+**bsontype:** Timestamp
+
+
+.. list-table::
+   :header-rows: 1
+   :class: border-table
+
+   * - Canonical
+
+     - Relaxed
+
+   * - .. code-block:: none
+          :copyable: false
+
+          {"$timestamp": {"t": <t>, "i": <i>}}
+
+     - .. code-block:: none
+          :copyable: false
+
+          <Same as Canonical>
+
+Where the values are as follows:
+
+- ``<t>``
+
+  - A positive integer for the seconds since epoch.
+
+- ``<i>``
+
+  - A positive integer for the increment.
+
+
 ## Examples
 
-.. include:: /includes/sample-data-usage.rst
+**include:** /includes/sample-data-usage.rst
 
 The following examples illustrate Extended JSON usage.
 
+.. _type-representations:
+
 ### Type Representations
+
+.. list-table::
+   :widths: 20 40 40
+   :header-rows: 1
+   
+   * - Example Field Name
+     - Canonical Format
+     - Relaxed Format
+
+   * - "_id":
+   
+     - {"$oid":"5d505646cf6d4fe581014ab2"}
+     - {"$oid":"5d505646cf6d4fe581014ab2"}
+
+   * - "arrayField":
+     - ["hello",{"$numberInt":"10"}]
+     - ["hello",10]
+
+   * - "dateField":
+     - {"$date":{"$numberLong":"1565546054692"}}
+     - {"$date":"2019-08-11T17:54:14.692Z"}
+
+   * - "dateBefore1970":
+     - {"$date":{"$numberLong":"-1577923200000"}}
+     - {"$date":{"$numberLong":"-1577923200000"}}
+     
+   * - "decimal128Field":
+     - {"$numberDecimal":"10.99"}
+     - {"$numberDecimal":"10.99"}
+
+   * - "documentField":
+     - {"a":"hello"}
+     - {"a":"hello"}
+
+   * - "doubleField":
+     - {"$numberDouble":"10.5"}
+     - 10.5
+
+   * - "infiniteNumber"
+     - {"$numberDouble":"Infinity"}
+     - {"$numberDouble":"Infinity"}
+    
+   * - "int32field":
+     - {"$numberInt":"10"}
+     - 10
+
+   * - "int64Field":
+     - {"$numberLong":"50"}
+     - 50
+
+   * - "minKeyField":
+     - {"$minKey":1}
+     - {"$minKey":1}
+
+   * - "maxKeyField":
+     - {"$maxKey":1}
+     - {"$maxKey":1}
+
+   * - "regexField":
+     - {"$regularExpression":{"pattern":"^H","options":"i"}}
+     - {"$regularExpression":{"pattern":"^H","options":"i"}}
+
+   * - "timestampField":
+     - {"$timestamp":{"t":1565545664,"i":1}}
+     - {"$timestamp":{"t":1565545664,"i":1}}
+
+   * - "uuid":
+     - {"$uuid":"3b241101-e2bb-4255-8caf-4136c566a962"}
+     - {"$uuid":"3b241101-e2bb-4255-8caf-4136c566a962"}
+
+.. _ex-obj-conversions:
 
 ### Extended JSON Object Conversions
 
-The following short examples retrieve a document object and then convert the object to different forms using Extended JSON object conversion methods.
+The following short examples retrieve a document object and then
+convert the object to different forms using Extended JSON object
+conversion methods.
 
-EJSON.serialize ```````````````
+### EJSON.serialize
 
-Serialize the data stored in a MongoDB document object. :binary:`mongosh` parses a JavaScript object and returns values using `"$"` prefixed `types <type-representations>`:
+Serialize the data stored in a MongoDB document object.
+:binary:`mongosh` parses a JavaScript object and returns values using
+``"$"`` prefixed :ref:`types <type-representations>`:
 
-EJSON.deserialize `````````````````
+.. io-code-block::
+   :copyable: true
 
-Deserialize a serialized object. :binary:`mongosh` parses a JavaScript object and returns values using the default :binary:`mongosh` `type <type-representations>` form:
+   .. input:: /code-examples/tested/command-line/mongosh/reference/mongodb-extended-json/ejson-serialize.snippet.ejson-serialize.js
+      :language: javascript
+      :category: usage example
 
-EJSON.stringify ```````````````
+   .. output:: /code-examples/tested/command-line/mongosh/reference/mongodb-extended-json/ejson-serialize-output.sh
+      :language: javascript
 
-Convert an object to a string. :binary:`mongosh` outputs the elements of the converted object as strings:
+### EJSON.deserialize
 
-EJSON.parse ```````````
+Deserialize a serialized object. :binary:`mongosh` parses a
+JavaScript object and returns values using the default
+:binary:`mongosh` :ref:`type <type-representations>` form:
 
-Parse a string to create an object. :binary:`mongosh` returns the converted strings as documents:
+.. io-code-block::
+   :copyable: true
+
+   .. input:: /code-examples/tested/command-line/mongosh/reference/mongodb-extended-json/ejson-deserialize.snippet.ejson-deserialize.js
+      :language: javascript
+      :category: usage example
+
+   .. output:: /code-examples/tested/command-line/mongosh/reference/mongodb-extended-json/ejson-deserialize-output.sh
+      :language: javascript
+
+### EJSON.stringify
+
+Convert an object to a string. :binary:`mongosh` outputs the
+elements of the converted object as strings:
+
+.. io-code-block::
+   :copyable: true
+
+   .. input:: /code-examples/tested/command-line/mongosh/reference/mongodb-extended-json/ejson-stringify.snippet.ejson-stringify.js
+      :language: javascript
+      :category: usage example
+
+   .. output:: /code-examples/tested/command-line/mongosh/reference/mongodb-extended-json/ejson-stringify-output.sh
+      :language: javascript
+
+### EJSON.parse
+
+Parse a string to create an object. :binary:`mongosh` returns the
+converted strings as documents:
+
+.. io-code-block::
+   :copyable: true
+
+   .. input:: /code-examples/tested/command-line/mongosh/reference/mongodb-extended-json/ejson-parse.snippet.ejson-parse.js
+      :language: javascript
+      :category: usage example
+
+   .. output:: /code-examples/tested/command-line/mongosh/reference/mongodb-extended-json/ejson-parse-output.sh
+      :language: javascript

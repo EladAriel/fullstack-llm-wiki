@@ -1,66 +1,231 @@
 ---
 type: "Framework Learn Page"
-framework: "mongodb"
+framework: "MongoDB"
 source_repo: "https://github.com/mongodb/docs.git"
 source_branch: "main"
 source_path: "content/manual/manual/source/tutorial/rotate-x509-member-cert.txt"
-source_commit: "ab9db26ed3d11618cdb61516d8180337d8e3f679"
-source_commit_short: "ab9db26e"
-source_commit_date: "2026-07-24T16:22:46-06:00"
-generated_at: "2026-07-25T11:51:15Z"
+source_commit: "b9f2bc487a2878b65e3c1f80024bebab76954f27"
+source_commit_short: "b9f2bc48"
+source_commit_date: "2026-08-28T17:09:45-05:00"
+generated_at: "2026-08-29T09:39:19.623866Z"
 ---
-
-====================================================
+.. _x509-rotate-member-certs:
 
 # Rotate Certificates on Clusters with clusterAuthX509
 
-.. versionadded:: 7.0
+**meta:** :keywords: on-prem
+   :description: Perform a rolling update to rotate X.509 certificates on self-managed clusters using `net.tls.clusterAuthX509.attributes` settings.
 
-Cluster members can use `X.509 certificates <internal-auth-x509>` for membership authentication to identify other servers in the same deployment. This tutorial describes how to perform a rolling update to rotate X.509 certificates on a cluster that uses the :setting:`net.tls.clusterAuthX509.attributes` settings to configure the cluster members' Distinguished Name (DN) attributes.
+.. default-domain:: mongodb
 
-> **Note:** To perform a rolling update to rotate certificates on a cluster that doesn't
-use the :setting:`net.tls.clusterAuthX509` settings and won't after the update,
-see `x509-rolling-update`.
+**contents:** On this page
+   :local:
+   :backlinks: none
+   :depth: 1
+   :class: singlecol
 
-When a server configured with the :setting:`net.tls.clusterAuthX509.attributes` setting receives a connection request, it compares the Distinguished Name (DN) attributes in the `subject` field of the presented certificates to the configured values of the :setting:`~net.tls.clusterAuthX509.attributes` setting and :parameter:`tlsClusterAuthX509Override` parameter. If the values match, it treats the connection as a cluster member.
+**versionadded:** 7.0
 
-In some situations, you may need to update the member certificates to new certificates with a new Distinguished Name (DN), such as if an organization changes its name. In a rolling update, member certificates are updated one at a time, and your deployment does not incur any downtime.
+Cluster members can use :ref:`X.509 certificates <internal-auth-x509>` 
+for membership authentication to identify other servers
+in the same deployment. This tutorial describes how to perform 
+a rolling update to rotate X.509 certificates on a cluster
+that uses the :setting:`net.tls.clusterAuthX509.attributes` settings to configure 
+the cluster members' Distinguished Name (DN) attributes. 
 
-Clusters adopting new certificates can use the :parameter:`tlsClusterAuthX509Override` parameter to accept X.509 certificates with different subject DN attributes during the certificate rotation procedure. Once all members use certificates with the new value, remove the override to begin rejecting the now out of date certificates.
+**note:** To perform a rolling update to rotate certificates on a cluster that doesn't
+   use the :setting:`net.tls.clusterAuthX509` settings and won't after the update,
+   see :ref:`x509-rolling-update`.
+
+When a server configured with the :setting:`net.tls.clusterAuthX509.attributes` setting
+receives a connection request, it compares the Distinguished Name (DN) attributes 
+in the ``subject`` field of the presented certificates to the configured values of the 
+:setting:`~net.tls.clusterAuthX509.attributes` setting and
+:parameter:`tlsClusterAuthX509Override` parameter.
+If the values match, it treats the connection as a cluster member. 
+
+In some situations, you may need to update the member certificates to
+new certificates with a new Distinguished Name (DN), such as if
+an organization changes its name. 
+In a rolling update, member certificates are updated one at a time, and
+your deployment does not incur any downtime. 
+
+Clusters adopting new certificates can use the 
+:parameter:`tlsClusterAuthX509Override` parameter to accept X.509 certificates
+with different subject DN attributes during the certificate rotation procedure. Once
+all members use certificates with the new value, remove the override to begin
+rejecting the now out of date certificates.
 
 ## About This Task
 
-Consider a replica set where member certificates, set using the :setting:`~net.tls.clusterFile` and :setting:`~net.tls.certificateKeyFile` settings, have Distinguished Name (DN) attributes that use the `10gen` organization and `10gen Server` organizational unit. These DN attributes are set using the :setting:`net.tls.clusterAuthX509.attributes` setting.
+Consider a replica set where member certificates, 
+set using the :setting:`~net.tls.clusterFile` and 
+:setting:`~net.tls.certificateKeyFile` settings, 
+have Distinguished Name (DN) attributes that use the ``10gen`` organization
+and ``10gen Server`` organizational unit. These DN attributes are set using the
+:setting:`net.tls.clusterAuthX509.attributes` setting.
 
-A member of this replica set has the following configuration file:
+A member of this replica set has the following configuration file: 
 
-```yaml
-security:
-  clusterAuthMode:      x509
-net:
-  tls:
-    mode:               requireTLS
-    certificateKeyFile: /etc/mycerts/10gen-server1.pem
-    CAFile:             /etc/mycerts/ca.pem
-    clusterFile:        /etc/mycerts/10gen-cluster1.pem
-    clusterCAFile:      /etc/mycerts/ca.pem
-    clusterAuthX509:
-       attributes:      O=10gen, OU=10gen Server
-```
+.. code-block:: yaml
+   :emphasize-lines: 6, 8, 11
 
-The following procedure updates each replica set member's X.509 certificates to new certificates that have DN attributes that use the `MongoDB` organization and `MongoDB Server` organizational unit.
+   security:
+     clusterAuthMode:      x509
+   net:
+     tls:
+       mode:               requireTLS
+       certificateKeyFile: /etc/mycerts/10gen-server1.pem
+       CAFile:             /etc/mycerts/ca.pem
+       clusterFile:        /etc/mycerts/10gen-cluster1.pem
+       clusterCAFile:      /etc/mycerts/ca.pem
+       clusterAuthX509:
+          attributes:      O=10gen, OU=10gen Server
 
-.. include:: /includes/x509-meets-requirements.rst
+The following procedure updates each replica set member's X.509 certificates to new
+certificates that have DN attributes that use the 
+``MongoDB`` organization and ``MongoDB Server`` organizational unit. 
+
+**include:** /includes/x509-meets-requirements.rst
 
 ## Steps
 
-These steps update member certificates to use new X.509 certificates on a cluster configured with the :setting:`net.tls.clusterAuthX509.attributes` setting.
+These steps update member certificates to use new X.509 certificates on a cluster
+configured with the :setting:`net.tls.clusterAuthX509.attributes` setting.
 
-The new certificates have Distinguished Names (DN) that change the Organization (O) attributes from `10gen` to `MongoDB` and the Organizational Unit (OU) attribute from `10gen Server` to `MongoDB Server`.
+The new certificates have Distinguished Names (DN) that change the 
+Organization (O) attributes from ``10gen`` to ``MongoDB`` and the
+Organizational Unit (OU) attribute from ``10gen Server`` to ``MongoDB Server``.
+
+**procedure:** .. step:: Update the TLS Cluster Membership Configuration
+
+      Update the configuration file of each server:
+
+      * Change :setting:`~net.tls.clusterAuthX509.attributes` setting to use
+        the values on the new certificate
+
+      * Set the :parameter:`tlsClusterAuthX509Override` parameter to use the
+        DN attributes of the old certificate.
+
+      For example: 
+
+      .. code-block:: yaml
+         :emphasize-lines: 9, 13
+
+         net:
+           tls:
+             mode:               requireTLS
+             certificateKeyFile: /etc/mycerts/mongodb-server1.pem
+             CAFile:             /etc/mycerts/ca.pem
+             clusterFile:        /etc/mycerts/mongodb-cluster1.pem
+             clusterCAFile:      /etc/mycerts/ca.pem
+             clusterAuthX509:
+                attributes:      O=MongoDB, OU=MongoDB Server
+         security:
+           clusterAuthMode: x509
+         setParameter:
+            tlsClusterAuthX509Override: { attributes: O=10gen, OU=10gen Server }
+
+   .. step:: Restart Secondary Cluster Members
+   
+      .. include:: /includes/procedure-replica-set-restart-secondaries
+
+      Secondary servers in the replica set now accept peer connections from
+      members using certificates with the new DN attributes.
+   
+   .. step:: Restart Primary Cluster Member
+   
+      .. include:: /includes/procedure-replica-set-restart-primary
+
+      The primary server in the replica set steps down and restarts as a
+      secondary that now accepts peer connections from members using
+      certificates with the new DN attributes.
+
+   .. step:: Update the TLS Certificates
+
+      Update the configuration file of each server:
+
+      * Change the :setting:`net.tls.certificateKeyFile` setting to use the 
+        new certificate.
+
+      * Change the :setting:`net.tls.clusterFile` setting to use the 
+        new certificate.
+
+      For example:
+
+      .. code-block:: yaml
+         :emphasize-lines: 4, 6
+
+         net:
+           tls:
+             mode:               requireTLS
+             certificateKeyFile: /etc/mycerts/mongodb-server2.pem
+             CAFile:             /etc/mycerts/ca.pem
+             clusterFile:        /etc/mycerts/mongodb-cluster2.pem
+             clusterCAFile:      /etc/mycerts/ca.pem
+             clusterAuthX509:
+                attributes:      O=MongoDB, OU=MongoDB Server
+         security:
+           clusterAuthMode: x509
+         setParameter:
+            tlsClusterAuthX509Override: { attributes: O=10gen, OU=10gen Server }
+            
+
+   .. step:: Restart Secondary Cluster Members
+   
+      .. include:: /includes/procedure-replica-set-restart-secondaries
+
+      Secondary servers in the replica set now use the new X.509 certificates.
+   
+   .. step:: Restart Primary Cluster Member
+   
+      .. include:: /includes/procedure-replica-set-restart-primary
+
+      The primary server in the replica set steps down and restarts as a 
+      secondary that uses the new X.509 certificate. 
+
+   .. step:: Remove the DN Certification Override Configuration
+
+      With all members of the cluster now using the new X.509 certificate, 
+      update the configuration file to remove the :setting:`setParameter` 
+      settings for the :parameter:`tlsClusterAuthX509Override` parameter.
+
+      For example:
+
+      .. code-block:: yaml
+
+         net:
+           tls:
+             mode:               requireTLS
+             certificateKeyFile: /etc/mycerts/mongodb-server1.pem
+             CAFile:             /etc/mycerts/ca.pem
+             clusterFile:        /etc/mycerts/mongodb-cluster1.pem
+             clusterCAFile:      /etc/mycerts/ca.pem
+             clusterAuthX509:
+                attributes:      O=MongoDB, OU=MongoDB Server
+         security:
+           clusterAuthMode: x509
+
+      This ensures that the server doesn't configure the old certificate
+      settings on startup.
+
+   .. step:: Restart Secondary Cluster Members
+   
+      .. include:: /includes/procedure-replica-set-restart-secondaries
+
+      Secondary servers in the replica set restart and no longer accept
+      connections from the old X.509 certificates.
+   
+   .. step:: Restart Primary Cluster Member
+   
+      .. include:: /includes/procedure-replica-set-restart-primary
+
+      The primary server steps down and restarts as a secondary that no longer
+      accepts connections from the old X.509 certificates.
 
 ## Learn More
 
-- `security-auth-x509`
-- `x509-internal-authentication`
-- `upgrade-to-x509-internal-authentication`
-- `x509-rotate-member-to-extensionValue`
+* :ref:`security-auth-x509`
+* :ref:`x509-internal-authentication`
+* :ref:`upgrade-to-x509-internal-authentication`
+* :ref:`x509-rotate-member-to-extensionValue`

@@ -1,45 +1,81 @@
 ---
 type: "Framework Learn Page"
-framework: "postgres"
+framework: "PostgreSQL"
 source_repo: "https://github.com/postgres/postgres.git"
 source_branch: "master"
 source_path: "doc/src/sgml/fuzzystrmatch.sgml"
-source_commit: "38afc3dcb25c45b744d4025029ce0a6c90b7059f"
-source_commit_short: "38afc3dc"
-source_commit_date: "2026-07-25T19:08:27+09:00"
-generated_at: "2026-07-25T11:50:59Z"
+source_commit: "6c5f1d6074208146930b67c2054509c3e82f6f7f"
+source_commit_short: "6c5f1d6"
+source_commit_date: "2026-08-28T23:24:47+02:00"
+generated_at: "2026-08-29T09:39:24.458436Z"
 ---
+# fuzzystrmatch — determine string similarities and distance
 
-## fuzzystrmatch -- determine string similarities and distance
+ 
+  fuzzystrmatch
+ 
 
-fuzzystrmatch
+ 
+  The fuzzystrmatch module provides several
+  functions to determine similarities and distance between strings.
+ 
 
-The `fuzzystrmatch` module provides several functions to determine similarities and distance between strings.
+ 
+  
+   At present, the soundex, metaphone,
+   dmetaphone, and dmetaphone_alt functions do
+   not work well with multibyte encodings (such as UTF-8).
+   Use daitch_mokotoff
+   or levenshtein with such data.
+  
+ 
 
-At present, the `soundex`, `metaphone`, `dmetaphone`, and `dmetaphone_alt` functions do not work well with multibyte encodings (such as UTF-8). Use `daitch_mokotoff` or `levenshtein` with such data.
+ 
+  This module is considered trusted, that is, it can be
+  installed by non-superusers who have CREATE privilege
+  on the current database.
+ 
 
-This module is considered trusted, that is, it can be installed by non-superusers who have `CREATE` privilege on the current database.
+ 
+  Soundex
 
-## Soundex
+  
+   The Soundex system is a method of matching similar-sounding names
+   by converting them to the same code.  It was initially used by the
+   United States Census in 1880, 1900, and 1910.  Note that Soundex
+   is not very useful for non-English names.
+  
 
-The Soundex system is a method of matching similar-sounding names by converting them to the same code. It was initially used by the United States Census in 1880, 1900, and 1910. Note that Soundex is not very useful for non-English names.
+  
+   The fuzzystrmatch module provides two functions
+   for working with Soundex codes:
+  
 
-The `fuzzystrmatch` module provides two functions for working with Soundex codes:
+  
+   soundex
+  
 
-soundex
+  
+   difference
+  
 
-difference
-
-```
 soundex(text) returns text
 difference(text, text) returns int
-```
 
-The `soundex` function converts a string to its Soundex code. The `difference` function converts two strings to their Soundex codes and then reports the number of matching code positions. Since Soundex codes have four characters, the result ranges from zero to four, with zero being no match and four being an exact match. (Thus, the function is misnamed -- `similarity` would have been a better name.)
+  
+   The soundex function converts a string to its Soundex code.
+   The difference function converts two strings to their Soundex
+   codes and then reports the number of matching code positions.  Since
+   Soundex codes have four characters, the result ranges from zero to four,
+   with zero being no match and four being an exact match.  (Thus, the
+   function is misnamed — similarity would have been
+   a better name.)
+  
 
-Here are some usage examples:
+  
+   Here are some usage examples:
+  
 
-```
 SELECT soundex('hello world!');
 
 SELECT soundex('Anne'), soundex('Ann'), difference('Anne', 'Ann');
@@ -56,27 +92,70 @@ INSERT INTO s VALUES ('jack');
 SELECT * FROM s WHERE soundex(nm) = soundex('john');
 
 SELECT * FROM s WHERE difference(s.nm, 'john') > 2;
-```
 
-## Daitch-Mokotoff Soundex
+ 
 
-Like the original Soundex system, Daitch-Mokotoff Soundex matches similar-sounding names by converting them to the same code. However, Daitch-Mokotoff Soundex is significantly more useful for non-English names than the original system. Major improvements over the original system include: - The code is based on the first six meaningful letters rather than four. - A letter or combination of letters maps into ten possible codes rather than seven. - Where two consecutive letters have a single sound, they are coded as a single number. - When a letter or combination of letters may have different sounds, multiple codes are emitted to cover all possibilities.
+ 
+  Daitch-Mokotoff Soundex
 
-daitch_mokotoff
+  
+   Like the original Soundex system, Daitch-Mokotoff Soundex matches
+   similar-sounding names by converting them to the same code.
+   However, Daitch-Mokotoff Soundex is significantly more useful for
+   non-English names than the original system.
+   Major improvements over the original system include:
 
-This function generates the Daitch-Mokotoff soundex codes for its input:
+   
+    
+     
+      The code is based on the first six meaningful letters rather than four.
+     
+    
+    
+     
+      A letter or combination of letters maps into ten possible codes rather
+      than seven.
+     
+    
+    
+     
+      Where two consecutive letters have a single sound, they are coded as a
+      single number.
+     
+    
+    
+     
+      When a letter or combination of letters may have different sounds,
+      multiple codes are emitted to cover all possibilities.
+     
+    
+   
+  
 
-```
+  
+   daitch_mokotoff
+  
+
+  
+   This function generates the Daitch-Mokotoff soundex codes for its input:
+  
+
 daitch_mokotoff(source text) returns text[]
-```
 
-The result may contain one or more codes depending on how many plausible pronunciations there are, so it is represented as an array.
+  
+   The result may contain one or more codes depending on how many plausible
+   pronunciations there are, so it is represented as an array.
+  
 
-Since a Daitch-Mokotoff soundex code consists of only 6 digits, `source` should be preferably a single word or name.
+  
+   Since a Daitch-Mokotoff soundex code consists of only 6 digits,
+   source should be preferably a single word or name.
+  
 
-Here are some examples:
+  
+   Here are some examples:
+  
 
-```
 SELECT daitch_mokotoff('George');
  daitch_mokotoff
 -----------------
@@ -96,11 +175,14 @@ SELECT daitch_mokotoff('Schwartzenegger');
  daitch_mokotoff
 -----------------
  {479465}
-```
 
-For matching of single names, returned text arrays can be matched directly using the `&&` operator: any overlap can be considered a match. A GIN index may be used for efficiency, see `gin` and this example:
+  
+   For matching of single names, returned text arrays can be matched
+   directly using the && operator: any overlap
+   can be considered a match.  A GIN index may
+   be used for efficiency, see  and this example:
+  
 
-```
 CREATE TABLE s (nm text);
 CREATE INDEX ix_s_dm ON s USING gin (daitch_mokotoff(nm)) WITH (fastupdate = off);
 
@@ -114,11 +196,13 @@ INSERT INTO s (nm) VALUES
 SELECT * FROM s WHERE daitch_mokotoff(nm) && daitch_mokotoff('Swartzenegger');
 SELECT * FROM s WHERE daitch_mokotoff(nm) && daitch_mokotoff('Jane');
 SELECT * FROM s WHERE daitch_mokotoff(nm) && daitch_mokotoff('Jens');
-```
 
-For indexing and matching of any number of names in any order, Full Text Search features can be used. See `textsearch` and this example:
+  
+   For indexing and matching of any number of names in any order, Full Text
+   Search features can be used. See  and this
+   example:
+  
 
-```
 CREATE FUNCTION soundex_tsvector(v_name text) RETURNS tsvector
 BEGIN ATOMIC
   SELECT to_tsvector('simple',
@@ -147,32 +231,57 @@ SELECT * FROM s WHERE soundex_tsvector(nm) @@ soundex_tsquery('jane doe');
 SELECT * FROM s WHERE soundex_tsvector(nm) @@ soundex_tsquery('john public');
 SELECT * FROM s WHERE soundex_tsvector(nm) @@ soundex_tsquery('besst, giorgio');
 SELECT * FROM s WHERE soundex_tsvector(nm) @@ soundex_tsquery('Jameson John');
-```
 
-If it is desired to avoid recalculation of soundex codes during index rechecks, an index on a separate column can be used instead of an index on an expression. A stored generated column can be used for this; see `ddl-generated-columns`.
+  
+   If it is desired to avoid recalculation of soundex codes during index
+   rechecks, an index on a separate column can be used instead of an index on
+   an expression.  A stored generated column can be used for this; see
+   .
+  
+ 
 
-## Levenshtein
+ 
+  Levenshtein
 
-This function calculates the Levenshtein distance between two strings:
+  
+   This function calculates the Levenshtein distance between two strings:
+  
 
-levenshtein
+  
+   levenshtein
+  
 
-levenshtein_less_equal
+  
+   levenshtein_less_equal
+  
 
-```
 levenshtein(source text, target text, ins_cost int, del_cost int, sub_cost int) returns int
 levenshtein(source text, target text) returns int
 levenshtein_less_equal(source text, target text, ins_cost int, del_cost int, sub_cost int, max_d int) returns int
 levenshtein_less_equal(source text, target text, max_d int) returns int
-```
 
-Both `source` and `target` can be any non-null string, with a maximum of 255 characters. The cost parameters specify how much to charge for a character insertion, deletion, or substitution, respectively. You can omit the cost parameters, as in the second version of the function; in that case they all default to 1.
+  
+   Both source and target can be any
+   non-null string, with a maximum of 255 characters.  The cost parameters
+   specify how much to charge for a character insertion, deletion, or
+   substitution, respectively.  You can omit the cost parameters, as in
+   the second version of the function; in that case they all default to 1.
+  
 
-`levenshtein_less_equal` is an accelerated version of the Levenshtein function for use when only small distances are of interest. If the actual distance is less than or equal to `max_d`, then `levenshtein_less_equal` returns the correct distance; otherwise it returns some value greater than `max_d`. If `max_d` is negative then the behavior is the same as `levenshtein`.
+  
+   levenshtein_less_equal is an accelerated version of the
+   Levenshtein function for use when only small distances are of interest.
+   If the actual distance is less than or equal to max_d,
+   then levenshtein_less_equal returns the correct
+   distance; otherwise it returns some value greater than max_d.
+   If max_d is negative then the behavior is the same as
+   levenshtein.
+  
 
-Examples:
+  
+   Examples:
+  
 
-```
 test=# SELECT levenshtein('GUMBO', 'GAMBOL');
  levenshtein
 -------------
@@ -196,53 +305,79 @@ test=# SELECT levenshtein_less_equal('extensive', 'exhaustive', 4);
 ------------------------
                       4
 (1 row)
-```
 
-## Metaphone
+ 
 
-Metaphone, like Soundex, is based on the idea of constructing a representative code for an input string. Two strings are then deemed similar if they have the same codes.
+ 
+  Metaphone
 
-This function calculates the metaphone code of an input string:
+  
+   Metaphone, like Soundex, is based on the idea of constructing a
+   representative code for an input string.  Two strings are then
+   deemed similar if they have the same codes.
+  
 
-metaphone
+  
+   This function calculates the metaphone code of an input string:
+  
 
-```
+  
+   metaphone
+  
+
 metaphone(source text, max_output_length int) returns text
-```
 
-`source` has to be a non-null string with a maximum of 255 characters. `max_output_length` sets the maximum length of the output metaphone code; if longer, the output is truncated to this length.
+  
+   source has to be a non-null string with a maximum of
+   255 characters.  max_output_length sets the maximum
+   length of the output metaphone code; if longer, the output is truncated
+   to this length.
+  
 
-Example:
+  
+   Example:
+  
 
-```
 test=# SELECT metaphone('GUMBO', 4);
  metaphone
 -----------
  KM
 (1 row)
-```
 
-## Double Metaphone
+ 
 
-The Double Metaphone system computes two sounds like strings for a given input string -- a primary and an alternate. In most cases they are the same, but for non-English names especially they can be a bit different, depending on pronunciation. These functions compute the primary and alternate codes:
+ 
+  Double Metaphone
 
-dmetaphone
+  
+   The Double Metaphone system computes two sounds like strings
+   for a given input string — a primary and an
+   alternate.  In most cases they are the same, but for non-English
+   names especially they can be a bit different, depending on pronunciation.
+   These functions compute the primary and alternate codes:
+  
 
-dmetaphone_alt
+  
+   dmetaphone
+  
 
-```
+  
+   dmetaphone_alt
+  
+
 dmetaphone(source text) returns text
 dmetaphone_alt(source text) returns text
-```
 
-There is no length limit on the input strings.
+  
+   There is no length limit on the input strings.
+  
 
-Example:
+  
+   Example:
+  
 
-```
 test=# SELECT dmetaphone('gumbo');
  dmetaphone
 ------------
  KMP
 (1 row)
-```

@@ -4,10 +4,10 @@ framework: "LangSmith"
 source_repo: "https://github.com/langchain-ai/docs.git"
 source_branch: "main"
 source_path: "src/langsmith/sandbox-auth-proxy.mdx"
-source_commit: "2aae1dfc98ee953a9a5185fb6fcdd9efb3f4d878"
-source_commit_short: "2aae1df"
-source_commit_date: "2026-07-25T00:27:23+00:00"
-generated_at: "2026-07-25T19:08:33.346180Z"
+source_commit: "a174f9cf7c91ee5eb14ee2382eb48bfe6e4956e9"
+source_commit_short: "a174f9c"
+source_commit_date: "2026-08-28T17:04:12-07:00"
+generated_at: "2026-08-29T09:39:50.609516Z"
 ---
 # Sandbox Auth Proxy
 
@@ -72,7 +72,6 @@ curl -X POST "$LANGSMITH_ENDPOINT/v2/sandboxes/boxes" \
   -H "Content-Type: application/json" \
   -d '{
     "name": "db-sandbox",
-    "wait_for_ready": true,
     "proxy_config": {
       "access_control": {
         "allow_list": [
@@ -85,6 +84,10 @@ curl -X POST "$LANGSMITH_ENDPOINT/v2/sandboxes/boxes" \
 ```
 
 The connection to `db.example.com:5432` is passed through at the TCP layer with no interception, so the PostgreSQL wire protocol—and TLS, host-key checking, and any other end-to-end protocol on top of it—works unchanged.
+
+<Note>
+Creating a sandbox boots it and returns once it reports `ready`, so there is no wait step to add. `GET /api/v2/sandboxes/boxes/{name}/status` reports the current state if you need to re-check it later.
+</Note>
 
 ### Configure via SDK
 
@@ -131,6 +134,7 @@ Add a `proxy_config` when creating a sandbox, or update an existing sandbox by p
 | `match_hosts` | Hosts to intercept (supports globs like `*.github.com`) |
 | `match_paths` | Paths to match (empty = all paths) |
 | `headers` | Headers to inject, each with a `name`, `type`, and `value` |
+| `env_vars` | Environment variables to set in the sandbox while the rule is enabled |
 | `no_proxy` | Hosts to bypass the proxy entirely (e.g. `localhost`) |
 
 ### Header types
@@ -142,6 +146,29 @@ Each header has a `type` that controls how its value is stored and displayed:
 | `workspace_secret` | References a workspace secret using `{KEY}` syntax. Resolved when the proxy configuration is applied. |
 | `plaintext` | Value is stored and returned as-is. Use for non-sensitive headers. |
 | `opaque` | Write-only. Value is encrypted at rest and never returned via the API. |
+
+### Set environment variables from a rule
+
+A rule's `env_vars` are plaintext environment variables set for every command in the sandbox while that rule is enabled. Use them for tools that refuse to run unless a credential variable is present, even though the proxy injects the real credential on the wire: give the variable a placeholder value so the command starts, and the proxy supplies the real credential.
+
+Values are plaintext and are returned by the API, so never put a secret in `env_vars`. Use a header with the `workspace_secret` or `opaque` type instead.
+
+Environment variables resolve in this order, from lowest precedence to highest:
+
+1. **Enabled proxy rules**: When two enabled rules declare the same name, the later rule in `rules` wins.
+2. **The sandbox's own `env_vars`**: Explicit per-sandbox values override values from rules.
+3. **Variables managed by an enabled AWS or GCP auth rule**: A rule that declares one of these names is rejected when the matching auth rule is enabled.
+
+```json
+{
+  "name": "github-api",
+  "match_hosts": ["api.github.com"],
+  "headers": [
+    {"name": "Authorization", "type": "opaque", "value": "Bearer <github-token>"}
+  ],
+  "env_vars": {"GH_TOKEN": "proxy-injected"}
+}
+```
 
 ## Authenticate AWS requests
 
@@ -158,7 +185,7 @@ AWS auth rules are different from header injection rules:
 - Set `type` to `aws`.
 - Put credentials under the `aws` object.
 - Do not set `match_hosts`, `match_paths`, or `headers`; AWS host matching is built into the proxy.
-- Configure at most one AWS auth rule per sandbox.
+- Configure at most one AWS auth rule per sandbox. The limit counts every AWS rule, including disabled ones.
 
 ```bash
 curl -X POST "$LANGSMITH_ENDPOINT/v2/sandboxes/boxes" \
@@ -166,7 +193,6 @@ curl -X POST "$LANGSMITH_ENDPOINT/v2/sandboxes/boxes" \
   -H "Content-Type: application/json" \
   -d '{
     "name": "aws-sandbox",
-    "wait_for_ready": true,
     "proxy_config": {
       "rules": [
         {
@@ -263,7 +289,7 @@ GCP auth rules are different from header injection rules:
 - Put credentials under `gcp.service_account_json`.
 - Set `gcp.scopes` to a non-empty list of OAuth scopes.
 - The proxy matches Google API hosts automatically and authenticates those requests with the configured service account.
-- Configure at most one enabled GCP auth rule per sandbox.
+- Configure at most one GCP auth rule per sandbox. The limit counts every GCP rule, including disabled ones.
 
 The SDK `gcp_auth` and `gcpAuth` helpers build this same rule shape.
 
@@ -273,7 +299,6 @@ curl -X POST "$LANGSMITH_ENDPOINT/v2/sandboxes/boxes" \
   -H "Content-Type: application/json" \
   -d '{
     "name": "gcp-sandbox",
-    "wait_for_ready": true,
     "proxy_config": {
       "rules": [
         {
@@ -359,7 +384,6 @@ curl -X POST "$LANGSMITH_ENDPOINT/v2/sandboxes/boxes" \
   -H "Content-Type: application/json" \
   -d '{
     "name": "openai-sandbox",
-    "wait_for_ready": true,
     "proxy_config": {
       "rules": [
         {
@@ -390,7 +414,6 @@ curl -X POST "$LANGSMITH_ENDPOINT/v2/sandboxes/boxes" \
   -H "Content-Type: application/json" \
   -d '{
     "name": "multi-api-sandbox",
-    "wait_for_ready": true,
     "proxy_config": {
       "rules": [
         {
@@ -473,6 +496,7 @@ def github_proxy_rules(github_token: str) -> list[dict[str, Any]]:
                     "value": f"Bearer {github_token}",
                 }
             ],
+            "env_vars": {"GH_TOKEN": "proxy-injected"},
         },
         {
             "name": "github",
@@ -503,15 +527,15 @@ def configure_github_proxy(sandbox_name: str, github_token: str) -> None:
 
 Call `configure_github_proxy` after creating or reattaching to a sandbox. GitHub App installation tokens expire, so refresh the proxy config whenever you reuse a sandbox for a new run.
 
-Inside the sandbox, set a non-secret placeholder token when a CLI requires a local credential before it sends a request:
+The `github-api` rule sets `GH_TOKEN` to a non-secret placeholder, which satisfies the `gh` CLI's local credential check. Commands then run without a per-command prefix:
 
 ```bash
-GH_TOKEN=dummy gh repo view langchain-ai/langchain
-GH_TOKEN=dummy gh pr list --repo langchain-ai/langchain
-GH_TOKEN=dummy gh repo clone langchain-ai/langchain
+gh repo view langchain-ai/langchain
+gh pr list --repo langchain-ai/langchain
+gh repo clone langchain-ai/langchain
 ```
 
-The placeholder only satisfies the `gh` CLI's local check. The proxy injects the real `Authorization` header into the outbound request.
+The placeholder never leaves the sandbox. The proxy injects the real `Authorization` header into the outbound request.
 
 ## Configure via SDK
 
@@ -620,7 +644,6 @@ curl -X POST "$LANGSMITH_ENDPOINT/v2/sandboxes/boxes" \
   -d '{
     "snapshot_id": "<snapshot-uuid>",
     "name": "callback-sandbox",
-    "wait_for_ready": true,
     "proxy_config": {
       "callbacks": [
         {

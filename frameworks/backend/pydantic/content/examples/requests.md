@@ -1,14 +1,15 @@
 ---
 type: "Framework Learn Page"
-framework: "pydantic"
+framework: "Pydantic"
 source_repo: "https://github.com/pydantic/pydantic"
 source_branch: "main"
 source_path: "docs/examples/requests.md"
-source_commit: "a2a6577d4c329dd574a45dbb01a8feaa16b1ad3d"
-source_commit_short: "a2a6577d"
-source_commit_date: "2026-07-23T15:38:17Z"
-generated_at: "2026-07-25T11:50:12Z"
+source_commit: "4bc21c0fa28323c0f3e0be93c9ad114b705029c6"
+source_commit_short: "4bc21c0"
+source_commit_date: "2026-08-29T11:30:40+02:00"
+generated_at: "2026-08-29T09:38:50.585421Z"
 ---
+# Requests
 
 Pydantic models are a great way to validate and serialize data for requests and responses.
 Pydantic is instrumental in many web frameworks and libraries, such as FastAPI, Django, Flask, and HTTPX.
@@ -82,11 +83,10 @@ pprint([u.name for u in users])
 
 1. Note, we're querying the `/users/` endpoint here to get a list of users.
 
-!!! tip "Logfire integration"
-    When you validate responses like this, a [`ValidationError`][pydantic_core.ValidationError] is often
-    the first sign that an API you depend on has changed its response format. The useful questions at that
-    point are *what did the response actually contain*, and *when did this start*:
-    [recording failed validations with Logfire](../errors/troubleshooting.md) answers both, since each
-    failure is stored with the data that triggered it.
+When you validate responses like this, a [`ValidationError`][pydantic_core.ValidationError] is often
+the first sign that an API you depend on has changed its response format. The useful questions at that
+point are *what did the response actually contain*, and *when did this start*:
+[recording failed validations with Logfire](../errors/troubleshooting.md) answers both, since each
+failure is stored with its structured errors and rejected values.
 
 <!-- TODO: httpx, flask, Django rest framework, FastAPI -->

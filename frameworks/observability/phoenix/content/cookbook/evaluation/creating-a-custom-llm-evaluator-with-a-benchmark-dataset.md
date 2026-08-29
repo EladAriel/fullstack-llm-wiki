@@ -4,10 +4,10 @@ framework: "Arize Phoenix"
 source_repo: "https://github.com/Arize-ai/phoenix.git"
 source_branch: "main"
 source_path: "docs/phoenix/cookbook/evaluation/creating-a-custom-llm-evaluator-with-a-benchmark-dataset.mdx"
-source_commit: "69b3ab92c37ff65812feaa2dbf0b1c0ad5ae55fe"
-source_commit_short: "69b3ab9"
-source_commit_date: "2026-07-25T11:48:12-06:00"
-generated_at: "2026-07-25T19:08:24.870012Z"
+source_commit: "c48e50e9906fcc56c1c103ebd93ef3c95ed6b6e7"
+source_commit_short: "c48e50e"
+source_commit_date: "2026-08-29T01:45:20-06:00"
+generated_at: "2026-08-29T09:39:58.875211Z"
 ---
 ---
 title: "Creating a Custom LLM Evaluator with a Benchmark Dataset"
@@ -18,7 +18,7 @@ description: Learn how to build a custom LLM-as-a-Judge evaluator by creating a 
 colab.research.google.com
 </Card>
 
-A good evaluator measures what you actually care about — and the only way to know it does is to test it against examples you've judged yourself. Phoenix ships several [pre-built evaluators](https://arize.com/docs/phoenix/evaluation/how-to-evals/running-pre-tested-evals) that have been validated against benchmark datasets, but these may not capture the nuances of your application.
+A good evaluator measures what you actually care about — and the only way to know it does is to test it against examples you've judged yourself. Phoenix ships several [pre-built evaluators](https://arize.com/docs/phoenix/evaluation/pre-built-metrics) that have been validated against benchmark datasets, but these may not capture the nuances of your application.
 
 So how do you achieve that same rigor when your use case falls outside the scope of standard evaluators? You build the evaluator the same way the pre-built ones were built. This tutorial walks through the three steps:
 

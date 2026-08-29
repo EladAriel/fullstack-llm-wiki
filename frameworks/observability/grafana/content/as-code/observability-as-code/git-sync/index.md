@@ -1,7 +1,7 @@
 ---
 type: "Framework Learn Directory Index"
 framework: "Grafana"
-generated_at: "2026-07-25T19:08:09.148238Z"
+generated_at: "2026-08-29T09:39:37.616165Z"
 ---
 # Git-Sync
 
@@ -25,3 +25,8 @@ This directory contains Grafana learning pages related to git-sync.
 - [Provisioned Dashboards](provisioned-dashboards.md)
 - [Usage Limits](usage-limits.md)
 - [Use Git Sync](use-git-sync.md)
+
+## Subdirectories
+
+- [Git Sync Setup](git-sync-setup/index.md)
+- [Scenarios](scenarios/index.md)

@@ -1,53 +1,98 @@
 ---
 type: "Framework Learn Page"
-framework: "mongodb"
+framework: "MongoDB"
 source_repo: "https://github.com/mongodb/docs.git"
 source_branch: "main"
 source_path: "content/manual/manual/source/reference/method/db.changeUserPassword.txt"
-source_commit: "ab9db26ed3d11618cdb61516d8180337d8e3f679"
-source_commit_short: "ab9db26e"
-source_commit_date: "2026-07-24T16:22:46-06:00"
-generated_at: "2026-07-25T11:51:15Z"
+source_commit: "b9f2bc487a2878b65e3c1f80024bebab76954f27"
+source_commit_short: "b9f2bc48"
+source_commit_date: "2026-08-28T17:09:45-05:00"
+generated_at: "2026-08-29T09:39:19.958777Z"
 ---
-
-========================================
-
 # db.changeUserPassword() (mongosh method)
+
+**meta:** :description: Change a user's password in the database where the user is defined using `db.changeUserPassword(username, password)`.
+
+.. default-domain:: mongodb
+
+**contents:** On this page
+   :local:
+   :backlinks: none
+   :depth: 1
+   :class: singlecol
 
 ## Definition
 
+**method:** db.changeUserPassword(username, password)
+
+   Updates a user's password. Run the method in the database where the
+   user is defined, i.e. the database you :method:`created
+   <db.createUser()>` the user.
+
+   .. |dbcommand| replace:: :dbcommand:`updateUser` command
+   .. include:: /includes/fact-mongosh-shell-method-alt.rst
+
+   .. list-table::
+      :header-rows: 1
+      :widths: 20 20 80
+   
+      * - Parameter
+        - Type
+        - Description
+      * - ``username``
+        - string
+        - The name of the user whose password you wish to change.
+      * - ``password``
+        - string
+        - The user's password. The value can be either:
+
+          - the user's password in cleartext string, or
+          - :method:`passwordPrompt()` to prompt for the user's password. 
+
+            .. include:: /includes/extracts/4.2-changes-passwordPrompt.rst
+
+      * - ``writeConcern``
+        - document
+        - .. include:: /includes/fact-write-concern-spec-link.rst
+
 ## Compatibility
 
-This method is available in deployments hosted in the following environments:
+This method is available in deployments hosted in the following
+environments:
 
-.. include:: /includes/fact-environments-no-atlas-support.rst
+**include:** /includes/fact-environments-no-atlas-support.rst
 
-.. include:: /includes/fact-environments-onprem-only.rst
+**include:** /includes/fact-environments-onprem-only.rst
 
 ## Required Access
 
-.. include:: /includes/access-change-password.rst
+**include:** /includes/access-change-password.rst
 
 ## Behavior
 
-.. include:: /includes/fact-cleartext-passwords-tls.rst
+.. |command| replace:: :method:`db.changeUserPassword()`
+
+**include:** /includes/fact-cleartext-passwords-tls.rst
 
 ## Example
 
-The following operation changes the password of the user named `accountUser` in the `products` database to `SOh3TbYhx8ypJPxmt1oOfL`:
+The following operation changes the password of the user named
+``accountUser`` in the ``products`` database to ``SOh3TbYhx8ypJPxmt1oOfL``:
 
-> **Tip:** .. include:: /includes/extracts/4.2-changes-passwordPrompt.rst
+**tip:** .. include:: /includes/extracts/4.2-changes-passwordPrompt.rst
 
-```javascript
-use products
-db.changeUserPassword("accountUser", passwordPrompt())
-```
+.. code-block:: javascript
 
-When prompted in :binary:`~bin.mongosh` for the password, enter the new password.
+   use products
+   db.changeUserPassword("accountUser", passwordPrompt())
 
-You can also pass the new password directly to :method:`db.changeUserPassword()`:
+When prompted in :binary:`~bin.mongosh` for the password, enter
+the new password.
 
-```javascript
-use products
-db.changeUserPassword("accountUser", "SOh3TbYhx8ypJPxmt1oOfL")
-```
+You can also pass the new password directly to
+:method:`db.changeUserPassword()`:
+
+.. code-block:: javascript
+
+   use products
+   db.changeUserPassword("accountUser", "SOh3TbYhx8ypJPxmt1oOfL")

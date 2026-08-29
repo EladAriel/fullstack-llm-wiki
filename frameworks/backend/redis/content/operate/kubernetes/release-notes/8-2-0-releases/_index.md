@@ -1,14 +1,15 @@
 ---
 type: "Framework Learn Page"
-framework: "redis"
+framework: "Redis"
 source_repo: "https://github.com/redis/docs.git"
 source_branch: "main"
 source_path: "content/operate/kubernetes/release-notes/8-2-0-releases/_index.md"
-source_commit: "9d30f68c3dad1a6b3b7d30fe604b911348ce8152"
-source_commit_short: "9d30f68c"
-source_commit_date: "2026-07-24T10:52:10-07:00"
-generated_at: "2026-07-25T11:51:22Z"
+source_commit: "f8693349287b0efbef3c865b6f6a2aceca88594d"
+source_commit_short: "f869334"
+source_commit_date: "2026-08-28T10:01:19-05:00"
+generated_at: "2026-08-29T09:38:55.161457Z"
 ---
+# _Index
 
 ---
 alwaysopen: false
@@ -19,11 +20,11 @@ categories:
 description: Releases with support for Redis Enterprise Software 8.2.0
 hideListLinks: true
 linkTitle: 8.2.0 releases
-title: Redis Enterprise for Kubernetes 8.2.0 release notes
+title: Redis Software for Kubernetes 8.2.0 release notes
 weight: 83
 ---
 
-Redis Enterprise for Kubernetes 8.2.0 includes new features, bug fixes, enhancements, and support for Redis Software 8.2.0. The latest release is 8.2.0-12 with support for Redis Software version 8.2.0-25.
+Redis Software for Kubernetes 8.2.0 includes new features, bug fixes, enhancements, and support for Redis Software 8.2.0. The latest release is 8.2.0-13 with support for Redis Software version 8.2.0-46.
 
 ## Detailed release notes
 
@@ -31,11 +32,9 @@ Redis Enterprise for Kubernetes 8.2.0 includes new features, bug fixes, enhancem
 
 ## Supported distributions
 
-Redis Enterprise for Kubernetes is compatible with [CNCF-conformant](https://www.cncf.io/training/certification/software-conformance/) Kubernetes platforms. The operator follows standard Kubernetes APIs and practices and is designed to run consistently across certified Kubernetes environments.
+Redis Software for Kubernetes is compatible with [CNCF-conformant](https://www.cncf.io/training/certification/software-conformance/) Kubernetes platforms. The operator follows standard Kubernetes APIs and practices and is designed to run consistently across certified Kubernetes environments.
 
 The following table shows supported Kubernetes versions at the time of this release. For a list of platforms tested with this release, see [Supported Kubernetes distributions]({{< relref "/operate/kubernetes/reference/supported_k8s_distributions" >}}).
-
-<!-- TODO (DOC-6703): add the full tested-platform list. -->
 
 | Kubernetes | **Redis <nobr>8.2.0</nobr>** |
 |---|---|

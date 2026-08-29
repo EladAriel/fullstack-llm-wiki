@@ -1,31 +1,19 @@
 ---
 type: "Framework Learn Directory Index"
-framework: "mongodb"
-directory: "content/tutorial"
-source_repo: "https://github.com/mongodb/docs.git"
-source_branch: "main"
-source_commit: "ab9db26ed3d11618cdb61516d8180337d8e3f679"
-source_commit_short: "ab9db26e"
-source_commit_date: "2026-07-24T16:22:46-06:00"
-generated_at: "2026-07-25T11:51:15Z"
+framework: "MongoDB"
+generated_at: "2026-08-29T09:39:20.590116Z"
 ---
 # Tutorial
 
-This directory contains mongodb learning pages related to tutorial.
+This directory contains MongoDB learning pages related to tutorial.
 
 ## Breadcrumbs
 
-[Wiki Home](../../index.md) -> [Content](../index.md) -> [Tutorial](index.md)
+[Wiki Home](../index.md) -> [Content](index.md)
 
 ## Navigation
 
-- Parent: [Parent Index](../index.md)
-
-## Child Directories
-
-- [Aggregation Examples](aggregation-examples/index.md) - pages related to aggregation examples
-- [Manage Shard Zone](manage-shard-zone/index.md) - pages related to manage shard zone
-- [Query Documents](query-documents/index.md) - pages related to query documents
+- Wiki Home: [Root Index](../index.md)
 
 ## Pages in This Directory
 
@@ -83,6 +71,7 @@ This directory contains mongodb learning pages related to tutorial.
 - [Create A Vulnerability Report](create-a-vulnerability-report.md)
 - [Create Chunks In Sharded Cluster](create-chunks-in-sharded-cluster.md)
 - [Create Queries That Ensure Selectivity](create-queries-that-ensure-selectivity.md)
+- [Create Unique Index On Sharded Collection](create-unique-index-on-sharded-collection.md)
 - [Create Users](create-users.md)
 - [Define Privilege](define-privilege.md)
 - [Deploy Geographically Distributed Replica Set](deploy-geographically-distributed-replica-set.md)
@@ -182,6 +171,7 @@ This directory contains mongodb learning pages related to tutorial.
 - [Resharding For Adding And Removing Shards](resharding-for-adding-and-removing-shards.md)
 - [Restart Sharded Cluster](restart-sharded-cluster.md)
 - [Restore Replica Set From Backup](restore-replica-set-from-backup.md)
+- [Restore Sharded Cluster With Database Dumps](restore-sharded-cluster-with-database-dumps.md)
 - [Restore Sharded Cluster](restore-sharded-cluster.md)
 - [Resync Replica Set Member](resync-replica-set-member.md)
 - [Rotate Encryption Key](rotate-encryption-key.md)
@@ -226,10 +216,8 @@ This directory contains mongodb learning pages related to tutorial.
 - [Verify Mongodb Packages](verify-mongodb-packages.md)
 - [View Sharded Cluster Configuration](view-sharded-cluster-configuration.md)
 
-## IDE LLM Guidance
+## Subdirectories
 
-When answering implementation questions related to this directory:
-
-1. Prefer the most specific page listed above.
-2. If the topic is broad, read the child directory index first.
-3. Use source metadata from each page when giving answers.
+- [Aggregation Examples](aggregation-examples/index.md)
+- [Manage Shard Zone](manage-shard-zone/index.md)
+- [Query Documents](query-documents/index.md)

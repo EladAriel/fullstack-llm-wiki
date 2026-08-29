@@ -1,43 +1,76 @@
 ---
 type: "Framework Learn Page"
-framework: "mongodb"
+framework: "MongoDB"
 source_repo: "https://github.com/mongodb/docs.git"
 source_branch: "main"
 source_path: "content/manual/manual/source/data-modeling/design-patterns/group-data.txt"
-source_commit: "ab9db26ed3d11618cdb61516d8180337d8e3f679"
-source_commit_short: "ab9db26e"
-source_commit_date: "2026-07-24T16:22:46-06:00"
-generated_at: "2026-07-25T11:51:15Z"
+source_commit: "b9f2bc487a2878b65e3c1f80024bebab76954f27"
+source_commit_short: "b9f2bc48"
+source_commit_date: "2026-08-28T17:09:45-05:00"
+generated_at: "2026-08-29T09:39:20.299192Z"
 ---
-
-==========
+.. _schema-pattern-group-data:
 
 # Group Data
 
-If your schema contains a large series of data, grouping that data into multiple smaller series can improve performance.
+**meta:** :description: Improve performance by grouping large data series into smaller ones using bucket and outlier patterns for better organization and handling of outliers.
 
-Your schema may also need to handle outliers in a series that cause poor performance for more common data values. To improve performance and organization for groups of data, you can use the `bucket <group-data-bucket-pattern>` and `outlier <group-data-outlier-pattern>` patterns.
+If your schema contains a large series of data, grouping that data into
+multiple smaller series can improve performance.
+
+Your schema may also need to handle outliers in a series that cause poor
+performance for more common data values. To improve performance and
+organization for groups of data, you can use the :ref:`bucket
+<group-data-bucket-pattern>` and :ref:`outlier
+<group-data-outlier-pattern>` patterns.
 
 ## Use Cases
 
-> **Tip:** `Time series collections <manual-timeseries-collection>` apply
-the bucket pattern automatically, and are suitable for most use cases
-of the bucket pattern.
+.. list-table::
+   :header-rows: 1
+   :widths: 10 10
+
+   * - Scenario
+     - Design Pattern Application
+
+   * - Your database stores a large array of product reviews, and your
+       application paginates reviews in groups of 10.
+     - Use the **bucket pattern** to group product reviews and handle
+       pagination on the server. This approach reduces the application
+       workload and simplifies pagination logic.
+
+   * - Your database stores reviews for books. A new, popular book
+       receives many more reviews than other books in the collection.
+
+     - Use the **outlier pattern** to separate the popular book's
+       reviews into separate documents. With this approach, you do not
+       have one large document that disrupts data retrieval for smaller,
+       more typical sized documents.
+
+**tip:** :ref:`Time series collections <manual-timeseries-collection>` apply
+   the bucket pattern automatically, and are suitable for most use cases
+   of the bucket pattern.
 
 ## Get Started
 
 To learn how to apply design patterns to group data, see these pages:
 
-- `group-data-bucket-pattern`
-- `group-data-outlier-pattern`
+- :ref:`group-data-bucket-pattern`
+
+- :ref:`group-data-outlier-pattern`
+
 ## Learn More
 
-- `data-modeling-schema-design`
-- `schema-design-patterns`
-- `timeseries-create-query-procedures`
-## Contents
+- :ref:`data-modeling-schema-design`
 
-- Bucket Pattern </data-modeling/design-patterns/group-data/bucket-pattern>
-- Outlier Pattern </data-modeling/design-patterns/group-data/outlier-pattern>
-- Attribute Pattern </data-modeling/design-patterns/group-data/attribute-pattern>
-- Subset Pattern </data-modeling/design-patterns/group-data/subset-pattern>
+- :ref:`schema-design-patterns`
+
+- :ref:`timeseries-create-query-procedures`
+
+**toctree:** :titlesonly: 
+   :hidden: 
+
+   Bucket Pattern </data-modeling/design-patterns/group-data/bucket-pattern>
+   Outlier Pattern </data-modeling/design-patterns/group-data/outlier-pattern>
+   Attribute Pattern </data-modeling/design-patterns/group-data/attribute-pattern>
+   Subset Pattern </data-modeling/design-patterns/group-data/subset-pattern>

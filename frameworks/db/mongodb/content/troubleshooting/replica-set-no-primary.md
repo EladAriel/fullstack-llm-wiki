@@ -1,133 +1,291 @@
 ---
 type: "Framework Learn Page"
-framework: "mongodb"
+framework: "MongoDB"
 source_repo: "https://github.com/mongodb/docs.git"
 source_branch: "main"
 source_path: "content/manual/manual/source/troubleshooting/replica-set-no-primary.txt"
-source_commit: "ab9db26ed3d11618cdb61516d8180337d8e3f679"
-source_commit_short: "ab9db26e"
-source_commit_date: "2026-07-24T16:22:46-06:00"
-generated_at: "2026-07-25T11:51:15Z"
+source_commit: "b9f2bc487a2878b65e3c1f80024bebab76954f27"
+source_commit_short: "b9f2bc48"
+source_commit_date: "2026-08-28T17:09:45-05:00"
+generated_at: "2026-08-29T09:39:19.563715Z"
 ---
-
-=========================================
+.. _manual-troubleshooting-replica-set-no-primary:
 
 # Troubleshoot Replica Sets with No Primary
 
-Replica sets can occasionally enter a state where no primary exists, typically during elections. However, when no primary exists for an extended period, the replica set cannot accept writes.
+**meta:** :description: Learn to diagnose and resolve extended periods where a MongoDB replica set has no primary, including network partitions, loss of majority, and member priority misconfiguration.
 
-This page contains common issues and resolutions for troubleshooting replica sets that have no primary for an extended period. If you need additional support after going through the following sections, contact `technical-support`.
+**contents:** On this page
+	:local:
+	:backlinks: none
+	:depth: 2
+	:class: singlecol
+
+Replica sets can occasionally enter a state where no primary exists, typically 
+during elections. However, when no primary exists for an extended period, the 
+replica set cannot accept writes.
+
+This page contains common issues and resolutions for troubleshooting 
+replica sets that have no primary for an extended period. If you need 
+additional support after going through the following sections, contact 
+:ref:`technical-support`.
 
 ## Prerequisite Checks
 
-Verify that your deployment does not have a primary by running the :dbcommand:`replSetGetStatus` or :method:`rs.status()` method. The following example shows the output of the :method:`rs.status()` method for a replica set with no primary:
+Verify that your deployment does not have a primary by running the 
+:dbcommand:`replSetGetStatus` or :method:`rs.status()` method. The following 
+example shows the output of the :method:`rs.status()` method for a replica set 
+with no primary: 
 
-> **Note:** In some cases, you may see that the `rs.status()` output shows some
-members' `stateStr` value as :replstate:`UNKNOWN` or :replstate:`DOWN`.
+.. io-code-block::
+   :copyable: true
+
+   .. input::
+      :language: javascript
+
+      rs.status().members
+
+   .. output::
+      :language: shell
+      :emphasize-lines: 7, 19, 29
+      :visible: false
+
+      [
+         {
+            _id: 0,
+            name: 'localhost:27018',
+            health: 1,
+            state: 2,
+            stateStr: 'SECONDARY',
+            ...
+            configVersion: 2,
+            configTerm: 6,
+            self: true,
+            lastHeartbeatMessage: ''
+         },
+         {
+            _id: 1,
+            name: 'localhost:27019',
+            health: 1,
+            state: 2,
+            stateStr: 'SECONDARY',
+            ...
+            configVersion: 2,
+            configTerm: 6
+		   },
+		   {
+            _id: 2,
+            name: 'localhost:27020',
+            health: 1,
+            state: 2,
+            stateStr: 'SECONDARY',
+            ...
+            configVersion: 2,
+            configTerm: 6
+		   }
+	   ] 
+
+**note:** In some cases, you may see that the ``rs.status()`` output shows some 
+   members' ``stateStr`` value as :replstate:`UNKNOWN` or :replstate:`DOWN`.
 
 ### Check Log Messages
 
-Check your deployment's `log messages <log-messages-ref>` for entries where the component (`"c"`) value is `ELECTION`. Here, you might find repeated attempts to start elections that fail with the following messages in the `"msg"` field:
+Check your deployment's :ref:`log messages <log-messages-ref>`
+for entries where the component (``"c"``) value is :data:`ELECTION`. Here, you 
+might find repeated attempts to start elections that fail with the following 
+messages in the ``"msg"`` field: 
+
+.. list-table::
+   :widths: 40 60
+   :header-rows: 1
+
+   * - Message
+     - Description
+
+   * - "Starting an election, since we've seen no PRIMARY in election timeout period"
+     - Logged by other members when the primary steps down.  
+
+   * - "we received insufficient votes" 
+     - Indicates that a majority of nodes did not respond to the election 
+       request. Members might be down or a network partition might have
+       occurred.
+
+   * - "can't see a majority of the set, relinquishing primary"
+     - Members might be down or a network partition might have occurred.
 
 ## Common Issues and Resolutions
 
-The following section describes common issues that may cause a replica set to have difficulty electing a new primary and how to resolve them. Before you contact support, check whether the following issues prevent your deployment from electing a primary.
+The following section describes common issues that may cause a replica set to 
+have difficulty electing a new primary and how to resolve them. Before you 
+contact support, check whether the following issues prevent your deployment
+from electing a primary.
 
 ### Network Partition
 
-If your deployment experiences a `network partition`, the nodes can't communicate with each other, preventing them from electing a primary.
+If your deployment experiences a :term:`network partition`, the nodes can't 
+communicate with each other, preventing them from electing a primary.
 
-To verify whether your deployment is affected by a network partition, run the :dbcommand:`replSetGetStatus` or :method:`rs.status()` method from different nodes. Based on the output from each node, identify which nodes are on each side of the partition.
+To verify whether your deployment is affected by a network partition, run the 
+:dbcommand:`replSetGetStatus` or :method:`rs.status()` method from different 
+nodes. Based on the output from each node, identify which nodes are on each side 
+of the partition.
 
 To help restore connectivity after a partition:
 
 - Check your firewall configurations for any rules that block
-communication between members.
-
+  communication between members.
 - Check DNS hostnames.
-- Ensure that you add your IP address to your IP Access List.
-> **Seealso:** - `considerations-when-deploying-rs`
-- `replica-set-troubleshooting-check-connection`
+- Ensure that you add your IP address to your IP Access List. 
 
-Once a majority of nodes can reach each other, MongoDB automatically elects a primary and writes resume normally.
+**seealso:** - :ref:`considerations-when-deploying-rs`
+   - :ref:`replica-set-troubleshooting-check-connection`
+
+Once a majority of nodes can reach each other, MongoDB automatically elects a 
+primary and writes resume normally. 
 
 ### No Eligible Secondary to Promote
 
-Ensure that your main data center contains both a quorum of voting members and members that are eligible to be primary. If your replica set's primary goes down and none of the secondaries are elected to become the primary, check that your remaining nodes aren't all `priority 0 <replica-set-secondary-only-members>` members.
+Ensure that your main data center contains both a quorum of voting
+members and members that are eligible to be primary. If your replica set's 
+primary goes down and none of the secondaries are elected to become the primary, 
+check that your remaining nodes aren't all :ref:`priority 0 
+<replica-set-secondary-only-members>` members. 
 
-To check the priority values of each member, run the :dbcommand:`replSetGetConfig` command or :method:`rs.conf()` method:
+To check the priority values of each member, run the 
+:dbcommand:`replSetGetConfig` command or :method:`rs.conf()` method: 
 
-If no secondaries are eligible to become primary due to their priority, update the :rsconf:`members[n].priority` value of one or more secondaries. For detailed instructions, see `replica-set-adjust-priority`.
+.. io-code-block::
+   :copyable: true
+   
+   .. input::
+      :language: javascript
+
+      // Returns an array of documents corresponding with each member in your replica set
+      rs.conf().members
+
+   .. output::
+      :language: shell
+      :emphasize-lines: 9
+      :visible: false
+
+      [
+         ...
+         {
+            _id: 1,
+            host: localhost:27019,
+            arbiterOnly: false,
+            buildIndexes: true,
+            hidden: false,
+            priority: 0,
+            tags: {},
+            secondaryDelaySecs: Long('0'),
+            votes: 1
+         },
+         ...
+      ]
+
+If no secondaries are eligible to become primary due to their priority,
+update the :rsconf:`members[n].priority` value of one or more
+secondaries. For detailed instructions, see :ref:`replica-set-adjust-priority`.
 
 ### Resource Exhaustion
 
-If your deployment has write-heavy workloads, too many indexes, or maintenance processes that take up significant disk space, you might overwhelm your nodes and cause them to crash.
+If your deployment has write-heavy workloads, too many indexes, or maintenance 
+processes that take up significant disk space, you might overwhelm your 
+nodes and cause them to crash. 
 
 To reclaim disk space, consider:
 
 - Dropping unused collections or databases.
 - Removing duplicate or unused indexes.
-- If you have a scheduled `maintenance window <configure-maintenance-window>`,
-consider enabling background compaction with the :dbcommand:`autoCompact`.
+- If you have a scheduled :ref:`maintenance window <configure-maintenance-window>`,
+  consider enabling background compaction with the :dbcommand:`autoCompact`.
 
-> **Warning:**   Run `autoCompact` only during periods of low traffic, such as a
-  maintenance window. On high-traffic databases, background compaction can
-  potentially delay or prevent operational tasks such as taking backups. To
-  learn more about performance impact and other considerations before
-  enabling background compaction, see
-  `autoCompact Behavior <autocompact-behavior>`.
+  .. warning::
+
+     Run ``autoCompact`` only during periods of low traffic, such as a 
+     maintenance window. On high-traffic databases, background compaction can 
+     potentially delay or prevent operational tasks such as taking backups. To 
+     learn more about performance impact and other considerations before 
+     enabling background compaction, see 
+     :ref:`autoCompact Behavior <autocompact-behavior>`.
 
 To monitor disk usage:
 
 - On Atlas, you can view the :guilabel:`Disk Usage` chart, available in
-`cluster monitoring <monitor-cluster-metrics>`.
+  :ref:`cluster monitoring <monitor-cluster-metrics>`.
 
-- On self-managed deployments, run the :dbcommand:`dbStats` command or
-:method:`db.stats()` method.
+- On self-managed deployments, run the :dbcommand:`dbStats` command or 
+  :method:`db.stats()` method.
 
 ### Loss of Majority
 
-If multiple voting members go down and the replica set loses its majority, `rs.status()` output may show that all members are in the `SECONDARY` or `RECOVERING` state. The following scenarios can cause loss of majority:
+If multiple voting members go down and the replica set loses its majority, 
+``rs.status()`` output may show that all members are in the ``SECONDARY`` or 
+``RECOVERING`` state. The following scenarios can cause loss of majority:
 
-Incorrectly Performed Rolling Maintenance `````````````````````````````````````````
+### Incorrectly Performed Rolling Maintenance
 
-For example, consider a three-member replica set where you take two members down for maintenance at the same time. In this scenario, the replica set loses its majority and can't elect a new primary until the third member is back up.
+For example, consider a three-member replica set where you take two members 
+down for maintenance at the same time. In this scenario, the replica set loses 
+its majority and can't elect a new primary until the third member is back up. 
 
-To avoid this scenario, ensure that you perform rolling maintenance serially, starting with secondary members and ending with the primary. This ensures that a primary is always available. For guidance on replica set maintenance, see `perform-maint-on-replica-set`.
+To avoid this scenario, ensure that you perform rolling maintenance serially, 
+starting with secondary members and ending with the primary. This ensures
+that a primary is always available. For guidance on replica set 
+maintenance, see :ref:`perform-maint-on-replica-set`. 
 
-Underprovisioned Cluster Topology `````````````````````````````````
+### Underprovisioned Cluster Topology
 
-For example, consider a deployment with two data-bearing members and one hidden non-voting node. If one data-bearing member fails, the remaining members can't form a majority.
+For example, consider a deployment with two data-bearing members and one hidden
+non-voting node. If one data-bearing member fails, the remaining members can't 
+form a majority.
 
-In a primary-secondary-arbiter (PSA) topology that uses :writeconcern:`"majority"` write concern, if the secondary goes down for maintenance, writes stall. The primary cannot get majority acknowledgment because only one of the two data-bearing voting members is available. Without `wtimeout <wc-wtimeout>` set on write operations, writes block indefinitely. To mitigate this:
+In a primary-secondary-arbiter (PSA) topology that uses
+:writeconcern:`"majority"` write concern, if the secondary goes down
+for maintenance, writes stall. The primary cannot get majority
+acknowledgment because only one of the two data-bearing voting members
+is available. Without :ref:`wtimeout <wc-wtimeout>` set on write
+operations, writes block indefinitely. To mitigate this:
 
 - Throttle write operations during the maintenance window to limit
-the volume of stalled writes.
+  the volume of stalled writes.
+- Set the ``wtimeout`` parameter on write operations that use 
+  ``"majority"`` write concern to prevent writes from blocking indefinitely.
 
-- Set the `wtimeout` parameter on write operations that use
-`"majority"` write concern to prevent writes from blocking indefinitely.
+For more details on mitigating performance issues in PSA topologies,
+see :ref:`performance-issues-psa`.
 
-For more details on mitigating performance issues in PSA topologies, see `performance-issues-psa`.
-
-In a primary-secondary-secondary-secondary-arbiter (PSSSA) topology, placing a majority of voting members in a single data center or disaster recovery (DR) site creates a risk of majority loss. If that region goes down completely, the remaining members cannot form a majority and cannot elect a primary. Distribute voting members across regions so that a majority remains available after a single-region failure. For guidance, see `data-center-awareness`.
+In a primary-secondary-secondary-secondary-arbiter (PSSSA) topology,
+placing a majority of voting members in a single data center or
+disaster recovery (DR) site creates a risk of majority loss. If that
+region goes down completely, the remaining members cannot form a
+majority and cannot elect a primary. Distribute voting members across
+regions so that a majority remains available after a single-region
+failure. For guidance, see :ref:`data-center-awareness`.
 
 ## Verify Resolution
 
-Once your deployment is restored and a new primary is elected, the `rs.status()` output shows that one of your members is in the `PRIMARY` state.
+Once your deployment is restored and a new primary is elected, the
+``rs.status()`` output shows that one of your members is in the
+``PRIMARY`` state.
 
 ## Diagnostics to Collect for More Support
 
-If you can't resolve your issue, contact `technical-support` with the following diagnostic information:
+If you can't resolve your issue, contact :ref:`technical-support`
+with the following diagnostic information:
 
 - Relevant log messages
-- `rs.config()` output
-- `rs.status()` output
+- ``rs.config()`` output
+- ``rs.status()`` output 
+
 ## Related Issues
 
-- `manual-troubleshooting-server-selection-timeout`
-- `manual-troubleshooting-replication-lag`
+- :ref:`manual-troubleshooting-server-selection-timeout`
+- :ref:`manual-troubleshooting-replication-lag`
+
 ## Learn More
 
-- `monitoring-for-mdb`
-- `reconfigure-replica-set-with-unavailable-members`
-- `replica-set-architecture`
+- :ref:`monitoring-for-mdb`
+- :ref:`reconfigure-replica-set-with-unavailable-members`
+- :ref:`replica-set-architecture`

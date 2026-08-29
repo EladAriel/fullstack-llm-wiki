@@ -4,10 +4,10 @@ framework: "Material UI"
 source_repo: "https://github.com/mui/material-ui.git"
 source_branch: "master"
 source_path: "docs/data/material/components/menus/menus.md"
-source_commit: "4d5fe7254baa7e97e38b516f37c7af13128468b7"
-source_commit_short: "4d5fe725"
-source_commit_date: "2026-07-24T12:25:49+03:00"
-generated_at: "2026-07-25T13:39:40.959292Z"
+source_commit: "fc3a3a0a8b7c8f20274eca4758ea07a33e25c1b4"
+source_commit_short: "fc3a3a0a"
+source_commit_date: "2026-08-28T09:03:39+07:00"
+generated_at: "2026-08-29T09:40:18.239422Z"
 ---
 ---
 productId: material-ui
@@ -57,8 +57,8 @@ For the menu that has long list and long text, you can use the `dense` prop to r
 
 ## Selected menu
 
-If used for item selection, when opened, simple menus places the initial focus on the selected menu item.
-The currently selected menu item is set using the `selected` prop (from [ListItem](/material-ui/api/list-item/)).
+If used for item selection, when opened, simple menus place the initial focus on the selected menu item.
+The currently selected menu item is set using the `selected` prop available on `MenuItem`.
 To use a selected menu item without impacting the initial focus, set the `variant` prop to "menu".
 
 {{"demo": "SimpleListMenu.js"}}

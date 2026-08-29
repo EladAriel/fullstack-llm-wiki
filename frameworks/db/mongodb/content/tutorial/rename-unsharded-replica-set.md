@@ -1,37 +1,53 @@
 ---
 type: "Framework Learn Page"
-framework: "mongodb"
+framework: "MongoDB"
 source_repo: "https://github.com/mongodb/docs.git"
 source_branch: "main"
 source_path: "content/manual/manual/source/tutorial/rename-unsharded-replica-set.txt"
-source_commit: "ab9db26ed3d11618cdb61516d8180337d8e3f679"
-source_commit_short: "ab9db26e"
-source_commit_date: "2026-07-24T16:22:46-06:00"
-generated_at: "2026-07-25T11:51:15Z"
+source_commit: "b9f2bc487a2878b65e3c1f80024bebab76954f27"
+source_commit_short: "b9f2bc48"
+source_commit_date: "2026-08-28T17:09:45-05:00"
+generated_at: "2026-08-29T09:39:19.647380Z"
 ---
-
-=================================
+.. _rename-a-replica-set:
 
 # Rename a Self-Managed Replica Set
 
-To rename a MongoDB replica set, you must shut down all members of the replica set, then configure each member's `local` database with the new replica set name.
+**meta:** :keywords: on-prem
+   :description: How to rename a replica set by shutting down all members and updating each member's local database with the new set name.
+
+.. default-domain:: mongodb
+
+**contents:** On this page
+   :local:
+   :backlinks: none
+   :depth: 1
+   :class: singlecol
+
+To rename a MongoDB replica set, you must shut down all members of 
+the replica set, then configure each member's ``local`` database 
+with the new replica set name.
 
 This procedure requires downtime.
 
 ## Prerequisites
 
-- Ensure that your replica set is not sharded. The renaming procedure
-is for unsharded replica sets only.
+- Ensure that your replica set is not sharded. The renaming procedure 
+  is for unsharded replica sets only. 
 
 - Before renaming a replica set, perform a full
-`backup of your MongoDB deployment <backup-methods>`.
+  :ref:`backup of your MongoDB deployment <backup-methods>`.
 
-- When `authentication <authentication>` is enabled, ensure that
-your `user role <roles>` has `find`, `insert`, and `remove` privileges on the `system.replset` collection in each member's `local` database.
+- When :ref:`authentication <authentication>` is enabled, ensure that 
+  your :ref:`user role <roles>` has ``find``, ``insert``, and ``remove``
+  privileges on the ``system.replset`` collection in each member's 
+  ``local`` database.
 
-> **Tip:**  You can view the privileges for a role by issuing the :dbcommand:`rolesInfo`
- command with the `showPrivileges` and `showBuiltinRoles` fields both set to `true`.
+  .. tip::
+
+    You can view the privileges for a role by issuing the :dbcommand:`rolesInfo` 
+    command with the ``showPrivileges`` and ``showBuiltinRoles`` fields both set to ``true``.
 
 ## Procedure
 
-.. include:: /includes/steps/rename-unsharded-replica-set.rst
+**include:** /includes/steps/rename-unsharded-replica-set.rst

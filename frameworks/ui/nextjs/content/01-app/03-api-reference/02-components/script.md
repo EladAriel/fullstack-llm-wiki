@@ -1,14 +1,15 @@
 ---
 type: "Framework Learn Page"
-framework: "nextjs"
+framework: "Next.js"
 source_repo: "https://github.com/vercel/next.js/"
 source_branch: "canary"
 source_path: "docs/01-app/03-api-reference/02-components/script.mdx"
-source_commit: "dcf242a17b5d4622bbd9624db531a9d84177619f"
-source_commit_short: "dcf242a1"
-source_commit_date: "2026-07-25T10:16:19+02:00"
-generated_at: "2026-07-25T11:50:53Z"
+source_commit: "33a5d542e519fe4e05c8c8c2c2845da9f741699b"
+source_commit_short: "33a5d542"
+source_commit_date: "2026-08-29T00:04:45-07:00"
+generated_at: "2026-08-29T09:40:24.292317Z"
 ---
+# Script
 
 ---
 title: Script Component
@@ -84,7 +85,7 @@ Scripts denoted with this strategy are preloaded and fetched before any first-pa
 
 <AppOnly>
 
-`beforeInteractive` scripts must be placed inside the root layout (`app/layout.tsx`) and are designed to load scripts that are needed by the entire site (i.e. the script will load when any page in the application has been loaded server-side).
+Scripts with the `beforeInteractive` strategy must be placed inside a [root layout](/docs/app/api-reference/file-conventions/layout#root-layout), such as `app/layout.tsx` or `app/[locale]/layout.tsx`, and are designed to load scripts that are needed by the entire site (i.e. the script will load when any page in the application has been loaded server-side).
 
 </AppOnly>
 
@@ -166,6 +167,12 @@ export default function Document() {
 </PagesOnly>
 
 > **Good to know**: Scripts with `beforeInteractive` will always be injected inside the `head` of the HTML document regardless of where it's placed in the component.
+
+<AppOnly>
+
+> **Good to know**: These scripts run once per document load. A client-side navigation does not run them again, including one that only changes a root param, such as `/en` to `/fi`, since the root layout stays the same.
+
+</AppOnly>
 
 Some examples of scripts that should be fetched as soon as possible with `beforeInteractive` include:
 

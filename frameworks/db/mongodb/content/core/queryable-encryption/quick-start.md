@@ -1,56 +1,135 @@
 ---
 type: "Framework Learn Page"
-framework: "mongodb"
+framework: "MongoDB"
 source_repo: "https://github.com/mongodb/docs.git"
 source_branch: "main"
 source_path: "content/manual/manual/source/core/queryable-encryption/quick-start.txt"
-source_commit: "ab9db26ed3d11618cdb61516d8180337d8e3f679"
-source_commit_short: "ab9db26e"
-source_commit_date: "2026-07-24T16:22:46-06:00"
-generated_at: "2026-07-25T11:51:15Z"
+source_commit: "b9f2bc487a2878b65e3c1f80024bebab76954f27"
+source_commit_short: "b9f2bc48"
+source_commit_date: "2026-08-28T17:09:45-05:00"
+generated_at: "2026-08-29T09:39:19.782388Z"
 ---
+**facet:** :name: programming_language
+   :values: csharp, go, java, javascript/typescript, python, ruby, shell, php
 
-================================
+**meta:** :keywords: node.js, compass, java sync, code example
+   :description: Learn how to build a sample application that uses MongoDB Queryable Encryption to automatically encrypt and decrypt sensitive document fields, such as SSN and billing information.
+
+.. _qe-quick-start:
 
 # {+qe+} Quick Start
 
-## Overview
+**contents:** On this page
+   :local:
+   :backlinks: none
+   :depth: 2
+   :class: singlecol
 
-This guide shows you how to build an application that implements the MongoDB {+qe+} feature to automatically encrypt and decrypt document fields.
+.. composable-tutorial::
+   :options: language-no-dependencies
+   :defaults: shell
 
-Select your driver language in the dropdown menu on the right to learn how to create an application that automatically encrypts and decrypts document fields.
+   This tutorial shows you how to build an application that implements the 
+   MongoDB {+qe+} feature to automatically encrypt and decrypt document fields.
+   
+   The tutorial includes the following sections:
+   
+   - **Set Up Your Project**: Install the driver and encryption dependencies, 
+     configure your environment variables, and create your project files with 
+     the required application variables.
+   - **Configure Encryption**: Create a {+cmk-long+} ({+cmk-abbr+}),
+     configure your KMS provider and automatic encryption settings, and
+     create an encryption-enabled client and collection.
+   - **Perform Encrypted Operations**: Insert a document with encrypted
+     fields, query on an encrypted field, and run the application to view
+     the decrypted results.
+     
+   Select your driver language in the drop-down menu to learn how to create an 
+   application that automatically encrypts and decrypts document fields.
+   
+   .. include:: /includes/queryable-encryption/quick-start/production-warning.rst
 
-> **Note:** MongoDB Community Edition `doesn't support <qe-csfle-compatibility>`
-{+qe+} with Automatic Encryption. You must use MongoDB Atlas or MongoDB
-Enterprise Advanced to implement this sample application.
+   .. _qe-guide-intro:
+   .. _qe-create-a-master-key:
+   .. _qe-download-example-qe-project:
 
-.. include:: /includes/queryable-encryption/quick-start/production-warning.rst
+## Before You Begin
 
-## Before You Get Started
-
-> **Warning:** Version 8.2.0 of `mongocryptd` might not run on Windows.
-This bug affects `In-Use Encryption <security-in-use-encryption>`
-with the MongoDB .NET/C# Driver and might affect other drivers based
-on your `mongocryptd` spawn arguments.
-To learn more about this issue and how to resolve it, see `8.2-known-issues`
-in the MongoDB 8.2 Release Notes.
-
-.. include:: /includes/queryable-encryption/set-up-section.rst
+   .. include:: /includes/queryable-encryption/quick-start/set-up-section.rst
 
 ### Full Application Code
 
-To see the complete code for the sample application, select your programming language in the language selector.
+   .. include:: /includes/queryable-encryption/quick-start/full-application-code.rst
+
 
 ## Procedure
 
+   .. selected-content::
+      :selections: shell
+
+      .. include:: /includes/queryable-encryption/shell-quickstart-steps.rst
+
+   .. selected-content::
+      :selections: nodejs
+
+      .. include:: /includes/queryable-encryption/node-quickstart-steps.rst
+
+   .. selected-content::
+      :selections: python
+
+      .. include:: /includes/queryable-encryption/python-quickstart-steps.rst
+
+   .. selected-content::
+      :selections: java-sync
+
+      .. include:: /includes/queryable-encryption/java-quickstart-steps.rst
+
+   .. selected-content::
+      :selections: go
+         
+      .. include:: /includes/queryable-encryption/go-quickstart-steps.rst
+
+   .. selected-content::
+      :selections: csharp
+
+      .. include:: /includes/queryable-encryption/csharp-quickstart-steps.rst
+
+   .. selected-content::
+      :selections: rust
+
+      .. include:: /includes/queryable-encryption/rust-quickstart-steps.rst
+
+   .. selected-content::
+      :selections: php
+
+      .. include:: /includes/queryable-encryption/php-quickstart-steps.rst
+
+   .. selected-content::
+      :selections: ruby
+
+      .. include:: /includes/queryable-encryption/ruby-quickstart-steps.rst
+
+   In this tutorial, you created an application that automatically
+   encrypts and decrypts the ``ssn`` and ``billing`` fields in your
+   ``patients`` collection. Because your application uses an encrypted
+   client, the query returns the decrypted field values. A client that
+   is not configured with your encryption keys would see the encrypted
+   values for those fields instead.
+
 ## Learn More
 
-To view a tutorial on production-ready {+qe+} with a remote KMS, see `<qe-tutorial-automatic-encryption>`.
+   To view a tutorial on production-ready {+qe+} with a remote
+   KMS, see :ref:`qe-tutorial-automatic-encryption`.
 
-To learn how {+qe+} works, see `<qe-fundamentals>`.
+   To learn how {+qe+} works, see
+   :ref:`qe-fundamentals`.
 
-To learn more about the topics mentioned in this guide, see the following links:
+   To learn more about the topics mentioned in this guide, see the
+   following links:
 
-- Learn more about {+qe+} components on the `Reference <qe-reference>` page.
-- Learn how {+cmk-long+}s and {+dek-long+}s work on the `<qe-reference-keys-key-vaults>` page.
-- See how KMS Providers manage your {+qe+} keys on the `<qe-fundamentals-kms-providers>` page.
+   - Learn more about {+qe+} components on the
+     :ref:`Reference <qe-reference>` page.
+   - Learn how {+cmk-long+}s and {+dek-long+}s work on the
+     :ref:`qe-reference-keys-key-vaults` page.
+   - See how KMS Providers manage your {+qe+} keys on the
+     :ref:`qe-fundamentals-kms-providers` page.

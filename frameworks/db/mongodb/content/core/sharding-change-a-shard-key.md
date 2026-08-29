@@ -1,41 +1,57 @@
 ---
 type: "Framework Learn Page"
-framework: "mongodb"
+framework: "MongoDB"
 source_repo: "https://github.com/mongodb/docs.git"
 source_branch: "main"
 source_path: "content/manual/manual/source/core/sharding-change-a-shard-key.txt"
-source_commit: "ab9db26ed3d11618cdb61516d8180337d8e3f679"
-source_commit_short: "ab9db26e"
-source_commit_date: "2026-07-24T16:22:46-06:00"
-generated_at: "2026-07-25T11:51:15Z"
+source_commit: "b9f2bc487a2878b65e3c1f80024bebab76954f27"
+source_commit_short: "b9f2bc48"
+source_commit_date: "2026-08-28T17:09:45-05:00"
+generated_at: "2026-08-29T09:39:19.530637Z"
 ---
-
-==================
+.. _change-a-shard-key:
 
 # Change a Shard Key
 
-The ideal shard key allows MongoDB to distribute documents evenly throughout the cluster while facilitating common query patterns. A suboptimal shard key can lead to uneven data distribution and the following problems:
+**meta:** :description: Learn how to change a shard key in MongoDB to improve data distribution and query performance by resharding or refining the shard key.
 
-- `Jumbo chunks <sharding-troubleshooting-jumbo-chunks>`
+.. default-domain:: mongodb
+
+**contents:** On this page
+   :local:
+   :backlinks: none
+   :depth: 2
+   :class: singlecol
+
+The ideal shard key allows MongoDB to distribute documents evenly
+throughout the cluster while facilitating common query patterns. A
+suboptimal shard key can lead to uneven data distribution and the
+following problems:
+
+- :ref:`Jumbo chunks <sharding-troubleshooting-jumbo-chunks>`
 - :ref:`Uneven load distribution
-<sharding-troubleshooting-monotonicity>`
-
+  <sharding-troubleshooting-monotonicity>`
 - :ref:`Decreased query performance over time
-<sharding-troubleshooting-scatter-gather>`
+  <sharding-troubleshooting-scatter-gather>`
 
 To address these issues, MongoDB allows you to change your shard key:
 
-- You can `refine a shard key <shard-key-refine>` by adding a suffix
-field or fields to the existing shard key.
+- You can :ref:`refine a shard key <shard-key-refine>` by adding a suffix 
+  field or fields to the existing shard key.
+- You can change a collection's shard key entirely and :ref:`reshard a collection 
+  <sharding-resharding>`.
 
-- You can change a collection's shard key entirely and :ref:`reshard a collection
-<sharding-resharding>`.
+Data distribution fixes are most effective when you 
+reshard a collection. If you want to improve data distribution and your
+cluster meets the :ref:`criteria to reshard <reshard-requirements>`,
+you should reshard the collection instead of refining the shard key. If
+your cluster doesn't meet the criteria to reshard, you should 
+refine the shard key.
 
-Data distribution fixes are most effective when you reshard a collection. If you want to improve data distribution and your cluster meets the `criteria to reshard <reshard-requirements>`, you should reshard the collection instead of refining the shard key. If your cluster doesn't meet the criteria to reshard, you should refine the shard key.
+For more information on common performance and scaling issues and advice
+on how to fix them, read :ref:`shardkey-troubleshoot-shard-keys`.
 
-For more information on common performance and scaling issues and advice on how to fix them, read `shardkey-troubleshoot-shard-keys`.
+**toctree:** :titlesonly:
 
-## Contents
-
-- Refine a Shard Key </core/sharding-refine-a-shard-key.txt>
-- Reshard a Collection </core/sharding-reshard-a-collection.txt>
+   Refine a Shard Key </core/sharding-refine-a-shard-key.txt>
+   Reshard a Collection </core/sharding-reshard-a-collection.txt>

@@ -1,80 +1,107 @@
 ---
 type: "Framework Learn Page"
-framework: "mongodb"
+framework: "MongoDB"
 source_repo: "https://github.com/mongodb/docs.git"
 source_branch: "main"
 source_path: "content/manual/manual/source/core/transactions-sharded-clusters.txt"
-source_commit: "ab9db26ed3d11618cdb61516d8180337d8e3f679"
-source_commit_short: "ab9db26e"
-source_commit_date: "2026-07-24T16:22:46-06:00"
-generated_at: "2026-07-25T11:51:15Z"
+source_commit: "b9f2bc487a2878b65e3c1f80024bebab76954f27"
+source_commit_short: "b9f2bc48"
+source_commit_date: "2026-08-28T17:09:45-05:00"
+generated_at: "2026-08-29T09:39:19.533516Z"
 ---
-
-============================================
+.. _production-considerations-sharded:
 
 # Production Considerations (Sharded Clusters)
 
+**meta:** :description: Understand the considerations for running multi-document transactions on sharded clusters, including performance, read and write concerns, and chunk migrations.
+
+.. default-domain:: mongodb
+
+**contents:** On this page
+   :local:
+   :backlinks: none
+   :depth: 1
+   :class: twocols
+
 You can perform multi-document transactions on sharded clusters.
 
-The following page lists concerns specific to running transactions on a sharded cluster. These concerns are in addition to those listed in `/core/transactions-production-consideration`.
+The following page lists concerns specific to running transactions on a
+sharded cluster. These concerns are in addition to those listed in
+:doc:`/core/transactions-production-consideration`.
 
 ## Performance
 
 ### Single Shard
 
-Transactions that target a single shard should have the same performance as replica-set transactions.
+Transactions that target a single shard should have the same
+performance as replica-set transactions.
 
 ### Multiple Shards
 
-Transactions that affect multiple shards incur a greater performance cost.
+Transactions that affect multiple shards incur a greater performance
+cost.
 
-> **Note:** On a sharded cluster, transactions that span multiple shards will
-error and abort if any involved shard contains an arbiter.
+**note:** On a sharded cluster, transactions that span multiple shards will
+   error and abort if any involved shard contains an arbiter.
+
+.. _transactions-sharded-clusters-time-limit:
 
 ### Time Limit
 
-To specify a time limit, specify a `maxTimeMS` limit on `commitTransaction`.
+To specify a time limit, specify a ``maxTimeMS`` limit on
+``commitTransaction``. 
 
-If `maxTimeMS` is unspecified, MongoDB will use the :parameter:`transactionLifetimeLimitSeconds`.
+If ``maxTimeMS`` is unspecified, MongoDB will use the
+:parameter:`transactionLifetimeLimitSeconds`.
 
-If `maxTimeMS` is specified but would result in transaction that exceeds :parameter:`transactionLifetimeLimitSeconds`, MongoDB will use the :parameter:`transactionLifetimeLimitSeconds`.
+If ``maxTimeMS`` is specified but would result in transaction that
+exceeds :parameter:`transactionLifetimeLimitSeconds`, MongoDB will use
+the :parameter:`transactionLifetimeLimitSeconds`.
 
-To modify :parameter:`transactionLifetimeLimitSeconds` for a sharded cluster, the parameter must be modified for all shard replica set members.
+To modify :parameter:`transactionLifetimeLimitSeconds` for a sharded
+cluster, the parameter must be modified for all shard replica set
+members.
 
 ## Read Concerns
 
-Multi-document transactions support :readconcern:`"local"`, :readconcern:`"majority"`, and :readconcern:`"snapshot"` read concern levels.
+Multi-document transactions support :readconcern:`"local"`,
+:readconcern:`"majority"`, and :readconcern:`"snapshot"` read concern
+levels.
 
-For transactions on a sharded cluster, only the :readconcern:`"snapshot"` read concern provides a consistent snapshot across multiple shards.
+For transactions on a sharded cluster, only the
+:readconcern:`"snapshot"` read concern provides a consistent snapshot
+across multiple shards.
 
-For more information on read concern and transactions, see `transactions-read-concern`.
+For more information on read concern and transactions, see
+:ref:`transactions-read-concern`.
 
 ## Write Concerns
 
-.. include:: /includes/extracts/transactions-shards-wcmajority-disabled.rst
+**include:** /includes/extracts/transactions-shards-wcmajority-disabled.rst
 
-> **Note:** .. include:: /includes/extracts/transactions-sharded-clusters-commit-writeconcern.rst
+**note:** .. include:: /includes/extracts/transactions-sharded-clusters-commit-writeconcern.rst
 
 ## Arbiters
 
-.. include:: /includes/extracts/transactions-arbiters.rst
+**include:** /includes/extracts/transactions-arbiters.rst
 
 ## Backups and Restores
 
-> **Warning:** .. include:: /includes/extracts/sharded-clusters-backup-restore-mongodump-mongorestore-restriction.rst
+**warning:** .. include:: /includes/extracts/sharded-clusters-backup-restore-mongodump-mongorestore-restriction.rst
 
 ## Chunk Migrations
 
-.. include:: /includes/extracts/transactions-chunk-migration.rst
+**include:** /includes/extracts/transactions-chunk-migration.rst
 
-> **Seealso:** :serverstatus:`shardingStatistics.countDonorMoveChunkLockTimeout`
+**seealso:** :serverstatus:`shardingStatistics.countDonorMoveChunkLockTimeout`
+
 
 ## Outside Reads During Commit
 
-.. include:: /includes/extracts/transactions-multi-shard-block-external-reads.rst
+**include:** /includes/extracts/transactions-multi-shard-block-external-reads.rst
 
-> **Seealso:** `transactions-atomicity`
+**seealso:** :ref:`transactions-atomicity`
 
 ## Additional Information
 
-See also `/core/transactions-production-consideration`.
+See also :doc:`/core/transactions-production-consideration`.

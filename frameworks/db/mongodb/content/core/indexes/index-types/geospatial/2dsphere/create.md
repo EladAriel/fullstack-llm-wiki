@@ -1,49 +1,68 @@
 ---
 type: "Framework Learn Page"
-framework: "mongodb"
+framework: "MongoDB"
 source_repo: "https://github.com/mongodb/docs.git"
 source_branch: "main"
 source_path: "content/manual/manual/source/core/indexes/index-types/geospatial/2dsphere/create.txt"
-source_commit: "ab9db26ed3d11618cdb61516d8180337d8e3f679"
-source_commit_short: "ab9db26e"
-source_commit_date: "2026-07-24T16:22:46-06:00"
-generated_at: "2026-07-25T11:51:15Z"
+source_commit: "b9f2bc487a2878b65e3c1f80024bebab76954f27"
+source_commit_short: "b9f2bc48"
+source_commit_date: "2026-08-28T17:09:45-05:00"
+generated_at: "2026-08-29T09:39:19.843977Z"
 ---
-
-=======================
+.. _2dsphere-index-create:
+.. _create-2dsphere-index:
 
 # Create a 2dsphere Index
 
-.. include:: /includes/indexes/2dsphere-index-intro.rst
+**meta:** :description: Create a 2dsphere index to support geospatial queries on an earth-like sphere using the `db.collection.createIndex()` method with the "2dsphere" index type.
 
-To create a 2dsphere index, use the :method:`db.collection.createIndex()` method and specify the string `"2dsphere"` as the index type:
+.. default-domain:: mongodb
 
-.. include:: /includes/indexes/code-examples/create-2dsphere-index.rst
+**contents:** On this page
+   :local:
+   :backlinks: none
+   :depth: 1
+   :class: singlecol
 
-The values in the `<location field>` must be either:
+**include:** /includes/indexes/2dsphere-index-intro.rst
 
-- `GeoJSON objects <geospatial-geojson>`
-- `Legacy coordinate pairs <geospatial-legacy>`
+To create a 2dsphere index, use the
+:method:`db.collection.createIndex()` method and specify the string
+``"2dsphere"`` as the index type:
+
+**include:** /includes/indexes/code-examples/create-2dsphere-index.rst
+
+The values in the ``<location field>`` must be either:
+
+- :ref:`GeoJSON objects <geospatial-geojson>`
+
+- :ref:`Legacy coordinate pairs <geospatial-legacy>`
+
 ## Before You Begin
 
-.. include:: /includes/indexes/geojson-sample-docs.rst
+**include:** /includes/indexes/geojson-sample-docs.rst
 
-The values in the `loc` field are `GeoJSON points <geojson-point>`.
+The values in the ``loc`` field are :ref:`GeoJSON points
+<geojson-point>`.
 
 ## Procedure
 
-The following operation creates a 2dsphere index on the location field `loc`:
+The following operation creates a 2dsphere index on the location field
+``loc``:
 
-```javascript
-db.places.createIndex( { loc : "2dsphere" } )
-```
+.. code-block:: javascript
+
+   db.places.createIndex( { loc : "2dsphere" } )
 
 ## Next Steps
 
-After you create a 2dsphere index, you can use the index for geospatial queries. To learn more, see `2dsphere-index-query`.
+After you create a 2dsphere index, you can use the index for geospatial
+queries. To learn more, see :ref:`2dsphere-index-query`.
 
 ## Learn More
 
-- `2dsphere-index`
-- `geospatial-queries`
-- `geospatial-restrictions`
+- :ref:`2dsphere-index`
+
+- :ref:`geospatial-queries`
+
+- :ref:`geospatial-restrictions`

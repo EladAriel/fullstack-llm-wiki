@@ -1,54 +1,86 @@
 ---
 type: "Framework Learn Page"
-framework: "mongodb"
+framework: "MongoDB"
 source_repo: "https://github.com/mongodb/docs.git"
 source_branch: "main"
 source_path: "content/manual/manual/source/core/views.txt"
-source_commit: "ab9db26ed3d11618cdb61516d8180337d8e3f679"
-source_commit_short: "ab9db26e"
-source_commit_date: "2026-07-24T16:22:46-06:00"
-generated_at: "2026-07-25T11:51:15Z"
+source_commit: "b9f2bc487a2878b65e3c1f80024bebab76954f27"
+source_commit_short: "b9f2bc48"
+source_commit_date: "2026-08-28T17:09:45-05:00"
+generated_at: "2026-08-29T09:39:19.522492Z"
 ---
-
-=====
+.. _views-landing-page:
 
 # Views
 
-A MongoDB view is a read-only queryable object whose contents are defined by an `aggregation pipeline <aggregation-pipeline>` on other collections or views.
+.. default-domain:: mongodb
 
-MongoDB does not persist the view contents to disk. A view's content is computed on-demand when a client queries the view.
+**facet:** :name: genre
+   :values: reference
 
-.. include:: /includes/views/disambiguate-standard-materialized.rst
+**meta:** :description: Views are read-only queryable objects defined by an aggregation pipeline. Use views to restrict data access and perform database queries like collection joins.
+
+**contents:** On this page
+   :local:
+   :backlinks: none
+   :depth: 1
+   :class: singlecol
+
+A MongoDB view is a read-only queryable object whose contents are
+defined by an :ref:`aggregation pipeline <aggregation-pipeline>` on
+other collections or views.
+
+MongoDB does not persist the view contents to disk. A view's content is
+computed on-demand when a client queries the view.
+
+**include:** /includes/views/disambiguate-standard-materialized.rst
+
+.. |page-topic| replace:: :ref:`create materialized views in the UI <create-view-atlas>`
+
+.. cta-banner::
+   :url: https://www.mongodb.com/docs/manual/core/materialized-views/#create-a-materialized-view-in-the-mongodb-atlas-ui
+   :icon: Cloud
+
+   .. include:: /includes/fact-atlas-compatible.rst
 
 ## Use Cases
 
 You can use views to:
 
 - Create a view on a collection of employee data to exclude any
-personally identifiable information (PII).
+  personally identifiable information (PII).
 
 - Create a view on a collection of sensor data to add computed
-fields and metrics.
+  fields and metrics.
 
 - Create a view that joins two collections containing inventory and
-order history. Your application can query the view without managing or understanding the underlying pipeline.
+  order history. Your application can query the view without managing or
+  understanding the underlying pipeline.
 
 - Create a {+fts+} or {+avs+} index on a view to partially
-index a collection, support incompatible data types or data models, and more. To learn more, see `fts-transform-documents-collections` and `avs-transform-documents-collections`.
+  index a collection, support incompatible data types or data
+  models, and more. To learn more, see
+  :ref:`fts-transform-documents-collections` and
+  :ref:`avs-transform-documents-collections`.
 
 ## Create and Manage Views
 
 To learn how to create and manage views, see the following resources:
 
-- `atlas-ui-views`
-- `manual-views-create`
-- `manual-views-lookup`
-- `manual-views-collation`
-- `manual-views-modify`
-- `manual-views-remove`
+- :ref:`atlas-ui-views`
+- :ref:`manual-views-create`
+- :ref:`manual-views-lookup`
+- :ref:`manual-views-collation`
+- :ref:`manual-views-modify`
+- :ref:`manual-views-remove`
+
+.. _view-materialized-view-compare:
+
 ## Comparison with On-Demand Materialized Views
 
-.. include:: /includes/views/fact-compare-view-and-materialized-view.rst
+**include:** /includes/views/fact-compare-view-and-materialized-view.rst
+
+.. _manual-views-behavior:
 
 ## Behavior
 
@@ -58,28 +90,36 @@ Views are read-only. Write operations on views return an error.
 
 ### Snapshot Isolation
 
-Views do not maintain timestamps of collection changes and do not support point-in-time or snapshot read isolation.
+Views do not maintain timestamps of collection changes and do not
+support point-in-time or snapshot read isolation.
+
+.. _views-pipelines:
 
 ### View Pipelines
 
-The view's underlying aggregation pipeline is subject to the 100 megabyte memory limit for blocking sort and blocking group operations.
+The view's underlying aggregation pipeline is subject to the 100
+megabyte memory limit for blocking sort and blocking group
+operations. 
 
-.. include:: /includes/fact-allowDiskUseByDefault.rst
+**include:** /includes/fact-allowDiskUseByDefault.rst
 
-> **Note:** .. include:: /includes/fact-atlas-enable-autoscaling.rst
+**note:** .. include:: /includes/fact-atlas-enable-autoscaling.rst
 
 ### Time Series Collections
 
-`Time series collections <manual-timeseries-collection>` are writable non-materialized views. Limitations for views apply to time series collections. For more information, see `Time Series Collection Limitations <manual-timeseries-collection-limitations>`.
+:ref:`Time series collections <manual-timeseries-collection>` are
+writable non-materialized views. Limitations for views apply to time series
+collections. For more information, see :ref:`Time Series Collection
+Limitations <manual-timeseries-collection-limitations>`.
 
 ## Access Control
 
-.. include:: /includes/extracts/views-access-control.rst
+**include:** /includes/extracts/views-access-control.rst
 
-## Contents
+**toctree:** :titlesonly:
 
-- Create & Query </core/views/create-view>
-- Join Collections </core/views/join-collections-with-view>
-- Use Default Collation </core/views/specify-collation>
-- Modify or Remove </core/views/update-view>
-- Supported Operations </core/views/supported-operations>
+   Create & Query </core/views/create-view>
+   Join Collections </core/views/join-collections-with-view>
+   Use Default Collation </core/views/specify-collation>
+   Modify or Remove </core/views/update-view>
+   Supported Operations </core/views/supported-operations>

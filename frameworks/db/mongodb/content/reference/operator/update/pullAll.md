@@ -1,48 +1,74 @@
 ---
 type: "Framework Learn Page"
-framework: "mongodb"
+framework: "MongoDB"
 source_repo: "https://github.com/mongodb/docs.git"
 source_branch: "main"
 source_path: "content/manual/manual/source/reference/operator/update/pullAll.txt"
-source_commit: "ab9db26ed3d11618cdb61516d8180337d8e3f679"
-source_commit_short: "ab9db26e"
-source_commit_date: "2026-07-24T16:22:46-06:00"
-generated_at: "2026-07-25T11:51:15Z"
+source_commit: "b9f2bc487a2878b65e3c1f80024bebab76954f27"
+source_commit_short: "b9f2bc48"
+source_commit_date: "2026-08-28T17:09:45-05:00"
+generated_at: "2026-08-29T09:39:20.109213Z"
 ---
-
-==========================
-
 # $pullAll (update operator)
+
+**meta:** :description: Remove specified values from an array using the `$pullAll` operator in MongoDB.
+
+.. default-domain:: mongodb
+
+**contents:** On this page
+   :local:
+   :backlinks: none
+   :depth: 1
+   :class: singlecol
 
 ## Definition
 
+**update:** $pullAll
+
+   The :update:`$pullAll` operator removes all instances of the
+   specified values from an existing array. Unlike the :update:`$pull`
+   operator that removes elements by specifying a query,
+   :update:`$pullAll` removes elements that match the listed values.
+
+   The :update:`$pullAll` operator has the form:
+
+   .. code-block:: javascript
+
+      { $pullAll: { <field1>: [ <value1>, <value2> ... ], ... } }
+
+   .. include:: /includes/use-dot-notation.rst
+
 ## Behavior
 
-.. include:: /includes/fact-update-operator-processing-order.rst
+**include:** /includes/fact-update-operator-processing-order.rst
 
-If a `<value>` to remove is a document or an array, :update:`$pullAll` removes only the elements in the array that match the specified `<value>` exactly, including order.
+If a ``<value>`` to remove is a document or an array,
+:update:`$pullAll` removes only the elements in the array that match
+the specified ``<value>`` exactly, including order.
 
-.. include:: /includes/extracts/update-operation-empty-operand-expressions-pull-all.rst
+**include:** /includes/extracts/update-operation-empty-operand-expressions-pull-all.rst
 
 ## Examples
 
-Create the `survey` collection:
+Create the ``survey`` collection:
 
-```javascript
-db.survey.insertOne( { _id: 1, scores: [ 0, 2, 5, 5, 1, 0 ] } )
-```
+.. code-block:: javascript
 
-The following operation removes all instances of the values "0" and "5" from the `scores` array:
+   db.survey.insertOne( { _id: 1, scores: [ 0, 2, 5, 5, 1, 0 ] } )
 
-```javascript
-db.survey.updateOne( { _id: 1 }, { $pullAll: { scores: [ 0, 5 ] } } )
-```
+The following operation removes all instances of the values "0" and "5"
+from the ``scores`` array:
 
-After the update, the `scores` field no longer has any instances of "0" or "5".
+.. code-block:: javascript
 
-```javascript
-{ "_id" : 1, "scores" : [ 2, 1 ] }
-```
+   db.survey.updateOne( { _id: 1 }, { $pullAll: { scores: [ 0, 5 ] } } )
 
-> **Seealso:** - :method:`db.collection.updateMany()`
-- :method:`db.collection.findAndModify()`
+After the update, the ``scores`` field no longer has any instances of
+"0" or "5".
+
+.. code-block:: javascript
+
+   { "_id" : 1, "scores" : [ 2, 1 ] }
+
+**seealso:** - :method:`db.collection.updateMany()`
+   - :method:`db.collection.findAndModify()`

@@ -1,33 +1,22 @@
 ---
 type: "Framework Learn Directory Index"
 framework: "pytest"
-directory: "content/how-to"
-source_repo: "https://github.com/pytest-dev/pytest"
-source_branch: "main"
-source_commit: "344c23787cdb3431dcc441b8b63ee9950f04b921"
-source_commit_short: "344c2378"
-source_commit_date: "2026-07-24T17:37:16+02:00"
-generated_at: "2026-07-25T11:50:13Z"
+generated_at: "2026-08-29T09:40:11.291082Z"
 ---
-# How To
+# How-To
 
-This directory contains pytest learning pages related to how to.
+This directory contains pytest learning pages related to how-to.
 
 ## Breadcrumbs
 
-[Wiki Home](../../index.md) -> [Content](../index.md) -> [How To](index.md)
+[Wiki Home](../index.md) -> [Content](index.md)
 
 ## Navigation
 
-- Parent: [Parent Index](../index.md)
-
-## Child Directories
-
-- None
+- Wiki Home: [Root Index](../index.md)
 
 ## Pages in This Directory
 
-- [Original Source Index](_source_index.md)
 - [Assert](assert.md)
 - [Bash Completion](bash-completion.md)
 - [Cache](cache.md)
@@ -45,17 +34,9 @@ This directory contains pytest learning pages related to how to.
 - [Plugins](plugins.md)
 - [Skipping](skipping.md)
 - [Subtests](subtests.md)
-- [Tmp Path](tmp_path.md)
+- [Tmp_Path](tmp_path.md)
 - [Unittest](unittest.md)
 - [Usage](usage.md)
-- [Writing Hook Functions](writing_hook_functions.md)
-- [Writing Plugins](writing_plugins.md)
-- [Xunit Setup](xunit_setup.md)
-
-## IDE LLM Guidance
-
-When answering implementation questions related to this directory:
-
-1. Prefer the most specific page listed above.
-2. If the topic is broad, read the child directory index first.
-3. Use source metadata from each page when giving answers.
+- [Writing_Hook_Functions](writing_hook_functions.md)
+- [Writing_Plugins](writing_plugins.md)
+- [Xunit_Setup](xunit_setup.md)

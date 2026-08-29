@@ -1,19 +1,47 @@
 ---
 type: "Framework Learn Page"
-framework: "mongodb"
+framework: "MongoDB"
 source_repo: "https://github.com/mongodb/docs.git"
 source_branch: "main"
 source_path: "content/manual/manual/source/reference/method/sh.enableAutoSplit.txt"
-source_commit: "ab9db26ed3d11618cdb61516d8180337d8e3f679"
-source_commit_short: "ab9db26e"
-source_commit_date: "2026-07-24T16:22:46-06:00"
-generated_at: "2026-07-25T11:51:15Z"
+source_commit: "b9f2bc487a2878b65e3c1f80024bebab76954f27"
+source_commit_short: "b9f2bc48"
+source_commit_date: "2026-08-28T17:09:45-05:00"
+generated_at: "2026-08-29T09:39:19.948019Z"
 ---
-
-===================================
-
 # sh.enableAutoSplit (mongosh method)
 
-> **Note:** .. include:: /includes/autosplit-no-operation.rst
+**meta:** :description: Enable the autosplit flag in a sharded cluster, though automatic chunk splitting is not performed starting in MongoDB 6.0.3.
+
+.. default-domain:: mongodb
+
+**contents:** On this page
+   :local:
+   :backlinks: none
+   :depth: 1
+   :class: singlecol
+
+**note:** .. include:: /includes/autosplit-no-operation.rst
 
 ## Description
+
+**method:** sh.enableAutoSplit()
+
+   Enables the autosplit flag in the :data:`config.settings`
+   collection. When auto-splitting is enabled for a sharded cluster,
+   MongoDB automatically splits chunks based on the shard key values
+   the chunk represents to keep the chunks from growing too large.
+   
+   You can only run :method:`sh.enableAutoSplit()` from a
+   :binary:`~bin.mongosh` session that is connected to a
+   :binary:`~bin.mongos` instance. :method:`sh.enableAutoSplit()`
+   errors if run on a :binary:`~bin.mongod` instance.
+
+   .. note::
+
+      .. include:: /includes/extracts/4.2-changes-start-balancer-autosplit.rst
+
+   .. seealso::
+
+      - :doc:`/tutorial/manage-sharded-cluster-balancer`
+      - :ref:`sharding-balancing`

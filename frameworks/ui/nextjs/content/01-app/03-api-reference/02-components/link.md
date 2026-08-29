@@ -1,14 +1,15 @@
 ---
 type: "Framework Learn Page"
-framework: "nextjs"
+framework: "Next.js"
 source_repo: "https://github.com/vercel/next.js/"
 source_branch: "canary"
 source_path: "docs/01-app/03-api-reference/02-components/link.mdx"
-source_commit: "dcf242a17b5d4622bbd9624db531a9d84177619f"
-source_commit_short: "dcf242a1"
-source_commit_date: "2026-07-25T10:16:19+02:00"
-generated_at: "2026-07-25T11:50:53Z"
+source_commit: "33a5d542e519fe4e05c8c8c2c2845da9f741699b"
+source_commit_short: "33a5d542"
+source_commit_date: "2026-08-29T00:04:45-07:00"
+generated_at: "2026-08-29T09:40:24.290855Z"
 ---
+# Link
 
 ---
 title: Link Component
@@ -82,14 +83,14 @@ The following props can be passed to the `<Link>` component:
 
 <AppOnly>
 
-| Prop                                  | Example                          | Type             | Required |
-| ------------------------------------- | -------------------------------- | ---------------- | -------- |
-| [`href`](#href-required)              | `href="/dashboard"`              | String or Object | Yes      |
-| [`replace`](#replace)                 | `replace={false}`                | Boolean          | -        |
-| [`scroll`](#scroll)                   | `scroll={false}`                 | Boolean          | -        |
-| [`prefetch`](#prefetch)               | `prefetch={false}`               | Boolean or null  | -        |
-| [`onNavigate`](#onnavigate)           | `onNavigate={(e) => {}}`         | Function         | -        |
-| [`transitionTypes`](#transitiontypes) | `transitionTypes={['slide-in']}` | `string[]`       | -        |
+| Prop                                  | Example                          | Type                       | Required |
+| ------------------------------------- | -------------------------------- | -------------------------- | -------- |
+| [`href`](#href-required)              | `href="/dashboard"`              | String or Object           | Yes      |
+| [`replace`](#replace)                 | `replace={false}`                | Boolean                    | -        |
+| [`scroll`](#scroll)                   | `scroll={false}`                 | Boolean                    | -        |
+| [`prefetch`](#prefetch)               | `prefetch={false}`               | Boolean, `"auto"`, or null | -        |
+| [`onNavigate`](#onnavigate)           | `onNavigate={(e) => {}}`         | Function                   | -        |
+| [`transitionTypes`](#transitiontypes) | `transitionTypes={['slide-in']}` | `string[]`                 | -        |
 
 </AppOnly>
 
@@ -312,7 +313,7 @@ Prefetching happens when a `<Link />` component enters the user's viewport (init
 The following values can be passed to the `prefetch` prop:
 
 - **`"auto"` or `null` (default)**: Prefetch behavior depends on whether the route is static or dynamic. For static routes, the full route will be prefetched (including all its data). For dynamic routes, the partial route down to the nearest segment with a [`loading.js`](/docs/app/api-reference/file-conventions/loading#instant-loading-states) boundary will be prefetched.
-- **`true`**: The full route is prefetched for both static and dynamic routes. With [Partial Prefetching](/docs/app/guides/adopting-partial-prefetching) enabled, the prefetch is the [App Shell](/docs/app/glossary#app-shell); on a route that opts into [`prefetch = 'allow-runtime'`](/docs/app/api-reference/file-conventions/route-segment-config/prefetch#allow-runtime), it also includes the per-link runtime data and the cached content behind it.
+- **`true`**: The full route is prefetched for both static and dynamic routes. With [Partial Prefetching](/docs/app/guides/adopting-partial-prefetching) enabled, the prefetch includes the [App Shell](/docs/app/glossary#app-shell) and cached content that depends on the link's URL data. See [Optimizing prefetching](/docs/app/guides/optimizing-prefetching).
 - `false`: Prefetching will never happen both on entering the viewport and on hover.
 
 > **With Partial Prefetching enabled** ([`partialPrefetching: true`](/docs/app/api-reference/config/next-config-js/partialPrefetching)): the default changes. `auto` prefetches the per-route [App Shell](/docs/app/glossary#app-shell) (the route's static and cached content) instead of the full page. See [Adopting Partial Prefetching](/docs/app/guides/adopting-partial-prefetching) for the full behavior change.
@@ -345,7 +346,7 @@ export default function Page() {
 
 <PagesOnly>
 
-Prefetching happens when a `<Link />` component enters the user's viewport (initially or through scroll). Next.js prefetches and loads the linked route (denoted by the `href`) and data in the background to improve the performance of client-side navigation's. **Prefetching is only enabled in production**.
+Prefetching happens when a `<Link />` component enters the user's viewport (initially or through scroll). Next.js prefetches and loads the linked route (denoted by the `href`) and data in the background to improve the performance of client-side navigation. **Prefetching is only enabled in production**.
 
 The following values can be passed to the `prefetch` prop:
 

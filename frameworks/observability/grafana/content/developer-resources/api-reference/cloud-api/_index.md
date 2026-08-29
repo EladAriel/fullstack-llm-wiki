@@ -4,10 +4,10 @@ framework: "Grafana"
 source_repo: "https://github.com/grafana/grafana.git"
 source_branch: "main"
 source_path: "docs/sources/developer-resources/api-reference/cloud-api/_index.md"
-source_commit: "d18e58d33aa8741f08fbab4aa73bdaf1f04e3be5"
-source_commit_short: "d18e58d3"
-source_commit_date: "2026-07-25T13:50:43+02:00"
-generated_at: "2026-07-25T19:08:09.002106Z"
+source_commit: "5e3a02f81d2aadf4bf24fe49ed97d872556f5bf9"
+source_commit_short: "5e3a02f8"
+source_commit_date: "2026-08-29T10:58:19+09:00"
+generated_at: "2026-08-29T09:39:37.544839Z"
 ---
 ---
 title: Grafana Cloud API
@@ -511,7 +511,7 @@ Example response:
   "lastUsedAt": "2022-06-08T22:05:46.959Z",
   "createdAt": "2022-06-08T22:05:46.959Z",
   "updatedAt": "2022-06-08T22:05:46.959Z",
-  "token": "glc_REDACTED_CLOUD_API_TOKEN"
+  "token": "glc_eyJrIjoiZjI0YzZkNGEwZDBmZmZjMmUzNTU2ODcxMmY0ZWZlNTQ1NTljMDFjOCIsIm4iOiJteXRva2VuIiwiaWQiOjF9"
 }
 ```
 
@@ -1413,7 +1413,7 @@ Example response:
 {
   "id": 1,
   "name": "testkey",
-  "key": "REDACTED_GRAFANA_API_KEY"
+  "key": "eyJrIjoiMWpSRVhRUVJHZlc3NW1laklzV3htQUt0cUxtS3RuWFUiLCJuIjoidGVzdGtleSIsImlkIjoxf"
 }
 ```
 
@@ -1928,7 +1928,7 @@ Example response:
   "createdAt": "2023-01-04T07:50:54.000Z",
   "updatedAt": null,
   "firstUsed": null,
-  "token": "REDACTED_GRAFANA_API_KEY",
+  "token": "eyJrIjoiZmU5ZDlmY2JkODkzNTg4ZGUyYTJhNmJiZGJiMWYwNjQyMGM0MzBkNiIsIm4iOiJjcmVhdGVhcGlrZXkiLCJpZCI6NjUyOTkyf",
   "links": [
     {
       "rel": "self",

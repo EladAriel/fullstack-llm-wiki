@@ -4,10 +4,10 @@ framework: "LangSmith"
 source_repo: "https://github.com/langchain-ai/docs.git"
 source_branch: "main"
 source_path: "src/langsmith/vitest-jest.mdx"
-source_commit: "2aae1dfc98ee953a9a5185fb6fcdd9efb3f4d878"
-source_commit_short: "2aae1df"
-source_commit_date: "2026-07-25T00:27:23+00:00"
-generated_at: "2026-07-25T19:08:33.378271Z"
+source_commit: "a174f9cf7c91ee5eb14ee2382eb48bfe6e4956e9"
+source_commit_short: "a174f9c"
+source_commit_date: "2026-08-28T17:04:12-07:00"
+generated_at: "2026-08-29T09:39:50.624056Z"
 ---
 # Vitest Jest
 
@@ -20,7 +20,7 @@ LangSmith provides integrations with [Vitest](https://vitest.dev/) and [Jest](ht
 
 ![Jest/Vitest reporter output](/langsmith/images/jest-vitest-reporter-output.png)
 
-Compared to the @[`evaluate()`][Client.evaluate] evaluation flow, the Vitest or Jest testing frameworks are useful when:
+Compared to the @[`evaluate()`] evaluation flow, the Vitest or Jest testing frameworks are useful when:
 
 * **Each example requires different evaluation logic**: Standard evaluation flows assume consistent application and evaluator execution across all dataset examples. For more complex systems or comprehensive evaluations, specific system subsets may require evaluation with particular input types and metrics. These heterogeneous evaluations are simpler to write as distinct test case suites that track together.
 * **You want to assert binary expectations**: Track assertions in LangSmith and raise assertion errors locally (e.g. in CI pipelines). Testing tools help when both evaluating system outputs and asserting basic properties about them.

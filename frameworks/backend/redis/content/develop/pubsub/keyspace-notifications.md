@@ -1,14 +1,15 @@
 ---
 type: "Framework Learn Page"
-framework: "redis"
+framework: "Redis"
 source_repo: "https://github.com/redis/docs.git"
 source_branch: "main"
 source_path: "content/develop/pubsub/keyspace-notifications.md"
-source_commit: "9d30f68c3dad1a6b3b7d30fe604b911348ce8152"
-source_commit_short: "9d30f68c"
-source_commit_date: "2026-07-24T10:52:10-07:00"
-generated_at: "2026-07-25T11:51:22Z"
+source_commit: "f8693349287b0efbef3c865b6f6a2aceca88594d"
+source_commit_short: "f869334"
+source_commit_date: "2026-08-28T10:01:19-05:00"
+generated_at: "2026-08-29T09:38:55.806303Z"
 ---
+# Keyspace Notifications
 
 ---
 categories:
@@ -130,7 +131,7 @@ Different commands generate different kind of events according to the following 
 * [`INCR`]({{< relref "/commands/incr" >}}), [`DECR`]({{< relref "/commands/decr" >}}), [`INCRBY`]({{< relref "/commands/incrby" >}}), [`DECRBY`]({{< relref "/commands/decrby" >}}) commands all generate `incrby` events.
 * [`INCREX`]({{< relref "/commands/increx" >}}) generates an `incrby` event (or `incrbyfloat` when used with `BYFLOAT`). Additionally, an `expire` event is generated when `EX`/`PX`/`EXAT`/`PXAT` is used, a `persist` event when `PERSIST` is used, or a `del` event if the specified expiration is already in the past and the key is removed.
 * [`LINSERT`]({{< relref "/commands/linsert" >}}) generates an `linsert` event.
-* [`LMOVE`]({{< relref "/commands/lmove" >}}) and [`BLMOVE`]({{< relref "/commands/blmove" >}}) generate an `lpop`/`rpop` event (depending on the wherefrom argument) and an `lpush`/`rpush` event (depending on the whereto argument). In both cases the order is guaranteed (the `lpush`/`rpush` event will always be delivered after the `lpop`/`rpop` event). Additionally a `del` event will be generated if the resulting list is zero length and the key is removed.
+* [`LMOVE`]({{< relref "/commands/lmove" >}}) and [`BLMOVE`]({{< relref "/commands/blmove" >}}) generate an `lpush`/`rpush` event (depending on the whereto argument) and an `lpop`/`rpop` event (depending on the wherefrom argument). In both cases the order is guaranteed (the `lpush`/`rpush` event will always be delivered before the `lpop`/`rpop` event). Additionally a `del` event will be generated if the resulting list is zero length and the key is removed.
 * [`LPOP`]({{< relref "/commands/lpop" >}}) generates an `lpop` event. Additionally a `del` event is generated if the key is removed because the last element from the list was popped.
 * [`LPUSH`]({{< relref "/commands/lpush" >}}) and [`LPUSHX`]({{< relref "/commands/lpushx" >}}) generates a single `lpush` event, even in the variadic case.
 * [`LREM`]({{< relref "/commands/lrem" >}}) generates an `lrem` event, and additionally a `del` event if the resulting list is empty and the key is removed.
@@ -142,7 +143,7 @@ Different commands generate different kind of events according to the following 
 * [`PERSIST`]({{< relref "/commands/persist" >}}) generates a `persist` event if the expiry time associated with key has been successfully deleted.
 * [`RENAME`]({{< relref "/commands/rename" >}}) generates two events, a `rename_from` event for the source key, and a `rename_to` event for the destination key.
 * [`RESTORE`]({{< relref "/commands/restore" >}}) generates a `restore` event for the key.
-* [`RPOPLPUSH`]({{< relref "/commands/rpoplpush" >}}) and [`BRPOPLPUSH`]({{< relref "/commands/brpoplpush" >}}) generate an `rpop` event and an `lpush` event. In both cases the order is guaranteed (the `lpush` event will always be delivered after the `rpop` event). Additionally a `del` event will be generated if the resulting list is zero length and the key is removed.
+* [`RPOPLPUSH`]({{< relref "/commands/rpoplpush" >}}) and [`BRPOPLPUSH`]({{< relref "/commands/brpoplpush" >}}) generate an `lpush` event and an `rpop` event. In both cases the order is guaranteed (the `lpush` event will always be delivered before the `rpop` event). Additionally a `del` event will be generated if the resulting list is zero length and the key is removed.
 * [`RPOP`]({{< relref "/commands/rpop" >}}) generates an `rpop` event. Additionally a `del` event is generated if the key is removed because the last element from the list was popped.
 * [`RPUSH`]({{< relref "/commands/rpush" >}}) and [`RPUSHX`]({{< relref "/commands/rpushx" >}}) generates a single `rpush` event, even in the variadic case.
 * [`SADD`]({{< relref "/commands/sadd" >}}) generates a single `sadd` event, even in the variadic case.

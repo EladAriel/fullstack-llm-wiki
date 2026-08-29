@@ -4,10 +4,10 @@ framework: "Arize Phoenix"
 source_repo: "https://github.com/Arize-ai/phoenix.git"
 source_branch: "main"
 source_path: "docs/phoenix/tracing/how-to-tracing.mdx"
-source_commit: "69b3ab92c37ff65812feaa2dbf0b1c0ad5ae55fe"
-source_commit_short: "69b3ab9"
-source_commit_date: "2026-07-25T11:48:12-06:00"
-generated_at: "2026-07-25T19:08:24.828357Z"
+source_commit: "c48e50e9906fcc56c1c103ebd93ef3c95ed6b6e7"
+source_commit_short: "c48e50e"
+source_commit_date: "2026-08-29T01:45:20-06:00"
+generated_at: "2026-08-29T09:39:58.800547Z"
 ---
 # How To Tracing
 
@@ -75,7 +75,7 @@ Extract span data for analysis, evaluation, or export.
   <Card title="Run a Query" href="/docs/phoenix/tracing/how-to-tracing/importing-and-exporting-traces/extract-data-from-spans#running-span-queries" icon="magnifying-glass" horizontal description="Span query examples"/>
   <Card title="Specify a Project" href="/docs/phoenix/tracing/how-to-tracing/importing-and-exporting-traces/extract-data-from-spans#how-to-specify-a-project" icon="folder" horizontal description="Project-scoped queries"/>
   <Card title="Query for Documents" href="/docs/phoenix/tracing/how-to-tracing/importing-and-exporting-traces/extract-data-from-spans#querying-for-retrieved-documents" icon="file-magnifying-glass" horizontal description="Document retrieval queries"/>
-  <Card title="Apply Filters" href="/docs/phoenix/tracing/how-to-tracing/importing-and-exporting-traces/extract-data-from-spans#how-to-apply-filters" icon="filter" horizontal description="Filter query patterns"/>
+  <Card title="Filter Expressions" href="/docs/phoenix/tracing/how-to-tracing/filter-expressions" icon="filter" horizontal description="Filter spans and sessions with expressions"/>
   <Card title="Extract Attributes" href="/docs/phoenix/tracing/how-to-tracing/importing-and-exporting-traces/extract-data-from-spans#how-to-extract-attributes" icon="tags" horizontal description="Attribute extraction tips"/>
   <Card title="Use Pre-defined Queries" href="/docs/phoenix/tracing/how-to-tracing/importing-and-exporting-traces/extract-data-from-spans#pre-defined-queries" icon="list-check" horizontal description="Prebuilt query patterns"/>
 </Columns>

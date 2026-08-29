@@ -1,41 +1,122 @@
 ---
 type: "Framework Learn Page"
-framework: "mongodb"
+framework: "MongoDB"
 source_repo: "https://github.com/mongodb/docs.git"
 source_branch: "main"
 source_path: "content/manual/manual/source/reference/method/sh.moveChunk.txt"
-source_commit: "ab9db26ed3d11618cdb61516d8180337d8e3f679"
-source_commit_short: "ab9db26e"
-source_commit_date: "2026-07-24T16:22:46-06:00"
-generated_at: "2026-07-25T11:51:15Z"
+source_commit: "b9f2bc487a2878b65e3c1f80024bebab76954f27"
+source_commit_short: "b9f2bc48"
+source_commit_date: "2026-08-28T17:09:45-05:00"
+generated_at: "2026-08-29T09:39:19.913975Z"
 ---
-
-===============================
+.. _sh-move-chunk:
 
 # sh.moveChunk() (mongosh method)
 
+**meta:** :description: Use `sh.moveChunk()` to manually move a chunk to a destination shard. In most cases, you should allow the balancer to handle chunk migrations automatically.
+
+.. default-domain:: mongodb
+
+**contents:** On this page
+   :local:
+   :backlinks: none
+   :depth: 1
+   :class: singlecol
+
 ## Definition
 
-> **Seealso:** - :dbcommand:`moveChunk`
-- :method:`sh.splitAt()`
-- :method:`sh.splitFind()`
-- `/sharding`, and :ref:`chunk migration
-  <sharding-chunk-migration>`
+**method:** sh.moveChunk(namespace, query, destination)
+
+   Moves the :term:`chunk` that contains the document specified by the
+   ``query`` to the ``destination`` shard. :method:`sh.moveChunk()`
+   provides a wrapper around the :dbcommand:`moveChunk` database
+   command.
+
+
+   .. important:: In most circumstances, allow the :term:`balancer` to
+      automatically migrate :term:`chunks <chunk>`, and avoid calling
+      :method:`sh.moveChunk()` directly.
+
+   .. warning:: 
+      
+      This command cannot be used for hashed shard keys, as it 
+      uses the ``find`` option from the :dbcommand:`moveChunk` command. 
+      To move a chunk with a :term:`hashed shard key`, use the 
+      :dbcommand:`moveChunk` command specifying the ``bounds`` field. 
+
+   .. |dbcommand| replace:: :dbcommand:`moveChunk` command
+   .. include:: /includes/fact-mongosh-shell-method-alt.rst
+
+   :method:`sh.moveChunk()` takes the following arguments:
+    
+   .. list-table::
+      :header-rows: 1
+      :widths: 20 20 80
+   
+      * - Parameter
+   
+        - Type
+   
+        - Description
+   
+      * - ``namespace``
+   
+        - string
+   
+        - The :term:`namespace` of the sharded collection that contains the
+          chunk to migrate.
+          
+          
+   
+      * - ``query``
+   
+        - document
+   
+        - An equality match on the shard key that selects the chunk to move.
+          
+          
+   
+      * - ``destination``
+   
+        - string
+   
+        - The ID of the recipient shard.
+
+   .. include:: /includes/retrieve-shard-id-note.rst       
+          
+   By default, MongoDB cannot move a chunk if the number of documents
+   in the chunk is greater than 2 times the result of dividing the
+   configured :ref:`chunk size<sharding-chunk-size>` by the average
+   document size. The :dbcommand:`moveChunk` command can specify the 
+   :ref:`forceJumbo <movechunk-forceJumbo>` option to allow for the manual 
+   migration of chunks too large to move, with or without the 
+   :ref:`jumbo <jumbo-chunk>` label. See :ref:`moveChunk <movechunk-forceJumbo>` 
+   command for details.
+
+**seealso:** - :dbcommand:`moveChunk`
+   - :method:`sh.splitAt()`
+   - :method:`sh.splitFind()`
+   - :doc:`/sharding`, and :ref:`chunk migration
+     <sharding-chunk-migration>`
+
 
 ## Compatibility
 
-This method is available in deployments hosted in the following environments:
+This method is available in deployments hosted in the following environments: 
 
-.. include:: /includes/fact-environments-atlas-only.rst
+**include:** /includes/fact-environments-atlas-only.rst
 
-.. include:: /includes/fact-environments-atlas-support-no-free.rst
+**include:** /includes/fact-environments-atlas-support-no-free.rst
 
-.. include:: /includes/fact-environments-onprem-only.rst
+**include:** /includes/fact-environments-onprem-only.rst
 
 ## Example
 
-Given the `people` collection in the `records` database, the following operation finds the chunk that contains the documents with the `zipcode` field set to `53187` and then moves that chunk to the shard named `shard0019`:
+Given the ``people`` collection in the ``records`` database, the
+following operation finds the chunk that contains the documents with the
+``zipcode`` field set to ``53187`` and then moves that chunk to the
+shard named ``shard0019``:
 
-```javascript
-sh.moveChunk("records.people", { zipcode: "53187" }, "shard0019")
-```
+.. code-block:: javascript
+
+   sh.moveChunk("records.people", { zipcode: "53187" }, "shard0019")

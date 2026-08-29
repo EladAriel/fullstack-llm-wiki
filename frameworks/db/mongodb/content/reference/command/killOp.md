@@ -1,81 +1,140 @@
 ---
 type: "Framework Learn Page"
-framework: "mongodb"
+framework: "MongoDB"
 source_repo: "https://github.com/mongodb/docs.git"
 source_branch: "main"
 source_path: "content/manual/manual/source/reference/command/killOp.txt"
-source_commit: "ab9db26ed3d11618cdb61516d8180337d8e3f679"
-source_commit_short: "ab9db26e"
-source_commit_date: "2026-07-24T16:22:46-06:00"
-generated_at: "2026-07-25T11:51:15Z"
+source_commit: "b9f2bc487a2878b65e3c1f80024bebab76954f27"
+source_commit_short: "b9f2bc48"
+source_commit_date: "2026-08-28T17:09:45-05:00"
+generated_at: "2026-08-29T09:39:20.054539Z"
 ---
-
-=========================
+.. _killop-database-command:
 
 # killOp (database command)
 
+**meta:** :description: Terminate operations using the `killOp` command by specifying the operation ID, with support across various MongoDB environments.
+
+.. default-domain:: mongodb
+
+**contents:** On this page
+   :local:
+   :backlinks: none
+   :depth: 1
+   :class: singlecol
+
 ## Definition
+
+**dbcommand:** killOp
+
+   Terminates an operation as specified by the operation ID.
+   :binary:`~bin.mongosh` provides the 
+   :method:`db.killOp()` helper.
+   To find operations and their corresponding IDs,
+   see :pipeline:`$currentOp` or :method:`db.currentOp()`.
+   
+   .. |command| replace:: killOp
+
+   The ``killOp`` command must be run against the ``admin`` database.
+
+   .. include:: /includes/fact-dbcommand.rst
 
 ## Compatibility
 
-This command is available in deployments hosted in the following environments:
+This command is available in deployments hosted in the following environments: 
 
-.. include:: /includes/fact-environments-atlas-only.rst
+**include:** /includes/fact-environments-atlas-only.rst
 
-.. include:: /includes/fact-environments-atlas-support-limited-all.rst
+**include:** /includes/fact-environments-atlas-support-limited-all.rst
 
-.. include:: /includes/fact-environments-onprem-only.rst
+**include:** /includes/fact-environments-onprem-only.rst
 
 ## Syntax
 
 The command has the following form:
 
-```javascript
-db.adminCommand(
-   { 
-     killOp: 1, 
-     op: <opid>, 
-     comment: <any> 
-   }
-)
-```
+.. code-block:: javascript
+
+   db.adminCommand(
+      { 
+        killOp: 1, 
+        op: <opid>, 
+        comment: <any> 
+      }
+   )
 
 ## Command Fields
 
-.. include:: /includes/extracts/warning-terminating-ops-command.rst
+.. list-table::
+   :header-rows: 1
+   :widths: 20 20 80
+ 
+   * - Parameter
+     - Type
+     - Description
+ 
+   * - ``op``
+     - number
+     - An operation ID.
+       
+   * - ``comment``
+     - any
+     - .. include:: /includes/extracts/comment-content.rst
+
+**include:** /includes/extracts/warning-terminating-ops-command.rst
 
 ## Behavior
 
-Do not use :dbcommand:`killOp` to terminate an in-progress index builds in replica sets or sharded clusters. Use :dbcommand:`dropIndexes` on the `primary` to drop the index. See `dropIndexes-cmd-index-builds`.
+Do *not* use :dbcommand:`killOp` to terminate an in-progress index
+builds in replica sets or sharded clusters. Use :dbcommand:`dropIndexes`
+on the :term:`primary` to drop the index. See 
+:ref:`dropIndexes-cmd-index-builds`.
 
 ### Access Control
 
-On systems running with :setting:`~security.authorization`, to kill operations not owned by the user, the user must have access that includes the :authaction:`killop` privilege action.
+On systems running with :setting:`~security.authorization`, to kill
+operations not owned by the user, the user must have access that
+includes the :authaction:`killop` privilege action.
 
-On :binary:`~bin.mongod` instances, users can kill their own operations even without the :authaction:`killop` privilege action.
+On :binary:`~bin.mongod` instances, users can kill their own operations
+even without the :authaction:`killop` privilege action.
 
 ### Sharded Cluster
 
-The :dbcommand:`killOp` command can be run on a :binary:`~bin.mongos` and can kill queries (i.e. read operations) that span shards in a cluster. The :dbcommand:`killOp` command from the :binary:`~bin.mongos` does not propagate to the shards when the operation to be killed is a write operation.
+The :dbcommand:`killOp` command can be run on
+a :binary:`~bin.mongos` and can kill queries (i.e. read operations)
+that span shards in a cluster. The :dbcommand:`killOp` command from the
+:binary:`~bin.mongos` does not propagate to the shards when the
+operation to be killed is a write operation.
 
-For information on how to list sharding operations that are active on a :binary:`~bin.mongos`, see the `localOps` parameter in :pipeline:`$currentOp`.
+For information on how to list sharding operations that are active on a
+:binary:`~bin.mongos`, see the ``localOps`` parameter in
+:pipeline:`$currentOp`.
 
-For more information and examples on killing operations on a sharded cluster, see:
+For more information and examples on killing operations on a sharded
+cluster, see:
 
-- `kill-read-ops-sharded-cluster`
-- `kill-write-ops-sharded-cluster`
+- :ref:`kill-read-ops-sharded-cluster`
+
+- :ref:`kill-write-ops-sharded-cluster`
+
 ## Example
 
-The following example uses :dbcommand:`killOp` to target the running operation with opid `3478`.
+The following example uses :dbcommand:`killOp` to target
+the running operation with opid ``3478``.
 
-```javascript
-db.adminCommand( { "killOp": 1, "op": 3478 } )
-```
+.. code-block:: javascript
+
+   db.adminCommand( { "killOp": 1, "op": 3478 } )
 
 The operation returns the following result:
 
-```javascript
-{ "info" : "attempting to kill op", "ok" : 1 }
-```
+.. code-block:: javascript
 
-:dbcommand:`killOp` reports success if it succeeded in marking the specified operation for termination. Operations may not actually be terminated until they reach an appropriate interruption point. Use :pipeline:`$currentOp` or :method:`db.currentOp()` to confirm the target operation was terminated.
+   { "info" : "attempting to kill op", "ok" : 1 }
+
+:dbcommand:`killOp` reports success if it succeeded in marking the
+specified operation for termination. Operations may not actually be
+terminated until they reach an appropriate interruption point. Use
+:pipeline:`$currentOp` or :method:`db.currentOp()` to confirm the
+target operation was terminated.

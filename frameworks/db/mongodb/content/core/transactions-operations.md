@@ -1,109 +1,204 @@
 ---
 type: "Framework Learn Page"
-framework: "mongodb"
+framework: "MongoDB"
 source_repo: "https://github.com/mongodb/docs.git"
 source_branch: "main"
 source_path: "content/manual/manual/source/core/transactions-operations.txt"
-source_commit: "ab9db26ed3d11618cdb61516d8180337d8e3f679"
-source_commit_short: "ab9db26e"
-source_commit_date: "2026-07-24T16:22:46-06:00"
-generated_at: "2026-07-25T11:51:15Z"
+source_commit: "b9f2bc487a2878b65e3c1f80024bebab76954f27"
+source_commit_short: "b9f2bc48"
+source_commit_date: "2026-08-28T17:09:45-05:00"
+generated_at: "2026-08-29T09:39:19.557384Z"
 ---
-
-===========================
+.. _transactions-operations-ref:
 
 # Transactions and Operations
 
-MongoDB provides the ability to use transactions across multiple operations, collections, databases, documents, and shards.
+**meta:** :description: Explore operations supported in MongoDB transactions, including CRUD operations, restrictions, and how to create collections and indexes within transactions.
+
+.. default-domain:: mongodb
+
+
+
+**contents:** On this page
+   :local:
+   :backlinks: none
+   :depth: 2
+   :class: singlecol
+
+MongoDB provides the ability to use transactions across multiple operations,
+collections, databases, documents, and shards.
 
 ## Operations Supported in Multi-Document Transactions
+
+.. _transactions-operations-crud:
 
 ### CRUD Operations
 
 The following read/write operations are allowed in transactions:
 
-.. include:: /includes/table-transactions-operations.rst
+**include:** /includes/table-transactions-operations.rst
 
-> **Note:** You can update a document's shard key value (unless the shard key
-field is the immutable `_id` field) by issuing single-document
-update / findAndModify operations either in a transaction or as a
-`retryable write <retryable-writes>`. For details, see
-`update-shard-key`.
+**note:** Updates to Shard Key Values
+
+   You can update a document's shard key value (unless the shard key
+   field is the immutable ``_id`` field) by issuing single-document
+   update / findAndModify operations either in a transaction or as a
+   :ref:`retryable write <retryable-writes>`. For details, see
+   :ref:`update-shard-key`.
+
+.. _transactions-operations-count:
 
 ### Count Operation
 
-.. include:: /includes/extracts/transactions-count.rst
+**include:** /includes/extracts/transactions-count.rst
+
+.. _transactions-operations-distinct:
 
 ### Distinct Operation
 
-.. include:: /includes/extracts/transactions-distinct.rst
+**include:** /includes/extracts/transactions-distinct.rst
+
+.. _transactions-operations-ddl:
 
 ### Administration Operations
 
-You can create collections and indexes in transactions. For details, see `transactions-create-collections-indexes`. The collections used in a transaction can be in different databases.
+You can create collections and indexes in transactions. For details, see
+:ref:`transactions-create-collections-indexes`. The collections used in a 
+transaction can be in different databases.
 
-> **Note:** .. include:: /includes/extracts/transactions-cross-shard-collection-restriction.rst
+**note:** .. include:: /includes/extracts/transactions-cross-shard-collection-restriction.rst
 
-.. include:: /includes/transactions/create-collections-indexes-in-transaction.rst
+**include:** /includes/transactions/create-collections-indexes-in-transaction.rst
 
-Explicit Create Operations ``````````````````````````
+.. _transactions-operations-ddl-explicit:
 
-> **Note:** For explicit creation of a collection or an index inside a
-transaction, the transaction read concern level must be
-:readconcern:`"local"`.
+### Explicit Create Operations
 
-For more information on creating collections and indexes in a transaction, see `transactions-create-collections-indexes`.
+.. list-table::
+   :header-rows: 1
+   :widths: 25 35 50
 
-Implicit Create Operations ``````````````````````````
+   * - Command
+     - Method
+     - Notes
 
-You can also implicitly create a collection through the following write operations against a :red:`non-existing` collection:
+   * - :dbcommand:`create`
 
-For other CRUD operations allowed in transactions, see `transactions-operations-crud`.
+     - :method:`db.createCollection()`
 
-For more information on creating collections and indexes in a transaction, see `transactions-create-collections-indexes`.
+     - See also the :ref:`transactions-operations-ddl-implicit`.
+
+   * - :dbcommand:`createIndexes`
+
+     - | :method:`db.collection.createIndex()`
+       | :method:`db.collection.createIndexes()`
+
+     - The index to create must either be on a non-existing collection,
+       in which case, the collection is created as part of the
+       operation, or on a new empty collection created earlier in the
+       same transaction.
+
+**note:** For explicit creation of a collection or an index inside a
+   transaction, the transaction read concern level must be
+   :readconcern:`"local"`.
+
+For more information on creating collections and indexes in a
+transaction, see :ref:`transactions-create-collections-indexes`.
+
+.. _transactions-operations-ddl-implicit:  
+
+### Implicit Create Operations
+
+You can also implicitly create a collection through the following write
+operations against a :red:`non-existing` collection:
+
+.. list-table::
+   :header-rows: 1
+   :widths: 70 30
+
+   * - Method Run against Non-Existing Collection
+     - Command Run against Non-Existing Collection
+
+   * - | :method:`db.collection.findAndModify()` with ``upsert: true``
+       | :method:`db.collection.findOneAndReplace()` with ``upsert: true``
+       | :method:`db.collection.findOneAndUpdate()` with ``upsert: true``
+     - :dbcommand:`findAndModify` with ``upsert: true``
+
+   * - | :method:`db.collection.insertMany()`
+       | :method:`db.collection.insertOne()`
+     - :dbcommand:`insert`
+
+   * - | :method:`db.collection.updateOne()` with ``upsert: true``
+       | :method:`db.collection.updateMany()` with ``upsert: true``
+       | :method:`db.collection.replaceOne()` with ``upsert: true``
+     - :dbcommand:`update` with ``upsert: true``
+
+   * - | :method:`db.collection.bulkWrite()`  with insert or ``upsert:true`` operations
+       | Various :ref:`bulk-operation-methods` with insert or ``upsert:true`` operations
+
+For other CRUD operations allowed in transactions, see
+:ref:`transactions-operations-crud`.
+
+For more information on creating collections and indexes in a
+transaction, see :ref:`transactions-create-collections-indexes`.
 
 ### Informational Operations
 
-.. include:: /includes/extracts/transactions-operations-restrictions-info.rst
+**include:** /includes/extracts/transactions-operations-restrictions-info.rst
+
+.. _transactions-operations-ref-restricted:
 
 ## Restricted Operations
 
 The following operations are not allowed in transactions:
 
 - Creating new collections in cross-shard write transactions. For
-example, if you write to an existing collection in one shard and implicitly create a collection in a different shard, MongoDB cannot perform both operations in the same transaction.
+  example, if you write to an existing collection in one shard and
+  implicitly create a collection in a different shard, MongoDB cannot
+  perform both operations in the same transaction.
 
 - :ref:`Explicit creation of collections
-<transactions-operations-ddl-explicit>`, e.g. :method:`db.createCollection()` method, and indexes, e.g. :method:`db.collection.createIndexes()` and :method:`db.collection.createIndex()` methods, when using a read concern level other than :readconcern:`"local"`.
+  <transactions-operations-ddl-explicit>`, e.g.
+  :method:`db.createCollection()` method, and indexes, e.g.
+  :method:`db.collection.createIndexes()` and
+  :method:`db.collection.createIndex()` methods, when using a read
+  concern level other than :readconcern:`"local"`.
 
 - The :dbcommand:`listCollections` and :dbcommand:`listIndexes`
-commands and their helper methods.
+  commands and their helper methods.
 
 - Other non-CRUD and non-informational operations, such as
-:dbcommand:`createUser`, :dbcommand:`getParameter`, :dbcommand:`count` and their helpers.
+  :dbcommand:`createUser`, :dbcommand:`getParameter`,
+  :dbcommand:`count` and their helpers.
 
-- Parallel operations. To update multiple namespaces concurrently, consider
-using the :dbcommand:`bulkWrite` command instead.
+- Parallel operations. To update multiple namespaces concurrently, consider 
+  using the :dbcommand:`bulkWrite` command instead.
 
-- Writes to `capped <manual-capped-collection>` collections.
+- Writes to :ref:`capped <manual-capped-collection>` collections.
+
 - Using read concern :readconcern:`"snapshot"` when reading
-from a `capped <manual-capped-collection>` collection. (Starting in MongoDB 5.0)
+  from a :ref:`capped <manual-capped-collection>` collection.
+  (Starting in MongoDB 5.0)
 
-- Reads/writes to collections in the `config`, `admin`, or `local`
-databases.
+- Reads/writes to collections in the ``config``, ``admin``, or ``local`` 
+  databases.
 
-- Writes to `system.*` collections.
-- Using `explain` or similar commands to return the supported operation's
-query plan.
+- Writes to ``system.*`` collections.
 
-- Calling :dbcommand:`getMore` on cursors created outside of a transaction,
-or calling :dbcommand:`getMore` outside of a transaction on cursors created within a transaction.
+- Using ``explain`` or similar commands to return the supported operation's 
+  query plan.
 
-- Specifying the :dbcommand:`killCursors` command as the first operation
-in a `transaction <transactions>`.
+- Calling :dbcommand:`getMore` on cursors created outside of a transaction, 
+  or calling :dbcommand:`getMore` outside of a transaction on cursors created 
+  within a transaction.
 
-> **Note:**  If you run the `killCursors` command within a
- transaction, the server immediately stops the specified
- cursors. It does **not** wait for the transaction to commit.
+- Specifying the :dbcommand:`killCursors` command as the first operation 
+  in a :ref:`transaction <transactions>`.
 
-> **Seealso:** `txn-prod-considerations-ddl`
+  .. note::
+
+    If you run the ``killCursors`` command within a
+    transaction, the server immediately stops the specified
+    cursors. It does **not** wait for the transaction to commit.
+
+**seealso:** :ref:`txn-prod-considerations-ddl`

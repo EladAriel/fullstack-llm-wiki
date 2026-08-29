@@ -1,109 +1,231 @@
 ---
 type: "Framework Learn Page"
-framework: "mongodb"
+framework: "MongoDB"
 source_repo: "https://github.com/mongodb/docs.git"
 source_branch: "main"
 source_path: "content/manual/manual/source/core/csfle/fundamentals/create-schema.txt"
-source_commit: "ab9db26ed3d11618cdb61516d8180337d8e3f679"
-source_commit_short: "ab9db26e"
-source_commit_date: "2026-07-24T16:22:46-06:00"
-generated_at: "2026-07-25T11:51:15Z"
+source_commit: "b9f2bc487a2878b65e3c1f80024bebab76954f27"
+source_commit_short: "b9f2bc48"
+source_commit_date: "2026-08-28T17:09:45-05:00"
+generated_at: "2026-08-29T09:39:19.808540Z"
 ---
-
-==================
+.. _csfle-fundamentals-create-schema:
 
 # Encryption Schemas
 
+**meta:** :description: Create an encryption schema for Client-Side Field Level Encryption using JSON Schema syntax to define encryption rules for document fields.
+
+.. default-domain:: mongodb
+
+**contents:** On this page
+   :local:
+   :backlinks: none
+   :depth: 2
+   :class: singlecol
+
 ## Overview
 
-On this page, you can learn how to create an encryption schema for automatic {+csfle+} ({+csfle-abbrev+}) as well as see an example detailing how to create the encryption schema used in the {+csfle-abbrev+} `Quick Start <csfle-quick-start>`.
+On this page, you can learn how to create an encryption schema for
+automatic {+csfle+} ({+csfle-abbrev+}) as well as see an example detailing
+how to create the encryption schema used in the {+csfle-abbrev+}
+:ref:`Quick Start <csfle-quick-start>`.
 
 ## Encryption Schemas
 
-An encryption schema is a JSON object which uses a strict subset of [JSON Schema Draft 4 standard syntax](https://tools.ietf.org/html/draft-zyp-json-schema-04) along with the keywords `encrypt` and `encryptMetadata` to define the **encryption rules** that specify how your {+csfle-abbrev+}-enabled client should encrypt your documents.
+An encryption schema is a JSON object which uses a strict subset of
+`JSON Schema Draft 4 standard syntax <https://tools.ietf.org/html/draft-zyp-json-schema-04>`_
+along with the keywords ``encrypt`` and ``encryptMetadata``
+to define the **encryption rules** that specify how your
+{+csfle-abbrev+}-enabled client should encrypt your documents.
 
-Encryption rules are JSON key-value pairs that define how your client application encrypts your fields. You must specify or inherit the following information in an encryption rule:
+Encryption rules are JSON key-value pairs that define how your client
+application encrypts your fields. You must specify or inherit the following
+information in an encryption rule:
 
 - The algorithm used to encrypt your field
 - Which {+dek-long+} (DEK) your client uses to encrypt your field
-- The [BSON](https://bsonspec.org/)_ type of your field
-Encryption rules must contain either the `encrypt` or `encryptMetadata` keyword.
+- The `BSON <https://bsonspec.org/>`__ type of your field
 
-To learn more about the encryption algorithms you can define in your encryption schema, see `<csfle-reference-encryption-algorithms>`.
+Encryption rules must contain either the ``encrypt`` or
+``encryptMetadata`` keyword.
 
-To learn more about {+dek-long+}s, see `qe-reference-keys-key-vaults`.
+To learn more about the encryption algorithms you can define in your
+encryption schema, see :ref:`<csfle-reference-encryption-algorithms>`.
+
+To learn more about {+dek-long+}s, see :ref:`qe-reference-keys-key-vaults`.
 
 ### encrypt Keyword
 
-The `encrypt` keyword defines an encryption rule for a single field in a BSON document. Encryption rules containing the `encrypt` keyword have the following structure:
+The ``encrypt`` keyword defines an encryption rule for a single field in a
+BSON document. Encryption rules containing the ``encrypt`` keyword have
+the following structure:
+
+**literalinclude:** /includes/fundamentals/encrypt-keyword.json
+   :language: json
 
 ### encryptMetadata Keyword
 
-The `encryptMetadata` keyword defines encryption rules which child elements of the sibling `properties` tag inherit. Encryption rules containing `encryptMetadata` have the following structure:
+The ``encryptMetadata`` keyword defines encryption rules which child
+elements of the sibling ``properties`` tag inherit. Encryption rules
+containing ``encryptMetadata`` have the following structure:
+
+**literalinclude:** /includes/fundamentals/encryptmetadata-keyword.json
+   :language: json
+
+.. _csfle-fundamentals-pattern-properties: 
 
 ### patternProperties Keyword
 
-You can use the `patternProperties` keyword in your encryption schema to define encryption rules for all fields with names that match a regular expression. This allows you to specify multiple fields for encryption based on a single regular expression, or to specify them by only using a part of the field name. The `patternProperties` keyword replaces `properties` in your encryption schema.
+You can use the ``patternProperties`` keyword in your encryption schema to 
+define encryption rules for all fields with names that match a regular expression.
+This allows you to specify multiple fields for encryption based on a single regular
+expression, or to specify them by only using a part of the field name. The
+``patternProperties`` keyword replaces ``properties`` in your encryption schema.
 
-Specify encryption rules with `patternProperties` using the following structure:
+Specify encryption rules with ``patternProperties`` using the following
+structure:
 
-To see an example of how to use `patternProperties` see `field-level-encryption-auto-encrypt-with-pattern-properties`
+**literalinclude:** /includes/fundamentals/patternProperties-keyword.json
+   :language: json
+
+To see an example of how to use ``patternProperties`` see
+:ref:`field-level-encryption-auto-encrypt-with-pattern-properties`
+
+.. _fle-define-a-json-schema:
 
 ## Example
 
-This example explains how to generate the encryption schema used in the `Create an Encryption Schema For Your Documents <csfle-quickstart-encryption-schema>` step of the {+csfle-abbrev+} Quick Start.
+This example explains how to generate the encryption schema used in 
+the :ref:`Create an Encryption Schema For Your Documents <csfle-quickstart-encryption-schema>`
+step of the {+csfle-abbrev+} Quick Start. 
 
-In the Quick Start, you insert documents with the following structure into the `patients` collection of the `medicalRecords` database:
+In the Quick Start, you insert documents with the following structure
+into the ``patients`` collection of the ``medicalRecords`` database:
+
+**literalinclude:** /includes/quick-start/schema/inserted-doc.json
+   :language: json
 
 ### Specify the Namespace
 
-At the root of your encryption schema, specify the namespace to which your encryption schema applies. Specify the following to encrypt and decrypt documents in the `patients` collection of the `medicalRecords` database:
+At the root of your encryption schema, specify the namespace to which your
+encryption schema applies. Specify the following to encrypt and decrypt
+documents in the ``patients`` collection of the ``medicalRecords``
+database:
+
+**literalinclude:** /includes/quick-start/schema/namespace.json
+   :language: json
 
 ### Specify the {+dek-long+}
 
-In the Quick Start, you encrypt all fields of your document with a single {+dek-long+} (DEK). To configure all fields in your documents to use a single DEK for encryption and decryption, specify the `_id` of your DEK with the `encryptMetadata` keyword at the root of your encryption schema as follows:
+In the Quick Start, you encrypt all fields of your document with a single
+{+dek-long+} (DEK). To configure all fields in your documents to use a
+single DEK for encryption and decryption, specify the ``_id`` of your DEK
+with the ``encryptMetadata`` keyword at the root of your encryption schema
+as follows:
+
+**literalinclude:** /includes/quick-start/schema/metadata.json
+   :language: json
 
 ### Choose Encryption Rules
 
-You decide to encrypt the following fields with the following encryption algorithms:
+You decide to encrypt the following fields with the following encryption
+algorithms:
 
-You choose to encrypt the `ssn` and `insurance.policyNumber` fields with deterministic encryption for the following reasons:
+.. list-table::
+   :header-rows: 1
+   :widths: 33 34 33
+
+   * - Field Name
+     - Encryption Algorithm
+     - BSON Type
+
+   * - ``ssn``
+     - Deterministic
+     - Int
+
+   * - ``bloodType``
+     - Random
+     - String
+
+   * - ``medicalRecords``
+     - Random
+     - Array
+
+   * - ``insurance.policyNumber``
+     - Deterministic
+     - Int
+
+You choose to encrypt the ``ssn`` and ``insurance.policyNumber`` fields
+with deterministic encryption for the following reasons:
+
+.. TODO: Kenn to review frequency analysis wording
 
 - You want to be able to query on these fields.
 - The values in these fields have a high cardinality, so
-this data is not susceptible to a frequency analysis attack.
+  this data is not susceptible to a frequency analysis
+  attack.
 
-You choose to encrypt the `bloodType` field with random encryption for the following reasons:
+You choose to encrypt the ``bloodType`` field with random encryption
+for the following reasons:
 
 - You do not plan to query on this field.
 - The values in this field have low cardinality, making
-them susceptible to a frequency analysis attack if you encrypted them deterministically.
+  them susceptible to a frequency analysis attack if you encrypted them
+  deterministically.
 
-that only automatic encryption did not support deterministic enryption of BSON arrays, however after testing it seems both manual and automatic encryption DO NOT support deterministic encryption of BSON arrays. Updated phrasing from "automatic encryption does not support deterministic..." to "CSFLE does not support deterministic...", let us know if this is incorrect!
+.. TODO: Technical reviewer, Kenn. The previous wording of this suggested
+   that only automatic encryption did not support deterministic enryption
+   of BSON arrays, however after testing it seems both manual and automatic
+   encryption DO NOT support deterministic encryption of BSON arrays. Updated
+   phrasing from "automatic encryption does not support deterministic..." to "CSFLE does not
+   support deterministic...", let us know if this is incorrect!
 
-You must encrypt the `medicalRecords` field with random encryption as {+csfle-abbrev+} does not support deterministic encryption of fields of type `array`.
+You must encrypt the ``medicalRecords`` field with random encryption
+as {+csfle-abbrev+} does not support deterministic
+encryption of fields of type ``array``.
 
-> **Tip:** To learn more about supported and unsupported automatic encryption
-operations, see `csfle-reference-automatic-encryption-supported-operations`.
+**tip:** To learn more about supported and unsupported automatic encryption
+   operations, see :ref:`csfle-reference-automatic-encryption-supported-operations`.
 
 ### Specify Encryption Rules
 
-To encrypt the `ssn` field with deterministic encryption, specify the following in your encryption schema:
+To encrypt the ``ssn`` field with deterministic encryption, specify the
+following in your encryption schema:
 
-To encrypt the `bloodType` field with random encryption, specify the following in your encryption schema:
+**literalinclude:** /includes/quick-start/schema/ssn.json
+   :language: json
 
-To encrypt the `medicalRecords` field with random encryption, specify the following in your encryption schema:
+To encrypt the ``bloodType`` field with random encryption, specify the
+following in your encryption schema:
 
-To encrypt the `insurance.policyNumber` field with deterministic encryption, specify the following in your encryption schema:
+**literalinclude:** /includes/quick-start/schema/bloodType.json
+   :language: json
+
+To encrypt the ``medicalRecords`` field with random encryption, specify the
+following in your encryption schema:
+
+**literalinclude:** /includes/quick-start/schema/medicalRecords.json
+   :language: json
+
+To encrypt the ``insurance.policyNumber`` field with deterministic
+encryption, specify the following in your encryption schema:
+
+**literalinclude:** /includes/quick-start/schema/insurancePolicyNumber.json
+   :language: json
 
 ### View the Complete Schema
 
 The complete encryption schema for the Quick Start is as follows:
 
+**literalinclude:** /includes/quick-start/schema/schema.json
+   :language: json
+
 ## Learn More
 
-To learn more about encryption schemas, see `csfle-reference-encryption-schemas`
+To learn more about encryption schemas, see
+:ref:`csfle-reference-encryption-schemas`
 
-To learn more about automatic encryption, see `csfle-fundamentals-automatic-encryption`.
+To learn more about automatic encryption, see
+:ref:`csfle-fundamentals-automatic-encryption`.
 
-To view the Quick Start, see `csfle-quick-start`.
+To view the Quick Start, see :ref:`csfle-quick-start`.

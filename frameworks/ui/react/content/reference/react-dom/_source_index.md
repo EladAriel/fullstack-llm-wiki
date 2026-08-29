@@ -1,15 +1,15 @@
 ---
 type: "Framework Learn Page"
-framework: "react"
+framework: "React"
 source_repo: "https://github.com/reactjs/react.dev"
 source_branch: "main"
 source_path: "src/content/reference/react-dom/index.md"
-source_commit: "7b6c3ceb9dd97249e9dce4a8a94e61aed6424698"
-source_commit_short: "7b6c3ceb"
-source_commit_date: "2026-07-20T15:31:48+02:00"
-generated_at: "2026-07-25T11:50:43Z"
-generated_filename: "_source_index.md"
+source_commit: "7c36f7ac329fe3cf2e11222edce9a535158c2cab"
+source_commit_short: "7c36f7a"
+source_commit_date: "2026-08-24T10:33:57-07:00"
+generated_at: "2026-08-29T09:40:25.491788Z"
 ---
+# Index
 
 ---
 title: React DOM APIs
@@ -42,6 +42,12 @@ These APIs can be used to make apps faster by pre-loading resources such as scri
 * [`preloadModule`](/reference/react-dom/preloadModule) lets you fetch an ESM module that you expect to use.
 * [`preinit`](/reference/react-dom/preinit) lets you fetch and evaluate an external script or fetch and insert a stylesheet.
 * [`preinitModule`](/reference/react-dom/preinitModule) lets you fetch and evaluate an ESM module.
+
+## Server Rendering APIs {/*server-rendering-apis*/}
+
+This API controls how components render on the server:
+
+* <CanaryBadge /> [`browser`](/reference/react-dom/browser) lets you mark a component as browser-only during server rendering.
 
 ---
 

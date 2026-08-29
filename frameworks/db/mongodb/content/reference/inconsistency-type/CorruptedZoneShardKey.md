@@ -1,71 +1,122 @@
 ---
 type: "Framework Learn Page"
-framework: "mongodb"
+framework: "MongoDB"
 source_repo: "https://github.com/mongodb/docs.git"
 source_branch: "main"
 source_path: "content/manual/manual/source/reference/inconsistency-type/CorruptedZoneShardKey.txt"
-source_commit: "ab9db26ed3d11618cdb61516d8180337d8e3f679"
-source_commit_short: "ab9db26e"
-source_commit_date: "2026-07-24T16:22:46-06:00"
-generated_at: "2026-07-25T11:51:15Z"
+source_commit: "b9f2bc487a2878b65e3c1f80024bebab76954f27"
+source_commit_short: "b9f2bc48"
+source_commit_date: "2026-08-28T17:09:45-05:00"
+generated_at: "2026-08-29T09:39:19.859357Z"
 ---
+# CorruptedZoneShardKey
 
-###################### CorruptedZoneShardKey ######################
+**meta:** :description: Identify and understand `CorruptedZoneShardKey` inconsistencies in MongoDB sharding metadata, including their format and example usage.
+
+**contents:** On this page
+   :local:
+   :backlinks: none
+   :depth: 1
+   :class: singlecol
+
+.. |incon-type| replace:: ``CorruptedZoneShardKey``
 
 # Description
 
+**data:** CorruptedZoneShardKey
+
+   .. include:: /includes/inconsistency-type/CorruptedZoneShardKey
+
 # Format
 
-```json
-{
-   type: "CorruptedZoneShardKey",
-   description: "<string>",
-   details: {
-      namespace: "<string>",
-      collectionUUID: UUID("<uuid>"),
-      zone: <zone>,
-      shardKeyPattern: <pattern>
+.. code-block:: json
+
+   {
+      type: "CorruptedZoneShardKey",
+      description: "<string>",
+      details: {
+         namespace: "<string>",
+         collectionUUID: UUID("<uuid>"),
+         zone: <zone>,
+         shardKeyPattern: <pattern>
+      }
    }
-}
-```
 
 |incon-type| inconsistency documents contain the following fields:
 
+.. list-table::
+   :header-rows: 1
+   :widths: 30 25 45
+
+   * - Field
+     - Type
+     - Description
+
+   * - ``type``
+     - string
+     - .. include:: /includes/inconsistency-type/type
+
+   * - ``description``
+     - string
+     - .. include:: /includes/inconsistency-type/descr
+
+   * - ``details``
+     - document
+     - .. include:: /includes/inconsistency-type/details
+
+   * - ``details.namespace``
+     - string
+     - .. include:: /includes/inconsistency-type/details.namespace
+
+   * - ``details.collectionUUID``
+     - UUID
+     - UUID of the collection with the corrupted zone shard key.
+
+   * - ``details.zone``
+     - document
+     - Zone with the corrupted shard key.
+
+   * - ``details.shardKeyPattern``
+     - document
+     - .. include:: /includes/inconsistency-type/details.shardKeyPattern
+
 # Example
 
-.. include:: /includes/inconsistency-type/example
+**include:** /includes/inconsistency-type/example
 
-```json
-{
-   cursor: {
-      id: Long("0"),
-      ns: "test.$cmd.aggregate",
-      firstBatch: [ 
-         {
-            type: "CorruptedZoneShardKey",
-            description: "Found zone with a shard key pattern violation",
-            details: { 
-               namespace: "test.authors",
-               collection: { 
-                  collectionUUID : new UUID("1ad56770-61e2-48e9-83c6-8ecefe73cfc4"),
-                  zone : { 
-                     ns : "test.authors",
-                     tag: "64ddd81656be208c6685da21", 
-                     min: { 
-                        y: 0 
+.. code-block:: json
+   :emphasize-lines: 6-28
+   :copyable: false
+
+   {
+      cursor: {
+         id: Long("0"),
+         ns: "test.$cmd.aggregate",
+         firstBatch: [ 
+            {
+               type: "CorruptedZoneShardKey",
+               description: "Found zone with a shard key pattern violation",
+               details: { 
+                  namespace: "test.authors",
+                  collection: { 
+                     collectionUUID : new UUID("1ad56770-61e2-48e9-83c6-8ecefe73cfc4"),
+                     zone : { 
+                        ns : "test.authors",
+                        tag: "64ddd81656be208c6685da21", 
+                        min: { 
+                           y: 0 
+                        }, 
+                        max: { 
+                           x: MaxKey 
+                        } 
                      }, 
-                     max: { 
-                        x: MaxKey 
-                     } 
-                  }, 
-                  shardKeyPattern: { 
-                     x: 1 
+                     shardKeyPattern: { 
+                        x: 1 
+                     }
                   }
                }
             }
-         }
-      ],
-   },
-   ok: 1
-}
-```
+         ],
+      },
+      ok: 1
+   }

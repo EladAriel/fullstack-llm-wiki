@@ -4,12 +4,11 @@ framework: "Langfuse"
 source_repo: "https://github.com/langfuse/langfuse-docs"
 source_branch: "main"
 source_path: "content/docs/observability/features/users.mdx"
-source_commit: "fcd1eca34a924867563c3c4e801254c4e66c0021"
-source_commit_short: "fcd1eca3"
-source_commit_date: "2026-07-25T00:45:45Z"
-generated_at: "2026-07-25T11:51:12Z"
+source_commit: "ba26344559edee69ba55c5d3aa80e632f56c1626"
+source_commit_short: "ba26344"
+source_commit_date: "2026-08-29T02:57:18+00:00"
+generated_at: "2026-08-29T09:38:37.752820Z"
 ---
-
 ---
 title: User Tracking
 description: User-level LLM observability to track token usage, usage volume and individual user feedback.
@@ -21,6 +20,26 @@ import { PropagationRestrictionsCallout } from "@/components/PropagationRestrict
 # User Tracking
 
 The Users view provides an overview of all users. It also offers an in-depth look into individual users. It's easy to map data in Langfuse to individual users. Just propagate the `userId` attribute across observations. This can be a username, email, or any other unique identifier. The `userId` is optional, but using it helps you get more from Langfuse aggregating metrics such as LLM usage cost by `userId`. See the integration docs to learn more.
+
+## Product use [#product-use]
+
+### View all users [#view-all-users]
+
+The user list provides an overview of all users that have been tracked by Langfuse. It makes it simple to segment by overall token usage, number of traces, and user feedback.
+
+<Frame>
+![User List](/images/docs/users-list.png)
+</Frame>
+
+### Individual user view [#individual-user-view]
+
+The individual user view provides an in-depth look into a single user. Explore aggregated metrics or view all traces and feedback for a user.
+
+<Frame>
+![User Detail View](/images/docs/user-detail-view.png)
+</Frame>
+
+## Set up user tracking [#set-up-user-tracking]
 
 <LangTabs items={["Python SDK", "JS/TS SDK", "OpenAI (Python)", "Langchain (Python)", "Langchain (JS/TS)"]}>
 <Tab>
@@ -189,21 +208,7 @@ await startActiveObservation("langchain-call", async () => {
 
 <PropagationRestrictionsCallout attributes={["userId"]} />
 
-## View all users
-
-The user list provides an overview of all users that have been tracked by Langfuse. It makes it simple to segment by overall token usage, number of traces, and user feedback.
-
-<Frame>
-![User List](/images/docs/users-list.png)
-</Frame>
-
-## Individual user view
-
-The individual user view provides an in-depth look into a single user. Explore aggregated metrics or view all traces and feedback for a user.
-
-<Frame>
-![User Detail View](/images/docs/user-detail-view.png)
-</Frame>
+## Deep-linking [#deep-linking]
 
 You can deep link to this view via the following URL format: `https://<hostname>/project/{projectId}/users/{userId}`
 

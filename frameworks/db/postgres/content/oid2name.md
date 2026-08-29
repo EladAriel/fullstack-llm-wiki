@@ -1,62 +1,288 @@
 ---
 type: "Framework Learn Page"
-framework: "postgres"
+framework: "PostgreSQL"
 source_repo: "https://github.com/postgres/postgres.git"
 source_branch: "master"
 source_path: "doc/src/sgml/oid2name.sgml"
-source_commit: "38afc3dcb25c45b744d4025029ce0a6c90b7059f"
-source_commit_short: "38afc3dc"
-source_commit_date: "2026-07-25T19:08:27+09:00"
-generated_at: "2026-07-25T11:50:59Z"
+source_commit: "6c5f1d6074208146930b67c2054509c3e82f6f7f"
+source_commit_short: "6c5f1d6"
+source_commit_date: "2026-08-28T23:24:47+02:00"
+generated_at: "2026-08-29T09:39:24.339152Z"
 ---
-
 oid2name
+ 
 
-oid2name
-1
-Application
+ 
+  
+# oid2name
 
-oid2name
-resolve OIDs and file nodes in a PostgreSQL data directory
+  1
+  Application
+ 
 
-`oid2name`
-`option`
+ 
+  
+# oid2name
 
-## Description
+  resolve OIDs and file nodes in a PostgreSQL data directory
+ 
 
-`oid2name` is a utility program that helps administrators to examine the file structure used by PostgreSQL. To make use of it, you need to be familiar with the database file structure, which is described in `storage`.
+ 
+  
+   oid2name
+   option
+  
+ 
 
-The name oid2name is historical, and is actually rather misleading, since most of the time when you use it, you will really be concerned with tables' filenode numbers (which are the file names visible in the database directories). Be sure you understand the difference between table OIDs and table filenodes!
+ 
+  
+# Description
 
-`oid2name` connects to a target database and extracts OID, filenode, and/or table name information. You can also have it show database OIDs or tablespace OIDs.
+ 
+  oid2name is a utility program that helps administrators to
+  examine the file structure used by PostgreSQL.  To make use of it, you need
+  to be familiar with the database file structure, which is described in
+  .
+ 
 
-## Options
+ 
+  
+   The name oid2name is historical, and is actually rather
+   misleading, since most of the time when you use it, you will really
+   be concerned with tables' filenode numbers (which are the file names
+   visible in the database directories).  Be sure you understand the
+   difference between table OIDs and table filenodes!
+  
 
-`oid2name` accepts the following command-line arguments: - show info for table with filenode `filenode`. - include indexes and sequences in the listing. - show info for table with OID `oid`. - omit headers (useful for scripting). - show tablespace OIDs. - include system objects (those in `information_schema`, `pg_toast` and `pg_catalog` schemas). - show info for table(s) matching `tablename_pattern`. - Print the `oid2name` version and exit. - display more information about each object shown: tablespace name, schema name, OID and path. - Show help about `oid2name` command line arguments, and exit.
+ 
 
-`oid2name` also accepts the following command-line arguments for connection parameters: - database to connect to. - database server's host. - database server's host. Use of this parameter is deprecated as of PostgreSQL 12. - database server's port. - user name to connect as.
+  
+   oid2name connects to a target database and
+   extracts OID, filenode, and/or table name information.  You can also have
+   it show database OIDs or tablespace OIDs.
+  
 
-To display specific tables, select which tables to show by using `-o`, `-f` and/or `-t`. `-o` takes an OID, `-f` takes a filenode, and `-t` takes a table name (actually, it's a `LIKE` pattern, so you can use things like `foo%`). You can use as many of these options as you like, and the listing will include all objects matched by any of the options. But note that these options can only show objects in the database given by `-d`.
+ 
 
-If you don't give any of `-o`, `-f` or `-t`, but do give `-d`, it will list all tables in the database named by `-d`. In this mode, the `-S` and `-i` options control what gets listed.
+ 
+  
+# Options
 
-If you don't give `-d` either, it will show a listing of database OIDs. Alternatively you can give `-s` to get a tablespace listing.
+  
+   oid2name accepts the following command-line arguments:
 
-## Environment
+   
 
-- Default connection parameters.
+    
+     -f filenode
+     --filenode=filenode
+     show info for table with filenode filenode.
 
-This utility, like most other PostgreSQL utilities, also uses the environment variables supported by `libpq` (see `libpq-envars`).
+    
 
-The environment variable `PG_COLOR` specifies whether to use color in diagnostic messages. Possible values are `always`, `auto` and `never`.
+    
+     -i
+     --indexes
+     include indexes and sequences in the listing.
 
-## Notes
+    
 
-`oid2name` requires a running database server with non-corrupt system catalogs. It is therefore of only limited use for recovering from catastrophic database corruption situations.
+    
+     -o oid
+     --oid=oid
+     show info for table with OID oid.
 
-## Examples
+    
+
+    
+     -q
+     --quiet
+     omit headers (useful for scripting).
+
+    
+
+    
+     -s
+     --tablespaces
+     show tablespace OIDs.
+
+    
+
+    
+     -S
+     --system-objects
+     include system objects (those in
+      information_schema, pg_toast
+      and pg_catalog schemas).
+     
+
+    
+
+    
+     -t tablename_pattern
+     --table=tablename_pattern
+     show info for table(s) matching tablename_pattern.
+
+    
+
+    
+     -V
+     --version
+     
+      
+       Print the oid2name version and exit.
+      
+
+     
+    
+
+    
+     -x
+     --extended
+     display more information about each object shown: tablespace name,
+      schema name, OID and path.
+     
+
+    
+
+    
+     -?
+     --help
+     
+      
+       Show help about oid2name command line
+       arguments, and exit.
+      
+
+     
+    
+   
+  
+
+  
+   oid2name also accepts the following command-line
+   arguments for connection parameters:
+
+   
+    
+     -d database
+     --dbname=database
+     database to connect to.
+
+    
+
+    
+     -h host
+     --host=host
+     database server's host.
+
+    
+
+    
+     -H host
+     database server's host.  Use of this parameter is
+     deprecated as of
+     PostgreSQL 12.
+
+    
+
+    
+     -p port
+     --port=port
+     database server's port.
+
+    
+
+    
+     -U username
+     --username=username
+     user name to connect as.
+
+    
+
+   
+  
+
+  
+   To display specific tables, select which tables to show by
+   using -o, -f and/or -t.
+   -o takes an OID,
+   -f takes a filenode,
+   and -t takes a table name (actually, it's a LIKE
+   pattern, so you can use things like foo%).
+   You can use as many
+   of these options as you like, and the listing will include all objects
+   matched by any of the options.  But note that these options can only
+   show objects in the database given by -d.
+  
+
+  
+   If you don't give any of -o, -f or -t,
+   but do give -d, it will list all tables in the database
+   named by -d.  In this mode, the -S and
+   -i options control what gets listed.
+  
+
+  
+   If you don't give -d either, it will show a listing of database
+   OIDs.  Alternatively you can give -s to get a tablespace
+   listing.
+  
+
+ 
+
+ 
+  
+# Environment
+
+  
+   
+    PGHOST
+    PGPORT
+    PGUSER
+
+    
+     
+      Default connection parameters.
+     
+
+    
+   
+  
+
+  
+   This utility, like most other PostgreSQL
+   utilities, also uses the environment variables supported by
+   libpq (see ).
+  
+
+  
+   The environment variable PG_COLOR specifies whether to use
+   color in diagnostic messages. Possible values are
+   always, auto and
+   never.
+  
+
+ 
+
+ 
+  
+# Notes
+
+  
+   oid2name requires a running database server with
+   non-corrupt system catalogs.  It is therefore of only limited use
+   for recovering from catastrophic database corruption situations.
+  
+
+ 
+
+ 
+  
+# Examples
 
 ```
+
 $ # what's in this database server, anyway?
 $ oid2name
 All databases:
@@ -173,8 +399,14 @@ From database "alvherre":
   Filenode  Table Name
 ----------------------
     155156         foo
+
 ```
 
-## Author
+ 
 
-B. Palmer bpalmer@crimelabs.net
+ 
+  
+# Author
+
+  
+   B. Palmer bpalmer@crimelabs.net

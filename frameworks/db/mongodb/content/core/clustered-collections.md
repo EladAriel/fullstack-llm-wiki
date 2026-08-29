@@ -1,177 +1,261 @@
 ---
 type: "Framework Learn Page"
-framework: "mongodb"
+framework: "MongoDB"
 source_repo: "https://github.com/mongodb/docs.git"
 source_branch: "main"
 source_path: "content/manual/manual/source/core/clustered-collections.txt"
-source_commit: "ab9db26ed3d11618cdb61516d8180337d8e3f679"
-source_commit_short: "ab9db26e"
-source_commit_date: "2026-07-24T16:22:46-06:00"
-generated_at: "2026-07-25T11:51:15Z"
+source_commit: "b9f2bc487a2878b65e3c1f80024bebab76954f27"
+source_commit_short: "b9f2bc48"
+source_commit_date: "2026-08-28T17:09:45-05:00"
+generated_at: "2026-08-29T09:39:19.511192Z"
 ---
-
-=====================
+.. _clustered-collections:
 
 # Clustered Collections
 
-.. versionadded:: 5.3
+**meta:** :description: Explore the benefits, behavior, and limitations of clustered collections in MongoDB, including how to create and manage them with clustered indexes.
 
-.. include:: /includes/clustered-collections-introduction.rst
+.. default-domain:: mongodb
 
-> **Important:** You must drop clustered collections before you can downgrade to
-a version of MongoDB earlier than 5.3.
+**contents:** On this page
+   :local:
+   :backlinks: none
+   :depth: 1
+   :class: singlecol
+
+**versionadded:** 5.3
+
+**include:** /includes/clustered-collections-introduction.rst
+
+**important:** Backward-Incompatible Feature
+
+   You must drop clustered collections before you can downgrade to
+   a version of MongoDB earlier than 5.3.
 
 ## Benefits
 
-Clustered collections have the following benefits compared to non-clustered collections:
+Clustered collections have the following benefits compared to
+non-clustered collections:
 
 - Faster queries on clustered collections without needing a secondary
-index, such as queries with range scans and equality comparisons on the clustered index key.
+  index, such as queries with range scans and equality comparisons on
+  the clustered index key.
 
 - Clustered collections have a lower storage size, which improves
-performance for queries and bulk inserts.
+  performance for queries and bulk inserts.
 
 - Clustered collections can eliminate the need for a secondary :ref:`TTL
-(Time To Live) index <ttl-index>`.
+  (Time To Live) index <ttl-index>`.
 
-- A clustered index is also a TTL index if you specify the
-`expireAfterSeconds <db.createCollection.expireAfterSeconds>` field.
+  - A clustered index is also a TTL index if you specify the
+    :ref:`expireAfterSeconds <db.createCollection.expireAfterSeconds>`
+    field.
 
-- To be used as a TTL index, the `_id` field must be a supported
-date type. See `index-feature-ttl`.
+  - To be used as a TTL index, the ``_id`` field must be a supported
+    date type. See :ref:`index-feature-ttl`.
 
-- If you use a clustered index as a TTL index, it improves document
-delete performance and reduces the clustered collection storage size.
+  - If you use a clustered index as a TTL index, it improves document
+    delete performance and reduces the clustered collection storage
+    size.
 
 - Clustered collections have additional performance improvements for
-inserts, updates, deletes, and queries.
+  inserts, updates, deletes, and queries.
 
-- All collections have an `_id index <index-type-id>`.
-- A non-clustered collection stores the `_id` index separately from
-the documents. This requires two writes for inserts, updates, and deletes, and two reads for queries.
+  - All collections have an :ref:`_id index <index-type-id>`.
 
-- A clustered collection stores the index and the documents together
-in `_id` value order. This requires one write for inserts, updates, and deletes, and one read for queries.
+  - A non-clustered collection stores the ``_id`` index separately from
+    the documents. This requires two writes for inserts, updates, and
+    deletes, and two reads for queries.
+    
+  - A clustered collection stores the index and the documents together
+    in ``_id`` value order. This requires one write for inserts,
+    updates, and deletes, and one read for queries.
 
 ## Behavior
 
-Clustered collections store documents ordered by the `clustered index <db.createCollection.clusteredIndex>` key value. The clustered index key must be `{ _id: 1 }`.
+Clustered collections store documents ordered by the :ref:`clustered
+index <db.createCollection.clusteredIndex>` key value. The clustered 
+index key must be ``{ _id: 1 }``. 
 
-You can only have one clustered index in a collection because the documents can be stored in only one order. Only collections with a clustered index store the data in sorted order.
+You can only have one clustered index in a collection because the
+documents can be stored in only one order. Only collections with a
+clustered index store the data in sorted order.
 
-You can have a clustered index and add `secondary indexes <secondary index>` to a clustered collection. Clustered indexes differ from secondary indexes:
+You can have a clustered index and add :term:`secondary indexes
+<secondary index>` to a clustered collection. Clustered indexes differ
+from secondary indexes:
 
 - A clustered index can only be created when you create the collection.
+
 - The clustered index keys are stored with the collection. The
-collection size returned by the :dbcommand:`collStats` command includes the clustered index size.
+  collection size returned by the :dbcommand:`collStats` command
+  includes the clustered index size.
 
-Starting in MongoDB 6.0.7, if a usable clustered index exists, the MongoDB query planner evaluates the clustered index against secondary indexes in the query planning process. When a query uses a clustered index, MongoDB performs a `bounded collection scan`.
+Starting in MongoDB 6.0.7, if a usable clustered index exists,
+the MongoDB query planner evaluates the clustered index against
+secondary indexes in the query planning process. When a query uses
+a clustered index, MongoDB performs a :term:`bounded collection scan`.
 
-Prior to MongoDB 6.0.7, if a `secondary index <secondary index>` existed on a clustered collection and the secondary index was usable by your query, the query planner selected the secondary index instead of the clustered index by default. In MongoDB 6.1 and prior, to use the clustered index, you must provide a hint because the `query optimizer <query-plans-query-optimization>` does not automatically select the clustered index.
+Prior to MongoDB 6.0.7, if a :term:`secondary index <secondary index>`
+existed on a clustered collection and the secondary index was usable by
+your query, the query planner selected the secondary index instead of the
+clustered index by default. In MongoDB 6.1 and prior, to use the
+clustered index, you must provide a hint because the :ref:`query
+optimizer <query-plans-query-optimization>` does not automatically
+select the clustered index.
 
 ### Index Size
 
-.. include:: /includes/clustered-collections-index-size.rst
+.. |Clustered-collections| replace:: clustered collections
+
+**include:** /includes/clustered-collections-index-size.rst
 
 ## Limitations
 
-- The clustered index key must be `{ _id: 1 }`.
+- The clustered index key must be ``{ _id: 1 }``.
+
 - You cannot transform a non-clustered collection to a clustered
-collection, or the reverse. Instead, you can:
+  collection, or the reverse. Instead, you can:
 
-- Read documents from one collection and write them to another
-collection using an `aggregation pipeline <aggregation-pipeline-intro>` with an :pipeline:`$out` stage or a :pipeline:`$merge` stage.
+  - Read documents from one collection and write them to another
+    collection using an :ref:`aggregation pipeline
+    <aggregation-pipeline-intro>` with an :pipeline:`$out` stage or
+    a :pipeline:`$merge` stage.
 
-- Export collection data with :binary:`~bin.mongodump` and import the
-data into another collection with :binary:`~bin.mongorestore`.
+  - Export collection data with :binary:`~bin.mongodump` and import the
+    data into another collection with :binary:`~bin.mongorestore`.
 
 - You cannot hide a clustered index. See :doc:`Hidden indexes
-</core/index-hidden>`.
+  </core/index-hidden>`.
 
 - If there are secondary indexes for the clustered collection, the
-collection has a larger storage size. This is because secondary indexes on a clustered collection with large clustered index keys may have a larger storage size than secondary indexes on a non-clustered collection.
+  collection has a larger storage size. This is because secondary
+  indexes on a clustered collection with large clustered index keys may
+  have a larger storage size than secondary indexes on a non-clustered
+  collection.
 
 - Clustered collections may not be :ref:`capped collections
-<manual-capped-collection>`.
+  <manual-capped-collection>`.
+
+.. _clustered-collections-clustered-index-key-values:
 
 ## Set Your Own Clustered Index Key Values
 
-By default, the `clustered index <db.createCollection.clusteredIndex>` key values are the unique document `object identifiers <objectid>`.
+By default, the :ref:`clustered index
+<db.createCollection.clusteredIndex>` key values are the unique document
+:ref:`object identifiers <objectid>`.
 
-You can set your own clustered index key values, which must follow the standard constraints of `the _id field <document-id-field>`.
+You can set your own clustered index key values, which must
+follow the standard constraints of
+:ref:`the _id field <document-id-field>`.
 
 To optimize performance:
 
 - Use sequentially increasing key values to improve insert performance.
+
 - Set your index keys to be as small in size as possible.
-- A clustered index supports keys up to 8 MB in size, but a much
-smaller clustered index key is best.
 
-- Large keys increase the storage size of the clustered collection and
-its secondary indexes which decreases clustered collection performance.
+  - A clustered index supports keys up to 8 MB in size, but a much
+    smaller clustered index key is best.
 
-> **Warning:** Randomly generated key values may decrease a clustered collection's
-performance.
+  - Large keys increase the storage size of the clustered collection and
+    its secondary indexes which decreases clustered collection performance.
+
+**warning:** Randomly generated key values may decrease a clustered collection's
+   performance. 
+
+.. _clustered-collections-examples:
 
 ## Examples
 
-### `Create` Example
+### ``Create`` Example
 
-.. include:: /includes/create-clustered-collection-example.rst
+**include:** /includes/create-clustered-collection-example.rst
 
-### `db.createCollection` Example
+### ``db.createCollection`` Example
 
-.. include:: /includes/db-create-clustered-collection-example.rst
+**include:** /includes/db-create-clustered-collection-example.rst
+
+.. _clustered-collections-index-example:
 
 ### Date Clustered Index Key Example
 
-The following :dbcommand:`create` example adds a clustered collection named `orders`:
+The following :dbcommand:`create` example adds a clustered collection
+named ``orders``:
 
-In the example, `clusteredIndex <db.createCollection.clusteredIndex>` specifies:
+**literalinclude:** /code-examples/tested/command-line/mongosh/collections/clustered/date-key/create-orders.snippet.create-orders.js
+   :language: javascript
+   :copyable: true
+   :category: usage example
 
-.. include:: /includes/clustered-index-example-fields.rst
+In the example, :ref:`clusteredIndex
+<db.createCollection.clusteredIndex>` specifies:
 
-The following example adds documents to the `orders` collection:
+.. |clustered-index-name| replace:: ``"name": "orders clustered key"``
 
-The `_id` `clusteredIndex <create.clusteredIndex>` key stores the order date.
+**include:** /includes/clustered-index-example-fields.rst
 
-If you use the `_id field in a range query, performance is improved. For example, the following query uses id` and :expression:`$gt` to return the orders where the order date is greater than the supplied date:
+The following example adds documents to the ``orders`` collection:
+
+**literalinclude:** /code-examples/tested/command-line/mongosh/collections/clustered/date-key/insert-orders.snippet.insert-orders.js
+   :language: javascript
+   :copyable: true
+   :category: usage example
+
+The ``_id`` :ref:`clusteredIndex <create.clusteredIndex>` key stores the
+order date.
+
+If you use the ``_id`` field in a range query, performance is improved.
+For example, the following query uses ``_id`` and :expression:`$gt` to
+return the orders where the order date is greater than the supplied
+date:
+
+**literalinclude:** /code-examples/tested/command-line/mongosh/collections/clustered/date-key/find-by-date.snippet.find-by-date.js
+   :language: javascript
+   :copyable: true
+   :category: usage example
 
 Example output:
 
-```javascript
-[
-   {
-      _id: ISODate( "2022-03-18T12:50:00.000Z" ),
-      quantity: 1,
-      totalOrderPrice: 10
-   }
-]
-```
+.. code-block:: javascript
+   :copyable: false
+
+   [
+      {
+         _id: ISODate( "2022-03-18T12:50:00.000Z" ),
+         quantity: 1,
+         totalOrderPrice: 10
+      }
+   ]
 
 ### Determine if a Collection is Clustered
 
-To determine if a collection is clustered, use the :dbcommand:`listCollections` command:
+To determine if a collection is clustered, use the
+:dbcommand:`listCollections` command:
 
-```javascript
-db.runCommand( { listCollections: 1 } )
-```
+.. code-block:: javascript
 
-For clustered collections, the output includes the `clusteredIndex <create.clusteredIndex>` details. For example, the following output shows the details for the `orders` clustered collection:
+   db.runCommand( { listCollections: 1 } )
 
-```javascript
-...
-name: 'orders',
-type: 'collection',
-options: {
-   clusteredIndex: {
-      v: 2,
-      key: { _id: 1 },
-      name: 'orders clustered key',
-      unique: true
-   }
-},
-...
-```
+For clustered collections, the output includes the
+:ref:`clusteredIndex <create.clusteredIndex>` details. For
+example, the following output shows the details for the
+``orders`` clustered collection:
 
-`v` is the index version.
+.. code-block:: javascript
+   :copyable: false
+
+   ...
+   name: 'orders',
+   type: 'collection',
+   options: {
+      clusteredIndex: {
+         v: 2,
+         key: { _id: 1 },
+         name: 'orders clustered key',
+         unique: true
+      }
+   },
+   ...
+
+``v`` is the index version.

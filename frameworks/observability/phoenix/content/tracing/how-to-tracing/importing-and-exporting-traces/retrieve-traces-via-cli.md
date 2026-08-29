@@ -4,10 +4,10 @@ framework: "Arize Phoenix"
 source_repo: "https://github.com/Arize-ai/phoenix.git"
 source_branch: "main"
 source_path: "docs/phoenix/tracing/how-to-tracing/importing-and-exporting-traces/retrieve-traces-via-cli.mdx"
-source_commit: "69b3ab92c37ff65812feaa2dbf0b1c0ad5ae55fe"
-source_commit_short: "69b3ab9"
-source_commit_date: "2026-07-25T11:48:12-06:00"
-generated_at: "2026-07-25T19:08:24.920916Z"
+source_commit: "c48e50e9906fcc56c1c103ebd93ef3c95ed6b6e7"
+source_commit_short: "c48e50e"
+source_commit_date: "2026-08-29T01:45:20-06:00"
+generated_at: "2026-08-29T09:39:58.908020Z"
 ---
 ---
 title: "Retrieve Traces via CLI"
@@ -40,13 +40,13 @@ npx @arizeai/phoenix-cli
 ### 1. Set your Phoenix endpoint
 
 ```bash
-export PHOENIX_HOST=http://localhost:6006
+export PHOENIX_ENDPOINT=http://localhost:6006
 ```
 
 For a remote deployment:
 
 ```bash
-export PHOENIX_HOST=https://your-phoenix.example.com
+export PHOENIX_ENDPOINT=https://your-phoenix.example.com
 ```
 
 ### 2. Set your project name
@@ -69,39 +69,24 @@ If your Phoenix instance has authentication enabled, you'll need to set the `PHO
 
 ## Use with AI Coding Assistants
 
-Phoenix CLI is designed to work seamlessly with AI coding assistants like **Claude Code**, **Cursor**, **Windsurf**, and other AI-powered development tools.
+The Phoenix CLI pairs well with AI coding assistants like **Claude Code**, **Cursor**, **Windsurf**, and others. There are two ways to wire it up.
 
-### Claude Code
+### Connect the assistant to Phoenix directly (recommended)
 
-After setting up the CLI, ask Claude Code questions like:
+Rather than pasting CLI output into a chat, connect the assistant to Phoenix once and let it query on its own:
+
+- **MCP** — register the Phoenix MCP server with your agent using `px setup mcp --agent cursor` (swap in `claude`, `codex`, and so on). The agent then reaches your traces, projects, and docs through the [remote MCP server](/docs/phoenix/integrations/remote-mcp) built into Phoenix, without you copying anything by hand.
+- **Skills** — `px setup skills` installs Phoenix skills so agents that support them know how to call the CLI. See [Coding Agents](/docs/phoenix/integrations/developer-tools/coding-agents).
+
+### Ask the assistant to run the CLI
+
+An assistant with terminal access can also run `px` directly. Ask Claude Code something like:
 
 ```
 Use px to fetch the last 3 traces from my Phoenix project and analyze them for potential improvements
 ```
 
-```
-Run px trace list --limit 5 --format raw and identify any errors or slow spans in my agent workflow
-```
-
-Claude Code will use the `px --help` command to discover the CLI capabilities and fetch your traces for analysis.
-
-### Cursor / Windsurf
-
-In Cursor or Windsurf, you can:
-
-1. Run `px trace list --limit 1 --format json` in the terminal
-2. Select the output and ask the AI to analyze it
-3. Or ask the AI directly to run the command and interpret results
-
-Example prompts:
-
-```
-Fetch my recent Phoenix traces using px and explain what my agent is doing
-```
-
-```
-Use the Phoenix CLI to get the last failed trace and help me debug it
-```
+It discovers the available commands through `px --help` and fetches the traces itself. For an assistant without terminal access, run a command such as `px trace list --limit 5 --format json` yourself and paste the output into the chat.
 
 ## Find Project and Trace IDs
 
@@ -394,10 +379,10 @@ px trace list --limit 100 --format raw --no-progress | \
 
 ### "Phoenix endpoint not configured"
 
-Set the `PHOENIX_HOST` environment variable:
+Set the `PHOENIX_ENDPOINT` environment variable:
 
 ```bash
-export PHOENIX_HOST=http://localhost:6006
+export PHOENIX_ENDPOINT=http://localhost:6006
 ```
 
 Or use the `--endpoint` flag:

@@ -1,81 +1,179 @@
 ---
 type: "Framework Learn Page"
-framework: "mongodb"
+framework: "MongoDB"
 source_repo: "https://github.com/mongodb/docs.git"
 source_branch: "main"
 source_path: "content/manual/manual/source/reference/method/db.collection.dropIndex.txt"
-source_commit: "ab9db26ed3d11618cdb61516d8180337d8e3f679"
-source_commit_short: "ab9db26e"
-source_commit_date: "2026-07-24T16:22:46-06:00"
-generated_at: "2026-07-25T11:51:15Z"
+source_commit: "b9f2bc487a2878b65e3c1f80024bebab76954f27"
+source_commit_short: "b9f2bc48"
+source_commit_date: "2026-08-28T17:09:45-05:00"
+generated_at: "2026-08-29T09:39:19.995981Z"
 ---
-
-==========================================
+.. _collection-drop-index:
 
 # db.collection.dropIndex() (mongosh method)
 
-.. include:: /includes/wayfinding/mongosh-method-dropIndex.rst
+**meta:** :description: Remove a specified index from a collection using `db.collection.dropIndex()`, ensuring the default `_id` index remains intact.
+
+.. default-domain:: mongodb
+
+**contents:** On this page
+   :local:
+   :backlinks: none
+   :depth: 1
+   :class: singlecol
+
+**include:** /includes/wayfinding/mongosh-method-dropIndex.rst
 
 ## Definition
 
+**method:** db.collection.dropIndex(index)
+
+
+   .. |dbcommand| replace:: :dbcommand:`dropIndexes` command
+
+
+   Drops or removes the specified index from a collection. 
+   
+   .. note::
+
+      - You cannot drop the default index on the ``_id`` field.
+      
+      - You cannot specify :method:`db.collection.dropIndex("*")
+        <db.collection.dropIndex>` to drop all non-``_id`` indexes. Use
+        :method:`db.collection.dropIndexes()` instead.
+
+   To get the index name or the index specification document for the
+   :method:`db.collection.dropIndex()` method, use the
+   :method:`db.collection.getIndexes()` method.
+
 ### Parameters
 
-The :method:`db.collection.dropIndex()` method takes the following parameter:
+The :method:`db.collection.dropIndex()` method takes the following
+parameter:
+
+.. list-table::
+   :header-rows: 1
+   :widths: 20 20 80
+
+   * - Parameter
+
+     - Type
+
+     - Description
+
+   * - ``index``
+
+     - string or document
+
+     - Required. Specifies the index to drop. You can specify the
+       index either by the index name or by the index specification
+       document.
+
+       To drop a :ref:`text <index-type-text>` index, specify the
+       index name.
+
+       You cannot specify ``"*"`` to drop all non-``_id`` indexes. Use
+       :method:`db.collection.dropIndexes()` instead.
+
+       If an index specified to :method:`db.collection.dropIndex()` is still 
+       building, :method:`db.collection.dropIndex()` attempts to stop the
+       in-progress build. Stopping an index build has the same effect as 
+       dropping the built index. See :ref:`dropIndex-method-index-builds` 
+       for more complete documentation.
 
 ## Compatibility
 
 This method is available in deployments hosted in the following environments:
 
-.. include:: /includes/fact-environments-atlas-only.rst
+**include:** /includes/fact-environments-atlas-only.rst
 
-.. include:: /includes/fact-environments-atlas-support-all.rst
+**include:** /includes/fact-environments-atlas-support-all.rst
 
-.. include:: /includes/fact-environments-onprem-only.rst
+**include:** /includes/fact-environments-onprem-only.rst
 
 ## Behavior
 
-.. include:: /includes/fact-drop-index-5.2.rst
+.. |drop-index| replace:: :method:`db.collection.dropIndex()`
+
+**include:** /includes/fact-drop-index-5.2.rst
 
 ### Resource Locking
 
-.. include:: /includes/extracts/dropIndex-method-resource-lock.rst
+**include:** /includes/extracts/dropIndex-method-resource-lock.rst
+
+.. _dropIndex-method-index-builds:
 
 ### Stop In-Progress Index Builds
 
-.. include:: /includes/fact-stop-in-progress-index-builds.rst
+**include:** /includes/fact-stop-in-progress-index-builds.rst
 
 ### Hidden Indexes
 
-.. include:: /includes/fact-hidden-indexes.rst
+**include:** /includes/fact-hidden-indexes.rst
 
 ## Example
 
-In a `pets` collection, create a descending index on the `cat` field:
+In a ``pets`` collection, create a descending index on the ``cat`` field:
 
-```javascript
-db.pets.createIndex( { cat: -1 }, { name: "catIdx" } )
-```
+.. code-block:: javascript
 
-To see the indexes in the `pets` collection, run the :method:`~db.collection.getIndexes()` method:
+   db.pets.createIndex( { cat: -1 }, { name: "catIdx" } )
 
-The single field index on the field `cat` has the user-specified name of `catIdx` and the index specification document of `{ "cat" : -1 }`.
+To see the indexes in the ``pets`` collection, run the
+:method:`~db.collection.getIndexes()` method:
 
-To drop the index `catIdx`, you can use either the index name:
+.. io-code-block::
+   :copyable: true
 
-```javascript
-db.pets.dropIndex( "catIdx" )
-```
+   .. input::
+      :language: javascript
 
-Or you can use the index specification document `{ "cat" : -1 }`:
+      db.pets.getIndexes()
 
-```javascript
-db.pets.dropIndex( { "cat" : -1 } )
-```
+   .. output::
 
-The `dropIndex` command returns the number of indexes in the collection prior to the command being run, and indicates whether the command was successful:
+      [
+         { v: 2, key: { _id: 1 }, name: '_id_' },
+         { v: 2, key: { cat: -1 }, name: 'catIdx' }
+      ]
+   
+The single field index on the field ``cat`` has the user-specified name
+of ``catIdx`` and the index specification document of
+``{ "cat" : -1 }``.
 
-```javascript
-{ nIndexesWas: 2, ok: 1 }
-```
+To drop the index ``catIdx``, you can use either the index name:
 
-To confirm that the index was dropped, run the `getIndexes()` method again:
+.. code-block:: javascript
+
+   db.pets.dropIndex( "catIdx" )
+
+Or you can use the index specification document ``{ "cat" : -1 }``:
+
+.. code-block:: javascript
+
+   db.pets.dropIndex( { "cat" : -1 } )
+
+The ``dropIndex`` command returns the number of indexes in the
+collection prior to the command being run, and indicates whether the
+command was successful:
+
+.. code-block:: javascript
+   :copyable: false
+
+   { nIndexesWas: 2, ok: 1 }
+
+To confirm that the index was dropped, run the ``getIndexes()`` method
+again:
+
+.. io-code-block::
+   :copyable: true
+
+   .. input::
+      :language: javascript
+
+      db.pets.getIndexes()
+
+   .. output::
+
+      [ { v: 2, key: { _id: 1 }, name: '_id_' } ]

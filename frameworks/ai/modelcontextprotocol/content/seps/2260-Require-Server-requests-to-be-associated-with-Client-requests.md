@@ -4,12 +4,11 @@ framework: "Model Context Protocol"
 source_repo: "https://github.com/modelcontextprotocol/modelcontextprotocol"
 source_branch: "main"
 source_path: "docs/seps/2260-Require-Server-requests-to-be-associated-with-Client-requests.mdx"
-source_commit: "7634684382c3d14cf7e9f14073fe40a2d8ace3fa"
-source_commit_short: "76346843"
-source_commit_date: "2026-07-23T16:49:30-07:00"
-generated_at: "2026-07-25T11:50:39Z"
+source_commit: "ca4ab3027f7c844cd3039c956438d72e8253f7f5"
+source_commit_short: "ca4ab30"
+source_commit_date: "2026-08-28T21:24:44-07:00"
+generated_at: "2026-08-29T09:38:48.016926Z"
 ---
-
 ---
 title: "SEP-2260: Require Server requests to be associated with a Client request."
 sidebarTitle: "SEP-2260: Require Server requests to be associate…"
@@ -24,6 +23,14 @@ description: "Require Server requests to be associated with a Client request."
     Standards Track
   </Badge>
 </div>
+
+<Note>
+  This SEP has reached Final status and is preserved as a historical record of
+  the design as accepted. Changes made to the protocol after finalization are
+  not reflected here. Refer to the [current
+  specification](/specification/latest) and its changelog for authoritative
+  requirements.
+</Note>
 
 | Field         | Value                                                                           |
 | ------------- | ------------------------------------------------------------------------------- |
@@ -269,7 +276,7 @@ Implementers **MUST** ensure that:
 
 **No changes required** - Clients should already handle sampling/elicitation requests in the context of their own outbound requests. Potential to simplify implementations if out-of-band is currently supported.
 
-Clients recieving server-to-client requests with no associated outbound request **SHOULD** respond with a `-32602` (Invalid Params) error.
+Clients receiving server-to-client requests with no associated outbound request **SHOULD** respond with a `-32602` (Invalid Params) error.
 
 ### For Transport Implementers
 

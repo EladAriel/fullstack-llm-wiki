@@ -1,19 +1,323 @@
 [
   {
-    "framework": "pydantic-ai",
-    "display_name": "Pydantic AI",
+    "framework": "ragas",
+    "display_name": "Ragas",
     "category": "ai",
-    "source_repo": "https://github.com/pydantic/pydantic-ai.git",
+    "source_repo": "https://github.com/vibrantlabsai/ragas",
     "source_branch": "main",
     "source_docs_path": "docs",
     "include_globs": ["**/*.md", "**/*.mdx"],
-    "exclude_globs": [
-      ".cursor/**",
-      ".hooks/**",
-      ".overrides/**",
-      ".partials/**",
-      "img/**",
-      "javascripts/**"
-    ]
+    "exclude_globs": []
+  },
+  {
+    "framework": "langchain",
+    "display_name": "LangChain",
+    "category": "ai",
+    "source_repo": "https://github.com/langchain-ai/docs",
+    "source_branch": "main",
+    "source_docs_path": "src/oss/langchain",
+    "include_globs": ["**/*.md", "**/*.mdx"],
+    "exclude_globs": []
+  },
+  {
+    "framework": "langfuse",
+    "display_name": "Langfuse",
+    "category": "ai",
+    "source_repo": "https://github.com/langfuse/langfuse-docs",
+    "source_branch": "main",
+    "source_docs_path": "content/docs",
+    "include_globs": ["**/*.md", "**/*.mdx"],
+    "exclude_globs": []
+  },
+  {
+    "framework": "langgraph",
+    "display_name": "LangGraph",
+    "category": "ai",
+    "source_repo": "https://github.com/langchain-ai/docs",
+    "source_branch": "main",
+    "source_docs_path": "src/oss/langgraph",
+    "include_globs": ["**/*.md", "**/*.mdx"],
+    "exclude_globs": []
+  },
+  {
+    "framework": "modelcontextprotocol",
+    "display_name": "Model Context Protocol",
+    "category": "ai",
+    "source_repo": "https://github.com/modelcontextprotocol/modelcontextprotocol",
+    "source_branch": "main",
+    "source_docs_path": "docs",
+    "include_globs": ["**/*.md", "**/*.mdx"],
+    "exclude_globs": []
+  },
+  {
+    "framework": "fastapi",
+    "display_name": "FastAPI",
+    "category": "backend",
+    "source_repo": "https://github.com/fastapi/fastapi.git",
+    "source_branch": "master",
+    "source_docs_path": "docs/en/docs",
+    "include_globs": ["**/*.md"],
+    "exclude_globs": []
+  },
+  {
+    "framework": "pydantic",
+    "display_name": "Pydantic",
+    "category": "backend",
+    "source_repo": "https://github.com/pydantic/pydantic",
+    "source_branch": "main",
+    "source_docs_path": "docs",
+    "include_globs": ["**/*.md", "**/*.mdx"],
+    "exclude_globs": []
+  },
+  {
+    "framework": "redis",
+    "display_name": "Redis",
+    "category": "backend",
+    "source_repo": "https://github.com/redis/docs.git",
+    "source_branch": "main",
+    "source_docs_path": "content",
+    "include_globs": ["**/*.md", "**/*.mdx"],
+    "exclude_globs": []
+  },
+  {
+    "framework": "beanie",
+    "display_name": "Beanie",
+    "category": "db",
+    "source_repo": "https://github.com/BeanieODM/beanie",
+    "source_branch": "main",
+    "source_docs_path": "docs",
+    "include_globs": ["**/*.md", "**/*.mdx"],
+    "exclude_globs": []
+  },
+  {
+    "framework": "mongodb",
+    "display_name": "MongoDB",
+    "category": "db",
+    "source_repo": "https://github.com/mongodb/docs.git",
+    "source_branch": "main",
+    "source_docs_path": "content/manual/manual/source",
+    "include_globs": ["**/*.txt", "**/*.rst", "**/*.md"],
+    "exclude_globs": ["includes/**", "meta/**"]
+  },
+  {
+    "framework": "postgres",
+    "display_name": "PostgreSQL",
+    "category": "db",
+    "source_repo": "https://github.com/postgres/postgres.git",
+    "source_branch": "master",
+    "source_docs_path": "doc/src/sgml",
+    "include_globs": ["**/*.sgml"],
+    "exclude_globs": []
+  },
+  {
+    "framework": "pymongo",
+    "display_name": "PyMongo",
+    "category": "db",
+    "source_repo": "https://github.com/mongodb/mongo-python-driver",
+    "source_branch": "main",
+    "source_docs_path": "doc",
+    "include_globs": ["**/*.rst", "**/*.md"],
+    "exclude_globs": []
+  },
+  {
+    "framework": "sqlalchemy",
+    "display_name": "SQLAlchemy",
+    "category": "db",
+    "source_repo": "https://github.com/sqlalchemy/sqlalchemy",
+    "source_branch": "main",
+    "source_docs_path": "doc/build",
+    "include_globs": ["**/*.rst", "**/*.md"],
+    "exclude_globs": []
+  },
+  {
+    "framework": "alembic",
+    "display_name": "Alembic",
+    "category": "db",
+    "source_repo": "https://github.com/sqlalchemy/alembic",
+    "source_branch": "main",
+    "source_docs_path": "docs/build",
+    "include_globs": ["**/*.rst", "**/*.md"],
+    "exclude_globs": [],
+    "target_basename": "sqlalchemy/alembic"
+  },
+  {
+    "framework": "grafana",
+    "display_name": "Grafana",
+    "category": "observability",
+    "source_repo": "https://github.com/grafana/grafana.git",
+    "source_branch": "main",
+    "source_docs_path": "docs/sources",
+    "include_globs": ["**/*.md", "**/*.mdx"],
+    "exclude_globs": ["shared/**", "whatsnew/**"]
+  },
+  {
+    "framework": "helicone",
+    "display_name": "Helicone",
+    "category": "observability",
+    "source_repo": "https://github.com/Helicone/helicone.git",
+    "source_branch": "main",
+    "source_docs_path": "docs",
+    "include_globs": ["**/*.md", "**/*.mdx"],
+    "exclude_globs": ["images/**", "snippets/**"]
+  },
+  {
+    "framework": "langsmith",
+    "display_name": "LangSmith",
+    "category": "observability",
+    "source_repo": "https://github.com/langchain-ai/docs.git",
+    "source_branch": "main",
+    "source_docs_path": "src/langsmith",
+    "include_globs": ["**/*.md", "**/*.mdx"],
+    "exclude_globs": ["snippets/**"]
+  },
+  {
+    "framework": "opentelemetry-js",
+    "display_name": "OpenTelemetry JS",
+    "category": "observability",
+    "source_repo": "https://github.com/open-telemetry/opentelemetry.io.git",
+    "source_branch": "main",
+    "source_docs_path": "content/en/docs/languages/js",
+    "include_globs": ["**/*.md", "**/*.mdx"],
+    "exclude_globs": ["_includes/**"]
+  },
+  {
+    "framework": "opentelemetry-python",
+    "display_name": "OpenTelemetry Python",
+    "category": "observability",
+    "source_repo": "https://github.com/open-telemetry/opentelemetry.io.git",
+    "source_branch": "main",
+    "source_docs_path": "content/en/docs/languages/python",
+    "include_globs": ["**/*.md", "**/*.mdx"],
+    "exclude_globs": ["_includes/**"]
+  },
+  {
+    "framework": "phoenix",
+    "display_name": "Arize Phoenix",
+    "category": "observability",
+    "source_repo": "https://github.com/Arize-ai/phoenix.git",
+    "source_branch": "main",
+    "source_docs_path": "docs/phoenix",
+    "include_globs": ["**/*.md", "**/*.mdx"],
+    "exclude_globs": ["snippets/**"]
+  },
+  {
+    "framework": "prometheus",
+    "display_name": "Prometheus",
+    "category": "observability",
+    "source_repo": "https://github.com/prometheus/docs.git",
+    "source_branch": "main",
+    "source_docs_path": "docs",
+    "include_globs": ["**/*.md", "**/*.mdx"],
+    "exclude_globs": []
+  },
+  {
+    "framework": "sentry-javascript",
+    "display_name": "Sentry JavaScript (React)",
+    "category": "observability",
+    "source_repo": "https://github.com/getsentry/sentry-docs.git",
+    "source_branch": "master",
+    "source_docs_path": "docs/platforms/javascript/guides/react",
+    "include_globs": ["**/*.md", "**/*.mdx"],
+    "exclude_globs": []
+  },
+  {
+    "framework": "sentry-python",
+    "display_name": "Sentry Python",
+    "category": "observability",
+    "source_repo": "https://github.com/getsentry/sentry-docs.git",
+    "source_branch": "master",
+    "source_docs_path": "docs/platforms/python",
+    "include_globs": ["**/*.md", "**/*.mdx"],
+    "exclude_globs": []
+  },
+  {
+    "framework": "jest",
+    "display_name": "Jest",
+    "category": "test",
+    "source_repo": "https://github.com/jestjs/jest",
+    "source_branch": "main",
+    "source_docs_path": "docs",
+    "include_globs": ["**/*.md", "**/*.mdx"],
+    "exclude_globs": []
+  },
+  {
+    "framework": "pytest",
+    "display_name": "pytest",
+    "category": "test",
+    "source_repo": "https://github.com/pytest-dev/pytest",
+    "source_branch": "main",
+    "source_docs_path": "doc/en",
+    "include_globs": ["**/*.rst", "**/*.md"],
+    "exclude_globs": []
+  },
+  {
+    "framework": "materialui",
+    "display_name": "Material UI",
+    "category": "ui",
+    "source_repo": "https://github.com/mui/material-ui.git",
+    "source_branch": "master",
+    "source_docs_path": "docs/data/material",
+    "include_globs": ["**/*.md", "**/*.mdx"],
+    "exclude_globs": []
+  },
+  {
+    "framework": "nextjs",
+    "display_name": "Next.js",
+    "category": "ui",
+    "source_repo": "https://github.com/vercel/next.js/",
+    "source_branch": "canary",
+    "source_docs_path": "docs",
+    "include_globs": ["**/*.md", "**/*.mdx"],
+    "exclude_globs": []
+  },
+  {
+    "framework": "react",
+    "display_name": "React",
+    "category": "ui",
+    "source_repo": "https://github.com/reactjs/react.dev",
+    "source_branch": "main",
+    "source_docs_path": "src/content",
+    "include_globs": ["**/*.md", "**/*.mdx"],
+    "exclude_globs": []
+  },
+  {
+    "framework": "shadcnui",
+    "display_name": "shadcn/ui",
+    "category": "ui",
+    "source_repo": "https://github.com/shadcn-ui/ui",
+    "source_branch": "main",
+    "source_docs_path": "apps/v4/content/docs",
+    "include_globs": ["**/*.md", "**/*.mdx"],
+    "exclude_globs": []
+  },
+  {
+    "framework": "tailwindcss",
+    "display_name": "Tailwind CSS",
+    "category": "ui",
+    "source_repo": "https://github.com/tailwindlabs/tailwindcss.com.git",
+    "source_branch": "main",
+    "source_docs_path": "src/docs",
+    "include_globs": ["**/*.md", "**/*.mdx"],
+    "exclude_globs": ["img/**", "utils/**"]
+  },
+  {
+    "framework": "tanstack",
+    "display_name": "TanStack",
+    "category": "ui",
+    "source_repo": "https://github.com/tanstack/query",
+    "source_branch": "main",
+    "source_docs_path": "docs",
+    "include_globs": ["**/*.md", "**/*.mdx"],
+    "exclude_globs": []
+  },
+  {
+    "framework": "zod",
+    "display_name": "Zod",
+    "category": "ui",
+    "source_repo": "https://github.com/colinhacks/zod",
+    "source_branch": "main",
+    "source_docs_path": "packages/docs/content",
+    "include_globs": ["**/*.md", "**/*.mdx"],
+    "exclude_globs": []
   }
 ]

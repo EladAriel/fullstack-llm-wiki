@@ -1,203 +1,245 @@
 ---
 type: "Framework Learn Page"
-framework: "mongodb"
+framework: "MongoDB"
 source_repo: "https://github.com/mongodb/docs.git"
 source_branch: "main"
 source_path: "content/manual/manual/source/tutorial/troubleshoot-reduce-function.txt"
-source_commit: "ab9db26ed3d11618cdb61516d8180337d8e3f679"
-source_commit_short: "ab9db26e"
-source_commit_date: "2026-07-24T16:22:46-06:00"
-generated_at: "2026-07-25T11:51:15Z"
+source_commit: "b9f2bc487a2878b65e3c1f80024bebab76954f27"
+source_commit_short: "b9f2bc48"
+source_commit_date: "2026-08-28T17:09:45-05:00"
+generated_at: "2026-08-29T09:39:19.609737Z"
 ---
-
-================================
+.. _troubleshoot-reduce-function:
 
 # Troubleshoot the Reduce Function
 
-> **Note:** .. include:: /includes/fact-use-aggregation-not-map-reduce.rst
-An `aggregation pipeline <aggregation-pipeline>` is also
-easier to troubleshoot than a map-reduce operation.
+**meta:** :description: Troubleshoot the reduce function in map-reduce operations by ensuring output type consistency, insensitivity to order, and idempotence.
 
-The `reduce` function is a JavaScript function that "reduces" to a single object all the values associated with a particular key during a `map-reduce <map-reduce>` operation. The `reduce` function must meet various requirements. This tutorial helps verify that the `reduce` function meets the following criteria:
+.. default-domain:: mongodb
 
-- The `reduce` function must return an object whose type must be
-**identical** to the type of the `value` emitted by the `map` function.
+**contents:** On this page
+   :local:
+   :backlinks: none
+   :depth: 1
+   :class: singlecol
 
-- The order of the elements in the `valuesArray` should not affect
-the output of the `reduce` function.
+**note:** Aggregation Pipeline as Alternative to Map-Reduce
 
-- The `reduce` function must be idempotent.
-For a list of all the requirements for the `reduce` function, see :dbcommand:`mapReduce`, or :binary:`~bin.mongosh` helper method :method:`db.collection.mapReduce()`.
+   .. include:: /includes/fact-use-aggregation-not-map-reduce.rst
+
+   An :ref:`aggregation pipeline <aggregation-pipeline>` is also
+   easier to troubleshoot than a map-reduce operation.
+
+The ``reduce`` function is a JavaScript function that "reduces" to a
+single object all the values associated with a particular key during a
+:ref:`map-reduce <map-reduce>` operation. The ``reduce`` function
+must meet various requirements. This tutorial helps verify that the
+``reduce`` function meets the following criteria:
+
+- The ``reduce`` function must return an object whose *type* must be
+  **identical** to the type of the ``value`` emitted by the ``map``
+  function.
+
+- The order of the elements in the ``valuesArray`` should not affect
+  the output of the ``reduce`` function.
+
+- The ``reduce`` function must be *idempotent*.
+
+For a list of all the requirements for the ``reduce`` function, see
+:dbcommand:`mapReduce`, or :binary:`~bin.mongosh` helper method
+:method:`db.collection.mapReduce()`.
 
 ## Confirm Output Type
 
-You can test that the `reduce` function returns a value that is the same type as the value emitted from the `map` function.
+You can test that the ``reduce`` function returns a value that is the
+same type as the value emitted from the ``map`` function.
 
-#. Define a `reduceFunction1` function that takes the arguments `keyCustId` and `valuesPrices`. `valuesPrices` is an array of integers:
+#. Define a ``reduceFunction1`` function that takes the arguments
+   ``keyCustId`` and ``valuesPrices``. ``valuesPrices`` is an array of
+   integers:
 
-```javascript
-   var reduceFunction1 = function(keyCustId, valuesPrices) {
-                             return Array.sum(valuesPrices);
-                         };
-```
+   .. code-block:: javascript
+
+      var reduceFunction1 = function(keyCustId, valuesPrices) {
+                                return Array.sum(valuesPrices);
+                            };
 
 #. Define a sample array of integers:
 
-```javascript
-   var myTestValues = [ 5, 5, 10 ];
-```
+   .. code-block:: javascript
 
-#. Invoke the `reduceFunction1` with `myTestValues`:
+      var myTestValues = [ 5, 5, 10 ];
 
-```javascript
-   reduceFunction1('myKey', myTestValues);
-```
+#. Invoke the ``reduceFunction1`` with ``myTestValues``:
 
-#. Verify the `reduceFunction1` returned an integer:
+   .. code-block:: javascript
 
-```javascript
-   20
-```
+      reduceFunction1('myKey', myTestValues);
 
-#. Define a `reduceFunction2` function that takes the arguments `keySKU` and `valuesCountObjects`. `valuesCountObjects` is an array of documents that contain two fields `count` and `qty`:
+#. Verify the ``reduceFunction1`` returned an integer:
 
-```javascript
-   var reduceFunction2 = function(keySKU, valuesCountObjects) {
-                             reducedValue = { count: 0, qty: 0 };
+   .. code-block:: javascript
 
-                             for (var idx = 0; idx < valuesCountObjects.length; idx++) {
-                                 reducedValue.count += valuesCountObjects[idx].count;
-                                 reducedValue.qty += valuesCountObjects[idx].qty;
-                             }
+      20
 
-                             return reducedValue;
-                         };
-```
+#. Define a ``reduceFunction2`` function that takes the arguments
+   ``keySKU`` and ``valuesCountObjects``. ``valuesCountObjects`` is an array of
+   documents that contain two fields ``count`` and ``qty``:
+
+   .. code-block:: javascript
+
+      var reduceFunction2 = function(keySKU, valuesCountObjects) {
+                                reducedValue = { count: 0, qty: 0 };
+
+                                for (var idx = 0; idx < valuesCountObjects.length; idx++) {
+                                    reducedValue.count += valuesCountObjects[idx].count;
+                                    reducedValue.qty += valuesCountObjects[idx].qty;
+                                }
+
+                                return reducedValue;
+                            };
 
 #. Define a sample array of documents:
 
-```javascript
-   var myTestObjects = [
-                         { count: 1, qty: 5 },
-                         { count: 2, qty: 10 },
-                         { count: 3, qty: 15 }
-                       ];
-```
+   .. code-block:: javascript
 
-#. Invoke the `reduceFunction2` with `myTestObjects`:
+      var myTestObjects = [
+                            { count: 1, qty: 5 },
+                            { count: 2, qty: 10 },
+                            { count: 3, qty: 15 }
+                          ];
 
-```javascript
-   reduceFunction2('myKey', myTestObjects);
-```
+#. Invoke the ``reduceFunction2`` with ``myTestObjects``:
 
-#. Verify the `reduceFunction2` returned a document with exactly the `count` and the `qty` field:
+   .. code-block:: javascript
 
-```javascript
-   { "count" : 6, "qty" : 30 }
-```
+      reduceFunction2('myKey', myTestObjects);
+
+#. Verify the ``reduceFunction2`` returned a document with exactly the
+   ``count`` and the ``qty`` field:
+
+   .. code-block:: javascript
+
+      { "count" : 6, "qty" : 30 }
 
 ## Ensure Insensitivity to the Order of Mapped Values
 
-The `reduce` function takes a `key` and a `values` array as its argument. You can test that the result of the `reduce` function does not depend on the order of the elements in the `values` array.
+The ``reduce`` function takes a ``key`` and a ``values`` array as its
+argument. You can test that the result of the ``reduce`` function does
+not depend on the order of the elements in the ``values`` array.
 
-#. Define a sample `values1` array and a sample `values2` array that only differ in the order of the array elements:
+#. Define a sample ``values1`` array and a sample ``values2`` array
+   that only differ in the order of the array elements:
 
-```javascript
-   var values1 = [
-                   { count: 1, qty: 5 },
-                   { count: 2, qty: 10 },
-                   { count: 3, qty: 15 }
-                 ];
+   .. code-block:: javascript
 
-   var values2 = [
-                   { count: 3, qty: 15 },
-                   { count: 1, qty: 5 },
-                   { count: 2, qty: 10 }
-                 ];
-```
+      var values1 = [
+                      { count: 1, qty: 5 },
+                      { count: 2, qty: 10 },
+                      { count: 3, qty: 15 }
+                    ];
 
-#. Define a `reduceFunction2` function that takes the arguments `keySKU` and `valuesCountObjects`. `valuesCountObjects` is an array of documents that contain two fields `count` and `qty`:
+      var values2 = [
+                      { count: 3, qty: 15 },
+                      { count: 1, qty: 5 },
+                      { count: 2, qty: 10 }
+                    ];
 
-```javascript
-   var reduceFunction2 = function(keySKU, valuesCountObjects) {
-                             reducedValue = { count: 0, qty: 0 };
+#. Define a ``reduceFunction2`` function that takes the arguments
+   ``keySKU`` and ``valuesCountObjects``. ``valuesCountObjects`` is an array of
+   documents that contain two fields ``count`` and ``qty``:
 
-                             for (var idx = 0; idx < valuesCountObjects.length; idx++) {
-                                 reducedValue.count += valuesCountObjects[idx].count;
-                                 reducedValue.qty += valuesCountObjects[idx].qty;
-                             }
+   .. code-block:: javascript
 
-                             return reducedValue;
-                         };
-```
+      var reduceFunction2 = function(keySKU, valuesCountObjects) {
+                                reducedValue = { count: 0, qty: 0 };
 
-#. Invoke the `reduceFunction2` first with `values1` and then with `values2`:
+                                for (var idx = 0; idx < valuesCountObjects.length; idx++) {
+                                    reducedValue.count += valuesCountObjects[idx].count;
+                                    reducedValue.qty += valuesCountObjects[idx].qty;
+                                }
 
-```javascript
-   reduceFunction2('myKey', values1);
-   reduceFunction2('myKey', values2);
-```
+                                return reducedValue;
+                            };
 
-#. Verify the `reduceFunction2` returned the same result:
+#. Invoke the ``reduceFunction2`` first with ``values1`` and then with
+   ``values2``:
 
-```javascript
-   { "count" : 6, "qty" : 30 }
-```
+   .. code-block:: javascript
+
+      reduceFunction2('myKey', values1);
+      reduceFunction2('myKey', values2);
+
+#. Verify the ``reduceFunction2`` returned the same result:
+
+   .. code-block:: javascript
+
+      { "count" : 6, "qty" : 30 }
 
 ## Ensure Reduce Function Idempotence
 
-Because the map-reduce operation may call a `reduce` multiple times for the same key, and won't call a `reduce` for single instances of a key in the working set, the `reduce` function must return a value of the same type as the value emitted from the `map` function. You can test that the `reduce` function process "reduced" values without affecting the final value.
+Because the map-reduce operation may call a ``reduce`` multiple times
+for the same key, and won't call a ``reduce`` for single instances
+of a key in the working set, the ``reduce`` function must return a value of the
+same type as the value emitted from the ``map`` function. You can test
+that the ``reduce`` function process "reduced" values without
+affecting the *final* value.
 
-#. Define a `reduceFunction2` function that takes the arguments `keySKU` and `valuesCountObjects`. `valuesCountObjects` is an array of documents that contain two fields `count` and `qty`:
+#. Define a ``reduceFunction2`` function that takes the arguments
+   ``keySKU`` and ``valuesCountObjects``. ``valuesCountObjects`` is an array of
+   documents that contain two fields ``count`` and ``qty``:
 
-```javascript
-   var reduceFunction2 = function(keySKU, valuesCountObjects) {
-                             reducedValue = { count: 0, qty: 0 };
+   .. code-block:: javascript
 
-                             for (var idx = 0; idx < valuesCountObjects.length; idx++) {
-                                 reducedValue.count += valuesCountObjects[idx].count;
-                                 reducedValue.qty += valuesCountObjects[idx].qty;
-                             }
+      var reduceFunction2 = function(keySKU, valuesCountObjects) {
+                                reducedValue = { count: 0, qty: 0 };
 
-                             return reducedValue;
-                         };
-```
+                                for (var idx = 0; idx < valuesCountObjects.length; idx++) {
+                                    reducedValue.count += valuesCountObjects[idx].count;
+                                    reducedValue.qty += valuesCountObjects[idx].qty;
+                                }
+
+                                return reducedValue;
+                            };
 
 #. Define a sample key:
 
-```javascript
-   var myKey = 'myKey';
-```
+   .. code-block:: javascript
 
-#. Define a sample `valuesIdempotent` array that contains an element that is a call to the `reduceFunction2` function:
+      var myKey = 'myKey';
 
-```javascript
-   var valuesIdempotent = [
-                            { count: 1, qty: 5 },
-                            { count: 2, qty: 10 },
-                            reduceFunction2(myKey, [ { count:3, qty: 15 } ] )
-                          ];
-```
+#. Define a sample ``valuesIdempotent`` array that contains an element that is a
+   call to the ``reduceFunction2`` function:
 
-#. Define a sample `values1` array that combines the values passed to `reduceFunction2`:
+   .. code-block:: javascript
 
-```javascript
-   var values1 = [
-                   { count: 1, qty: 5 },
-                   { count: 2, qty: 10 },
-                   { count: 3, qty: 15 }
-                 ];
-```
+      var valuesIdempotent = [
+                               { count: 1, qty: 5 },
+                               { count: 2, qty: 10 },
+                               reduceFunction2(myKey, [ { count:3, qty: 15 } ] )
+                             ];
 
-#. Invoke the `reduceFunction2` first with `myKey` and `valuesIdempotent` and then with `myKey` and `values1`:
+#. Define a sample ``values1`` array that combines the values passed to
+   ``reduceFunction2``:
 
-```javascript
-   reduceFunction2(myKey, valuesIdempotent);
-   reduceFunction2(myKey, values1);
-```
+   .. code-block:: javascript
 
-#. Verify the `reduceFunction2` returned the same result:
+      var values1 = [
+                      { count: 1, qty: 5 },
+                      { count: 2, qty: 10 },
+                      { count: 3, qty: 15 }
+                    ];
 
-```javascript
-   { "count" : 6, "qty" : 30 }
-```
+#. Invoke the ``reduceFunction2`` first with ``myKey`` and
+   ``valuesIdempotent`` and then with ``myKey`` and ``values1``:
+
+   .. code-block:: javascript
+
+      reduceFunction2(myKey, valuesIdempotent);
+      reduceFunction2(myKey, values1);
+
+#. Verify the ``reduceFunction2`` returned the same result:
+
+   .. code-block:: javascript
+
+      { "count" : 6, "qty" : 30 }

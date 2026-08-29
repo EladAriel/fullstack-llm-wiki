@@ -1,75 +1,225 @@
 ---
 type: "Framework Learn Page"
-framework: "mongodb"
+framework: "MongoDB"
 source_repo: "https://github.com/mongodb/docs.git"
 source_branch: "main"
 source_path: "content/manual/manual/source/core/read-preference.txt"
-source_commit: "ab9db26ed3d11618cdb61516d8180337d8e3f679"
-source_commit_short: "ab9db26e"
-source_commit_date: "2026-07-24T16:22:46-06:00"
-generated_at: "2026-07-25T11:51:15Z"
+source_commit: "b9f2bc487a2878b65e3c1f80024bebab76954f27"
+source_commit_short: "b9f2bc48"
+source_commit_date: "2026-08-28T17:09:45-05:00"
+generated_at: "2026-08-29T09:39:19.528554Z"
 ---
-
-===============
+.. _read-preference:
+.. _replica-set-read-preference:
+.. _replica-set-read-preference-background:
 
 # Read Preference
 
-.. include:: /includes/introduction-read-preference.rst
+.. default-domain:: mongodb
 
-Read preference consists of the `read preference mode <read-pref-modes-summary>` and optionally, a `tag set list <replica-set-read-preference-tag-sets>`, and the `maxStalenessSeconds <replica-set-read-preference-max-staleness>` option.
+**facet:** :name: genre
+   :values: reference
+
+**meta:** :description: Read preference describes how MongoDB clients route read operations to the members of a replica set.
+
+**contents:** On this page
+   :local:
+   :backlinks: none
+   :depth: 1
+   :class: singlecol
+
+**include:** /includes/introduction-read-preference.rst
+
+Read preference consists of the :ref:`read preference mode
+<read-pref-modes-summary>` and optionally, a :ref:`tag set list
+<replica-set-read-preference-tag-sets>`, and the
+:ref:`maxStalenessSeconds <replica-set-read-preference-max-staleness>`
+option.
+
+.. _read-pref-summary:
+.. _read-pref-modes-summary:
 
 ## Read Preference Modes
 
 The following table summarizes the read preference modes:
 
-.. include:: /includes/read-preference-modes-table.rst
+**include:** /includes/read-preference-modes-table.rst
 
-For detailed description of the read preference modes, see `replica-set-read-preference-modes`.
+For detailed description of the read preference modes, see
+:ref:`replica-set-read-preference-modes`.
 
-> **Seealso:** - `replica-set-read-preference-tag-sets`
-- `replica-set-read-preference-max-staleness`
+**seealso:** - :ref:`replica-set-read-preference-tag-sets`
+   - :ref:`replica-set-read-preference-max-staleness`
 
 ## Behavior
 
 - All read preference modes except :readmode:`primary` may return
-stale data because `secondaries <secondary>` replicate operations from the primary in an asynchronous process. [#edge-cases-2-primaries]_ Ensure that your application can tolerate stale data if you choose to use a non-:readmode:`primary` mode.
+  stale data because :term:`secondaries <secondary>` replicate
+  operations from the primary in an asynchronous process.
+  [#edge-cases-2-primaries]_ Ensure that your application can
+  tolerate stale data if you choose to use a non-:readmode:`primary`
+  mode.
 
 - Read preference does not affect the visibility of data.
-Clients can see the results of writes before they are acknowledged or have propagated to a majority of replica set members. For details, see `/core/read-isolation-consistency-recency`.
+  Clients can see the results of writes before they are
+  acknowledged or have propagated to a majority of replica set
+  members. For details, see
+  :doc:`/core/read-isolation-consistency-recency`.
 
 - Read preference does not affect
-`causal consistency <causal-consistency>`. The `causal consistency guarantees <sessions>` provided by causally consistent sessions for read operations with :readconcern:`"majority"` read concern and write	operations with :writeconcern:`"majority"` write concern hold across all members of the MongoDB deployment.
+  :ref:`causal consistency <causal-consistency>`. The
+  :ref:`causal consistency guarantees <sessions>` provided by
+  causally consistent sessions for read operations with
+  :readconcern:`"majority"` read concern and write	operations with
+  :writeconcern:`"majority"` write concern hold across all members
+  of the MongoDB deployment.	
 
-.. include:: /includes/long-running-secondary-reads-may-terminate.rst
+**include:** /includes/long-running-secondary-reads-may-terminate.rst
+
+.. _replica-set-read-preference-modes:
 
 ## Read Preference Modes
 
-> **Seealso:** To learn about use cases for specific read preference settings,
-see `read-preference-use-cases`.
+**readmode:** primary
+
+   All read operations use only the current replica set
+   :term:`primary`. [#edge-cases-2-primaries]_ This is the default read
+   mode. If the primary is unavailable, read operations produce an
+   error or throw an exception.
+
+   The :readmode:`primary` read preference mode is not compatible with
+   read preference modes that use :ref:`tag set lists
+   <replica-set-read-preference-tag-sets>` or :ref:`maxStalenessSeconds 
+   <replica-set-read-preference-max-staleness>`. 
+   If you specify tag set lists or a ``maxStalenessSeconds`` value
+   with :readmode:`primary`, the driver will produce an error.
+
+   .. include:: /includes/extracts/transactions-read-pref.rst
+
+**readmode:** primaryPreferred
+
+   In most situations, operations read from the :term:`primary` member
+   of the set. However, if the primary is unavailable, as is the case
+   during :term:`failover` situations, operations read from :term:`secondary`
+   members that satisfy the read preference's ``maxStalenessSeconds`` and
+   tag set lists.
+
+   .. include:: /includes/extracts/maxStaleness-primaryPreferred.rst
+
+   .. include:: /includes/extracts/tagSets-primaryPreferred.rst
+
+   .. include:: /includes/extracts/maxStaleness-and-tagSets-general.rst
+
+   .. include:: /includes/extracts/secondary-reads-stale-data-primaryPreferred.rst
+
+   .. include:: /includes/primaryPreferred-systemOverloaded.rst
+
+**readmode:** secondary
+
+   Operations read *only* from the :term:`secondary` members of the set.
+   If no secondaries are available, then this read operation produces an
+   error or exception.
+
+   Most replica sets have at least one secondary, but there are
+   situations where there may be no available secondary. For example, a
+   replica set with a :term:`primary`, a secondary, and an
+   :term:`arbiter` may not have any secondaries if a member is in
+   recovering state or unavailable.
+
+   .. include:: /includes/extracts/maxStaleness-secondary.rst
+   
+   .. include:: /includes/extracts/tagSets-secondary.rst
+   
+   .. include:: /includes/extracts/maxStaleness-and-tagSets-general.rst
+   
+   .. include:: /includes/extracts/secondary-reads-stale-data-secondary.rst
+
+**readmode:** secondaryPreferred
+
+   .. include:: /includes/secondaryPreferred-read-mode.rst
+
+   .. include:: /includes/extracts/maxStaleness-secondaryPreferred.rst
+
+   .. include:: /includes/extracts/tagSets-secondaryPreferred.rst
+
+   .. include:: /includes/extracts/maxStaleness-and-tagSets-general.rst
+
+   .. include:: /includes/extracts/secondary-reads-stale-data-secondaryPreferred.rst
+
+**readmode:** nearest
+
+   The driver reads from a member whose network latency falls within
+   the acceptable latency window. Reads in the :readmode:`nearest` mode
+   do not consider whether a member is a :term:`primary` or
+   :term:`secondary` when routing read operations: primaries and
+   secondaries are treated equivalently.
+
+   Set this mode to minimize the effect of network latency
+   on read operations without preference for current or stale data.
+    
+   When the read preference includes a :ref:`maxStalenessSeconds value
+   <replica-set-read-preference-max-staleness>`, the client estimates
+   how stale each secondary is by comparing the secondary's last write
+   to that of the primary, if available, or to the secondary with the
+   most recent write if there is no primary. The client will then
+   filter out any secondary whose estimated lag is greater than
+   ``maxStalenessSeconds`` and randomly direct the read to a remaining
+   member (primary or secondary) whose network latency falls within the
+   :ref:`acceptable latency window
+   <replica-set-read-preference-behavior-nearest>`.
+
+   If you specify a :ref:`tag set list
+   <replica-set-read-preference-tag-sets>`, the client attempts to
+   find a replica set member that matches the specified tag set lists and
+   directs reads to an arbitrary member from among the :ref:`nearest
+   group <replica-set-read-preference-behavior-nearest>`.
+
+   .. include:: /includes/extracts/maxStaleness-and-tagSets-nearest.rst
+
+   .. include:: /includes/extracts/secondary-reads-stale-data-nearest.rst
+
+**seealso:** To learn about use cases for specific read preference settings,
+   see :ref:`read-preference-use-cases`. 
+
+.. _read-preference-configure:
 
 ## Configure Read Preference
 
-When using a MongoDB driver, you can specify the read preference using the driver's read preference API. See the driver :driver:`API documentation </>`. You can also set the read preference when `connecting to the replica set or sharded cluster <connections-read-preference>`. For an example, see `connection string <connections-read-preference>`.
+When using a MongoDB driver, you can specify the read preference using
+the driver's read preference API. See the driver :driver:`API
+documentation </>`. You can also set the read preference when
+:ref:`connecting to the replica set or sharded cluster
+<connections-read-preference>`. For an example, see :ref:`connection
+string <connections-read-preference>`.
 
-For a given read preference, the MongoDB drivers use the same `member selection logic <replica-set-read-preference-behavior-member-selection>`.
+For a given read preference, the MongoDB drivers use the same
+:ref:`member selection logic
+<replica-set-read-preference-behavior-member-selection>`.
 
-When using :binary:`~bin.mongosh`, see :method:`cursor.readPref()` and :method:`Mongo.setReadPref()`.
+When using :binary:`~bin.mongosh`, see
+:method:`cursor.readPref()` and :method:`Mongo.setReadPref()`. 
 
 ## Read Preference and Transactions
 
-.. include:: /includes/extracts/transactions-read-pref.rst
+**include:** /includes/extracts/transactions-read-pref.rst
 
 ## Additional Considerations
 
-.. include:: /includes/merge-and-read-preference.rst
+**include:** /includes/merge-and-read-preference.rst
 
-For :dbcommand:`mapReduce` operations, only "inline" :dbcommand:`mapReduce` operations that do not write data support read preference. Otherwise, :dbcommand:`mapReduce` operations run on the `primary` member.
+For :dbcommand:`mapReduce` operations, only "inline"
+:dbcommand:`mapReduce` operations that do not write data support read
+preference. Otherwise, :dbcommand:`mapReduce` operations run on the
+:term:`primary` member.
 
-.. include:: /includes/footnote-two-primaries-edge-cases.rst
+.. [#edge-cases-2-primaries]
 
-## Contents
+   .. include:: /includes/footnote-two-primaries-edge-cases.rst
 
-- Use Cases </core/read-preference-use-cases>
-- Tag Sets </core/read-preference-tags>
-- Configure Tag Sets </tutorial/configure-replica-set-tag-sets>
-- maxStalenessSeconds </core/read-preference-staleness>
+**toctree:** :titlesonly:
+   :hidden:
+   
+   Use Cases </core/read-preference-use-cases>
+   Tag Sets </core/read-preference-tags>
+   Configure Tag Sets </tutorial/configure-replica-set-tag-sets>
+   maxStalenessSeconds </core/read-preference-staleness>

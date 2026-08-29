@@ -1,15 +1,14 @@
 ---
 type: "Framework Learn Page"
-framework: "redis"
+framework: "Redis"
 source_repo: "https://github.com/redis/docs.git"
 source_branch: "main"
 source_path: "content/operate/oss_and_stack/install/build-stack/macos-13-14.md"
-source_commit: "9d30f68c3dad1a6b3b7d30fe604b911348ce8152"
-source_commit_short: "9d30f68c"
-source_commit_date: "2026-07-24T10:52:10-07:00"
-generated_at: "2026-07-25T11:51:22Z"
+source_commit: "f8693349287b0efbef3c865b6f6a2aceca88594d"
+source_commit_short: "f869334"
+source_commit_date: "2026-08-28T10:01:19-05:00"
+generated_at: "2026-08-29T09:38:55.243142Z"
 ---
-
 ---
 categories:
 - docs
@@ -28,6 +27,7 @@ Three RediSearch-specific build constraints apply on macOS and are handled in th
 
 - The cross-language LTO that RediSearch enables by default requires Linux; its build script aborts on macOS with `Error: LTO is only supported on Linux`. Step 5 sets `LTO=0` to disable it.
 - RediSearch's Rust workspace uses edition 2024 and features stabilized in Rust 1.94, so the Rust toolchain in step 3 is pinned to `1.94.0`. Older Rust fails with `feature edition2024 is required`.
+- RediSearch's CMake build calls `libtool -static` (BSD libtool syntax). Step 6's `PATH` prepends `$HOMEBREW_PREFIX/opt/libtool/libexec/gnubin`, so Homebrew's GNU `libtool` is used for that step instead of macOS's `/usr/bin/libtool`.
 {{< /note >}}
 
 ## 1. Install homebrew

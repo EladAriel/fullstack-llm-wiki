@@ -4,10 +4,10 @@ framework: "Arize Phoenix"
 source_repo: "https://github.com/Arize-ai/phoenix.git"
 source_branch: "main"
 source_path: "docs/phoenix/prompt-engineering/tutorial/optimize-prompts-automatically.mdx"
-source_commit: "69b3ab92c37ff65812feaa2dbf0b1c0ad5ae55fe"
-source_commit_short: "69b3ab9"
-source_commit_date: "2026-07-25T11:48:12-06:00"
-generated_at: "2026-07-25T19:08:24.976735Z"
+source_commit: "c48e50e9906fcc56c1c103ebd93ef3c95ed6b6e7"
+source_commit_short: "c48e50e"
+source_commit_date: "2026-08-29T01:45:20-06:00"
+generated_at: "2026-08-29T09:39:58.911536Z"
 ---
 # Optimize Prompts Automatically
 
@@ -230,4 +230,3 @@ If you're interested in more tutorials on Prompts, check out:
 
 - [Few-Shot Prompting Tutorial](https://arize.com/docs/phoenix/cookbook/prompt-engineering/few-shot-prompting)
 - [Chain of Thought Prompting Tutorial](https://arize.com/docs/phoenix/cookbook/prompt-engineering/chain-of-thought-prompting)
-- [Optimizing Coding Agents (Cline, Claude Code) with Prompt Learning Tutorial (Arize AX)](https://arize.com/docs/ax/cookbooks/prompt-learning/optimizing-coding-agent-prompts-for-execution)

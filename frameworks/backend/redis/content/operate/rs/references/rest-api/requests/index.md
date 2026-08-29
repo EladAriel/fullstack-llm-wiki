@@ -1,67 +1,53 @@
 ---
 type: "Framework Learn Directory Index"
-framework: "redis"
-directory: "content/operate/rs/references/rest-api/requests"
-source_repo: "https://github.com/redis/docs.git"
-source_branch: "main"
-source_commit: "9d30f68c3dad1a6b3b7d30fe604b911348ce8152"
-source_commit_short: "9d30f68c"
-source_commit_date: "2026-07-24T10:52:10-07:00"
-generated_at: "2026-07-25T11:51:22Z"
+framework: "Redis"
+generated_at: "2026-08-29T09:38:56.408870Z"
 ---
 # Requests
 
-This directory contains redis learning pages related to requests.
+This directory contains Redis learning pages related to requests.
 
 ## Breadcrumbs
 
-[Wiki Home](../../../../../../index.md) -> [Content](../../../../../index.md) -> [Operate](../../../../index.md) -> [Rs](../../../index.md) -> [References](../../index.md) -> [Rest Api](../index.md) -> [Requests](index.md)
+[Wiki Home](../index.md) -> [Content](index.md)
 
 ## Navigation
 
-- Parent: [Parent Index](../index.md)
-
-## Child Directories
-
-- [Actions](actions/index.md) - pages related to actions
-- [Bdbs](bdbs/index.md) - pages related to bdbs
-- [Bootstrap](bootstrap/index.md) - pages related to bootstrap
-- [Cluster](cluster/index.md) - pages related to cluster
-- [Cm Settings](cm_settings/index.md) - pages related to cm settings
-- [Crdb Tasks](crdb_tasks/index.md) - pages related to crdb tasks
-- [Crdbs](crdbs/index.md) - pages related to crdbs
-- [Debuginfo](debuginfo/index.md) - pages related to debuginfo
-- [Diagnostics](diagnostics/index.md) - pages related to diagnostics
-- [Endpoints Stats](endpoints-stats/index.md) - pages related to endpoints stats
-- [Job Scheduler](job_scheduler/index.md) - pages related to job scheduler
-- [Jsonschema](jsonschema/index.md) - pages related to jsonschema
-- [Ldap Mappings](ldap_mappings/index.md) - pages related to ldap mappings
-- [License](license/index.md) - pages related to license
-- [Logs](logs/index.md) - pages related to logs
-- [Metrics Config](metrics_config/index.md) - pages related to metrics config
-- [Migrations](migrations/index.md) - pages related to migrations
-- [Modules](modules/index.md) - pages related to modules
-- [Node Master Healthcheck](node_master_healthcheck/index.md) - pages related to node master healthcheck
-- [Nodes](nodes/index.md) - pages related to nodes
-- [Ocsp](ocsp/index.md) - pages related to ocsp
-- [Proxies](proxies/index.md) - pages related to proxies
-- [Redis Acls](redis_acls/index.md) - pages related to redis acls
-- [Roles](roles/index.md) - pages related to roles
-- [Services](services/index.md) - pages related to services
-- [Shards](shards/index.md) - pages related to shards
-- [Suffix](suffix/index.md) - pages related to suffix
-- [Suffixes](suffixes/index.md) - pages related to suffixes
-- [Usage Report](usage_report/index.md) - pages related to usage report
-- [Users](users/index.md) - pages related to users
+- Wiki Home: [Root Index](../index.md)
 
 ## Pages in This Directory
 
-- [Index](_index.md)
+- [_Index](_index.md)
 
-## IDE LLM Guidance
+## Subdirectories
 
-When answering implementation questions related to this directory:
-
-1. Prefer the most specific page listed above.
-2. If the topic is broad, read the child directory index first.
-3. Use source metadata from each page when giving answers.
+- [Actions](actions/index.md)
+- [Bdbs](bdbs/index.md)
+- [Bootstrap](bootstrap/index.md)
+- [Cluster](cluster/index.md)
+- [Cm Settings](cm_settings/index.md)
+- [Crdb Tasks](crdb_tasks/index.md)
+- [Crdbs](crdbs/index.md)
+- [Debuginfo](debuginfo/index.md)
+- [Diagnostics](diagnostics/index.md)
+- [Endpoints Stats](endpoints-stats/index.md)
+- [Job Scheduler](job_scheduler/index.md)
+- [Jsonschema](jsonschema/index.md)
+- [Ldap Mappings](ldap_mappings/index.md)
+- [License](license/index.md)
+- [Logs](logs/index.md)
+- [Metrics Config](metrics_config/index.md)
+- [Migrations](migrations/index.md)
+- [Modules](modules/index.md)
+- [Node Master Healthcheck](node_master_healthcheck/index.md)
+- [Nodes](nodes/index.md)
+- [Ocsp](ocsp/index.md)
+- [Proxies](proxies/index.md)
+- [Redis Acls](redis_acls/index.md)
+- [Roles](roles/index.md)
+- [Services](services/index.md)
+- [Shards](shards/index.md)
+- [Suffix](suffix/index.md)
+- [Suffixes](suffixes/index.md)
+- [Usage Report](usage_report/index.md)
+- [Users](users/index.md)

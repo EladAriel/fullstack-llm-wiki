@@ -4,10 +4,10 @@ framework: "Grafana"
 source_repo: "https://github.com/grafana/grafana.git"
 source_branch: "main"
 source_path: "docs/sources/as-code/observability-as-code/git-sync/permissions-git.md"
-source_commit: "d18e58d33aa8741f08fbab4aa73bdaf1f04e3be5"
-source_commit_short: "d18e58d3"
-source_commit_date: "2026-07-25T13:50:43+02:00"
-generated_at: "2026-07-25T19:08:09.058876Z"
+source_commit: "5e3a02f81d2aadf4bf24fe49ed97d872556f5bf9"
+source_commit_short: "5e3a02f8"
+source_commit_date: "2026-08-29T10:58:19+09:00"
+generated_at: "2026-08-29T09:39:37.533294Z"
 ---
 ---
 description: Learn how to protect your Git repository and control who can read or write dashboard source code when using Git Sync.
@@ -31,11 +31,12 @@ canonical: https://grafana.com/docs/grafana/latest/as-code/observability-as-code
 
 # Configure Git repository protection
 
-When you use Git Sync, your dashboard configurations are stored as code in a Git repository. Git repository protection controls who can access this source code and who can modify it. This guide explains how to configure repository access at your Git provider to protect your dashboard source code.
+For Git Sync to work correctly you need to configure permissions at two layers:
 
-{{< admonition type="note" >}}
-Repository protection works as an additional security layer after Grafana internal permissions. For information about Grafana permissions, refer to [Git Sync permissions and access control](https://grafana.com/docs/grafana/<GRAFANA_VERSION>/as-code/observability-as-code/git-sync/permissions-grafana).
-{{< /admonition >}}
+- At your Git provider level, to protect your repository, as described in this document.
+- At the Grafana level for repository management and resource access. Refer to [Git Sync permissions and access control](https://grafana.com/docs/grafana/<GRAFANA_VERSION>/as-code/observability-as-code/git-sync/permissions-grafana) for more information.
+
+When you use Git Sync, your dashboard configurations are stored as code in a Git repository. You can configure Git repository protection to control who can access this source code and who can modify it. Repository protection works as an additional security layer after Grafana internal permissions.
 
 ## Required permissions at the Git provider level
 
@@ -161,33 +162,4 @@ Refer to your Git provider's documentation for instructions on configuring `CODE
 
 ## Troubleshooting
 
-### Git Sync fails with "403 Forbidden" or "Unauthorized"
-
-**Cause**: The authentication credentials lack the required repository permissions.
-
-**Solution**:
-
-1. Verify the credentials have read and write access to the repository
-2. Check that the credentials can create pull requests (if branch protection is enabled)
-3. Verify authentication credentials haven't expired
-4. For GitHub Apps, verify the app is installed and authorized for the repository
-
-### Dashboard changes commit directly without review
-
-**Cause**: Branch protection is not configured at the Git provider.
-
-**Solution**:
-
-1. Enable branch protection on the target branch at your Git provider
-2. Configure the branch to require pull requests before merging
-3. Verify the branch name in protection rules matches the branch configured in Grafana
-
-### Pull requests not created when expected
-
-**Cause**: Branch protection is not enabled or the authentication credentials lack pull request creation permission.
-
-**Solution**:
-
-1. Verify branch protection is enabled on the correct branch
-2. Check that the credentials have permission to create pull requests
-3. Ensure the branch name in Git Sync settings matches the protected branch exactly
+For permissions troubleshooting refer to [Troubleshoot permissions](https://grafana.com/docs/grafana/<GRAFANA_VERSION>/as-code/observability-as-code/git-sync/permissions-grafana#troubleshoot-permissions) in the Git Sync permissions documentation.

@@ -1,14 +1,15 @@
 ---
 type: "Framework Learn Page"
-framework: "pydantic"
+framework: "Pydantic"
 source_repo: "https://github.com/pydantic/pydantic"
 source_branch: "main"
 source_path: "docs/errors/errors.md"
-source_commit: "a2a6577d4c329dd574a45dbb01a8feaa16b1ad3d"
-source_commit_short: "a2a6577d"
-source_commit_date: "2026-07-23T15:38:17Z"
-generated_at: "2026-07-25T11:50:12Z"
+source_commit: "4bc21c0fa28323c0f3e0be93c9ad114b705029c6"
+source_commit_short: "4bc21c0"
+source_commit_date: "2026-08-29T11:30:40+02:00"
+generated_at: "2026-08-29T09:38:50.591718Z"
 ---
+# Errors
 
 
 Pydantic will raise a [`ValidationError`][pydantic_core.ValidationError] whenever it finds an error in the data it's validating.
@@ -29,7 +30,7 @@ You can access these errors in several ways:
 |--------------------------------------------------------------|------------------------------------------------------------------------------------------------|
 | [`errors()`][pydantic_core.ValidationError.errors]           | Returns a list of [`ErrorDetails`][pydantic_core.ErrorDetails] errors found in the input data. |
 | [`error_count()`][pydantic_core.ValidationError.error_count] | Returns the number of errors.                                                                  |
-| [`json()`][pydantic_core.ValidationError.json]               | Returns a JSON representation of the list errors.                                              |
+| [`json()`][pydantic_core.ValidationError.json]               | Returns a JSON representation of the list of errors.                                              |
 | `str(e)`                                                     | Returns a human-readable representation of the errors.                                         |
 
 The [`ErrorDetails`][pydantic_core.ErrorDetails] object is a dictionary. It contains the following:
@@ -46,8 +47,8 @@ The [`ErrorDetails`][pydantic_core.ErrorDetails] object is a dictionary. It cont
 The first item in the [`loc`][pydantic_core.ErrorDetails.loc] list will be the field where the error occurred, and if the field is a
 [sub-model](../concepts/models.md#nested-models), subsequent items will be present to indicate the nested location of the error.
 
-!!! tip "Logfire integration"
-    [Logfire](troubleshooting.md) can be used to record validation errors, with the input that produced it.
+For validations spread across a running service, [Logfire](troubleshooting.md) records this same
+structured error list and surrounding trace context, without wrapping each call in `try`/`except`.
 
 As a demonstration:
 

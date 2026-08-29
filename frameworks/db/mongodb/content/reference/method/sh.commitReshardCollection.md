@@ -1,51 +1,89 @@
 ---
 type: "Framework Learn Page"
-framework: "mongodb"
+framework: "MongoDB"
 source_repo: "https://github.com/mongodb/docs.git"
 source_branch: "main"
 source_path: "content/manual/manual/source/reference/method/sh.commitReshardCollection.txt"
-source_commit: "ab9db26ed3d11618cdb61516d8180337d8e3f679"
-source_commit_short: "ab9db26e"
-source_commit_date: "2026-07-24T16:22:46-06:00"
-generated_at: "2026-07-25T11:51:15Z"
+source_commit: "b9f2bc487a2878b65e3c1f80024bebab76954f27"
+source_commit_short: "b9f2bc48"
+source_commit_date: "2026-08-28T17:09:45-05:00"
+generated_at: "2026-08-29T09:39:20.001831Z"
 ---
-
-=============================================
-
 # sh.commitReshardCollection() (mongosh method)
+
+**meta:** :description: Force the completion of a resharding operation by blocking writes early using the `sh.commitReshardCollection()` method.
+
+.. default-domain:: mongodb
+
+**contents:** On this page
+   :local:
+   :backlinks: none
+   :depth: 1
+   :class: singlecol
 
 ## Definition
 
+**method:** sh.commitReshardCollection(namespace)
+
+   .. versionadded:: 5.0
+
+   .. |method-or-command| replace:: ``sh.commitReshardCollection()``
+   .. include:: /includes/fact-reshard-block-writes-duration.rst
+
+   .. |dbcommand| replace:: :dbcommand:`commitReshardCollection` command
+   .. include:: /includes/fact-mongosh-shell-method-alt.rst
+
 ## Compatibility
 
-This method is available in deployments hosted in the following environments:
+This method is available in deployments hosted in the following environments: 
 
-.. include:: /includes/fact-environments-atlas-only.rst
+**include:** /includes/fact-environments-atlas-only.rst
 
-.. include:: /includes/fact-environments-atlas-support-no-free.rst
+**include:** /includes/fact-environments-atlas-support-no-free.rst
 
-.. include:: /includes/fact-environments-onprem-only.rst
+**include:** /includes/fact-environments-onprem-only.rst
 
 ## Syntax
 
-The :method:`sh.commitReshardCollection()` method has the following syntax:
+The :method:`sh.commitReshardCollection()` method has the following
+syntax:
 
-```javascript
-sh.commitReshardCollection( <namespace> )
-```
+.. code-block:: javascript
+
+   sh.commitReshardCollection( <namespace> )
 
 ### Parameter
 
-The :method:`sh.commitReshardCollection()` method takes the following parameter:
+The :method:`sh.commitReshardCollection()` method takes the following
+parameter:
+
+.. list-table::
+   :header-rows: 1
+   :widths: 20 20 60
+
+   * - Parameter
+     - Type
+     - Description
+
+   * - :ref:`namespace <method-commitReshardCollection-namespace>`
+
+     - String
+
+     - .. _method-commitReshardCollection-namespace:
+
+       The name of the collection to shard in the form
+       ``"<database>.<collection>"``.
 
 ## Example
 
 ### Commit a Resharding Operation
 
-The following command forces the `resharding operation <sharding-resharding>` on the `sales.orders` to block writes and complete:
+The following command forces the :ref:`resharding operation
+<sharding-resharding>` on the ``sales.orders`` to block writes and
+complete:
 
-```javascript
-sh.commitReshardCollection("sales.orders")
-```
+.. code-block:: javascript
 
-> **Seealso:** `sharding-resharding`
+   sh.commitReshardCollection("sales.orders")
+
+**seealso:** :ref:`sharding-resharding`

@@ -1,81 +1,135 @@
 ---
 type: "Framework Learn Page"
-framework: "mongodb"
+framework: "MongoDB"
 source_repo: "https://github.com/mongodb/docs.git"
 source_branch: "main"
 source_path: "content/manual/manual/source/reference/command/addShard.txt"
-source_commit: "ab9db26ed3d11618cdb61516d8180337d8e3f679"
-source_commit_short: "ab9db26e"
-source_commit_date: "2026-07-24T16:22:46-06:00"
-generated_at: "2026-07-25T11:51:15Z"
+source_commit: "b9f2bc487a2878b65e3c1f80024bebab76954f27"
+source_commit_short: "b9f2bc48"
+source_commit_date: "2026-08-28T17:09:45-05:00"
+generated_at: "2026-08-29T09:39:20.055506Z"
 ---
-
-===========================
+.. _sharding-add-shard:
 
 # addShard (database command)
 
+**meta:** :description: Add a shard replica set to a sharded cluster using the `addShard` command, ensuring the shard is empty and considering balancing effects.
+
+.. default-domain:: mongodb
+
+**contents:** On this page
+   :local:
+   :backlinks: none
+   :depth: 1
+   :class: singlecol
+
 ## Definition
+
+**dbcommand:** addShard
+
+   Adds a shard replica set to a :term:`sharded cluster`.
+
+   .. |method| replace:: :method:`sh.addShard` helper method
+   .. include:: /includes/fact-dbcommand-tip
 
 ## Compatibility
 
-This command is available in deployments hosted in the following environments:
+This command is available in deployments hosted in the following environments: 
 
-.. include:: /includes/fact-environments-onprem-only.rst
+**include:** /includes/fact-environments-onprem-only.rst
 
-> **Note:** .. include:: /includes/edit-shards-atlas-compatibility.rst
+**note:** .. include:: /includes/edit-shards-atlas-compatibility.rst
 
 ## Syntax
 
 The command has the following syntax:
 
-```javascript
-db.adminCommand(
-   { 
-     addShard: "<replica_set>/<hostname><:port>", 
-     name: "<shard_name>" 
-   } 
-)
-```
+.. code-block:: javascript
+  
+   db.adminCommand(
+      { 
+        addShard: "<replica_set>/<hostname><:port>", 
+        name: "<shard_name>" 
+      } 
+   )
 
 ### Command Fields
 
-> **Note:** .. include:: /includes/fact-remove-maxSize-addShard.rst
+**note:** .. include:: /includes/fact-remove-maxSize-addShard.rst
 
 The command contains the following fields:
 
-The :dbcommand:`addShard` command stores shard configuration information in the `config database`. Always run :dbcommand:`addShard` when using the `admin` database.
+.. list-table::
+   :header-rows: 1
+   :widths: 20 20 80
+ 
+   * - Field
+ 
+     - Type
+ 
+     - Description
+ 
+   * - ``addShard``
+ 
+     - string
+ 
+     - The replica set name, hostname, and port of at least one member of
+       the shard's replica set. Any additional replica set member hostnames
+       must be comma separated. For example:
+       
+       .. code-block:: bash
+       
+          <replica_set>/<hostname><:port>,<hostname><:port>, ...
+
+   * - ``name``
+ 
+     - string
+ 
+     - Optional. A name for the shard. If this is not specified, MongoDB
+       automatically provides a unique name.
+           
+The :dbcommand:`addShard` command stores shard configuration
+information in the :term:`config database`. Always run
+:dbcommand:`addShard` when using the ``admin`` database.
 
 ## Considerations
 
 ### Storage
 
-The shard that you add to your sharded cluster must be empty.
+The shard that you add to your sharded cluster must be empty. 
 
 ### Balancing
 
-.. include:: /includes/fact-adding-shards-changes-cluster-balance.rst
+**include:** /includes/fact-adding-shards-changes-cluster-balance.rst
 
 ### Hidden Members
 
-.. include:: /includes/important-add-shard-not-compatible-with-hidden-members.rst
+.. |cmd-name| replace:: :dbcommand:`addShard`
+**include:** /includes/important-add-shard-not-compatible-with-hidden-members.rst
 
 ### DDL Operations
 
-If you add a shard while your cluster executes a DDL operation (operation that modifies a collection such as :dbcommand:`reshardCollection`), `addShard` only executes after the concurrent DDL operation finishes.
+If you add a shard while your cluster executes a DDL operation
+(operation that modifies a collection such as
+:dbcommand:`reshardCollection`), ``addShard`` only executes after the
+concurrent DDL operation finishes. 
 
 ## Required Access
 
-You must have the :authaction:`addShard` `action <security-user-actions>` on a cluster resource to run the `addShard` command. The :authrole:`clusterAdmin` or :authrole:`clusterManager` `built-in roles <built-in-roles>` contain the `addShard` action and grant privileges to run the `addShard` command.
+You must have the :authaction:`addShard` :ref:`action <security-user-actions>` on a
+cluster resource to run the ``addShard`` command. The :authrole:`clusterAdmin` or
+:authrole:`clusterManager` :ref:`built-in roles <built-in-roles>` contain the
+``addShard`` action and grant privileges to run the ``addShard`` command.
 
 ## Examples
 
 The following command adds a replica set as a shard:
 
-```javascript
-use admin
-db.runCommand( { addShard: "repl0/mongodb3.example.net:27327"} )
-```
+.. code-block:: javascript
 
-> **Warning:** Do not use `localhost` for the hostname unless your
-config server is also running on
-`localhost`.
+   use admin
+   db.runCommand( { addShard: "repl0/mongodb3.example.net:27327"} )
+
+**warning:** Do not use ``localhost`` for the hostname unless your
+   config server is also running on
+   ``localhost``.

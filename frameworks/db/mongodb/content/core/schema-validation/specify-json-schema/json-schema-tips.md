@@ -1,113 +1,138 @@
 ---
 type: "Framework Learn Page"
-framework: "mongodb"
+framework: "MongoDB"
 source_repo: "https://github.com/mongodb/docs.git"
 source_branch: "main"
 source_path: "content/manual/manual/source/core/schema-validation/specify-json-schema/json-schema-tips.txt"
-source_commit: "ab9db26ed3d11618cdb61516d8180337d8e3f679"
-source_commit_short: "ab9db26e"
-source_commit_date: "2026-07-24T16:22:46-06:00"
-generated_at: "2026-07-25T11:51:15Z"
+source_commit: "b9f2bc487a2878b65e3c1f80024bebab76954f27"
+source_commit_short: "b9f2bc48"
+source_commit_date: "2026-08-28T17:09:45-05:00"
+generated_at: "2026-08-29T09:39:19.825747Z"
 ---
-
-===============================
+.. _json-schema-tips:
 
 # Tips for JSON Schema Validation
 
-This page describes best practices for JSON schema validation to help avoid common issues.
+.. default-domain:: mongodb
 
-## `_id` Field and `additionalProperties: false`
+**contents:** On this page
+   :local:
+   :backlinks: none
+   :depth: 1
+   :class: singlecol
 
-When you specify `additionalProperties: false` in your JSON schema, MongoDB rejects documents that contain fields not included in your schema's `properties` object.
+This page describes best practices for JSON schema validation to help
+avoid common issues.
 
-Because all objects contain an automatically-generated `_id` field, when you set `additionalProperties: false, you must include the id` field in your `properties` object. If you don't, all documents are rejected.
+## ``_id`` Field and ``additionalProperties: false``
+
+When you specify ``additionalProperties: false`` in your JSON schema,
+MongoDB rejects documents that contain fields not included in your
+schema's ``properties`` object.
+
+Because all objects contain an automatically-generated ``_id`` field,
+when you set ``additionalProperties: false``, you must include the
+``_id`` field in your ``properties`` object. If you don't, all documents
+are rejected.
 
 For example, with this validation, no documents are valid:
 
-```javascript
-{
-  "$jsonSchema": {
-    "required": [ "_id", "storeLocation" ],
-    "properties": {
-      "storeLocation": { "bsonType": "string" }
-    },
-    "additionalProperties": false
-  }
-}
-```
+.. code-block:: javascript
 
-This validation ensures that `storeLocation` is a string. However, the `properties object does not contain an id` field.
-
-To allow documents in the collection, you must update the `properties object to include an id` field:
-
-```javascript
-{
-  "$jsonSchema": {
-    "required": [ "_id", "storeLocation" ],
-    "properties": {
-      "_id": { "bsonType": "objectId" },
-      "storeLocation": { "bsonType": "string" }
-    },
-    "additionalProperties": false
-  }
-}
-```
-
-## Validation for `null` Field Values
-
-Your application may be configured to set missing field values to `null`, instead of not including those fields in the object sent to the collection.
-
-If your schema validates data types for a field, to insert documents with a `null` value for that field, you must explicitly allow `null` as a valid BSON type.
-
-For example, this schema validation does not allow documents where `storeLocation` is `null`:
-
-```javascript
-db.createCollection("sales",
    {
-      validator:
-         {
-            "$jsonSchema": {
-               "properties": {
-                  "storeLocation": { "bsonType": "string" }
+     "$jsonSchema": {
+       "required": [ "_id", "storeLocation" ],
+       "properties": {
+         "storeLocation": { "bsonType": "string" }
+       },
+       "additionalProperties": false
+     }
+   }
+
+This validation ensures that ``storeLocation`` is a string. However, the
+``properties`` object does not contain an ``_id`` field.
+
+To allow documents in the collection, you must update the ``properties``
+object to include an ``_id`` field:
+
+.. code-block:: javascript
+   :emphasize-lines: 5
+
+   {
+     "$jsonSchema": {
+       "required": [ "_id", "storeLocation" ],
+       "properties": {
+         "_id": { "bsonType": "objectId" },
+         "storeLocation": { "bsonType": "string" }
+       },
+       "additionalProperties": false
+     }
+   }
+
+## Validation for ``null`` Field Values
+
+Your application may be configured to set missing field values to
+``null``, instead of not including those fields in the object sent to
+the collection. 
+
+If your schema validates data types for a field, to insert documents
+with a ``null`` value for that field, you must explicitly allow ``null``
+as a valid BSON type.
+
+For example, this schema validation does not allow documents where
+``storeLocation`` is ``null``:
+
+.. code-block:: javascript
+
+   db.createCollection("sales",
+      {
+         validator:
+            {
+               "$jsonSchema": {
+                  "properties": {
+                     "storeLocation": { "bsonType": "string" }
+                  }
                }
             }
-         }
-    }
- )
-```
+       }
+    )
 
 With the preceding validation, this document is rejected:
 
-```javascript
-db.store.insertOne( { storeLocation: null } )
-```
+.. code-block:: javascript
 
-Alternatively, this schema validation allows `null` values for `storeLocation`:
+   db.store.insertOne( { storeLocation: null } )
 
-```javascript
-db.createCollection("store",
-   {
-      validator:
-         {
-            "$jsonSchema": {
-               "properties": {
-                  "storeLocation": { "bsonType": [ "null", "string" ] }
+Alternatively, this schema validation allows ``null`` values for
+``storeLocation``:
+
+.. code-block:: javascript
+
+   db.createCollection("store",
+      {
+         validator:
+            {
+               "$jsonSchema": {
+                  "properties": {
+                     "storeLocation": { "bsonType": [ "null", "string" ] }
+                  }
                }
             }
-         }
-    }
- )
-```
+       }
+    )
 
 With the preceding validation, this document is allowed:
 
-```javascript
-db.store.insertOne( { storeLocation: null } )
-```
+.. code-block:: javascript
 
-> **Note:** `null` field values are not the same as missing fields. If a field
-is missing from a document, MongoDB does not validate that field.
+   db.store.insertOne( { storeLocation: null } )
+
+**note:** ``null`` Fields Compared with Missing Fields
+
+   ``null`` field values are not the same as missing fields. If a field
+   is missing from a document, MongoDB does not validate that field.
+
 
 ## Validation with Encrypted Fields
 
-.. include:: /includes/queryable-encryption/qe-csfle-schema-validation.rst
+**include:** /includes/queryable-encryption/qe-csfle-schema-validation.rst

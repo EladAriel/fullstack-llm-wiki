@@ -1,154 +1,225 @@
 ---
 type: "Framework Learn Page"
-framework: "mongodb"
+framework: "MongoDB"
 source_repo: "https://github.com/mongodb/docs.git"
 source_branch: "main"
 source_path: "content/manual/manual/source/reference/method/db.collection.createSearchIndex.txt"
-source_commit: "ab9db26ed3d11618cdb61516d8180337d8e3f679"
-source_commit_short: "ab9db26e"
-source_commit_date: "2026-07-24T16:22:46-06:00"
-generated_at: "2026-07-25T11:51:15Z"
+source_commit: "b9f2bc487a2878b65e3c1f80024bebab76954f27"
+source_commit_short: "b9f2bc48"
+source_commit_date: "2026-08-28T17:09:45-05:00"
+generated_at: "2026-08-29T09:39:19.966744Z"
 ---
-
-==================================================
-
 # db.collection.createSearchIndex() (mongosh method)
+
+.. default-domain:: mongodb
+
+**meta:** :keywords: Search
+   :description: Create a {+fts+} or Vector Search index on a specified collection using `db.collection.createSearchIndex()`.
+
+**contents:** On this page
+   :local:
+   :backlinks: none
+   :depth: 2
+   :class: singlecol
 
 ## Definition
 
-.. versionadded:: 7.0 (Also available starting in 6.0.7)
+**method:** db.collection.createSearchIndex()
 
-.. include:: /includes/atlas-search-commands/command-descriptions/createSearchIndex-method.rst
+**versionadded:** 7.0 (*Also available starting in 6.0.7*)
 
-.. include:: /includes/fact-mongosh-shell-method-alt.rst
+.. |fts-index| replace:: :atlas:`{+fts+} index </atlas-search/atlas-search-overview/#fts-indexes>` or :atlas:`{+avs+} index </atlas-vector-search/vector-search-overview/>`
+
+**include:** /includes/atlas-search-commands/command-descriptions/createSearchIndex-method.rst
+
+.. |dbcommand| replace:: :dbcommand:`createSearchIndexes` command
+
+**include:** /includes/fact-mongosh-shell-method-alt.rst
 
 ## Compatibility
 
-This method is available in deployments hosted in the following environments:
+This method is available in deployments hosted in the following environments: 
 
-.. include:: /includes/fact-environments-atlas-only.rst
+**include:** /includes/fact-environments-atlas-only.rst
+
+
+
 
 ## Syntax
 
 Command syntax:
 
-```javascript
-db.<collection>.createSearchIndex(
-   <name>,
-   <type>,
-   {
-      <definition>
-   }
-)
-```
+.. code-block:: javascript
+
+   db.<collection>.createSearchIndex(
+      <name>,
+      <type>,
+      {
+         <definition>
+      }
+   )
 
 ## Command Fields
 
-`createSearchIndex()` takes these fields:
+``createSearchIndex()`` takes these fields:
+
+.. list-table::
+  :header-rows: 1
+  :widths: 20 20 20 80
+
+  * - Field
+    - Type
+    - Necessity
+    - Description
+
+  * - ``name``
+    - string
+    - Optional
+    - Name of the search index to create.
+      
+      You cannot create multiple indexes with the same name on a single
+      collection.
+
+      If you do not specify a ``name``, the index is named ``default``.
+
+  * - ``type``
+    - string
+    - Optional
+    - .. include:: /includes/atlas-search-commands/field-definitions/type.rst
+  
+  * - ``definition``
+    - document
+    - Required
+    - Document describing the index to create. The ``definition`` syntax
+      depends on whether you create a standard search index or a Vector
+      Search index. For the ``definition`` syntax, see:
+      
+      - :ref:`search-index-definition-create-mongosh`
+      - :ref:`vector-search-index-definition-create-mongosh`
+
+.. _search-index-definition-create-mongosh:
 
 ### Search Index Definition Syntax
 
-.. include:: /includes/atlas-search-commands/search-index-definition-fields.rst
+**include:** /includes/atlas-search-commands/search-index-definition-fields.rst
+
+.. _vector-search-index-definition-create-mongosh:
 
 ### Vector Search Index Definition Syntax
 
-.. include:: /includes/atlas-search-commands/vector-search-index-definition-fields.rst
+**include:** /includes/atlas-search-commands/vector-search-index-definition-fields.rst
 
 ## Behavior
 
-.. include:: /includes/atlas-search-commands/behavior/create-behavior.rst
+.. |method-name| replace:: ``createSearchIndex()``
+.. |method-name-title| replace:: ``createSearchIndex()``
+
+**include:** /includes/atlas-search-commands/behavior/create-behavior.rst   
 
 ## Access Control
 
-.. include:: /includes/atlas-search-commands/access-control/create-access-control.rst
+**include:** /includes/atlas-search-commands/access-control/create-access-control.rst
 
 ## Examples
 
 ### Create a Search Index on All Fields
 
-The following example creates a search index named `searchIndex01` on the `movies` collection:
+The following example creates a search index named ``searchIndex01`` on
+the ``movies`` collection:
 
-```javascript
-db.movies.createSearchIndex(
-   "searchIndex01",
-   { mappings: { dynamic: true } }
-)
-```
+.. code-block:: javascript
 
-The index definition specifies `mappings: { dynamic: true }`, which means that the index contains all fields in the collection that have `supported data types <bson-data-chart>`.
+   db.movies.createSearchIndex(
+      "searchIndex01",
+      { mappings: { dynamic: true } }
+   )
+
+The index definition specifies ``mappings: { dynamic: true }``, which
+means that the index contains all fields in the collection that have
+:ref:`supported data types <bson-data-chart>`.
 
 ### Create a Search Index with a Language Analyzer
 
-A language analyzer introduces stop-words, which are words that are not significant enough to be indexed.
+A language analyzer introduces stop-words, which are words that are not
+significant enough to be indexed.
 
-The following example creates a search index named `frenchIndex01` on the `cars` collection, and specifies the `lucene.french` analyzer on the `fr` field:
+The following example creates a search index named ``frenchIndex01`` on
+the ``cars`` collection, and specifies the ``lucene.french`` analyzer on
+the ``fr`` field:
 
-```javascript
-db.cars.createSearchIndex(
-   "frenchIndex01",
-   {
-      mappings: {
-         fields: {
-            subject: {
-               fields: {
-                  fr: {
-                     analyzer: "lucene.french",
-                     type: "string"
-                  }
-               },
-               type: "document"
+.. code-block:: javascript
+
+   db.cars.createSearchIndex(
+      "frenchIndex01",
+      {
+         mappings: {
+            fields: {
+               subject: {
+                  fields: {
+                     fr: {
+                        analyzer: "lucene.french",
+                        type: "string"
+                     }
+                  },
+                  type: "document"
+               }
             }
          }
       }
-   }
-)
-```
+   )
 
-To learn more about language analyzers, see `ref-language-analyzers`.
+To learn more about language analyzers, see
+:ref:`ref-language-analyzers`.
 
 ### Create a Search Index with the Default Name
 
-The following `createSearchIndex()` method only specifies the index definition and omits the index name. The command creates a search index with the name `default` on the `food` collection:
+The following ``createSearchIndex()`` method only specifies the index
+definition and omits the index name. The command creates a search index
+with the name ``default`` on the ``food`` collection:
 
-```javascript
-db.food.createSearchIndex(
-   {
-      mappings: {
-         fields: {
-            title: {
-               type: "string"
+.. code-block:: javascript
+
+   db.food.createSearchIndex(
+      {
+         mappings: {
+            fields: {
+               title: {
+                  type: "string"
+               }
             }
          }
       }
-   }
-)
-```
+   )
 
 ### Create a Vector Search Index
 
-The following example creates a vector search index named `vectorSearchIndex01` on the `movies` collection:
+The following example creates a vector search index named
+``vectorSearchIndex01`` on the ``movies`` collection:
 
-```javascript
-db.movies.createSearchIndex(
-   "vectorSearchIndex01",
-   "vectorSearch",
-   {
-      fields: [
-         {
-            type: "vector",
-            numDimensions: 1,
-            path: "genre",
-            similarity: "cosine"
-         }
-      ]
-   }
-)
-```
+.. code-block:: javascript
 
-The vector search index contains one dimension and indexes the `genre` field.
+   db.movies.createSearchIndex(
+      "vectorSearchIndex01",
+      "vectorSearch",
+      {
+         fields: [
+            {
+               type: "vector",
+               numDimensions: 1,
+               path: "genre",
+               similarity: "cosine"
+            }
+         ]
+      }
+   )
+
+The vector search index contains one dimension and indexes the ``genre``
+field.
 
 ## Learn More
 
 - :pipeline:`$vectorSearch` aggregation stage
-- `Tutorial: Semantic Search <vector-search-quick-start>`
+
+- :ref:`Tutorial: Semantic Search <vector-search-quick-start>`
+
 - :atlas:`{+avs+} Changelog </atlas-vector-search/changelog/>`

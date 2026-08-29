@@ -1,154 +1,212 @@
 ---
 type: "Framework Learn Page"
-framework: "mongodb"
+framework: "MongoDB"
 source_repo: "https://github.com/mongodb/docs.git"
 source_branch: "main"
 source_path: "content/manual/manual/source/tutorial/kerberos-auth-activedirectory-authz.txt"
-source_commit: "ab9db26ed3d11618cdb61516d8180337d8e3f679"
-source_commit_short: "ab9db26e"
-source_commit_date: "2026-07-24T16:22:46-06:00"
-generated_at: "2026-07-25T11:51:15Z"
+source_commit: "b9f2bc487a2878b65e3c1f80024bebab76954f27"
+source_commit_short: "b9f2bc48"
+source_commit_date: "2026-08-28T17:09:45-05:00"
+generated_at: "2026-08-29T09:39:19.610884Z"
 ---
-
-=====================================================
-
 # Configure Kerberos and Active Directory Authorization
 
-[MongoDB Enterprise](http://www.mongodb.com/products/mongodb-enterprise-advanced) supports querying an LDAP server for the LDAP groups to which an authenticated user belongs. MongoDB maps the LDAP distinguished names (DN) of each returned group to `roles <roles>` on the `admin` database. MongoDB authorizes the user based on the mapped roles and their associated privileges. See `LDAP Authorization <security-ldap-external>` for more information.
+**meta:** :keywords: on-prem
+   :description: Configure MongoDB for Kerberos authentication and Active Directory authorization, detailing prerequisites, setup, and configuration steps.
 
-MongoDB Enterprise supports authentication using a `Kerberos service </core/kerberos>`. Kerberos is an industry standard authentication protocol for large client/server systems.
+.. default-domain:: mongodb
 
-This tutorial describes how to configuring MongoDB to perform authentication through a Kerberos server and authorization through an Active Directory (AD) server via the platform libraries.
+**contents:** On this page
+   :local:
+   :backlinks: none
+   :depth: 1
+   :class: singlecol
+
+`MongoDB Enterprise
+<http://www.mongodb.com/products/mongodb-enterprise-advanced>`_ supports
+querying an LDAP server for the LDAP groups to which an authenticated user
+belongs. MongoDB maps the LDAP distinguished names (DN) of each returned
+group to :ref:`roles <roles>` on the ``admin`` database. MongoDB authorizes
+the user based on the mapped roles and their associated privileges. See
+:ref:`LDAP Authorization <security-ldap-external>` for more information.
+
+MongoDB Enterprise supports authentication using a :doc:`Kerberos service
+</core/kerberos>`. Kerberos is an industry standard authentication protocol
+for large client/server systems.
+
+This tutorial describes how to configuring MongoDB to perform authentication
+through a Kerberos server and authorization through an Active Directory (AD)
+server via the platform libraries.
 
 ## Prerequisites
 
-> **Important:** Thoroughly familiarize yourself with the following subjects before
-proceeding:
-- `Kerberos Authentication <security-kerberos>`
-- `LDAP Authorization <security-ldap-external>`
-- [Active Directory](https://msdn.microsoft.com/en-us/library/bb742424.aspx)
+**important:** Thoroughly familiarize yourself with the following subjects before
+   proceeding:
 
-A full description of :abbr:`AD (Active Directory)` is beyond the scope of this tutorial. This tutorial assumes prior knowledge of :abbr:`AD (Active Directory)`.
+   - :ref:`Kerberos Authentication <security-kerberos>`
+   - :ref:`LDAP Authorization <security-ldap-external>`
+   - `Active Directory <https://msdn.microsoft.com/en-us/library/bb742424.aspx>`_
 
-MongoDB supports using SASL mechanisms for binding between the MongoDB server and :abbr:`AD (Active Directory)`. A full description of SASL, SASL mechanisms, or the specific :abbr:`AD (Active Directory)` configuration requirements for a given SASL mechanism are beyond the scope of this tutorial. This tutorial assumes prior knowledge of SASL and its related subject matter.
 
-Setting up and configuring a Kerberos deployment is beyond the scope of this document. This tutorial assumes you have configured a `Kerberos service principal <kerberos-service-principal>` for each :binary:`~bin.mongod` and :binary:`~bin.mongos` instance in your MongoDB deployment, and you have a valid `keytab file <keytab-files>` for for each :binary:`~bin.mongod` and :binary:`~bin.mongos` instance.
+A full description of :abbr:`AD (Active Directory)` is beyond the scope of
+this tutorial. This tutorial assumes prior knowledge of :abbr:`AD (Active
+Directory)`.
 
-.. include:: /includes/fact-kerberos-FQDN-repica-sets.rst
+MongoDB supports using SASL mechanisms for binding between the MongoDB server
+and :abbr:`AD (Active Directory)`. A full description of SASL, SASL
+mechanisms, or the specific :abbr:`AD (Active Directory)` configuration
+requirements for a given SASL mechanism are beyond the scope of this tutorial.
+This tutorial assumes prior knowledge of SASL and its related subject matter.
 
-.. include:: /includes/fact-confirm-enterprise-binaries.rst
+Setting up and configuring a Kerberos deployment is beyond the scope of
+this document. This tutorial assumes you have configured a
+:ref:`Kerberos service principal <kerberos-service-principal>` for each
+:binary:`~bin.mongod` and :binary:`~bin.mongos` instance in your MongoDB
+deployment, and you have a valid :ref:`keytab file <keytab-files>` for
+for each :binary:`~bin.mongod` and :binary:`~bin.mongos` instance.
+
+**include:** /includes/fact-kerberos-FQDN-repica-sets.rst
+
+**include:** /includes/fact-confirm-enterprise-binaries.rst
 
 ## Considerations
 
-This tutorial explains configuring MongoDB for Kerberos authentication and :abbr:`AD (Active Directory)` authorization.
+This tutorial explains configuring MongoDB for Kerberos authentication and
+:abbr:`AD (Active Directory)` authorization.
 
-To perform this procedure on your own MongoDB server, you must modify the given procedures with respect to your own specific infrastructure, especially Kerberos configurations, constructing :abbr:`AD (Active Directory)` queries, or managing users.
+To perform this procedure on your own MongoDB server, you must modify the
+given procedures with respect to your own specific infrastructure, especially
+Kerberos configurations, constructing :abbr:`AD (Active Directory)` queries,
+or managing users.
 
 ### Transport Layer Security
 
-By default, MongoDB creates a TLS/SSL connection when binding to the :abbr:`AD (Active Directory)` server. This requires configuring the host of the MongoDB server to have access to the AD server's Certificate Authority (CA) certificates.
+By default, MongoDB creates a TLS/SSL connection when binding to the :abbr:`AD
+(Active Directory)` server. This requires configuring the host of the MongoDB
+server to have access to the AD server's Certificate Authority (CA)
+certificates.
 
 This tutorial provides instructions for the required host configurations.
 
-This tutorial assumes you have access to the AD server's CA certificates and can create a copy of the certificates on the MongoDB server.
+This tutorial assumes you have access to the AD server's CA certificates and
+can create a copy of the certificates on the MongoDB server.
+
+.. _kerb-auth-ldap-authz-adschema:
 
 ### Example Active Directory Schema
 
-This tutorial uses the following example :abbr:`AD (Active Directory)` objects as the basis for the provided queries, configurations, and output. Each object shows only a subset of the possible attributes.
+This tutorial uses the following example :abbr:`AD (Active Directory)` objects
+as the basis for the provided queries, configurations, and output. Each object
+shows only a subset of the possible attributes.
 
-User Objects ++++++++++++
+.. _kerb-auth-ldap-authz-userObj:
 
-```bash
-dn:CN=bob,CN=Users,DC=marketing,DC=example,DC=com
-userPrincipalName: bob@marketing.example.com
-memberOf: CN=marketing,CN=Users,DC=example,DC=com
+### User Objects
 
-dn:CN=alice,CN=Users,DC=engineering,DC=example,DC=com
-userPrincipalName: alice@engineering.example.com
-memberOf: CN=web,CN=Users,DC=example,DC=com
-memberOf: CN=PrimaryApplication,CN=Users,DC=example,DC=com
+.. code-block:: bash
 
-dn:CN=sam,CN=Users,DC=dba,DC=example,DC=com
-userPrincipalName: sam@dba.example.com
-memberOf: CN=dba,CN=Users,DC=example,DC=com
-memberOf: CN=PrimaryApplication,CN=Users,DC=example,DC=com
+   dn:CN=bob,CN=Users,DC=marketing,DC=example,DC=com
+   userPrincipalName: bob@marketing.example.com
+   memberOf: CN=marketing,CN=Users,DC=example,DC=com
 
-dn:CN=joe,CN=Users,DC=analytics,DC=example,DC=com
-userPrincipalName: joe@analytics.example.com
-memberof: CN=marketing,CN=Users,DC=example,DC=com
-```
+   dn:CN=alice,CN=Users,DC=engineering,DC=example,DC=com
+   userPrincipalName: alice@engineering.example.com
+   memberOf: CN=web,CN=Users,DC=example,DC=com
+   memberOf: CN=PrimaryApplication,CN=Users,DC=example,DC=com
 
-Group Objects +++++++++++++
+   dn:CN=sam,CN=Users,DC=dba,DC=example,DC=com
+   userPrincipalName: sam@dba.example.com
+   memberOf: CN=dba,CN=Users,DC=example,DC=com
+   memberOf: CN=PrimaryApplication,CN=Users,DC=example,DC=com
 
-```bash
-dn:CN=marketing,CN=Users,DC=example,DC=com
-member:CN=bob,CN=Users,DC=marketing,DC=example,DC=com
-member:CN=joe,CN=Users,DC=analytics,DC=example,DC=com
+   dn:CN=joe,CN=Users,DC=analytics,DC=example,DC=com
+   userPrincipalName: joe@analytics.example.com
+   memberof: CN=marketing,CN=Users,DC=example,DC=com
 
-dn:CN=engineering,CN=Users,DC=example,DC=com
-member:CN=web,CN=Users,DC=example,DC=com
-member:CN=dba,CN=users,DC=example,DC=com
+.. _kerb-auth-ldap-authz-groupObj:
 
-dn:CN=web,CN=Users,DC=example,DC=com
-member:CN=alice,CN=Users,DC=engineering,DC=example,DC=com
+### Group Objects
 
-dn:CN=dba,CN=Users,DC=example,DC=com
-member:CN=sam,CN=Users,DC=dba,DC=example,DC=com
+.. code-block:: bash
 
-dn:CN=PrimaryApplication,CN=Users,DC=example,DC=com
-member:CN=sam,CN=Users,DC=dba,DC=example,DC=com
-member:CN=alice,CN=Users,DC=engineering,DC=example,DC=com
-```
+   dn:CN=marketing,CN=Users,DC=example,DC=com
+   member:CN=bob,CN=Users,DC=marketing,DC=example,DC=com
+   member:CN=joe,CN=Users,DC=analytics,DC=example,DC=com
+
+   dn:CN=engineering,CN=Users,DC=example,DC=com
+   member:CN=web,CN=Users,DC=example,DC=com
+   member:CN=dba,CN=users,DC=example,DC=com
+
+   dn:CN=web,CN=Users,DC=example,DC=com
+   member:CN=alice,CN=Users,DC=engineering,DC=example,DC=com
+
+   dn:CN=dba,CN=Users,DC=example,DC=com
+   member:CN=sam,CN=Users,DC=dba,DC=example,DC=com
+
+   dn:CN=PrimaryApplication,CN=Users,DC=example,DC=com
+   member:CN=sam,CN=Users,DC=dba,DC=example,DC=com
+   member:CN=alice,CN=Users,DC=engineering,DC=example,DC=com
+
 
 ### Active Directory Credentials
 
-This tutorial uses a username and password for performing queries on the :abbr:`AD (Active Directory)` server. The credentials provided must have sufficient privileges on the AD server for supporting queries related to :setting:`security.ldap.userToDNMapping` or :setting:`security.ldap.authz.queryTemplate`.
+This tutorial uses a username and password for performing queries on the
+:abbr:`AD (Active Directory)` server. The credentials provided must have
+sufficient privileges on the AD server for supporting queries related to
+:setting:`security.ldap.userToDNMapping` or
+:setting:`security.ldap.authz.queryTemplate`.
 
 ### Replica Sets
 
-MongoDB LDAP authorization requires every :binary:`~bin.mongod` in the replica set to be on at least MongoDB 3.4.0 or later.
+MongoDB LDAP authorization requires *every* :binary:`~bin.mongod` in the replica
+set to be on at least MongoDB 3.4.0 or later.
 
 ### Sharded Clusters
 
-MongoDB LDAP authorization requires every :binary:`~bin.mongod` and :binary:`~bin.mongos` in the sharded cluster to be on at least MongoDB 3.4.0 or later.
+MongoDB LDAP authorization requires *every* :binary:`~bin.mongod` and
+:binary:`~bin.mongos` in the sharded cluster to be on at least MongoDB 3.4.0 or
+later.
 
 ## Procedure
 
-.. include:: /includes/steps/kerberos-auth-activedirectory-authz.rst
+**include:** /includes/steps/kerberos-auth-activedirectory-authz.rst
 
 This procedure produces the following configuration file:
 
-```yaml
-security:
-   authorization: "enabled"
-   ldap:
-      servers: activedirectory.example.net"
-      bind:
-         queryUser: "mongodbadmin@dba.example.com"
-         queryPassword: "secret123"
-      userToDNMapping:
-         '[
-            {
-               match: "(.+)"
-               ldapQuery: "DC=example,DC=com??sub?(userPrincipalName={0})"
-            }
-         ]'
-      authz:
-         queryTemplate: "DC=example,DC=com??sub?(&(objectClass=group)(member:1.2.840.113556.1.4.1941:={USER}))"
-setParameter:
-   authenticationMechanisms: "GSSAPI"
-```
+.. code-block:: yaml
 
-> **Important:** The given sample configuration requires modification to match your :abbr:`AD
-(Active Directory)` schema, directory structure, and configuration. You may
-also require additional :doc:`configuration file options
-</reference/configuration-options>` for your deployment.
+   security:
+      authorization: "enabled"
+      ldap:
+         servers: activedirectory.example.net"
+         bind:
+            queryUser: "mongodbadmin@dba.example.com"
+            queryPassword: "secret123"
+         userToDNMapping:
+            '[
+               {
+                  match: "(.+)"
+                  ldapQuery: "DC=example,DC=com??sub?(userPrincipalName={0})"
+               }
+            ]'
+         authz:
+            queryTemplate: "DC=example,DC=com??sub?(&(objectClass=group)(member:1.2.840.113556.1.4.1941:={USER}))"
+   setParameter:
+      authenticationMechanisms: "GSSAPI"
+
+**important:** The given sample configuration requires modification to match your :abbr:`AD
+   (Active Directory)` schema, directory structure, and configuration. You may
+   also require additional :doc:`configuration file options
+   </reference/configuration-options>` for your deployment.
 
 For more information on configuring roles and privileges, see:
 
-- `role-based access control <authorization>`
-- `privilege actions <security-user-actions>`
-- `collection level access control <collection-level-access>`
+- :ref:`role-based access control <authorization>`
+
+- :ref:`privilege actions <security-user-actions>`
+
+- :ref:`collection level access control <collection-level-access>`
+
 ## Testing and Verification
 
-.. include:: /includes/fact-mongokerberos.rst
+**include:** /includes/fact-mongokerberos.rst

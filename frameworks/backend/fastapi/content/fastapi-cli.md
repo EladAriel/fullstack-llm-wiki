@@ -4,12 +4,11 @@ framework: "FastAPI"
 source_repo: "https://github.com/fastapi/fastapi.git"
 source_branch: "master"
 source_path: "docs/en/docs/fastapi-cli.md"
-source_commit: "255b912928904e3ba5980425a54d6837c8bd1a1c"
-source_commit_short: "255b9129"
-source_commit_date: "2026-07-24T21:15:37Z"
-generated_at: "2026-07-25T11:50:10Z"
+source_commit: "49033471594ea5d99a80abdf1043231b7791ee49"
+source_commit_short: "4903347"
+source_commit_date: "2026-08-26T17:53:57+00:00"
+generated_at: "2026-08-29T09:38:49.701488Z"
 ---
-
 # FastAPI CLI { #fastapi-cli }
 
 **FastAPI <abbr title="command line interface">CLI</abbr>** is a command line program that you can use to serve your FastAPI app, manage your FastAPI project, and more.
@@ -130,6 +129,10 @@ Additionally, other tools might not be able to find it, for example the [VS Code
 Running `fastapi dev` initiates development mode.
 
 By default, **auto-reload** is enabled, automatically reloading the server when you make changes to your code. This is resource-intensive and could be less stable than when it's disabled. You should only use it for development. It also listens on the IP address `127.0.0.1`, which is the IP for your machine to communicate with itself alone (`localhost`).
+
+Before importing your app, `fastapi dev` sets the `FASTAPI_ENV` environment variable to `development`. If `FASTAPI_ENV` is already set, its existing value is preserved. This lets app startup code choose development-friendly behavior while allowing you to provide an app-specific environment such as `staging`.
+
+The conventional `FASTAPI_ENV` values are `development` and `production`. `fastapi run` currently leaves `FASTAPI_ENV` unchanged, so set it explicitly if your app needs to detect production mode.
 
 ## `fastapi run` { #fastapi-run }
 

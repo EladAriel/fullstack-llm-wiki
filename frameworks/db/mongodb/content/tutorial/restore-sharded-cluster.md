@@ -1,177 +1,245 @@
 ---
 type: "Framework Learn Page"
-framework: "mongodb"
+framework: "MongoDB"
 source_repo: "https://github.com/mongodb/docs.git"
 source_branch: "main"
 source_path: "content/manual/manual/source/tutorial/restore-sharded-cluster.txt"
-source_commit: "ab9db26ed3d11618cdb61516d8180337d8e3f679"
-source_commit_short: "ab9db26e"
-source_commit_date: "2026-07-24T16:22:46-06:00"
-generated_at: "2026-07-25T11:51:15Z"
+source_commit: "b9f2bc487a2878b65e3c1f80024bebab76954f27"
+source_commit_short: "b9f2bc48"
+source_commit_date: "2026-08-28T17:09:45-05:00"
+generated_at: "2026-08-29T09:39:19.565713Z"
 ---
+.. _restore-sharded-cluster:
 
-======================================
+# Restore a Self-Managed Sharded Cluster from Snapshots
 
-# Restore a Self-Managed Sharded Cluster
+.. default-domain:: mongodb
 
-This procedure restores a sharded cluster from an existing backup snapshot, such as `Logical Volume Manager (LVM) snapshots <backup-sharded-lvm>`. The source and target sharded cluster must have the same number of shards. For information on creating LVM snapshots for all components of a sharded cluster, see `backup-sharded-lvm`.
+**meta:** :keywords: on-prem
+   :description: Restore a self-managed sharded cluster from LVM snapshot backups by stopping each mongod process, restoring data directories, and restarting each cluster component.
 
-> **Note:** .. include:: /includes/extracts/sharded-clusters-backup-restore-mongodump-mongorestore-restriction.rst
+**contents:** On this page
+   :local:
+   :backlinks: none
+   :depth: 1
+   :class: singlecol
+
+This procedure restores a sharded cluster from an existing backup
+snapshot, such as :ref:`Logical Volume Manager (LVM) snapshots <backup-sharded-lvm>`. The
+source and target sharded cluster must have the same number of shards.
+For information on creating LVM snapshots for all components of a
+sharded cluster, see :ref:`backup-sharded-lvm`.
+
+**note:** .. include:: /includes/extracts/sharded-clusters-backup-restore-mongodump-mongorestore-restriction.rst
 
 ## Considerations
 
-.. include:: /includes/fact-aes256-backups.rst
+**include:** /includes/fact-aes256-backups.rst
 
 ## Before You Begin
 
-.. include:: /includes/dSO-role-intro.rst
+**include:** /includes/dSO-role-intro.rst
 
-.. include:: /includes/dSO-warning.rst
+**include:** /includes/dSO-warning.rst
 
 ## A. (Optional) Review Replica Set Configurations
 
-This procedure initiates a new replica set for the Config Server Replica Set (CSRS) and each shard replica set using the default configuration. To use a different replica set configuration for your restored CSRS and shards, you must reconfigure the replica set(s).
+This procedure initiates a new replica set for the 
+Config Server Replica Set (CSRS) and each shard replica set using
+the default configuration. To use a different replica set
+configuration for your restored CSRS and shards, you must
+reconfigure the replica set(s).
 
-If your source cluster is running correctly and is accessible, connect a :binary:`mongo <bin.mongo>` shell to the primary replica set member in each replica set. Next, run :method:`rs.conf()` to view the replica configuration document.
+If your source cluster is running correctly and is accessible, connect a
+:binary:`mongo <bin.mongo>` shell to the primary replica set member
+in each replica set. Next, run :method:`rs.conf()` to view the
+replica configuration document.
 
-If you cannot access one or more components of the source sharded cluster, please reference any existing internal documentation to reconstruct the configuration requirements for each shard replica set and the config server replica set.
+If you cannot access one or more components of the source sharded 
+cluster, please reference any existing internal documentation to 
+reconstruct the configuration requirements for each shard replica set 
+and the config server replica set.
 
 ## B. Prepare the Target Host for Restoration
 
-Storage Space Requirements Ensure the target host hardware has sufficient open storage space for the restored data. If the target host contains existing sharded cluster data that you want to keep, ensure that you have enough storage space for both the existing data and the restored data.
+Storage Space Requirements
+  Ensure the target host hardware has sufficient open storage space
+  for the restored data. If the target host contains existing sharded
+  cluster data that you want to keep, ensure that you have enough 
+  storage space for both the existing data and the restored data.
 
-LVM Requirements For LVM snapshots, you must have at least one LVM managed volume group and a logical volume with enough free space for the extracted snapshot data.
+LVM Requirements
+  For LVM snapshots, you must have at least one LVM managed
+  volume group and a logical volume with enough free space for the
+  extracted snapshot data.
 
-MongoDB Version Requirements Ensure the target host and source host have the same MongoDB Server version. To check the version of MongoDB available on a host machine, run `mongod --version` from the terminal or shell.
+MongoDB Version Requirements
+  Ensure the target host and source host have the same MongoDB Server
+  version. To check the version of MongoDB available on a host machine,
+  run ``mongod --version`` from the terminal or shell.
 
-For complete documentation on installation, see `/installation`.
+  For complete documentation on installation, see
+  :doc:`/installation`.
 
-Shut Down Running MongoDB Processes If restoring to an existing cluster, shut down the :binary:`mongod <bin.mongod>` or :binary:`mongos <bin.mongos>` process on the target host.
+Shut Down Running MongoDB Processes
+  If restoring to an existing cluster, shut down the 
+  :binary:`mongod <bin.mongod>` or :binary:`mongos <bin.mongos>` 
+  process on the target host.
 
-For hosts running :binary:`mongos <bin.mongos>`, connect a :binary:`mongo <bin.mongo>` shell to the `mongos` and run :method:`db.shutdownServer()` from the `admin` database:
+  For hosts running :binary:`mongos <bin.mongos>`, connect a 
+  :binary:`mongo <bin.mongo>` shell to the ``mongos`` and
+  run :method:`db.shutdownServer()` from the ``admin`` database:
 
-```javascript
-  use admin
-  db.shutdownServer()
+  .. code-block:: javascript
 
-For hosts running a :binary:`mongod <bin.mongod>`, connect a 
-:binary:`mongo <bin.mongo>` shell to the ``mongod`` and
-run :method:`db.hello()`:
+     use admin
+     db.shutdownServer()
 
-* If :data:`~hello.isWritablePrimary` is false, the ``mongod`` is a
- :term:`secondary` member of a replica set. You
- can shut it down by running :method:`db.shutdownServer()` from
- the ``admin`` database.
+  For hosts running a :binary:`mongod <bin.mongod>`, connect a 
+  :binary:`mongo <bin.mongo>` shell to the ``mongod`` and
+  run :method:`db.hello()`:
 
-* If :data:`~hello.isWritablePrimary` is true, the ``mongod`` is the
- :term:`primary` member of a replica set. Shut down
- the secondary members of the replica set *first*. Use
- :method:`rs.status()` to identify the other members of
- the replica set.
+  * If :data:`~hello.isWritablePrimary` is false, the ``mongod`` is a
+    :term:`secondary` member of a replica set. You
+    can shut it down by running :method:`db.shutdownServer()` from
+    the ``admin`` database.
 
- The primary automatically steps down after it detects a
- majority of members are offline. After it steps down
- (:method:`db.hello` returns
- :data:`isWritablePrimary: false <hello.isWritablePrimary>`), you can
- safely shut down the ``mongod``.
-```
+  * If :data:`~hello.isWritablePrimary` is true, the ``mongod`` is the
+    :term:`primary` member of a replica set. Shut down
+    the secondary members of the replica set *first*. Use
+    :method:`rs.status()` to identify the other members of
+    the replica set.
 
-Prepare Data Directory Create a directory on the target host for the restored database files. Ensure that the user that runs the :binary:`mongod <bin.mongod>` has read, write, and execute permissions for all files and subfolders in that directory:
+    The primary automatically steps down after it detects a
+    majority of members are offline. After it steps down
+    (:method:`db.hello` returns
+    :data:`isWritablePrimary: false <hello.isWritablePrimary>`), you can
+    safely shut down the ``mongod``.
 
-```bash
-  sudo mkdir /path/to/mongodb
-  sudo chown -R mongodb:mongodb /path/to/mongodb
-  sudo chmod -R 770 /path/to/mongodb
+Prepare Data Directory
+  Create a directory on the target host for the restored database
+  files. Ensure that the user that runs the 
+  :binary:`mongod <bin.mongod>` has read, write, and execute permissions
+  for all files and subfolders in that directory:
 
-Substitute ``/path/to/mongodb`` with the path to the data directory
-you created. On :abbr:`RHEL (Red Hat Enterprise Linux)` / CentOS,
-Amazon Linux, and SUSE, the default username is ``mongod``.
-```
+  .. code-block:: bash
 
-Prepare Log Directory Create a directory on the target host for the :binary:`mongod <bin.mongod>` log files. Ensure that the user that runs the :binary:`mongod <bin.mongod>` has read, write, and execute permissions for all files and subfolders in that directory:
+     sudo mkdir /path/to/mongodb
+     sudo chown -R mongodb:mongodb /path/to/mongodb
+     sudo chmod -R 770 /path/to/mongodb
 
-```bash
-  sudo mkdir /path/to/mongodb/logs
-  sudo chown -R mongodb:mongodb /path/to/mongodb/logs
-  sudo chmod -R 770 /path/to/mongodb/logs
+  Substitute ``/path/to/mongodb`` with the path to the data directory
+  you created. On :abbr:`RHEL (Red Hat Enterprise Linux)` / CentOS,
+  Amazon Linux, and SUSE, the default username is ``mongod``.
 
-Substitute ``/path/to/mongodb/logs`` with the path to the log 
-directory you created. On :abbr:`RHEL (Red Hat Enterprise Linux)` /
-CentOS, Amazon Linux, and SUSE, the default username is ``mongod``.
-```
+Prepare Log Directory
+  Create a directory on the target host for the 
+  :binary:`mongod <bin.mongod>` log files. Ensure that the user that 
+  runs the :binary:`mongod <bin.mongod>` has read, write, and execute 
+  permissions for all files and subfolders in that directory:
 
-Create Configuration File This procedure assumes starting a :binary:`mongod <bin.mongod>` with a `configuration file <configuration-file>`.
+  .. code-block:: bash
 
-Create the configuration file in your preferred location. Ensure that the user that runs the :binary:`mongod <bin.mongod>` has read and write permissions on the configuration file:
+     sudo mkdir /path/to/mongodb/logs
+     sudo chown -R mongodb:mongodb /path/to/mongodb/logs
+     sudo chmod -R 770 /path/to/mongodb/logs
 
-```bash
-  sudo touch /path/to/mongod.conf
-  sudo chown mongodb:mongodb /path/to/mongodb/mongod.conf
-  sudo chmod 644 /path/to/mongodb/mongod.conf
+  Substitute ``/path/to/mongodb/logs`` with the path to the log 
+  directory you created. On :abbr:`RHEL (Red Hat Enterprise Linux)` /
+  CentOS, Amazon Linux, and SUSE, the default username is ``mongod``.
 
-On :abbr:`RHEL (Red Hat Enterprise Linux)` / CentOS, Amazon Linux,
-and SUSE, the default username is ``mongod``.
+Create Configuration File
+  This procedure assumes starting a :binary:`mongod <bin.mongod>`
+  with a :ref:`configuration file <configuration-file>`. 
 
-Open the configuration file in your preferred text editor and
-modify at it as required by your deployment. Alternatively,
-if you have access to the original configuration file for the
-:binary:`mongod <bin.mongod>`, copy it to your preferred location
-on the target host.
+  Create the configuration file in your preferred location. Ensure that
+  the user that runs the :binary:`mongod <bin.mongod>` has read and
+  write permissions on the configuration file:
 
-.. important::
+  .. code-block:: bash
 
-  Validate that your configuration file includes the following
-  settings:
+     sudo touch /path/to/mongod.conf
+     sudo chown mongodb:mongodb /path/to/mongodb/mongod.conf
+     sudo chmod 644 /path/to/mongodb/mongod.conf
 
-  - :setting:`storage.dbPath` must be set to the path to your
-    preferred data directory.
+  On :abbr:`RHEL (Red Hat Enterprise Linux)` / CentOS, Amazon Linux,
+  and SUSE, the default username is ``mongod``.
 
-  - :setting:`systemLog.path` must be set to the path to your
-    preferred log directory
+  Open the configuration file in your preferred text editor and
+  modify at it as required by your deployment. Alternatively,
+  if you have access to the original configuration file for the
+  :binary:`mongod <bin.mongod>`, copy it to your preferred location
+  on the target host.
 
-  - :setting:`net.bindIp` must include the IP address of the
-    host machine.
+  .. important::
 
-  - :setting:`replication.replSetName` has the same value across
-    each member in any given replica set.
+     Validate that your configuration file includes the following
+     settings:
 
-  - :setting:`sharding.clusterRole` has the same value across each
-    member in any given replica set. 
+     - :setting:`storage.dbPath` must be set to the path to your
+       preferred data directory.
 
-  - You must also specify the same :ref:`startup options
-    <mongod-options>` for your new deployment that were specified in
-    the snapshot.
-```
+     - :setting:`systemLog.path` must be set to the path to your
+       preferred log directory
+
+     - :setting:`net.bindIp` must include the IP address of the
+       host machine.
+
+     - :setting:`replication.replSetName` has the same value across
+       each member in any given replica set.
+
+     - :setting:`sharding.clusterRole` has the same value across each
+       member in any given replica set. 
+
+     - You must also specify the same :ref:`startup options
+       <mongod-options>` for your new deployment that were specified in
+       the snapshot.
 
 ## C. Restore Config Server Replica Set
 
-.. include:: /includes/steps/restore-sharded-config-primary-from-backup.rst
+**include:** /includes/steps/restore-sharded-config-primary-from-backup.rst
 
 ## D. Restore Each Shard Replica Set
 
-.. include:: /includes/steps/restore-sharded-shard-primary-from-backup.rst
+**include:** /includes/steps/restore-sharded-shard-primary-from-backup.rst
 
 ## E. Restart Each :binary:`mongos <bin.mongos>`
 
-Restart each :binary:`mongos <bin.mongos>` in the cluster.
+Restart each :binary:`mongos <bin.mongos>` in the cluster. 
 
-```bash
-mongos --config /path/to/config/mongos.conf
-```
+.. code-block:: bash
+
+   mongos --config /path/to/config/mongos.conf
 
 Include all other command line options as required by your deployment.
 
-If the CSRS replica set name or any member hostname changed, update the :binary:`mongos <bin.mongos>` configuration file setting :setting:`sharding.configDB` with updated configuration server connection string:
+If the CSRS replica set name or any member hostname changed, update the 
+:binary:`mongos <bin.mongos>` configuration file setting 
+:setting:`sharding.configDB` with updated configuration server 
+connection string:
 
-```yaml
-sharding:
-  configDB: "myNewCSRSName/config1.example.net:27019,config2.example.net:27019,config3.example.net:27019"
-```
+.. code-block:: yaml
+
+   sharding:
+     configDB: "myNewCSRSName/config1.example.net:27019,config2.example.net:27019,config3.example.net:27019"
+
 
 ## F. Validate Cluster Accessibility
 
-Connect a :binary:`mongo <bin.mongo>` shell to one of the :binary:`mongos <bin.mongos>` processes for the cluster. Use :method:`sh.status()` to check the overall cluster status. If :method:`sh.status()` indicates that the balancer is not running, use :method:`sh.startBalancer()` to restart the balancer. [#autosplit]_
+Connect a :binary:`mongo <bin.mongo>` shell to one of the 
+:binary:`mongos <bin.mongos>` processes for the cluster. Use
+:method:`sh.status()` to check the overall cluster status. If 
+:method:`sh.status()` indicates that the balancer is not running, use 
+:method:`sh.startBalancer()` to restart the balancer. [#autosplit]_
 
-To confirm that all shards are accessible and communicating, insert test data into a temporary sharded collection. Confirm that data is being split and migrated between each shard in your cluster. You can connect a :binary:`mongo <bin.mongo>` shell to each shard primary and use :method:`db.collection.find()` to validate that the data was sharded as expected.
 
-.. include:: /includes/extracts/4.2-changes-start-balancer-autosplit.rst
+To confirm that all shards are accessible and communicating, insert
+test data into a temporary sharded collection. Confirm that data is
+being split and migrated between each shard in your cluster. You can
+connect a :binary:`mongo <bin.mongo>` shell to each shard primary and
+use :method:`db.collection.find()` to validate that the data was
+sharded as expected.
+
+.. [#autosplit]
+
+   .. include:: /includes/extracts/4.2-changes-start-balancer-autosplit.rst

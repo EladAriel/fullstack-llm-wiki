@@ -1,7 +1,7 @@
 ---
 type: "Framework Learn Directory Index"
 framework: "Sentry JavaScript (React)"
-generated_at: "2026-07-25T19:08:17.701493Z"
+generated_at: "2026-08-29T09:40:04.523388Z"
 ---
 # Content
 
@@ -17,3 +17,7 @@ This directory contains Sentry JavaScript (React) learning pages related to cont
 
 ## Pages in This Directory
 
+
+## Subdirectories
+
+- [Features](features/index.md)

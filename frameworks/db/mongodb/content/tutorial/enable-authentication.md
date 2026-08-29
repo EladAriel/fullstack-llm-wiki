@@ -1,54 +1,84 @@
 ---
 type: "Framework Learn Page"
-framework: "mongodb"
+framework: "MongoDB"
 source_repo: "https://github.com/mongodb/docs.git"
 source_branch: "main"
 source_path: "content/manual/manual/source/tutorial/enable-authentication.txt"
-source_commit: "ab9db26ed3d11618cdb61516d8180337d8e3f679"
-source_commit_short: "ab9db26e"
-source_commit_date: "2026-07-24T16:22:46-06:00"
-generated_at: "2026-07-25T11:51:15Z"
+source_commit: "b9f2bc487a2878b65e3c1f80024bebab76954f27"
+source_commit_short: "b9f2bc48"
+source_commit_date: "2026-08-28T17:09:45-05:00"
+generated_at: "2026-08-29T09:39:19.574720Z"
 ---
-
-=================================================
+.. _enable-access-control:
 
 # Enable Access Control on Self-Managed Deployments
 
-.. include:: /includes/LDAP-deprecated.rst
+.. default-domain:: mongodb
 
-Enabling access control on a MongoDB deployment enforces authentication. With access control enabled, users must authenticate and can only perform actions permitted by their assigned roles.
+**meta:** :description: Enable authentication on MongoDB deployments for secure user access control.
+   :keywords: on-prem
+                 
+**contents:** On this page
+   :local:
+   :backlinks: none
+   :depth: 2
+   :class: singlecol
 
-> **Note:** You can't disable access control in {+atlas+}.
+.. dismissible-skills-card::
+   :skill: Secure MongoDB Self-Managed: AuthN and AuthZ
+   :url: https://learn.mongodb.com/skills/?openTab=security
+
+**include:** /includes/LDAP-deprecated.rst
+   
+Enabling access control on a MongoDB deployment enforces authentication.
+With access control enabled, users must authenticate and can only
+perform actions permitted by their assigned roles.
+
+.. |page-topic| replace:: :atlas:`configure authentication in the UI </atlas-ui-authentication/>`
+
+.. cta-banner::
+   :url: https://www.mongodb.com/docs/atlas/atlas-ui-authentication/
+   :icon: Cloud
+
+   .. include:: /includes/fact-atlas-compatible.rst
+
+**note:** You can't disable access control in {+atlas+}.
 
 ## Access Control Resources
 
-To enable access control for a standalone instance, see the following resources:
+To enable access control for a standalone instance, see the
+following resources:
 
-- `/tutorial/configure-scram-client-authentication`
-- `/tutorial/configure-x509-client-authentication`
-- `/tutorial/control-access-to-mongodb-with-kerberos-authentication`
-- `/tutorial/control-access-to-mongodb-windows-with-kerberos-authentication`
-- `/tutorial/kerberos-auth-activedirectory-authz`
-- `/tutorial/configure-ldap-sasl-activedirectory`
-- `/tutorial/configure-ldap-sasl-openldap`
-- `/tutorial/authenticate-nativeldap-activedirectory`
-- `/core/oidc/security-oidc`
-To enable access control for a `replica set </replication>` or a `sharded cluster <sharding-sharded-cluster>`, see the following resources:
+- :doc:`/tutorial/configure-scram-client-authentication`
+- :doc:`/tutorial/configure-x509-client-authentication`
+- :doc:`/tutorial/control-access-to-mongodb-with-kerberos-authentication`
+- :doc:`/tutorial/control-access-to-mongodb-windows-with-kerberos-authentication`
+- :doc:`/tutorial/kerberos-auth-activedirectory-authz`
+- :doc:`/tutorial/configure-ldap-sasl-activedirectory`
+- :doc:`/tutorial/configure-ldap-sasl-openldap`
+- :doc:`/tutorial/authenticate-nativeldap-activedirectory`
+- :doc:`/core/oidc/security-oidc`
 
-- `/tutorial/deploy-replica-set-with-keyfile-access-control`
-- `/tutorial/enforce-keyfile-access-control-in-existing-replica-set`
-- `/tutorial/enforce-keyfile-access-control-in-existing-replica-set-without-downtime`
-- `/tutorial/deploy-sharded-cluster-with-keyfile-access-control`
-- `/tutorial/enforce-keyfile-access-control-in-existing-sharded-cluster`
-- `/tutorial/enforce-keyfile-access-control-in-existing-sharded-cluster-no-downtime`
-- `/tutorial/control-access-to-mongodb-with-kerberos-authentication`
-- `/tutorial/control-access-to-mongodb-windows-with-kerberos-authentication`
-- `/tutorial/kerberos-auth-activedirectory-authz`
-- `/tutorial/configure-ldap-sasl-activedirectory`
-- `/tutorial/configure-ldap-sasl-openldap`
-- `/tutorial/authenticate-nativeldap-activedirectory`
+To enable access control for a :doc:`replica set
+</replication>` or a :ref:`sharded cluster
+<sharding-sharded-cluster>`, see the following resources:
+
+- :doc:`/tutorial/deploy-replica-set-with-keyfile-access-control`
+- :doc:`/tutorial/enforce-keyfile-access-control-in-existing-replica-set`
+- :doc:`/tutorial/enforce-keyfile-access-control-in-existing-replica-set-without-downtime`
+- :doc:`/tutorial/deploy-sharded-cluster-with-keyfile-access-control`
+- :doc:`/tutorial/enforce-keyfile-access-control-in-existing-sharded-cluster`
+- :doc:`/tutorial/enforce-keyfile-access-control-in-existing-sharded-cluster-no-downtime`
+- :doc:`/tutorial/control-access-to-mongodb-with-kerberos-authentication`
+- :doc:`/tutorial/control-access-to-mongodb-windows-with-kerberos-authentication`
+- :doc:`/tutorial/kerberos-auth-activedirectory-authz`
+- :doc:`/tutorial/configure-ldap-sasl-activedirectory`
+- :doc:`/tutorial/configure-ldap-sasl-openldap`
+- :doc:`/tutorial/authenticate-nativeldap-activedirectory`
+
 ## Next Steps
 
-To create additional users, see `/tutorial/create-users`.
+To create additional users, see :doc:`/tutorial/create-users`.
 
-To manage users, assign roles, and create custom roles, see `/tutorial/manage-users-and-roles`.
+To manage users, assign roles, and create custom roles, see
+:doc:`/tutorial/manage-users-and-roles`.

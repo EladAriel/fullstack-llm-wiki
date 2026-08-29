@@ -1,7 +1,7 @@
 ---
 type: "Framework Learn Directory Index"
 framework: "Grafana"
-generated_at: "2026-07-25T19:08:09.120556Z"
+generated_at: "2026-08-29T09:39:37.587303Z"
 ---
 # Grafana-Advisor
 
@@ -18,3 +18,8 @@ This directory contains Grafana learning pages related to grafana-advisor.
 ## Pages in This Directory
 
 - [_Index](_index.md)
+
+## Subdirectories
+
+- [Advisor Cli](advisor-cli/index.md)
+- [Advisor Create Alert](advisor-create-alert/index.md)

@@ -1,125 +1,184 @@
 ---
 type: "Framework Learn Page"
-framework: "mongodb"
+framework: "MongoDB"
 source_repo: "https://github.com/mongodb/docs.git"
 source_branch: "main"
 source_path: "content/manual/manual/source/reference/operator/aggregation/concatArrays.txt"
-source_commit: "ab9db26ed3d11618cdb61516d8180337d8e3f679"
-source_commit_short: "ab9db26e"
-source_commit_date: "2026-07-24T16:22:46-06:00"
-generated_at: "2026-07-25T11:51:15Z"
+source_commit: "b9f2bc487a2878b65e3c1f80024bebab76954f27"
+source_commit_short: "b9f2bc48"
+source_commit_date: "2026-08-28T17:09:45-05:00"
+generated_at: "2026-08-29T09:39:20.209156Z"
 ---
-
-===================================
-
 # $concatArrays (expression operator)
+
+**meta:** :description: Concatenate arrays using `$concatArrays` in MongoDB aggregation, returning `null` if any argument is `null` or missing.
+
+.. default-domain:: mongodb
+
+**contents:** On this page
+   :local:
+   :backlinks: none
+   :depth: 1
+   :class: singlecol
 
 ## Definition
 
-Returns a single array that concatenates two or more arrays. `$concatArrays` can be used as an aggregation accumulator or an array operator.
+Returns a single array that concatenates two or more arrays. 
+``$concatArrays`` can be used as an aggregation accumulator or an 
+array operator.
 
 ## Aggregation Accumulator
+**group:** $concatArrays
 
-`$concatArrays` is available as an accumulator in these stages:
+``$concatArrays`` is available as an accumulator in these stages:
 
 - :pipeline:`$bucket`
 - :pipeline:`$bucketAuto`
 - :pipeline:`$group`
 - :pipeline:`$setWindowFields`
+
+.. _concatArrays-syntax:
+
 ### Syntax
 
-When used as an aggregation accumulator, `$concatArrays` has the following syntax:
+When used as an aggregation accumulator, ``$concatArrays`` has the 
+following syntax:
 
-```javascript
-{ $concatArrays: "<array field>" }
-```
+.. code-block:: javascript
+
+   { $concatArrays: "<array field>" }
+
+.. _concatArrays-behavior:
 
 ### Behavior
 
-.. include:: /includes/fact-agg-accumulator-null-missing-behavior.rst
+**include:** /includes/fact-agg-accumulator-null-missing-behavior.rst
 
 ### Example
 
-.. include:: /includes/concatArrays-setUnion-accum-example-setup.rst
+**include:** /includes/concatArrays-setUnion-accum-example-setup.rst
 
-This example shows how you can use `$concatArrays` as an accumulator. This example combines the elements of all `items` arrays when grouping on the `location` field:
+This example shows how you can use ``$concatArrays`` as an 
+accumulator. This example combines the elements of all ``items`` arrays 
+when grouping on the ``location`` field:
 
-```javascript
-db.sales.aggregate( [ 
-   {
-      $group: {
-         _id: "$location",
-         array: { "$concatArrays": "$items" }
+.. code-block:: javascript
+
+   db.sales.aggregate( [ 
+      {
+         $group: {
+            _id: "$location",
+            array: { "$concatArrays": "$items" }
+         }
       }
-   }
-] )
-```
+   ] )
 
 The operation returns the following result:
 
-```javascript
-[
-   {
-      "_id": "NYC",
-      "array": [
-          "laptop", "tablet", "phone", "tablet", "desktop",
-          { "accessories": [ "mouse", "keyboard"] }
-      ]
-   }
-]
-```
+.. code-block:: javascript
+   :copyable: false
+
+   [
+      {
+         "_id": "NYC",
+         "array": [
+             "laptop", "tablet", "phone", "tablet", "desktop",
+             { "accessories": [ "mouse", "keyboard"] }
+         ]
+      }
+   ]
 
 ## Array Operator
 
+**expression:** $concatArrays
+
 ### Syntax
 
-When used as an array operator, `$concatArrays` has the following syntax:
+When used as an array operator, ``$concatArrays`` has the following
+syntax:
 
-```javascript
-{ $concatArrays: [ <array1>, <array2>, ... ] }
-```
+.. code-block:: javascript
+
+   { $concatArrays: [ <array1>, <array2>, ... ] }
 
 ### Behavior
 
-.. include:: /includes/fact-array-expr.rst
+**include:** /includes/fact-array-expr.rst
 
-If any argument resolves to a value of `null` or refers to a field that is missing, :expression:`$concatArrays` returns `null`.
+If any argument resolves to a value of ``null`` or refers to a field
+that is missing, :expression:`$concatArrays` returns ``null``.
+
+.. list-table::
+   :header-rows: 1
+   :widths: 60 40
+   :class: border-table
+
+   * - Example
+     - Results
+
+   * - .. code-block:: javascript
+          :copyable: false
+
+          { $concatArrays: [ 
+             [ "hello", " "], [ "world" ]
+          ] }
+
+     - .. code-block:: javascript
+          :copyable: false
+
+          [ "hello", " ", "world" ]
+
+   * - .. code-block:: javascript
+          :copyable: false
+
+          { $concatArrays: [ 
+             [ "hello", " "], 
+             [ [ "world" ], "again"] 
+          ] }
+
+     - .. code-block:: javascript
+          :copyable: false
+
+          [ "hello", " ", [ "world" ], "again" ]
 
 ### Example
 
-Create a collection named `warehouses` with the following documents:
+Create a collection named ``warehouses`` with the following documents:
 
-```javascript
-db.warehouses.insertMany( [
-   { _id : 1, instock: [ "chocolate" ], ordered: [ "butter", "apples" ] },
-   { _id : 2, instock: [ "apples", "pudding", "pie" ] },
-   { _id : 3, instock: [ "pears", "pecans" ], ordered: [ "cherries" ] },
-   { _id : 4, instock: [ "ice cream" ], ordered: [ ] }
-] )
-```
+.. code-block:: javascript
 
-The following example concatenates the `instock` and the `ordered` arrays:
+   db.warehouses.insertMany( [
+      { _id : 1, instock: [ "chocolate" ], ordered: [ "butter", "apples" ] },
+      { _id : 2, instock: [ "apples", "pudding", "pie" ] },
+      { _id : 3, instock: [ "pears", "pecans" ], ordered: [ "cherries" ] },
+      { _id : 4, instock: [ "ice cream" ], ordered: [ ] }
+   ] )
 
-```javascript
-db.warehouses.aggregate( [
-   { $project: { items: { $concatArrays: [ "$instock", "$ordered" ] } } }
-] )
-```
+The following example concatenates the ``instock`` and the ``ordered``
+arrays:
+
+.. code-block:: javascript
+
+   db.warehouses.aggregate( [
+      { $project: { items: { $concatArrays: [ "$instock", "$ordered" ] } } }
+   ] )
 
 The operation returns the following results:
 
-```javascript
-[
-   { _id : 1, items : [ "chocolate", "butter", "apples" ] },
-   { _id : 2, items : null },
-   { _id : 3, items : [ "pears", "pecans", "cherries" ] },
-   { _id : 4, items : [ "ice cream" ] }
-]
-```
+.. code-block:: javascript
+   :copyable: false
+   
+   [
+      { _id : 1, items : [ "chocolate", "butter", "apples" ] },
+      { _id : 2, items : null },
+      { _id : 3, items : [ "pears", "pecans", "cherries" ] },
+      { _id : 4, items : [ "ice cream" ] }
+   ]
 
 ## Limitations
 
-`$concatArrays` only supports arrays and expressions that resolve to an array.
+``$concatArrays`` only supports arrays and expressions that resolve to 
+an array.
 
 ## Learn More
 

@@ -1,73 +1,112 @@
 ---
 type: "Framework Learn Page"
-framework: "mongodb"
+framework: "MongoDB"
 source_repo: "https://github.com/mongodb/docs.git"
 source_branch: "main"
 source_path: "content/manual/manual/source/core/auditing.txt"
-source_commit: "ab9db26ed3d11618cdb61516d8180337d8e3f679"
-source_commit_short: "ab9db26e"
-source_commit_date: "2026-07-24T16:22:46-06:00"
-generated_at: "2026-07-25T11:51:15Z"
+source_commit: "b9f2bc487a2878b65e3c1f80024bebab76954f27"
+source_commit_short: "b9f2bc48"
+source_commit_date: "2026-08-28T17:09:45-05:00"
+generated_at: "2026-08-29T09:39:19.545619Z"
 ---
-
-========
+.. _auditing:
 
 # Auditing
 
-> **Note:** {+atlas+} supports auditing for `M10` and larger clusters.
-To learn more, see `<set-up-database-auditing>` in the {+atlas+}
-documentation.
+.. default-domain:: mongodb
 
-MongoDB Enterprise includes an auditing facility for :binary:`~bin.mongod` and :binary:`~bin.mongos` instances. The facility allows administrators and users to track system activity for deployments with multiple users and applications.
+**meta:** :keywords: on-prem
+   :description: Enable and configure auditing in MongoDB Enterprise to track system activity, with options for output destinations and event filtering.
+
+**contents:** On this page
+   :local:
+   :backlinks: none
+   :depth: 1
+   :class: singlecol
+
+**note:** Auditing in {+atlas+}
+
+   {+atlas+} supports auditing for ``M10`` and larger clusters.
+   To learn more, see :ref:`<set-up-database-auditing>` in the {+atlas+} 
+   documentation.
+
+MongoDB Enterprise includes an auditing facility for
+:binary:`~bin.mongod` and :binary:`~bin.mongos` instances. The
+facility allows administrators and users to track system
+activity for deployments with multiple users and applications.
 
 ## Enable and Configure Audit Output
 
-The auditing facility can write audit events to the console, the `syslog`, a JSON file, or a BSON file. To enable auditing in MongoDB Enterprise, set an audit output destination with :option:`--auditDestination <mongod --auditDestination>`. For details, see `/tutorial/configure-auditing`.
+The auditing facility can write audit events to the console, the
+:term:`syslog`, a JSON file, or a BSON file. To enable auditing in
+MongoDB Enterprise, set an audit output destination with
+:option:`--auditDestination <mongod --auditDestination>`. For details,
+see :doc:`/tutorial/configure-auditing`.
 
-For information on the audit log messages, see `/reference/audit-message`.
+For information on the audit log messages, see :doc:`/reference/audit-message`.
+
+.. _auditing-audit-events-and-filter:
 
 ## Audit Events and Filter
 
-Once enabled, the auditing system can record the following operations [#transactions]_:
+Once enabled, the auditing system can record the following operations
+[#transactions]_:
 
 - schema (DDL),
 - replica set and sharded cluster,
 - authentication and authorization, and
-- CRUD operations (requires :parameter:`auditAuthorizationSuccess` set to `true`).
-> **Note:** Starting in MongoDB 5.0, `secondaries <secondary>` do not log
-DDL audit events for replicated changes. DDL audit events are still
-logged for DDL operations that modify the :ref:`local database
-<replica-set-local-database>` and the :data:`system.profile
-<<database>.system.profile>` collection.
+- CRUD operations (requires :parameter:`auditAuthorizationSuccess` set to ``true``).
 
-For details on audited actions, see `audit-message-format`.
+**note:** Starting in MongoDB 5.0, :term:`secondaries <secondary>` do not log
+   DDL audit events for replicated changes. DDL audit events are still
+   logged for DDL operations that modify the :ref:`local database
+   <replica-set-local-database>` and the :data:`system.profile
+   <<database>.system.profile>` collection.
 
-Use `filters <audit-filter>` to restrict captured events. See `Configure Audit Filters <audit-filter>` for details.
+For details on audited actions, see :ref:`audit-message-format`.
 
-Operations in an aborted transaction still generate audit events. However, there is no audit event that indicates that the transaction aborted.
+Use :ref:`filters <audit-filter>` to restrict captured events.
+See :ref:`Configure Audit Filters <audit-filter>` for details.
+
+.. [#transactions]
+
+   Operations in an aborted transaction still generate audit events.
+   However, there is no audit event that indicates that the transaction
+   aborted.
 
 ## Audit Guarantee
 
-The auditing system writes every audit event [#filter]_ to an in-memory buffer. MongoDB writes this buffer to disk periodically.
+The auditing system writes every audit event [#filter]_ to an
+in-memory buffer. MongoDB writes this buffer to disk periodically.
 
-Events from a single connection are ordered: if MongoDB writes one event to disk, it has written all prior events for that connection.
+Events from a single connection are ordered: if MongoDB writes
+one event to disk, it has written all prior events for that
+connection.
 
-If an audit event corresponds to an operation that affects the durable state of the database, such as a modification to data, MongoDB writes the audit event to disk before writing to the `journal` for that entry. Before adding an operation to the journal, MongoDB writes all audit events on that connection, up to and including the entry for that operation.
+If an audit event corresponds to an operation that affects the
+durable state of the database, such as a modification to data,
+MongoDB writes the audit event to disk *before* writing to the
+:term:`journal` for that entry. Before adding an operation to
+the journal, MongoDB writes all audit events on that connection,
+up to and including the entry for that operation.
 
-> **Warning:** MongoDB may lose events **if** the server terminates before it
-commits the events to the audit log. The client may receive
-confirmation of the event before MongoDB commits to the audit log.
-For example, while auditing an aggregation operation, the server
-might terminate after returning the result but before the audit log
-flushes.
-In addition, if the server cannot write to the audit log at the
-:option:`audit destination <mongod --auditDestination>`, the server
-terminates.
+**warning:** MongoDB may lose events **if** the server terminates before it
+   commits the events to the audit log. The client may receive
+   confirmation of the event before MongoDB commits to the audit log.
+   For example, while auditing an aggregation operation, the server
+   might terminate after returning the result but before the audit log
+   flushes.
 
-<audit-filter>` to limit events to audit.
+   In addition, if the server cannot write to the audit log at the
+   :option:`audit destination <mongod --auditDestination>`, the server
+   terminates.
 
-## Contents
+.. [#filter] Audit configuration can include a :ref:`filter
+   <audit-filter>` to limit events to audit.
 
-- Configure </tutorial/configure-auditing>
-- Configure Filters </tutorial/configure-audit-filters>
-- Audit Messages </reference/audit-message>
+**toctree:** :titlesonly:
+   :hidden:
+
+   Configure </tutorial/configure-auditing>
+   Configure Filters </tutorial/configure-audit-filters>
+   Audit Messages </reference/audit-message>

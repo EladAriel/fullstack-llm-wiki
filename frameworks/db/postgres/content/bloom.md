@@ -1,49 +1,109 @@
 ---
 type: "Framework Learn Page"
-framework: "postgres"
+framework: "PostgreSQL"
 source_repo: "https://github.com/postgres/postgres.git"
 source_branch: "master"
 source_path: "doc/src/sgml/bloom.sgml"
-source_commit: "38afc3dcb25c45b744d4025029ce0a6c90b7059f"
-source_commit_short: "38afc3dc"
-source_commit_date: "2026-07-25T19:08:27+09:00"
-generated_at: "2026-07-25T11:50:59Z"
+source_commit: "6c5f1d6074208146930b67c2054509c3e82f6f7f"
+source_commit_short: "6c5f1d6"
+source_commit_date: "2026-08-28T23:24:47+02:00"
+generated_at: "2026-08-29T09:39:24.324496Z"
 ---
+# bloom — bloom filter index access method
 
-## bloom -- bloom filter index access method
+ 
+  bloom
+ 
 
-bloom
+ 
+  bloom provides an index access method based on
+  Bloom filters.
+ 
 
-`bloom` provides an index access method based on [Bloom filters](https://en.wikipedia.org/wiki/Bloom_filter).
+ 
+  A Bloom filter is a space-efficient data structure that is used to test
+  whether an element is a member of a set.  In the case of an index access
+  method, it allows fast exclusion of non-matching tuples via signatures
+  whose size is determined at index creation.
+ 
 
-A Bloom filter is a space-efficient data structure that is used to test whether an element is a member of a set. In the case of an index access method, it allows fast exclusion of non-matching tuples via signatures whose size is determined at index creation.
+ 
+  A signature is a lossy representation of the indexed attribute(s), and as
+  such is prone to reporting false positives; that is, it may be reported
+  that an element is in the set, when it is not.  So index search results
+  must always be rechecked using the actual attribute values from the heap
+  entry.  Larger signatures reduce the odds of a false positive and thus
+  reduce the number of useless heap visits, but of course also make the index
+  larger and hence slower to scan.
+ 
 
-A signature is a lossy representation of the indexed attribute(s), and as such is prone to reporting false positives; that is, it may be reported that an element is in the set, when it is not. So index search results must always be rechecked using the actual attribute values from the heap entry. Larger signatures reduce the odds of a false positive and thus reduce the number of useless heap visits, but of course also make the index larger and hence slower to scan.
+ 
+  This type of index is most useful when a table has many attributes and
+  queries test arbitrary combinations of them.  A traditional btree index is
+  faster than a bloom index, but it can require many btree indexes to support
+  all possible queries where one needs only a single bloom index.  Note
+  however that bloom indexes only support equality queries, whereas btree
+  indexes can also perform inequality and range searches.
+ 
 
-This type of index is most useful when a table has many attributes and queries test arbitrary combinations of them. A traditional btree index is faster than a bloom index, but it can require many btree indexes to support all possible queries where one needs only a single bloom index. Note however that bloom indexes only support equality queries, whereas btree indexes can also perform inequality and range searches.
+ 
+  Parameters
 
-## Parameters
+  
+   A bloom index accepts the following parameters in its
+   WITH clause:
+  
 
-A `bloom` index accepts the following parameters in its `WITH` clause:
+   
+   
+    length
+    
+     
+      Length of each signature (index entry) in bits. It is rounded up to the
+      nearest multiple of 16. The default is
+      80 bits and the maximum is 4096.
+     
+    
+   
+   
+   
+   
+    col1 — col32
+    
+     
+      Number of bits generated for each index column. Each parameter's name
+      refers to the number of the index column that it controls.  The default
+      is 2 bits and the maximum is 4095.
+      Parameters for index columns not actually used are ignored.
+     
+    
+   
+   
+ 
 
-- Length of each signature (index entry) in bits. It is rounded up to the nearest multiple of `16`. The default is `80` bits and the maximum is `4096`.
+ 
+  Examples
 
-- Number of bits generated for each index column. Each parameter's name refers to the number of the index column that it controls. The default is `2` bits and the maximum is `4095`. Parameters for index columns not actually used are ignored.
+  
+   This is an example of creating a bloom index:
+  
 
-## Examples
-
-This is an example of creating a bloom index:
-
-```
 CREATE INDEX bloomidx ON tbloom USING bloom (i1,i2,i3)
        WITH (length=80, col1=2, col2=2, col3=4);
-```
 
-The index is created with a signature length of 80 bits, with attributes i1 and i2 mapped to 2 bits, and attribute i3 mapped to 4 bits. We could have omitted the `length`, `col1`, and `col2` specifications since those have the default values.
+  
+   The index is created with a signature length of 80 bits, with attributes
+   i1 and i2 mapped to 2 bits, and attribute i3 mapped to 4 bits.  We could
+   have omitted the length, col1,
+   and col2 specifications since those have the default values.
+  
 
-Here is a more complete example of bloom index definition and usage, as well as a comparison with equivalent btree indexes. The bloom index is considerably smaller than the btree index, and can perform better.
+  
+   Here is a more complete example of bloom index definition and usage, as
+   well as a comparison with equivalent btree indexes.  The bloom index is
+   considerably smaller than the btree index, and can perform better.
+  
 
-```
 =# CREATE TABLE tbloom AS
    SELECT
      (random() * 1000000)::int AS i1,
@@ -55,14 +115,13 @@ Here is a more complete example of bloom index definition and usage, as well as 
    FROM
   generate_series(1,10000000);
 SELECT 10000000
-```
 
-A sequential scan over this large table takes a long time:
+  
+   A sequential scan over this large table takes a long time:
 
-```
 =# EXPLAIN ANALYZE SELECT * FROM tbloom WHERE i2 = 898732 AND i5 = 123451;
                                               QUERY PLAN
--------------------------------------------------------------------zwsp-----------------------------------
+-------------------------------------------------------------------&zwsp;-----------------------------------
  Seq Scan on tbloom  (cost=0.00..213744.00 rows=250 width=24) (actual time=357.059..357.059 rows=0.00 loops=1)
    Filter: ((i2 = 898732) AND (i5 = 123451))
    Rows Removed by Filter: 10000000
@@ -70,11 +129,13 @@ A sequential scan over this large table takes a long time:
  Planning Time: 0.346 ms
  Execution Time: 357.076 ms
 (6 rows)
-```
 
-Even with the btree index defined the result will still be a sequential scan:
+  
 
-```
+  
+   Even with the btree index defined the result will still be a
+   sequential scan:
+
 =# CREATE INDEX btreeidx ON tbloom (i1, i2, i3, i4, i5, i6);
 CREATE INDEX
 =# SELECT pg_size_pretty(pg_relation_size('btreeidx'));
@@ -84,7 +145,7 @@ CREATE INDEX
 (1 row)
 =# EXPLAIN ANALYZE SELECT * FROM tbloom WHERE i2 = 898732 AND i5 = 123451;
                                               QUERY PLAN
--------------------------------------------------------------------zwsp-----------------------------------
+-------------------------------------------------------------------&zwsp;-----------------------------------
  Seq Scan on tbloom  (cost=0.00..213744.00 rows=2 width=24) (actual time=351.016..351.017 rows=0.00 loops=1)
    Filter: ((i2 = 898732) AND (i5 = 123451))
    Rows Removed by Filter: 10000000
@@ -92,11 +153,13 @@ CREATE INDEX
  Planning Time: 0.138 ms
  Execution Time: 351.035 ms
 (6 rows)
-```
 
-Having the bloom index defined on the table is better than btree in handling this type of search:
+  
 
-```
+  
+   Having the bloom index defined on the table is better than btree in
+   handling this type of search:
+
 =# CREATE INDEX bloomidx ON tbloom USING bloom (i1, i2, i3, i4, i5, i6);
 CREATE INDEX
 =# SELECT pg_size_pretty(pg_relation_size('bloomidx'));
@@ -106,7 +169,7 @@ CREATE INDEX
 (1 row)
 =# EXPLAIN ANALYZE SELECT * FROM tbloom WHERE i2 = 898732 AND i5 = 123451;
                                                      QUERY PLAN
--------------------------------------------------------------------zwsp--------------------------------------------------
+-------------------------------------------------------------------&zwsp;--------------------------------------------------
  Bitmap Heap Scan on tbloom  (cost=1792.00..1799.69 rows=2 width=24) (actual time=22.605..22.606 rows=0.00 loops=1)
    Recheck Cond: ((i2 = 898732) AND (i5 = 123451))
    Rows Removed by Index Recheck: 2300
@@ -119,11 +182,15 @@ CREATE INDEX
  Planning Time: 0.099 ms
  Execution Time: 22.632 ms
 (11 rows)
-```
 
-Now, the main problem with the btree search is that btree is inefficient when the search conditions do not constrain the leading index column(s). A better strategy for btree is to create a separate index on each column. Then the planner will choose something like this:
+  
 
-```
+  
+   Now, the main problem with the btree search is that btree is inefficient
+   when the search conditions do not constrain the leading index column(s).
+   A better strategy for btree is to create a separate index on each column.
+   Then the planner will choose something like this:
+
 =# CREATE INDEX btreeidx1 ON tbloom (i1);
 CREATE INDEX
 =# CREATE INDEX btreeidx2 ON tbloom (i2);
@@ -138,7 +205,7 @@ CREATE INDEX
 CREATE INDEX
 =# EXPLAIN ANALYZE SELECT * FROM tbloom WHERE i2 = 898732 AND i5 = 123451;
                                                         QUERY PLAN
--------------------------------------------------------------------zwsp--------------------------------------------------------
+-------------------------------------------------------------------&zwsp;--------------------------------------------------------
  Bitmap Heap Scan on tbloom  (cost=9.29..13.30 rows=1 width=24) (actual time=0.032..0.033 rows=0.00 loops=1)
    Recheck Cond: ((i5 = 123451) AND (i2 = 898732))
    Buffers: shared read=6
@@ -155,29 +222,79 @@ CREATE INDEX
  Planning Time: 0.264 ms
  Execution Time: 0.047 ms
 (15 rows)
-```
 
-Although this query runs much faster than with either of the single indexes, we pay a penalty in index size. Each of the single-column btree indexes occupies 88.5 MB, so the total space needed is 531 MB, over three times the space used by the bloom index.
+   Although this query runs much faster than with either of the single
+   indexes, we pay a penalty in index size.  Each of the single-column
+   btree indexes occupies 88.5 MB, so the total space needed is 531 MB,
+   over three times the space used by the bloom index.
+  
+ 
 
-## Operator Class Interface
+ 
+  Operator Class Interface
 
-An operator class for bloom indexes requires only a hash function for the indexed data type and an equality operator for searching. This example shows the operator class definition for the `text` data type:
+  
+   An operator class for bloom indexes requires only a hash function for the
+   indexed data type and an equality operator for searching. This example
+   shows the operator class definition for the text data type:
+  
 
-```
 CREATE OPERATOR CLASS text_ops
 DEFAULT FOR TYPE text USING bloom AS
     OPERATOR    1   =(text, text),
     FUNCTION    1   hashtext(text);
-```
 
-## Limitations
+ 
 
-- Only operator classes for `int4` and `text` are included with the module. - Only the `=` operator is supported for search. But it is possible to add support for arrays with union and intersection operations in the future. - `bloom` access method doesn't support `UNIQUE` indexes. - `bloom` access method doesn't support searching for `NULL` values.
+ 
+  Limitations
+  
+   
+    
+     
+      Only operator classes for int4 and text are
+      included with the module.
+     
+    
 
-## Authors
+    
+     
+      Only the = operator is supported for search.  But
+      it is possible to add support for arrays with union and intersection
+      operations in the future.
+     
+    
 
-Teodor Sigaev teodor@postgrespro.ru, Postgres Professional, Moscow, Russia
+    
+     
+       bloom access method doesn't support
+       UNIQUE indexes.
+     
+    
 
-Alexander Korotkov a.korotkov@postgrespro.ru, Postgres Professional, Moscow, Russia
+    
+     
+       bloom access method doesn't support searching for
+       NULL values.
+     
+    
+   
+  
+ 
 
-Oleg Bartunov obartunov@postgrespro.ru, Postgres Professional, Moscow, Russia
+ 
+  Authors
+
+  
+   Teodor Sigaev teodor@postgrespro.ru,
+   Postgres Professional, Moscow, Russia
+  
+
+  
+   Alexander Korotkov a.korotkov@postgrespro.ru,
+   Postgres Professional, Moscow, Russia
+  
+
+  
+   Oleg Bartunov obartunov@postgrespro.ru,
+   Postgres Professional, Moscow, Russia

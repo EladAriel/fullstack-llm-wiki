@@ -1,44 +1,80 @@
 ---
 type: "Framework Learn Page"
-framework: "mongodb"
+framework: "MongoDB"
 source_repo: "https://github.com/mongodb/docs.git"
 source_branch: "main"
 source_path: "content/manual/manual/source/core/oidc/security-oidc.txt"
-source_commit: "ab9db26ed3d11618cdb61516d8180337d8e3f679"
-source_commit_short: "ab9db26e"
-source_commit_date: "2026-07-24T16:22:46-06:00"
-generated_at: "2026-07-25T11:51:15Z"
+source_commit: "b9f2bc487a2878b65e3c1f80024bebab76954f27"
+source_commit_short: "b9f2bc48"
+source_commit_date: "2026-08-28T17:09:45-05:00"
+generated_at: "2026-08-29T09:39:19.789993Z"
 ---
-
-====================================================
+.. _authentication-oidc:
 
 # Authentication and Authorization with OIDC/OAuth 2.0
 
-MongoDB Enterprise supports OpenID Connect (OIDC) and OAuth 2.0 authentication and authorization for both human users and applications. These protocols enable Workforce and Workload Identity Federation, which streamline authentication and authorization by integrating with external |idps|. This lets you simplify your security management and enhance your system's scalability and flexibility.
+.. default-domain:: mongodb
 
-> **Important:** .. include:: includes/fact-OIDC-linux-only.rst
+**meta:** :keywords: security, oidc
+
+**facet:** :name: genre
+   :values: reference
+
+**contents:** On this page
+   :local:
+   :backlinks: none
+   :depth: 1
+   :class: singlecol
+
+MongoDB Enterprise supports OpenID Connect (OIDC) and OAuth 2.0 
+authentication and authorization for both human users and applications.
+These protocols enable Workforce and Workload Identity Federation, which 
+streamline authentication and authorization by integrating with external 
+|idps|. This lets you simplify your security management and 
+enhance your system's scalability and flexibility.
+
+**important:** .. include:: includes/fact-OIDC-linux-only.rst
 
 ## Use Cases
 
-Workload and Workforce Identity Federation use OIDC and OAuth 2.0 as follows:
+Workload and Workforce Identity Federation use OIDC and OAuth 2.0 as 
+follows: 
 
-- Workforce Identity Federation uses OIDC to enable human users to
-authenticate and get authorized using an external |idp|.
+- Workforce Identity Federation uses OIDC to enable human users to 
+  authenticate and get authorized using an external |idp|.
 
-- Workload Identity Federation uses OAuth 2.0 to enable your applications to
-access MongoDB using external programmatic identities such as Azure Service Principals, Azure Managed Identities, and Google Service Accounts.
+- Workload Identity Federation uses OAuth 2.0 to enable your applications to 
+  access MongoDB using external programmatic identities such as Azure Service 
+  Principals, Azure Managed Identities, and Google Service Accounts.
 
 ## Behavior
 
-To use Workforce and Workload Identity Federation, you must use MongoDB Enterprise and have MongoDB 7.0.11 or later.
+To use Workforce and Workload Identity Federation, you must use MongoDB 
+Enterprise and have MongoDB 7.0.11 or later.
 
-.. include:: /includes/fact-confirm-enterprise-binaries.rst
+**include:** /includes/fact-confirm-enterprise-binaries.rst
 
 ## Get Started
 
 Select an authentication method to get started:
 
-## Contents
+.. list-table::
+   :header-rows: 1
 
-- Workforce (Humans) </core/oidc/workforce>
-- Workload (Applications) </core/oidc/workload>
+   * - Authentication method
+     - User type
+     - Supported protocols
+
+   * - :ref:`workforce`
+     - Human users
+     - OIDC
+
+   * - :ref:`workload`
+     - Programmatic users
+     - OAuth 2.0
+
+**toctree:** :titlesonly:
+   :hidden:
+
+   Workforce (Humans) </core/oidc/workforce>
+   Workload (Applications) </core/oidc/workload>

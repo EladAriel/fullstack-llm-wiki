@@ -1,37 +1,164 @@
 ---
 type: "Framework Learn Page"
-framework: "mongodb"
+framework: "MongoDB"
 source_repo: "https://github.com/mongodb/docs.git"
 source_branch: "main"
 source_path: "content/manual/manual/source/reference/local-database.txt"
-source_commit: "ab9db26ed3d11618cdb61516d8180337d8e3f679"
-source_commit_short: "ab9db26e"
-source_commit_date: "2026-07-24T16:22:46-06:00"
-generated_at: "2026-07-25T11:51:15Z"
+source_commit: "b9f2bc487a2878b65e3c1f80024bebab76954f27"
+source_commit_short: "b9f2bc48"
+source_commit_date: "2026-08-28T17:09:45-05:00"
+generated_at: "2026-08-29T09:39:19.699053Z"
 ---
+.. _replica-set-local-database:
 
-======================
+# The ``local`` Database
 
-# The `local` Database
+**meta:** :description: Explore the `local` database in MongoDB, which stores replication data and instance-specific information, and learn about its collections and restrictions.
+
+.. default-domain:: mongodb
+
+**contents:** On this page
+   :local:
+   :backlinks: none
+   :depth: 1
+   :class: singlecol
+
+
+
+
+
 
 ## Overview
 
-Every :binary:`~bin.mongod` instance has its own `local` database, which stores data used in the replication process and other instance-specific data. Collections in the `local` database are not replicated.
+Every :binary:`~bin.mongod` instance has its own ``local`` database, which
+stores data used in the replication process and other instance-specific
+data. Collections in the ``local`` database are not replicated.
 
-## Collections on all `mongod` Instances
+
+## Collections on all ``mongod`` Instances
+
+**data:** local.startup_log
+
+   On startup, each :binary:`~bin.mongod` instance inserts a document into
+   :data:`~local.startup_log` with diagnostic information about the
+   :binary:`~bin.mongod` instance itself and host
+   information. :data:`~local.startup_log` is a capped
+   collection. This information is primarily useful for diagnostic
+   purposes.
+
+   For example, the following is a prototype of a document from the
+   :data:`~local.startup_log` collection:
+
+   .. code-block:: javascript
+
+      {
+        "_id" : "<string>",
+        "hostname" : "<string>",
+        "startTime" : ISODate("<date>"),
+        "startTimeLocal" : "<string>",
+        "cmdLine" : {
+              "dbpath" : "<path>",
+              "<option>" : <value>
+        },
+        "pid" : <number>,
+        "buildinfo" : {
+              "version" : "<string>",
+              "gitVersion" : "<string>",
+              "sysInfo" : "<string>",
+              "loaderFlags" : "<string>",
+              "compilerFlags" : "<string>",
+              "allocator" : "<string>",
+              "versionArray" : [ <num>, <num>, <...> ],
+              "javascriptEngine" : "<string>",
+              "bits" : <number>,
+              "debug" : <boolean>,
+              "maxBsonObjectSize" : <number>
+        }
+      }
+
+   Documents in the :data:`~local.startup_log` collection contain the
+   following fields:
+
+   .. data:: local.startup_log._id
+
+      Includes the system hostname and a millisecond epoch value.
+
+   .. data:: local.startup_log.hostname
+
+      The system's hostname.
+
+   .. data:: local.startup_log.startTime
+
+      A UTC :term:`ISODate` value that reflects when the server started.
+
+   .. data:: local.startup_log.startTimeLocal
+
+      A string that reports the :data:`~local.startup_log.startTime`
+      in the system's local time zone.
+
+   .. data:: local.startup_log.cmdLine
+
+      An embedded document that reports the :binary:`~bin.mongod` runtime
+      options and their values.
+
+   .. data:: local.startup_log.pid
+
+      The process identifier for this process.
+
+   .. data:: local.startup_log.buildinfo
+
+      An embedded document that reports information about the build
+      environment and settings used to compile this
+      :binary:`~bin.mongod`. This is the same output as
+      :dbcommand:`buildInfo`. See :data:`buildInfo`.
 
 ## Collections on Replica Set Members
 
+**data:** local.system.replset
+
+   :data:`local.system.replset` holds the replica set's configuration
+   object as its single document. To view the object's configuration
+   information, issue :method:`rs.conf()` from :binary:`~bin.mongosh`.
+   You can also query this collection directly.
+
+**data:** local.oplog.rs
+
+   :data:`local.oplog.rs` is the capped collection that holds the
+   :term:`oplog`. You set its size at creation using the
+   :setting:`~replication.oplogSizeMB` setting. To resize the oplog
+   after replica set initiation, use the
+   :doc:`/tutorial/change-oplog-size` procedure. For additional
+   information, see the :ref:`replica-set-oplog-sizing` section.
+
+   .. include:: /includes/fact-oplog-size.rst
+
+   Starting in MongoDB 5.0, manual write operations to the oplog are
+   restricted. For details, see :ref:`oplog-coll-behavior`.
+
+**data:** local.replset.minvalid
+
+   This contains an object used internally by replica sets to track replication
+   status.
+
+
 ## Restrictions
 
-Multi-Document Transactions on `local` You cannot perform read/write operations to the collections in the `local` database inside a `multi-document transaction <transactions>`.
+Multi-Document Transactions on ``local``
+  You cannot perform read/write operations to the collections in the
+  ``local`` database inside a 
+  :ref:`multi-document transaction <transactions>`.
 
-Retryable Writes against `local` You cannot perform write operations to collections in the `local` database with `retryable writes <retryable-writes>` enabled.
+Retryable Writes against ``local``
+  You cannot perform write operations to collections in the ``local``
+  database with :ref:`retryable writes <retryable-writes>` enabled.
 
-> **Important:**   The official MongoDB drivers enable retryable writes by
-  default. Applications that write to the `local` database
-  encounter write errors unless retryable writes are explicitly
-  disabled.
-  To disable retryable writes, specify
-  :urioption:`retryWrites=false <retryWrites>` in the
-  `connection string <mongodb-uri>` for the MongoDB cluster.
+  .. important::
+
+     The official MongoDB drivers enable retryable writes by
+     default. Applications that write to the ``local`` database
+     encounter write errors *unless* retryable writes are explicitly 
+     disabled.
+
+     To disable retryable writes, specify
+     :urioption:`retryWrites=false <retryWrites>` in the 
+     :ref:`connection string <mongodb-uri>` for the MongoDB cluster.

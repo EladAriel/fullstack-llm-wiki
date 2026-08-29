@@ -1,14 +1,15 @@
 ---
 type: "Framework Learn Page"
-framework: "redis"
+framework: "Redis"
 source_repo: "https://github.com/redis/docs.git"
 source_branch: "main"
 source_path: "content/operate/rs/references/cli-utilities/rladmin/tune.md"
-source_commit: "9d30f68c3dad1a6b3b7d30fe604b911348ce8152"
-source_commit_short: "9d30f68c"
-source_commit_date: "2026-07-24T10:52:10-07:00"
-generated_at: "2026-07-25T11:51:22Z"
+source_commit: "f8693349287b0efbef3c865b6f6a2aceca88594d"
+source_commit_short: "f869334"
+source_commit_date: "2026-08-28T10:01:19-05:00"
+generated_at: "2026-08-29T09:38:55.568195Z"
 ---
+# Tune
 
 ---
 Title: rladmin tune
@@ -65,6 +66,7 @@ rladmin tune cluster
         [ default_tracking_table_max_keys_policy <value> ]
         [ default_oss_sharding { enabled | disabled } ]
         [ filter_node_wd_health_metrics { enabled | disabled } ]
+        [ control_plane_basic_authentication { enabled | disabled } ]
  ]
 ```
 
@@ -75,6 +77,7 @@ rladmin tune cluster
 | acl_pubsub_default | `resetchannels`<br /> `allchannels` | Default pub/sub ACL rule for all databases in the cluster:<br />•`resetchannels` blocks access to all channels (restrictive)<br />•`allchannels` allows access to all channels (permissive) |
 | automatic_node_offload | `enabled`<br />`disabled` | Define whether automatic node offload migration will take place |
 | auto_recovery | `enabled`<br />`disabled` | Defines whether to use automatic recovery after shard failure |
+| control_plane_basic_authentication     | `enabled`<br />`disabled`       | Activates or deactivates [basic and digest authentication]({{< relref "/operate/rs/security/access-control/disable-basic-authentication" >}}) for the cluster management REST API. Enabled by default. |
 | data_internode_encryption              | `enabled`<br />`disabled`       | Activates or deactivates [internode encryption]({{< relref "/operate/rs/security/encryption/internode-encryption" >}}) for new databases    |
 | db_conns_auditing                      | `enabled`<br /> `disabled`      | Activates or deactivates [connection auditing]({{< relref "/operate/rs/security/audit-events" >}}) by default for new databases of a cluster                                                                  |
 | default_concurrent_restore_actions     | integer<br />`all`              | Default number of concurrent actions when restoring a node from a snapshot (positive integer or "all")                         |

@@ -1,72 +1,104 @@
 ---
 type: "Framework Learn Page"
-framework: "mongodb"
+framework: "MongoDB"
 source_repo: "https://github.com/mongodb/docs.git"
 source_branch: "main"
 source_path: "content/manual/manual/source/tutorial/install-mongodb-enterprise-on-windows-unattended.txt"
-source_commit: "ab9db26ed3d11618cdb61516d8180337d8e3f679"
-source_commit_short: "ab9db26e"
-source_commit_date: "2026-07-24T16:22:46-06:00"
-generated_at: "2026-07-25T11:51:15Z"
+source_commit: "b9f2bc487a2878b65e3c1f80024bebab76954f27"
+source_commit_short: "b9f2bc48"
+source_commit_date: "2026-08-28T17:09:45-05:00"
+generated_at: "2026-08-29T09:39:19.570794Z"
 ---
+.. _install-enterprise-windows-msiexec:
 
-===========================================================
+# Install MongoDB Enterprise on Windows using ``msiexec.exe``
 
-# Install MongoDB Enterprise on Windows using `msiexec.exe`
+**meta:** :keywords: on-prem
+   :description: Install MongoDB Enterprise on Windows using `msiexec.exe` for unattended setup, including service configuration and component selection.
 
-.. include:: /includes/minor-release.rst
+.. default-domain:: mongodb
+
+**contents:** On this page
+   :local:
+   :backlinks: none
+   :depth: 1
+   :class: singlecol
+
+.. |arrow| unicode:: U+27A4
+.. |edition| replace:: Enterprise
+.. |distro-name| replace:: Windows
+.. |executable-name| replace:: ``mongod.exe``
+.. |mdb-download-link| replace:: `MongoDB Download Center <https://www.mongodb.com/try/download/enterprise>`__
+
+**include:** /includes/minor-release.rst
 
 ## Overview
 
-Use this tutorial to install MongoDB {+version+} |edition| Edition on Windows in an unattended fashion using `msiexec.exe` from the command line. This is useful for system administrators who deploy MongoDB using automation.
+Use this tutorial to install MongoDB {+version+} |edition| Edition on
+Windows in an unattended fashion using ``msiexec.exe`` from the
+command line. This is useful for system administrators who deploy
+MongoDB using automation.
 
-:products:`MongoDB Enterprise Edition</mongodb-enterprise-advanced>` is available on select platforms and contains support for features related to security and monitoring.
+:products:`MongoDB Enterprise Edition</mongodb-enterprise-advanced>`
+is available on select platforms and contains support for features
+related to security and monitoring.
 
 ### MongoDB Version
 
-.. include:: /includes/fact-install-past-mongodb.rst
+**include:** /includes/fact-install-past-mongodb.rst
 
 ### Installation Method
 
-This tutorial installs MongoDB on Windows using the command-line tool `msiexec.exe`. You can also install MongoDB on Windows using these methods:
+This tutorial installs MongoDB on Windows using the command-line tool
+``msiexec.exe``. You can also install MongoDB on Windows using these
+methods:
 
-- `Install MongoDB using the MSI Installer <install-enterprise-windows>`
-- `Install MongoDB from the zip file <install-enterprise-windows-zip>`
+- :ref:`Install MongoDB using the MSI Installer <install-enterprise-windows>`
+
+- :ref:`Install MongoDB from the zip file <install-enterprise-windows-zip>`
+
 ## Considerations
 
-### MongoDB Shell, `mongosh`
+### MongoDB Shell, ``mongosh``
 
-.. include:: /includes/fact-have-to-install-mongosh-win.rst
+**include:** /includes/fact-have-to-install-mongosh-win.rst
+
 
 ### Platform Support
 
-.. include:: /includes/fact-platform-support-enterprise-windows.rst
+**include:** /includes/fact-platform-support-enterprise-windows.rst
 
 ### Virtualization
 
-.. include:: /includes/fact-virtualbox-not-supported.rst
+**include:** /includes/fact-virtualbox-not-supported.rst
 
 ### Production Notes
 
-.. include:: /includes/fact-see-production-notes.rst
+**include:** /includes/fact-see-production-notes.rst
 
 ### Full Time Diagnostic Data Capture
 
-MongoDB logs diagnostic data to assist with troubleshooting. For details, see `Full Time Diagnostic Data Capture <ftdc-stub>`.
+MongoDB logs diagnostic data to assist with troubleshooting. For
+details, see :ref:`Full Time Diagnostic Data Capture <ftdc-stub>`.
 
-.. include:: /includes/fact-ftdc-windows-user-permissions.rst
+**include:** /includes/fact-ftdc-windows-user-permissions.rst
 
 ## Install MongoDB Enterprise Edition
 
 ### Procedure
 
-Follow these steps to install MongoDB |edition| Edition unattended on Windows from the [Windows command prompt/interpreter](https://docs.microsoft.com/en-us/windows-server/administration/windows- commands/cmd)_ (`cmd.exe`) using `msiexec.exe`.
+Follow these steps to install MongoDB |edition| Edition unattended on
+Windows from the `Windows command prompt/interpreter
+<https://docs.microsoft.com/en-us/windows-server/administration/windows-
+commands/cmd>`__ (``cmd.exe``) using ``msiexec.exe``.
 
-.. include:: /includes/deploy/enterprise-windows-msiexec.rst
+**include:** /includes/deploy/enterprise-windows-msiexec.rst
 
 ## Start MongoDB Enterprise Edition as a Windows Service
 
-You can install and configure MongoDB as a :guilabel:`Windows Service` during installation. The MongoDB service starts upon successful installation.
+You can install and configure MongoDB as a :guilabel:`Windows Service`
+during installation. The MongoDB service starts upon successful
+installation.
 
 To start or restart the MongoDB service, use the Services console:
 
@@ -74,7 +106,7 @@ To start or restart the MongoDB service, use the Services console:
 
 #. Right-click on the MongoDB service and click :guilabel:`Start`.
 
-.. include:: /includes/steps/create-manually-windows-service-for-mongodb.rst
+**include:** /includes/steps/create-manually-windows-service-for-mongodb.rst
 
 ## Stop MongoDB Enterprise Edition as a Windows Service
 
@@ -82,43 +114,61 @@ To stop or pause the MongoDB service, use the Services console:
 
 #. From the Services console, locate the MongoDB service.
 
-#. Right-click on the MongoDB service and click :guilabel:`Stop` or :guilabel:`Pause`.
+#. Right-click on the MongoDB service and click :guilabel:`Stop` or
+   :guilabel:`Pause`.
 
-You can also manage the service from the command line. To stop the MongoDB service from the command line, open a [Windows command prompt/interpreter](https://docs.microsoft.com/en-us/windows-server/administration/windows- commands/cmd)_ (`cmd.exe`) as an :guilabel:`Administrator`, and run the following command:
+You can also manage the service from the command line. To stop the
+MongoDB service from the command line, open a `Windows command
+prompt/interpreter
+<https://docs.microsoft.com/en-us/windows-server/administration/windows-
+commands/cmd>`__ (``cmd.exe``) as an :guilabel:`Administrator`, and
+run the following command:
 
-```bat
-net stop MongoDB
-```
+.. code-block:: bat
+
+   net stop MongoDB
 
 ## Remove MongoDB Enterprise Edition as a Windows Service
 
-To remove the MongoDB service, first use the Services console to stop the service. Then open a [Windows command prompt/interpreter](https://docs.microsoft.com/en-us/windows-server/administration/windows-commands/cmd)_ (`cmd.exe`) as an :guilabel:`Administrator`, and run the following command:
+To remove the MongoDB service, first use the Services console to stop
+the service. Then open a `Windows command prompt/interpreter
+<https://docs.microsoft.com/en-us/windows-server/administration/windows-commands/cmd>`__
+(``cmd.exe``) as an :guilabel:`Administrator`, and run the following
+command:
 
-```bat
-sc.exe delete MongoDB
-```
+.. code-block:: bat
+
+   sc.exe delete MongoDB
 
 ## Start MongoDB Enterprise Edition from the Command Interpreter
 
-Open a [Windows command prompt/interpreter](https://docs.microsoft.com/en-us/windows-server/administration/windows- commands/cmd)_ (`cmd.exe`) as an :guilabel:`Administrator`.
+Open a `Windows command prompt/interpreter
+<https://docs.microsoft.com/en-us/windows-server/administration/windows-
+commands/cmd>`__ (``cmd.exe``) as an :guilabel:`Administrator`.
 
-> **Important:** You must open the command interpreter as an
-:guilabel:`Administrator`.
+**important:** You must open the command interpreter as an
+   :guilabel:`Administrator`.
 
-.. include:: /includes/steps/run-mongodb-on-windows.rst
+**include:** /includes/steps/run-mongodb-on-windows.rst
 
 ## Additional Considerations
 
 ### Localhost Binding by Default
 
-.. include:: /includes/fact-installation-bind-ip-default-in-config.rst
+**include:** /includes/fact-installation-bind-ip-default-in-config.rst
 
-### Point Releases and `.msi`
+### Point Releases and ``.msi``
 
-If you installed MongoDB with the Windows installer (`.msi`), the `.msi` automatically upgrades within the `same release series <release-version-numbers>`, such as 7.2.1 to 7.2.2.
+If you installed MongoDB with the Windows installer (``.msi``), the
+``.msi`` automatically upgrades within the :ref:`same release series
+<release-version-numbers>`, such as 7.2.1 to 7.2.2.
 
-Upgrading a full release series, such as 6.0 to 7.0, requires a new installation.
+Upgrading a full release series, such as 6.0 to 7.0, requires a new
+installation.
 
 ### Add MongoDB binaries to the System PATH
 
-All command-line examples in this tutorial use absolute paths to the MongoDB binaries. You can add `C:\Program Files\MongoDB\Server\{+version+}\bin` to your System `PATH` to omit the full path to the MongoDB binaries.
+All command-line examples in this tutorial use absolute paths to the
+MongoDB binaries. You can add ``C:\Program
+Files\MongoDB\Server\{+version+}\bin`` to your System ``PATH`` to omit
+the full path to the MongoDB binaries.

@@ -1,33 +1,22 @@
 ---
 type: "Framework Learn Directory Index"
-framework: "nextjs"
-directory: "content/01-app/03-api-reference/05-config/01-next-config-js"
-source_repo: "https://github.com/vercel/next.js/"
-source_branch: "canary"
-source_commit: "dcf242a17b5d4622bbd9624db531a9d84177619f"
-source_commit_short: "dcf242a1"
-source_commit_date: "2026-07-25T10:16:19+02:00"
-generated_at: "2026-07-25T11:50:53Z"
+framework: "Next.js"
+generated_at: "2026-08-29T09:40:24.349840Z"
 ---
-# 01 Next Config Js
+# 01-Next-Config-Js
 
-This directory contains nextjs learning pages related to 01 next config js.
+This directory contains Next.js learning pages related to 01-next-config-js.
 
 ## Breadcrumbs
 
-[Wiki Home](../../../../../index.md) -> [Content](../../../../index.md) -> [01 App](../../../index.md) -> [03 Api Reference](../../index.md) -> [05 Config](../index.md) -> [01 Next Config Js](index.md)
+[Wiki Home](../index.md) -> [Content](index.md)
 
 ## Navigation
 
-- Parent: [Parent Index](../index.md)
-
-## Child Directories
-
-- None
+- Wiki Home: [Root Index](../index.md)
 
 ## Pages in This Directory
 
-- [Original Source Index](_source_index.md)
 - [Adapterpath](adapterPath.md)
 - [Alloweddevorigins](allowedDevOrigins.md)
 - [Appdir](appDir.md)
@@ -37,6 +26,7 @@ This directory contains nextjs learning pages related to 01 next config js.
 - [Cachecomponents](cacheComponents.md)
 - [Cachehandlers](cacheHandlers.md)
 - [Cachelife](cacheLife.md)
+- [Cachemaxmemorysize](cacheMaxMemorySize.md)
 - [Compress](compress.md)
 - [Crossorigin](crossOrigin.md)
 - [Csschunking](cssChunking.md)
@@ -83,6 +73,7 @@ This directory contains nextjs learning pages related to 01 next config js.
 - [Trailingslash](trailingSlash.md)
 - [Transpilepackages](transpilePackages.md)
 - [Turbopack](turbopack.md)
+- [Turbopackchunking](turbopackChunking.md)
 - [Turbopackfilesystemcache](turbopackFileSystemCache.md)
 - [Turbopackignoreissue](turbopackIgnoreIssue.md)
 - [Turbopacklocalpostcssconfig](turbopackLocalPostcssConfig.md)
@@ -92,14 +83,7 @@ This directory contains nextjs learning pages related to 01 next config js.
 - [Typescript](typescript.md)
 - [Urlimports](urlImports.md)
 - [Uselightningcss](useLightningcss.md)
+- [Useoffline](useOffline.md)
 - [Usetypescriptcli](useTypeScriptCli.md)
 - [Webvitalsattribution](webVitalsAttribution.md)
 - [Webpack](webpack.md)
-
-## IDE LLM Guidance
-
-When answering implementation questions related to this directory:
-
-1. Prefer the most specific page listed above.
-2. If the topic is broad, read the child directory index first.
-3. Use source metadata from each page when giving answers.

@@ -4,12 +4,11 @@ framework: "Langfuse"
 source_repo: "https://github.com/langfuse/langfuse-docs"
 source_branch: "main"
 source_path: "content/docs/observability/features/corrections.mdx"
-source_commit: "fcd1eca34a924867563c3c4e801254c4e66c0021"
-source_commit_short: "fcd1eca3"
-source_commit_date: "2026-07-25T00:45:45Z"
-generated_at: "2026-07-25T11:51:12Z"
+source_commit: "ba26344559edee69ba55c5d3aa80e632f56c1626"
+source_commit_short: "ba26344"
+source_commit_date: "2026-08-29T02:57:18+00:00"
+generated_at: "2026-08-29T09:38:37.751590Z"
 ---
-
 ---
 title: Corrections
 description: Capture improved versions of LLM outputs directly in traces and observations to build better datasets and drive continuous improvement.
@@ -142,17 +141,35 @@ curl -X POST https://cloud.langfuse.com/api/public/scores \
 
 ## Fetching Corrections
 
-Corrections are stored as scores and can be fetched programmatically to build datasets or analyze model performance.
+Corrections are stored as scores and can be fetched programmatically to build datasets or analyze model performance. Filter the [Scores API](/docs/api-and-data-platform/features/scores-api) by `dataType=CORRECTION`. The corrected output is in the `value` field.
 
 <Tabs items={["Python", "TypeScript", "HTTP"]}>
 <Tab>
 
-Coming soon: Fetch corrections via the SDK.
+```python
+from langfuse import get_client
+
+langfuse = get_client()
+
+corrections = langfuse.api.scores_v3.get_many_v3(
+    data_type="CORRECTION",
+    fields="subject,details",
+)
+```
 
 </Tab>
 <Tab>
 
-Coming soon: Fetch corrections via the SDK.
+```typescript
+import { LangfuseClient } from "@langfuse/client";
+
+const langfuse = new LangfuseClient();
+
+const corrections = await langfuse.api.scoresV3.getManyV3({
+  dataType: "CORRECTION",
+  fields: "subject,details",
+});
+```
 
 </Tab>
 <Tab>

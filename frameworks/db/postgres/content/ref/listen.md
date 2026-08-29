@@ -1,64 +1,165 @@
 ---
 type: "Framework Learn Page"
-framework: "postgres"
+framework: "PostgreSQL"
 source_repo: "https://github.com/postgres/postgres.git"
 source_branch: "master"
 source_path: "doc/src/sgml/ref/listen.sgml"
-source_commit: "38afc3dcb25c45b744d4025029ce0a6c90b7059f"
-source_commit_short: "38afc3dc"
-source_commit_date: "2026-07-25T19:08:27+09:00"
-generated_at: "2026-07-25T11:50:59Z"
+source_commit: "6c5f1d6074208146930b67c2054509c3e82f6f7f"
+source_commit_short: "6c5f1d6"
+source_commit_date: "2026-08-28T23:24:47+02:00"
+generated_at: "2026-08-29T09:39:24.533205Z"
 ---
-
 LISTEN
+ 
 
-LISTEN
-7
-SQL - Language Statements
+ 
+  
+# LISTEN
 
-LISTEN
-listen for a notification
+  7
+  SQL - Language Statements
+ 
 
-```
+ 
+  
+# LISTEN
+
+  listen for a notification
+ 
+
+ 
+
 LISTEN channel
+
+ 
+
+ 
+  
+# Description
+
+  
+   LISTEN registers the current session as a
+   listener on the notification channel named channel.
+   If the current session is already registered as a listener for
+   this notification channel, nothing is done.
+  
+
+  
+   Whenever the command NOTIFY channel is invoked, either
+   by this session or another one connected to the same database, all
+   the sessions currently listening on that notification channel are
+   notified, and each will in turn notify its connected client
+   application.
+  
+
+  
+   A session can be unregistered for a given notification channel with the
+   UNLISTEN command.  A session's listen
+   registrations are automatically cleared when the session ends.
+  
+
+  
+   The method a client application must use to detect notification events depends on
+   which PostgreSQL application programming interface it
+   uses.  With the libpq library, the application issues
+   LISTEN as an ordinary SQL command, and then must
+   periodically call the function PQnotifies to find out
+   whether any notification events have been received.  Other interfaces such as
+   libpgtcl provide higher-level methods for handling notify events; indeed,
+   with libpgtcl the application programmer should not even issue
+   LISTEN or UNLISTEN directly.  See the
+   documentation for the interface you are using for more details.
+  
+
+ 
+
+ 
+  
+# Parameters
+
+  
+   
+    channel
+    
+     
+      Name of a notification channel (any identifier).
+     
+
+    
+   
+  
+ 
+
+ 
+  
+# Notes
+
+  
+   LISTEN takes effect at transaction commit.
+   If LISTEN or UNLISTEN is executed
+   within a transaction that later rolls back, the set of notification
+   channels being listened to is unchanged.
+  
+
+  
+   A transaction that has executed LISTEN cannot be
+   prepared for two-phase commit.
+  
+
+  
+   There is a race condition when first setting up a listening session:
+   if concurrently-committing transactions are sending notify events,
+   exactly which of those will the newly listening session receive?
+   The answer is that the session will receive all events committed after
+   an instant during the transaction's commit step.  But that is slightly
+   later than any database state that the transaction could have observed
+   in queries.  This leads to the following rule for
+   using LISTEN: first execute (and commit!) that
+   command, then in a new transaction inspect the database state as needed
+   by the application logic, then rely on notifications to find out about
+   subsequent changes to the database state.  The first few received
+   notifications might refer to updates already observed in the initial
+   database inspection, but this is usually harmless.
+  
+
+  
+   
+   contains a more extensive
+   discussion of the use of LISTEN and
+   NOTIFY.
+  
+
+ 
+
+ 
+  
+# Examples
+
+  
+   Configure and execute a listen/notify sequence from
+   psql:
+
 ```
 
-## Description
-
-`LISTEN` registers the current session as a listener on the notification channel named `channel`. If the current session is already registered as a listener for this notification channel, nothing is done.
-
-Whenever the command `NOTIFY channel` is invoked, either by this session or another one connected to the same database, all the sessions currently listening on that notification channel are notified, and each will in turn notify its connected client application.
-
-A session can be unregistered for a given notification channel with the `UNLISTEN` command. A session's listen registrations are automatically cleared when the session ends.
-
-The method a client application must use to detect notification events depends on which PostgreSQL application programming interface it uses. With the `libpq` library, the application issues `LISTEN` as an ordinary SQL command, and then must periodically call the function `PQnotifies` to find out whether any notification events have been received. Other interfaces such as `libpgtcl` provide higher-level methods for handling notify events; indeed, with `libpgtcl` the application programmer should not even issue `LISTEN` or `UNLISTEN` directly. See the documentation for the interface you are using for more details.
-
-## Parameters
-
-- Name of a notification channel (any identifier).
-
-## Notes
-
-`LISTEN` takes effect at transaction commit. If `LISTEN` or `UNLISTEN` is executed within a transaction that later rolls back, the set of notification channels being listened to is unchanged.
-
-A transaction that has executed `LISTEN` cannot be prepared for two-phase commit.
-
-There is a race condition when first setting up a listening session: if concurrently-committing transactions are sending notify events, exactly which of those will the newly listening session receive? The answer is that the session will receive all events committed after an instant during the transaction's commit step. But that is slightly later than any database state that the transaction could have observed in queries. This leads to the following rule for using `LISTEN`: first execute (and commit!) that command, then in a new transaction inspect the database state as needed by the application logic, then rely on notifications to find out about subsequent changes to the database state. The first few received notifications might refer to updates already observed in the initial database inspection, but this is usually harmless.
-
-`sql-notify` contains a more extensive discussion of the use of `LISTEN` and `NOTIFY`.
-
-## Examples
-
-Configure and execute a listen/notify sequence from `psql`:
-
-```
 LISTEN virtual;
 NOTIFY virtual;
 Asynchronous notification "virtual" received from server process with PID 8448.
+
 ```
 
-## Compatibility
+ 
 
-There is no `LISTEN` statement in the SQL standard.
+ 
+  
+# Compatibility
 
-## See Also
+  
+   There is no LISTEN statement in the SQL
+   standard.
+  
+
+ 
+
+ 
+  
+# See Also

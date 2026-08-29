@@ -1,44 +1,38 @@
 ---
 type: "Framework Learn Page"
-framework: "pydantic"
+framework: "Pydantic"
 source_repo: "https://github.com/pydantic/pydantic"
 source_branch: "main"
 source_path: "docs/errors/validation_errors.md"
-source_commit: "a2a6577d4c329dd574a45dbb01a8feaa16b1ad3d"
-source_commit_short: "a2a6577d"
-source_commit_date: "2026-07-23T15:38:17Z"
-generated_at: "2026-07-25T11:50:12Z"
+source_commit: "4bc21c0fa28323c0f3e0be93c9ad114b705029c6"
+source_commit_short: "4bc21c0"
+source_commit_date: "2026-08-29T11:30:40+02:00"
+generated_at: "2026-08-29T09:38:50.591466Z"
 ---
-
 Pydantic attempts to provide useful validation errors. Below are details on common validation errors users
 may encounter when working with pydantic, together with some suggestions on how to fix them.
 
-The entries below explain what each error type means. To also see *which input* triggered an error in a
-live service, [Logfire](troubleshooting.md) records the input and structured errors for each validation —
-see [Troubleshooting Validation Errors](troubleshooting.md).
+The entries below explain what each error type means. To see the rejected values and surrounding trace
+when one occurs in a live service, [Logfire](troubleshooting.md) can record failed validations with their
+structured errors. See [Troubleshooting Validation Errors](troubleshooting.md) for setup and
+sensitive-data considerations.
 
 ## `arguments_type`
 
 This error is raised when an object that would be passed as arguments to a function during validation is not
-a `tuple`, `list`, or `dict`. Because `NamedTuple` uses function calls in its implementation, that is one way to
-produce this error:
+a `tuple`, `list`, or `dict`:
 
 ```python
-from typing import NamedTuple
-
-from pydantic import BaseModel, ValidationError
+from pydantic import TypeAdapter, ValidationError
 
 
-class MyNamedTuple(NamedTuple):
-    x: int
+def func(x: int) -> None: ...
 
 
-class MyModel(BaseModel):
-    field: MyNamedTuple
-
+ta = TypeAdapter(func)
 
 try:
-    MyModel.model_validate({'field': 'invalid'})
+    ta.validate_python('invalid')
 except ValidationError as exc:
     print(repr(exc.errors()[0]['type']))
     #> 'arguments_type'
@@ -736,6 +730,27 @@ except ValidationError as exc:
     #> 'dict_type'
 ```
 
+## `ellipsis_error`
+
+This error is raised when the input isn't the [`Ellipsis`][] literal:
+
+```python
+from types import EllipsisType
+
+from pydantic import BaseModel, ValidationError
+
+
+class Model(BaseModel):
+    e: EllipsisType
+
+
+try:
+    Model(e=1)
+except ValidationError as exc:
+    print(repr(exc.errors()[0]['type']))
+    #> 'ellipsis_error'
+```
+
 ## `enum`
 
 This error is raised when the input value does not exist in an `enum` field members:
@@ -882,6 +897,25 @@ try:
 except ValidationError as exc:
     print(repr(exc.errors()[0]['type']))
     #> 'fraction_type'
+```
+
+## `frozen_dict_type`
+
+This error is raised when the input value's type is not valid for a `frozendict` field:
+
+```python {requires="3.15" lint="skip"}
+from pydantic import BaseModel, ValidationError
+
+
+class Model(BaseModel):
+    x: frozendict
+
+
+try:
+    model = Model(x='test')
+except ValidationError as exc:
+    print(repr(exc.errors()[0]['type']))
+    #> 'frozen_dict_type'
 ```
 
 ## `frozen_field`
@@ -1591,6 +1625,32 @@ try:
 except ValidationError as exc:
     print(repr(exc.errors()[0]['type']))
     #> 'multiple_of'
+```
+
+## `named_tuple_type`
+
+This error is raised when the input value is not valid for a named tuple field:
+
+```python
+from typing import NamedTuple
+
+from pydantic import BaseModel, ValidationError
+
+
+class Point(NamedTuple):
+    x: int
+    y: int
+
+
+class Model(BaseModel):
+    p: Point
+
+
+try:
+    Model(p='invalid')
+except ValidationError as exc:
+    print(repr(exc.errors()[0]['type']))
+    #> 'named_tuple_type'
 ```
 
 ## `needs_python_object`

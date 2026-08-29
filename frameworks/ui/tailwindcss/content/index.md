@@ -1,7 +1,7 @@
 ---
 type: "Framework Learn Directory Index"
 framework: "Tailwind CSS"
-generated_at: "2026-07-25T13:40:03.124603Z"
+generated_at: "2026-08-29T09:40:31.765599Z"
 ---
 # Content
 

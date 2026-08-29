@@ -1,7 +1,7 @@
 ---
 type: "Framework Learn Directory Index"
 framework: "Sentry Python"
-generated_at: "2026-07-25T19:08:13.550770Z"
+generated_at: "2026-08-29T09:40:09.070970Z"
 ---
 # Instrumentation
 
@@ -19,3 +19,7 @@ This directory contains Sentry Python learning pages related to instrumentation.
 
 - [Automatic Instrumentation](automatic-instrumentation.md)
 - [Opentelemetry](opentelemetry.md)
+
+## Subdirectories
+
+- [Custom Instrumentation](custom-instrumentation/index.md)

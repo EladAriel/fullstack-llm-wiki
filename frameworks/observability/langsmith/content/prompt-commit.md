@@ -4,10 +4,10 @@ framework: "LangSmith"
 source_repo: "https://github.com/langchain-ai/docs.git"
 source_branch: "main"
 source_path: "src/langsmith/prompt-commit.mdx"
-source_commit: "2aae1dfc98ee953a9a5185fb6fcdd9efb3f4d878"
-source_commit_short: "2aae1df"
-source_commit_date: "2026-07-25T00:27:23+00:00"
-generated_at: "2026-07-25T19:08:33.398301Z"
+source_commit: "a174f9cf7c91ee5eb14ee2382eb48bfe6e4956e9"
+source_commit_short: "a174f9c"
+source_commit_date: "2026-08-28T17:04:12-07:00"
+generated_at: "2026-08-29T09:39:50.586630Z"
 ---
 # Prompt Commit
 
@@ -43,7 +43,7 @@ Before we begin, ensure you have the following set up:
    * Go to **GitHub > Settings > Developer settings > Personal access tokens > Tokens (classic)**.
    * Click **Generate new token (classic)**.
    * Name it (e.g., "LangSmith Prompt Sync"), set an expiration, and select the required scopes.
-   * Click **Generate token** and **copy it immediately** — it won't be shown again.
+   * Click **Generate token** and **copy it immediately** because it is not shown again.
    * Store the token securely and provide it as an environment variable to your server.
 
 ## Understanding LangSmith "Prompt commits" and webhooks
@@ -355,7 +355,7 @@ The server's core functionality will include an endpoint for webhook reception, 
   * **Webhook Endpoint (`/webhook/commit`):** This is the URL path your LangSmith webhook will target.
   * **Error Handling:** Basic error handling for GitHub API interactions is included.
 
-  **Deploy this server to your chosen platform (e.g., Render) and note down its public URL (e.g., `https://prompt-commit-webhook.onrender.com`).**
+  **Deploy this server to your chosen platform (e.g., Render) and note down its public URL (e.g., `https://<your-render-service>.onrender.com`).**
 </Accordion>
 
 ## Configuring the webhook in LangSmith
@@ -374,7 +374,7 @@ Once your FastAPI server is deployed and you have its public URL, you can config
 
    ![LangSmith Webhook configuration modal](/langsmith/images/prompt-commit-webhook.png)
 
-   * **Webhook URL:** Enter the full public URL of your deployed FastAPI server's endpoint. For our example server, this would be `https://prompt-commit-webhook.onrender.com/webhook/commit`.
+   * **Webhook URL:** Enter the full public URL of your deployed FastAPI server's endpoint. For our example server, this would be `https://<your-render-service>.onrender.com/webhook/commit`.
    * **Headers (Optional):**
      * You can add custom headers that LangSmith will send with each webhook request.
 
@@ -392,7 +392,7 @@ Now, with everything set up, here's what happens:
 
 2. **Webhook Trigger:** LangSmith detects this new prompt commit and triggers the configured webhook.
 
-3. **HTTP Request:** LangSmith sends an HTTP POST request to the public URL of your FastAPI server (e.g., `https://prompt-commit-webhook.onrender.com/webhook/commit`). The body of this request contains the JSON prompt manifest for the entire workspace.
+3. **HTTP Request:** LangSmith sends an HTTP POST request to the public URL of your FastAPI server (e.g., `https://<your-render-service>.onrender.com/webhook/commit`). The body of this request contains the JSON prompt manifest for the entire workspace.
 
 4. **Server Receives Payload:** Your FastAPI server's endpoint receives the request.
 

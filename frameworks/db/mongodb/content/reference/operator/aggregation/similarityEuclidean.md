@@ -1,85 +1,160 @@
 ---
 type: "Framework Learn Page"
-framework: "mongodb"
+framework: "MongoDB"
 source_repo: "https://github.com/mongodb/docs.git"
 source_branch: "main"
 source_path: "content/manual/manual/source/reference/operator/aggregation/similarityEuclidean.txt"
-source_commit: "ab9db26ed3d11618cdb61516d8180337d8e3f679"
-source_commit_short: "ab9db26e"
-source_commit_date: "2026-07-24T16:22:46-06:00"
-generated_at: "2026-07-25T11:51:15Z"
+source_commit: "b9f2bc487a2878b65e3c1f80024bebab76954f27"
+source_commit_short: "b9f2bc48"
+source_commit_date: "2026-08-28T17:09:45-05:00"
+generated_at: "2026-08-29T09:39:20.158878Z"
 ---
-
-==========================================
-
 # $similarityEuclidean (expression operator)
+
+**meta:** :description: Use $similarityEuclidean in MongoDB aggregation to compute the Euclidean distance between two numeric vectors. Returns a raw distance or a normalized score in (0, 1].
+
+.. default-domain:: mongodb
+
+**contents:** On this page
+   :local:
+   :backlinks: none
+   :depth: 1
+   :class: singlecol
 
 ## Definition
 
-.. versionadded:: 8.3
+**versionadded:** 8.3
+
+**expression:** $similarityEuclidean
+
+   Returns the Euclidean distance between two numeric vectors
+   represented as arrays or ``binData`` values. Euclidean distance
+   measures the straight-line distance between two points in vector
+   space.
+
+   :expression:`$similarityEuclidean` has two syntax forms.
+
+   **Concise syntax** returns a raw Euclidean distance:
+
+   .. code-block:: javascript
+
+      { $similarityEuclidean: [ <vector1>, <vector2> ] }
+
+   **Full syntax** accepts an optional normalization parameter:
+
+   .. code-block:: javascript
+
+      {
+         $similarityEuclidean: {
+            vectors: [ <vector1>, <vector2> ],
+            score: <boolean>
+         }
+      }
+
+   When using the full syntax, :expression:`$similarityEuclidean`
+   accepts the following fields:
+
+   .. list-table::
+      :header-rows: 1
+      :widths: 20 15 10 55
+
+      * - Field
+        - Type
+        - Necessity
+        - Description
+
+      * - ``vectors``
+        - Array
+        - Required
+        - Array of exactly two expressions. Each expression must
+          resolve to an array of numeric values or a ``binData``
+          value. Both vectors must have equal length.
+
+      * - ``score``
+        - Boolean
+        - Optional
+        - When ``true``, returns a normalized score in the range
+          ``(0, 1]`` using the formula ``1 / (1 + distance)``.
+          Identical vectors produce a score of ``1``. Defaults
+          to ``false``.
+
+   For more information on expressions, see
+   :ref:`aggregation-expressions`.
 
 ## Behavior
 
-### `null` and Missing Values
+### ``null`` and Missing Values
 
-If either argument resolves to `null` or refers to a missing field, :expression:`$similarityEuclidean` returns `null`.
+If either argument resolves to ``null`` or refers to a missing
+field, :expression:`$similarityEuclidean` returns ``null``.
 
 ### Return Value
 
-:expression:`$similarityEuclidean` returns a `double`. When `score` is `false` (the default), the result is the raw Euclidean distance, which is always greater than or equal to `0`. A distance of `0` means the vectors are identical. Larger values indicate greater dissimilarity.
+:expression:`$similarityEuclidean` returns a ``double``. When
+``score`` is ``false`` (the default), the result is the raw
+Euclidean distance, which is always greater than or equal to
+``0``. A distance of ``0`` means the vectors are identical.
+Larger values indicate greater dissimilarity.
 
-When `score` is `true`, the result is normalized to the range `(0, 1]` using the formula `1 / (1 + distance)`:
+When ``score`` is ``true``, the result is normalized to the range
+``(0, 1]`` using the formula ``1 / (1 + distance)``:
 
-- `1` indicates the vectors are identical (distance is `0`).
-- Values approaching `0` indicate greater dissimilarity.
+- ``1`` indicates the vectors are identical (distance is ``0``).
+- Values approaching ``0`` indicate greater dissimilarity.
+
 ### Errors
 
-:expression:`$similarityEuclidean` returns an error in the following cases:
+:expression:`$similarityEuclidean` returns an error in the
+following cases:
 
-- Either argument does not resolve to an array or `binData` value.
-- Input arrays or `binData` values have different lengths.
+- Either argument does not resolve to an array or ``binData`` value.
+- Input arrays or ``binData`` values have different lengths.
 - Either array contains non-numeric elements.
+
 ## Example
 
-The following example uses a `vectors` collection:
+The following example uses a ``vectors`` collection:
 
-```javascript
-db.vectors.insertMany( [
-   { _id: 1, a: [1, 2, 3], b: [1, 2, 3] },
-   { _id: 2, a: [1, 2, 3], b: [3, 2, 1] },
-   { _id: 3, a: [1, 2, 3], b: [4, 5, 6] }
-] )
-```
+.. code-block:: javascript
 
-The following aggregation pipeline computes the Euclidean distance between the `a` and `b` fields for each document and returns both the raw distance and the normalized score:
+   db.vectors.insertMany( [
+      { _id: 1, a: [1, 2, 3], b: [1, 2, 3] },
+      { _id: 2, a: [1, 2, 3], b: [3, 2, 1] },
+      { _id: 3, a: [1, 2, 3], b: [4, 5, 6] }
+   ] )
 
-```javascript
-db.vectors.aggregate( [
-   {
-      $project: {
-         raw: { $similarityEuclidean: [ "$a", "$b" ] },
-         normalized: {
-            $similarityEuclidean: {
-               vectors: [ "$a", "$b" ],
-               score: true
+The following aggregation pipeline computes the Euclidean distance
+between the ``a`` and ``b`` fields for each document and returns
+both the raw distance and the normalized score:
+
+.. code-block:: javascript
+
+   db.vectors.aggregate( [
+      {
+         $project: {
+            raw: { $similarityEuclidean: [ "$a", "$b" ] },
+            normalized: {
+               $similarityEuclidean: {
+                  vectors: [ "$a", "$b" ],
+                  score: true
+               }
             }
          }
       }
-   }
-] )
-```
+   ] )
 
 The operation returns the following results:
 
-```javascript
-{ _id: 1, raw: 0, normalized: 1 }
-{ _id: 2, raw: 2.8284271247461903,
-  normalized: 0.2612038749637415 }
-{ _id: 3, raw: 5.196152422706632,
-  normalized: 0.16139702886038895 }
-```
+.. code-block:: javascript
+   :copyable: false
+
+   { _id: 1, raw: 0, normalized: 1 }
+   { _id: 2, raw: 2.8284271247461903,
+     normalized: 0.2612038749637415 }
+   { _id: 3, raw: 5.196152422706632,
+     normalized: 0.16139702886038895 }
 
 ## Learn More
 
 - :pipeline:`$vectorSearch`
-- `aggregation-expressions`
+- :ref:`aggregation-expressions`

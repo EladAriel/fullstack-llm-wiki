@@ -1,7 +1,7 @@
 ---
 type: "Framework Learn Directory Index"
 framework: "Grafana"
-generated_at: "2026-07-25T19:08:09.134795Z"
+generated_at: "2026-08-29T09:39:37.618068Z"
 ---
 # Http-Api
 
@@ -26,3 +26,8 @@ This directory contains Grafana learning pages related to http-api.
 - [Playlist](playlist.md)
 - [Resource History](resource-history.md)
 - [Secrets_Management](secrets_management.md)
+
+## Subdirectories
+
+- [Api Legacy](api-legacy/index.md)
+- [Examples](examples/index.md)

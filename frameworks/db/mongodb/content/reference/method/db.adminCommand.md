@@ -1,94 +1,141 @@
 ---
 type: "Framework Learn Page"
-framework: "mongodb"
+framework: "MongoDB"
 source_repo: "https://github.com/mongodb/docs.git"
 source_branch: "main"
 source_path: "content/manual/manual/source/reference/method/db.adminCommand.txt"
-source_commit: "ab9db26ed3d11618cdb61516d8180337d8e3f679"
-source_commit_short: "ab9db26e"
-source_commit_date: "2026-07-24T16:22:46-06:00"
-generated_at: "2026-07-25T11:51:15Z"
+source_commit: "b9f2bc487a2878b65e3c1f80024bebab76954f27"
+source_commit_short: "b9f2bc48"
+source_commit_date: "2026-08-28T17:09:45-05:00"
+generated_at: "2026-08-29T09:39:19.922316Z"
 ---
-
-==================================
-
 # db.adminCommand() (mongosh method)
 
-.. include:: /includes/fact-mongosh-shell-method.rst
+**meta:** :description: Execute administrative database commands using `db.adminCommand()` in MongoDB, applicable across various environments.
+
+.. default-domain:: mongodb
+
+**contents:** On this page
+   :local:
+   :backlinks: none
+   :depth: 1
+   :class: singlecol
+
+**include:** /includes/fact-mongosh-shell-method.rst
 
 ## Definition
 
+**method:** db.adminCommand(command)
+
+   Provides a helper to run specified :doc:`database commands
+   </reference/command>` against the ``admin`` database.
+
+
+   .. list-table::
+      :header-rows: 1
+      :widths: 20 20 80
+   
+      * - Parameter
+   
+        - Type
+   
+        - Description
+   
+      * - ``command``
+   
+        - document or string
+   
+        - A :term:`database command`, specified either in :term:`document` form
+          or as a string. If specified as a string, the command cannot include
+          any arguments.
+          
 ## Compatibility
 
-This method is available in deployments hosted in the following environments:
+This method is available in deployments hosted in the following environments: 
 
-.. include:: /includes/fact-environments-atlas-only.rst
+**include:** /includes/fact-environments-atlas-only.rst
 
-.. include:: /includes/fact-environments-atlas-support-all.rst
+**include:** /includes/fact-environments-atlas-support-all.rst
 
-.. include:: /includes/fact-environments-onprem-only.rst
+**include:** /includes/fact-environments-onprem-only.rst
 
 ## Behavior
 
-:method:`db.adminCommand` runs commands against the `admin` database regardless of the database context in which it runs. The following commands are equivalent:
+:method:`db.adminCommand` runs commands against the ``admin``
+database regardless of the database context in which it runs.
+The following commands are equivalent:
 
-```javascript
-db.getSiblingDB("admin").runCommand(<command>)
+.. code-block:: javascript
 
-db.adminCommand(<command>)
-```
+   db.getSiblingDB("admin").runCommand(<command>)
 
-For a list of available administrative database commands, see `database-commands`.
+   db.adminCommand(<command>)
 
-> **Note:** For a :binary:`~bin.mongod` or :binary:`~bin.mongos` running with
-:setting:`~security.authorization`, the authorized user must have
-the appropriate privileges to run the database command. See the
-reference documentation for the command for more information on
-security requirements.
+For a list of available administrative database commands, see
+:ref:`database-commands`.
+
+**note:** For a :binary:`~bin.mongod` or :binary:`~bin.mongos` running with
+   :setting:`~security.authorization`, the authorized user must have
+   the appropriate privileges to run the database command. See the
+   reference documentation for the command for more information on
+   security requirements.
+
+.. _db-adminCommand-response:
 
 ## Response
 
-The method returns a response document that contains the following fields:
+The method returns a response document that contains the following
+fields:
 
-.. include:: /includes/fact-runCommand-results.rst
+**include:** /includes/fact-runCommand-results.rst
+
+.. _admincommand-examples:
 
 ## Examples
 
 ### killOp
 
-The following example uses the :method:`db.adminCommand()` method to execute a :dbcommand:`killOp` command to terminate an operation with `opid 724`. :dbcommand:`killOp` is an administrative command and must be run against the `admin` database.
+The following example uses the :method:`db.adminCommand()`
+method to execute a :dbcommand:`killOp` command to terminate an
+operation with ``opid 724``. :dbcommand:`killOp` is an administrative
+command and must be run against the ``admin`` database.
 
-```javascript
-db.adminCommand( { "killOp": 1, "op": 724 } )
-```
+.. code-block:: javascript
+
+   db.adminCommand( { "killOp": 1, "op": 724 } )
 
 ### renameCollection
 
-The following example uses :method:`db.adminCommand()` to execute the :dbcommand:`renameCollection` administrative database command to rename the `orders` collection in the `test` database to `orders-2016`.
+The following example uses :method:`db.adminCommand()` to execute
+the :dbcommand:`renameCollection` administrative database command
+to rename the ``orders`` collection in the ``test`` database to
+``orders-2016``.
 
-```javascript
-db.adminCommand(
-  {
-     renameCollection: "test.orders",
-     to: "test.orders-2016"
-  }
-)
-```
+.. code-block:: javascript
+
+   db.adminCommand(
+     {
+        renameCollection: "test.orders",
+        to: "test.orders-2016"
+     }
+   )
 
 ### createUser
 
-The following example uses the :method:`db.adminCommand()` method to create a user named `bruce` with the :authrole:`dbOwner` role on the `admin` database.
+The following example uses the :method:`db.adminCommand()` method to
+create a user named ``bruce`` with the :authrole:`dbOwner` role on the
+``admin`` database.
 
-> **Tip:** .. include:: /includes/extracts/4.2-changes-passwordPrompt.rst
+**tip:** .. include:: /includes/extracts/4.2-changes-passwordPrompt.rst
 
-```javascript
-db.adminCommand(
-  {
-    createUser: "bruce",
-    pwd: passwordPrompt(),  // or <cleartext password>
-    roles: [
-      { role: "dbOwner", db: "admin" }
-    ]
-  }
-)
-```
+.. code-block:: javascript
+
+   db.adminCommand(
+     {
+       createUser: "bruce",
+       pwd: passwordPrompt(),  // or <cleartext password>
+       roles: [
+         { role: "dbOwner", db: "admin" }
+       ]
+     }
+   )

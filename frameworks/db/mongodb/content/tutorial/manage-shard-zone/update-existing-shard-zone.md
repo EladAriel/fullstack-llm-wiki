@@ -1,24 +1,33 @@
 ---
 type: "Framework Learn Page"
-framework: "mongodb"
+framework: "MongoDB"
 source_repo: "https://github.com/mongodb/docs.git"
 source_branch: "main"
 source_path: "content/manual/manual/source/tutorial/manage-shard-zone/update-existing-shard-zone.txt"
-source_commit: "ab9db26ed3d11618cdb61516d8180337d8e3f679"
-source_commit_short: "ab9db26e"
-source_commit_date: "2026-07-24T16:22:46-06:00"
-generated_at: "2026-07-25T11:51:15Z"
+source_commit: "b9f2bc487a2878b65e3c1f80024bebab76954f27"
+source_commit_short: "b9f2bc48"
+source_commit_date: "2026-08-28T17:09:45-05:00"
+generated_at: "2026-08-29T09:39:19.850478Z"
 ---
-
-=============================
+.. _sharding-update-existing-zone:
 
 # Update an Existing Shard Zone
 
-After you specify a range of values for a shard zone, you can update the shard zone range if your application's requirements change.
+**contents:** On this page
+   :local:
+   :backlinks: none
+   :depth: 2
+   :class: singlecol
+
+**facet:** :name: genre 
+   :values: tutorial
+
+After you specify a range of values for a shard zone, you can update the
+shard zone range if your application's requirements change.
 
 To update an existing shard zone, perform these steps:
 
-#. Stop the `balancer`.
+#. Stop the :term:`balancer`.
 
 #. Remove the old range from the zone.
 
@@ -29,23 +38,71 @@ To update an existing shard zone, perform these steps:
 ## About this Task
 
 - Zone ranges are inclusive of the lower boundary and exclusive of the
-upper boundary.
+  upper boundary.
 
 - After you modify a zone, the balancer must migrate chunks to the
-appropriate zones based on the new range of values. Until balancing completes, some chunks may reside on the wrong shard given the configured zones for the sharded cluster.
+  appropriate zones based on the new range of values. Until balancing
+  completes, some chunks may reside on the wrong shard given the
+  configured zones for the sharded cluster.
 
 ## Before you Begin
 
-To complete this tutorial, you must `deploy a sharded cluster <sharding-procedure-setup>` with a sharded collection and create a zone to modify.
+To complete this tutorial, you must :ref:`deploy a sharded cluster
+<sharding-procedure-setup>` with a sharded collection and create a zone
+to modify.
 
-This example uses a sharded collection named `users` in the `records` database, sharded by the `zipcode` field.
+This example uses a sharded collection named ``users`` in the
+``records`` database, sharded by the ``zipcode`` field. 
+
+**procedure:** :style: normal
+
+   .. step:: Add a shard to a zone called NYC
+
+      .. code-block:: none
+
+         sh.addShardToZone(<shard name>, "NYC")
+
+   .. step:: Specify a range of zipcode values for the NYC zone
+
+      .. code-block:: javascript
+
+         sh.updateZoneKeyRange("records.users", { zipcode: "10001" }, { zipcode: "10281" }, "NYC" )
 
 ## Steps
 
-The following procedure modifies the range of `zipcode` values for the `NYC` zone to be `11201` through `11240`.
+The following procedure modifies the range of ``zipcode`` values for the
+``NYC`` zone to be ``11201`` through ``11240``.
+
+**procedure:** :style: normal
+
+   .. step:: Stop the balancer
+
+      .. code-block:: javascript
+
+         sh.stopBalancer()
+
+   .. step:: Remove the current NYC range from the zone
+
+     .. code-block:: javascript
+
+         sh.removeRangeFromZone("records.user", { zipcode: "10001" }, { zipcode: "10281" } )
+         
+   .. step:: Update the zone key range for the NYC zone
+
+      .. code-block:: javascript
+
+         sh.updateZoneKeyRange("records.users", { zipcode: "11201" }, { zipcode: "11240" }, "NYC" )
+      
+   .. step:: Restart the balancer
+
+      .. code-block:: javascript
+
+         sh.startBalancer()
 
 ## Learn More
 
 - :method:`sh.removeRangeFromZone()`
+
 - :method:`sh.updateZoneKeyRange()`
-- `workload-isolation`
+
+- :ref:`workload-isolation`

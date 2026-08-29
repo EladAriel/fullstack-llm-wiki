@@ -1,67 +1,154 @@
 ---
 type: "Framework Learn Page"
-framework: "mongodb"
+framework: "MongoDB"
 source_repo: "https://github.com/mongodb/docs.git"
 source_branch: "main"
 source_path: "content/manual/manual/source/data-modeling/schema-design-process/map-relationships.txt"
-source_commit: "ab9db26ed3d11618cdb61516d8180337d8e3f679"
-source_commit_short: "ab9db26e"
-source_commit_date: "2026-07-24T16:22:46-06:00"
-generated_at: "2026-07-25T11:51:15Z"
+source_commit: "b9f2bc487a2878b65e3c1f80024bebab76954f27"
+source_commit_short: "b9f2bc48"
+source_commit_date: "2026-08-28T17:09:45-05:00"
+generated_at: "2026-08-29T09:39:20.294853Z"
 ---
-
-========================
+.. _data-modeling-map-relationships:
 
 # Map Schema Relationships
 
-How you map relationships between data entities affects your application's performance and scalability.
+**meta:** :description: Map schema relationships by embedding related data or using references to optimize application performance and scalability.
 
-The recommended way to handle related data is to embed it in a sub-document. Embedding related data lets your application query the data it needs with a single read operation and avoid slow :pipeline:`$lookup` operations.
+.. default-domain:: mongodb
 
-For some use cases, you can use a reference to point to related data in a separate collection.
+**contents:** On this page
+   :local:
+   :backlinks: none
+   :depth: 2
+   :class: singlecol
+
+.. dismissible-skills-card::
+   :skill: Relational to Document Model
+   :url: https://learn.mongodb.com/skills?openTab=data%20modeling
+
+How you map relationships between data entities affects
+your application's performance and scalability.
+
+The recommended way to handle related data is to embed it in a sub-document.
+Embedding related data lets your application query the data it needs with a
+single read operation and avoid slow :pipeline:`$lookup` operations.
+
+For some use cases, you can use a reference to point to related data in a
+separate collection. 
 
 ## About this Task
 
-To determine if you should embed related data or use references, consider the relative importance of the following goals for your application:
+To determine if you should embed related data or use references,
+consider the relative importance of the following goals for your
+application:
 
-Improve queries on related data If your application frequently queries one entity to return data about another entity, embed the data to avoid the need for frequent `$lookup` operations.
+Improve queries on related data
+  If your application frequently queries one entity to return data about
+  another entity, embed the data to avoid the need for frequent
+  ``$lookup`` operations.
 
-Improve data returned from different entities If your application returns data from related entities together, embed the data in a single collection.
+Improve data returned from different entities
+  If your application returns data from related entities together,
+  embed the data in a single collection. 
 
-Improve update performance If your application frequently updates related data, consider storing the data in its own collection and using a reference to access it. When you use a reference, you reduce your application's write workload by only needing to update the data in a single place.
+Improve update performance
+  If your application frequently updates related data, consider
+  storing the data in its own collection and using a reference to access it.
+  When you use a reference, you reduce your application's write workload by only
+  needing to update the data in a single place.
 
-To learn more about the benefits of embedded data and references, see `data-modeling-decisions`.
+To learn more about the benefits of embedded data and references, see
+:ref:`data-modeling-decisions`.
 
 ## Steps
 
+**procedure:** :style: normal
+
+   .. step:: Identify related data in your schema
+
+      Identify the data that your application queries and how entities
+      relate to each other.
+
+      Consider the operations you identified from your application's
+      workload in the :ref:`Identify Application Workload
+      <data-modeling-identify-workload>` step. Note the
+      information these operations write and return, and what
+      information overlaps between multiple operations. 
+
+   .. step:: Create a schema map for your related data
+
+      Your schema map should show related data fields and the type of
+      relationship between those fields (one-to-one, one-to-many,
+      many-to-many).
+
+      Your schema map can resemble an `entity-relationship model
+      <https://en.wikipedia.org/wiki/Entity%E2%80%93relationship_model>`__.
+
+   .. step:: Choose whether to embed related data or use references
+
+      The decision to embed data or use references depends on your
+      application's common queries. Review the queries you identified in
+      the first step of the schema design process and use the guidelines
+      mentioned earlier on this page to design your schema.
+
+      Configure your databases, collections, and application logic to
+      match the approach you choose.
+
 ## Examples
 
-The following examples show how to optimize your schema for different queries depending on the needs of your application.
+The following examples show how to optimize your schema for different
+queries depending on the needs of your application.
 
-.. include:: /includes/sample-data-usage.rst
+**include:** /includes/sample-data-usage.rst
 
 ### Optimize Queries for Movies
 
-If your application queries movies for fields such as `title`, embed related information in the `movies` collection. Embedding data returns everything the application needs in a single operation.
+If your application queries movies for fields such as ``title``,
+embed related information in the ``movies`` collection. Embedding
+data returns everything the application needs in a single operation.
 
 The following document optimizes queries on movies:
 
+**literalinclude:** /code-examples/tested/command-line/mongosh/data-modeling/map-relationships/embedded.snippet.embedded.js
+   :language: javascript
+   :category: usage example
+
 ### Optimize Queries for Movies and Users
 
-If your application returns movie information and user information separately, consider storing movies and users in separate collections. This schema design reduces the work required to return user information, and lets you return only user information without including unneeded fields.
+If your application returns movie information and user information
+separately, consider storing movies and users in separate collections.
+This schema design reduces the work required to return user
+information, and lets you return only user information without
+including unneeded fields.
 
-In the following schema, the `movies` collection contains a `userId` field, which is a reference to the `users` collection.
+In the following schema, the ``movies`` collection contains a
+``userId`` field, which is a reference to the ``users`` collection.
 
-Movies Collection `````````````````
+### Movies Collection
 
-Users Collection ````````````````
+**literalinclude:** /code-examples/tested/command-line/mongosh/data-modeling/map-relationships/reference-movies.snippet.reference-movies.js
+   :language: javascript
+   :category: usage example
+   :emphasize-lines: 6
+
+### Users Collection
+
+**literalinclude:** /code-examples/tested/command-line/mongosh/data-modeling/map-relationships/reference-users.snippet.reference-users.js
+   :language: javascript
+   :category: usage example
+   :emphasize-lines: 2
 
 ## Next Steps
 
-After you map relationships for your application's data, the next step in the schema design process is to apply design patterns to optimize your schema. See `data-modeling-apply-patterns`.
+After you map relationships for your application's data, the next step
+in the schema design process is to apply design patterns to optimize
+your schema. See :ref:`data-modeling-apply-patterns`.
 
 ## Learn More
 
-- `databases-and-collections`
-- `data-modeling-duplicate-data`
-- `data-model-example-keyword-search`
+- :ref:`databases-and-collections`
+
+- :ref:`data-modeling-duplicate-data`
+
+- :ref:`data-model-example-keyword-search`

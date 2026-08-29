@@ -1,117 +1,142 @@
 ---
 type: "Framework Learn Page"
-framework: "mongodb"
+framework: "MongoDB"
 source_repo: "https://github.com/mongodb/docs.git"
 source_branch: "main"
 source_path: "content/manual/manual/source/data-modeling/design-antipatterns/reduce-collections.txt"
-source_commit: "ab9db26ed3d11618cdb61516d8180337d8e3f679"
-source_commit_short: "ab9db26e"
-source_commit_date: "2026-07-24T16:22:46-06:00"
-generated_at: "2026-07-25T11:51:15Z"
+source_commit: "b9f2bc487a2878b65e3c1f80024bebab76954f27"
+source_commit_short: "b9f2bc48"
+source_commit_date: "2026-08-28T17:09:45-05:00"
+generated_at: "2026-08-29T09:39:20.298034Z"
 ---
-
-================================
+.. _reduce-collections:
 
 # Reduce the Number of Collections
 
-Creating too many collections can decrease performance. With every collection, MongoDB creates a default `_id index <indexes>`, which uses additional storage. If you create excessive collections, those collections and indexes can strain replica set resources and decrease performance.
+.. default-domain:: mongodb
+
+**contents:** On this page
+   :local:
+   :backlinks: none
+   :depth: 1 
+   :class: singlecol
+
+.. dismissible-skills-card::
+   :skill: Advanced Schema Patterns & Antipatterns
+   :url: https://learn.mongodb.com/skills?openTab=data%20modeling
+
+Creating too many collections can decrease performance. With every 
+collection, MongoDB creates a default :ref:`_id index <indexes>`, which 
+uses additional storage. If you create excessive collections, those 
+collections and indexes can strain replica set resources and decrease 
+performance.
 
 ## About this Task
 
-Consider the following schema that stores daily temperature readings that are taken every hour. The `temperature` database stores each day's readings in separate collections.
+Consider the following schema that stores daily temperature readings that 
+are taken every hour. The ``temperature`` database stores each day's 
+readings in separate collections.
 
-```javascript
-// Temperatures for May 10, 2024
-{
-   _id: 1,
-   timestamp: "2024-05-10T010:00:00Z",
-   temperature: 60
-},
-{
-   _id: 2
-   timestamp: "2024-05-10T011:00:00Z",
-   temperature: 61
-},
-{
-   _id: 3
-   timestamp: "2024-05-10T012:00:00Z",
-   temperature: 64
-}
-...
-```
+.. code-block:: javascript 
 
-```javascript
-// Temperatures for May 11, 2024
-{
-   _id: 1,
-   timestamp: "2024-05-11T010:00:00Z",
-   temperature: 68
-},
-{
-   _id: 2
-   timestamp: "2024-05-11T011:00:00Z",
-   temperature: 72
-},
-{
-   _id: 3
-   timestamp: "2024-05-11T012:00:00Z",
-   temperature: 72
-}
-...
-```
+   // Temperatures for May 10, 2024
+   {
+      _id: 1,
+      timestamp: "2024-05-10T010:00:00Z",
+      temperature: 60
+   },
+   {
+      _id: 2
+      timestamp: "2024-05-10T011:00:00Z",
+      temperature: 61
+   },
+   {
+      _id: 3
+      timestamp: "2024-05-10T012:00:00Z",
+      temperature: 64
+   }
+   ...
 
-With an unbound number of collections, the number of default `_id` indexes can grow to degrade performance.
+.. code-block:: javascript
 
-Additionally, this approach requires a :pipeline:`$lookup` operation to query across multiple collections. `$lookup` operations add query complexity and can strain resources.
+   // Temperatures for May 11, 2024
+   {
+      _id: 1,
+      timestamp: "2024-05-11T010:00:00Z",
+      temperature: 68
+   },
+   {
+      _id: 2
+      timestamp: "2024-05-11T011:00:00Z",
+      temperature: 72
+   },
+   {
+      _id: 3
+      timestamp: "2024-05-11T012:00:00Z",
+      temperature: 72
+   }
+   ...
 
-To reduce the number of collections, drop or archive unused collections, or remodel your data schema by consolidating related collections, denormalizing data, or leveraging embedded documents where appropriate.
+With an unbound number of collections, the number of default ``_id`` 
+indexes can grow to degrade performance. 
+
+Additionally, this approach requires a :pipeline:`$lookup` operation to 
+query across multiple collections. ``$lookup`` operations add query 
+complexity and can strain resources.
+
+To reduce the number of collections, drop or archive unused collections, 
+or remodel your data schema by consolidating related collections, 
+denormalizing data, or leveraging embedded documents where appropriate.
 
 ## Example
 
-You can modify the schema to store each day's temperature readings in a single collection. For example:
+You can modify the schema to store each day's temperature readings in a 
+single collection. For example:
 
-```javascript
-db.dailyTemperatures.insertMany( [
-   {
-      _id: ISODate("2024-05-10T00:00:00Z"),
-      readings: [
-         {
-            timestamp: "2024-05-10T10:00:00Z",
-            temperature: 60
-         },
-         {
-            timestamp: "2024-05-10T11:00:00Z",
-            temperature: 61
-         },
-         {
-            timestamp: "2024-05-10T12:00:00Z",
-            temperature: 64
-         }
-      ]
-   },
-   {
-      _id: ISODate("2024-05-11T00:00:00Z"),
-      readings: [
-         {
-            timestamp: "2024-05-11T10:00:00Z",
-            temperature: 68
-         },
-         {
-            timestamp: "2024-05-11T11:00:00Z",
-            temperature: 72
-         },
-         {
-            timestamp: "2024-05-11T12:00:00Z",
-            temperature: 72
-         }
-      ]
-   }
-] )
-```
+.. code-block:: javascript
 
-The updated schema requires fewer resources than the original. Instead of needing a separate index for each day, the default `_id` index now facilitates queries by date.
+   db.dailyTemperatures.insertMany( [
+      {
+         _id: ISODate("2024-05-10T00:00:00Z"),
+         readings: [
+            {
+               timestamp: "2024-05-10T10:00:00Z",
+               temperature: 60
+            },
+            {
+               timestamp: "2024-05-10T11:00:00Z",
+               temperature: 61
+            },
+            {
+               timestamp: "2024-05-10T12:00:00Z",
+               temperature: 64
+            }
+         ]
+      },
+      {
+         _id: ISODate("2024-05-11T00:00:00Z"),
+         readings: [
+            {
+               timestamp: "2024-05-11T10:00:00Z",
+               temperature: 68
+            },
+            {
+               timestamp: "2024-05-11T11:00:00Z",
+               temperature: 72
+            },
+            {
+               timestamp: "2024-05-11T12:00:00Z",
+               temperature: 72
+            }
+         ]
+      }
+   ] )
+
+The updated schema requires fewer resources than the original. Instead 
+of needing a separate index for each day, the default ``_id`` index now 
+facilitates queries by date.
 
 ## Learn More
 
-- `schema-design-antipatterns`
-- `schema-design-patterns`
+- :ref:`schema-design-antipatterns`
+- :ref:`schema-design-patterns`

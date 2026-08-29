@@ -1,38 +1,99 @@
 ---
 type: "Framework Learn Page"
-framework: "mongodb"
+framework: "MongoDB"
 source_repo: "https://github.com/mongodb/docs.git"
 source_branch: "main"
 source_path: "content/manual/manual/source/reference/method/sh.removeTagRange.txt"
-source_commit: "ab9db26ed3d11618cdb61516d8180337d8e3f679"
-source_commit_short: "ab9db26e"
-source_commit_date: "2026-07-24T16:22:46-06:00"
-generated_at: "2026-07-25T11:51:15Z"
+source_commit: "b9f2bc487a2878b65e3c1f80024bebab76954f27"
+source_commit_short: "b9f2bc48"
+source_commit_date: "2026-08-28T17:09:45-05:00"
+generated_at: "2026-08-29T09:39:19.962379Z"
 ---
-
-====================================
-
 # sh.removeTagRange() (mongosh method)
+
+**meta:** :description: Remove a shard tag from a specified range of shard key values using `sh.removeTagRange()` in MongoDB.
+
+.. default-domain:: mongodb
+
+**contents:** On this page
+   :local:
+   :backlinks: none
+   :depth: 1
+   :class: singlecol
 
 ## Definition
 
+**method:** sh.removeTagRange(namespace, minimum, maximum)
+   
+   .. |method| replace:: :method:`sh.removeRangeFromZone()`
+   
+   .. include:: /includes/fact-zone-sharding-alias.rst
+
+   Removes a specified shard tag from a defined range of shard key values. 
+   ``sh.removeTagRange()`` takes the following arguments:
+
+
+   .. list-table::
+      :header-rows: 1
+      :widths: 20 20 80
+   
+      * - Parameter
+   
+        - Type
+   
+        - Description
+   
+      * - ``namespace``
+   
+        - string
+   
+        - The :term:`namespace` of the sharded collection to tag.
+          
+          
+   
+      * - ``minimum``
+   
+        - document
+   
+        - The minimum value of the :term:`shard key` from the tag. Specify
+          the minimum value in the form of ``<fieldname>:<value>``.  This
+          value must be of the same BSON type or types as the shard key.
+          
+          
+   
+      * - ``maximum``
+   
+        - document
+   
+        - The maximum value of the shard key range from the tag.
+          Specify the maximum value in the form of ``<fieldname>:<value>``. This
+          value must be of the same BSON type or types as the shard key.
+
+
+   Use ``sh.removeTagRange()`` to ensure that unused or out of
+   date ranges are removed and hence chunks are balanced as required.
+
+   Only run ``sh.removeTagRange()`` when connected to a
+   :binary:`~bin.mongos` instance.
+
 ## Compatibility
 
-This method is available in deployments hosted in the following environments:
+This method is available in deployments hosted in the following environments: 
 
-.. include:: /includes/fact-environments-atlas-only.rst
+**include:** /includes/fact-environments-atlas-only.rst
 
-.. include:: /includes/fact-environments-atlas-support-no-free.rst
+**include:** /includes/fact-environments-atlas-support-no-free.rst
 
-.. include:: /includes/fact-environments-onprem-only.rst
+**include:** /includes/fact-environments-onprem-only.rst
 
 ## Example
 
-Given a shard key of `{state: 1, zip: 1}`, the following operation removes an existing tag range covering zip codes in New York State:
+Given a shard key of ``{state: 1, zip: 1}``, the following operation
+removes an existing tag range covering zip codes in New York State:
 
-```javascript
-sh.removeTagRange( "exampledb.collection",
-                { state: "NY", zip: MinKey },
-                { state: "NY", zip: MaxKey }
-              )
-```
+.. code-block:: javascript
+
+   sh.removeTagRange( "exampledb.collection",
+                   { state: "NY", zip: MinKey },
+                   { state: "NY", zip: MaxKey }
+                 )

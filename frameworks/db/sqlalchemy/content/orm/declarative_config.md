@@ -1,376 +1,492 @@
 ---
 type: "Framework Learn Page"
-framework: "sqlalchemy"
+framework: "SQLAlchemy"
 source_repo: "https://github.com/sqlalchemy/sqlalchemy"
 source_branch: "main"
 source_path: "doc/build/orm/declarative_config.rst"
-source_commit: "aa1a5575358d3aa14953b04dced02f4763fed2e7"
-source_commit_short: "aa1a5575"
-source_commit_date: "2026-07-23T18:02:59Z"
-generated_at: "2026-07-25T11:50:45Z"
+source_commit: "85cafd1a131fa8afeeeab23151940480b3fb0042"
+source_commit_short: "85cafd1"
+source_commit_date: "2026-08-28T20:17:49+00:00"
+generated_at: "2026-08-29T09:39:27.574721Z"
 ---
-
-=============================================
+.. _orm_declarative_mapper_config_toplevel:
 
 # Mapper Configuration with Declarative
 
-The section `orm_mapper_configuration_overview discusses the general configurational elements of a orm.Mapper construct, which is the structure that defines how a particular user defined class is mapped to a database table or other SQL construct.    The following sections describe specific details about how the declarative system goes about constructing the orm.Mapper`.
+The section :ref:`orm_mapper_configuration_overview` discusses the general
+configurational elements of a :class:`_orm.Mapper` construct, which is the
+structure that defines how a particular user defined class is mapped to a
+database table or other SQL construct.    The following sections describe
+specific details about how the declarative system goes about constructing
+the :class:`_orm.Mapper`.
+
+.. _orm_declarative_properties:
 
 ## Defining Mapped Properties with Declarative
 
-The examples given at `orm_declarative_table_config_toplevel illustrate mappings against table-bound columns, using the orm.mapped_column construct.  There are several other varieties of ORM mapped constructs that may be configured besides table-bound columns, the most common being the orm.relationship construct.  Other kinds of properties include SQL expressions that are defined using the orm.column_property construct and multiple-column mappings using the orm.composite` construct.
+The examples given at :ref:`orm_declarative_table_config_toplevel`
+illustrate mappings against table-bound columns, using the :func:`_orm.mapped_column`
+construct.  There are several other varieties of ORM mapped constructs
+that may be configured besides table-bound columns, the most common being the
+:func:`_orm.relationship` construct.  Other kinds of properties include
+SQL expressions that are defined using the :func:`_orm.column_property`
+construct and multiple-column mappings using the :func:`_orm.composite`
+construct.
 
-While an `imperative mapping <orm_imperative_mapping>` makes use of the `properties <orm_mapping_properties> dictionary to establish all the mapped class attributes, in the declarative mapping, these properties are all specified inline with the class definition, which in the case of a declarative table mapping are inline with the schema.Column objects that will be used to generate a schema.Table` object.
+While an :ref:`imperative mapping <orm_imperative_mapping>` makes use of
+the :ref:`properties <orm_mapping_properties>` dictionary to establish
+all the mapped class attributes, in the declarative
+mapping, these properties are all specified inline with the class definition,
+which in the case of a declarative table mapping are inline with the
+:class:`_schema.Column` objects that will be used to generate a
+:class:`_schema.Table` object.
 
-Working with the example mapping of `User` and `Address, we may illustrate a declarative table mapping that includes not just orm.mapped_column` objects but also relationships and SQL expressions:
+Working with the example mapping of ``User`` and ``Address``, we may illustrate
+a declarative table mapping that includes not just :func:`_orm.mapped_column`
+objects but also relationships and SQL expressions::
 
-```
-from typing import List
-from typing import Optional
+    from typing import List
+    from typing import Optional
 
-from sqlalchemy import Column
-from sqlalchemy import ForeignKey
-from sqlalchemy import String
-from sqlalchemy import Text
-from sqlalchemy.orm import column_property
-from sqlalchemy.orm import DeclarativeBase
-from sqlalchemy.orm import Mapped
-from sqlalchemy.orm import mapped_column
-from sqlalchemy.orm import relationship
+    from sqlalchemy import Column
+    from sqlalchemy import ForeignKey
+    from sqlalchemy import String
+    from sqlalchemy import Text
+    from sqlalchemy.orm import column_property
+    from sqlalchemy.orm import DeclarativeBase
+    from sqlalchemy.orm import Mapped
+    from sqlalchemy.orm import mapped_column
+    from sqlalchemy.orm import relationship
 
-class Base(DeclarativeBase):
-    pass
 
-class User(Base):
-    __tablename__ = "user"
+    class Base(DeclarativeBase):
+        pass
 
-    id: Mapped[int] = mapped_column(primary_key=True)
-    name: Mapped[str]
-    firstname: Mapped[str] = mapped_column(String(50))
-    lastname: Mapped[str] = mapped_column(String(50))
-    fullname: Mapped[str] = column_property(firstname + " " + lastname)
 
-    addresses: Mapped[List["Address"]] = relationship(back_populates="user")
+    class User(Base):
+        __tablename__ = "user"
 
-class Address(Base):
-    __tablename__ = "address"
+        id: Mapped[int] = mapped_column(primary_key=True)
+        name: Mapped[str]
+        firstname: Mapped[str] = mapped_column(String(50))
+        lastname: Mapped[str] = mapped_column(String(50))
+        fullname: Mapped[str] = column_property(firstname + " " + lastname)
 
-    id: Mapped[int] = mapped_column(primary_key=True)
-    user_id: Mapped[int] = mapped_column(ForeignKey("user.id"))
-    email_address: Mapped[str]
-    address_statistics: Mapped[Optional[str]] = mapped_column(Text, deferred=True)
+        addresses: Mapped[List["Address"]] = relationship(back_populates="user")
 
-    user: Mapped["User"] = relationship(back_populates="addresses")
-```
 
-The above declarative table mapping features two tables, each with a `_orm.relationship referring to the other, as well as a simple SQL expression mapped by orm.column_property, and an additional orm.mapped_column that indicates loading should be on a "deferred" basis as defined by the orm.mapped_column.deferred` keyword.    More documentation on these particular concepts may be found at `relationship_patterns`, `mapper_column_property_sql_expressions`, and `orm_queryguide_column_deferral`.
+    class Address(Base):
+        __tablename__ = "address"
 
-Properties may be specified with a declarative mapping as above using "hybrid table" style as well; the `_schema.Column objects that are directly part of a table move into the schema.Table definition but everything else, including composed SQL expressions, would still be inline with the class definition.  Constructs that need to refer to a schema.Column directly would reference it in terms of the schema.Table` object.  To illustrate the above mapping using hybrid table style:
+        id: Mapped[int] = mapped_column(primary_key=True)
+        user_id: Mapped[int] = mapped_column(ForeignKey("user.id"))
+        email_address: Mapped[str]
+        address_statistics: Mapped[Optional[str]] = mapped_column(Text, deferred=True)
 
-```
-# mapping attributes using declarative with imperative table
-# i.e. __table__
+        user: Mapped["User"] = relationship(back_populates="addresses")
 
-from sqlalchemy import Column, ForeignKey, Integer, String, Table, Text
-from sqlalchemy.orm import column_property
-from sqlalchemy.orm import DeclarativeBase
-from sqlalchemy.orm import deferred
-from sqlalchemy.orm import relationship
+The above declarative table mapping features two tables, each with a
+:func:`_orm.relationship` referring to the other, as well as a simple
+SQL expression mapped by :func:`_orm.column_property`, and an additional
+:func:`_orm.mapped_column` that indicates loading should be on a
+"deferred" basis as defined
+by the :paramref:`_orm.mapped_column.deferred` keyword.    More documentation
+on these particular concepts may be found at :ref:`relationship_patterns`,
+:ref:`mapper_column_property_sql_expressions`, and :ref:`orm_queryguide_column_deferral`.
 
-class Base(DeclarativeBase):
-    pass
+Properties may be specified with a declarative mapping as above using
+"hybrid table" style as well; the :class:`_schema.Column` objects that
+are directly part of a table move into the :class:`_schema.Table` definition
+but everything else, including composed SQL expressions, would still be
+inline with the class definition.  Constructs that need to refer to a
+:class:`_schema.Column` directly would reference it in terms of the
+:class:`_schema.Table` object.  To illustrate the above mapping using
+hybrid table style::
 
-class User(Base):
-    __table__ = Table(
-        "user",
-        Base.metadata,
-        Column("id", Integer, primary_key=True),
-        Column("name", String),
-        Column("firstname", String(50)),
-        Column("lastname", String(50)),
-    )
+    # mapping attributes using declarative with imperative table
+    # i.e. __table__
 
-    fullname = column_property(__table__.c.firstname + " " + __table__.c.lastname)
+    from sqlalchemy import Column, ForeignKey, Integer, String, Table, Text
+    from sqlalchemy.orm import column_property
+    from sqlalchemy.orm import DeclarativeBase
+    from sqlalchemy.orm import deferred
+    from sqlalchemy.orm import relationship
 
-    addresses = relationship("Address", back_populates="user")
 
-class Address(Base):
-    __table__ = Table(
-        "address",
-        Base.metadata,
-        Column("id", Integer, primary_key=True),
-        Column("user_id", ForeignKey("user.id")),
-        Column("email_address", String),
-        Column("address_statistics", Text),
-    )
+    class Base(DeclarativeBase):
+        pass
 
-    address_statistics = deferred(__table__.c.address_statistics)
 
-    user = relationship("User", back_populates="addresses")
-```
+    class User(Base):
+        __table__ = Table(
+            "user",
+            Base.metadata,
+            Column("id", Integer, primary_key=True),
+            Column("name", String),
+            Column("firstname", String(50)),
+            Column("lastname", String(50)),
+        )
+
+        fullname = column_property(__table__.c.firstname + " " + __table__.c.lastname)
+
+        addresses = relationship("Address", back_populates="user")
+
+
+    class Address(Base):
+        __table__ = Table(
+            "address",
+            Base.metadata,
+            Column("id", Integer, primary_key=True),
+            Column("user_id", ForeignKey("user.id")),
+            Column("email_address", String),
+            Column("address_statistics", Text),
+        )
+
+        address_statistics = deferred(__table__.c.address_statistics)
+
+        user = relationship("User", back_populates="addresses")
 
 Things to note above:
 
-- The address `_schema.Table` contains a column called `address_statistics`,
-however we re-map this column under the same attribute name to be under the control of a `_orm.deferred` construct.
+* The address :class:`_schema.Table` contains a column called ``address_statistics``,
+  however we re-map this column under the same attribute name to be under
+  the control of a :func:`_orm.deferred` construct.
 
-- With both declararative table and hybrid table mappings, when we define a
-`_schema.ForeignKey` construct, we always name the target table using the **table name**, and not the mapped class name.
+* With both declararative table and hybrid table mappings, when we define a
+  :class:`_schema.ForeignKey` construct, we always name the target table
+  using the **table name**, and not the mapped class name.
 
-- When we define `_orm.relationship` constructs, as these constructs
-create a linkage between two mapped classes where one necessarily is defined before the other, we can refer to the remote class using its string name. This functionality also extends into the area of other arguments specified on the `_orm.relationship` such as the "primary join" and "order by" arguments.   See the section `orm_declarative_relationship_eval` for details on this.
+* When we define :func:`_orm.relationship` constructs, as these constructs
+  create a linkage between two mapped classes where one necessarily is defined
+  before the other, we can refer to the remote class using its string name.
+  This functionality also extends into the area of other arguments specified
+  on the :func:`_orm.relationship` such as the "primary join" and "order by"
+  arguments.   See the section :ref:`orm_declarative_relationship_eval` for
+  details on this.
+
+
+.. _orm_declarative_mapper_options:
 
 ## Mapper Configuration Options with Declarative
 
-With all mapping forms, the mapping of the class is configured through parameters that become part of the `_orm.Mapper object. The function which ultimately receives these arguments is the orm.Mapper function, and are delivered to it from one of the front-facing mapping functions defined on the orm.registry` object.
+With all mapping forms, the mapping of the class is configured through
+parameters that become part of the :class:`_orm.Mapper` object.
+The function which ultimately receives these arguments is the
+:class:`_orm.Mapper` function, and are delivered to it from one of
+the front-facing mapping functions defined on the :class:`_orm.registry`
+object.
 
-For the declarative form of mapping, mapper arguments are specified using the `__mapper_args__ declarative class variable, which is a dictionary that is passed as keyword arguments to the orm.Mapper` function. Some examples:
+For the declarative form of mapping, mapper arguments are specified
+using the ``__mapper_args__`` declarative class variable, which is a dictionary
+that is passed as keyword arguments to the :class:`_orm.Mapper` function.
+Some examples:
 
 **Map Specific Primary Key Columns**
 
-The example below illustrates Declarative-level settings for the `_orm.Mapper.primary_key` parameter, which establishes particular columns as part of what the ORM should consider to be a primary key for the class, independently of schema-level primary key constraints:
+The example below illustrates Declarative-level settings for the
+:paramref:`_orm.Mapper.primary_key` parameter, which establishes
+particular columns as part of what the ORM should consider to be a primary
+key for the class, independently of schema-level primary key constraints::
 
-```
-class GroupUsers(Base):
-    __tablename__ = "group_users"
+    class GroupUsers(Base):
+        __tablename__ = "group_users"
 
-    user_id = mapped_column(String(40))
-    group_id = mapped_column(String(40))
+        user_id = mapped_column(String(40))
+        group_id = mapped_column(String(40))
 
-    __mapper_args__ = {"primary_key": [user_id, group_id]}
-```
+        __mapper_args__ = {"primary_key": [user_id, group_id]}
 
-> **Seealso:**  `mapper_primary_key` - further background on ORM mapping of explicit
- columns as primary key columns
+**seealso:** :ref:`mapper_primary_key` - further background on ORM mapping of explicit
+    columns as primary key columns
 
 **Version ID Column**
 
-The example below illustrates Declarative-level settings for the `_orm.Mapper.version_id_col and orm.Mapper.version_id_generator` parameters, which configure an ORM-maintained version counter that is updated and checked within the `unit of work` flush process:
+The example below illustrates Declarative-level settings for the
+:paramref:`_orm.Mapper.version_id_col` and
+:paramref:`_orm.Mapper.version_id_generator` parameters, which configure
+an ORM-maintained version counter that is updated and checked within the
+:term:`unit of work` flush process::
 
-```
-from datetime import datetime
+    from datetime import datetime
 
-class Widget(Base):
-    __tablename__ = "widgets"
 
-    id = mapped_column(Integer, primary_key=True)
-    timestamp = mapped_column(DateTime, nullable=False)
+    class Widget(Base):
+        __tablename__ = "widgets"
 
-    __mapper_args__ = {
-        "version_id_col": timestamp,
-        "version_id_generator": lambda v: datetime.now(),
-    }
-```
+        id = mapped_column(Integer, primary_key=True)
+        timestamp = mapped_column(DateTime, nullable=False)
 
-> **Seealso:**  `mapper_version_counter` - background on the ORM version counter feature
+        __mapper_args__ = {
+            "version_id_col": timestamp,
+            "version_id_generator": lambda v: datetime.now(),
+        }
+
+**seealso:** :ref:`mapper_version_counter` - background on the ORM version counter feature
 
 **Single Table Inheritance**
 
-The example below illustrates Declarative-level settings for the `_orm.Mapper.polymorphic_on and orm.Mapper.polymorphic_identity` parameters, which are used when configuring a single-table inheritance mapping:
+The example below illustrates Declarative-level settings for the
+:paramref:`_orm.Mapper.polymorphic_on` and
+:paramref:`_orm.Mapper.polymorphic_identity` parameters, which are used when
+configuring a single-table inheritance mapping::
 
-```
-class Person(Base):
-    __tablename__ = "person"
+    class Person(Base):
+        __tablename__ = "person"
 
-    person_id = mapped_column(Integer, primary_key=True)
-    type = mapped_column(String, nullable=False)
+        person_id = mapped_column(Integer, primary_key=True)
+        type = mapped_column(String, nullable=False)
 
-    __mapper_args__ = dict(
-        polymorphic_on=type,
-        polymorphic_identity="person",
-    )
+        __mapper_args__ = dict(
+            polymorphic_on=type,
+            polymorphic_identity="person",
+        )
 
-class Employee(Person):
-    __mapper_args__ = dict(
-        polymorphic_identity="employee",
-    )
-```
 
-> **Seealso:**  `single_inheritance` - background on the ORM single table inheritance
- mapping feature.
+    class Employee(Person):
+        __mapper_args__ = dict(
+            polymorphic_identity="employee",
+        )
+
+**seealso:** :ref:`single_inheritance` - background on the ORM single table inheritance
+    mapping feature.
 
 ### Constructing mapper arguments dynamically
 
-The `__mapper_args__ dictionary may be generated from a class-bound descriptor method rather than from a fixed dictionary by making use of the orm.declared_attr construct.    This is useful to create arguments for mappers that are programmatically derived from the table configuration or other aspects of the mapped class.    A dynamic _mapper_args__` attribute will typically be useful when using a Declarative Mixin or abstract base class.
+The ``__mapper_args__`` dictionary may be generated from a class-bound
+descriptor method rather than from a fixed dictionary by making use of the
+:func:`_orm.declared_attr` construct.    This is useful to create arguments
+for mappers that are programmatically derived from the table configuration
+or other aspects of the mapped class.    A dynamic ``__mapper_args__``
+attribute will typically be useful when using a Declarative Mixin or
+abstract base class.
 
-For example, to omit from the mapping any columns that have a special `.Column.info value, a mixin can use a _mapper_args__` method that scans for these columns from the `cls.__table__ attribute and passes them to the orm.Mapper.exclude_properties` collection:
+For example, to omit from the mapping
+any columns that have a special :attr:`.Column.info` value, a mixin
+can use a ``__mapper_args__`` method that scans for these columns from the
+``cls.__table__`` attribute and passes them to the :paramref:`_orm.Mapper.exclude_properties`
+collection::
 
-```
-from sqlalchemy import Column
-from sqlalchemy import Integer
-from sqlalchemy import select
-from sqlalchemy import String
-from sqlalchemy.orm import DeclarativeBase
-from sqlalchemy.orm import declared_attr
+    from sqlalchemy import Column
+    from sqlalchemy import Integer
+    from sqlalchemy import select
+    from sqlalchemy import String
+    from sqlalchemy.orm import DeclarativeBase
+    from sqlalchemy.orm import declared_attr
 
-class ExcludeColsWFlag:
-    @declared_attr
-    def __mapper_args__(cls):
-        return {
-            "exclude_properties": [
-                column.key
-                for column in cls.__table__.c
-                if column.info.get("exclude", False)
-            ]
-        }
 
-class Base(DeclarativeBase):
-    pass
+    class ExcludeColsWFlag:
+        @declared_attr
+        def __mapper_args__(cls):
+            return {
+                "exclude_properties": [
+                    column.key
+                    for column in cls.__table__.c
+                    if column.info.get("exclude", False)
+                ]
+            }
 
-class SomeClass(ExcludeColsWFlag, Base):
-    __tablename__ = "some_table"
 
-    id = mapped_column(Integer, primary_key=True)
-    data = mapped_column(String)
-    not_needed = mapped_column(String, info={"exclude": True})
-```
+    class Base(DeclarativeBase):
+        pass
 
-Above, the `ExcludeColsWFlag mixin provides a per-class _mapper_args__` hook that will scan for `.Column` objects that include the key/value `'exclude': True` passed to the `.Column.info parameter, and then add their string "key" name to the orm.Mapper.exclude_properties` collection which will prevent the resulting `.Mapper` from considering these columns for any SQL operations.
 
-> **Seealso:**  `orm_mixins_toplevel`
+    class SomeClass(ExcludeColsWFlag, Base):
+        __tablename__ = "some_table"
+
+        id = mapped_column(Integer, primary_key=True)
+        data = mapped_column(String)
+        not_needed = mapped_column(String, info={"exclude": True})
+
+Above, the ``ExcludeColsWFlag`` mixin provides a per-class ``__mapper_args__``
+hook that will scan for :class:`.Column` objects that include the key/value
+``'exclude': True`` passed to the :paramref:`.Column.info` parameter, and then
+add their string "key" name to the :paramref:`_orm.Mapper.exclude_properties`
+collection which will prevent the resulting :class:`.Mapper` from considering
+these columns for any SQL operations.
+
+**seealso:** :ref:`orm_mixins_toplevel`
+
 
 ## Other Declarative Mapping Directives
 
-### `__declare_last__()`
+### ``__declare_last__()``
 
-The `__declare_last__()` hook allows definition of a class level function that is automatically called by the `.MapperEvents.after_configured` event, which occurs after mappings are assumed to be completed and the 'configure' step has finished:
+The ``__declare_last__()`` hook allows definition of
+a class level function that is automatically called by the
+:meth:`.MapperEvents.after_configured` event, which occurs after mappings are
+assumed to be completed and the 'configure' step has finished::
 
-```
-class MyClass(Base):
-    @classmethod
-    def __declare_last__(cls):
-        """ """
-        # do something with mappings
-```
+    class MyClass(Base):
+        @classmethod
+        def __declare_last__(cls):
+            """ """
+            # do something with mappings
 
-### `__declare_first__()`
+### ``__declare_first__()``
 
-Like `__declare_last__()`, but is called at the beginning of mapper configuration via the `.MapperEvents.before_configured` event:
+Like ``__declare_last__()``, but is called at the beginning of mapper
+configuration via the :meth:`.MapperEvents.before_configured` event::
 
-```
-class MyClass(Base):
-    @classmethod
-    def __declare_first__(cls):
-        """ """
-        # do something before mappings are configured
-```
+    class MyClass(Base):
+        @classmethod
+        def __declare_first__(cls):
+            """ """
+            # do something before mappings are configured
 
-### `metadata`
+.. _declarative_metadata:
 
-The `_schema.MetaData collection normally used to assign a new schema.Table is the orm.registry.metadata attribute associated with the orm.registry object in use. When using a declarative base class such as that produced by the orm.DeclarativeBase superclass, as well as legacy functions such as orm.declarative_base and orm.registry.generate_base, this schema.MetaData` is also normally present as an attribute named `.metadata that's directly on the base class, and thus also on the mapped class via inheritance. Declarative uses this attribute, when present, in order to determine the target schema.MetaData collection, or if not present, uses the schema.MetaData associated directly with the orm.registry`.
+### ``metadata``
 
-This attribute may also be assigned towards in order to affect the `_schema.MetaData collection to be used on a per-mapped-hierarchy basis for a single base and/or orm.registry. This takes effect whether a declarative base class is used or if the orm.registry.mapped` decorator is used directly, thus allowing patterns such as the metadata-per-abstract base example in the next section, `declarative_abstract. A similar pattern can be illustrated using orm.registry.mapped` as follows:
+The :class:`_schema.MetaData` collection normally used to assign a new
+:class:`_schema.Table` is the :attr:`_orm.registry.metadata` attribute
+associated with the :class:`_orm.registry` object in use. When using a
+declarative base class such as that produced by the
+:class:`_orm.DeclarativeBase` superclass, as well as legacy functions such as
+:func:`_orm.declarative_base` and :meth:`_orm.registry.generate_base`, this
+:class:`_schema.MetaData` is also normally present as an attribute named
+``.metadata`` that's directly on the base class, and thus also on the mapped
+class via inheritance. Declarative uses this attribute, when present, in order
+to determine the target :class:`_schema.MetaData` collection, or if not
+present, uses the :class:`_schema.MetaData` associated directly with the
+:class:`_orm.registry`.
 
-```
-reg = registry()
+This attribute may also be assigned towards in order to affect the
+:class:`_schema.MetaData` collection to be used on a per-mapped-hierarchy basis
+for a single base and/or :class:`_orm.registry`. This takes effect whether a
+declarative base class is used or if the :meth:`_orm.registry.mapped` decorator
+is used directly, thus allowing patterns such as the metadata-per-abstract base
+example in the next section, :ref:`declarative_abstract`. A similar pattern can
+be illustrated using :meth:`_orm.registry.mapped` as follows::
 
-class BaseOne:
-    metadata = MetaData()
+    reg = registry()
 
-class BaseTwo:
-    metadata = MetaData()
 
-@reg.mapped
-class ClassOne:
-    __tablename__ = "t1"  # will use reg.metadata
+    class BaseOne:
+        metadata = MetaData()
 
-    id = mapped_column(Integer, primary_key=True)
 
-@reg.mapped
-class ClassTwo(BaseOne):
-    __tablename__ = "t1"  # will use BaseOne.metadata
+    class BaseTwo:
+        metadata = MetaData()
 
-    id = mapped_column(Integer, primary_key=True)
 
-@reg.mapped
-class ClassThree(BaseTwo):
-    __tablename__ = "t1"  # will use BaseTwo.metadata
+    @reg.mapped
+    class ClassOne:
+        __tablename__ = "t1"  # will use reg.metadata
 
-    id = mapped_column(Integer, primary_key=True)
-```
+        id = mapped_column(Integer, primary_key=True)
 
-> **Seealso:**  `declarative_abstract`
 
-### `__abstract__`
+    @reg.mapped
+    class ClassTwo(BaseOne):
+        __tablename__ = "t1"  # will use BaseOne.metadata
 
-`__abstract__` causes declarative to skip the production of a table or mapper for the class entirely.  A class can be added within a hierarchy in the same way as mixin (see `declarative_mixins`), allowing subclasses to extend just from the special class:
+        id = mapped_column(Integer, primary_key=True)
 
-```
-class SomeAbstractBase(Base):
-    __abstract__ = True
 
-    def some_helpful_method(self):
-        """ """
+    @reg.mapped
+    class ClassThree(BaseTwo):
+        __tablename__ = "t1"  # will use BaseTwo.metadata
 
-    @declared_attr
-    def __mapper_args__(cls):
-        return {"helpful mapper arguments": True}
+        id = mapped_column(Integer, primary_key=True)
 
-class MyMappedClass(SomeAbstractBase):
-    pass
-```
+**seealso:** :ref:`declarative_abstract`
 
-One possible use of `__abstract__ is to use a distinct schema.MetaData` for different bases:
+.. _declarative_abstract:
 
-```
-class Base(DeclarativeBase):
-    pass
+### ``__abstract__``
 
-class DefaultBase(Base):
-    __abstract__ = True
-    metadata = MetaData()
+``__abstract__`` causes declarative to skip the production
+of a table or mapper for the class entirely.  A class can be added within a
+hierarchy in the same way as mixin (see :ref:`declarative_mixins`), allowing
+subclasses to extend just from the special class::
 
-class OtherBase(Base):
-    __abstract__ = True
-    metadata = MetaData()
-```
+    class SomeAbstractBase(Base):
+        __abstract__ = True
 
-Above, classes which inherit from `DefaultBase will use one schema.MetaData` as the registry of tables, and those which inherit from `OtherBase` will use a different one. The tables themselves can then be created perhaps within distinct databases:
+        def some_helpful_method(self):
+            """ """
 
-```
-DefaultBase.metadata.create_all(some_engine)
-OtherBase.metadata.create_all(some_other_engine)
-```
+        @declared_attr
+        def __mapper_args__(cls):
+            return {"helpful mapper arguments": True}
 
-> **Seealso:**  `orm_inheritance_abstract_poly` - an alternative form of "abstract"
- mapped class that is appropriate for inheritance hierarchies.
 
-### `__table_cls__`
+    class MyMappedClass(SomeAbstractBase):
+        pass
 
-Allows the callable / class used to generate a `_schema.Table to be customized. This is a very open-ended hook that can allow special customizations to a schema.Table` that one generates here:
+One possible use of ``__abstract__`` is to use a distinct
+:class:`_schema.MetaData` for different bases::
 
-```
-class MyMixin:
-    @classmethod
-    def __table_cls__(cls, name, metadata_obj, *arg, **kw):
-        return Table(f"my_{name}", metadata_obj, *arg, **kw)
-```
+    class Base(DeclarativeBase):
+        pass
 
-The above mixin would cause all `_schema.Table` objects generated to include the prefix `"my_", followed by the name normally specified using the _tablename__` attribute.
 
-`__table_cls__` also supports the case of returning `None`, which causes the class to be considered as single-table inheritance vs. its subclass. This may be useful in some customization schemes to determine that single-table inheritance should take place based on the arguments for the table itself, such as, define as single-inheritance if there is no primary key present:
+    class DefaultBase(Base):
+        __abstract__ = True
+        metadata = MetaData()
 
-```
-class AutoTable:
-    @declared_attr
-    def __tablename__(cls):
-        return cls.__name__
 
-    @classmethod
-    def __table_cls__(cls, *arg, **kw):
-        for obj in arg[1:]:
-            if (isinstance(obj, Column) and obj.primary_key) or isinstance(
-                obj, PrimaryKeyConstraint
-            ):
-                return Table(*arg, **kw)
+    class OtherBase(Base):
+        __abstract__ = True
+        metadata = MetaData()
 
-        return None
+Above, classes which inherit from ``DefaultBase`` will use one
+:class:`_schema.MetaData` as the registry of tables, and those which inherit from
+``OtherBase`` will use a different one. The tables themselves can then be
+created perhaps within distinct databases::
 
-class Person(AutoTable, Base):
-    id = mapped_column(Integer, primary_key=True)
+    DefaultBase.metadata.create_all(some_engine)
+    OtherBase.metadata.create_all(some_other_engine)
 
-class Employee(Person):
-    employee_name = mapped_column(String)
-```
+**seealso:** :ref:`orm_inheritance_abstract_poly` - an alternative form of "abstract"
+    mapped class that is appropriate for inheritance hierarchies.
 
-The above `Employee` class would be mapped as single-table inheritance against `Person`; the `employee_name` column would be added as a member of the `Person` table.
+.. _declarative_table_cls:
+
+### ``__table_cls__``
+
+Allows the callable / class used to generate a :class:`_schema.Table` to be customized.
+This is a very open-ended hook that can allow special customizations
+to a :class:`_schema.Table` that one generates here::
+
+    class MyMixin:
+        @classmethod
+        def __table_cls__(cls, name, metadata_obj, *arg, **kw):
+            return Table(f"my_{name}", metadata_obj, *arg, **kw)
+
+The above mixin would cause all :class:`_schema.Table` objects generated to include
+the prefix ``"my_"``, followed by the name normally specified using the
+``__tablename__`` attribute.
+
+``__table_cls__`` also supports the case of returning ``None``, which
+causes the class to be considered as single-table inheritance vs. its subclass.
+This may be useful in some customization schemes to determine that single-table
+inheritance should take place based on the arguments for the table itself,
+such as, define as single-inheritance if there is no primary key present::
+
+    class AutoTable:
+        @declared_attr
+        def __tablename__(cls):
+            return cls.__name__
+
+        @classmethod
+        def __table_cls__(cls, *arg, **kw):
+            for obj in arg[1:]:
+                if (isinstance(obj, Column) and obj.primary_key) or isinstance(
+                    obj, PrimaryKeyConstraint
+                ):
+                    return Table(*arg, **kw)
+
+            return None
+
+
+    class Person(AutoTable, Base):
+        id = mapped_column(Integer, primary_key=True)
+
+
+    class Employee(Person):
+        employee_name = mapped_column(String)
+
+The above ``Employee`` class would be mapped as single-table inheritance
+against ``Person``; the ``employee_name`` column would be added as a member
+of the ``Person`` table.

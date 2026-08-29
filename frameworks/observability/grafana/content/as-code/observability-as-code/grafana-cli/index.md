@@ -1,7 +1,7 @@
 ---
 type: "Framework Learn Directory Index"
 framework: "Grafana"
-generated_at: "2026-07-25T19:08:09.147948Z"
+generated_at: "2026-08-29T09:39:37.616567Z"
 ---
 # Grafana-Cli
 
@@ -18,3 +18,7 @@ This directory contains Grafana learning pages related to grafana-cli.
 ## Pages in This Directory
 
 - [_Index](_index.md)
+
+## Subdirectories
+
+- [Grafanactl](grafanactl/index.md)

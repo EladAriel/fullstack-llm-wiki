@@ -4,10 +4,10 @@ framework: "LangSmith"
 source_repo: "https://github.com/langchain-ai/docs.git"
 source_branch: "main"
 source_path: "src/langsmith/engine-issue-categories.mdx"
-source_commit: "2aae1dfc98ee953a9a5185fb6fcdd9efb3f4d878"
-source_commit_short: "2aae1df"
-source_commit_date: "2026-07-25T00:27:23+00:00"
-generated_at: "2026-07-25T19:08:33.415736Z"
+source_commit: "a174f9cf7c91ee5eb14ee2382eb48bfe6e4956e9"
+source_commit_short: "a174f9c"
+source_commit_date: "2026-08-28T17:04:12-07:00"
+generated_at: "2026-08-29T09:39:50.620363Z"
 ---
 # Engine Issue Categories
 
@@ -126,4 +126,4 @@ A better-fit tool existed but the agent chose the wrong one for the user's reque
 - [Find and fix your agent's issues](/langsmith/engine): Set up Engine, work through the issue lifecycle, and control costs.
 - [Engine](/langsmith/engine-overview): Product overview and where Engine fits in the development lifecycle.
 - [Engine webhook events](/langsmith/engine-webhooks): Forward detected issues to your incident-management, paging, or chat tools.
-- [Evaluators](/langsmith/evaluators): Deploy the suggested evaluator Engine generates for each issue.
+- [Manage datasets](/langsmith/manage-datasets): Turn the traces Engine links to an issue into ground truth examples for offline evaluation.

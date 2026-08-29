@@ -1,70 +1,269 @@
 ---
 type: "Framework Learn Page"
-framework: "mongodb"
+framework: "MongoDB"
 source_repo: "https://github.com/mongodb/docs.git"
 source_branch: "main"
 source_path: "content/manual/manual/source/reference/method/sp.processor.modify.txt"
-source_commit: "ab9db26ed3d11618cdb61516d8180337d8e3f679"
-source_commit_short: "ab9db26e"
-source_commit_date: "2026-07-24T16:22:46-06:00"
-generated_at: "2026-07-25T11:51:15Z"
+source_commit: "b9f2bc487a2878b65e3c1f80024bebab76954f27"
+source_commit_short: "b9f2bc48"
+source_commit_date: "2026-08-28T17:09:45-05:00"
+generated_at: "2026-08-29T09:39:19.896748Z"
 ---
-
-======================================
-
 # sp.processor.modify() (mongosh method)
+
+**meta:** :description: Use sp.processor.modify() to update the pipeline, processor name, or dead letter queue of a stopped stream processor on your Atlas Stream Processing Workspace.
+
+.. default-domain:: mongodb
+
+**contents:** On this page
+   :local:
+   :backlinks: none
+   :depth: 2
+   :class: singlecol
 
 ## Definition
 
-Modifies a named :atlas:`Stream Processor </atlas-sp/overview/#mongodb-expression-exp.Stream-Processor>` on the current :atlas:`Stream Processing Workspace </atlas-sp/overview/#mongodb-expression-exp.Stream-Processing-Instance>`.
+**method:** sp.processor.modify()
+
+Modifies a named :atlas:`Stream Processor
+</atlas-sp/overview/#mongodb-expression-exp.Stream-Processor>` on the
+current :atlas:`Stream Processing Workspace
+</atlas-sp/overview/#mongodb-expression-exp.Stream-Processing-Instance>`.
 
 ## Compatibility
 
-.. include:: /includes/fact-environments-atlas-support-stream-processing-only.rst
+**include:** /includes/fact-environments-atlas-support-stream-processing-only.rst
 
 ## Syntax
 
-The :method:`sp.processor.modify()` method has the following syntax:
+The :method:`sp.processor.modify()` method has the following syntax: 
 
-```javascript
-sp.processor.modify({
-  pipeline: [
-    <pipeline>
-  ],
-  name: <name>,
-  dlq: {
-    connectionName: <connectionName>,
-    db: <db>,
-    coll: <coll>
-  },
-  resumeFromCheckpoint: <resumeFromCheckpoint>,
-  tier: <tier>
-})
-```
+.. code-block:: javascript
+
+   sp.processor.modify({
+     pipeline: [
+       <pipeline>
+     ],
+     name: <name>,
+     dlq: {
+       connectionName: <connectionName>,
+       db: <db>,
+       coll: <coll>
+     },
+     resumeFromCheckpoint: <resumeFromCheckpoint>,
+     tier: <tier>
+   })
 
 ## Command Fields
 
-`sp.processor.modify()` takes the following fields:
+``sp.processor.modify()`` takes the following fields:
+
+.. list-table::
+   :header-rows: 1
+   :widths: 30 15 15 40
+
+   * - Field
+     - Type
+     - Necessity
+     - Description
+
+   * - ``pipeline``
+     - array
+     - Optional
+     - Array of aggregation stages to apply to
+       your streaming data where the last stage must be a :atlas:`sink
+       stage </atlas-stream-processing/#sinks>`. To learn more, see
+       :ref:`Stream Processing Aggregation <atlas-sp-aggregation>`.
+
+   * - ``name``
+     - string
+     - Optional
+     - New name for the stream processor.
+
+   * - ``dlq``
+     - object
+     - Optional
+     - Object that sets a :term:`dead letter
+       queue` for your stream processor. To remove an existing dead
+       letter queue, pass an empty object (``{}``).
+
+   * - ``dlq.connectionName``
+     - string
+     - Conditional
+     - Label that identifies a connection in your connection
+       registry. This connection must reference a |service| cluster.
+       Required when you set a dead letter queue.
+
+   * - ``dlq.db``
+     - string
+     - Conditional
+     - Name of a |service| database on the cluster specified
+       in ``dlq.connectionName``. Required when you set a
+       dead letter queue.
+
+   * - ``dlq.coll``
+     - string
+     - Conditional
+     - Name of a collection in the database specified in
+       ``dlq.db``. Required when you set a dead letter queue.
+
+   * - ``resumeFromCheckpoint``
+     - boolean
+     - Optional
+     - Flag that specifies whether the modified stream processor
+       resumes from its last checkpoint. By default, this field is
+       ``true``. When set to ``false``, the processor retains only
+       summary statistics.
+
+   * - ``tier``
+     - string
+     - Optional
+     - The tier to assign to the stream processor. If you
+       don't declare this option, the processor retains its
+       current tier. Must be one of the following values:
+
+       .. include:: /includes/fact-asp-stream-processor-tiers.rst
 
 ## Behavior
 
-The stream processor must be in a `STOPPED` state before you invoke this method. The `pipeline` argument replaces the processor's entire existing pipeline, including stages that you do not change.
+The stream processor must be in a ``STOPPED`` state before you invoke
+this method. The ``pipeline`` argument replaces the processor's entire
+existing pipeline, including stages that you do not change.
 
-By default, the modified processor resumes from its last checkpoint. If you set `resumeFromCheckpoint` to `false`, the modified processor retains only summary statistics. When you modify a processor with open windows, {+atlas-sp+} recomputes those windows on the updated pipeline.
+By default, the modified processor resumes from its last checkpoint. If
+you set ``resumeFromCheckpoint`` to ``false``, the modified
+processor retains only summary statistics. When you modify a processor
+with open windows, {+atlas-sp+} recomputes those windows on the updated
+pipeline.
 
-For limitations that apply when you modify stream processors, see :atlas:`Modify a Stream Processor </atlas-sp/manage-stream-processor/#limitations>`.
+For limitations that apply when you modify stream processors, see
+:atlas:`Modify a Stream Processor
+</atlas-sp/manage-stream-processor/#limitations>`.
 
 ## Access Control
 
-To run `sp.processor.modify()`, you must have the :atlasrole:`atlasAdmin` role.
+To run ``sp.processor.modify()``, you must have the
+:atlasrole:`atlasAdmin` role.
 
 ## Example
 
-The example changes a stopped stream processor named `solarDemo` to add a `$match` stage, rename it, update its tier, and configure a dead letter queue:
+The example changes a stopped stream processor named ``solarDemo``
+to add a ``$match`` stage, rename it, update its tier, and configure
+a dead letter queue:
 
-Start the renamed processor, then run `sp.listStreamProcessors()` to verify the name, tier, and dead letter queue changes:
+.. io-code-block::
+   :copyable: true
 
-Run :method:`sp.processor.sample()` to verify the pipeline change:
+   .. input::
+      :language: javascript
+
+      sp.solarDemo.modify({
+        pipeline: [
+          { $source: { connectionName: "sample_stream_solar" }},
+          { $match: { device_id: "device_0" }},
+          { $merge: { into: {
+              connectionName: "cluster0",
+              db: "testout",
+              coll: "testout2"
+          }}}
+        ],
+        name: "solarDemoRenamed",
+        dlq: {
+          connectionName: "cluster0",
+          db: "testout",
+          coll: "dlq"
+        },
+        resumeFromCheckpoint: true,
+        tier: "SP10"
+      })
+
+   .. output::
+      :language: javascript
+
+      { ok: 1 }
+
+Start the renamed processor, then run ``sp.listStreamProcessors()``
+to verify the name, tier, and dead letter queue changes:
+
+.. io-code-block::
+   :copyable: true
+
+   .. input::
+      :language: javascript
+
+      sp.solarDemoRenamed.start()
+      sp.listStreamProcessors()
+
+   .. output::
+      :language: javascript
+
+      [
+        {
+          id: '6a39b08e6d9040e1cef8e31f',
+          name: 'solarDemoRenamed',
+          lastModified: ISODate('2026-06-22T22:00:46.858Z'),
+          state: 'STARTED',
+          tier: 'SP10',
+          errorMsg: '',
+          workers: [ 'worker-5f4c5bbc9d-7hg2q' ],
+          pipeline: [
+            { '$source': { connectionName: 'sample_stream_solar' } },
+            { '$match': { device_id: 'device_0' } },
+            {
+              '$merge': {
+                into: {
+                  connectionName: 'cluster0',
+                  db: 'testout',
+                  coll: 'testout2'
+                }
+              }
+            }
+          ],
+          lastStateChange: ISODate('2026-06-22T22:01:16.835Z'),
+          dlq: {
+            connectionName: 'cluster0',
+            db: 'testout',
+            coll: 'dlq'
+          }
+        }
+      ]
+
+Run :method:`sp.processor.sample()` to verify the pipeline
+change:
+
+.. io-code-block::
+   :copyable: true
+
+   .. input::
+      :language: javascript
+
+      sp.solarDemoRenamed.sample()
+
+   .. output::
+      :language: javascript
+
+      {
+        device_id: 'device_0',
+        group_id: 9,
+        timestamp: '2026-06-22T22:01:25.828+00:00',
+        max_watts: 450,
+        event_type: 0,
+        obs: {
+          watts: 122,
+          temp: 18
+        }
+      }
+      {
+        device_id: 'device_0',
+        group_id: 3,
+        timestamp: '2026-06-22T22:01:26.828+00:00',
+        max_watts: 450,
+        event_type: 0,
+        obs: {
+          watts: 377,
+          temp: 7
+        }
+      }
 
 ## Learn More
 

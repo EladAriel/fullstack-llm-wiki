@@ -1,25 +1,34 @@
 ---
 type: "Framework Learn Page"
-framework: "postgres"
+framework: "PostgreSQL"
 source_repo: "https://github.com/postgres/postgres.git"
 source_branch: "master"
 source_path: "doc/src/sgml/ref/security_label.sgml"
-source_commit: "38afc3dcb25c45b744d4025029ce0a6c90b7059f"
-source_commit_short: "38afc3dc"
-source_commit_date: "2026-07-25T19:08:27+09:00"
-generated_at: "2026-07-25T11:50:59Z"
+source_commit: "6c5f1d6074208146930b67c2054509c3e82f6f7f"
+source_commit_short: "6c5f1d6"
+source_commit_date: "2026-08-28T23:24:47+02:00"
+generated_at: "2026-08-29T09:39:24.575087Z"
 ---
-
 SECURITY LABEL
+ 
 
-SECURITY LABEL
-7
-SQL - Language Statements
+ 
+  
+# SECURITY LABEL
 
-SECURITY LABEL
-define or change a security label applied to an object
+  7
+  SQL - Language Statements
+ 
 
-```
+ 
+  
+# SECURITY LABEL
+
+  define or change a security label applied to an object
+ 
+
+ 
+
 SECURITY LABEL [ FOR provider ] ON
 {
   TABLE object_name |
@@ -50,46 +59,209 @@ where aggregate_signature is:
 * |
 [ argmode ] [ argname ] argtype [ , ... ] |
 [ [ argmode ] [ argname ] argtype [ , ... ] ] ORDER BY [ argmode ] [ argname ] argtype [ , ... ]
+
+ 
+
+ 
+  
+# Description
+
+  
+   SECURITY LABEL applies a security label to a database
+   object.  An arbitrary number of security labels, one per label provider, can
+   be associated with a given database object.  Label providers are loadable
+   modules which register themselves by using the function
+   register_label_provider.
+  
+
+  
+    
+      register_label_provider is not an SQL function; it can
+      only be called from C code loaded into the backend.
+    
+
+  
+
+  
+   The label provider determines whether a given label is valid and whether
+   it is permissible to assign that label to a given object.  The meaning of a
+   given label is likewise at the discretion of the label provider.
+   PostgreSQL places no restrictions on whether or how a
+   label provider must interpret security labels; it merely provides a
+   mechanism for storing them.  In practice, this facility is intended to allow
+   integration with label-based mandatory access control (MAC) systems such as
+   SELinux.  Such systems make all access control decisions
+   based on object labels, rather than traditional discretionary access control
+   (DAC) concepts such as users and groups.
+  
+
+  
+   You must own the database object to use SECURITY LABEL.
+  
+
+ 
+
+ 
+  
+# Parameters
+
+  
+   
+    object_name
+    table_name.column_name
+    aggregate_name
+    function_name
+    procedure_name
+    routine_name
+    
+     
+      The name of the object to be labeled.  Names of objects that reside in
+      schemas (tables, functions, etc.) can be schema-qualified.
+     
+
+    
+   
+
+   
+    provider
+    
+     
+      The name of the provider with which this label is to be associated.  The
+      named provider must be loaded and must consent to the proposed labeling
+      operation.  If exactly one provider is loaded, the provider name may be
+      omitted for brevity.
+     
+
+    
+   
+
+   
+    argmode
+
+    
+     
+      The mode of a function, procedure, or aggregate
+      argument: IN, OUT,
+      INOUT, or VARIADIC.
+      If omitted, the default is IN.
+      Note that SECURITY LABEL does not actually
+      pay any attention to OUT arguments, since only the input
+      arguments are needed to determine the function's identity.
+      So it is sufficient to list the IN, INOUT,
+      and VARIADIC arguments.
+     
+
+    
+   
+
+   
+    argname
+
+    
+     
+      The name of a function, procedure, or aggregate argument.
+      Note that SECURITY LABEL does not actually
+      pay any attention to argument names, since only the argument data
+      types are needed to determine the function's identity.
+     
+
+    
+   
+
+   
+    argtype
+
+    
+     
+      The data type of a function, procedure, or aggregate argument.
+     
+
+    
+   
+
+   
+    large_object_oid
+    
+     
+      The OID of the large object.
+     
+
+    
+   
+
+    
+     PROCEDURAL
+
+     
+      
+       This is a noise word.
+      
+
+     
+    
+
+   
+    string_literal
+    
+     
+      The new setting of the security label, written as a string literal.
+     
+
+    
+   
+
+   
+    NULL
+    
+     
+      Write NULL to drop the security label.
+     
+
+    
+   
+  
+ 
+
+ 
+  
+# Examples
+
+  
+   The following example shows how the security label of a table could
+   be set or changed:
+
 ```
 
-## Description
-
-`SECURITY LABEL` applies a security label to a database object. An arbitrary number of security labels, one per label provider, can be associated with a given database object. Label providers are loadable modules which register themselves by using the function `register_label_provider`.
-
-`register_label_provider` is not an SQL function; it can only be called from C code loaded into the backend.
-
-The label provider determines whether a given label is valid and whether it is permissible to assign that label to a given object. The meaning of a given label is likewise at the discretion of the label provider. PostgreSQL places no restrictions on whether or how a label provider must interpret security labels; it merely provides a mechanism for storing them. In practice, this facility is intended to allow integration with label-based mandatory access control (MAC) systems such as SELinux. Such systems make all access control decisions based on object labels, rather than traditional discretionary access control (DAC) concepts such as users and groups.
-
-You must own the database object to use `SECURITY LABEL`.
-
-## Parameters
-
-- The name of the object to be labeled. Names of objects that reside in schemas (tables, functions, etc.) can be schema-qualified.
-- The name of the provider with which this label is to be associated. The named provider must be loaded and must consent to the proposed labeling operation. If exactly one provider is loaded, the provider name may be omitted for brevity.
-- The mode of a function, procedure, or aggregate argument: `IN`, `OUT`, `INOUT`, or `VARIADIC`. If omitted, the default is `IN`. Note that `SECURITY LABEL` does not actually pay any attention to `OUT` arguments, since only the input arguments are needed to determine the function's identity. So it is sufficient to list the `IN`, `INOUT`, and `VARIADIC` arguments.
-- The name of a function, procedure, or aggregate argument. Note that `SECURITY LABEL` does not actually pay any attention to argument names, since only the argument data types are needed to determine the function's identity.
-- The data type of a function, procedure, or aggregate argument.
-- The OID of the large object.
-- This is a noise word.
-- The new setting of the security label, written as a string literal.
-- Write `NULL` to drop the security label.
-
-## Examples
-
-The following example shows how the security label of a table could be set or changed:
-
-```
 SECURITY LABEL FOR selinux ON TABLE mytable IS 'system_u:object_r:sepgsql_table_t:s0';
-```
-
-To remove the label:
 
 ```
+
+   To remove the label:
+
+```
+
 SECURITY LABEL FOR selinux ON TABLE mytable IS NULL;
+
 ```
 
-## Compatibility
+  
 
-There is no `SECURITY LABEL` command in the SQL standard.
+ 
 
-## See Also
+ 
+  
+# Compatibility
+
+  
+   There is no SECURITY LABEL command in the SQL standard.
+  
+
+ 
+
+ 
+  
+# See Also
+
+  
+   
+   src/test/modules/dummy_seclabel

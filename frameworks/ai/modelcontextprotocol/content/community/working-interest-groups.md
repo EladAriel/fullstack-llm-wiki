@@ -4,11 +4,12 @@ framework: "Model Context Protocol"
 source_repo: "https://github.com/modelcontextprotocol/modelcontextprotocol"
 source_branch: "main"
 source_path: "docs/community/working-interest-groups.mdx"
-source_commit: "7634684382c3d14cf7e9f14073fe40a2d8ace3fa"
-source_commit_short: "76346843"
-source_commit_date: "2026-07-23T16:49:30-07:00"
-generated_at: "2026-07-25T11:50:39Z"
+source_commit: "ca4ab3027f7c844cd3039c956438d72e8253f7f5"
+source_commit_short: "ca4ab30"
+source_commit_date: "2026-08-28T21:24:44-07:00"
+generated_at: "2026-08-29T09:38:48.010201Z"
 ---
+# Working Interest Groups
 
 ---
 title: Working and Interest Groups
@@ -240,15 +241,14 @@ The quarterly updates are provided as a document posted in the [GitHub Discussio
 **Working Group Formation:**
 
 - There must be a widely acknowledged concern requiring coordination
-- PR for creation of WG into `docs/community/working-groups/<name>/overview.mdx`, gated by CODEOWNERS requiring approval by Maintainers
-- PR for charter into `docs/community/working-groups/<name>.mdx`, gated by CODEOWNERS requiring approval from Core Maintainers
+- PR adding the WG charter as `docs/community/working-groups/<name>.mdx`, written from the [Group Charter Template](/community/charter-template) and including the corresponding navigation entry in `docs/docs.json`, gated by CODEOWNERS requiring approval from Core Maintainers
 - Initial member list approved by WG Lead
 
 **Interest Group Formation:**
 
 - Fill out the creation template in the `#wg-ig-group-creation` channel on [Discord](https://discord.gg/6CSzBmMkjX)
 - A Core Maintainer reviews the proposal; the IG and its Facilitator(s) must be sponsored by at least two Core Maintainers or one Lead Maintainer
-- Once sponsored, the Facilitator(s) organize the IG and create a charter
+- Once sponsored, the Facilitator(s) organize the IG and create a charter via a PR adding `docs/community/interest-groups/<name>.mdx`, written from the same template and including the corresponding navigation entry in `docs/docs.json`, gated by CODEOWNERS requiring approval from Core Maintainers
 
 **Retirement:**
 

@@ -1,33 +1,46 @@
 ---
 type: "Framework Learn Page"
-framework: "mongodb"
+framework: "MongoDB"
 source_repo: "https://github.com/mongodb/docs.git"
 source_branch: "main"
 source_path: "content/manual/manual/source/tutorial/upgrade-to-enterprise-standalone.txt"
-source_commit: "ab9db26ed3d11618cdb61516d8180337d8e3f679"
-source_commit_short: "ab9db26e"
-source_commit_date: "2026-07-24T16:22:46-06:00"
-generated_at: "2026-07-25T11:51:15Z"
+source_commit: "b9f2bc487a2878b65e3c1f80024bebab76954f27"
+source_commit_short: "b9f2bc48"
+source_commit_date: "2026-08-28T17:09:45-05:00"
+generated_at: "2026-08-29T09:39:19.567333Z"
 ---
-
-==========================================
+.. _upgrade_to_enterprise_standalone:
 
 # Upgrade to MongoDB Enterprise (Standalone)
 
-.. include:: /includes/minor-release.rst
+**meta:** :keywords: on-prem
+   :description: Upgrade a standalone `mongod` from MongoDB Community Edition to Enterprise Edition by following outlined steps for different operating systems.
 
-.. include:: /includes/extracts/enterprise-additional-features.rst
+.. default-domain:: mongodb
 
-The following steps outline the procedure to upgrade a standalone :binary:`~bin.mongod` from the MongoDB Community Edition to the MongoDB Enterprise Edition. For example, the steps can be used to upgrade MongoDB 7.0 Community to MongoDB 7.0 Enterprise.
+**contents:** On this page
+   :local:
+   :backlinks: none
+   :depth: 1
+   :class: singlecol
+
+**include:** /includes/minor-release.rst
+
+**include:** /includes/extracts/enterprise-additional-features.rst
+
+The following steps outline the procedure to upgrade a standalone
+:binary:`~bin.mongod` from the MongoDB Community Edition to the MongoDB
+Enterprise Edition. For example, the steps can be used to upgrade
+MongoDB 7.0 Community to MongoDB 7.0 Enterprise.
 
 ## Consideration
 
-> **Warning:** .. include:: /includes/extracts/enterprise-upgrade-edition-only.rst
+**warning:** .. include:: /includes/extracts/enterprise-upgrade-edition-only.rst
 
 ## Download Enterprise Binaries
 
-.. include:: /includes/extracts/enterprise-install-binaries.rst
+**include:** /includes/extracts/enterprise-install-binaries.rst
 
 ## Procedure
 
-.. include:: /includes/steps/upgrade-enterprise-standalone.rst
+**include:** /includes/steps/upgrade-enterprise-standalone.rst

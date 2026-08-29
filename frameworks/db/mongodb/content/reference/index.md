@@ -1,39 +1,19 @@
 ---
 type: "Framework Learn Directory Index"
-framework: "mongodb"
-directory: "content/reference"
-source_repo: "https://github.com/mongodb/docs.git"
-source_branch: "main"
-source_commit: "ab9db26ed3d11618cdb61516d8180337d8e3f679"
-source_commit_short: "ab9db26e"
-source_commit_date: "2026-07-24T16:22:46-06:00"
-generated_at: "2026-07-25T11:51:15Z"
+framework: "MongoDB"
+generated_at: "2026-08-29T09:39:20.592825Z"
 ---
 # Reference
 
-This directory contains mongodb learning pages related to reference.
+This directory contains MongoDB learning pages related to reference.
 
 ## Breadcrumbs
 
-[Wiki Home](../../index.md) -> [Content](../index.md) -> [Reference](index.md)
+[Wiki Home](../index.md) -> [Content](index.md)
 
 ## Navigation
 
-- Parent: [Parent Index](../index.md)
-
-## Child Directories
-
-- [Audit Message](audit-message/index.md) - pages related to audit message
-- [Bson Types](bson-types/index.md) - pages related to bson types
-- [Change Events](change-events/index.md) - pages related to change events
-- [Cluster Parameters](cluster-parameters/index.md) - pages related to cluster parameters
-- [Command](command/index.md) - pages related to command
-- [Inconsistency Type](inconsistency-type/index.md) - pages related to inconsistency type
-- [Method](method/index.md) - pages related to method
-- [Mql](mql/index.md) - pages related to mql
-- [Operator](operator/index.md) - pages related to operator
-- [Program](program/index.md) - pages related to program
-- [Write Concern](write-concern/index.md) - pages related to write concern
+- Wiki Home: [Root Index](../index.md)
 
 ## Pages in This Directory
 
@@ -115,10 +95,16 @@ This directory contains mongodb learning pages related to reference.
 - [Versioning](versioning.md)
 - [Write Concern](write-concern.md)
 
-## IDE LLM Guidance
+## Subdirectories
 
-When answering implementation questions related to this directory:
-
-1. Prefer the most specific page listed above.
-2. If the topic is broad, read the child directory index first.
-3. Use source metadata from each page when giving answers.
+- [Audit Message](audit-message/index.md)
+- [Bson Types](bson-types/index.md)
+- [Change Events](change-events/index.md)
+- [Cluster Parameters](cluster-parameters/index.md)
+- [Command](command/index.md)
+- [Inconsistency Type](inconsistency-type/index.md)
+- [Method](method/index.md)
+- [Mql](mql/index.md)
+- [Operator](operator/index.md)
+- [Program](program/index.md)
+- [Write Concern](write-concern/index.md)

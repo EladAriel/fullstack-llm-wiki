@@ -4,10 +4,10 @@ framework: "Sentry Python"
 source_repo: "https://github.com/getsentry/sentry-docs.git"
 source_branch: "master"
 source_path: "docs/platforms/python/tracing/instrumentation/automatic-instrumentation.mdx"
-source_commit: "8557ccbd46b02c43301ef74ff54516736ecf9d69"
-source_commit_short: "8557ccb"
-source_commit_date: "2026-07-24T13:12:02-04:00"
-generated_at: "2026-07-25T19:08:13.534293Z"
+source_commit: "8b4e4a23b18ee70f5fdb05bcda48869c10be2f60"
+source_commit_short: "8b4e4a2"
+source_commit_date: "2026-08-28T22:17:56+00:00"
+generated_at: "2026-08-29T09:40:09.046804Z"
 ---
 # Automatic Instrumentation
 
@@ -30,7 +30,7 @@ supported:
 description: "Learn what instrumentation automatically captures transactions."
 ---
 
-Many integrations for popular frameworks automatically capture transactions. If you already have any of the following frameworks set up for Sentry error reporting, you will start to see traces immediately:
+Many integrations for popular frameworks automatically capture transactions (or service spans in <PlatformLink to="/tracing/streamed-spans">stream mode</PlatformLink>). If you already have any of the following frameworks set up for Sentry error reporting, you will start to see traces immediately:
 
 - All WSGI-based web frameworks (Django, Flask, Pyramid, Falcon, Bottle)
 - Celery
@@ -39,11 +39,13 @@ Many integrations for popular frameworks automatically capture transactions. If 
 
 See the full [list of available integrations](/platforms/python/integrations/).
 
-Spans are instrumented for the following operations within a transaction:
+Spans are instrumented for the following operations within a transaction/service span:
 
 - Database queries that use SQLAlchemy or the Django ORM
 - HTTP requests made with HTTPX, requests, the stdlib, AIOHTTP, or pyreqwest
 - Spawned subprocesses
 - Redis operations
 
-Spans are only created within an existing transaction. If you're not using any of the supported frameworks, you'll need to <PlatformLink to="/tracing/instrumentation/custom-instrumentation/">create transactions manually</PlatformLink>.
+In transaction mode, spans are only created within an existing transaction. If you're not using any of the supported frameworks, you'll need to <PlatformLink to="/tracing/instrumentation/custom-instrumentation/">create transactions manually</PlatformLink>.
+
+Stream mode removes this limitation. Since there are no transactions, any span started without a parent is automatically promoted to a service span (the equivalent of a transaction). You can also force any span to become a service span when starting it by setting its parent to `None`. See <PlatformLink to="/tracing/instrumentation/custom-instrumentation/">Custom Instrumentation</PlatformLink> to learn more.

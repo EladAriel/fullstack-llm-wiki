@@ -1,14 +1,15 @@
 ---
 type: "Framework Learn Page"
-framework: "tanstack"
+framework: "TanStack"
 source_repo: "https://github.com/tanstack/query"
 source_branch: "main"
 source_path: "docs/framework/angular/typescript.md"
-source_commit: "fd50fa14d283c7d6664a796f758498d1ad5bfce7"
-source_commit_short: "fd50fa14"
-source_commit_date: "2026-07-24T22:22:47+10:00"
-generated_at: "2026-07-25T11:50:41Z"
+source_commit: "2969edf32f7e0c48e2a108d84712d6e01edfde21"
+source_commit_short: "2969edf"
+source_commit_date: "2026-08-28T01:03:02+09:00"
+generated_at: "2026-08-29T09:40:33.363856Z"
 ---
+# Typescript
 
 ---
 id: typescript
@@ -186,9 +187,11 @@ computed(() => {
 
 ## Typing Query Options
 
-If you inline query options into `injectQuery`, you'll get automatic type inference. However, you might want to extract the query options into a separate function to share them between `injectQuery` and e.g. `prefetchQuery` or manage them in a service. In that case, you'd lose type inference. To get it back, you can use the `queryOptions` helper:
+If you inline query options into `injectQuery`, you'll get automatic type inference. However, you might want to extract the query options into a separate function to share them between `injectQuery` and e.g. `queryClient.query`, or manage them in a service. In that case, you'd lose type inference. To get it back, you can use the `queryOptions` helper:
 
 ```ts
+import { noop } from '@tanstack/angular-query-experimental'
+
 @Injectable({
   providedIn: 'root',
 })
@@ -227,7 +230,7 @@ export class Component {
   postQuery = injectQuery(this.optionsSignal)
 
   someMethod() {
-    this.queryClient.prefetchQuery(this.queries.post(23))
+    void this.queryClient.query(this.queries.post(23)).catch(noop)
   }
 }
 ```

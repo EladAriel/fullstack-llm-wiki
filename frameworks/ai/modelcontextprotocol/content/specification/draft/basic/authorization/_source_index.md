@@ -4,12 +4,12 @@ framework: "Model Context Protocol"
 source_repo: "https://github.com/modelcontextprotocol/modelcontextprotocol"
 source_branch: "main"
 source_path: "docs/specification/draft/basic/authorization/index.mdx"
-source_commit: "7634684382c3d14cf7e9f14073fe40a2d8ace3fa"
-source_commit_short: "76346843"
-source_commit_date: "2026-07-23T16:49:30-07:00"
-generated_at: "2026-07-25T11:50:39Z"
-generated_filename: "_source_index.md"
+source_commit: "ca4ab3027f7c844cd3039c956438d72e8253f7f5"
+source_commit_short: "ca4ab30"
+source_commit_date: "2026-08-28T21:24:44-07:00"
+generated_at: "2026-08-29T09:38:48.101904Z"
 ---
+# Index
 
 ---
 title: Authorization
@@ -141,11 +141,8 @@ only the scopes necessary for their intended operations. During the initial auth
 1. **Use `scope` parameter** from the initial `WWW-Authenticate` header in the 401 response, if provided
 2. **If `scope` is not available**, use all scopes defined in `scopes_supported` from the Protected Resource Metadata document, omitting the `scope` parameter if `scopes_supported` is undefined.
 
-This approach accommodates the general-purpose nature of MCP clients, which typically lack domain-specific knowledge to make informed decisions about individual scope selection. Requesting all available scopes allows the authorization server and end-user to determine appropriate permissions during the consent process.
-
-This approach minimizes user friction while following the principle of least privilege.
 The `scopes_supported` field is intended to represent the minimal set of scopes necessary
-for basic functionality (see [Scope Minimization](/docs/tutorials/security/security_best_practices#scope-minimization)),
+for basic functionality (see [Scope Minimization](/docs/draft/tutorials/security/security_best_practices#scope-minimization)),
 with additional scopes requested incrementally through the step-up authorization flow steps
 described in the [Scope Challenge Handling](#scope-challenge-handling) section.
 
@@ -365,20 +362,7 @@ The `scope` attribute describes the scopes necessary to access
 the requested resource — servers are not required to include
 the client's previously granted scopes.
 
-Servers have flexibility in determining which scopes to include:
-
-- **Minimum approach**: Include only the scopes required for the
-  specific operation that triggered the error.
-- **Recommended approach**: Include the scopes required for the
-  current operation along with related scopes that commonly work
-  together, to reduce the number of step-up authorization rounds.
-- **Extended approach**: Include the scopes required for the
-  current operation, related scopes, and any other scopes the
-  server anticipates the client may need in the near future.
-
-The choice depends on the server's assessment of user experience impact and authorization friction.
-
-Regardless of the approach chosen, servers **SHOULD** include all
+Whatever scope-inclusion strategy a server adopts, servers **SHOULD** include all
 scopes required for the current operation in a single challenge.
 Challenging incrementally (returning one missing scope, then another
 on the subsequent retry) forces multiple authorization round-trips
@@ -392,14 +376,8 @@ Servers **SHOULD** be consistent in their scope inclusion strategy to provide pr
 Servers **SHOULD** consider the user experience impact when determining which scopes to include in the
 response, as misconfigured scopes may require frequent user interaction.
 
-<Note>
-  Scope accumulation across operations is a client-side responsibility. Clients
-  **SHOULD** compute the union of previously requested scopes and newly
-  challenged scopes when initiating re-authorization, as described in [Step-Up
-  Authorization Flow](#step-up-authorization-flow). This allows servers to
-  remain stateless with respect to client scope sets while ensuring clients do
-  not lose previously granted permissions.
-</Note>
+Scope accumulation across operations is a client-side responsibility. See the
+[Step-Up Authorization Flow](#step-up-authorization-flow) for the scope-union requirement.
 
 Example insufficient scope response:
 
@@ -436,18 +414,8 @@ The flow is as follows:
 Clients **SHOULD** implement retry limits and **SHOULD** track scope upgrade attempts to avoid
 repeated failures for the same resource and operation combination.
 
-<Note>
-  **Hierarchical scopes**: Some authorization servers define scope hierarchies
-  where a broader scope implies narrower ones (for example, an `admin` scope
-  that subsumes `read`). When accumulating scopes, the client's union may
-  contain semantically redundant entries — for example, a token previously
-  granted a broad scope may be challenged with a narrower one it already
-  implies. Clients need not deduplicate hierarchically; authorization servers
-  typically normalize such redundancy during token issuance. Servers, for their
-  part, must account for hierarchy when deciding whether a token is sufficient
-  for an operation, but this does not affect the scopes they emit in a
-  challenge.
-</Note>
+Servers **MUST** account for scope hierarchies, where a broader scope implies narrower ones, when
+deciding whether a token is sufficient for an operation.
 
 ## Security Considerations
 

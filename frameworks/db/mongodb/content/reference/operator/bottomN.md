@@ -1,55 +1,122 @@
 ---
 type: "Framework Learn Page"
-framework: "mongodb"
+framework: "MongoDB"
 source_repo: "https://github.com/mongodb/docs.git"
 source_branch: "main"
 source_path: "content/manual/manual/source/reference/operator/bottomN.txt"
-source_commit: "ab9db26ed3d11618cdb61516d8180337d8e3f679"
-source_commit_short: "ab9db26e"
-source_commit_date: "2026-07-24T16:22:46-06:00"
-generated_at: "2026-07-25T11:51:15Z"
+source_commit: "b9f2bc487a2878b65e3c1f80024bebab76954f27"
+source_commit_short: "b9f2bc48"
+source_commit_date: "2026-08-28T17:09:45-05:00"
+generated_at: "2026-08-29T09:39:19.864702Z"
 ---
-
-==============================
+.. _bottomN_expression_operator:
 
 # $bottomN (expression operator)
 
+**meta:** :description: Use the `$bottomN` operator in MongoDB to return the last values of an array.
+
+.. default-domain:: mongodb
+
+**contents:** On this page
+   :local:
+   :backlinks: none
+   :depth: 1
+   :class: singlecol
+
 ## Definition
 
-> **Note:** This page describes the `$bottomN` expression operator. For the `$bottomN`
-accumulator operator, see `$bottomN (accumulator operator) <bottomN_accumulator_operator>`.
+**expression:** $bottomN
+
+   .. versionadded:: 8.3
+
+   Returns the last ``n`` elements of an array
+   according to the specified sort order. If the array contains 
+   fewer than ``n`` elements, ``$bottomN`` returns all elements in the array.
+
+**note:** Disambiguation
+
+   This page describes the ``$bottomN`` expression operator. For the ``$bottomN``
+   accumulator operator, see :ref:`$bottomN (accumulator operator) <bottomN_accumulator_operator>`. 
 
 ## Syntax
 
-When used as an expression operator, `$bottomN` has the following syntax:
+When used as an expression operator, ``$bottomN`` has the following syntax:
 
-```none
-{
-   $bottomN:
-      {
-         n: <expression>,
-         sortBy: { <field1>: <sort order>, <field2>: <sort order> ... },
-         input: <expression>
-      }
-}
-```
+.. code-block:: none
+   :copyable: false
+
+   {
+      $bottomN:
+         {
+            n: <expression>,
+            sortBy: { <field1>: <sort order>, <field2>: <sort order> ... },
+            input: <expression>
+         }
+   }
+
+.. list-table::
+   :header-rows: 1
+   :widths: 15 15 70
+
+   * - Field
+     - Necessity
+     - Description
+
+   * - n
+
+     - Required
+
+     - The number of array elements to return.
+
+   * - sortBy
+
+     - Required
+
+     - Specifies the order of results. See :ref:`Sort Behavior
+       <bottomN_sort_behavior>` for more information. 
+
+
+   * - input
+
+     - Required
+
+     - The array that ``$bottomN`` evaluates. 
 
 ## Behavior
 
+.. _bottomN_sort_behavior:
+
 ### Sort Behavior
 
-.. include:: /includes/sortBy-examples.rst
+**include:** /includes/sortBy-examples.rst
 
 ### Input Values
 
-The `input` field must resolve to an array. If you specify an `input` that is not an array, MongoDB errors.
+The ``input`` field must resolve to an array. If you specify an ``input`` that is not
+an array, MongoDB errors. 
 
 ## Example
 
-.. include:: /includes/sample-data-usage-singular.rst
+**include:** /includes/sample-data-usage-singular.rst
 
-The `movies` collection contains documents that resemble the following example:
+The ``movies`` collection contains documents that resemble the following
+example:
 
-The following aggregation pipeline uses `$bottomN` on the `cast` array:
+**literalinclude:** /includes/movies-sample-document.js
+   :language: javascript
+   :category: usage example
 
-In this example, `$bottomN` sorts the existing `cast` array in ascending alphabetical order and returns the last three values.
+The following aggregation pipeline uses ``$bottomN`` on the
+``cast`` array:
+
+.. io-code-block::
+   :copyable: true
+
+   .. input:: /code-examples/tested/command-line/mongosh/aggregation/expressions/bottomN/pipeline.snippet.use-bottomN-on-array.js
+      :language: javascript
+
+   .. output:: /code-examples/tested/command-line/mongosh/aggregation/expressions/bottomN/pipeline-output.sh
+      :language: javascript
+
+In this example, ``$bottomN`` sorts the existing ``cast`` array in ascending
+alphabetical order and returns the last three values.

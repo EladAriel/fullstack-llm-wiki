@@ -1,148 +1,177 @@
 ---
 type: "Framework Learn Page"
-framework: "mongodb"
+framework: "MongoDB"
 source_repo: "https://github.com/mongodb/docs.git"
 source_branch: "main"
 source_path: "content/manual/manual/source/reference/operator/aggregation/push.txt"
-source_commit: "ab9db26ed3d11618cdb61516d8180337d8e3f679"
-source_commit_short: "ab9db26e"
-source_commit_date: "2026-07-24T16:22:46-06:00"
-generated_at: "2026-07-25T11:51:15Z"
+source_commit: "b9f2bc487a2878b65e3c1f80024bebab76954f27"
+source_commit_short: "b9f2bc48"
+source_commit_date: "2026-08-28T17:09:45-05:00"
+generated_at: "2026-08-29T09:39:20.170577Z"
 ---
-
-============================
-
 # $push (accumulator operator)
+
+**meta:** :description: Explore how to use the `$push` operator in MongoDB aggregation stages to create arrays from document values.
+
+.. default-domain:: mongodb
+
+**contents:** On this page
+   :local:
+   :backlinks: none
+   :depth: 1
+   :class: singlecol
 
 ## Definition
 
-:group:`$push` returns an array of all values that result from applying an `expression <aggregation-expressions>` to documents.
+**group:** $push
 
-.. include:: /includes/extracts/fact-aggregation-accumulator-push.rst
+:group:`$push` returns an array of *all* values that result from
+applying an :ref:`expression <aggregation-expressions>` to documents.
+
+**include:** /includes/extracts/fact-aggregation-accumulator-push.rst
 
 ## Syntax
 
 :group:`$push` syntax:
 
-```none
-{ $push: <expression> }
-```
+.. code-block:: none
+   :copyable: false
 
-For more information on expressions, see `aggregation-expressions`.
+   { $push: <expression> }
+
+For more information on expressions, see
+:ref:`aggregation-expressions`.
 
 ## Behavior
 
-When using :group:`$push` in a :pipeline:`$group` stage, the order of the documents coming into the pipeline determines the order of the documents in the output array. To guarantee a defined order, the :pipeline:`$group` pipeline stage should follow a :pipeline:`$sort` stage.
+When using :group:`$push` in a :pipeline:`$group` stage, the order of 
+the documents coming into the pipeline determines the order of the 
+documents in the output array. To guarantee a defined order, the
+:pipeline:`$group` pipeline stage should follow a :pipeline:`$sort`
+stage.
 
 ## Examples
 
-### Use in `$group` Stage
+### Use in ``$group`` Stage
 
-Consider a `sales` collection with the following documents:
+Consider a ``sales`` collection with the following documents:
 
-```javascript
-db.sales.insertMany( [
-   { _id : 1, "item" : "abc", "price" : 10, "quantity" : 2, "date" : ISODate("2014-01-01T08:00:00Z") },
-   { _id : 2, "item" : "jkl", "price" : 20, "quantity" : 1, "date" : ISODate("2014-02-03T09:00:00Z") },
-   { _id : 3, "item" : "xyz", "price" : 5, "quantity" : 5, "date" : ISODate("2014-02-03T09:05:00Z") },
-   { _id : 4, "item" : "abc", "price" : 10, "quantity" : 10, "date" : ISODate("2014-02-15T08:00:00Z") },
-   { _id : 5, "item" : "xyz", "price" : 5, "quantity" : 10, "date" : ISODate("2014-02-15T09:05:00Z") },
-   { _id : 6, "item" : "xyz", "price" : 5, "quantity" : 5, "date" : ISODate("2014-02-15T12:05:10Z") },
-   { _id : 7, "item" : "xyz", "price" : 5, "quantity" : 10, "date" : ISODate("2014-02-15T14:12:12Z") }
-] )
-```
+.. code-block:: javascript
+   :copyable: true
 
-Grouping the documents by the day and the year of the `date` field, the following operation uses the :group:`$push` accumulator to compute the list of items and quantities sold for each group:
+   db.sales.insertMany( [
+      { _id : 1, "item" : "abc", "price" : 10, "quantity" : 2, "date" : ISODate("2014-01-01T08:00:00Z") },
+      { _id : 2, "item" : "jkl", "price" : 20, "quantity" : 1, "date" : ISODate("2014-02-03T09:00:00Z") },
+      { _id : 3, "item" : "xyz", "price" : 5, "quantity" : 5, "date" : ISODate("2014-02-03T09:05:00Z") },
+      { _id : 4, "item" : "abc", "price" : 10, "quantity" : 10, "date" : ISODate("2014-02-15T08:00:00Z") },
+      { _id : 5, "item" : "xyz", "price" : 5, "quantity" : 10, "date" : ISODate("2014-02-15T09:05:00Z") },
+      { _id : 6, "item" : "xyz", "price" : 5, "quantity" : 5, "date" : ISODate("2014-02-15T12:05:10Z") },
+      { _id : 7, "item" : "xyz", "price" : 5, "quantity" : 10, "date" : ISODate("2014-02-15T14:12:12Z") }
+   ] )
 
-```javascript
-db.sales.aggregate(
-   [
-   { $sort: { date: 1, item: 1 } },
-   {
-       $group:
-         {
-           _id: { day: { $dayOfYear: "$date"}, year: { $year: "$date" } },
-           itemsSold: { $push:  { item: "$item", quantity: "$quantity" } }
-         }
-     }
-   ]
-)
-```
+Grouping the documents by the day and the year of the ``date`` field,
+the following operation uses the :group:`$push` accumulator to
+compute the list of items and quantities sold for each group:
+
+.. code-block:: javascript
+
+   db.sales.aggregate(
+      [
+      { $sort: { date: 1, item: 1 } },
+      {
+          $group:
+            {
+              _id: { day: { $dayOfYear: "$date"}, year: { $year: "$date" } },
+              itemsSold: { $push:  { item: "$item", quantity: "$quantity" } }
+            }
+        }
+      ]
+   )
 
 The operation returns the following results:
 
-```javascript
-{
-   "_id" : { "day" : 46, "year" : 2014 },
-   "itemsSold" : [
-      { "item" : "abc", "quantity" : 10 },
-      { "item" : "xyz", "quantity" : 10 },
-      { "item" : "xyz", "quantity" : 5 },
-      { "item" : "xyz", "quantity" : 10 }
-   ]
-}
-{
-   "_id" : { "day" : 34, "year" : 2014 },
-   "itemsSold" : [
-      { "item" : "jkl", "quantity" : 1 },
-      { "item" : "xyz", "quantity" : 5 }
-   ]
-}
-{
-   "_id" : { "day" : 1, "year" : 2014 },
-   "itemsSold" : [ { "item" : "abc", "quantity" : 2 } ]
-}
-```
+.. code-block:: javascript
+   :copyable: false
 
-### Use in `$setWindowFields` Stage
-
-.. versionadded:: 5.0
-
-.. include:: /includes/setWindowFields-example-collection.rst
-
-This example uses :group:`$push` in the :pipeline:`$setWindowFields` stage to output an array of cake sales `quantity` values for each `state`:
-
-```javascript
-db.cakeSales.aggregate( [
    {
-      $setWindowFields: {
-         partitionBy: "$state",
-         sortBy: { orderDate: 1 },
-         output: {
-            quantitiesForState: {
-               $push: "$quantity",
-               window: {
-                  documents: [ "unbounded", "current" ]
-               }         
+      "_id" : { "day" : 46, "year" : 2014 },
+      "itemsSold" : [
+         { "item" : "abc", "quantity" : 10 },
+         { "item" : "xyz", "quantity" : 10 },
+         { "item" : "xyz", "quantity" : 5 },
+         { "item" : "xyz", "quantity" : 10 }
+      ]
+   }
+   {
+      "_id" : { "day" : 34, "year" : 2014 },
+      "itemsSold" : [
+         { "item" : "jkl", "quantity" : 1 },
+         { "item" : "xyz", "quantity" : 5 }
+      ]
+   }
+   {
+      "_id" : { "day" : 1, "year" : 2014 },
+      "itemsSold" : [ { "item" : "abc", "quantity" : 2 } ]
+   }
+
+### Use in ``$setWindowFields`` Stage
+
+**versionadded:** 5.0
+
+**include:** /includes/setWindowFields-example-collection.rst
+
+This example uses :group:`$push` in the :pipeline:`$setWindowFields`
+stage to output an array of cake sales ``quantity`` values for each
+``state``:
+
+.. code-block:: javascript
+
+   db.cakeSales.aggregate( [
+      {
+         $setWindowFields: {
+            partitionBy: "$state",
+            sortBy: { orderDate: 1 },
+            output: {
+               quantitiesForState: {
+                  $push: "$quantity",
+                  window: {
+                     documents: [ "unbounded", "current" ]
+                  }         
+               }
             }
          }
       }
-   }
-] )
-```
+   ] )
 
 In the example:
 
-.. include:: /includes/setWindowFields-partition-sort-date.rst
+**include:** /includes/setWindowFields-partition-sort-date.rst
 
-- `output` sets the array of `quantity` values using
-:group:`$push` for the documents in a `documents <setWindowFields-documents>` window.
+- ``output`` sets the array of ``quantity`` values using
+  :group:`$push` for the documents in a :ref:`documents
+  <setWindowFields-documents>` window.
 
-The `window <setWindowFields-window>` contains documents between an `unbounded` lower limit and the `current` document in the output. This means :group:`$push` appends the `quantity` values to the `quantitiesForState` array for the documents between the beginning of the partition and the current document.
+  The :ref:`window <setWindowFields-window>` contains documents between
+  an ``unbounded`` lower limit and the ``current`` document in the
+  output. This means :group:`$push` appends the ``quantity`` values to
+  the ``quantitiesForState`` array for the documents between the
+  beginning of the partition and the current document.
 
-In this output, the array of `quantity` values for `CA` and `WA` is shown in the `quantitiesForState` array:
+In this output, the array of ``quantity`` values for ``CA`` and ``WA``
+is shown in the ``quantitiesForState`` array:
 
-```javascript
-{ "_id" : 4, "type" : "strawberry", "orderDate" : ISODate("2019-05-18T16:09:01Z"),
-  "state" : "CA", "price" : 41, "quantity" : 162, "quantitiesForState" : [ 162 ] }
-{ "_id" : 0, "type" : "chocolate", "orderDate" : ISODate("2020-05-18T14:10:30Z"),
-  "state" : "CA", "price" : 13, "quantity" : 120, "quantitiesForState" : [ 162, 120 ] }
-{ "_id" : 2, "type" : "vanilla", "orderDate" : ISODate("2021-01-11T06:31:15Z"),
-  "state" : "CA", "price" : 12, "quantity" : 145, "quantitiesForState" : [ 162, 120, 145 ] }
-{ "_id" : 5, "type" : "strawberry", "orderDate" : ISODate("2019-01-08T06:12:03Z"),
-  "state" : "WA", "price" : 43, "quantity" : 134, "quantitiesForState" : [ 134 ] }
-{ "_id" : 3, "type" : "vanilla", "orderDate" : ISODate("2020-02-08T13:13:23Z"),
-  "state" : "WA", "price" : 13, "quantity" : 104, "quantitiesForState" : [ 134, 104 ] }
-{ "_id" : 1, "type" : "chocolate", "orderDate" : ISODate("2021-03-20T11:30:05Z"),
-  "state" : "WA", "price" : 14, "quantity" : 140, "quantitiesForState" : [ 134, 104, 140 ] }
-```
+.. code-block:: javascript
+   :copyable: false
+
+   { "_id" : 4, "type" : "strawberry", "orderDate" : ISODate("2019-05-18T16:09:01Z"),
+     "state" : "CA", "price" : 41, "quantity" : 162, "quantitiesForState" : [ 162 ] }
+   { "_id" : 0, "type" : "chocolate", "orderDate" : ISODate("2020-05-18T14:10:30Z"),
+     "state" : "CA", "price" : 13, "quantity" : 120, "quantitiesForState" : [ 162, 120 ] }
+   { "_id" : 2, "type" : "vanilla", "orderDate" : ISODate("2021-01-11T06:31:15Z"),
+     "state" : "CA", "price" : 12, "quantity" : 145, "quantitiesForState" : [ 162, 120, 145 ] }
+   { "_id" : 5, "type" : "strawberry", "orderDate" : ISODate("2019-01-08T06:12:03Z"),
+     "state" : "WA", "price" : 43, "quantity" : 134, "quantitiesForState" : [ 134 ] }
+   { "_id" : 3, "type" : "vanilla", "orderDate" : ISODate("2020-02-08T13:13:23Z"),
+     "state" : "WA", "price" : 13, "quantity" : 104, "quantitiesForState" : [ 134, 104 ] }
+   { "_id" : 1, "type" : "chocolate", "orderDate" : ISODate("2021-03-20T11:30:05Z"),
+     "state" : "WA", "price" : 14, "quantity" : 140, "quantitiesForState" : [ 134, 104, 140 ] }

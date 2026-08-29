@@ -4,12 +4,11 @@ framework: "Langfuse"
 source_repo: "https://github.com/langfuse/langfuse-docs"
 source_branch: "main"
 source_path: "content/docs/prompt-management/features/prompt-version-control.mdx"
-source_commit: "fcd1eca34a924867563c3c4e801254c4e66c0021"
-source_commit_short: "fcd1eca3"
-source_commit_date: "2026-07-25T00:45:45Z"
-generated_at: "2026-07-25T11:51:12Z"
+source_commit: "ba26344559edee69ba55c5d3aa80e632f56c1626"
+source_commit_short: "ba26344"
+source_commit_date: "2026-08-29T02:57:18+00:00"
+generated_at: "2026-08-29T09:38:37.762540Z"
 ---
-
 ---
 title: Version Control
 sidebarTitle: Version Control
@@ -20,7 +19,9 @@ description: Use prompt labels to fetch specific prompt versions in the SDKs.
 
 In Langfuse, version control & deployment of prompts is managed via `versions` and `labels`.
 
-## Versions & Labels
+## Implementation
+
+### Versions & Labels [#versions--labels]
 
 Each prompt version is automatically assigned a `version ID`. Additionally, you can assign `labels` to follow your own versioning scheme.
 
@@ -153,11 +154,13 @@ const prompt = await langfuse.prompt.get("movie-critic", {
 
 </LangTabs>
 
-## Rollbacks
+## Operational workflows
+
+### Rollbacks
 
 When a prompt has a `production` label, then that version will be served by default in the SDKs. You can quickly rollback to a previous version by setting the `production` label to that previous version in the Langfuse UI.
 
-## Prompt Diffs
+### Prompt Diffs
 
 The prompt version diff view shows you the changes you made to the prompt over time. This helps you understand how the prompt has evolved and what changes have been made to debug issues or understand the impact of changes.
 
@@ -167,7 +170,7 @@ The prompt version diff view shows you the changes you made to the prompt over t
   aspectRatio={16 / 9}
 />
 
-## Protected prompt labels
+### Protected prompt labels [#protected-prompt-labels]
 
 <AvailabilityBanner
   availability={{

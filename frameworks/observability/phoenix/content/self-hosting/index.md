@@ -1,7 +1,7 @@
 ---
 type: "Framework Learn Directory Index"
 framework: "Arize Phoenix"
-generated_at: "2026-07-25T19:08:24.985712Z"
+generated_at: "2026-08-29T09:39:58.962416Z"
 ---
 # Self-Hosting
 
@@ -20,3 +20,13 @@ This directory contains Arize Phoenix learning pages related to self-hosting.
 - [Architecture](architecture.md)
 - [Configuration](configuration.md)
 - [License](license.md)
+
+## Subdirectories
+
+- [Advanced](advanced/index.md)
+- [Configuration](configuration/index.md)
+- [Deployment Options](deployment-options/index.md)
+- [Features](features/index.md)
+- [Misc](misc/index.md)
+- [Security](security/index.md)
+- [Upgrade](upgrade/index.md)

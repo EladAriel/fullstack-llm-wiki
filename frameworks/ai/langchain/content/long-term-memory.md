@@ -4,11 +4,12 @@ framework: "LangChain"
 source_repo: "https://github.com/langchain-ai/docs"
 source_branch: "main"
 source_path: "src/oss/langchain/long-term-memory.mdx"
-source_commit: "2aae1dfc98ee953a9a5185fb6fcdd9efb3f4d878"
-source_commit_short: "2aae1dfc"
-source_commit_date: "2026-07-25T00:27:23Z"
-generated_at: "2026-07-25T11:51:05Z"
+source_commit: "a174f9cf7c91ee5eb14ee2382eb48bfe6e4956e9"
+source_commit_short: "a174f9c"
+source_commit_date: "2026-08-28T17:04:12-07:00"
+generated_at: "2026-08-29T09:38:24.253421Z"
 ---
+# Long Term Memory
 
 ---
 title: Long-term memory
@@ -57,9 +58,19 @@ To add long-term memory to an agent, create a store and pass it to @[`create_age
     </Tab>
     <Tab title="PostgreSQL">
 :::python
-```shell
-pip install langgraph-checkpoint-postgres
+<CodeGroup>
+```bash pip
+pip install -U langgraph-checkpoint-postgres "psycopg[binary]"
 ```
+
+```bash uv
+uv add langgraph-checkpoint-postgres "psycopg[binary]"
+```
+</CodeGroup>
+
+<Note>
+By default, `langgraph-checkpoint-postgres` installs `psycopg` (Psycopg 3) without extras. The install above adds `psycopg[binary]`, which is recommended for most users. For other options, see the [Psycopg installation docs](https://www.psycopg.org/psycopg3/docs/basic/install.html).
+</Note>
 
 <LongTermMemoryCreateAgentPostgresPy />
 

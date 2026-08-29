@@ -1,156 +1,206 @@
 ---
 type: "Framework Learn Page"
-framework: "mongodb"
+framework: "MongoDB"
 source_repo: "https://github.com/mongodb/docs.git"
 source_branch: "main"
 source_path: "content/manual/manual/source/core/dot-dollar-considerations/dollar-prefix.txt"
-source_commit: "ab9db26ed3d11618cdb61516d8180337d8e3f679"
-source_commit_short: "ab9db26e"
-source_commit_date: "2026-07-24T16:22:46-06:00"
-generated_at: "2026-07-25T11:51:15Z"
+source_commit: "b9f2bc487a2878b65e3c1f80024bebab76954f27"
+source_commit_short: "b9f2bc48"
+source_commit_date: "2026-08-28T17:09:45-05:00"
+generated_at: "2026-08-29T09:39:19.805126Z"
 ---
-
-===========================
+.. _dollar-prefix-field-names:
 
 # Dollar-Prefixed Field Names
 
-This section summarizes how different insert and update operations handle dollar (`$`) prefixed field names. MongoDB discourages the use of dollar prefixed field names because some features aren't supported with these fields. See `dot-dollar-general-restrictions` for more information.
+**meta:** :description: Understand how MongoDB handles dollar-prefixed field names in insert and update operations, including restrictions and special cases.
+
+**facet:** :name: genre
+   :values: reference
+
+**contents:** On this page
+   :local:
+   :backlinks: none
+   :depth: 1
+   :class: singlecol
+
+This section summarizes how different insert and update operations
+handle dollar (``$``) prefixed field names. MongoDB discourages the use
+of dollar prefixed field names because some features aren't 
+supported with these fields. See :ref:`dot-dollar-general-restrictions`
+for more information.
 
 ## Insert Operations
 
-Dollar (`$`) prefixed fields are permitted as top level and nested field names for inserts.
+Dollar (``$``) prefixed fields are permitted as top level and nested
+field names for inserts.
 
-```javascript
-db.sales.insertOne( {
-   "$price": 50.00,
-   "quantity": 30
-} )
-```
+.. code-block:: javascript
+   :emphasize-lines: 3
 
-Dollar (`$`) prefixed fields are permitted on inserts using otherwise reserved words. Operator names like :update:`$inc` can be used as field names as well as words like `id`, `db`, and `ref`.
+   db.sales.insertOne( {
+      "$price": 50.00,
+      "quantity": 30
+   } )
 
-```javascript
-db.books.insertOne( {
-   "$id": "h1961-01",
-   "location": {
-      "$db": "novels",
-      "$ref": "2007042768",
-      "$inc": true
-} } )
-```
+Dollar (``$``) prefixed fields are permitted on inserts using otherwise
+reserved words. Operator names like :update:`$inc` can be used as
+field names as well as words like ``id``, ``db``, and ``ref``.
 
-An update which creates a new document during an `upsert` is treated as an `insert` rather than an `update` for field name validation. `Upserts <upsert>` can accept dollar (`$`) prefixed fields. However, `upserts <upsert>` are a special case and similar update operations may cause an error if the `match` portion of the update selects an existing document.
+.. code-block:: javascript
+   :emphasize-lines: 2, 4-6
 
-This code sample has `upsert: true` so it will insert a new document if the collection doesn't already contain a document that matches the query term, `{ "date": "2021-07-07" }`. If this sample code matches an existing document, the update will fail since `$hotel` is dollar (`$`) prefixed.
+   db.books.insertOne( {
+      "$id": "h1961-01",
+      "location": {
+         "$db": "novels",
+         "$ref": "2007042768",
+         "$inc": true
+   } } )
 
-```javascript
-db.expenses.updateOne(
-   { "date": "2021-07-07" },
-   { $set: {
-      "phone": 25.17,
-      "$hotel": 320.10
-   } },
-   { upsert: true }
-)
-```
+An update which creates a new document during an :term:`upsert` is
+treated as an ``insert`` rather than an ``update`` for field name
+validation. :term:`Upserts <upsert>` can accept dollar (``$``) prefixed
+fields. However, :term:`upserts <upsert>` are a special case and
+similar update operations may cause an error if the ``match`` portion
+of the update selects an existing document.
+
+This code sample has ``upsert: true`` so it will insert a new document
+if the collection doesn't already contain a document that matches the
+query term, ``{ "date": "2021-07-07" }``. If this sample code matches
+an existing document, the update will fail since ``$hotel`` is dollar
+(``$``) prefixed.
+
+.. code-block:: javascript
+   :emphasize-lines: 5
+
+   db.expenses.updateOne(
+      { "date": "2021-07-07" },
+      { $set: {
+         "phone": 25.17,
+         "$hotel": 320.10
+      } },
+      { upsert: true }
+   )
 
 ## Document Replacing Updates
 
-Update operators either replace existing fields with new documents or else modify those fields. In cases where the update performs a replacement, dollar (`$`) prefixed fields are not permitted as top level field names.
+Update operators either replace existing fields with new documents
+or else modify those fields. In cases where the update performs a
+replacement, dollar (``$``) prefixed fields are not permitted as top
+level field names. 
 
 Consider a document like
 
-```javascript
-{
-   "_id": "E123",
-   "address": {
-      "$number": 123,
-      "$street": "Elm Road"
-   },
-   "$rooms": {
-      "br": 2,
-      "bath": 1
+.. code-block:: javascript::
+
+   {
+      "_id": "E123",
+      "address": {
+         "$number": 123,
+         "$street": "Elm Road"
+      },
+      "$rooms": {
+         "br": 2,
+         "bath": 1
+      }
    }
-}
-```
 
-You could use an update operator that replaces an existing document to modify the `address.$street` field but you could not update the `$rooms` field that way.
+You could use an update operator that replaces an existing document to
+modify the ``address.$street`` field but you could not update the
+``$rooms`` field that way. 
 
-```
-db.housing.updateOne(
-   { "_id": "E123" },
-   { $set: { "address.$street": "Elm Ave" } }
-)
-```
+.. code-block::
 
-Use :expression:`$setField` as part of an aggregation pipeline to `update top level <dotDollar-aggregate-update>` dollar (`$`) prefixed fields like `$rooms`.
+   db.housing.updateOne(
+      { "_id": "E123" },
+      { $set: { "address.$street": "Elm Ave" } }
+   )
+
+Use :expression:`$setField` as part of an aggregation pipeline to
+:ref:`update top level <dotDollar-aggregate-update>` dollar (``$``)
+prefixed fields like ``$rooms``.
 
 ## Document Modifying Updates
 
-When an update modifies, rather than replaces, existing document fields, dollar (`$`) prefixed fields can be top level field names. Subfields can be accessed directly, but you need a helper method to access the top level fields.
+When an update modifies, rather than replaces, existing document
+fields, dollar (``$``) prefixed fields can be top level field names.
+Subfields can be accessed directly, but you need a helper method to
+access the top level fields. 
 
-> **Seealso:** :expression:`$getField`, :expression:`$setField`,
-:expression:`$literal`, :pipeline:`$replaceWith`
+**seealso:** :expression:`$getField`, :expression:`$setField`,
+   :expression:`$literal`, :pipeline:`$replaceWith`
 
 Consider a collection with documents like this inventory record:
 
-```
-{
-   _id: ObjectId("610023ad7d58ecda39b8d161"),
-   "part": "AB305",
-   "$bin": 200,
-   "quantity": 100,
-   "pricing": { sale: true, "$discount": 60 }
-}
-```
+.. code-block::
+   :copyable: false
 
-The `pricing.$discount` subfield can be queried directly.
+   {
+      _id: ObjectId("610023ad7d58ecda39b8d161"),
+      "part": "AB305",
+      "$bin": 200,
+      "quantity": 100,
+      "pricing": { sale: true, "$discount": 60 }
+   }
 
-```
-db.inventory.findAndModify( {
-    query: { "part": { $eq: "AB305" } },
-    update: { $inc: { "pricing.$discount": 10 } }
-} )
-```
+The ``pricing.$discount`` subfield can be queried directly.
 
-Use :expression:`$getField` and :expression:`$literal` to access the value of the top level `$bin` field.
+.. code-block::
 
-```
-db.inventory.findAndModify( {
-   query: { $expr: {
-      $eq: [ { $getField: { $literal: "$bin" } }, 200 ]
-   } }, 
-   update: { $inc: { "quantity": 10 } }
-} )
-```
+   db.inventory.findAndModify( {
+       query: { "part": { $eq: "AB305" } },
+       update: { $inc: { "pricing.$discount": 10 } }
+   } )
+
+
+Use :expression:`$getField` and :expression:`$literal` to access the
+value of the top level ``$bin`` field.
+
+.. code-block::
+   :emphasize-lines: 3
+
+   db.inventory.findAndModify( {
+      query: { $expr: {
+         $eq: [ { $getField: { $literal: "$bin" } }, 200 ]
+      } }, 
+      update: { $inc: { "quantity": 10 } }
+   } )
+
+.. _dotDollar-aggregate-update:
 
 ## Updates Using Aggregation Pipelines
 
-Use :expression:`$setField`, :expression:`$getField`, and :expression:`$literal` in the :pipeline:`$replaceWith` stage to modify dollar (`$`) prefixed fields in an aggregation `pipeline`.
+Use :expression:`$setField`, :expression:`$getField`, and
+:expression:`$literal` in the :pipeline:`$replaceWith` stage to modify
+dollar (``$``) prefixed fields in an aggregation :term:`pipeline`.
 
 Consider a collection of school records like:
 
-```javascript
-db.school.insertOne (
-{
-   "_id": 100001,
-   "$term": "fall",
-   "registered": true,
-   "grade": 4
-} ) 
-```
+.. code-block:: javascript
+   :copyable: true
 
-Create a new collection for the spring semester using a `pipeline` to update the dollar (`$`) prefixed `$term` field.
+   db.school.insertOne (
+   {
+      "_id": 100001,
+      "$term": "fall",
+      "registered": true,
+      "grade": 4
+   } ) 
 
-```javascript
-db.school.aggregate( [
-   { $match: { "registered": true } }, 
-   { $replaceWith: {
-      $setField: {
-         field: { $literal: "$term" }, 
-         input: "$$ROOT",
-         value: "spring"
-   } } },
-   { $out: "spring2022" }
-] )
-```
+Create a new collection for the spring semester using a 
+:term:`pipeline` to update the dollar (``$``) prefixed ``$term`` field.
+
+.. code-block:: javascript
+   :emphasize-lines: 3-5
+
+   db.school.aggregate( [
+      { $match: { "registered": true } }, 
+      { $replaceWith: {
+         $setField: {
+            field: { $literal: "$term" }, 
+            input: "$$ROOT",
+            value: "spring"
+      } } },
+      { $out: "spring2022" }
+   ] )

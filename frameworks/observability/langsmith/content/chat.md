@@ -4,10 +4,10 @@ framework: "LangSmith"
 source_repo: "https://github.com/langchain-ai/docs.git"
 source_branch: "main"
 source_path: "src/langsmith/chat.mdx"
-source_commit: "2aae1dfc98ee953a9a5185fb6fcdd9efb3f4d878"
-source_commit_short: "2aae1df"
-source_commit_date: "2026-07-25T00:27:23+00:00"
-generated_at: "2026-07-25T19:08:33.408593Z"
+source_commit: "a174f9cf7c91ee5eb14ee2382eb48bfe6e4956e9"
+source_commit_short: "a174f9c"
+source_commit_date: "2026-08-28T17:04:12-07:00"
+generated_at: "2026-08-29T09:39:50.654422Z"
 ---
 # Chat
 
@@ -30,6 +30,7 @@ Chat helps you gain insight from your traces, conversation threads, and prompts 
 - [Projects](#projects): Browse and filter runs across a project.
 - [Trace pages](#trace-pages): Analyze individual runs and execution traces.
 - [Thread views](#thread-views): Understand conversation threads and user interactions.
+- [Engine](#engine): Investigate detected issues and their linked traces.
 
 **Prompt Engineering:**
 - [Playground](#playground): Edit and optimize prompts.
@@ -60,7 +61,7 @@ Before you start using Chat, you need to add an API key for the model you're usi
 <secret/>
 
 <Note>
-Chat calls model providers from LangSmith's egress IP addresses. If your model provider (or a proxy in front of it) restricts traffic by IP, allowlist the LangSmith egress IPs listed in [Allowlist IP addresses](/langsmith/deploy-to-cloud#allowlist-ip-addresses).
+Chat calls model providers from LangSmith's egress IP addresses. If your model provider (or a proxy in front of it) restricts traffic by IP, allowlist the LangSmith egress IPs listed in [Allowlist IP addresses](/langsmith/cloud-platform-features#allowlist-ip-addresses).
 </Note>
 
 ### Supported models
@@ -117,6 +118,17 @@ Under the **Threads** tab, Chat analyzes conversation [threads](/langsmith/obser
 - "What issues is the user experiencing?"
 - "Was the user's problem solved?"
 - "What was the main topic of this thread?"
+
+### Engine
+
+On the [Engine](/langsmith/engine) page, open Chat to investigate detected issues and their linked traces. Chat can help you understand the selected issue, or answer questions across multiple Engine issues. For example:
+
+**Example questions:**
+- "What went wrong?"
+- "Why was this flagged?"
+- "Explain the proposed fix"
+- "What are my most pressing issues?"
+- "How many new issues do I have?"
 
 ## Prompt engineering
 
@@ -206,7 +218,7 @@ Learn more about the features that Chat helps you explore:
   <Card
     title="Prompt Engineering"
     icon="wand"
-    href="/langsmith/prompt-engineering"
+    href="/langsmith/prompt-context-hub#prompts"
   >
     Create and iterate on prompts in the Playground
   </Card>

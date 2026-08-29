@@ -1,82 +1,110 @@
 ---
 type: "Framework Learn Page"
-framework: "mongodb"
+framework: "MongoDB"
 source_repo: "https://github.com/mongodb/docs.git"
 source_branch: "main"
 source_path: "content/manual/manual/source/reference/command/replSetInitiate.txt"
-source_commit: "ab9db26ed3d11618cdb61516d8180337d8e3f679"
-source_commit_short: "ab9db26e"
-source_commit_date: "2026-07-24T16:22:46-06:00"
-generated_at: "2026-07-25T11:51:15Z"
+source_commit: "b9f2bc487a2878b65e3c1f80024bebab76954f27"
+source_commit_short: "b9f2bc48"
+source_commit_date: "2026-08-28T17:09:45-05:00"
+generated_at: "2026-08-29T09:39:20.028114Z"
 ---
-
-==================================
-
 # replSetInitiate (database command)
+
+**meta:** :description: Initialize a new replica set using the `replSetInitiate` command or `rs.initiate()` method, specifying configuration with DNS hostnames.
+
+.. default-domain:: mongodb
+
+**contents:** On this page
+   :local:
+   :backlinks: none
+   :depth: 1
+   :class: singlecol
 
 ## Definition
 
+**dbcommand:** replSetInitiate
+
+   The :dbcommand:`replSetInitiate` command initializes a new replica set.
+   
+   .. |command| replace:: ``replSetInitiate``
+
+   .. |method| replace:: :method:`rs.initiate` helper method
+   .. include:: /includes/fact-dbcommand-tip
+
+   .. include:: /includes/fact-dbcommand.rst
+
+   .. note::
+
+      Run the command on only one of the :binary:`~bin.mongod` instances
+      for the replica set.
+
 ## Compatibility
 
-This command is available in deployments hosted in the following environments:
+This command is available in deployments hosted in the following environments: 
 
-.. include:: /includes/fact-environments-onprem-only.rst
+**include:** /includes/fact-environments-onprem-only.rst
 
-.. include:: /includes/fact-environments-no-atlas-support.rst
+**include:** /includes/fact-environments-no-atlas-support.rst
 
 ## Syntax
 
 The command has the following syntax:
 
-```javascript
-db.runCommand(
-   { 
-     replSetInitiate : <config_document> 
-   }
-)
-```
+.. code-block:: javascript
 
-The `<config_document>` is a `document` that specifies the replica set's configuration. For instance, here's a config document for creating a simple 3-member replica set:
+   db.runCommand(
+      { 
+        replSetInitiate : <config_document> 
+      }
+   )
 
-```javascript
-{
-   _id : <setname>,
-    members : [
-        {_id : 0, host : <host0>},
-        {_id : 1, host : <host1>},
-        {_id : 2, host : <host2>},
-    ]
-}
-```
+The ``<config_document>`` is a :term:`document` that specifies
+the replica set's configuration. For instance, here's a config document
+for creating a simple 3-member replica set:
 
-.. include:: /includes/important-hostnames.rst
+.. code-block:: javascript
+
+  {
+      _id : <setname>,
+       members : [
+           {_id : 0, host : <host0>},
+           {_id : 1, host : <host1>},
+           {_id : 2, host : <host2>},
+       ]
+  }
+
+**include:** /includes/important-hostnames.rst
 
 ## IP Binding
 
-.. include:: /includes/fact-default-bind-ip.rst
+**include:** /includes/fact-default-bind-ip.rst
 
 ## Example
 
-Assign a config document to a variable and then to pass the document to the :method:`rs.initiate()` helper:
+Assign a config document to a variable and then to pass the document to
+the :method:`rs.initiate()` helper:
 
-```javascript
-config = {
-    _id : "my_replica_set",
-     members : [
-         {_id : 0, host : "rs1.example.net:27017"},
-         {_id : 1, host : "rs2.example.net:27017"},
-         {_id : 2, host : "rs3.example.net", arbiterOnly: true},
-     ]
-}
+.. code-block:: javascript
 
-rs.initiate(config)
-```
+   config = {
+       _id : "my_replica_set",
+        members : [
+            {_id : 0, host : "rs1.example.net:27017"},
+            {_id : 1, host : "rs2.example.net:27017"},
+            {_id : 2, host : "rs3.example.net", arbiterOnly: true},
+        ]
+   }
 
-.. include:: /includes/important-hostnames.rst
+   rs.initiate(config)
 
-Notice that omitting the port cause the host to use the default port of 27017. Notice also that you can specify other options in the config documents such as the `arbiterOnly` setting in this example.
+**include:** /includes/important-hostnames.rst
 
-> **Seealso:** - `/reference/replica-configuration`
-- `/administration/replica-set-deployment`
-- :ref:`Replica Set Reconfiguration
-  <replica-set-reconfiguration-usage>`
+Notice that omitting the port cause the host to use the default port
+of 27017. Notice also that you can specify other options in the config
+documents such as the ``arbiterOnly`` setting in this example.
+
+**seealso:** - :doc:`/reference/replica-configuration`
+   - :doc:`/administration/replica-set-deployment`
+   - :ref:`Replica Set Reconfiguration
+     <replica-set-reconfiguration-usage>`

@@ -1,46 +1,206 @@
 ---
 type: "Framework Learn Page"
-framework: "mongodb"
+framework: "MongoDB"
 source_repo: "https://github.com/mongodb/docs.git"
 source_branch: "main"
 source_path: "content/manual/manual/source/tutorial/manage-journaling.txt"
-source_commit: "ab9db26ed3d11618cdb61516d8180337d8e3f679"
-source_commit_short: "ab9db26e"
-source_commit_date: "2026-07-24T16:22:46-06:00"
-generated_at: "2026-07-25T11:51:15Z"
+source_commit: "b9f2bc487a2878b65e3c1f80024bebab76954f27"
+source_commit_short: "b9f2bc48"
+source_commit_date: "2026-08-28T17:09:45-05:00"
+generated_at: "2026-08-29T09:39:19.633458Z"
 ---
-
-=================================================
+.. _manage-journaling:
 
 # Configure Journaling for Self-Managed Deployments
 
-MongoDB uses write ahead logging to an on-disk `journal` to guarantee `write operation <crud>` durability.
+**meta:** :keywords: on-prem
+   :description: Configure journaling for MongoDB deployments to ensure write operation durability and recover data after unexpected shutdowns.
 
-The WiredTiger storage engine does not require journaling to guarantee a consistent state after a crash. The database will be restored to the last consistent `checkpoint <storage-wiredtiger-checkpoints>` during recovery.  However, if MongoDB exits unexpectedly in between checkpoints, journaling is required to recover writes that occurred after the last checkpoint.
+.. default-domain:: mongodb
 
-If :binary:`~bin.mongod` stops unexpectedly, the program can recover everything written to the journal. MongoDB will re-apply the write operations on restart and maintain a consistent state. By default, the greatest extent of lost writes, i.e., those not made to the journal, are those made in the last 100 milliseconds, plus the time it takes to perform the actual journal writes. See :setting:`~storage.journal.commitIntervalMs` for more information on the default.
+**contents:** On this page
+   :local:
+   :backlinks: none
+   :depth: 1
+   :class: singlecol
+
+MongoDB uses *write ahead logging* to an on-disk :term:`journal` to
+guarantee :ref:`write operation <crud>` durability.
+
+The WiredTiger storage engine does not require journaling to guarantee
+a consistent state after a crash. The database will be restored to the
+last consistent :ref:`checkpoint <storage-wiredtiger-checkpoints>`
+during recovery.  However, if MongoDB exits unexpectedly in between
+checkpoints, journaling is required to recover writes that occurred
+after the last checkpoint.
+
+If :binary:`~bin.mongod` stops unexpectedly, the program can recover everything 
+written to the journal. MongoDB will re-apply the write operations on restart 
+and maintain a consistent state. By default, the greatest extent of lost writes, 
+i.e., those not made to the journal, are those made in the last 100 
+milliseconds, plus the time it takes to perform the actual journal writes. See
+:setting:`~storage.journal.commitIntervalMs` for more information on
+the default.
 
 ## Procedures
 
 ### Get Commit Acknowledgement
 
-You can get commit acknowledgment with the `write-concern` and the :writeconcern:`j` option. For details, see `write-concern-operation`.
+You can get commit acknowledgment with the :ref:`write-concern` and
+the :writeconcern:`j` option. For details, see
+:ref:`write-concern-operation`.
 
 ### Monitor Journal Status
 
-The :dbcommand:`serverStatus` command/:method:`db.serverStatus()` method returns :serverstatus:`wiredTiger.log`, which contains statistics on the journal.
+The :dbcommand:`serverStatus` command/:method:`db.serverStatus()`
+method returns :serverstatus:`wiredTiger.log`, which contains
+statistics on the journal.
 
 ### Recover Data After Unexpected Shutdown
 
-On a restart after a crash, MongoDB replays all journal files in the journal directory before the server becomes available. If MongoDB must replay journal files, :binary:`~bin.mongod` notes these events in the log output.
+On a restart after a crash, MongoDB replays all journal files in the
+journal directory before the server becomes available. If MongoDB must
+replay journal files, :binary:`~bin.mongod` notes these events in the log
+output.
 
-There is no reason to run `--repair`.
+There is no reason to run ``--repair``.
+
+.. _manage-journaling-change-wt-journal-compressor:
 
 ### Change WiredTiger Journal Compressor
 
-With the WiredTiger storage engine, MongoDB, by default, uses the `snappy` compressor for the journal. To specify a different compressions algorithm or no compression for a :binary:`~bin.mongod` instance:
+With the WiredTiger storage engine, MongoDB, by default, uses the
+``snappy`` compressor for the journal. To specify a different
+compressions algorithm or no compression for a :binary:`~bin.mongod`
+instance:
 
-> **Tip:** If you encounter an unclean shutdown for a :binary:`~bin.mongod`
-during this procedure, you must use the old compressor settings to
-recover using the journal files. Once recovered, you can retry the
-procedure.
+**tip:** If you encounter an unclean shutdown for a :binary:`~bin.mongod`
+   during this procedure, you must use the old compressor settings to
+   recover using the journal files. Once recovered, you can retry the
+   procedure.
+
+**tabs:** tabs:
+
+      - id: standalone
+        name: Standalone
+        content: |
+
+           Use the following procedure to change the journal compressor
+           for a standalone :binary:`~bin.mongod` instance:
+
+           #. Update
+              :setting:`storage.wiredTiger.engineConfig.journalCompressor`
+              to the new value.
+
+              If you use command-line options instead of a configuration file, 
+              you must update the :option:`--wiredTigerJournalCompressor
+              <mongod --wiredTigerJournalCompressor>` command-line option during
+              the restart below.
+
+           #. Perform a clean shutdown of the :binary:`~bin.mongod`
+              instance. For example, connect :binary:`~bin.mongosh` to
+              the instance and issue :method:`db.shutdownServer()`:
+
+              .. code-block:: javascript
+
+                 db.getSiblingDB('admin').shutdownServer()
+
+
+           #. Once you have confirmed that the process is no longer running,
+              restart the :binary:`~bin.mongod` instance:
+
+              - If you are using a configuration file:
+
+                .. code-block:: bash
+
+                   mongod -f <path/to/myconfig.conf>
+
+              - If you are using command-line options instead of a configuration
+                file, update :option:`--wiredTigerJournalCompressor <mongod
+                --wiredTigerJournalCompressor>` to the new value.
+
+                .. code-block:: bash
+
+                   mongod --wiredTigerJournalCompressor <differentCompressor|none>  ...
+
+      - id: replset
+        name: "Replica Set Member"
+        content: |
+
+           Use the following procedure to change the journal compressor
+           for a member of a replica set:
+
+           #. Perform a clean shutdown of the :binary:`~bin.mongod`
+              instance. For example, connect :binary:`~bin.mongosh` to
+              the instance and issue :method:`db.shutdownServer()`:
+
+              .. code-block:: javascript
+
+                 db.getSiblingDB('admin').shutdownServer()
+
+           #. Update
+              :setting:`storage.wiredTiger.engineConfig.journalCompressor` 
+              to the new value.
+
+              If you use command-line options instead of a configuration file, 
+              you must update the command-line options during the 
+              restart below.
+
+           #. Restart the :binary:`~bin.mongod` instance:
+
+              - If you are using a configuration file:
+
+                .. code-block:: bash
+
+                   mongod -f <path/to/myconfig.conf>
+
+              - If you are using command-line options instead of a configuration
+                file, update :option:`--wiredTigerJournalCompressor 
+                <mongod --wiredTigerJournalCompressor>` to the new 
+                value.
+
+                .. code-block:: bash
+
+                   mongod --wiredTigerJournalCompressor <differentCompressor|none> ...
+
+
+      - id: shardedcluster
+        name: "Sharded Cluster Member"
+        content: |
+
+           Use the following procedure to change the journal compressor
+           for a member of a shard replica set or config server replica set:
+
+           #. Perform a clean shutdown of the :binary:`~bin.mongod`
+              instance. For example, connect :binary:`~bin.mongosh` to
+              the instance and issue :method:`db.shutdownServer()`:
+
+              .. code-block:: javascript
+
+                 db.getSiblingDB('admin').shutdownServer()
+
+          
+           #. Update 
+              :setting:`storage.wiredTiger.engineConfig.journalCompressor` 
+              to the new value.
+
+              If you use command-line options instead of a configuration file, 
+              you must update the command-line options during the 
+              restart below.
+
+
+           #. Restart the :binary:`~bin.mongod` instance:
+
+              - If you are using a configuration file:
+
+                .. code-block:: bash
+
+                   mongod -f <path/to/myconfig.conf>
+
+              - If you are using command-line options instead of a configuration
+                file, update :option:`--wiredTigerJournalCompressor 
+                <mongod --wiredTigerJournalCompressor>` to the new value.
+
+                .. code-block:: bash
+
+                   mongod --shardsvr --wiredTigerJournalCompressor <differentCompressor|none> --replSet ...

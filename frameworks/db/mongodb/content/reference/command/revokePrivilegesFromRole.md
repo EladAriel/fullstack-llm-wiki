@@ -1,162 +1,216 @@
 ---
 type: "Framework Learn Page"
-framework: "mongodb"
+framework: "MongoDB"
 source_repo: "https://github.com/mongodb/docs.git"
 source_branch: "main"
 source_path: "content/manual/manual/source/reference/command/revokePrivilegesFromRole.txt"
-source_commit: "ab9db26ed3d11618cdb61516d8180337d8e3f679"
-source_commit_short: "ab9db26e"
-source_commit_date: "2026-07-24T16:22:46-06:00"
-generated_at: "2026-07-25T11:51:15Z"
+source_commit: "b9f2bc487a2878b65e3c1f80024bebab76954f27"
+source_commit_short: "b9f2bc48"
+source_commit_date: "2026-08-28T17:09:45-05:00"
+generated_at: "2026-08-29T09:39:20.072539Z"
 ---
-
-===========================================
-
 # revokePrivilegesFromRole (database command)
+
+**meta:** :description: Remove specified privileges from a user-defined role using the `revokePrivilegesFromRole` command in MongoDB.
+
+.. default-domain:: mongodb
+
+**contents:** On this page
+   :local:
+   :backlinks: none
+   :depth: 1
+   :class: singlecol
 
 ## Definition
 
+**dbcommand:** revokePrivilegesFromRole
+
+   Removes the specified privileges from the :ref:`user-defined
+   <user-defined-roles>` role on the database where the
+   command is run. 
+
+   .. |method| replace:: :method:`db.revokePrivilegesFromRole` helper method
+   .. include:: /includes/fact-dbcommand-tip
+
 ## Compatibility
 
-This command is available in deployments hosted in the following environments:
+This command is available in deployments hosted in the following environments: 
 
-.. include:: /includes/fact-environments-atlas-only.rst
+**include:** /includes/fact-environments-atlas-only.rst
 
-.. include:: /includes/fact-environments-atlas-support-no-free.rst
+**include:** /includes/fact-environments-atlas-support-no-free.rst
 
-.. include:: /includes/fact-environments-onprem-only.rst
-
+**include:** /includes/fact-environments-onprem-only.rst
+                
 ## Syntax
 
 The command has the following syntax:
 
-```javascript
-db.runCommand(
-   {
-     revokePrivilegesFromRole: "<role>",
-     privileges: [
-       { resource: { <resource> }, actions: [ "<action>", ... ] },
-       ...
-     ],
-     writeConcern: <write concern document>,
-     comment: <any>
-   }
-)
-```
+.. code-block:: javascript
+
+   db.runCommand(
+      {
+        revokePrivilegesFromRole: "<role>",
+        privileges: [
+          { resource: { <resource> }, actions: [ "<action>", ... ] },
+          ...
+        ],
+        writeConcern: <write concern document>,
+        comment: <any>
+      }
+   )
 
 ## Command Fields
 
 The command takes the following fields:
 
+.. list-table::
+   :header-rows: 1
+   :widths: 20 20 80
+ 
+   * - Field
+     - Type
+     - Description
+
+   * - ``revokePrivilegesFromRole``
+     - string
+     - The :ref:`user-defined <user-defined-roles>` role to revoke
+       privileges from.
+
+   * - ``privileges``
+     - array
+     - An array of privileges to remove from the role.  See
+       :data:`~admin.system.roles.privileges` for more information on the
+       format of the privileges.
+
+   * - ``writeConcern``
+     - document
+     - .. include:: /includes/fact-write-concern-spec-link.rst
+
+   * - ``comment``
+     - any
+     - .. include:: /includes/extracts/comment-content.rst
+
 ## Behavior
 
-To revoke a privilege, the `resource document </reference/resource-document>` pattern must match **exactly** the `resource` field of that privilege. The `actions` field can be a subset or match exactly.
+To revoke a privilege, the :doc:`resource document
+</reference/resource-document>` pattern must match **exactly** the
+``resource`` field of that privilege. The ``actions`` field can be a
+subset or match exactly.
 
-For example, consider the role `accountRole` in the `products` database with the following privilege that specifies the `products` database as the resource:
+For example, consider the role ``accountRole`` in the ``products``
+database with the following privilege that specifies the ``products``
+database as the resource:
 
-```javascript
-{
-  "resource" : {
-      "db" : "products",
-      "collection" : ""
-  },
-  "actions" : [
-      "find",
-      "update"
-  ]
-}
-```
+.. code-block:: javascript
 
-You cannot revoke `find` and/or `update` from just one collection in the `products` database. The following operations result in no change to the role:
+   {
+     "resource" : {
+         "db" : "products",
+         "collection" : ""
+     },
+     "actions" : [
+         "find",
+         "update"
+     ]
+   }
 
-```javascript
-use products
-db.runCommand(
-    {
-      revokePrivilegesFromRole: "accountRole",
-      privileges:
-        [
-          {
-            resource : {
-                db : "products",
-                collection : "gadgets"
-            },
-            actions : [
-                "find",
-                "update"
-            ]
-          }
-        ]
-    }
-)
+You *cannot* revoke ``find`` and/or ``update`` from just *one*
+collection in the ``products`` database. The following operations
+result in no change to the role:
 
-db.runCommand(
-    {
-      revokePrivilegesFromRole: "accountRole",
-      privileges:
-        [
-          {
-            resource : {
-                db : "products",
-                collection : "gadgets"
-            },
-            actions : [
-                "find"
-            ]
-          }
-        ]
-    }
-)
-```
+.. code-block:: javascript
 
-To revoke the `"find"` and/or the `"update"` action from the role `accountRole`, you must match the resource document exactly. For example, the following operation revokes just the `"find"` action from the existing privilege.
+   use products
+   db.runCommand(
+       {
+         revokePrivilegesFromRole: "accountRole",
+         privileges:
+           [
+             {
+               resource : {
+                   db : "products",
+                   collection : "gadgets"
+               },
+               actions : [
+                   "find",
+                   "update"
+               ]
+             }
+           ]
+       }
+   )
 
-```javascript
-use products
-db.runCommand(
-    {
-      revokePrivilegesFromRole: "accountRole",
-      privileges:
-        [
-          {
-            resource : {
-                db : "products",
-                collection : ""
-            },
-            actions : [
-                "find"
-            ]
-          }
-        ]
-    }
-)
-```
+   db.runCommand(
+       {
+         revokePrivilegesFromRole: "accountRole",
+         privileges:
+           [
+             {
+               resource : {
+                   db : "products",
+                   collection : "gadgets"
+               },
+               actions : [
+                   "find"
+               ]
+             }
+           ]
+       }
+   )
+
+To revoke the ``"find"`` and/or the ``"update"`` action from the role
+``accountRole``, you must match the resource document exactly. For
+example, the following operation revokes just the ``"find"`` action
+from the existing privilege.
+
+.. code-block:: javascript
+
+   use products
+   db.runCommand(
+       {
+         revokePrivilegesFromRole: "accountRole",
+         privileges:
+           [
+             {
+               resource : {
+                   db : "products",
+                   collection : ""
+               },
+               actions : [
+                   "find"
+               ]
+             }
+           ]
+       }
+   )
 
 ## Required Access
 
-.. include:: /includes/access-revoke-privileges.rst
+**include:** /includes/access-revoke-privileges.rst
 
 ## Example
 
-The following operation removes multiple privileges from the `associates` role in the `products` database:
+The following operation removes multiple privileges from the
+``associates`` role in the ``products`` database:
 
-```javascript
-use products
-db.runCommand(
-   {
-     revokePrivilegesFromRole: "associate",
-     privileges:
-      [
-        {
-          resource: { db: "products", collection: "" },
-          actions: [ "createCollection", "createIndex", "find" ]
-        },
-        {
-          resource: { db: "products", collection: "orders" },
-          actions: [ "insert" ]
-        }
-      ],
-     writeConcern: { w: "majority" }
-   }
-)
-```
+.. code-block:: javascript
+
+   use products
+   db.runCommand(
+      {
+        revokePrivilegesFromRole: "associate",
+        privileges:
+         [
+           {
+             resource: { db: "products", collection: "" },
+             actions: [ "createCollection", "createIndex", "find" ]
+           },
+           {
+             resource: { db: "products", collection: "orders" },
+             actions: [ "insert" ]
+           }
+         ],
+        writeConcern: { w: "majority" }
+      }
+   )

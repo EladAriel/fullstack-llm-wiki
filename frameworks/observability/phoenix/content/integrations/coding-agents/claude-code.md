@@ -4,10 +4,10 @@ framework: "Arize Phoenix"
 source_repo: "https://github.com/Arize-ai/phoenix.git"
 source_branch: "main"
 source_path: "docs/phoenix/integrations/coding-agents/claude-code.mdx"
-source_commit: "69b3ab92c37ff65812feaa2dbf0b1c0ad5ae55fe"
-source_commit_short: "69b3ab9"
-source_commit_date: "2026-07-25T11:48:12-06:00"
-generated_at: "2026-07-25T19:08:24.837227Z"
+source_commit: "c48e50e9906fcc56c1c103ebd93ef3c95ed6b6e7"
+source_commit_short: "c48e50e"
+source_commit_date: "2026-08-29T01:45:20-06:00"
+generated_at: "2026-08-29T09:39:58.919921Z"
 ---
 # Claude Code
 
@@ -156,9 +156,9 @@ Subagents nest inside the turn that spawned them, so a `Task` delegation shows u
 
 The tracing plugin also works with the [Claude Agent SDK](https://platform.claude.com/docs/en/agent-sdk/overview) in both Python and TypeScript. The SDK loads the plugin locally — no marketplace install is required — but the setup must be done in your application code before the SDK session starts, so the agent cannot configure it at runtime.
 
-<Callout type="warning">
+<Warning>
 You must use `ClaudeSDKClient`. The standalone `query()` function does not support hooks, so tracing will not work with it.
-</Callout>
+</Warning>
 
 ### 1. Locate the plugin
 

@@ -1,96 +1,196 @@
 ---
 type: "Framework Learn Page"
-framework: "mongodb"
+framework: "MongoDB"
 source_repo: "https://github.com/mongodb/docs.git"
 source_branch: "main"
 source_path: "content/manual/manual/source/reference/method/db.rotateCertificates.txt"
-source_commit: "ab9db26ed3d11618cdb61516d8180337d8e3f679"
-source_commit_short: "ab9db26e"
-source_commit_date: "2026-07-24T16:22:46-06:00"
-generated_at: "2026-07-25T11:51:15Z"
+source_commit: "b9f2bc487a2878b65e3c1f80024bebab76954f27"
+source_commit_short: "b9f2bc48"
+source_commit_date: "2026-08-28T17:09:45-05:00"
+generated_at: "2026-08-29T09:39:19.951257Z"
 ---
-
-========================================
-
 # db.rotateCertificates() (mongosh method)
+
+**meta:** :description: Rotate TLS certificates for `mongod` or `mongos` using `db.rotateCertificates()` to apply updated configuration values.
+
+.. default-domain:: mongodb
+
+**contents:** On this page
+   :local:
+   :backlinks: none
+   :depth: 1
+   :class: singlecol
 
 ## Definition
 
-.. versionadded:: 5.0
+**versionadded:** 5.0
+
+**method:** db.rotateCertificates(message)
+
+   Rotates the currently used :ref:`TLS certificates
+   <rotated-certs-method>` for a :binary:`~bin.mongod` or
+   :binary:`~bin.mongos` to use the updated values for these
+   certificates defined in the :doc:`configuration file
+   </reference/configuration-options>`.
+
+   .. code-block:: javascript
+
+      db.rotateCertificates(message)
+
+   The :method:`db.rotateCertificates()` method takes the following
+   optional argument:
+
+   .. list-table::
+      :header-rows: 1
+      :widths: 20 20 80
+   
+      * - Parameter
+   
+        - Type
+   
+        - Description
+   
+      * - ``message``
+   
+        - string
+   
+        - *optional* A message logged by the server to the log file and
+          audit file.
+
+   The :method:`db.rotateCertificates()` method wraps the
+   :dbcommand:`rotateCertificates` command.
+
 
 ## Compatibility
 
-This method is available in deployments hosted in the following environments:
+This method is available in deployments hosted in the following environments: 
 
-.. include:: /includes/fact-environments-no-atlas-support.rst
+**include:** /includes/fact-environments-no-atlas-support.rst
 
-.. include:: /includes/fact-environments-onprem-only.rst
+**include:** /includes/fact-environments-onprem-only.rst
 
-.. include:: /includes/rotate-certificates.rst
-
+**include:** /includes/rotate-certificates.rst
+              
 ## Output
 
-The :method:`db.rotateCertificates()` method returns a document with the following field:
+The :method:`db.rotateCertificates()` method returns a document with
+the following field:
+
+.. list-table::
+   :header-rows: 1
+   :widths: 20 20 80
+
+   * - Field
+
+     - Type
+
+     - Description
+
+   * - ``ok``
+
+     - bool
+
+     - Contains the command's execution status. ``true`` on success, or
+       ``false`` if an error occurred. If ``false``, an ``errmsg`` field
+       is additionally provided with a detailed error message.
 
 ## Behavior
+
+.. _rotated-certs-method:
 
 Rotation includes the following certificates:
 
 - :setting:`TLS Certificates <net.tls.certificateKeyFile>`
 - :setting:`CRL (Certificate Revocation List) files <net.tls.CRLFile>`
-(on Linux and Windows platforms)
-
+  (on Linux and Windows platforms)
 - :setting:`CA (Certificate Authority) files <net.tls.CAFile>`
+
 To rotate one or more of these certificates:
 
-#. Replace the certificate or certificates you wish to rotate on the filesystem, noting the following constraints:
+#. Replace the certificate or certificates you wish to rotate on the
+   filesystem, noting the following constraints:
+   
+   - Each new certificate must have the *same filename* and
+     *same filepath* as the certificate it is replacing.
 
-- Each new certificate must have the same filename and
-same filepath as the certificate it is replacing.
+   - If rotating an encrypted :setting:`TLS Certificate
+     <net.tls.certificateKeyFile>`, its password must be the same as
+     the password for the old certificate (as specified to the
+     :setting:`~net.tls.certificateKeyFilePassword` configuration file
+     setting). Certificate rotation does not support the interactive
+     password prompt.
 
-- If rotating an encrypted :setting:`TLS Certificate
-<net.tls.certificateKeyFile>`, its password must be the same as the password for the old certificate (as specified to the :setting:`~net.tls.certificateKeyFilePassword` configuration file setting). Certificate rotation does not support the interactive password prompt.
+#. Connect :binary:`~bin.mongosh` to the :binary:`~bin.mongod` or
+   :binary:`~bin.mongos` instance that you wish to perform certificate
+   rotation on.
 
-#. Connect :binary:`~bin.mongosh` to the :binary:`~bin.mongod` or :binary:`~bin.mongos` instance that you wish to perform certificate rotation on.
-
-#. Run :method:`db.rotateCertificates()` to rotate the certificates used by the :binary:`~bin.mongod` or :binary:`~bin.mongos` instance.
+#. Run :method:`db.rotateCertificates()` to rotate the certificates used
+   by the :binary:`~bin.mongod` or :binary:`~bin.mongos` instance.
 
 When certificate rotation takes place:
 
 - Existing connections to the :binary:`~bin.mongod` or
-:binary:`~bin.mongos` instance are not terminated, and will continue to use the old certificates.
+  :binary:`~bin.mongos` instance are not terminated, and will continue
+  to use the old certificates.
 
 - Any new connections will use the new certificates.
-If you have configured :parameter:`OCSP <ocspEnabled>` for your deployment, the :method:`db.rotateCertificates()` method will also fetch stapled OCSP responses during rotation.
 
-The :method:`db.rotateCertificates()` method may be run on a running :binary:`~bin.mongod` or :binary:`~bin.mongos` regardless of replication status.
+If you have configured :parameter:`OCSP <ocspEnabled>` for your
+deployment, the :method:`db.rotateCertificates()` method will also fetch
+stapled OCSP responses during rotation.
 
-Only one instance of :method:`db.rotateCertificates()` or :dbcommand:`rotateCertificates` may run on each :binary:`~bin.mongod` or :binary:`~bin.mongos` process at a time. Attempting to initiate a second instance while one is already running will result in an error.
+The :method:`db.rotateCertificates()` method may be run on a running
+:binary:`~bin.mongod` or :binary:`~bin.mongos` regardless of replication
+status.
 
-Incorrect, expired, revoked, or missing certificate files will cause the certificate rotation to fail, but will not invalidate the existing TLS configuration or terminate the running :binary:`~bin.mongod` or :binary:`~bin.mongos` process.
+Only one instance of :method:`db.rotateCertificates()` or
+:dbcommand:`rotateCertificates` may run on each :binary:`~bin.mongod` or
+:binary:`~bin.mongos` process at a time. Attempting to initiate a second
+instance while one is already running will result in an error.
 
-If the :binary:`~bin.mongod` or :binary:`~bin.mongos` is running with :option:`--tlsCertificateSelector <mongod --tlsCertificateSelector>` set to `thumbprint`, :method:`db.rotateCertificates()` will fail and write a warning message to the log file.
+Incorrect, expired, revoked, or missing certificate files will cause the
+certificate rotation to fail, but will not invalidate the existing
+TLS configuration or terminate the running :binary:`~bin.mongod` or
+:binary:`~bin.mongos` process.
+
+If the :binary:`~bin.mongod` or :binary:`~bin.mongos` is running with
+:option:`--tlsCertificateSelector <mongod --tlsCertificateSelector>` set
+to ``thumbprint``, :method:`db.rotateCertificates()` will fail and write
+a warning message to the log file.
 
 ## Logging
 
-On successful rotation, the subject names, thumbprints, and the validity period of the server and cluster certificate thumbprints are logged to the configured `log destination <log-message-destinations>`. If `auditing <auditing>` is enabled, this information is also written to the audit log.
+On successful rotation, the subject names, thumbprints, and the
+validity period of the server and cluster certificate thumbprints are
+logged to the configured :ref:`log destination
+<log-message-destinations>`. If :ref:`auditing <auditing>` is
+enabled, this information is also written to the audit log.
 
-On Linux and Windows platforms, if a :setting:`CRL file <net.tls.CRLFile>` is present, its thumbprint and validity period are also logged to these locations.
+On Linux and Windows platforms, if a :setting:`CRL file
+<net.tls.CRLFile>` is present, its thumbprint and validity period are
+also logged to these locations.
 
 ## Required Access
 
-.. include:: /includes/access-rotate-certificates.rst
+.. |rotate-op| replace:: :method:`db.rotateCertificates()` method
+
+**include:** /includes/access-rotate-certificates.rst
 
 ## Example
 
-The following operation rotates the certificates on a running :binary:`~bin.mongod` instance, after having made the appropriate updates to the configuration file to specify the updated certificate information:
+The following operation rotates the certificates on a running
+:binary:`~bin.mongod` instance, after having made the appropriate
+updates to the configuration file to specify the updated certificate
+information:
 
-```javascript
-db.rotateCertificates()
-```
+.. code-block:: javascript
 
-The following performs the same as above, but also writes a custom log message at rotation time to the `log file <log-message-destinations>` and `audit file <auditing>`:
+   db.rotateCertificates()
 
-```javascript
-db.rotateCertificates("message": "Rotating certificates")
-```
+The following performs the same as above, but also writes a custom log
+message at rotation time to the :ref:`log file
+<log-message-destinations>` and :ref:`audit file <auditing>`:
+
+.. code-block:: javascript
+
+   db.rotateCertificates("message": "Rotating certificates")

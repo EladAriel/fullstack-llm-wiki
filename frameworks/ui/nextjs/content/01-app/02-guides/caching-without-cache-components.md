@@ -1,14 +1,15 @@
 ---
 type: "Framework Learn Page"
-framework: "nextjs"
+framework: "Next.js"
 source_repo: "https://github.com/vercel/next.js/"
 source_branch: "canary"
 source_path: "docs/01-app/02-guides/caching-without-cache-components.mdx"
-source_commit: "dcf242a17b5d4622bbd9624db531a9d84177619f"
-source_commit_short: "dcf242a1"
-source_commit_date: "2026-07-25T10:16:19+02:00"
-generated_at: "2026-07-25T11:50:53Z"
+source_commit: "33a5d542e519fe4e05c8c8c2c2845da9f741699b"
+source_commit_short: "33a5d542"
+source_commit_date: "2026-08-29T00:04:45-07:00"
+generated_at: "2026-08-29T09:40:24.272534Z"
 ---
+# Caching Without Cache Components
 
 ---
 title: Caching and Revalidating (Previous Model)
@@ -120,7 +121,7 @@ export const dynamic = 'auto'
 <details>
   <summary>This is an advanced option that should only be used if you specifically need to override the default behavior.</summary>
 
-By default, Next.js **will cache** any `fetch()` requests that are reachable **before** any Request-time APIs are used and **will not cache** `fetch` requests that are discovered **after** Request-time APIs are used.
+A `fetch` request that sets no `cache` option is fetched once during `next build` if it is reachable **before** any Request-time APIs are used, because the route is prerendered up to that point. Requests discovered **after** a Request-time API run on every request.
 
 `fetchCache` allows you to override the default `cache` option of all `fetch` requests in a layout or page.
 

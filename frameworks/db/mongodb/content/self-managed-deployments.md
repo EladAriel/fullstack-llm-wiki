@@ -1,41 +1,62 @@
 ---
 type: "Framework Learn Page"
-framework: "mongodb"
+framework: "MongoDB"
 source_repo: "https://github.com/mongodb/docs.git"
 source_branch: "main"
 source_path: "content/manual/manual/source/self-managed-deployments.txt"
-source_commit: "ab9db26ed3d11618cdb61516d8180337d8e3f679"
-source_commit_short: "ab9db26e"
-source_commit_date: "2026-07-24T16:22:46-06:00"
-generated_at: "2026-07-25T11:51:15Z"
+source_commit: "b9f2bc487a2878b65e3c1f80024bebab76954f27"
+source_commit_short: "b9f2bc48"
+source_commit_date: "2026-08-28T17:09:45-05:00"
+generated_at: "2026-08-29T09:39:19.472089Z"
 ---
-
-========================
+.. _self-managed-deployments:
 
 # Self-Managed Deployments
 
-These documents provide instructions on how to install and administer a self-managed MongoDB database.
+.. default-domain:: mongodb
 
-`Install a Self-Managed Deployment <tutorial-installation>` Learn how to install a self-managed MongoDB database deployment.
+**facet:** :name: genre
+   :values: reference
 
-`Deploy and Manage Self-Managed Replica Sets <deploy-manage-self-managed-replica-sets>` Learn to deploy and manage replica sets in a self-managed database.
+**meta:** :description: Learn about self-managed MongoDB document database deployments.
 
-`Deploy and Manage Self-Managed Sharded Clusters <deploy-manage-self-managed-sharded-clusters>` Learn to deploy and manage sharded clusters in a self-managed database.
+**contents:** On this page
+   :local:
+   :backlinks: none
+   :depth: 1
+   :class: singlecol
 
-`Self-Managed Storage <self-managed-storage>` Learn about managing data in a self-managed MongoDB database.
+These documents provide instructions on how to install and administer 
+a self-managed MongoDB database.
 
-`Self-Managed Administration <self-managed-administration>` Learn about administering a self-managed MongoDB database.
+:ref:`Install a Self-Managed Deployment <tutorial-installation>`
+   Learn how to install a self-managed MongoDB database deployment.
 
-`Self-Managed Security <self-managed-security>` Learn about security options for a self-managed MongoDB database.
+:ref:`Deploy and Manage Self-Managed Replica Sets <deploy-manage-self-managed-replica-sets>`
+   Learn to deploy and manage replica sets in a self-managed database.
 
-`$text Queries on Self-Managed Deployments <text-search-on-prem>` Learn about using `$text` queries on a self-managed MongoDB database.
+:ref:`Deploy and Manage Self-Managed Sharded Clusters <deploy-manage-self-managed-sharded-clusters>`
+   Learn to deploy and manage sharded clusters in a self-managed database.
 
-## Contents
+:ref:`Self-Managed Storage <self-managed-storage>`
+   Learn about managing data in a self-managed MongoDB database.
 
-- Install </installation>
-- Deploy & Manage Replica Sets <administration/deploy-manage-self-managed-replica-sets>
-- Deploy & Manage Sharded Clusters <administration/deploy-manage-self-managed-sharded-clusters>
-- Storage </core/self-managed-storage>
-- Administration </administration/self-managed-administration>
-- Security </core/self-managed-security>
-- $text Queries on Self-Managed Deployments </core/text-search/on-prem>
+:ref:`Self-Managed Administration <self-managed-administration>`
+   Learn about administering a self-managed MongoDB database.
+
+:ref:`Self-Managed Security <self-managed-security>`
+   Learn about security options for a self-managed MongoDB database.
+
+:ref:`$text Queries on Self-Managed Deployments <text-search-on-prem>`
+   Learn about using ``$text`` queries on a self-managed MongoDB database.
+
+**toctree:** :titlesonly:
+   :hidden:
+
+   Install </installation>
+   Deploy & Manage Replica Sets <administration/deploy-manage-self-managed-replica-sets>
+   Deploy & Manage Sharded Clusters <administration/deploy-manage-self-managed-sharded-clusters>
+   Storage </core/self-managed-storage>
+   Administration </administration/self-managed-administration>
+   Security </core/self-managed-security>
+   $text Queries on Self-Managed Deployments </core/text-search/on-prem>

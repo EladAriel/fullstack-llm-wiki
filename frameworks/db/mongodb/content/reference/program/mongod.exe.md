@@ -1,25 +1,125 @@
 ---
 type: "Framework Learn Page"
-framework: "mongodb"
+framework: "MongoDB"
 source_repo: "https://github.com/mongodb/docs.git"
 source_branch: "main"
 source_path: "content/manual/manual/source/reference/program/mongod.exe.txt"
-source_commit: "ab9db26ed3d11618cdb61516d8180337d8e3f679"
-source_commit_short: "ab9db26e"
-source_commit_date: "2026-07-24T16:22:46-06:00"
-generated_at: "2026-07-25T11:51:15Z"
+source_commit: "b9f2bc487a2878b65e3c1f80024bebab76954f27"
+source_commit_short: "b9f2bc48"
+source_commit_date: "2026-08-28T17:09:45-05:00"
+generated_at: "2026-08-29T09:39:19.872224Z"
 ---
+.. default-domain:: mongodb
 
-==============
+**binary:** mongod.exe
 
-# `mongod.exe`
+**program:** mongod.exe
+
+**meta:** :keywords: on-prem
+   :description: Explore the unique options for using `mongod.exe` on Windows, including service installation and configuration.
+             
+# ``mongod.exe``
+
+**contents:** On this page
+   :local:
+   :backlinks: none
+   :depth: 1
+   :class: singlecol
 
 ## Synopsis
 
-:binary:`mongod.exe` is the build of the MongoDB daemon (i.e. :binary:`~bin.mongod`) for the Windows platform. :binary:`mongod.exe` has all of the features of :binary:`~bin.mongod` on Unix-like platforms and is completely compatible with the other builds of :binary:`~bin.mongod`. In addition, :binary:`mongod.exe` provides several options for interacting with the Windows platform itself.
+:binary:`mongod.exe` is the build of the MongoDB daemon
+(i.e. :binary:`~bin.mongod`) for the Windows
+platform. :binary:`mongod.exe` has all of the features of
+:binary:`~bin.mongod` on Unix-like platforms and is completely compatible
+with the other builds of :binary:`~bin.mongod`. In addition,
+:binary:`mongod.exe` provides several options for interacting with
+the Windows platform itself.
 
-This document only references options that are unique to :binary:`mongod.exe`. :binary:`mongod.exe` supports all :binary:`~bin.mongod` options except those with documented Windows incompatibility. See the `/reference/program/mongod` and the `/reference/configuration-options` documents for more information on `mongod` options not listed here.
+This document *only* references options that are unique to
+:binary:`mongod.exe`. :binary:`mongod.exe` supports all
+:binary:`~bin.mongod` options *except* those with documented Windows
+incompatibility. See the :doc:`/reference/program/mongod` and the
+:doc:`/reference/configuration-options` documents for more information
+on ``mongod`` options not listed here.
 
-To install and use :binary:`mongod.exe`, see `install-mdb-community-windows`.
+To install and use :binary:`mongod.exe`, see
+:ref:`install-mdb-community-windows`.
 
 ## Options
+
+**option:** --install
+
+   Installs :program:`mongod.exe` as a Windows Service and exits.
+   
+   If needed, you can install services for multiple instances of
+   :program:`mongod.exe`. Install each service with a unique :option:`--serviceName`
+   and :option:`--serviceDisplayName`. Use multiple instances only when
+   sufficient system resources exist and your system design requires it.
+
+
+**option:** --remove
+
+   Removes the :program:`mongod.exe` Windows Service. If :program:`mongod.exe` is
+   running, this operation will stop and then remove the service.
+   
+   :option:`--remove` requires the :option:`--serviceName` if you
+   configured a non-default :option:`--serviceName` during the
+   :option:`--install` operation.
+
+
+**option:** --reinstall
+
+   Removes :program:`mongod.exe` and reinstalls :program:`mongod.exe`
+   as a Windows Service.
+
+
+**option:** --serviceName name
+
+   *Default*: MongoDB
+
+   Sets the service name of :program:`mongod.exe` when running as a
+   Windows Service. Use this name with the ``net start <name>`` and
+   ``net stop <name>`` operations.
+
+   You must use :option:`--serviceName` in conjunction with either
+   the :option:`--install` or :option:`--remove` option.
+
+
+**option:** --serviceDisplayName <name>
+
+   *Default*: MongoDB
+
+   Sets the name listed for MongoDB on the Services administrative
+   application.
+
+
+**option:** --serviceDescription <description>
+
+   *Default*: MongoDB Server
+
+   Sets the :program:`mongod.exe` service description.
+   
+   You must use :option:`--serviceDescription` in conjunction with the
+   :option:`--install` option.
+   
+   For descriptions that contain spaces, you must enclose the
+   description in quotes.
+
+
+**option:** --serviceUser <user>
+
+   Runs the :program:`mongod.exe` service in the context of a certain user. This
+   user must have "Log on as a service" privileges.
+   
+   You must use :option:`--serviceUser` in conjunction with the
+   :option:`--install` option.
+
+
+**option:** --servicePassword <password>
+
+   Sets the password for ``<user>`` for :program:`mongod.exe` when running with
+   the :option:`--serviceUser` option.
+   
+   You must use :option:`--servicePassword` in conjunction with the
+   :option:`--install` option.

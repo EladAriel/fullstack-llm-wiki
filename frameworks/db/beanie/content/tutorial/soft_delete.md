@@ -1,15 +1,14 @@
 ---
 type: "Framework Learn Page"
-framework: "beanie"
+framework: "Beanie"
 source_repo: "https://github.com/BeanieODM/beanie"
 source_branch: "main"
 source_path: "docs/tutorial/soft_delete.md"
-source_commit: "00c0f745ef12c4be145209d2ef69c2181d4d3a17"
-source_commit_short: "00c0f745"
-source_commit_date: "2026-03-29T13:57:21+02:00"
-generated_at: "2026-06-21T11:21:43Z"
+source_commit: "aa290b5739b52c7f62e43e37724b63038d1e5a81"
+source_commit_short: "aa290b5"
+source_commit_date: "2026-08-07T10:16:44-06:00"
+generated_at: "2026-08-29T09:38:56.938945Z"
 ---
-
 # Soft Delete
 
 Instead of permanently removing documents from the database, soft delete marks them as deleted by setting a `deleted_at` timestamp. Soft-deleted documents are automatically excluded from normal queries but remain in the database.

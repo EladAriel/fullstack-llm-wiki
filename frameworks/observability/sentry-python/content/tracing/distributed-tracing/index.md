@@ -1,7 +1,7 @@
 ---
 type: "Framework Learn Directory Index"
 framework: "Sentry Python"
-generated_at: "2026-07-25T19:08:13.551127Z"
+generated_at: "2026-08-29T09:40:09.071165Z"
 ---
 # Distributed-Tracing
 
@@ -17,3 +17,9 @@ This directory contains Sentry Python learning pages related to distributed-trac
 
 ## Pages in This Directory
 
+
+## Subdirectories
+
+- [Custom Trace Propagation](custom-trace-propagation/index.md)
+- [Dealing With Cors Issues](dealing-with-cors-issues/index.md)
+- [Limiting Trace Propagation](limiting-trace-propagation/index.md)

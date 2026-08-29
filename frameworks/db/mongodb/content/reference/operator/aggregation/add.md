@@ -1,83 +1,153 @@
 ---
 type: "Framework Learn Page"
-framework: "mongodb"
+framework: "MongoDB"
 source_repo: "https://github.com/mongodb/docs.git"
 source_branch: "main"
 source_path: "content/manual/manual/source/reference/operator/aggregation/add.txt"
-source_commit: "ab9db26ed3d11618cdb61516d8180337d8e3f679"
-source_commit_short: "ab9db26e"
-source_commit_date: "2026-07-24T16:22:46-06:00"
-generated_at: "2026-07-25T11:51:15Z"
+source_commit: "b9f2bc487a2878b65e3c1f80024bebab76954f27"
+source_commit_short: "b9f2bc48"
+source_commit_date: "2026-08-28T17:09:45-05:00"
+generated_at: "2026-08-29T09:39:20.234251Z"
 ---
-
-==========================
-
 # $add (expression operator)
+
+**meta:** :description: Add numbers or combine numbers with a date using the `$add` operator in MongoDB aggregation.
+
+.. default-domain:: mongodb
+
+**contents:** On this page
+   :local:
+   :backlinks: none
+   :depth: 1
+   :class: singlecol
+
+.. Substitution used in includes and in the body of this text
+.. |operatorName| replace:: ``$add``
 
 ## Definition
 
+**expression:** $add
+
+   Adds numbers together or adds numbers and a date. If one of the
+   arguments is a date, :expression:`$add` treats the other arguments
+   as milliseconds to add to the date.
+
+   The :expression:`$add` expression has the following syntax:
+
+   .. code-block:: javascript
+
+      { $add: [ <expression1>, <expression2>, ... ] }
+
+   The arguments can be any valid :ref:`expression
+   <aggregation-expressions>` as long as they resolve to
+   either all numbers or to numbers and a date. For more information on
+   expressions, see :ref:`aggregation-expressions`.
+
+   Starting in MongoDB 6.1 you can optimize the ``$add`` operation. To
+   improve performance, group references at the end of the argument
+   list. For example,
+
+   .. code-block:: javascript
+
+      $add: [ 1, 2, 3, '$a', '$b', '$c' ]
+
 ## Behavior
 
-.. include:: /includes/agg-expression-order-of-return-behavior.rst
+**include:** /includes/agg-expression-order-of-return-behavior.rst
 
-When mixing `document-bson-type-date` and non-integer operands, the `$add` operator evaluates the array of expressions from left to right and rounds numeric values before adding them to the `Date` value. For more information, see `add-operation-left-associative`.
+When mixing :ref:`document-bson-type-date` and non-integer operands, the ``$add`` 
+operator evaluates the array of expressions from left to right and rounds 
+numeric values before adding them to the ``Date`` value. For more information, see
+:ref:`add-operation-left-associative`.
 
 ## Examples
 
-The following examples use a `sales` collection with the following documents:
+The following examples use a ``sales`` collection with the following
+documents:
 
-```javascript
-db.sales.insertMany( [
-   { _id : 1, "item" : "abc", "price" : 10, "fee" : 2, date: ISODate("2014-03-01T08:00:00Z") },
-   { _id : 2, "item" : "jkl", "price" : 20, "fee" : 1, date: ISODate("2014-03-01T09:00:00Z") },
-   { _id : 3, "item" : "xyz", "price" : 5,  "fee" : 0, date: ISODate("2014-03-15T09:00:00Z") }
-] )
-```
+.. code-block:: javascript
+   :copyable: true
+
+   db.sales.insertMany( [
+      { _id : 1, "item" : "abc", "price" : 10, "fee" : 2, date: ISODate("2014-03-01T08:00:00Z") },
+      { _id : 2, "item" : "jkl", "price" : 20, "fee" : 1, date: ISODate("2014-03-01T09:00:00Z") },
+      { _id : 3, "item" : "xyz", "price" : 5,  "fee" : 0, date: ISODate("2014-03-15T09:00:00Z") }
+   ] )
 
 ### Add Numbers
 
-The following aggregation uses the :expression:`$add` expression in the :pipeline:`$project` pipeline to calculate the total cost:
+The following aggregation uses the :expression:`$add` expression in the
+:pipeline:`$project` pipeline to calculate the total cost:
 
-```javascript
-db.sales.aggregate(
-   [
-     { $project: { item: 1, total: { $add: [ "$price", "$fee" ] } } }
-   ]
-)
-```
+.. code-block:: javascript
+
+   db.sales.aggregate(
+      [
+        { $project: { item: 1, total: { $add: [ "$price", "$fee" ] } } }
+      ]
+   )
 
 The operation returns the following results:
 
-```javascript
-{ "_id" : 1, "item" : "abc", "total" : 12 }
-{ "_id" : 2, "item" : "jkl", "total" : 21 }
-{ "_id" : 3, "item" : "xyz", "total" : 5 }
-```
+.. code-block:: javascript
+
+   { "_id" : 1, "item" : "abc", "total" : 12 }
+   { "_id" : 2, "item" : "jkl", "total" : 21 }
+   { "_id" : 3, "item" : "xyz", "total" : 5 }
 
 ### Perform Addition on a Date
 
-The following aggregation uses the :expression:`$add` expression to compute the `billing_date` by adding `32460*60000` milliseconds (i.e. 3 days) to the `date` field :
+The following aggregation uses the :expression:`$add` expression to
+compute the ``billing_date`` by adding ``3*24*60*60000`` milliseconds
+(i.e. 3 days) to the ``date`` field :
 
-```javascript
-db.sales.aggregate(
-   [
-     { $project: { item: 1, billing_date: { $add: [ "$date", 3*24*60*60000 ] } } }
-   ]
-)
-```
+.. code-block:: javascript
+
+   db.sales.aggregate(
+      [
+        { $project: { item: 1, billing_date: { $add: [ "$date", 3*24*60*60000 ] } } }
+      ]
+   )
 
 The operation returns the following results:
 
-```javascript
-{ "_id" : 1, "item" : "abc", "billing_date" : ISODate("2014-03-04T08:00:00Z") }
-{ "_id" : 2, "item" : "jkl", "billing_date" : ISODate("2014-03-04T09:00:00Z") }
-{ "_id" : 3, "item" : "xyz", "billing_date" : ISODate("2014-03-18T09:00:00Z") }
-```
+.. code-block:: javascript
+
+   { "_id" : 1, "item" : "abc", "billing_date" : ISODate("2014-03-04T08:00:00Z") }
+   { "_id" : 2, "item" : "jkl", "billing_date" : ISODate("2014-03-04T09:00:00Z") }
+   { "_id" : 3, "item" : "xyz", "billing_date" : ISODate("2014-03-18T09:00:00Z") }
+
+.. _add-operation-left-associative:
 
 ### Add Non-Integer Values to a Date
 
-The following aggregation uses the `$add` expression to compute the `result` field by adding numeric values to the `date` field:
+The following aggregation uses the ``$add`` expression to compute the ``result`` 
+field by adding numeric values to the ``date`` field:
 
-Note that, although the sum of non-date expressions is `6.1` milliseconds, the aggregation results in the initial `$date` field plus `7` milliseconds due to the `$add` operation's left associativity.
+.. io-code-block::
+      
+   .. input::
+      :language: javascript
+      
+      db.sales.aggregate(
+         [
+            { $project: { item: 1, result: { $add: [ 1.5, 1.6, "$date", 1.5, 1.5 ] } } }
+         ]
+      )
+   
+   .. output::
+      :visible: true
 
-When `$add` evaluates the array of expressions from left to right, it first adds the two numeric values `1.5` and `1.6`. The resulting `3.1` is rounded to `3` before being added to the `$date` field. Next, it is added to the rounded value of `1.5` (which is `2`), and then to the rounded value of the final `1.5` (which is also `2`).
+      { "_id" : 1, "item" : 'abc', "result" : ISODate("2014-03-01T08:00:00.007Z") }
+      { "_id" : 2, "item" : 'jkl', "result" : ISODate("2014-03-01T09:00:00.007Z") }
+      { "_id" : 3, "item" : 'xyz', "result" : ISODate("2014-03-15T09:00:00.007Z") }
+
+Note that, although the sum of non-date expressions is ``6.1`` milliseconds,
+the aggregation results in the initial ``$date`` field plus ``7`` milliseconds due 
+to the ``$add`` operation's left associativity.
+
+When ``$add`` evaluates the array of expressions from left to right, it first adds
+the two numeric values ``1.5`` and ``1.6``. The resulting ``3.1`` is rounded to ``3`` 
+before being added to the ``$date`` field. Next, it is added to the rounded 
+value of ``1.5`` (which is ``2``), and then to the rounded value of the final ``1.5`` 
+(which is also ``2``).

@@ -1,66 +1,153 @@
 ---
 type: "Framework Learn Page"
-framework: "mongodb"
+framework: "MongoDB"
 source_repo: "https://github.com/mongodb/docs.git"
 source_branch: "main"
 source_path: "content/manual/manual/source/reference/operator/aggregation/hexHash.txt"
-source_commit: "ab9db26ed3d11618cdb61516d8180337d8e3f679"
-source_commit_short: "ab9db26e"
-source_commit_date: "2026-07-24T16:22:46-06:00"
-generated_at: "2026-07-25T11:51:15Z"
+source_commit: "b9f2bc487a2878b65e3c1f80024bebab76954f27"
+source_commit_short: "b9f2bc48"
+source_commit_date: "2026-08-28T17:09:45-05:00"
+generated_at: "2026-08-29T09:39:20.219389Z"
 ---
-
-=================================
-
 # $hexHash (aggregation expression)
+
+**meta:** :description: Use the $hexHash aggregation expression to generate an uppercase hex hash from a UTF-8 string or binary data using the MD5, SHA-256, or XXH64 algorithm.
+
+.. default-domain:: mongodb
+
+**contents:** On this page
+   :local:
+   :backlinks: none
+   :depth: 1
+   :class: singlecol
 
 ## Definition
 
-.. versionadded:: 8.3
+**versionadded:** 8.3
+
+**expression:** $hexHash
+
+   Generates and returns an uppercase hexadecimal string
+   representation of a hash value from a UTF-8 string or binary
+   data (:bsontype:`BinData <Binary>`). To get binary data instead
+   of a hexadecimal string, use :expression:`$hash`.
 
 ## Syntax
 
-`$hexHash` has the following syntax:
+``$hexHash`` has the following syntax:
 
-```javascript
-{
-   $hexHash: {
-      input: <expression>,
-      algorithm: <string>
+.. code-block:: javascript
+
+   {
+      $hexHash: {
+         input: <expression>,
+         algorithm: <string>
+      }
    }
-}
-```
+
+.. list-table::
+   :header-rows: 1
+   :widths: 20 20 60
+
+   * - Field
+     - Type
+     - Description
+
+   * - ``input``
+     - :ref:`Expression <aggregation-expressions>`
+     - Required. The value to hash. Must resolve to a valid
+       UTF-8 string or :bsontype:`BinData <Binary>`.
+
+   * - ``algorithm``
+     - String
+     - Required. The hashing algorithm. Accepted values:
+
+       - ``"md5"``
+       - ``"sha256"``
+       - ``"xxh64"``
 
 ## Behavior
 
-`$hexHash` returns an uppercase hexadecimal string. The length of the output depends on the algorithm:
+``$hexHash`` returns an uppercase hexadecimal string. The length of
+the output depends on the algorithm:
 
-If `input` resolves to `null` or undefined, or refers to a missing field, `$hexHash` returns `null`.
+.. list-table::
+   :header-rows: 1
+   :widths: 40 60
 
-If `input` resolves to a type other than a UTF-8 string or :bsontype:`BinData <Binary>`, `$hexHash` returns an error.
+   * - Algorithm
+     - Output Length (characters)
 
-If `algorithm` is not one of the accepted values, `$hexHash` returns an error.
+   * - ``"md5"``
+     - 32
 
-> **Important:** MD5 is not a cryptographically secure algorithm and is not
-suitable for security-sensitive applications. If you are
-hashing sensitive data, use `"sha256"` instead.
-MD5 is also disabled in FIPS mode. If your deployment runs
-with FIPS mode enabled, use `"sha256"` or `"xxh64"`
-instead.
+   * - ``"sha256"``
+     - 64
+
+   * - ``"xxh64"``
+     - 16
+
+If ``input`` resolves to ``null`` or undefined, or refers to a
+missing field, ``$hexHash`` returns ``null``.
+
+If ``input`` resolves to a type other than a UTF-8 string or
+:bsontype:`BinData <Binary>`, ``$hexHash`` returns an error.
+
+If ``algorithm`` is not one of the accepted values, ``$hexHash``
+returns an error.
+
+**important:** MD5 is not a cryptographically secure algorithm and is not
+   suitable for security-sensitive applications. If you are
+   hashing sensitive data, use ``"sha256"`` instead.
+
+   MD5 is also disabled in FIPS mode. If your deployment runs
+   with FIPS mode enabled, use ``"sha256"`` or ``"xxh64"``
+   instead.
 
 ## Examples
 
-The following examples use a collection named `files` with this document:
+The following examples use a collection named ``files`` with
+this document:
+
+**literalinclude:** /code-examples/tested/command-line/mongosh/aggregation/expressions/hexHash/hash-field-value/load-data.js
+   :language: javascript
+   :category: usage example
 
 ### Hash a Field Value
 
-The following example computes the SHA-256 hexadecimal hash of the `filename` field:
+The following example computes the SHA-256 hexadecimal hash of
+the ``filename`` field:
 
-The `hexHash` field contains the SHA-256 hash as a 64-character uppercase hexadecimal string. To use a different algorithm, change the `algorithm` value. For example, `"xxh64"` produces a 16-character string.
+.. io-code-block::
+   :copyable: true
+
+   .. input:: /code-examples/tested/command-line/mongosh/aggregation/expressions/hexHash/hash-field-value/hash-field-value.js
+      :language: javascript
+      :category: usage example
+
+   .. output:: /code-examples/tested/command-line/mongosh/aggregation/expressions/hexHash/hash-field-value/output.sh
+      :language: javascript
+
+The ``hexHash`` field contains the SHA-256 hash as a 64-character
+uppercase hexadecimal string. To use a different algorithm, change
+the ``algorithm`` value. For example, ``"xxh64"`` produces a
+16-character string.
 
 ### Null or Missing Input
 
-If `input` is `null`, or `input` refers to a missing field, `$hexHash` returns `null`:
+If ``input`` is ``null``, or ``input`` refers to a missing field,
+``$hexHash`` returns ``null``:
+
+.. io-code-block::
+   :copyable: true
+
+   .. input:: /code-examples/tested/command-line/mongosh/aggregation/expressions/hexHash/null-missing/null-missing.js
+      :language: javascript
+      :category: usage example
+
+   .. output:: /code-examples/tested/command-line/mongosh/aggregation/expressions/hexHash/null-missing/output.sh
+      :visible: true
+      :language: javascript
 
 ## Learn More
 

@@ -1,42 +1,19 @@
 ---
 type: "Framework Learn Directory Index"
-framework: "mongodb"
-directory: "content/core"
-source_repo: "https://github.com/mongodb/docs.git"
-source_branch: "main"
-source_commit: "ab9db26ed3d11618cdb61516d8180337d8e3f679"
-source_commit_short: "ab9db26e"
-source_commit_date: "2026-07-24T16:22:46-06:00"
-generated_at: "2026-07-25T11:51:15Z"
+framework: "MongoDB"
+generated_at: "2026-08-29T09:39:20.588642Z"
 ---
 # Core
 
-This directory contains mongodb learning pages related to core.
+This directory contains MongoDB learning pages related to core.
 
 ## Breadcrumbs
 
-[Wiki Home](../../index.md) -> [Content](../index.md) -> [Core](index.md)
+[Wiki Home](../index.md) -> [Content](index.md)
 
 ## Navigation
 
-- Parent: [Parent Index](../index.md)
-
-## Child Directories
-
-- [Capped Collections](capped-collections/index.md) - pages related to capped collections
-- [Csfle](csfle/index.md) - pages related to csfle
-- [Defragment Sharded Collections](defragment-sharded-collections/index.md) - pages related to defragment sharded collections
-- [Dot Dollar Considerations](dot-dollar-considerations/index.md) - pages related to dot dollar considerations
-- [Index Unique](index-unique/index.md) - pages related to index unique
-- [Indexes](indexes/index.md) - pages related to indexes
-- [Moveable Collections](moveable-collections/index.md) - pages related to moveable collections
-- [Oidc](oidc/index.md) - pages related to oidc
-- [Queryable Encryption](queryable-encryption/index.md) - pages related to queryable encryption
-- [Schema Validation](schema-validation/index.md) - pages related to schema validation
-- [Text Search](text-search/index.md) - pages related to text search
-- [Timeseries](timeseries/index.md) - pages related to timeseries
-- [Tls](tls/index.md) - pages related to tls
-- [Views](views/index.md) - pages related to views
+- Wiki Home: [Root Index](../index.md)
 
 ## Pages in This Directory
 
@@ -63,6 +40,7 @@ This directory contains mongodb learning pages related to core.
 - [Defragment Sharded Collections](defragment-sharded-collections.md)
 - [Distributed Queries](distributed-queries.md)
 - [Document](document.md)
+- [Documents Other Uses](documents-other-uses.md)
 - [Dot Dollar Considerations](dot-dollar-considerations.md)
 - [Field Paths](field-paths.md)
 - [Gridfs](gridfs.md)
@@ -173,10 +151,19 @@ This directory contains mongodb learning pages related to core.
 - [Write Performance](write-performance.md)
 - [Zone Sharding](zone-sharding.md)
 
-## IDE LLM Guidance
+## Subdirectories
 
-When answering implementation questions related to this directory:
-
-1. Prefer the most specific page listed above.
-2. If the topic is broad, read the child directory index first.
-3. Use source metadata from each page when giving answers.
+- [Capped Collections](capped-collections/index.md)
+- [Csfle](csfle/index.md)
+- [Defragment Sharded Collections](defragment-sharded-collections/index.md)
+- [Dot Dollar Considerations](dot-dollar-considerations/index.md)
+- [Index Unique](index-unique/index.md)
+- [Indexes](indexes/index.md)
+- [Moveable Collections](moveable-collections/index.md)
+- [Oidc](oidc/index.md)
+- [Queryable Encryption](queryable-encryption/index.md)
+- [Schema Validation](schema-validation/index.md)
+- [Text Search](text-search/index.md)
+- [Timeseries](timeseries/index.md)
+- [Tls](tls/index.md)
+- [Views](views/index.md)

@@ -4,10 +4,10 @@ framework: "LangSmith"
 source_repo: "https://github.com/langchain-ai/docs.git"
 source_branch: "main"
 source_path: "src/langsmith/run-evals-api-only.mdx"
-source_commit: "2aae1dfc98ee953a9a5185fb6fcdd9efb3f4d878"
-source_commit_short: "2aae1df"
-source_commit_date: "2026-07-25T00:27:23+00:00"
-generated_at: "2026-07-25T19:08:33.406235Z"
+source_commit: "a174f9cf7c91ee5eb14ee2382eb48bfe6e4956e9"
+source_commit_short: "a174f9c"
+source_commit_date: "2026-08-28T17:04:12-07:00"
+generated_at: "2026-08-29T09:39:50.634905Z"
 ---
 ---
 title: How to use the REST API
@@ -241,7 +241,7 @@ runs_resp = requests.post(
     json={
         "session": [experiment_id],
         "is_root": True,  # Only fetch root runs
-        "select": ["id", "reference_example_id", "outputs"],
+        "select": ["id", "reference_example_id", "outputs", "session_id"],
     }
 )
 
@@ -267,6 +267,7 @@ for run in runs:
         "run_id": str(run["id"]),
         "key": "correctness",  # The name of your evaluation metric
         "score": 1.0 if is_correct else 0.0,
+        "session_id": run["session_id"],  # Required: the run's tracing project UUID
         "comment": f"Expected: {expected_output}, Got: {actual_output}",  # Optional
     }
 
@@ -328,7 +329,7 @@ runs = requests.post(
     json={
         "session": experiment_ids,
         "is_root": True, # Only fetch root runs (spans) which contain the end outputs
-        "select": ["id", "reference_example_id", "outputs"],
+        "select": ["id", "reference_example_id", "outputs", "session_id"],
     }
 ).json()
 runs = runs["runs"]
@@ -351,6 +352,7 @@ for example_id, runs in example_id_to_runs_map.items():
             "score": 1 if i == 0 else 0,
             "run_id": str(run["id"]),
             "key": "ranked_preference",
+            "session_id": run["session_id"],  # Required: the run's tracing project UUID
             "feedback_group_id": str(feedback_group_id),
             "comparative_experiment_id": comparative_experiment_id,
         }

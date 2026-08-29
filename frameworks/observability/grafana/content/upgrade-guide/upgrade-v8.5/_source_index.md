@@ -1,0 +1,46 @@
+---
+type: "Framework Learn Page"
+framework: "Grafana"
+source_repo: "https://github.com/grafana/grafana.git"
+source_branch: "main"
+source_path: "docs/sources/upgrade-guide/upgrade-v8.5/index.md"
+source_commit: "5e3a02f81d2aadf4bf24fe49ed97d872556f5bf9"
+source_commit_short: "5e3a02f8"
+source_commit_date: "2026-08-29T10:58:19+09:00"
+generated_at: "2026-08-29T09:39:37.427834Z"
+---
+---
+description: Upgrade to Grafana v8.5
+keywords:
+  - grafana
+  - configuration
+  - documentation
+  - upgrade
+labels:
+  products:
+    - enterprise
+    - oss
+menutitle: Upgrade to v8.5
+title: Upgrade to Grafana v8.5
+weight: 2400
+---
+
+# Upgrade to Grafana v8.5
+
+{{< docs/shared lookup="upgrade/intro.md" source="grafana" version="<GRAFANA VERSION>" >}}
+
+{{< docs/shared lookup="back-up/back-up-grafana.md" source="grafana" version="<GRAFANA VERSION>" leveloffset="+1" >}}
+
+{{< docs/shared lookup="upgrade/upgrade-common-tasks.md" source="grafana" version="<GRAFANA VERSION>" >}}
+
+## Technical notes
+
+This section describes technical changes associated with this release of Grafana.
+
+### Default data source
+
+The concept of a `default` data source existed in Grafana since the beginning. However, the meaning and behavior were not clear. The default data source was not just the starting data source for new panels but it was also saved using a special value (null). This made it possible to change the default data source to another and have that change impact all dashboards that used the default data source.
+
+This behavior was not very intuitive and creates issues for users who want to change the default without it impacting existing dashboards.
+That is why we are changing the behavior in 8.5. From now on, the `default` data source will not be a persisted property but just the starting data source for new panels and queries.
+Existing dashboards that still have panels with a `datasource` set to null will be migrated when the dashboard opens. The migration will set the data source property to the **current** default data source.

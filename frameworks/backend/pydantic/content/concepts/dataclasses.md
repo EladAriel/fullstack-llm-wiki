@@ -1,25 +1,19 @@
 ---
 type: "Framework Learn Page"
-framework: "pydantic"
+framework: "Pydantic"
 source_repo: "https://github.com/pydantic/pydantic"
 source_branch: "main"
 source_path: "docs/concepts/dataclasses.md"
-source_commit: "a2a6577d4c329dd574a45dbb01a8feaa16b1ad3d"
-source_commit_short: "a2a6577d"
-source_commit_date: "2026-07-23T15:38:17Z"
-generated_at: "2026-07-25T11:50:12Z"
+source_commit: "4bc21c0fa28323c0f3e0be93c9ad114b705029c6"
+source_commit_short: "4bc21c0"
+source_commit_date: "2026-08-29T11:30:40+02:00"
+generated_at: "2026-08-29T09:38:50.589007Z"
 ---
-
 ??? api "API Documentation"
     [`@pydantic.dataclasses.dataclass`][pydantic.dataclasses.dataclass]<br>
 
 If you don't want to use Pydantic's [`BaseModel`][pydantic.BaseModel] you can instead get the same data validation
 on standard [dataclasses][dataclasses].
-
-!!! tip "Logfire integration"
-    Because a Pydantic dataclass validates its inputs just like a model, the same observability applies: if
-    you use [Logfire](../integrations/logfire.md), validations of Pydantic dataclasses are
-    [recorded alongside model validations](../errors/troubleshooting.md), input included.
 
 ```python
 from datetime import datetime
@@ -234,6 +228,11 @@ except pydantic.ValidationError as e:
       Input should be a valid integer, unable to parse string as an integer [type=int_parsing, input_value='pika', input_type=str]
     """
 ```
+
+Because a Pydantic dataclass validates its inputs just like a model, the same observability applies: if
+you use [Logfire](../integrations/logfire.md), validations of Pydantic dataclasses are
+[recorded alongside model validations](../errors/troubleshooting.md), with rejected values in their
+structured errors.
 
 The decorator can also be applied directly on a stdlib dataclass, in which case a new subclass will be created:
 

@@ -4,12 +4,11 @@ framework: "LangChain"
 source_repo: "https://github.com/langchain-ai/docs"
 source_branch: "main"
 source_path: "src/oss/langchain/multi-agent/subagents.mdx"
-source_commit: "2aae1dfc98ee953a9a5185fb6fcdd9efb3f4d878"
-source_commit_short: "2aae1dfc"
-source_commit_date: "2026-07-25T00:27:23Z"
-generated_at: "2026-07-25T11:51:05Z"
+source_commit: "a174f9cf7c91ee5eb14ee2382eb48bfe6e4956e9"
+source_commit_short: "a174f9c"
+source_commit_date: "2026-08-28T17:04:12-07:00"
+generated_at: "2026-08-29T09:38:24.258791Z"
 ---
-
 ---
 title: Subagents
 ---
@@ -65,7 +64,7 @@ from langchain.tools import tool
 from langchain.agents import create_agent
 
 # Create a subagent
-subagent = create_agent(model="google_genai:gemini-3.5-flash", tools=[...])
+subagent = create_agent(model="google_genai:gemini-3.6-flash", tools=[...])
 
 # Wrap it as a tool
 @tool("research", description="Research a topic and return findings")
@@ -74,7 +73,7 @@ def call_research_agent(query: str):
     return result["messages"][-1].content
 
 # Main agent with subagent as a tool
-main_agent = create_agent(model="google_genai:gemini-3.5-flash", tools=[call_research_agent])
+main_agent = create_agent(model="google_genai:gemini-3.6-flash", tools=[call_research_agent])
 ```
 :::
 :::js
@@ -83,7 +82,7 @@ import { createAgent, tool } from "langchain";
 import { z } from "zod";
 
 // Create a subagent
-const subagent = createAgent({ model: "google_genai:gemini-3.5-flash", tools: [...] });
+const subagent = createAgent({ model: "google_genai:gemini-3.6-flash", tools: [...] });
 
 // Wrap it as a tool
 const callResearchAgent = tool(
@@ -101,7 +100,7 @@ const callResearchAgent = tool(
 );
 
 // Main agent with subagent as a tool
-const mainAgent = createAgent({ model: "google_genai:gemini-3.5-flash", tools: [callResearchAgent] });
+const mainAgent = createAgent({ model: "google_genai:gemini-3.6-flash", tools: [callResearchAgent] });
 ```
 :::
 

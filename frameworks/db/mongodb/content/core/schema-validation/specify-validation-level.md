@@ -1,48 +1,285 @@
 ---
 type: "Framework Learn Page"
-framework: "mongodb"
+framework: "MongoDB"
 source_repo: "https://github.com/mongodb/docs.git"
 source_branch: "main"
 source_path: "content/manual/manual/source/core/schema-validation/specify-validation-level.txt"
-source_commit: "ab9db26ed3d11618cdb61516d8180337d8e3f679"
-source_commit_short: "ab9db26e"
-source_commit_date: "2026-07-24T16:22:46-06:00"
-generated_at: "2026-07-25T11:51:15Z"
+source_commit: "b9f2bc487a2878b65e3c1f80024bebab76954f27"
+source_commit_short: "b9f2bc48"
+source_commit_date: "2026-08-28T17:09:45-05:00"
+generated_at: "2026-08-29T09:39:19.788458Z"
 ---
-
-===============================================
+.. _schema-specify-validation-level:
 
 # Specify Validation Level for Existing Documents
 
-For documents that already exist in your collection prior to adding validation, you can specify how MongoDB applies validation rules to these documents.
+**meta:** :description: Specify how MongoDB applies validation rules to existing documents using `strict` or `moderate` validation levels.
+
+.. default-domain:: mongodb
+
+**contents:** On this page
+   :local:
+   :backlinks: none
+   :depth: 1
+   :class: singlecol
+
+For documents that already exist in your collection prior to adding
+validation, you can specify how MongoDB applies validation rules to
+these documents.
 
 ## Context
 
-Your schema's `validationLevel` determines the documents for which MongoDB applies validation rules:
+Your schema's ``validationLevel`` determines the documents for which
+MongoDB applies validation rules:
+
+.. list-table::
+   :header-rows: 1
+   :stub-columns: 1
+   :widths: 10 20
+
+   * - Validation Level
+     - Behavior
+
+   * - ``strict``
+     - (*Default*) MongoDB applies the same validation rules to all
+       document inserts and updates.
+
+   * - ``moderate``
+     -  MongoDB applies the same validation rules to document inserts
+        and updates to existing valid documents that match the
+        validation rules. Updates to existing documents in the 
+        collection that don't match the validation rules aren't required 
+        to pass validation.
 
 ## Prerequisite
 
-The examples on this page use a `contacts` collection with these documents:
+The examples on this page use a ``contacts`` collection with these
+documents:
 
-```json
-db.contacts.insertMany([
-   { "_id": 1, "name": "Anne", "phone": "+1 555 123 456", "city": "London", "status": "Complete" },
-   { "_id": 2, "name": "Ivan", "city": "Vancouver" }
-])
-```
+.. code-block:: json
 
-## Steps: Use `strict` Validation
+   db.contacts.insertMany([
+      { "_id": 1, "name": "Anne", "phone": "+1 555 123 456", "city": "London", "status": "Complete" },
+      { "_id": 2, "name": "Ivan", "city": "Vancouver" }
+   ])
 
-The following example adds a `strict` validation to the `contacts` collection and shows the results when attempting to update invalid documents.
+## Steps: Use ``strict`` Validation
 
-## Steps: Use `moderate` Validation
+The following example adds a ``strict`` validation to the ``contacts``
+collection and shows the results when attempting to update invalid
+documents.
 
-The following example adds a `moderate` validation to the `contacts` collection and shows the results when attempting to update invalid documents.
+**procedure:** .. step:: Specify validation rules with ``strict`` validation level.
 
-> **Important:** The error output is intended for human consumption. It may change in
-the future and should not be relied upon in scripts.
+      Add a validator to the ``contacts`` collection with ``strict``
+      ``validationLevel``:
+
+      .. code-block:: javascript
+
+         db.runCommand( {
+            collMod: "contacts", 
+            validator: { $jsonSchema: {
+               bsonType: "object",
+               required: [ "phone", "name" ],
+               properties: {
+                  phone: {
+                     bsonType: "string",
+                     description: "phone must be a string and is required"
+                  },
+                  name: {
+                     bsonType: "string",
+                     description: "name must be a string and is required"
+                  }
+               }
+            } },
+            validationLevel: "strict"
+         } )
+
+      Because the ``validationLevel`` is ``strict``, when any document
+      is updated, MongoDB checks that document for validation.
+
+   .. step:: Test the validation.
+
+      The following update commands modify both documents in the ``contacts``
+      collection such that neither of the documents are consistent with the
+      validation rule which requires ``name`` to be a string:
+
+      .. code-block:: javascript
+
+         db.contacts.updateOne(
+            { _id: 1 },
+            { $set: { name: 10 } }
+         )
+
+         db.contacts.updateOne(
+            { _id: 2 },
+            { $set: { name: 20 } }
+         )
+
+   .. step:: Observe results.
+      
+      Both update operations fail. MongoDB returns the following output
+      for each operation:
+
+      .. code-block:: javascript
+         :copyable: false
+
+          MongoServerError: Document failed validation
+          Additional information: {
+            failingDocumentId: <id>,
+            details: {
+              operatorName: '$jsonSchema',
+              schemaRulesNotSatisfied: [
+                {
+                  operatorName: 'properties',
+                  propertiesNotSatisfied: [
+                    {
+                      propertyName: 'name',
+                      description: 'name must be a string and is required',
+                      details: [
+                        {
+                          operatorName: 'bsonType',
+                          specifiedAs: { bsonType: 'string' },
+                          reason: 'type did not match',
+                          consideredValue: <value>,
+                          consideredType: 'int'
+                        }
+                      ]
+                    }
+                  ]
+                },
+                {
+                  operatorName: 'required',
+                  specifiedAs: { required: [ 'phone', 'name' ] },
+                  missingProperties: [ 'phone' ]
+                }
+              ]
+            }
+          }
+
+
+## Steps: Use ``moderate`` Validation
+
+The following example adds a ``moderate`` validation to the ``contacts``
+collection and shows the results when attempting to update invalid
+documents.
+
+**procedure:** .. step:: Specify validation rules with ``moderate`` validation level.
+
+      Add a validator to the ``contacts`` collection with ``moderate``
+      ``validationLevel``:
+
+      .. code-block:: javascript
+
+         db.runCommand( {
+            collMod: "contacts", 
+            validator: { $jsonSchema: {
+               bsonType: "object",
+               required: [ "phone", "name" ],
+               properties: {
+                  phone: {
+                     bsonType: "string",
+                     description: "phone must be a string and is required"
+                  },
+                  name: {
+                     bsonType: "string",
+                     description: "name must be a string and is required"
+                  }
+               }
+            } },
+            validationLevel: "moderate"
+         } )
+
+      Because the ``validationLevel`` is ``moderate``:
+
+      - If you update the document with ``_id: 1``, MongoDB applies the
+        new validation rules because the existing document meets the
+        validation requirements.
+
+      - If you update the document with ``_id: 2``, MongoDB does not apply the
+        new validation rules because the existing document does not meet the
+        validation requirements.
+
+   .. step:: Test the validation.
+
+      The following update commands modify both documents in the ``contacts``
+      collection such that neither of the documents are consistent with the
+      validation rule which requires ``name`` to be a string:
+
+      .. code-block:: javascript
+
+         db.contacts.updateOne(
+            { _id: 1 },
+            { $set: { name: 10 } }
+         )
+
+         db.contacts.updateOne(
+            { _id: 2 },
+            { $set: { name: 20 } }
+         )
+
+   .. step:: Observe results.
+
+      MongoDB returns the following output for each operation:
+
+      .. code-block:: javascript
+         :copyable: false
+
+         // _id: 1
+
+         MongoServerError: Document failed validation
+         Additional information: {
+           failingDocumentId: 1,
+           details: {
+             operatorName: '$jsonSchema',
+             schemaRulesNotSatisfied: [
+               {
+                 operatorName: 'properties',
+                 propertiesNotSatisfied: [
+                   {
+                     propertyName: 'name',
+                     description: 'name must be a string and is required',
+                     details: [
+                       {
+                         operatorName: 'bsonType',
+                         specifiedAs: { bsonType: 'string' },
+                         reason: 'type did not match',
+                         consideredValue: 10,
+                         consideredType: 'int'
+                       }
+                     ]
+                   }
+                 ]
+               }
+             ]
+           }
+         }
+
+         // _id: 2
+
+         {
+            acknowledged: true,
+            insertedId: null,
+            matchedCount: 1,
+            modifiedCount: 0,
+            upsertedCount: 0
+         }
+
+      The output shows:
+
+      - The update fails for the document with ``_id: 1``. This document
+        met the initial validation requirements, and MongoDB applies
+        validation rules to this document.
+
+      - The update succeeds for the document with ``_id: 2``. This
+        document did not meet the initial validation requirements, and
+        MongoDB does not apply validation rules to this document.
+
+
+**important:** The error output is intended for human consumption. It may change in
+   the future and should not be relied upon in scripts.
 
 ## Learn More
 
-- `schema-validation-handle-invalid-docs`
-- `schema-update-validation`
+- :ref:`schema-validation-handle-invalid-docs`
+- :ref:`schema-update-validation`

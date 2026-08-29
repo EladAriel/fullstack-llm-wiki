@@ -4,11 +4,12 @@ framework: "Model Context Protocol"
 source_repo: "https://github.com/modelcontextprotocol/modelcontextprotocol"
 source_branch: "main"
 source_path: "docs/community/interest-groups/security.mdx"
-source_commit: "7634684382c3d14cf7e9f14073fe40a2d8ace3fa"
-source_commit_short: "76346843"
-source_commit_date: "2026-07-23T16:49:30-07:00"
-generated_at: "2026-07-25T11:50:39Z"
+source_commit: "ca4ab3027f7c844cd3039c956438d72e8253f7f5"
+source_commit_short: "ca4ab30"
+source_commit_date: "2026-08-28T21:24:44-07:00"
+generated_at: "2026-08-29T09:38:48.027415Z"
 ---
+# Security
 
 ---
 title: Security Charter
@@ -80,7 +81,7 @@ scopes validated problems into focused Working Groups or [SEPs](/community/sep-g
 - **[Server Card WG](/community/working-groups/server-card) / [Registry WG](/community/working-groups/registry)**:
   server identity, provenance, and discovery metadata intersect with admission and supply-chain
   concerns
-- **Transports WG**: stdio process isolation and unauthenticated method surface
+- **[Transports WG](/community/working-groups/transports)**: stdio process isolation and unauthenticated method surface
 - **SDK Maintainers**: coordinated handling of SDK security advisories and cross-SDK security
   defaults
 

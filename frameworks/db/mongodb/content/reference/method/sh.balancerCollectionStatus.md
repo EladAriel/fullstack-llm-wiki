@@ -1,80 +1,131 @@
 ---
 type: "Framework Learn Page"
-framework: "mongodb"
+framework: "MongoDB"
 source_repo: "https://github.com/mongodb/docs.git"
 source_branch: "main"
 source_path: "content/manual/manual/source/reference/method/sh.balancerCollectionStatus.txt"
-source_commit: "ab9db26ed3d11618cdb61516d8180337d8e3f679"
-source_commit_short: "ab9db26e"
-source_commit_date: "2026-07-24T16:22:46-06:00"
-generated_at: "2026-07-25T11:51:15Z"
+source_commit: "b9f2bc487a2878b65e3c1f80024bebab76954f27"
+source_commit_short: "b9f2bc48"
+source_commit_date: "2026-08-28T17:09:45-05:00"
+generated_at: "2026-08-29T09:39:19.983186Z"
 ---
-
-==============================================
-
 # sh.balancerCollectionStatus() (mongosh method)
+
+**meta:** :description: Check if chunks in a sharded collection are balanced using the `sh.balancerCollectionStatus()` method in MongoDB.
+
+.. default-domain:: mongodb
+
+**contents:** On this page
+   :local:
+   :backlinks: none
+   :depth: 1
+   :class: singlecol
 
 ## Definition
 
+**method:** sh.balancerCollectionStatus(namespace)
+
+   Returns a document that contains information about whether the
+   chunks of a sharded collection are balanced (i.e. do not need to be
+   moved) as of the time the command is run or need to be moved because
+   of draining shards, zone violation or imbalance of chunks across
+   shards. 
+   
+   .. |dbcommand| replace:: :dbcommand:`balancerCollectionStatus` command
+   .. include:: /includes/fact-mongosh-shell-method-alt.rst
+
+
 ## Compatibility
 
-This method is available in deployments hosted in the following environments:
+This method is available in deployments hosted in the following environments: 
 
-.. include:: /includes/fact-environments-atlas-only.rst
+**include:** /includes/fact-environments-atlas-only.rst
 
-.. include:: /includes/fact-environments-atlas-support-no-free.rst
+**include:** /includes/fact-environments-atlas-support-no-free.rst
 
-.. include:: /includes/fact-environments-onprem-only.rst
+**include:** /includes/fact-environments-onprem-only.rst
 
 ## Syntax
 
 The :method:`sh.balancerCollectionStatus` has the following form:
 
-```javascript
-sh.balancerCollectionStatus( <namespace> )
-```
+.. code-block:: javascript
+
+   sh.balancerCollectionStatus( <namespace> )
 
 ### Parameter
 
 The :method:`sh.balancerCollectionStatus()` method takes the following parameter:
 
+.. list-table::
+   :header-rows: 1
+   :widths: 20 20 60
+
+   * - Parameter
+     - Type
+     - Description
+
+   * - :ref:`namespace <method-balancercollectionstatus-namespace>`
+
+     - String
+
+     - .. _method-balancercollectionstatus-namespace:
+
+       The :term:`namespace` of the collection to shard in the form
+       ``"<database>.<collection>"``.
+
 ## Access Control
 
-When running with access control, the user must have the :authaction:`enableSharding` privilege actions on `database and/or collection <resource-specific-db-and-or-collection>` to run the method. That is, a user must have a `role <roles>` that grants the following `privilege <privileges>`:
+When running with access control, the user must have the
+:authaction:`enableSharding` privilege actions on :ref:`database
+and/or collection <resource-specific-db-and-or-collection>` to run the
+method. That is, a user must have a :ref:`role <roles>` that grants the
+following :ref:`privilege <privileges>`:
 
-```javascript
-{ resource: { db: <database>, collection: <collection> }, actions: [ "enableSharding" ] }
-```
+.. code-block:: javascript
 
-The built-in :authrole:`clusterManager` role provides the appropriate privileges.
+  { resource: { db: <database>, collection: <collection> }, actions: [ "enableSharding" ] }
+
+The built-in :authrole:`clusterManager` role provides the appropriate
+privileges.
+
 
 ## Examples
 
-To check whether the chunks of a sharded collection `test.contacts` is currently in balance, connect to a :binary:`~bin.mongos` instance and issue the following:
+To check whether the chunks of a sharded collection ``test.contacts``
+is currently in balance, connect to a :binary:`~bin.mongos` instance
+and issue the following:
 
-```javascript
-sh.balancerCollectionStatus("test.contacts")
-```
+.. code-block:: javascript
 
-If the chunks for the collection do not need to be moved, the method returns an output similar to the following:
+   sh.balancerCollectionStatus("test.contacts")
 
-```javascript
-{
-   "balancerCompliant" : true,
-   "ok" : 1,
-   "operationTime" : Timestamp(1583193238, 1),
-   "$clusterTime" : {
-      "clusterTime" : Timestamp(1583193238, 1),
-      "signature" : {
-         "hash" : BinData(0,"AAAAAAAAAAAAAAAAAAAAAAAAAAA="),
-         "keyId" : Long(0)
+If the chunks for the collection do not need to be moved, the method
+returns an output similar to the following:
+
+.. code-block:: javascript
+   :copyable: false
+
+   {
+      "balancerCompliant" : true,
+      "ok" : 1,
+      "operationTime" : Timestamp(1583193238, 1),
+      "$clusterTime" : {
+         "clusterTime" : Timestamp(1583193238, 1),
+         "signature" : {
+            "hash" : BinData(0,"AAAAAAAAAAAAAAAAAAAAAAAAAAA="),
+            "keyId" : Long(0)
+         }
       }
    }
-}
-```
+
+.. _balancer-collection-status-defrag-output-method:
 
 ### Ongoing Defragmentation Process
 
-.. include:: /includes/sharding/balancer-status-defrag-example.rst
+.. |balancer-command| replace:: ``sh.balancerCollectionStatus`` method
 
-For the description of the output, see `balancerCollectionStatus Output <cmd-balancer-CollectionStatus-output>`.
+**include:** /includes/sharding/balancer-status-defrag-example.rst
+
+For the description of the output, see :ref:`balancerCollectionStatus
+Output <cmd-balancer-CollectionStatus-output>`.

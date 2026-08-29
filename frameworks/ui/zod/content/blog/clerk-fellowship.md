@@ -1,14 +1,15 @@
 ---
 type: "Framework Learn Page"
-framework: "zod"
+framework: "Zod"
 source_repo: "https://github.com/colinhacks/zod"
 source_branch: "main"
 source_path: "packages/docs/content/blog/clerk-fellowship.mdx"
-source_commit: "912f0f51b0ced654d0069741e7160834dca742ee"
-source_commit_short: "912f0f51"
-source_commit_date: "2026-06-10T10:17:29-07:00"
-generated_at: "2026-06-21T11:57:59Z"
+source_commit: "e6b6ab347675cd2bd54b1bdbed16f98c59be82a9"
+source_commit_short: "e6b6ab3"
+source_commit_date: "2026-08-28T17:35:38-07:00"
+generated_at: "2026-08-29T09:40:34.223008Z"
 ---
+# Clerk Fellowship
 
 ---
 title: Joining Clerk as an OSS Fellow to work on Zod 4

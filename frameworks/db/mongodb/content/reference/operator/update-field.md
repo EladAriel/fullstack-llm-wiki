@@ -1,29 +1,85 @@
 ---
 type: "Framework Learn Page"
-framework: "mongodb"
+framework: "MongoDB"
 source_repo: "https://github.com/mongodb/docs.git"
 source_branch: "main"
 source_path: "content/manual/manual/source/reference/operator/update-field.txt"
-source_commit: "ab9db26ed3d11618cdb61516d8180337d8e3f679"
-source_commit_short: "ab9db26e"
-source_commit_date: "2026-07-24T16:22:46-06:00"
-generated_at: "2026-07-25T11:51:15Z"
+source_commit: "b9f2bc487a2878b65e3c1f80024bebab76954f27"
+source_commit_short: "b9f2bc48"
+source_commit_date: "2026-08-28T17:09:45-05:00"
+generated_at: "2026-08-29T09:39:19.864381Z"
 ---
+.. _field-update-operators:
 
-======================
 
 # Field Update Operators
 
-.. include:: /includes/extracts/operators-toc-explanation.rst
+**meta:** :description: Explore various field update operators in MongoDB, including `$set`, `$inc`, `$rename`, and `$unset`, for modifying document fields.
 
-## Contents
+.. default-domain:: mongodb
 
-- $currentDate </reference/operator/update/currentDate>
-- $inc </reference/operator/update/inc>
-- $min </reference/operator/update/min>
-- $max </reference/operator/update/max>
-- $mul </reference/operator/update/mul>
-- $rename </reference/operator/update/rename>
-- $set </reference/operator/update/set>
-- $setOnInsert </reference/operator/update/setOnInsert>
-- $unset </reference/operator/update/unset>
+**contents:** On this page
+   :local:
+   :backlinks: none
+   :depth: 1
+   :class: singlecol
+
+**include:** /includes/extracts/operators-toc-explanation.rst
+
+.. list-table::
+   :widths: 30,70
+   :header-rows: 1
+
+   * - Name
+
+     - Description
+
+   * - :update:`$currentDate`
+
+     - Sets the value of a field to current date, either as a Date or a Timestamp.
+
+   * - :update:`$inc`
+
+     - Increments the value of the field by the specified amount.
+
+   * - :update:`$min`
+
+     - Only updates the field if the specified value is less than the existing field value.
+
+   * - :update:`$max`
+
+     - Only updates the field if the specified value is greater than the existing field value.
+
+   * - :update:`$mul`
+
+     - Multiplies the value of the field by the specified amount.
+
+   * - :update:`$rename`
+
+     - Renames a field.
+
+   * - :update:`$set`
+
+     - Sets the value of a field in a document.
+
+   * - :update:`$setOnInsert`
+
+     - Sets the value of a field if an update results in an insert of a document. Has no effect on update operations that modify existing documents.
+
+   * - :update:`$unset`
+
+     - Removes the specified field from a document.
+
+
+**toctree:** :titlesonly: 
+   :hidden: 
+
+   $currentDate </reference/operator/update/currentDate>
+   $inc </reference/operator/update/inc>
+   $min </reference/operator/update/min>
+   $max </reference/operator/update/max>
+   $mul </reference/operator/update/mul>
+   $rename </reference/operator/update/rename>
+   $set </reference/operator/update/set>
+   $setOnInsert </reference/operator/update/setOnInsert>
+   $unset </reference/operator/update/unset>

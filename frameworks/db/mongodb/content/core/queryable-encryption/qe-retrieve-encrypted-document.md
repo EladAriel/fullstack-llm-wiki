@@ -1,27 +1,430 @@
 ---
 type: "Framework Learn Page"
-framework: "mongodb"
+framework: "MongoDB"
 source_repo: "https://github.com/mongodb/docs.git"
 source_branch: "main"
 source_path: "content/manual/manual/source/core/queryable-encryption/qe-retrieve-encrypted-document.txt"
-source_commit: "ab9db26ed3d11618cdb61516d8180337d8e3f679"
-source_commit_short: "ab9db26e"
-source_commit_date: "2026-07-24T16:22:46-06:00"
-generated_at: "2026-07-25T11:51:15Z"
+source_commit: "b9f2bc487a2878b65e3c1f80024bebab76954f27"
+source_commit_short: "b9f2bc48"
+source_commit_date: "2026-08-28T17:09:45-05:00"
+generated_at: "2026-08-29T09:39:19.780512Z"
 ---
+**facet:** :name: programming_language
+   :values: csharp, go, java, javascript/typescript, python, ruby, shell, rust, php
 
-=======================================
+**facet:** :name: genre
+   :values: tutorial
+
+**meta:** :keywords: queryable encryption, in-use encryption, code example, node.js, compass, java sync
+
+.. _qe-query-encrypted-document:
 
 # Query a Document with Encrypted Fields
 
+**contents:** On this page
+   :local:
+   :backlinks: none
+   :depth: 2
+   :class: singlecol
+
 ## Overview
 
-This guide shows you how to use a {+qe+}-enabled application to retrieve a document that has encrypted fields.
+This guide shows you how to use a {+qe+}-enabled application to retrieve
+a document that has encrypted fields.
 
-After you complete the steps in this guide, you should be able to use your application to query data in encrypted fields, and to decrypt those fields as an authorized user.
+After you complete the steps in this guide, you should be able to use
+your application to query data in encrypted fields, and to decrypt those 
+fields as an authorized user.
 
 ## Before You Start
 
-`Create an encrypted collection and insert documents <qe-create-encrypted-collection>` before continuing.
+:ref:`Create an encrypted collection and insert documents
+<qe-create-encrypted-collection>` before continuing.
+
+.. tabs-selector:: drivers
 
 ## Procedure
+
+**procedure:** .. step:: Query an encrypted field with equality
+
+      If you enabled equality queries on an encrypted field, you can retrieve
+      documents that have a specified value in that field.
+      
+      The following example performs an equality query on an
+      encrypted field and prints the decrypted data:
+
+      .. tabs-drivers::
+
+         .. tab::
+            :tabid: shell
+
+            .. literalinclude:: /includes/qe-tutorials/mongosh/queryable-encryption-tutorial.js
+               :start-after: start-find-document
+               :end-before: end-find-document
+               :language: javascript
+               :dedent:
+
+         .. tab::
+            :tabid: nodejs
+
+            .. literalinclude:: /includes/qe-tutorials/node/queryable-encryption-tutorial.js
+               :start-after: start-find-document
+               :end-before: end-find-document
+               :language: javascript
+               :dedent:
+
+         .. tab::
+            :tabid: python
+
+            .. literalinclude:: /includes/qe-tutorials/python/queryable_encryption_tutorial.py
+               :start-after: start-find-document
+               :end-before: end-find-document
+               :language: python
+               :dedent:
+
+         .. tab::
+            :tabid: java-sync
+
+            .. literalinclude:: /includes/qe-tutorials/java/src/main/java/com/mongodb/tutorials/qe/QueryableEncryptionTutorial.java
+               :start-after: start-find-document
+               :end-before: end-find-document
+               :language: java
+               :dedent:
+
+         .. tab::
+            :tabid: go
+
+            .. literalinclude:: /includes/qe-tutorials/go/queryable_encryption_tutorial.go
+               :start-after: start-find-document
+               :end-before: end-find-document
+               :language: go
+               :dedent:
+
+         .. tab::
+            :tabid: csharp
+
+            .. literalinclude:: /includes/qe-tutorials/csharp/QueryableEncryptionTutorial.cs
+               :start-after: start-find-document
+               :end-before: end-find-document
+               :language: csharp
+               :dedent:
+
+         .. tab::
+            :tabid: rust
+
+            .. literalinclude:: /includes/qe-tutorials/rust/src/queryable_encryption_tutorial.rs
+               :start-after: start-find-document
+               :end-before: end-find-document
+               :language: rust
+               :dedent:
+
+         .. tab::
+            :tabid: php
+
+            .. literalinclude:: /includes/qe-tutorials/php/queryable-encryption-tutorial.php
+               :start-after: start-find-document
+               :end-before: end-find-document
+               :language: php
+               :dedent:
+
+         .. tab::
+            :tabid: ruby
+
+            .. literalinclude:: /includes/qe-tutorials/ruby/queryable-encryption-tutorial.rb
+               :start-after: start-find-document
+               :end-before: end-find-document
+               :language: ruby
+               :dedent:
+
+   .. step:: Query an encrypted field with range
+
+      If you enabled range queries on an encrypted field, you can retrieve
+      documents where the value of that field is within the range that you specify.
+      
+      The following example performs a range query on an
+      encrypted field and prints the decrypted data:
+
+      .. tabs-drivers::
+
+         .. tab::
+            :tabid: shell
+
+            .. literalinclude:: /includes/qe-tutorials/mongosh/range-query.js
+               :start-after: start-query-range
+               :end-before: end-query-range
+               :language: javascript
+               :dedent:
+
+         .. tab::
+            :tabid: nodejs
+
+            .. literalinclude:: /includes/qe-tutorials/node/range-query.js
+               :start-after: start-query-range
+               :end-before: end-query-range
+               :language: javascript
+               :dedent:
+
+         .. tab::
+            :tabid: python
+
+            .. literalinclude:: /includes/qe-tutorials/python/range_query.py
+               :start-after: start-query-range
+               :end-before: end-query-range
+               :language: python
+               :dedent:
+
+         .. tab::
+            :tabid: java-sync
+
+            .. literalinclude:: /includes/qe-tutorials/java/RangeQuery.java
+               :start-after: start-query-range
+               :end-before: end-query-range
+               :language: java
+               :dedent:
+
+         .. tab::
+            :tabid: go
+
+            .. literalinclude:: /includes/qe-tutorials/go/range_query.go
+               :start-after: start-query-range
+               :end-before: end-query-range
+               :language: go
+               :dedent:
+
+         .. tab::
+            :tabid: csharp
+
+            .. literalinclude:: /includes/qe-tutorials/csharp/RangeQuery.cs
+               :start-after: start-query-range
+               :end-before: end-query-range
+               :language: csharp
+               :dedent:
+
+         .. tab::
+            :tabid: rust
+
+            .. literalinclude:: /includes/qe-tutorials/rust/range_query.rs
+               :start-after: start-query-range
+               :end-before: end-query-range
+               :language: rust
+               :dedent:
+
+         .. tab::
+            :tabid: php
+
+            .. literalinclude:: /includes/qe-tutorials/php/range-query.php
+               :start-after: start-query-range
+               :end-before: end-query-range
+               :language: php
+               :dedent:
+
+         .. tab::
+            :tabid: ruby
+
+            .. literalinclude:: /includes/qe-tutorials/ruby/range-query.rb
+               :start-after: start-query-range
+               :end-before: end-query-range
+               :language: ruby
+               :dedent:
+
+   .. step:: Query an encrypted field for a prefix, suffix, or substring match
+
+      .. tabs-drivers::
+
+         .. tab::
+            :tabid: nodejs
+
+            If you enabled prefix, suffix, or substring queries on an encrypted field, you can retrieve
+            documents where the value of that field includes the string
+            specified in your search criteria.
+
+            The following example performs a prefix query on an
+            encrypted field and prints the decrypted data:
+
+            .. literalinclude:: /includes/qe-tutorials/node/prefix-query.js
+               :start-after: start-query-prefix
+               :end-before: end-query-prefix
+               :language: javascript
+         
+            To perform a suffix query, replace ``$encStrStartsWith``
+            with ``$encStrEndsWith``. Then, replace the ``prefix``
+            option with the ``suffix`` option.
+
+            To perform a substring query, use the ``$encStrContains``
+            operator, as shown in the following example:
+
+            .. literalinclude:: /includes/qe-tutorials/node/substring-query.js
+               :start-after: start-query-substring
+               :end-before: end-query-substring
+               :language: javascript
+
+         .. tab::
+            :tabid: csharp
+
+            If you enabled prefix, suffix, or substring queries on an encrypted field, you can retrieve
+            documents where the value of that field includes the string
+            specified in your search criteria.
+
+            The following example performs a prefix query on an
+            encrypted field and prints the decrypted data:
+
+            .. literalinclude:: /includes/qe-tutorials/csharp/PrefixQuery.cs
+               :start-after: start-query-prefix
+               :end-before: end-query-prefix
+               :language: csharp
+
+            To perform a suffix query, replace ``$encStrStartsWith``
+            with ``$encStrEndsWith``. Then, replace the ``prefix``
+            option with the ``suffix`` option.
+
+            To perform a substring query, use the ``$encStrContains``
+            operator, as shown in the following example:
+
+            .. literalinclude:: /includes/qe-tutorials/csharp/SubstringQuery.cs
+               :start-after: start-query-substring
+               :end-before: end-query-substring
+               :language: csharp
+
+         .. tab::
+            :tabid: java-sync
+
+            If you enabled prefix, suffix, or substring queries on an encrypted field, you can retrieve
+            documents where the value of that field includes the string
+            specified in your search criteria.
+
+            The following example performs a prefix query on an
+            encrypted field and prints the decrypted data:
+
+            .. literalinclude:: /includes/qe-tutorials/java/PrefixQuery.java
+               :start-after: start-query-prefix
+               :end-before: end-query-prefix
+               :language: java
+
+            To perform a suffix query, replace ``$encStrStartsWith``
+            with ``$encStrEndsWith``. Then, replace the ``prefix``
+            option with the ``suffix`` option.
+
+            To perform a substring query, use the ``$encStrContains``
+            operator, as shown in the following example:
+
+            .. literalinclude:: /includes/qe-tutorials/java/SubstringQuery.java
+               :start-after: start-query-substring
+               :end-before: end-query-substring
+               :language: java
+
+         .. tab::
+            :tabid: python
+
+            If you enabled prefix, suffix, or substring queries on an encrypted field, you can retrieve
+            documents where the value of that field includes the string
+            specified in your search criteria.
+
+            The following example performs a prefix query on an
+            encrypted field and prints the decrypted data:
+
+            .. literalinclude:: /includes/qe-tutorials/python/prefix-query.py
+               :start-after: start-query-prefix
+               :end-before: end-query-prefix
+               :language: python
+
+            To perform a suffix query, replace ``$encStrStartsWith``
+            with ``$encStrEndsWith``. Then, replace the ``prefix``
+            option with the ``suffix`` option.
+
+            To perform a substring query, use the ``$encStrContains``
+            operator, as shown in the following example:
+
+            .. literalinclude:: /includes/qe-tutorials/python/substring-query.py
+               :start-after: start-query-substring
+               :end-before: end-query-substring
+               :language: python
+
+         .. tab::
+            :tabid: shell
+
+            .. note::
+
+               |mdb-shell| does not currently support prefix, suffix, or
+               substring queries on encrypted fields.
+
+         .. tab::
+            :tabid: go
+
+            If you enabled prefix, suffix, or substring queries on an encrypted field, you can retrieve
+            documents where the value of that field includes the string
+            specified in your search criteria.
+
+            The following example performs a prefix query on an
+            encrypted field and prints the decrypted data:
+
+            .. literalinclude:: /includes/qe-tutorials/go/prefix_query.go
+               :start-after: start-query-prefix
+               :end-before: end-query-prefix
+               :language: go
+
+            To perform a suffix query, replace ``$encStrStartsWith``
+            with ``$encStrEndsWith`` in the previous example. Then,
+            replace the ``prefix`` option with the ``suffix`` option.
+
+            To perform a substring query, use the ``$encStrContains``
+            operator, as shown in the following example:
+
+            .. literalinclude:: /includes/qe-tutorials/go/substring_query.go
+               :start-after: start-query-substring
+               :end-before: end-query-substring
+               :language: go
+
+         .. tab::
+            :tabid: rust
+
+            If you enabled prefix, suffix, or substring queries on an encrypted field, you can retrieve
+            documents where the value of that field includes the string
+            specified in your search criteria.
+
+            The following example performs a prefix query on an
+            encrypted field and prints the decrypted data:
+
+            .. literalinclude:: /includes/qe-tutorials/rust/prefix_query.rs
+               :start-after: start-query-prefix
+               :end-before: end-query-prefix
+               :language: rust
+
+            To perform a suffix query, replace ``$encStrStartsWith``
+            with ``$encStrEndsWith`` in the preceding example. Then,
+            replace the ``prefix`` option with the ``suffix`` option.
+
+            To perform a substring query, use the ``$encStrContains``
+            operator, as shown in the following example:
+
+            .. literalinclude:: /includes/qe-tutorials/rust/substring_query.rs
+               :start-after: start-query-substring
+               :end-before: end-query-substring
+               :language: rust
+
+         .. tab::
+            :tabid: php
+
+            .. note::
+
+               The PHP library does not currently support prefix, suffix, or
+               substring queries on encrypted fields.
+
+         .. tab::
+            :tabid: ruby
+
+            .. note::
+
+               The Ruby driver does not currently support prefix, suffix, or
+               substring queries on encrypted fields.
+
+### Query Result
+
+      The output of the preceding code examples should look similar to the
+      following:
+
+      .. literalinclude:: /includes/qe-tutorials/encrypted-document.json
+         :language: json
+         :copyable: false
+         :dedent:
+
+      .. include:: /includes/queryable-encryption/safe-content-warning.rst

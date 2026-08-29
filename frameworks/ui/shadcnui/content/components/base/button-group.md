@@ -1,14 +1,15 @@
 ---
 type: "Framework Learn Page"
-framework: "shadcnui"
+framework: "shadcn/ui"
 source_repo: "https://github.com/shadcn-ui/ui"
 source_branch: "main"
 source_path: "apps/v4/content/docs/components/base/button-group.mdx"
-source_commit: "4baadbc6517070ae8f8feb2c97037adc2b305544"
-source_commit_short: "4baadbc6"
-source_commit_date: "2026-07-23T23:50:36+04:00"
-generated_at: "2026-07-25T11:50:48Z"
+source_commit: "683a5a9b370acdb7785a0529434e6a3b8c7e0441"
+source_commit_short: "683a5a9"
+source_commit_date: "2026-08-26T10:28:13+04:00"
+generated_at: "2026-08-29T09:40:26.991373Z"
 ---
+# Button Group
 
 ---
 title: Button Group
@@ -225,9 +226,9 @@ The `ButtonGroupSeparator` component visually divides buttons within a group.
 
 Use this component to display text within a button group.
 
-| Prop      | Type      | Default |
-| --------- | --------- | ------- |
-| `asChild` | `boolean` | `false` |
+| Prop     | Type                 | Default |
+| -------- | -------------------- | ------- |
+| `render` | `React.ReactElement` |         |
 
 ```tsx
 <ButtonGroup>
@@ -236,7 +237,7 @@ Use this component to display text within a button group.
 </ButtonGroup>
 ```
 
-Use the `asChild` prop to render a custom component as the text, for example a label.
+Use the `render` prop to render a custom component as the text, for example a label.
 
 ```tsx showLineNumbers
 import { ButtonGroupText } from "@/components/ui/button-group"
@@ -245,9 +246,7 @@ import { Label } from "@/components/ui/label"
 export function ButtonGroupTextDemo() {
   return (
     <ButtonGroup>
-      <ButtonGroupText asChild>
-        <Label htmlFor="name">Text</Label>
-      </ButtonGroupText>
+      <ButtonGroupText render={<Label htmlFor="name" />}>Text</ButtonGroupText>
       <Input placeholder="Type something here..." id="name" />
     </ButtonGroup>
   )

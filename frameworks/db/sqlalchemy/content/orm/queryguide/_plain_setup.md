@@ -1,111 +1,106 @@
 ---
 type: "Framework Learn Page"
-framework: "sqlalchemy"
+framework: "SQLAlchemy"
 source_repo: "https://github.com/sqlalchemy/sqlalchemy"
 source_branch: "main"
 source_path: "doc/build/orm/queryguide/_plain_setup.rst"
-source_commit: "aa1a5575358d3aa14953b04dced02f4763fed2e7"
-source_commit_short: "aa1a5575"
-source_commit_date: "2026-07-23T18:02:59Z"
-generated_at: "2026-07-25T11:50:45Z"
+source_commit: "85cafd1a131fa8afeeeab23151940480b3fb0042"
+source_commit_short: "85cafd1"
+source_commit_date: "2026-08-28T20:17:49+00:00"
+generated_at: "2026-08-29T09:39:27.723887Z"
 ---
-
 :orphan:
-
-======================================
 
 # Setup for ORM Queryguide: SELECT
 
-This page illustrates the mappings and fixture data used by the `select` document of the `queryguide_toplevel`.
+This page illustrates the mappings and fixture data used by the
+:doc:`select` document of the :ref:`queryguide_toplevel`.
 
-```python
- >>> from typing import List
- >>> from typing import Optional
- >>>
- >>> from sqlalchemy import Column
- >>> from sqlalchemy import create_engine
- >>> from sqlalchemy import ForeignKey
- >>> from sqlalchemy import Table
- >>> from sqlalchemy.orm import DeclarativeBase
- >>> from sqlalchemy.orm import Mapped
- >>> from sqlalchemy.orm import mapped_column
- >>> from sqlalchemy.orm import relationship
- >>> from sqlalchemy.orm import Session
- >>>
- >>>
- >>> class Base(DeclarativeBase):
- ...     pass
- >>> class User(Base):
- ...     __tablename__ = "user_account"
- ...     id: Mapped[int] = mapped_column(primary_key=True)
- ...     name: Mapped[str]
- ...     fullname: Mapped[Optional[str]]
- ...     addresses: Mapped[List["Address"]] = relationship(back_populates="user")
- ...     orders: Mapped[List["Order"]] = relationship()
- ...
- ...     def __repr__(self) -> str:
- ...         return f"User(id={self.id!r}, name={self.name!r}, fullname={self.fullname!r})"
- >>> class Address(Base):
- ...     __tablename__ = "address"
- ...     id: Mapped[int] = mapped_column(primary_key=True)
- ...     user_id: Mapped[int] = mapped_column(ForeignKey("user_account.id"))
- ...     email_address: Mapped[str]
- ...     user: Mapped[User] = relationship(back_populates="addresses")
- ...
- ...     def __repr__(self) -> str:
- ...         return f"Address(id={self.id!r}, email_address={self.email_address!r})"
- >>> order_items_table = Table(
- ...     "order_items",
- ...     Base.metadata,
- ...     Column("order_id", ForeignKey("user_order.id"), primary_key=True),
- ...     Column("item_id", ForeignKey("item.id"), primary_key=True),
- ... )
- >>>
- >>> class Order(Base):
- ...     __tablename__ = "user_order"
- ...     id: Mapped[int] = mapped_column(primary_key=True)
- ...     user_id: Mapped[int] = mapped_column(ForeignKey("user_account.id"))
- ...     items: Mapped[List["Item"]] = relationship(secondary=order_items_table)
- >>> class Item(Base):
- ...     __tablename__ = "item"
- ...     id: Mapped[int] = mapped_column(primary_key=True)
- ...     name: Mapped[str]
- ...     description: Mapped[str]
- >>> engine = create_engine("sqlite+pysqlite:///:memory:", echo=True)
- >>> Base.metadata.create_all(engine)
- BEGIN ...
- >>> conn = engine.connect()
- >>> session = Session(conn)
- >>> session.add_all(
- ...     [
- ...         User(
- ...             name="spongebob",
- ...             fullname="Spongebob Squarepants",
- ...             addresses=[Address(email_address="spongebob@sqlalchemy.org")],
- ...         ),
- ...         User(
- ...             name="sandy",
- ...             fullname="Sandy Cheeks",
- ...             addresses=[
- ...                 Address(email_address="sandy@sqlalchemy.org"),
- ...                 Address(email_address="squirrel@squirrelpower.org"),
- ...             ],
- ...         ),
- ...         User(
- ...             name="patrick",
- ...             fullname="Patrick Star",
- ...             addresses=[Address(email_address="pat999@aol.com")],
- ...         ),
- ...         User(
- ...             name="squidward",
- ...             fullname="Squidward Tentacles",
- ...             addresses=[Address(email_address="stentcl@sqlalchemy.org")],
- ...         ),
- ...         User(name="ehkrabs", fullname="Eugene H. Krabs"),
- ...     ]
- ... )
- >>> session.commit()
- BEGIN ... COMMIT
- >>> conn.begin()
- BEGIN ...
-```
+**sourcecode:** python
+
+    >>> from typing import List
+    >>> from typing import Optional
+    >>> from sqlalchemy import Column
+    >>> from sqlalchemy import create_engine
+    >>> from sqlalchemy import ForeignKey
+    >>> from sqlalchemy import Table
+    >>> from sqlalchemy.orm import DeclarativeBase
+    >>> from sqlalchemy.orm import Mapped
+    >>> from sqlalchemy.orm import mapped_column
+    >>> from sqlalchemy.orm import relationship
+    >>> from sqlalchemy.orm import Session
+### >>>
+    >>> class Base(DeclarativeBase):
+    ...     pass
+    >>> class User(Base):
+    ...     __tablename__ = "user_account"
+    ...     id: Mapped[int] = mapped_column(primary_key=True)
+    ...     name: Mapped[str]
+    ...     fullname: Mapped[Optional[str]]
+    ...     addresses: Mapped[List["Address"]] = relationship(back_populates="user")
+    ...     orders: Mapped[List["Order"]] = relationship()
+    ...
+    ...     def __repr__(self) -> str:
+    ...         return f"User(id={self.id!r}, name={self.name!r}, fullname={self.fullname!r})"
+    >>> class Address(Base):
+    ...     __tablename__ = "address"
+    ...     id: Mapped[int] = mapped_column(primary_key=True)
+    ...     user_id: Mapped[int] = mapped_column(ForeignKey("user_account.id"))
+    ...     email_address: Mapped[str]
+    ...     user: Mapped[User] = relationship(back_populates="addresses")
+    ...
+    ...     def __repr__(self) -> str:
+    ...         return f"Address(id={self.id!r}, email_address={self.email_address!r})"
+    >>> order_items_table = Table(
+    ...     "order_items",
+    ...     Base.metadata,
+    ...     Column("order_id", ForeignKey("user_order.id"), primary_key=True),
+    ...     Column("item_id", ForeignKey("item.id"), primary_key=True),
+### ... )
+    >>> class Order(Base):
+    ...     __tablename__ = "user_order"
+    ...     id: Mapped[int] = mapped_column(primary_key=True)
+    ...     user_id: Mapped[int] = mapped_column(ForeignKey("user_account.id"))
+    ...     items: Mapped[List["Item"]] = relationship(secondary=order_items_table)
+    >>> class Item(Base):
+    ...     __tablename__ = "item"
+    ...     id: Mapped[int] = mapped_column(primary_key=True)
+    ...     name: Mapped[str]
+    ...     description: Mapped[str]
+    >>> engine = create_engine("sqlite+pysqlite:///:memory:", echo=True)
+    >>> Base.metadata.create_all(engine)
+    BEGIN ...
+    >>> conn = engine.connect()
+    >>> session = Session(conn)
+    >>> session.add_all(
+    ...     [
+    ...         User(
+    ...             name="spongebob",
+    ...             fullname="Spongebob Squarepants",
+    ...             addresses=[Address(email_address="spongebob@sqlalchemy.org")],
+    ...         ),
+    ...         User(
+    ...             name="sandy",
+    ...             fullname="Sandy Cheeks",
+    ...             addresses=[
+    ...                 Address(email_address="sandy@sqlalchemy.org"),
+    ...                 Address(email_address="squirrel@squirrelpower.org"),
+    ...             ],
+    ...         ),
+    ...         User(
+    ...             name="patrick",
+    ...             fullname="Patrick Star",
+    ...             addresses=[Address(email_address="pat999@aol.com")],
+    ...         ),
+    ...         User(
+    ...             name="squidward",
+    ...             fullname="Squidward Tentacles",
+    ...             addresses=[Address(email_address="stentcl@sqlalchemy.org")],
+    ...         ),
+    ...         User(name="ehkrabs", fullname="Eugene H. Krabs"),
+    ...     ]
+    ... )
+    >>> session.commit()
+    BEGIN ... COMMIT
+    >>> conn.begin()
+    BEGIN ...

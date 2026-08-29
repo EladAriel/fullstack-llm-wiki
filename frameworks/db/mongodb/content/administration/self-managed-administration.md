@@ -1,41 +1,54 @@
 ---
 type: "Framework Learn Page"
-framework: "mongodb"
+framework: "MongoDB"
 source_repo: "https://github.com/mongodb/docs.git"
 source_branch: "main"
 source_path: "content/manual/manual/source/administration/self-managed-administration.txt"
-source_commit: "ab9db26ed3d11618cdb61516d8180337d8e3f679"
-source_commit_short: "ab9db26e"
-source_commit_date: "2026-07-24T16:22:46-06:00"
-generated_at: "2026-07-25T11:51:15Z"
+source_commit: "b9f2bc487a2878b65e3c1f80024bebab76954f27"
+source_commit_short: "b9f2bc48"
+source_commit_date: "2026-08-28T17:09:45-05:00"
+generated_at: "2026-08-29T09:39:19.756637Z"
 ---
-
-===========================
+.. _self-managed-administration:
 
 # Self-Managed Administration
 
-Learn how to operate and maintain self-managed MongoDB deployments. Familiarize yourself with best practices for running self-managed deployments in production.
+.. default-domain:: mongodb
 
-`Production Notes <production-notes>` Learn about system configurations that affect MongoDB, especially when running in production.
+Learn how to operate and maintain self-managed MongoDB deployments.
+Familiarize yourself with best practices for running self-managed
+deployments in production.
 
-`Operations Checklist <operations-checklist>` Learn how to avoid issues in your production MongoDB deployment.
+:ref:`Production Notes <production-notes>`
+   Learn about system configurations that affect MongoDB, especially
+   when running in production.
 
-`Performance <self-managed-performance>` Learn how to monitor and improve performance for self-managed deployments.
+:ref:`Operations Checklist <operations-checklist>`
+   Learn how to avoid issues in your production MongoDB deployment.
 
-`Configuration and Maintenance <self-managed-configuration-and-maintenance>` Learn how to configure and administer self-managed deployments.
+:ref:`Performance <self-managed-performance>`
+   Learn how to monitor and improve performance for self-managed
+   deployments.
 
-`Backup Methods <backup-methods>` Learn how to backup data on self-managed deployments.
+:ref:`Configuration and Maintenance <self-managed-configuration-and-maintenance>`
+   Learn how to configure and administer self-managed deployments.
 
-`Monitoring <monitoring-for-mdb>` Learn how to assess your self-managed deployment and monitor key metrics.
+:ref:`Backup Methods <backup-methods>`
+   Learn how to backup data on self-managed deployments.
 
-`Exit Codes <server-exit-codes>` Learn the different MongoDB exit codes and how they are caused.
+:ref:`Monitoring <monitoring-for-mdb>`
+   Learn how to assess your self-managed deployment and monitor key
+   metrics.
 
-## Contents
+:ref:`Exit Codes <server-exit-codes>`
+   Learn the different MongoDB exit codes and how they are caused.
 
-- Production Notes </administration/production-notes>
-- Operations Checklist </administration/production-checklist-operations>
-- Performance </administration/self-managed-performance>
-- Configuration & Maintenance </administration/self-managed-configuration-and-maintenance>
-- Backup Methods </core/backups>
-- Monitoring </administration/monitoring>
-- Exit Codes & Statuses <reference/exit-codes>
+**toctree:** :titlesonly:
+
+   Production Notes </administration/production-notes>
+   Operations Checklist </administration/production-checklist-operations>
+   Performance </administration/self-managed-performance>
+   Configuration & Maintenance </administration/self-managed-configuration-and-maintenance>
+   Backup Methods </core/backups>
+   Monitoring </administration/monitoring>
+   Exit Codes & Statuses <reference/exit-codes>

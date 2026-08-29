@@ -1,7 +1,7 @@
 ---
 type: "Framework Learn Directory Index"
 framework: "Arize Phoenix"
-generated_at: "2026-07-25T19:08:24.992544Z"
+generated_at: "2026-08-29T09:39:58.963500Z"
 ---
 # Typescript
 
@@ -24,3 +24,7 @@ This directory contains Arize Phoenix learning pages related to typescript.
 - [Arizeai Phoenix Otel](arizeai-phoenix-otel.md)
 - [Mcp Server](mcp-server.md)
 - [Overview](overview.md)
+
+## Subdirectories
+
+- [Packages](packages/index.md)

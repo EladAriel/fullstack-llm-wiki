@@ -1,14 +1,15 @@
 ---
 type: "Framework Learn Page"
-framework: "pydantic"
+framework: "Pydantic"
 source_repo: "https://github.com/pydantic/pydantic"
 source_branch: "main"
 source_path: "docs/examples/custom_validators.md"
-source_commit: "a2a6577d4c329dd574a45dbb01a8feaa16b1ad3d"
-source_commit_short: "a2a6577d"
-source_commit_date: "2026-07-23T15:38:17Z"
-generated_at: "2026-07-25T11:50:12Z"
+source_commit: "4bc21c0fa28323c0f3e0be93c9ad114b705029c6"
+source_commit_short: "4bc21c0"
+source_commit_date: "2026-08-29T11:30:40+02:00"
+generated_at: "2026-08-29T09:38:50.586066Z"
 ---
+# Custom_Validators
 
 This page provides example snippets for creating more complex, custom validators in Pydantic.
 Many of these examples are adapted from Pydantic issues and discussions, and are intended to showcase
@@ -302,5 +303,7 @@ and the forbidden passwords list will not get added to the context in the above 
 
 More details about validation context can be found in the [validators documentation](../concepts/validators.md#validation-context).
 
-!!! tip "Logfire integration"
-    The [Logfire integration](../integrations/logfire.md) also records the message from your custom validators.
+The messages you write in these `raise ValueError(...)` calls are worth crafting: they're what you'll
+read when the rule eventually rejects real data. They also carry through to tooling that consumes the
+structured errors: [Logfire's explanations of failed validations](../errors/troubleshooting.md), for
+example, include the messages from your custom validators.

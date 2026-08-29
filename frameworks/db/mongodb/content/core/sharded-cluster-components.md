@@ -1,67 +1,111 @@
 ---
 type: "Framework Learn Page"
-framework: "mongodb"
+framework: "MongoDB"
 source_repo: "https://github.com/mongodb/docs.git"
 source_branch: "main"
 source_path: "content/manual/manual/source/core/sharded-cluster-components.txt"
-source_commit: "ab9db26ed3d11618cdb61516d8180337d8e3f679"
-source_commit_short: "ab9db26e"
-source_commit_date: "2026-07-24T16:22:46-06:00"
-generated_at: "2026-07-25T11:51:15Z"
+source_commit: "b9f2bc487a2878b65e3c1f80024bebab76954f27"
+source_commit_short: "b9f2bc48"
+source_commit_date: "2026-08-28T17:09:45-05:00"
+generated_at: "2026-08-29T09:39:19.510412Z"
 ---
+.. _sharding-shards:
+.. _sharding-production-architecture:
 
-==========================
 
 # Sharded Cluster Components
 
-.. include:: /includes/fact-sharded-cluster-components.rst
+**meta:** :description: Explore components of a MongoDB sharded cluster, including shards, `mongos` routers, and config servers. Learn about production and development configurations.
+
+.. default-domain:: mongodb
+
+**contents:** On this page
+   :local:
+   :backlinks: none
+   :depth: 1
+   :class: singlecol
+
+**include:** /includes/fact-sharded-cluster-components.rst
+
+.. _sc-production-configuration:
 
 ## Production Configuration
 
-In a production cluster, ensure that data is redundant and that your systems are highly available. Consider the following for a production sharded cluster deployment:
+In a production cluster, ensure that data is redundant and
+that your systems are highly available. Consider the following
+for a production sharded cluster deployment:
 
-- Deploy Config Servers as a 3 member `replica set`
-- Deploy each Shard as a 3 member `replica set`
+- Deploy Config Servers as a 3 member :term:`replica set`
+- Deploy each Shard as a 3 member :term:`replica set`
 - Deploy one or more :binary:`~bin.mongos` routers
+
 ### Replica Set Distribution
 
-For production deployments, we recommend deplying config server and shard replica sets on at least three data centers. This configuration provides high availability in case a single data center goes down.
+For production deployments, we recommend deplying config server and shard replica
+sets on at least three data centers. This configuration provides high availability in case
+a single data center goes down.
+
 
 ### Number of Shards
 
-Sharding requires at least two shards to distribute sharded data. Single shard sharded clusters may be useful if you plan on enabling sharding in the  near future, but do not need to at the time of deployment.
+Sharding requires at least two shards to distribute sharded data. Single
+shard sharded clusters may be useful if you plan on enabling sharding in
+the  near future, but do not need to at the time of deployment.
 
-### Number of `mongos` and Distribution
+.. _sharded-cluster-components-distribution:
 
-:binary:`~bin.mongos` routers support high availability and scalability when deploying multiple `mongos` instances. If a proxy or load balancer is between the application and the `mongos` routers, you must configure it for `client affinity`. Client affinity allows every connection from a single client to reach the same `mongos`. For shard-level high availability, either:
+### Number of ``mongos`` and Distribution
 
-- Add `mongos` instances on the same hardware where `mongod`
-instances are already running.
+:binary:`~bin.mongos` routers support high availability and scalability
+when deploying multiple ``mongos`` instances. If a proxy or load 
+balancer is between the application and the ``mongos`` routers, you 
+must configure it for :term:`client affinity`. Client affinity allows 
+every connection from a single client to reach the same ``mongos``. 
+For shard-level high availability, either:
 
-- Embed `mongos` routers on the same hardware where the application is hosted.
-:binary:`~bin.mongos` routers communicate frequently with your config servers. As you increase the number of routers, performance may degrade. If performance degrades, reduce the number of routers.
+- Add ``mongos`` instances on the same hardware where ``mongod`` 
+  instances are already running. 
+- Embed ``mongos`` routers on the same hardware where the application is hosted. 
 
-The following diagram shows a common sharded cluster architecture used in production:
+:binary:`~bin.mongos` routers communicate frequently with your config 
+servers. As you increase the number of routers, performance may degrade. 
+If performance degrades, reduce the number of routers.
 
-.. image:: /images/sharded-cluster-production-architecture.png
+The following diagram shows a common sharded cluster architecture used
+in production:
+
+**image:** /images/sharded-cluster-production-architecture.png
+   :alt: Diagram that shows a production-level sharded cluster
+         containing multiple shards and mongos routers.
 
 ## Development Configuration
 
-For testing and development, you can deploy a sharded cluster with a minimum number of components. These **non-production** clusters have the following components:
+For testing and development, you can deploy a sharded cluster with a
+minimum number of components. These **non-production** clusters have the
+following components:
 
 - One :binary:`~bin.mongos` instance.
-- A single shard `replica set`.
-- A replica set `config server <sharding-config-server>`.
-The following diagram shows a sharded cluster architecture used for **development only**:
 
-.. image:: /images/sharded-cluster-test-architecture.png
+- A single shard :term:`replica set`.
 
-> **Warning:** development only.
+- A replica set :ref:`config server <sharding-config-server>`.
 
-> **Seealso:** `/tutorial/deploy-shard-cluster/`
 
-## Contents
+The following diagram shows a sharded cluster architecture used for
+**development only**:
 
-- Shards </core/sharded-cluster-shards>
-- Config Servers (metadata) </core/sharded-cluster-config-servers>
-- Router (mongos) </core/sharded-cluster-query-router>
+**image:** /images/sharded-cluster-test-architecture.png
+   :alt: Diagram that shows a development sharded cluster
+         containing a single shard and mongos router.
+
+**warning:** Use the test cluster architecture for testing and
+   development only.
+
+**seealso:** :doc:`/tutorial/deploy-shard-cluster/`
+
+**toctree:** :titlesonly: 
+   :hidden: 
+
+   Shards </core/sharded-cluster-shards>
+   Config Servers (metadata) </core/sharded-cluster-config-servers>
+   Router (mongos) </core/sharded-cluster-query-router>

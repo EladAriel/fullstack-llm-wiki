@@ -1,63 +1,85 @@
 ---
 type: "Framework Learn Page"
-framework: "mongodb"
+framework: "MongoDB"
 source_repo: "https://github.com/mongodb/docs.git"
 source_branch: "main"
 source_path: "content/manual/manual/source/tutorial/model-tree-structures-with-ancestors-array.txt"
-source_commit: "ab9db26ed3d11618cdb61516d8180337d8e3f679"
-source_commit_short: "ab9db26e"
-source_commit_date: "2026-07-24T16:22:46-06:00"
-generated_at: "2026-07-25T11:51:15Z"
+source_commit: "b9f2bc487a2878b65e3c1f80024bebab76954f27"
+source_commit_short: "b9f2bc48"
+source_commit_date: "2026-08-28T17:09:45-05:00"
+generated_at: "2026-08-29T09:39:19.589482Z"
 ---
-
-================================================
-
 # Model Tree Structures with an Array of Ancestors
+
+**meta:** :description: Model tree structures using the Array of Ancestors pattern for efficient querying of node ancestors and descendants in MongoDB.
+
+**contents:** On this page
+   :local:
+   :backlinks: none
+   :depth: 1
+   :class: singlecol
 
 ## Overview
 
-This page describes a data model that describes a tree-like structure in MongoDB documents using `references <data-modeling-referencing>` to parent nodes and an array that stores all ancestors.
+This page describes a data model that describes a tree-like
+structure in MongoDB documents using :ref:`references
+<data-modeling-referencing>` to parent nodes and an array that stores
+all ancestors.
 
 ## Pattern
 
-The Array of Ancestors pattern stores each tree node in a document; in addition to the tree node, document stores in an array the id(s) of the node's ancestors or path.
+.. start-model-tree-structures-include-here
+
+The *Array of Ancestors* pattern stores each tree node in a document;
+in addition to the tree node, document stores in an array the id(s) of
+the node's ancestors or path.
 
 Consider the following hierarchy of categories:
 
-.. include:: /images/data-model-tree.rst
+**include:** /images/data-model-tree.rst
 
-The following example models the tree using Array of Ancestors. In addition to the `ancestors` field, these documents also store the reference to the immediate parent category in the `parent` field:
+The following example models the tree using *Array of Ancestors*. In
+addition to the ``ancestors`` field, these documents also store the
+reference to the immediate parent category in the ``parent`` field:
 
-```javascript
-db.categories.insertMany( [
-  { _id: "MongoDB", ancestors: [ "Books", "Programming", "Databases" ], parent: "Databases" },
-  { _id: "dbm", ancestors: [ "Books", "Programming", "Databases" ], parent: "Databases" },
-  { _id: "Databases", ancestors: [ "Books", "Programming" ], parent: "Programming" },
-  { _id: "Languages", ancestors: [ "Books", "Programming" ], parent: "Programming" },
-  { _id: "Programming", ancestors: [ "Books" ], parent: "Books" },
-  { _id: "Books", ancestors: [ ], parent: null }
-] )
-```
+.. code-block:: javascript
+
+   db.categories.insertMany( [
+     { _id: "MongoDB", ancestors: [ "Books", "Programming", "Databases" ], parent: "Databases" },
+     { _id: "dbm", ancestors: [ "Books", "Programming", "Databases" ], parent: "Databases" },
+     { _id: "Databases", ancestors: [ "Books", "Programming" ], parent: "Programming" },
+     { _id: "Languages", ancestors: [ "Books", "Programming" ], parent: "Programming" },
+     { _id: "Programming", ancestors: [ "Books" ], parent: "Books" },
+     { _id: "Books", ancestors: [ ], parent: null }
+   ] )
+
 
 - The query to retrieve the ancestors or path of a node is fast and
-straightforward:
+  straightforward:
 
-```javascript
-  db.categories.findOne( { _id: "MongoDB" } ).ancestors
-```
+  .. code-block:: javascript
 
-- You can create an index on the field `ancestors` to enable fast
-search by the ancestors nodes:
+     db.categories.findOne( { _id: "MongoDB" } ).ancestors
 
-```javascript
-  db.categories.createIndex( { ancestors: 1 } )
-```
+- You can create an index on the field ``ancestors`` to enable fast
+  search by the ancestors nodes:
 
-- You can query by the field `ancestors` to find all its descendants:
-```javascript
-  db.categories.find( { ancestors: "Programming" } )
-```
+  .. code-block:: javascript
 
-The Array of Ancestors pattern provides a fast and efficient solution to find the descendants and the ancestors of a node by creating an index on the elements of the ancestors field. This makes Array of Ancestors a good choice for working with subtrees.
+     db.categories.createIndex( { ancestors: 1 } )
 
-The Array of Ancestors pattern is slightly slower than the `Materialized Paths <model-tree-materialized-paths>` pattern but is more straightforward to use.
+- You can query by the field ``ancestors`` to find all its descendants:
+
+  .. code-block:: javascript
+
+     db.categories.find( { ancestors: "Programming" } )
+
+The *Array of Ancestors* pattern provides a fast and efficient solution
+to find the descendants and the ancestors of a node by creating an
+index on the elements of the ancestors field. This makes *Array of
+Ancestors* a good choice for working with subtrees.
+
+The *Array of Ancestors* pattern is slightly slower than the
+:ref:`Materialized Paths
+<model-tree-materialized-paths>` pattern but
+is more straightforward to use.

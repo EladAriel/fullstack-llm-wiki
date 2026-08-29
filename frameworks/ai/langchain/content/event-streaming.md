@@ -4,11 +4,12 @@ framework: "LangChain"
 source_repo: "https://github.com/langchain-ai/docs"
 source_branch: "main"
 source_path: "src/oss/langchain/event-streaming.mdx"
-source_commit: "2aae1dfc98ee953a9a5185fb6fcdd9efb3f4d878"
-source_commit_short: "2aae1dfc"
-source_commit_date: "2026-07-25T00:27:23Z"
-generated_at: "2026-07-25T11:51:05Z"
+source_commit: "a174f9cf7c91ee5eb14ee2382eb48bfe6e4956e9"
+source_commit_short: "a174f9c"
+source_commit_date: "2026-08-28T17:04:12-07:00"
+generated_at: "2026-08-29T09:38:24.252964Z"
 ---
+# Event Streaming
 
 ---
 title: Event streaming
@@ -252,9 +253,9 @@ await Promise.all([
 
 ## Streaming sub-agents
 
+:::python
 When a `create_agent` call invokes another named `create_agent` (via a wrapping tool, typically), the inner agent's events flow at a nested namespace. The `name=` you pass to `create_agent` identifies that inner agent in the stream, so you can filter and label per agent.
 
-:::python
 Named sub-agents surface on the dedicated `stream.subagents` projection. Each handle exposes the inner agent's own `.messages`, `.values`, `.tool_calls`, and `.output`, plus `.name` (the `name=` you passed) and `.cause` (the tool call that dispatched the sub-agent). Because only named `create_agent` runs appear here, you don't need to filter plain subgraphs out.
 
 ```py
@@ -301,7 +302,9 @@ for subagent in stream.subagents:
 :::
 
 :::js
-Named sub-agents surface as handles on `stream.subgraphs`, alongside any plain subgraphs. Each handle exposes the inner agent's `.messages`, `.values`, `.toolCalls`, and `.output`; filter on `subagent.name` (the `name=` you passed) to act on a specific agent.
+When a `createAgent` call invokes another named `createAgent` (via a wrapping tool, typically), the inner agent's events flow at a nested namespace. The `name` you pass to `createAgent` identifies that inner agent in the stream, so you can filter and label per agent.
+
+Named sub-agents surface on the dedicated `stream.subagents` projection. Each handle exposes the inner agent's own `.messages`, `.toolCalls`, and `.output`, plus `.name` (the `name=` you passed), `.cause` (the tool call that dispatched the sub-agent), and nested `.subagents`. Because only named `createAgent` runs appear here, you don't need to filter plain subgraphs out.
 
 ```ts
 import { createAgent, tool } from "langchain";
@@ -339,8 +342,7 @@ const stream = await supervisor.streamEvents(
   { version: "v3" }
 );
 
-for await (const subagent of stream.subgraphs) {
-  if (subagent.name !== "weather_agent") continue;
+for await (const subagent of stream.subagents) {
   process.stdout.write(`${subagent.name}: `);
   for await (const message of subagent.messages) {
     for await (const token of message.text) {
@@ -349,6 +351,7 @@ for await (const subagent of stream.subgraphs) {
   }
   process.stdout.write("\n");
 }
+//Output: "weather_agent: The weather in Boston is sunny!"
 ```
 :::
 
@@ -359,7 +362,7 @@ Plain `StateGraph` subgraphs invoked from a tool also surface on `stream.subgrap
 :::
 
 :::js
-Named sub-agents share the `stream.subgraphs` projection with plain subgraphs; the filter you write into your loop is what separates them.
+`stream.subagents` is the focused view of named `createAgent` sub-agents, while `stream.subgraphs` covers every nested graph. Use whichever matches your UI.
 :::
 
 ## State and final output

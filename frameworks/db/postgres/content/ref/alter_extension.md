@@ -1,26 +1,36 @@
 ---
 type: "Framework Learn Page"
-framework: "postgres"
+framework: "PostgreSQL"
 source_repo: "https://github.com/postgres/postgres.git"
 source_branch: "master"
 source_path: "doc/src/sgml/ref/alter_extension.sgml"
-source_commit: "38afc3dcb25c45b744d4025029ce0a6c90b7059f"
-source_commit_short: "38afc3dc"
-source_commit_date: "2026-07-25T19:08:27+09:00"
-generated_at: "2026-07-25T11:50:59Z"
+source_commit: "6c5f1d6074208146930b67c2054509c3e82f6f7f"
+source_commit_short: "6c5f1d6"
+source_commit_date: "2026-08-28T23:24:47+02:00"
+generated_at: "2026-08-29T09:39:24.579051Z"
 ---
-
 ALTER EXTENSION
+ 
 
-ALTER EXTENSION
-7
-SQL - Language Statements
+ 
+  
+# ALTER EXTENSION
 
-ALTER EXTENSION
+  7
+  SQL - Language Statements
+ 
 
-change the definition of an extension
+ 
+  
+# ALTER EXTENSION
 
-```
+  
+   change the definition of an extension
+  
+ 
+
+ 
+
 ALTER EXTENSION name UPDATE [ TO new_version ]
 ALTER EXTENSION name SET SCHEMA new_schema
 ALTER EXTENSION name ADD member_object
@@ -63,40 +73,301 @@ and aggregate_signature is:
 * |
 [ argmode ] [ argname ] argtype [ , ... ] |
 [ [ argmode ] [ argname ] argtype [ , ... ] ] ORDER BY [ argmode ] [ argname ] argtype [ , ... ]
+
+ 
+
+ 
+  
+# Description
+
+  
+   ALTER EXTENSION changes the definition of an installed
+   extension.  There are several subforms:
+
+   
+   
+    UPDATE
+    
+     
+      This form updates the extension to a newer version.  The extension
+      must supply a suitable update script (or series of scripts) that can
+      modify the currently-installed version into the requested version.
+     
+
+    
+   
+
+   
+    SET SCHEMA
+    
+     
+      This form moves the extension's objects into another schema. The
+      extension has to be relocatable for this command to
+      succeed.
+     
+
+    
+   
+
+   
+    ADD member_object
+    
+     
+      This form adds an existing object to the extension.  This is mainly
+      useful in extension update scripts.  The object will subsequently
+      be treated as a member of the extension; notably, it can only be
+      dropped by dropping the extension.
+     
+
+    
+   
+
+   
+    DROP member_object
+    
+     
+      This form removes a member object from the extension.  This is mainly
+      useful in extension update scripts.  The object is not dropped, only
+      disassociated from the extension.
+     
+
+    
+   
+   
+
+   See  for more information about these
+   operations.
+  
+
+  
+   You must own the extension to use ALTER EXTENSION.
+   The ADD/DROP forms require ownership of the
+   added/dropped object as well.
+  
+
+ 
+
+ 
+  
+# Parameters
+
+  
+   
+    
+     name
+     
+      
+       The name of an installed extension.
+      
+
+     
+    
+
+    
+     new_version
+     
+      
+       The desired new version of the extension.  This can be written as
+       either an identifier or a string literal.  If not specified,
+       ALTER EXTENSION UPDATE attempts to update to whatever is
+       shown as the default version in the extension's control file.
+      
+
+     
+    
+
+    
+     new_schema
+     
+      
+       The new schema for the extension.
+      
+
+     
+    
+
+    
+     object_name
+     aggregate_name
+     function_name
+     operator_name
+     procedure_name
+     routine_name
+     
+      
+       The name of an object to be added to or removed from the extension.
+       Names of tables,
+       aggregates, domains, foreign tables, functions, operators,
+       operator classes, operator families, procedures, property graphs, routines, sequences, text search objects,
+       types, and views can be schema-qualified.
+      
+
+     
+    
+
+    
+     source_type
+     
+      
+       The name of the source data type of the cast.
+      
+
+     
+    
+
+    
+     target_type
+     
+      
+       The name of the target data type of the cast.
+      
+
+     
+    
+
+    
+     argmode
+
+     
+      
+       The mode of a function, procedure, or aggregate
+       argument: IN, OUT,
+       INOUT, or VARIADIC.
+       If omitted, the default is IN.
+       Note that ALTER EXTENSION does not actually pay
+       any attention to OUT arguments, since only the input
+       arguments are needed to determine the function's identity.
+       So it is sufficient to list the IN, INOUT,
+       and VARIADIC arguments.
+      
+
+     
+    
+
+    
+     argname
+
+     
+      
+       The name of a function, procedure, or aggregate argument.
+       Note that ALTER EXTENSION does not actually pay
+       any attention to argument names, since only the argument data
+       types are needed to determine the function's identity.
+      
+
+     
+    
+
+    
+     argtype
+
+     
+      
+       The data type of a function, procedure, or aggregate argument.
+      
+
+     
+    
+
+    
+     left_type
+     right_type
+     
+      
+       The data type(s) of the operator's arguments (optionally
+       schema-qualified).  Write NONE for the missing argument
+       of a prefix operator.
+      
+
+     
+    
+
+    
+     PROCEDURAL
+
+     
+      
+       This is a noise word.
+      
+
+     
+    
+
+    
+     type_name
+
+     
+      
+       The name of the data type of the transform.
+      
+
+     
+    
+
+    
+     lang_name
+
+     
+      
+       The name of the language of the transform.
+      
+
+     
+    
+   
+  
+
+ 
+
+ 
+  
+# Examples
+
+  
+   To update the hstore extension to version 2.0:
+
 ```
 
-## Description
-
-`ALTER EXTENSION` changes the definition of an installed extension. There are several subforms: - This form updates the extension to a newer version. The extension must supply a suitable update script (or series of scripts) that can modify the currently-installed version into the requested version. - This form moves the extension's objects into another schema. The extension has to be relocatable for this command to succeed. - This form adds an existing object to the extension. This is mainly useful in extension update scripts. The object will subsequently be treated as a member of the extension; notably, it can only be dropped by dropping the extension. - This form removes a member object from the extension. This is mainly useful in extension update scripts. The object is not dropped, only disassociated from the extension. See `extend-extensions` for more information about these operations.
-
-You must own the extension to use `ALTER EXTENSION`. The `ADD`/`DROP` forms require ownership of the added/dropped object as well.
-
-## Parameters
-
-- The name of an installed extension. - The desired new version of the extension. This can be written as either an identifier or a string literal. If not specified, `ALTER EXTENSION UPDATE` attempts to update to whatever is shown as the default version in the extension's control file. - The new schema for the extension. - The name of an object to be added to or removed from the extension. Names of tables, aggregates, domains, foreign tables, functions, operators, operator classes, operator families, procedures, property graphs, routines, sequences, text search objects, types, and views can be schema-qualified. - The name of the source data type of the cast. - The name of the target data type of the cast. - The mode of a function, procedure, or aggregate argument: `IN`, `OUT`, `INOUT`, or `VARIADIC`. If omitted, the default is `IN`. Note that `ALTER EXTENSION` does not actually pay any attention to `OUT` arguments, since only the input arguments are needed to determine the function's identity. So it is sufficient to list the `IN`, `INOUT`, and `VARIADIC` arguments. - The name of a function, procedure, or aggregate argument. Note that `ALTER EXTENSION` does not actually pay any attention to argument names, since only the argument data types are needed to determine the function's identity. - The data type of a function, procedure, or aggregate argument. - The data type(s) of the operator's arguments (optionally schema-qualified). Write `NONE` for the missing argument of a prefix operator. - This is a noise word. - The name of the data type of the transform. - The name of the language of the transform.
-
-## Examples
-
-To update the `hstore` extension to version 2.0:
-
-```
 ALTER EXTENSION hstore UPDATE TO '2.0';
-```
-
-To change the schema of the `hstore` extension to `utils`:
 
 ```
+
+  
+
+  
+   To change the schema of the hstore extension
+   to utils:
+
+```
+
 ALTER EXTENSION hstore SET SCHEMA utils;
-```
-
-To add an existing function to the `hstore` extension:
 
 ```
+
+  
+
+  
+   To add an existing function to the hstore extension:
+
+```
+
 ALTER EXTENSION hstore ADD FUNCTION populate_record(anyelement, hstore);
+
 ```
 
-## Compatibility
+ 
 
-`ALTER EXTENSION` is a PostgreSQL extension.
+ 
+  
+# Compatibility
 
-## See Also
+  
+   ALTER EXTENSION is a PostgreSQL
+   extension.
+  
+
+ 
+
+ 
+  
+# See Also

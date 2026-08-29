@@ -1,31 +1,142 @@
 ---
 type: "Framework Learn Page"
-framework: "mongodb"
+framework: "MongoDB"
 source_repo: "https://github.com/mongodb/docs.git"
 source_branch: "main"
 source_path: "content/manual/manual/source/core/csfle/reference/csfle-options-clients.txt"
-source_commit: "ab9db26ed3d11618cdb61516d8180337d8e3f679"
-source_commit_short: "ab9db26e"
-source_commit_date: "2026-07-24T16:22:46-06:00"
-generated_at: "2026-07-25T11:51:15Z"
+source_commit: "b9f2bc487a2878b65e3c1f80024bebab76954f27"
+source_commit_short: "b9f2bc48"
+source_commit_date: "2026-08-28T17:09:45-05:00"
+generated_at: "2026-08-29T09:39:19.814502Z"
 ---
+**facet:** :name: programming_language
+   :values: csharp, go, java, javascript/typescript, python, shell
 
-=============================================
+**meta:** :keywords: code example, node.js, compass
+   :description: Configure MongoClient instances with Client-Side Field Level Encryption options using the autoEncryptionOpts object.
+
+.. _csfle-reference-mongo-client:
 
 # MongoClient Options for {+csfle-abbrev+}
 
+.. default-domain:: mongodb
+
+**contents:** On this page
+   :local:
+   :backlinks: none
+   :depth: 2
+   :class: singlecol
+
 ## Overview
 
-View information about the {+csfle+} ({+csfle-abbrev+})-specific configuration options for `MongoClient` instances.
+View information about the {+csfle+} ({+csfle-abbrev+})-specific
+configuration options for ``MongoClient`` instances.
 
 ## {+title-auto-encrypt-options+}
 
-Pass an `{+auto-encrypt-options+}` object to your `MongoClient` instance to specify {+csfle-abbrev+}-specific options.
+Pass an ``{+auto-encrypt-options+}`` object to your ``MongoClient``
+instance to specify {+csfle-abbrev+}-specific options.
 
-The following table describes the structure of an `{+auto-encrypt-options+}` object:
+The following table describes the structure of an
+``{+auto-encrypt-options+}`` object:
+
+.. list-table::
+   :header-rows: 1
+   :widths: 20 10 10 60
+
+   * - Parameter
+
+     - Type
+
+     - Required
+
+     - Description
+
+   * - ``keyVaultClient``
+
+     - ``MongoClient``
+
+     - No
+
+     - A ``MongoClient`` instance configured to connect to
+       the MongoDB instance hosting your {+key-vault-long+}.
+
+       If you omit the ``keyVaultClient`` option, the MongoDB instance specified
+       to your ``MongoClient`` instance containing the
+       ``{+auto-encrypt-options+}`` configuration is used as the
+       host of your {+key-vault-long+}.
+
+       To learn more about {+key-vault-long+}s, see :ref:`qe-reference-keys-key-vaults`.
+
+   * - ``keyVaultNamespace``
+
+     - String
+
+     - Yes
+
+     - The full :term:`namespace` of the {+key-vault-long+}.
+
+   * - ``kmsProviders``
+
+     - Object
+
+     - Yes
+
+     - The {+kms-long+} (KMS) used by {+csfle+} for
+       managing your {+cmk-long+}s (CMKs).
+
+       To learn more about ``kmsProviders`` objects, see
+       :ref:`qe-fundamentals-kms-providers`.
+
+       To learn more about {+cmk-long+}s, see :ref:`qe-reference-keys-key-vaults`.
+
+   * - ``tlsOptions``
+
+     - Object
+
+     - No
+
+     - An object that maps {+kms-long+} provider names to TLS configuration
+       options.
+
+       To learn more about TLS options see: :ref:`tls-mongod-options`.
+
+       To learn more about TLS see: :ref:`transport-encryption`.
+
+   * - ``schemaMap``
+
+     - Object
+
+     - No
+
+     - An encryption schema.
+
+       To learn how to construct an encryption schema, see
+       :ref:`csfle-fundamentals-create-schema`.
+
+       For complete documentation of encryption schemas, see :ref:`csfle-reference-encryption-schemas`.
+
+   * - ``bypassAutoEncryption``
+
+     - Boolean
+
+     - No
+
+     - Specify ``true`` to bypass automatic {+csfle+} rules
+       and perform {+manual-enc+}. ``bypassAutoEncryption`` does not
+       disable automatic decryption.
+
+       To learn more about this option, see
+       :ref:`csfle-fundamentals-manual-encryption-automatic-decryption`.
+
+.. _csfle-enc-options-example:
 
 ## Example
 
-To view a code-snippet demonstrating how to use `{+auto-encrypt-options+}` to configure your `MongoClient` instance, select the tab corresponding to your driver:
+To view a code-snippet demonstrating how to use
+``{+auto-encrypt-options+}`` to configure your
+``MongoClient`` instance, select the tab corresponding to your driver:
 
-.. include:: /includes/automatic-enc-options/tabs.rst
+.. tabs-selector:: drivers
+
+**include:** /includes/automatic-enc-options/tabs.rst

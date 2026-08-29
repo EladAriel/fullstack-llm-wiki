@@ -1,161 +1,202 @@
 ---
 type: "Framework Learn Page"
-framework: "mongodb"
+framework: "MongoDB"
 source_repo: "https://github.com/mongodb/docs.git"
 source_branch: "main"
 source_path: "content/manual/manual/source/reference/method/Session.abortTransaction.txt"
-source_commit: "ab9db26ed3d11618cdb61516d8180337d8e3f679"
-source_commit_short: "ab9db26e"
-source_commit_date: "2026-07-24T16:22:46-06:00"
-generated_at: "2026-07-25T11:51:15Z"
+source_commit: "b9f2bc487a2878b65e3c1f80024bebab76954f27"
+source_commit_short: "b9f2bc48"
+source_commit_date: "2026-08-28T17:09:45-05:00"
+generated_at: "2026-08-29T09:39:19.952590Z"
 ---
-
-===========================================
-
 # Session.abortTransaction() (mongosh method)
+
+**meta:** :description: Terminate a multi-document transaction using `Session.abortTransaction()` to roll back any changes made during the transaction.
+
+.. default-domain:: mongodb
+
+**contents:** On this page
+   :local:
+   :backlinks: none
+   :depth: 1
+   :class: singlecol
 
 ## Definition
 
+**method:** Session.abortTransaction()
+
+   Terminates the :ref:`multi-document transaction
+   <transactions>` and rolls back any data changes made by the
+   operations within the transaction. That is, the transaction ends
+   without saving any of the changes made by the operations in the
+   transaction.
+   
+   .. include:: /includes/transaction-support
+   
+   ``Session.abortTransaction()`` does not return a value.
+
+   .. |dbcommand| replace:: :dbcommand:`abortTransaction` command
+   .. include:: /includes/fact-mongosh-shell-method-alt
+
+
 ## Compatibility
+
+.. |command| replace:: method
 
 This method is available in deployments hosted in the following environments:
 
-.. include:: /includes/fact-environments-atlas-only.rst
+**include:** /includes/fact-environments-atlas-only.rst
 
-.. include:: /includes/fact-environments-atlas-support-all.rst
+**include:** /includes/fact-environments-atlas-support-all.rst
 
-.. include:: /includes/fact-environments-onprem-only.rst
+**include:** /includes/fact-environments-onprem-only.rst
 
 ## Behavior
 
 ### Atomicity
 
-When a transaction aborts, all data changes made by the writes in the transaction are discarded without ever becoming visible and the transaction ends.
+When a transaction aborts, all data changes made by the writes in the
+transaction are discarded without ever becoming visible and the
+transaction ends.
 
 ### Security
 
-If running with `auditing <auditing>`, operations in an aborted transaction are still audited.
+If running with :ref:`auditing <auditing>`, operations in an
+aborted transaction are still audited.
 
 ### Retryable
 
-If the abort operation encounters an error, MongoDB drivers retry the abort operation a single time regardless of whether :urioption:`retryWrites` is set to `true`. For more information, see `transactions-retry`.
+If the abort operation encounters an error, MongoDB drivers retry the
+abort operation a single time regardless of whether
+:urioption:`retryWrites` is set to ``true``. For more information, see
+:ref:`transactions-retry`.
 
 ## Example
 
-Consider a scenario where as changes are made to an employee's record in the `hr` database, you want to ensure that the `events` collection in the `reporting` database are in sync with the `hr` changes and vice versa. That is, you want to ensure that these writes are done as a single transaction, such that either both operations succeed or fail.
+Consider a scenario where as changes are made to an employee's record
+in the ``hr`` database, you want to ensure that the ``events``
+collection in the ``reporting`` database are in sync with the ``hr``
+changes and vice versa. That is, you want to ensure that these writes are done as a
+single transaction, such that either both operations succeed or fail.
 
-The `employees` collection in the `hr` database has the following documents:
+The ``employees`` collection in the ``hr`` database has the following
+documents:
 
-```javascript
-{ "_id" : ObjectId("5af0776263426f87dd69319a"), "employee" : 3, "name" : { "title" : "Mr.", "name" : "Iba Ochs" }, "status" : "Active", "department" : "ABC" }
-{ "_id" : ObjectId("5af0776263426f87dd693198"), "employee" : 1, "name" : { "title" : "Miss", "name" : "Ann Thrope" }, "status" : "Active", "department" : "ABC" }
-{ "_id" : ObjectId("5af0776263426f87dd693199"), "employee" : 2, "name" : { "title" : "Mrs.", "name" : "Eppie Delta" }, "status" : "Active", "department" : "XYZ" }
-```
+.. code-block:: javascript
 
-The `employees` collection has a unique index on the `employee` field:
+   { "_id" : ObjectId("5af0776263426f87dd69319a"), "employee" : 3, "name" : { "title" : "Mr.", "name" : "Iba Ochs" }, "status" : "Active", "department" : "ABC" }
+   { "_id" : ObjectId("5af0776263426f87dd693198"), "employee" : 1, "name" : { "title" : "Miss", "name" : "Ann Thrope" }, "status" : "Active", "department" : "ABC" }
+   { "_id" : ObjectId("5af0776263426f87dd693199"), "employee" : 2, "name" : { "title" : "Mrs.", "name" : "Eppie Delta" }, "status" : "Active", "department" : "XYZ" }
 
-```javascript
-db.employees.createIndex( { employee: 1 }, { unique: true } )
-```
+The ``employees`` collection has a unique index on the ``employee`` field:
 
-The `events` collection in the `reporting` database has the following documents:
+.. code-block:: javascript
 
-```javascript
-{ "_id" : ObjectId("5af07daa051d92f02462644a"), "employee" : 1, "status" : { "new" : "Active", "old" : null }, "department" : { "new" : "ABC", "old" : null } }
-{ "_id" : ObjectId("5af07daa051d92f02462644b"), "employee" : 2, "status" : { "new" : "Active", "old" : null }, "department" : { "new" : "XYZ", "old" : null } }
-{ "_id" : ObjectId("5af07daa051d92f02462644c"), "employee" : 3, "status" : { "new" : "Active", "old" : null }, "department" : { "new" : "ABC", "old" : null } }
-```
+   db.employees.createIndex( { employee: 1 }, { unique: true } )
 
-The following example opens a transaction, attempts to add a record to the `events` collection and add a document to the `employees` collection. If the operation encounters an error in either operations or in committing the transaction, the session aborts the transaction.
+The ``events`` collection in the ``reporting`` database has the
+following documents:
 
-```javascript
-// Runs the txnFunc and retries if TransientTransactionError encountered
+.. code-block:: javascript
 
-function runTransactionWithRetry(txnFunc, session) {
-    while (true) {
-        try {
-            txnFunc(session);  // performs transaction
-            break;
-        } catch (error) {
-            // If transient error, retry the whole transaction
-            if (error?.errorLabels?.includes("TransientTransactionError")) {
-                print("TransientTransactionError, retrying transaction ...");
-                continue;
-            } else {
-                throw error;
-            }
-        }
-    }   
-}
+   { "_id" : ObjectId("5af07daa051d92f02462644a"), "employee" : 1, "status" : { "new" : "Active", "old" : null }, "department" : { "new" : "ABC", "old" : null } }
+   { "_id" : ObjectId("5af07daa051d92f02462644b"), "employee" : 2, "status" : { "new" : "Active", "old" : null }, "department" : { "new" : "XYZ", "old" : null } }
+   { "_id" : ObjectId("5af07daa051d92f02462644c"), "employee" : 3, "status" : { "new" : "Active", "old" : null }, "department" : { "new" : "ABC", "old" : null } }
 
-// Retries commit if UnknownTransactionCommitResult encountered
+The following example opens a transaction, attempts to add a record to
+the ``events`` collection and add a document to the ``employees``
+collection. If the operation encounters an error in either operations
+or in committing the transaction, the session aborts the transaction.
 
-function commitWithRetry(session) {
-    while (true) {
-        try {
-            session.commitTransaction(); // Uses write concern set at transaction start.
-            print("Transaction committed.");
-            break;
-        } catch (error) {
-            // Can retry commit
-            if (error?.errorLabels?.includes("UnknownTransactionCommitResult") ) {
-                print("UnknownTransactionCommitResult, retrying commit operation ...");
-                continue;
-            } else {
-                print("Error during commit ...");
-                throw error;
-            }
-       }
-    }
-}
+.. code-block:: javascript
 
-// Performs inserts and count in a transaction 
-function updateEmployeeInfo(session) {
-   employeesCollection = session.getDatabase("hr").employees;
-   eventsCollection = session.getDatabase("reporting").events;
+   // Runs the txnFunc and retries if TransientTransactionError encountered
 
-   // Start a transaction for the session that uses:
-   // - read concern "snapshot" 
-   // - write concern "majority"
-
-   session.startTransaction( { readConcern: { level: "snapshot" }, writeConcern: { w: "majority" } } );
-
-   try{
-      eventsCollection.insertOne( 
-         { employee: 3, status: { new: "Active", old: null },  department: { new: "XYZ", old: null } }
-      );
-
-      // Count number of events for employee 3
-
-      var countDoc = eventsCollection.aggregate( [ { $match:  { employee: 3 } }, { $count: "eventCounts" } ] ).next();
-
-      print( "events count (in active transaction): " + countDoc.eventCounts );
-
-      // The following operations should fail as an employee ``3`` already exist in employees collection
-      employeesCollection.insertOne( 
-         { employee: 3, name: { title: "Miss", name: "Terri Bachs" }, status: "Active", department: "XYZ" }
-      ); 
-   } catch (error) {
-      print("Caught exception during transaction, aborting.");
-      session.abortTransaction();
-      throw error;
+   function runTransactionWithRetry(txnFunc, session) {
+       while (true) {
+           try {
+               txnFunc(session);  // performs transaction
+               break;
+           } catch (error) {
+               // If transient error, retry the whole transaction
+               if (error?.errorLabels?.includes("TransientTransactionError")) {
+                   print("TransientTransactionError, retrying transaction ...");
+                   continue;
+               } else {
+                   throw error;
+               }
+           }
+       }   
    }
 
-   commitWithRetry(session);
+   // Retries commit if UnknownTransactionCommitResult encountered
 
-} // End of updateEmployeeInfo function
+   function commitWithRetry(session) {
+       while (true) {
+           try {
+               session.commitTransaction(); // Uses write concern set at transaction start.
+               print("Transaction committed.");
+               break;
+           } catch (error) {
+               // Can retry commit
+               if (error?.errorLabels?.includes("UnknownTransactionCommitResult") ) {
+                   print("UnknownTransactionCommitResult, retrying commit operation ...");
+                   continue;
+               } else {
+                   print("Error during commit ...");
+                   throw error;
+               }
+          }
+       }
+   }
 
-// Start a session.
-session = db.getMongo().startSession( { readPreference: { mode: "primary" } } );
+   // Performs inserts and count in a transaction 
+   function updateEmployeeInfo(session) {
+      employeesCollection = session.getDatabase("hr").employees;
+      eventsCollection = session.getDatabase("reporting").events;
 
-try{
-   runTransactionWithRetry(updateEmployeeInfo, session);
-} catch (error) {
-   // Do something with error
-} finally {
-   session.endSession();
-}
-```
+      // Start a transaction for the session that uses:
+      // - read concern "snapshot" 
+      // - write concern "majority"
 
-> **Seealso:** - :method:`Session.startTransaction()`
-- :method:`Session.commitTransaction()`
+      session.startTransaction( { readConcern: { level: "snapshot" }, writeConcern: { w: "majority" } } );
+
+      try{
+         eventsCollection.insertOne( 
+            { employee: 3, status: { new: "Active", old: null },  department: { new: "XYZ", old: null } }
+         );
+
+         // Count number of events for employee 3
+
+         var countDoc = eventsCollection.aggregate( [ { $match:  { employee: 3 } }, { $count: "eventCounts" } ] ).next();
+
+         print( "events count (in active transaction): " + countDoc.eventCounts );
+
+         // The following operations should fail as an employee ``3`` already exist in employees collection
+         employeesCollection.insertOne( 
+            { employee: 3, name: { title: "Miss", name: "Terri Bachs" }, status: "Active", department: "XYZ" }
+         ); 
+      } catch (error) {
+         print("Caught exception during transaction, aborting.");
+         session.abortTransaction();
+         throw error;
+      }
+
+      commitWithRetry(session);
+
+   } // End of updateEmployeeInfo function
+
+   // Start a session.
+   session = db.getMongo().startSession( { readPreference: { mode: "primary" } } );
+
+   try{
+      runTransactionWithRetry(updateEmployeeInfo, session);
+   } catch (error) {
+      // Do something with error
+   } finally {
+      session.endSession();
+   }
+
+
+**seealso:** - :method:`Session.startTransaction()`
+   - :method:`Session.commitTransaction()`

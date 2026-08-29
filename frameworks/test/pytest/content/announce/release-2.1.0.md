@@ -4,41 +4,48 @@ framework: "pytest"
 source_repo: "https://github.com/pytest-dev/pytest"
 source_branch: "main"
 source_path: "doc/en/announce/release-2.1.0.rst"
-source_commit: "344c23787cdb3431dcc441b8b63ee9950f04b921"
-source_commit_short: "344c2378"
-source_commit_date: "2026-07-24T17:37:16+02:00"
-generated_at: "2026-07-25T11:50:13Z"
+source_commit: "fdba12e1708313f56e9cf713d260c029764ca2b7"
+source_commit_short: "fdba12e"
+source_commit_date: "2026-08-27T21:55:50+02:00"
+generated_at: "2026-08-29T09:40:11.201326Z"
 ---
-
 # py.test 2.1.0: perfected assertions and bug fixes
 
-Welcome to the release of pytest-2.1, a mature testing tool for Python, supporting CPython 2.4-3.2, Jython and latest PyPy interpreters.  See the improved extensive docs (now also as PDF!) with tested examples here:
+Welcome to the release of pytest-2.1, a mature testing tool for Python,
+supporting CPython 2.4-3.2, Jython and latest PyPy interpreters.  See
+the improved extensive docs (now also as PDF!) with tested examples here:
 
-http://pytest.org/
+     http://pytest.org/
 
-The single biggest news about this release are **perfected assertions** courtesy of Benjamin Peterson.  You can now safely use `assert` statements in test modules without having to worry about side effects or python optimization ("-OO") options.  This is achieved by rewriting assert statements in test modules upon import, using a PEP302 hook. See https://docs.pytest.org/en/stable/how-to/assert.html for detailed information.  The work has been partly sponsored by my company, merlinux GmbH.
+The single biggest news about this release are **perfected assertions**
+courtesy of Benjamin Peterson.  You can now safely use ``assert``
+statements in test modules without having to worry about side effects
+or python optimization ("-OO") options.  This is achieved by rewriting
+assert statements in test modules upon import, using a PEP302 hook.
+See https://docs.pytest.org/en/stable/how-to/assert.html for
+detailed information.  The work has been partly sponsored by my company,
+merlinux GmbH.
 
 For further details on bug fixes and smaller enhancements see below.
 
-If you want to install or upgrade pytest, just type one of:
+If you want to install or upgrade pytest, just type one of::
 
-```
-pip install -U pytest # or
-easy_install -U pytest
-```
+    pip install -U pytest # or
+    easy_install -U pytest
 
-best, holger krekel / https://merlinux.eu/
+best,
+holger krekel / https://merlinux.eu/
 
 ## Changes between 2.0.3 and 2.1.0
 
 - fix issue53 call nosestyle setup functions with correct ordering
 - fix issue58 and issue59: new assertion code fixes
 - merge Benjamin's assertionrewrite branch: now assertions
-for test modules on python 2.6 and above are done by rewriting the AST and saving the pyc file before the test module is imported. see doc/assert.txt for more info.
-
+  for test modules on python 2.6 and above are done by rewriting
+  the AST and saving the pyc file before the test module is imported.
+  see doc/assert.txt for more info.
 - fix issue43: improve doctests with better traceback reporting on
-unexpected exceptions
-
+  unexpected exceptions
 - fix issue47: timing output in junitxml for test cases is now correct
 - fix issue48: typo in MarkInfo repr leading to exception
 - fix issue49: avoid confusing error when initialization partially fails

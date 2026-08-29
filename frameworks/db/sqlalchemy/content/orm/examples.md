@@ -1,69 +1,147 @@
 ---
 type: "Framework Learn Page"
-framework: "sqlalchemy"
+framework: "SQLAlchemy"
 source_repo: "https://github.com/sqlalchemy/sqlalchemy"
 source_branch: "main"
 source_path: "doc/build/orm/examples.rst"
-source_commit: "aa1a5575358d3aa14953b04dced02f4763fed2e7"
-source_commit_short: "aa1a5575"
-source_commit_date: "2026-07-23T18:02:59Z"
-generated_at: "2026-07-25T11:50:45Z"
+source_commit: "85cafd1a131fa8afeeeab23151940480b3fb0042"
+source_commit_short: "85cafd1"
+source_commit_date: "2026-08-28T20:17:49+00:00"
+generated_at: "2026-08-29T09:39:27.557126Z"
 ---
-
-=====================
+.. _examples_toplevel:
 
 # Core and ORM Examples
 
-The SQLAlchemy distribution includes a variety of code examples illustrating a select set of patterns, some typical and some not so typical.   All are runnable and can be found in the `/examples` directory of the distribution.   Descriptions and source code for all can be found here.
+The SQLAlchemy distribution includes a variety of code examples illustrating
+a select set of patterns, some typical and some not so typical.   All are
+runnable and can be found in the ``/examples`` directory of the
+distribution.   Descriptions and source code for all can be found here.
 
-Additional SQLAlchemy examples, some user contributed, are available on the wiki at <https://www.sqlalchemy.org/trac/wiki/UsageRecipes>.
+Additional SQLAlchemy examples, some user contributed, are available on the
+wiki at `<https://www.sqlalchemy.org/trac/wiki/UsageRecipes>`_.
+
 
 # Mapping Recipes
 
+.. _examples_adjacencylist:
+
 ## Adjacency List
+
+**automodule:** examples.adjacency_list
+
+.. _examples_associations:
 
 ## Associations
 
+**automodule:** examples.association
+
+.. _examples_asyncio:
+
 ## Asyncio Integration
+
+**automodule:** examples.asyncio
 
 ## Directed Graphs
 
+**automodule:** examples.graphs
+
 ## Dynamic Relations as Dictionaries
+
+**automodule:** examples.dynamic_dict
+
+.. _examples_generic_associations:
 
 ## Generic Associations
 
+**automodule:** examples.generic_associations
+
+
 ## Materialized Paths
+
+**automodule:** examples.materialized_paths
 
 ## Nested Sets
 
+**automodule:** examples.nested_sets
+
+.. _examples_performance:
+
 ## Performance
+
+**automodule:** examples.performance
+
+
+.. _examples_spaceinvaders:
 
 ## Space Invaders
 
+**automodule:** examples.space_invaders
+
+
+.. _examples_versioning:
+
 ## Versioning Objects
 
-#### Versioning with a History Table
+.. _examples_versioned_history:
 
-#### Versioning using Temporal Rows
+## Versioning with a History Table
+
+**automodule:** examples.versioned_history
+
+.. _examples_versioned_rows:
+
+## Versioning using Temporal Rows
+
+**automodule:** examples.versioned_rows
+
+.. _examples_vertical_tables:
 
 ## Vertical Attribute Mapping
+
+**automodule:** examples.vertical
+
+
+.. _examples_inheritance:
 
 # Inheritance Mapping Recipes
 
 ## Basic Inheritance Mappings
 
+**automodule:** examples.inheritance
+
 # Special APIs
+
+.. _examples_instrumentation:
 
 ## Attribute Instrumentation
 
+**automodule:** examples.custom_attributes
+
+.. _examples_sharding:
+
 ## Horizontal Sharding
+
+**automodule:** examples.sharding
 
 # Extending Core
 
+.. _examples_syntax_extensions:
+
 ## Extending Statements like SELECT, INSERT, etc
+
+**automodule:** examples.syntax_extensions
 
 # Extending the ORM
 
+.. _examples_session_orm_events:
+
 ## ORM Query Events
 
+**automodule:** examples.extending_query
+
+.. _examples_caching:
+
 ## Dogpile Caching
+
+**automodule:** examples.dogpile_caching

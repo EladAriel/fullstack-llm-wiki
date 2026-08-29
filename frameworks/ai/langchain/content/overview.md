@@ -4,11 +4,12 @@ framework: "LangChain"
 source_repo: "https://github.com/langchain-ai/docs"
 source_branch: "main"
 source_path: "src/oss/langchain/overview.mdx"
-source_commit: "2aae1dfc98ee953a9a5185fb6fcdd9efb3f4d878"
-source_commit_short: "2aae1dfc"
-source_commit_date: "2026-07-25T00:27:23Z"
-generated_at: "2026-07-25T11:51:05Z"
+source_commit: "a174f9cf7c91ee5eb14ee2382eb48bfe6e4956e9"
+source_commit_short: "a174f9c"
+source_commit_date: "2026-08-28T17:04:12-07:00"
+generated_at: "2026-08-29T09:38:24.250794Z"
 ---
+# Overview
 
 ---
 title: LangChain overview
@@ -173,16 +174,20 @@ This example demonstrates how to create a simple LangChain agent with a custom t
     # pip install -qU langchain "langchain[openai]"
     import os
     from langchain.agents import create_agent
+    from langchain.chat_models import init_chat_model
 
     def get_weather(city: str) -> str:
         """Get weather for a given city."""
         return f"It's always sunny in {city}!"
 
+    model = init_chat_model(
+        "azure_openai:gpt-5.5",
+        azure_deployment=os.environ["AZURE_OPENAI_DEPLOYMENT_NAME"],
+    )
     agent = create_agent(
-        model="azure_openai:gpt-5.5",
+        model=model,
         tools=[get_weather],
         system_prompt="You are a helpful assistant",
-        azure_deployment=os.environ["AZURE_OPENAI_DEPLOYMENT_NAME"],
     )
 
     result = agent.invoke(
@@ -198,9 +203,9 @@ This example demonstrates how to create a simple LangChain agent with a custom t
         """Get weather for a given city."""
         return f"It's always sunny in {city}!"
 
+    # US cross-region inference profile; use global.anthropic.claude-sonnet-4-6 for worldwide routing.
     agent = create_agent(
-        model="anthropic.claude-3-5-sonnet-20240620-v1:0",
-        model_provider="bedrock_converse",
+        model="bedrock_converse:us.anthropic.claude-sonnet-4-6",
         tools=[get_weather],
         system_prompt="You are a helpful assistant",
     )
@@ -219,12 +224,9 @@ This example demonstrates how to create a simple LangChain agent with a custom t
         return f"It's always sunny in {city}!"
 
     agent = create_agent(
-        model="microsoft/Phi-3-mini-4k-instruct",
-        model_provider="huggingface",
+        model="huggingface:microsoft/Phi-3-mini-4k-instruct",
         tools=[get_weather],
         system_prompt="You are a helpful assistant",
-        temperature=0.7,
-        max_tokens=1024,
     )
 
     result = agent.invoke(

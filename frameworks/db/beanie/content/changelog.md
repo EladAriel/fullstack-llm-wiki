@@ -1,18 +1,47 @@
 ---
 type: "Framework Learn Page"
-framework: "beanie"
+framework: "Beanie"
 source_repo: "https://github.com/BeanieODM/beanie"
 source_branch: "main"
 source_path: "docs/changelog.md"
-source_commit: "00c0f745ef12c4be145209d2ef69c2181d4d3a17"
-source_commit_short: "00c0f745"
-source_commit_date: "2026-03-29T13:57:21+02:00"
-generated_at: "2026-06-21T11:21:43Z"
+source_commit: "aa290b5739b52c7f62e43e37724b63038d1e5a81"
+source_commit_short: "aa290b5"
+source_commit_date: "2026-08-07T10:16:44-06:00"
+generated_at: "2026-08-29T09:38:56.937544Z"
 ---
-
 # Changelog
 
 Beanie project
+
+## [2.2.0] - 2026-08-07
+### Add `distinct()` to chained find queries
+- Author - [smahn9123](https://github.com/smahn9123)
+- PR <https://github.com/BeanieODM/beanie/pull/1301>
+### Optimize `FindQuery.exists()`
+- Author - [gsakkis](https://github.com/gsakkis)
+- PR <https://github.com/BeanieODM/beanie/pull/1295>
+### Fix underscore-prefixed event hooks
+- Author - [tingQian](https://github.com/tingQian)
+- PR <https://github.com/BeanieODM/beanie/pull/1317>
+### Fix typing for `find_one()` upsert results
+- Author - [xianjianlf2](https://github.com/xianjianlf2)
+- PR <https://github.com/BeanieODM/beanie/pull/1346>
+### Fix logical `Not` operator type hint
+- Author - [0x5t4l1n](https://github.com/0x5t4l1n)
+- PR <https://github.com/BeanieODM/beanie/pull/1345>
+### Fix existing MongoDB indexes with float directions
+- Author - [gaurav-hub319](https://github.com/gaurav-hub319)
+- PR <https://github.com/BeanieODM/beanie/pull/1343>
+### Documentation and examples
+- Add a DocumentDB sample and clarify computed-field and serializer limitations.
+- Add Context7 documentation metadata.
+- Authors - [khelanmodi](https://github.com/khelanmodi), [pctablet505](https://github.com/pctablet505), [Sarthak-commits](https://github.com/Sarthak-commits)
+- PRs <https://github.com/BeanieODM/beanie/pull/1306>, <https://github.com/BeanieODM/beanie/pull/1341>, <https://github.com/BeanieODM/beanie/pull/1334>
+### Documentation: clarify `SetRevisionId` usage
+- Author - [j-vanrav](https://github.com/j-vanrav)
+- PR <https://github.com/BeanieODM/beanie/pull/1315>
+
+[2.2.0]: https://pypi.org/project/beanie/2.2.0
 
 ## [2.1.0] - 2026-03-20
 ### Drop EOL Python 3.9, MongoDB 4.4/5.0/6.0, Pydantic v1

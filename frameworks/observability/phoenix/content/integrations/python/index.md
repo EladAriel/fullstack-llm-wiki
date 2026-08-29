@@ -1,7 +1,7 @@
 ---
 type: "Framework Learn Directory Index"
 framework: "Arize Phoenix"
-generated_at: "2026-07-25T19:08:24.986774Z"
+generated_at: "2026-08-29T09:39:58.970640Z"
 ---
 # Python
 
@@ -17,6 +17,7 @@ This directory contains Arize Phoenix learning pages related to python.
 
 ## Pages in This Directory
 
+- [Ag2](ag2.md)
 - [Agentspec](agentspec.md)
 - [Agno](agno.md)
 - [Autogen](autogen.md)
@@ -39,3 +40,27 @@ This directory contains Arize Phoenix learning pages related to python.
 - [Pydantic](pydantic.md)
 - [Restate](restate.md)
 - [Strands Agents](strands-agents.md)
+
+## Subdirectories
+
+- [Ag2](ag2/index.md)
+- [Agentspec](agentspec/index.md)
+- [Agno](agno/index.md)
+- [Autogen](autogen/index.md)
+- [Beeai](beeai/index.md)
+- [Crewai](crewai/index.md)
+- [Dspy](dspy/index.md)
+- [Google Adk](google-adk/index.md)
+- [Graphite](graphite/index.md)
+- [Guardrails Ai](guardrails-ai/index.md)
+- [Haystack](haystack/index.md)
+- [Hugging Face Smolagents](hugging-face-smolagents/index.md)
+- [Instructor](instructor/index.md)
+- [Langchain](langchain/index.md)
+- [Langgraph](langgraph/index.md)
+- [Llamaindex](llamaindex/index.md)
+- [Nvidia](nvidia/index.md)
+- [Portkey](portkey/index.md)
+- [Pydantic](pydantic/index.md)
+- [Restate](restate/index.md)
+- [Strands Agents](strands-agents/index.md)

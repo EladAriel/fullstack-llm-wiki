@@ -1,30 +1,66 @@
 ---
 type: "Framework Learn Page"
-framework: "mongodb"
+framework: "MongoDB"
 source_repo: "https://github.com/mongodb/docs.git"
 source_branch: "main"
 source_path: "content/manual/manual/source/tutorial/split-chunks-in-sharded-cluster.txt"
-source_commit: "ab9db26ed3d11618cdb61516d8180337d8e3f679"
-source_commit_short: "ab9db26e"
-source_commit_date: "2026-07-24T16:22:46-06:00"
-generated_at: "2026-07-25T11:51:15Z"
+source_commit: "b9f2bc487a2878b65e3c1f80024bebab76954f27"
+source_commit_short: "b9f2bc48"
+source_commit_date: "2026-08-28T17:09:45-05:00"
+generated_at: "2026-08-29T09:39:19.574124Z"
 ---
-
-=================================
+.. _split-chunks-sharded-cluster:
 
 # Split Chunks in a Sharded Cluster
 
-MongoDB automatically splits `chunks <chunk>` to ensure a fair distribution of data across the cluster and the `AutoMerger <automerger-concept>` automatically merges adjacent chunks residing on the same shard.
+**meta:** :description: Split chunks manually in a sharded cluster using `splitFind()` or `splitAt()` commands for better data distribution.
 
-To split chunks manually, use the :dbcommand:`split` command with either fields `middle` or `find`. :binary:`~bin.mongosh` provides the helper methods :method:`sh.splitFind()` and :method:`sh.splitAt()`.
+.. default-domain:: mongodb
 
-:method:`~sh.splitFind()` splits the chunk that contains the first document returned that matches this query into two equally sized chunks. You must specify the full namespace (i.e. "`<database>.<collection>`") of the sharded collection to :method:`~sh.splitFind()`. The query in :method:`~sh.splitFind()` does not need to use the shard key, though it nearly always makes sense to do so.
+**contents:** On this page
+   :local:
+   :backlinks: none
+   :depth: 1
+   :class: singlecol
 
-Use :method:`~sh.splitAt()` to split a chunk in two, using the queried document as the lower bound in the new chunk:
+MongoDB automatically splits :term:`chunks <chunk>` to ensure a
+fair distribution of data across the cluster and the
+:ref:`AutoMerger <automerger-concept>` automatically merges
+adjacent chunks residing on the same shard.
 
-> **Note:** :method:`~sh.splitAt()` does not necessarily split the chunk
-into two equally sized chunks. The split occurs at the location of
-the document matching the query, regardless of where that document is
-in the chunk.
+To split chunks manually, use the :dbcommand:`split` command with either
+fields ``middle`` or ``find``. :binary:`~bin.mongosh` provides the
+helper methods :method:`sh.splitFind()` and :method:`sh.splitAt()`.
 
-> **Seealso:** `initial-chunks-empty-collection`
+:method:`~sh.splitFind()` splits the chunk that contains the *first*
+document returned that matches this query into two equally sized chunks.
+You must specify the full namespace (i.e. "``<database>.<collection>``")
+of the sharded collection to :method:`~sh.splitFind()`. The query in
+:method:`~sh.splitFind()` does not need to use the shard key, though it
+nearly always makes sense to do so.
+
+**example:** The following command splits the chunk that contains the value of
+   ``63109`` for the ``zipcode`` field in the ``people`` collection of
+   the ``records`` database:
+
+   .. code-block:: javascript
+
+      sh.splitFind( "records.people", { "zipcode": "63109" } )
+
+Use :method:`~sh.splitAt()` to split a chunk in two, using the queried
+document as the lower bound in the new chunk:
+
+**example:** The following command splits the chunk that contains the value of
+   ``63109`` for the ``zipcode`` field in the ``people`` collection of
+   the ``records`` database.
+
+   .. code-block:: javascript
+
+      sh.splitAt( "records.people", { "zipcode": "63109" } )
+
+**note:** :method:`~sh.splitAt()` does not necessarily split the chunk
+   into two equally sized chunks. The split occurs at the location of
+   the document matching the query, regardless of where that document is
+   in the chunk.
+
+**seealso:** :ref:`initial-chunks-empty-collection`

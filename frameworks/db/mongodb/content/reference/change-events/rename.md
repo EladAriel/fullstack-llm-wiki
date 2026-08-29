@@ -1,56 +1,165 @@
 ---
 type: "Framework Learn Page"
-framework: "mongodb"
+framework: "MongoDB"
 source_repo: "https://github.com/mongodb/docs.git"
 source_branch: "main"
 source_path: "content/manual/manual/source/reference/change-events/rename.txt"
-source_commit: "ab9db26ed3d11618cdb61516d8180337d8e3f679"
-source_commit_short: "ab9db26e"
-source_commit_date: "2026-07-24T16:22:46-06:00"
-generated_at: "2026-07-25T11:51:15Z"
+source_commit: "b9f2bc487a2878b65e3c1f80024bebab76954f27"
+source_commit_short: "b9f2bc48"
+source_commit_date: "2026-08-28T17:09:45-05:00"
+generated_at: "2026-08-29T09:39:19.878884Z"
 ---
+.. _change-event-rename:
+.. _change-streams-rename-event:
 
-================
+# ``rename`` Event
 
-# `rename` Event
+**meta:** :description: Understand the `rename` event in MongoDB, which occurs when a collection is renamed, including details on fields like `operationType`, `ns`, and `to`.
+
+.. default-domain:: mongodb
+
+**contents:** On this page
+   :local:
+   :backlinks: none
+   :depth: 2
+   :class: singlecol
+
+.. |idref| replace:: ce-rename
 
 ## Summary
 
+**data:** rename
+
+   A ``rename`` event occurs when a collection is renamed.
+
+
 ## Description
+
+.. list-table::
+   :header-rows: 1
+   :widths: 20 20 60
+
+   * - Field
+     - Type
+     - Description
+   * - ``_id``
+     - Document
+     - .. include:: /includes/change-stream/id
+   * - ``clusterTime``
+     - Timestamp
+     - .. include:: /includes/change-stream/clusterTime
+   * - ``collectionUUID``
+     - UUID
+     - .. include:: /includes/change-stream/collectionUUID
+
+   * - ``lsid``
+     - document
+     - .. include:: /includes/change-stream/lsid
+
+   * - ``ns``
+     -  document
+     - .. include:: /includes/change-stream/ns
+
+   * - ``ns.db``
+     - string
+     - .. include:: /includes/change-stream/ns.db
+
+   * - ``ns.coll``
+     - string
+     - .. include:: /includes/change-stream/ns.coll
+
+   * - ``operationDescription``
+     - document
+     - .. include:: /includes/change-stream/operationDescription
+
+   * - | ``operationDescription.``
+       | ``dropTarget``
+     - UUID
+     - .. include:: /includes/change-stream/od-dropTarget
+
+   * - | ``operationDescription.``
+       | ``to``
+     - document
+     - .. include:: /includes/change-stream/od-to
+
+   * - | ``operationDescription.``
+       | ``to.coll``
+     - document
+     - .. include:: /includes/change-stream/od-to-coll
+
+   * - | ``operationDescription.``
+       | ``to.db``
+     - document
+     - .. include:: /includes/change-stream/od-to-db
+
+   * - ``operationType``
+     - string
+     - .. include:: /includes/change-stream/operationType
+
+       Returns a value of ``rename`` for these change events.
+
+   * - ``to``
+     - document
+     - .. include:: /includes/change-stream/to
+
+   * - ``to.coll``
+     - document
+     - .. include:: /includes/change-stream/to.coll
+
+   * - ``to.db``
+     - document
+     - .. include:: /includes/change-stream/to.db
+
+   * - ``txnNumber``
+     - NumberLong
+     - .. include:: /includes/change-stream/txnNumber
+
+   * - ``wallTime``
+     - :term:`ISODate`
+     - .. include:: /includes/change-stream/wallTime
 
 ## Behavior
 
-#### Expanded Event Information
+## Expanded Event Information
 
-.. versionchanged:: 6.0
+**versionchanged:** 6.0
 
-Starting in MongoDB 6.0, when the `showExpandedEvents <change-streams-expanded-events>` option is set to `true` for the change stream, the `rename` event includes an `operationDescription` document. This document provides a `to` field showing the changed database and collection and a `dropTarget` field indicating whether the `rename` operation removed the collection before the rename.
+Starting in MongoDB 6.0, when the :ref:`showExpandedEvents
+<change-streams-expanded-events>` option is set to ``true`` for the change 
+stream, the ``rename`` event includes an ``operationDescription`` document.
+This document provides a ``to`` field showing the changed database and
+collection and a ``dropTarget`` field indicating whether the ``rename``
+operation removed the collection before the rename.
+
 
 ## Example
 
-The following example illustrates a `rename` event:
+The following example illustrates a ``rename`` event:
 
-```json
-{
-   "_id": { <Resume Token> },
-   "operationType": "rename",
-   "clusterTime": <Timestamp>,
-   "wallTime": <ISODate>,
-   "ns": {
-      "db": "engineering",
-      "coll": "users"
-   },
-   "to": {
-      "db": "engineering",
-      "coll": "people"
-   },
-   "operationDescription": {
+.. code-block:: json
+   :copyable: false
+
+   {
+      "_id": { <Resume Token> },
+      "operationType": "rename",
+      "clusterTime": <Timestamp>,
+      "wallTime": <ISODate>,
+      "ns": {
+         "db": "engineering",
+         "coll": "users"
+      },
       "to": {
          "db": "engineering",
          "coll": "people"
+      },
+      "operationDescription": {
+         "to": {
+            "db": "engineering",
+            "coll": "people"
+         }
       }
    }
-}
-```
 
-A `rename` event leads to an `invalidate event <change-event-invalidate>` for change streams opened against its `ns` collection or `to` collection.
+A ``rename`` event leads to an
+:ref:`invalidate event <change-event-invalidate>` for change streams opened
+against its ``ns`` collection or ``to`` collection.

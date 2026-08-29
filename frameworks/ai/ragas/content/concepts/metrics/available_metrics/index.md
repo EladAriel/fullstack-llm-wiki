@@ -1,57 +1,38 @@
 ---
 type: "Framework Learn Directory Index"
 framework: "Ragas"
-directory: "content/concepts/metrics/available_metrics"
-source_repo: "https://github.com/vibrantlabsai/ragas"
-source_branch: "main"
-source_commit: "298b68274234c060deacab3cf5fb52aa3a20e885"
-source_commit_short: "298b6827"
-source_commit_date: "2026-02-24T13:17:18+05:30"
-generated_at: "2026-06-23T13:55:50Z"
+generated_at: "2026-08-29T09:38:15.999799Z"
 ---
-# Available Metrics
+# Available_Metrics
 
-This directory contains Ragas learning pages related to available metrics.
+This directory contains Ragas learning pages related to available_metrics.
 
 ## Breadcrumbs
 
-[Wiki Home](../../../../index.md) -> [Content](../../../index.md) -> [Concepts](../../index.md) -> [Metrics](../index.md) -> [Available Metrics](index.md)
+[Wiki Home](../index.md) -> [Content](index.md)
 
 ## Navigation
 
-- Parent: [Parent Index](../index.md)
-
-## Child Directories
-
-- None
+- Wiki Home: [Root Index](../index.md)
 
 ## Pages in This Directory
 
-- [Original Source Index](_source_index.md)
 - [Agents](agents.md)
-- [Answer Correctness](answer_correctness.md)
-- [Answer Relevance](answer_relevance.md)
-- [Aspect Critic](aspect_critic.md)
-- [Context Entities Recall](context_entities_recall.md)
-- [Context Precision](context_precision.md)
-- [Context Recall](context_recall.md)
-- [Factual Correctness](factual_correctness.md)
+- [Answer_Correctness](answer_correctness.md)
+- [Answer_Relevance](answer_relevance.md)
+- [Aspect_Critic](aspect_critic.md)
+- [Context_Entities_Recall](context_entities_recall.md)
+- [Context_Precision](context_precision.md)
+- [Context_Recall](context_recall.md)
+- [Factual_Correctness](factual_correctness.md)
 - [Faithfulness](faithfulness.md)
-- [General Purpose](general_purpose.md)
-- [Multi Modal Faithfulness](multi_modal_faithfulness.md)
-- [Multi Modal Relevance](multi_modal_relevance.md)
-- [Noise Sensitivity](noise_sensitivity.md)
-- [Nvidia Metrics](nvidia_metrics.md)
-- [Rubrics Based](rubrics_based.md)
-- [Semantic Similarity](semantic_similarity.md)
+- [General_Purpose](general_purpose.md)
+- [Multi_Modal_Faithfulness](multi_modal_faithfulness.md)
+- [Multi_Modal_Relevance](multi_modal_relevance.md)
+- [Noise_Sensitivity](noise_sensitivity.md)
+- [Nvidia_Metrics](nvidia_metrics.md)
+- [Rubrics_Based](rubrics_based.md)
+- [Semantic_Similarity](semantic_similarity.md)
 - [Sql](sql.md)
-- [Summarization Score](summarization_score.md)
+- [Summarization_Score](summarization_score.md)
 - [Traditional](traditional.md)
-
-## IDE LLM Guidance
-
-When answering implementation questions related to this directory:
-
-1. Prefer the most specific page listed above.
-2. If the topic is broad, read the child directory index first.
-3. Use source metadata from each page when giving answers.

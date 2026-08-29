@@ -1,132 +1,198 @@
 ---
 type: "Framework Learn Page"
-framework: "mongodb"
+framework: "MongoDB"
 source_repo: "https://github.com/mongodb/docs.git"
 source_branch: "main"
 source_path: "content/manual/manual/source/reference/operator/update/sort.txt"
-source_commit: "ab9db26ed3d11618cdb61516d8180337d8e3f679"
-source_commit_short: "ab9db26e"
-source_commit_date: "2026-07-24T16:22:46-06:00"
-generated_at: "2026-07-25T11:51:15Z"
+source_commit: "b9f2bc487a2878b65e3c1f80024bebab76954f27"
+source_commit_short: "b9f2bc48"
+source_commit_date: "2026-08-28T17:09:45-05:00"
+generated_at: "2026-08-29T09:39:20.104898Z"
 ---
-
-=======================
-
 # $sort (update operator)
 
-> **Note:** The following page refers to the update modifier :update:`$sort`.
-For the aggregation stage, see :pipeline:`$sort`.
+**meta:** :description: Sort array elements during a `$push` operation using the `$sort` modifier, which must be used with `$each`.
+
+.. default-domain:: mongodb
+
+**contents:** On this page
+   :local:
+   :backlinks: none
+   :depth: 1
+   :class: singlecol
+
+.. dismissible-skills-card::
+   :skill: Fundamentals of Data Transformation
+   :url: https://learn.mongodb.com/skills?openTab=aggregation
+
+**note:** Disambiguation
+
+   The following page refers to the update modifier :update:`$sort`.
+   For the aggregation stage, see :pipeline:`$sort`.
+
+**update:** $sort
+
+   The :update:`$sort` modifier orders the elements of an array
+   during a :update:`$push` operation.
+
+   To use the :update:`$sort` modifier, it **must** appear with the
+   :update:`$each` modifier. You can pass an empty array ``[]`` to the
+   :update:`$each` modifier such that only the :update:`$sort` modifier
+   has an effect.
+
+   .. code-block:: javascript
+
+      {
+        $push: {
+           <field>: {
+             $each: [ <value1>, <value2>, ... ],
+             $sort: <sort specification>
+           }
+        }
+      }
+
+
+   For ``<sort specification>``:
+
+   - To sort array elements that are not documents, or if the array
+     elements are documents, to sort by the whole documents, specify
+     ``1`` for ascending or ``-1`` for descending.
+
+   - If the array elements are documents, to sort by a field in the
+     documents, specify a sort document with the field and the
+     direction, i.e. ``{ field: 1 }`` or ``{ field: -1 }``. Do **not**
+     reference the containing array field in the sort specification
+     (e.g. ``{ "arrayField.field": 1 }`` is incorrect).
 
 ## Behavior
 
-.. include:: /includes/fact-update-operator-processing-order.rst
+**include:** /includes/fact-update-operator-processing-order.rst
 
-The :update:`$sort` modifier can sort array elements that are not documents. In previous versions, the :update:`$sort` modifier required the array elements be documents.
+The :update:`$sort` modifier can sort array elements that are not
+documents. In previous versions, the :update:`$sort` modifier required
+the array elements be documents.
 
-If the array elements are documents, the modifier can sort by either the whole document or by a specific field in the documents. In previous versions, the :update:`$sort` modifier can only sort by a specific field in the documents.
+If the array elements are documents, the modifier can sort by either
+the whole document or by a specific field in the documents. In previous
+versions, the :update:`$sort` modifier can only sort by a specific
+field in the documents.
 
-Trying to use the :update:`$sort` modifier without the :update:`$each` modifier results in an error. The :update:`$sort` no longer requires the :update:`$slice` modifier. For a list of modifiers available for :update:`$push`, see `push-modifiers`.
+Trying to use the :update:`$sort` modifier without the :update:`$each`
+modifier results in an error. The :update:`$sort` no longer requires
+the :update:`$slice` modifier. For a list of modifiers available for
+:update:`$push`, see :ref:`push-modifiers`.
 
 ## Examples
 
+.. _example-sort-by-field-in-documents:
+
 ### Sort Array of Documents by a Field in the Documents
 
-Create the `students` collection:
+Create the ``students`` collection:
 
-```javascript
-db.students.insertOne(
+.. code-block:: javascript
+
+   db.students.insertOne(
+      {
+        "_id": 1,
+        "quizzes": [
+          { "id" : 1, "score" : 6 },
+          { "id" : 2, "score" : 9 }
+        ]
+      }
+   )
+
+The following update appends additional documents to the ``quizzes``
+array and then sorts all the elements of the array by the ascending
+``score`` field:
+
+.. code-block:: javascript
+
+   db.students.updateOne(
+      { _id: 1 },
+      {
+        $push: {
+          quizzes: {
+            $each: [ { id: 3, score: 8 }, { id: 4, score: 7 }, { id: 5, score: 6 } ],
+            $sort: { score: 1 }
+          }
+        }
+      }
+   )
+
+**important:** The sort document refers directly to the field in the
+   documents and does not reference the containing array field
+   ``quizzes``; i.e. ``{ score: 1 }`` and **not** ``{ "quizzes.score": 1}``
+
+After the update, the array elements are in order of ascending
+``score`` field:
+
+.. code-block:: javascript
+
    {
-     "_id": 1,
-     "quizzes": [
-       { "id" : 1, "score" : 6 },
-       { "id" : 2, "score" : 9 }
+     "_id" : 1,
+     "quizzes" : [
+        { "id" : 1, "score" : 6 },
+        { "id" : 5, "score" : 6 },
+        { "id" : 4, "score" : 7 },
+        { "id" : 3, "score" : 8 },
+        { "id" : 2, "score" : 9 }
      ]
    }
-)
-```
-
-The following update appends additional documents to the `quizzes` array and then sorts all the elements of the array by the ascending `score` field:
-
-```javascript
-db.students.updateOne(
-   { _id: 1 },
-   {
-     $push: {
-       quizzes: {
-         $each: [ { id: 3, score: 8 }, { id: 4, score: 7 }, { id: 5, score: 6 } ],
-         $sort: { score: 1 }
-       }
-     }
-   }
-)
-```
-
-> **Important:** documents and does not reference the containing array field
-`quizzes`; i.e. `{ score: 1 }` and **not** `{ "quizzes.score": 1}`
-
-After the update, the array elements are in order of ascending `score` field:
-
-```javascript
-{
-  "_id" : 1,
-  "quizzes" : [
-     { "id" : 1, "score" : 6 },
-     { "id" : 5, "score" : 6 },
-     { "id" : 4, "score" : 7 },
-     { "id" : 3, "score" : 8 },
-     { "id" : 2, "score" : 9 }
-  ]
-}
-```
 
 ### Sort Array Elements That Are Not Documents
 
-Add the following document to the `students` collection:
+Add the following document to the ``students`` collection:
 
-```javascript
-db.students.insertOne( { "_id" : 2, "tests" : [  89,  70,  89,  50 ] } )
-```
+.. code-block:: javascript
 
-The following operation adds two more elements to the `tests` array and sorts the elements:
+   db.students.insertOne( { "_id" : 2, "tests" : [  89,  70,  89,  50 ] } )
 
-```javascript
-db.students.updateOne(
-   { _id: 2 },
-   { $push: { tests: { $each: [ 40, 60 ], $sort: 1 } } }
-)
-```
+The following operation adds two more elements to the ``tests`` array
+and sorts the elements:
 
-The updated document has the elements of the `tests` array in ascending order:
+.. code-block:: javascript
 
-```javascript
-{ "_id" : 2, "tests" : [  40,  50,  60,  70,  89,  89 ] }
-```
+   db.students.updateOne(
+      { _id: 2 },
+      { $push: { tests: { $each: [ 40, 60 ], $sort: 1 } } }
+   )
+
+The updated document has the elements of the ``tests`` array in
+ascending order:
+
+.. code-block:: javascript
+
+   { "_id" : 2, "tests" : [  40,  50,  60,  70,  89,  89 ] }
 
 ### Update Array Using Sort Only
 
-Add the following document to the `students` collection:
+Add the following document to the ``students`` collection:
 
-```javascript
-db.students.insertOne( { "_id" : 3, "tests" : [  89,  70,  100,  20 ] } )
-```
+.. code-block:: javascript
 
-To update the `tests` field to sort its elements in descending order, specify the `{ $sort: -1 }` and specify an empty array `[]` for the :update:`$each` modifier. For example:
+   db.students.insertOne( { "_id" : 3, "tests" : [  89,  70,  100,  20 ] } )
 
-```javascript
-db.students.updateOne(
-   { _id: 3 },
-   { $push: { tests: { $each: [ ], $sort: -1 } } }
-)
-```
+To update the ``tests`` field to sort its elements in descending
+order, specify the ``{ $sort: -1 }`` and specify an empty array ``[]``
+for the :update:`$each` modifier. For example:
 
-The example sorts the `tests` field values in descending order:
+.. code-block:: javascript
 
-```javascript
-{ "_id" : 3, "tests" : [ 100,  89,  70,  20 ] }
-```
+   db.students.updateOne(
+      { _id: 3 },
+      { $push: { tests: { $each: [ ], $sort: -1 } } }
+   )
 
-### Use `$sort` with Other `$push` Modifiers
+The example sorts the ``tests`` field values in descending order:
 
-.. include:: /includes/example-push-with-multiple-modifiers.rst
+.. code-block:: javascript
 
-The order of the modifiers in the query does not change the order that the modifiers are applied. For details, see `push-modifiers`.
+   { "_id" : 3, "tests" : [ 100,  89,  70,  20 ] }
+
+### Use ``$sort`` with Other ``$push`` Modifiers
+
+**include:** /includes/example-push-with-multiple-modifiers.rst
+
+The order of the modifiers in the query does not change the order that
+the modifiers are applied. For details, see :ref:`push-modifiers`.

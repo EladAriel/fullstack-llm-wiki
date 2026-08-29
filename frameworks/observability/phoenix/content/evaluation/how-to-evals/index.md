@@ -1,7 +1,7 @@
 ---
 type: "Framework Learn Directory Index"
 framework: "Arize Phoenix"
-generated_at: "2026-07-25T19:08:24.991634Z"
+generated_at: "2026-08-29T09:39:58.968047Z"
 ---
 # How-To-Evals
 
@@ -24,3 +24,7 @@ This directory contains Arize Phoenix learning pages related to how-to-evals.
 - [Custom Llm Evaluators](custom-llm-evaluators.md)
 - [Prompt Formats](prompt-formats.md)
 - [Using Evals With Phoenix](using-evals-with-phoenix.md)
+
+## Subdirectories
+
+- [Configuring The Llm](configuring-the-llm/index.md)

@@ -1,14 +1,15 @@
 ---
 type: "Framework Learn Page"
-framework: "redis"
+framework: "Redis"
 source_repo: "https://github.com/redis/docs.git"
 source_branch: "main"
 source_path: "content/develop/get-started/_index.md"
-source_commit: "9d30f68c3dad1a6b3b7d30fe604b911348ce8152"
-source_commit_short: "9d30f68c"
-source_commit_date: "2026-07-24T10:52:10-07:00"
-generated_at: "2026-07-25T11:51:22Z"
+source_commit: "f8693349287b0efbef3c865b6f6a2aceca88594d"
+source_commit_short: "f869334"
+source_commit_date: "2026-08-28T10:01:19-05:00"
+generated_at: "2026-08-29T09:38:55.797455Z"
 ---
+# _Index
 
 ---
 aliases:
@@ -32,12 +33,9 @@ title: Quick starts
 weight: 20
 ---
 
-Redis can be used as a database, cache, streaming engine, message broker, and more. The following quick start guides will show you how to use Redis for the following specific purposes:
+Redis can be used as a database, cache, streaming engine, message broker, and more. To get started, follow one of these guides:
 
-1. [Data structure store]({{< relref "/develop/get-started/data-store" >}})
-2. [Document database]({{< relref "/develop/get-started/document-database" >}})
-3. [Vector database]({{< relref "/develop/get-started/vector-database" >}})
-
-Please select the guide that aligns best with your specific usage scenario.
+1. [Data structure store]({{< relref "/develop/get-started/data-store" >}}) &mdash; get to know the core Redis data types as an in-memory data structure store.
+2. [Redis Search tutorial]({{< relref "/develop/get-started/search-tutorial" >}}) &mdash; a guided, end-to-end walkthrough of search and query for developers new to Redis: data modeling (hashes versus JSON), indexing, searching and filtering with `FT.SEARCH`, aggregation with `FT.AGGREGATE`, and vector and hybrid search.
 
 You can find answers to frequently asked questions in the [FAQ]({{< relref "/develop/get-started/faq" >}}).

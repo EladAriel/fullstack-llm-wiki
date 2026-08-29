@@ -1,198 +1,249 @@
 ---
 type: "Framework Learn Page"
-framework: "mongodb"
+framework: "MongoDB"
 source_repo: "https://github.com/mongodb/docs.git"
 source_branch: "main"
 source_path: "content/manual/manual/source/tutorial/configure-audit-filters.txt"
-source_commit: "ab9db26ed3d11618cdb61516d8180337d8e3f679"
-source_commit_short: "ab9db26e"
-source_commit_date: "2026-07-24T16:22:46-06:00"
-generated_at: "2026-07-25T11:51:15Z"
+source_commit: "b9f2bc487a2878b65e3c1f80024bebab76954f27"
+source_commit_short: "b9f2bc48"
+source_commit_date: "2026-08-28T17:09:45-05:00"
+generated_at: "2026-08-29T09:39:19.601971Z"
 ---
-
-=======================
+.. _audit-filter:
 
 # Configure Audit Filters
 
-> **Note:** MongoDB Atlas supports auditing for all `M10` and larger
-clusters. Atlas supports specifying a JSON-formatted audit
-filter as documented below and using the Atlas audit filter
-builder for simplified auditing configuration. To learn more, see
-the Atlas documentation for
-:atlas:`Set Up Database Auditing </database-auditing>`
-and `Configure a Custom Auditing Filter <auditing-custom-filter>`.
+.. default-domain:: mongodb
 
-:products:`MongoDB Enterprise </mongodb-enterprise-advanced>` supports `auditing <auditing>` of various operations. When `enabled <configure-auditing>`, the audit facility, by default, records all auditable operations as detailed in `audit-action-details-results`. You can specify event filters to limit which events are recorded.
+**meta:** :keywords: on-prem
+   :description: Configure audit filters for MongoDB Enterprise to record specific operations, with options for runtime or startup configuration.
+                    
+**contents:** On this page
+   :local:
+   :backlinks: none
+   :depth: 1
+   :class: singlecol
 
-You can configure audit filters at `startup <configure-audit-filters-at-startup>` or you can configure MongoDB to allow filter configuration at `runtime <configure-audit-filters-at-runtime>`.
+**note:** Auditing in MongoDB Atlas
+
+
+   MongoDB Atlas supports auditing for all ``M10`` and larger
+   clusters. Atlas supports specifying a JSON-formatted audit
+   filter as documented below and using the Atlas audit filter
+   builder for simplified auditing configuration. To learn more, see
+   the Atlas documentation for
+   :atlas:`Set Up Database Auditing </database-auditing>`
+   and :ref:`Configure a Custom Auditing Filter <auditing-custom-filter>`.
+
+:products:`MongoDB Enterprise </mongodb-enterprise-advanced>`
+supports :ref:`auditing <auditing>` of various operations. When
+:ref:`enabled <configure-auditing>`, the audit facility, by
+default, records all auditable operations as detailed in
+:ref:`audit-action-details-results`. You can specify event filters to
+limit which events are recorded.
+
+You can configure audit filters at :ref:`startup
+<configure-audit-filters-at-startup>` or you can configure MongoDB to
+allow filter configuration at :ref:`runtime
+<configure-audit-filters-at-runtime>`.
 
 ## Audit Filter Syntax
 
-Audit filters have the same form as query predicate documents specified to :dbcommand:`find` commands. To see example audit filters, see `audit-filter-examples`.
+Audit filters have the same form as query predicate documents specified
+to :dbcommand:`find` commands. To see example audit filters, see
+:ref:`audit-filter-examples`.
+
+.. _configure-audit-filters-at-runtime:
 
 ## Filter Configuration at Runtime
 
-.. include:: /includes/fact-enable-runtime-audit-configuration.rst
+**include:** /includes/fact-enable-runtime-audit-configuration.rst
+
+.. _configure-audit-filters-at-startup:
 
 ## Filter Configuration at System Startup
 
-Audit filters can be specified on the command line or else in the `configuration file <configuration-options>` used to start the `mongod` or `mongos` instance.
+Audit filters can be specified on the command line or else in the
+:ref:`configuration file <configuration-options>` used to start the
+``mongod`` or ``mongos`` instance.
 
 ### Configuration File Usage
 
-Filters can be specified in YAML under the `auditLog` session of the `configuration file <configuration-options>`. See the examples below for sample configurations.
+Filters can be specified in YAML under the ``auditLog`` session of the
+:ref:`configuration file <configuration-options>`. See the examples
+below for sample configurations.
 
-> **Note:** If `runtimeConfiguration` is enabled, then the
-`configuration file <configuration-options>` cannot be used to
-specify audit filters.
+**note:** If ``runtimeConfiguration`` is enabled, then the
+   :ref:`configuration file <configuration-options>` cannot be used to
+   specify audit filters.
+
+.. _audit-filter-examples:
 
 ## Examples
 
 ### Record All Auditable Events
 
-To record all auditable events, do not specify an audit filter. By default, the audit facility records all auditable operations.
+To record all auditable events, do not specify an audit filter. By
+default, the audit facility records all auditable operations.
 
 ### Filter for Multiple Operation Types
 
-The following example audits only the :authaction:`createCollection` and :authaction:`dropCollection` actions by using the filter:
+The following example audits only the :authaction:`createCollection`
+and :authaction:`dropCollection` actions by using the filter:
 
-```bash
-{ atype: { $in: [ "createCollection", "dropCollection" ] } }
-```
+.. code-block:: bash
 
-.. include:: /includes/fact-audit-filter-single-quotes.rst
+   { atype: { $in: [ "createCollection", "dropCollection" ] } }
 
-```javascript
-mongod --dbpath data/db --auditDestination file --auditFilter '{ atype: { $in: [ "createCollection", "dropCollection" ] } }' --auditFormat BSON --auditPath data/db/auditLog.bson
-```
+**include:** /includes/fact-audit-filter-single-quotes.rst
 
-.. include:: /includes/extracts/default-bind-ip-security-additional-command-line.rst
+.. code-block:: javascript
 
-.. include:: /includes/fact-audit-filter-yaml-configuration.rst
+   mongod --dbpath data/db --auditDestination file --auditFilter '{ atype: { $in: [ "createCollection", "dropCollection" ] } }' --auditFormat BSON --auditPath data/db/auditLog.bson
 
-```yaml
-storage:
-   dbPath: data/db
-auditLog:
-   destination: file
-   format: BSON
-   path: data/db/auditLog.bson
-   filter: '{ atype: { $in: [ "createCollection", "dropCollection" ] } }'
-```
+**include:** /includes/extracts/default-bind-ip-security-additional-command-line.rst
+
+**include:** /includes/fact-audit-filter-yaml-configuration.rst
+
+.. code-block:: yaml
+
+   storage:
+      dbPath: data/db
+   auditLog:
+      destination: file
+      format: BSON
+      path: data/db/auditLog.bson
+      filter: '{ atype: { $in: [ "createCollection", "dropCollection" ] } }'
 
 ### Filter on Authentication Operations on a Single Database
 
-The `<field>` can include `any field in the audit message </reference/audit-message>`. For authentication operations (i.e. `atype: "authenticate"`), the audit messages include a `db` field in the `param` document.
+The ``<field>`` can include :doc:`any field in the audit message
+</reference/audit-message>`. For authentication operations (i.e.
+``atype: "authenticate"``), the audit messages include a ``db`` field
+in the ``param`` document.
 
-The following example audits only the `authenticate` operations that occur against the `test` database by using the filter:
+The following example audits only the ``authenticate`` operations
+that occur against the ``test`` database by using the filter:
 
-```bash
-{ atype: "authenticate", "param.db": "test" }
-```
+.. code-block:: bash
 
-.. include:: /includes/fact-audit-filter-single-quotes.rst
+   { atype: "authenticate", "param.db": "test" }
 
-```javascript
-mongod --dbpath data/db --auth --auditDestination file --auditFilter '{ atype: "authenticate", "param.db": "test" }' --auditFormat BSON --auditPath data/db/auditLog.bson
-```
+**include:** /includes/fact-audit-filter-single-quotes.rst
 
-.. include:: /includes/extracts/default-bind-ip-security-additional-command-line.rst
+.. code-block:: javascript
 
-.. include:: /includes/fact-audit-filter-yaml-configuration.rst
+   mongod --dbpath data/db --auth --auditDestination file --auditFilter '{ atype: "authenticate", "param.db": "test" }' --auditFormat BSON --auditPath data/db/auditLog.bson
 
-```yaml
-storage:
-   dbPath: data/db
-security:
-   authorization: enabled
-auditLog:
-   destination: file
-   format: BSON
-   path: data/db/auditLog.bson
-   filter: '{ atype: "authenticate", "param.db": "test" }'
-```
+**include:** /includes/extracts/default-bind-ip-security-additional-command-line.rst
 
-To filter on all `authenticate` operations across databases, omit `"param.db": "test"` and use the filter `{ atype: "authenticate" }`.
+**include:** /includes/fact-audit-filter-yaml-configuration.rst
+
+.. code-block:: yaml
+
+   storage:
+      dbPath: data/db
+   security:
+      authorization: enabled
+   auditLog:
+      destination: file
+      format: BSON
+      path: data/db/auditLog.bson
+      filter: '{ atype: "authenticate", "param.db": "test" }'
+
+To filter on all ``authenticate`` operations across databases, omit
+``"param.db": "test"`` and use the filter ``{ atype: "authenticate" }``.
 
 ### Filter on Collection Creation and Drop Operations for a Single Database
 
-The `<field>` can include `any field in the audit message </reference/audit-message>`. For collection creation and drop operations (i.e. `atype: "createCollection"` and `atype: "dropCollection"`), the audit messages include a namespace `ns` field in the `param` document.
+The ``<field>`` can include :doc:`any field in the audit message
+</reference/audit-message>`. For collection creation and drop
+operations (i.e. ``atype: "createCollection"`` and ``atype:
+"dropCollection"``), the audit messages include a namespace ``ns``
+field in the ``param`` document.
 
-The following example audits only the `createCollection` and `dropCollection` operations that occur against the `test` database by using the filter:
+The following example audits only the ``createCollection`` and
+``dropCollection`` operations that occur against the ``test`` database
+by using the filter:
 
-> **Note:** The regular expression requires two backslashes (`\\`) to escape
-the dot (`.`).
+**note:** The regular expression requires two backslashes (``\\``) to escape
+   the dot (``.``).
 
-```bash
-{ atype: { $in: [ "createCollection", "dropCollection" ] }, "param.ns": /^test\\./ }
-```
+.. code-block:: bash
 
-.. include:: /includes/fact-audit-filter-single-quotes.rst
+   { atype: { $in: [ "createCollection", "dropCollection" ] }, "param.ns": /^test\\./ }
 
-```javascript
-mongod --dbpath data/db --auth --auditDestination file --auditFilter '{ atype: { $in: [ "createCollection", "dropCollection" ] }, "param.ns": /^test\\./ }' --auditFormat BSON --auditPath data/db/auditLog.bson
-```
+**include:** /includes/fact-audit-filter-single-quotes.rst
 
-.. include:: /includes/extracts/default-bind-ip-security-additional-command-line.rst
+.. code-block:: javascript
 
-.. include:: /includes/fact-audit-filter-yaml-configuration.rst
+   mongod --dbpath data/db --auth --auditDestination file --auditFilter '{ atype: { $in: [ "createCollection", "dropCollection" ] }, "param.ns": /^test\\./ }' --auditFormat BSON --auditPath data/db/auditLog.bson
 
-```yaml
-storage:
-   dbPath: data/db
-security:
-   authorization: enabled
-auditLog:
-   destination: file
-   format: BSON
-   path: data/db/auditLog.bson
-   filter: '{ atype: { $in: [ "createCollection", "dropCollection" ] }, "param.ns": /^test\\./ }'
-```
+**include:** /includes/extracts/default-bind-ip-security-additional-command-line.rst
+
+**include:** /includes/fact-audit-filter-yaml-configuration.rst
+
+.. code-block:: yaml
+
+   storage:
+      dbPath: data/db
+   security:
+      authorization: enabled
+   auditLog:
+      destination: file
+      format: BSON
+      path: data/db/auditLog.bson
+      filter: '{ atype: { $in: [ "createCollection", "dropCollection" ] }, "param.ns": /^test\\./ }'
 
 ### Filter by Authorization Role
 
-The following example audits operations by users with :authrole:`readWrite` role on the `test` database, including users with roles that inherit from :authrole:`readWrite`, by using the filter:
+The following example audits operations by users with
+:authrole:`readWrite` role on the ``test`` database, including users
+with roles that inherit from :authrole:`readWrite`, by using the filter:
 
-```bash
-{ roles: { role: "readWrite", db: "test" } }
-```
+.. code-block:: bash
 
-.. include:: /includes/fact-audit-filter-single-quotes.rst
+   { roles: { role: "readWrite", db: "test" } }
 
-```javascript
-mongod --dbpath data/db --auth --auditDestination file --auditFilter '{ roles: { role: "readWrite", db: "test" } }' --auditFormat BSON --auditPath data/db/auditLog.bson
-```
+**include:** /includes/fact-audit-filter-single-quotes.rst
 
-.. include:: /includes/extracts/default-bind-ip-security-additional-command-line.rst
+.. code-block:: javascript
 
-.. include:: /includes/fact-audit-filter-yaml-configuration.rst
+   mongod --dbpath data/db --auth --auditDestination file --auditFilter '{ roles: { role: "readWrite", db: "test" } }' --auditFormat BSON --auditPath data/db/auditLog.bson
 
-```yaml
-storage:
-   dbPath: data/db
-security:
-   authorization: enabled
-auditLog:
-   destination: file
-   format: BSON
-   path: data/db/auditLog.bson
-   filter: '{ roles: { role: "readWrite", db: "test" } }'
-```
+**include:** /includes/extracts/default-bind-ip-security-additional-command-line.rst
+
+**include:** /includes/fact-audit-filter-yaml-configuration.rst
+
+.. code-block:: yaml
+
+   storage:
+      dbPath: data/db
+   security:
+      authorization: enabled
+   auditLog:
+      destination: file
+      format: BSON
+      path: data/db/auditLog.bson
+      filter: '{ roles: { role: "readWrite", db: "test" } }'
 
 ### Filter on Read and Write Operations
 
-To capture read and write operations in the audit, you must also enable the audit system to log authorization successes using the :parameter:`auditAuthorizationSuccess` parameter. [#authorization-agnostic]_
+To capture read and write operations in the audit, you must also
+enable the audit system to log authorization successes using the
+:parameter:`auditAuthorizationSuccess` parameter.
+[#authorization-agnostic]_
 
-> **Note:** .. include:: /includes/fact-auditAuthorizationSuccess-performance-impact.rst
+**note:** .. include:: /includes/fact-auditAuthorizationSuccess-performance-impact.rst
 
 This filter audits multiple read and write operations:
 
-```bash
-{
-   atype: "authCheck",
-   "param.command": { $in: [ "find", "insert", "delete", "update", "findAndModify" ] }
-}
-```
+.. code-block:: bash
+
+   {
+      atype: "authCheck",
+      "param.command": { $in: [ "find", "insert", "delete", "update", "findAndModify" ] }
+   }
 
 The audited operations include:
 
@@ -203,46 +254,52 @@ The audited operations include:
 - :method:`~db.collection.updateOne()`
 - :method:`~db.collection.updateMany()`
 - :method:`~db.collection.findAndModify()`
-.. include:: /includes/fact-audit-filter-single-quotes.rst
 
-```javascript
-mongod --dbpath data/db --auth --setParameter auditAuthorizationSuccess=true --auditDestination file --auditFilter '{ atype: "authCheck", "param.command": { $in: [ "find", "insert", "delete", "update", "findAndModify" ] } }' --auditFormat BSON --auditPath data/db/auditLog.bson
-```
+**include:** /includes/fact-audit-filter-single-quotes.rst
 
-.. include:: /includes/extracts/default-bind-ip-security-additional-command-line.rst
+.. code-block:: javascript
 
-.. include:: /includes/fact-audit-filter-yaml-configuration.rst
+   mongod --dbpath data/db --auth --setParameter auditAuthorizationSuccess=true --auditDestination file --auditFilter '{ atype: "authCheck", "param.command": { $in: [ "find", "insert", "delete", "update", "findAndModify" ] } }' --auditFormat BSON --auditPath data/db/auditLog.bson
 
-```yaml
-storage:
-   dbPath: data/db
-security:
-   authorization: enabled
-auditLog:
-   destination: file
-   format: BSON
-   path: data/db/auditLog.bson
-   filter: '{ atype: "authCheck", "param.command": { $in: [ "find", "insert", "delete", "update", "findAndModify" ] } }'
-setParameter: { auditAuthorizationSuccess: true }
-```
+**include:** /includes/extracts/default-bind-ip-security-additional-command-line.rst
+
+**include:** /includes/fact-audit-filter-yaml-configuration.rst
+
+.. code-block:: yaml
+
+   storage:
+      dbPath: data/db
+   security:
+      authorization: enabled
+   auditLog:
+      destination: file
+      format: BSON
+      path: data/db/auditLog.bson
+      filter: '{ atype: "authCheck", "param.command": { $in: [ "find", "insert", "delete", "update", "findAndModify" ] } }'
+   setParameter: { auditAuthorizationSuccess: true }
+
 
 ### Filter on Read and Write Operations for a Collection
 
-To capture read and write operations in the audit, you must also enable the audit system to log authorization successes using the :parameter:`auditAuthorizationSuccess` parameter. [#authorization-agnostic]_
+To capture read and write operations in the audit, you must also
+enable the audit system to log authorization successes using the
+:parameter:`auditAuthorizationSuccess` parameter.
+[#authorization-agnostic]_
 
-> **Note:** .. include:: /includes/fact-auditAuthorizationSuccess-performance-impact.rst
+**note:** .. include:: /includes/fact-auditAuthorizationSuccess-performance-impact.rst
 
-This filter audits multiple read and write operations on the `orders` collection in the `test` database:
+This filter audits multiple read and write operations on the ``orders``
+collection in the ``test`` database:
 
-```bash
-{
-    atype: "authCheck",
-    "param.ns": "test.orders",
-    "param.command": { $in: [ "find", "insert", "delete", "update", "findAndModify" ] }
-}
-```
+.. code-block:: bash
 
-The audited operations include:
+   {
+       atype: "authCheck",
+       "param.ns": "test.orders",
+       "param.command": { $in: [ "find", "insert", "delete", "update", "findAndModify" ] }
+   }
+
+The audited operations include: 
 
 - :method:`~db.collection.find()`
 - :method:`~db.collection.insertOne()`
@@ -251,102 +308,114 @@ The audited operations include:
 - :method:`~db.collection.updateOne()`
 - :method:`~db.collection.updateMany()`
 - :method:`~db.collection.findAndModify()`
-.. include:: /includes/fact-audit-filter-single-quotes.rst
 
-```javascript
-mongod --dbpath data/db --auth --setParameter auditAuthorizationSuccess=true --auditDestination file --auditFilter '{ atype: "authCheck", "param.ns": "test.orders", "param.command": { $in: [ "find", "insert", "delete", "update", "findAndModify" ] } }' --auditFormat BSON --auditPath data/db/auditLog.bson
-```
 
-.. include:: /includes/extracts/default-bind-ip-security-additional-command-line.rst
+**include:** /includes/fact-audit-filter-single-quotes.rst
 
-.. include:: /includes/fact-audit-filter-yaml-configuration.rst
+.. code-block:: javascript
 
-```yaml
-storage:
-   dbPath: data/db
-security:
-   authorization: enabled
-auditLog:
-   destination: file
-   format: BSON
-   path: data/db/auditLog.bson
-   filter: '{ atype: "authCheck", "param.ns": "test.orders", "param.command": { $in: [ "find", "insert", "delete", "update", "findAndModify" ] } }'
-setParameter: { auditAuthorizationSuccess: true }
-```
+   mongod --dbpath data/db --auth --setParameter auditAuthorizationSuccess=true --auditDestination file --auditFilter '{ atype: "authCheck", "param.ns": "test.orders", "param.command": { $in: [ "find", "insert", "delete", "update", "findAndModify" ] } }' --auditFormat BSON --auditPath data/db/auditLog.bson
+
+**include:** /includes/extracts/default-bind-ip-security-additional-command-line.rst
+
+**include:** /includes/fact-audit-filter-yaml-configuration.rst
+
+.. code-block:: yaml
+
+   storage:
+      dbPath: data/db
+   security:
+      authorization: enabled
+   auditLog:
+      destination: file
+      format: BSON
+      path: data/db/auditLog.bson
+      filter: '{ atype: "authCheck", "param.ns": "test.orders", "param.command": { $in: [ "find", "insert", "delete", "update", "findAndModify" ] } }'
+   setParameter: { auditAuthorizationSuccess: true }
 
 ### Filter OCSF Schema Log Messages
 
-Starting in MongoDB 8.0, MongoDB can write log messages in {+ocsf+} format. The OCSF schema contains different fields than the default `mongo` schema.
+Starting in MongoDB 8.0, MongoDB can write log messages in {+ocsf+}
+format. The OCSF schema contains different fields than the default
+``mongo`` schema.
 
-The following audit filter captures Network Activity actions that are recorded in the OCSF schema:
+The following audit filter captures Network Activity actions that are
+recorded in the OCSF schema:
 
-```bash
-{ category_uid: 4 }
-```
+.. code-block:: bash
 
-.. include:: /includes/fact-audit-filter-single-quotes.rst
+   { category_uid: 4 }
 
-```javascript
-mongod --dbpath data/db --auth --setParameter auditAuthorizationSuccess=true --auditDestination file --auditFilter '{ category_uid: 4 }' --auditFormat JSON --auditSchema OCSF --auditPath data/db/auditLog.json
-```
+**include:** /includes/fact-audit-filter-single-quotes.rst
 
-.. include:: /includes/fact-audit-filter-yaml-configuration.rst
+.. code-block:: javascript
 
-```yaml
-storage:
-   dbPath: data/db
-security:
-   authorization: enabled
-auditLog:
-   destination: file
-   format: JSON
-   path: data/db/auditLog.json
-   filter: '{ category_uid: 4 }'
-   schema: OCSF
-setParameter: { auditAuthorizationSuccess: true }
-```
+   mongod --dbpath data/db --auth --setParameter auditAuthorizationSuccess=true --auditDestination file --auditFilter '{ category_uid: 4 }' --auditFormat JSON --auditSchema OCSF --auditPath data/db/auditLog.json
+   
+**include:** /includes/fact-audit-filter-yaml-configuration.rst
 
-For more information on OCSF log messages, see `event-audit-messages-ocsf`.
+.. code-block:: yaml
+
+   storage:
+      dbPath: data/db
+   security:
+      authorization: enabled
+   auditLog:
+      destination: file
+      format: JSON
+      path: data/db/auditLog.json
+      filter: '{ category_uid: 4 }'
+      schema: OCSF
+   setParameter: { auditAuthorizationSuccess: true }
+
+For more information on OCSF log messages, see
+:ref:`event-audit-messages-ocsf`.
 
 ### Specify Top-Level Query Operators ($or)
 
-To filter on multiple audit message fields, you can specify a top-level query operator like :query:`$or`. For example, the following filter captures operations where either `atype` is `authenticate` or the operation was performed by a user with the `readWrite` role:
+To filter on multiple audit message fields, you can specify a top-level
+query operator like :query:`$or`. For example, the following filter
+captures operations where either ``atype`` is ``authenticate`` or the
+operation was performed by a user with the ``readWrite`` role:
 
-```javascript
-{
-   $or: [
-      { atype: "authenticate" },
-      { "roles.role": "readWrite" }
-   ]
-}
-```
+.. code-block:: javascript
 
-.. include:: /includes/fact-audit-filter-single-quotes.rst
+   {
+      $or: [
+         { atype: "authenticate" },
+         { "roles.role": "readWrite" }
+      ]
+   }
 
-```javascript
-mongod --dbpath data/db --auth --setParameter auditAuthorizationSuccess=true --auditDestination file --auditFilter '{ $or: [ { atype: "authenticate" }, { "roles.role": "readWrite" } ] }' --auditFormat BSON --auditPath data/db/auditLog.bson
-```
+**include:** /includes/fact-audit-filter-single-quotes.rst
 
-.. include:: /includes/extracts/default-bind-ip-security-additional-command-line.rst
+.. code-block:: javascript
 
-.. include:: /includes/fact-audit-filter-yaml-configuration.rst
+   mongod --dbpath data/db --auth --setParameter auditAuthorizationSuccess=true --auditDestination file --auditFilter '{ $or: [ { atype: "authenticate" }, { "roles.role": "readWrite" } ] }' --auditFormat BSON --auditPath data/db/auditLog.bson
 
-```yaml
-storage:
-   dbPath: data/db
-security:
-   authorization: enabled
-auditLog:
-   destination: file
-   format: BSON
-   path: data/db/auditLog.bson
-   filter: '{ $or: [ { atype: "authenticate" }, { "roles.role": "readWrite" } ] }'
-```
+**include:** /includes/extracts/default-bind-ip-security-additional-command-line.rst
+
+**include:** /includes/fact-audit-filter-yaml-configuration.rst
+
+.. code-block:: yaml
+
+   storage:
+      dbPath: data/db
+   security:
+      authorization: enabled
+   auditLog:
+      destination: file
+      format: BSON
+      path: data/db/auditLog.bson
+      filter: '{ $or: [ { atype: "authenticate" }, { "roles.role": "readWrite" } ] }'
 
 ## Learn More
 
-- `configure-auditing`
-- `auditing`
-- `audit-message`
-- `auditConfig`
-parameter without enabling `--auth`; however, all operations will return success for authorization checks.
+- :ref:`configure-auditing`
+- :ref:`auditing`
+- :ref:`audit-message`
+- :ref:`auditConfig`
+
+.. [#authorization-agnostic] You can enable :parameter:`auditAuthorizationSuccess`
+   parameter without enabling ``--auth``; however, all operations will
+   return success for authorization checks.

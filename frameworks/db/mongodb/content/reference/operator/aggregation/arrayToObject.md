@@ -1,77 +1,186 @@
 ---
 type: "Framework Learn Page"
-framework: "mongodb"
+framework: "MongoDB"
 source_repo: "https://github.com/mongodb/docs.git"
 source_branch: "main"
 source_path: "content/manual/manual/source/reference/operator/aggregation/arrayToObject.txt"
-source_commit: "ab9db26ed3d11618cdb61516d8180337d8e3f679"
-source_commit_short: "ab9db26e"
-source_commit_date: "2026-07-24T16:22:46-06:00"
-generated_at: "2026-07-25T11:51:15Z"
+source_commit: "b9f2bc487a2878b65e3c1f80024bebab76954f27"
+source_commit_short: "b9f2bc48"
+source_commit_date: "2026-08-28T17:09:45-05:00"
+generated_at: "2026-08-29T09:39:20.226486Z"
 ---
-
-====================================
-
 # $arrayToObject (expression operator)
+
+**meta:** :description: Convert an array into a document using `$arrayToObject` in MongoDB, handling repeated field names by using the last value.
+
+.. default-domain:: mongodb
+
+**contents:** On this page
+   :local:
+   :backlinks: none
+   :depth: 1
+   :class: singlecol
 
 ## Definition
 
+**expression:** $arrayToObject
+   
+   Converts an array into a single document. 
+
+   ``$arrayToObject`` has the following syntax:
+
+   .. code-block:: javascript
+
+      { $arrayToObject: <expression> }
+
+   The ``<expression>`` can be any valid :ref:`expression
+   <aggregation-expressions>` that resolves to:
+
+   - An array of two-element arrays where the first element is the
+     field name, and the second element is the field value:
+
+     .. code-block:: javascript
+
+        $arrayToObject: [ 
+            [ [ "item", "abc123" ], [ "qty", 25 ] ] 
+        ]
+
+   \- OR -
+
+   - An array of documents that contains two fields, ``k`` and ``v``
+     where:
+
+     - The ``k`` field contains the field name.
+
+     - The ``v`` field contains the value of the field.
+
+     .. code-block:: javascript
+
+        $arrayToObject: [ 
+           [ 
+              { "k": "item", "v": "abc123" }, 
+              { "k": "qty", "v": 25 } 
+           ] 
+        ]
+
 ## Behavior
 
-If you pass in an empty array to `$arrayToObject`, MongoDB creates an empty object.
+If you pass in an empty array to ``$arrayToObject``, MongoDB creates an
+empty object.
 
 If the name of a field repeats in the array,
 
 - Starting in 4.0.5, :expression:`$arrayToObject` uses the last value
-for that field. For 4.0.0-4.0.4, the value used depends on the driver.
+  for that field. For 4.0.0-4.0.4, the value used depends on the driver.
 
 - Starting in 3.6.10, :expression:`$arrayToObject` uses the last value
-for that field. For 3.6.0-3.6.9, the value used depends on the driver.
+  for that field. For 3.6.0-3.6.9, the value used depends on the driver.
 
 - Starting in 3.4.19, :expression:`$arrayToObject` uses the last value
-for that field. For 3.4.0-3.4.19, the value uses depends on the driver.
+  for that field. For 3.4.0-3.4.19, the value uses depends on the
+  driver.
+
+.. list-table::
+   :header-rows: 1
+   :widths: 60 40
+   :class: border-table
+
+   * - Example
+     - Results
+
+   * - .. code-block:: json
+          :copyable: false
+
+          { $arrayToObject: [
+             [ { "k": "item", "v": "abc123" },
+               { "k": "qty", "v": "$qty" } ]
+          ] }
+
+     - Given a document with the field ``qty`` and value ``25``,     
+       :expression:`$arrayToObject` returns:
+
+       .. code-block:: json
+          :copyable: false
+     
+          { "item" : "abc123", "qty" : 25 }
+
+   * - .. code-block:: json
+          :copyable: false
+
+          { $arrayToObject: { $literal:  [ 
+             [ "item", "abc123" ], [ "qty", 25 ] 
+          ] } }
+
+     - .. code-block:: json
+          :copyable: false
+
+          { "item" : "abc123", "qty" : 25 }
+
+   * - .. code-block:: json
+          :copyable: false
+
+          { $arrayToObject: { $literal: [ 
+             { "k": "item", "v": "123abc" }, 
+             { "k": "item", "v": "abc123" } 
+          ] } }
+
+     - .. code-block:: json
+          :copyable: false
+
+          { "item" : "abc123" }
+          
+       
+       Starting in versions 4.0.5+ (3.6.10+ and 3.4.19+), if the name
+       of a field repeats in the array, :expression:`$arrayToObject`
+       uses the last value for that field.
+
 
 ## Examples
 
-### `$arrayToObject`  Example
 
-Consider a `inventory` collection with the following documents:
+### ``$arrayToObject``  Example
 
-```javascript
-db.inventory.insertMany( [
-   { _id: 1, item: "ABC1",  dimensions: [ { "k": "l", "v": 25} , { "k": "w", "v": 10 }, { "k": "uom", "v": "cm" } ] },
-   { _id: 2, item: "ABC2",  dimensions: [ [ "l", 50 ], [ "w",  25 ], [ "uom", "cm" ] ] },
-   { _id: 3, item: "ABC3",  dimensions: [ [ "l", 25 ], [ "l",  "cm" ], [ "l", 50 ] ] }
-] )
-```
+Consider a ``inventory`` collection with the following documents:
 
-The following aggregation pipeline operation use the :expression:`$arrayToObject` to return the `dimensions` field as a document:
+.. code-block:: javascript
 
-```javascript
-db.inventory.aggregate(
-   [
-      {
-         $project: {
-            item: 1,
-            dimensions: { $arrayToObject: "$dimensions" }
+   db.inventory.insertMany( [
+      { _id: 1, item: "ABC1",  dimensions: [ { "k": "l", "v": 25} , { "k": "w", "v": 10 }, { "k": "uom", "v": "cm" } ] },
+      { _id: 2, item: "ABC2",  dimensions: [ [ "l", 50 ], [ "w",  25 ], [ "uom", "cm" ] ] },
+      { _id: 3, item: "ABC3",  dimensions: [ [ "l", 25 ], [ "l",  "cm" ], [ "l", 50 ] ] }
+   ] )
+
+The following aggregation pipeline operation use the
+:expression:`$arrayToObject` to return the ``dimensions`` field as a
+document:
+
+.. code-block:: javascript
+
+   db.inventory.aggregate(
+      [
+         {
+            $project: {
+               item: 1,
+               dimensions: { $arrayToObject: "$dimensions" }
+            }
          }
-      }
-   ]
-)
-```
+      ]
+   )
 
 The operation returns the following:
 
-```javascript
-{ _id: 1, item: "ABC1", dimensions: { "l" : 25, "w" : 10, "uom" : "cm" } }
-{ _id: 2, item: "ABC2", dimensions: { "l" : 50, "w" : 25, "uom" : "cm" } }
-{ _id: 3, item: "ABC3", dimensions: { "l" : 50 } }
-```
+.. code-block:: javascript
 
-Starting in versions 4.0.5+ (3.6.10+ and 3.4.19+), if the name of a field repeats in the array, :expression:`$arrayToObject` uses the last value for that field.
+   { _id: 1, item: "ABC1", dimensions: { "l" : 25, "w" : 10, "uom" : "cm" } }
+   { _id: 2, item: "ABC2", dimensions: { "l" : 50, "w" : 25, "uom" : "cm" } }
+   { _id: 3, item: "ABC3", dimensions: { "l" : 50 } }
 
-### `$objectToArray` + `$arrayToObject` Example
+Starting in versions 4.0.5+ (3.6.10+ and 3.4.19+), if the name of a
+field repeats in the array, :expression:`$arrayToObject` uses the last
+value for that field. 
 
-.. include:: /includes/example-objectToArray-arrayToObject.rst
+### ``$objectToArray`` + ``$arrayToObject`` Example
 
-> **Seealso:** :expression:`$objectToArray`
+**include:** /includes/example-objectToArray-arrayToObject.rst
+
+**seealso:** :expression:`$objectToArray`

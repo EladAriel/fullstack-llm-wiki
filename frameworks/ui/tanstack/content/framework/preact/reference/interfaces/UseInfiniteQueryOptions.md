@@ -1,23 +1,26 @@
 ---
 type: "Framework Learn Page"
-framework: "tanstack"
+framework: "TanStack"
 source_repo: "https://github.com/tanstack/query"
 source_branch: "main"
 source_path: "docs/framework/preact/reference/interfaces/UseInfiniteQueryOptions.md"
-source_commit: "fd50fa14d283c7d6664a796f758498d1ad5bfce7"
-source_commit_short: "fd50fa14"
-source_commit_date: "2026-07-24T22:22:47+10:00"
-generated_at: "2026-07-25T11:50:41Z"
+source_commit: "2969edf32f7e0c48e2a108d84712d6e01edfde21"
+source_commit_short: "2969edf"
+source_commit_date: "2026-08-28T01:03:02+09:00"
+generated_at: "2026-08-29T09:40:33.381776Z"
 ---
+# Useinfinitequeryoptions
 
 ---
 id: UseInfiniteQueryOptions
 title: UseInfiniteQueryOptions
 ---
 
-# Interface: UseInfiniteQueryOptions\<TQueryFnData, TError, TData, TQueryKey, TPageParam\>
+Defined in: [preact-query/src/types.ts:237](https://github.com/TanStack/query/blob/main/packages/preact-query/src/types.ts#L237)
 
-Defined in: [preact-query/src/types.ts:103](https://github.com/theVedanta/query/blob/main/packages/preact-query/src/types.ts#L103)
+The options accepted by `useInfiniteQuery`. Extends InfiniteQueryObserverOptions from
+`@tanstack/query-core` with the `preact-query`-specific `subscribed` option, minus `suspense` (which
+`preact-query` derives from which hook you call rather than exposing as an option).
 
 ## Extends
 
@@ -29,21 +32,32 @@ Defined in: [preact-query/src/types.ts:103](https://github.com/theVedanta/query/
 
 `TQueryFnData` = `unknown`
 
+The type of a single page, as your `queryFn` resolves it.
+
 ### TError
 
 `TError` = `DefaultError`
 
+The type of errors your `queryFn` may throw.
+
 ### TData
 
-`TData` = `TQueryFnData`
+`TData` = `InfiniteData`\<`TQueryFnData`\>
+
+The type `data` ends up as after `select` runs — defaults to `InfiniteData<TQueryFnData>`,
+the shape of all fetched pages plus their page params.
 
 ### TQueryKey
 
 `TQueryKey` *extends* `QueryKey` = `QueryKey`
 
+The type of your `queryKey`.
+
 ### TPageParam
 
 `TPageParam` = `unknown`
+
+The type of the parameter passed to `queryFn` to fetch a given page.
 
 ## Properties
 
@@ -53,7 +67,12 @@ Defined in: [preact-query/src/types.ts:103](https://github.com/theVedanta/query/
 optional subscribed: boolean;
 ```
 
-Defined in: [preact-query/src/types.ts:123](https://github.com/theVedanta/query/blob/main/packages/preact-query/src/types.ts#L123)
+Defined in: [preact-query/src/types.ts:258](https://github.com/TanStack/query/blob/main/packages/preact-query/src/types.ts#L258)
 
 Set this to `false` to unsubscribe this observer from updates to the query cache.
-Defaults to `true`.
+
+#### Default Value
+
+```ts
+true
+```

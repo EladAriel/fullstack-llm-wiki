@@ -1,306 +1,360 @@
 ---
 type: "Framework Learn Page"
-framework: "mongodb"
+framework: "MongoDB"
 source_repo: "https://github.com/mongodb/docs.git"
 source_branch: "main"
 source_path: "content/manual/manual/source/reference/operator/update/pull.txt"
-source_commit: "ab9db26ed3d11618cdb61516d8180337d8e3f679"
-source_commit_short: "ab9db26e"
-source_commit_date: "2026-07-24T16:22:46-06:00"
-generated_at: "2026-07-25T11:51:15Z"
+source_commit: "b9f2bc487a2878b65e3c1f80024bebab76954f27"
+source_commit_short: "b9f2bc48"
+source_commit_date: "2026-08-28T17:09:45-05:00"
+generated_at: "2026-08-29T09:39:20.106363Z"
 ---
-
-=======================
-
 # $pull (update operator)
+
+.. default-domain:: mongodb
+
+**facet:** :name: programming_language
+   :values: shell
+
+**meta:** :description: Use the $pull operator to remove all instances of a value or values from an array that match a specified condition.
+
+**contents:** On this page
+   :local:
+   :backlinks: none
+   :depth: 1
+   :class: singlecol
 
 ## Definition
 
+**update:** $pull
+
+   The :update:`$pull` operator removes from an existing array all
+   instances of a value or values that match a specified condition.
+
 ## Compatibility
 
-.. include:: /includes/fact-compatibility.rst
+.. |operator-method| replace:: ``$pull``
+
+**include:** /includes/fact-compatibility.rst
 
 ## Syntax
 
 The :update:`$pull` operator has the following form:
 
-```javascript
-{ $pull: { <field1>: <value|condition>, <field2>: <value|condition>, ... } }
-```
+.. code-block:: javascript
 
-.. include:: /includes/use-dot-notation.rst
+   { $pull: { <field1>: <value|condition>, <field2>: <value|condition>, ... } }
+
+**include:** /includes/use-dot-notation.rst
 
 ## Behavior
 
-.. include:: /includes/fact-update-operator-processing-order.rst
+**include:** /includes/fact-update-operator-processing-order.rst
 
-If you specify a `<condition>` and the array elements are embedded documents, :update:`$pull` operator applies the `<condition>` as if each array element were a document in a collection. See `pull-array-of-documents` for an example.
+If you specify a ``<condition>`` and the array elements are embedded
+documents, :update:`$pull` operator applies the ``<condition>`` as if each
+array element were a document in a collection. See
+:ref:`pull-array-of-documents` for an example.
 
-If the specified `<value>` to remove is an array, :update:`$pull` removes only the elements in the array that match the specified `<value>` exactly, including order.
+If the specified ``<value>`` to remove is an array, :update:`$pull`
+removes only the elements in the array that match the specified
+``<value>`` exactly, including order.
 
-If the specified `<value>` to remove is a document, :update:`$pull` removes only the elements in the array that have the exact same fields and values. The ordering of the fields can differ.
+If the specified ``<value>`` to remove is a document, :update:`$pull`
+removes only the elements in the array that have the exact same fields
+and values. The ordering of the fields can differ.
 
-.. include:: /includes/extracts/update-operation-empty-operand-expressions-pull.rst
+**include:** /includes/extracts/update-operation-empty-operand-expressions-pull.rst
 
 ## Examples
 
 ### Remove All Items That Equal a Specified Value
 
-Create the `stores` collection:
+Create the ``stores`` collection:
 
-```javascript
-db.stores.insertMany( [
-   {
-      _id: 1,
-      fruits: [ "apples", "pears", "oranges", "grapes", "bananas" ],
-      vegetables: [ "carrots", "celery", "squash", "carrots" ]
-   },
-   {
-      _id: 2,
-      fruits: [ "plums", "kiwis", "oranges", "bananas", "apples" ],
-      vegetables: [ "broccoli", "zucchini", "carrots", "onions" ]
-   }
-] )
-```
+.. code-block:: javascript
+
+   db.stores.insertMany( [
+      {
+         _id: 1,
+         fruits: [ "apples", "pears", "oranges", "grapes", "bananas" ],
+         vegetables: [ "carrots", "celery", "squash", "carrots" ]
+      },
+      {
+         _id: 2,
+         fruits: [ "plums", "kiwis", "oranges", "bananas", "apples" ],
+         vegetables: [ "broccoli", "zucchini", "carrots", "onions" ]
+      }
+   ] )
 
 The following operation removes
 
-- `"apples"` and `"oranges"` from the `fruits` array
-- `"carrots"` from the `vegetables` array
-```javascript
-db.stores.updateMany(
-    { },
-    { $pull: { fruits: { $in: [ "apples", "oranges" ] }, vegetables: "carrots" } }
-)
-```
+- ``"apples"`` and ``"oranges"`` from the ``fruits`` array
+- ``"carrots"`` from the ``vegetables`` array
+
+.. code-block:: javascript
+
+   db.stores.updateMany(
+       { },
+       { $pull: { fruits: { $in: [ "apples", "oranges" ] }, vegetables: "carrots" } }
+   )
 
 Confirm the result with :method:`db.collection.find()`:
 
-```javascript
-{
- _id: 1,
- fruits: [ 'pears', 'grapes', 'bananas' ],
- vegetables: [ 'celery', 'squash' ]
-},
-{
- _id: 2,
- fruits: [ 'plums', 'kiwis', 'bananas' ],
- vegetables: [ 'broccoli', 'zucchini', 'onions' ]
-}
-```
+.. code-block:: javascript
 
-### Remove All Items That Match a Specified `$pull` Condition
+  {
+    _id: 1,
+    fruits: [ 'pears', 'grapes', 'bananas' ],
+    vegetables: [ 'celery', 'squash' ]
+  },
+  {
+    _id: 2,
+    fruits: [ 'plums', 'kiwis', 'bananas' ],
+    vegetables: [ 'broccoli', 'zucchini', 'onions' ]
+  }
 
-Create the `profiles` collection:
 
-```javascript
-db.profiles.insertOne( { _id: 1, votes: [ 3, 5, 6, 7, 7, 8 ] } )
-```
+### Remove All Items That Match a Specified ``$pull`` Condition
 
-The following operation removes all items from the `votes` array that are greater than or equal to ( :query:`$gte` ) `6`:
+Create the ``profiles`` collection:
 
-```javascript
-db.profiles.updateOne( { _id: 1 }, { $pull: { votes: { $gte: 6 } } } )
-```
+.. code-block:: javascript
+
+   db.profiles.insertOne( { _id: 1, votes: [ 3, 5, 6, 7, 7, 8 ] } )
+
+The following operation removes all items from the ``votes`` array
+that are greater than or equal to ( :query:`$gte` ) ``6``:
+
+.. code-block:: javascript
+
+   db.profiles.updateOne( { _id: 1 }, { $pull: { votes: { $gte: 6 } } } )
 
 After the update operation, the document only has values less than 6:
 
-```javascript
-{ _id: 1, votes: [  3,  5 ] }
-```
+.. code-block:: javascript
+   :copyable: false
 
-### Remove Items Using `bulkWrite()`
+   { _id: 1, votes: [  3,  5 ] }
+
+### Remove Items Using ``bulkWrite()``
 
 The following :method:`db.collection.bulkWrite()` operation:
 
-- Creates the `profilesBulkWrite` collection.
-- Removes all items from the `votes` array
-that are greater than or equal to ( :query:`$gte` ) `6`.
+- Creates the ``profilesBulkWrite`` collection.
+- Removes all items from the ``votes`` array
+  that are greater than or equal to ( :query:`$gte` ) ``6``.
+- Removes all items from the ``votes`` array
+  that are less than or equal to ( :query:`$lte` ) ``3``.
 
-- Removes all items from the `votes` array
-that are less than or equal to ( :query:`$lte` ) `3`.
+.. code-block:: javascript
 
-```javascript
-try {
-   db.profilesBulkWrite.bulkWrite( [
-      {
-         insertOne: {
-            "document": { _id: 1, votes: [ 3, 5, 6, 7, 7, 8 ] }
+   try {
+      db.profilesBulkWrite.bulkWrite( [
+         {
+            insertOne: {
+               "document": { _id: 1, votes: [ 3, 5, 6, 7, 7, 8 ] }
+            }
+         },
+         {
+            updateOne: {
+               "filter": { _id: 1 },
+               "update": { $pull: { votes: { $gte: 6 } } }
+            }
+         },
+         {
+            updateOne: {
+               "filter": { _id: 1 },
+               "update": { $pull: { votes: { $lte: 3 } } }
+            }
          }
-      },
-      {
-         updateOne: {
-            "filter": { _id: 1 },
-            "update": { $pull: { votes: { $gte: 6 } } }
-         }
-      },
-      {
-         updateOne: {
-            "filter": { _id: 1 },
-            "update": { $pull: { votes: { $lte: 3 } } }
-         }
-      }
-   ] );
-} catch (e) {
-   print(e);
-}
-```
+      ] );
+   } catch (e) {
+      print(e);
+   }
 
-After the operation, you can confirm the document only has values less than 6 and greater than 3:
+After the operation, you can confirm the document
+only has values less than 6 and greater than 3:
 
-```javascript
-db.profilesBulkWrite.find()
-```
+.. code-block:: javascript
+   
+   db.profilesBulkWrite.find()
 
 The operation returns the following:
 
-```javascript
-[ { _id: 1, votes: [ 5 ] } ]
-```
+.. code-block:: javascript
+   :copyable: false
+
+   [ { _id: 1, votes: [ 5 ] } ]
+
+
+.. _pull-array-of-documents:
 
 ### Remove Items from an Array of Documents
 
-Create the `survey` collection:
+Create the ``survey`` collection:
 
-```javascript
-db.survey.insertMany([
-   {
-      _id: 1,
-      results: [
-         { item: "A", score: 5 },
-         { item: "B", score: 8 }
-      ]
-   },
-   {
-      _id: 2,
-      results: [
-         { item: "C", score: 8 },
-         { item: "B", score: 4 }
-      ]
-   }
-] )
-```
+.. _ex-create-survey-collection:
 
-The following operation removes all elements from the `results` array that contain both a `score` field equal to `8` and an `item` field equal to `"B"`:
-
-```javascript
-db.survey.updateMany(
-  { },
-  { $pull: { results: { score: 8 , item: "B" } } }
-)
-```
-
-The :update:`$pull` expression applies the condition to each element of the `results` array as though it were a top-level document.
-
-After the operation, the `results` array contains no documents that contain both a `score` field equal to `8` and an `item` field equal to `"B"`.
-
-```javascript
-{ _id: 1, results: [ { item: 'A', score: 5 } ] },
-{
- _id: 2,
- results: [ { item: 'C', score: 8 }, { item: 'B', score: 4 } ]
-}
-```
-
-The :update:`$pull` operator treats each element as a top-level object. The query is applied to each element. The expression does not need to use :query:`$elemMatch` to specify match conditions.
-
-However, the following operation does not :update:`$pull` any elements from the original collection:
-
-```javascript
-db.survey.updateMany(
-  { },
-  { $pull: { results: { $elemMatch: { score: 8 , item: "B" } } } }
-)
-```
-
-> **Note:** Drop the `survey` collection with:
 .. code-block:: javascript
-   db.survey.drop()
-Then `recreate it <ex-create-survey-collection>` to run this
-example.
+
+   db.survey.insertMany([
+      {
+         _id: 1,
+         results: [
+            { item: "A", score: 5 },
+            { item: "B", score: 8 }
+         ]
+      },
+      {
+         _id: 2,
+         results: [
+            { item: "C", score: 8 },
+            { item: "B", score: 4 }
+         ]
+      }
+   ] )
+
+The following operation removes all elements from the ``results`` array
+that contain both a ``score`` field equal to ``8`` and an ``item``
+field equal to ``"B"``:
+
+.. code-block:: javascript
+
+   db.survey.updateMany(
+     { },
+     { $pull: { results: { score: 8 , item: "B" } } }
+   )
+
+The :update:`$pull` expression applies the condition to each element of
+the ``results`` array as though it were a top-level document.
+
+After the operation, the ``results`` array contains no documents that
+contain both a ``score`` field equal to ``8`` and an ``item`` field
+equal to ``"B"``.
+
+.. code-block:: javascript
+   :copyable: false
+
+  { _id: 1, results: [ { item: 'A', score: 5 } ] },
+  {
+    _id: 2,
+    results: [ { item: 'C', score: 8 }, { item: 'B', score: 4 } ]
+  }
+
+The :update:`$pull` operator treats each element as a top-level object.
+The query is applied to each element. The expression does not need to
+use :query:`$elemMatch` to specify match conditions.
+
+However, the following operation does not :update:`$pull` any
+elements from the original collection:
+
+.. code-block:: javascript
+
+   db.survey.updateMany(
+     { },
+     { $pull: { results: { $elemMatch: { score: 8 , item: "B" } } } }
+   )
+
+**note:** Drop the ``survey`` collection with:
+   
+   .. code-block:: javascript
+   
+      db.survey.drop()
+      
+   Then :ref:`recreate it <ex-create-survey-collection>` to run this
+   example.
 
 ### Remove Documents from Nested Arrays
 
-Create a new `survey` collection with documents that are embedded in nested arrays.
+Create a new ``survey`` collection with documents that are embedded in
+nested arrays.
 
-```javascript
-db.survey.drop()
+.. code-block:: javascript
+   :emphasize-lines: 10, 15, 25, 30
 
-db.survey.insertMany( [
+   db.survey.drop()
+
+   db.survey.insertMany( [
+      {
+         _id: 1,
+         results: [
+            {
+               item: "A", 
+               score: 5, 
+               answers: [ { q: 1, a: 4 }, { q: 2, a: 6 } ]
+            },
+            {
+               item: "B",
+               score: 8,
+               answers: [ { q: 1, a: 8 }, { q: 2, a: 9 } ]
+            }
+         ]
+      },
+      {
+         _id: 2,
+         results: [
+            {
+               item: "C",
+               score: 8,
+               answers: [ { q: 1, a: 8 }, { q: 2, a: 7 } ]
+            },
+            {
+               item: "B",
+               score: 4,
+               answers: [ { q: 1, a: 0 }, { q: 2, a: 8 } ]
+            }
+         ]
+      }
+   ] )
+
+To specify multiple conditions on the elements of the
+``answers`` array, use :query:`$elemMatch`:
+
+.. code-block:: javascript
+   :emphasize-lines: 8
+
+   db.survey.updateMany(
+     { },
+     {
+        $pull:
+           {
+              results:
+                 {
+                    answers: { $elemMatch: { q: 2, a: { $gte: 8 } } }
+                 }
+           }
+     }
+   )
+
+The operation updated the ``results`` array in each document it
+matched. :method:`db.collection.updateMany()` removed documents from
+``results`` when an element of the embedded ``answers`` array matched
+the selection conditions in the highlighted line.
+
+.. code-block:: javascript
+   :copyable: false
+
    {
-      _id: 1,
-      results: [
-         {
-            item: "A", 
-            score: 5, 
-            answers: [ { q: 1, a: 4 }, { q: 2, a: 6 } ]
-         },
-         {
-            item: "B",
-            score: 8,
-            answers: [ { q: 1, a: 8 }, { q: 2, a: 9 } ]
-         }
-      ]
+     _id: 1,
+     results: [
+       {
+         item: 'A',
+         score: 5,
+         answers: [ { q: 1, a: 4 }, { q: 2, a: 6 } ]
+       }
+     ]
    },
    {
-      _id: 2,
-      results: [
-         {
-            item: "C",
-            score: 8,
-            answers: [ { q: 1, a: 8 }, { q: 2, a: 7 } ]
-         },
-         {
-            item: "B",
-            score: 4,
-            answers: [ { q: 1, a: 0 }, { q: 2, a: 8 } ]
-         }
-      ]
+     _id: 2,
+     results: [
+       {
+         item: 'C',
+         score: 8,
+         answers: [ { q: 1, a: 8 }, { q: 2, a: 7 } ]
+       }
+     ]
    }
-] )
-```
 
-To specify multiple conditions on the elements of the `answers` array, use :query:`$elemMatch`:
-
-```javascript
-db.survey.updateMany(
-  { },
-  {
-     $pull:
-        {
-           results:
-              {
-                 answers: { $elemMatch: { q: 2, a: { $gte: 8 } } }
-              }
-        }
-  }
-)
-```
-
-The operation updated the `results` array in each document it matched. :method:`db.collection.updateMany()` removed documents from `results` when an element of the embedded `answers` array matched the selection conditions in the highlighted line.
-
-```javascript
-{
-  _id: 1,
-  results: [
-    {
-      item: 'A',
-      score: 5,
-      answers: [ { q: 1, a: 4 }, { q: 2, a: 6 } ]
-    }
-  ]
-},
-{
-  _id: 2,
-  results: [
-    {
-      item: 'C',
-      score: 8,
-      answers: [ { q: 1, a: 8 }, { q: 2, a: 7 } ]
-    }
-  ]
-}
-```
-
-> **Seealso:** - :method:`db.collection.updateMany()`
-- :method:`db.collection.findAndModify()`
+**seealso:** - :method:`db.collection.updateMany()`
+   - :method:`db.collection.findAndModify()`

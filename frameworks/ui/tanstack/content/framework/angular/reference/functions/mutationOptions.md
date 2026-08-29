@@ -1,23 +1,22 @@
 ---
 type: "Framework Learn Page"
-framework: "tanstack"
+framework: "TanStack"
 source_repo: "https://github.com/tanstack/query"
 source_branch: "main"
 source_path: "docs/framework/angular/reference/functions/mutationOptions.md"
-source_commit: "fd50fa14d283c7d6664a796f758498d1ad5bfce7"
-source_commit_short: "fd50fa14"
-source_commit_date: "2026-07-24T22:22:47+10:00"
-generated_at: "2026-07-25T11:50:41Z"
+source_commit: "2969edf32f7e0c48e2a108d84712d6e01edfde21"
+source_commit_short: "2969edf"
+source_commit_date: "2026-08-28T01:03:02+09:00"
+generated_at: "2026-08-29T09:40:33.421425Z"
 ---
+# Mutationoptions
 
 ---
 id: mutationOptions
 title: mutationOptions
 ---
 
-# Function: mutationOptions()
-
-Allows to share and re-use mutation options in a type-safe way.
+Allows sharing and re-using mutation options in a type-safe way.
 
 **Example**
 
@@ -61,7 +60,7 @@ function mutationOptions<TData, TError, TVariables, TOnMutateResult>(options): W
 
 Defined in: [mutation-options.ts:39](https://github.com/TanStack/query/blob/main/packages/angular-query-experimental/src/mutation-options.ts#L39)
 
-Allows to share and re-use mutation options in a type-safe way.
+Allows sharing and re-using mutation options in a type-safe way.
 
 **Example**
 
@@ -133,7 +132,7 @@ function mutationOptions<TData, TError, TVariables, TOnMutateResult>(options): O
 
 Defined in: [mutation-options.ts:53](https://github.com/TanStack/query/blob/main/packages/angular-query-experimental/src/mutation-options.ts#L53)
 
-Allows to share and re-use mutation options in a type-safe way.
+Allows sharing and re-using mutation options in a type-safe way.
 
 **Example**
 

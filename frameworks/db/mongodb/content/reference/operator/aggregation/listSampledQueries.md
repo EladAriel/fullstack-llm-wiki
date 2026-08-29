@@ -1,53 +1,122 @@
 ---
 type: "Framework Learn Page"
-framework: "mongodb"
+framework: "MongoDB"
 source_repo: "https://github.com/mongodb/docs.git"
 source_branch: "main"
 source_path: "content/manual/manual/source/reference/operator/aggregation/listSampledQueries.txt"
-source_commit: "ab9db26ed3d11618cdb61516d8180337d8e3f679"
-source_commit_short: "ab9db26e"
-source_commit_date: "2026-07-24T16:22:46-06:00"
-generated_at: "2026-07-25T11:51:15Z"
+source_commit: "b9f2bc487a2878b65e3c1f80024bebab76954f27"
+source_commit_short: "b9f2bc48"
+source_commit_date: "2026-08-28T17:09:45-05:00"
+generated_at: "2026-08-29T09:39:20.172285Z"
 ---
-
-=======================================
-
 # $listSampledQueries (aggregation stage)
+
+**meta:** :description: Retrieve sampled queries for collections to analyze shard key metrics, specifying a collection or all collections, with access control and usage limitations.
+
+.. default-domain:: mongodb
+
+**contents:** On this page
+   :local:
+   :backlinks: none
+   :depth: 2
+   :class: singlecol
 
 ## Definition
 
+**pipeline:** $listSampledQueries
+
+   Returns sampled queries for all collections or a specific 
+   collection. Sampled queries are used by the
+   ``analyzeShardKey`` command to calculate metrics about the read and 
+   write distribution of a shard key.
+
 ## Syntax
 
-`$listSampledQueries` has this syntax:
+``$listSampledQueries`` has this syntax:
 
-```javascript
-{  
-   $listSampledQueries: { namespace: <namespace> } 
-}
-```
+.. code-block:: javascript
+
+   {  
+      $listSampledQueries: { namespace: <namespace> } 
+   }
 
 ## Behavior
 
 - To list sampled queries for a single collection, specify
-the collection in the `namespace` argument.
+  the collection in the ``namespace`` argument.
 
-- To list sampled queries for all collections, omit the `namespace`
-argument.
+- To list sampled queries for all collections, omit the ``namespace``
+  argument.
 
 ## Access Control
 
-`$listSampledQueries` requires the :authrole:`clusterMonitor` role on the cluster.
+``$listSampledQueries`` requires the :authrole:`clusterMonitor` role 
+on the cluster. 
 
 ## Limitations
 
-- You cannot use `$listSampledQueries` on Atlas
-:atlas:`multi-tenant </build-multi-tenant-arch>` configurations.
-
-- You cannot use `$listSampledQueries` on standalone deployments.
-- You cannot use `$listSampledQueries` directly against a
-:option:`--shardsvr <mongod --shardsvr>` replica set. When running on a sharded cluster, `$listSampledQueries` must run against a `mongos`.
+- You cannot use ``$listSampledQueries`` on Atlas
+  :atlas:`multi-tenant </build-multi-tenant-arch>`
+  configurations.
+- You cannot use ``$listSampledQueries`` on standalone deployments.
+- You cannot use ``$listSampledQueries`` directly against a
+  :option:`--shardsvr <mongod --shardsvr>` replica set.
+  When running on a sharded cluster, ``$listSampledQueries``
+  must run against a ``mongos``.
 
 ## Examples
+
+.. tabs-drivers::
+
+   .. tab:: 
+      :tabid: shell
+
+### List Sampled Queries for All Collections
+
+      The following aggregation operation lists all sampled queries for all
+      collections in the replica set:
+
+      .. code-block:: javascript
+
+        db.aggregate( [  { $listSampledQueries: {  } } ] )
+
+### List Sampled Queries for A Specific Collection
+
+      The following aggregation operation lists all sampled queries for a 
+      ``post`` collection in the ``social`` database:
+
+      .. code-block:: javascript
+
+        db.aggregate( [  { $listSampledQueries: { namespace: "social.post" } } ] )
+    
+   .. tab:: 
+      :tabid: nodejs
+      
+      To use the {+node-driver-full+} to add a ``$listSampledQueries`` stage to
+      an aggregation pipeline, use the ``$listSampledQueries`` operator in a
+      pipeline object.
+
+### List Sampled Queries for All Collections
+
+      The following aggregation operation lists all sampled queries for all
+      collections in the replica set:
+
+      .. literalinclude:: /includes/driver-examples/node/aggregation/examples.js
+         :start-after: //start listSampledQueries
+         :end-before: //end listSampledQueries
+         :language: javascript
+         :dedent: 2
+
+### List Sampled Queries for A Specific Collection
+
+      The following aggregation operation lists all sampled queries for the
+      ``movies`` collection in the ``sample_mflix`` database:
+
+      .. literalinclude:: /includes/driver-examples/node/aggregation/examples.js
+        :start-after: //start listSampledQueriesWithNamespace
+        :end-before: //end listSampledQueriesWithNamespace
+        :language: javascript
+        :dedent: 2
 
 ## Output
 
@@ -55,30 +124,112 @@ The output fields differ for read and write queries.
 
 ### Read Queries
 
-```none
-{
-   _id: <uuid>,  
-   ns: "<database>.<collection>",
-   collectionUuid: <collUUID>,
-   cmdName: <find|aggregate|count|distinct>,
-   cmd: {
-     filter: <object>,
-     collation: <object>,
-     let: <object>
-   },
-   expireAt: <date>
-}
-```
+.. code-block:: none
+   :copyable: false
+
+   {
+      _id: <uuid>,  
+      ns: "<database>.<collection>",
+      collectionUuid: <collUUID>,
+      cmdName: <find|aggregate|count|distinct>,
+      cmd: {
+        filter: <object>,
+        collation: <object>,
+        let: <object>
+      },
+      expireAt: <date>
+   }
+
+
+.. list-table::
+   :header-rows: 1
+
+   * - Field Name
+     - Type
+     - Description
+
+   * - ``_id``
+     - UUID
+     - Sample ID for the query.
+
+   * - ``ns``
+     - string
+     - Namespace of the sampled collection.
+
+   * - ``collectionUuid``
+     - UUID
+     - ID of the sampled collection.
+   
+   * - ``cmdName``
+     - string
+     - Name of the sampled command. Can be one of:
+
+       - ``"find"``
+       - ``"aggregate"``
+       - ``"count"``
+       - ``"distinct"``
+
+   * - ``cmd.filter``
+     - object
+     - Filter the command ran with, if applicable.
+
+   * - ``cmd.collation``
+     - object
+     - Collation the command ran with, if applicable.
+
+   * - ``cmd.let``
+     - object
+     - Custom variables the command ran with, if applicable.
+
+   * - ``expireAt``
+     - date
+     - Date that the sample expires.
 
 ### Write Queries
 
-```none
-{
-   _id: <uuid>,
-   ns: "<database>.<collection>",
-   collectionUuid: <collUUID>,
-   cmdName: <update|delete|findAndModify>,
-   cmd: <object>,
-   expireAt: <date>
-}
-```
+.. code-block:: none
+   :copyable: false
+
+   {
+      _id: <uuid>,
+      ns: "<database>.<collection>",
+      collectionUuid: <collUUID>,
+      cmdName: <update|delete|findAndModify>,
+      cmd: <object>,
+      expireAt: <date>
+   }
+
+.. list-table::
+   :header-rows: 1
+
+   * - Field Name
+     - Type
+     - Description
+
+   * - ``_id``
+     - UUID
+     - Sample ID for the query.
+
+   * - ``ns``
+     - string
+     - Namespace of the sampled collection.
+
+   * - ``collectionUuid``
+     - UUID
+     - ID of the sampled collection.
+   
+   * - ``cmdName``
+     - string
+     - Name of the sampled command. Can be one of:
+
+       - ``"update"``
+       - ``"delete"``
+       - ``"findAndModify"``
+
+   * - ``cmd``
+     - object
+     - Command object
+
+   * - ``expireAt``
+     - date
+     - Date that the sample expires.

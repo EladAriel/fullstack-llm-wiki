@@ -1,72 +1,101 @@
 ---
 type: "Framework Learn Page"
-framework: "mongodb"
+framework: "MongoDB"
 source_repo: "https://github.com/mongodb/docs.git"
 source_branch: "main"
 source_path: "content/manual/manual/source/reference/method/KeyVault.getKey.txt"
-source_commit: "ab9db26ed3d11618cdb61516d8180337d8e3f679"
-source_commit_short: "ab9db26e"
-source_commit_date: "2026-07-24T16:22:46-06:00"
-generated_at: "2026-07-25T11:51:15Z"
+source_commit: "b9f2bc487a2878b65e3c1f80024bebab76954f27"
+source_commit_short: "b9f2bc48"
+source_commit_date: "2026-08-28T17:09:45-05:00"
+generated_at: "2026-08-29T09:39:19.989248Z"
 ---
-
-==================================
+.. _keyvault-getkey-method:
 
 # KeyVault.getKey() (mongosh method)
 
+**meta:** :description: Retrieve a data encryption key using its UUID from the key vault associated with the database connection.
+
+.. default-domain:: mongodb
+
+**contents:** On this page
+   :local:
+   :backlinks: none
+   :depth: 1
+   :class: singlecol
+
+**method:** KeyVault.getKey(UUID)
+
+   Gets a data encryption key with the specified ``UUID``. The data
+   encryption key must exist in the key vault associated to the database
+   connection.
+
+   :returns:
+  
+     Document representing a matching data encryption key.
+
+
 ## Compatibility
 
-This command is available in deployments hosted in the following environments:
+This command is available in deployments hosted in the following
+environments: 
 
-.. include:: /includes/fact-environments-atlas-only.rst
+**include:** /includes/fact-environments-atlas-only.rst
 
-.. include:: /includes/fact-environments-onprem-only.rst
+**include:** /includes/fact-environments-onprem-only.rst
+
 
 ## Syntax
 
 :method:`~KeyVault.getKey()` has the following syntax:
 
-```none
-keyVault = db.getMongo().getKeyVault()
+.. code-block:: none
 
-keyVault.getKey(UUID("<UUID String>"))
-```
+   keyVault = db.getMongo().getKeyVault()
+   
+   keyVault.getKey(UUID("<UUID String>"))
 
-The :abbr:`UUID (Universally unique identifier)` is a BSON :bsontype:`binary data <Binary>` object with subtype `4`.
+The :abbr:`UUID (Universally unique identifier)` is a BSON 
+:bsontype:`binary data <Binary>` object with subtype ``4``.
+
 
 ## Behavior
 
 ### Requires Configuring Client-Side Field Level Encryption on Database Connection
 
-.. include:: /includes/extracts/csfle-requires-enabling-encryption.rst
+**include:** /includes/extracts/csfle-requires-enabling-encryption.rst
 
 ## Example
 
-The following example uses a `locally managed KMS <qe-fundamentals-kms-providers-local>` for the client-side field level encryption configuration.
+The following example uses a :ref:`locally managed KMS
+<qe-fundamentals-kms-providers-local>` for the client-side field level
+encryption configuration. 
 
-.. include:: /includes/csfle-connection-boilerplate-example.rst
+**include:** /includes/csfle-connection-boilerplate-example.rst
 
-Retrieve the :method:`keyVault <getKeyVault()>` object and use the :method:`KeyVault.getKey()` to retrieve a data encryption key using its `UUID`:
+Retrieve the :method:`keyVault <getKeyVault()>` object and
+use the :method:`KeyVault.getKey()` to retrieve
+a data encryption key using its ``UUID``:
 
-```javascript
-keyVault = encryptedClient.getKeyVault()
-keyVault.getKey(UUID("b4b41b33-5c97-412e-a02b-743498346079"))
-```
+.. code-block:: javascript
 
-:method:`~KeyVault.getKey()` returns the data encryption key, with output similar to the following:
+   keyVault = encryptedClient.getKeyVault()
+   keyVault.getKey(UUID("b4b41b33-5c97-412e-a02b-743498346079"))
 
-```json
-{
-  "_id" : UUID("b4b41b33-5c97-412e-a02b-743498346079"),
-  "keyMaterial" : BinData(0,"E+0jZKzA4YuE1lGmSVIy2mivqH4JxFo0yFATdxYX/s0YtMFsgVXyu7Bbn4IQ2gn7F/9JAPJFOxdQc5lN3AR+oX33ewVZsd63f3DN1zzcukqdR2Y+EeO7ekRxyRjdzMaNNrBNIv9Gn5LEJgWPSYkG8VczF7cNZnc1YmnR0tuDPNYfm0J7dCZuZUNWW3FCGRcdFx6AlXiCtXKNR97hJ216pQ=="),
-  "creationDate" : ISODate("2021-03-16T18:22:43.733Z"),
-  "updateDate" : ISODate("2021-03-16T18:22:43.733Z"),
-  "status" : 0, "version" : Long(0),
-  "masterKey" : {
-    "provider" : "local"
-  },
-  "keyAltNames" : [
-     "alpha"
-  ]
-}
-```
+:method:`~KeyVault.getKey()` returns the data encryption key, with
+output similar to the following:
+
+.. code-block:: json
+
+   {
+     "_id" : UUID("b4b41b33-5c97-412e-a02b-743498346079"),
+     "keyMaterial" : BinData(0,"E+0jZKzA4YuE1lGmSVIy2mivqH4JxFo0yFATdxYX/s0YtMFsgVXyu7Bbn4IQ2gn7F/9JAPJFOxdQc5lN3AR+oX33ewVZsd63f3DN1zzcukqdR2Y+EeO7ekRxyRjdzMaNNrBNIv9Gn5LEJgWPSYkG8VczF7cNZnc1YmnR0tuDPNYfm0J7dCZuZUNWW3FCGRcdFx6AlXiCtXKNR97hJ216pQ=="),
+     "creationDate" : ISODate("2021-03-16T18:22:43.733Z"),
+     "updateDate" : ISODate("2021-03-16T18:22:43.733Z"),
+     "status" : 0, "version" : Long(0),
+     "masterKey" : {
+       "provider" : "local"
+     },
+     "keyAltNames" : [
+        "alpha"
+     ]
+   }

@@ -1,13 +1,17 @@
 ---
 type: "Framework Learn Page"
-framework: "pymongo"
+framework: "PyMongo"
 source_repo: "https://github.com/mongodb/mongo-python-driver"
 source_branch: "main"
 source_path: "doc/api/pymongo/pool.rst"
-source_commit: "78f3a797d8ebf251bba96508d78a6ca305ef1c04"
-source_commit_short: "78f3a797"
-source_commit_date: "2026-07-24T12:57:51-07:00"
-generated_at: "2026-07-25T11:51:01Z"
+source_commit: "5cf3268f82f21e7683e10a21e0c36fa947e640fa"
+source_commit_short: "5cf3268"
+source_commit_date: "2026-08-28T14:23:00-04:00"
+generated_at: "2026-08-29T09:39:25.621091Z"
 ---
+# :mod:`pool` -- Pool module for use with a MongoDB client.
 
-# `pool` -- Pool module for use with a MongoDB client.
+**automodule:** pymongo.pool
+
+   .. autoclass:: pymongo.pool.PoolOptions()
+      :members:

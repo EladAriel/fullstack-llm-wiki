@@ -1,37 +1,159 @@
 ---
 type: "Framework Learn Page"
-framework: "mongodb"
+framework: "MongoDB"
 source_repo: "https://github.com/mongodb/docs.git"
 source_branch: "main"
 source_path: "content/manual/manual/source/reference/aggregation-variables.txt"
-source_commit: "ab9db26ed3d11618cdb61516d8180337d8e3f679"
-source_commit_short: "ab9db26e"
-source_commit_date: "2026-07-24T16:22:46-06:00"
-generated_at: "2026-07-25T11:51:15Z"
+source_commit: "b9f2bc487a2878b65e3c1f80024bebab76954f27"
+source_commit_short: "b9f2bc48"
+source_commit_date: "2026-08-28T17:09:45-05:00"
+generated_at: "2026-08-29T09:39:19.692812Z"
 ---
-
-====================================
+.. _aggregation-variables:
 
 # Variables in Aggregation Expressions
 
-`Aggregation expressions <aggregation-expressions>` can use both user-defined and system variables.
+**meta:** :description: Explore how to use user-defined and system variables in MongoDB aggregation expressions, including accessing and modifying data.
 
-Variables can hold any `BSON type data <bson-types>`. To access the value of the variable, prefix the variable name with double dollar signs (`$$`); i.e. `"$$<variable>"`.
+.. default-domain:: mongodb
 
-If the variable references an object, to access a specific field in the object, use the dot notation; i.e. `"$$<variable>.<field>"`.
+**contents:** On this page
+   :local:
+   :backlinks: none
+   :depth: 1
+   :class: singlecol
+
+:ref:`Aggregation expressions <aggregation-expressions>` can use both
+user-defined and system variables.
+
+Variables can hold any :ref:`BSON type data <bson-types>`.
+To access the value of the variable, prefix the variable name with
+double dollar signs (``$$``); i.e. ``"$$<variable>"``.
+
+If the variable references an object, to access a specific field in the
+object, use the dot notation; i.e. ``"$$<variable>.<field>"``.
+
+.. _agg-user-variables:
 
 ## User Variables
 
-User variable names can contain the ascii characters `[_a-zA-Z0-9]` and any non-ascii character.
+User variable names can contain the ascii characters ``[_a-zA-Z0-9]``
+and any non-ascii character.
 
-User variable names must begin with a lowercase ascii letter `[a-z]` or a non-ascii character.
+User variable names must begin with a lowercase ascii letter ``[a-z]``
+or a non-ascii character.
+
+.. _agg-system-variables:
 
 ## System Variables
 
 MongoDB offers the following system variables:
 
-> **Seealso:** - :expression:`$let`
-- :pipeline:`$redact`
-- :expression:`$map`
-- :expression:`$filter`
-- :expression:`$reduce`
+.. list-table::
+   :header-rows: 1
+   :widths: 15 50
+
+   * - Variable
+
+     - Description
+
+   * - .. variable:: NOW
+
+     - A variable that returns the current datetime value.
+       :variable:`NOW` returns the same value for all members of the
+       deployment and remains the same throughout all stages of the
+       aggregation pipeline.
+
+   * - .. variable:: CLUSTER_TIME
+
+     - A variable that returns the current timestamp value.
+     
+       :variable:`CLUSTER_TIME` is only available on replica sets and
+       sharded clusters.
+
+       :variable:`CLUSTER_TIME` returns the same value for all members
+       of the deployment and remains the same throughout all stages of
+       the pipeline.
+
+   * - .. variable:: ROOT
+
+     - References the root document, i.e. the top-level document, currently
+       being processed in the aggregation pipeline stage.
+
+   * - .. variable:: CURRENT
+
+     - References the start of the field path being processed in the
+       aggregation pipeline stage. Unless documented otherwise, all
+       stages start with :variable:`CURRENT` the same as
+       :variable:`ROOT`.
+
+       :variable:`CURRENT` is modifiable. However, since ``$<field>``
+       is equivalent to ``$$CURRENT.<field>``, rebinding
+       :variable:`CURRENT` changes the meaning of ``$`` accesses.
+
+   * - .. variable:: REMOVE
+
+     - A variable which evaluates to the missing value. Allows for the
+       exclusion of fields in :pipeline:`$addFields` and
+       :pipeline:`$project` stages.
+
+       For examples that use ``$$REMOVE``, see:
+       
+       - :ref:`addFields-remove-example`
+       - :ref:`remove-example`
+
+   * - .. variable:: DESCEND
+
+     - One of the allowed results of a :pipeline:`$redact` expression.
+
+   * - .. variable:: PRUNE
+
+     - One of the allowed results of a :pipeline:`$redact` expression.
+
+   * - .. variable:: KEEP
+
+     - One of the allowed results of a :pipeline:`$redact` expression.
+
+   * - .. variable:: SEARCH_META 
+
+     - A variable that stores the metadata results of an :atlas:`Atlas 
+       Search </atlas-search/>` query. In all supported aggregation 
+       pipeline stages, a field set to the variable 
+       :variable:`$$SEARCH_META <SEARCH_META>` returns the :atlas:`metadata results 
+       </reference/atlas-search/query-syntax/#metadata-result-types>`
+       for the query.
+
+       For an example of its usage, see {+fts+} :atlas:`facet 
+       </reference/atlas-search/facet/#search_meta-aggregation-variable>` 
+       and :atlas:`count </reference/atlas-search/counting/#search_meta-aggregation-variable>`.
+
+   * - .. variable:: USER_ROLES
+
+     - Returns the :ref:`roles <roles>` assigned to the current user.
+
+       .. include:: /includes/user-roles-system-variable-examples-list.rst
+
+       .. include:: /includes/aggregation/agg-userroles-restrictions.rst
+
+       .. versionadded:: 7.0
+
+   * - .. variable:: IDX
+
+     - Returns the index of the current array element. Can be used with
+       :expression:`$map`, :expression:`$filter`, and
+       :expression:`$reduce` expressions. The first array element has an
+       index of ``0``. To use the ``$$IDX`` variable, you omit the
+       ``arrayIndexAs`` field from the expression.
+       
+       For ``$$IDX`` examples, see :ref:`map index example
+       <map-IDX-example>`, :ref:`filter index example
+       <filter-IDX-example>`, and :ref:`reduce index example
+       <reduce-IDX-example>`.
+
+       .. versionadded:: 8.3
+
+**seealso:** - :expression:`$let`
+   - :pipeline:`$redact`
+   - :expression:`$map`
+   - :expression:`$filter`
+   - :expression:`$reduce`

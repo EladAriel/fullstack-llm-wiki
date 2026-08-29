@@ -1,14 +1,15 @@
 ---
 type: "Framework Learn Page"
-framework: "redis"
+framework: "Redis"
 source_repo: "https://github.com/redis/docs.git"
 source_branch: "main"
 source_path: "content/operate/rs/security/audit-events.md"
-source_commit: "9d30f68c3dad1a6b3b7d30fe604b911348ce8152"
-source_commit_short: "9d30f68c"
-source_commit_date: "2026-07-24T10:52:10-07:00"
-generated_at: "2026-07-25T11:51:22Z"
+source_commit: "f8693349287b0efbef3c865b6f6a2aceca88594d"
+source_commit_short: "f869334"
+source_commit_date: "2026-08-28T10:01:19-05:00"
+generated_at: "2026-08-29T09:38:55.329334Z"
 ---
+# Audit Events
 
 ---
 alwaysopen: false
@@ -39,7 +40,7 @@ Example external listeners include:
 
 - [`ncat`](https://nmap.org/ncat/): useful for debugging but not suitable for production environments.
 
-- Imperva Sonar: a third-party service available for purchase separately from Redis Software. See [Redis Onboarding Steps](https://docs.imperva.com/bundle/onboarding-databases-to-sonar-reference-guide/page/Redis-Onboarding-Steps_48368215.html) for more information.
+- Imperva Sonar: a third-party service available for purchase separately from Redis Software. See [Redis Onboarding Steps](https://docs-cybersec.thalesgroup.com/bundle/onboarding-databases-to-sonar-reference-guide/page/Redis-Enterprise-Software-Onboarding-Steps_48368215.html) for more information.
 
 - IBM Guardium
 
@@ -165,6 +166,10 @@ You can filter by usernames, source IP addresses, or both to manage data volume 
 Filter changes affect new client connections only. Existing connections continue to be audited based on the filters that were active when the connection was established.
 {{</note>}}
 
+{{< multitabs id="enable-command-connection-auditing"
+    tab1="REST API"
+    tab2="rladmin" >}}
+
 To enable command and connection auditing and configure filters, use an [update database configuration]({{< relref "/operate/rs/references/rest-api/requests/bdbs#put-bdbs" >}}) REST API request:
 
 ```
@@ -188,6 +193,16 @@ PUT https://<host>:<port>/v1/bdbs/<database-id>
     }
 }
 ```
+
+-tab-sep-
+
+To enable command and connection auditing using `rladmin`:
+
+```
+rladmin tune db db:<id|name> audit_settings audit_mode connection_and_crud
+```
+
+{{< /multitabs >}}
 
 ### Inclusive versus exclusive filters
 
@@ -237,6 +252,10 @@ You can set the `max_total_key_bytes` to control how much key data is captured p
 
 ### Partial updates
 
+{{< multitabs id="partial-update-username-filter"
+    tab1="REST API"
+    tab2="rladmin" >}}
+
 Updates to `audit_settings` merge with the database's existing audit configuration, so you can change one setting without resending the others. For example, the following request disables the username filter while preserving its username list and filter type:
 
 ```sh
@@ -249,6 +268,17 @@ PUT https://<host>:<port>/v1/bdbs/<database-id>
     }
 }
 ```
+
+-tab-sep-
+
+Each `rladmin tune db audit_settings` command updates only the setting you specify, merging with the database's existing audit configuration. For example, the following commands set the filtered usernames and then enable the filter:
+
+```
+rladmin tune db db:<id|name> audit_settings username_filter usernames alice,bob
+rladmin tune db db:<id|name> audit_settings username_filter enabled enabled
+```
+
+{{< /multitabs >}}
 
 ## Enable connection auditing only
 
@@ -274,7 +304,7 @@ PUT https://<host>:<port>/v1/bdbs/<database-id>
 To enable connection auditing only using `rladmin`:
 
 ```
-rladmin tune db db:<id|name> db_conns_auditing enabled
+rladmin tune db db:<id|name> audit_settings audit_mode connection
 ```
 
 {{< /multitabs >}}
@@ -328,6 +358,10 @@ To deactivate this policy, set `db_conns_auditing` to `disabled`.
 
 ## Turn off auditing
 
+{{< multitabs id="turn-off-auditing"
+    tab1="REST API"
+    tab2="rladmin" >}}
+
 To turn off auditing for a specific database:
 
 ```sh
@@ -338,6 +372,16 @@ PUT https://<host>:<port>/v1/bdbs/<database-id>
     }
 }
 ```
+
+-tab-sep-
+
+To turn off auditing for a specific database using `rladmin`:
+
+```
+rladmin tune db db:<id|name> audit_settings audit_mode disabled
+```
+
+{{< /multitabs >}}
 
 ## Notification examples
 

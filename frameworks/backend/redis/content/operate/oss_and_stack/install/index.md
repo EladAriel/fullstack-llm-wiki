@@ -1,42 +1,28 @@
 ---
 type: "Framework Learn Directory Index"
-framework: "redis"
-directory: "content/operate/oss_and_stack/install"
-source_repo: "https://github.com/redis/docs.git"
-source_branch: "main"
-source_commit: "9d30f68c3dad1a6b3b7d30fe604b911348ce8152"
-source_commit_short: "9d30f68c"
-source_commit_date: "2026-07-24T10:52:10-07:00"
-generated_at: "2026-07-25T11:51:22Z"
+framework: "Redis"
+generated_at: "2026-08-29T09:38:56.340598Z"
 ---
 # Install
 
-This directory contains redis learning pages related to install.
+This directory contains Redis learning pages related to install.
 
 ## Breadcrumbs
 
-[Wiki Home](../../../../index.md) -> [Content](../../../index.md) -> [Operate](../../index.md) -> [Oss And Stack](../index.md) -> [Install](index.md)
+[Wiki Home](../index.md) -> [Content](index.md)
 
 ## Navigation
 
-- Parent: [Parent Index](../index.md)
-
-## Child Directories
-
-- [Archive](archive/index.md) - pages related to archive
-- [Build Stack](build-stack/index.md) - pages related to build stack
-- [Install Stack](install-stack/index.md) - pages related to install stack
-- [Upgrade](upgrade/index.md) - pages related to upgrade
+- Wiki Home: [Root Index](../index.md)
 
 ## Pages in This Directory
 
-- [Index](_index.md)
+- [_Index](_index.md)
 - [Version Mgmt](version-mgmt.md)
 
-## IDE LLM Guidance
+## Subdirectories
 
-When answering implementation questions related to this directory:
-
-1. Prefer the most specific page listed above.
-2. If the topic is broad, read the child directory index first.
-3. Use source metadata from each page when giving answers.
+- [Archive](archive/index.md)
+- [Build Stack](build-stack/index.md)
+- [Install Stack](install-stack/index.md)
+- [Upgrade](upgrade/index.md)

@@ -1,88 +1,107 @@
 ---
 type: "Framework Learn Page"
-framework: "mongodb"
+framework: "MongoDB"
 source_repo: "https://github.com/mongodb/docs.git"
 source_branch: "main"
 source_path: "content/manual/manual/source/core/indexes/index-types/geospatial/2d/query/proximity-flat-surface.txt"
-source_commit: "ab9db26ed3d11618cdb61516d8180337d8e3f679"
-source_commit_short: "ab9db26e"
-source_commit_date: "2026-07-24T16:22:46-06:00"
-generated_at: "2026-07-25T11:51:15Z"
+source_commit: "b9f2bc487a2878b65e3c1f80024bebab76954f27"
+source_commit_short: "b9f2bc48"
+source_commit_date: "2026-08-28T17:09:45-05:00"
+generated_at: "2026-08-29T09:39:19.848122Z"
 ---
-
-==================================================
+.. _2d-index-proximity-query:
 
 # Query for Locations Near a Point on a Flat Surface
 
-You can query for location data that appears near a specified point on a flat surface.
+**meta:** :description: Query location data near a specified point on a flat surface using the `$near` operator with geospatial indexing.
 
-To query for location data near a specified point, use the :query:`$near` operator:
+.. default-domain:: mongodb
 
-```javascript
-db.<collection>.find( {
-   <location field> : {
-      $near : [ <longitude>, <latitude> ],
-      $maxDistance : <distance in meters>
-   }
-} )
-```
+**contents:** On this page
+   :local:
+   :backlinks: none
+   :depth: 2
+   :class: singlecol
+
+You can query for location data that appears near a specified point on a
+flat surface.
+
+To query for location data near a specified point, use the
+:query:`$near` operator:
+
+.. code-block:: javascript
+
+   db.<collection>.find( {
+      <location field> : {
+         $near : [ <longitude>, <latitude> ],
+         $maxDistance : <distance in meters>
+      }
+   } )
 
 ## About this Task
 
-- When specifying coordinate pairs in the `$near` operator, list the
-**longitude** first, and then **latitude**.
+- When specifying coordinate pairs in the ``$near`` operator, list the
+  **longitude** first, and then **latitude**.
 
-- Valid longitude values are between `-180` and `180`, both
-inclusive.
+  - Valid longitude values are between ``-180`` and ``180``, both
+    inclusive.
 
-- Valid latitude values are between `-90` and `90`, both
-inclusive.
+  - Valid latitude values are between ``-90`` and ``90``, both
+    inclusive.
 
-- Specify distance in the `$maxDistance` field in **meters**.
+- Specify distance in the ``$maxDistance`` field in **meters**.
+
 ## Before you Begin
 
 #. .. include:: /includes/indexes/2d-sample-docs.rst
 
 #. .. include:: /includes/indexes/near-requires-geospatial-index.rst
+   
+   Create a 2d index on the ``address`` field:
 
-Create a 2d index on the `address` field:
+   .. code-block:: javascript
 
-```javascript
-   db.contacts.createIndex( { address: "2d" } )
-```
+      db.contacts.createIndex( { address: "2d" } )
 
 ## Procedure
 
-Use `$near` to query the collection. The following `$near` query returns documents that have an `address` field within 50 meters of the coordinate pair `[ -73.92, 40.78 ]`:
+Use ``$near`` to query the collection. The following ``$near`` query
+returns documents that have an ``address`` field within 50 meters of the
+coordinate pair ``[ -73.92, 40.78 ]``:
 
-```javascript
-db.contacts.find( {
-   address: {
-      $near: [ -73.92, 40.78 ],
-      $maxDistance : 50
-   }
-} )
-```
+.. code-block:: javascript
+
+   db.contacts.find( {
+      address: {
+         $near: [ -73.92, 40.78 ],
+         $maxDistance : 50
+      }
+   } )
 
 Output:
 
-```javascript
-[
-   {
-     _id: ObjectId("640a3dd9c639b6f094b00e89"),
-     name: 'Georgine Lestaw',
-     phone: '714-555-0107',
-     address: [ -74, 44.74 ]
-   }
-]
-```
+.. code-block:: javascript
+   :copyable: false
 
-Results are sorted by distance from the queried point, from nearest to farthest.
+   [
+      {
+        _id: ObjectId("640a3dd9c639b6f094b00e89"),
+        name: 'Georgine Lestaw',
+        phone: '714-555-0107',
+        address: [ -74, 44.74 ]
+      }
+   ]
+
+Results are sorted by distance from the queried point, from nearest to
+farthest.
 
 ## Learn More
 
 - :query:`$near`
+
 - :pipeline:`$geoNear`
-- `geospatial-restrictions`
+
+- :ref:`geospatial-restrictions`
+
 - To perform proximity queries on a spherical surface, see
-`2dsphere-query-geojson-proximity`.
+  :ref:`2dsphere-query-geojson-proximity`.

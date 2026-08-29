@@ -1,69 +1,98 @@
 ---
 type: "Framework Learn Page"
-framework: "mongodb"
+framework: "MongoDB"
 source_repo: "https://github.com/mongodb/docs.git"
 source_branch: "main"
 source_path: "content/manual/manual/source/query-api.txt"
-source_commit: "ab9db26ed3d11618cdb61516d8180337d8e3f679"
-source_commit_short: "ab9db26e"
-source_commit_date: "2026-07-24T16:22:46-06:00"
-generated_at: "2026-07-25T11:51:15Z"
+source_commit: "b9f2bc487a2878b65e3c1f80024bebab76954f27"
+source_commit_short: "b9f2bc48"
+source_commit_date: "2026-08-28T17:09:45-05:00"
+generated_at: "2026-08-29T09:39:19.480017Z"
 ---
-
-===================
+.. |query-api| replace:: Query API
 
 # MongoDB |query-api|
 
-The MongoDB |query-api| is the mechanism that you use to interact with your data.
+**meta:** :description: Explore data using MongoDB's Query API, which supports CRUD operations, aggregation pipelines, and various query types like geospatial and full-text search.
+
+.. default-domain:: mongodb
+
+**contents:** On this page
+   :local:
+   :backlinks: none
+   :depth: 1
+   :class: singlecol
+
+The MongoDB |query-api| is the mechanism that you use to interact with 
+your data.
 
 The |query-api| comprises two ways to query data in MongoDB:
 
-- `CRUD Operations <crud>`
-- `Aggregation pipelines <aggregation-pipeline>`
+- :ref:`CRUD Operations <crud>`
+- :ref:`Aggregation pipelines <aggregation-pipeline>`
+
 You can use the |query-api| to perform:
 
 - **Adhoc queries**. Explore your MongoDB data with :binary:`~bin.mongosh`,
-:compass:`Compass </>` , [VSCode](https://code.visualstudio.com/docs/azure/mongodb) or a MongoDB :driver:`driver </>`.
+  :compass:`Compass </>` , 
+  `VSCode <https://code.visualstudio.com/docs/azure/mongodb>`_ 
+  or a MongoDB :driver:`driver </>`.
 
-- **Data transformations**. Use
-`aggregation pipelines <aggregation-pipeline>` to reshape your data and perform calculations.
+- **Data transformations**. Use 
+  :ref:`aggregation pipelines <aggregation-pipeline>` to 
+  reshape your data and perform calculations. 
 
-- **Document join support** Use :pipeline:`$lookup` and
-:pipeline:`$unionWith` to combine data from different collections.
+- **Document join support** Use :pipeline:`$lookup` and 
+  :pipeline:`$unionWith` to combine data from different collections.
 
-- **Graph and geospatial queries**. Use operators such as
-:query:`$geoWithin` and :pipeline:`$geoNear` to analyze geospatial data and :pipeline:`$graphLookup` for graph data.
+- **Graph and geospatial queries**. Use operators such as 
+  :query:`$geoWithin` and :pipeline:`$geoNear` to analyze geospatial 
+  data and :pipeline:`$graphLookup` for graph data.
 
-- **Full-text search**. Use the :pipeline:`$search` stage to
-perform efficient text search on your data.
+- **Full-text search**. Use the :pipeline:`$search` stage to 
+  perform efficient text search on your data.
 
 - **Semantic search**. Use the :pipeline:`$vectorSearch` stage to
-perform semantic search on your data.
+  perform semantic search on your data.
 
 - **Indexing**. Improve your MongoDB query performance by using the correct
-`index type <indexes>` for your data architecture.
+  :ref:`index type <indexes>` for your data architecture.
 
-- **On-demand materialized views**. Use :pipeline:`$out` and
-:pipeline:`$merge` to `create materialized views </core/materialized-views>` on common queries.
+- **On-demand materialized views**. Use :pipeline:`$out` and 
+  :pipeline:`$merge` to :doc:`create materialized views 
+  </core/materialized-views>`
+  on common queries.
 
-- **Time series analysis**. Query and aggregate your time-stamped data
-with `time series collections <manual-timeseries-collection-create>`.
+- **Time series analysis**. Query and aggregate your time-stamped data 
+  with :ref:`time series collections <manual-timeseries-collection-create>`.
 
 ## Document Model
 
-A document in MongoDB is a data structure composed of field and value pairs. Documents are stored as BSON which is the binary representation of `JSON`. This low level of abstraction helps you develop quicker and reduces the efforts around querying and data modeling. The document model provides several advantages, including:
+A document in MongoDB is a data structure composed of field and value 
+pairs. Documents are stored as BSON which is the binary representation of 
+:term:`JSON`. This low level of abstraction helps you develop quicker 
+and reduces the efforts around querying and data modeling. The document
+model provides several advantages, including:
 
-- Documents correspond to native data types in many programming
-languages.
+- Documents correspond to native data types in many programming 
+  languages.
 
 - Embedded documents and arrays reduce need for expensive joins.
-- Flexible schema. Documents do not need to have the same set of fields
-and the data type for a field can differ across documents within a collection.
+
+- Flexible schema. Documents do not need to have the same set of fields 
+  and the data type for a field can differ across documents within a 
+  collection.
 
 ## Data as Code
 
-The MongoDB |query-api| supports :driver:`drivers</>` for major programming languages. These drivers allow you to make calls to the database and generate queries using the syntax native to your application.
+The MongoDB |query-api| supports :driver:`drivers</>` for major 
+programming languages. These drivers allow you to make calls to the 
+database and generate queries using the syntax native to your 
+application.
 
 ## Getting Started
 
-To get started, visit the MongoDB `Getting Started Guide <getting-started>`. Here you can find resources, code examples and tutorials that demonstrate the MongoDB |query-api|.
+To get started, visit the MongoDB 
+:ref:`Getting Started Guide <getting-started>`. Here you can
+find resources, code examples and tutorials that demonstrate the MongoDB
+|query-api|.

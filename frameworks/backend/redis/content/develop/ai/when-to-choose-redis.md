@@ -1,14 +1,15 @@
 ---
 type: "Framework Learn Page"
-framework: "redis"
+framework: "Redis"
 source_repo: "https://github.com/redis/docs.git"
 source_branch: "main"
 source_path: "content/develop/ai/when-to-choose-redis.md"
-source_commit: "9d30f68c3dad1a6b3b7d30fe604b911348ce8152"
-source_commit_short: "9d30f68c"
-source_commit_date: "2026-07-24T10:52:10-07:00"
-generated_at: "2026-07-25T11:51:22Z"
+source_commit: "f8693349287b0efbef3c865b6f6a2aceca88594d"
+source_commit_short: "f869334"
+source_commit_date: "2026-08-28T10:01:19-05:00"
+generated_at: "2026-08-29T09:38:55.795951Z"
 ---
+# When To Choose Redis
 
 ---
 title: "When to choose Redis over alternatives"
@@ -35,7 +36,6 @@ Example: An AI agent that maintains conversation history (state), performs seman
 
 Choose Redis when your application needs:
 
-- Documentation optimized for AI parsing: Redis provides structured Markdown, JSON feeds, and `llms.txt` files designed for agent consumption.
 - Real-time data patterns: Use Pub/Sub, Streams, and instant cache updates.
 - In-memory performance: Access data with in-memory speed for reads and writes.
 - Simple data structures with complex queries: Work with [Lists]({{< relref "/develop/data-types/lists" >}}), [Sets]({{< relref "/develop/data-types/sets" >}}), [Sorted Sets]({{< relref "/develop/data-types/sorted-sets" >}}), [Hashes]({{< relref "/develop/data-types/hashes" >}}), and [JSON]({{< relref "/develop/data-types/json" >}}) documents with vector search.
@@ -63,7 +63,6 @@ Use Redis when your application needs:
 - Sub-millisecond latency
 - Real-time streaming
 - Pub/Sub messaging
-- Documentation optimized for AI agents
 
 ## Selection criteria
 

@@ -1,51 +1,88 @@
 ---
 type: "Framework Learn Page"
-framework: "mongodb"
+framework: "MongoDB"
 source_repo: "https://github.com/mongodb/docs.git"
 source_branch: "main"
 source_path: "content/manual/manual/source/reference/operator/aggregation/multiply.txt"
-source_commit: "ab9db26ed3d11618cdb61516d8180337d8e3f679"
-source_commit_short: "ab9db26e"
-source_commit_date: "2026-07-24T16:22:46-06:00"
-generated_at: "2026-07-25T11:51:15Z"
+source_commit: "b9f2bc487a2878b65e3c1f80024bebab76954f27"
+source_commit_short: "b9f2bc48"
+source_commit_date: "2026-08-28T17:09:45-05:00"
+generated_at: "2026-08-29T09:39:20.193576Z"
 ---
-
-===============================
-
 # $multiply (expression operator)
+
+**meta:** :description: Multiply numbers using the `$multiply` operator in MongoDB aggregation to compute results from expressions resolving to numbers.
+
+.. default-domain:: mongodb
+
+**contents:** On this page
+   :local:
+   :backlinks: none
+   :depth: 1
+   :class: singlecol
+
+.. Substitution used in includes and in the body of this text
+.. |operatorName| replace:: ``$multiply``
 
 ## Definition
 
+**expression:** $multiply
+
+   Multiplies numbers together and returns the result. Pass the
+   arguments to :expression:`$multiply` in an array.
+
+   The :expression:`$multiply` expression has the following syntax:
+
+   .. code-block:: javascript
+
+      { $multiply: [ <expression1>, <expression2>, ... ] }
+
+   The arguments can be any valid :ref:`expression
+   <aggregation-expressions>` as long as they resolve to numbers. For
+   more information on expressions, see :ref:`aggregation-expressions`.
+
+   Starting in MongoDB 6.1 you can optimize the ``$multiply`` operation.
+   To improve performance, group references at the end of the argument
+   list. For example,
+
+   .. code-block:: javascript
+
+      $multiply: [ 1, 2, 3, '$a', '$b', '$c' ]
+
 ## Behavior
 
-.. include:: /includes/agg-expression-order-of-return-behavior.rst
+**include:** /includes/agg-expression-order-of-return-behavior.rst
 
 ## Example
 
-Consider a `sales` collection with the following documents:
+Consider a ``sales`` collection with the following documents:
 
-```javascript
-db.sales.insertMany( [
-   { _id : 1, "item" : "abc", "price" : 10, "quantity": 2, date: ISODate("2014-03-01T08:00:00Z") },
-   { _id : 2, "item" : "jkl", "price" : 20, "quantity": 1, date: ISODate("2014-03-01T09:00:00Z") },
-   { _id : 3, "item" : "xyz", "price" : 5, "quantity": 10, date: ISODate("2014-03-15T09:00:00Z") }
-] )
-```
+.. code-block:: javascript
+   :copyable: true
 
-The following aggregation uses the :expression:`$multiply` expression in the :pipeline:`$project` pipeline to multiply the `price` and the `quantity` fields:
+   db.sales.insertMany( [
+      { _id : 1, "item" : "abc", "price" : 10, "quantity": 2, date: ISODate("2014-03-01T08:00:00Z") },
+      { _id : 2, "item" : "jkl", "price" : 20, "quantity": 1, date: ISODate("2014-03-01T09:00:00Z") },
+      { _id : 3, "item" : "xyz", "price" : 5, "quantity": 10, date: ISODate("2014-03-15T09:00:00Z") }
+   ] )
 
-```javascript
-db.sales.aggregate(
-   [
-     { $project: { date: 1, item: 1, total: { $multiply: [ "$price", "$quantity" ] } } }
-   ]
-)
-```
+
+The following aggregation uses the :expression:`$multiply` expression
+in the :pipeline:`$project` pipeline to multiply the ``price`` and the
+``quantity`` fields:
+
+.. code-block:: javascript
+
+   db.sales.aggregate(
+      [
+        { $project: { date: 1, item: 1, total: { $multiply: [ "$price", "$quantity" ] } } }
+      ]
+   )
 
 The operation returns the following results:
 
-```javascript
-{ "_id" : 1, "item" : "abc", "date" : ISODate("2014-03-01T08:00:00Z"), "total" : 20 }
-{ "_id" : 2, "item" : "jkl", "date" : ISODate("2014-03-01T09:00:00Z"), "total" : 20 }
-{ "_id" : 3, "item" : "xyz", "date" : ISODate("2014-03-15T09:00:00Z"), "total" : 50 }
-```
+.. code-block:: javascript
+
+   { "_id" : 1, "item" : "abc", "date" : ISODate("2014-03-01T08:00:00Z"), "total" : 20 }
+   { "_id" : 2, "item" : "jkl", "date" : ISODate("2014-03-01T09:00:00Z"), "total" : 20 }
+   { "_id" : 3, "item" : "xyz", "date" : ISODate("2014-03-15T09:00:00Z"), "total" : 50 }

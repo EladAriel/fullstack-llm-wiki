@@ -1,40 +1,64 @@
 ---
 type: "Framework Learn Page"
-framework: "mongodb"
+framework: "MongoDB"
 source_repo: "https://github.com/mongodb/docs.git"
 source_branch: "main"
 source_path: "content/manual/manual/source/core/read-preference-staleness.txt"
-source_commit: "ab9db26ed3d11618cdb61516d8180337d8e3f679"
-source_commit_short: "ab9db26e"
-source_commit_date: "2026-07-24T16:22:46-06:00"
-generated_at: "2026-07-25T11:51:15Z"
+source_commit: "b9f2bc487a2878b65e3c1f80024bebab76954f27"
+source_commit_short: "b9f2bc48"
+source_commit_date: "2026-08-28T17:09:45-05:00"
+generated_at: "2026-08-29T09:39:19.515767Z"
 ---
+.. _replica-set-read-preference-max-staleness:
 
-=======================================
+# Read Preference ``maxStalenessSeconds``
 
-# Read Preference `maxStalenessSeconds`
+**meta:** :description: Specify `maxStalenessSeconds` to limit replication lag for reads from secondaries, ensuring they don't fall too far behind the primary's writes.
 
-Replica set members can lag behind the `primary` due to network congestion, low disk throughput, long-running operations, etc. The read preference `maxStalenessSeconds` option lets you specify a maximum replication lag, or "staleness", for reads from `secondaries <secondary>`. When a secondary's estimated staleness exceeds `maxStalenessSeconds`, the client stops using it for read operations.
+.. default-domain:: mongodb
 
-.. include:: /includes/fact-important-maxStalenessSeconds-intended-use.rst
+Replica set members can lag behind the :term:`primary` due to network
+congestion, low disk throughput, long-running operations, etc. The read
+preference ``maxStalenessSeconds`` option lets you specify a maximum
+replication lag, or "staleness", for reads from :term:`secondaries
+<secondary>`. When a secondary's estimated staleness exceeds
+``maxStalenessSeconds``, the client stops using it for read operations.
 
-> **Note:** `Flow control <replication-flow-control>` limits the rate at which
-the primary applies its writes with the goal of keeping :data:`majority
-committed <replSetGetStatus.optimes.lastCommittedOpTime>` lag under a
-specified maximum value.
+**include:** /includes/fact-important-maxStalenessSeconds-intended-use.rst
 
-You can specify `maxStalenessSeconds` with the following read preference modes:
+**note:** :ref:`Flow control <replication-flow-control>` limits the rate at which
+   the primary applies its writes with the goal of keeping :data:`majority
+   committed <replSetGetStatus.optimes.lastCommittedOpTime>` lag under a
+   specified maximum value.
+
+You can specify ``maxStalenessSeconds`` with the following read
+preference modes:
 
 - :readmode:`primaryPreferred`
 - :readmode:`secondary`
 - :readmode:`secondaryPreferred`
 - :readmode:`nearest`
-Max staleness is not compatible with mode :readmode:`primary` and only applies when `selecting <replica-set-read-preference-behavior-member-selection>` a `secondary` member of a set for a read operation.
 
-When selecting a server for a read operation with `maxStalenessSeconds`, clients estimate how stale each secondary is by comparing the secondary's last write to that of the primary. The client will then direct the read operation to a secondary whose estimated lag is less than or equal to `maxStalenessSeconds`.
+Max staleness is not compatible with mode :readmode:`primary` and only
+applies when :ref:`selecting
+<replica-set-read-preference-behavior-member-selection>` a
+:term:`secondary` member of a set for a read operation.
 
-If there is no primary, the client uses the secondary with the most recent write for the comparison.
+When selecting a server for a read operation with ``maxStalenessSeconds``, clients
+estimate how stale each secondary is by comparing the secondary's last
+write to that of the primary. The client will then direct the read
+operation to a secondary whose estimated lag is less than or equal to
+``maxStalenessSeconds``.
 
-By default, there is no maximum staleness and clients will not consider a secondary's lag when choosing where to direct a read operation.
+If there is no primary, the client uses the secondary with the most
+recent write for the comparison.
 
-You must specify a `maxStalenessSeconds` value of 90 seconds or longer: specifying a smaller `maxStalenessSeconds` value will raise an error. Clients estimate secondaries' staleness by periodically checking the latest write date of each replica set member. Since these checks are infrequent, the staleness estimate is coarse. Thus, clients cannot enforce a `maxStalenessSeconds` value of less than 90 seconds.
+By default, there is no maximum staleness and clients will not consider a
+secondary's lag when choosing where to direct a read operation. 
+
+You must specify a ``maxStalenessSeconds`` value of 90 seconds or
+longer: specifying a smaller ``maxStalenessSeconds`` value will raise
+an error. Clients estimate secondaries' staleness by periodically
+checking the latest write date of each replica set member. Since these
+checks are infrequent, the staleness estimate is coarse. Thus, clients
+cannot enforce a ``maxStalenessSeconds`` value of less than 90 seconds.

@@ -1,39 +1,188 @@
 ---
 type: "Framework Learn Page"
-framework: "mongodb"
+framework: "MongoDB"
 source_repo: "https://github.com/mongodb/docs.git"
 source_branch: "main"
 source_path: "content/manual/manual/source/reference/security.txt"
-source_commit: "ab9db26ed3d11618cdb61516d8180337d8e3f679"
-source_commit_short: "ab9db26e"
-source_commit_date: "2026-07-24T16:22:46-06:00"
-generated_at: "2026-07-25T11:51:15Z"
+source_commit: "b9f2bc487a2878b65e3c1f80024bebab76954f27"
+source_commit_short: "b9f2bc48"
+source_commit_date: "2026-08-28T17:09:45-05:00"
+generated_at: "2026-08-29T09:39:19.697685Z"
 ---
-
-===============================================
+.. _security-reference:
 
 # Security Reference for Self-Managed Deployments
 
-The following lists the security related methods available in :binary:`~bin.mongosh` as well as additional `security reference material <security-reference-materials>`.
+.. default-domain:: mongodb
 
-## Security Methods in `mongosh`
+**meta:** :keywords: on-prem
+   :description: Explore security methods in `mongosh` for user and role management in self-managed MongoDB deployments.
+
+**contents:** On this page
+   :local:
+   :backlinks: none
+   :depth: 1
+   :class: singlecol
+
+The following lists the security related methods available in
+:binary:`~bin.mongosh` as well as additional
+:ref:`security reference material <security-reference-materials>`.
+
+## Security Methods in ``mongosh``
 
 ### User Management and Authentication Methods
 
+.. list-table::
+   :widths: 30,70
+   :header-rows: 1
+
+   * - Name
+
+     - Description
+
+   * - :method:`db.auth()`
+
+     - Authenticates a user to a database.
+
+   * - :method:`db.changeUserPassword()`
+
+     - Changes an existing user's password.
+
+   * - :method:`db.createUser()`
+
+     - Creates a new user.
+   
+
+   * - :method:`db.dropUser()`
+
+     - Removes a single user.
+   
+
+   * - :method:`db.dropAllUsers()`
+
+     - Deletes all users associated with a database.
+   
+
+   * - :method:`db.getUser()`
+
+     - Returns information about the specified user.
+   
+
+   * - :method:`db.getUsers()`
+
+     - Returns information about all users associated with a database.
+   
+
+   * - :method:`db.grantRolesToUser()`
+
+     - Grants a role and its privileges to a user.
+   
+
+   * - :method:`db.removeUser()`
+
+     - Deprecated. Removes a user from a database.
+
+   * - :method:`db.revokeRolesFromUser()`
+
+     - Removes a role from a user.
+   
+
+   * - :method:`db.updateUser()`
+
+     - Updates user data.
+   
+
+   * - :method:`passwordPrompt()`
+
+     - Prompts for the password as an alternative to specifying passwords
+       directly in various :binary:`~bin.mongosh` user
+       authentication/management methods.
+   
+
+
 ### Role Management Methods
+
+.. list-table::
+   :widths: 30,70
+   :header-rows: 1
+
+   * - Name
+
+     - Description
+
+   * - :method:`db.createRole()`
+
+     - Creates a role and specifies its privileges.
+   
+
+   * - :method:`db.dropRole()`
+
+     - Deletes a user-defined role.
+   
+
+   * - :method:`db.dropAllRoles()`
+
+     - Deletes all user-defined roles associated with a database.
+   
+
+   * - :method:`db.getRole()`
+
+     - Returns information for the specified role.
+   
+
+   * - :method:`db.getRoles()`
+
+     - Returns information for all the user-defined roles in a database.
+   
+
+   * - :method:`db.grantPrivilegesToRole()`
+
+     - Assigns privileges to a user-defined role.
+   
+
+   * - :method:`db.revokePrivilegesFromRole()`
+
+     - Removes the specified privileges from a user-defined role.
+   
+
+   * - :method:`db.grantRolesToRole()`
+
+     - Specifies roles from which a user-defined role inherits privileges.
+   
+
+   * - :method:`db.revokeRolesFromRole()`
+
+     - Removes inherited roles from a role.
+   
+
+   * - :method:`db.updateRole()`
+
+     - Updates a user-defined role.
+   
+
+
+.. _security-reference-materials:
 
 ## Security Reference Documentation
 
-`/reference/system-roles-collection` Describes the content of the collection that stores user-defined roles.
+:doc:`/reference/system-roles-collection`
+   Describes the content of the collection that stores user-defined
+   roles.
 
-`/reference/system-users-collection` Describes the content of the collection that stores users' credentials and role assignments.
+:doc:`/reference/system-users-collection`
+   Describes the content of the collection that stores users'
+   credentials and role assignments.
 
-`/reference/resource-document` Describes the resource document for roles.
+:doc:`/reference/resource-document`
+   Describes the resource document for roles.
 
-`/reference/privilege-actions` List of the actions available for privileges.
+:doc:`/reference/privilege-actions`
+   List of the actions available for privileges.
 
-## Contents
 
-- systems.roles Collection </reference/system-roles-collection>
-- systems.users Collection </reference/system-users-collection>
-- Resource Document </reference/resource-document>
+**toctree:** :titlesonly: 
+   :hidden: 
+
+   systems.roles Collection </reference/system-roles-collection>
+   systems.users Collection </reference/system-users-collection>
+   Resource Document </reference/resource-document>

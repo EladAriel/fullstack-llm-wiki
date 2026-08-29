@@ -4,36 +4,44 @@ framework: "Sentry Python"
 source_repo: "https://github.com/getsentry/sentry-docs.git"
 source_branch: "master"
 source_path: "docs/platforms/python/tracing/instrumentation/custom-instrumentation/queues-module.mdx"
-source_commit: "8557ccbd46b02c43301ef74ff54516736ecf9d69"
-source_commit_short: "8557ccb"
-source_commit_date: "2026-07-24T13:12:02-04:00"
-generated_at: "2026-07-25T19:08:13.535592Z"
+source_commit: "8b4e4a23b18ee70f5fdb05bcda48869c10be2f60"
+source_commit_short: "8b4e4a2"
+source_commit_date: "2026-08-28T22:17:56+00:00"
+generated_at: "2026-08-29T09:40:09.048139Z"
 ---
 ---
 title: Instrument Queues
 sidebar_order: 3000
 description: "Learn how to manually instrument your code to use Sentry's Queues module. "
 ---
+
 Sentry comes with a [queue-monitoring dashboard](https://sentry.io/orgredirect/organizations/:orgslug/dashboards/) that can be auto-instrumented for popular Python queue setups (like <PlatformLink to="/integrations/celery/">Celery</PlatformLink>).
 
 In case yours isn't supported, you can still instrument custom spans and transactions around your queue producers and consumers to ensure that you have performance data about your messaging queues.
 
+<Alert>
+
+This page covers both transaction mode (default) and stream mode. See <PlatformLink to="/tracing/streamed-spans/">Streamed Spans</PlatformLink> to learn more.
+
+</Alert>
+
 ## Producer Instrumentation
 
-To start capturing performance metrics, use the `sentry_sdk.start_span()` function to wrap your queue producer events. Your span `op` must be set to `queue.publish`. Include the following span data to enrich your producer spans with queue metrics:
+To start capturing performance metrics, use the `start_span()` function to wrap your queue producer events. Your span `op` must be set to `queue.publish`. Include the following span data to enrich your producer spans with queue metrics:
 
-| Data Attribute | Type | Description |
-|:--|:--|:--|
-| `messaging.message.id ` | string | The message identifier |
-| `messaging.destination.name` | string | The queue or topic name |
-| `messaging.message.body.size` | int | Size of the message body in bytes |
+| Data Attribute                | Type   | Description                       |
+| :---------------------------- | :----- | :-------------------------------- |
+| `messaging.message.id `       | string | The message identifier            |
+| `messaging.destination.name`  | string | The queue or topic name           |
+| `messaging.message.body.size` | int    | Size of the message body in bytes |
 
-Your `queue.publish` span must exist inside a transaction in order to be recognized as a producer span. If you are using a <PlatformLink to="/integrations/#web-frameworks">supported web framework</PlatformLink>, the transaction is created by the integration. If you use plain Python, you can start a new one using `sentry_sdk.start_transaction()`.
+In transaction mode, your `queue.publish` span must exist inside a transaction in order to be recognized as a producer span. If you are using a <PlatformLink to="/integrations/#web-frameworks">supported web framework</PlatformLink>, the transaction is created by the integration. If you use plain Python, you can start a new one using `sentry_sdk.start_transaction()`.
+
+In stream mode, there's no separate transaction to depend on. If your `queue.process` span has no parent, it's automatically promoted to a service span. If you'd rather group it under an explicit service span, start one with `sentry_sdk.traces.start_span(parent_span=None)` first.
 
 You must also include trace headers (`sentry-trace` and `baggage`) in your message so that your consumers can continue your trace once your message is picked up.
 
-
-```python
+```python {tabTitle:Transaction Mode (Default)}
 from datetime import datetime, timezone
 
 import sentry_sdk
@@ -79,25 +87,74 @@ with sentry_sdk.start_transaction(
         )
 ```
 
+```python {tabTitle:Stream Mode}
+from datetime import datetime, timezone
+
+import sentry_sdk
+import my_custom_queue
+
+# Initialize Sentry
+sentry_sdk.init(...)
+
+connection = my_custom_queue.connect()
+
+# The message you want to send to the queue
+queue = "messages"
+message = "Hello World!"
+message_id = "abc123"
+
+# Create the service span
+# If you are using a web framework, the framework integration
+# will create this for you and you can omit this.
+with sentry_sdk.traces.start_span(
+    name="queue_producer_transaction",
+    attributes={"sentry.op": "function"},
+    parent_span=None,
+):
+    # Create the span
+    with sentry_sdk.traces.start_span(
+        name="queue_producer",
+        attributes={"sentry.op": "queue.publish"},
+    ) as span:
+        # Set span data
+        span.set_attributes({
+            "messaging.message.id": message_id,
+            "messaging.destination.name": queue,
+            "messaging.message.body.size": len(message.encode("utf-8")),
+        })
+
+        # Publish the message to the queue (including trace information and current time stamp)
+        now = int(datetime.now(timezone.utc).timestamp())
+        connection.publish(
+            queue=queue,
+            body=message,
+            timestamp=now,
+            headers={
+                "sentry-trace": sentry_sdk.get_traceparent(),
+                "baggage": sentry_sdk.get_baggage(),
+            },
+        )
+```
 
 ## Consumer Instrumentation
 
-To start capturing performance metrics, use the `sentry_sdk.start_span()` function to wrap your queue consumers. Your span `op` must be set to `queue.process`. Include the following span data to enrich your consumer spans with queue metrics:
+To start capturing performance metrics, use the `start_span()` function to wrap your queue consumers. Your span `op` must be set to `queue.process`. Include the following span data to enrich your consumer spans with queue metrics:
 
-| Data Attribute | Type | Description |
-|:--|:--|:--|
-| `messaging.message.id ` | string | The message identifier |
-| `messaging.destination.name` | string | The queue or topic name |
-| `messaging.message.body.size` | number | Size of the message body in bytes |
-| `messaging.message.retry.count ` | number | The number of times a message was attempted to be processed |
+| Data Attribute                       | Type   | Description                                                         |
+| :----------------------------------- | :----- | :------------------------------------------------------------------ |
+| `messaging.message.id `              | string | The message identifier                                              |
+| `messaging.destination.name`         | string | The queue or topic name                                             |
+| `messaging.message.body.size`        | number | Size of the message body in bytes                                   |
+| `messaging.message.retry.count `     | number | The number of times a message was attempted to be processed         |
 | `messaging.message.receive.latency ` | number | The time in milliseconds that a message awaited processing in queue |
 
-Your `queue.process` span must exist inside a transaction in order to be recognized as a consumer span. If you are using a <PlatformLink to="/integrations/#web-frameworks">supported web framework</PlatformLink>, the transaction is created by the integration. If you use plain Python, you can start a new one using `sentry_sdk.start_transaction()`.
+In transaction mode, your `queue.process` span must exist inside a transaction in order to be recognized as a consumer span. If you are using a <PlatformLink to="/integrations/#web-frameworks">supported web framework</PlatformLink>, the transaction is created by the integration. If you use plain Python, you can start a new one using `sentry_sdk.start_transaction()`.
 
-Use `sentry_sdk.continue_trace()` to connect your consumer spans to their associated producer spans, and `transaction.set_status()` to mark the trace of your message as success or failed.
+In stream mode, there's no separate transaction to depend on. If your `queue.process` span has no parent, it's automatically promoted to a service span. If you'd rather group it under an explicit service span, start one with `sentry_sdk.traces.start_span(parent_span=None)` first.
 
+Use `continue_trace()` to connect your consumer spans to their associated producer spans. To mark the trace of your message as success or failed, use `transaction.set_status()` in transaction mode, or set `span.status = "ok"/"error"` directly on the service span in stream mode.
 
-```python
+```python {tabTitle:Transaction Mode (Default)}
 from datetime import datetime, timezone
 
 import sentry_sdk
@@ -134,8 +191,8 @@ with sentry_sdk.start_transaction(transaction):
         # Set span data
         span.set_data("messaging.message.id", message["message_id"])
         span.set_data("messaging.destination.name", queue)
-        span.set_data("messaging.message.body.size", message["body"])
-        span.set_data("messaging.message.receive.latency", latency)
+        span.set_data("messaging.message.body.size", len(message["body"].encode("utf-8")))
+        span.set_data("messaging.message.receive.latency", latency.total_seconds() * 1000)
         span.set_data("messaging.message.retry.count", 0)
 
         try:
@@ -144,4 +201,55 @@ with sentry_sdk.start_transaction(transaction):
         except Exception:
             # In case of an error set the status to "internal_error"
             transaction.set_status("internal_error")
+```
+
+```python {tabTitle:Stream Mode}
+from datetime import datetime, timezone
+
+import sentry_sdk
+import my_custom_queue
+
+# Initialize Sentry
+sentry_sdk.init(...)
+
+connection = my_custom_queue.connect()
+
+# Pick up message from queues
+queue = "messages"
+message = connection.consume(queue=queue)
+
+# Calculate latency (optional, but valuable)
+now = datetime.now(timezone.utc)
+message_time = datetime.fromtimestamp(message["timestamp"], timezone.utc)
+latency = now - message_time
+
+# Continue the trace started in the producer
+# If you are using a web framework, the framework integration
+# will create this for you and you can omit this.
+sentry_sdk.traces.continue_trace(message["headers"])
+with sentry_sdk.traces.start_span(
+    name="queue_consumer_transaction",
+    attributes={"sentry.op": "function"},
+    parent_span=None,
+) as service_span:
+    # Create the span
+    with sentry_sdk.traces.start_span(
+        name="queue_consumer",
+        attributes={"sentry.op": "queue.process"},
+    ) as span:
+        # Set span data
+        span.set_attributes({
+            "messaging.message.id": message["message_id"],
+            "messaging.destination.name": queue,
+            "messaging.message.body.size": len(message["body"].encode("utf-8")),
+            "messaging.message.receive.latency": latency.total_seconds() * 1000,
+            "messaging.message.retry.count": 0,
+        })
+
+        try:
+            # Process the message
+            process_message(message)
+        except Exception:
+            # In case of an error set the status to "error"
+            service_span.status = "error"
 ```

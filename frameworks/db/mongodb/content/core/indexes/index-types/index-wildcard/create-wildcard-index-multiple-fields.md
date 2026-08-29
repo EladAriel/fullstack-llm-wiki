@@ -1,212 +1,263 @@
 ---
 type: "Framework Learn Page"
-framework: "mongodb"
+framework: "MongoDB"
 source_repo: "https://github.com/mongodb/docs.git"
 source_branch: "main"
 source_path: "content/manual/manual/source/core/indexes/index-types/index-wildcard/create-wildcard-index-multiple-fields.txt"
-source_commit: "ab9db26ed3d11618cdb61516d8180337d8e3f679"
-source_commit_short: "ab9db26e"
-source_commit_date: "2026-07-24T16:22:46-06:00"
-generated_at: "2026-07-25T11:51:15Z"
+source_commit: "b9f2bc487a2878b65e3c1f80024bebab76954f27"
+source_commit_short: "b9f2bc48"
+source_commit_date: "2026-08-28T17:09:45-05:00"
+generated_at: "2026-08-29T09:39:19.840251Z"
 ---
-
-=============================================
+.. _create-wildcard-index-multiple-fields:
 
 # Include or Exclude Fields in a Wildcard Index
 
-When you create a wildcard index, you can specify fields to include or exclude in the index. This lets you:
+**meta:** :description: Specify fields to include or exclude in a wildcard index using the `wildcardProjection` option to optimize query performance and index size.
+
+.. default-domain:: mongodb
+
+**contents:** On this page
+   :local:
+   :backlinks: none
+   :depth: 2
+   :class: singlecol
+
+When you create a wildcard index, you can specify fields to include or
+exclude in the index. This lets you:
 
 - Create a wildcard index that only covers specific fields. For example,
-if you have multiple embedded documents with multiple subfields, you can create an index to cover queries on both embedded documents and their subfields.
+  if you have multiple embedded documents with multiple subfields, you
+  can create an index to cover queries on both embedded documents and
+  their subfields.
 
 - Create a wildcard index that omits specific fields. For example, if
-you have a collection that contains a field that is never queried, you can omit that field from the index.
+  you have a collection that contains a field that is never queried, you
+  can omit that field from the index.
 
-To include or exclude fields in a wildcard index, specify the chosen fields in the `wildcardProjection` option:
+To include or exclude fields in a wildcard index, specify the chosen
+fields in the ``wildcardProjection`` option:
 
-```javascript
-db.<collection>.createIndex(
-   {
-      "$**" : <sortOrder>
-   },
-   {
-      "wildcardProjection" : {
-         "<field1>" : < 0 | 1 >, 
-         "<field2>" : < 0 | 1 >,
-         ...
-         "<fieldN>" : < 0 | 1 >
+.. code-block:: javascript
+
+   db.<collection>.createIndex(
+      {
+         "$**" : <sortOrder>
+      },
+      {
+         "wildcardProjection" : {
+            "<field1>" : < 0 | 1 >, 
+            "<field2>" : < 0 | 1 >,
+            ...
+            "<fieldN>" : < 0 | 1 >
+         }
       }
-   }
-)
-```
+   )
 
-In the `wildcardProjection` document, the value `0` or `1` indicates whether the field is included or excluded in the index:
+In the ``wildcardProjection`` document, the value ``0`` or ``1``
+indicates whether the field is included or excluded in the index:
 
-- `0` means the field is excluded.
-- `1` means the field is included.
+- ``0`` means the field is excluded.
+- ``1`` means the field is included.
+
+
 ## Restrictions
 
-- To use the `wildcardProjection` option, your index key must be
-`$**`.
+- To use the ``wildcardProjection`` option, your index key must be
+  ``$**``.
 
 - Wildcard indexes don't support mixing inclusion and exclusion
-statements in the `wildcardProjection document except when explicitly including the id` field. For example:
+  statements in the ``wildcardProjection`` document except when
+  explicitly including the ``_id`` field. For example:
 
-- The following `wildcardProjection` document is **invalid** because
-it specifies both an inclusion and an exclusion of a field:
+  - The following ``wildcardProjection`` document is **invalid** because
+    it specifies both an inclusion and an exclusion of a field:
 
-```json
-    {
-      "wildcardProjection" : {
-         "attributes" : 0, 
-         "users" : 1
+    .. code-block:: json
+       :copyable: false
+
+       {
+         "wildcardProjection" : {
+            "attributes" : 0, 
+            "users" : 1
+         }
       }
-   }
 
-- The following ``wildcardProjection`` document is **valid** because
- even though it specifies both inclusion and exclusion, it includes
- the ``_id`` field:
+  - The following ``wildcardProjection`` document is **valid** because
+    even though it specifies both inclusion and exclusion, it includes
+    the ``_id`` field:
 
- .. code-block:: json
-    :copyable: false
+    .. code-block:: json
+       :copyable: false
 
-    {
-      "wildcardProjection" : {
-         "attributes" : 0, 
-         "_id" : 1
+       {
+         "wildcardProjection" : {
+            "attributes" : 0, 
+            "_id" : 1
+         }
       }
-   }
-```
 
 ## Before You Begin
 
-Create a `products` collection that contains the following documents:
+Create a ``products`` collection that contains the following documents:
 
-```javascript
-db.products.insertMany( [
-   {
-      "item": "t-shirt",
-      "price": "29.99",
-      "attributes": {
-         "material": "cotton",
-         "color": "blue",
-         "size": {
-            "units": "cm",
-            "length": 74
+.. code-block:: javascript
+
+   db.products.insertMany( [
+      {
+         "item": "t-shirt",
+         "price": "29.99",
+         "attributes": {
+            "material": "cotton",
+            "color": "blue",
+            "size": {
+               "units": "cm",
+               "length": 74
+            }
+         }
+      },
+      {
+         "item": "milk",
+         "price": "3.99",
+         "attributes": {
+            "sellBy": "02-06-2023",
+            "type": "oat"
+         }
+      },
+      {
+         "item": "laptop",
+         "price": "339.99",
+         "attributes": {
+            "memory": "8GB",
+            "size": {
+               "units": "inches",
+               "height": 10,
+               "width": 15
+            }
          }
       }
-   },
-   {
-      "item": "milk",
-      "price": "3.99",
-      "attributes": {
-         "sellBy": "02-06-2023",
-         "type": "oat"
-      }
-   },
-   {
-      "item": "laptop",
-      "price": "339.99",
-      "attributes": {
-         "memory": "8GB",
-         "size": {
-            "units": "inches",
-            "height": 10,
-            "width": 15
-         }
-      }
-   }
-] )
-```
+   ] )
 
-Each document has an `attributes` field that contains product details. The subfields of `attributes` vary depending on the product.
+Each document has an ``attributes`` field that contains product details.
+The subfields of ``attributes`` vary depending on the product.
 
 ## Procedures
 
-You can use the `wildcardProjection` option to:
+You can use the ``wildcardProjection`` option to:
 
-- `wildcard-index-include-specific-fields`
-- `wildcard-index-exclude-specific-fields`
+- :ref:`wildcard-index-include-specific-fields`
+
+- :ref:`wildcard-index-exclude-specific-fields`
+
+.. _wildcard-index-include-specific-fields:
+
 ### Include Specific Fields in a Wildcard Index
 
-If you frequently query certain document fields, you can specify those fields in a `wildcardProjection` to support those queries without adding unnecessary bloat to the index.
+If you frequently query certain document fields, you can specify those
+fields in a ``wildcardProjection`` to support those queries without
+adding unnecessary bloat to the index.
 
-The following operation creates a wildcard index that contains all scalar values (meaning strings and numbers) of the `attributes.size` and `attributes.color` fields:
+The following operation creates a wildcard index that contains all
+scalar values (meaning strings and numbers) of the ``attributes.size``
+and ``attributes.color`` fields:
 
-```javascript
-db.products.createIndex(
-   {
-      "$**" : 1
-   },
-   {
-      "wildcardProjection" : {
-         "attributes.size" : 1, 
-         "attributes.color" : 1
+.. code-block:: javascript
+
+   db.products.createIndex(
+      {
+         "$**" : 1
+      },
+      {
+         "wildcardProjection" : {
+            "attributes.size" : 1, 
+            "attributes.color" : 1
+         }
       }
-   }
-)
-```
+   )
 
-Results ```````
+### Results
 
-While the key pattern `"$**"` covers all fields in the document, the `wildcardProjection` field limits the index to only the included fields.
+While the key pattern ``"$**"`` covers all fields in the document, the
+``wildcardProjection`` field limits the index to only the included
+fields.
 
-If a field is an embedded document or array (like `attributes.size`), the wildcard index recurses into the field and indexes all embedded scalar field values.
+If a field is an embedded document or array (like ``attributes.size``),
+the wildcard index recurses into the field and indexes all embedded
+scalar field values.
 
-The created index supports queries on any scalar value included in the `wildcardProjection` object. For example, the index supports these queries:
+The created index supports queries on any scalar value included in the
+``wildcardProjection`` object. For example, the index supports these
+queries:
 
-```javascript
-db.products.find( { "attributes.size.height" : 10 } )
-db.products.find( { "attributes.color" : "blue" } )
-```
+.. code-block:: javascript
 
-The index only supports queries on fields included in the `wildcardProjection` object. In this example, MongoDB performs a collection scan for the following query because it includes a field that is not present in the `wildcardProjection` object:
+   db.products.find( { "attributes.size.height" : 10 } )
+   db.products.find( { "attributes.color" : "blue" } )
+   
+The index only supports queries on fields included in the 
+``wildcardProjection`` object. In this example, MongoDB performs
+a collection scan for the following query because it includes
+a field that is not present in the ``wildcardProjection`` object:
 
-```javascript
-db.products.find ( { "item": "milk" } )
-```
+.. code-block:: javascript
+
+   db.products.find ( { "item": "milk" } )
+   
+.. _wildcard-index-exclude-specific-fields:
 
 ### Exclude Specific Fields from a Wildcard Index
 
-If there are document fields that you rarely query, you can create a wildcard index that omits those fields.
+If there are document fields that you rarely query, you can create a
+wildcard index that omits those fields.
 
-The following operation creates a wildcard index on all document fields in the `products` collection, but omits the `attributes.memory` field from the index:
+The following operation creates a wildcard index on all document fields
+in the ``products`` collection, but omits the ``attributes.memory``
+field from the index:
 
-```javascript
-db.products.createIndex(
-   {
-      "$**" : 1
-   },
-   {
-      "wildcardProjection" : {
-         "attributes.memory" : 0
+.. code-block:: javascript
+
+   db.products.createIndex(
+      {
+         "$**" : 1
+      },
+      {
+         "wildcardProjection" : {
+            "attributes.memory" : 0
+         }
       }
-   }
-)
-```
+   )
 
-Results ```````
+### Results
 
-While the key pattern `"$**"` covers all fields in the document, the `wildcardProjection` field excludes `attributes.memory` values from the index.
+While the key pattern ``"$**"`` covers all fields in the document, the
+``wildcardProjection`` field excludes ``attributes.memory`` values from
+the index.
 
-If a field is an embedded document or array (like `attributes.size`), the wildcard index recurses into the field and indexes all embedded scalar field values.
+If a field is an embedded document or array (like ``attributes.size``),
+the wildcard index recurses into the field and indexes all embedded
+scalar field values.
 
 For example, the index supports these queries:
 
-```javascript
-db.products.find( { "attributes.color" : "blue" } )
-db.products.find( { "attributes.size.height" : 10 } )
-```
+.. code-block:: javascript
 
-The index **does not** support queries on `attributes.memory`, because that field was omitted from the index.
+   db.products.find( { "attributes.color" : "blue" } )
+   db.products.find( { "attributes.size.height" : 10 } )
+
+The index **does not** support queries on ``attributes.memory``, because
+that field was omitted from the index.
 
 ## Learn More
 
-To learn how to use wildcard projection with a compound wildcard index to filter fields, see `wc-compound-index-wcProject`.
+To learn how to use wildcard projection with a compound wildcard index
+to filter fields, see :ref:`wc-compound-index-wcProject`.
 
 To learn more about behaviors and use cases for wildcard indexes, see:
 
-- `createIndex-method-wildcard-option`
-- `wildcard-projection-signature`
-- `wildcard-index-embedded-object-behavior`
-- `wildcard-index-restrictions`
+- :ref:`createIndex-method-wildcard-option`
+
+- :ref:`wildcard-projection-signature`
+
+- :ref:`wildcard-index-embedded-object-behavior`
+
+- :ref:`wildcard-index-restrictions`

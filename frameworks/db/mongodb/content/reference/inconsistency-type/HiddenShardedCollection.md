@@ -1,65 +1,109 @@
 ---
 type: "Framework Learn Page"
-framework: "mongodb"
+framework: "MongoDB"
 source_repo: "https://github.com/mongodb/docs.git"
 source_branch: "main"
 source_path: "content/manual/manual/source/reference/inconsistency-type/HiddenShardedCollection.txt"
-source_commit: "ab9db26ed3d11618cdb61516d8180337d8e3f679"
-source_commit_short: "ab9db26e"
-source_commit_date: "2026-07-24T16:22:46-06:00"
-generated_at: "2026-07-25T11:51:15Z"
+source_commit: "b9f2bc487a2878b65e3c1f80024bebab76954f27"
+source_commit_short: "b9f2bc48"
+source_commit_date: "2026-08-28T17:09:45-05:00"
+generated_at: "2026-08-29T09:39:19.856501Z"
 ---
+# HiddenShardedCollection
 
-######################## HiddenShardedCollection ########################
+**meta:** :description: Identify and describe `HiddenShardedCollection` inconsistencies in MongoDB sharding metadata using the `checkMetadataConsistency` command.
+
+
+**contents:** On this page
+   :local:
+   :backlinks: none
+   :depth: 1
+   :class: singlecol
+
+.. |incon-type| replace:: ``HiddenShardedCollection``
 
 # Description
 
+**data:** HiddenShardedCollection
+
+   .. include:: /includes/inconsistency-type/HiddenShardedCollection
+
 # Format
 
-```json
-{
-   type: "HiddenShardedCollection",
-   description: "<string>",
-   details: {
-      namespace: "<string>",
-      collection: "<object>",
+.. code-block:: json
+
+   {
+      type: "HiddenShardedCollection",
+      description: "<string>",
+      details: {
+         namespace: "<string>",
+         collection: "<object>",
+      }
    }
-}
-```
 
 |incon-type| inconsistency documents contain the following fields:
 
+.. list-table::
+   :widths: 30 25 45
+   :header-rows: 1
+
+   * - Field
+     - Type
+     - Description
+
+   * - ``type``
+     - string
+     - .. include:: /includes/inconsistency-type/type
+
+   * - ``description``
+     - string
+     - .. include:: /includes/inconsistency-type/descr
+
+   * - ``details``
+     - document
+     - .. include:: /includes/inconsistency-type/details
+
+   * - ``details.namespace``
+     - string
+     - .. include:: /includes/inconsistency-type/details.namespace
+
+   * - ``details.collection``
+     - document
+     - .. include:: /includes/inconsistency-type/details.collection
+
 # Example
 
-.. include:: /includes/inconsistency-type/example
+**include:** /includes/inconsistency-type/example
 
-```json
-{
-   cursor: {
-      id: Long("0"),
-      ns: "test.$cmd.aggregate",
-      firstBatch: [
-         {
-            type: "HiddenShardedCollection",
-            description: "Found sharded collection but relative database does not exist",
-            details: {
-               namespace: "test.authors",
-               collection: {
-                   _id: "test.authors",
-                   lastmodEpoch: ObjectId("64ddd78de906038182671674"),
-                   lastmod: ISODate("2023-08-17T08:17:17.944Z"),
-                   timestamp: Timestamp(1692260237, 58),
-                   uuid: new UUID("69317741-7bc5-4eca-8877-7858cecf67d6"),
-                   key: {
-                      "skey" : 1
-                   },
-                   unique: false,
-                   noBalance: false
-                }
+.. code-block:: json
+   :emphasize-lines: 6-24
+   :copyable: false
+
+   {
+      cursor: {
+         id: Long("0"),
+         ns: "test.$cmd.aggregate",
+         firstBatch: [
+            {
+               type: "HiddenShardedCollection",
+               description: "Found sharded collection but relative database does not exist",
+               details: {
+                  namespace: "test.authors",
+                  collection: {
+                      _id: "test.authors",
+                      lastmodEpoch: ObjectId("64ddd78de906038182671674"),
+                      lastmod: ISODate("2023-08-17T08:17:17.944Z"),
+                      timestamp: Timestamp(1692260237, 58),
+                      uuid: new UUID("69317741-7bc5-4eca-8877-7858cecf67d6"),
+                      key: {
+                         "skey" : 1
+                      },
+                      unique: false,
+                      noBalance: false
+                   }
+               }
             }
-         }
-      ],
-   },
-   ok: 1
-}
-```
+         ],
+      },
+      ok: 1
+   }

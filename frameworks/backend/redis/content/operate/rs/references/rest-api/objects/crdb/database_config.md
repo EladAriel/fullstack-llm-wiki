@@ -1,14 +1,15 @@
 ---
 type: "Framework Learn Page"
-framework: "redis"
+framework: "Redis"
 source_repo: "https://github.com/redis/docs.git"
 source_branch: "main"
 source_path: "content/operate/rs/references/rest-api/objects/crdb/database_config.md"
-source_commit: "9d30f68c3dad1a6b3b7d30fe604b911348ce8152"
-source_commit_short: "9d30f68c"
-source_commit_date: "2026-07-24T10:52:10-07:00"
-generated_at: "2026-07-25T11:51:22Z"
+source_commit: "f8693349287b0efbef3c865b6f6a2aceca88594d"
+source_commit_short: "f869334"
+source_commit_date: "2026-08-28T10:01:19-05:00"
+generated_at: "2026-08-29T09:38:55.603807Z"
 ---
+# Database_Config
 
 ---
 Title: CRDB database config object
@@ -38,6 +39,7 @@ Use `default_db_config` to set the following fields so they apply to every insta
 |------|------------|-------------|
 | module_list | array of module objects | List of modules to be loaded to all participating clusters of the Active-Active database<br />{{<code>}}[{<br />  "module_id": string,<br />  "module_args": string,<br />  "module_name": string,<br />  "semantic_version": string,<br />}, ...]{{</code>}}<br />**module_id**: Module UID (deprecated; use `module_name` instead)<br />**module_args**: Module command-line arguments (pattern does not allow special characters &,\<,>,")<br />**module_name**: Module's name<br />**semantic_version**: Module's semantic version (deprecated; use `module_args` instead)<br /><br />**module_id** and **semantic_version** are optional as of Redis Software v7.4.2 and deprecated as of v7.8.2. |
 | oss_sharding | boolean (default: false) | An alternative to `shard_key_regex` for using the common case of the OSS shard hashing policy |
+| redis_version | string | Version of the redis-server processes used to create the Active-Active database, for example `7.4` |
 | sharding | boolean (default:&nbsp;false) | Cluster mode (server-side sharding). When true, shard hashing rules must be provided by either `oss_sharding` or `shard_key_regex` |
 | shard_key_regex | `[{ "regex": string }, ...]` | Custom keyname-based sharding rules (required if sharding is enabled)<br /><br />To use the default rules you should set the value to:<br />`[{"regex": ".*\\{(?<tag>.*)\\}.*"}, {"regex": "(?<tag>.*)"}]` |
 | tls_mode | 'enabled'<br /> **'disabled'** <br />'replica_ssl' | Encrypt communication |

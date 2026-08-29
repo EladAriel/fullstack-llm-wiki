@@ -4,12 +4,11 @@ framework: "Langfuse"
 source_repo: "https://github.com/langfuse/langfuse-docs"
 source_branch: "main"
 source_path: "content/docs/api-and-data-platform/overview.mdx"
-source_commit: "fcd1eca34a924867563c3c4e801254c4e66c0021"
-source_commit_short: "fcd1eca3"
-source_commit_date: "2026-07-25T00:45:45Z"
-generated_at: "2026-07-25T11:51:12Z"
+source_commit: "ba26344559edee69ba55c5d3aa80e632f56c1626"
+source_commit_short: "ba26344"
+source_commit_date: "2026-08-29T02:57:18+00:00"
+generated_at: "2026-08-29T09:38:37.747664Z"
 ---
-
 ---
 title: Overview
 seoTitle: "Open Source LLM API & Data Platform"
@@ -31,7 +30,7 @@ Example use cases:
 
 ```mermaid
 graph LR
-    LF["Langfuse<br/><br/>• Traces<br/>• Prompts<br/>• Scores"]
+    LF["Langfuse<br/><br/>• Traces<br/>• Prompts<br/>• Scores<br/>•Experiments<br/>•Evaluators"]
 
     LF --> API["Public API"]
     LF --> Dash["In-app Dashboards"]
@@ -44,7 +43,10 @@ Choose the data access path based on what you want to build:
 
 | Goal                                                           | Recommended path                                                                   |
 | -------------------------------------------------------------- | ---------------------------------------------------------------------------------- |
+| Work with Langfuse from a terminal or coding agent             | [CLI](/docs/api-and-data-platform/features/cli)                                    |
+| Connect an AI tool that cannot run shell commands              | [MCP Server](/docs/api-and-data-platform/features/mcp-server)                      |
 | Query aggregate cost, usage, latency, volume, or score metrics | [Metrics API v2](/docs/metrics/features/metrics-api#v2)                            |
+| Retrieve experiment runs, items, and evaluation scores         | [Experiments API](/docs/api-and-data-platform/features/experiments-api)            |
 | Retrieve row-level spans, generations, or events               | [Observations API v2](/docs/api-and-data-platform/features/observations-api#v2)    |
 | Use the API from Python or JS/TS                               | [Query via SDKs](/docs/api-and-data-platform/features/query-via-sdk)               |
 | Export large volumes on a schedule                             | [Blob Storage Export](/docs/api-and-data-platform/features/export-to-blob-storage) |
@@ -64,6 +66,8 @@ import {
   BarChart3,
   ListTree,
   Bot,
+  Terminal,
+  FlaskConical,
 } from "lucide-react";
 
 <Cards num={3}>
@@ -71,6 +75,12 @@ import {
     title="Langfuse for Agents"
     href="/agents"
     icon={<Bot />}
+    arrow
+  />
+  <Card
+    title="CLI"
+    href="/docs/api-and-data-platform/features/cli"
+    icon={<Terminal />}
     arrow
   />
   <Card
@@ -95,6 +105,12 @@ import {
     title="Observations API"
     href="/docs/api-and-data-platform/features/observations-api"
     icon={<ListTree />}
+    arrow
+  />
+  <Card
+    title="Experiments API"
+    href="/docs/api-and-data-platform/features/experiments-api"
+    icon={<FlaskConical />}
     arrow
   />
   <Card

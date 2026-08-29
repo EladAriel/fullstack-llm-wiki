@@ -1,39 +1,67 @@
 ---
 type: "Framework Learn Page"
-framework: "mongodb"
+framework: "MongoDB"
 source_repo: "https://github.com/mongodb/docs.git"
 source_branch: "main"
 source_path: "content/manual/manual/source/reference/aggregation.txt"
-source_commit: "ab9db26ed3d11618cdb61516d8180337d8e3f679"
-source_commit_short: "ab9db26e"
-source_commit_date: "2026-07-24T16:22:46-06:00"
-generated_at: "2026-07-25T11:51:15Z"
+source_commit: "b9f2bc487a2878b65e3c1f80024bebab76954f27"
+source_commit_short: "b9f2bc48"
+source_commit_date: "2026-08-28T17:09:45-05:00"
+generated_at: "2026-08-29T09:39:19.705056Z"
 ---
-
-=====================
+.. _aggregation-reference:
 
 # Aggregation Reference
 
+**meta:** :description: Explore MongoDB's aggregation capabilities, including pipeline stages, operators, and comparisons with SQL and `mapReduce`.
+
+.. default-domain:: mongodb
+
+**contents:** On this page
+   :local:
+   :backlinks: none
+   :depth: 1
+   :class: singlecol
+
+.. |page-topic| replace:: :atlas:`run aggregation pipelines in the UI </atlas-ui/agg-pipeline>`
+
+.. cta-banner::
+   :url: https://www.mongodb.com/docs/atlas/atlas-ui/agg-pipeline
+   :icon: Cloud
+
+   .. include:: /includes/fact-atlas-compatible.rst
+
 ## Aggregation Resources
 
-`/reference/operator/aggregation/interface` Reference for data aggregation commands.
+:doc:`/reference/operator/aggregation/interface`
+   Reference for data aggregation commands.
 
-`aggregation-pipeline-operator-reference` Reference for aggregation pipeline stages.
+:ref:`aggregation-pipeline-operator-reference`
+   Reference for aggregation pipeline stages.
 
-`/reference/aggregation-variables` Use variables in aggregation pipeline expressions.
+:doc:`/reference/aggregation-variables`
+   Use variables in aggregation pipeline expressions.
 
-`mql-reference` Reference for :abbr:`MQL (MongoDB Query Language)` operators and expressions used in aggregations and other MQL queries.
+:ref:`mql-reference`
+   Reference for :abbr:`MQL (MongoDB Query Language)` operators and
+   expressions used in aggregations and other MQL queries.
 
-`/reference/sql-aggregation-comparison` Compare common aggregation operations in SQL and MongoDB.
+:doc:`/reference/sql-aggregation-comparison`
+   Compare common aggregation operations in SQL and MongoDB.
 
-`/reference/aggregation-commands-comparison` Compare :dbcommand:`mapReduce` and :dbcommand:`aggregate`.
+:doc:`/reference/aggregation-commands-comparison`
+   Compare :dbcommand:`mapReduce` and :dbcommand:`aggregate`.
 
-[Practical MongoDB Aggregations (e-book)](https://www.practical-mongodb-aggregations.com)_ For more information on aggregations, read the [Practical MongoDB Aggregations](https://www.practical-mongodb-aggregations.com)_ e-book.
+`Practical MongoDB Aggregations (e-book) <https://www.practical-mongodb-aggregations.com>`__
+   For more information on aggregations, read the `Practical MongoDB
+   Aggregations <https://www.practical-mongodb-aggregations.com>`__
+   e-book.
 
-## Contents
+**toctree:** :titlesonly:
+   :hidden:
 
-- Commands </reference/operator/aggregation/interface>
-- Commands Comparison </reference/aggregation-commands-comparison>
-- Variables  </reference/aggregation-variables>
-- SQL to Aggregation </reference/sql-aggregation-comparison>
-- Practical MongoDB Aggregations (e-book) <https://www.practical-mongodb-aggregations.com>
+   Commands </reference/operator/aggregation/interface>
+   Commands Comparison </reference/aggregation-commands-comparison>
+   Variables  </reference/aggregation-variables>
+   SQL to Aggregation </reference/sql-aggregation-comparison>
+   Practical MongoDB Aggregations (e-book) <https://www.practical-mongodb-aggregations.com>

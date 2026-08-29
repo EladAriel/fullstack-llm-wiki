@@ -4,46 +4,57 @@ framework: "pytest"
 source_repo: "https://github.com/pytest-dev/pytest"
 source_branch: "main"
 source_path: "doc/en/announce/release-2.6.2.rst"
-source_commit: "344c23787cdb3431dcc441b8b63ee9950f04b921"
-source_commit_short: "344c2378"
-source_commit_date: "2026-07-24T17:37:16+02:00"
-generated_at: "2026-07-25T11:50:13Z"
+source_commit: "fdba12e1708313f56e9cf713d260c029764ca2b7"
+source_commit_short: "fdba12e"
+source_commit_date: "2026-08-27T21:55:50+02:00"
+generated_at: "2026-08-29T09:40:11.179078Z"
 ---
-
 # pytest-2.6.2: few fixes and cx_freeze support
 
-pytest is a mature Python testing tool with more than 1100 tests against itself, passing on many different interpreters and platforms. This release is drop-in compatible to 2.5.2 and 2.6.X.  It also brings support for including pytest with cx_freeze or similar freezing tools into your single-file app distribution.  For details see the CHANGELOG below.
+pytest is a mature Python testing tool with more than 1100 tests
+against itself, passing on many different interpreters and platforms.
+This release is drop-in compatible to 2.5.2 and 2.6.X.  It also
+brings support for including pytest with cx_freeze or similar
+freezing tools into your single-file app distribution.  For details
+see the CHANGELOG below.
 
 See docs at:
 
-http://pytest.org
+    http://pytest.org
 
-As usual, you can upgrade from pypi via:
+As usual, you can upgrade from pypi via::
 
-```
-pip install -U pytest
-```
+    pip install -U pytest
 
 Thanks to all who contributed, among them:
 
-Floris Bruynooghe Benjamin Peterson Bruno Oliveira
+    Floris Bruynooghe
+    Benjamin Peterson
+    Bruno Oliveira
 
-have fun, holger krekel
+have fun,
+holger krekel
 
 ## 2.6.2
 
 - Added function pytest.freeze_includes(), which makes it easy to embed
-pytest into executables using tools like cx_freeze. See docs for examples and rationale. Thanks Bruno Oliveira.
+  pytest into executables using tools like cx_freeze.
+  See docs for examples and rationale. Thanks Bruno Oliveira.
 
 - Improve assertion rewriting cache invalidation precision.
+
 - fixed issue561: adapt autouse fixture example for python3.
+
 - fixed issue453: assertion rewriting issue with __repr__ containing
-"\n{", "\n}" and "\n~".
+  "\n{", "\n}" and "\n~".
 
 - fix issue560: correctly display code if an "else:" or "finally:" is
-followed by statements on the same line.
+  followed by statements on the same line.
 
 - Fix example in monkeypatch documentation, thanks t-8ch.
+
 - fix issue572: correct tmpdir doc example for python3.
+
 - Do not mark as universal wheel because Python 2.6 is different from
-other builds due to the extra argparse dependency.  Fixes issue566. Thanks sontek.
+  other builds due to the extra argparse dependency.  Fixes issue566.
+  Thanks sontek.

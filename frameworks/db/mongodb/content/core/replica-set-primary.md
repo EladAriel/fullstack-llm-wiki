@@ -1,33 +1,62 @@
 ---
 type: "Framework Learn Page"
-framework: "mongodb"
+framework: "MongoDB"
 source_repo: "https://github.com/mongodb/docs.git"
 source_branch: "main"
 source_path: "content/manual/manual/source/core/replica-set-primary.txt"
-source_commit: "ab9db26ed3d11618cdb61516d8180337d8e3f679"
-source_commit_short: "ab9db26e"
-source_commit_date: "2026-07-24T16:22:46-06:00"
-generated_at: "2026-07-25T11:51:15Z"
+source_commit: "b9f2bc487a2878b65e3c1f80024bebab76954f27"
+source_commit_short: "b9f2bc48"
+source_commit_date: "2026-08-28T17:09:45-05:00"
+generated_at: "2026-08-29T09:39:19.554526Z"
 ---
-
 :orphan:
 
-===================
+.. _replica-set-primary:
 
 # Replica Set Primary
 
-The primary is the only member in the replica set that receives write operations. MongoDB applies write operations on the `primary` and then records the operations on the primary's `oplog </core/replica-set-oplog>`. `Secondary <replica-set-secondary-members>` members replicate this log and apply the operations to their data sets.
+**meta:** :description: Understand the role of the primary in a replica set, handling write operations and elections for primary selection.
 
-In the following three-member replica set, the primary accepts all write operations. Then the secondaries replicate the oplog to apply to their data sets.
+.. default-domain:: mongodb
 
-.. include:: /images/replica-set-read-write-operations-primary.rst
+**contents:** On this page
+   :local:
+   :backlinks: none
+   :depth: 1
+   :class: singlecol
+.. start-content
 
-All members of the replica set can accept read operations. However, by default, an application directs its read operations to the primary member. See `/core/read-preference` for details on changing the default read behavior.
+The primary is the only member in the replica set that receives write
+operations. MongoDB applies write operations on the :term:`primary` and
+then records the operations on the primary's :doc:`oplog
+</core/replica-set-oplog>`. :ref:`Secondary
+<replica-set-secondary-members>` members replicate this log and apply
+the operations to their data sets.
 
-The replica set can have at most one primary. [#edge-cases-2-primaries]_ If the current primary becomes unavailable, an election determines the new primary. See `/core/replica-set-elections` for more details.
+In the following three-member replica set, the primary accepts all
+write operations. Then the secondaries replicate the oplog to apply to
+their data sets.
 
-In the following 3-member replica set, the primary becomes unavailable. This triggers an election which selects one of the remaining secondaries as the new primary.
+**include:** /images/replica-set-read-write-operations-primary.rst
 
-.. include:: /images/replica-set-trigger-election.rst
+All members of the replica set can accept read operations. However, by
+default, an application directs its read operations to the primary
+member. See :doc:`/core/read-preference` for details on changing the
+default read behavior.
 
-.. include:: /includes/footnote-two-primaries-edge-cases.rst
+The replica set can have at most one primary.
+[#edge-cases-2-primaries]_ If the current primary becomes unavailable,
+an election determines the new primary. See
+:doc:`/core/replica-set-elections` for more details.
+
+.. start-content-election-example
+
+In the following 3-member replica set, the primary becomes unavailable.
+This triggers an election which selects one of the remaining
+secondaries as the new primary.
+
+**include:** /images/replica-set-trigger-election.rst
+
+.. [#edge-cases-2-primaries]
+
+   .. include:: /includes/footnote-two-primaries-edge-cases.rst

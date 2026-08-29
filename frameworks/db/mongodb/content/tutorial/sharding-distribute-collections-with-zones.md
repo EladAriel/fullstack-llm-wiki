@@ -1,78 +1,253 @@
 ---
 type: "Framework Learn Page"
-framework: "mongodb"
+framework: "MongoDB"
 source_repo: "https://github.com/mongodb/docs.git"
 source_branch: "main"
 source_path: "content/manual/manual/source/tutorial/sharding-distribute-collections-with-zones.txt"
-source_commit: "ab9db26ed3d11618cdb61516d8180337d8e3f679"
-source_commit_short: "ab9db26e"
-source_commit_date: "2026-07-24T16:22:46-06:00"
-generated_at: "2026-07-25T11:51:15Z"
+source_commit: "b9f2bc487a2878b65e3c1f80024bebab76954f27"
+source_commit_short: "b9f2bc48"
+source_commit_date: "2026-08-28T17:09:45-05:00"
+generated_at: "2026-08-29T09:39:19.583849Z"
 ---
-
-==================================
+.. _sharding-tutorial-distribute-collections:
 
 # Distribute Collections Using Zones
 
-.. include:: /includes/intro-zone-sharding.rst
+**meta:** :description: Configure shard zones to distribute collections across a sharded cluster based on physical resources and shard key ranges.
 
-You can use `zone sharding <zone-sharding>` to distribute collections across a sharded cluster and designate which shards store data for each collection. You can distribute collections based on shard properties, such as physical resources and available memory, to ensure that each collection is stored on the optimal shard for that data.
+.. default-domain:: mongodb
+
+**contents:** On this page
+   :local:
+   :backlinks: none
+   :depth: 2
+   :class: singlecol
+
+**include:** /includes/intro-zone-sharding.rst
+
+You can use :ref:`zone sharding <zone-sharding>` to distribute
+collections across a sharded cluster and designate which shards store
+data for each collection. You can distribute collections based on shard
+properties, such as physical resources and available memory, to ensure
+that each collection is stored on the optimal shard for that data.
 
 ## Prerequisites
 
 To complete this tutorial, you must:
 
-- `Deploy a sharded cluster <sharding-procedure-setup>`. This
-tutorial uses a sharded cluster with three shards.
+- :ref:`Deploy a sharded cluster <sharding-procedure-setup>`. This
+  tutorial uses a sharded cluster with three shards.
 
 - Connect to a :program:`mongos`. You cannot create zones or zone ranges
-by connecting directly to a shard.
+  by connecting directly to a shard.
 
 - Authenticate as a user with at least the :authrole:`clusterManager`
-role on the `admin` database. To view user permissions, use the :method:`db.getUser()` method.
+  role on the ``admin`` database. To view user permissions, use the
+  :method:`db.getUser()` method.
 
 ## Scenario
 
-You have a database called `shardDistributionDB` that contains two sharded collections:
+You have a database called ``shardDistributionDB`` that contains two
+sharded collections:
 
-- `bigData`, which contains a large amount of data.
-- `manyIndexes`, which contains many large indexes.
-You want to limit each collection to a subset of shards so that each collection can use the shards' different physical resources.
+- ``bigData``, which contains a large amount of data.
+
+- ``manyIndexes``, which contains many large indexes.
+
+You want to limit each collection to a subset of shards so that each
+collection can use the shards' different physical resources.
 
 ### Architecture
 
-The sharded cluster has three shards. Each shard has unique physical resources:
+The sharded cluster has three shards. Each shard has unique physical
+resources:
+
+.. list-table::
+   :header-rows: 1
+   :widths: 8 20
+
+   * - Shard Name
+     - Physical Resources
+
+   * - ``shard0``
+     - High memory capacity
+
+   * - ``shard1``
+     - Fast flash storage
+
+   * - ``shard2``
+     - High memory capacity **and** fast flash storage
 
 ### Zones
 
-To distribute collections based on physical resources, use shard zones. A shard zone associates collections with a specific subset of shards, which restricts the shards that store the collection's data. In this example, you need two shard zones:
+To distribute collections based on physical resources, use shard zones.
+A shard zone associates collections with a specific subset of shards,
+which restricts the shards that store the collection's data. In this
+example, you need two shard zones:
+
+.. list-table::
+   :header-rows: 1
+   :widths: 10 15 20
+
+   * - Zone Name
+     - Description
+     - Collections in this Zone
+
+   * - ``HI_RAM``
+     - Servers with high memory capacity.
+     - Collections requiring more memory, such as collections with large
+       indexes, should be on the ``HI_RAM`` shards.
+
+   * - ``FLASH``
+     - Servers with flash drives for fast storage speeds.
+     - Large collections requiring fast data retrieval should be on the
+       ``FLASH`` shards.
 
 ### Shard Key
 
-In this tutorial, the `shard key <shard-key>` you will use to shard each collection is `{ _id: "hashed" }`. You will configure shard zones **before** you shard the collections. As a result, each collection's data only ever exists on the shards in the corresponding zone.
+In this tutorial, the :ref:`shard key <shard-key>` you will use to shard
+each collection is ``{ _id: "hashed" }``. You will configure shard zones
+**before** you shard the collections. As a result, each collection's
+data only ever exists on the shards in the corresponding zone.
 
-With `hashed sharding <index-type-hashed>`, if you shard collections before you configure zones, MongoDB assigns `chunks <chunk>` evenly between all shards when sharding is enabled. This means that chunks may be temporarily assigned to a shard poorly suited to handle that chunk's data.
+With :ref:`hashed sharding <index-type-hashed>`, if you shard
+collections before you configure zones, MongoDB assigns :term:`chunks
+<chunk>` evenly between all shards when sharding is enabled. This means
+that chunks may be temporarily assigned to a shard poorly suited to
+handle that chunk's data.
 
 ### Balancer
 
-The `balancer <sharding-balancing>` migrates chunks to the appropriate shard, respecting any configured zones. When balancing is complete, shards only contain chunks whose ranges match its assigned zones.
+The :ref:`balancer <sharding-balancing>` migrates chunks to the
+appropriate shard, respecting any configured zones. When balancing is
+complete, shards only contain chunks whose ranges match its assigned
+zones.
 
-> **Important:** Adding, removing, or changing zones or zone ranges can result in
-chunk migrations. Depending on the size of your dataset and the
-number of chunks a zone or zone range affects, these migrations may
-impact cluster performance. Consider running the balancer during
-specific scheduled windows. To learn how to set a scheduling window,
-see `sharding-schedule-balancing-window`.
+**important:** Performance
+   
+   Adding, removing, or changing zones or zone ranges can result in
+   chunk migrations. Depending on the size of your dataset and the
+   number of chunks a zone or zone range affects, these migrations may
+   impact cluster performance. Consider running the balancer during
+   specific scheduled windows. To learn how to set a scheduling window,
+   see :ref:`sharding-schedule-balancing-window`.
 
 ## Steps
 
-Use the following procedure to configure shard zones and distribute collections based on shard physical resources.
+Use the following procedure to configure shard zones and distribute
+collections based on shard physical resources.
+
+**procedure:** .. step:: Add each shard to the appropriate zone.
+
+      To configure the shards in each zone, use the
+      :dbcommand:`addShardToZone` command.
+
+      Add ``shard0`` and ``shard2`` to the ``HI_RAM`` zone:
+
+      .. code-block:: javascript
+
+         sh.addShardToZone("shard0", "HI_RAM")
+
+         sh.addShardToZone("shard2", "HI_RAM")
+
+      Add ``shard1`` and ``shard2`` to the ``FLASH`` zone:
+
+      .. code-block:: javascript
+
+         sh.addShardToZone("shard1", "FLASH")
+         
+         sh.addShardToZone("shard2", "FLASH")
+
+   .. step:: Add zone ranges for the relevant collections.
+      
+      To associate a range of
+      shard keys to a zone, use :method:`sh.updateZoneKeyRange()`. 
+
+      In this scenario, you want to associate all documents in a
+      collection to the appropriate zone. To associate all collection
+      documents to a zone, specify the following zone range:
+
+      - a lower bound of ``{ "_id" : MinKey }``
+      - an upper bound of ``{ "_id" : MaxKey }``
+
+      For the ``bigData`` collection, set:
+      
+      - The namespace to ``shardDistributionDB.bigData``,
+      - The lower bound to :bsontype:`MinKey`,
+      - The upper bound to :bsontype:`MaxKey`, 
+      - The zone to ``FLASH``
+
+      .. code-block:: javascript
+
+         sh.updateZoneKeyRange(
+            "shardDistributionDB.bigData",
+            { "_id" : MinKey },
+            { "_id" : MaxKey },
+            "FLASH"
+         )
+
+      For the ``manyIndexes`` collection, set:
+      
+      - The namespace to ``shardDistributionDB.manyIndexes``,
+      - The lower bound to :bsontype:`MinKey`,
+      - The upper bound to :bsontype:`MaxKey`, 
+      - The zone to ``HI_RAM``
+
+      .. code-block:: javascript
+
+         sh.updateZoneKeyRange(
+            "shardDistributionDB.manyIndexes",
+            { "_id" : MinKey },
+            { "_id" : MaxKey },
+            "HI_RAM"
+         )
+
+   .. step:: Shard the collections.
+
+      To shard both collections (``bigData`` and ``manyIndexes``),
+      specify a :ref:`shard key <shard-key>` of ``{ _id: "hashed" }``.
+
+      Run the following commands:
+
+      .. code-block:: javascript
+
+         sh.shardCollection(
+            "shardDistributionDB.bigData", { _id: "hashed" }
+         )
+
+         sh.shardCollection(
+            "shardDistributionDB.manyIndexes", { _id: "hashed" }
+         )
+      
+   .. step:: Review the changes.
+
+      To view chunk distribution and shard zones, use the
+      :method:`sh.status()` method:
+
+      .. code-block:: javascript
+
+         sh.status()
+
+      The next time the :ref:`balancer <sharding-balancing>` runs, it
+      splits chunks where necessary and migrates chunks across the
+      shards, respecting the configured zones. The amount of time the
+      balancer takes to complete depends on several factors, including
+      number of shards, available memory, and
+      :abbr:`IOPS (Input/Output Operations Per Second)`.
+
+      When balancing finishes:
+      
+      - Chunks for documents in the ``manyIndexes`` collection reside on
+        ``shard0`` and ``shard2``
+        
+      - Chunks for documents in the ``bigData`` collection reside on
+        ``shard1`` and ``shard2``.
 
 ## Learn More
 
 To learn more about sharding and balancing, see the following pages:
 
-- `sharding-data-partitioning`
-- `index-type-hashed`
-- `sharding-manage-zones`
-- `sharding-shards`
+- :ref:`sharding-data-partitioning`
+- :ref:`index-type-hashed`
+- :ref:`sharding-manage-zones`
+- :ref:`sharding-shards`

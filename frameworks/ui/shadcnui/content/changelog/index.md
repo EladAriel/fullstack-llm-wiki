@@ -1,29 +1,19 @@
 ---
 type: "Framework Learn Directory Index"
-framework: "shadcnui"
-directory: "content/changelog"
-source_repo: "https://github.com/shadcn-ui/ui"
-source_branch: "main"
-source_commit: "4baadbc6517070ae8f8feb2c97037adc2b305544"
-source_commit_short: "4baadbc6"
-source_commit_date: "2026-07-23T23:50:36+04:00"
-generated_at: "2026-07-25T11:50:48Z"
+framework: "shadcn/ui"
+generated_at: "2026-08-29T09:40:27.002646Z"
 ---
 # Changelog
 
-This directory contains shadcnui learning pages related to changelog.
+This directory contains shadcn/ui learning pages related to changelog.
 
 ## Breadcrumbs
 
-[Wiki Home](../../index.md) -> [Content](../index.md) -> [Changelog](index.md)
+[Wiki Home](../index.md) -> [Content](index.md)
 
 ## Navigation
 
-- Parent: [Parent Index](../index.md)
-
-## Child Directories
-
-- None
+- Wiki Home: [Root Index](../index.md)
 
 ## Pages in This Directory
 
@@ -74,16 +64,11 @@ This directory contains shadcnui learning pages related to changelog.
 - [2026 06 Chat Components](2026-06-chat-components.md)
 - [2026 06 Github Registries](2026-06-github-registries.md)
 - [2026 07 Base Ui Default](2026-07-base-ui-default.md)
+- [2026 07 Dynamic Search](2026-07-dynamic-search.md)
 - [2026 07 Helpers](2026-07-helpers.md)
 - [2026 07 React Aria](2026-07-react-aria.md)
 - [2026 07 Toast](2026-07-toast.md)
 - [2026 07 Typeset](2026-07-typeset.md)
-- [Original Source Index](_source_index.md)
-
-## IDE LLM Guidance
-
-When answering implementation questions related to this directory:
-
-1. Prefer the most specific page listed above.
-2. If the topic is broad, read the child directory index first.
-3. Use source metadata from each page when giving answers.
+- [2026 08 Helpers Human In The Loop](2026-08-helpers-human-in-the-loop.md)
+- [2026 08 Private Github Registries](2026-08-private-github-registries.md)
+- [2026 08 Questionnaire](2026-08-questionnaire.md)

@@ -1,72 +1,120 @@
 ---
 type: "Framework Learn Page"
-framework: "mongodb"
+framework: "MongoDB"
 source_repo: "https://github.com/mongodb/docs.git"
 source_branch: "main"
 source_path: "content/manual/manual/source/core/timeseries/timeseries-index.txt"
-source_commit: "ab9db26ed3d11618cdb61516d8180337d8e3f679"
-source_commit_short: "ab9db26e"
-source_commit_date: "2026-07-24T16:22:46-06:00"
-generated_at: "2026-07-25T11:51:15Z"
+source_commit: "b9f2bc487a2878b65e3c1f80024bebab76954f27"
+source_commit_short: "b9f2bc48"
+source_commit_date: "2026-08-28T17:09:45-05:00"
+generated_at: "2026-08-29T09:39:19.794507Z"
 ---
-
-===================
+.. _manual-timeseries-index:
 
 # Time Series Indexes
 
-Indexes on time series collections generally behave like indexes on regular collections, but with several additional considerations and limitations.
+.. default-domain:: mongodb
 
-.. include:: /includes/time-series-secondary-indexes-downgrade-FCV.rst
+**facet:** :name: genre
+   :values: reference
 
-Starting in version 6.0, you can add a secondary index to any field in a time series collection. MongoDB indexes time series collections by `buckets <timeseries-bucketing>` of documents as opposed to individual documents. Time series buckets contain documents with shared metaField values, ordered by timeField values that are close together. MongoDB indexes the minimum and maximum values of all fields, except the metaField. Indexing buckets instead of individual documents reduces index size and improves query efficiency.
+**meta:** :keywords: IOT
+   :description: Index time series collections in MongoDB. Learn about secondary indexes, special considerations, limitations, and best practices for time-stamped data.
 
-> **Tip:** To improve query performance, you can manually :ref:`add secondary
-indexes <timeseries-add-secondary-index>` to any field in your time
-series collection.
+**contents:** On this page
+   :local:
+   :backlinks: none
+   :depth: 2
+   :class: singlecol
+
+Indexes on time series collections generally behave like indexes on
+regular collections, but with several additional considerations and
+limitations. 
+
+**include:** /includes/time-series-secondary-indexes-downgrade-FCV.rst
+
+Starting in version 6.0, you can add a secondary index to any field in a
+time series collection. MongoDB indexes time series collections by
+:ref:`buckets <timeseries-bucketing>` of documents as opposed to individual
+documents. Time series buckets contain documents with shared metaField values,
+ordered by timeField values that are close together. MongoDB indexes the
+minimum and maximum values of all fields, except the metaField. Indexing
+buckets instead of individual documents reduces index size and improves query
+efficiency.
+
+**tip:** To improve query performance, you can manually :ref:`add secondary
+   indexes <timeseries-add-secondary-index>` to any field in your time
+   series collection.
 
 ## Clustered Collection
 
-By default, MongoDB clusters time series collections based on bucket time.
+By default, MongoDB clusters time series collections based on bucket
+time. 
 
 ## Compound Indexes
 
-.. versionadded:: 6.3
+**versionadded:** 6.3
 
-Starting in MongoDB 6.3, MongoDB creates a default  `compound index <index-type-compound>` on both the metaField and timeField of a time series collection. MongoDB uses this index to improve query performance and speed.
+Starting in MongoDB 6.3, MongoDB creates a default  :ref:`compound index
+<index-type-compound>` on both the metaField and timeField of a time
+series collection. MongoDB uses this index to improve query performance
+and speed. 
 
-You can add a `compound index <index-type-compound>` on the `timeField`, `metaField`, or measurement fields.
+You can add a :ref:`compound index <index-type-compound>` on the
+``timeField``, ``metaField``, or measurement fields.
 
 ## Partial Indexes
 
-.. versionadded:: 6.0
+**versionadded:** 6.0
 
-Starting in MongoDB 6.0, you can use the :query:`$or`, :query:`$in`, and :query:`$geoWithin` operators with `partial indexes <index-type-partial>` on a time series collection.
+Starting in MongoDB 6.0, you can use the :query:`$or`, :query:`$in`, and
+:query:`$geoWithin` operators with :ref:`partial indexes
+<index-type-partial>` on a time series collection.
 
-You cannot create `partial indexes <index-type-partial>` on the metaField and timeField.
+You cannot create :ref:`partial indexes <index-type-partial>` on the
+metaField and timeField. 
+
 
 ## TTL Indexes
 
-.. versionadded:: 7.0
+**versionadded:** 7.0
 
-Starting in MongoDB 7.0, you can create a `TTL <index-feature-ttl>` index with a `partialFilterExpression` that relies only on the metaField. In versions prior to 6.3, you can only create TTL indexes based on the `expireAfterSeconds` parameter.
+Starting in MongoDB 7.0, you can create a :ref:`TTL <index-feature-ttl>`
+index with a ``partialFilterExpression`` that relies only on the
+metaField. In versions prior to 6.3, you can only create TTL indexes
+based on the ``expireAfterSeconds`` parameter. 
 
-If your time series collection doesn't use the `expireAfterSeconds` option to expire documents, creating a partial TTL index sets an expiration time for matching documents only. If the collection uses `expireAfterSeconds` for all documents, you can use a partial TTL index to expire matching documents sooner.
+If your time series collection doesn't use the ``expireAfterSeconds``
+option to expire documents, creating a partial TTL index sets an
+expiration time for matching documents only. If the collection uses
+``expireAfterSeconds`` for all documents, you can use a partial TTL
+index to expire matching documents sooner.
+
+.. _timeseries--prohibited-index:
 
 ## Prohibited Indexes
 
-MongoDB does not allow the following index types on time series collections:
+MongoDB does not allow the following index types on time series
+collections:
 
-- `Text indexes <index-type-text>`
-- `2d indexes <2d-index>`
-- `Unique indexes <index-type-unique>`
-You cannot create sparse indexes on the metaField.
+- :ref:`Text indexes <index-type-text>`
+- :ref:`2d indexes <2d-index>`
+- :ref:`Unique indexes <index-type-unique>`
+
+You cannot create sparse indexes on the metaField. 
 
 ## Indexing Best Practices
 
-.. include:: /includes/time-series/fact-index-best-practices.rst
+**include:** /includes/time-series/fact-index-best-practices.rst
 
-For more information and examples, see `timeseries-add-secondary-index`.
+For more information and examples, see
+:ref:`timeseries-add-secondary-index`. 
 
-## Contents
+**toctree:** :titlesonly:
 
-- Add Secondary Indexes </core/timeseries/timeseries-secondary-index>
+   Add Secondary Indexes </core/timeseries/timeseries-secondary-index>
+
+
+
+
+

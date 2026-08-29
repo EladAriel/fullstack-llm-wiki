@@ -1,65 +1,86 @@
 ---
 type: "Framework Learn Page"
-framework: "mongodb"
+framework: "MongoDB"
 source_repo: "https://github.com/mongodb/docs.git"
 source_branch: "main"
 source_path: "content/manual/manual/source/tutorial/install-mongodb-enterprise-on-os-x.txt"
-source_commit: "ab9db26ed3d11618cdb61516d8180337d8e3f679"
-source_commit_short: "ab9db26e"
-source_commit_date: "2026-07-24T16:22:46-06:00"
-generated_at: "2026-07-25T11:51:15Z"
+source_commit: "b9f2bc487a2878b65e3c1f80024bebab76954f27"
+source_commit_short: "b9f2bc48"
+source_commit_date: "2026-08-28T17:09:45-05:00"
+generated_at: "2026-08-29T09:39:19.597332Z"
 ---
+**meta:** :keywords: on-prem
+   :description: Install MongoDB Enterprise on macOS using a downloaded tarball, configure directories, and run `mongod` with appropriate settings.
 
-===================================
+.. _install-enterprise-macos:
 
 # Install MongoDB Enterprise on macOS
 
-.. include:: /includes/minor-release.rst
+.. default-domain:: mongodb
+
+**contents:** On this page
+   :local:
+   :backlinks: none
+   :depth: 1
+   :class: twocols
+
+.. |arrow| unicode:: U+27A4
+.. |edition| replace:: Enterprise
+.. |distro-name| replace:: macOS
+.. |package-manager| replace:: ``brew``
+.. |executable-name| replace:: ``mongod``
+.. |mdb-download-link| replace:: `MongoDB Download Center <https://www.mongodb.com/try/download/enterprise>`__
+
+**include:** /includes/minor-release.rst
 
 ## Overview
 
-Use this tutorial to manually install MongoDB {+version+} |edition| Edition on macOS using a downloaded `.tgz` tarball.
+Use this tutorial to manually install MongoDB {+version+} |edition|
+Edition on macOS using a downloaded ``.tgz`` tarball.
 
-:products:`MongoDB Enterprise Edition</mongodb-enterprise-advanced>` is available on select platforms and contains support for features related to security and monitoring.
+:products:`MongoDB Enterprise Edition</mongodb-enterprise-advanced>`
+is available on select platforms and contains support for features
+related to security and monitoring.
 
 ### MongoDB Version
 
-.. include:: /includes/fact-install-past-mongodb.rst
+**include:** /includes/fact-install-past-mongodb.rst
 
 ## Considerations
 
-### MongoDB Shell, `mongosh`
+### MongoDB Shell, ``mongosh``
 
-.. include:: /includes/fact-have-to-install-mongosh-tgz.rst
+**include:** /includes/fact-have-to-install-mongosh-tgz.rst
 
 ### Platform Support
 
-.. include:: /includes/fact-platform-support-enterprise-macos.rst
+**include:** /includes/fact-platform-support-enterprise-macos.rst
 
 ### Production Notes
 
-.. include:: /includes/fact-see-production-notes.rst
+**include:** /includes/fact-see-production-notes.rst
 
 ## Install MongoDB Enterprise Edition
 
-To manually install MongoDB |edition| Edition from the `.tgz`, complete the following steps:
+To manually install MongoDB |edition| Edition from the ``.tgz``,
+complete the following steps:
 
-.. include:: /includes/deploy/install-tar.rst
+**include:** /includes/deploy/install-tar.rst
 
 ## Run MongoDB Enterprise Edition
 
 ulimit Considerations
-
-.. include:: /includes/fact-installation-ulimit.rst
+   .. include:: /includes/fact-installation-ulimit.rst
 
 ### Procedure
 
-Follow these steps to run MongoDB |edition| Edition. These instructions assume that you are using the default settings.
+Follow these steps to run MongoDB |edition| Edition. These instructions
+assume that you are using the default settings.
 
-.. include:: /includes/steps/run-mongodb-on-osx.rst
+**include:** /includes/steps/run-mongodb-on-osx.rst
 
 ## Additional Information
 
 ### Localhost Binding by Default
 
-.. include:: /includes/fact-installation-bind-ip-default-in-config.rst
+**include:** /includes/fact-installation-bind-ip-default-in-config.rst

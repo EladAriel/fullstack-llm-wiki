@@ -1,47 +1,187 @@
 ---
 type: "Framework Learn Page"
-framework: "mongodb"
+framework: "MongoDB"
 source_repo: "https://github.com/mongodb/docs.git"
 source_branch: "main"
 source_path: "content/manual/manual/source/tutorial/start-a-sharded-cluster-with-config-shard.txt"
-source_commit: "ab9db26ed3d11618cdb61516d8180337d8e3f679"
-source_commit_short: "ab9db26e"
-source_commit_date: "2026-07-24T16:22:46-06:00"
-generated_at: "2026-07-25T11:51:15Z"
+source_commit: "b9f2bc487a2878b65e3c1f80024bebab76954f27"
+source_commit_short: "b9f2bc48"
+source_commit_date: "2026-08-28T17:09:45-05:00"
+generated_at: "2026-08-29T09:39:19.625804Z"
 ---
-
-===========================================
+.. _start-a-sharded-cluster-with-config-shard:
 
 # Start a Sharded Cluster with a Config Shard
 
-.. include:: /includes/config-shard-intro.rst
+.. default-domain:: mongodb
+
+**contents:** On this page
+   :local:
+   :backlinks: none
+   :depth: 1
+   :class: singlecol
+
+**facet:** :name: genre
+   :values: tutorial
+
+**include:** /includes/config-shard-intro.rst
 
 ## About this Task
 
-You can consider using a config shard if your cluster has three or fewer shards.
+You can consider using a config shard if your cluster has three or fewer 
+shards.
 
-For details, see `Config Shard Use Cases <config-shard-use-cases>`.
+For details, see :ref:`Config Shard Use Cases <config-shard-use-cases>`.
 
 ### Compatibility
 
-You can perform this task on deployments hosted in the following environments:
+You can perform this task on deployments hosted in the following
+environments: 
 
-.. include:: /includes/fact-environments-atlas-only.rst
+**include:** /includes/fact-environments-atlas-only.rst
 
-> **Note:** This task is not available on the {+atlas+} Free or Flex Tiers.
+**note:** This task is not available on the {+atlas+} Free or Flex Tiers.
 
-.. include:: /includes/fact-environments-onprem-only.rst
+**include:** /includes/fact-environments-onprem-only.rst
+
 
 ..
-
 ## Access Control
 
-TBD. Checking in with Tech re Access Control: https://docs.google.com/document/d/1Q2R01EArSVZ86pilDnjFJNrgRZVNjQ77dGN99oGk1Gk/edit
+   TBD. Checking in with Tech re Access Control: https://docs.google.com/document/d/1Q2R01EArSVZ86pilDnjFJNrgRZVNjQ77dGN99oGk1Gk/edit
+
 
 ## Steps
 
+**procedure:** :style: normal
+
+   .. step:: Create the Config Server Replica Set.
+   
+      For a production deployment, deploy a config server replica set with at
+      least three members. 
+      
+      .. note::
+      
+         The config server replica set must not use the same name as any of
+         the shard replica sets.
+      
+      For this tutorial, the config server replica set members are associated
+      with the following hosts:
+      
+      .. list-table::
+         :header-rows: 1
+      
+         * - Config Server Replica Set Member
+           - Hostname
+      
+         * - Member 0
+           - ``cfg1.example.net``
+      
+         * - Member 1
+           - ``cfg2.example.net``
+      
+         * - Member 2
+           - ``cfg3.example.net``
+      
+      .. include:: /includes/steps-deploy-sharded-cluster-config-server-noauth.rst
+      
+   .. step:: Start a mongos for the Sharded Cluster.
+         
+      Start a :binary:`~bin.mongos` using either a configuration file or a
+      command line parameter to specify the config servers.
+      
+      .. tabs::
+      
+         .. tab:: Configuration File
+            :tabid: config-file
+      
+            If using a configuration file, set the
+            :setting:`sharding.configDB` to the config server replica set
+            name and at least one member of the replica set in
+            ``<replSetName>/<host:port>`` format.
+      
+            .. include:: /includes/warning-bind-ip-security-considerations.rst
+      
+            .. code-block:: yaml
+      
+               sharding:
+                 configDB: <configReplSetName>/cfg1.example.net:27019,cfg2.example.net:27019
+               net:
+                 bindIp: localhost,<hostname(s)|ip address(es)>
+      
+            Start the :binary:`~bin.mongos` specifying the ``--config``
+            option and the path to the configuration file.
+      
+            .. code-block:: bash
+      
+               mongos --config <path-to-config>
+      
+            For more information on the configuration file, see 
+            :ref:`configuration options <configuration-options>`.
+      
+         .. tab:: Command Line
+            :tabid: command-line
+      
+            If using command line parameters start the :binary:`~bin.mongos`
+            and specify the ``--configdb``,  ``--bind_ip``, and other
+            options as appropriate to your deployment. For example:
+      
+            .. include:: /includes/warning-bind-ip-security-considerations.rst
+      
+            .. code-block:: bash
+      
+               mongos --configdb <configReplSetName>/cfg1.example.net:27019,cfg2.example.net:27019,cfg3.example.net:27019 --bind_ip localhost,<hostname(s)|ip address(es)>
+      
+            Include any other options as appropriate for your deployment.
+     
+      At this point, your sharded cluster consists of the
+      ``mongos`` and the config servers.  You can now connect to
+      the sharded cluster using ``mongosh``.
+
+   .. step:: Connect to the Sharded Cluster.
+   
+      Connect ``mongosh`` to the ``mongos``. Specify the ``host`` and 
+      ``port`` on which the ``mongos`` is running:
+      
+      .. code-block:: bash
+      
+         mongosh --host <hostname> --port <port>
+
+   .. step:: Transition from a Dedicated Config Server to a Config Shard.
+
+      This example configures a dedicated config server to run as a 
+      config shard:
+
+      .. code-block:: javascript
+
+         db.adminCommand( {
+            transitionFromDedicatedConfigServer: 1
+         } )
+
+   .. step:: Confirm Cluster uses a Config Shard
+
+      To confirm that the sharded cluster now uses the config shard,
+      run the :dbcommand:`serverStatus` command to check that the
+      :serverstatus:`~shardingStatistics.configServerInShardCache`
+      status returns ``true``: 
+
+      .. io-code-block::
+         :copyable: true
+
+         .. input::
+            :language: javascript
+
+            db.adminCommand( {
+               serverStatus: 1,
+            } ).shardingStatistics.configServerInShardCache
+
+         .. output::
+            :language: javascript
+
+            true
+
 ## Learn More
 
-- `config-shard-concept`
+- :ref:`config-shard-concept`
 - :dbcommand:`addShard`
 - :dbcommand:`transitionFromDedicatedConfigServer`

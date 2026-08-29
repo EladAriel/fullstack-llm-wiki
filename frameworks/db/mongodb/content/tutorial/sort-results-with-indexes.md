@@ -1,251 +1,376 @@
 ---
 type: "Framework Learn Page"
-framework: "mongodb"
+framework: "MongoDB"
 source_repo: "https://github.com/mongodb/docs.git"
 source_branch: "main"
 source_path: "content/manual/manual/source/tutorial/sort-results-with-indexes.txt"
-source_commit: "ab9db26ed3d11618cdb61516d8180337d8e3f679"
-source_commit_short: "ab9db26e"
-source_commit_date: "2026-07-24T16:22:46-06:00"
-generated_at: "2026-07-25T11:51:15Z"
+source_commit: "b9f2bc487a2878b65e3c1f80024bebab76954f27"
+source_commit_short: "b9f2bc48"
+source_commit_date: "2026-08-28T17:09:45-05:00"
+generated_at: "2026-08-29T09:39:19.577861Z"
 ---
-
-=================================
+.. _index-sort:
+.. _sorting-with-indexes:
 
 # Use Indexes to Sort Query Results
 
-.. include:: /includes/fact-sort-multiple-indexes.rst
+**meta:** :description: Learn how to use indexes to efficiently sort query results in MongoDB, including handling multiple fields and collation settings.
 
-If MongoDB cannot use an index or indexes to obtain the sort order, MongoDB must perform an in-memory sort operation on the data.
+.. default-domain:: mongodb
 
-Starting in MongoDB 6.0, if the server requires more than 100 megabytes of memory for a pipeline execution stage, MongoDB automatically writes temporary files to disk unless that query specifies `{ allowDiskUse: false }`.
+**contents:** On this page
+   :local:
+   :backlinks: none
+   :depth: 1
+   :class: singlecol
 
-Sort operations that use an index often have better performance than in-memory sorts.
+**include:** /includes/fact-sort-multiple-indexes.rst
 
-> **Note:** .. include:: /includes/fact-multikey-index-sort-limitation.rst
+If MongoDB cannot use an index or indexes to obtain the sort order, MongoDB must perform
+an in-memory sort operation on the data.
+
+Starting in MongoDB 6.0, if the server requires more than 100 megabytes 
+of memory for a pipeline execution stage, MongoDB automatically writes 
+temporary files to disk unless that query specifies
+``{ allowDiskUse: false }``.
+
+Sort operations that use an index often have better performance than
+in-memory sorts.
+
+**note:** .. include:: /includes/fact-multikey-index-sort-limitation.rst
+
+.. _sort-results-single-field:
 
 ## Sort with a Single Field Index
 
-If an ascending or a descending index is on a single field, the sort operation on the field can be in either direction.
+If an ascending or a descending index is on a single field, the sort
+operation on the field can be in either direction.
 
-For example, create an ascending index on the field `a` for a collection `records`:
+For example, create an ascending index on the field ``a`` for a
+collection ``records``:
 
-```javascript
-db.records.createIndex( { a: 1 } )
-```
+.. code-block:: javascript
 
-This index can support an ascending sort on `a`:
+   db.records.createIndex( { a: 1 } )
 
-```javascript
-db.records.find().sort( { a: 1 } )
-```
+This index can support an ascending sort on ``a``:
 
-The index can also support the following descending sort on `a` by traversing the index in reverse order:
+.. code-block:: javascript
 
-```javascript
-db.records.find().sort( { a: -1 } )
-```
+   db.records.find().sort( { a: 1 } )
+
+The index can also support the following descending sort on ``a`` by
+traversing the index in reverse order:
+
+.. code-block:: javascript
+
+   db.records.find().sort( { a: -1 } )
+
+.. _sort-on-multiple-fields:
 
 ## Sort on Multiple Fields
 
-Create a `compound index <index-type-compound>` to support sorting on multiple fields.
+Create a :ref:`compound index <index-type-compound>` to support sorting
+on multiple fields.
 
-You can specify a sort on all the keys of the index or on a subset; however, the sort keys must be listed in the same order as they appear in the index. For example, an index key pattern `{ a: 1, b: 1 }` can support a sort on `{ a: 1, b: 1 }` but not on `{ b: 1, a: 1 }`.
+You can specify a sort on all the keys of the index or on a subset;
+however, the sort keys must be listed in the *same order* as they
+appear in the index. For example, an index key pattern ``{ a: 1, b: 1
+}`` can support a sort on ``{ a: 1, b: 1 }`` but *not* on ``{ b: 1, a:
+1 }``.
 
-For a query to use a compound index for a sort, the specified sort direction for all keys in the :method:`cursor.sort()` document must match the index key pattern or match the inverse of the index key pattern. For example, an index key pattern `{ a: 1, b: -1 }` can support a sort on `{ a: 1, b: -1 }` and `{ a: -1, b: 1 }` but **not** on `{ a: -1, b: -1 }` or `{a: 1, b: 1}`.
+For a query to use a compound index for a sort, the specified sort direction
+for all keys in the :method:`cursor.sort()` document must match the index
+key pattern *or* match the inverse of the index key pattern.
+For example, an index key pattern ``{ a: 1, b: -1 }`` can
+support a sort on ``{ a: 1, b: -1 }`` and ``{ a: -1, b: 1 }`` but **not**
+on ``{ a: -1, b: -1 }`` or ``{a: 1, b: 1}``.
+
+.. _sort-index-prefix:
 
 ### Sort and Index Prefix
 
-If the sort keys correspond to the index keys or an index prefix, MongoDB can use the index to sort the query results. A prefix of a compound index is a subset that consists of one or more keys at the start of the index key pattern.
+If the sort keys correspond to the index keys or an index *prefix*,
+MongoDB can use the index to sort the query results. A *prefix* of a
+compound index is a subset that consists of one or more keys at the
+start of the index key pattern.
 
-For example, create a compound index on the `data` collection:
+For example, create a compound index on the ``data`` collection:
 
-```javascript
-db.data.createIndex( { a:1, b: 1, c: 1, d: 1 } )
-```
+.. code-block:: javascript
+
+   db.data.createIndex( { a:1, b: 1, c: 1, d: 1 } )
 
 Then, the following are prefixes for that index:
 
-```javascript
-{ a: 1 }
-{ a: 1, b: 1 }
-{ a: 1, b: 1, c: 1 }
-```
+.. code-block:: javascript
 
-The following query and sort operations use the index prefixes to sort the results. These operations do not need to sort the result set in memory.
+   { a: 1 }
+   { a: 1, b: 1 }
+   { a: 1, b: 1, c: 1 }
 
-Consider the following example in which the prefix keys of the index appear in both the query predicate and the sort:
+The following query and sort operations use the index prefixes to sort
+the results. These operations do not need to sort the result set in
+memory.
 
-```javascript
-db.data.find( { a: { $gt: 4 } } ).sort( { a: 1, b: 1 } )
-```
+.. list-table::
+   :header-rows: 1
+   :widths: 75, 25
 
-In such cases, MongoDB can use the index to retrieve the documents in order specified by the sort. As the example shows, the index prefix in the query predicate can be different from the prefix in the sort.
+   * - Example
+
+     - Index Prefix
+
+   * - ``db.data.find().sort( { a: 1 } )``
+
+     - ``{ a: 1 }``
+
+   * - ``db.data.find().sort( { a: -1 } )``
+
+     - ``{ a: 1 }``
+
+   * - ``db.data.find().sort( { a: 1, b: 1 } )``
+
+     - ``{ a: 1, b: 1 }``
+
+   * - ``db.data.find().sort( { a: -1, b: -1 } )``
+
+     - ``{ a: 1, b: 1 }``
+
+   * - ``db.data.find().sort( { a: 1, b: 1, c: 1 } )``
+
+     - ``{ a: 1, b: 1, c: 1 }``
+
+   * - ``db.data.find( { a: { $gt: 4 } } ).sort( { a: 1, b: 1 } )``
+
+     - ``{ a: 1, b: 1 }``
+
+Consider the following example in which the prefix keys of the index
+appear in both the query predicate and the sort:
+
+.. code-block:: javascript
+
+   db.data.find( { a: { $gt: 4 } } ).sort( { a: 1, b: 1 } )
+
+In such cases, MongoDB can use the index to retrieve the documents in
+order specified by the sort. As the example shows, the index prefix in
+the query predicate can be different from the prefix in the sort.
+
+.. _sort-index-nonprefix-subset:
 
 ### Sort and Non-prefix Subset of an Index
 
-An index can support sort operations on a non-prefix subset of the index key pattern. To do so, the query must include **equality** conditions on all the prefix keys that precede the sort keys.
+An index can support sort operations on a non-prefix subset of the
+index key pattern. To do so, the query must include **equality**
+conditions on all the prefix keys that precede the sort keys.
 
-For example, the collection `data` has the following index:
+For example, the collection ``data`` has the following index:
 
-```javascript
-{ a: 1, b: 1, c: 1, d: 1 }
-```
+.. code-block:: javascript
+
+   { a: 1, b: 1, c: 1, d: 1 }
 
 The following operations can use the index to get the sort order:
 
-As the last operation shows, only the index fields preceding the sort subset must have the equality conditions in the query document; the other index fields may specify other conditions.
+.. list-table::
+   :header-rows: 1
+   :widths: 75, 25
 
-If the query does **not** specify an equality condition on an index prefix that precedes or overlaps with the sort specification, the operation will **not** efficiently use the index. For example, the following operations specify a sort document of `{ c: 1 }`, but the query documents do not contain equality matches on the preceding index fields `a` and `b`:
+   * - Example
 
-```javascript
-db.data.find( { a: { $gt: 2 } } ).sort( { c: 1 } )
-db.data.find( { c: 5 } ).sort( { c: 1 } )
-```
+     - Index Prefix
 
-These operations **will not** efficiently use the index `{ a: 1, b: 1, c: 1, d: 1 }` and may not even use the index to retrieve the documents.
+   * - ``db.data.find( { a: 5 } ).sort( { b: 1, c: 1 } )``
+
+     - ``{ a: 1 , b: 1, c: 1 }``
+
+   * - ``db.data.find( { b: 3, a: 4 } ).sort( { c: 1 } )``
+
+     - ``{ a: 1, b: 1, c: 1 }``
+
+   * - ``db.data.find( { a: 5, b: { $lt: 3} } ).sort( { b: 1 } )``
+
+     - ``{ a: 1, b: 1 }``
+
+As the last operation shows, only the index fields *preceding* the sort
+subset must have the equality conditions in the query document; the
+other index fields may specify other conditions.
+
+If the query does **not** specify an equality condition on an index
+prefix that precedes or overlaps with the sort specification, the
+operation will **not** efficiently use the index. For example, the
+following operations specify a sort document of ``{ c: 1 }``, but the
+query documents do not contain equality matches on the preceding index
+fields ``a`` and ``b``:
+
+.. code-block:: javascript
+
+   db.data.find( { a: { $gt: 2 } } ).sort( { c: 1 } )
+   db.data.find( { c: 5 } ).sort( { c: 1 } )
+
+These operations **will not** efficiently use the index ``{ a: 1, b: 1,
+c: 1, d: 1 }`` and may not even use the index to retrieve the documents.
 
 ## Index Sort Order
 
-A collection of indexed documents may have multiple data types in the key field. When an index has a key with multiple data types, the index is sorted according to the `BSON type sort order <bson-types-comparison-order>`.
+A collection of indexed documents may have multiple data types in the
+key field. When an index has a key with multiple data types, the index is sorted 
+according to the :ref:`BSON type sort order <bson-types-comparison-order>`.
 
-See the `index sorting example <ex-sort-index-types>`.
+
+See the :ref:`index sorting example <ex-sort-index-types>`.
 
 ## Index Use and Collation
 
-.. include:: /includes/extracts/collation-index-use.rst
+**include:** /includes/extracts/collation-index-use.rst
 
 ## Examples
 
-The following example demonstrates sorting when index keys have the same or different types.
+.. _ex-sort-index-types:
 
-Create the `keyTypes` collection:
+The following example demonstrates sorting when index keys have the
+same or different types.
 
-```javascript
-db.keyTypes.insertMany( [
-  { seqNum: 1, seqType: null, type: "null" },
-  { seqNum: 29, seqType: null, type: "null" },
-  { seqNum: 2, seqType: Int32("10"), type: "Int32"  },
-  { seqNum: 28, seqType: Int32("10"), type: "Int32"  },
-  { seqNum: 3, seqType: Long("10"), type: "Long" },
-  { seqNum: 27, seqType: Long("10"), type: "Long" },
-  { seqNum: 4, seqType: Decimal128("10"), type: "Decimal128" },
-  { seqNum: 26, seqType: Decimal128("10"), type: "Decimal128" },
-  { seqNum: 5, seqType: Double("10"), type: "Double" },
-  { seqNum: 25, seqType: Double("10"), type: "Double"  },
-  { seqNum: 6, seqType: String("10"), type: "String"  },
-  { seqNum: 24, seqType: String("10"), type: "String" },
-  { seqNum: 7, seqType: [ "1", "2", "3" ], type: "Array" },
-  { seqNum: 23, seqType: [ "1", "2", "3" ], type: "Array" },
-  { seqNum: 8, seqType: [ [1], [2], [3] ], type: "Array" },
-  { seqNum: 22, seqType: [ [1], [2], [3] ], type: "Array " },
-  { seqNum: 9, seqType: [ 1, 2, 3 ], type: "Array" },
-  { seqNum: 21, seqType: [ 1, 2, 3 ], type: "Array" },
-  { seqNum: 10, seqType: true, type: "Boolean" },
-  { seqNum: 11, seqType: new Timestamp(), type: "Timestamp" },
-  { seqNum: 12, seqType: new Date(), type: "Date" },
-  { seqNum: 13, seqType: new ObjectId(), type: "ObjectId" },
-] )
-```
+Create the ``keyTypes`` collection:
 
-Create indexes on the sequence number ( `seqNum` ) and sequence type ( `seqType` ) fields:
+.. code-block:: javascript
 
-```javascript
-db.keyTypes.createIndex( { seqNum: 1 } )
+   db.keyTypes.insertMany( [
+     { seqNum: 1, seqType: null, type: "null" },
+     { seqNum: 29, seqType: null, type: "null" },
+     { seqNum: 2, seqType: Int32("10"), type: "Int32"  },
+     { seqNum: 28, seqType: Int32("10"), type: "Int32"  },
+     { seqNum: 3, seqType: Long("10"), type: "Long" },
+     { seqNum: 27, seqType: Long("10"), type: "Long" },
+     { seqNum: 4, seqType: Decimal128("10"), type: "Decimal128" },
+     { seqNum: 26, seqType: Decimal128("10"), type: "Decimal128" },
+     { seqNum: 5, seqType: Double("10"), type: "Double" },
+     { seqNum: 25, seqType: Double("10"), type: "Double"  },
+     { seqNum: 6, seqType: String("10"), type: "String"  },
+     { seqNum: 24, seqType: String("10"), type: "String" },
+     { seqNum: 7, seqType: [ "1", "2", "3" ], type: "Array" },
+     { seqNum: 23, seqType: [ "1", "2", "3" ], type: "Array" },
+     { seqNum: 8, seqType: [ [1], [2], [3] ], type: "Array" },
+     { seqNum: 22, seqType: [ [1], [2], [3] ], type: "Array " },
+     { seqNum: 9, seqType: [ 1, 2, 3 ], type: "Array" },
+     { seqNum: 21, seqType: [ 1, 2, 3 ], type: "Array" },
+     { seqNum: 10, seqType: true, type: "Boolean" },
+     { seqNum: 11, seqType: new Timestamp(), type: "Timestamp" },
+     { seqNum: 12, seqType: new Date(), type: "Date" },
+     { seqNum: 13, seqType: new ObjectId(), type: "ObjectId" },
+   ] )
 
-db.keyTypes.createIndex( { seqType: 1 } )
-```
+Create indexes on the sequence number ( ``seqNum`` ) and sequence type
+( ``seqType`` ) fields:
 
-Query the collection using :method:`~db.collection.find()`. The projection document, `{ _id: 0 }, suppresses the id` field in the output display.
+.. code-block:: javascript
 
-```javascript
-db.keyTypes.find( {}, { _id: 0 } )
-```
+   db.keyTypes.createIndex( { seqNum: 1 } )
+
+   db.keyTypes.createIndex( { seqType: 1 } )
+
+
+Query the collection using :method:`~db.collection.find()`.
+The projection document, ``{ _id: 0 }``, suppresses the ``_id`` field
+in the output display.
+
+.. code-block:: javascript
+
+   db.keyTypes.find( {}, { _id: 0 } )
 
 The documents are returned in insertion order:
 
-```javascript
-{ seqNum: 1, seqType: null, type: 'null' },
-{ seqNum: 29, seqType: null, type: 'null' },
-{ seqNum: 2, seqType: 10, type: 'Int32' },
-{ seqNum: 28, seqType: 10, type: 'Int32' },
-{ seqNum: 3, seqType: Long("10"), type: 'Long' },
-{ seqNum: 27, seqType: Long("10"), type: 'Long' },
-{ seqNum: 4, seqType: Decimal128("10"), type: 'Decimal128' },
+.. code-block:: javascript:
+   :copyable: false
 
-// Output truncated
-```
+   { seqNum: 1, seqType: null, type: 'null' },
+   { seqNum: 29, seqType: null, type: 'null' },
+   { seqNum: 2, seqType: 10, type: 'Int32' },
+   { seqNum: 28, seqType: 10, type: 'Int32' },
+   { seqNum: 3, seqType: Long("10"), type: 'Long' },
+   { seqNum: 27, seqType: Long("10"), type: 'Long' },
+   { seqNum: 4, seqType: Decimal128("10"), type: 'Decimal128' },
 
-The sequence number ( `seqNum` ) index has values of the same type. Use the `seqNum` index to query the `keyTypes` collection:
+   // Output truncated
 
-```javascript
-db.keyTypes.find( {}, { _id: 0 } ).sort( { seqNum: 1} )
-```
+The sequence number ( ``seqNum`` ) index has values of the same type.
+Use the ``seqNum`` index to query the ``keyTypes`` collection:
 
-The `seqNum` keys are integers. The documents are returned in numerical order:
+.. code-block:: javascript
 
-```javascript
-{ seqNum: 1, seqType: null, type: 'null' },
-{ seqNum: 2, seqType: 10, type: 'Int32' },
-{ seqNum: 3, seqType: Long("10"), type: 'Long' },
-{ seqNum: 4, seqType: Decimal128("10"), type: 'Decimal128' },
-{ seqNum: 5, seqType: 10, type: 'Double' },
-{ seqNum: 6, seqType: '10', type: 'String' },
-{ seqNum: 7, seqType: [ '1', '2', '3' ], type: 'Array' },
+   db.keyTypes.find( {}, { _id: 0 } ).sort( { seqNum: 1} )
 
-// Output truncated
-```
 
-The sequence type ( `seqType` ) index has values of the different types. Use the `seqType` index to query the `keyTypes` collection:
+The ``seqNum`` keys are integers. The documents are returned in
+numerical order:
 
-```javascript
-db.keyTypes.find( {}, { _id: 0 } ).sort( { seqType: 1} )
-```
+.. code-block:: javascript:
+   :copyable: false
 
-The documents are returned in `BSON type sort order <bson-types-comparison-order>`:
+   { seqNum: 1, seqType: null, type: 'null' },
+   { seqNum: 2, seqType: 10, type: 'Int32' },
+   { seqNum: 3, seqType: Long("10"), type: 'Long' },
+   { seqNum: 4, seqType: Decimal128("10"), type: 'Decimal128' },
+   { seqNum: 5, seqType: 10, type: 'Double' },
+   { seqNum: 6, seqType: '10', type: 'String' },
+   { seqNum: 7, seqType: [ '1', '2', '3' ], type: 'Array' },
 
-```javascript
-{ seqNum: 1, seqType: null, type: 'null' },
-{ seqNum: 29, seqType: null, type: 'null' },
-{ seqNum: 9, seqType: [ 1, 2, 3 ], type: 'Array' },
-{ seqNum: 21, seqType: [ 1, 2, 3 ], type: 'Array' },
-{ seqNum: 2, seqType: 10, type: 'Int32' },
-{ seqNum: 28, seqType: 10, type: 'Int32' },
-{ seqNum: 3, seqType: Long("10"), type: 'Long' },
-{ seqNum: 27, seqType: Long("10"), type: 'Long' },
-{ seqNum: 4, seqType: Decimal128("10"), type: 'Decimal128' },
-{ seqNum: 26, seqType: Decimal128("10"), type: 'Decimal128' },
-{ seqNum: 5, seqType: 10, type: 'Double' },
-{ seqNum: 25, seqType: 10, type: 'Double' },
-{ seqNum: 7, seqType: [ '1', '2', '3' ], type: 'Array' },
-{ seqNum: 23, seqType: [ '1', '2', '3' ], type: 'Array' },
-{ seqNum: 6, seqType: '10', type: 'String' },
-{ seqNum: 24, seqType: '10', type: 'String' },
-{ seqNum: 8, seqType: [ [ 1 ], [ 2 ], [ 3 ] ], type: 'Array' },
-{ seqNum: 22, seqType: [ [ 1 ], [ 2 ], [ 3 ] ], type: 'Array ' },
-{
-  seqNum: 13,
-  seqType: ObjectId("6239e3922604d5a7478df071"),
-  type: 'ObjectId'
-},
-{ seqNum: 10, seqType: true, type: 'Boolean' },
-{
-  seqNum: 12,
-  seqType: ISODate("2022-03-22T14:56:18.100Z"),
-  type: 'Date'
-},
-{
-  seqNum: 11,
-  seqType: Timestamp({ t: 1647960978, i: 1 }),
-  type: 'Timestamp'
-}
-```
+   // Output truncated
+
+The sequence type ( ``seqType`` ) index has values of the different
+types. Use the ``seqType`` index to query the ``keyTypes`` collection:
+
+.. code-block:: javascript
+
+   db.keyTypes.find( {}, { _id: 0 } ).sort( { seqType: 1} )
+
+The documents are returned in :ref:`BSON type sort order
+<bson-types-comparison-order>`:
+
+
+.. code-block:: javascript:
+   :copyable: false
+
+   { seqNum: 1, seqType: null, type: 'null' },
+   { seqNum: 29, seqType: null, type: 'null' },
+   { seqNum: 9, seqType: [ 1, 2, 3 ], type: 'Array' },
+   { seqNum: 21, seqType: [ 1, 2, 3 ], type: 'Array' },
+   { seqNum: 2, seqType: 10, type: 'Int32' },
+   { seqNum: 28, seqType: 10, type: 'Int32' },
+   { seqNum: 3, seqType: Long("10"), type: 'Long' },
+   { seqNum: 27, seqType: Long("10"), type: 'Long' },
+   { seqNum: 4, seqType: Decimal128("10"), type: 'Decimal128' },
+   { seqNum: 26, seqType: Decimal128("10"), type: 'Decimal128' },
+   { seqNum: 5, seqType: 10, type: 'Double' },
+   { seqNum: 25, seqType: 10, type: 'Double' },
+   { seqNum: 7, seqType: [ '1', '2', '3' ], type: 'Array' },
+   { seqNum: 23, seqType: [ '1', '2', '3' ], type: 'Array' },
+   { seqNum: 6, seqType: '10', type: 'String' },
+   { seqNum: 24, seqType: '10', type: 'String' },
+   { seqNum: 8, seqType: [ [ 1 ], [ 2 ], [ 3 ] ], type: 'Array' },
+   { seqNum: 22, seqType: [ [ 1 ], [ 2 ], [ 3 ] ], type: 'Array ' },
+   {
+     seqNum: 13,
+     seqType: ObjectId("6239e3922604d5a7478df071"),
+     type: 'ObjectId'
+   },
+   { seqNum: 10, seqType: true, type: 'Boolean' },
+   {
+     seqNum: 12,
+     seqType: ISODate("2022-03-22T14:56:18.100Z"),
+     type: 'Date'
+   },
+   {
+     seqNum: 11,
+     seqType: Timestamp({ t: 1647960978, i: 1 }),
+     type: 'Timestamp'
+   }
 
 - Numerical types (Int32, Long, Decimal128, Double) are equivalent when
-compared with other types.
-
+  compared with other types. 
 - Within the Numbers BSON type, numerical types are sorted:
-- Int32
-- Long
-- Decimal128
-- Double
+
+  - Int32
+  - Long
+  - Decimal128
+  - Double

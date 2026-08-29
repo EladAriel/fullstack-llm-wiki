@@ -4,10 +4,10 @@ framework: "Arize Phoenix"
 source_repo: "https://github.com/Arize-ai/phoenix.git"
 source_branch: "main"
 source_path: "docs/phoenix/cookbook/tracing/identify-high-signal-traces.mdx"
-source_commit: "69b3ab92c37ff65812feaa2dbf0b1c0ad5ae55fe"
-source_commit_short: "69b3ab9"
-source_commit_date: "2026-07-25T11:48:12-06:00"
-generated_at: "2026-07-25T19:08:24.867495Z"
+source_commit: "c48e50e9906fcc56c1c103ebd93ef3c95ed6b6e7"
+source_commit_short: "c48e50e"
+source_commit_date: "2026-08-29T01:45:20-06:00"
+generated_at: "2026-08-29T09:39:58.877283Z"
 ---
 ---
 description: >-
@@ -41,8 +41,8 @@ You can run every query in this guide against any Phoenix project that has trace
     npm install -g @arizeai/phoenix-cli       # provides the `px` command
 
     # Scoped to THIS terminal (re-run it in each new shell). Both the `px` CLI
-    # and the Python/TS clients read PHOENIX_COLLECTOR_ENDPOINT.
-    export PHOENIX_COLLECTOR_ENDPOINT=http://localhost:6006
+    # and the Python/TS clients read PHOENIX_ENDPOINT.
+    export PHOENIX_ENDPOINT=http://localhost:6006
     export PHOENIX_PROJECT=high-signal-demo
 
     px auth status                            # verify it reaches your server
@@ -231,7 +231,7 @@ Glance at the [metrics dashboard](/docs/phoenix/tracing/llm-traces/metrics) [in 
 
 Once a week, pull a deliberately mixed sample of traces and read them with open-ended notes. This is where improvement is made real. You'll learn how in the last section of this guide.
 
-<Callout icon="warning" color="#3b82f6">
+<Callout icon="warning">
     Teams that only do the daily check end up dashboard-watching. Teams that only do deep dives get surprised by fires. You need both, as they are complementary. Smoke-check anomalies tell you where to oversample in the weekly review.
 </Callout>
 
@@ -750,7 +750,7 @@ The pipeline below has four stages, each doing one job:
 
 The code below adds two more steps that put the clusters to work: cross-referencing them against failure signals, then building the review sample.
 
-<Callout icon="sparkles" color="#3b82f6">
+<Callout icon="sparkles">
     [BERTopic](https://maartengr.github.io/BERTopic/) packages this exact pipeline if you'd rather not assemble it yourself.
 </Callout>
 
@@ -917,7 +917,7 @@ main().catch((err) => {
 </Tab>
 </Tabs>
 
-<Callout icon="sparkles" color="#3b82f6">
+<Callout icon="sparkles">
     Phoenix doesn't include a built-in embedding projector. The workflow above shows the full DIY approach: embed, reduce, cluster, cross-reference against error rates. This portability is a feature. You control the embedding model and clustering algorithm.
 </Callout>
 

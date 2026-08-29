@@ -1,0 +1,54 @@
+---
+type: "Framework Learn Page"
+framework: "Langfuse"
+source_repo: "https://github.com/langfuse/langfuse-docs"
+source_branch: "main"
+source_path: "content/docs/observability/features/agentic-access.mdx"
+source_commit: "ba26344559edee69ba55c5d3aa80e632f56c1626"
+source_commit_short: "ba26344"
+source_commit_date: "2026-08-29T02:57:18+00:00"
+generated_at: "2026-08-29T09:38:37.751137Z"
+---
+---
+title: Agentic access
+sidebarTitle: Agent Access
+description: Let AI agents investigate observations, query metrics, and work with your Langfuse observability data through the Agent Skill, CLI, or MCP server.
+---
+
+# Agentic access to observability
+
+AI agents can investigate production behavior directly in Langfuse. There are different ways for agents to access your data:
+
+import AgenticAccessMethods from "@/components-mdx/agentic-access-methods.mdx";
+import { ManualGuideList } from "@/components/academy/ManualGuideList";
+
+<AgenticAccessMethods />
+
+## Example workflows
+
+Ask your agent to:
+
+- Find observations with errors or high latency in a specific environment
+- Compare token usage, cost, or latency across models and releases
+- Inspect the input, output, metadata, and scores of a problematic observation
+- Add a comment or score to record the outcome of an investigation
+
+## Work across Langfuse
+
+Agents can also [manage prompts](/docs/prompt-management/features/agentic-access) and [run evaluation workflows](/docs/evaluation/agentic-access) in Langfuse.
+
+<ManualGuideList
+  title="Related guides and blog posts"
+  guides={[
+    {
+      href: "/guides/videos/headless-langfuse",
+      topic: "Headless Langfuse from your coding agent",
+      lede: "Instrument an application, analyze production traces, build a dataset, and run evaluations without leaving your coding agent.",
+    },
+    {
+      href: "/blog/2026-06-05-agentic-setup-for-operational-work",
+      topic: "How we use agents to review production infrastructure",
+      lede: "See how repo-owned skills, MCP servers, and queryable production data support recurring engineering reviews.",
+    },
+  ]}
+/>

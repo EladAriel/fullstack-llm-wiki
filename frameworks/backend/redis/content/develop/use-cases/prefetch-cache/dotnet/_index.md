@@ -1,14 +1,15 @@
 ---
 type: "Framework Learn Page"
-framework: "redis"
+framework: "Redis"
 source_repo: "https://github.com/redis/docs.git"
 source_branch: "main"
 source_path: "content/develop/use-cases/prefetch-cache/dotnet/_index.md"
-source_commit: "9d30f68c3dad1a6b3b7d30fe604b911348ce8152"
-source_commit_short: "9d30f68c"
-source_commit_date: "2026-07-24T10:52:10-07:00"
-generated_at: "2026-07-25T11:51:22Z"
+source_commit: "f8693349287b0efbef3c865b6f6a2aceca88594d"
+source_commit_short: "f869334"
+source_commit_date: "2026-08-28T10:01:19-05:00"
+generated_at: "2026-08-29T09:38:56.143834Z"
 ---
+# _Index
 
 ---
 aliases:
@@ -26,7 +27,7 @@ title: Redis prefetch cache with StackExchange.Redis
 weight: 6
 ---
 
-This guide shows you how to implement a Redis prefetch cache in C# with [StackExchange.Redis](https://stackexchange.github.io/StackExchange.Redis/). It includes a small local web server built with ASP.NET Core minimal APIs so you can watch the cache pre-load at startup, see a background sync worker apply primary mutations within milliseconds, and break the cache to confirm that reads never fall back to the primary.
+This guide shows you how to implement a Redis prefetch cache in C# with [StackExchange.Redis](https://seredis.dev/). It includes a small local web server built with ASP.NET Core minimal APIs so you can watch the cache pre-load at startup, see a background sync worker apply primary mutations within milliseconds, and break the cache to confirm that reads never fall back to the primary.
 
 ## Overview
 
@@ -430,7 +431,7 @@ If a key is missing for an ID that still exists in the primary, the prefetch did
 
 ## Learn more
 
-* [StackExchange.Redis documentation](https://stackexchange.github.io/StackExchange.Redis/) - Install and use the StackExchange.Redis client
+* [StackExchange.Redis documentation](https://seredis.dev/) - Install and use the StackExchange.Redis client
 * [HSET command]({{< relref "/commands/hset" >}}) - Write hash fields
 * [HGETALL command]({{< relref "/commands/hgetall" >}}) - Read every field of a hash
 * [EXPIRE command]({{< relref "/commands/expire" >}}) - Set key expiration in seconds

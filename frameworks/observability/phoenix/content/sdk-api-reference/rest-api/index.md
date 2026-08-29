@@ -1,7 +1,7 @@
 ---
 type: "Framework Learn Directory Index"
 framework: "Arize Phoenix"
-generated_at: "2026-07-25T19:08:24.992689Z"
+generated_at: "2026-08-29T09:39:58.963640Z"
 ---
 # Rest-Api
 
@@ -19,3 +19,7 @@ This directory contains Arize Phoenix learning pages related to rest-api.
 
 - [Api Reference](api-reference.md)
 - [Overview](overview.md)
+
+## Subdirectories
+
+- [Api Reference](api-reference/index.md)

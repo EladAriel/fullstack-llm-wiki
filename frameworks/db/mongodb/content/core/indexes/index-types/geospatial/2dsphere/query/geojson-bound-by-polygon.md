@@ -1,88 +1,108 @@
 ---
 type: "Framework Learn Page"
-framework: "mongodb"
+framework: "MongoDB"
 source_repo: "https://github.com/mongodb/docs.git"
 source_branch: "main"
 source_path: "content/manual/manual/source/core/indexes/index-types/geospatial/2dsphere/query/geojson-bound-by-polygon.txt"
-source_commit: "ab9db26ed3d11618cdb61516d8180337d8e3f679"
-source_commit_short: "ab9db26e"
-source_commit_date: "2026-07-24T16:22:46-06:00"
-generated_at: "2026-07-25T11:51:15Z"
+source_commit: "b9f2bc487a2878b65e3c1f80024bebab76954f27"
+source_commit_short: "b9f2bc48"
+source_commit_date: "2026-08-28T17:09:45-05:00"
+generated_at: "2026-08-29T09:39:19.846152Z"
 ---
-
-======================================
+.. _2dsphere-query-geojson-objects-polygon:
 
 # Query for Locations Bound by a Polygon
 
-You can query for location data within the perimeter of a specified polygon.
+.. default-domain:: mongodb
 
-To query for location data within a perimeter, use the :query:`$geoWithin` operator and specify the coordinates of the polygon's vertices:
+**contents:** On this page
+   :local:
+   :backlinks: none
+   :depth: 2
+   :class: singlecol
 
-```javascript
-db.<collection>.find( {
-   <location field> : {
-      $geoWithin : {
-         $geometry : {
-            type : "Polygon",
-            coordinates : [ <coordinates> ]
-         }
+You can query for location data within the perimeter of a specified
+polygon.
+
+To query for location data within a perimeter, use the
+:query:`$geoWithin` operator and specify the coordinates of the
+polygon's vertices:
+
+.. code-block:: javascript
+
+   db.<collection>.find( {
+      <location field> : {
+         $geoWithin : {
+            $geometry : {
+               type : "Polygon",
+               coordinates : [ <coordinates> ]
+            }
+          }
        }
-    }
- } )
-```
+    } )
 
 ## About this Task
 
-- The values in the field you query with the `$geoWithin` operator
-must be in GeoJSON format.
+.. |geo-operator-method| replace:: ``$geoWithin``
+
+- The values in the field you query with the ``$geoWithin`` operator
+  must be in GeoJSON format.
 
 - .. include:: /includes/indexes/geojson-lat-long.rst
-- When you specify Polygon `coordinates`, the first and last
-coordinates in the array must be the same. This closes the bounds of the polygon.
+
+- When you specify Polygon ``coordinates``, the first and last
+  coordinates in the array must be the same. This closes the bounds of
+  the polygon.
 
 - .. include:: /includes/indexes/geospatial-index-not-required.rst
+
 ## Before You Begin
 
-.. include:: /includes/indexes/geojson-sample-docs.rst
+**include:** /includes/indexes/geojson-sample-docs.rst
 
 ## Procedure
 
-Use `$geoWithin` to query the collection. The following `$geoWithin` query specifies a polygon with four vertices (a rectangle) and returns points within that polygon:
+Use ``$geoWithin`` to query the collection. The following ``$geoWithin``
+query specifies a polygon with four vertices (a rectangle) and returns
+points within that polygon:
 
-```javascript
-db.places.find( {
-   loc: {
-      $geoWithin: {
-         $geometry: {
-            type: "Polygon",
-            coordinates: [ [
-               [ -73.95, 40.80 ],
-               [ -73.94, 40.79 ],
-               [ -73.97, 40.76 ],
-               [ -73.98, 40.76 ],
-               [ -73.95, 40.80 ]
-            ] ]
-          }
+.. code-block:: javascript
+
+   db.places.find( {
+      loc: {
+         $geoWithin: {
+            $geometry: {
+               type: "Polygon",
+               coordinates: [ [
+                  [ -73.95, 40.80 ],
+                  [ -73.94, 40.79 ],
+                  [ -73.97, 40.76 ],
+                  [ -73.98, 40.76 ],
+                  [ -73.95, 40.80 ]
+               ] ]
+             }
+         }
       }
-   }
-} )
-```
+   } )
 
 Output:
 
-```javascript
-[
-  {
-    _id: ObjectId("63a4a8d67348ebdcd0a061f0"),
-    loc: { type: 'Point', coordinates: [ -73.97, 40.77 ] },
-    name: 'Central Park',
-    category: 'Park'
-  }
-]
-```
+.. code-block:: javascript
+   :copyable: false
+
+   [
+     {
+       _id: ObjectId("63a4a8d67348ebdcd0a061f0"),
+       loc: { type: 'Point', coordinates: [ -73.97, 40.77 ] },
+       name: 'Central Park',
+       category: 'Park'
+     }
+   ]
 
 ## Learn More
 
 - :query:`$geoWithin`
-- `geojson-polygon`
-- `geospatial-restrictions`
+
+- :ref:`geojson-polygon`
+
+- :ref:`geospatial-restrictions`

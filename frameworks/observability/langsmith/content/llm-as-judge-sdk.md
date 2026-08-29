@@ -4,10 +4,10 @@ framework: "LangSmith"
 source_repo: "https://github.com/langchain-ai/docs.git"
 source_branch: "main"
 source_path: "src/langsmith/llm-as-judge-sdk.mdx"
-source_commit: "2aae1dfc98ee953a9a5185fb6fcdd9efb3f4d878"
-source_commit_short: "2aae1df"
-source_commit_date: "2026-07-25T00:27:23+00:00"
-generated_at: "2026-07-25T19:08:33.433471Z"
+source_commit: "a174f9cf7c91ee5eb14ee2382eb48bfe6e4956e9"
+source_commit_short: "a174f9c"
+source_commit_date: "2026-08-28T17:04:12-07:00"
+generated_at: "2026-08-29T09:39:50.681393Z"
 ---
 ---
 title: How to define an LLM-as-a-judge evaluator
@@ -93,5 +93,132 @@ results = evaluate(
     evaluators=[valid_reasoning]  # List of evaluator functions
 )
 ```
+
+## Use reference outputs
+
+When your dataset examples include reference outputs (expected answers), you can pass `reference_outputs` as a parameter to your evaluator function. LangSmith automatically provides the example's reference outputs to any evaluator that declares this parameter.
+
+<CodeGroup>
+
+```python Python
+from langsmith import evaluate, traceable, wrappers, Client
+from openai import OpenAI
+from pydantic import BaseModel
+
+# Wrap the OpenAI client to automatically trace all LLM calls
+oai_client = wrappers.wrap_openai(OpenAI())
+
+# Define an evaluator that checks the answer against a reference answer
+def matches_expected(inputs: dict, outputs: dict, reference_outputs: dict) -> bool:
+    """Use an LLM to judge if the actual answer matches the expected answer."""
+    instructions = """
+Given a question, an expected answer, and an actual answer, determine if the
+actual answer is semantically equivalent to the expected answer."""
+
+    class Response(BaseModel):
+        answers_match: bool
+
+    msg = (
+        f"Question: {inputs['question']}\n"
+        f"Expected answer: {reference_outputs['answer']}\n"
+        f"Actual answer: {outputs['answer']}"
+    )
+
+    response = oai_client.beta.chat.completions.parse(
+        model="gpt-4o",
+        messages=[{"role": "system", "content": instructions}, {"role": "user", "content": msg}],
+        response_format=Response,
+    )
+
+    return response.choices[0].message.parsed.answers_match
+
+@traceable
+def my_app(inputs: dict) -> dict:
+    # Your application logic here
+    return {"answer": "Paris"}
+
+# Create a dataset with reference outputs (expected answers)
+ls_client = Client()
+dataset = ls_client.create_dataset("geography-qa")
+examples = [
+    {
+        "inputs": {"question": "What is the capital of France?"},
+        "outputs": {"answer": "Paris"},
+    },
+    {
+        "inputs": {"question": "What is the capital of Germany?"},
+        "outputs": {"answer": "Berlin"},
+    },
+]
+ls_client.create_examples(dataset_id=dataset.id, examples=examples)
+
+results = evaluate(
+    my_app,
+    data=dataset,
+    evaluators=[matches_expected]
+)
+```
+
+```typescript TypeScript
+import { evaluate } from "langsmith/evaluation";
+import { Client } from "langsmith";
+import OpenAI from "openai";
+import { zodResponseFormat } from "openai/helpers/zod";
+import { z } from "zod";
+
+const oaiClient = new OpenAI();
+
+const matchesExpected = async ({
+  inputs,
+  outputs,
+  referenceOutputs,
+}: {
+  inputs: Record<string, any>;
+  outputs: Record<string, any>;
+  referenceOutputs?: Record<string, any>;
+}): Promise<boolean> => {
+  const instructions = `Given a question, an expected answer, and an actual answer, determine if the
+actual answer is semantically equivalent to the expected answer.`;
+
+  const ResponseSchema = z.object({ answers_match: z.boolean() });
+
+  const msg = `Question: ${inputs.question}\nExpected answer: ${referenceOutputs?.answer}\nActual answer: ${outputs.answer}`;
+
+  const response = await oaiClient.beta.chat.completions.parse({
+    model: "gpt-4o",
+    messages: [
+      { role: "system", content: instructions },
+      { role: "user", content: msg },
+    ],
+    response_format: zodResponseFormat(ResponseSchema, "response"),
+  });
+
+  return response.choices[0].message.parsed?.answers_match ?? false;
+};
+
+const myApp = async (inputs: Record<string, any>): Promise<Record<string, any>> => {
+  // Your application logic here
+  return { answer: "Paris" };
+};
+
+// Create a dataset with reference outputs (expected answers)
+const lsClient = new Client();
+const dataset = await lsClient.createDataset("geography-qa-ts");
+await lsClient.createExamples({
+  inputs: [
+    { question: "What is the capital of France?" },
+    { question: "What is the capital of Germany?" },
+  ],
+  outputs: [{ answer: "Paris" }, { answer: "Berlin" }],
+  datasetId: dataset.id,
+});
+
+await evaluate(myApp, {
+  data: dataset.name,
+  evaluators: [matchesExpected],
+});
+```
+
+</CodeGroup>
 
 For more information on how to write a custom evaluator, refer to [How to define a code evaluator (SDK)](/langsmith/code-evaluator-sdk).

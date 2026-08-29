@@ -4,10 +4,10 @@ framework: "LangSmith"
 source_repo: "https://github.com/langchain-ai/docs.git"
 source_branch: "main"
 source_path: "src/langsmith/cloud-platform-features.mdx"
-source_commit: "2aae1dfc98ee953a9a5185fb6fcdd9efb3f4d878"
-source_commit_short: "2aae1df"
-source_commit_date: "2026-07-25T00:27:23+00:00"
-generated_at: "2026-07-25T19:08:33.342123Z"
+source_commit: "a174f9cf7c91ee5eb14ee2382eb48bfe6e4956e9"
+source_commit_short: "a174f9c"
+source_commit_date: "2026-08-28T17:04:12-07:00"
+generated_at: "2026-08-29T09:39:50.602259Z"
 ---
 # Cloud Platform Features
 
@@ -28,7 +28,30 @@ The data region for a deployment is implied by the data region of the LangSmith 
 
 ## Static IP addresses
 
-All traffic from deployments created after January 6, 2025 comes through a NAT gateway. This NAT gateway has several static IP addresses depending on the data region. For the list of static IP addresses, see the [Allowlist IP addresses table](/langsmith/deploy-to-cloud#allowlist-ip-addresses).
+All traffic from deployments created after January 6, 2025 comes through a NAT gateway. This NAT gateway has several static IP addresses depending on the data region.
+
+### Allowlist IP addresses
+
+Use the following static IP addresses to allowlist traffic for each region:
+
+| GCP US         | GCP EU         | GCP APAC       | AWS US        |
+| -------------- | -------------- | -------------- | ------------- |
+| 35.197.29.146  | 34.90.213.236  | 34.40.236.16   | 3.13.80.97    |
+| 34.145.102.123 | 34.13.244.114  | 34.40.140.88   | 3.146.216.198 |
+| 34.169.45.153  | 34.32.180.189  | 34.151.88.209 | 16.59.72.244  |
+| 34.82.222.17   | 34.34.69.108   | 35.189.51.120 |               |
+| 35.227.171.135 | 34.32.145.240  | 34.40.172.39  |               |
+| 34.169.88.30   | 34.90.157.44   | 35.189.56.87  |               |
+| 34.19.93.202   | 34.141.242.180 | 35.189.17.201 |               |
+| 34.19.34.50    | 34.32.141.108  | 35.244.99.196 |               |
+| 34.59.244.194  | 34.12.178.175  | 34.40.149.177 |               |
+| 34.9.99.224    | 34.91.192.230  | 34.40.144.104 |               |
+| 34.68.27.146   | 34.32.209.237  | 34.151.130.182 |               |
+| 34.41.178.137  | 34.178.128.69  | 34.116.82.199 |               |
+| 34.123.151.210 |                |                |               |
+| 34.135.61.140  |                |                |               |
+| 34.121.166.52  |                |                |               |
+| 34.31.121.70   |                |                |               |
 
 ## Payload size
 

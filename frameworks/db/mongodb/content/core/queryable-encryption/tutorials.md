@@ -1,44 +1,67 @@
 ---
 type: "Framework Learn Page"
-framework: "mongodb"
+framework: "MongoDB"
 source_repo: "https://github.com/mongodb/docs.git"
 source_branch: "main"
 source_path: "content/manual/manual/source/core/queryable-encryption/tutorials.txt"
-source_commit: "ab9db26ed3d11618cdb61516d8180337d8e3f679"
-source_commit_short: "ab9db26e"
-source_commit_date: "2026-07-24T16:22:46-06:00"
-generated_at: "2026-07-25T11:51:15Z"
+source_commit: "b9f2bc487a2878b65e3c1f80024bebab76954f27"
+source_commit_short: "b9f2bc48"
+source_commit_date: "2026-08-28T17:09:45-05:00"
+generated_at: "2026-08-29T09:39:19.776236Z"
 ---
-
-==============================
+.. _qe-tutorials:
+.. _qe-tutorial-automatic-encryption:
+.. _qe-tutorial-manual-encryption:
+.. _qe-convert-to-a-remote-master-key:
 
 # {+qe+} Tutorials
 
-Read the `Overview: Enable Queryable Encryption <qe-overview-enable-qe>` section to set up your development environment and data keys, then the `Overview: Use Queryable Encryption <qe-overview-use-qe>` section to learn how to use {+qe+} with your preferred {+kms-long+}.
+**meta:** :description: Explore tutorials on using Queryable Encryption with various Key Management Systems, featuring sample applications in multiple programming languages.
 
-To learn how to use {+qe+} with a local key (not for production), see the `qe-quick-start`.
+.. default-domain:: mongodb
 
-To learn how to use {+manual-enc+} with {+qe+}, read `<qe-tutorials-manual-encryption>`.
+**contents:** On this page
+   :local:
+   :backlinks: none
+   :depth: 2
+   :class: singlecol
 
-Each tutorial provides a sample application in multiple languages for each supported {+kms-long+}.
+Read the :ref:`Overview: Enable Queryable Encryption
+<qe-overview-enable-qe>` section to set up your development environment and
+data keys, then the :ref:`Overview: Use Queryable Encryption
+<qe-overview-use-qe>` section to learn how to use {+qe+} with your
+preferred {+kms-long+}.
+
+To learn how to use {+qe+} with a local key (not for production), see the
+:ref:`qe-quick-start`.
+
+To learn how to use {+manual-enc+} with {+qe+}, read
+:ref:`<qe-tutorials-manual-encryption>`.
+
+Each tutorial provides a sample application in multiple languages for 
+each supported {+kms-long+}.
 
 Code samples for specific language drivers:
 
-- [Python]({+sample-app-url-qe+}/python/)_
-- [Node.js]({+sample-app-url-qe+}/node/)_
-- [Java]({+sample-app-url-qe+}/java/)_
-- [Go]({+sample-app-url-qe+}/go/)_
-- [C#/.NET]({+sample-app-url-qe+}/csharp/)_
-- [Rust]({+sample-app-url-qe+}/rust/)_
-- [PHP]({+sample-app-url-qe+}/php/)_
-> **Tip:** Some driver documentation sets include queryable encryption tutorials for
-specific driver integrations and frameworks. To view the tutorials, visit
-the following documentation:
-- `node-mongoose-qe` in the Node.js driver documentation
-- `django-qe` in the Django MongoDB Backend documentation
+- `Python <{+sample-app-url-qe+}/python/>`__
+- `Node.js <{+sample-app-url-qe+}/node/>`__
+- `Java <{+sample-app-url-qe+}/java/>`__
+- `Go <{+sample-app-url-qe+}/go/>`__
+- `C#/.NET <{+sample-app-url-qe+}/csharp/>`__
+- `Rust <{+sample-app-url-qe+}/rust/>`__
+- `PHP <{+sample-app-url-qe+}/php/>`__
 
-## Contents
+**tip:** Driver Integration Tutorials
 
-- Enable </core/queryable-encryption/overview-enable-qe>
-- Create & Query </core/queryable-encryption/overview-use-qe>
-- Use Explicit Encryption </core/queryable-encryption/tutorials/explicit-encryption>
+   Some driver documentation sets include queryable encryption tutorials for
+   specific driver integrations and frameworks. To view the tutorials, visit
+   the following documentation:
+
+   - :ref:`node-mongoose-qe` in the Node.js driver documentation
+   - :ref:`django-qe` in the Django MongoDB Backend documentation
+
+**toctree:** :titlesonly:
+
+   Enable </core/queryable-encryption/overview-enable-qe>
+   Create & Query </core/queryable-encryption/overview-use-qe>
+   Use Explicit Encryption </core/queryable-encryption/tutorials/explicit-encryption>

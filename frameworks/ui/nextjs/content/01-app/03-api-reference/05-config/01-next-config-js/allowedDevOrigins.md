@@ -1,14 +1,15 @@
 ---
 type: "Framework Learn Page"
-framework: "nextjs"
+framework: "Next.js"
 source_repo: "https://github.com/vercel/next.js/"
 source_branch: "canary"
 source_path: "docs/01-app/03-api-reference/05-config/01-next-config-js/allowedDevOrigins.mdx"
-source_commit: "dcf242a17b5d4622bbd9624db531a9d84177619f"
-source_commit_short: "dcf242a1"
-source_commit_date: "2026-07-25T10:16:19+02:00"
-generated_at: "2026-07-25T11:50:53Z"
+source_commit: "33a5d542e519fe4e05c8c8c2c2845da9f741699b"
+source_commit_short: "33a5d542"
+source_commit_date: "2026-08-29T00:04:45-07:00"
+generated_at: "2026-08-29T09:40:24.310128Z"
 ---
+# Alloweddevorigins
 
 ---
 title: allowedDevOrigins
@@ -26,5 +27,27 @@ To configure a Next.js application to allow requests from origins other than the
 ```js filename="next.config.js"
 module.exports = {
   allowedDevOrigins: ['local-origin.dev', '*.local-origin.dev'],
+}
+```
+
+Only the [`hostname`](https://developer.mozilla.org/en-US/docs/Web/API/URL/hostname) of the request's `Origin` header is matched against your entries. For a request from `http://local-origin.dev:3000/dashboard?tab=1`, that is `local-origin.dev`. The scheme, the port, the path, and the query string are ignored. Write your entries that way too, without `https://` and without a port.
+
+A no-cors cross-site request, such as a script tag loading a dev asset, sends no `Origin` header. Those are matched on the `Referer` hostname instead.
+
+Entries can also expand, through two wildcards: a `*` stands in for exactly one label of the hostname, and `**` for one or more. That is why the example above lists two entries, one for the bare hostname and one for its subdomains.
+
+| Entry                 | Matches                                             | Does not match                                 |
+| --------------------- | --------------------------------------------------- | ---------------------------------------------- |
+| `local-origin.dev`    | `local-origin.dev`                                  | `team.local-origin.dev`                        |
+| `*.local-origin.dev`  | `team.local-origin.dev`                             | `local-origin.dev`, `team.eu.local-origin.dev` |
+| `**.local-origin.dev` | `team.local-origin.dev`, `team.eu.local-origin.dev` | `local-origin.dev`                             |
+
+Partial replacement is not supported. Write `*.local-origin.dev`, rather than `team-*.local-origin.dev`. Using `**` is only supported at the start of the pattern.
+
+The dev server already allows `localhost`, its subdomains, and the hostname it was started with. Any other hostname needs an entry, such as a tunnel used for remote development:
+
+```js filename="next.config.js"
+module.exports = {
+  allowedDevOrigins: ['*.tunnel.example.com'],
 }
 ```

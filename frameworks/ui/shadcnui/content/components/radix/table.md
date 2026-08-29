@@ -1,14 +1,15 @@
 ---
 type: "Framework Learn Page"
-framework: "shadcnui"
+framework: "shadcn/ui"
 source_repo: "https://github.com/shadcn-ui/ui"
 source_branch: "main"
 source_path: "apps/v4/content/docs/components/radix/table.mdx"
-source_commit: "4baadbc6517070ae8f8feb2c97037adc2b305544"
-source_commit_short: "4baadbc6"
-source_commit_date: "2026-07-23T23:50:36+04:00"
-generated_at: "2026-07-25T11:50:48Z"
+source_commit: "683a5a9b370acdb7785a0529434e6a3b8c7e0441"
+source_commit_short: "683a5a9"
+source_commit_date: "2026-08-26T10:28:13+04:00"
+generated_at: "2026-08-29T09:40:26.976066Z"
 ---
+# Table
 
 ---
 title: Table
@@ -136,7 +137,7 @@ A table showing actions for each row using a `<DropdownMenu />` component.
 
 ## Data Table
 
-You can use the `<Table />` component to build more complex data tables. Combine it with [@tanstack/react-table](https://tanstack.com/table/v8) to create tables with sorting, filtering and pagination.
+You can use the `<Table />` component to build more complex data tables. Combine it with [@tanstack/react-table](https://tanstack.com/table/latest) to create tables with sorting, filtering and pagination.
 
 See the [Data Table](/docs/components/data-table) documentation for more information.
 

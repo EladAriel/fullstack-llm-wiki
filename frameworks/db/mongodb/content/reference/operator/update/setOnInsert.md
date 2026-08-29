@@ -1,58 +1,94 @@
 ---
 type: "Framework Learn Page"
-framework: "mongodb"
+framework: "MongoDB"
 source_repo: "https://github.com/mongodb/docs.git"
 source_branch: "main"
 source_path: "content/manual/manual/source/reference/operator/update/setOnInsert.txt"
-source_commit: "ab9db26ed3d11618cdb61516d8180337d8e3f679"
-source_commit_short: "ab9db26e"
-source_commit_date: "2026-07-24T16:22:46-06:00"
-generated_at: "2026-07-25T11:51:15Z"
+source_commit: "b9f2bc487a2878b65e3c1f80024bebab76954f27"
+source_commit_short: "b9f2bc48"
+source_commit_date: "2026-08-28T17:09:45-05:00"
+generated_at: "2026-08-29T09:39:20.104494Z"
 ---
-
-==============================
-
 # $setOnInsert (update operator)
+
+**meta:** :description: Use `$setOnInsert` to assign values during an upsert operation that results in a document insert, otherwise it does nothing.
+
+.. default-domain:: mongodb
+
+**contents:** On this page
+   :local:
+   :backlinks: none
+   :depth: 1
+   :class: singlecol
 
 ## Definition
 
+**update:** $setOnInsert
+
+   If an update operation with :ref:`upsert: true <upsert-parameter>`
+   results in an insert of a document, then :update:`$setOnInsert`
+   assigns the specified values to the fields in the document. If the
+   update operation does not result in an insert,
+   :update:`$setOnInsert` does nothing.
+
+   You can specify the ``upsert`` option for:
+
+   - :method:`db.collection.updateOne()`
+   - :method:`db.collection.updateMany()`
+   - :method:`db.collection.findOneAndUpdate()`
+
+   .. code-block:: javascript
+
+      db.collection.updateOne(
+         <query>,
+         { $setOnInsert: { <field1>: <value1>, ... } },
+         { upsert: true }
+      )
+
+   .. include:: /includes/use-dot-notation.rst
+
 ## Behavior
 
-.. include:: /includes/fact-update-operator-processing-order.rst
+**include:** /includes/fact-update-operator-processing-order.rst
 
-.. include:: /includes/extracts/update-operation-empty-operand-expressions-set-on-insert.rst
+**include:** /includes/extracts/update-operation-empty-operand-expressions-set-on-insert.rst
 
 ## Example
 
-The `products` collection contains no documents.
+The ``products`` collection contains no documents.
 
-Insert a new document using :method:`db.collection.updateOne()` the `upsert: true <upsert-parameter>` parameter.
+Insert a new document using :method:`db.collection.updateOne()` the :ref:`upsert:
+true <upsert-parameter>` parameter.
 
-```javascript
-db.products.updateOne(
-  { _id: 1 },
-  {
-     $set: { item: "apple" },
-     $setOnInsert: { defaultQty: 100 }
-  },
-  { upsert: true }
-)
-```
+.. code-block:: javascript
 
-MongoDB uses `<query> to create a new document with id: 1`. :update:`$setOnInsert` updates the document as specified.
+   db.products.updateOne(
+     { _id: 1 },
+     {
+        $set: { item: "apple" },
+        $setOnInsert: { defaultQty: 100 }
+     },
+     { upsert: true }
+   )
 
-The `products` collection contains the newly-inserted document:
+MongoDB uses ``<query>`` to create a new document with ``_id: 1``.
+:update:`$setOnInsert` updates the document as specified.
 
-```javascript
-{ "_id" : 1, "item" : "apple", "defaultQty" : 100 }
-```
+The ``products`` collection contains the newly-inserted document:
 
-When the `upsert <upsert-parameter>` parameter is `true` :method:`db.collection.updateOne()`:
+.. code-block:: javascript
 
-- creates a new document
+   { "_id" : 1, "item" : "apple", "defaultQty" : 100 }
+
+When the :ref:`upsert <upsert-parameter>` parameter is ``true``
+:method:`db.collection.updateOne()`:
+
+- creates a new document 
 - applies the :update:`$set` operation
 - applies the :update:`$setOnInsert` operation
-If :method:`db.collection.updateOne()` matches an existing document, MongoDB only applies the :update:`$set` operation.
 
-> **Seealso:** - :method:`db.collection.updateOne()`
-- :method:`db.collection.findOneAndUpdate()`
+If :method:`db.collection.updateOne()` matches an existing document,
+MongoDB only applies the :update:`$set` operation.
+
+**seealso:** - :method:`db.collection.updateOne()`
+   - :method:`db.collection.findOneAndUpdate()`

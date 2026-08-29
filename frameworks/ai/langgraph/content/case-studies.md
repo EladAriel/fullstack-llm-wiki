@@ -4,11 +4,12 @@ framework: "LangGraph"
 source_repo: "https://github.com/langchain-ai/docs"
 source_branch: "main"
 source_path: "src/oss/langgraph/case-studies.mdx"
-source_commit: "2aae1dfc98ee953a9a5185fb6fcdd9efb3f4d878"
-source_commit_short: "2aae1dfc"
-source_commit_date: "2026-07-25T00:27:23Z"
-generated_at: "2026-07-25T11:51:08Z"
+source_commit: "a174f9cf7c91ee5eb14ee2382eb48bfe6e4956e9"
+source_commit_short: "a174f9c"
+source_commit_date: "2026-08-28T17:04:12-07:00"
+generated_at: "2026-08-29T09:38:45.963859Z"
 ---
+# Case Studies
 
 ---
 title: Case studies
@@ -56,7 +57,7 @@ This list of companies using LangGraph and their success stories is compiled fro
 | [Tradestack](https://www.tradestack.uk/) | Software & Technology (GenAI Native) | Copilot for domain-specific task | [Case study, 2024](https://blog.langchain.dev/customers-tradestack/) |
 | [Uber](https://www.uber.com/) | Transportation | Developer productivity; Code generation | [Interrupt talk, 2025](https://youtu.be/Bugs0dVcNI8?feature=shared); [Presentation, 2024](https://dpe.org/sessions/ty-smith-adam-huda/this-year-in-ubers-ai-driven-developer-productivity-revolution/); [Video, 2024](https://www.youtube.com/watch?v=8rkA5vWUE4Y) |
 | [Unify](https://www.unifygtm.com/) | Software & Technology (GenAI Native) | Copilot for domain-specific task | [Interrupt talk, 2025](https://youtu.be/pKk-LfhujwI?feature=shared); [Blog post, 2024](https://blog.langchain.dev/unify-launches-agents-for-account-qualification-using-langgraph-and-langsmith/) |
-| [Vizient](https://www.vizientinc.com/) | Healthcare | Copilot for domain-specific task | [Video story, 2025](https://www.youtube.com/watch?v=vrjJ6NuyTWA); [Case study, 2025](https://blog.langchain.dev/p/3d2cd58c-13a5-4df9-bd84-7d54ed0ed82c/) |
+| [Vizient](https://www.vizientinc.com/) | Healthcare | Copilot for domain-specific task | [Video story, 2025](https://www.youtube.com/watch?v=vrjJ6NuyTWA); [Case study, 2025](https://www.langchain.com/blog/customers-vizient) |
 | [Vodafone](https://www.vodafone.com/) | Telecommunications | Code generation; internal search | [Case study, 2025](https://blog.langchain.dev/customers-vodafone/) |
 | [WebToon](https://www.webtoons.com/en/) | Media & Entertainment | Data extraction | [Case study, 2025](https://blog.langchain.com/customers-webtoon/) |
 | [11x](https://www.11x.ai/) | Software & Technology (GenAI Native) | Research & outreach | [Interrupt talk, 2025](https://youtu.be/fegwPmaAPQk?feature=shared) |

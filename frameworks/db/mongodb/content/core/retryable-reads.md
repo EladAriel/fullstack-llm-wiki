@@ -1,60 +1,135 @@
 ---
 type: "Framework Learn Page"
-framework: "mongodb"
+framework: "MongoDB"
 source_repo: "https://github.com/mongodb/docs.git"
 source_branch: "main"
 source_path: "content/manual/manual/source/core/retryable-reads.txt"
-source_commit: "ab9db26ed3d11618cdb61516d8180337d8e3f679"
-source_commit_short: "ab9db26e"
-source_commit_date: "2026-07-24T16:22:46-06:00"
-generated_at: "2026-07-25T11:51:15Z"
+source_commit: "b9f2bc487a2878b65e3c1f80024bebab76954f27"
+source_commit_short: "b9f2bc48"
+source_commit_date: "2026-08-28T17:09:45-05:00"
+generated_at: "2026-08-29T09:39:19.552761Z"
 ---
-
-===============
+.. _retryable-reads:
 
 # Retryable Reads
 
-Retryable reads allow MongoDB drivers to automatically retry certain read operations a single time if they encounter certain network or server errors.
+**meta:** :description: Enable retryable reads in MongoDB drivers to automatically retry certain read operations once upon encountering network or server errors.
+
+.. default-domain:: mongodb
+
+**contents:** On this page
+   :local:
+   :backlinks: none
+   :depth: 1
+   :class: singlecol
+
+Retryable reads allow MongoDB drivers to automatically retry certain
+read operations a single time if they encounter certain network 
+or server errors.
 
 ## Prerequisites
 
-Minimum Driver Version Official MongoDB drivers compatible with MongoDB Server 6.0 and later support retryable reads.
+Minimum Driver Version
+  Official MongoDB drivers compatible with MongoDB Server 6.0 and later
+  support retryable reads. 
 
-For more information on official MongoDB drivers, see :driver:`MongoDB Drivers </>`.
+  For more information on official MongoDB drivers, see
+  :driver:`MongoDB Drivers </>`.
 
-Minimum Server Version Drivers can only retry read operations if connected to MongoDB Server 6.0 or later.
+Minimum Server Version
+  Drivers can only retry read operations if connected to 
+  MongoDB Server 6.0 or later.
 
 ## Enabling Retryable Reads
 
-Official MongoDB drivers compatible with MongoDB Server 6.0 and later enable retryable reads by default. To explicitly disable retryable reads, specify :urioption:`retryReads=false <retryReads>` in the `connection string <mongodb-uri>` for the deployment.
+Official MongoDB drivers compatible with MongoDB Server 6.0 and later
+enable retryable reads by default. To explicitly disable retryable
+reads, specify :urioption:`retryReads=false <retryReads>` in the
+:ref:`connection string <mongodb-uri>` for the deployment.
 
 :binary:`~bin.mongosh` does not support retryable reads.
 
+.. _retryable-read-ops:
+
 ## Retryable Read Operations
 
-MongoDB drivers support retrying the following read operations. The list references a generic description of each method. For specific syntax and usage, defer to the driver documentation for that method.
+MongoDB drivers support retrying the following read operations. The 
+list references a generic description of each method. For specific 
+syntax and usage, defer to the driver documentation for that method.
 
-MongoDB drivers may include retryable support for other operations, such as helper methods or methods that wrap a retryable read operation. Defer to the :driver:`driver documentation </>` to determine whether a method explicitly supports retryable reads.
+.. list-table::
+   :header-rows: 1
 
-> **Seealso:** Retryable Read Specification: [Supported Read Operations](https://github.com/mongodb/specifications/blob/master/source/retryable-reads/retryable-reads.rst#supported-read-operations)_
+   * - Methods
+     - Descriptions
+
+   * - | ``Collection.aggregate``
+       | ``Collection.count``
+       | ``Collection.countDocuments``
+       | ``Collection.distinct``
+       | ``Collection.estimatedDocumentCount``
+       | ``Collection.find``
+       | ``Database.aggregate`` 
+       
+       For ``Collection.aggregate`` and ``Database.aggregate``, drivers
+       can only retry aggregation pipelines which do **not** include
+       write stages, such as :pipeline:`$out` or :pipeline:`$merge`.
+
+
+     - CRUD API Read Operations
+
+   * - | ``Collection.watch``
+       | ``Database.watch``
+       | ``MongoClient.watch``
+
+     - Change Stream Operations
+
+   * - | ``MongoClient.listDatabases``
+       | ``Database.listCollections``
+       | ``Collection.listIndexes``
+     
+     - Enumeration Operations
+
+   * - GridFS Operations backed by ``Collection.find``
+       (e.g. ``GridFSBucket.openDownloadStream``)
+
+     - GridFS File Download Operations
+
+MongoDB drivers *may* include retryable support for other operations, 
+such as helper methods or methods that wrap a retryable read operation.
+Defer to the :driver:`driver documentation </>`
+to determine whether a method explicitly supports retryable reads.
+
+**seealso:** Retryable Read Specification: `Supported Read Operations <https://github.com/mongodb/specifications/blob/master/source/retryable-reads/retryable-reads.rst#supported-read-operations>`__
 
 ### Unsupported Read Operations
 
-The following operations do not support retryable reads:
+The following operations do *not* support retryable reads:
 
 - :method:`db.collection.mapReduce()`
 - :dbcommand:`getMore`
-- Any read command passed to a generic `Database.runCommand` helper,
-which is agnostic about read or write commands.
+- Any read command passed to a generic ``Database.runCommand`` helper,
+  which is agnostic about read or write commands.
 
 ## Behavior
 
 ### Persistent Network Errors
 
-MongoDB retryable reads make only **one** retry attempt. This helps address transient network errors or `replica set elections <replica-set-elections>`, but not persistent network errors.
+MongoDB retryable reads make only **one** retry attempt. This helps
+address transient network errors or
+:ref:`replica set elections <replica-set-elections>`, but not persistent
+network errors.
 
 ### Failover Period
 
-The driver performs `server selection <replica-set-read-preference-behavior>` using the read command's original `read preference <read-preference>` before retrying the read operation. If the driver cannot select a server for the retry attempt using the original read preference, the driver returns the original error.
+The driver performs :ref:`server selection
+<replica-set-read-preference-behavior>` using the read command's
+original :ref:`read preference <read-preference>` before retrying the
+read operation. If the driver cannot select a server 
+for the retry attempt using the original read preference, 
+the driver returns the original error.
 
-The drivers wait :urioption:`serverSelectionTimeoutMS` milliseconds before performing server selection. Retryable reads do not address instances where no eligible servers exist after waiting :urioption:`serverSelectionTimeoutMS`.
+The drivers wait :urioption:`serverSelectionTimeoutMS` milliseconds
+before performing server selection. Retryable reads do not address
+instances where no eligible servers exist after waiting
+:urioption:`serverSelectionTimeoutMS`.

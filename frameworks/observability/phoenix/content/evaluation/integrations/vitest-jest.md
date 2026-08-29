@@ -4,10 +4,10 @@ framework: "Arize Phoenix"
 source_repo: "https://github.com/Arize-ai/phoenix.git"
 source_branch: "main"
 source_path: "docs/phoenix/evaluation/integrations/vitest-jest.mdx"
-source_commit: "69b3ab92c37ff65812feaa2dbf0b1c0ad5ae55fe"
-source_commit_short: "69b3ab9"
-source_commit_date: "2026-07-25T11:48:12-06:00"
-generated_at: "2026-07-25T19:08:24.926466Z"
+source_commit: "c48e50e9906fcc56c1c103ebd93ef3c95ed6b6e7"
+source_commit_short: "c48e50e"
+source_commit_date: "2026-08-29T01:45:20-06:00"
+generated_at: "2026-08-29T09:39:58.893129Z"
 ---
 ---
 title: "Vitest / Jest"
@@ -90,7 +90,7 @@ export default defineConfig({
 
 - **`include`** keeps eval suites in `*.eval.ts` files separate from unit tests.
 - **`reporters`** keeps Vitest's default output and adds the Phoenix summary block.
-- **`setupFiles`** loads `PHOENIX_HOST`, `PHOENIX_API_KEY`, and other env vars from `.env`.
+- **`setupFiles`** loads `PHOENIX_ENDPOINT`, `PHOENIX_API_KEY`, and other env vars from `.env`.
 - **`testTimeout`** is bumped because LLM calls can be slow.
 
 <Note>
@@ -619,7 +619,7 @@ px.test(
 
 | Variable | Description |
 |---|---|
-| `PHOENIX_HOST` | Phoenix base URL |
+| `PHOENIX_ENDPOINT` | Phoenix base URL |
 | `PHOENIX_API_KEY` | Bearer token for Phoenix |
 | `PHOENIX_CLIENT_HEADERS` | Optional JSON headers forwarded to the Phoenix client and tracer |
 | `PHOENIX_TEST_TRACKING` | Set to `false` to disable sync to Phoenix for the current run |
@@ -648,7 +648,7 @@ jobs:
       - run: npm ci
       - name: Run eval suite
         env:
-          PHOENIX_HOST: ${{ secrets.PHOENIX_HOST }}
+          PHOENIX_ENDPOINT: ${{ secrets.PHOENIX_ENDPOINT }}
           PHOENIX_API_KEY: ${{ secrets.PHOENIX_API_KEY }}
           OPENAI_API_KEY: ${{ secrets.OPENAI_API_KEY }}
         run: npm run eval
@@ -671,7 +671,7 @@ jobs:
       - run: npm ci
       - name: Run eval suite
         env:
-          PHOENIX_HOST: ${{ secrets.PHOENIX_HOST }}
+          PHOENIX_ENDPOINT: ${{ secrets.PHOENIX_ENDPOINT }}
           PHOENIX_API_KEY: ${{ secrets.PHOENIX_API_KEY }}
           OPENAI_API_KEY: ${{ secrets.OPENAI_API_KEY }}
         run: npm run eval

@@ -1,53 +1,102 @@
 ---
 type: "Framework Learn Page"
-framework: "mongodb"
+framework: "MongoDB"
 source_repo: "https://github.com/mongodb/docs.git"
 source_branch: "main"
 source_path: "content/manual/manual/source/reference/command/balancerStart.txt"
-source_commit: "ab9db26ed3d11618cdb61516d8180337d8e3f679"
-source_commit_short: "ab9db26e"
-source_commit_date: "2026-07-24T16:22:46-06:00"
-generated_at: "2026-07-25T11:51:15Z"
+source_commit: "b9f2bc487a2878b65e3c1f80024bebab76954f27"
+source_commit_short: "b9f2bc48"
+source_commit_date: "2026-08-28T17:09:45-05:00"
+generated_at: "2026-08-29T09:39:20.059243Z"
 ---
-
-================================
-
 # balancerStart (database command)
+
+**meta:** :description: Start the balancer thread on a `mongos` instance using the `balancerStart` command or `sh.startBalancer()` method.
+
+.. default-domain:: mongodb
+
+**contents:** On this page
+   :local:
+   :backlinks: none
+   :depth: 1
+   :class: singlecol
 
 ## Definition
 
+**dbcommand:** balancerStart
+
+   Starts the balancer thread.  The command does not wait for a
+   balancing round to start.
+
+   .. include:: /includes/start-balancer-automerger.rst
+
+   .. |method| replace:: :method:`sh.startBalancer` 
+      helper method
+   .. include:: /includes/fact-dbcommand-tip
+
 ## Compatibility
 
-This command is available in deployments hosted in the following environments:
+This command is available in deployments hosted in the following environments: 
 
-.. include:: /includes/fact-environments-atlas-only.rst
+**include:** /includes/fact-environments-atlas-only.rst
 
-.. include:: /includes/fact-environments-onprem-only.rst
+**include:** /includes/fact-environments-onprem-only.rst
 
+           
 ## Syntax
 
-You can only issue the :dbcommand:`balancerStart` against the `admin` database on a :binary:`~bin.mongos` instance.
+You can only issue the
+:dbcommand:`balancerStart` against the ``admin`` database on a
+:binary:`~bin.mongos` instance.
 
 The command has the following syntax:
 
-```javascript
-db.adminCommand( 
-   { 
-     balancerStart: 1, 
-     maxTimeMS: <number> 
-   } 
-)
-```
+.. code-block:: javascript
+
+   db.adminCommand( 
+      { 
+        balancerStart: 1, 
+        maxTimeMS: <number> 
+      } 
+   )
 
 ### Command Fields
 
+.. list-table::
+   :header-rows: 1
+   :widths: 20 20 80
+
+   * - Field
+
+     - Type
+
+     - Description
+
+   * - ``balancerStart``
+
+     - any
+
+     - Any value.
+       
+       
+
+   * - ``maxTimeMS``
+
+     - integer
+
+     - Optional. Time limit for enabling the balancer.
+       
+       Defaults to 60000 milliseconds.
+       
+
 ## Example
 
-To start the balancer thread, connect to a :binary:`~bin.mongos` instance and issue the following command:
+To start the balancer thread, connect to a :binary:`~bin.mongos` instance
+and issue the following command:
 
-```javascript
-db.adminCommand( { balancerStart: 1 } )
-```
+.. code-block:: javascript
 
-> **Seealso:** - :method:`sh.startBalancer()`
-- :dbcommand:`balancerStart`
+   db.adminCommand( { balancerStart: 1 } )
+
+**seealso:** - :method:`sh.startBalancer()`
+   - :dbcommand:`balancerStart`

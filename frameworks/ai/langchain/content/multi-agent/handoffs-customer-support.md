@@ -4,12 +4,11 @@ framework: "LangChain"
 source_repo: "https://github.com/langchain-ai/docs"
 source_branch: "main"
 source_path: "src/oss/langchain/multi-agent/handoffs-customer-support.mdx"
-source_commit: "2aae1dfc98ee953a9a5185fb6fcdd9efb3f4d878"
-source_commit_short: "2aae1dfc"
-source_commit_date: "2026-07-25T00:27:23Z"
-generated_at: "2026-07-25T11:51:05Z"
+source_commit: "a174f9cf7c91ee5eb14ee2382eb48bfe6e4956e9"
+source_commit_short: "a174f9c"
+source_commit_date: "2026-08-28T17:04:12-07:00"
+generated_at: "2026-08-29T09:38:24.257062Z"
 ---
-
 ---
 title: Build customer support with handoffs
 sidebarTitle: "Handoffs: Customer support"
@@ -108,11 +107,11 @@ Set up [LangSmith](https://smith.langchain.com) to inspect what is happening ins
 
 :::python
 <CodeGroup>
-```bash bash
+```bash Shell
 export LANGSMITH_TRACING="true"
 export LANGSMITH_API_KEY="..."
 ```
-```python python
+```python Python
 import getpass
 import os
 
@@ -124,11 +123,11 @@ os.environ["LANGSMITH_API_KEY"] = getpass.getpass()
 
 :::js
 <CodeGroup>
-```bash bash
+```bash Shell
 export LANGSMITH_TRACING="true"
 export LANGSMITH_API_KEY="..."
 ```
-```typescript typescript
+```typescript TypeScript
 process.env.LANGSMITH_TRACING = "true";
 process.env.LANGSMITH_API_KEY = "...";
 ```
@@ -1047,7 +1046,7 @@ from langchain.chat_models import init_chat_model
 from langchain.messages import HumanMessage, ToolMessage
 from langchain.tools import tool, ToolRuntime
 
-model = init_chat_model("google_genai:gemini-3.5-flash")
+model = init_chat_model("google_genai:gemini-3.6-flash")
 
 
 # Define the possible workflow steps

@@ -4,11 +4,12 @@ framework: "LangChain"
 source_repo: "https://github.com/langchain-ai/docs"
 source_branch: "main"
 source_path: "src/oss/langchain/frontend/overview.mdx"
-source_commit: "2aae1dfc98ee953a9a5185fb6fcdd9efb3f4d878"
-source_commit_short: "2aae1dfc"
-source_commit_date: "2026-07-25T00:27:23Z"
-generated_at: "2026-07-25T11:51:05Z"
+source_commit: "a174f9cf7c91ee5eb14ee2382eb48bfe6e4956e9"
+source_commit_short: "a174f9c"
+source_commit_date: "2026-08-28T17:04:12-07:00"
+generated_at: "2026-08-29T09:38:24.260713Z"
 ---
+# Overview
 
 ---
 title: Overview
@@ -230,8 +231,8 @@ Custom state keys are inferred automatically, no manual interface required.
   <Card title="Reasoning tokens" icon="brain" href="/oss/langchain/frontend/reasoning-tokens">
     Display model thinking processes in collapsible blocks.
   </Card>
-  <Card title="Generative UI" icon="wand" href="/oss/langchain/frontend/generative-ui">
-    Render AI-generated user interfaces from natural language prompts using json-render.
+  <Card title="Generative UI" icon="wand" href="/oss/langchain/frontend/generative-ui-overview">
+    Render agent-generated interfaces across the spectrum from controlled to declarative to open-ended.
   </Card>
 </CardGroup>
 
@@ -282,7 +283,7 @@ Start from the UX question your application needs to answer:
 | Send work while a run is active | [Message queues](/oss/langchain/frontend/message-queues) |
 | Leave and come back to long-running work | [Join & rejoin streams](/oss/langchain/frontend/join-rejoin) |
 | Edit or retry from an earlier turn | [Branching chat](/oss/langchain/frontend/branching-chat) and [time travel](/oss/langchain/frontend/time-travel) |
-| Render state as an application, not a chat | [Structured output](/oss/langchain/frontend/structured-output), [generative UI](/oss/langchain/frontend/generative-ui), and [Deep Agents frontend patterns](/oss/deepagents/frontend/overview) |
+| Render state as an application, not a chat | [Structured output](/oss/langchain/frontend/structured-output), [generative UI](/oss/langchain/frontend/generative-ui-overview), and [Deep Agents frontend patterns](/oss/deepagents/frontend/overview) |
 
 ## Integrations
 

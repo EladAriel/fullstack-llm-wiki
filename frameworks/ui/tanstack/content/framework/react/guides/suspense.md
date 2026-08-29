@@ -1,14 +1,15 @@
 ---
 type: "Framework Learn Page"
-framework: "tanstack"
+framework: "TanStack"
 source_repo: "https://github.com/tanstack/query"
 source_branch: "main"
 source_path: "docs/framework/react/guides/suspense.md"
-source_commit: "fd50fa14d283c7d6664a796f758498d1ad5bfce7"
-source_commit_short: "fd50fa14"
-source_commit_date: "2026-07-24T22:22:47+10:00"
-generated_at: "2026-07-25T11:50:41Z"
+source_commit: "2969edf32f7e0c48e2a108d84712d6e01edfde21"
+source_commit_short: "2969edf"
+source_commit_date: "2026-08-28T01:03:02+09:00"
+generated_at: "2026-08-29T09:40:33.408758Z"
 ---
+# Suspense
 
 ---
 id: suspense
@@ -20,7 +21,6 @@ React Query can also be used with React's Suspense for Data Fetching APIs. For t
 - [useSuspenseQuery](../reference/useSuspenseQuery.md)
 - [useSuspenseInfiniteQuery](../reference/useSuspenseInfiniteQuery.md)
 - [useSuspenseQueries](../reference/useSuspenseQueries.md)
-- Additionally, you can use the `useQuery().promise` and `React.use()` (Experimental)
 
 When using suspense mode, `status` states and `error` objects are not needed and are then replaced by usage of the `React.Suspense` component (including the use of the `fallback` prop and React error boundaries for catching errors). Please read the [Resetting Error Boundaries](#resetting-error-boundaries) and look at the [Suspense Example](../examples/suspense) for more information on how to set up suspense mode.
 
@@ -185,56 +185,3 @@ export function Providers(props: { children: React.ReactNode }) {
 ```
 
 For more information, check out the [NextJs Suspense Streaming Example](../examples/nextjs-suspense-streaming) and the [Advanced Rendering & Hydration](./advanced-ssr.md) guide.
-
-## Using `useQuery().promise` and `React.use()` (Experimental)
-
-> To enable this feature, you need to set the `experimental_prefetchInRender` option to `true` when creating your `QueryClient`
-
-**Example code:**
-
-```tsx
-const queryClient = new QueryClient({
-  defaultOptions: {
-    queries: {
-      experimental_prefetchInRender: true,
-    },
-  },
-})
-```
-
-**Usage:**
-
-```tsx
-import React from 'react'
-import { useQuery } from '@tanstack/react-query'
-import { fetchTodos, type Todo } from './api'
-
-function TodoList({ query }: { query: UseQueryResult<Todo[]> }) {
-  const data = React.use(query.promise)
-
-  return (
-    <ul>
-      {data.map((todo) => (
-        <li key={todo.id}>{todo.title}</li>
-      ))}
-    </ul>
-  )
-}
-
-export function App() {
-  const query = useQuery({ queryKey: ['todos'], queryFn: fetchTodos })
-
-  return (
-    <>
-      <h1>Todos</h1>
-      <React.Suspense fallback={<div>Loading...</div>}>
-        <TodoList query={query} />
-      </React.Suspense>
-    </>
-  )
-}
-```
-
-For a more complete example, see [suspense example on GitHub](https://github.com/TanStack/query/tree/main/examples/react/suspense).
-
-For a Next.js streaming example, see [nextjs-suspense-streaming example on GitHub](https://github.com/TanStack/query/tree/main/examples/react/nextjs-suspense-streaming).

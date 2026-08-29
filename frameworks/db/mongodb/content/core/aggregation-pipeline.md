@@ -1,93 +1,155 @@
 ---
 type: "Framework Learn Page"
-framework: "mongodb"
+framework: "MongoDB"
 source_repo: "https://github.com/mongodb/docs.git"
 source_branch: "main"
 source_path: "content/manual/manual/source/core/aggregation-pipeline.txt"
-source_commit: "ab9db26ed3d11618cdb61516d8180337d8e3f679"
-source_commit_short: "ab9db26e"
-source_commit_date: "2026-07-24T16:22:46-06:00"
-generated_at: "2026-07-25T11:51:15Z"
+source_commit: "b9f2bc487a2878b65e3c1f80024bebab76954f27"
+source_commit_short: "b9f2bc48"
+source_commit_date: "2026-08-28T17:09:45-05:00"
+generated_at: "2026-08-29T09:39:19.504507Z"
 ---
-
-====================
+.. _aggregation-pipeline:
 
 # Aggregation Pipeline
 
-.. include:: /includes/aggregation-pipeline-introduction.rst
+.. default-domain:: mongodb
 
-When you run aggregation pipelines on {+atlas+} deployments in the {+atlas+} UI, you can preview the results at each stage.
+**facet:** :name: programming_language
+   :values: shell
+
+**facet:** :name: genre 
+   :values: reference
+
+**meta:** :description: MongoDB database aggregation pipeline details and syntax examples.
+   :keywords: sample dataset
+
+**contents:** On this page
+   :local:
+   :backlinks: none
+   :depth: 1
+   :class: singlecol
+
+.. dismissible-skills-card::
+   :skill: Fundamentals of Data Transformation
+   :url: https://learn.mongodb.com/skills?openTab=aggregation
+
+**include:** /includes/aggregation-pipeline-introduction.rst
+
+.. |page-topic| replace:: :atlas:`run aggregation pipelines in the UI </atlas-ui/agg-pipeline>`
+
+.. cta-banner::
+   :url: https://www.mongodb.com/docs/atlas/atlas-ui/agg-pipeline
+   :icon: Cloud
+
+   .. include:: /includes/fact-atlas-compatible.rst
+
+When you run aggregation pipelines on {+atlas+} deployments in the
+{+atlas+} UI, you can preview the results at each stage.
+
+.. _aggregation-pipeline-examples:
 
 ## Complete Aggregation Pipeline Examples
 
-The `aggregation-complete-examples` section contains step-by-step tutorials for common aggregation tasks, with examples for MongoDB Shell and each of the :driver:`official MongoDB drivers </>`.
-
-## Additional Aggregation Pipeline Stage Details
-
-An aggregation pipeline consists of one or more `stages <aggregation-pipeline-operator-reference>` that process documents:
-
-- A stage does not need to output one document for every input
-document. Some stages produce new documents or filter documents out.
-
-- The same stage can appear multiple times in a pipeline, except for
-:pipeline:`$out`, :pipeline:`$merge`, and :pipeline:`$geoNear`.
-
-For all aggregation stages, see `aggregation-pipeline-operator-reference`.
-
-### Expressions and Operators
-
-Some aggregation pipeline stages accept `expressions <expression>`. Operators calculate values based on input expressions.
-
-.. include:: /includes/expression-components.rst
-
-### Field Paths
-
-`Field path <field path>` expressions access fields in input documents. Prefix the field name with a dollar sign `$`. For example, `"$user"` references the `user` field, and `"$user.name"` references the embedded `user.name` field.
-
-`"$<field>"` is equivalent to `"$$CURRENT.<field>"`, where :variable:`CURRENT` is a system variable that defaults to the root of the current object unless a stage specifies otherwise.
-
-For more examples, see `agg-field-paths`.
+The :ref:`aggregation-complete-examples` section contains step-by-step
+tutorials for common aggregation tasks, with examples for MongoDB Shell
+and each of the :driver:`official MongoDB drivers </>`.
 
 ## Run an Aggregation Pipeline
 
 To run an aggregation pipeline, use:
 
 - :method:`db.collection.aggregate()` or
+
 - :dbcommand:`aggregate`
+
+.. _aggregation-pipeline-stages-details:
+
+## Additional Aggregation Pipeline Stage Details
+
+An aggregation pipeline consists of one or more :ref:`stages
+<aggregation-pipeline-operator-reference>` that process documents:
+
+- A stage does not need to output one document for every input
+  document. Some stages produce new documents or filter documents out.
+- The same stage can appear multiple times in a pipeline, except for
+  :pipeline:`$out`, :pipeline:`$merge`, and :pipeline:`$geoNear`.
+
+For all aggregation stages, see
+:ref:`aggregation-pipeline-operator-reference`.
+
+.. _aggregation-pipeline-expressions:
+
+### Expressions and Operators
+
+In aggregation pipelines, expressions define how the stage processes  
+each input document in the pipeline. For example, expressions can define 
+which documents to include, how to reshape fields, or how to compute new values.
+
+Some aggregation pipeline stages accept :term:`expressions
+<expression>`. Operators calculate values based on input expressions.
+
+**include:** /includes/expression-components.rst
+
+.. _agg-quick-ref-field-paths:
+
+**note:** Accessing Array Element Indexes in $map, $filter, and $reduce
+   
+   .. include:: /includes/array-element-index.rst
+
+### Field Paths
+
+:term:`Field path <field path>` expressions access fields in input
+documents. Prefix the field name with a dollar sign ``$``. For example,
+``"$user"`` references the ``user`` field, and ``"$user.name"``
+references the embedded ``user.name`` field.
+
+For more examples, see :ref:`agg-field-paths`.
+
+.. _aggregation-update-documents:
+
 ## Update Documents Using an Aggregation Pipeline
 
 To update documents with an aggregation pipeline, use:
 
-.. include:: /includes/table-update-with-aggregation-availability.rst
+**include:** /includes/table-update-with-aggregation-availability.rst
 
 ## Other Considerations
 
 ### Aggregation Pipeline Limitations
 
-For limits on value types and result size, see `agg-pipeline-limits`.
+For limits on value types and result size, see
+:ref:`agg-pipeline-limits`.
 
 ### Aggregation Pipelines and Sharded Collections
 
-Aggregation pipelines support operations on sharded collections. See `aggregation-pipeline-sharded-collection`.
+Aggregation pipelines support operations on sharded collections. See
+:ref:`aggregation-pipeline-sharded-collection`.
 
-### Aggregation Pipelines as an Alternative to Map-Reduce
+**important:** Aggregation Pipelines as an Alternative to Map-Reduce
+   
+   Starting in MongoDB 5.0, :ref:`map-reduce <map-reduce>` is deprecated. 
+   
+   For examples of aggregation pipeline alternatives to map-reduce, see:
 
-.. include:: /includes/fact-use-aggregation-not-map-reduce.rst
+   - :ref:`map-reduce-to-agg-pipeline`
 
-### Accessing Array Element Indexes in $map, $filter, and $reduce
+   - :ref:`map-reduce-examples`
 
-.. include:: /includes/array-element-index.rst
 
 ## Learn More
 
 To learn more about aggregation pipelines, see:
 
-- `aggregation-expression-operators`
-- `aggregation-pipeline-operator-reference`
-## Contents
+- :ref:`aggregation-expression-operators`
 
-- Field Paths </core/field-paths>
-- Optimization </core/aggregation-pipeline-optimization>
-- Limits </core/aggregation-pipeline-limits>
-- Sharded Collections </core/aggregation-pipeline-sharded-collections>
-- Complete Pipeline Examples </tutorial/aggregation-complete-examples>
+- :ref:`aggregation-pipeline-operator-reference`
+
+**toctree:** :titlesonly:
+   :hidden:
+
+   Field Paths </core/field-paths>
+   Optimization </core/aggregation-pipeline-optimization>
+   Limits </core/aggregation-pipeline-limits>
+   Sharded Collections </core/aggregation-pipeline-sharded-collections>
+   Complete Pipeline Examples </tutorial/aggregation-complete-examples>

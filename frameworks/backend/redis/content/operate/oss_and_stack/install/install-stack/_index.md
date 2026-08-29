@@ -1,14 +1,15 @@
 ---
 type: "Framework Learn Page"
-framework: "redis"
+framework: "Redis"
 source_repo: "https://github.com/redis/docs.git"
 source_branch: "main"
 source_path: "content/operate/oss_and_stack/install/install-stack/_index.md"
-source_commit: "9d30f68c3dad1a6b3b7d30fe604b911348ce8152"
-source_commit_short: "9d30f68c"
-source_commit_date: "2026-07-24T10:52:10-07:00"
-generated_at: "2026-07-25T11:51:22Z"
+source_commit: "f8693349287b0efbef3c865b6f6a2aceca88594d"
+source_commit_short: "f869334"
+source_commit_date: "2026-08-28T10:01:19-05:00"
+generated_at: "2026-08-29T09:38:55.246416Z"
 ---
+# _Index
 
 ---
 aliases:
@@ -130,14 +131,13 @@ docker run -d --name redis -p 6379:6379 redis
 #### Homebrew
 
 ```bash
-brew tap redis/redis
-brew install --cask redis
+brew install redis
 ```
 
 Start Redis:
 
 ```bash
-redis-server $(brew --prefix)/etc/redis.conf
+brew services start redis
 ```
 
 [Full Homebrew installation guide]({{< relref "/operate/oss_and_stack/install/install-stack/homebrew" >}})
@@ -186,5 +186,7 @@ The latest version of Redis Open Source has been tested on the following platfor
 While you can install Redis Open Source on any of the platforms listed below, you might also consider using Redis Cloud by creating a [free account](https://redis.com/try-free/?utm_source=redisio&utm_medium=referral&utm_campaign=2023-09-try_free&utm_content=cu-redis_cloud_users).
 
 You can also download [Redis Insight]({{< relref "/operate/redisinsight/install/" >}}), a free developer companion tool with an intuitive GUI and advanced CLI, which you can use alongside Redis Open Source.
+
+If you only need the Redis CLI (`redis-cli`) to connect to a remote Redis server, and not the full Redis Open Source distribution, see [Install redis-cli]({{< relref "/operate/oss_and_stack/install/install-stack/install-redis-cli" >}}).
 
 <hr/>

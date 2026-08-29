@@ -1,52 +1,107 @@
 ---
 type: "Framework Learn Page"
-framework: "postgres"
+framework: "PostgreSQL"
 source_repo: "https://github.com/postgres/postgres.git"
 source_branch: "master"
 source_path: "doc/src/sgml/ref/savepoint.sgml"
-source_commit: "38afc3dcb25c45b744d4025029ce0a6c90b7059f"
-source_commit_short: "38afc3dc"
-source_commit_date: "2026-07-25T19:08:27+09:00"
-generated_at: "2026-07-25T11:50:59Z"
+source_commit: "6c5f1d6074208146930b67c2054509c3e82f6f7f"
+source_commit_short: "6c5f1d6"
+source_commit_date: "2026-08-28T23:24:47+02:00"
+generated_at: "2026-08-29T09:39:24.607925Z"
 ---
-
 SAVEPOINT
+ 
 
-savepoints
-defining
+ 
+  savepoints
+  defining
+ 
 
-SAVEPOINT
-7
-SQL - Language Statements
+ 
+  
+# SAVEPOINT
 
-SAVEPOINT
-define a new savepoint within the current transaction
+  7
+  SQL - Language Statements
+ 
 
-```
+ 
+  
+# SAVEPOINT
+
+  define a new savepoint within the current transaction
+ 
+
+ 
+
 SAVEPOINT savepoint_name
+
+ 
+
+ 
+  
+# Description
+
+  
+   SAVEPOINT establishes a new savepoint within
+   the current transaction.
+  
+
+  
+   A savepoint is a special mark inside a transaction that allows all commands
+   that are executed after it was established to be rolled back, restoring
+   the transaction state to what it was at the time of the savepoint.
+  
+
+ 
+
+ 
+  
+# Parameters
+
+  
+   
+    savepoint_name
+    
+     
+      The name to give to the new savepoint.  If savepoints with the
+      same name already exist, they will be inaccessible until newer
+      identically-named savepoints are released.
+     
+
+    
+   
+  
+ 
+
+ 
+  
+# Notes
+
+  
+   Use ROLLBACK TO to
+   rollback to a savepoint.  Use RELEASE SAVEPOINT
+   to destroy a savepoint, keeping
+   the effects of commands executed after it was established.
+  
+
+  
+   Savepoints can only be established when inside a transaction block.
+   There can be multiple savepoints defined within a transaction.
+  
+
+ 
+
+ 
+  
+# Examples
+
+  
+   To establish a savepoint and later undo the effects of all commands executed
+   after it was established:
+
 ```
 
-## Description
-
-`SAVEPOINT` establishes a new savepoint within the current transaction.
-
-A savepoint is a special mark inside a transaction that allows all commands that are executed after it was established to be rolled back, restoring the transaction state to what it was at the time of the savepoint.
-
-## Parameters
-
-- The name to give to the new savepoint. If savepoints with the same name already exist, they will be inaccessible until newer identically-named savepoints are released.
-
-## Notes
-
-Use ROLLBACK TO to rollback to a savepoint. Use RELEASE SAVEPOINT to destroy a savepoint, keeping the effects of commands executed after it was established.
-
-Savepoints can only be established when inside a transaction block. There can be multiple savepoints defined within a transaction.
-
-## Examples
-
-To establish a savepoint and later undo the effects of all commands executed after it was established:
-
-```
 BEGIN;
     INSERT INTO table1 VALUES (1);
     SAVEPOINT my_savepoint;
@@ -54,26 +109,34 @@ BEGIN;
     ROLLBACK TO SAVEPOINT my_savepoint;
     INSERT INTO table1 VALUES (3);
 COMMIT;
-```
-
-The above transaction will insert the values 1 and 3, but not 2.
-
-To establish and later destroy a savepoint:
 
 ```
+
+   The above transaction will insert the values 1 and 3, but not 2.
+  
+
+  
+   To establish and later destroy a savepoint:
+
+```
+
 BEGIN;
     INSERT INTO table1 VALUES (3);
     SAVEPOINT my_savepoint;
     INSERT INTO table1 VALUES (4);
     RELEASE SAVEPOINT my_savepoint;
 COMMIT;
-```
-
-The above transaction will insert both 3 and 4.
-
-To use a single savepoint name:
 
 ```
+
+   The above transaction will insert both 3 and 4.
+  
+
+  
+  To use a single savepoint name:
+
+```
+
 BEGIN;
     INSERT INTO table1 VALUES (1);
     SAVEPOINT my_savepoint;
@@ -92,12 +155,31 @@ BEGIN;
     ROLLBACK TO SAVEPOINT my_savepoint;
     SELECT * FROM table1;               -- shows only row 1
 COMMIT;
+
 ```
 
-The above transaction shows row 3 being rolled back first, then row 2.
+  The above transaction shows row 3 being rolled back first, then row 2.
+  
 
-## Compatibility
+ 
 
-SQL requires a savepoint to be destroyed automatically when another savepoint with the same name is established. In PostgreSQL, the old savepoint is kept, though only the more recent one will be used when rolling back or releasing. (Releasing the newer savepoint with `RELEASE SAVEPOINT` will cause the older one to again become accessible to `ROLLBACK TO SAVEPOINT` and `RELEASE SAVEPOINT`.) Otherwise, `SAVEPOINT` is fully SQL conforming.
+ 
+  
+# Compatibility
 
-## See Also
+  
+   SQL requires a savepoint to be destroyed automatically when another
+   savepoint with the same name is established.  In
+   PostgreSQL, the old savepoint is kept, though only the more
+   recent one will be used when rolling back or releasing.  (Releasing the
+   newer savepoint with RELEASE SAVEPOINT will cause the older one
+   to again become accessible to ROLLBACK TO SAVEPOINT and
+   RELEASE SAVEPOINT.) Otherwise, SAVEPOINT is
+   fully SQL conforming.
+  
+
+ 
+
+ 
+  
+# See Also

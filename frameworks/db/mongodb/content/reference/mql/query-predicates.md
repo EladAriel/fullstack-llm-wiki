@@ -1,31 +1,182 @@
 ---
 type: "Framework Learn Page"
-framework: "mongodb"
+framework: "MongoDB"
 source_repo: "https://github.com/mongodb/docs.git"
 source_branch: "main"
 source_path: "content/manual/manual/source/reference/mql/query-predicates.txt"
-source_commit: "ab9db26ed3d11618cdb61516d8180337d8e3f679"
-source_commit_short: "ab9db26e"
-source_commit_date: "2026-07-24T16:22:46-06:00"
-generated_at: "2026-07-25T11:51:15Z"
+source_commit: "b9f2bc487a2878b65e3c1f80024bebab76954f27"
+source_commit_short: "b9f2bc48"
+source_commit_date: "2026-08-28T17:09:45-05:00"
+generated_at: "2026-08-29T09:39:19.862536Z"
 ---
-
-================
+.. _query-predicates-ref:
+.. _query-projection-operators-top:
+.. _query-selectors:
 
 # Query Predicates
 
-Query predicates are expressions that indicate whether a document matches a specified query. For example, `{ name: { $eq: "Alice" } }` is a query predicate that returns documents where the value of the `"name"` field is the string `"Alice"`.
+**meta:** :description: Learn about query predicates in MongoDB. Use these expressions to filter documents in ad-hoc CRUD commands and aggregation pipelines, including comparison, logical, array, and geospatial operators.
+
+**contents:** On this page
+   :local:
+   :backlinks: none
+   :depth: 1
+   :class: singlecol
+
+Query predicates are expressions that indicate whether a document
+matches a specified query. For example, ``{ name: {
+$eq: "Alice" } }`` is a query predicate that returns documents where the
+value of the ``"name"`` field is the string ``"Alice"``.
 
 Use the following types of operators in query predicates:
 
+.. list-table::
+   :widths: 30 70
+   :header-rows: 1
+
+   * - Operator Type
+     - Description
+
+   * - :ref:`query-selectors-arrays`
+     - Return data based on array conditions.
+
+   * - :ref:`query-selectors-bitwise`
+     - Return data based on bit position conditions.
+
+   * - :ref:`query-selectors-comparison`
+     - Return data based on value comparisons such as less than and
+       greater than.
+
+   * - :ref:`query-selectors-data-type`
+     - Return data based on field existence or data types. 
+
+   * - :ref:`query-selectors-misc`
+     - Perform specialized functions in query predicates.
+
+   * - :ref:`query-selectors-logical`
+     - Return data based on boolean logic (and, or, and nor).
+
+   * - :ref:`query-selectors-geospatial`
+     - Return data based on geospatial query predicates, such as
+       containment within a region on the surface of the Earth.
+
 ## Alphabetical List of Operators
 
-## Contents
+.. list-table::
+   :widths: 30 70
+   :header-rows: 1
 
-- Arrays </reference/mql/query-predicates/arrays>
-- Bitwise </reference/mql/query-predicates/bitwise>
-- Comparison </reference/mql/query-predicates/comparison>
-- Data Type </reference/mql/query-predicates/data-type>
-- Geospatial </reference/mql/query-predicates/geospatial>
-- Logical </reference/mql/query-predicates/logical>
-- Miscellaneous </reference/mql/query-predicates/misc>
+   * - Name
+     - Description
+
+   * - :query:`$all`
+     - Matches arrays that contain all elements specified in the query.
+
+   * - :query:`$and`
+     - .. include:: /includes/query-predicates/and-desc.rst
+
+   * - :query:`$bitsAllClear`
+     - Matches numeric or binary values in which a set of bit positions
+       *all* have a value of ``0``.
+
+   * - :query:`$bitsAllSet`
+     - Matches numeric or binary values in which a set of bit positions
+       *all* have a value of ``1``.
+
+   * - :query:`$bitsAnyClear`
+     - Matches numeric or binary values in which *any* bit from a set of
+       bit positions has a value of ``0``.
+
+   * - :query:`$bitsAnySet`
+     - Matches numeric or binary values in which *any* bit from a set of
+       bit positions has a value of ``1``.
+
+   * - :query:`$elemMatch`
+     - .. include:: /includes/query-predicates/elemMatch-desc.rst
+
+   * - :query:`$eq`
+     - Matches values that are equal to a specified value.
+
+   * - :query:`$exists`
+     - Matches documents that have the specified field.
+
+   * - :query:`$expr`
+     - .. include:: /includes/query-predicates/expr-desc.rst
+
+   * - :query:`$geoIntersects`
+     - Selects geometries that intersect with a :term:`GeoJSON` geometry.
+       Requires a :ref:`2dsphere <2dsphere-index>` index.
+
+   * - :query:`$geoWithin`
+     - Selects geometries within a bounding :ref:`GeoJSON geometry
+       <geospatial-indexes-store-geojson>`. Requires a
+       :ref:`2dsphere <2dsphere-index>` or :ref:`2d <2d-index>` index.
+
+   * - :query:`$gt`
+     - Matches values that are greater than a specified value.
+
+   * - :query:`$gte`
+     - Matches values that are greater than or equal to a specified
+       value.
+     
+   * - :query:`$jsonSchema`
+     - .. include:: /includes/query-predicates/jsonSchema-desc.rst
+
+   * - :query:`$in`
+     - Matches any of the values specified in an array.
+
+   * - :query:`$lt`
+     - Matches values that are less than a specified value.
+
+   * - :query:`$lte`
+     - Matches values that are less than or equal to a specified value.
+
+   * - :query:`$mod`
+     - Matches documents based on the result of a modulo operation on a
+       field value.
+
+   * - :query:`$ne`
+     - Matches all values that are not equal to a specified value.
+
+   * - :query:`$near`
+     - Returns geospatial objects in proximity to a point.
+       Requires a ``2dsphere`` or ``2d`` index.
+
+   * - :query:`$nearSphere`
+     - Returns geospatial objects in proximity to a point on a sphere.
+       Requires a ``2dsphere`` or ``2d`` index.
+
+   * - :query:`$nin`
+     - .. include:: /includes/query-predicates/nin-desc.rst
+
+   * - :query:`$nor`
+     - .. include:: /includes/query-predicates/nor-desc.rst
+
+   * - :query:`$not`
+     - Inverts the effect of a query predicate and returns documents
+       that do *not* match the query predicate.
+
+   * - :query:`$or`
+     - .. include:: /includes/query-predicates/or-desc.rst
+
+   * - :query:`$regex`
+     - Matches documents where values match a specified regular expression.
+
+   * - :query:`$size`
+     - .. include:: /includes/query-predicates/size-desc.rst
+
+   * - :query:`$type`
+     - Matches documents if a field is of the specified type.
+
+   * - :query:`$where`
+     - Matches documents that satisfy a JavaScript expression.
+
+**toctree:** :hidden:
+
+   Arrays </reference/mql/query-predicates/arrays>
+   Bitwise </reference/mql/query-predicates/bitwise>
+   Comparison </reference/mql/query-predicates/comparison>
+   Data Type </reference/mql/query-predicates/data-type>
+   Geospatial </reference/mql/query-predicates/geospatial>
+   Logical </reference/mql/query-predicates/logical>
+   Miscellaneous </reference/mql/query-predicates/misc>

@@ -1,33 +1,23 @@
 ---
 type: "Framework Learn Directory Index"
-framework: "redis"
-directory: "content/embeds"
-source_repo: "https://github.com/redis/docs.git"
-source_branch: "main"
-source_commit: "9d30f68c3dad1a6b3b7d30fe604b911348ce8152"
-source_commit_short: "9d30f68c"
-source_commit_date: "2026-07-24T10:52:10-07:00"
-generated_at: "2026-07-25T11:51:22Z"
+framework: "Redis"
+generated_at: "2026-08-29T09:38:56.328017Z"
 ---
 # Embeds
 
-This directory contains redis learning pages related to embeds.
+This directory contains Redis learning pages related to embeds.
 
 ## Breadcrumbs
 
-[Wiki Home](../../index.md) -> [Content](../index.md) -> [Embeds](index.md)
+[Wiki Home](../index.md) -> [Content](index.md)
 
 ## Navigation
 
-- Parent: [Parent Index](../index.md)
-
-## Child Directories
-
-- [K8S](k8s/index.md) - pages related to k8s
+- Wiki Home: [Root Index](../index.md)
 
 ## Pages in This Directory
 
-- [Index](_index.md)
+- [_Index](_index.md)
 - [Acl Command Compatibility](acl-command-compatibility.md)
 - [Aur Rds Mysql Create Debezium User](aur-rds-mysql-create-debezium-user.md)
 - [Backup Locations](backup-locations.md)
@@ -59,6 +49,8 @@ This directory contains redis learning pages related to embeds.
 - [Rc Aa Cidr](rc-aa-cidr.md)
 - [Rc Acls Note](rc-acls-note.md)
 - [Rc Agent Memory Get Started](rc-agent-memory-get-started.md)
+- [Rc Agent Memory Quickstart Create Service](rc-agent-memory-quickstart-create-service.md)
+- [Rc Agent Memory Quickstart Prerequisites](rc-agent-memory-quickstart-prerequisites.md)
 - [Rc Context Retriever Get Started](rc-context-retriever-get-started.md)
 - [Rc Cost Report Api](rc-cost-report-api.md)
 - [Rc Cost Report Csv](rc-cost-report-csv.md)
@@ -111,12 +103,9 @@ This directory contains redis learning pages related to embeds.
 - [Tls Configuration Procedure](tls-configuration-procedure.md)
 - [Tryout Redisgraph](tryout-redisgraph.md)
 - [Tryout Redsigears](tryout-redsigears.md)
+- [Ts Filter Expr](ts-filter-expr.md)
 - [What Is Redis Enterprise](what-is-redis-enterprise.md)
 
-## IDE LLM Guidance
+## Subdirectories
 
-When answering implementation questions related to this directory:
-
-1. Prefer the most specific page listed above.
-2. If the topic is broad, read the child directory index first.
-3. Use source metadata from each page when giving answers.
+- [K8S](k8s/index.md)

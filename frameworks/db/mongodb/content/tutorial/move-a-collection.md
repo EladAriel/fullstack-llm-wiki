@@ -1,37 +1,161 @@
 ---
 type: "Framework Learn Page"
-framework: "mongodb"
+framework: "MongoDB"
 source_repo: "https://github.com/mongodb/docs.git"
 source_branch: "main"
 source_path: "content/manual/manual/source/tutorial/move-a-collection.txt"
-source_commit: "ab9db26ed3d11618cdb61516d8180337d8e3f679"
-source_commit_short: "ab9db26e"
-source_commit_date: "2026-07-24T16:22:46-06:00"
-generated_at: "2026-07-25T11:51:15Z"
+source_commit: "b9f2bc487a2878b65e3c1f80024bebab76954f27"
+source_commit_short: "b9f2bc48"
+source_commit_date: "2026-08-28T17:09:45-05:00"
+generated_at: "2026-08-29T09:39:19.624239Z"
 ---
-
-=================
+.. _task-move-a-collection:
 
 # Move a Collection
 
-Starting in MongoDB 8.0, you can move an unsharded collection to a different shard using the :dbcommand:`moveCollection` command.
+.. default-domain:: mongodb
+
+**contents:** On this page
+   :local:
+   :backlinks: none
+   :depth: 1
+   :class: singlecol
+
+.. |mc| replace:: ``moveCollection``
+
+Starting in MongoDB 8.0, you can move an unsharded collection to a 
+different shard using the :dbcommand:`moveCollection` command. 
 
 ## About this Task
 
-.. include:: /includes/mc-considerations.rst
+**include:** /includes/mc-considerations.rst
 
 ## Access Control
 
-If your deployment has `access control <authorization>` enabled, the :authrole:`enableSharding` role grants you access to run the `moveCollection` command.
+If your deployment has :ref:`access control <authorization>` enabled, 
+the :authrole:`enableSharding` role grants you access to run the 
+``moveCollection`` command.
 
 ## Before you Begin
 
-.. include:: /includes/mc-reqs.rst
+**include:** /includes/mc-reqs.rst
 
 ## Steps
 
+**procedure:** :style: normal
+   
+   .. step:: Move the collection.
+
+      To move an unsharded collection named ``inventory`` on the
+      ``app`` database to the ``shard02`` shard, run ``moveCollection``:
+
+      .. include:: /includes/mc-code-block.rst
+
+      .. include:: /includes/mc-sh-status.rst
+
+   .. step:: Monitor the progress of the moveCollection operation.
+
+      a. Monitor the time remaining.
+
+         To monitor the time remaining for the ``moveCollection`` 
+         operation, use the :pipeline:`$currentOp` pipeline stage. 
+
+         This example shows how to check the progress of 
+         ``moveCollection`` on the ``app.inventory`` collection:
+
+         .. code-block:: javascript
+
+            db.getSiblingDB("admin").aggregate( [
+               { $currentOp: { allUsers: true, localOps: false } },
+               {
+                  $match: {
+                  type: "op",
+                  "originatingCommand.reshardCollection": "app.inventory"
+                  }
+               }
+            ] )
+
+         .. note::
+
+            To see updated values, you need to continuously run the
+            preceeding pipeline.
+
+         The :pipeline:`$currentOp` pipeline outputs:
+
+         - ``totalOperationTimeElapsedSecs``: elapsed operation time in
+           seconds
+         - ``remainingOperationTimeEstimatedSecs``: estimated time 
+           remaining in seconds for the current ``moveCollection``
+           operation. It is returned as ``-1`` when a new 
+           ``moveCollection`` operation starts.
+
+         .. note::
+
+            ``remainingOperationTimeEstimatedSecs`` is set to a pessimistic time
+            estimate:
+
+            - The catch-up phase time estimate is set to the clone phase time, which
+               is a relatively long time.
+            - In practice, if there are only a few pending write operations, the
+               actual catch-up phase time is relatively short.
+
+         This pipeline stage has output similar to the following:
+
+         .. code-block:: javascript
+            :copyable: false
+            :emphasize-lines: 14-15
+
+            [
+               {
+                  shard: '<shard>',
+                  type: 'op',
+                  desc: 'ReshardingRecipientService | ReshardingDonorService | ReshardingCoordinatorService <reshardingUUID>',
+                  op: 'command',
+                  ns: '<database>.<collection>',
+                  originatingCommand: {
+                  reshardCollection: '<database>.<collection>',
+                  key: <shardkey>,
+                  unique: <boolean>,
+                  collation: { locale: 'simple' }
+                  },
+                  totalOperationTimeElapsedSecs: <number>,
+                  remainingOperationTimeEstimatedSecs: <number>,
+                  ...
+               },
+               ...
+            ]
+
+      #. Monitor the number of bytes transferred.
+
+         To monitor the number of bytes transferred,  
+         use :serverstatus:`shardingStatistics.resharding.active.bytesCopied`
+         and compare against the number of bytes in the collection.
+
+   .. step:: Confirm the collection has been moved.
+
+      To confirm the collection has been moved to the expected shard, 
+      use the :pipeline:`$collStats` pipeline stage.
+
+      This example shows how to confirm that the ``app.inventory``
+      collection exists on the expected shard:
+
+      .. code-block:: javascript
+
+         db.inventory.aggregate( [ 
+           { $collStats: {} }, 
+           { $project: { "shard": 1 } } 
+         ] )
+
+      This pipeline stage has output similar to the following:
+
+      .. code-block:: javascript
+         :copyable: false
+
+         [ { shard: 'shard02' } ]
+
+
 ## Learn More
 
-- `moveable-collections`
+- :ref:`moveable-collections`
 - :dbcommand:`moveCollection`
 - :method:`sh.moveCollection`

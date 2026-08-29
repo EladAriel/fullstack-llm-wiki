@@ -1,112 +1,245 @@
 ---
 type: "Framework Learn Page"
-framework: "mongodb"
+framework: "MongoDB"
 source_repo: "https://github.com/mongodb/docs.git"
 source_branch: "main"
 source_path: "content/manual/manual/source/reference/command/getDefaultRWConcern.txt"
-source_commit: "ab9db26ed3d11618cdb61516d8180337d8e3f679"
-source_commit_short: "ab9db26e"
-source_commit_date: "2026-07-24T16:22:46-06:00"
-generated_at: "2026-07-25T11:51:15Z"
+source_commit: "b9f2bc487a2878b65e3c1f80024bebab76954f27"
+source_commit_short: "b9f2bc48"
+source_commit_date: "2026-08-28T17:09:45-05:00"
+generated_at: "2026-08-29T09:39:20.008563Z"
 ---
-
-======================================
-
 # getDefaultRWConcern (database command)
+
+**meta:** :description: Retrieve global default read and write concern settings using the `getDefaultRWConcern` command in MongoDB.
+
+.. default-domain:: mongodb
+
+**contents:** On this page
+   :local:
+   :backlinks: none
+   :depth: 1
+   :class: singlecol
 
 ## Definition
 
+**dbcommand:** getDefaultRWConcern
+
+   The :dbcommand:`getDefaultRWConcern` administrative command retrieves
+   the global default read or write concern settings.
+
+   - For sharded clusters, issue the :dbcommand:`getDefaultRWConcern`
+     on a :binary:`~bin.mongos`.
+
 ## Compatibility
 
-This command is available in deployments hosted in the following environments:
+This command is available in deployments hosted in the following environments: 
 
-.. include:: /includes/fact-environments-atlas-only.rst
+**include:** /includes/fact-environments-atlas-only.rst
 
-.. include:: /includes/fact-environments-atlas-support-all.rst
+**include:** /includes/fact-environments-atlas-support-all.rst
 
-.. include:: /includes/fact-environments-onprem-only.rst
+**include:** /includes/fact-environments-onprem-only.rst
 
 ## Syntax
 
 The command has the following form:
 
-```javascript
-   db.adminCommand( 
-      { 
-        getDefaultRWConcern: 1 , 
-        inMemory: <boolean>, 
-        comment: <any> 
-      } 
-   )
-```
+.. code-block:: javascript
+
+      db.adminCommand( 
+         { 
+           getDefaultRWConcern: 1 , 
+           inMemory: <boolean>, 
+           comment: <any> 
+         } 
+      )
 
 ## Command Fields
 
 The command has the following fields:
 
+.. list-table::
+   :header-rows: 1
+   :widths: 20 20 80
+ 
+   * - Field
+     - Type
+     - Description
+ 
+   * - :ref:`getDefaultRWConcern <getDefaultRWConcern-cmd-getDefaultRWConcern>`
+     - int
+     - .. _getDefaultRWConcern-cmd-getDefaultRWConcern:
+     
+       Set to ``1``.
+ 
+   * - :ref:`inMemory <getDefaultRWConcern-cmd-inMemory>`
+     - boolean
+     - .. _getDefaultRWConcern-cmd-inMemory:
+ 
+       Optional. 
+       
+       Set to ``true`` to return the in-memory cached copy of the
+       global default read or write concern settings. The instance 
+       uses the in-memory copy when applying the global defaults 
+       to an operation.
+ 
+       Set to ``false`` to return the on-disk copy of the
+       deployment's global default read or write concern. Defaults to
+       ``false``.
+ 
+   * - ``comment``
+     - any
+     - .. include:: /includes/extracts/comment-content.rst
+
 ## Output
 
 The output may include the following fields:
 
-> **Seealso:** :dbcommand:`setDefaultRWConcern`
+.. list-table::
+   :header-rows: 1
+   :widths: 20 20 80
+ 
+   * - Field
+     - Type
+     - Description
+ 
+   * - :ref:`defaultWriteConcern <getDefaultRWConcern-cmd-defaultWriteConcern>`
+     - ``object``
+     - .. _getDefaultRWConcern-cmd-defaultWriteConcern:
+     
+       The global default :ref:`write concern <write-concern>`
+       configuration. 
+       
+       If the deployment has no global default write concern settings,
+       this field is absent from ``getDefaultRWConcern`` output. 
+ 
+   * - :ref:`defaultReadConcern <getDefaultRWConcern-cmd-defaultReadConcern>`
+     - ``object``
+     - .. _getDefaultRWConcern-cmd-defaultReadConcern:
+     
+       The global default :ref:`read concern <read-concern>`
+       configuration.
+       
+       If the deployment has no global default read concern settings,
+       this field is absent from ``getDefaultRWConcern`` output.
+ 
+   * - :ref:`defaultWriteConcernSource <getDefaultRWConcern-cmd-defaultWriteConcernSource>`
+     - String
+     - .. _getDefaultRWConcern-cmd-defaultWriteConcernSource:
+ 
+       .. include:: /includes/fact-defaultWriteConcernSource-possible-values.rst
+ 
+   * - :ref:`defaultReadConcernSource <getDefaultRWConcern-cmd-defaultReadConcernSource>`
+     - String
+     - .. _getDefaultRWConcern-cmd-defaultReadConcernSource:  
+ 
+       .. include:: /includes/fact-defaultReadConcernSource-possible-values.rst
+ 
+   * - :ref:`updateOpTime <getDefaultRWConcern-cmd-updateOpTime>`
+     - Timestamp
+     - .. _getDefaultRWConcern-cmd-updateOpTime:
+     
+       The operation timestamp of when any global default read or
+       write concern setting was last modified. Present if a default
+       has ever been set for the cluster.
+ 
+   * - :ref:`updateWallClockTime <getDefaultRWConcern-cmd-updateWallClockTime>`
+     - Date
+     - .. _getDefaultRWConcern-cmd-updateWallClockTime:
+     
+       The wall clock date when an administrator last set the global
+       default read or write concern. This value is informational and
+       should not be used for any recency comparisons.
+ 
+   * - :ref:`localUpdateWallClockTime <getDefaultRWConcern-cmd-localUpdateWallClockTime>`
+     - Date
+     - .. _getDefaultRWConcern-cmd-localUpdateWallClockTime:
+     
+       The wall clock date when the :binary:`~bin.mongod` or 
+       :binary:`~bin.mongos` last updated its local copy of the
+       global default read and write concern settings. This value is
+       informational and should not be used for any recency
+       comparisons.
+ 
+**seealso:** :dbcommand:`setDefaultRWConcern`
 
 ## Behavior
 
-> **Note:** Each :binary:`~bin.mongod` in the replica set or sharded cluster
-must have `featureCompatibilityVersion <set-fcv>` set to
-at least `4.4` to use :dbcommand:`getDefaultRWConcern`.  If you
-downgrade your deployment's :ref:`featureCompatibilityVersion
-<set-fcv>` from `4.4` to `4.2`, all cluster-wide read and write
-concern defaults are lost, but :binary:`~bin.mongos` instances may
-continue applying the defaults for up to 30 seconds.
+**note:** Requires ``featureCompatibilityVersion`` 4.4+
+
+
+   Each :binary:`~bin.mongod` in the replica set or sharded cluster 
+   *must* have :ref:`featureCompatibilityVersion <set-fcv>` set to 
+   at least ``4.4`` to use :dbcommand:`getDefaultRWConcern`.  If you
+   downgrade your deployment's :ref:`featureCompatibilityVersion
+   <set-fcv>` from ``4.4`` to ``4.2``, all cluster-wide read and write
+   concern defaults are lost, but :binary:`~bin.mongos` instances may
+   continue applying the defaults for up to 30 seconds.
 
 ### Replica Sets
 
-You can issue :dbcommand:`getDefaultRWConcern` against any data-bearing member of the replica set (i.e. not against an `arbiter`).
+You can issue :dbcommand:`getDefaultRWConcern` against any data-bearing
+member of the replica set (i.e. not against an :term:`arbiter`). 
 
-A secondary can return a 'stale' version of the global default settings if it has not yet replicated the latest changes from the primary.
+A secondary can return a 'stale' version of the global default 
+settings if it has not yet replicated the latest changes from the 
+primary.
 
 ### Sharded Clusters
 
-Issue the :dbcommand:`setDefaultRWConcern` against a :binary:`~bin.mongos` in the cluster.
+Issue the :dbcommand:`setDefaultRWConcern` against a
+:binary:`~bin.mongos` in the cluster. 
 
-Each :binary:`~bin.mongos` periodically refreshes its local copy of the global default settings. A :binary:`~bin.mongos` can return a 'stale' version of the global default settings if it has not yet refreshed its local copy after a recent update to the global default settings or if it fetched its settings from a lagged `config server secondary <sharding-config-server>`.
+Each :binary:`~bin.mongos` periodically refreshes its local copy of the
+global default settings. A :binary:`~bin.mongos` can return a 'stale'
+version of the global default settings if it has not yet refreshed
+its local copy after a recent update to the global default settings
+*or* if it fetched its settings from a lagged 
+:ref:`config server secondary <sharding-config-server>`.
 
-The global default settings do not propagate to the individual shards. You cannot run :dbcommand:`getDefaultRWConcern` against a shard.
+The global default settings do *not* propagate to the individual shards.
+You cannot run :dbcommand:`getDefaultRWConcern` against a shard.
 
 ### Access Control
 
-For replica sets or sharded clusters enforcing `authentication`, :dbcommand:`getDefaultRWConcern` requires that the authenticated user have the :authaction:`getDefaultRWConcern` privilege action.
+For replica sets or sharded clusters enforcing 
+:ref:`authentication`, :dbcommand:`getDefaultRWConcern` requires 
+that the authenticated user have the 
+:authaction:`getDefaultRWConcern` privilege action. 
 
-The :authrole:`clusterManager` or :authrole:`clusterMonitor` built-in roles provides the required privileges to run :dbcommand:`getDefaultRWConcern`.
+The :authrole:`clusterManager` or :authrole:`clusterMonitor` built-in
+roles provides the required privileges to run
+:dbcommand:`getDefaultRWConcern`.
 
 ## Example
 
-The following operation retrieves the currently configured global default read and write concern for the :binary:`~bin.mongod`.
+The following operation retrieves the currently configured
+global default read and write concern for the :binary:`~bin.mongod`.
 
-```javascript
-db.adminCommand({
-  "getDefaultRWConcern": 1
-})
-```
+.. code-block:: javascript
+
+   db.adminCommand({
+     "getDefaultRWConcern": 1
+   })
 
 The operation returns output similar to the following:
 
-```javascript
-{
-  "defaultWriteConcern" : {
-    "w" : "majority"
-  },
-  "defaultReadConcern" : {
-    "level" : "majority"
-  },
-  "defaultWriteConcernSource" : "global",
-  "defaultReadConcernSource" : "global",
-  "updateOpTime" : Timestamp(1586290895, 1),
-  "updateWallClockTime" : ISODate("2020-04-07T20:21:41.849Z"),
-  "localUpdateWallClockTime" : ISODate("2020-04-07T20:21:41.862Z"),
-  "ok" : 1,
-  "$clusterTime" : { ... }
-  "operationTime" : Timestamp(1586290925, 1)
-}
-```
+.. code-block:: javascript
+
+   {
+     "defaultWriteConcern" : {
+       "w" : "majority"
+     },
+     "defaultReadConcern" : {
+       "level" : "majority"
+     },
+     "defaultWriteConcernSource" : "global",
+     "defaultReadConcernSource" : "global",
+     "updateOpTime" : Timestamp(1586290895, 1),
+     "updateWallClockTime" : ISODate("2020-04-07T20:21:41.849Z"),
+     "localUpdateWallClockTime" : ISODate("2020-04-07T20:21:41.862Z"),
+     "ok" : 1,
+     "$clusterTime" : { ... }
+     "operationTime" : Timestamp(1586290925, 1)
+   }

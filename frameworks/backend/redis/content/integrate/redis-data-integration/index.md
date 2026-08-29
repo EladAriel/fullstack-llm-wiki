@@ -1,37 +1,23 @@
 ---
 type: "Framework Learn Directory Index"
-framework: "redis"
-directory: "content/integrate/redis-data-integration"
-source_repo: "https://github.com/redis/docs.git"
-source_branch: "main"
-source_commit: "9d30f68c3dad1a6b3b7d30fe604b911348ce8152"
-source_commit_short: "9d30f68c"
-source_commit_date: "2026-07-24T10:52:10-07:00"
-generated_at: "2026-07-25T11:51:22Z"
+framework: "Redis"
+generated_at: "2026-08-29T09:38:56.336416Z"
 ---
-# Redis Data Integration
+# Redis-Data-Integration
 
-This directory contains redis learning pages related to redis data integration.
+This directory contains Redis learning pages related to redis-data-integration.
 
 ## Breadcrumbs
 
-[Wiki Home](../../../index.md) -> [Content](../../index.md) -> [Integrate](../index.md) -> [Redis Data Integration](index.md)
+[Wiki Home](../index.md) -> [Content](index.md)
 
 ## Navigation
 
-- Parent: [Parent Index](../index.md)
-
-## Child Directories
-
-- [Architecture](architecture/index.md) - pages related to architecture
-- [Data Pipelines](data-pipelines/index.md) - pages related to data pipelines
-- [Installation](installation/index.md) - pages related to installation
-- [Reference](reference/index.md) - pages related to reference
-- [Release Notes](release-notes/index.md) - pages related to release notes
+- Wiki Home: [Root Index](../index.md)
 
 ## Pages in This Directory
 
-- [Index](_index.md)
+- [_Index](_index.md)
 - [Faq](faq.md)
 - [Observability](observability.md)
 - [Quick Start Guide](quick-start-guide.md)
@@ -39,10 +25,10 @@ This directory contains redis learning pages related to redis data integration.
 - [Troubleshooting](troubleshooting.md)
 - [When To Use](when-to-use.md)
 
-## IDE LLM Guidance
+## Subdirectories
 
-When answering implementation questions related to this directory:
-
-1. Prefer the most specific page listed above.
-2. If the topic is broad, read the child directory index first.
-3. Use source metadata from each page when giving answers.
+- [Architecture](architecture/index.md)
+- [Data Pipelines](data-pipelines/index.md)
+- [Installation](installation/index.md)
+- [Reference](reference/index.md)
+- [Release Notes](release-notes/index.md)

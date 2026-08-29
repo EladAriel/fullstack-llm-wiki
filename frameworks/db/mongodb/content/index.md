@@ -1,17 +1,11 @@
 ---
 type: "Framework Learn Directory Index"
-framework: "mongodb"
-directory: "content"
-source_repo: "https://github.com/mongodb/docs.git"
-source_branch: "main"
-source_commit: "ab9db26ed3d11618cdb61516d8180337d8e3f679"
-source_commit_short: "ab9db26e"
-source_commit_date: "2026-07-24T16:22:46-06:00"
-generated_at: "2026-07-25T11:51:15Z"
+framework: "MongoDB"
+generated_at: "2026-08-29T09:39:20.587735Z"
 ---
 # Content
 
-This directory contains mongodb learning pages related to content.
+This directory contains MongoDB learning pages related to content.
 
 ## Breadcrumbs
 
@@ -20,23 +14,6 @@ This directory contains mongodb learning pages related to content.
 ## Navigation
 
 - Wiki Home: [Root Index](../index.md)
-
-## Child Directories
-
-- [Administration](administration/index.md) - pages related to administration
-- [Appendix](appendix/index.md) - pages related to appendix
-- [Applications](applications/index.md) - pages related to applications
-- [Core](core/index.md) - pages related to core
-- [Data Modeling](data-modeling/index.md) - pages related to data modeling
-- [Faq](faq/index.md) - pages related to faq
-- [Images](images/index.md) - pages related to images
-- [Includes](includes/index.md) - pages related to includes
-- [Meta](meta/index.md) - pages related to meta
-- [Reference](reference/index.md) - pages related to reference
-- [Release Notes](release-notes/index.md) - pages related to release notes
-- [Sample Data](sample-data/index.md) - pages related to sample data
-- [Troubleshooting](troubleshooting/index.md) - pages related to troubleshooting
-- [Tutorial](tutorial/index.md) - pages related to tutorial
 
 ## Pages in This Directory
 
@@ -68,10 +45,17 @@ This directory contains mongodb learning pages related to content.
 - [Text Search](text-search.md)
 - [Tutorial](tutorial.md)
 
-## IDE LLM Guidance
+## Subdirectories
 
-When answering implementation questions related to this directory:
-
-1. Prefer the most specific page listed above.
-2. If the topic is broad, read the child directory index first.
-3. Use source metadata from each page when giving answers.
+- [Administration](administration/index.md)
+- [Appendix](appendix/index.md)
+- [Applications](applications/index.md)
+- [Core](core/index.md)
+- [Data Modeling](data-modeling/index.md)
+- [Faq](faq/index.md)
+- [Images](images/index.md)
+- [Reference](reference/index.md)
+- [Release Notes](release-notes/index.md)
+- [Sample Data](sample-data/index.md)
+- [Troubleshooting](troubleshooting/index.md)
+- [Tutorial](tutorial/index.md)

@@ -1,66 +1,108 @@
 ---
 type: "Framework Learn Page"
-framework: "mongodb"
+framework: "MongoDB"
 source_repo: "https://github.com/mongodb/docs.git"
 source_branch: "main"
 source_path: "content/manual/manual/source/reference/operator/aggregation/isArray.txt"
-source_commit: "ab9db26ed3d11618cdb61516d8180337d8e3f679"
-source_commit_short: "ab9db26e"
-source_commit_date: "2026-07-24T16:22:46-06:00"
-generated_at: "2026-07-25T11:51:15Z"
+source_commit: "b9f2bc487a2878b65e3c1f80024bebab76954f27"
+source_commit_short: "b9f2bc48"
+source_commit_date: "2026-08-28T17:09:45-05:00"
+generated_at: "2026-08-29T09:39:20.134604Z"
 ---
-
-==============================
+.. _agg-expr-isArray:
 
 # $isArray (expression operator)
 
+**meta:** :description: Determine if an operand is an array using `$isArray` in MongoDB aggregation, returning a boolean result.
+
+.. default-domain:: mongodb
+
+**contents:** On this page
+   :local:
+   :backlinks: none
+   :depth: 1
+   :class: singlecol
+
 ## Definition
+
+**expression:** $isArray
+
+   Determines if the operand is an array. Returns a boolean.
+
+   :expression:`$isArray` has the following syntax:
+
+   .. code-block:: javascript
+
+      { $isArray: [ <expression> ] }
 
 ## Behavior
 
-The `<expression>` can be any valid `expression <aggregation-expressions>`. For more information on expressions, see `aggregation-expressions`.
+The ``<expression>`` can be any valid :ref:`expression
+<aggregation-expressions>`. For more information on expressions, see
+:ref:`aggregation-expressions`.
 
-> **Note:** .. include:: /includes/aggregation/fact-arrays-in-arguments.rst
+.. list-table::
+   :header-rows: 1
+
+   * - Example
+     - Results
+     - Notes
+
+   * - ``{ $isArray: "hello" }``
+     - ``false``
+     - ``"hello"`` is a string, passed as a string.
+
+   * - ``{ $isArray: [ "hello" ] }``
+     - ``false``
+     - ``"hello"`` is a string, passed as part of an argument array.
+
+   * - ``{ $isArray: [ [ "hello" ] ] }``
+     - ``true``
+     - ``[ "hello" ]`` is an array, passed as part of an argument array.
+
+**note:** .. include:: /includes/aggregation/fact-arrays-in-arguments.rst
 
 ## Example
 
-Create a collection named `warehouses` with the following documents:
+Create a collection named ``warehouses`` with the following documents:
 
-```javascript
-db.warehouses.insertMany( [
-   { _id : 1, instock: [ "chocolate" ], ordered: [ "butter", "apples" ] },
-   { _id : 2, instock: [ "apples", "pudding", "pie" ] },
-   { _id : 3, instock: [ "pears", "pecans" ], ordered: [ "cherries" ] },
-   { _id : 4, instock: [ "ice cream" ], ordered: [ ] }
-] )
-```
+.. code-block:: javascript
 
-Check if the `instock` and the `ordered` fields are arrays. If both fields are arrays, concatenate them:
+   db.warehouses.insertMany( [
+      { _id : 1, instock: [ "chocolate" ], ordered: [ "butter", "apples" ] },
+      { _id : 2, instock: [ "apples", "pudding", "pie" ] },
+      { _id : 3, instock: [ "pears", "pecans" ], ordered: [ "cherries" ] },
+      { _id : 4, instock: [ "ice cream" ], ordered: [ ] }
+   ] )
 
-```javascript
-db.warehouses.aggregate( [
-   { $project:
-      { items: 
-          { $cond:
-            {
-              if: { $and: [ { $isArray: "$instock" },
-                            { $isArray: "$ordered" } 
-                          ] },
-              then: { $concatArrays: [ "$instock", "$ordered" ] },
-              else: "One or more fields is not an array."
-            }
-          }
+Check if the ``instock`` and the ``ordered`` fields are arrays. If both
+fields are arrays, concatenate them:
+
+.. code-block:: javascript
+
+   db.warehouses.aggregate( [
+      { $project:
+         { items: 
+             { $cond:
+               {
+                 if: { $and: [ { $isArray: "$instock" },
+                               { $isArray: "$ordered" } 
+                             ] },
+                 then: { $concatArrays: [ "$instock", "$ordered" ] },
+                 else: "One or more fields is not an array."
+               }
+             }
+         }
       }
-   }
-] )
-```
+   ] )
 
-```javascript
-{ _id : 1, items : [ "chocolate", "butter", "apples" ] }
-{ _id : 2, items : "One or more fields is not an array." }
-{ _id : 3, items : [ "pears", "pecans", "cherries" ] }
-{ _id : 4, items : [ "ice cream" ] }
-```
+.. code-block:: javascript
+   :copyable: false
 
-> **Seealso:** - :expression:`$cond`
-- :expression:`$concatArrays`
+   { _id : 1, items : [ "chocolate", "butter", "apples" ] }
+   { _id : 2, items : "One or more fields is not an array." }
+   { _id : 3, items : [ "pears", "pecans", "cherries" ] }
+   { _id : 4, items : [ "ice cream" ] }
+
+**seealso:** - :expression:`$cond`
+   - :expression:`$concatArrays`

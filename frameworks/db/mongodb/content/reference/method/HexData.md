@@ -1,18 +1,23 @@
 ---
 type: "Framework Learn Page"
-framework: "mongodb"
+framework: "MongoDB"
 source_repo: "https://github.com/mongodb/docs.git"
 source_branch: "main"
 source_path: "content/manual/manual/source/reference/method/HexData.txt"
-source_commit: "ab9db26ed3d11618cdb61516d8180337d8e3f679"
-source_commit_short: "ab9db26e"
-source_commit_date: "2026-07-24T16:22:46-06:00"
-generated_at: "2026-07-25T11:51:15Z"
+source_commit: "b9f2bc487a2878b65e3c1f80024bebab76954f27"
+source_commit_short: "b9f2bc48"
+source_commit_date: "2026-08-28T17:09:45-05:00"
+generated_at: "2026-08-29T09:39:19.895925Z"
 ---
-
-==========================
+.. _server-HexData-method:
 
 # HexData() (mongosh method)
+
+**contents:** On this page
+   :local:
+   :backlinks: none
+   :depth: 1
+   :class: singlecol
 
 ## Definition
 
@@ -20,19 +25,75 @@ Creates a binary data object from hexadecimal data.
 
 ## Syntax
 
-`HexData()` has the following syntax:
+``HexData()`` has the following syntax:
+
+**method:** HexData( <subType>, <buffer> )
+
+   :returns: Binary data object.
 
 ## Command Fields
 
 The command takes these fields:
 
-> **Note:** `mongosh` silently stops parsing at the first non-hex character, unlike the
-legacy shell which rejects invalid hex characters. To determine if your
-`HexData()` output is valid, you can use the `.toString('hex')` method on the
-`HexData()` output and compare that string against the original input string
-using a case-insensitive comparison.
+.. list-table::
+   :header-rows: 1
+   :widths: 20 20 20 40
+
+   * - Field
+     - Type
+     - Necessity
+     - Description
+
+   * - ``subType``
+     - integer
+     - Required
+     - Specify a data subtype:
+
+       .. include:: /includes/binary-subtypes.rst
+
+   * - ``buffer``
+     - string
+     - Required
+     - Hexadecimal data. The string is decoded up to the first character
+       that is not a valid hexadecimal digit. You can use upper or lower
+       case letters in the hexadecimal string.
+
+**note:** ``mongosh`` silently stops parsing at the first non-hex character, unlike the 
+   legacy shell which rejects invalid hex characters. To determine if your 
+   ``HexData()`` output is valid, you can use the ``.toString('hex')`` method on the 
+   ``HexData()`` output and compare that string against the original input string
+   using a case-insensitive comparison.
 
 ## Examples
+
+**procedure:** :style: normal
+
+   .. step:: Create the example collection
+
+      Use ``HexData()`` to insert a document with binary data created
+      from a hexadecimal string into a test collection:
+
+      .. code-block:: javascript
+
+         db.hexCollection.insertOne( {
+            _id: 0, hexField: HexData( 0, "123456abcdef" )
+         } )
+
+   .. step:: Retrieve the document
+
+      To return the document, run the following ``find`` command:
+
+      .. code-block:: javascript
+
+         db.hexCollection.find()
+
+      Output shows the ``hexField`` value as a base 64 number using
+      :method:`Binary.createFromBase64`:
+
+      .. code-block:: javascript
+         :copyable: false
+
+         [ { _id: 0, hexField: Binary.createFromBase64('EjRWq83v', 0) } ]
 
 ## Learn More
 

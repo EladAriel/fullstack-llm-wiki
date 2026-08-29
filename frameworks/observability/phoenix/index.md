@@ -1,6 +1,6 @@
-# phoenix Learn Wiki
+# Arize Phoenix Learn Wiki
 
-This is a local LLM-friendly wiki generated from the official phoenix documentation.
+This is a local LLM-friendly wiki generated from the official Arize Phoenix documentation.
 
 ## Status
 
@@ -8,9 +8,10 @@ This is a local LLM-friendly wiki generated from the official phoenix documentat
 - Source repo: `https://github.com/Arize-ai/phoenix.git`
 - Source branch: `main`
 - Source docs path: `docs/phoenix`
-- Source commit: `69b3ab9`
-- Source commit date: `2026-07-25T11:48:12-06:00`
-- Wiki generated at: `2026-07-25T19:08:24.978878Z`
+- Source commit: `c48e50e`
+- Source commit date: `2026-08-29T01:45:20-06:00`
+- Wiki generated at: `2026-08-29T09:39:58.981014Z`
+- Page count: `765`
 
 ## How the IDE LLM should use this wiki
 
@@ -29,3 +30,17 @@ This is a local LLM-friendly wiki generated from the official phoenix documentat
 ## Top-Level Wiki Areas
 
 - [Content Index](content/index.md)
+- [Cookbook](content/cookbook/index.md)
+- [Datasets And Experiments](content/datasets-and-experiments/index.md)
+- [Documentation](content/documentation/index.md)
+- [Evaluation](content/evaluation/index.md)
+- [Get Started](content/get-started/index.md)
+- [Integrations](content/integrations/index.md)
+- [Prompt Engineering](content/prompt-engineering/index.md)
+- [Release Notes](content/release-notes/index.md)
+- [Resources](content/resources/index.md)
+- [Sdk Api Reference](content/sdk-api-reference/index.md)
+- [Self Hosting](content/self-hosting/index.md)
+- [Settings](content/settings/index.md)
+- [Tracing](content/tracing/index.md)
+- [Use Cases](content/use-cases/index.md)

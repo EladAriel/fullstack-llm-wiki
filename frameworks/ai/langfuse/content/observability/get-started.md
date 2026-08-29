@@ -4,12 +4,11 @@ framework: "Langfuse"
 source_repo: "https://github.com/langfuse/langfuse-docs"
 source_branch: "main"
 source_path: "content/docs/observability/get-started.mdx"
-source_commit: "fcd1eca34a924867563c3c4e801254c4e66c0021"
-source_commit_short: "fcd1eca3"
-source_commit_date: "2026-07-25T00:45:45Z"
-generated_at: "2026-07-25T11:51:12Z"
+source_commit: "ba26344559edee69ba55c5d3aa80e632f56c1626"
+source_commit_short: "ba26344"
+source_commit_date: "2026-08-29T02:57:18+00:00"
+generated_at: "2026-08-29T09:38:37.747019Z"
 ---
-
 ---
 title: Get Started
 description: Get started with LLM observability with Langfuse in minutes before diving into all platform features.
@@ -191,12 +190,6 @@ First install the Langfuse OpenAI wrapper. It extends the official client to sen
     href="/integrations/model-providers/openai-js"
     arrow
   />
-  <Card
-    icon={<Code />}
-    title="Notebook"
-    href="/guides/cookbook/js_integration_openai"
-    arrow
-  />
 </Cards>
 
 </Tab>
@@ -266,12 +259,6 @@ First install the Langfuse core SDK and the LangChain integration.
     icon={<BookOpen />}
     title="Full Langchain SDK documentation"
     href="/integrations/frameworks/langchain"
-    arrow
-  />
-  <Card
-    icon={<Code />}
-    title="Notebook"
-    href="/guides/cookbook/js_integration_langchain"
     arrow
   />
 </Cards>
@@ -487,12 +474,20 @@ _[What does a good trace look like?](/docs/observability/best-practices)_
 
 <FaqPreview tags={["observability-get-started"]} />
 
+If your trace looks overly complicated or overwhelming, the tracing setup itself may need a second look. Compare it against our [best practices guide](/docs/observability/best-practices).
+
 ## Next steps
 
-Now that you've ingested your first trace, you can start adding on more functionality to your traces. We recommend starting with the following:
+Now that your first trace is in Langfuse, learn to make sense of your traces by reading the chapter on [Monitoring in the Langfuse Academy](/academy/monitoring).
+
+Or if you know exactly what you're looking for, here are the most common features:
 
 - [Group traces into sessions for multi-turn applications](/docs/observability/features/sessions)
-- [Split traces into environments for different stages of your application](/docs/observability/features/environments)
-- [Add attributes to your traces so you can filter them in the future](/docs/observability/features/tags)
+- [Attribute traces to individual users](/docs/observability/features/users)
+- [Add attributes to your traces so you can filter them later](/docs/observability/features/tags)
+- [Track model usage and cost](/docs/observability/features/token-and-cost-tracking)
+- [Monitor application quality with scores](/docs/evaluation/scores/overview)
+- [Get notified when a metric crosses a threshold with alerts](/docs/observability/features/alerts)
+- [Analyze cost, latency, volume, and quality in custom dashboards](/docs/metrics/features/custom-dashboards)
 
-Already know what you want? Take a look under _Features_ for guides on specific topics.
+Take a look under [Features](#sidebar-folder-docs-observability-features) in the sidebar for guides on specific topics.

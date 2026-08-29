@@ -1,66 +1,124 @@
 ---
 type: "Framework Learn Page"
-framework: "mongodb"
+framework: "MongoDB"
 source_repo: "https://github.com/mongodb/docs.git"
 source_branch: "main"
 source_path: "content/manual/manual/source/tutorial/manage-shard-zone.txt"
-source_commit: "ab9db26ed3d11618cdb61516d8180337d8e3f679"
-source_commit_short: "ab9db26e"
-source_commit_date: "2026-07-24T16:22:46-06:00"
-generated_at: "2026-07-25T11:51:15Z"
+source_commit: "b9f2bc487a2878b65e3c1f80024bebab76954f27"
+source_commit_short: "b9f2bc48"
+source_commit_date: "2026-08-28T17:09:45-05:00"
+generated_at: "2026-08-29T09:39:19.639362Z"
 ---
-
-==================
+.. _sharding-manage-zones:
 
 # Manage Shard Zones
 
-In sharded clusters, you can create zones that represent a group of shards and associate one or more ranges of `shard key` values to that zone. MongoDB routes reads and writes that fall into a zone range only to those shards inside of the zone.
+**meta:** :description: Manage shard zones by creating, adding, and removing zones and zone ranges in MongoDB sharded clusters.
 
-> **Tip:** .. include:: /includes/extracts/zoned-sharding-pre-define-zone.rst
+.. default-domain:: mongodb
+
+**contents:** On this page
+   :local:
+   :backlinks: none
+   :depth: 1
+   :class: singlecol
+
+In sharded clusters, you can create zones that represent a group of shards and
+associate one or more ranges of :term:`shard key` values to that zone. MongoDB
+routes reads and writes that fall into a zone range only to those shards
+inside of the zone.
+
+**tip:** .. include:: /includes/extracts/zoned-sharding-pre-define-zone.rst
+
 
 ## Add Shards to a Zone
 
-Associate a Zone with a particular shard using the :method:`sh.addShardToZone()` method when connected to a :binary:`~bin.mongos` instance. A single shard may have multiple zones, and multiple shards may also have the same zone.
+Associate a Zone with a particular shard using the
+:method:`sh.addShardToZone()` method when connected to a :binary:`~bin.mongos`
+instance. A single shard may have multiple zones, and multiple shards
+may also have the same zone.
 
-You may remove zone from a particular shard using the :method:`sh.removeShardFromZone()` method when connected to a :binary:`~bin.mongos` instance, as in the following example, which removes the `NRT` zone from a shard:
+**example:** The following example adds the zone ``NYC`` to two shards, and the zones
+   ``SFO`` and ``NRT`` to a third shard:
 
-```javascript
-sh.removeShardFromZone("shard0002", "NRT")
-```
+   .. code-block:: javascript
+
+      sh.addShardToZone("shard0000", "NYC")
+      sh.addShardToZone("shard0001", "NYC")
+      sh.addShardToZone("shard0002", "SFO")
+      sh.addShardToZone("shard0002", "NRT")
+
+You may remove zone from a particular shard using the
+:method:`sh.removeShardFromZone()` method when connected to a
+:binary:`~bin.mongos` instance, as in the following example, which removes
+the ``NRT`` zone from a shard:
+
+.. code-block:: javascript
+
+   sh.removeShardFromZone("shard0002", "NRT")
 
 ## Create a Zone Range
 
-To define the zone's range of shard keys, use the :method:`sh.updateZoneKeyRange()` method when connected to a :binary:`~bin.mongos` instance. Any given shard key range may only have one assigned zone. You cannot overlap defined ranges.
+To define the zone's range of shard keys, use the :method:`sh.updateZoneKeyRange()`
+method when connected to a :binary:`~bin.mongos` instance. Any given shard key
+range may only have *one* assigned zone. You cannot overlap defined ranges.
 
-> **Note:** - .. include:: /includes/fact-shard-ranges-inclusive-exclusive.rst
-- .. include:: /includes/extracts/zoned-sharding-drop-collection-change.rst
+**example:** Given a collection named ``users`` in the ``records`` database,
+   sharded by the ``zipcode`` field. The following operations assign:
+
+   - two ranges of zip codes in Manhattan and Brooklyn the ``NYC`` zone
+
+   - one range of zip codes in San Francisco the ``SFO`` zone
+
+   .. code-block:: javascript
+
+      sh.updateZoneKeyRange("records.users", { zipcode: "10001" }, { zipcode: "10281" }, "NYC")
+      sh.updateZoneKeyRange("records.users", { zipcode: "11201" }, { zipcode: "11240" }, "NYC")
+      sh.updateZoneKeyRange("records.users", { zipcode: "94102" }, { zipcode: "94135" }, "SFO")
+
+**note:** - .. include:: /includes/fact-shard-ranges-inclusive-exclusive.rst
+   
+   - .. include:: /includes/extracts/zoned-sharding-drop-collection-change.rst
 
 ## Remove a Zone Range
+Use the shell helper method :method:`sh.removeRangeFromZone()` to
+remove a range from a zone.
 
-Use the shell helper method :method:`sh.removeRangeFromZone()` to remove a range from a zone.
+**example:** The following example removes the ``NYC`` zone assignment for the
+   range of zip codes within Manhattan:
 
-> **Note:** .. include:: /includes/extracts/zoned-sharding-drop-collection-change.rst
+   .. code-block:: javascript
 
+      sh.removeRangeFromZone("records.user", {zipcode: "10001"}, {zipcode: "10281"})
+
+**note:** .. include:: /includes/extracts/zoned-sharding-drop-collection-change.rst
+   
 ## View Existing Zones
 
-Use :method:`sh.status()` to list the zones associated to each shard in the cluster. You can also view a shards zones by querying the `config.shards` collection in the `config` database.
+Use :method:`sh.status()` to list the zones associated to each shard in the
+cluster. You can also view a shards zones by querying the
+:data:`~config.shards` collection in the ``config`` database. 
 
-The following example uses the :method:`~db.collection.find()` method to return all shards with the `NYC` zone.
+The following example uses the :method:`~db.collection.find()` method to
+return all shards with the ``NYC`` zone.
 
-```javascript
-use config
-db.shards.find({ tags: "NYC" })
-```
+.. code-block:: javascript
 
-You can find zone ranges for all `namespaces <namespace>` in the `config.tags` collection of the `config` database. The output of :method:`sh.status()` also displays all zone ranges.
+   use config
+   db.shards.find({ tags: "NYC" })
 
-The following example uses the :method:`~db.collection.find()` method to return any range associated to the `NYC` zone.
+You can find zone ranges for all :term:`namespaces <namespace>` in the
+:data:`~config.tags` collection of the ``config`` database. The output
+of :method:`sh.status()` also displays all zone ranges.
 
-```javascript
-use config
-db.tags.find({ tag: "NYC" })
-```
+The following example uses the :method:`~db.collection.find()` method to
+return any range associated to the ``NYC`` zone.
 
-## Contents
+.. code-block:: javascript
 
-- Update Shard Zone </tutorial/manage-shard-zone/update-existing-shard-zone>
+   use config
+   db.tags.find({ tag: "NYC" })
+
+**toctree:** :hidden:
+
+   Update Shard Zone </tutorial/manage-shard-zone/update-existing-shard-zone>

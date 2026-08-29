@@ -1,90 +1,110 @@
 ---
 type: "Framework Learn Page"
-framework: "mongodb"
+framework: "MongoDB"
 source_repo: "https://github.com/mongodb/docs.git"
 source_branch: "main"
 source_path: "content/manual/manual/source/tutorial/troubleshoot-map-function.txt"
-source_commit: "ab9db26ed3d11618cdb61516d8180337d8e3f679"
-source_commit_short: "ab9db26e"
-source_commit_date: "2026-07-24T16:22:46-06:00"
-generated_at: "2026-07-25T11:51:15Z"
+source_commit: "b9f2bc487a2878b65e3c1f80024bebab76954f27"
+source_commit_short: "b9f2bc48"
+source_commit_date: "2026-08-28T17:09:45-05:00"
+generated_at: "2026-08-29T09:39:19.603509Z"
 ---
-
-=============================
+.. _troubleshoot-map-function:
 
 # Troubleshoot the Map Function
 
-> **Note:** .. include:: /includes/fact-use-aggregation-not-map-reduce.rst
-An `aggregation pipeline <aggregation-pipeline>` is also
-easier to troubleshoot than a map-reduce operation.
+**meta:** :description: Troubleshoot map functions in MongoDB by verifying key-value pairs emitted during map-reduce operations, using custom emit functions.
 
-The `map` function is a JavaScript function that associates or "maps" a value with a key and emits the key and value pair during a `map-reduce <map-reduce>` operation.
+.. default-domain:: mongodb
+
+**contents:** On this page
+   :local:
+   :backlinks: none
+   :depth: 1
+   :class: singlecol
+
+**note:** Aggregation Pipeline as Alternative to Map-Reduce
+
+   .. include:: /includes/fact-use-aggregation-not-map-reduce.rst
+
+   An :ref:`aggregation pipeline <aggregation-pipeline>` is also
+   easier to troubleshoot than a map-reduce operation.
+
+The ``map`` function is a JavaScript function that associates or "maps"
+a value with a key and emits the key and value pair during a
+:ref:`map-reduce <map-reduce>` operation.
 
 ## Verify Key and Value Pairs
 
-To verify the `key` and `value` pairs emitted by the `map` function, write your own `emit` function.
+To verify the ``key`` and ``value`` pairs emitted by the ``map``
+function, write your own ``emit`` function.
 
-Consider a collection `orders` that contains documents of the following prototype:
+Consider a collection ``orders`` that contains documents of the
+following prototype:
 
-```javascript
-{
-     _id: ObjectId("50a8240b927d5d8b5891743c"),
-     cust_id: "abc123",
-     ord_date: new Date("Oct 04, 2012"),
-     status: 'A',
-     price: 250,
-     items: [ { sku: "mmm", qty: 5, price: 2.5 },
-              { sku: "nnn", qty: 5, price: 2.5 } ]
-}
-```
+.. code-block:: javascript
 
-#. Define the `map` function that maps the `price` to the `cust_id` for each document and emits the `cust_id` and `price` pair:
-
-```javascript
-   var map = function() {
-       emit(this.cust_id, this.price);
-   };
-```
-
-#. Define the `emit` function to print the key and value:
-
-```javascript
-   var emit = function(key, value) {
-       print("emit");
-       print("key: " + key + "  value: " + tojson(value));
+   {
+        _id: ObjectId("50a8240b927d5d8b5891743c"),
+        cust_id: "abc123",
+        ord_date: new Date("Oct 04, 2012"),
+        status: 'A',
+        price: 250,
+        items: [ { sku: "mmm", qty: 5, price: 2.5 },
+                 { sku: "nnn", qty: 5, price: 2.5 } ]
    }
-```
 
-#. Invoke the `map` function with a single document from the `orders` collection:
+#. Define the ``map`` function that maps the ``price`` to the
+   ``cust_id`` for each document and emits the ``cust_id`` and ``price``
+   pair:
 
-```javascript
-   var myDoc = db.orders.findOne( { _id: ObjectId("50a8240b927d5d8b5891743c") } );
-   map.apply(myDoc);
-```
+   .. code-block:: javascript
+
+      var map = function() {
+          emit(this.cust_id, this.price);
+      };
+
+#. Define the ``emit`` function to print the key and value:
+
+   .. code-block:: javascript
+
+      var emit = function(key, value) {
+          print("emit");
+          print("key: " + key + "  value: " + tojson(value));
+      }
+
+#. Invoke the ``map`` function with a single document from the ``orders``
+   collection:
+
+   .. code-block:: javascript
+
+      var myDoc = db.orders.findOne( { _id: ObjectId("50a8240b927d5d8b5891743c") } );
+      map.apply(myDoc);
 
 #. Verify the key and value pair is as you expected.
 
-```javascript
-   emit
-   key: abc123 value:250
-```
+   .. code-block:: javascript
 
-#. Invoke the `map` function with multiple documents from the `orders` collection:
+      emit
+      key: abc123 value:250
 
-```javascript
-   var myCursor = db.orders.find( { cust_id: "abc123" } );
+#. Invoke the ``map`` function with multiple documents from the ``orders``
+   collection:
 
-   while (myCursor.hasNext()) {
-       var doc = myCursor.next();
-       print ("document _id= " + tojson(doc._id));
-       map.apply(doc);
-       print();
-   }
-```
+   .. code-block:: javascript
+
+      var myCursor = db.orders.find( { cust_id: "abc123" } );
+
+      while (myCursor.hasNext()) {
+          var doc = myCursor.next();
+          print ("document _id= " + tojson(doc._id));
+          map.apply(doc);
+          print();
+      }
 
 #. Verify the key and value pairs are as you expected.
 
-> **Seealso:** The `map` function must meet various requirements. For a list of all
-the requirements for the `map` function, see :dbcommand:`mapReduce`,
-or :binary:`~bin.mongosh` helper method
-:method:`db.collection.mapReduce()`.
+**seealso:** The ``map`` function must meet various requirements. For a list of all
+   the requirements for the ``map`` function, see :dbcommand:`mapReduce`,
+   or :binary:`~bin.mongosh` helper method
+   :method:`db.collection.mapReduce()`.

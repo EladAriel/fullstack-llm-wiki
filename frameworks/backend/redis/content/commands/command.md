@@ -1,14 +1,15 @@
 ---
 type: "Framework Learn Page"
-framework: "redis"
+framework: "Redis"
 source_repo: "https://github.com/redis/docs.git"
 source_branch: "main"
 source_path: "content/commands/command.md"
-source_commit: "9d30f68c3dad1a6b3b7d30fe604b911348ce8152"
-source_commit_short: "9d30f68c"
-source_commit_date: "2026-07-24T10:52:10-07:00"
-generated_at: "2026-07-25T11:51:22Z"
+source_commit: "f8693349287b0efbef3c865b6f6a2aceca88594d"
+source_commit_short: "f869334"
+source_commit_date: "2026-08-28T10:01:19-05:00"
+generated_at: "2026-08-29T09:38:55.050602Z"
 ---
+# Command
 
 ---
 acl_categories:
@@ -68,9 +69,9 @@ The exact number of elements in the array depends on the server's version.
 1. First key
 1. Last key
 1. Step
-1. [ACL categories][ta] (as of Redis 6.0)
-1. [Tips][tb] (as of Redis 7.0)
-1. [Key specifications][td] (as of Redis 7.0)
+1. [ACL categories]({{< relref "/operate/oss_and_stack/management/security/acl" >}}) (as of Redis 6.0)
+1. [Tips]({{< relref "/develop/reference/command-tips.md" >}}) (as of Redis 7.0)
+1. [Key specifications]({{< relref "/develop/reference/key-specs.md" >}}) (as of Redis 7.0)
 1. Subcommands (as of Redis 7.0)
 
 ## Name
@@ -108,7 +109,7 @@ Command flags are an array. It can contain the following simple strings (status 
   This flag is used for monitoring latency with the [`LATENCY`]({{< relref "/commands/latency" >}}) command.
 * **loading:** the command is allowed while the database is loading.
 * **movablekeys:** the _first key_, _last key_, and _step_ values don't determine all key positions.
-  Clients need to use [`COMMAND GETKEYS`]({{< relref "/commands/command-getkeys" >}}) or [key specifications][td] in this case.
+  Clients need to use [`COMMAND GETKEYS`]({{< relref "/commands/command-getkeys" >}}) or [key specifications]({{< relref "/develop/reference/key-specs.md" >}}) in this case.
   See below for more details.
 * **no_auth:** executing the command doesn't require authentication.
 * **no_async_loading:** the command is denied during asynchronous loading (that is when a replica uses disk-less `SWAPDB SYNC`, and allows access to the old dataset).
@@ -117,12 +118,12 @@ Command flags are an array. It can contain the following simple strings (status 
 * **noscript:** the command can't be called from [scripts]({{< relref "/develop/programmability/eval-intro" >}}) or [functions]({{< relref "/develop/programmability/functions-intro" >}}).
 * **pubsub:** the command is related to [Redis Pub/Sub]({{< relref "/develop/pubsub" >}}).
 * **random**: the command returns random results, which is a concern with verbatim script replication.
-  As of Redis 7.0, this flag is a [command tip][tb].
+  As of Redis 7.0, this flag is a [command tip]({{< relref "/develop/reference/command-tips.md" >}}).
 * **readonly:** the command doesn't modify data.
 * **sort_for_script:** the command's output is sorted when called from a script.
 * **skip_monitor:** the command is not shown in [`MONITOR`]({{< relref "/commands/monitor" >}})'s output.
 * **skip_slowlog:** the command is not shown in [`SLOWLOG`]({{< relref "/commands/slowlog" >}})'s output.
-  As of Redis 7.0, this flag is a [command tip][tb].
+  As of Redis 7.0, this flag is a [command tip]({{< relref "/develop/reference/command-tips.md" >}}).
 * **stale:** the command is allowed while a replica has stale data.
 * **write:** the command may modify data.
 
@@ -158,7 +159,7 @@ You can use the [`COMMAND GETKEYS`]({{< relref "/commands/command-getkeys" >}}) 
 As of Redis 7.0, clients can use the [key specifications](#key-specifications) to identify the positions of key names.
 The only commands that require using [`COMMAND GETKEYS`]({{< relref "/commands/command-getkeys" >}}) are [`SORT`]({{< relref "/commands/sort" >}}) and [`MIGRATE`]({{< relref "/commands/migrate" >}}) for clients that parse keys' specifications.
 
-For more information, please refer to the [key specifications page][tr].
+For more information, please refer to the [key specifications page]({{< relref "/develop/reference/key-specs.md" >}}).
 
 ## First key
 
@@ -212,32 +213,27 @@ Unlike [`MGET`]({{< relref "/commands/mget" >}}), which uses a step value of _1_
 ## ACL categories
 
 This is an array of simple strings that are the ACL categories to which the command belongs.
-Please refer to the [Access Control List][ta] page for more information.
+Please refer to the [Access Control List]({{< relref "/operate/oss_and_stack/management/security/acl" >}}) page for more information.
 
 ## Command tips
 
 Helpful information about the command.
 To be used by clients/proxies.
 
-Please check the [Command tips][tb] page for more information.
+Please check the [Command tips]({{< relref "/develop/reference/command-tips.md" >}}) page for more information.
 
 ## Key specifications
 
 This is an array consisting of the command's key specifications.
 Each element in the array is a map describing a method for locating keys in the command's arguments.
 
-For more information please check the [key specifications page][td].
+For more information please check the [key specifications page]({{< relref "/develop/reference/key-specs.md" >}}).
 
 ## Subcommands
 
 This is an array containing all of the command's subcommands, if any.
 Some Redis commands have subcommands (e.g., the `REWRITE` subcommand of [`CONFIG`]({{< relref "/commands/config" >}})).
 Each element in the array represents one subcommand and follows the same specifications as those of `COMMAND`'s reply.
-
-[ta]: /operate/oss_and_stack/management/security/acl
-[tb]: /develop/reference/command-tips.md
-[td]: /develop/reference/key-specs.md
-[tr]: /develop/reference/key-specs.md
 
 ## Examples
 

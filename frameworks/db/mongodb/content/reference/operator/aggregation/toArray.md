@@ -1,107 +1,189 @@
 ---
 type: "Framework Learn Page"
-framework: "mongodb"
+framework: "MongoDB"
 source_repo: "https://github.com/mongodb/docs.git"
 source_branch: "main"
 source_path: "content/manual/manual/source/reference/operator/aggregation/toArray.txt"
-source_commit: "ab9db26ed3d11618cdb61516d8180337d8e3f679"
-source_commit_short: "ab9db26e"
-source_commit_date: "2026-07-24T16:22:46-06:00"
-generated_at: "2026-07-25T11:51:15Z"
+source_commit: "b9f2bc487a2878b65e3c1f80024bebab76954f27"
+source_commit_short: "b9f2bc48"
+source_commit_date: "2026-08-28T17:09:45-05:00"
+generated_at: "2026-08-29T09:39:20.216115Z"
 ---
-
-==============================
-
 # $toArray (expression operator)
 
+.. default-domain:: mongodb
+
+**contents:** On this page
+   :local:
+   :backlinks: none
+   :depth: 1
+   :class: singlecol
+
+**meta:** :description: Learn how to convert a value to an array.
+   :keywords: type conversion
+
 ## Definition
+
+**expression:** $toArray
+
+   Converts a value to an array. If the value cannot be converted,
+   ``$toArray`` errors. If the value is ``null`` or missing, ``$toArray``
+   returns null.
+
+   ``$toArray`` has the following syntax:
+
+   .. code-block:: javascript
+
+      {
+         $toArray: <expression>
+      }
+
+   ``$toArray`` takes any valid :ref:`expression
+   <aggregation-expressions>`.
+
+   ``$toArray`` is a shorthand for the following :expression:`$convert`
+   expression:
+
+   .. code-block:: javascript
+
+      { $convert: { input: <expression>, to: "array" } }
 
 ## Behavior
 
 ### Input Type Expectations
 
-The following table describes the behavior of `$toArray` for different input types:
+The following table describes the behavior of ``$toArray`` for
+different input types:
 
-.. include:: /includes/table-toArray-input-types.rst
+**include:** /includes/table-toArray-input-types.rst
 
 ### Parsing Rules
 
-When converting a string to an array, `$toArray`:
+When converting a string to an array, ``$toArray``:
 
-- Requires valid `JSON` syntax. Comments and trailing commas are
-not allowed.
+- Requires valid :term:`JSON` syntax. Comments and trailing commas are
+  not allowed.
 
 - Requires the top-level value to be an array. If the string
-does not represent an array, `$toArray` errors.
+  does not represent an array, ``$toArray`` errors.
 
-- Does not interpret Extended JSON type wrappers such as `$oid`,
-`$date`, or `Timestamp(...)`. These remain strings or nested objects in the result.
+- Does not interpret Extended JSON type wrappers such as ``$oid``,
+  ``$date``, or ``Timestamp(...)``. These remain strings or nested
+  objects in the result.
 
 ### binData Conversion
 
-When converting binData to an array, `$toArray`:
+When converting binData to an array, ``$toArray``:
 
 - Accepts binData with subtype 9 values.
-- Converts `PACKED_BIT` vectors to `boolean` arrays.
-- Converts `INT8` vectors to `integer` arrays.
-- Converts `FLOAT32` vectors to `double` arrays.
+
+- Converts ``PACKED_BIT`` vectors to ``boolean`` arrays.
+
+- Converts ``INT8`` vectors to ``integer`` arrays.
+
+- Converts ``FLOAT32`` vectors to ``double`` arrays.
+
 ### Numeric Type Mapping
 
-`$toArray` converts numeric types based on their value and format:
+``$toArray`` converts numeric types based on their value and format:
 
-.. include:: /includes/fact-string-conversion-numeric-type-mapping.rst
+**include:** /includes/fact-string-conversion-numeric-type-mapping.rst
 
 ## Examples
 
-The following table shows examples of using `$toArray` to convert strings to arrays:
+The following table shows examples of using ``$toArray`` to convert
+strings to arrays:
+
+.. list-table::
+   :header-rows: 1
+   :widths: 70 30
+
+   * - Example
+     - Results
+
+   * - ``$toArray: "[1, 2, 3]"``
+     - [ 1, 2, 3 ]
+
+   * - ``$toArray: '["a", "b", "c"]'``
+     - [ 'a', 'b', 'c' ]
+
+   * - ``$toArray: "[]"``
+     - [ ]
+
+   * - ``$toArray: "{}"``
+     - Error: Input doesn't match expected type 'array'
+
+   * - ``$toArray: 123``
+     - Error: Unsupported conversion from int to array in $convert with
+       no onError value
+
+   * - ``$toArray: "123"``
+     - Error: Input doesn't represent valid JSON: Unexpected standalone
+       value
+
+   * - ``$toArray: "[{\"$oid\": \"507f1f77bcf86cd799439011\"}]"``
+     - [ { '$oid': '507f1f77bcf86cd799439011' } ]
+
+   * - ``$toArray: null``
+     - null
 
 ### Convert String to Array
 
-Insert a document into the `jsonStrings` collection:
+Insert a document into the ``jsonStrings`` collection:
 
-```javascript
-db.jsonStrings.insertOne({_id: 1})
-```
+.. code-block:: javascript
+
+   db.jsonStrings.insertOne({_id: 1})
 
 The following operation converts strings to arrays:
 
-```javascript
-db.jsonStrings.aggregate([
-  {
-    $project: {
-      _id: 0,
-      numbers: { $toArray: "[1, 2, 3]" },
-      documents: { $toArray: '[{"a": 1}, {"b": 2}]' }
-    }
-  }
-])
-```
+.. code-block:: javascript
 
-The `numbers` field in the result is an array of integers, and `documents` is an array of embedded documents:
+   db.jsonStrings.aggregate([
+     {
+       $project: {
+         _id: 0,
+         numbers: { $toArray: "[1, 2, 3]" },
+         documents: { $toArray: '[{"a": 1}, {"b": 2}]' }
+       }
+     }
+   ])
 
-```json
-{
-  numbers: [ 1, 2, 3 ],
-  documents: [ { a: 1 }, { b: 2 } ]
-}
-```
+The ``numbers`` field in the result is an array of integers, and
+``documents`` is an array of embedded documents:
+
+.. code-block:: json
+
+   {
+     numbers: [ 1, 2, 3 ],
+     documents: [ { a: 1 }, { b: 2 } ]
+   }
 
 ### Convert binData to Array
 
 The following operation converts binData vectors to arrays:
 
-```javascript
-db.t.aggregate([
-  {
-    $project: {
-      _id: 0,
-      original: "$v",
-      asArray: { $toArray: "$v" }
-    }
-  }
-])
-```
+**literalinclude:** /code-examples/tested/command-line/mongosh/aggregation/expressions/convert/bindata-to-array/variants/load-data.snippet.insert-bindata-variants.js
+   :language: javascript
+   :category: usage example
+
+.. code-block:: javascript
+
+   db.t.aggregate([
+     {
+       $project: {
+         _id: 0,
+         original: "$v",
+         asArray: { $toArray: "$v" }
+       }
+     }
+   ])
 
 The operation returns:
 
-.. include:: /includes/note-conversion-error-use-convert.rst
+**literalinclude:** /code-examples/tested/command-line/mongosh/aggregation/expressions/convert/bindata-to-array/variants/output.sh
+   :language: javascript
+   :category: usage example
+   :copyable: false
+
+**include:** /includes/note-conversion-error-use-convert.rst

@@ -1,76 +1,205 @@
 ---
 type: "Framework Learn Page"
-framework: "mongodb"
+framework: "MongoDB"
 source_repo: "https://github.com/mongodb/docs.git"
 source_branch: "main"
 source_path: "content/manual/manual/source/reference/operator/aggregation/toInt.txt"
-source_commit: "ab9db26ed3d11618cdb61516d8180337d8e3f679"
-source_commit_short: "ab9db26e"
-source_commit_date: "2026-07-24T16:22:46-06:00"
-generated_at: "2026-07-25T11:51:15Z"
+source_commit: "b9f2bc487a2878b65e3c1f80024bebab76954f27"
+source_commit_short: "b9f2bc48"
+source_commit_date: "2026-08-28T17:09:45-05:00"
+generated_at: "2026-08-29T09:39:20.195609Z"
 ---
-
-============================
-
 # $toInt (expression operator)
+
+.. default-domain:: mongodb
+
+**contents:** On this page
+   :local:
+   :backlinks: none
+   :depth: 1
+   :class: singlecol
+
+**meta:** :description: Learn how to convert a value to an integer.
+   :keywords: type conversion
 
 ## Definition
 
+**expression:** $toInt
+
+   Converts a value to an integer. If the value cannot be converted
+   to an integer, :expression:`$toInt` errors. If the value is null or
+   missing, :expression:`$toInt` returns null.
+
+   :expression:`$toInt` has the following syntax:
+
+   .. code-block:: javascript
+
+      {
+         $toInt: <expression>
+      }
+
+   The :expression:`$toInt` takes any valid :ref:`expression
+   <aggregation-expressions>`.
+
+   The :expression:`$toInt` is a shorthand for the following
+   :expression:`$convert` expression:
+
+   .. code-block:: javascript
+
+      { $convert: { input: <expression>, to: "int" } }
+
+   .. seealso::
+
+      :expression:`$convert`
+
 ## Behavior
 
-The following table lists the input types that can be converted to an integer:
+The following table lists the input types that can be converted to an
+integer:
 
-.. include:: /includes/strings-to-non-decimal.rst
+.. list-table::
+   :header-rows: 1
+   :widths: 20 80
+
+   * - Input Type
+     - Behavior
+
+   * - Boolean
+     - | Returns ``0`` for  ``false``.
+       | Returns ``1`` for ``true``.
+
+   * - Double
+     - Returns truncated value.
+
+       The truncated double value must fall within the minimum and
+       maximum value for an integer.
+
+       You cannot convert a double value whose truncated value is less
+       than the minimum integer value or is greater than the maximum
+       integer value.
+
+   * - Decimal
+     - Returns truncated value.
+
+       The truncated decimal value must fall within the minimum and
+       maximum value for an integer.
+
+       You cannot convert a decimal value whose truncated value is less
+       than the minimum integer value or is greater than the maximum
+       integer value.
+
+   * - Integer
+     - No-op. Returns the integer value.
+
+   * - Long
+
+     - Returns the long value as an integer.
+
+       The long value must fall within the minimum and maximum value
+       for an integer.
+
+       You cannot convert a long value that is less than the minimum
+       integer value or is greater than the maximum integer value.
+
+   * - String
+     - Returns the numerical value of the string as an integer.
+
+       The string value must be a base\ :sub:`10` integer; e.g.
+       ``"-5"``, ``"123456"``).
+
+       You cannot convert a string value of a float or decimal or
+       non-base\ :sub:`10` number (e.g. ``"-5.0"``, ``"0x6400"``)
+
+**include:** /includes/strings-to-non-decimal.rst
 
 The following table lists some conversion to integer examples:
 
+.. list-table::
+   :header-rows: 1
+   :widths: 80 20
+
+   * - Example
+     - Results
+
+   * - ``$toInt: true``
+     - 1
+
+   * - ``$toInt: false``
+     - 0
+
+   * - ``$toInt: 1.99999``
+     - 1
+
+   * - ``$toInt: Decimal128("5.5000")``
+     - 5
+
+   * - ``$toInt: Decimal128("9223372036000.000")``
+     - Error
+
+   * - ``$toInt: Long("5000")``
+     - 5000
+
+   * - ``$toInt: Long("922337203600")``
+     - Error
+
+   * - ``$toInt: "-2"``
+     - -2
+
+   * - ``$toInt: "2.5"``
+     - Error
+
+   * - ``$toInt: null``
+     - null
+
 ## Example
 
-Create a collection `orders` with the following documents:
+Create a collection ``orders`` with the following documents:
 
-```javascript
-db.orders.insertMany( [
-   { _id: 1, item: "apple", qty: "5", price: 10 },
-   { _id: 2, item: "pie", qty: "10", price: Decimal128("20.0") },
-   { _id: 3, item: "ice cream", qty: "2", price: "4.99" },
-   { _id: 4, item: "almonds" ,  qty: "5", price: 5 }
-] )
-```
+.. code-block:: javascript
+
+   db.orders.insertMany( [
+      { _id: 1, item: "apple", qty: "5", price: 10 },
+      { _id: 2, item: "pie", qty: "10", price: Decimal128("20.0") },
+      { _id: 3, item: "ice cream", qty: "2", price: "4.99" },
+      { _id: 4, item: "almonds" ,  qty: "5", price: 5 }
+   ] )
 
 The following aggregation operation:
 
-- converts `qty` to an integer,
-- converts `price` to a decimal,
+- converts ``qty`` to an integer,
+- converts ``price`` to a decimal,
 - calculates the total price:
-```javascript
-// Define stage to add convertedPrice and convertedQty fields with the converted price and qty values
 
-priceQtyConversionStage = { 
-   $addFields: { 
-      convertedPrice: { $toDecimal: "$price" },
-      convertedQty: { $toInt: "$qty" },
-   }
-};
+.. code-block:: javascript
 
-// Define stage to calculate total price by multiplying convertedPrice and convertedQty fields 
+   // Define stage to add convertedPrice and convertedQty fields with the converted price and qty values
 
-totalPriceCalculationStage = { 
-   $project: { item: 1, totalPrice: { $multiply: [ "$convertedPrice", "$convertedQty" ] } }
-};
+   priceQtyConversionStage = { 
+      $addFields: { 
+         convertedPrice: { $toDecimal: "$price" },
+         convertedQty: { $toInt: "$qty" },
+      }
+   };
 
-db.orders.aggregate( [
-   priceQtyConversionStage,
-   totalPriceCalculationStage
-] )
-```
+   // Define stage to calculate total price by multiplying convertedPrice and convertedQty fields 
+
+
+   totalPriceCalculationStage = { 
+      $project: { item: 1, totalPrice: { $multiply: [ "$convertedPrice", "$convertedQty" ] } }
+   };
+
+   db.orders.aggregate( [
+      priceQtyConversionStage,
+      totalPriceCalculationStage
+   ] )
 
 The operation returns the following documents:
 
-```javascript
-{ _id: 1, item: 'apple', totalPrice: Decimal128("50") },
-{ _id: 2, item: 'pie', totalPrice: Decimal128("200.0") },
-{ _id: 3, item: 'ice cream', totalPrice: Decimal128("9.98") },
-{ _id: 4, item: 'almonds', totalPrice: Decimal128("25") }
-```
+.. code-block:: javascript
 
-.. include:: /includes/note-conversion-error-use-convert.rst
+   { _id: 1, item: 'apple', totalPrice: Decimal128("50") },
+   { _id: 2, item: 'pie', totalPrice: Decimal128("200.0") },
+   { _id: 3, item: 'ice cream', totalPrice: Decimal128("9.98") },
+   { _id: 4, item: 'almonds', totalPrice: Decimal128("25") }
+
+**include:** /includes/note-conversion-error-use-convert.rst

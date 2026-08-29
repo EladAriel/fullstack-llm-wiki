@@ -1,81 +1,224 @@
 ---
 type: "Framework Learn Page"
-framework: "mongodb"
+framework: "MongoDB"
 source_repo: "https://github.com/mongodb/docs.git"
 source_branch: "main"
 source_path: "content/manual/manual/source/reference/method/db.updateRole.txt"
-source_commit: "ab9db26ed3d11618cdb61516d8180337d8e3f679"
-source_commit_short: "ab9db26e"
-source_commit_date: "2026-07-24T16:22:46-06:00"
-generated_at: "2026-07-25T11:51:15Z"
+source_commit: "b9f2bc487a2878b65e3c1f80024bebab76954f27"
+source_commit_short: "b9f2bc48"
+source_commit_date: "2026-08-28T17:09:45-05:00"
+generated_at: "2026-08-29T09:39:19.923660Z"
 ---
-
-================================
-
 # db.updateRole() (mongosh method)
+
+**meta:** :description: Update user-defined roles in MongoDB with `db.updateRole()`, replacing privileges and roles, and specify authentication restrictions and write concern.
+
+.. default-domain:: mongodb
+
+**contents:** On this page
+   :local:
+   :backlinks: none
+   :depth: 1
+   :class: singlecol
 
 ## Definition
 
+**method:** db.updateRole( rolename, update, writeConcern )
+
+   Updates a :ref:`user-defined role <user-defined-roles>`. The
+   :method:`db.updateRole()` method must run on the role's database.
+
+   .. |dbcommand| replace:: :dbcommand:`updateRole` command
+   .. include:: /includes/fact-mongosh-shell-method-alt.rst
+
+   An update to a field **completely replaces** the previous field's values.
+   To grant or remove roles or :ref:`privileges <privileges>` without
+   replacing all values, use one or more of the following methods:
+
+   - :method:`db.grantRolesToRole()`
+   - :method:`db.grantPrivilegesToRole()`
+   - :method:`db.revokeRolesFromRole()`
+   - :method:`db.revokePrivilegesFromRole()`
+
+   .. warning::
+
+      An update to the ``privileges`` or ``roles`` array completely replaces
+      the previous array's values.
+
+   The :method:`db.updateRole()` method uses the following syntax:
+
+   .. code-block:: javascript
+
+      db.updateRole(
+          "<rolename>",
+          {
+            privileges:
+                [
+                  { resource: { <resource> }, actions: [ "<action>", ... ] },
+                  ...
+                ],
+            roles:
+                [
+                  { role: "<role>", db: "<database>" } | "<role>",
+                  ...
+                ],
+            authenticationRestrictions:
+                [
+                  {
+                    clientSource: ["<IP>" | "<CIDR range>", ...],
+                    serverAddress: ["<IP>", | "<CIDR range>", ...]
+                  },
+                  ...
+                ]
+          },
+          { <writeConcern> }
+      )
+
+   The :method:`db.updateRole()` method accepts the following arguments:
+
+
+   .. list-table::
+      :header-rows: 1
+      :widths: 20 20 80
+   
+      * - Parameter
+   
+        - Type
+        - Description
+      * - ``rolename``
+        - string
+        - The name of the :ref:`user-defined role <user-defined-roles>` to update.
+      * - ``update``
+        - document
+        - A document containing the replacement data for the role. This
+          data completely replaces the corresponding data for the role.
+      * - ``writeConcern``
+        - document
+        - .. include:: /includes/fact-write-concern-spec-link.rst
+
+   The ``update`` document specifies the fields to update and the new
+   values. Each field in the ``update`` document is optional, but the
+   document must include at least one field. The ``update`` document has the
+   following fields:
+
+
+   .. list-table::
+      :header-rows: 1
+      :widths: 20 20 80
+   
+      * - Field
+   
+        - Type
+   
+        - Description
+   
+      * - ``privileges``
+   
+        - array
+   
+        - Optional. Required if you do not specify :data:`~admin.system.roles.roles` array.
+          The privileges to grant the role. An update to the ``privileges``
+          array overrides the previous array's values. For the syntax for
+          specifying a privilege, see the :data:`~admin.system.roles.privileges`
+          array.
+          
+          
+   
+      * - ``roles``
+   
+        - array
+   
+        - Optional. Required if you do not specify :data:`~admin.system.roles.privileges` array.
+          The roles from which this role inherits privileges. An update to the
+          ``roles`` array overrides the previous array's values.
+          
+          
+   
+      * - ``authenticationRestrictions``
+   
+        - array
+   
+        - Optional.
+          
+          .. include:: /includes/fact-auth-restrictions-role-desc.rst
+          
+          
+   
+
+
+   The :method:`db.updateRole()` method wraps the :dbcommand:`updateRole`
+   command.
+
+
 ## Compatibility
 
-This method is available in deployments hosted in the following environments:
+This method is available in deployments hosted in the following
+environments:
 
-.. include:: /includes/fact-environments-no-atlas-support.rst
+**include:** /includes/fact-environments-no-atlas-support.rst
 
-.. include:: /includes/fact-environments-onprem-only.rst
+**include:** /includes/fact-environments-onprem-only.rst
 
+   
 ### Roles
 
-.. include:: /includes/fact-roles-array-contents.rst
+.. |local-cmd-name| replace:: :method:`db.updateRole()`
+**include:** /includes/fact-roles-array-contents.rst
 
 ### Authentication Restrictions
 
-.. include:: /includes/fact-auth-restrictions-array-contents.rst
+**include:** /includes/fact-auth-restrictions-array-contents.rst
 
 ## Behavior
 
 ### Replica set
 
-.. include:: /includes/fact-management-methods-write-concern.rst
+.. |command| replace:: :method:`db.updateRole()`
+
+**include:** /includes/fact-management-methods-write-concern.rst
 
 ### Scope
 
-.. include:: /includes/fact-roles-privileges-scope.rst
+**include:** /includes/fact-roles-privileges-scope.rst
 
 ### Privileges
 
-.. include:: /includes/fact-roles-privileges-multiple-collections.rst
+**include:** /includes/fact-roles-privileges-multiple-collections.rst
 
 ## Required Access
 
-.. include:: /includes/access-update-role.rst
+**include:** /includes/access-update-role.rst
 
 ## Example
 
-The following :method:`db.updateRole()` method replaces the `admin.system.roles.privileges` and the `admin.system.roles.roles` for the `inventoryControl` role that exists in the `products` database. The method runs on the database that contains `inventoryControl`:
+The following :method:`db.updateRole()` method replaces the
+:data:`~admin.system.roles.privileges` and the
+:data:`~admin.system.roles.roles` for the ``inventoryControl`` role
+that exists in the ``products`` database. The method runs on the
+database that contains ``inventoryControl``:
 
-```javascript
-use products
-db.updateRole(
-    "inventoryControl",
-    {
-      privileges:
-          [
-            {
-              resource: { db:"products", collection:"clothing" },
-              actions: [ "update", "createCollection", "createIndex"]
-            }
-          ],
-      roles:
-          [
-            {
-              role: "read",
-              db: "products"
-            }
-          ]
-    },
-    { w:"majority" }
-)
-```
+.. code-block:: javascript
+
+   use products
+   db.updateRole(
+       "inventoryControl",
+       {
+         privileges:
+             [
+               {
+                 resource: { db:"products", collection:"clothing" },
+                 actions: [ "update", "createCollection", "createIndex"]
+               }
+             ],
+         roles:
+             [
+               {
+                 role: "read",
+                 db: "products"
+               }
+             ]
+       },
+       { w:"majority" }
+   )
 
 To view a role's privileges, use the :dbcommand:`rolesInfo` command.

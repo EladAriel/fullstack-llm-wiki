@@ -1,128 +1,245 @@
 ---
 type: "Framework Learn Page"
-framework: "mongodb"
+framework: "MongoDB"
 source_repo: "https://github.com/mongodb/docs.git"
 source_branch: "main"
 source_path: "content/manual/manual/source/reference/command/checkMetadataConsistency.txt"
-source_commit: "ab9db26ed3d11618cdb61516d8180337d8e3f679"
-source_commit_short: "ab9db26e"
-source_commit_date: "2026-07-24T16:22:46-06:00"
-generated_at: "2026-07-25T11:51:15Z"
+source_commit: "b9f2bc487a2878b65e3c1f80024bebab76954f27"
+source_commit_short: "b9f2bc48"
+source_commit_date: "2026-08-28T17:09:45-05:00"
+generated_at: "2026-08-29T09:39:20.052681Z"
 ---
-
-===========================================
-
 # checkMetadataConsistency (database command)
+
+**meta:** :description: Perform consistency checks on sharding metadata for clusters, databases, or collections using the `checkMetadataConsistency` command.
+
+**contents:** On this page
+   :local:
+   :backlinks: none
+   :depth: 2
+   :class: singlecol
+
 
 ## Definition
 
+**dbcommand:** checkMetadataConsistency
+
+   Performs a series of consistency checks on sharding metadata for a cluster,
+   database, or collection.  The command returns a cursor with either all or a
+   batch of the :ref:`inconsistency results <inconsistency-types>` found.
+
+   .. |method| replace:: :method:`db.checkMetadataConsistency`,
+      :method:`db.collection.checkMetadataConsistency`, or
+      :method:`sh.checkMetadataConsistency` helper methods
+   .. include:: /includes/fact-dbcommand-tip
+
+   Run this command after major maintenance operations, such as upgrades and
+   downgrades, to check the state of the catalog.
+
+   By default, the command does not check indexes for consistency across 
+   the shards.  To check indexes, set the ``checkIndexes`` option.
+
+   .. versionadded:: 7.0
+
 ## Compatibility
 
-This command is available in deployments hosted in the following environments:
+This command is available in deployments hosted in the following environments: 
 
-.. include:: /includes/fact-environments-atlas-only.rst
+**include:** /includes/fact-environments-atlas-only.rst
 
-.. include:: /includes/fact-environments-atlas-support-all.rst
+**include:** /includes/fact-environments-atlas-support-all.rst
 
-.. include:: /includes/fact-environments-onprem-only.rst
+**include:** /includes/fact-environments-onprem-only.rst
 
-> **Note:** The `checkMetadataConsistency` command is executable only when connecting to
-`mongos`. `mongod` does not support this command.
-
+**note:** The ``checkMetadataConsistency`` command is executable only when connecting to
+   ``mongos``. ``mongod`` does not support this command. 
+   
 ## Syntax
 
-- To check the entire cluster for sharding metadata inconsistencies, run
-the command from the `admin` database.
+-  To check the entire cluster for sharding metadata inconsistencies, run
+   the command from the ``admin`` database.
 
-```javascript
-   db.adminCommand( {
-      checkMetadataConsistency: 1
-   } )
-```
+   .. code-block:: javascript
 
-- To check the database for sharding metadata inconsistencies, run the command
-from the database context:
+      db.adminCommand( {
+         checkMetadataConsistency: 1
+      } )
 
-```javascript
-   use cars
-   db.runCommand( {
-      checkMetadataConsistency: 1
-   } )
-```
+-  To check the database for sharding metadata inconsistencies, run the command
+   from the database context:
 
-- To check a collection for sharding metadata inconsistencies, run the command
-with the collection name:
+   .. code-block:: javascript
 
-```javascript
-   use library
-   db.runCommand( {
-      checkMetadataConsistency: "authors",
-   } )
-```
+      use cars
+      db.runCommand( {
+         checkMetadataConsistency: 1
+      } )
+
+-  To check a collection for sharding metadata inconsistencies, run the command
+   with the collection name:
+
+   .. code-block:: javascript
+
+      use library
+      db.runCommand( {
+         checkMetadataConsistency: "authors",
+      } )
+
 
 ### Command Fields
 
+.. list-table::
+   :widths: 20 15 65
+   :header-rows: 1
+
+   * - Field
+     - Type
+     - Description
+   * - ``checkMetadataConsistency``
+     - integer or string
+     - Specifies the collection to check.
+
+       ``1``
+         Sets the command to check all collections in the
+         database for metadata inconsistencies. If run on the
+         ``admin`` database, it checks all collections in all
+         databases.
+
+       ``"<collection>"``
+         Sets the collection to check for metadata
+         inconsistencies.
+
+   * - ``checkIndexes``
+     - boolean 
+     - Sets whether the command also checks indexes in sharding metadata.
+
+       For more information, see :ref:`checkMetadataConsistency-indexes`.
+
+   * - ``cursor``
+     - document
+     - Configures the return cursor.
+
+   * - ``cursor.batchSize``
+     - integer
+     - Maximum number of inconsistency results to include in each batch.
+
+   * - ``dbMetadataLockMaxTimeMS``
+     - integer
+     - Optional. Maximum time in milliseconds that the command is allowed
+       to wait to acquire a database lock. 
+       
+       You can also use this field with
+       :ref:`max-time-ms`. For example, if you set ``dbMetadataLockMaxTimeMs``
+       to 500 and ``maxTimeMs`` to 5000, the operation waits 500
+       milliseconds to try to acquire the database lock and waits a total
+       of 5000 milliseconds for the entire operation to finish.
+
 ### Output
 
-The `checkMetadataConsistency` command returns a cursor with a document for each inconsistency found in sharding metadata. To learn more, see `inconsistency-types`.
+The ``checkMetadataConsistency`` command returns a cursor with a document for
+each inconsistency found in sharding metadata. To learn more, see 
+:ref:`inconsistency-types`.
 
 The return document has the following fields:
+
+.. list-table::
+   :header-rows: 1
+   :widths: 25 30 45
+
+   * - Field
+     - Type
+     - Description
+
+   * - ``cursor``
+     - document
+     - Cursor with the results of the inconsistency checks.
+
+   * - ``cursor.id``
+     - integer
+     - A 64-bit integer indicated the cursor ID.  Use the ``cursor.id`` value
+       with the :dbcommand:`getMore` command to retrieve the next batch 
+       of inconsistencies.
+
+       If the cursor returns an ID of ``0``, it indicates that there are no
+       more batches of information.
+
+
+   * - ``cursor.ns``
+     - string
+     - The database and collection checked for inconsistencies.
+
+   * - ``cursor.firstBatch``
+     - array
+     - Results of metadata consistency checks.
+
+   * - ``ok``
+     - boolean
+     - Indicates whether the command was successful.
 
 ## Behavior
 
 ### Batch Results
 
-The `checkMetadataConsistency` command returns results in batches. To customize the batch size, the `batchSize` option:
+The ``checkMetadataConsistency`` command returns results in batches. To
+customize the batch size, the ``batchSize`` option:
 
-```javascript
-var cur = db.runCommand( {
-   checkMetadataConsistency: 1,
-   cursor: {
-      batchSize: 10
-   }
-} )
-```
+.. code-block:: javascript
 
-If the `cursor.id` field is greater than 0, you can use with the :dbcommand:`getMore` command to retrieve the next batch of results.
+   var cur = db.runCommand( {
+      checkMetadataConsistency: 1,
+      cursor: {
+         batchSize: 10
+      }
+   } )
+
+If the ``cursor.id`` field is greater than 0, you can use with the
+:dbcommand:`getMore` command to retrieve the next batch of results.
+
+
+.. _checkMetadataConsistency-indexes:
 
 ### Check Indexes
 
-The `checkMetadataConsistency` command does not check indexes by default. To check metadata consistency and indexes, use the `checkIndexes` option:
+The ``checkMetadataConsistency`` command does not check indexes by default.  
+To check metadata consistency and indexes, use the ``checkIndexes`` option:
 
-```javascript
-db.runCommand( {
-   checkMetadataConsistency: 1,
-   checkIndexes: true
-} )
-```
+.. code-block:: javascript
+
+   db.runCommand( {
+      checkMetadataConsistency: 1,
+      checkIndexes: true
+   } )
+
 
 ## Example
 
-Use :method:`~db.runCommand` to run the `checkMetadataConsistency` command:
 
-```javascript
-db.runCommand( { checkMetadataConsistency: 1 } )
-```
+Use :method:`~db.runCommand` to run the ``checkMetadataConsistency`` command:
+
+.. code-block:: javascript
+
+   db.runCommand( { checkMetadataConsistency: 1 } )
 
 Example Output:
 
-```json
-{
-   cursor: {
-      id: Long("0"),
-      ns: "test.$cmd.aggregate",
-      firstBatch: [
-         {
-            type: "MisplacedCollection",
-            description: "Unsharded collection found on shard different from database primary shard",
-            details: {
-               namespace: "test.authors",
-               shard: "shard02",
-               localUUID: new UUID("1ad56770-61e2-48e9-83c6-8ecefe73cfc4")
+.. code-block:: json
+   :copyable: false
+
+   {
+      cursor: {
+         id: Long("0"),
+         ns: "test.$cmd.aggregate",
+         firstBatch: [
+            {
+               type: "MisplacedCollection",
+               description: "Unsharded collection found on shard different from database primary shard",
+               details: {
+                  namespace: "test.authors",
+                  shard: "shard02",
+                  localUUID: new UUID("1ad56770-61e2-48e9-83c6-8ecefe73cfc4")
+               }
             }
-         }
-      ],
-   },
-   ok: 1
-}
-```
+         ],
+      },
+      ok: 1
+   }

@@ -1,51 +1,68 @@
 ---
 type: "Framework Learn Page"
-framework: "mongodb"
+framework: "MongoDB"
 source_repo: "https://github.com/mongodb/docs.git"
 source_branch: "main"
 source_path: "content/manual/manual/source/core/capped-collections/change-max-docs-capped-collection.txt"
-source_commit: "ab9db26ed3d11618cdb61516d8180337d8e3f679"
-source_commit_short: "ab9db26e"
-source_commit_date: "2026-07-24T16:22:46-06:00"
-generated_at: "2026-07-25T11:51:15Z"
+source_commit: "b9f2bc487a2878b65e3c1f80024bebab76954f27"
+source_commit_short: "b9f2bc48"
+source_commit_date: "2026-08-28T17:09:45-05:00"
+generated_at: "2026-08-29T09:39:19.783089Z"
 ---
-
-===============================================
+.. _capped-collections-change-max-docs:
 
 # Change Maximum Documents in a Capped Collection
 
-.. versionadded:: 6.0
+**meta:** :description: Modify the maximum number of documents in a capped collection using the `collMod` command's `cappedMax` option.
 
-To change the maximum number of documents in a `capped collection <manual-capped-collection>`, use the :dbcommand:`collMod` command's `cappedMax` option.
+**contents:** On this page 
+   :local:
+   :backlinks: none
+   :depth: 2
+   :class: singlecol
 
-- If `cappedMax` is less than or equal to `0`, there is no maximum
-document limit.
+**facet:** :name: genre
+   :values: tutorial
 
-- If `cappedMax` is less than the current number of documents in the
-collection, MongoDB removes the excess documents on the next insert operation.
+**versionadded:** 6.0
+
+To change the maximum number of documents in a :ref:`capped collection
+<manual-capped-collection>`, use the :dbcommand:`collMod` command's
+``cappedMax`` option.
+
+- If ``cappedMax`` is less than or equal to ``0``, there is no maximum
+  document limit.
+  
+- If ``cappedMax`` is less than the current number of documents in the
+  collection, MongoDB removes the excess documents on the next insert
+  operation.
 
 ## About this Task
 
-.. include:: /includes/capped-collections/use-ttl-index.rst
+**include:** /includes/capped-collections/use-ttl-index.rst
 
 ## Before you Begin
 
-Create a capped collection called `log` that can store a maximum of 20,000 documents:
+Create a capped collection called ``log`` that can store a maximum of
+20,000 documents:
 
-```javascript
-db.createCollection( "log", { capped: true, size: 5242880, max: 20000 } )
-```
+.. code-block:: javascript
+
+   db.createCollection( "log", { capped: true, size: 5242880, max: 20000 } )
 
 ## Steps
 
-Run the following command to set the maximum number of documents in the `log` collection to 5,000:
+Run the following command to set the maximum number of documents in the
+``log`` collection to 5,000:
 
-```javascript
-db.runCommand( { collMod: "log", cappedMax: 5000 } )
-```
+.. code-block:: javascript
+
+   db.runCommand( { collMod: "log", cappedMax: 5000 } )
 
 ## Learn More
 
-- `capped-collections-change-size`
-- `capped-collections-check`
-- `capped-collections-query`
+- :ref:`capped-collections-change-size`
+
+- :ref:`capped-collections-check`
+
+- :ref:`capped-collections-query`

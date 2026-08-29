@@ -1,135 +1,195 @@
 ---
 type: "Framework Learn Page"
-framework: "mongodb"
+framework: "MongoDB"
 source_repo: "https://github.com/mongodb/docs.git"
 source_branch: "main"
 source_path: "content/manual/manual/source/reference/method/cursor.skip.txt"
-source_commit: "ab9db26ed3d11618cdb61516d8180337d8e3f679"
-source_commit_short: "ab9db26e"
-source_commit_date: "2026-07-24T16:22:46-06:00"
-generated_at: "2026-07-25T11:51:15Z"
+source_commit: "b9f2bc487a2878b65e3c1f80024bebab76954f27"
+source_commit_short: "b9f2bc48"
+source_commit_date: "2026-08-28T17:09:45-05:00"
+generated_at: "2026-08-29T09:39:19.950006Z"
 ---
-
-==============================
-
 # cursor.skip() (mongosh method)
+
+**meta:** :description: Use the `skip()` method on a cursor to control the starting point for returning results, useful for implementing paginated queries.
+
+.. default-domain:: mongodb
+
+**contents:** On this page
+   :local:
+   :backlinks: none
+   :depth: 1
+   :class: singlecol
 
 ## Definition
 
+**method:** cursor.skip(<offset>)
+
+
+   .. include:: /includes/fact-mongosh-shell-method.rst
+
+
+   Call the :method:`~cursor.skip()` method on a cursor to control where
+   MongoDB begins returning results. This approach may be useful in
+   implementing paginated results.
+
+   .. note::
+
+      You must apply :method:`~cursor.skip()` to the cursor before
+      retrieving any documents from the database.
+
+   The :method:`~cursor.skip()` method has the following parameter:
+
+
+   .. list-table::
+      :header-rows: 1
+      :widths: 20 20 80
+   
+      * - Parameter
+   
+        - Type
+   
+        - Description
+   
+      * - ``offset``
+   
+        - number
+   
+        - The number of documents to skip in the results set.
+
 ## Compatibility
 
-This method is available in deployments hosted in the following environments:
+This method is available in deployments hosted in the following environments: 
 
-.. include:: /includes/fact-environments-atlas-only.rst
+**include:** /includes/fact-environments-atlas-only.rst
 
-.. include:: /includes/fact-environments-atlas-support-all.rst
+**include:** /includes/fact-environments-atlas-support-all.rst
 
-.. include:: /includes/fact-environments-onprem-only.rst
+**include:** /includes/fact-environments-onprem-only.rst
 
 ## Behavior
 
-### Using `skip()` with `sort()`
+### Using ``skip()`` with ``sort()``
 
-If using :method:`~cursor.skip()` with :method:`~cursor.sort()`, be sure to include at least one field in your sort that contains unique values, before passing results to :method:`~cursor.skip()`.
+If using :method:`~cursor.skip()` with :method:`~cursor.sort()`, be
+sure to include at least one field in your sort that contains
+unique values, before passing results to :method:`~cursor.skip()`.
 
-Sorting on fields that contain duplicate values may return an inconsistent sort order for those duplicate fields over multiple executions, especially when the collection is actively receiving writes.
+Sorting on fields that contain duplicate values may return an
+inconsistent sort order for those duplicate fields over multiple
+executions, especially when the collection is actively receiving writes.
 
-The easiest way to guarantee sort consistency is to include the `_id` field in your sort query.
+The easiest way to guarantee sort consistency is to include the
+``_id`` field in your sort query.
 
-See `Consistent sorting with the sort() method <sort-cursor-consistent-sorting>` for more information.
+See :ref:`Consistent sorting with the sort() method
+<sort-cursor-consistent-sorting>` for more information.
 
-### Using `skip()` with `limit()`
 
-.. include:: includes/reference/skip-limit.rst
+### Using ``skip()`` with ``limit()``
+
+**include:** includes/reference/skip-limit.rst
 
 ## Pagination Example
 
-### Using `skip()`
+### Using ``skip()``
 
-The following JavaScript function uses :method:`~cursor.skip() to paginate a collection by its id` field:
+The following JavaScript function uses :method:`~cursor.skip()` to
+paginate a collection by its ``_id`` field:
 
-```javascript
-function printStudents(pageNumber, nPerPage) {
-  print( "Page: " + pageNumber );
-  db.students.find()
-             .sort( { _id: 1 } )
-             .skip( pageNumber > 0 ? ( ( pageNumber - 1 ) * nPerPage ) : 0 )
-             .limit( nPerPage )
-             .forEach( student => {
-               print( student.name );
-             } );
-}
-```
+.. code-block:: javascript
 
-The :method:`~cursor.skip()` method requires the server to scan from the beginning of the input results set before beginning to return results. As the offset increases, :method:`~cursor.skip()` will become slower.
+   function printStudents(pageNumber, nPerPage) {
+     print( "Page: " + pageNumber );
+     db.students.find()
+                .sort( { _id: 1 } )
+                .skip( pageNumber > 0 ? ( ( pageNumber - 1 ) * nPerPage ) : 0 )
+                .limit( nPerPage )
+                .forEach( student => {
+                  print( student.name );
+                } );
+   }
+
+The :method:`~cursor.skip()` method requires the server to scan from the
+beginning of the input results set before beginning to return results.
+As the offset increases, :method:`~cursor.skip()` will become slower.
 
 ### Using Range Queries
 
-Range queries can use `indexes <indexes>` to avoid scanning unwanted documents, typically yielding better performance as the offset grows compared to using :method:`~cursor.skip()` for pagination.
+Range queries can use :ref:`indexes <indexes>` to avoid scanning
+unwanted documents, typically yielding better performance as the offset
+grows compared to using :method:`~cursor.skip()` for pagination.
 
-Descending Order ````````````````
+### Descending Order
 
 Use this procedure to implement pagination with range queries:
 
-- Choose a field such as `_id` which generally changes in a consistent
-direction over time and has a `unique index <index-type-unique>` to prevent duplicate values,
+* Choose a field such as ``_id`` which generally changes in a consistent
+  direction over time and has a :ref:`unique index <index-type-unique>`
+  to prevent duplicate values,
+* Query for documents whose field is less than the start value
+  using the :query:`$lt` and :method:`~cursor.sort()` operators, and
+* Store the last-seen field value for the next query.
 
-- Query for documents whose field is less than the start value
-using the :query:`$lt` and :method:`~cursor.sort()` operators, and
+For example, the following function uses the above procedure to print
+pages of student names from a collection, sorted approximately in order
+of newest documents first using the ``_id`` field (that is, in
+*descending* order):
 
-- Store the last-seen field value for the next query.
-For example, the following function uses the above procedure to print pages of student names from a collection, sorted approximately in order of newest documents first using the `_id` field (that is, in descending order):
+.. code-block:: javascript
 
-```javascript
-function printStudents(startValue, nPerPage) {
-  let endValue = null;
-  db.students.find( { _id: { $lt: startValue } } )
-             .sort( { _id: -1 } )
-             .limit( nPerPage )
-             .forEach( student => {
-               print( student.name );
-               endValue = student._id;
-             } );
+   function printStudents(startValue, nPerPage) {
+     let endValue = null;
+     db.students.find( { _id: { $lt: startValue } } )
+                .sort( { _id: -1 } )
+                .limit( nPerPage )
+                .forEach( student => {
+                  print( student.name );
+                  endValue = student._id;
+                } );
 
-  return endValue;
-}
-```
+     return endValue;
+   }
 
-You may then use the following code to print all student names using this pagination function, using :bsontype:`MaxKey` to start from the largest possible key:
+You may then use the following code to print all student names using this
+pagination function, using :bsontype:`MaxKey` to start
+from the largest possible key:
 
-```javascript
-let currentKey = MaxKey;
-while (currentKey !== null) {
-  currentKey = printStudents(currentKey, 10);
-}
-```
+.. code-block:: javascript
 
-> **Note:** .. include:: /includes/fact-ObjectId-timestamp-order.rst
+   let currentKey = MaxKey;
+   while (currentKey !== null) {
+     currentKey = printStudents(currentKey, 10);
+   }
 
-Ascending Order ```````````````
+**note:** .. include:: /includes/fact-ObjectId-timestamp-order.rst
 
-Returning paginated results in ascending order is similar to the previous, but uses :query:`$gt` with an ascending sort order:
+### Ascending Order
 
-```javascript
-function printStudents(startValue, nPerPage) {
-  let endValue = null;
-  db.students.find( { _id: { $gt: startValue } } )
-             .sort( { _id: 1 } )
-             .limit( nPerPage )
-             .forEach( student => {
-               print( student.name );
-               endValue = student._id;
-             } );
+Returning paginated results in ascending order is similar to the
+previous, but uses :query:`$gt` with an *ascending* sort order:
 
-  return endValue;
-}
-```
+.. code-block:: javascript
 
-Using this function is likewise similar, but with :bsontype:`MinKey` as the starting key:
+   function printStudents(startValue, nPerPage) {
+     let endValue = null;
+     db.students.find( { _id: { $gt: startValue } } )
+                .sort( { _id: 1 } )
+                .limit( nPerPage )
+                .forEach( student => {
+                  print( student.name );
+                  endValue = student._id;
+                } );
 
-```javascript
-let currentKey = MinKey;
-while (currentKey !== null) {
-  currentKey = printStudents(currentKey, 10);
-}
-```
+     return endValue;
+   }
+
+Using this function is likewise similar, but with
+:bsontype:`MinKey` as the starting key:
+
+.. code-block:: javascript
+
+   let currentKey = MinKey;
+   while (currentKey !== null) {
+     currentKey = printStudents(currentKey, 10);
+   }

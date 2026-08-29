@@ -4,10 +4,10 @@ framework: "LangSmith"
 source_repo: "https://github.com/langchain-ai/docs.git"
 source_branch: "main"
 source_path: "src/langsmith/langsmith-mcp-server.mdx"
-source_commit: "2aae1dfc98ee953a9a5185fb6fcdd9efb3f4d878"
-source_commit_short: "2aae1df"
-source_commit_date: "2026-07-25T00:27:23+00:00"
-generated_at: "2026-07-25T19:08:33.392175Z"
+source_commit: "a174f9cf7c91ee5eb14ee2382eb48bfe6e4956e9"
+source_commit_short: "a174f9c"
+source_commit_date: "2026-08-28T17:04:12-07:00"
+generated_at: "2026-08-29T09:39:50.600880Z"
 ---
 # Langsmith Mcp Server
 
@@ -24,6 +24,8 @@ import SaasRegionUrls from '/snippets/langsmith/saas-region-urls.mdx';
 LangSmith now hosts an OAuth-authenticated remote MCP server on LangSmith Cloud and on [self-hosted LangSmith](/langsmith/self-hosted) v0.15 or later. Cloud endpoints:
 
 <SaasRegionUrls prefix="api.smith" suffix="/mcp" />
+
+BYOC endpoint: `https://<data_plane_url>/api/mcp`, where `<data_plane_url>` is the URL of your [BYOC](/langsmith/byoc) data plane.
 
 Self-hosted endpoint: `https://<your-langsmith-host>/api/mcp`.
 
@@ -52,31 +54,24 @@ The LangSmith MCP Server is a [Model Context Protocol](https://modelcontextproto
 
 ## Quickstart (hosted)
 
-A hosted version of the LangSmith MCP Server is available over HTTP, so you can connect without running the server yourself.
+A hosted version of the LangSmith MCP Server is available through the [LangSmith Remote MCP](/langsmith/langsmith-remote-mcp), so you can connect without running the server yourself.
 
-- **URL:** `https://langsmith-mcp-server.onrender.com/mcp`
-- **Authentication:** Send your [LangSmith API key](/langsmith/create-account-api-key) in the `LANGSMITH-API-KEY` header.
-
-<Note>
-The hosted instance is for [LangSmith Cloud](/langsmith/deploy-to-cloud). For a [self-hosted LangSmith](/langsmith/self-hosted) instance, run the server yourself and point it at your endpoint (see [Docker deployment](#docker-deployment-http-streamable)).
-</Note>
+- **URL:** `https://api.smith.langchain.com/mcp`
+- **Authentication:** Interactive MCP clients use OAuth 2.1. See [LangSmith Remote MCP authentication](/langsmith/langsmith-remote-mcp#authentication) for programmatic API key access.
 
 **Example (Cursor `mcp.json`):**
 
 ```json
 {
   "mcpServers": {
-    "LangSmith MCP (Hosted)": {
-      "url": "https://langsmith-mcp-server.onrender.com/mcp",
-      "headers": {
-        "LANGSMITH-API-KEY": "lsv2_pt_your_api_key_here"
-      }
+    "langsmith": {
+      "url": "https://api.smith.langchain.com/mcp"
     }
   }
 }
 ```
 
-Optional headers: `LANGSMITH-WORKSPACE-ID`, `LANGSMITH-ENDPOINT` (same as in [Environment variables](#environment-variables)).
+The MCP client opens a browser window to complete the OAuth flow when you first connect.
 
 ## Available tools
 

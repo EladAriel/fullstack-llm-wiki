@@ -4,10 +4,10 @@ framework: "Tailwind CSS"
 source_repo: "https://github.com/tailwindlabs/tailwindcss.com.git"
 source_branch: "main"
 source_path: "src/docs/scroll-margin.mdx"
-source_commit: "1e700c43f5f270a1a55c4a33e71f01952f24b8c2"
-source_commit_short: "1e700c4"
-source_commit_date: "2026-07-16T19:14:03+02:00"
-generated_at: "2026-07-25T13:40:03.101878Z"
+source_commit: "bd868a314bd05ca78acd047e3da289274dd6ccd7"
+source_commit_short: "bd868a3"
+source_commit_date: "2026-08-11T20:09:16+02:00"
+generated_at: "2026-08-29T09:40:31.753908Z"
 ---
 # Scroll Margin
 
@@ -36,6 +36,8 @@ export const description = "Utilities for controlling the scroll offset around i
   ].flatMap(([prefix, property]) => [
     [`${prefix}-<number>`, `${property}: calc(var(--spacing) * <number>);`],
     [`-${prefix}-<number>`, `${property}: calc(var(--spacing) * -<number>);`],
+    [`${prefix}-px`, `${property}: 1px;`],
+    [`-${prefix}-px`, `${property}: -1px;`],
     [`${prefix}-(<custom-property>)`, `${property}: var(<custom-property>);`],
     [`${prefix}-[<value>]`, `${property}: <value>;`],
   ])}

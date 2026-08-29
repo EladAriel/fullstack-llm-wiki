@@ -1,28 +1,39 @@
 ---
 type: "Framework Learn Page"
-framework: "postgres"
+framework: "PostgreSQL"
 source_repo: "https://github.com/postgres/postgres.git"
 source_branch: "master"
 source_path: "doc/src/sgml/ref/move.sgml"
-source_commit: "38afc3dcb25c45b744d4025029ce0a6c90b7059f"
-source_commit_short: "38afc3dc"
-source_commit_date: "2026-07-25T19:08:27+09:00"
-generated_at: "2026-07-25T11:50:59Z"
+source_commit: "6c5f1d6074208146930b67c2054509c3e82f6f7f"
+source_commit_short: "6c5f1d6"
+source_commit_date: "2026-08-28T23:24:47+02:00"
+generated_at: "2026-08-29T09:39:24.540144Z"
 ---
-
 MOVE
+ 
 
-cursor
-MOVE
+ 
+  cursor
+  MOVE
+ 
 
-MOVE
-7
-SQL - Language Statements
+ 
+  
+# MOVE
 
-MOVE
-position a cursor
+  7
+  SQL - Language Statements
+ 
 
-```
+ 
+  
+# MOVE
+
+  position a cursor
+ 
+
+ 
+
 MOVE [ direction ] [ FROM | IN ] cursor_name
 
 where direction can be one of:
@@ -41,27 +52,55 @@ where direction can be one of:
     BACKWARD
     BACKWARD count
     BACKWARD ALL
+
+ 
+
+ 
+  
+# Description
+
+  
+   MOVE repositions a cursor without retrieving any data.
+   MOVE works exactly like the FETCH
+   command, except it only positions the cursor and does not return rows.
+  
+
+  
+   The parameters for the MOVE command are identical to
+   those of the FETCH command; refer to
+   
+   for details on syntax and usage.
+  
+
+ 
+
+ 
+  
+# Outputs
+
+  
+   On successful completion, a MOVE command returns a command
+   tag of the form
+
 ```
 
-## Description
-
-`MOVE` repositions a cursor without retrieving any data. `MOVE` works exactly like the `FETCH` command, except it only positions the cursor and does not return rows.
-
-The parameters for the `MOVE` command are identical to those of the `FETCH` command; refer to `sql-fetch` for details on syntax and usage.
-
-## Outputs
-
-On successful completion, a `MOVE` command returns a command tag of the form
-
-```
 MOVE count
-```
-
-The `count` is the number of rows that a `FETCH` command with the same parameters would have returned (possibly zero).
-
-## Examples
 
 ```
+
+   The count is the number
+   of rows that a FETCH command with the same parameters
+   would have returned (possibly zero).
+  
+
+ 
+
+ 
+  
+# Examples
+
+```
+
 BEGIN WORK;
 DECLARE liahona CURSOR FOR SELECT * FROM films;
 
@@ -79,10 +118,21 @@ FETCH 1 FROM liahona;
 -- Close the cursor liahona and end the transaction:
 CLOSE liahona;
 COMMIT WORK;
+
 ```
 
-## Compatibility
+ 
 
-There is no `MOVE` statement in the SQL standard.
+ 
+  
+# Compatibility
 
-## See Also
+  
+   There is no MOVE statement in the SQL standard.
+  
+
+ 
+
+ 
+  
+# See Also

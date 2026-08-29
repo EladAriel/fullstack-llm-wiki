@@ -1,26 +1,55 @@
 ---
 type: "Framework Learn Page"
-framework: "mongodb"
+framework: "MongoDB"
 source_repo: "https://github.com/mongodb/docs.git"
 source_branch: "main"
 source_path: "content/manual/manual/source/core/schema-validation.txt"
-source_commit: "ab9db26ed3d11618cdb61516d8180337d8e3f679"
-source_commit_short: "ab9db26e"
-source_commit_date: "2026-07-24T16:22:46-06:00"
-generated_at: "2026-07-25T11:51:15Z"
+source_commit: "b9f2bc487a2878b65e3c1f80024bebab76954f27"
+source_commit_short: "b9f2bc48"
+source_commit_date: "2026-08-28T17:09:45-05:00"
+generated_at: "2026-08-29T09:39:19.539952Z"
 ---
-
-=================
+.. _schema-validation-overview:
+.. _schema-validation-document:
 
 # Schema Validation
 
-Schema validation lets you create validation rules for your fields, such as allowed data types and value ranges.
+.. default-domain:: mongodb
 
-MongoDB uses a flexible schema model. By default, documents in a collection don't need the same fields or data types. After you establish an application schema, use schema validation to prevent unintended schema changes and data type errors.
+**facet:** :name: genre
+   :values: reference
+
+**meta:** :description: Use schema validation to prevent unintended schema changes and data type errors. Specify validation rules for fields, including data types, value ranges, and required fields.
+
+**contents:** On this page
+   :local:
+   :backlinks: none
+   :depth: 1
+   :class: singlecol
+
+.. dismissible-skills-card::
+   :skill: Relational to Document Model
+   :url: https://learn.mongodb.com/skills?openTab=data%20modeling
+
+Schema validation lets you create validation rules for your fields, such
+as allowed data types and value ranges.
+
+MongoDB uses a flexible schema model. By default, documents in a
+collection don't need the same fields or data types. After you establish
+an application schema, use schema validation to prevent unintended
+schema changes and data type errors.
+
+.. |page-topic| replace:: :atlas:`implement schema validation in the UI </performance-advisor/schema-suggestions/>`
+
+.. cta-banner::
+   :url: https://www.mongodb.com/docs/atlas/performance-advisor/schema-suggestions/
+   :icon: Cloud
+
+   .. include:: /includes/fact-atlas-compatible.rst
 
 ## When to Use Schema Validation
 
-.. include:: /includes/data-modeling/schema-validation-use-case.rst
+**include:** /includes/data-modeling/schema-validation-use-case.rst
 
 ## When MongoDB Checks Validation
 
@@ -28,42 +57,48 @@ After you add schema validation rules to a collection:
 
 - All document inserts must match the rules.
 - The validation level determines how rules apply to existing documents
-and updates. To learn more, see `schema-specify-validation-level`.
+  and updates. To learn more, see
+  :ref:`schema-specify-validation-level`.
 
-To find documents in a collection that don't match the schema validation rules, see `use-json-schema-query-conditions-find-documents`.
+To find documents in a collection that don't match the schema validation
+rules, see :ref:`use-json-schema-query-conditions-find-documents`.
 
 ## What Happens When a Document Fails Validation
 
-By default, MongoDB rejects any insert or update operation that would produce an invalid document.
+By default, MongoDB rejects any insert or update operation that would
+produce an invalid document.
 
-Alternatively, you can configure MongoDB to allow invalid documents and log a warning when a schema violation occurs.
+Alternatively, you can configure MongoDB to allow invalid documents and
+log a warning when a schema violation occurs.
 
-To learn more, see `schema-validation-handle-invalid-docs`.
+To learn more, see :ref:`schema-validation-handle-invalid-docs`.
 
 ## Get Started
 
 For schema validation tasks, see the following pages:
 
-- `schema-validation-json`
-- `schema-validation-polymorphic-collections`
-- `schema-validation-query-expression`
-- `schema-allowed-field-values`
-- `schema-view-validation-rules`
-- `schema-update-validation`
-- `use-json-schema-query-conditions`
-- `schema-bypass-document-validation`
+- :ref:`schema-validation-json`
+- :ref:`schema-validation-polymorphic-collections`
+- :ref:`schema-validation-query-expression`
+- :ref:`schema-allowed-field-values`
+- :ref:`schema-view-validation-rules`
+- :ref:`schema-update-validation`
+- :ref:`use-json-schema-query-conditions`
+- :ref:`schema-bypass-document-validation`
+
 ## Learn More
 
-To learn about MongoDB's flexible schema model, see `manual-data-modeling-intro`.
+To learn about MongoDB's flexible schema model, see
+:ref:`manual-data-modeling-intro`.
 
-## Contents
+**toctree:** :titlesonly:
 
-- Specify JSON Validation </core/schema-validation/specify-json-schema>
-- Specify Validation for Polymorphic Collections </core/schema-validation/specify-validation-polymorphic-collections>
-- Specify Query Operators </core/schema-validation/specify-query-expression-rules>
-- Specify Validation Level </core/schema-validation/specify-validation-level>
-- Handle Invalid Documents </core/schema-validation/handle-invalid-documents>
-- Bypass </core/schema-validation/bypass-document-validation>
-- View Existing Rules </core/schema-validation/view-existing-validation-rules>
-- Modify Rules </core/schema-validation/update-schema-validation>
-- Query and Modify </core/schema-validation/use-json-schema-query-conditions>
+   Specify JSON Validation </core/schema-validation/specify-json-schema>
+   Specify Validation for Polymorphic Collections </core/schema-validation/specify-validation-polymorphic-collections>
+   Specify Query Operators </core/schema-validation/specify-query-expression-rules>
+   Specify Validation Level </core/schema-validation/specify-validation-level>
+   Handle Invalid Documents </core/schema-validation/handle-invalid-documents>
+   Bypass </core/schema-validation/bypass-document-validation>
+   View Existing Rules </core/schema-validation/view-existing-validation-rules>
+   Modify Rules </core/schema-validation/update-schema-validation>
+   Query and Modify </core/schema-validation/use-json-schema-query-conditions>

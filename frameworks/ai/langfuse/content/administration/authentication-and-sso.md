@@ -4,12 +4,11 @@ framework: "Langfuse"
 source_repo: "https://github.com/langfuse/langfuse-docs"
 source_branch: "main"
 source_path: "content/docs/administration/authentication-and-sso.mdx"
-source_commit: "fcd1eca34a924867563c3c4e801254c4e66c0021"
-source_commit_short: "fcd1eca3"
-source_commit_date: "2026-07-25T00:45:45Z"
-generated_at: "2026-07-25T11:51:12Z"
+source_commit: "ba26344559edee69ba55c5d3aa80e632f56c1626"
+source_commit_short: "ba26344"
+source_commit_date: "2026-08-29T02:57:18+00:00"
+generated_at: "2026-08-29T09:38:37.748875Z"
 ---
-
 ---
 title: Authentication & SSO
 sidebarTitle: Authentication & SSO
@@ -142,7 +141,7 @@ Langfuse does not support exceptions on enforced domains. There are no "break gl
 
 #### Okta [#okta]
 
-##### Step 1: Create an OIDC Application in Okta
+**Step 1: Create an OIDC Application in Okta**
 
 1. Log in to the Okta Admin Console
 2. Navigate to **Applications** > **Applications**
@@ -151,7 +150,7 @@ Langfuse does not support exceptions on enforced domains. There are no "break gl
 5. Select **Web Application** as the Application type
 6. Click **Next**
 
-##### Step 2: Configure the Application
+**Step 2: Configure the Application**
 
 1. Enter an **App integration name** (e.g., "Langfuse")
 2. Set the **Sign-in redirect URI** to:
@@ -162,19 +161,19 @@ Langfuse does not support exceptions on enforced domains. There are no "break gl
 5. Under **Assignments**, choose how to assign users
 6. Click **Save**
 
-##### Step 3: Retrieve Credentials
+**Step 3: Retrieve Credentials**
 
 1. On the application's **General** tab, copy the **Client ID** and **Client Secret**
 2. Note your Okta **Issuer URL** (e.g., `https://example.okta.com`)
 
-##### Step 4: Verify Your Domain in Langfuse
+**Step 4: Verify Your Domain in Langfuse**
 
 1. In Langfuse, open **Organization Settings > SSO**
 2. In the **Verify Domain** section, click **Add Domain** and enter the domain that should use Okta
 3. Copy the DNS TXT record provided by Langfuse into your DNS provider
 4. Wait for DNS propagation, then click **Verify** in Langfuse
 
-##### Step 5: Configure SSO in Langfuse
+**Step 5: Configure SSO in Langfuse**
 
 1. In **Organization Settings > SSO**, find your verified domain in the **SSO Configuration** section
 2. Click **Configure SSO**
@@ -183,7 +182,7 @@ Langfuse does not support exceptions on enforced domains. There are no "break gl
 5. Enter the **Issuer URL**, **Client ID**, and **Client Secret**
 6. Save the configuration
 
-##### Step 6: Assign Users
+**Step 6: Assign Users**
 
 1. In Okta, go to your Langfuse application's **Assignments** tab
 2. Assign users or groups who should have access to Langfuse
@@ -213,7 +212,8 @@ https://cloud.langfuse.com/auth/sso-initiate?provider=<PROVIDER>
 
 ##### User Provisioning with SCIM
 
-For automated user provisioning, see the [Okta SCIM Setup Guide](/docs/administration/scim-and-org-api#okta).
+Okta does not support SCIM on custom OIDC apps, so you need a **second Okta application** dedicated to SCIM provisioning in addition to the OIDC app above.
+See the [Okta SCIM Setup Guide](/docs/administration/scim-and-org-api#okta).
 
 ## Related Resources
 

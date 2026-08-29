@@ -4,34 +4,89 @@ framework: "pytest"
 source_repo: "https://github.com/pytest-dev/pytest"
 source_branch: "main"
 source_path: "doc/en/announce/release-3.0.0.rst"
-source_commit: "344c23787cdb3431dcc441b8b63ee9950f04b921"
-source_commit_short: "344c2378"
-source_commit_date: "2026-07-24T17:37:16+02:00"
-generated_at: "2026-07-25T11:50:13Z"
+source_commit: "fdba12e1708313f56e9cf713d260c029764ca2b7"
+source_commit_short: "fdba12e"
+source_commit_date: "2026-08-27T21:55:50+02:00"
+generated_at: "2026-08-29T09:40:11.187506Z"
 ---
-
 # pytest-3.0.0
 
 The pytest team is proud to announce the 3.0.0 release!
 
-pytest is a mature Python testing tool with more than 1600 tests against itself, passing on many different interpreters and platforms.
+pytest is a mature Python testing tool with more than 1600 tests
+against itself, passing on many different interpreters and platforms.
 
-This release contains a lot of bugs fixes and improvements, and much of the work done on it was possible because of the 2016 Sprint[1], which was funded by an indiegogo campaign which raised over US$12,000 with nearly 100 backers.
+This release contains a lot of bugs fixes and improvements, and much of
+the work done on it was possible because of the 2016 Sprint[1], which
+was funded by an indiegogo campaign which raised over US$12,000 with
+nearly 100 backers.
 
-There's a "What's new in pytest 3.0" [2] blog post highlighting the major features in this release.
+There's a "What's new in pytest 3.0" [2] blog post highlighting the
+major features in this release.
 
 To see the complete changelog and documentation, please visit:
 
-http://docs.pytest.org
+    http://docs.pytest.org
 
 As usual, you can upgrade from pypi via:
 
-pip install -U pytest
+    pip install -U pytest
 
 Thanks to all who contributed to this release, among them:
 
-AbdealiJK Ana Ribeiro Antony Lee Brandon W Maister Brianna Laugher Bruno Oliveira Ceridwen Christian Boelsen Daniel Hahler Danielle Jenkins Dave Hunt Diego Russo Dmitry Dygalo Edoardo Batini Eli Boyarski Freya Bruhin Floris Bruynooghe Greg Price Guyzmo HEAD KANGAROO JJ Javi Romero Javier Domingo Cansino Kale Kundert Kalle Bronsen Marius Gedminas Matt Williams Mike Lundy Oliver Bestwalter Omar Kohl Raphael Pierzina RedBeardCode Roberto Polli Romain Dorgueil Roman Bolshakov Ronny Pfannschmidt Stefan Zimmermann Steffen Allner Tareq Alayan Ted Xiao Thomas Grainger Tom Viner TomV Vasily Kuznetsov aostr marscher palaviv satoru taschini
+    AbdealiJK
+    Ana Ribeiro
+    Antony Lee
+    Brandon W Maister
+    Brianna Laugher
+    Bruno Oliveira
+    Ceridwen
+    Christian Boelsen
+    Daniel Hahler
+    Danielle Jenkins
+    Dave Hunt
+    Diego Russo
+    Dmitry Dygalo
+    Edoardo Batini
+    Eli Boyarski
+    Freya Bruhin
+    Floris Bruynooghe
+    Greg Price
+    Guyzmo
+    HEAD KANGAROO
+    JJ
+    Javi Romero
+    Javier Domingo Cansino
+    Kale Kundert
+    Kalle Bronsen
+    Marius Gedminas
+    Matt Williams
+    Mike Lundy
+    Oliver Bestwalter
+    Omar Kohl
+    Raphael Pierzina
+    RedBeardCode
+    Roberto Polli
+    Romain Dorgueil
+    Roman Bolshakov
+    Ronny Pfannschmidt
+    Stefan Zimmermann
+    Steffen Allner
+    Tareq Alayan
+    Ted Xiao
+    Thomas Grainger
+    Tom Viner
+    TomV
+    Vasily Kuznetsov
+    aostr
+    marscher
+    palaviv
+    satoru
+    taschini
 
-Happy testing, The Pytest Development Team
 
-[1] http://blog.pytest.org/2016/pytest-development-sprint/ [2] http://blog.pytest.org/2016/whats-new-in-pytest-30/
+Happy testing,
+The Pytest Development Team
+
+[1] http://blog.pytest.org/2016/pytest-development-sprint/
+[2] http://blog.pytest.org/2016/whats-new-in-pytest-30/

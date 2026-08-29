@@ -4,11 +4,12 @@ framework: "Model Context Protocol"
 source_repo: "https://github.com/modelcontextprotocol/modelcontextprotocol"
 source_branch: "main"
 source_path: "docs/seps/2663-tasks-extension.mdx"
-source_commit: "7634684382c3d14cf7e9f14073fe40a2d8ace3fa"
-source_commit_short: "76346843"
-source_commit_date: "2026-07-23T16:49:30-07:00"
-generated_at: "2026-07-25T11:50:39Z"
+source_commit: "ca4ab3027f7c844cd3039c956438d72e8253f7f5"
+source_commit_short: "ca4ab30"
+source_commit_date: "2026-08-28T21:24:44-07:00"
+generated_at: "2026-08-29T09:38:48.016078Z"
 ---
+# 2663 Tasks Extension
 
 ---
 title: "SEP-2663: Tasks Extension"
@@ -24,6 +25,14 @@ description: "Tasks Extension"
     Extensions Track
   </Badge>
 </div>
+
+<Note>
+  This SEP has reached Final status and is preserved as a historical record of
+  the design as accepted. Changes made to the protocol after finalization are
+  not reflected here. Refer to the [current
+  specification](/specification/latest) and its changelog for authoritative
+  requirements.
+</Note>
 
 | Field         | Value                                                                                                                                                                 |
 | ------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
@@ -116,7 +125,7 @@ A server that has negotiated this extension **MAY** return `CreateTaskResult` in
 
 A server **MUST NOT** return `CreateTaskResult` to a client that did not include the extension capability on its request, regardless of prior declarations. A client that has negotiated this extension **MUST** be prepared to handle either `CallToolResult` or `CreateTaskResult` in response to any supported request it issues. A client that receives `CreateTaskResult` in response to an unsupported request type **MUST** interpret this as an invalid response to the request.
 
-If a server is unable to service a request to a client that does not declare this extension capability without returning `CreateTaskResult`, the server **MUST** return an error with the code `-32003` (Missing Required Client Capability), indicating the required extension in the error response:
+If a server is unable to service a request to a client that does not declare this extension capability without returning `CreateTaskResult`, the server **MUST** return an error with the code `-32021` (Missing Required Client Capability), indicating the required extension in the error response:
 
 ```jsonl
 {
@@ -124,7 +133,7 @@ If a server is unable to service a request to a client that does not declare thi
   "id": 1,
   "error": {
     // MISSING_REQUIRED_CLIENT_CAPABILITY
-    "code": -32003,
+    "code": -32021,
     // Message provided for example purposes only. The content of this example message is non-normative.
     "message": "Missing required client capability",
     "data": {
@@ -494,7 +503,7 @@ If a client requests task status notifications but does not declare the `io.mode
   "id": 12,
   "error": {
     // MISSING_REQUIRED_CLIENT_CAPABILITY
-    "code": -32003,
+    "code": -32021,
     // Message provided for example purposes only. The content of this example message is non-normative.
     "message": "Missing required client capability",
     "data": {
@@ -824,7 +833,7 @@ Servers **MUST** return standard JSON-RPC errors for the following protocol erro
   - Servers **MUST** return this error for `tasks/get`.
   - Servers **SHOULD** return this error for `tasks/update` and `tasks/cancel`.
 - Internal errors: `-32603` (Internal error)
-- Missing required client capabilities: `-32003` (Missing Required Client Capability)
+- Missing required client capabilities: `-32021` (Missing Required Client Capability)
   - Servers **MUST** return this error for non-declaring clients requesting task notifications on `subscriptions/listen`.
   - Servers **MUST** return this error for non-declaring clients issuing `tasks/get`, `tasks/update`, and `tasks/cancel` requests.
 

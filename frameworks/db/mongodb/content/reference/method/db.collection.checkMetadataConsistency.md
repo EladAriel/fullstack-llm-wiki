@@ -1,43 +1,101 @@
 ---
 type: "Framework Learn Page"
-framework: "mongodb"
+framework: "MongoDB"
 source_repo: "https://github.com/mongodb/docs.git"
 source_branch: "main"
 source_path: "content/manual/manual/source/reference/method/db.collection.checkMetadataConsistency.txt"
-source_commit: "ab9db26ed3d11618cdb61516d8180337d8e3f679"
-source_commit_short: "ab9db26e"
-source_commit_date: "2026-07-24T16:22:46-06:00"
-generated_at: "2026-07-25T11:51:15Z"
+source_commit: "b9f2bc487a2878b65e3c1f80024bebab76954f27"
+source_commit_short: "b9f2bc48"
+source_commit_date: "2026-08-28T17:09:45-05:00"
+generated_at: "2026-08-29T09:39:19.885579Z"
 ---
-
-=========================================================
-
 # db.collection.checkMetadataConsistency() (mongosh method)
+
+**meta:** :description: Perform consistency checks on sharding metadata for a collection using `db.collection.checkMetadataConsistency()`.
+
+.. default-domain:: mongodb
+
+**contents:** On this page
+   :local:
+   :backlinks: none
+   :depth: 1
+   :class: singlecol
 
 ## Definition
 
+**method:** db.collection.checkMetadataConsistency(options)
+
+   Performs a series of consistency checks on sharding metadata 
+   for the collection. The method returns a cursor with either all or a
+   batch of the inconsistency results found.
+
+   .. |dbcommand| replace:: :dbcommand:`checkMetadataConsistency` command
+   .. include:: /includes/fact-mongosh-shell-method-alt.rst
+
+   Run this method after major maintenance operations, such as upgrades and
+   downgrades, to check the state of the catalog.
+
+   .. include:: /includes/inconsistency-type/index-note
+
+   For more information on the inconsistencies this method checks for,
+   see :ref:`inconsistency-types`.
+
+   :returns: This method returns a cursor with a ``documents`` array, 
+      which contains a document for each inconsistency found in 
+      the sharding metadata.
+
+
 ## Compatibility
 
-This method is available in deployments hosted in the following environments:
+This method is available in deployments hosted in the following environments: 
 
-.. include:: /includes/fact-environments-atlas-only.rst
+**include:** /includes/fact-environments-atlas-only.rst
 
-.. include:: /includes/fact-environments-atlas-support-no-free.rst
+**include:** /includes/fact-environments-atlas-support-no-free.rst
 
-.. include:: /includes/fact-environments-onprem-only.rst
+**include:** /includes/fact-environments-onprem-only.rst
 
-.. include:: /includes/method/checkMetadataConsistency-execute-mongos.rst
+**include:** /includes/method/checkMetadataConsistency-execute-mongos.rst
+
 
 ## Syntax
 
 The :method:`db.collection.checkMetadataConsistency` method has the following syntax:
 
-```javascript
-db.collection.checkMetadataConsistency( { <options> } )
-```
+.. code-block:: javascript
 
-The `options` document can take the following fields and values:
+   db.collection.checkMetadataConsistency( { <options> } )
 
-.. include:: /includes/inconsistency-type/checkMetadataConsistency-options.rst
+The ``options`` document can take the following fields and values:
+
+**include:** /includes/inconsistency-type/checkMetadataConsistency-options.rst
+
 
 ## Example
+
+.. io-code-block::
+
+   .. input::
+      :language: javascript
+
+      db.authors.checkMetadataConsistency()
+
+   .. output::
+      :language: json
+
+      {
+         cursorHasMore: false,
+         documents: [
+            {
+               type: "MisplacedCollection",
+               description: "Unsharded collection found on shard different from database primary shard",
+               details: {
+                  namespace: "test.authors",
+                  shard: "shard02",
+                  localUUID: new UUID("1ad56770-61e2-48e9-83c6-8ecefe73cfc4")
+               }
+            }
+         ],
+      }
+
+ 

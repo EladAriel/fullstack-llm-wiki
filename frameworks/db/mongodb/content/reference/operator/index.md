@@ -1,32 +1,19 @@
 ---
 type: "Framework Learn Directory Index"
-framework: "mongodb"
-directory: "content/reference/operator"
-source_repo: "https://github.com/mongodb/docs.git"
-source_branch: "main"
-source_commit: "ab9db26ed3d11618cdb61516d8180337d8e3f679"
-source_commit_short: "ab9db26e"
-source_commit_date: "2026-07-24T16:22:46-06:00"
-generated_at: "2026-07-25T11:51:15Z"
+framework: "MongoDB"
+generated_at: "2026-08-29T09:39:20.596976Z"
 ---
 # Operator
 
-This directory contains mongodb learning pages related to operator.
+This directory contains MongoDB learning pages related to operator.
 
 ## Breadcrumbs
 
-[Wiki Home](../../../index.md) -> [Content](../../index.md) -> [Reference](../index.md) -> [Operator](index.md)
+[Wiki Home](../index.md) -> [Content](index.md)
 
 ## Navigation
 
-- Parent: [Parent Index](../index.md)
-
-## Child Directories
-
-- [Aggregation](aggregation/index.md) - pages related to aggregation
-- [Projection](projection/index.md) - pages related to projection
-- [Query](query/index.md) - pages related to query
-- [Update](update/index.md) - pages related to update
+- Wiki Home: [Root Index](../index.md)
 
 ## Pages in This Directory
 
@@ -38,10 +25,9 @@ This directory contains mongodb learning pages related to operator.
 - [Update Bitwise](update-bitwise.md)
 - [Update Field](update-field.md)
 
-## IDE LLM Guidance
+## Subdirectories
 
-When answering implementation questions related to this directory:
-
-1. Prefer the most specific page listed above.
-2. If the topic is broad, read the child directory index first.
-3. Use source metadata from each page when giving answers.
+- [Aggregation](aggregation/index.md)
+- [Projection](projection/index.md)
+- [Query](query/index.md)
+- [Update](update/index.md)

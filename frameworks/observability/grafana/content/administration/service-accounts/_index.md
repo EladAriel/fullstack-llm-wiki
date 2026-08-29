@@ -4,10 +4,10 @@ framework: "Grafana"
 source_repo: "https://github.com/grafana/grafana.git"
 source_branch: "main"
 source_path: "docs/sources/administration/service-accounts/_index.md"
-source_commit: "d18e58d33aa8741f08fbab4aa73bdaf1f04e3be5"
-source_commit_short: "d18e58d3"
-source_commit_date: "2026-07-25T13:50:43+02:00"
-generated_at: "2026-07-25T19:08:09.038058Z"
+source_commit: "5e3a02f81d2aadf4bf24fe49ed97d872556f5bf9"
+source_commit_short: "5e3a02f8"
+source_commit_date: "2026-08-29T10:58:19+09:00"
+generated_at: "2026-08-29T09:39:37.484688Z"
 ---
 ---
 aliases:
@@ -251,7 +251,7 @@ To list your token's permissions, use the `/api/access-control/user/permissions`
 Run the following command with the token whose permissions you want to check:
 
 ```bash
-curl -H "Authorization: Bearer glsa_REDACTED_SERVICE_ACCOUNT_TOKEN" -X GET '<grafana_url>/api/access-control/user/permissions' | jq
+curl -H "Authorization: Bearer glsa_iNValIdinValiDinvalidinvalidinva_5b582697" -X GET '<grafana_url>/api/access-control/user/permissions' | jq
 ```
 
 The output lists the token's permissions:
@@ -278,7 +278,7 @@ The following command output is shortened to show only the relevant content.
 To list which dashboards a token can view, filter the `/api/access-control/user/permissions` endpoint's response for the `dashboards:read` permission key:
 
 ```bash
-curl -H "Authorization: Bearer glsa_REDACTED_SERVICE_ACCOUNT_TOKEN" -X GET '<grafana_url>/api/access-control/user/permissions' | jq '."dashboards:read"'
+curl -H "Authorization: Bearer glsa_iNValIdinValiDinvalidinvalidinva_5b582697" -X GET '<grafana_url>/api/access-control/user/permissions' | jq '."dashboards:read"'
 ```
 
 The output lists the dashboards a token can view and the folders a token can view dashboards from,

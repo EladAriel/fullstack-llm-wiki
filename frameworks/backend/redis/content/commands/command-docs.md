@@ -1,14 +1,15 @@
 ---
 type: "Framework Learn Page"
-framework: "redis"
+framework: "Redis"
 source_repo: "https://github.com/redis/docs.git"
 source_branch: "main"
 source_path: "content/commands/command-docs.md"
-source_commit: "9d30f68c3dad1a6b3b7d30fe604b911348ce8152"
-source_commit_short: "9d30f68c"
-source_commit_date: "2026-07-24T10:52:10-07:00"
-generated_at: "2026-07-25T11:51:22Z"
+source_commit: "f8693349287b0efbef3c865b6f6a2aceca88594d"
+source_commit_short: "f869334"
+source_commit_date: "2026-08-28T10:01:19-05:00"
+generated_at: "2026-08-29T09:38:55.052041Z"
 ---
+# Command Docs
 
 ---
 acl_categories:
@@ -98,9 +99,7 @@ The following keys may be included in the mapped reply:
   1. The Redis version that the entry applies to.
   2. The description of the change.
 * **arguments:** an array of maps that describe the command's arguments.
-  Please refer to the [Redis command arguments][td] page for more information.
-
-[td]: /develop/reference/command-arguments
+  Please refer to the [Redis command arguments]({{< relref "/develop/reference/command-arguments" >}}) page for more information.
 
 ## Optional arguments
 
@@ -197,7 +196,7 @@ redis> COMMAND DOCS SET
               5)  1) "name"
                   2) "ifdeq-digest"
                   3) "type"
-                  4) "integer"
+                  4) "string"
                   5) "display_text"
                   6) "ifdeq-digest"
                   7) "token"
@@ -207,7 +206,7 @@ redis> COMMAND DOCS SET
               6)  1) "name"
                   2) "ifdne-digest"
                   3) "type"
-                  4) "integer"
+                  4) "string"
                   5) "display_text"
                   6) "ifdne-digest"
                   7) "token"

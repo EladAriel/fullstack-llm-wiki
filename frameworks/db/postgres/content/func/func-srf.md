@@ -1,45 +1,102 @@
 ---
 type: "Framework Learn Page"
-framework: "postgres"
+framework: "PostgreSQL"
 source_repo: "https://github.com/postgres/postgres.git"
 source_branch: "master"
 source_path: "doc/src/sgml/func/func-srf.sgml"
-source_commit: "38afc3dcb25c45b744d4025029ce0a6c90b7059f"
-source_commit_short: "38afc3dc"
-source_commit_date: "2026-07-25T19:08:27+09:00"
-generated_at: "2026-07-25T11:50:59Z"
+source_commit: "6c5f1d6074208146930b67c2054509c3e82f6f7f"
+source_commit_short: "6c5f1d6"
+source_commit_date: "2026-08-28T23:24:47+02:00"
+generated_at: "2026-08-29T09:39:24.508184Z"
 ---
+# Set Returning Functions
 
-## Set Returning Functions
+  
+   set returning functions
+   functions
+  
 
-set returning functions
-functions
+  
+   This section describes functions that possibly return more than one row.
+   The most widely used functions in this class are series generating
+   functions, as detailed in  and
+   .  Other, more specialized
+   set-returning functions are described elsewhere in this manual.
+   See  for ways to combine multiple
+   set-returning functions.
+  
 
-This section describes functions that possibly return more than one row. The most widely used functions in this class are series generating functions, as detailed in `functions-srf-series` and `functions-srf-subscripts`. Other, more specialized set-returning functions are described elsewhere in this manual. See `queries-tablefunctions` for ways to combine multiple set-returning functions.
+   
+    Series Generating Functions
+    
+     
+      
+       
+        Function
+       
+       
+        Description
+       
+      
+     
 
-## Series Generating Functions
+     
+      
+       
+        
+         generate_series
+        
+        generate_series ( start integer, stop integer , step integer  )
+        setof integer
+       
+       
+        generate_series ( start bigint, stop bigint , step bigint  )
+        setof bigint
+       
+       
+        generate_series ( start numeric, stop numeric , step numeric  )
+        setof numeric
+       
+       
+        Generates a series of values from start
+        to stop, with a step size
+        of step.  step
+        defaults to 1.
+       
+      
 
-Function
+      
+       
+        generate_series ( start timestamp, stop timestamp, step interval )
+        setof timestamp
+       
+       
+        generate_series ( start timestamp with time zone, stop timestamp with time zone, step interval , timezone text  )
+        setof timestamp with time zone
+       
+       
+        Generates a series of values from start
+        to stop, with a step size
+        of step.
+        In the timezone-aware form, times of day and daylight-savings
+        adjustments are computed according to the time zone named by
+        the timezone argument, or the current
+         setting if that is omitted.
+       
+      
+     
+    
+   
 
-Description
+  
+   When step is positive, zero rows are returned if
+   start is greater than stop.
+   Conversely, when step is negative, zero rows are
+   returned if start is less than stop.
+   Zero rows are also returned if any input is NULL.
+   It is an error
+   for step to be zero. Some examples follow:
 
-generate_series `generate_series` ( `start` `integer`, `stop` `integer` , `step` `integer` ) setof integer
-
-`generate_series` ( `start` `bigint`, `stop` `bigint` , `step` `bigint` ) setof bigint
-
-`generate_series` ( `start` `numeric`, `stop` `numeric` , `step` `numeric` ) setof numeric
-
-Generates a series of values from `start` to `stop`, with a step size of `step`. `step` defaults to 1.
-
-`generate_series` ( `start` `timestamp`, `stop` `timestamp`, `step` `interval` ) setof timestamp
-
-`generate_series` ( `start` `timestamp with time zone`, `stop` `timestamp with time zone`, `step` `interval` , `timezone` `text` ) setof timestamp with time zone
-
-Generates a series of values from `start` to `stop`, with a step size of `step`. In the timezone-aware form, times of day and daylight-savings adjustments are computed according to the time zone named by the `timezone` argument, or the current `guc-timezone` setting if that is omitted.
-
-When `step` is positive, zero rows are returned if `start` is greater than `stop`. Conversely, when `step` is negative, zero rows are returned if `start` is less than `stop`. Zero rows are also returned if any input is `NULL`. It is an error for `step` to be zero. Some examples follow:
-
-```
 SELECT * FROM generate_series(2,4);
  generate_series
 -----------------
@@ -111,25 +168,62 @@ SELECT * FROM generate_series('2001-10-22 00:00 -04:00'::timestamptz,
  2001-10-31 05:00:00+00
  2001-11-01 05:00:00+00
 (11 rows)
-```
 
-## Subscript Generating Functions
+  
 
-Function
+   
+    Subscript Generating Functions
+    
+     
+      
+       
+        Function
+       
+       
+        Description
+       
+      
+     
 
-Description
+     
+      
+       
+        
+         generate_subscripts
+        
+        generate_subscripts ( array anyarray, dim integer )
+        setof integer
+       
+       
+        Generates a series comprising the valid subscripts of
+        the dim'th dimension of the given array.
+       
+      
 
-generate_subscripts `generate_subscripts` ( `array` `anyarray`, `dim` `integer` ) setof integer
+      
+       
+        generate_subscripts ( array anyarray, dim integer,  reverse boolean )
+        setof integer
+       
+       
+        Generates a series comprising the valid subscripts of
+        the dim'th dimension of the given array.
+        When reverse is true, returns the series in
+        reverse order.
+       
+      
+     
+    
+   
 
-Generates a series comprising the valid subscripts of the `dim`'th dimension of the given array.
+  
+   generate_subscripts is a convenience function that generates
+   the set of valid subscripts for the specified dimension of the given
+   array.
+   Zero rows are returned for arrays that do not have the requested dimension,
+   or if any input is NULL.
+   Some examples follow:
 
-`generate_subscripts` ( `array` `anyarray`, `dim` `integer`, `reverse` `boolean` ) setof integer
-
-Generates a series comprising the valid subscripts of the `dim`'th dimension of the given array. When `reverse` is true, returns the series in reverse order.
-
-`generate_subscripts` is a convenience function that generates the set of valid subscripts for the specified dimension of the given array. Zero rows are returned for arrays that do not have the requested dimension, or if any input is `NULL`. Some examples follow:
-
-```
 -- basic usage:
 SELECT generate_subscripts('{NULL,1,NULL,2}'::int[], 1) AS s;
  s
@@ -176,13 +270,21 @@ SELECT * FROM unnest2(ARRAY[[1,2],[3,4]]);
        3
        4
 (4 rows)
-```
 
-ordinality
+  
 
-When a function in the `FROM` clause is suffixed by `WITH ORDINALITY`, a `bigint` column is appended to the function's output column(s), which starts from 1 and increments by 1 for each row of the function's output. This is most useful in the case of set returning functions such as `unnest()`.
+  
+   ordinality
+  
 
-```
+  
+   When a function in the FROM clause is suffixed
+   by WITH ORDINALITY, a bigint column is
+   appended to the function's output column(s), which starts from 1 and
+   increments by 1 for each row of the function's output.
+   This is most useful in the case of set returning
+   functions such as unnest().
+
 -- set returning function WITH ORDINALITY:
 SELECT * FROM pg_ls_dir('.') WITH ORDINALITY AS t(ls,n);
        ls        | n
@@ -207,4 +309,3 @@ SELECT * FROM pg_ls_dir('.') WITH ORDINALITY AS t(ls,n);
  pg_stat_tmp     | 18
  pg_subtrans     | 19
 (19 rows)
-```

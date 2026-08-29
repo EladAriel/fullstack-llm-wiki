@@ -1,131 +1,241 @@
 ---
 type: "Framework Learn Page"
-framework: "mongodb"
+framework: "MongoDB"
 source_repo: "https://github.com/mongodb/docs.git"
 source_branch: "main"
 source_path: "content/manual/manual/source/reference/operator/aggregation/round.txt"
-source_commit: "ab9db26ed3d11618cdb61516d8180337d8e3f679"
-source_commit_short: "ab9db26e"
-source_commit_date: "2026-07-24T16:22:46-06:00"
-generated_at: "2026-07-25T11:51:15Z"
+source_commit: "b9f2bc487a2878b65e3c1f80024bebab76954f27"
+source_commit_short: "b9f2bc48"
+source_commit_date: "2026-08-28T17:09:45-05:00"
+generated_at: "2026-08-29T09:39:20.191206Z"
 ---
-
-=============================
-
 # $round  (expression operator)
 
+**meta:** :description: Use `$round` to round numbers to specified decimal places or whole integers, supporting even rounding and handling special values like `null` and `NaN`.
+
+.. default-domain:: mongodb
+
+**contents:** On this page
+   :local:
+   :backlinks: none
+   :depth: 1
+   :class: singlecol
+
 ## Definition
+
+**expression:** $round
+
+   :expression:`$round` rounds a number to a whole integer *or* to a 
+   specified decimal place.
+
+   :expression:`$round` has the following syntax:
+
+   .. code-block:: javascript
+
+      { $round : [ <number>, <place> ] }
+
+   .. list-table::
+      :header-rows: 1
+      :widths: 20 20 80
+
+      * - Field
+
+        - Type
+
+        - Description
+
+      * - ``<number>``
+
+        - number
+
+        - Can be any valid :ref:`expression <aggregation-expressions>`
+          that resolves to a number. Specifically, the expression must
+          resolve to an integer, double, 
+          :bsontype:`decimal <data_numberdecimal>`, or
+          :bsontype:`long <data_numberlong>`.
+
+          :expression:`$round` returns an error if the expression
+          resolves to a non-numeric data type.
+   
+      * - ``<place>``
+
+        - integer
+
+        - *Optional* Can be any valid 
+          :ref:`expression <aggregation-expressions>` that resolves to 
+          an integer between -20 and 100, exclusive. e.g. 
+          ``-20 < place < 100``. Defaults to ``0`` if unspecified.
+
+          - If ``<place>`` resolves to a positive integer,
+            :expression:`$round` rounds to ``<place>`` decimal 
+            places.
+
+            For example, ``$round : [1234.5678, 2]`` rounds to two
+            decimal places and returns ``1234.57``.
+
+          - If ``<place>`` resolves to a negative integer,
+            :expression:`$round` rounds using the digit ``<place>`` 
+            to the left of the decimal. 
+
+            For example, ``$round : [1234.5678, -2]`` uses the
+            2nd digit to the left of the decimal (``3``) and returns
+            ``1200``.
+            
+            If the absolute value of ``<place>`` equals or exceeds the
+            number of digits to the left of the decimal,
+            :expression:`$round` returns ``0``.
+
+            For example, ``$round : [ 1234.5678, -4]`` specifies the
+            fourth digit to the left of the decimal. This equals the
+            number of digits left of the decimal and returns ``0``.
+
+          - If ``<place>`` resolves to ``0``, :expression:`$round`
+            rounds using the first digit to the right of the decimal and
+            returns rounded integer value.
+
+            For example, ``$round : [1234.5678, 0]`` returns ``1235``.
 
 ## Behavior
 
 ### Rounding to Even Values
 
-When rounding on a value of `5`, :expression:`$round` rounds to the nearest even value. For example, consider the following sample documents:
+When rounding on a value of ``5``, :expression:`$round` rounds to the
+nearest even value. For example, consider the following sample 
+documents:
 
-```javascript
-{_id : 1, "value" : 10.5},
-{_id : 2, "value" : 11.5},
-{_id : 3, "value" : 12.5},
-{_id : 4, "value" : 13.5}
-```
+.. code-block:: javascript
+ 
+   {_id : 1, "value" : 10.5},
+   {_id : 2, "value" : 11.5},
+   {_id : 3, "value" : 12.5},
+   {_id : 4, "value" : 13.5}
 
 :expression:`$round : [ "$value", 0] <$round>` returns the following:
 
-```javascript
-{_id : 1, "value" : 10},
-{_id : 2, "value" : 12},
-{_id : 3, "value" : 12},
-{_id : 4, "value" : 14}
-```
+.. code-block:: javascript
 
-The value `10.5` is closest to the even value `10`, while the values `11.5` and `12.5` are closest to the even value `12`. Rounding to the nearest even value supports more even distribution of rounded data than always rounding up or down.
+   {_id : 1, "value" : 10},
+   {_id : 2, "value" : 12},
+   {_id : 3, "value" : 12},
+   {_id : 4, "value" : 14}
+
+The value ``10.5`` is closest to the even value ``10``, while the values
+``11.5`` and ``12.5`` are closest to the even value ``12``. Rounding to
+the nearest even value supports more even distribution of rounded data
+than always rounding up or down.
 
 ### Rounding Precision with Floating Point Numbers
 
-If you print a double-precision floating point number `0.05` with 20 digits after the decimal separator, you will see `0.05000000000000000278`, which is slightly greater than `0.05` and is rounded to `0.1`.
+If you print a double-precision floating point number ``0.05`` with 20
+digits after the decimal separator, you will see
+``0.05000000000000000278``, which is slightly greater than ``0.05`` and
+is rounded to ``0.1``.
 
-.. include:: /includes/precision.rst
+**include:** /includes/precision.rst
 
 ### Returned Data Type
 
-The returned data type matches the data type of the input expression or value.
+The returned data type matches the data type of the input expression 
+or value.
 
-### `null`, `NaN`, and `+/- Infinity`
+### ``null``, ``NaN``, and ``+/- Infinity``
 
-- If the first argument resolves to a value of `null` or
-refers to a field that is  missing, :expression:`$round` returns `null`.
+- If the first argument resolves to a value of ``null`` or
+  refers to a field that is  missing, :expression:`$round` returns 
+  ``null``.
 
-- If the first argument resolves to `NaN`, :expression:`$round`
-returns `NaN`.
+- If the first argument resolves to ``NaN``, :expression:`$round` 
+  returns ``NaN``.
 
-- If the first argument resolves to negative or positive infinity,
-:expression:`$round` returns negative or positive infinity respectively.
+- If the first argument resolves to negative or positive infinity, 
+  :expression:`$round` returns negative or positive infinity 
+  respectively.
+
+.. list-table::
+   :header-rows: 1
+   :widths: 85 15
+
+   * - Example
+     - Results
+
+   * - ``{ $round: [ NaN, 1] }``
+     - ``NaN``
+
+   * - ``{ $round: [ null, 1] }``
+     - ``null``
+
+   * - ``{ $round : [ Infinity, 1 ] }``
+     - ``Infinity`` 
+   
+   * - ``{ $round : [ -Infinity, 1 ] }``
+     - ``-Infinity``
 
 ## Example
 
-Create a collection named `samples` with the following documents:
-
-```javascript
-db.samples.insertMany(
-   [
-     { _id: 1, value: 19.25 },
-     { _id: 2, value: 28.73 },
-     { _id: 3, value: 34.32 },
-     { _id: 4, value: -45.39 }
-   ]
-)
-```
-
-- The following aggregation returns `value` rounded to the
-first decimal place:
-
-```javascript
-  db.samples.aggregate([
-     { $project: { roundedValue: { $round: [ "$value", 1 ] } } }
-  ])
-
-The operation returns the following results:
+Create a collection named ``samples`` with the following documents:
 
 .. code-block:: javascript
 
-  { "_id" : 1, "roundedValue" : 19.2 }
-  { "_id" : 2, "roundedValue" : 28.7 }
-  { "_id" : 3, "roundedValue" : 34.3 }
-  { "_id" : 4, "roundedValue" : -45.4 }
-```
+   db.samples.insertMany(
+      [
+        { _id: 1, value: 19.25 },
+        { _id: 2, value: 28.73 },
+        { _id: 3, value: 34.32 },
+        { _id: 4, value: -45.39 }
+      ]
+   )
 
-- The following aggregation returns `value`
-rounded using the first digit to the left of the decimal:
 
-```javascript
-  db.samples.aggregate([
-     { $project: { roundedValue: { $round: [ "$value", -1 ] } } }
-  ])
+- The following aggregation returns ``value`` rounded to the
+  first decimal place:
 
-The operation returns the following results:
+  .. code-block:: javascript
 
-.. code-block:: javascript
+     db.samples.aggregate([
+        { $project: { roundedValue: { $round: [ "$value", 1 ] } } }
+     ])
 
-  { "_id" : 1, "roundedValue" : 10 }
-  { "_id" : 2, "roundedValue" : 20 }
-  { "_id" : 3, "roundedValue" : 30 }
-  { "_id" : 4, "roundedValue" : -50 }
-```
+  The operation returns the following results:
 
-- The following aggregation returns `value` rounded to the
-whole integer:
+  .. code-block:: javascript
 
-```javascript
-  db.samples.aggregate([
-     { $project: { roundedValue: { $round: [ "$value", 0 ] } } }
-  ])
+     { "_id" : 1, "roundedValue" : 19.2 }
+     { "_id" : 2, "roundedValue" : 28.7 }
+     { "_id" : 3, "roundedValue" : 34.3 }
+     { "_id" : 4, "roundedValue" : -45.4 }
 
-The operation returns the following results:
+- The following aggregation returns ``value``
+  rounded using the first digit to the left of the decimal:
 
-.. code-block:: javascript
+  .. code-block:: javascript
 
-  { "_id" : 1, "roundedValue" : 19 }
-  { "_id" : 2, "roundedValue" : 29 }
-  { "_id" : 3, "roundedValue" : 34 }
-  { "_id" : 4, "roundedValue" : -45 }
-```
+     db.samples.aggregate([
+        { $project: { roundedValue: { $round: [ "$value", -1 ] } } }
+     ])
+
+  The operation returns the following results:
+
+  .. code-block:: javascript
+
+     { "_id" : 1, "roundedValue" : 10 }
+     { "_id" : 2, "roundedValue" : 20 }
+     { "_id" : 3, "roundedValue" : 30 }
+     { "_id" : 4, "roundedValue" : -50 }
+
+- The following aggregation returns ``value`` rounded to the 
+  whole integer:
+
+  .. code-block:: javascript
+
+     db.samples.aggregate([
+        { $project: { roundedValue: { $round: [ "$value", 0 ] } } }
+     ])
+
+  The operation returns the following results:
+
+  .. code-block:: javascript
+
+     { "_id" : 1, "roundedValue" : 19 }
+     { "_id" : 2, "roundedValue" : 29 }
+     { "_id" : 3, "roundedValue" : 34 }
+     { "_id" : 4, "roundedValue" : -45 }

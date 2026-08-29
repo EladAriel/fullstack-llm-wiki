@@ -1,210 +1,351 @@
 ---
 type: "Framework Learn Page"
-framework: "mongodb"
+framework: "MongoDB"
 source_repo: "https://github.com/mongodb/docs.git"
 source_branch: "main"
 source_path: "content/manual/manual/source/troubleshooting/backup-restore-failures.txt"
-source_commit: "ab9db26ed3d11618cdb61516d8180337d8e3f679"
-source_commit_short: "ab9db26e"
-source_commit_date: "2026-07-24T16:22:46-06:00"
-generated_at: "2026-07-25T11:51:15Z"
+source_commit: "b9f2bc487a2878b65e3c1f80024bebab76954f27"
+source_commit_short: "b9f2bc48"
+source_commit_date: "2026-08-28T17:09:45-05:00"
+generated_at: "2026-08-29T09:39:19.564368Z"
 ---
-
-========================================
+.. _manual-troubleshooting-backup-restore-failures:
 
 # Troubleshoot Backup and Restore Failures
 
-Backup and restore operations for deployments managed by Ops Manager can fail for a variety of reasons, including agent connectivity issues, disk space constraints, or oplog inconsistencies.
+**meta:** :description: Learn to diagnose and resolve backup and restore failures in Ops Manager-managed deployments, including agent connectivity issues, disk space constraints, and oplog gaps.
 
-This page describes how to confirm backup and restore failures, outlines common causes and resolutions, and provides guidance on what to collect before contacting support. If the issue persists after you complete the steps below, contact `technical-support`.
+**contents:** On this page
+	:local:
+	:backlinks: none
+	:depth: 2
+	:class: singlecol
+
+Backup and restore operations for deployments managed by Ops Manager
+can fail for a variety of reasons, including agent connectivity issues, disk
+space constraints, or oplog inconsistencies.
+
+This page describes how to confirm backup and restore failures, outlines common
+causes and resolutions, and provides guidance on what to collect before
+contacting support. If the issue persists after you complete the steps below,
+contact :ref:`technical-support`.
 
 ## Prerequisite Checks
 
-Before you investigate the root cause of a backup or restore failure, confirm that a failure has occurred by checking the relevant status indicators in the Ops Manager UI or API.
+Before you investigate the root cause of a backup or restore failure, confirm
+that a failure has occurred by checking the relevant status indicators in the
+Ops Manager UI or API.
 
 ### Check for Backup Failures
 
 Use the following methods to confirm that a backup job or snapshot has failed.
 
-Check Snapshot Status `````````````````````
+### Check Snapshot Status
 
 To confirm whether a snapshot failed:
 
-You can also click :guilabel:`JSON` next to a snapshot to view additional fields, including:
+**procedure:** :style: normal
 
-- `status`
-- `createdDate`
-- `completedDate`
-- `totalDuration`
-- `transferSpeed`
+   .. step:: Navigate to snapshots in the Ops Manager UI.
+
+      a. Click :guilabel:`Admin`.
+      #. Click :guilabel:`Backups`.
+      #. Click :guilabel:`Snapshots`.
+
+   .. step:: Search for the replica set or deployment.
+
+   .. step:: Review the :guilabel:`State` column.
+
+      The column shows whether the snapshot succeeded, is running, or failed.
+
+You can also click :guilabel:`JSON` next to a snapshot to view additional
+fields, including:
+
+- ``status``
+- ``createdDate``
+- ``completedDate``
+- ``totalDuration``
+- ``transferSpeed``
+
 These fields help confirm whether the backup completed successfully.
 
-For a description of all snapshot states, see :opsmgr:`Backup Overview </core/backup-overview/#backup-definition-and-operational-states>`.
+For a description of all snapshot states, see
+:opsmgr:`Backup Overview </core/backup-overview/#backup-definition-and-operational-states>`.
 
-Check the Backup Jobs Page ``````````````````````````
+### Check the Backup Jobs Page
 
 To check for issues with ongoing backup jobs:
 
+**procedure:** :style: normal
+
+   .. step:: Navigate to the Backup Jobs page.
+
+      a. Click :guilabel:`Admin`.
+      #. Click :guilabel:`Backup`.
+      #. Click :guilabel:`Jobs`.
+
+   .. step:: Find your replica set or cluster.
+
+   .. step:: Look for highlighted fields.
+
+      Fields such as :guilabel:`Last Snapshot`, :guilabel:`Last Oplog`, or
+      :guilabel:`Head Time` might appear highlighted when delayed, indicating a
+      problem with the backup process.
+
 For more information, see :opsmgr:`Jobs </admin/backup/jobs-page/#jobs>`.
 
-Check Backup Logs `````````````````
+### Check Backup Logs
 
 To review error messages from backup jobs:
 
-The logs display error messages grouped by time, which can help diagnose why a backup job failed.
+**procedure:** :style: normal
 
-Check Alerts ````````````
+   .. step:: Navigate to logs.
 
-Ops Manager generates alerts that indicate failures or issues with backup jobs, including:
+      a. Click :guilabel:`Admin`.
+      #. Click :guilabel:`Logs`.
+
+   .. step:: Filter for backup jobs.
+
+The logs display error messages grouped by time, which can help diagnose why a
+backup job failed.
+
+### Check Alerts
+
+Ops Manager generates alerts that indicate failures or issues with backup jobs,
+including:
 
 - "Backup has reached a high number of retries"
 - "Backup is in an unexpected state"
 - "Replica set has a late snapshot"
-For a full list of backup-related alert conditions, see :opsmgr:`Alert Conditions </reference/alerts>`.
 
-Query the API for Incomplete Snapshots ``````````````````````````````````````
+For a full list of backup-related alert conditions, see
+:opsmgr:`Alert Conditions </reference/alerts>`.
 
-To retrieve snapshots that have not completed, query the Ops Manager API using the `completed=false` query parameter:
+### Query the API for Incomplete Snapshots
 
-```bash
-curl --user "{PUBLIC-KEY}:{PRIVATE-KEY}" --digest \
-  --header "Accept: application/json" \
-  "https://{OPSMANAGER-HOST}:{PORT}/api/public/v1.0/groups/{PROJECT-ID}/clusters/{CLUSTER-ID}/snapshots?completed=false"
-```
+To retrieve snapshots that have not completed, query the Ops Manager API using
+the ``completed=false`` query parameter:
 
-The response includes a `results` array where each object represents a snapshot. The `complete` field indicates whether the snapshot finished successfully.
+.. code-block:: bash
+   :copyable: true
 
-> **Note:** The snapshot API does not provide a named failure status. A snapshot
-with `complete: false` may still be in progress or may have failed.
+   curl --user "{PUBLIC-KEY}:{PRIVATE-KEY}" --digest \
+     --header "Accept: application/json" \
+     "https://{OPSMANAGER-HOST}:{PORT}/api/public/v1.0/groups/{PROJECT-ID}/clusters/{CLUSTER-ID}/snapshots?completed=false"
 
-For more information, see :opsmgr:`Get All Snapshots for One Cluster </reference/api/snapshots/get-all-snapshots-for-one-cluster/>`.
+The response includes a ``results`` array where each object represents a
+snapshot. The ``complete`` field indicates whether the snapshot finished
+successfully.
+
+**note:** The snapshot API does not provide a named failure status. A snapshot
+   with ``complete: false`` may still be in progress or may have failed.
+
+For more information, see
+:opsmgr:`Get All Snapshots for One Cluster </reference/api/snapshots/get-all-snapshots-for-one-cluster/>`.
 
 ### Check for Restore Failures
 
 Use the following methods to confirm that a restore job has failed.
 
-Check the Restores Page ```````````````````````
+### Check the Restores Page
 
 To view the status of restore jobs in the Ops Manager UI:
 
-The :guilabel:`Restores` page shows a table of the last 300 restore jobs. Check the :guilabel:`Status` column to identify jobs with the following states:
+**procedure:** :style: normal
 
-- `FAILED`
-- `CANCELED`
-- `IN_PROGRESS`
-- `FINISHED`
+   .. step:: Click :guilabel:`Deployment`.
+
+   .. step:: Click your cluster or replica set.
+
+   .. step:: Click the :guilabel:`Backup` tab.
+
+   .. step:: Click :guilabel:`Restores`.
+
+The :guilabel:`Restores` page shows a table of the last 300 restore jobs. Check
+the :guilabel:`Status` column to identify jobs with the following states:
+
+- ``FAILED``
+- ``CANCELED``
+- ``IN_PROGRESS``
+- ``FINISHED``
+
 Click a row to view more details about that specific restore operation.
 
 For more information, see :opsmgr:`Restores </admin/backup/restores-page>`.
 
-Query the API for Failed Restore Jobs ``````````````````````````````````````
+### Query the API for Failed Restore Jobs
 
 To retrieve restore jobs programmatically, query the Ops Manager API:
 
-```bash
-curl --user "{PUBLIC-KEY}:{PRIVATE-KEY}" --digest \
-  --header "Accept: application/json" \
-  "https://{OPSMANAGER-HOST}:{PORT}/api/public/v1.0/groups/{PROJECT-ID}/clusters/{CLUSTER-ID}/restoreJobs"
-```
+.. code-block:: bash
+   :copyable: true
 
-The response includes a `results` array where each object represents a restore job. The `statusName` field indicates the job state. Possible values include:
+   curl --user "{PUBLIC-KEY}:{PRIVATE-KEY}" --digest \
+     --header "Accept: application/json" \
+     "https://{OPSMANAGER-HOST}:{PORT}/api/public/v1.0/groups/{PROJECT-ID}/clusters/{CLUSTER-ID}/restoreJobs"
 
-- `FINISHED`
-- `IN_PROGRESS`
-- `BROKEN`
-- `KILLED`
-Restore jobs with a `statusName` of `BROKEN` or `KILLED` are considered failed.
+The response includes a ``results`` array where each object represents a
+restore job. The ``statusName`` field indicates the job state. Possible values
+include:
 
-To filter for failed jobs using `jq`:
+- ``FINISHED``
+- ``IN_PROGRESS``
+- ``BROKEN``
+- ``KILLED``
 
-```bash
-curl --user "{PUBLIC-KEY}:{PRIVATE-KEY}" --digest \
-  --header "Accept: application/json" \
-  "https://{OPSMANAGER-HOST}:{PORT}/api/public/v1.0/groups/{PROJECT-ID}/clusters/{CLUSTER-ID}/restoreJobs" \
-  | jq '.results[] | select(.statusName=="BROKEN" or .statusName=="KILLED")'
-```
+Restore jobs with a ``statusName`` of ``BROKEN`` or ``KILLED`` are considered
+failed.
 
-For more information, see :opsmgr:`Get All Restore Jobs for One Cluster </reference/api/restorejobs/get-all-restore-jobs-for-one-cluster/>`.
+To filter for failed jobs using ``jq``:
+
+.. code-block:: bash
+   :copyable: true
+
+   curl --user "{PUBLIC-KEY}:{PRIVATE-KEY}" --digest \
+     --header "Accept: application/json" \
+     "https://{OPSMANAGER-HOST}:{PORT}/api/public/v1.0/groups/{PROJECT-ID}/clusters/{CLUSTER-ID}/restoreJobs" \
+     | jq '.results[] | select(.statusName=="BROKEN" or .statusName=="KILLED")'
+
+For more information, see
+:opsmgr:`Get All Restore Jobs for One Cluster </reference/api/restorejobs/get-all-restore-jobs-for-one-cluster/>`.
 
 ## Common Issues and Resolutions
 
-The following sections describe common causes of backup and restore failures and how to resolve them.
+The following sections describe common causes of backup and restore failures and
+how to resolve them.
 
 ### Backup Failures
 
-The following sections describe common causes of backup failures and how to resolve them.
+The following sections describe common causes of backup failures and how to
+resolve them.
 
-Insufficient Disk Space ```````````````````````
+### Insufficient Disk Space
 
-A lack of free disk space on the replica set member nodes can cause the cluster to enter an unhealthy state, leading to backup failures.
+A lack of free disk space on the replica set member nodes can cause the
+cluster to enter an unhealthy state, leading to backup failures.
 
-To resolve this issue, increase the available storage capacity on the `dbPath` of the affected nodes. Monitor disk usage regularly to prevent recurrence.
+To resolve this issue, increase the available storage capacity on the ``dbPath``
+of the affected nodes. Monitor disk usage regularly to prevent recurrence.
 
-MongoDB Agent Is Down or Unstable ``````````````````````````````````
+### MongoDB Agent Is Down or Unstable
 
-The backup process depends on the MongoDB Agent running continuously. If the agent stops or keeps restarting, backups fail.
+The backup process depends on the MongoDB Agent running continuously. If the
+agent stops or keeps restarting, backups fail.
 
 Symptoms include:
 
 - Alerts such as "Backup oplog is behind"
 - No oplog slices received for an hour
+
 To resolve this issue:
 
-For more information, see :opsmgr:`Fix Backup Oplog Issues </reference/alerts/backup-oplog-is-behind/>`.
+**procedure:** :style: normal
 
-Agent Cannot Reach the Replica Set ```````````````````````````````````
+   .. step:: Verify that the agent process is running on the host.
 
-The backup agent must maintain a connection to the replica set. Failures can occur due to network connectivity issues, an unavailable MongoDB node, or an authentication failure.
+   .. step:: Check the agent logs.
+
+      The agent logs are typically located at:
+
+      .. code-block:: bash
+
+         /var/log/mongodb-mms-automation/backup-agent.log
+
+   .. step:: Fix any permission issues or configuration errors causing restarts.
+
+For more information, see
+:opsmgr:`Fix Backup Oplog Issues </reference/alerts/backup-oplog-is-behind/>`.
+
+### Agent Cannot Reach the Replica Set
+
+The backup agent must maintain a connection to the replica set. Failures can
+occur due to network connectivity issues, an unavailable MongoDB node, or an
+authentication failure.
 
 Symptoms in the agent logs include:
 
-- `server selection timeout`
-- `Authentication failed`
+- ``server selection timeout``
+- ``Authentication failed``
+
 To resolve this issue:
 
-For more information, see :opsmgr:`Fix Backup Oplog Issues </reference/alerts/backup-oplog-is-behind/>`.
+**procedure:** :style: normal
 
-Oplog Issues ````````````
+   .. step:: Test connectivity from the backup agent host.
 
-If the oplog is too small or the backup agent cannot keep up with write activity, the backup falls behind and eventually fails.
+      .. code-block:: bash
+         :copyable: true
+
+         mongosh "mongodb://host:port"
+
+   .. step:: Verify network access and credentials.
+
+      Confirm the following:
+
+      - Network access between the agent host and replica set members
+      - Replica set availability
+      - Backup user credentials and required roles
+
+For more information, see
+:opsmgr:`Fix Backup Oplog Issues </reference/alerts/backup-oplog-is-behind/>`.
+
+### Oplog Issues
+
+If the oplog is too small or the backup agent cannot keep up with write
+activity, the backup falls behind and eventually fails.
 
 Symptoms include the following alerts:
 
 - "Backup requires a resync"
 - "Backup oplog is behind"
+
 To resolve this issue:
 
 - Increase the oplog size so the oplog window covers enough history (a minimum
-of 24 hours is recommended).
-
+  of 24 hours is recommended).
 - If the backup has fallen too far behind, resync the backup.
-Backup Job Fails to Bind to a Backup Daemon ````````````````````````````````````````````
 
-A backup job requires a Backup Daemon with enough space to store a local copy of the backed-up replica set. If no daemon has sufficient space, the job fails to bind. To resolve this issue, add an additional Backup Daemon to increase capacity.
+### Backup Job Fails to Bind to a Backup Daemon
 
-This issue can also occur when no primary is detected in the replica set. To resolve this, ensure the replica set is healthy and has a primary before you retry the backup.
+A backup job requires a Backup Daemon with enough space to store a local
+copy of the backed-up replica set. If no daemon has sufficient space, the
+job fails to bind. To resolve this issue, add an additional Backup Daemon
+to increase capacity.
 
-For more information, see :opsmgr:`Backup FAQ </reference/faq/faq-backup/>`.
+This issue can also occur when no primary is detected in the replica set.
+To resolve this, ensure the replica set is healthy and has a primary before
+you retry the backup.
+
+For more information, see
+:opsmgr:`Backup FAQ </reference/faq/faq-backup/>`.
 
 ### Restore Failures
 
-The following sections describe common causes of restore failures and how to resolve them.
+The following sections describe common causes of restore failures and how to
+resolve them.
 
-Attempting to Restore a Single Shard in a Sharded Cluster ``````````````````````````````````````````````````````````
+### Attempting to Restore a Single Shard in a Sharded Cluster
 
-When you restore a sharded cluster, you must restore all shards. The restore process fails if you attempt to restore a single shard in isolation.
+When you restore a sharded cluster, you must restore all shards. The restore
+process fails if you attempt to restore a single shard in isolation.
 
-For more information, see :opsmgr:`Restore Limitations </tutorial/nav/restore-overview/#limitations>`.
+For more information, see
+:opsmgr:`Restore Limitations </tutorial/nav/restore-overview/#limitations>`.
 
-Mismatched Settings Between Backup and Target Database ```````````````````````````````````````````````````````
+### Mismatched Settings Between Backup and Target Database
 
-An automated restore can fail when certain storage settings of the source backup and the target database do not match. If a restore attempt fails, Ops Manager displays any mismatched settings.
+An automated restore can fail when certain storage settings of the source backup
+and the target database do not match. If a restore attempt fails, Ops Manager
+displays any mismatched settings.
 
-For a list of settings that must match, see :opsmgr:`Potential Causes for Automated Restore Failure </tutorial/nav/restore-overview/#potential-causes-for-automated-restore-failure>`.
+For a list of settings that must match, see
+:opsmgr:`Potential Causes for Automated Restore Failure </tutorial/nav/restore-overview/#potential-causes-for-automated-restore-failure>`.
 
-Oplog Gaps During Point-in-Time Restore ````````````````````````````````````````
+### Oplog Gaps During Point-in-Time Restore
 
-Point-in-time restores require a continuous oplog history. If there is a gap in the oplog, the restore fails.
+Point-in-time restores require a continuous oplog history. If there is a gap in
+the oplog, the restore fails.
 
 Common causes of oplog gaps include:
 
@@ -213,23 +354,42 @@ Common causes of oplog gaps include:
 - Cluster topology changes occurred.
 - A Feature Compatibility Version (FCV) change occurred.
 - A restore was attempted across MongoDB version changes.
+
 To resolve this issue:
 
 - Restore from the latest valid snapshot taken before the oplog gap, or
 - Wait until a new snapshot is created, then perform the restore again.
-For more information, see :opsmgr:`Restore from a Specific Point in Time </tutorial/restore-pit-snapshot-http/>`.
 
-Insufficient Disk Space on the Restore Host ````````````````````````````````````````````
+For more information, see
+:opsmgr:`Restore from a Specific Point in Time </tutorial/restore-pit-snapshot-http/>`.
 
-If the target host does not have enough storage for the snapshot files and restored database, the restore fails.
+### Insufficient Disk Space on the Restore Host
+
+If the target host does not have enough storage for the snapshot files and
+restored database, the restore fails.
 
 To resolve this issue:
 
-For more information about the `dbStats` command, see :dbcommand:`dbStats`.
+**procedure:** :style: normal
+
+   .. step:: Check the size of the database you are restoring.
+
+      .. code-block:: javascript
+         :copyable: true
+
+         db.stats()
+
+   .. step:: Ensure sufficient disk space on the target host.
+
+      Verify that the ``dbPath`` has enough free disk space to accommodate the
+      restored data before proceeding.
+
+For more information about the ``dbStats`` command, see :dbcommand:`dbStats`.
 
 ## Diagnostics to Collect for More Support
 
-If the issue persists, collect the following information before contacting `technical-support`:
+If the issue persists, collect the following information before contacting
+:ref:`technical-support`:
 
 - Complete error messages from the Ops Manager UI or API
 - Backup agent log files
@@ -237,10 +397,12 @@ If the issue persists, collect the following information before contacting `tech
 - Ops Manager version
 - Relevant MongoDB server logs
 - Output from the Restores page or API restore job query
+
 ## Related Issues
 
-- `manual-troubleshooting-replica-set-no-primary`
-- `manual-troubleshooting-replication-lag`
+- :ref:`manual-troubleshooting-replica-set-no-primary`
+- :ref:`manual-troubleshooting-replication-lag`
+
 ## Learn More
 
 - :opsmgr:`Backup Overview </core/backup-overview/>`

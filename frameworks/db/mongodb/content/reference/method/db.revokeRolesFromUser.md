@@ -1,73 +1,129 @@
 ---
 type: "Framework Learn Page"
-framework: "mongodb"
+framework: "MongoDB"
 source_repo: "https://github.com/mongodb/docs.git"
 source_branch: "main"
 source_path: "content/manual/manual/source/reference/method/db.revokeRolesFromUser.txt"
-source_commit: "ab9db26ed3d11618cdb61516d8180337d8e3f679"
-source_commit_short: "ab9db26e"
-source_commit_date: "2026-07-24T16:22:46-06:00"
-generated_at: "2026-07-25T11:51:15Z"
+source_commit: "b9f2bc487a2878b65e3c1f80024bebab76954f27"
+source_commit_short: "b9f2bc48"
+source_commit_date: "2026-08-28T17:09:45-05:00"
+generated_at: "2026-08-29T09:39:19.907350Z"
 ---
-
-=========================================
-
 # db.revokeRolesFromUser() (mongosh method)
+
+**meta:** :description: Remove roles from a user in the current database using the `db.revokeRolesFromUser()` method in MongoDB.
+
+.. default-domain:: mongodb
+
+**contents:** On this page
+   :local:
+   :backlinks: none
+   :depth: 1
+   :class: singlecol
 
 ## Definition
 
+**method:** db.revokeRolesFromUser()
+
+   Removes one or more roles from a user on the current
+   database. 
+   
+   .. |dbcommand| replace:: :dbcommand:`revokeRolesFromUser` command
+   .. include:: /includes/fact-mongosh-shell-method-alt.rst
+
+   The :method:`db.revokeRolesFromUser()` method uses the
+   following syntax:
+
+   .. code-block:: javascript
+
+      db.revokeRolesFromUser( "<username>", [ <roles> ], { <writeConcern> } )
+
+   The :method:`db.revokeRolesFromUser()` method takes the following arguments:
+
+
+   .. list-table::
+      :header-rows: 1
+      :widths: 20 20 80
+   
+      * - Parameter
+        - Type
+        - Description
+      * - ``user``
+        - string
+        - The name of the user from whom to revoke roles.
+      * - ``roles``
+        - array
+        - The roles to remove from the user.
+      * - ``writeConcern``
+        - document
+        - .. include:: /includes/fact-write-concern-spec-link.rst
+
+   .. |local-cmd-name| replace:: :method:`db.revokeRolesFromUser()`
+   .. include:: /includes/fact-roles-array-contents.rst
+
+   The :method:`db.revokeRolesFromUser()` method wraps the
+   :dbcommand:`revokeRolesFromUser` command.
+
 ## Compatibility
 
-This method is available in deployments hosted in the following environments:
+This method is available in deployments hosted in the following
+environments:
 
-.. include:: /includes/fact-environments-no-atlas-support.rst
+**include:** /includes/fact-environments-no-atlas-support.rst
 
-.. include:: /includes/fact-environments-onprem-only.rst
+**include:** /includes/fact-environments-onprem-only.rst
 
 ## Behavior
 
 ### Replica set
 
-.. include:: /includes/fact-management-methods-write-concern.rst
+.. |command| replace:: :method:`db.revokeRolesFromUser()`
+
+**include:** /includes/fact-management-methods-write-concern.rst
 
 ## Required Access
 
-.. include:: /includes/access-revoke-roles.rst
+**include:** /includes/access-revoke-roles.rst
 
 ## Example
 
-The `accountUser01` user in the `products` database has the following roles:
+The ``accountUser01`` user in the ``products`` database has the following
+roles:
 
-```javascript
-"roles" : [
-    { "role" : "assetsReader",
-      "db" : "assets"
-    },
-    { "role" : "read",
-      "db" : "stock"
-    },
-    { "role" : "readWrite",
-      "db" : "products"
-    }
-]
-```
+.. code-block:: javascript
 
-The following :method:`db.revokeRolesFromUser()` method removes the two of the user's roles: the :authrole:`read` role on the `stock` database and the :authrole:`readWrite` role on the `products` database, which is also the database on which the method runs:
+   "roles" : [
+       { "role" : "assetsReader",
+         "db" : "assets"
+       },
+       { "role" : "read",
+         "db" : "stock"
+       },
+       { "role" : "readWrite",
+         "db" : "products"
+       }
+   ]
 
-```javascript
-use products
-db.revokeRolesFromUser( "accountUser01",
-                        [ { role: "read", db: "stock" }, "readWrite" ],
-                        { w: "majority" }
-                      )
-```
+The following :method:`db.revokeRolesFromUser()` method removes the two of
+the user's roles: the :authrole:`read` role on the ``stock`` database and
+the :authrole:`readWrite` role on the ``products`` database, which is also
+the database on which the method runs:
 
-The user `accountUser01` user in the `products` database now has only one remaining role:
+.. code-block:: javascript
 
-```javascript
-"roles" : [
-    { "role" : "assetsReader",
-      "db" : "assets"
-    }
-]
-```
+   use products
+   db.revokeRolesFromUser( "accountUser01",
+                           [ { role: "read", db: "stock" }, "readWrite" ],
+                           { w: "majority" }
+                         )
+
+The user ``accountUser01`` user in the ``products`` database now has only
+one remaining role:
+
+.. code-block:: javascript
+
+   "roles" : [
+       { "role" : "assetsReader",
+         "db" : "assets"
+       }
+   ]

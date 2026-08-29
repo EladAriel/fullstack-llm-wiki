@@ -1,152 +1,203 @@
 ---
 type: "Framework Learn Page"
-framework: "mongodb"
+framework: "MongoDB"
 source_repo: "https://github.com/mongodb/docs.git"
 source_branch: "main"
 source_path: "content/manual/manual/source/tutorial/create-users.txt"
-source_commit: "ab9db26ed3d11618cdb61516d8180337d8e3f679"
-source_commit_short: "ab9db26e"
-source_commit_date: "2026-07-24T16:22:46-06:00"
-generated_at: "2026-07-25T11:51:15Z"
+source_commit: "b9f2bc487a2878b65e3c1f80024bebab76954f27"
+source_commit_short: "b9f2bc48"
+source_commit_date: "2026-08-28T17:09:45-05:00"
+generated_at: "2026-08-29T09:39:19.618412Z"
 ---
-
-=========================================
+.. _create-users:
 
 # Create a User on Self-Managed Deployments
 
-With access control enabled, users must identify themselves. Grant each user one or more `roles <roles>`. A role grants a user `privileges <privileges>` to perform certain `actions <security-user-actions>` on MongoDB `resources <resource-document>`.
+.. default-domain:: mongodb
 
-Each application and user of a MongoDB system should map to a distinct user. This principle of access isolation facilitates access revocation and ongoing user maintenance. To ensure a system of `least privilege`, only grant the minimal set of privileges required to a user.
+**facet:** :name: programming_language
+   :values: shell
 
-The user information on this page applies to self-managed deployments hosted in all of the following environments:
+**meta:** :description: Enable access control for MongoDB security. Assign users roles for specific actions. Follow the least privilege principle for user maintenance.
+   :keywords: on-prem
 
-.. include:: /includes/fact-environments-onprem-only.rst
+**contents:** On this page
+   :local:
+   :backlinks: none
+   :depth: 2
+   :class: singlecol
 
-To learn how to create database users on a MongoDB Atlas deployment, see `mongodb-users`.
+.. dismissible-skills-card::
+   :skill: Secure MongoDB Self-Managed: AuthN and AuthZ
+   :url: https://learn.mongodb.com/skills/?openTab=security
+
+With access control enabled, users must identify themselves.
+Grant each user one or more :ref:`roles <roles>`. A role grants
+a user :ref:`privileges <privileges>` to perform certain :ref:`actions
+<security-user-actions>` on MongoDB :ref:`resources
+<resource-document>`.
+
+Each application and user of a MongoDB system should map to a distinct
+user. This principle of *access isolation* facilitates access revocation
+and ongoing user maintenance. To ensure a system of :term:`least
+privilege`, only grant the minimal set of privileges required to a user.
+
+The user information on this page applies to self-managed deployments hosted in 
+all of the following environments:
+
+**include:** /includes/fact-environments-onprem-only.rst
+
+To learn how to create database users on a MongoDB Atlas deployment,
+see :ref:`mongodb-users`.
+
+.. _add-user-prereq:
 
 ## Prerequisites
 
 To be able to create users, you need to:
 
-- `enable access control <enable-access-control>`
-- `create a user administrator <create-user-admin>`
+- :ref:`enable access control <enable-access-control>`
+- :ref:`create a user administrator <create-user-admin>`
+
 For routine user creation, you must possess the following permissions:
 
-.. include:: /includes/access-create-user.rst
+**include:** /includes/access-create-user.rst
+
+.. _create-user-procedure:
 
 ## Steps
 
-> **Note:** The following procedures use `authentication-scram`
-authentication. For information on other authentication
-mechanisms, see `create-users-examples`.
+**note:** The following procedures use :ref:`authentication-scram`
+   authentication. For information on other authentication
+   mechanisms, see :ref:`create-users-examples`.
 
-To configure database users for your self-managed MongoDB Enterprise or MongoDB Community deployment, follow these steps:
+To configure database users for your self-managed MongoDB Enterprise 
+or MongoDB Community deployment, follow these steps:
 
-.. include:: /includes/steps/authorization-create-users.rst
+**include:** /includes/steps/authorization-create-users.rst
 
-> **Seealso:** `/tutorial/manage-users-and-roles`
+**seealso:** :doc:`/tutorial/manage-users-and-roles`
+
+.. _create-users-examples:
+.. _add-new-user:
 
 ## Additional Examples
 
 ### Username/Password Authentication
 
-The following operation creates a user in the `reporting` database with the specified name, password, and roles.
+The following operation creates a user in the ``reporting``
+database with the specified name, password, and roles.
 
-> **Tip:** .. include:: /includes/extracts/mongosh-password-prompt.rst
+**tip:** .. include:: /includes/extracts/mongosh-password-prompt.rst
 
-```javascript
-use reporting
-db.createUser(
-  {
-    user: "reportsUser",
-    pwd: passwordPrompt(),  // or cleartext password
-    roles: [
-       { role: "read", db: "reporting" },
-       { role: "read", db: "products" },
-       { role: "read", db: "sales" },
-       { role: "readWrite", db: "accounts" }
-    ]
-  }
-)
-```
+.. code-block:: javascript
+
+   use reporting
+   db.createUser(
+     {
+       user: "reportsUser",
+       pwd: passwordPrompt(),  // or cleartext password
+       roles: [
+          { role: "read", db: "reporting" },
+          { role: "read", db: "products" },
+          { role: "read", db: "sales" },
+          { role: "readWrite", db: "accounts" }
+       ]
+     }
+   )
 
 ### Kerberos Authentication
 
-.. include:: /includes/extracts/create-user-intro-kerberos.rst
+**include:** /includes/extracts/create-user-intro-kerberos.rst
 
-For Kerberos authentication, you must add the Kerberos principal as the username. You do not need to specify a password.
+For Kerberos authentication, you must add the Kerberos principal as the
+username. You do not need to specify a password.
 
-The following operation adds the Kerberos principal `reportingapp@EXAMPLE.NET` with read-only access to the `records` database:
+The following operation adds the Kerberos principal
+``reportingapp@EXAMPLE.NET`` with read-only access to the ``records``
+database:
 
-```javascript
-use $external
-db.createUser(
-    {
-      user: "reportingapp@EXAMPLE.NET",
-      roles: [
-         { role: "read", db: "records" }
-      ]
-    }
-)
-```
+.. code-block:: javascript
 
-> **Seealso:** For more information about setting up Kerberos authentication for
-your MongoDB deployment, see the following tutorials:
-- `/tutorial/control-access-to-mongodb-with-kerberos-authentication`
-- `/tutorial/control-access-to-mongodb-windows-with-kerberos-authentication`
+   use $external
+   db.createUser(
+       {
+         user: "reportingapp@EXAMPLE.NET",
+         roles: [
+            { role: "read", db: "records" }
+         ]
+       }
+   )
+
+**seealso:** For more information about setting up Kerberos authentication for
+   your MongoDB deployment, see the following tutorials:
+
+   - :doc:`/tutorial/control-access-to-mongodb-with-kerberos-authentication`
+   - :doc:`/tutorial/control-access-to-mongodb-windows-with-kerberos-authentication`
 
 ### LDAP Authentication
 
-.. include:: /includes/LDAP-deprecated.rst
+**include:** /includes/LDAP-deprecated.rst
+   
+**include:** /includes/extracts/create-user-intro-ldap.rst
 
-.. include:: /includes/extracts/create-user-intro-ldap.rst
+For LDAP authentication, you must specify a username. You do not need
+to specify the password, as that is handled by the LDAP service.
 
-For LDAP authentication, you must specify a username. You do not need to specify the password, as that is handled by the LDAP service.
+The following operation adds the ``reporting`` user with read-only
+access to the ``records`` database:
 
-The following operation adds the `reporting` user with read-only access to the `records` database:
+.. code-block:: javascript
 
-```javascript
-use $external
-db.createUser(
-    {
-      user: "reporting",
-      roles: [
-         { role: "read", db: "records" }
-      ]
-    }
-)
-```
+   use $external
+   db.createUser(
+       {
+         user: "reporting",
+         roles: [
+            { role: "read", db: "records" }
+         ]
+       }
+   )
 
-> **Seealso:** For more information about setting up LDAP authentication for
-your MongoDB deployment, see the following tutorials:
-- `/tutorial/configure-ldap-sasl-activedirectory`
-- `/tutorial/configure-ldap-sasl-openldap`
+**seealso:** For more information about setting up LDAP authentication for
+   your MongoDB deployment, see the following tutorials:
+
+   - :doc:`/tutorial/configure-ldap-sasl-activedirectory`
+   - :doc:`/tutorial/configure-ldap-sasl-openldap`
 
 ### X.509 Client Certificate Authentication
 
-.. include:: /includes/extracts/create-user-intro-x509.rst
+**include:** /includes/extracts/create-user-intro-x509.rst
 
-For X.509 Client Certificate authentication, you must add the value of the `subject` from the client certificate as a MongoDB user. Each unique X.509 client certificate corresponds to a single MongoDB user. You do not need to specify a password.
+For X.509 Client Certificate authentication, you must add the value of
+the ``subject`` from the client certificate as a MongoDB user. Each
+unique X.509 client certificate corresponds to a single MongoDB user.
+You do not need to specify a password.
 
-The following operation adds the client certificate subject `CN=myName,OU=myOrgUnit,O=myOrg,L=myLocality,ST=myState,C=myCountry` user with read-only access to the `records` database.
+The following operation adds the client certificate subject
+``CN=myName,OU=myOrgUnit,O=myOrg,L=myLocality,ST=myState,C=myCountry``
+user with read-only access to the ``records`` database.
 
-```javascript
-use $external
-db.createUser(
-    {
-      user: "CN=myName,OU=myOrgUnit,O=myOrg,L=myLocality,ST=myState,C=myCountry",
-      roles: [
-         { role: "read", db: "records" }
-      ]
-    }
-)
-```
+.. code-block:: javascript
 
-> **Seealso:** For more information about setting up X.509 Client Certificate
-authentication for your MongoDB deployment, see the following
-tutorials:
-- `/tutorial/configure-x509-client-authentication`
+   use $external
+   db.createUser(
+       {
+         user: "CN=myName,OU=myOrgUnit,O=myOrg,L=myLocality,ST=myState,C=myCountry",
+         roles: [
+            { role: "read", db: "records" }
+         ]
+       }
+   )
+
+**seealso:** For more information about setting up X.509 Client Certificate
+   authentication for your MongoDB deployment, see the following
+   tutorials:
+
+   - :doc:`/tutorial/configure-x509-client-authentication`
 
 ## Next Steps
 
-To manage users, assign roles, and create custom roles for your self-managed MongoDB Enterprise or MongoDB Community deployment, see `/tutorial/manage-users-and-roles`.
+To manage users, assign roles, and create custom roles for your
+self-managed MongoDB Enterprise or MongoDB Community deployment, 
+see :doc:`/tutorial/manage-users-and-roles`.

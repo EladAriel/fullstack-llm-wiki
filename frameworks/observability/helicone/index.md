@@ -1,6 +1,6 @@
-# helicone Learn Wiki
+# Helicone Learn Wiki
 
-This is a local LLM-friendly wiki generated from the official helicone documentation.
+This is a local LLM-friendly wiki generated from the official Helicone documentation.
 
 ## Status
 
@@ -8,9 +8,10 @@ This is a local LLM-friendly wiki generated from the official helicone documenta
 - Source repo: `https://github.com/Helicone/helicone.git`
 - Source branch: `main`
 - Source docs path: `docs`
-- Source commit: `67df07b`
-- Source commit date: `2026-07-21T05:35:38-07:00`
-- Wiki generated at: `2026-07-25T19:08:22.284647Z`
+- Source commit: `607c855`
+- Source commit date: `2026-08-25T19:59:29-04:00`
+- Wiki generated at: `2026-08-29T09:39:42.370183Z`
+- Page count: `442`
 
 ## How the IDE LLM should use this wiki
 
@@ -29,3 +30,17 @@ This is a local LLM-friendly wiki generated from the official helicone documenta
 ## Top-Level Wiki Areas
 
 - [Content Index](content/index.md)
+- [Community](content/community/index.md)
+- [External](content/external/index.md)
+- [Faq](content/faq/index.md)
+- [Features](content/features/index.md)
+- [Gateway](content/gateway/index.md)
+- [Getting Started](content/getting-started/index.md)
+- [Graphql](content/graphql/index.md)
+- [Guides](content/guides/index.md)
+- [Helicone Headers](content/helicone-headers/index.md)
+- [Integrations](content/integrations/index.md)
+- [Other Integrations](content/other-integrations/index.md)
+- [References](content/references/index.md)
+- [Rest](content/rest/index.md)
+- [Tools](content/tools/index.md)

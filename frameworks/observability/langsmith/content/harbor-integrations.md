@@ -4,10 +4,10 @@ framework: "LangSmith"
 source_repo: "https://github.com/langchain-ai/docs.git"
 source_branch: "main"
 source_path: "src/langsmith/harbor-integrations.mdx"
-source_commit: "2aae1dfc98ee953a9a5185fb6fcdd9efb3f4d878"
-source_commit_short: "2aae1df"
-source_commit_date: "2026-07-25T00:27:23+00:00"
-generated_at: "2026-07-25T19:08:33.401457Z"
+source_commit: "a174f9cf7c91ee5eb14ee2382eb48bfe6e4956e9"
+source_commit_short: "a174f9c"
+source_commit_date: "2026-08-28T17:04:12-07:00"
+generated_at: "2026-08-29T09:39:50.649980Z"
 ---
 # Harbor Integrations
 
@@ -15,6 +15,8 @@ generated_at: "2026-07-25T19:08:33.401457Z"
 title: Harbor integrations
 description: Run evaluations, Deep Agents, and sandboxes on LangSmith with Harbor.
 ---
+
+import LangsmithEndpointValues from '/snippets/langsmith/langsmith-endpoint-values.mdx';
 
 Use LangSmith to run, trace, compare, and cost agent evaluations from one place, with [Harbor](https://harborframework.com/docs) as the execution layer. Harbor is a framework for evaluating and optimizing agents and language models in sandboxed environments, from the creators of [Terminal-Bench](https://www.tbench.ai). It runs each trial in an isolated container, so you can parallelize evaluations and rollouts across many environments at once.
 
@@ -29,7 +31,7 @@ This page covers the LangSmith-specific Harbor flags. For the complete CLI, run 
 ## Prerequisites
 
 - A [LangSmith account](https://smith.langchain.com) and an [API key](/langsmith/create-account-api-key).
-- Python with `pip`.
+- Python 3.12 or later with `pip`.
 - A provider API key for the model your agent calls, such as `ANTHROPIC_API_KEY`.
 
 ### Install
@@ -42,11 +44,14 @@ pip install "harbor[langsmith]"
 
 ### Authenticate
 
-Harbor authenticates with your LangSmith credentials. Set an API key:
+Harbor authenticates with your LangSmith credentials. Set an API key and the endpoint that key belongs to:
 
 ```bash
 export LANGSMITH_API_KEY="<LANGSMITH_API_KEY>"
+export LANGSMITH_ENDPOINT="<LANGSMITH_ENDPOINT>"
 ```
+
+<LangsmithEndpointValues />
 
 Alternatively, select a [LangSmith SDK profile](/langsmith/profile-configuration) instead of exporting a key:
 
@@ -294,6 +299,7 @@ harbor run -d "<org/name>" \
 
 ## See also
 
+- [Evaluate Managed Deep Agents](/langsmith/managed-deep-agents-evals)
 - [Deep Agents documentation](/oss/deepagents/overview)
 - [Datasets & Experiments](/langsmith/manage-datasets)
 - [Analyze an experiment](/langsmith/analyze-an-experiment)

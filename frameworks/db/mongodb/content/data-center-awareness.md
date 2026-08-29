@@ -1,37 +1,68 @@
 ---
 type: "Framework Learn Page"
-framework: "mongodb"
+framework: "MongoDB"
 source_repo: "https://github.com/mongodb/docs.git"
 source_branch: "main"
 source_path: "content/manual/manual/source/data-center-awareness.txt"
-source_commit: "ab9db26ed3d11618cdb61516d8180337d8e3f679"
-source_commit_short: "ab9db26e"
-source_commit_date: "2026-07-24T16:22:46-06:00"
-generated_at: "2026-07-25T11:51:15Z"
+source_commit: "b9f2bc487a2878b65e3c1f80024bebab76954f27"
+source_commit_short: "b9f2bc48"
+source_commit_date: "2026-08-28T17:09:45-05:00"
+generated_at: "2026-08-29T09:39:19.474477Z"
 ---
-
-=====================
+.. _data-center-awareness:
 
 # Data Center Awareness
 
-MongoDB provides a number of features that allow application developers and database administrators to customize the behavior of a `sharded cluster` or `replica set` deployment so that MongoDB may be more "data center aware," or allow operational and location-based separation.
+**meta:** :description: Customize MongoDB deployments for data center awareness and workload isolation using zones and operational separation.
 
-MongoDB also supports workload isolation based on functional parameters, to ensure that certain :binary:`~bin.mongod` instances are only used for reporting workloads or that certain high-frequency portions of a sharded collection only exist on specific shards.
+.. default-domain:: mongodb
 
-The following documents, found either in this section or other sections of this manual, provide information on customizing a deployment for operation- and location-based separation:
+**contents:** On this page
+   :local:
+   :backlinks: none
+   :depth: 1
+   :class: singlecol
 
-`/core/workload-isolation` MongoDB lets you specify that certain application operations use certain :binary:`~bin.mongod` instances.
+MongoDB provides a number of features that allow application
+developers and database administrators to customize the behavior of a
+:term:`sharded cluster` or :term:`replica set` deployment so that
+MongoDB may be *more* "data center aware," or allow operational
+and location-based separation.
 
-`/core/zone-sharding` A zone represents one or more ranges of shard key values for a sharded collection. MongoDB routes reads and writes for sharded data covered by a zone only to shards inside that zone. For use in managing data distribution and deployment patterns.
+MongoDB also supports workload isolation based on functional parameters, to ensure
+that certain :binary:`~bin.mongod` instances are only used for reporting workloads
+or that certain high-frequency portions of a sharded collection only exist on
+specific shards.
 
-`/tutorial/manage-shard-zone` Administrative tasks related to configuring zones in sharded clusters
+The following documents, *found either in this section or other sections
+of this manual*, provide information on customizing a deployment for
+operation- and location-based separation:
+
+:doc:`/core/workload-isolation`
+   MongoDB lets you specify that certain application operations use
+   certain :binary:`~bin.mongod` instances.
+
+:doc:`/core/zone-sharding`
+   A zone represents one or more ranges of shard key values for a
+   sharded collection. MongoDB routes reads and writes for sharded
+   data covered by a zone only to shards inside that zone. For use in
+   managing data distribution and deployment patterns.
+
+:doc:`/tutorial/manage-shard-zone`
+   Administrative tasks related to configuring zones in sharded
+   clusters
+
+
 
 ## Further Reading
 
-- The `/reference/write-concern` and `/core/read-preference`
-documents, which address capabilities related to data center awareness.
+- The :doc:`/reference/write-concern` and :doc:`/core/read-preference`
+  documents, which address capabilities related to data center
+  awareness.
 
-- `/tutorial/deploy-geographically-distributed-replica-set`.
-## Contents
+- :doc:`/tutorial/deploy-geographically-distributed-replica-set`.
 
-- Workload Isolation </core/workload-isolation>
+**toctree:** :titlesonly:
+   :hidden:
+
+   Workload Isolation </core/workload-isolation>

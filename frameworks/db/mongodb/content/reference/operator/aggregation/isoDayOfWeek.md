@@ -1,58 +1,152 @@
 ---
 type: "Framework Learn Page"
-framework: "mongodb"
+framework: "MongoDB"
 source_repo: "https://github.com/mongodb/docs.git"
 source_branch: "main"
 source_path: "content/manual/manual/source/reference/operator/aggregation/isoDayOfWeek.txt"
-source_commit: "ab9db26ed3d11618cdb61516d8180337d8e3f679"
-source_commit_short: "ab9db26e"
-source_commit_date: "2026-07-24T16:22:46-06:00"
-generated_at: "2026-07-25T11:51:15Z"
+source_commit: "b9f2bc487a2878b65e3c1f80024bebab76954f27"
+source_commit_short: "b9f2bc48"
+source_commit_date: "2026-08-28T17:09:45-05:00"
+generated_at: "2026-08-29T09:39:20.124784Z"
 ---
-
-===================================
-
 # $isoDayOfWeek (expression operator)
+
+**meta:** :description: Use `$isoDayOfWeek` to return the weekday number in ISO 8601 format, ranging from 1 (Monday) to 7 (Sunday), for a given date expression.
+
+.. default-domain:: mongodb
+
+**contents:** On this page
+   :local:
+   :backlinks: none
+   :depth: 1
+   :class: singlecol
 
 ## Definition
 
+**expression:** $isoDayOfWeek
+
+   Returns the weekday number in ISO 8601 format, ranging from
+   ``1`` (for Monday) to ``7`` (for Sunday).
+
+   The :expression:`$isoDayOfWeek` expression has the following
+   :ref:`operator expression syntax <aggregation-expressions>`:
+
+   .. code-block:: javascript
+
+      { $isoDayOfWeek: <dateExpression> }
+
+   .. include:: /includes/fact-iso-date-objects.rst
+
 ## Behavior
 
-> **Note:**
+.. list-table::
+   :header-rows: 1
+   :widths: 90 10
+   :class: border-table
+
+   * - Example
+     - Result
+
+   * - .. code-block:: javascript
+          :copyable: false
+
+          { $isoDayOfWeek: new Date("2016-01-01") }
+
+     - 5
+
+   * - .. code-block:: javascript
+          :copyable: false
+
+          { $isoDayOfWeek: { date: new Date("Jan 7, 2003") } }
+
+     - 2
+
+   * - .. code-block:: javascript
+          :copyable: false
+
+          { $isoDayOfWeek: {
+              date: new Date("August 14, 2011"),
+              timezone: "America/Chicago"
+          } }
+
+     - 7
+
+   * - .. code-block:: javascript
+          :copyable: false
+
+          { $isoDayOfWeek: ISODate("1998-11-07T00:00:00Z") }
+
+     - 6
+
+   * - .. code-block:: javascript
+          :copyable: false
+
+          { $isoDayOfWeek: {
+              date: ISODate("1998-11-07T00:00:00Z"),
+              timezone: "-0400"
+          } }
+
+     - 5
+
+   * - .. code-block:: javascript
+          :copyable: false
+
+          { $isoDayOfWeek: "March 28, 1976" }
+
+     - ``error``
+
+   * - .. code-block:: javascript
+          :copyable: false
+
+          { $isoDayOfWeek: Date("2016-01-01") }
+
+     - ``error``
+
+   * - .. code-block:: javascript
+          :copyable: false
+
+          { $isoDayOfWeek: "2009-04-09" }
+
+     - ``error``
+
+**note:** ``$isoDayOfWeek`` cannot take a string as an argument.
 
 ## Example
 
-A collection called `birthdays` contains the following documents:
+A collection called ``birthdays`` contains the following documents:
 
-```javascript
-db.birthdays.insertMany( [
-   { _id: 1, name: "Betty", birthday: ISODate("1993-09-21T00:00:00Z") },
-   { _id: 2, name: "Veronica", birthday: ISODate("1981-11-07T00:00:00Z") }
-] )
-```
 
-The following operation returns the weekday number for each `birthday` field.
+.. code-block:: javascript
 
-```javascript
-db.birthdays.aggregate( [
-  {
-    $project: {
-      _id: 0,
-      name: "$name",
-      dayOfWeek: { $isoDayOfWeek: "$birthday" }
-    }
-  }
-] )
-```
+   db.birthdays.insertMany( [
+      { _id: 1, name: "Betty", birthday: ISODate("1993-09-21T00:00:00Z") },
+      { _id: 2, name: "Veronica", birthday: ISODate("1981-11-07T00:00:00Z") }
+   ] )
+
+The following operation returns the weekday number for each
+``birthday`` field.
+
+
+.. code-block:: javascript
+
+   db.birthdays.aggregate( [
+     {
+       $project: {
+         _id: 0,
+         name: "$name",
+         dayOfWeek: { $isoDayOfWeek: "$birthday" }
+       }
+     }
+   ] )
 
 The operation returns the following results:
 
-```javascript
-[
-   { name: "Betty", dayOfWeek: 2 },
-   { name: "Veronica", dayOfWeek: 6 }
-]
-```
+.. code-block:: javascript
 
-> **Seealso:** - `/reference/operator/aggregation/isoWeekYear`
-- `/reference/operator/aggregation/isoWeek`
+   [
+      { name: "Betty", dayOfWeek: 2 },
+      { name: "Veronica", dayOfWeek: 6 }
+   ]
+
+**seealso:** - :doc:`/reference/operator/aggregation/isoWeekYear`
+   - :doc:`/reference/operator/aggregation/isoWeek`

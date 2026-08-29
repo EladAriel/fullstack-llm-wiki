@@ -1,75 +1,104 @@
 ---
 type: "Framework Learn Page"
-framework: "mongodb"
+framework: "MongoDB"
 source_repo: "https://github.com/mongodb/docs.git"
 source_branch: "main"
 source_path: "content/manual/manual/source/core/queryable-encryption/fundamentals/keys-key-vaults.txt"
-source_commit: "ab9db26ed3d11618cdb61516d8180337d8e3f679"
-source_commit_short: "ab9db26e"
-source_commit_date: "2026-07-24T16:22:46-06:00"
-generated_at: "2026-07-25T11:51:15Z"
+source_commit: "b9f2bc487a2878b65e3c1f80024bebab76954f27"
+source_commit_short: "b9f2bc48"
+source_commit_date: "2026-08-28T17:09:45-05:00"
+generated_at: "2026-08-29T09:39:19.821839Z"
 ---
-
-==============================
+.. _qe-reference-keys-key-vaults:
 
 # Encryption Keys and Key Vaults
 
+**meta:** :description: Learn about encryption keys, key vaults, and key management systems in MongoDB, including how to manage Data Encryption Keys and Customer Master Keys.
+
+.. default-domain:: mongodb
+
+**contents:** On this page
+   :local:
+   :backlinks: none
+   :depth: 2
+   :class: singlecol
+
 ## Overview
 
-In this guide, you can learn details about the following components of {+in-use-encryption+}:
+In this guide, you can learn details about the following components of
+{+in-use-encryption+}:
 
 - {+dek-long+}s ({+dek-abbr+})s
 - {+cmk-long+}s ({+cmk-abbr+})s
 - {+key-vault-long+}s
 - {+kms-long+} ({+kms-abbr+})
-To view step by step guides demonstrating how to use the preceding components to set up a {+qe+} or {+csfle+} enabled client, see the following resources:
 
-- `{+qe+} Quick Start <qe-quick-start>`
+To view step by step guides demonstrating how to use the preceding
+components to set up a {+qe+} or {+csfle+} enabled client, see the
+following resources:
+
+- :ref:`{+qe+} Quick Start <qe-quick-start>` 
 - :ref:`{+qe+} Automatic Encryption Tutorial
-<qe-tutorial-automatic-encryption>`
+  <qe-tutorial-automatic-encryption>`
+- :ref:`{+csfle-abbrev+} Quick Start <csfle-quick-start>`
+- :ref:`{+csfle-abbrev+} Automatic Encryption Tutorial <csfle-tutorial-automatic-encryption>`
 
-- `{+csfle-abbrev+} Quick Start <csfle-quick-start>`
-- `{+csfle-abbrev+} Automatic Encryption Tutorial <csfle-tutorial-automatic-encryption>`
 ## Data Encryption Keys and the Customer Master Key
 
-.. include:: /includes/queryable-encryption/qe-csfle-about-dek-cmk-keys.rst
+**include:** /includes/queryable-encryption/qe-csfle-about-dek-cmk-keys.rst
 
-.. include:: /includes/queryable-encryption/qe-csfle-warning-remote-kms.rst
+**include:** /includes/queryable-encryption/qe-csfle-warning-remote-kms.rst
+
+.. _qe-key-rotation:
 
 ### Key Rotation
 
-.. include:: /includes/queryable-encryption/qe-csfle-key-rotation.rst
+**include:** /includes/queryable-encryption/qe-csfle-key-rotation.rst
 
-For details on rotating keys, see `Rotate Encryption Keys <qe-fundamentals-manage-keys>`.
+For details on rotating keys, see :ref:`Rotate Encryption Keys <qe-fundamentals-manage-keys>`.
+
+.. _qe-reference-key-vault:
 
 ## {+key-vault-long-title+}s
 
-.. include:: /includes/queryable-encryption/qe-csfle-about-key-vault-collections.rst
+**include:** /includes/queryable-encryption/qe-csfle-about-key-vault-collections.rst
 
-To view diagrams detailing how your {+dek-abbr+}, {+cmk-abbr+}, and {+key-vault-long+} interact in all supported {+kms-abbr+} provider architectures, see `qe-fundamentals-kms-providers`.
+To view diagrams detailing how your {+dek-abbr+}, {+cmk-abbr+}, and {+key-vault-long+} interact
+in all supported {+kms-abbr+} provider architectures, see
+:ref:`qe-fundamentals-kms-providers`.
 
 ### {+key-vault-long+} Name
 
-.. include:: /includes/fact-csfle-qe-keyvault-name.rst
+**include:** /includes/fact-csfle-qe-keyvault-name.rst
 
 ### Permissions
 
-.. include:: /includes/queryable-encryption/qe-csfle-key-vault-permissions.rst
+**include:** /includes/queryable-encryption/qe-csfle-key-vault-permissions.rst
 
-To learn how to grant your application access to your {+cmk-long+}, see the `{+qe+} Automatic Encryption Tutorial <qe-tutorial-automatic-encryption>` or `{+csfle-abbrev+} Automatic Encryption Tutorial <csfle-tutorial-automatic-encryption>`.
+To learn how to grant your application access to your {+cmk-long+}, see the
+:ref:`{+qe+} Automatic Encryption Tutorial
+<qe-tutorial-automatic-encryption>` or :ref:`{+csfle-abbrev+}
+Automatic Encryption Tutorial <csfle-tutorial-automatic-encryption>`.
 
 ### Key Vault Cluster
 
-.. include:: /includes/queryable-encryption/qe-csfle-key-vault-cluster.rst
+**include:** /includes/queryable-encryption/qe-csfle-key-vault-cluster.rst
 
-To specify the cluster that hosts your {+key-vault-long+}, use the `keyVaultClient` field of your client's `MongoClient` object. To learn more about the specific configuration options in your client's `MongoClient` object, see the `MongoClient Options for {+qe+} <qe-reference-mongo-client>` or `MongoClient Options for {+csfle-abbrev+} <csfle-reference-mongo-client>`.
+To specify the cluster that hosts your {+key-vault-long+}, use the
+``keyVaultClient`` field of your client's ``MongoClient`` object.
+To learn more about the specific configuration options in your
+client's ``MongoClient`` object, see the :ref:`MongoClient Options for
+{+qe+} <qe-reference-mongo-client>` or :ref:`MongoClient Options for
+{+csfle-abbrev+} <csfle-reference-mongo-client>`.
 
 ### Update a {+key-vault-long-title+}
 
-.. include:: /includes/in-use-encryption/update-a-key.rst
+**include:** /includes/in-use-encryption/update-a-key.rst
 
-To view a tutorial that shows how to create a {+dek-long+}, see the `{+qe+} Quick Start <qe-quick-start>` or the `{+csfle-abbrev+} Quick Start <csfle-local-create-dek>`.
+To view a tutorial that shows how to create a {+dek-long+}, see
+the :ref:`{+qe+} Quick Start <qe-quick-start>` or the
+:ref:`{+csfle-abbrev+} Quick Start <csfle-local-create-dek>`.
 
-## Contents
+**toctree:** :titlesonly:
 
-- KMS Providers </core/queryable-encryption/fundamentals/kms-providers>
+   KMS Providers </core/queryable-encryption/fundamentals/kms-providers>

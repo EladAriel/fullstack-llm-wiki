@@ -1,44 +1,70 @@
 ---
 type: "Framework Learn Page"
-framework: "mongodb"
+framework: "MongoDB"
 source_repo: "https://github.com/mongodb/docs.git"
 source_branch: "main"
 source_path: "content/manual/manual/source/administration/replica-set-deployment.txt"
-source_commit: "ab9db26ed3d11618cdb61516d8180337d8e3f679"
-source_commit_short: "ab9db26e"
-source_commit_date: "2026-07-24T16:22:46-06:00"
-generated_at: "2026-07-25T11:51:15Z"
+source_commit: "b9f2bc487a2878b65e3c1f80024bebab76954f27"
+source_commit_short: "b9f2bc48"
+source_commit_date: "2026-08-28T17:09:45-05:00"
+generated_at: "2026-08-29T09:39:19.764411Z"
 ---
+.. _server-replica-set-deploy-all:
 
-=============================================
+**meta:** :keywords: on-prem
+   :description: Explore tutorials on deploying and managing self-managed replica sets, including configuration and member adjustments.
 
 # Self-Managed Replica Set Deployment Tutorials
 
+.. default-domain:: mongodb
+
+**contents:** On this page
+   :local:
+   :backlinks: none
+   :depth: 1
+   :class: singlecol
+
 The following tutorials provide information on deploying replica sets.
 
-`server-replica-set-deploy` Configure a three-member replica set for production systems.
+:ref:`server-replica-set-deploy`
+   Configure a three-member replica set for production systems.
 
-`server-replica-set-deploy-test` Configure a three-member replica set for either development or testing systems.
+:ref:`server-replica-set-deploy-test`
+   Configure a three-member replica set for either development or
+   testing systems.
 
-`server-replica-set-deploy-geo` Create a geographically redundant replica set to protect against location-centered availability limitations (e.g. network and power interruptions).
+:ref:`server-replica-set-deploy-geo`
+   Create a geographically redundant replica set to protect against
+   location-centered availability limitations (e.g. network and power
+   interruptions).
 
-`server-replica-set-deploy-arbiter` Add an arbiter to give a replica set an odd number of voting members to prevent election ties.
+:ref:`server-replica-set-deploy-arbiter`
+   Add an arbiter to give a replica set an odd number of voting
+   members to prevent election ties.
 
-`server-replica-set-deploy-convert` Convert an existing standalone `mongod` instance into a three-member replica set.
+:ref:`server-replica-set-deploy-convert`
+   Convert an existing standalone ``mongod`` instance into a
+   three-member replica set.
 
-`server-replica-set-deploy-expand` Add a new member to an existing replica set.
+:ref:`server-replica-set-deploy-expand`
+   Add a new member to an existing replica set.
 
-`server-replica-set-remove-member` Remove a member from a replica set.
+:ref:`server-replica-set-remove-member`
+   Remove a member from a replica set.
 
-`server-replica-set-replace-member` Update the replica set configuration when the hostname of a member's corresponding `mongod` instance has changed.
+:ref:`server-replica-set-replace-member`
+   Update the replica set configuration when the hostname of a
+   member's corresponding ``mongod`` instance has changed.
 
-## Contents
 
-- Replica Set </tutorial/deploy-replica-set>
-- Convert to Replica Set </tutorial/convert-standalone-to-replica-set>
-- Add Members </tutorial/expand-replica-set>
-- Add an Arbiter </tutorial/add-replica-set-arbiter>
-- Remove Members </tutorial/remove-replica-set-member>
-- Replace a Member </tutorial/replace-replica-set-member>
-- Test & Development Replica Sets </tutorial/deploy-replica-set-for-testing>
-- Geographically Redundant Replica Sets </tutorial/deploy-geographically-distributed-replica-set>
+**toctree:** :titlesonly: 
+   :hidden: 
+
+   Replica Set </tutorial/deploy-replica-set>
+   Convert to Replica Set </tutorial/convert-standalone-to-replica-set>
+   Add Members </tutorial/expand-replica-set>
+   Add an Arbiter </tutorial/add-replica-set-arbiter>
+   Remove Members </tutorial/remove-replica-set-member>
+   Replace a Member </tutorial/replace-replica-set-member>
+   Test & Development Replica Sets </tutorial/deploy-replica-set-for-testing>
+   Geographically Redundant Replica Sets </tutorial/deploy-geographically-distributed-replica-set>

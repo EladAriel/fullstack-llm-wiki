@@ -1,82 +1,193 @@
 ---
 type: "Framework Learn Page"
-framework: "postgres"
+framework: "PostgreSQL"
 source_repo: "https://github.com/postgres/postgres.git"
 source_branch: "master"
 source_path: "doc/src/sgml/func/func-uuid.sgml"
-source_commit: "38afc3dcb25c45b744d4025029ce0a6c90b7059f"
-source_commit_short: "38afc3dc"
-source_commit_date: "2026-07-25T19:08:27+09:00"
-generated_at: "2026-07-25T11:50:59Z"
+source_commit: "6c5f1d6074208146930b67c2054509c3e82f6f7f"
+source_commit_short: "6c5f1d6"
+source_commit_date: "2026-08-28T23:24:47+02:00"
+generated_at: "2026-08-29T09:39:24.501487Z"
 ---
+# UUID Functions
 
-## UUID Functions
+  
+   UUID
+   generating
+  
 
-UUID
-generating
+  
+   gen_random_uuid
+  
 
-gen_random_uuid
+  
+   uuidv4
+  
 
-uuidv4
+  
+   uuidv7
+  
 
-uuidv7
+  
+   uuid_extract_timestamp
+  
 
-uuid_extract_timestamp
+  
+   uuid_extract_version
+  
 
-uuid_extract_version
+  
+    shows the PostgreSQL
+   functions that can be used to generate UUIDs.
+  
 
-`func_uuid_gen_table` shows the PostgreSQL functions that can be used to generate UUIDs.
+  
+   UUID Generation Functions
+   
+    
+     
+      
+        Function
+       
+       
+        Description
+        
+       
+        Example(s)
+       
+     
+    
 
-## UUID Generation Functions
+    
+     
+      
+        gen_random_uuid ( )
+        uuid
+       
+       
+        uuidv4 ( )
+        uuid
+       
+       
+        Generates a version 4 (random) UUID
+       
+       
+        gen_random_uuid()
+        5b30857f-0bfa-48b5-ac0b-5c64e28078d1
+       
+       
+        uuidv4()
+        b42410ee-132f-42ee-9e4f-09a6485c95b8
+       
+     
+     
+      
+        uuidv7
+        (  shift interval  )
+        uuid
+       
+       
+        Generates a version 7 (time-ordered) UUID. The timestamp is
+        computed using UNIX timestamp with millisecond precision +
+        sub-millisecond timestamp + random. The optional
+        parameter shift will shift the computed
+        timestamp by the given interval.
+        Infinite interval values are not accepted.
+        The shifted timestamp must fall within the range supported by
+        UUID version 7's 48-bit millisecond timestamp field: from
+        1970-01-01 00:00:00 UTC to approximately year 10889.
+        An error is raised if the resulting timestamp is outside this
+        range.
+       
+       
+        uuidv7()
+        019535d9-3df7-79fb-b466-fa907fa17f9e
+       
+     
+    
+   
+  
 
-Function
+  
+   
+    The  module provides additional functions that
+    implement other standard algorithms for generating UUIDs.
+   
+  
 
-Description
+  
+    shows the PostgreSQL
+   functions that can be used to extract information from UUIDs.
+  
 
-Example(s)
+  
+   UUID Extraction Functions
+   
+    
+     
+      
+        Function
+       
+       
+        Description
+       
+       
+        Example(s)
+       
+     
+    
 
-`gen_random_uuid` ( ) uuid
+    
+     
+      
+        uuid_extract_timestamp
+        ( uuid )
+        timestamp with time zone
+       
+       
+        Extracts a timestamp with time zone from a UUID of
+        version 1, 6, or 7.  For other versions, this function returns null.
+        Note that the extracted timestamp is not necessarily exactly equal
+        to the time the UUID was generated; this depends on the
+        implementation that generated the UUID.
+       
+       
+        uuid_extract_timestamp('019535d9-3df7-79fb-b466-&zwsp;fa907fa17f9e'::uuid)
+         2025-02-23 21:46:24.503-05
+       
+     
+     
+      
+        uuid_extract_version
+        ( uuid )
+        smallint
+       
+       
+        Extracts the version from a UUID of one of the variants described by
+        RFC
+        9562.  For other variants, this function returns null.
+        For example, for a UUID generated
+        by gen_random_uuid(), this function will
+        return 4.
+       
+       
+        uuid_extract_version('41db1265-8bc1-4ab3-992f-&zwsp;885799a4af1d'::uuid)
+        4
+       
+       
+        uuid_extract_version('019535d9-3df7-79fb-b466-&zwsp;fa907fa17f9e'::uuid)
+        7
+       
+     
+    
+   
+  
 
-`uuidv4` ( ) uuid
-
-Generates a version 4 (random) UUID
-
-`gen_random_uuid()` 5b30857f-0bfa-48b5-ac0b-5c64e28078d1
-
-`uuidv4()` b42410ee-132f-42ee-9e4f-09a6485c95b8
-
-`uuidv7` ( `shift` `interval` ) uuid
-
-Generates a version 7 (time-ordered) UUID. The timestamp is computed using UNIX timestamp with millisecond precision + sub-millisecond timestamp + random. The optional parameter `shift` will shift the computed timestamp by the given `interval`. Infinite interval values are not accepted. The shifted timestamp must fall within the range supported by UUID version 7's 48-bit millisecond timestamp field: from 1970-01-01 00:00:00 UTC to approximately year 10889. An error is raised if the resulting timestamp is outside this range.
-
-`uuidv7()` 019535d9-3df7-79fb-b466-fa907fa17f9e
-
-The `uuid-ossp` module provides additional functions that implement other standard algorithms for generating UUIDs.
-
-`func_uuid_extract_table` shows the PostgreSQL functions that can be used to extract information from UUIDs.
-
-## UUID Extraction Functions
-
-Function
-
-Description
-
-Example(s)
-
-`uuid_extract_timestamp` ( `uuid` ) timestamp with time zone
-
-Extracts a `timestamp with time zone` from a UUID of version 1 or 7. For other versions, this function returns null. Note that the extracted timestamp is not necessarily exactly equal to the time the UUID was generated; this depends on the implementation that generated the UUID.
-
-`uuid_extract_timestamp('019535d9-3df7-79fb-b466-zwspfa907fa17f9e'::uuid)` 2025-02-23 21:46:24.503-05
-
-`uuid_extract_version` ( `uuid` ) smallint
-
-Extracts the version from a UUID of one of the variants described by [RFC 9562](https://datatracker.ietf.org/doc/html/rfc9562). For other variants, this function returns null. For example, for a UUID generated by `gen_random_uuid()`, this function will return 4.
-
-`uuid_extract_version('41db1265-8bc1-4ab3-992f-zwsp885799a4af1d'::uuid)` 4
-
-`uuid_extract_version('019535d9-3df7-79fb-b466-zwspfa907fa17f9e'::uuid)` 7
-
-PostgreSQL also provides the usual comparison operators shown in `functions-comparison-op-table` for UUIDs.
-
-See `datatype-uuid` for details on the data type `uuid` in PostgreSQL.
+  
+   PostgreSQL also provides the usual comparison
+   operators shown in  for
+   UUIDs.
+  
+  
+   See  for details on the data type
+   uuid in PostgreSQL.

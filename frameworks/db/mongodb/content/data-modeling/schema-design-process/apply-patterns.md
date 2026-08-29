@@ -1,97 +1,128 @@
 ---
 type: "Framework Learn Page"
-framework: "mongodb"
+framework: "MongoDB"
 source_repo: "https://github.com/mongodb/docs.git"
 source_branch: "main"
 source_path: "content/manual/manual/source/data-modeling/schema-design-process/apply-patterns.txt"
-source_commit: "ab9db26ed3d11618cdb61516d8180337d8e3f679"
-source_commit_short: "ab9db26e"
-source_commit_date: "2026-07-24T16:22:46-06:00"
-generated_at: "2026-07-25T11:51:15Z"
+source_commit: "b9f2bc487a2878b65e3c1f80024bebab76954f27"
+source_commit_short: "b9f2bc48"
+source_commit_date: "2026-08-28T17:09:45-05:00"
+generated_at: "2026-08-29T09:39:20.293988Z"
 ---
-
-=====================
+.. _data-modeling-apply-patterns:
 
 # Apply Design Patterns
 
-Schema design patterns are ways to optimize your data model for your application's access patterns. They improve application performance and reduce schema complexity. Schema design patterns affect how your data is stored and what data is returned to your application.
+**meta:** :description: Optimize your data model using schema design patterns to enhance application performance and reduce complexity.
 
-For a list of schema design patterns and examples, see the [Building with Patterns](https://www.mongodb.com/blog/post/building-with-patterns-a-summary)_ MongoDB blog series.
+.. default-domain:: mongodb
+
+**contents:** On this page
+   :local:
+   :backlinks: none
+   :depth: 2
+   :class: singlecol
+
+Schema design patterns are ways to optimize your data model for your
+application's access patterns. They improve application performance and
+reduce schema complexity. Schema design patterns affect how your data is
+stored and what data is returned to your application. 
+
+For a list of schema design patterns and examples, see the `Building
+with Patterns
+<https://www.mongodb.com/blog/post/building-with-patterns-a-summary>`__
+MongoDB blog series.
 
 ## About this Task
 
-Before you implement schema design patterns, consider the problem that you are trying to solve. Each schema design pattern has different use cases and tradeoffs for data consistency, performance, and complexity.
+Before you implement schema design patterns, consider the problem that
+you are trying to solve. Each schema design pattern has different use
+cases and tradeoffs for data consistency, performance, and complexity.
 
-Implementing a pattern without understanding your application and the data it needs can degrade application performance and cause unnecessary complications.
+Implementing a pattern without understanding your application and the
+data it needs can degrade application performance and cause unnecessary
+complications.
 
 ## Example
 
-Consider the following example patterns used by a movie theater franchise:
+Consider the following example patterns used by a movie theater
+franchise:
 
-- The schema contains a `movie` collection and a `theater`
-collection. The schema uses the `subset pattern <group-data-subset-pattern>` to duplicate a subset of information from the `movie` collection in the `theater` collection. The subset pattern reduces the size of documents returned to the application and improves read performance.
+- The schema contains a ``movie`` collection and a ``theater``
+  collection. The schema uses the :ref:`subset pattern
+  <group-data-subset-pattern>`
+  to duplicate a subset of information from the ``movie`` collection in
+  the ``theater`` collection. The subset pattern reduces the size of
+  documents returned to the application and improves read performance.
 
-- The `movie` collection contains a `total_views` field, which uses
-the `computed pattern <model-computed-data>` to calculate a running total of the number of times that customers view a movie across all of the theaters where the movie is shown.
+- The ``movie`` collection contains a ``total_views`` field, which uses
+  the :ref:`computed pattern <model-computed-data>` to calculate a
+  running total of the number of times that customers view a movie
+  across all of the theaters where the movie is shown.
 
 ### movie Collection
 
-```javascript
-db.movie.insertOne(
-  {
-    _id: 1,
-    title: "Titanic",
-    year: 1997,
-    director: "James Cameron",
-    runtime: 194,
-    distributor: "Paramount Pictures",
-    languages: [ "English" ],
-    total_views: 3500
-  }
-)
-```
+.. code-block:: javascript
+   :emphasize-lines: 10
+
+   db.movie.insertOne(
+     {
+       _id: 1,
+       title: "Titanic",
+       year: 1997,
+       director: "James Cameron",
+       runtime: 194,
+       distributor: "Paramount Pictures",
+       languages: [ "English" ],
+       total_views: 3500
+     }
+   )
 
 ### theater Collection
 
-```javascript
-db.theater.insertMany(
-  [
-    {
-      name: "Downtown Cinemas",
-      address: {
-        street: "2212 Taylor Street",
-        state: "NY"
-      },
-      movies: [
-        {
-           movie_id: 1,
-           title: "Titanic",
-           runtime: 194,
-           views: 1500
-        }
-      ]
-    },
-    {
-      name: "Midtown Theater",
-      address: {
-        street: "1232 5th Street",
-        state: "NY"
-      },
-      movies: [
-        {
-           movie_id: 1,
-           title: "Titanic",
-           runtime: 194,
-           views: 2000
-        }
-      ]
-    }
-  ]
-)
-```
+.. code-block:: javascript
+   :emphasize-lines: 14,29
+
+   db.theater.insertMany(
+     [
+       {
+         name: "Downtown Cinemas",
+         address: {
+           street: "2212 Taylor Street",
+           state: "NY"
+         },
+         movies: [
+           {
+              movie_id: 1,
+              title: "Titanic",
+              runtime: 194,
+              views: 1500
+           }
+         ]
+       },
+       {
+         name: "Midtown Theater",
+         address: {
+           street: "1232 5th Street",
+           state: "NY"
+         },
+         movies: [
+           {
+              movie_id: 1,
+              title: "Titanic",
+              runtime: 194,
+              views: 2000
+           }
+         ]
+       }
+     ]
+   )
+  
 
 ## Learn More
 
-- `data-models-application-context`
-- `data-modeling-duplicate-data`
-- `data-modeling-data-consistency`
+- :ref:`data-models-application-context`
+
+- :ref:`data-modeling-duplicate-data`
+
+- :ref:`data-modeling-data-consistency`

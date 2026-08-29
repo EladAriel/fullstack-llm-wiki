@@ -1,14 +1,15 @@
 ---
 type: "Framework Learn Page"
-framework: "redis"
+framework: "Redis"
 source_repo: "https://github.com/redis/docs.git"
 source_branch: "main"
 source_path: "content/develop/reference/clients.md"
-source_commit: "9d30f68c3dad1a6b3b7d30fe604b911348ce8152"
-source_commit_short: "9d30f68c"
-source_commit_date: "2026-07-24T10:52:10-07:00"
-generated_at: "2026-07-25T11:51:22Z"
+source_commit: "f8693349287b0efbef3c865b6f6a2aceca88594d"
+source_commit_short: "f869334"
+source_commit_date: "2026-08-28T10:01:19-05:00"
+generated_at: "2026-08-29T09:38:55.804176Z"
 ---
+# Clients
 
 ---
 categories:
@@ -211,7 +212,7 @@ In the above example two clients are connected to the Redis server. Let's look a
 * **omem**: The amount of memory used by the client for the output buffer.
 * **cmd**: The last executed command.
 
-See the [[`CLIENT LIST`]({{< relref "/commands/client-list" >}})](/commands/client-list) documentation for the full listing of fields and their purpose.
+See the [`CLIENT LIST`]({{< relref "/commands/client-list" >}}) documentation for the full listing of fields and their purpose.
 
 Once you have the list of clients, you can close a client's connection using the [`CLIENT KILL`]({{< relref "/commands/client-kill" >}}) command, specifying the client address as its argument.
 

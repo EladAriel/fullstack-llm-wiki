@@ -1,14 +1,15 @@
 ---
 type: "Framework Learn Page"
-framework: "nextjs"
+framework: "Next.js"
 source_repo: "https://github.com/vercel/next.js/"
 source_branch: "canary"
 source_path: "docs/01-app/03-api-reference/04-functions/cacheTag.mdx"
-source_commit: "dcf242a17b5d4622bbd9624db531a9d84177619f"
-source_commit_short: "dcf242a1"
-source_commit_date: "2026-07-25T10:16:19+02:00"
-generated_at: "2026-07-25T11:50:53Z"
+source_commit: "33a5d542e519fe4e05c8c8c2c2845da9f741699b"
+source_commit_short: "33a5d542"
+source_commit_date: "2026-08-29T00:04:45-07:00"
+generated_at: "2026-08-29T09:40:24.280915Z"
 ---
+# Cachetag
 
 ---
 title: cacheTag
@@ -45,7 +46,7 @@ const nextConfig = {
   cacheComponents: true,
 }
 
-export default nextConfig
+module.exports = nextConfig
 ```
 
 The `cacheTag` function takes one or more string values.
@@ -56,7 +57,8 @@ import { cacheTag } from 'next/cache'
 export async function getData() {
   'use cache'
   cacheTag('my-data')
-  const data = await fetch('/api/data')
+  const res = await fetch('https://api.example.com/data')
+  const data = await res.json()
   return data
 }
 ```
@@ -67,7 +69,8 @@ import { cacheTag } from 'next/cache'
 export async function getData() {
   'use cache'
   cacheTag('my-data')
-  const data = await fetch('/api/data')
+  const res = await fetch('https://api.example.com/data')
+  const data = await res.json()
   return data
 }
 ```
@@ -130,7 +133,10 @@ export async function Bookings({ type = 'haircut' }: BookingsProps) {
   cacheTag('bookings-data')
 
   async function getBookingsData() {
-    const data = await fetch(`/api/bookings?type=${encodeURIComponent(type)}`)
+    const response = await fetch(
+      `https://api.example.com/bookings?type=${encodeURIComponent(type)}`
+    )
+    const data = await response.json()
     return data
   }
 
@@ -146,7 +152,10 @@ export async function Bookings({ type = 'haircut' }) {
   cacheTag('bookings-data')
 
   async function getBookingsData() {
-    const data = await fetch(`/api/bookings?type=${encodeURIComponent(type)}`)
+    const response = await fetch(
+      `https://api.example.com/bookings?type=${encodeURIComponent(type)}`
+    )
+    const data = await response.json()
     return data
   }
 
@@ -168,7 +177,10 @@ interface BookingsProps {
 export async function Bookings({ type = 'haircut' }: BookingsProps) {
   async function getBookingsData() {
     'use cache'
-    const data = await fetch(`/api/bookings?type=${encodeURIComponent(type)}`)
+    const response = await fetch(
+      `https://api.example.com/bookings?type=${encodeURIComponent(type)}`
+    )
+    const data = await response.json()
     cacheTag('bookings-data', data.id)
     return data
   }
@@ -182,7 +194,10 @@ import { cacheTag } from 'next/cache'
 export async function Bookings({ type = 'haircut' }) {
   async function getBookingsData() {
     'use cache'
-    const data = await fetch(`/api/bookings?type=${encodeURIComponent(type)}`)
+    const response = await fetch(
+      `https://api.example.com/bookings?type=${encodeURIComponent(type)}`
+    )
+    const data = await response.json()
     cacheTag('bookings-data', data.id)
     return data
   }

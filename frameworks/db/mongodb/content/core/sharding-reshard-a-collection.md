@@ -1,75 +1,113 @@
 ---
 type: "Framework Learn Page"
-framework: "mongodb"
+framework: "MongoDB"
 source_repo: "https://github.com/mongodb/docs.git"
 source_branch: "main"
 source_path: "content/manual/manual/source/core/sharding-reshard-a-collection.txt"
-source_commit: "ab9db26ed3d11618cdb61516d8180337d8e3f679"
-source_commit_short: "ab9db26e"
-source_commit_date: "2026-07-24T16:22:46-06:00"
-generated_at: "2026-07-25T11:51:15Z"
+source_commit: "b9f2bc487a2878b65e3c1f80024bebab76954f27"
+source_commit_short: "b9f2bc48"
+source_commit_date: "2026-08-28T17:09:45-05:00"
+generated_at: "2026-08-29T09:39:19.532105Z"
 ---
-
-====================
+.. _sharding-resharding:
 
 # Reshard a Collection
 
-The ideal shard key allows MongoDB to distribute documents evenly throughout the cluster while facilitating common query patterns. A suboptimal shard key can lead to performance or scaling issues due to uneven data distribution. You can change the shard key for a collection to change the distribution of your data across a cluster.
+**meta:** :description: Change or redistribute shard keys in MongoDB collections to optimize data distribution and performance.
 
-Starting in MongoDB 8.0, you can reshard a collection on the same shard key, allowing you to redistribute data to include new shards or to different zones without changing your shard key. To reshard to the same shard key, set `forceRedistribution <forceRedistribution-field>` to `true`.
+.. default-domain:: mongodb
 
-.. include:: /includes/time-series/reshard-timeseries.rst
+**contents:** On this page
+   :local:
+   :backlinks: none
+   :depth: 3
+   :class: singlecol
 
-> **Note:** Before resharding your collection, read
-`shardkey-troubleshoot-shard-keys` for information on common
-performance and scaling issues and advice on how to fix them.
+**facet:** :name: genre
+   :values: tutorial
+
+
+The ideal shard key allows MongoDB to distribute documents evenly
+throughout the cluster while facilitating common query patterns. A
+suboptimal shard key can lead to performance or scaling issues due to
+uneven data distribution. You can change the shard key for a collection to
+change the distribution of your data across a cluster.
+
+Starting in MongoDB 8.0, you can reshard a collection on the same shard key,
+allowing you to redistribute data to include new shards or to different zones
+without changing your shard key. To reshard to the same shard key, set 
+:ref:`forceRedistribution <forceRedistribution-field>` to ``true``.
+
+**include:** /includes/time-series/reshard-timeseries.rst
+
+**note:** Before resharding your collection, read
+   :ref:`shardkey-troubleshoot-shard-keys` for information on common
+   performance and scaling issues and advice on how to fix them.
+
+.. _resharding-limitations:
 
 ## About this Task
 
-.. include:: /includes/sharding/resharding-limitations.rst
+**include:** /includes/sharding/resharding-limitations.rst
+
+.. _reshard-requirements:
 
 ## Before you Begin
 
-.. include:: /includes/fact-reshard-considerations.rst
+.. |operation| replace:: resharding
+.. |op| replace:: reshard
+**include:** /includes/fact-reshard-considerations.rst
 
 - You must rewrite your application's queries to use **both** the
-current shard key and the new shard key.
+  current shard key and the new shard key.
 
-> **Tip:**   If your application can tolerate downtime, you can perform these
-  steps to avoid rewriting your application's queries to use both the
-  current and new shard keys:
-  #. Stop your application.
-  #. Rewrite your application to use the **new** shard key.
-  #. Wait until the resharding operation completes. To
-     monitor the resharding process, use the
-     :pipeline:`$currentOp` pipeline stage.
-  #. Deploy your rewritten application.
-Before the resharding operation completes, the following
-queries return an error if the query filter does not include
-either the current shard key or a unique field (like `_id`):
-- :method:`~db.collection.deleteOne()`
-- :method:`~db.collection.findAndModify()`
-- :method:`~db.collection.findOneAndDelete()`
-- :method:`~db.collection.findOneAndReplace()`
-- :method:`~db.collection.findOneAndUpdate()`
-- :method:`~db.collection.replaceOne()`
-- :method:`~db.collection.updateOne()`
-For optimal performance, we recommend that you also rewrite other
-queries to include the new shard key.
-Once the resharding operation completes, you can remove the
-old shard key from the queries.
+  .. tip::
 
-.. include:: /includes/resharding-oplog-note.rst
+     If your application can tolerate downtime, you can perform these
+     steps to avoid rewriting your application's queries to use both the
+     current and new shard keys:
+     
+     #. Stop your application.
+     
+     #. Rewrite your application to use the **new** shard key.
+
+     #. Wait until the resharding operation completes. To
+        monitor the resharding process, use the
+        :pipeline:`$currentOp` pipeline stage.
+     
+     #. Deploy your rewritten application.
+
+  Before the resharding operation completes, the following
+  queries return an error if the query filter does not include
+  either the current shard key or a unique field (like ``_id``):
+
+  - :method:`~db.collection.deleteOne()`
+  - :method:`~db.collection.findAndModify()`
+  - :method:`~db.collection.findOneAndDelete()`
+  - :method:`~db.collection.findOneAndReplace()`
+  - :method:`~db.collection.findOneAndUpdate()`
+  - :method:`~db.collection.replaceOne()`
+  - :method:`~db.collection.updateOne()`
+
+  For optimal performance, we recommend that you also rewrite other
+  queries to include the new shard key.
+
+  Once the resharding operation completes, you can remove the
+  old shard key from the queries.
+
+**include:** /includes/resharding-oplog-note.rst
+
+.. _resharding_process:
 
 ## Steps
 
-> **Important:** We strongly recommend that you check the
-`resharding-limitations` and read the `resharding_process`
-section in full before resharding your collection.
+**important:** We strongly recommend that you check the
+   :ref:`resharding-limitations` and read the :ref:`resharding_process`
+   section in full before resharding your collection.
 
-.. include:: /includes/reshard-collection-introduction.rst
+**include:** /includes/reshard-collection-introduction.rst
 
-.. include:: /includes/steps/reshard-a-collection.rst
+**include:** /includes/steps/reshard-a-collection.rst
 
 ## Behavior
 
@@ -79,14 +117,22 @@ The minimum duration of a resharding operation is always 5 minutes.
 
 ### Retryable Writes
 
-`Retryable writes <retryable-writes>` initiated before or during resharding can be retried during and after the collection has been resharded for up to 5 minutes. After 5 minutes you may be unable to find the definitive result of the write and subsequent attempts to retry the write fail with an `IncompleteTransactionHistory` error.
+:ref:`Retryable writes <retryable-writes>` initiated before or during
+resharding can be retried during and after the collection has been
+resharded for up to 5 minutes. After 5 minutes you may be unable to find
+the definitive result of the write and subsequent attempts to retry the
+write fail with an ``IncompleteTransactionHistory`` error.
 
 ### Reshard Limitations
 
-.. include:: /includes/fact-reshard-limitations.rst
+**include:** /includes/fact-reshard-limitations.rst
 
 ## Error Case
 
-### Duplicate `_id` Values
+### Duplicate ``_id`` Values
 
-The resharding operation fails if `_id values are not globally unique to avoid corrupting collection data. Duplicate id values can also prevent successful chunk migration. If you have documents with duplicate id` values, copy the data from each into a new document, and then delete the duplicate documents.
+The resharding operation fails if ``_id`` values are not globally unique
+to avoid corrupting collection data. Duplicate ``_id`` values can also
+prevent successful chunk migration. If you have documents with duplicate
+``_id`` values, copy the data from each into a new document, and then
+delete the duplicate documents.

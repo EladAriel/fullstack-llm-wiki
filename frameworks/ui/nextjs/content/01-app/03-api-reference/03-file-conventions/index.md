@@ -1,34 +1,22 @@
 ---
 type: "Framework Learn Directory Index"
-framework: "nextjs"
-directory: "content/01-app/03-api-reference/03-file-conventions"
-source_repo: "https://github.com/vercel/next.js/"
-source_branch: "canary"
-source_commit: "dcf242a17b5d4622bbd9624db531a9d84177619f"
-source_commit_short: "dcf242a1"
-source_commit_date: "2026-07-25T10:16:19+02:00"
-generated_at: "2026-07-25T11:50:53Z"
+framework: "Next.js"
+generated_at: "2026-08-29T09:40:24.348132Z"
 ---
-# 03 File Conventions
+# 03-File-Conventions
 
-This directory contains nextjs learning pages related to 03 file conventions.
+This directory contains Next.js learning pages related to 03-file-conventions.
 
 ## Breadcrumbs
 
-[Wiki Home](../../../../index.md) -> [Content](../../../index.md) -> [01 App](../../index.md) -> [03 Api Reference](../index.md) -> [03 File Conventions](index.md)
+[Wiki Home](../index.md) -> [Content](index.md)
 
 ## Navigation
 
-- Parent: [Parent Index](../index.md)
-
-## Child Directories
-
-- [01 Metadata](01-metadata/index.md) - pages related to 01 metadata
-- [02 Route Segment Config](02-route-segment-config/index.md) - pages related to 02 route segment config
+- Wiki Home: [Root Index](../index.md)
 
 ## Pages in This Directory
 
-- [Original Source Index](_source_index.md)
 - [Default](default.md)
 - [Dynamic Routes](dynamic-routes.md)
 - [Error](error.md)
@@ -51,10 +39,7 @@ This directory contains nextjs learning pages related to 03 file conventions.
 - [Template](template.md)
 - [Unauthorized](unauthorized.md)
 
-## IDE LLM Guidance
+## Subdirectories
 
-When answering implementation questions related to this directory:
-
-1. Prefer the most specific page listed above.
-2. If the topic is broad, read the child directory index first.
-3. Use source metadata from each page when giving answers.
+- [01 Metadata](01-metadata/index.md)
+- [02 Route Segment Config](02-route-segment-config/index.md)

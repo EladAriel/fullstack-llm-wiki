@@ -1,140 +1,168 @@
 ---
 type: "Framework Learn Page"
-framework: "mongodb"
+framework: "MongoDB"
 source_repo: "https://github.com/mongodb/docs.git"
 source_branch: "main"
 source_path: "content/manual/manual/source/reference/operator/aggregation/addToSet.txt"
-source_commit: "ab9db26ed3d11618cdb61516d8180337d8e3f679"
-source_commit_short: "ab9db26e"
-source_commit_date: "2026-07-24T16:22:46-06:00"
-generated_at: "2026-07-25T11:51:15Z"
+source_commit: "b9f2bc487a2878b65e3c1f80024bebab76954f27"
+source_commit_short: "b9f2bc48"
+source_commit_date: "2026-08-28T17:09:45-05:00"
+generated_at: "2026-08-29T09:39:20.144064Z"
 ---
-
-================================
-
 # $addToSet (accumulator operator)
+
+**meta:** :description: Use `$addToSet` in aggregation to return an array of unique values from an expression applied to each document in a group.
+
+.. default-domain:: mongodb
+
+**contents:** On this page
+   :local:
+   :backlinks: none
+   :depth: 1
+   :class: singlecol
 
 ## Definition
 
-.. versionchanged:: 5.0
+**versionchanged:** 5.0
 
-:group:`$addToSet` returns an array of all unique values that results from applying an `expression <aggregation-expressions>` to each document in a group.
+**group:** $addToSet
+
+:group:`$addToSet` returns an array of all *unique* values that
+results from applying an :ref:`expression <aggregation-expressions>`
+to each document in a group.
 
 The order of the elements in the returned array is unspecified.
 
-.. include:: /includes/extracts/fact-aggregation-accumulator-addToSet.rst
+**include:** /includes/extracts/fact-aggregation-accumulator-addToSet.rst
 
 ## Syntax
 
 :group:`$addToSet` syntax:
 
-```none
-{ $addToSet: <expression> }
-```
+.. code-block:: none
+   :copyable: false
 
-For more information on expressions, see `aggregation-expressions`.
+   { $addToSet: <expression> }
+
+For more information on expressions, see :ref:`aggregation-expressions`.
 
 ## Behavior
 
-If the value of the expression is an array, :group:`$addToSet` appends the whole array as a single element.
+If the value of the expression is an array, :group:`$addToSet` appends
+the whole array as a *single* element.
 
-If the value of the expression is a document, MongoDB determines that the document is a duplicate if another document in the array matches the to-be-added document exactly. Specifically, the existing document has the exact same fields and values in the exact same order.
+If the value of the expression is a document, MongoDB determines that
+the document is a duplicate if another document in the array matches the
+to-be-added document exactly. Specifically, the existing document has
+the exact same fields and values in the exact same order.
 
 ## Examples
 
-### Use in `$group` Stage
+### Use in ``$group`` Stage
 
-Consider a `sales` collection with the following documents:
+Consider a ``sales`` collection with the following documents:
 
-```javascript
-db.sales.insertMany( [
-   { _id : 1, "item" : "abc", "price" : 10, "quantity" : 2, "date" : ISODate("2014-01-01T08:00:00Z") },
-   { _id : 2, "item" : "jkl", "price" : 20, "quantity" : 1, "date" : ISODate("2014-02-03T09:00:00Z") },
-   { _id : 3, "item" : "xyz", "price" : 5, "quantity" : 5, "date" : ISODate("2014-02-03T09:05:00Z") },
-   { _id : 4, "item" : "abc", "price" : 10, "quantity" : 10, "date" : ISODate("2014-02-15T08:00:00Z") },
-   { _id : 5, "item" : "xyz", "price" : 5, "quantity" : 10, "date" : ISODate("2014-02-15T09:12:00Z") }
-] )
-```
+.. code-block:: javascript
+   :copyable: true
 
-Grouping the documents by the day and the year of the `date` field, the following operation uses the :group:`$addToSet` accumulator to compute the list of unique items sold for each group:
+   db.sales.insertMany( [
+      { _id : 1, "item" : "abc", "price" : 10, "quantity" : 2, "date" : ISODate("2014-01-01T08:00:00Z") },
+      { _id : 2, "item" : "jkl", "price" : 20, "quantity" : 1, "date" : ISODate("2014-02-03T09:00:00Z") },
+      { _id : 3, "item" : "xyz", "price" : 5, "quantity" : 5, "date" : ISODate("2014-02-03T09:05:00Z") },
+      { _id : 4, "item" : "abc", "price" : 10, "quantity" : 10, "date" : ISODate("2014-02-15T08:00:00Z") },
+      { _id : 5, "item" : "xyz", "price" : 5, "quantity" : 10, "date" : ISODate("2014-02-15T09:12:00Z") }
+   ] )
 
-```javascript
-db.sales.aggregate(
-   [
-     {
-       $group:
-         {
-           _id: { day: { $dayOfYear: "$date"}, year: { $year: "$date" } },
-           itemsSold: { $addToSet: "$item" }
-         }
-     }
-   ]
-)
-```
+Grouping the documents by the day and the year of the ``date`` field,
+the following operation uses the :group:`$addToSet` accumulator to
+compute the list of unique items sold for each group:
+
+.. code-block:: javascript
+
+   db.sales.aggregate(
+      [
+        {
+          $group:
+            {
+              _id: { day: { $dayOfYear: "$date"}, year: { $year: "$date" } },
+              itemsSold: { $addToSet: "$item" }
+            }
+        }
+      ]
+   )
 
 The operation returns the following results:
 
-```javascript
-{ "_id" : { "day" : 46, "year" : 2014 }, "itemsSold" : [ "xyz", "abc" ] }
-{ "_id" : { "day" : 34, "year" : 2014 }, "itemsSold" : [ "xyz", "jkl" ] }
-{ "_id" : { "day" : 1, "year" : 2014 }, "itemsSold" : [ "abc" ] }
-```
+.. code-block:: javascript
+   :copyable: false
 
-### Use in `$setWindowFields` Stage
+   { "_id" : { "day" : 46, "year" : 2014 }, "itemsSold" : [ "xyz", "abc" ] }
+   { "_id" : { "day" : 34, "year" : 2014 }, "itemsSold" : [ "xyz", "jkl" ] }
+   { "_id" : { "day" : 1, "year" : 2014 }, "itemsSold" : [ "abc" ] }
 
-.. versionadded:: 5.0
+### Use in ``$setWindowFields`` Stage
 
-.. include:: /includes/setWindowFields-example-collection.rst
+**versionadded:** 5.0
 
-This example uses :group:`$addToSet` in the :pipeline:`$setWindowFields` stage to output the unique cake `type` sales for each `state`:
+**include:** /includes/setWindowFields-example-collection.rst
 
-```javascript
-db.cakeSales.aggregate( [
-   {
-      $setWindowFields: {
-         partitionBy: "$state",
-         sortBy: { orderDate: 1 },
-         output: {
-            cakeTypesForState: {
-               $addToSet: "$type",
-               window: {
-                  documents: [ "unbounded", "current" ]
+This example uses :group:`$addToSet` in the :pipeline:`$setWindowFields`
+stage to output the unique cake ``type`` sales for each ``state``:
+
+.. code-block:: javascript
+
+   db.cakeSales.aggregate( [
+      {
+         $setWindowFields: {
+            partitionBy: "$state",
+            sortBy: { orderDate: 1 },
+            output: {
+               cakeTypesForState: {
+                  $addToSet: "$type",
+                  window: {
+                     documents: [ "unbounded", "current" ]
+                  }
                }
             }
          }
       }
-   }
-] )
-```
+   ] )
 
 In the example:
 
-.. include:: /includes/setWindowFields-partition-sort-date.rst
+**include:** /includes/setWindowFields-partition-sort-date.rst
 
-- `output` adds each unique cake `type` to the `cakeTypesForState`
-array field using :group:`$addToSet` that is run in a `documents <setWindowFields-documents>` window.
+- ``output`` adds each unique cake ``type`` to the ``cakeTypesForState``
+  array field using :group:`$addToSet` that is run in a :ref:`documents
+  <setWindowFields-documents>` window.
 
-The `window <setWindowFields-window>` contains documents between an `unbounded` lower limit and the `current` document. This means :group:`$addToSet` returns an array containing the unique cake `type` fields for the documents between the beginning of the partition and the current document.
+  The :ref:`window <setWindowFields-window>` contains documents between
+  an ``unbounded`` lower limit and the ``current`` document. This means
+  :group:`$addToSet` returns an array containing the unique cake
+  ``type`` fields for the documents between the beginning of the
+  partition and the current document.
 
-In this example output, the cake `type` array for `CA` and `WA` is shown in the `cakeTypesForState` field:
+In this example output, the cake ``type`` array for ``CA`` and ``WA`` is
+shown in the ``cakeTypesForState`` field:
 
-```javascript
-{ "_id" : 4, "type" : "strawberry", "orderDate" : ISODate("2019-05-18T16:09:01Z"),
-  "state" : "CA", "price" : 41, "quantity" : 162,
-  "cakeTypesForState" : [ "strawberry" ] }
-{ "_id" : 0, "type" : "chocolate", "orderDate" : ISODate("2020-05-18T14:10:30Z"),
-  "state" : "CA", "price" : 13, "quantity" : 120,
-  "cakeTypesForState" : [ "strawberry", "chocolate" ] }
-{ "_id" : 2, "type" : "vanilla", "orderDate" : ISODate("2021-01-11T06:31:15Z"),
-  "state" : "CA", "price" : 12, "quantity" : 145,
-  "cakeTypesForState" : [ "strawberry", "vanilla", "chocolate" ] }
-{ "_id" : 5, "type" : "strawberry", "orderDate" : ISODate("2019-01-08T06:12:03Z"),
-  "state" : "WA", "price" : 43, "quantity" : 134,
-  "cakeTypesForState" : [ "strawberry" ] }
-{ "_id" : 3, "type" : "vanilla", "orderDate" : ISODate("2020-02-08T13:13:23Z"),
-  "state" : "WA", "price" : 13, "quantity" : 104,
-  "cakeTypesForState" : [ "vanilla", "strawberry" ] }
-{ "_id" : 1, "type" : "chocolate", "orderDate" : ISODate("2021-03-20T11:30:05Z"),
-  "state" : "WA", "price" : 14, "quantity" : 140,
-  "cakeTypesForState" : [ "vanilla", "chocolate", "strawberry" ] }
-```
+.. code-block:: javascript
+   :copyable: false
+
+   { "_id" : 4, "type" : "strawberry", "orderDate" : ISODate("2019-05-18T16:09:01Z"),
+     "state" : "CA", "price" : 41, "quantity" : 162,
+     "cakeTypesForState" : [ "strawberry" ] }
+   { "_id" : 0, "type" : "chocolate", "orderDate" : ISODate("2020-05-18T14:10:30Z"),
+     "state" : "CA", "price" : 13, "quantity" : 120,
+     "cakeTypesForState" : [ "strawberry", "chocolate" ] }
+   { "_id" : 2, "type" : "vanilla", "orderDate" : ISODate("2021-01-11T06:31:15Z"),
+     "state" : "CA", "price" : 12, "quantity" : 145,
+     "cakeTypesForState" : [ "strawberry", "vanilla", "chocolate" ] }
+   { "_id" : 5, "type" : "strawberry", "orderDate" : ISODate("2019-01-08T06:12:03Z"),
+     "state" : "WA", "price" : 43, "quantity" : 134,
+     "cakeTypesForState" : [ "strawberry" ] }
+   { "_id" : 3, "type" : "vanilla", "orderDate" : ISODate("2020-02-08T13:13:23Z"),
+     "state" : "WA", "price" : 13, "quantity" : 104,
+     "cakeTypesForState" : [ "vanilla", "strawberry" ] }
+   { "_id" : 1, "type" : "chocolate", "orderDate" : ISODate("2021-03-20T11:30:05Z"),
+     "state" : "WA", "price" : 14, "quantity" : 140,
+     "cakeTypesForState" : [ "vanilla", "chocolate", "strawberry" ] }

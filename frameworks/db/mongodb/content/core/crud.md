@@ -1,45 +1,56 @@
 ---
 type: "Framework Learn Page"
-framework: "mongodb"
+framework: "MongoDB"
 source_repo: "https://github.com/mongodb/docs.git"
 source_branch: "main"
 source_path: "content/manual/manual/source/core/crud.txt"
-source_commit: "ab9db26ed3d11618cdb61516d8180337d8e3f679"
-source_commit_short: "ab9db26e"
-source_commit_date: "2026-07-24T16:22:46-06:00"
-generated_at: "2026-07-25T11:51:15Z"
+source_commit: "b9f2bc487a2878b65e3c1f80024bebab76954f27"
+source_commit_short: "b9f2bc48"
+source_commit_date: "2026-08-28T17:09:45-05:00"
+generated_at: "2026-08-29T09:39:19.511482Z"
 ---
-
-=====================
+.. _crud-concepts:
 
 # MongoDB CRUD Concepts
 
-This section contains information on additional concepts related to CRUD operations in MongoDB.
+**meta:** :description: Explore concepts related to CRUD operations in MongoDB, including transactions, query optimization, and write operation performance.
+   :robots: noindex, nosnippet
+
+.. default-domain:: mongodb
+
+**contents:** On this page
+   :local:
+   :backlinks: none
+   :depth: 1
+   :class: singlecol
+
+This section contains information on additional concepts related to
+CRUD operations in MongoDB.
 
 Atomicity, consistency, and distributed operations
+   - :doc:`/core/write-operations-atomicity`
+   - :doc:`/core/read-isolation-consistency-recency`
+   - :doc:`/core/distributed-queries`
 
-- `/core/write-operations-atomicity`
-- `/core/read-isolation-consistency-recency`
-- `/core/distributed-queries`
 Query Plan, Performance, Analysis, and Query Shape
+   - :doc:`/core/query-plans`
+   - :doc:`/core/query-optimization`
+   - :doc:`/core/write-performance`
+   - :doc:`/core/query-shapes`
 
-- `/core/query-plans`
-- `/core/query-optimization`
-- `/core/write-performance`
-- `/core/query-shapes`
 Miscellaneous
+   - :doc:`/core/tailable-cursors`
+   - :doc:`/core/dot-dollar-considerations`
 
-- `/core/tailable-cursors`
-- `/core/dot-dollar-considerations`
-> **Seealso:** `/core/transactions`
+**seealso:** :doc:`/core/transactions`
 
-## Contents
+**toctree:** :titlesonly: 
 
-- Atomicity & Transactions </core/write-operations-atomicity>
-- Distributed Queries </core/distributed-queries>
-- Periods & Dollar Signs </core/dot-dollar-considerations>
-- Read Isolation, Consistency, & Recency </core/read-isolation-consistency-recency>
-- Query Optimization </core/query-optimization>
-- Query Plans </core/query-plans>
-- Query Shapes </core/query-shapes>
-- Cursors </core/cursors>
+   Atomicity & Transactions </core/write-operations-atomicity>
+   Distributed Queries </core/distributed-queries>
+   Periods & Dollar Signs </core/dot-dollar-considerations>
+   Read Isolation, Consistency, & Recency </core/read-isolation-consistency-recency>
+   Query Optimization </core/query-optimization>
+   Query Plans </core/query-plans>
+   Query Shapes </core/query-shapes>
+   Cursors </core/cursors>

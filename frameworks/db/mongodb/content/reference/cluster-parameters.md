@@ -1,52 +1,110 @@
 ---
 type: "Framework Learn Page"
-framework: "mongodb"
+framework: "MongoDB"
 source_repo: "https://github.com/mongodb/docs.git"
 source_branch: "main"
 source_path: "content/manual/manual/source/reference/cluster-parameters.txt"
-source_commit: "ab9db26ed3d11618cdb61516d8180337d8e3f679"
-source_commit_short: "ab9db26e"
-source_commit_date: "2026-07-24T16:22:46-06:00"
-generated_at: "2026-07-25T11:51:15Z"
+source_commit: "b9f2bc487a2878b65e3c1f80024bebab76954f27"
+source_commit_short: "b9f2bc48"
+source_commit_date: "2026-08-28T17:09:45-05:00"
+generated_at: "2026-08-29T09:39:19.667469Z"
 ---
-
-================================================
+.. _cluster-parameters:
 
 # Cluster Parameters for a Self-Managed Deployment
 
-You can use MongoDB cluster parameters to specify configuration options that affect all nodes in a replica set or sharded cluster.
+**meta:** :keywords: on-prem
+   :description: Configure MongoDB cluster parameters to manage settings across all nodes in a replica set or sharded cluster.
+
+.. default-domain:: mongodb
+
+**contents:** On this page
+   :local:
+   :backlinks: none
+   :depth: 2
+   :class: singlecol
+
+You can use MongoDB cluster parameters to specify configuration options that 
+affect all nodes in a replica set or sharded cluster.
 
 ## Syntax
 
-To set cluster parameters for your deployment, run the following command on the `admin` database:
+To set cluster parameters for your deployment, run the following command on the 
+``admin`` database:
 
-```javascript
-db.adminCommand( { setClusterParameter:{ <parameter>: <value> } } )
-```
+.. code-block:: javascript
 
-To view the current cluster parameter values, run the following command on the `admin` database:
+   db.adminCommand( { setClusterParameter:{ <parameter>: <value> } } )
 
-```javascript
-db.adminCommand( { getClusterParameter: "*" } )
-```
+To view the current cluster parameter values, run the following command on the 
+``admin`` database: 
 
-To learn more about setting and viewing cluster parameters, see :dbcommand:`setClusterParameter` and :dbcommand:`getClusterParameter`.
+.. code-block:: javascript
+
+   db.adminCommand( { getClusterParameter: "*" } )
+
+To learn more about setting and viewing cluster parameters, see 
+:dbcommand:`setClusterParameter` and :dbcommand:`getClusterParameter`.
 
 ## Access Control
 
-.. include:: /includes/cluster-parameters/access-control.rst
+**include:** /includes/cluster-parameters/access-control.rst
 
 ## Parameters
 
+.. |mongod-only| replace:: Available for :binary:`~bin.mongod` only.
+
+.. |mongos-only| replace:: Available for :binary:`~bin.mongos` only.
+
+.. |both| replace:: Available for both :binary:`~bin.mongod` and :binary:`~bin.mongos`.
+
 MongoDB provides the following cluster parameters:
+
+.. list-table::
+   :widths: 20, 30, 50
+   :header-rows: 1
+
+   * - Name
+
+     - Availability 
+
+     - Description
+
+   * - :parameter:`auditConfig`
+
+     - |both|
+
+     - .. include:: /includes/fact-auditConfig.rst
+
+   * - :parameter:`changeStreamOptions`
+
+     - |both|
+
+     - .. include:: /includes/fact-changeStreamOptions.rst
+   
+   * - :parameter:`defaultMaxTimeMS`
+
+     - |both|
+
+     -  .. include:: /includes/cluster-parameters/defaultMaxTimeMS.rst
+
+   * - :parameter:`fleDisableSubstringPreviewParameterLimits`
+
+     - |both|
+
+     -  Overrides string length limitations for :ref:`substring queries
+        <qe-substring-parameters>` on {+qe+} enabled collections.
 
 ## Learn More
 
 - :dbcommand:`getClusterParameter`
-- :dbcommand:`setClusterParameter`
-## Contents
 
-- auditConfig </reference/cluster-parameters/auditConfig>
-- changeStreamOptions </reference/cluster-parameters/changeStreamOptions>
-- defaultMaxTimeMS </reference/cluster-parameters/defaultMaxTimeMS>
-- fleDisableSubstringPreviewParameterLimits </reference/cluster-parameters/fleDisableSubstringPreviewParameterLimits>
+- :dbcommand:`setClusterParameter`
+
+**toctree:** :titlesonly:
+   :hidden:
+
+   auditConfig </reference/cluster-parameters/auditConfig>
+   changeStreamOptions </reference/cluster-parameters/changeStreamOptions>
+   defaultMaxTimeMS </reference/cluster-parameters/defaultMaxTimeMS>
+   fleDisableSubstringPreviewParameterLimits </reference/cluster-parameters/fleDisableSubstringPreviewParameterLimits>

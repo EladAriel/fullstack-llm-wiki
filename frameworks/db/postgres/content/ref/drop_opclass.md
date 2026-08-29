@@ -1,58 +1,165 @@
 ---
 type: "Framework Learn Page"
-framework: "postgres"
+framework: "PostgreSQL"
 source_repo: "https://github.com/postgres/postgres.git"
 source_branch: "master"
 source_path: "doc/src/sgml/ref/drop_opclass.sgml"
-source_commit: "38afc3dcb25c45b744d4025029ce0a6c90b7059f"
-source_commit_short: "38afc3dc"
-source_commit_date: "2026-07-25T19:08:27+09:00"
-generated_at: "2026-07-25T11:50:59Z"
+source_commit: "6c5f1d6074208146930b67c2054509c3e82f6f7f"
+source_commit_short: "6c5f1d6"
+source_commit_date: "2026-08-28T23:24:47+02:00"
+generated_at: "2026-08-29T09:39:24.593717Z"
 ---
-
 DROP OPERATOR CLASS
+ 
 
-DROP OPERATOR CLASS
-7
-SQL - Language Statements
+ 
+  
+# DROP OPERATOR CLASS
 
-DROP OPERATOR CLASS
-remove an operator class
+  7
+  SQL - Language Statements
+ 
 
-```
+ 
+  
+# DROP OPERATOR CLASS
+
+  remove an operator class
+ 
+
+ 
+
 DROP OPERATOR CLASS [ IF EXISTS ] name USING index_method [ CASCADE | RESTRICT ]
+
+ 
+
+ 
+  
+# Description
+
+  
+   DROP OPERATOR CLASS drops an existing operator class.
+   To execute this command you must be the owner of the operator class.
+  
+
+  
+   DROP OPERATOR CLASS does not drop any of the operators
+   or functions referenced by the class.  If there are any indexes depending
+   on the operator class, you will need to specify
+   CASCADE for the drop to complete.
+  
+
+ 
+
+ 
+  
+# Parameters
+
+  
+
+   
+    IF EXISTS
+    
+     
+      Do not throw an error if the operator class does not exist. A notice is issued
+      in this case.
+     
+
+    
+   
+
+   
+    name
+    
+     
+      The name (optionally schema-qualified) of an existing operator class.
+     
+
+    
+   
+
+   
+    index_method
+    
+     
+      The name of the index access method the operator class is for.
+     
+
+    
+   
+
+   
+    CASCADE
+    
+     
+      Automatically drop objects that depend on the operator class (such as
+      indexes), and in turn all objects that depend on those objects
+      (see ).
+     
+
+    
+   
+
+   
+    RESTRICT
+    
+     
+      Refuse to drop the operator class if any objects depend on it.
+      This is the default.
+     
+
+    
+   
+  
+ 
+
+ 
+  
+# Notes
+
+  
+   DROP OPERATOR CLASS will not drop the operator family
+   containing the class, even if there is nothing else left in the
+   family (in particular, in the case where the family was implicitly
+   created by CREATE OPERATOR CLASS).  An empty operator
+   family is harmless, but for the sake of tidiness you might wish to
+   remove the family with DROP OPERATOR FAMILY; or perhaps
+   better, use DROP OPERATOR FAMILY in the first place.
+  
+
+ 
+
+ 
+  
+# Examples
+
+  
+   Remove the B-tree operator class widget_ops:
+
 ```
 
-## Description
-
-`DROP OPERATOR CLASS` drops an existing operator class. To execute this command you must be the owner of the operator class.
-
-`DROP OPERATOR CLASS` does not drop any of the operators or functions referenced by the class. If there are any indexes depending on the operator class, you will need to specify `CASCADE` for the drop to complete.
-
-## Parameters
-
-- Do not throw an error if the operator class does not exist. A notice is issued in this case.
-- The name (optionally schema-qualified) of an existing operator class.
-- The name of the index access method the operator class is for.
-- Automatically drop objects that depend on the operator class (such as indexes), and in turn all objects that depend on those objects (see `ddl-depend`).
-- Refuse to drop the operator class if any objects depend on it. This is the default.
-
-## Notes
-
-`DROP OPERATOR CLASS` will not drop the operator family containing the class, even if there is nothing else left in the family (in particular, in the case where the family was implicitly created by `CREATE OPERATOR CLASS`). An empty operator family is harmless, but for the sake of tidiness you might wish to remove the family with `DROP OPERATOR FAMILY`; or perhaps better, use `DROP OPERATOR FAMILY` in the first place.
-
-## Examples
-
-Remove the B-tree operator class `widget_ops`:
-
-```
 DROP OPERATOR CLASS widget_ops USING btree;
+
 ```
 
-This command will not succeed if there are any existing indexes that use the operator class. Add `CASCADE` to drop such indexes along with the operator class.
+   This command will not succeed if there are any existing indexes
+   that use the operator class.  Add CASCADE to drop
+   such indexes along with the operator class.
+  
 
-## Compatibility
+ 
 
-There is no `DROP OPERATOR CLASS` statement in the SQL standard.
+ 
+  
+# Compatibility
 
-## See Also
+  
+   There is no DROP OPERATOR CLASS statement in the
+   SQL standard.
+  
+
+ 
+
+ 
+  
+# See Also

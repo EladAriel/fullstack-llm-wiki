@@ -1,123 +1,303 @@
 ---
 type: "Framework Learn Page"
-framework: "mongodb"
+framework: "MongoDB"
 source_repo: "https://github.com/mongodb/docs.git"
 source_branch: "main"
 source_path: "content/manual/manual/source/reference/operator/query/type.txt"
-source_commit: "ab9db26ed3d11618cdb61516d8180337d8e3f679"
-source_commit_short: "ab9db26e"
-source_commit_date: "2026-07-24T16:22:46-06:00"
-generated_at: "2026-07-25T11:51:15Z"
+source_commit: "b9f2bc487a2878b65e3c1f80024bebab76954f27"
+source_commit_short: "b9f2bc48"
+source_commit_date: "2026-08-28T17:09:45-05:00"
+generated_at: "2026-08-29T09:39:20.253478Z"
 ---
-
-================================
-
 # $type (query predicate operator)
+
+.. default-domain:: mongodb
+
+**facet:** :name: programming_language
+   :values: shell
+
+**meta:** :description: Query MongoDB documents by data type using the $type operator, which can help you query unstructured data with unpredictable types. Accepts single or multiple BSON type aliases.
+
+**contents:** On this page
+   :local:
+   :backlinks: none
+   :depth: 1
+   :class: singlecol
 
 ## Definition
 
+**query:** $type
+
+   :query:`$type` selects documents where the *value* of the
+   ``field`` is an instance of the specified :term:`BSON` type(s).
+   Querying by data type is useful for
+   unstructured data where data types aren't predictable.
+
 ## Compatibility
 
-.. include:: /includes/fact-compatibility.rst
+.. |operator-method| replace:: ``$type``
+
+**include:** /includes/fact-compatibility.rst
 
 ## Syntax
 
-A :query:`$type` expression for a single `BSON` type has the following syntax:
+A :query:`$type` expression for a single :term:`BSON` type has
+the following syntax:
 
-```javascript
-{ field: { $type: <BSON type> } }
-```
+.. code-block:: javascript
 
-You can specify either the number or alias for the `BSON type<document-type-available-types>`.
+   { field: { $type: <BSON type> } }
 
-The :query:`$type` expression can also accept an array of `BSON` types and has the following syntax:
+You can specify either the number or alias for the :ref:`BSON
+type<document-type-available-types>`.
 
-```javascript
-{ field: { $type: [ <BSON type1> , <BSON type2>, ... ] } }
-```
+The :query:`$type` expression can also accept an array of :term:`BSON`
+types and has the following syntax:
 
-The above query matches documents where the `field` value is any of the listed types. The types specified in the array can be either numeric or string aliases.
+.. code-block:: javascript
 
-For an example, see `document-querying-by-multiple-data-types`.
+   { field: { $type: [ <BSON type1> , <BSON type2>, ... ] } }
 
-`document-type-available-types` describes the BSON types and their corresponding numeric and string aliases.
+The above query matches documents where the ``field`` value is
+any of the listed types. The types specified in the array can be
+either numeric or string aliases.
 
-> **Seealso:** - :expression:`$isNumber` - checks if the argument is a number.
-- :expression:`$type (Aggregation) <$type>` - returns the BSON type
-  of the argument.
+For an example, see :ref:`document-querying-by-multiple-data-types`.
+
+:ref:`document-type-available-types` describes the BSON types and
+their corresponding numeric and string aliases.
+
+**seealso:** - :expression:`$isNumber` - checks if the argument is a number.
+
+   - :expression:`$type (Aggregation) <$type>` - returns the BSON type
+     of the argument.
 
 ## Behavior
 
-:query:`$type` returns documents where the BSON type of the `field` matches the BSON type passed to :query:`$type`.
+:query:`$type` returns documents where the BSON type of the ``field``
+matches the BSON type passed to :query:`$type`. 
 
 ### Arrays
 
-For documents where `field` is an array, :query:`$type` returns documents in which at least one array element matches a type passed to :query:`$type`.
+For documents where ``field`` is an array, :query:`$type` returns
+documents in which at least one array element matches a type passed to
+:query:`$type`.
 
-Queries for `$type: "array"` return documents where the field itself is an array.
+Queries for ``$type: "array"`` return documents where the field itself is 
+an array.
+
+.. _document-type-available-types:
 
 ### Available Types
 
-The :query:`$type` operator accepts string aliases for the BSON types in addition to the numbers corresponding to the BSON types.
+The :query:`$type` operator accepts string aliases
+for the BSON types in addition to the numbers corresponding to the BSON
+types.
 
-:query:`$type` supports the `number` alias, which matches against the following `BSON` types:
+:query:`$type` supports the ``number`` alias, which matches against
+the following :term:`BSON` types:
 
 - :bsontype:`double <Double>`
 - :bsontype:`32-bit integer <Int32>`
 - :bsontype:`64-bit integer <Int64>`
 - :bsontype:`decimal <Decimal128>`
-For examples, see `query-type-examples`.
 
-> **Seealso:** :expression:`$isNumber`
+For examples, see :ref:`query-type-examples`.
+
+**seealso:** :expression:`$isNumber`
 
 ### MinKey and MaxKey
 
-:bsontype:`MinKey` and :bsontype:`MaxKey` are used in comparison operations and exist primarily for internal use. For all possible `BSON` element values, `MinKey` is always the smallest value, and `MaxKey` is always the greatest value.
+:bsontype:`MinKey` and :bsontype:`MaxKey`
+are used in comparison operations and exist primarily for internal use.
+For all possible :term:`BSON` element values, ``MinKey`` is always the
+smallest value, and ``MaxKey`` is always the greatest value.
 
-Querying for `minKey` or `maxKey` with :query:`$type` only returns fields that match the special `MinKey` or `MaxKey` values.
+Querying for ``minKey`` or ``maxKey`` with :query:`$type` only returns
+fields that match the special ``MinKey`` or ``MaxKey`` values.
 
-For example, the following `data` collection has these documents with `MinKey` and `MaxKey`:
+For example, the following ``data`` collection has these documents
+with ``MinKey`` and ``MaxKey``:
 
-The following query returns the document with `_id: 1`:
+**literalinclude:** /code-examples/tested/command-line/mongosh/operators/type/type-data-setup.snippet.type-data-setup.js
+   :language: javascript
+   :category: usage example
 
-The following query returns the document with `_id: 2`:
+The following query returns the document with ``_id: 1``:
+
+.. io-code-block::
+   :copyable: true
+
+   .. input:: /code-examples/tested/command-line/mongosh/operators/type/type-data-find-minkey.snippet.type-data-find-minkey.js
+      :language: javascript
+      :category: usage example
+
+   .. output:: /code-examples/tested/command-line/mongosh/operators/type/type-data-find-minkey-output.sh
+      :language: javascript
+
+The following query returns the document with ``_id: 2``:
+
+.. io-code-block::
+   :copyable: true
+
+   .. input:: /code-examples/tested/command-line/mongosh/operators/type/type-data-find-maxkey.snippet.type-data-find-maxkey.js
+      :language: javascript
+      :category: usage example
+
+   .. output:: /code-examples/tested/command-line/mongosh/operators/type/type-data-find-maxkey-output.sh
+      :language: javascript
+
+.. _query-type-examples:
 
 ## Examples
 
+.. _document-querying-by-data-type:
+
 ### Querying by Data Type
 
-.. include:: /includes/sample-data-usage.rst
+**include:** /includes/sample-data-usage.rst
 
-The `movies` collection stores IMDb ratings in the `imdb.rating` field. Most documents store `imdb.rating` as a `double`, but some documents store it as an empty `string` (`""`).
+The ``movies`` collection stores IMDb ratings in the
+``imdb.rating`` field. Most documents store ``imdb.rating`` as a
+``double``, but some documents store it as an empty ``string``
+(``""``).
 
-The following queries return documents from 2013 where `imdb.rating` is the `BSON` type `string`.
+The following queries return documents from 2013 where
+``imdb.rating`` is the :term:`BSON` type ``string``.
 
-This query specifies the type with the number of the `BSON type <document-type-available-types>`.
+This query specifies the type with the number of the :ref:`BSON type
+<document-type-available-types>`. 
+
+.. io-code-block::
+   :copyable: true
+
+   .. input:: /code-examples/tested/command-line/mongosh/operators/type/type-query-imdb-string.snippet.type-query-imdb-string-numeric.js
+      :language: javascript
+      :category: usage example
+
+   .. output:: /code-examples/tested/command-line/mongosh/operators/type/type-query-imdb-string-output.sh
+      :language: javascript
 
 This query specifies the type with the alias of the BSON type:
 
-The following query uses the `number` alias to return documents where `imdb.rating` is the `BSON` type `double`, `int`, or `long`:
+.. io-code-block::
+   :copyable: true
+
+   .. input:: /code-examples/tested/command-line/mongosh/operators/type/type-query-imdb-string.snippet.type-query-imdb-string-alias.js
+      :language: javascript
+      :category: usage example
+
+   .. output:: /code-examples/tested/command-line/mongosh/operators/type/type-query-imdb-string-output.sh
+      :language: javascript
+
+
+The following query uses the ``number`` alias to return documents
+where ``imdb.rating`` is the :term:`BSON` type ``double``, ``int``,
+or ``long``:
+
+.. io-code-block::
+   :copyable: true
+
+   .. input:: /code-examples/tested/command-line/mongosh/operators/type/type-query-number-alias.snippet.type-query-number-alias.js
+      :language: javascript
+      :category: usage example
+
+   .. output:: /code-examples/tested/command-line/mongosh/operators/type/type-query-number-alias-output.sh
+      :language: javascript
+
+.. _document-querying-by-multiple-data-types:
 
 ### Querying by Multiple Data Types
 
-The following queries return documents where `imdb.rating` is the `BSON` type `string` or `double`. The first query uses numeric aliases and the second query uses string aliases.
+The following queries return documents where ``imdb.rating`` is the :term:`BSON`
+type ``string`` or ``double``. The first query uses numeric aliases and the
+second query uses string aliases.
+
+.. io-code-block::
+   :copyable: true
+
+   .. input:: /code-examples/tested/command-line/mongosh/operators/type/type-query-multiple-types.snippet.type-query-multiple-types-numeric.js
+      :language: javascript
+      :category: usage example
+
+   .. output:: /code-examples/tested/command-line/mongosh/operators/type/type-query-multiple-types-output.sh
+      :language: javascript
+
+.. io-code-block::
+   :copyable: true
+
+   .. input:: /code-examples/tested/command-line/mongosh/operators/type/type-query-multiple-types.snippet.type-query-multiple-types-alias.js
+      :language: javascript
+      :category: usage example
+
+   .. output:: /code-examples/tested/command-line/mongosh/operators/type/type-query-multiple-types-output.sh
+      :language: javascript
+
+.. _document-querying-by-array-type:
 
 ### Querying by Array Type
 
-The `movies` collection stores film genres in the `genres` field as an array. The following query returns documents where the `genres` field is an array:
+The ``movies`` collection stores film genres in the ``genres``
+field as an array. The following query returns documents where
+the ``genres`` field is an array:
+
+.. io-code-block::
+   :copyable: true
+
+   .. input:: /code-examples/tested/command-line/mongosh/operators/type/type-query-array.snippet.type-query-array.js
+      :language: javascript
+      :category: usage example
+
+   .. output:: /code-examples/tested/command-line/mongosh/operators/type/type-query-array-output.sh
+      :language: javascript
+
+.. _document-querying-by-MinKey-And-MaxKey:
 
 ### Querying by MinKey and MaxKey
 
-The folllowing examples use the `restaurants` collection that uses `minKey` for any grade that is a failing grade:
+The folllowing examples use the ``restaurants`` collection that uses ``minKey``
+for any grade that is a failing grade:
 
-And `maxKey` for any grade that is the highest passing grade:
+**literalinclude:** /code-examples/tested/command-line/mongosh/operators/type/type-restaurants-setup.snippet.type-restaurants-insert-minkey.js
+   :language: javascript
+   :category: usage example
 
-The following query returns any restaurant whose `grades.grade` field contains `minKey` or is an array containing an element of the specified type:
+And ``maxKey`` for any grade that is the highest passing grade:
 
-The following query returns any restaurant whose `grades.grade` field contains `maxKey` or is an array containing an element of the specified type:
+**literalinclude:** /code-examples/tested/command-line/mongosh/operators/type/type-restaurants-setup.snippet.type-restaurants-insert-maxkey.js
+   :language: javascript
+   :category: usage example
+
+The following query returns any restaurant whose ``grades.grade`` field
+contains ``minKey`` *or* is an array containing an element of
+the specified type:
+
+.. io-code-block::
+   :copyable: true
+
+   .. input:: /code-examples/tested/command-line/mongosh/operators/type/type-restaurants-find-minkey.snippet.type-restaurants-find-minkey.js
+      :language: javascript
+      :category: usage example
+
+   .. output:: /code-examples/tested/command-line/mongosh/operators/type/type-restaurants-find-minkey-output.sh
+      :language: javascript
+
+The following query returns any restaurant whose ``grades.grade`` field
+contains ``maxKey`` *or* is an array containing an element of
+the specified type:
+
+.. io-code-block::
+   :copyable: true
+
+   .. input:: /code-examples/tested/command-line/mongosh/operators/type/type-restaurants-find-maxkey.snippet.type-restaurants-find-maxkey.js
+      :language: javascript
+      :category: usage example
+
+   .. output:: /code-examples/tested/command-line/mongosh/operators/type/type-restaurants-find-maxkey-output.sh
+      :language: javascript
 
 ## Learn More
 
-- `faq-developers-query-for-nulls`
+- :ref:`faq-developers-query-for-nulls`
 - :method:`db.collection.find()`
-- `bson-types`
+- :ref:`bson-types`

@@ -1,75 +1,105 @@
 ---
 type: "Framework Learn Page"
-framework: "mongodb"
+framework: "MongoDB"
 source_repo: "https://github.com/mongodb/docs.git"
 source_branch: "main"
 source_path: "content/manual/manual/source/tutorial/unique-constraints-on-arbitrary-fields.txt"
-source_commit: "ab9db26ed3d11618cdb61516d8180337d8e3f679"
-source_commit_short: "ab9db26e"
-source_commit_date: "2026-07-24T16:22:46-06:00"
-generated_at: "2026-07-25T11:51:15Z"
+source_commit: "b9f2bc487a2878b65e3c1f80024bebab76954f27"
+source_commit_short: "b9f2bc48"
+source_commit_date: "2026-08-28T17:09:45-05:00"
+generated_at: "2026-08-29T09:39:19.623381Z"
 ---
-
 :orphan:
 
-======================================
+.. Orphaning this temporarily in hopes that this whole thing can be removed.
+
+.. _shard-key-arbitrary-uniqueness:
 
 # Unique Constraints on Arbitrary Fields
 
-If you cannot use a unique field as the shard key or if you need to enforce uniqueness over multiple fields, you must create another `collection` to act as a "proxy collection". This collection must contain both a reference to the original document (i.e. its `ObjectId`) and the unique key.
+**meta:** :description: Create a proxy collection to enforce unique constraints on non-shard key fields using unique indexes.
 
-Consider a collection `records` that stores user information. The field `email` is not the shard key, but needs to be unique.
+.. default-domain:: mongodb
 
-The `proxy` collection then would contain the following:
+**contents:** On this page
+   :local:
+   :backlinks: none
+   :depth: 1
+   :class: singlecol
 
-```javascript
-{
-  "_id" : ObjectId("...")
-  "parent_id" : "<ID>"
-  "email" : "<string>"
-}
-```
 
-Use the following command to create a unique index on the `email` field:
+If you cannot use a unique field as the shard key or if you need to
+enforce uniqueness over multiple fields, you must create another
+:term:`collection` to act as a "proxy collection". This collection
+must contain both a reference to the original document (i.e. its
+``ObjectId``) and the unique key.
 
-```javascript
-db.proxy.createIndex( { "email" : 1 }, { unique : true } )
-```
+Consider a collection ``records`` that stores user information. The
+field ``email`` is not the shard key, but needs to be unique.
 
-The following example first attempts to insert a document containing the target field and a generated Unique ID into the `proxy` collection. If the operation is successful, then it inserts the full document into the `records` collection.
+The ``proxy`` collection then would contain the following:
 
-```javascript
-records = db.getSiblingDB('records');
-proxy = db.getSiblingDB('proxy');
+.. code-block:: javascript
 
-var primary_id = ObjectId();
+   {
+     "_id" : ObjectId("...")
+     "parent_id" : "<ID>"
+     "email" : "<string>"
+   }
 
-proxy.insertOne({
-   "_id" : primary_id
-   "email" : "example@example.net"
-})
+Use the following command to create a unique index on the ``email`` field:
 
-// if: the above operation returns successfully,
-// then continue:
+.. code-block:: javascript
 
-records.insertOne({
-   "_id" : primary_id
-   "email": "example@example.net"
-   // additional information...
-})
-```
+   db.proxy.createIndex( { "email" : 1 }, { unique : true } )
 
-Note that this methodology requires creating a unique ID for the `primary_id` field rather than letting MongoDB automatically create it on document insertion.
+The following example first attempts to insert a document containing the
+target field and a generated Unique ID into the ``proxy`` collection. If the
+operation is successful, then it inserts the full document into the
+``records`` collection.
 
-If you need to enforce uniqueness on multiple fields, then each field would require its own proxy collection.
+.. code-block:: javascript
+
+   records = db.getSiblingDB('records');
+   proxy = db.getSiblingDB('proxy');
+
+   var primary_id = ObjectId();
+
+   proxy.insertOne({
+      "_id" : primary_id
+      "email" : "example@example.net"
+   })
+
+   // if: the above operation returns successfully,
+   // then continue:
+
+   records.insertOne({
+      "_id" : primary_id
+      "email": "example@example.net"
+      // additional information...
+   })
+
+Note that this methodology requires creating a unique ID for the
+``primary_id`` field rather than letting MongoDB automatically create
+it on document insertion.
+
+If you need to enforce uniqueness on multiple fields, then
+each field would require its own proxy collection.
+
+**see:** The full documentation of: :method:`~db.collection.createIndex()`
+   and :dbcommand:`shardCollection`.
 
 ## Considerations
 
 - Your application must catch errors when inserting documents into the
-"proxy" collection and must enforce consistency between the two collections.
+  "proxy" collection and must enforce consistency between the two
+  collections.
 
 - If the proxy collection requires sharding, you must shard on the
-single field on which you want to enforce uniqueness.
+  single field on which you want to enforce uniqueness.
 
 - To enforce uniqueness on more than one field using sharded proxy
-collections, you must have one proxy collection for every field for which to enforce uniqueness. If you create multiple unique indexes on a single proxy collection, you cannot be able to shard proxy collections.
+  collections, you must have *one* proxy collection for *every* field
+  for which to enforce uniqueness. If you create multiple unique
+  indexes on a single proxy collection, you *cannot* be able to
+  shard proxy collections.

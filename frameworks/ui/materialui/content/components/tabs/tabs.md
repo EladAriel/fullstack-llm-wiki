@@ -4,10 +4,10 @@ framework: "Material UI"
 source_repo: "https://github.com/mui/material-ui.git"
 source_branch: "master"
 source_path: "docs/data/material/components/tabs/tabs.md"
-source_commit: "4d5fe7254baa7e97e38b516f37c7af13128468b7"
-source_commit_short: "4d5fe725"
-source_commit_date: "2026-07-24T12:25:49+03:00"
-generated_at: "2026-07-25T13:39:40.943628Z"
+source_commit: "fc3a3a0a8b7c8f20274eca4758ea07a33e25c1b4"
+source_commit_short: "fc3a3a0a"
+source_commit_date: "2026-08-28T09:03:39+07:00"
+generated_at: "2026-08-29T09:40:18.220478Z"
 ---
 ---
 productId: material-ui
@@ -53,6 +53,22 @@ following [WAI-ARIA Authoring Practices](https://www.w3.org/WAI/ARIA/apg/pattern
 - `<TabContext />` - the top-level component that wraps the Tab List and Tab Panel components.
 
 {{"demo": "LabTabs.js"}}
+
+## Keep panels always mounted
+
+Keeping panels mounted preserves state and makes subsequent tab changes faster. However, all panels render on initial load, consume memory, and may continue running effects while hidden. Use this approach selectively for stateful or frequently accessed panels.
+
+### With lab API
+
+When using the `@mui/lab` API, pass `keepMounted` to each `TabPanel`.
+
+{{"demo": "KeepMountedLabTabs.js"}}
+
+### With standard API
+
+With the standard API, render the panel children unconditionally and use the hidden attribute to control visibility.
+
+{{"demo": "KeepMountedStandardTabs.js"}}
 
 ## Wrapped labels
 
@@ -170,6 +186,7 @@ The following steps are needed in order to provide necessary information for ass
 1. Label `Tabs` via `aria-label` or `aria-labelledby`.
 2. `Tab`s need to be connected to their
    corresponding `[role="tabpanel"]` by setting the correct `id`, `aria-controls` and `aria-labelledby`.
+3. If a tab panel has no focusable content, or its first element containing meaningful content is not focusable, set `tabIndex={0}` on the panel.
 
 An example for the current implementation can be found in the demos on this page. We've also published [an experimental API](#experimental-api) in `@mui/lab` that does not require
 extra work.

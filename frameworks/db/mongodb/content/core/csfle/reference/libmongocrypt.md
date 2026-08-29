@@ -1,25 +1,102 @@
 ---
 type: "Framework Learn Page"
-framework: "mongodb"
+framework: "MongoDB"
 source_repo: "https://github.com/mongodb/docs.git"
 source_branch: "main"
 source_path: "content/manual/manual/source/core/csfle/reference/libmongocrypt.txt"
-source_commit: "ab9db26ed3d11618cdb61516d8180337d8e3f679"
-source_commit_short: "ab9db26e"
-source_commit_date: "2026-07-24T16:22:46-06:00"
-generated_at: "2026-07-25T11:51:15Z"
+source_commit: "b9f2bc487a2878b65e3c1f80024bebab76954f27"
+source_commit_short: "b9f2bc48"
+source_commit_date: "2026-08-28T17:09:45-05:00"
+generated_at: "2026-08-29T09:39:19.811858Z"
 ---
-
-===============================
+.. _csfle-reference-libmongocrypt:
 
 # Install libmongocrypt for CSFLE
 
+**meta:** :description: Install `libmongocrypt` for Client-Side Field Level Encryption using package managers for macOS, Windows, and various Linux distributions.
+
+.. default-domain:: mongodb
+
+**contents:** On this page
+   :local:
+   :backlinks: none
+   :depth: 3
+   :class: singlecol
+
 ## Overview
 
-Learn how to install `libmongocrypt`, a `core component <csfle-reference-encryption-components>` of {+csfle+}.
+Learn how to install ``libmongocrypt``, a :ref:`core component <csfle-reference-encryption-components>`
+of {+csfle+}.
 
-.. include:: /includes/queryable-encryption/tutorials/warning-dont-build-libmongocrypt-from-source.rst
+**include:** /includes/queryable-encryption/tutorials/warning-dont-build-libmongocrypt-from-source.rst
 
 ## Steps
 
 Select your operating system for installation steps.
+
+.. composable-tutorial::
+   :options: operating-system, linux-distribution
+   :defaults: linux, amazon
+
+   .. selected-content::
+      :selections: macos, None
+
+      To install on macOS:
+
+      .. procedure::
+
+         .. include:: /includes/queryable-encryption/tutorials/steps-install-libmongocrypt-macos.rst
+
+   .. selected-content::
+      :selections: windows, None
+
+      To install on Windows:
+
+      .. procedure::
+
+         .. include:: /includes/queryable-encryption/tutorials/steps-install-libmongocrypt-windows.rst
+   
+   .. selected-content::
+      :selections: linux, amazon
+
+      To install on Amazon Linux:
+
+      .. procedure::
+
+         .. include:: /includes/queryable-encryption/tutorials/steps-install-libmongocrypt-amazon.rst
+
+   .. selected-content::
+      :selections: linux, debian
+
+      To install on Debian:
+
+      .. procedure::
+
+         .. include:: /includes/queryable-encryption/tutorials/steps-install-libmongocrypt-debian.rst
+
+   .. selected-content::
+      :selections: linux, red-hat
+
+      To install on Red Hat Enterprise Linux:
+
+      .. procedure::
+
+         .. include:: /includes/queryable-encryption/tutorials/steps-install-libmongocrypt-red-hat.rst
+
+   .. selected-content::
+      :selections: linux, suse
+
+      To install on Suse:
+
+      .. procedure::   
+         
+         .. include:: /includes/queryable-encryption/tutorials/steps-install-libmongocrypt-suse.rst
+
+   .. selected-content::
+      :selections: linux, ubuntu
+
+      To install on Ubuntu:
+
+      .. procedure::
+
+         .. include:: /includes/queryable-encryption/tutorials/steps-install-libmongocrypt-ubuntu.rst

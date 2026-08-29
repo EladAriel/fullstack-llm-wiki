@@ -1,33 +1,108 @@
 ---
 type: "Framework Learn Page"
-framework: "mongodb"
+framework: "MongoDB"
 source_repo: "https://github.com/mongodb/docs.git"
 source_branch: "main"
 source_path: "content/manual/manual/source/reference/system-collections.txt"
-source_commit: "ab9db26ed3d11618cdb61516d8180337d8e3f679"
-source_commit_short: "ab9db26e"
-source_commit_date: "2026-07-24T16:22:46-06:00"
-generated_at: "2026-07-25T11:51:15Z"
+source_commit: "b9f2bc487a2878b65e3c1f80024bebab76954f27"
+source_commit_short: "b9f2bc48"
+source_commit_date: "2026-08-28T17:09:45-05:00"
+generated_at: "2026-08-29T09:39:19.700328Z"
 ---
-
-==================
+.. _metadata-system-collections:
 
 # System Collections
 
+**meta:** :description: Explore MongoDB's reserved system collections for internal use, including roles, users, index builds, and time series data storage.
+
+.. default-domain:: mongodb
+
+**contents:** On this page
+   :local:
+   :backlinks: none
+   :depth: 2
+   :class: singlecol
+
 ## Synopsis
 
-MongoDB stores system information in collections that use the `<database>.system.*` `namespace`, which MongoDB reserves for internal use. Do not create collections that begin with `system`.
+MongoDB stores system information in collections that use the
+``<database>.system.*`` :term:`namespace`, which MongoDB reserves for
+internal use. Do not create collections that begin with ``system``.
 
-MongoDB also stores some additional instance-local metadata in the `local database <replica-set-local-database>` `local.replset.*` namespace, specifically for replication purposes and in the `config database <config-database>` for `sessions information <sessions>`.
+MongoDB also stores some additional instance-local metadata in the
+:ref:`local database <replica-set-local-database>` ``local.replset.*``
+namespace, specifically for replication purposes and in the :ref:`config
+database <config-database>` for :ref:`sessions information
+<sessions>`.
 
-|service-fullname| and other MongoDB cloud services store essential operational data in dedicated databases that use the prefix `__mdb_internal_*`. **Do not access or modify databases with this prefix.** We recommend that you ignore these namespaces in administrative tools. For more information on these cloud-specific databases, see :atlas:`Internal Databases </reference/internal-database>`.
+|service-fullname| and other MongoDB cloud services store essential operational 
+data in dedicated databases that use the prefix ``__mdb_internal_*``. 
+**Do not access or modify databases with this prefix.**
+We recommend that you ignore these namespaces in administrative tools. For more 
+information on these cloud-specific databases, see :atlas:`Internal Databases </reference/internal-database>`.
 
 ## Collections
 
-System collections include these collections stored in the `admin` database:
+System collections include these collections stored in the ``admin`` database:
 
-System collections include these collections stored in the `config` database:
+**data:** admin.system.roles
+
+   The :data:`admin.system.roles` collection stores custom roles that
+   administrators create and assign to users to provide access to
+   specific resources.
+
+**data:** admin.system.users
+
+   The :data:`admin.system.users` collection stores the user's
+   authentication credentials as well as any roles assigned to the user.
+   Users may define authorization roles in the
+   :data:`admin.system.roles` collection.
+
+**data:** admin.system.version
+
+   The :data:`admin.system.version` collection stores metadata to 
+   support internal operations. Do not modify this collection unless
+   specifically instructed to in this documentation or by a MongoDB 
+   support engineer.
+
+System collections include these collections stored in the ``config`` 
+database:
+
+**data:** config.system.indexBuilds
+
+   The :data:`~config.system.indexBuilds` collection stores 
+   information related to in-progress index builds.
+
+**data:** config.system.preimages
+
+   Stores previous versions of modified documents from collections with 
+   the :ref:`changeStreamPreAndPostImages 
+   <db.createCollection.changeStreamPreAndPostImages>` option enabled.
+   The ``config.system.preimages`` collection is automatically
+   purged when the pre-images expire. For details, see 
+   :parameter:`changeStreamOptions.preAndPostImages.expireAfterSeconds`.
 
 ### Database-Specific Collections
 
-System collections also include these collections stored directly in each database:
+System collections also include these collections stored directly in
+each database:
+
+**data:** <database>.system.profile
+
+   The :data:`<database>.system.profile` collection stores database
+   profiling information. For information on profiling, see :ref:`database-profiling`.
+
+**data:** <database>.system.js
+
+   The :data:`<database>.system.js` collection stores special JavaScript
+   code for use in :ref:`server side JavaScript
+   <server-side-javascript>`. See
+   :doc:`/tutorial/store-javascript-function-on-server` for more
+   information.
+
+**data:** <database>.system.views
+
+   The :data:`<database>.system.views` collection contains
+   information about each :ref:`view <views-landing-page>` in the database.
+
+   .. include:: /includes/5.0-changes/no-direct-write-system-views.rst

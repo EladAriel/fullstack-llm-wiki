@@ -1,77 +1,101 @@
 ---
 type: "Framework Learn Page"
-framework: "mongodb"
+framework: "MongoDB"
 source_repo: "https://github.com/mongodb/docs.git"
 source_branch: "main"
 source_path: "content/manual/manual/source/reference/operator/query/nor.txt"
-source_commit: "ab9db26ed3d11618cdb61516d8180337d8e3f679"
-source_commit_short: "ab9db26e"
-source_commit_date: "2026-07-24T16:22:46-06:00"
-generated_at: "2026-07-25T11:51:15Z"
+source_commit: "b9f2bc487a2878b65e3c1f80024bebab76954f27"
+source_commit_short: "b9f2bc48"
+source_commit_date: "2026-08-28T17:09:45-05:00"
+generated_at: "2026-08-29T09:39:20.240275Z"
 ---
-
-===============================
-
 # $nor (query predicate operator)
+
+**meta:** :description: Perform a logical `NOR` operation to select documents that fail all specified query predicates.
+
+.. default-domain:: mongodb
+
+**contents:** On this page
+   :local:
+   :backlinks: none
+   :depth: 1
+   :class: singlecol
 
 ## Definition
 
+**query:** $nor
+
+   :query:`$nor` performs a logical ``NOR`` operation on an array of one
+   or more query predicates and selects the documents that **fail** all
+   the query predicates in the array. The :query:`$nor` has the
+   following syntax:
+
+   .. code-block:: javascript
+
+      { $nor: [ { <expression1> }, { <expression2> }, ...  { <expressionN> } ] }
+
 ## Examples
 
-### `$nor` Query with Two Expressions
+### ``$nor`` Query with Two Expressions
 
 Consider the following query which uses only the :query:`$nor` operator:
 
-```javascript
-db.inventory.find( { $nor: [ { price: 1.99 }, { sale: true } ]  } )
-```
+.. code-block:: javascript
+
+   db.inventory.find( { $nor: [ { price: 1.99 }, { sale: true } ]  } )
 
 This query will return all documents that:
 
-- contain the `price` field whose value is not equal to `1.99`
-and contain the `sale` field whose value is not equal to `true` **or**
+- contain the ``price`` field whose value is *not* equal to ``1.99``
+  and contain the ``sale`` field whose value *is not* equal to
+  ``true`` **or**
 
-- contain the `price` field whose value is not equal to `1.99`
-but do not contain the `sale` field **or**
+- contain the ``price`` field whose value is *not* equal to ``1.99``
+  *but* do *not* contain the ``sale`` field **or**
 
-- do not contain the `price` field but contain the `sale`
-field whose value is not equal to `true` **or**
+- do *not* contain the ``price`` field *but* contain the ``sale``
+  field whose value *is not* equal to ``true`` **or**
+- do *not* contain the ``price`` field *and* do *not* contain the
+  ``sale`` field
 
-- do not contain the `price` field and do not contain the
-`sale` field
-
-### `$nor` and Additional Comparisons
+### ``$nor`` and Additional Comparisons
 
 Consider the following query:
 
-```javascript
-db.inventory.find( { $nor: [ { price: 1.99 }, { qty: { $lt: 20 } }, { sale: true } ] } )
-```
+.. code-block:: javascript
 
-This query will select all documents in the `inventory` collection where:
+   db.inventory.find( { $nor: [ { price: 1.99 }, { qty: { $lt: 20 } }, { sale: true } ] } )
 
-- the `price` field value does not equal `1.99` **and**
-- the `qty` field value is not less than `20` **and**
-- the `sale` field value is not equal to `true`
+This query will select all documents in the ``inventory`` collection
+where:
+
+- the ``price`` field value does *not* equal ``1.99`` **and**
+- the ``qty`` field value is *not* less than ``20`` **and**
+- the ``sale`` field value is *not* equal to ``true``
+
 including those documents that do not contain these field(s).
 
-The exception in returning documents that do not contain the field in the :query:`$nor` expression is when the :query:`$nor` operator is used with the :query:`$exists` operator.
+The exception in returning documents that do not contain the field
+in the :query:`$nor` expression is when the :query:`$nor` operator is
+used with the :query:`$exists` operator.
 
-### `$nor` and `$exists`
+### ``$nor`` and ``$exists``
 
-Compare that with the following query which uses the :query:`$nor` operator with the :query:`$exists` operator:
+Compare that with the following query which uses the
+:query:`$nor` operator with the :query:`$exists` operator:
 
-```javascript
-db.inventory.find( { $nor: [ { price: 1.99 }, { price: { $exists: false } },
-                             { sale: true }, { sale: { $exists: false } } ] } )
-```
+.. code-block:: javascript
+
+   db.inventory.find( { $nor: [ { price: 1.99 }, { price: { $exists: false } },
+                                { sale: true }, { sale: { $exists: false } } ] } )
 
 This query will return all documents that:
 
-- contain the `price` field whose value is not equal to `1.99`
-and contain the `sale` field whose value is not equal to `true`
+- contain the ``price`` field whose value is *not* equal to ``1.99``
+  and contain the ``sale`` field whose value *is not* equal to
+  ``true``
 
-> **Seealso:** - :method:`~db.collection.find()`
-- :query:`$or`
-- :update:`$set`
-- :query:`$exists`
+**seealso:** - :method:`~db.collection.find()`
+   - :query:`$or`
+   - :update:`$set`
+   - :query:`$exists`

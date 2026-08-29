@@ -1,105 +1,147 @@
 ---
 type: "Framework Learn Page"
-framework: "mongodb"
+framework: "MongoDB"
 source_repo: "https://github.com/mongodb/docs.git"
 source_branch: "main"
 source_path: "content/manual/manual/source/tutorial/text-search-in-aggregation.txt"
-source_commit: "ab9db26ed3d11618cdb61516d8180337d8e3f679"
-source_commit_short: "ab9db26e"
-source_commit_date: "2026-07-24T16:22:46-06:00"
-generated_at: "2026-07-25T11:51:15Z"
+source_commit: "b9f2bc487a2878b65e3c1f80024bebab76954f27"
+source_commit_short: "b9f2bc48"
+source_commit_date: "2026-08-28T17:09:45-05:00"
+generated_at: "2026-08-29T09:39:19.582201Z"
 ---
-
-=================================
+.. _text-agg:
 
 # $text in the Aggregation Pipeline
 
-.. include:: /includes/extracts/fact-text-search-legacy-atlas.rst
+.. default-domain:: mongodb
 
-In the aggregation pipeline, you can use the :query:`$text` query operator in the :pipeline:`$match` stage.
+**meta:** :keywords: on-prem
+   :description: Explore $text query capabilities in the aggregation pipeline.
+
+**contents:** On this page
+   :local:
+   :backlinks: none
+   :depth: 1
+   :class: singlecol
+
+**include:** /includes/extracts/fact-text-search-legacy-atlas.rst
+
+.. _text-agg-expression-behavior:
+
+In the aggregation pipeline, you can use the :query:`$text` query operator in 
+the :pipeline:`$match` stage.
 
 ## Restrictions
 
-For general `$text` operator restrictions, see `operator restrictions <text-query-operator-behavior>`.
+For general ``$text`` operator restrictions, see :ref:`operator
+restrictions <text-query-operator-behavior>`.
 
-In addition, `$text` queries in the aggregation pipeline have the following restrictions:
+In addition, ``$text`` queries in the aggregation pipeline have the following 
+restrictions:
 
-.. include:: /includes/list-text-search-restrictions-in-agg.rst
+**include:** /includes/list-text-search-restrictions-in-agg.rst
 
-not documenting that you cannot include the $text operation + some other operation that requires a special index. Although, if either of the two no longer needs to be the first stage, then will need to include.
+.. Since $geoNear needs to be the first stage in pipeline,
+   not documenting that you cannot include the
+   $text operation + some other operation that requires a special index.
+   Although, if either of the two no longer needs to be the first
+   stage, then will need to include.
+
+.. |meta-object| replace:: :expression:`$meta`
+.. |sort-object| replace:: :pipeline:`$sort` pipeline
 
 ## Text Score
 
-.. include:: /includes/fact-text-search-score.rst
+**include:** /includes/fact-text-search-score.rst
 
-The metadata is only available after the :pipeline:`$match` stage that includes the `$text` operation.
+The metadata is only available after the :pipeline:`$match` stage that
+includes the ``$text`` operation.
+
+.. _text-search-examples:
 
 ## Examples
 
-The following examples assume a collection `articles` that has a text index on the field `subject`:
+The following examples assume a collection ``articles`` that has a text
+index on the field ``subject``:
 
-```javascript
-db.articles.createIndex( { subject: "text" } )
-```
+.. code-block:: javascript
+
+   db.articles.createIndex( { subject: "text" } )
 
 ### Calculate the Total Views for Articles that Contains a Word
 
-The following aggregation searches for the term `cake` in the :pipeline:`$match` stage and calculates the total `views` for the matching documents in the :pipeline:`$group` stage.
+The following aggregation searches for the term ``cake`` in the
+:pipeline:`$match` stage and calculates the total ``views`` for the
+matching documents in the :pipeline:`$group` stage.
 
-```javascript
-db.articles.aggregate(
-   [
-     { $match: { $text: { $search: "cake" } } },
-     { $group: { _id: null, views: { $sum: "$views" } } }
-   ]
-)
-```
+.. code-block:: javascript
+
+   db.articles.aggregate(
+      [
+        { $match: { $text: { $search: "cake" } } },
+        { $group: { _id: null, views: { $sum: "$views" } } }
+      ]
+   )
 
 ### Return Results Sorted by Text Search Score
 
-To sort by the text search score, include a :expression:`{$meta: "textScore"} <$meta>` expression in the :pipeline:`$sort` stage. The following example matches on either the term `cake` or `tea`, sorts by the `textScore` in descending order, and returns only the `title` field in the results set.
+To sort by the text search score, include a :expression:`{$meta:
+"textScore"} <$meta>` expression in the :pipeline:`$sort` stage. The
+following example matches on *either* the term ``cake`` or ``tea``,
+sorts by the ``textScore`` in descending order, and returns only the
+``title`` field in the results set.
 
-```javascript
-db.articles.aggregate(
-   [
-     { $match: { $text: { $search: "cake tea" } } },
-     { $sort: { score: { $meta: "textScore" } } },
-     { $project: { title: 1, _id: 0 } }
-   ]
-)
-```
+.. code-block:: javascript
 
-The specified metadata determines the sort order. For example, the `"textScore"` metadata sorts in descending order. See :expression:`$meta` for more information on metadata as well as an example of overriding the default sort order of the metadata.
+   db.articles.aggregate(
+      [
+        { $match: { $text: { $search: "cake tea" } } },
+        { $sort: { score: { $meta: "textScore" } } },
+        { $project: { title: 1, _id: 0 } }
+      ]
+   )
+
+The specified metadata determines the sort order. For example, the
+``"textScore"`` metadata sorts in descending order. See
+:expression:`$meta` for more information on metadata as well as an
+example of overriding the default sort order of the metadata.
 
 ### Match on Text Score
 
-The `"textScore"` metadata is available for projections, sorts, and conditions subsequent the :pipeline:`$match` stage that includes the `$text` operation.
+The ``"textScore"`` metadata is available for projections, sorts, and
+conditions subsequent the :pipeline:`$match` stage that includes the
+``$text`` operation.
 
-The following example matches on either the term `cake` or `tea`, projects the `title` and the `score` fields, and then returns only those documents with a `score` greater than `1.0`.
+The following example matches on *either* the term ``cake`` or ``tea``,
+projects the ``title`` and the ``score`` fields, and then returns only
+those documents with a ``score`` greater than ``1.0``.
 
-```javascript
-db.articles.aggregate(
-   [
-     { $match: { $text: { $search: "cake tea" } } },
-     { $project: { title: 1, _id: 0, score: { $meta: "textScore" } } },
-     { $match: { score: { $gt: 1.0 } } }
-   ]
-)
-```
+.. code-block:: javascript
+
+   db.articles.aggregate(
+      [
+        { $match: { $text: { $search: "cake tea" } } },
+        { $project: { title: 1, _id: 0, score: { $meta: "textScore" } } },
+        { $match: { score: { $gt: 1.0 } } }
+      ]
+   )
 
 ### Specify a Language for Text Search
 
-The following aggregation searches in spanish for documents that contain the term `saber` but not the term `claro` in the :pipeline:`$match` stage and calculates the total `views` for the matching documents in the :pipeline:`$group` stage.
+The following aggregation searches in spanish for documents that
+contain the term ``saber`` but not the term ``claro`` in the
+:pipeline:`$match` stage and calculates the total ``views`` for the
+matching documents in the :pipeline:`$group` stage.
 
-```javascript
-db.articles.aggregate(
-   [
-     { $match: { $text: { $search: "saber -claro", $language: "es" } } },
-     { $group: { _id: null, views: { $sum: "$views" } } }
-   ]
-)
-```
+.. code-block:: javascript
 
-## `$search` Stage in {+fts+}
+   db.articles.aggregate(
+      [
+        { $match: { $text: { $search: "saber -claro", $language: "es" } } },
+        { $group: { _id: null, views: { $sum: "$views" } } }
+      ]
+   )
 
-.. include:: /includes/fact-atlas-search-search-stage.rst
+## ``$search`` Stage in {+fts+}
+
+**include:** /includes/fact-atlas-search-search-stage.rst

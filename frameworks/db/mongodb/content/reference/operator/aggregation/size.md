@@ -1,72 +1,94 @@
 ---
 type: "Framework Learn Page"
-framework: "mongodb"
+framework: "MongoDB"
 source_repo: "https://github.com/mongodb/docs.git"
 source_branch: "main"
 source_path: "content/manual/manual/source/reference/operator/aggregation/size.txt"
-source_commit: "ab9db26ed3d11618cdb61516d8180337d8e3f679"
-source_commit_short: "ab9db26e"
-source_commit_date: "2026-07-24T16:22:46-06:00"
-generated_at: "2026-07-25T11:51:15Z"
+source_commit: "b9f2bc487a2878b65e3c1f80024bebab76954f27"
+source_commit_short: "b9f2bc48"
+source_commit_date: "2026-08-28T17:09:45-05:00"
+generated_at: "2026-08-29T09:39:20.162496Z"
 ---
-
-============================
-
 # $size  (expression operator)
+
+.. default-domain:: mongodb
+
+**facet:** :name: programming_language
+   :values: shell
+
+**meta:** :description: Learn about the $size aggregation operator, which counts and returns the total number of items in an array.
+
+**contents:** On this page
+   :local:
+   :backlinks: none
+   :depth: 1
+   :class: singlecol
 
 ## Definition
 
+**expression:** $size
+
+   Counts and returns the total number of items in an array.
+
 ## Compatibility
 
-.. include:: /includes/fact-compatibility.rst
+.. |operator-method| replace:: ``$size``
+
+**include:** /includes/fact-compatibility.rst
 
 ## Syntax
 
 :expression:`$size` has the following syntax:
 
-```javascript
-{ $size: <expression> }
-```
+.. code-block:: javascript
 
-The argument for :expression:`$size` can be any `expression <aggregation-expressions>` as long as it resolves to an array. For more information on expressions, see `aggregation-expressions`.
+   { $size: <expression> }
+
+The argument for :expression:`$size` can be any :ref:`expression
+<aggregation-expressions>` as long as it resolves to an array. For
+more information on expressions, see :ref:`aggregation-expressions`.
 
 ## Behavior
 
-The argument for :expression:`$size` must resolve to an array. If the argument for :expression:`$size` is missing or does not resolve to an array, :expression:`$size` errors.
+The argument for :expression:`$size` must resolve to an array. If the
+argument for :expression:`$size` is missing or does not resolve to an
+array, :expression:`$size` errors.
 
 ## Example
 
-Consider an `inventory` collection with the following documents:
+Consider an ``inventory`` collection with the following documents:
 
-```javascript
-db.inventory.insertMany( [
-   { _id: 1, item: "ABC1", description: "product 1", colors: [ "blue", "black", "red" ] },
-   { _id: 2, item: "ABC2", description: "product 2", colors: [ "purple" ] },
-   { _id: 3, item: "XYZ1", description: "product 3", colors: [ ] },
-   { _id: 4, item: "ZZZ1", description: "product 4 - missing colors" },
-   { _id: 5, item: "ZZZ2", description: "product 5 - colors is string", colors: "blue,red" }
-] )
-```
+.. code-block:: javascript
 
-The following aggregation pipeline operation uses the :expression:`$size` operator to return the number of elements in the `colors` array:
+   db.inventory.insertMany( [
+      { _id: 1, item: "ABC1", description: "product 1", colors: [ "blue", "black", "red" ] },
+      { _id: 2, item: "ABC2", description: "product 2", colors: [ "purple" ] },
+      { _id: 3, item: "XYZ1", description: "product 3", colors: [ ] },
+      { _id: 4, item: "ZZZ1", description: "product 4 - missing colors" },
+      { _id: 5, item: "ZZZ2", description: "product 5 - colors is string", colors: "blue,red" }
+   ] )
 
-```javascript
-db.inventory.aggregate([
-   {
-      $project: {
-         item: 1,
-         numberOfColors: { $cond: { if: { $isArray: "$colors" }, then: { $size: "$colors" }, else: "NA"} }
-      } 
-   }
-] )
-```
+The following aggregation pipeline operation uses the
+:expression:`$size` operator to return the number of elements in the ``colors``
+array:
+
+.. code-block:: javascript
+
+   db.inventory.aggregate([
+      {
+         $project: {
+            item: 1,
+            numberOfColors: { $cond: { if: { $isArray: "$colors" }, then: { $size: "$colors" }, else: "NA"} }
+         } 
+      }
+   ] )
 
 The operation returns the following:
 
-```javascript
-{ _id: 1, item: "ABC1", numberOfColors: 3 }
-{ _id: 2, item: "ABC2", numberOfColors: 1 }
-{ _id: 3, item: "XYZ1", numberOfColors: 0 }
-{ _id: 4, item: "ZZZ1", numberOfColors: "NA" }
-{ _id: 5, item: "ZZZ2", numberOfColors: "NA" }
-```
+.. code-block:: javascript
+
+   { _id: 1, item: "ABC1", numberOfColors: 3 }
+   { _id: 2, item: "ABC2", numberOfColors: 1 }
+   { _id: 3, item: "XYZ1", numberOfColors: 0 }
+   { _id: 4, item: "ZZZ1", numberOfColors: "NA" }
+   { _id: 5, item: "ZZZ2", numberOfColors: "NA" }

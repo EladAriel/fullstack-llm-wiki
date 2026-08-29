@@ -1,15 +1,14 @@
 ---
 type: "Framework Learn Page"
-framework: "pydantic"
+framework: "Pydantic"
 source_repo: "https://github.com/pydantic/pydantic"
 source_branch: "main"
 source_path: "docs/concepts/serialization.md"
-source_commit: "a2a6577d4c329dd574a45dbb01a8feaa16b1ad3d"
-source_commit_short: "a2a6577d"
-source_commit_date: "2026-07-23T15:38:17Z"
-generated_at: "2026-07-25T11:50:12Z"
+source_commit: "4bc21c0fa28323c0f3e0be93c9ad114b705029c6"
+source_commit_short: "4bc21c0"
+source_commit_date: "2026-08-29T11:30:40+02:00"
+generated_at: "2026-08-29T09:38:50.587878Z"
 ---
-
 Beyond accessing model attributes directly via their field names (e.g. `model.foobar`), models can be converted, dumped,
 serialized, and exported in a number of ways. Serialization can be customized for the whole model, or on a per-field
 or per-type basis.
@@ -145,12 +144,11 @@ variety of types ([date and time types][datetime], [`UUID`][uuid.UUID] objects, 
 is used and can't be serialized to JSON, a [`PydanticSerializationError`][pydantic_core.PydanticSerializationError] exception
 is raised.
 
-!!! tip "Logfire integration"
-    A serialization error like this often only shows up when a particular object reaches the point of being
-    serialized (commonly when building a response), so it can be easy to miss until it happens in
-    production. Like any exception, it's captured by [Logfire](../integrations/logfire.md) if you've
-    instrumented your application, in the context of the request that triggered it, and grouped with other
-    occurrences so you can tell a one-off from a recurring problem.
+A serialization error like this often only shows up when a particular object reaches the point of being
+serialized (commonly when building a response), so it can be easy to miss until it happens in
+production. Like any exception, it's captured by [Logfire](../integrations/logfire.md) if you've
+instrumented your application, in the context of the request that triggered it, and grouped with other
+occurrences so you can tell a one-off from a recurring problem.
 
 !!! info "See also"
     The [`TypeAdapter.dump_json()`][pydantic.TypeAdapter.dump_json] method, useful when *not* dealing with Pydantic models.
@@ -470,7 +468,9 @@ As with [field serializers](#field-serializers), **two** different types of mode
     ```
 
       1. `'plain'` is the default mode for the decorator, and can be omitted.
-      2. You are free to return a value that *isn't* a dictionary.
+      2. You are free to return a value that *isn't* a dictionary. However, note that this may cause
+         type checking issues (as the return type of [`model_dump()`][pydantic.main.BaseModel.model_dump]
+         is `dict[str, Any]`).
 
 * ***Wrap* serializers**: give more flexibility to customize the serialization behavior. You can run code before or after
   the Pydantic serialization logic.

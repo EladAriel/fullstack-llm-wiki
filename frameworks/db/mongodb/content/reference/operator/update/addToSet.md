@@ -1,138 +1,178 @@
 ---
 type: "Framework Learn Page"
-framework: "mongodb"
+framework: "MongoDB"
 source_repo: "https://github.com/mongodb/docs.git"
 source_branch: "main"
 source_path: "content/manual/manual/source/reference/operator/update/addToSet.txt"
-source_commit: "ab9db26ed3d11618cdb61516d8180337d8e3f679"
-source_commit_short: "ab9db26e"
-source_commit_date: "2026-07-24T16:22:46-06:00"
-generated_at: "2026-07-25T11:51:15Z"
+source_commit: "b9f2bc487a2878b65e3c1f80024bebab76954f27"
+source_commit_short: "b9f2bc48"
+source_commit_date: "2026-08-28T17:09:45-05:00"
+generated_at: "2026-08-29T09:39:20.103107Z"
 ---
-
-===========================
-
 # $addToSet (update operator)
+
+.. default-domain:: mongodb
+
+**facet:** :name: programming_language
+   :values: shell
+
+**meta:** :description: Use the $addToSet operator to add unique values to MongoDB arrays, ensuring no new duplicates. $addToSet appends values without guaranteeing element order.
+
+**contents:** On this page
+   :local:
+   :backlinks: none
+   :depth: 1
+   :class: singlecol
 
 ## Definition
 
+**update:** $addToSet
+
+   The :update:`$addToSet` operator adds a value to an array unless the value
+   is already present, in which case :update:`$addToSet` does nothing to that
+   array.
+
 ## Compatibility
 
-.. include:: /includes/fact-compatibility.rst
+.. |operator-method| replace:: ``$addToSet``
+
+**include:** /includes/fact-compatibility.rst
 
 ## Syntax
 
 The :update:`$addToSet` operator has the form:
 
-```javascript
-{ $addToSet: { <field1>: <value1>, ... } }
-```
+.. code-block:: javascript
 
-.. include:: /includes/use-dot-notation.rst
+   { $addToSet: { <field1>: <value1>, ... } }
+
+**include:** /includes/use-dot-notation.rst
 
 ## Behavior
 
-.. include:: /includes/fact-update-operator-processing-order.rst
+**include:** /includes/fact-update-operator-processing-order.rst
 
-:update:`$addToSet` only ensures that there are no duplicate items added to the set and does not affect existing duplicate elements. :update:`$addToSet` does not guarantee a particular ordering of elements in the modified set.
+:update:`$addToSet` only ensures that there are no duplicate items
+*added* to the set and does not affect existing duplicate elements.
+:update:`$addToSet` does not guarantee a particular ordering of
+elements in the modified set.
 
-.. include:: /includes/extracts/update-operation-empty-operand-expressions-add-to-set.rst
+**include:** /includes/extracts/update-operation-empty-operand-expressions-add-to-set.rst
 
 ### Missing Field
 
-If you use :update:`$addToSet` on a field that is absent from the document to update, :update:`$addToSet` creates the array field with the specified value as its element.
+If you use :update:`$addToSet` on a field that is absent from the
+document to update, :update:`$addToSet` creates the array field with
+the specified value as its element.
 
 ### Field is Not an Array
 
-If you use :update:`$addToSet` on a field that is **not** an array, the operation fails.
+If you use :update:`$addToSet` on a field that is **not** an array, the
+operation fails.
 
-For example, create the `pigments` collection:
+For example, create the ``pigments`` collection:
 
-```javascript
-db.pigments.insertOne( { _id: 1, colors: "blue, green, red" } )
-```
+.. code-block:: javascript
 
-The `colors` field is not an array. The following :update:`$addToSet` operation fails:
+   db.pigments.insertOne( { _id: 1, colors: "blue, green, red" } )
 
-```javascript
-db.pigments.updateOne(
-   { _id: 1 },
-   { $addToSet: { colors: "mauve" } }
-)
-```
+The ``colors`` field is not an array. The following :update:`$addToSet`
+operation fails:
+
+.. code-block:: javascript
+
+   db.pigments.updateOne(
+      { _id: 1 },
+      { $addToSet: { colors: "mauve" } }
+   )
 
 ### Value to Add is An Array
 
-If the value is an array, :update:`$addToSet` appends the whole array as a single element.
+If the value is an array, :update:`$addToSet` appends the whole array
+as a *single* element.
 
-Create the `alphabet` collection:
+Create the ``alphabet`` collection:
 
-```javascript
-db.alphabet.insertOne( { _id: 1, letters: ["a", "b"] } )
-```
+.. code-block:: javascript
 
-The following operation appends the array `[ "c", "d" ]` to the `letters` field:
+   db.alphabet.insertOne( { _id: 1, letters: ["a", "b"] } )
 
-```javascript
-db.alphabet.updateOne(
-   { _id: 1 },
-   { $addToSet: { letters: [ "c", "d" ] } }
-)
-```
+The following operation appends the array ``[ "c", "d" ]`` to the
+``letters`` field:
 
-The array `[ "c", "d" ]` is added as a single element:
+.. code-block:: javascript
 
-```javascript
- { _id: 1, letters: [ 'a', 'b', [ 'c', 'd' ] ] }
-```
+   db.alphabet.updateOne(
+      { _id: 1 },
+      { $addToSet: { letters: [ "c", "d" ] } }
+   )
 
-> **Tip:** To add each element of the value **separately**, use the
-:update:`$each` modifier with :update:`$addToSet`. See
-`addToSet-modifiers` for details.
+The array ``[ "c", "d" ]`` is added as a single element:
+
+.. code-block:: javascript
+
+    { _id: 1, letters: [ 'a', 'b', [ 'c', 'd' ] ] }
+
+**tip:** To add each element of the value **separately**, use the
+   :update:`$each` modifier with :update:`$addToSet`. See
+   :ref:`addToSet-modifiers` for details.
 
 ### Value to Add is a Document
 
-If the value is a document, MongoDB determines that the document is a duplicate if an existing document in the array matches the to-be-added document exactly. That is, the existing document has the exact same fields and values and the fields are in the same order. Field order matters and you cannot specify that MongoDB compare only a subset of the fields in the document to determine whether the document is a duplicate of an existing array element.
+If the value is a document, MongoDB determines that the document is a
+duplicate if an existing document in the array matches the to-be-added
+document exactly. That is, the existing document has the exact same
+fields and values *and* the fields are in the same order. Field order
+matters and you cannot specify that MongoDB compare only a subset of
+the fields in the document to determine whether the document is a
+duplicate of an existing array element.
 
 ## Examples
 
-Create the `inventory` collection:
+Create the ``inventory`` collection:
 
-```javascript
-db.inventory.insertOne( 
-   { _id: 1, item: "polarizing_filter", tags: [ "electronics", "camera" ] }
-)
-```
+.. code-block:: javascript
+
+   db.inventory.insertOne( 
+      { _id: 1, item: "polarizing_filter", tags: [ "electronics", "camera" ] }
+   )
 
 ### Add to Array
 
-The following operation adds the element `"accessories"` to the `tags` array since `"accessories"` does not exist in the array:
+The following operation adds the element ``"accessories"`` to the
+``tags`` array since ``"accessories"`` does not exist in the array:
 
-```javascript
-db.inventory.updateOne(
-   { _id: 1 },
-   { $addToSet: { tags: "accessories" } }
-)
-```
+.. code-block:: javascript
+
+   db.inventory.updateOne(
+      { _id: 1 },
+      { $addToSet: { tags: "accessories" } }
+   )
 
 ### Value Already Exists
 
-The following :update:`$addToSet` operation has no effect because `"camera"` is already an element of the `tags` array:
+The following :update:`$addToSet` operation has no effect because
+``"camera"`` is already an element of the ``tags`` array:
 
-```javascript
-db.inventory.updateOne(
-   { _id: 1 },
-   { $addToSet: { tags: "camera"  } }
-)
-```
+.. code-block:: javascript
 
-### `$each` Modifier
+   db.inventory.updateOne(
+      { _id: 1 },
+      { $addToSet: { tags: "camera"  } }
+   )
 
-You can use the :update:`$addToSet` operator with the :update:`$each` modifier. The :update:`$each` modifier allows the :update:`$addToSet` operator to add multiple values to the array field.
+.. _addToSet-modifiers:
 
-.. include:: /includes/example-addToSet-each.rst
+### ``$each`` Modifier
 
-> **Seealso:** - :method:`db.collection.updateMany()`
-- :method:`db.collection.findAndModify()`
-- :update:`$push`
-- :update:`$pull`
+You can use the :update:`$addToSet` operator with the
+:update:`$each` modifier. The :update:`$each` modifier allows the
+:update:`$addToSet` operator to add multiple values to the array
+field.
+
+**include:** /includes/example-addToSet-each.rst
+
+**seealso:** - :method:`db.collection.updateMany()`
+   - :method:`db.collection.findAndModify()`
+   - :update:`$push`
+   - :update:`$pull`

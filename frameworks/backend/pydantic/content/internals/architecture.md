@@ -1,14 +1,15 @@
 ---
 type: "Framework Learn Page"
-framework: "pydantic"
+framework: "Pydantic"
 source_repo: "https://github.com/pydantic/pydantic"
 source_branch: "main"
 source_path: "docs/internals/architecture.md"
-source_commit: "a2a6577d4c329dd574a45dbb01a8feaa16b1ad3d"
-source_commit_short: "a2a6577d"
-source_commit_date: "2026-07-23T15:38:17Z"
-generated_at: "2026-07-25T11:50:12Z"
+source_commit: "4bc21c0fa28323c0f3e0be93c9ad114b705029c6"
+source_commit_short: "4bc21c0"
+source_commit_date: "2026-08-29T11:30:40+02:00"
+generated_at: "2026-08-29T09:38:50.585059Z"
 ---
+# Architecture
 
 !!! note
     This section is part of the *internals* documentation, and is partly targeted to contributors.
@@ -233,3 +234,12 @@ dumped = model.model_dump()  # (2)!
    [`SchemaSerializer.to_python`][pydantic_core.SchemaSerializer.to_python] method.
    `pydantic-core` will read the instance's `__dict__` attribute and built the appropriate result
    (again, following the core schema of the model).
+
+### The plugin hook around validation
+
+Pydantic wraps the `SchemaValidator` in a plugin layer: when plugins are installed, each of the
+`validate_python`, `validate_json`, and `validate_strings` calls can be intercepted, letting a plugin
+observe the input, result, and any error for every validation. This is the mechanism behind
+observability tooling such as [Logfire](../integrations/logfire.md), which uses it to record validations
+without any per-call instrumentation. Plugins are configured per model through the
+[`plugin_settings`][pydantic.ConfigDict.plugin_settings] configuration value.

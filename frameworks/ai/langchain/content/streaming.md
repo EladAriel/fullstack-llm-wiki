@@ -4,12 +4,11 @@ framework: "LangChain"
 source_repo: "https://github.com/langchain-ai/docs"
 source_branch: "main"
 source_path: "src/oss/langchain/streaming.mdx"
-source_commit: "2aae1dfc98ee953a9a5185fb6fcdd9efb3f4d878"
-source_commit_short: "2aae1dfc"
-source_commit_date: "2026-07-25T00:27:23Z"
-generated_at: "2026-07-25T11:51:05Z"
+source_commit: "a174f9cf7c91ee5eb14ee2382eb48bfe6e4956e9"
+source_commit_short: "a174f9c"
+source_commit_date: "2026-08-28T17:04:12-07:00"
+generated_at: "2026-08-29T09:38:24.248872Z"
 ---
-
 ---
 title: Streaming
 description: Stream real-time updates from agent runs
@@ -266,6 +265,18 @@ for await (const [token, metadata] of await agent.stream(
     console.log(`content: ${JSON.stringify(token.contentBlocks, null, 2)}`);
 }
 ```
+:::
+
+:::python
+<Note>
+    **Wrapping an agent as a node in a parent `StateGraph`?** @[`create_agent`] returns a compiled graph, so using it as a node makes it a subgraph. `stream_mode="messages"` on the parent graph will not emit token chunks from the inner agent's LLM calls unless you pass `subgraphs=True`. See [Subgraph outputs](/oss/langgraph/streaming#subgraph-outputs).
+</Note>
+:::
+
+:::js
+<Note>
+    **Wrapping an agent as a node in a parent `StateGraph`?** @[`createAgent`] returns a `ReactAgent` wrapper; pass `agent.graph` when adding it as a node. Use `subgraphs: true` so message chunks include the subgraph namespace. See [Subgraph outputs](/oss/langgraph/streaming#subgraph-outputs).
+</Note>
 :::
 
 ## Custom updates

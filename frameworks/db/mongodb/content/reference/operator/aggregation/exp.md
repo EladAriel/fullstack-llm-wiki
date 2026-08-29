@@ -1,49 +1,89 @@
 ---
 type: "Framework Learn Page"
-framework: "mongodb"
+framework: "MongoDB"
 source_repo: "https://github.com/mongodb/docs.git"
 source_branch: "main"
 source_path: "content/manual/manual/source/reference/operator/aggregation/exp.txt"
-source_commit: "ab9db26ed3d11618cdb61516d8180337d8e3f679"
-source_commit_short: "ab9db26e"
-source_commit_date: "2026-07-24T16:22:46-06:00"
-generated_at: "2026-07-25T11:51:15Z"
+source_commit: "b9f2bc487a2878b65e3c1f80024bebab76954f27"
+source_commit_short: "b9f2bc48"
+source_commit_date: "2026-08-28T17:09:45-05:00"
+generated_at: "2026-08-29T09:39:20.217456Z"
 ---
-
-==========================
-
 # $exp (expression operator)
+
+**meta:** :description: Use the `$exp` operator in MongoDB to raise Euler's number to a specified exponent, returning a double or decimal result.
+
+.. default-domain:: mongodb
+
+**contents:** On this page
+   :local:
+   :backlinks: none
+   :depth: 1
+   :class: singlecol
 
 ## Definition
 
+**expression:** $exp 
+
+   Raises Euler's number (i.e. *e* ) to the specified exponent and
+   returns the result. 
+
+   :expression:`$exp` has the following syntax:
+
+   .. code-block:: javascript
+
+      { $exp: <exponent> }
+
+   The ``<exponent>`` expression can be any valid :ref:`expression
+   <aggregation-expressions>` as long as it resolves to a number. For
+   more information on expressions, see :ref:`aggregation-expressions`.
+
 ## Behavior
 
-.. include:: /includes/agg-expression-double-unless-decimal-behavior.rst
+**include:** /includes/agg-expression-double-unless-decimal-behavior.rst
 
-.. include:: /includes/extracts/agg-expression-null-operand-exp.rst
+**include:** /includes/extracts/agg-expression-null-operand-exp.rst
+
+.. list-table::
+   :header-rows: 1
+   :widths: 85 15
+
+   * - Example
+     - Results
+
+   * - ``{ $exp: 0 }``
+     - ``1``
+
+   * - ``{ $exp: 2 }``
+     - ``7.38905609893065``
+
+   * - ``{ $exp: -2 }``
+     - ``0.1353352832366127``
 
 ## Example
 
-A collection named `accounts` contains the following documents:
+A collection named ``accounts`` contains the following documents:
 
-```javascript
-db.accounts.insertMany( [
-   { _id: 1, interestRate: .08, presentValue: 10000 },
-   { _id: 2, interestRate: .0825, presentValue: 250000 },
-   { _id: 3, interestRate: .0425, presentValue: 1000 }
-] )
-```
+.. code-block:: javascript
 
-The following example calculates the effective interest rate for continuous compounding:
+   db.accounts.insertMany( [
+      { _id: 1, interestRate: .08, presentValue: 10000 },
+      { _id: 2, interestRate: .0825, presentValue: 250000 },
+      { _id: 3, interestRate: .0425, presentValue: 1000 }
+   ] )
 
-```javascript
-db.accounts.aggregate( [ { $project: { effectiveRate: { $subtract: [ { $exp: "$interestRate"}, 1 ] } } } ] )
-```
+The following example calculates the effective interest rate for
+continuous compounding:
+
+.. code-block:: javascript
+
+   db.accounts.aggregate( [ { $project: { effectiveRate: { $subtract: [ { $exp: "$interestRate"}, 1 ] } } } ] )
 
 The operation returns the following results:
 
-```javascript
-{ "_id" : 1, "effectiveRate" : 0.08328706767495864 }
-{ "_id" : 2, "effectiveRate" : 0.08599867343905654 }
-{ "_id" : 3, "effectiveRate" : 0.04341605637367807 }
-```
+.. code-block:: javascript
+   :copyable: false
+
+   { "_id" : 1, "effectiveRate" : 0.08328706767495864 }
+   { "_id" : 2, "effectiveRate" : 0.08599867343905654 }
+   { "_id" : 3, "effectiveRate" : 0.04341605637367807 }

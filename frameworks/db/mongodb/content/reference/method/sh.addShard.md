@@ -1,51 +1,120 @@
 ---
 type: "Framework Learn Page"
-framework: "mongodb"
+framework: "MongoDB"
 source_repo: "https://github.com/mongodb/docs.git"
 source_branch: "main"
 source_path: "content/manual/manual/source/reference/method/sh.addShard.txt"
-source_commit: "ab9db26ed3d11618cdb61516d8180337d8e3f679"
-source_commit_short: "ab9db26e"
-source_commit_date: "2026-07-24T16:22:46-06:00"
-generated_at: "2026-07-25T11:51:15Z"
+source_commit: "b9f2bc487a2878b65e3c1f80024bebab76954f27"
+source_commit_short: "b9f2bc48"
+source_commit_date: "2026-08-28T17:09:45-05:00"
+generated_at: "2026-08-29T09:39:19.972705Z"
 ---
-
-==============================
-
 # sh.addShard() (mongosh method)
+
+**meta:** :description: Add a shard replica set to a sharded cluster using the `sh.addShard()` method on a `mongos` instance.
+
+.. default-domain:: mongodb
+
+**contents:** On this page
+   :local:
+   :backlinks: none
+   :depth: 1
+   :class: singlecol
 
 ## Definition
 
+**method:** sh.addShard(<url>)
+
+   Adds a shard replica set to a :term:`sharded cluster`. This method
+   must be run on a :binary:`~bin.mongos` instance.
+
+   .. |dbcommand| replace:: :dbcommand:`addShard` command
+   .. include:: /includes/fact-mongosh-shell-method-alt.rst
+
+   The :method:`sh.addShard()` method has the following parameter:
+
+
+   .. list-table::
+      :header-rows: 1
+      :widths: 20 20 80
+   
+      * - Parameter
+   
+        - Type
+   
+        - Description
+   
+      * - ``host``
+   
+        - string
+   
+        - The replica set name, hostname, and port of at least one member of
+          the shard's replica set. Any additional replica set member hostnames
+          must be comma separated. For example:
+          
+          .. code-block:: bash
+          
+             <replica_set>/<hostname><:port>,<hostname><:port>, ...
+          
+          
+   
+
+
+   The :method:`sh.addShard()` method has the following prototype form:
+
+   .. code-block:: javascript
+
+      sh.addShard("<replica_set>/<hostname><:port>")
+
+   .. warning::
+
+      Do not use ``localhost`` for the hostname unless your
+      config server
+      is also running on ``localhost``.
+
+      .. |mongodb-package| replace:: :binary:`~bin.mongos`
+      .. include:: /includes/note-deb-and-rpm-default-to-localhost.rst
+
+   .. include:: /includes/extracts/mongos-operations-wc-add-shard.rst
+
 ## Compatibility
 
-This method is available in deployments hosted in the following environments:
+This method is available in deployments hosted in the following environments: 
 
-.. include:: /includes/fact-environments-atlas-only.rst
+**include:** /includes/fact-environments-atlas-only.rst
 
-.. include:: /includes/fact-environments-atlas-support-no-free.rst
+**include:** /includes/fact-environments-atlas-support-no-free.rst
 
-.. include:: /includes/fact-environments-onprem-only.rst
+**include:** /includes/fact-environments-onprem-only.rst
 
 ## Considerations
 
 ### Balancing
 
-.. include:: /includes/fact-adding-shards-changes-cluster-balance.rst
+**include:** /includes/fact-adding-shards-changes-cluster-balance.rst
 
 ### Hidden Members
 
-.. include:: /includes/important-add-shard-not-compatible-with-hidden-members.rst
+.. |cmd-name| replace:: :method:`sh.addShard()`
+**include:** /includes/important-add-shard-not-compatible-with-hidden-members.rst
 
 ### DDL Operations
 
-If you run `sh.addShard` while your cluster executes a DDL operation (operation that modifies a collection such as :dbcommand:`reshardCollection`), `sh.addShard` only executes after the concurrent DDL operation finishes.
+If you run ``sh.addShard`` while your cluster executes a DDL operation
+(operation that modifies a collection such as
+:dbcommand:`reshardCollection`), ``sh.addShard`` only executes after the
+concurrent DDL operation finishes. 
 
 ## Example
 
-To add a shard, specify the name of the replica set and the hostname of at least one member of the replica set, as a seed. If you specify additional hostnames, all must be members of the same replica set.
+To add a shard, specify the name of the replica set and
+the hostname of at least one member of the replica set, as a seed. If
+you specify additional hostnames, all must be members of the same
+replica set.
 
-The following example adds a replica set named `repl0` and specifies one member of the replica set:
+The following example adds a replica set named ``repl0`` and specifies
+one member of the replica set:
 
-```javascript
-sh.addShard("repl0/mongodb3.example.net:27327")
-```
+.. code-block:: javascript
+
+   sh.addShard("repl0/mongodb3.example.net:27327")

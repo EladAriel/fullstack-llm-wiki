@@ -1,70 +1,163 @@
 ---
 type: "Framework Learn Page"
-framework: "mongodb"
+framework: "MongoDB"
 source_repo: "https://github.com/mongodb/docs.git"
 source_branch: "main"
 source_path: "content/manual/manual/source/reference/operator/aggregation/rtrim.txt"
-source_commit: "ab9db26ed3d11618cdb61516d8180337d8e3f679"
-source_commit_short: "ab9db26e"
-source_commit_date: "2026-07-24T16:22:46-06:00"
-generated_at: "2026-07-25T11:51:15Z"
+source_commit: "b9f2bc487a2878b65e3c1f80024bebab76954f27"
+source_commit_short: "b9f2bc48"
+source_commit_date: "2026-08-28T17:09:45-05:00"
+generated_at: "2026-08-29T09:39:20.170119Z"
 ---
-
-=============================
-
 # $rtrim  (expression operator)
 
+**meta:** :description: Use `$rtrim` in MongoDB to remove specified characters or whitespace from the end of a string in aggregation operations.
+
+.. default-domain:: mongodb
+
+**contents:** On this page
+   :local:
+   :backlinks: none
+   :depth: 1
+   :class: singlecol
+
 ## Definition
+
+**expression:** $rtrim
+
+   Removes whitespace characters, including null, or the specified
+   characters from the end of a string.
+
+   :expression:`$rtrim` has the following syntax:
+
+   .. code-block:: javascript
+
+      { $rtrim: { input: <string>,  chars: <string> } }
+
+
+   The :expression:`$rtrim` takes a document with the following fields:
+
+   .. list-table::
+      :widths: 20 80
+      :header-rows: 1
+
+      * - Field
+        - Description
+
+      * - ``input``
+
+        - The string to trim. The argument can be any valid
+          :ref:`expression <aggregation-expressions>` that resolves to
+          a string. For more information on expressions, see
+          :ref:`aggregation-expressions`.
+
+      * - ``chars``
+
+        - Optional. The character(s) to trim from the end of the
+          ``input``.
+
+          The argument can be any valid :ref:`expression
+          <aggregation-expressions>` that resolves to a string. The
+          :expression:`$rtrim` operator breaks down the string into
+          individual UTF `code point
+          <http://www.unicode.org/glossary/#code_point>`_ to trim from
+          ``input``.
+
+          If unspecified, :expression:`$rtrim` removes whitespace
+          characters, including the null character. For the list of
+          whitespace characters, see :ref:`rtrim-white-space`.
+
+   .. seealso::
+
+      - :expression:`$ltrim`
+      - :expression:`$trim`
 
 ## Behavior
 
 - By default, :expression:`$rtrim` removes whitespace,
-including the null character, from the end of the input string:
+  including the null character, from the end of the input string:
 
-- You can override the default characters to trim using the `chars`
-field.
+  .. list-table::
+     :header-rows: 1
+     :widths: 70 30
 
-For example, the following trims any `g` and `e` from the end of the input string. Since the input ends with a whitespace, neither character can be trimmed from the end of the string.
+     * - Example
+       - Results
+
+     * - ``{ $rtrim: { input: "  \n good  bye \t  " } }``
+       - ``"  \n good  bye"``
+
+- You can override the default characters to trim using the ``chars``
+  field.
+
+  For example, the following trims any ``g`` and ``e`` from the end of
+  the input string. Since the input ends with a whitespace, neither
+  character can be trimmed from the end of the string.
+
+  .. list-table::
+     :header-rows: 1
+     :widths: 70 30
+
+     * - Example
+       - Results
+
+     * - ``{ $rtrim: { input: "ggggoodbyeeeee   ", chars: "ge" } }``
+       - ``"ggggoodbyeeeee   "``
 
 - If overriding the default characters to trim, you can explicitly
-include the whitespace character(s) to trim in the `chars` field.
+  include the whitespace character(s) to trim in the ``chars`` field.
 
-For example, the following trims any space or `e` from the end of the input string.
+  For example, the following trims any space or ``e`` from the end of
+  the input string.
+
+  .. list-table::
+     :header-rows: 1
+     :widths: 80 20
+
+     * - Example
+       - Results
+
+     * - ``{ $rtrim: { input: " ggggoodbyeeeee   ", chars: "e " } }``
+       - ``" ggggoodby"``
+
+.. _rtrim-white-space:
 
 ### Whitespace Characters
 
-By default, :expression:`$rtrim` removes the following whitespace, including the null character:
+By default, :expression:`$rtrim` removes the following whitespace,
+including the null character:
 
-.. include:: /includes/list-table-trim-white-space.rst
+**include:** /includes/list-table-trim-white-space.rst
 
 ## Limitations
 
-.. include:: /includes/fact-trim-chars-length-limit.rst
+**include:** /includes/fact-trim-chars-length-limit.rst
 
 ## Example
 
-Consider an `inventory` collection with the following documents:
+Consider an ``inventory`` collection with the following documents:
 
-```javascript
-db.inventory.insertMany( [
-   { _id: 1, item: "ABC1", quarter: "13Q1", description: " product 1" },
-   { _id: 2, item: "ABC2", quarter: "13Q4", description: "product 2 \n The product is in stock.  \n\n  " },
-   { _id: 3, item: "XYZ1", quarter: "14Q2", description: null }
-] )
-```
+.. code-block:: javascript
 
-The following operation uses the :expression:`$rtrim` operator to remove trailing whitespace from the `description` field:
+   db.inventory.insertMany( [
+      { _id: 1, item: "ABC1", quarter: "13Q1", description: " product 1" },
+      { _id: 2, item: "ABC2", quarter: "13Q4", description: "product 2 \n The product is in stock.  \n\n  " },
+      { _id: 3, item: "XYZ1", quarter: "14Q2", description: null }
+   ] )
 
-```javascript
-db.inventory.aggregate([
-   { $project: { item: 1, description: { $rtrim: { input: "$description" } } } }
-])
-```
+The following operation uses the :expression:`$rtrim` operator to
+remove trailing whitespace from the ``description`` field:
+
+.. code-block:: javascript
+
+   db.inventory.aggregate([
+      { $project: { item: 1, description: { $rtrim: { input: "$description" } } } }
+   ])
 
 The operation returns the following results:
 
-```javascript
-{ _id: 1, item: "ABC1", description: " product 1" }
-{ _id: 2, item: "ABC2", description: "product 2 \n The product is in stock." }
-{ _id: 3, item: "XYZ1", description: null }
-```
+.. code-block:: javascript
+
+   { _id: 1, item: "ABC1", description: " product 1" }
+   { _id: 2, item: "ABC2", description: "product 2 \n The product is in stock." }
+   { _id: 3, item: "XYZ1", description: null }

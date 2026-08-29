@@ -1,108 +1,127 @@
 ---
 type: "Framework Learn Page"
-framework: "mongodb"
+framework: "MongoDB"
 source_repo: "https://github.com/mongodb/docs.git"
 source_branch: "main"
 source_path: "content/manual/manual/source/reference/operator/aggregation/bitOr.txt"
-source_commit: "ab9db26ed3d11618cdb61516d8180337d8e3f679"
-source_commit_short: "ab9db26e"
-source_commit_date: "2026-07-24T16:22:46-06:00"
-generated_at: "2026-07-25T11:51:15Z"
+source_commit: "b9f2bc487a2878b65e3c1f80024bebab76954f27"
+source_commit_short: "b9f2bc48"
+source_commit_date: "2026-08-28T17:09:45-05:00"
+generated_at: "2026-08-29T09:39:20.199898Z"
 ---
-
-============================
-
 # $bitOr (expression operator)
+
+**meta:** :description: Explore the `$bitOr` aggregation operator in MongoDB, which performs a bitwise OR operation on arrays of integers and long values.
+
+.. default-domain:: mongodb
+
+**contents:** On this page
+  :local:
+  :backlinks: none
+  :depth: 1
+  :class: singlecol
 
 ## Definition
 
-.. versionadded:: 6.3
+**versionadded:** 6.3
+
+**expression:** $bitOr
+
+    Returns the result of a bitwise ``or`` operation on an array of ``int`` and 
+    ``long`` values. 
 
 ## Syntax
 
-The `$bitOr` operator has the following syntax:
+The ``$bitOr`` operator has the following syntax: 
 
-```javascript
-   { $bitOr: [ <expression1>, <expression2>, ... ] }
-```
+.. code-block:: javascript
+
+      { $bitOr: [ <expression1>, <expression2>, ... ] }
 
 ## Behavior
 
-.. include:: /includes/fact-bitwise-integer-long-results.rst
+**include:** /includes/fact-bitwise-integer-long-results.rst
 
-.. include:: /includes/fact-mongosh-integer-long-constructors.rst
+**include:** /includes/fact-mongosh-integer-long-constructors.rst
 
-.. include:: /includes/fact-bitwise-type-error.rst
+**include:** /includes/fact-bitwise-type-error.rst
 
-If the argument is an empty array, the operation returns `Int32(0)`.
+If the argument is an empty array, the operation returns ``Int32(0)``.
 
-If any of the arguments in the array equate to `null`, the operation returns `null`.
+If any of the arguments in the array equate to ``null``, the operation returns 
+``null``. 
 
 ## Examples
 
-The examples on this page use the `switches` collection, which contains the following documents:
+The examples on this page use the ``switches`` collection, which contains the 
+following documents: 
 
-```javascript
- db.switches.insertMany( [
-     { _id: 0, a: Int32(0), b: Int32(127) },
-     { _id: 1, a: Int32(2), b: Int32(3) },
-     { _id: 2, a: Int32(3), b: Int32(5) }
- ] )
-```
+.. code-block:: javascript 
 
-### Bitwise `OR` with Two Integers
+    db.switches.insertMany( [
+        { _id: 0, a: Int32(0), b: Int32(127) },
+        { _id: 1, a: Int32(2), b: Int32(3) },
+        { _id: 2, a: Int32(3), b: Int32(5) }
+    ] )
 
-The following aggregation uses the `$bitOr` operator in the :pipeline:`$project` stage:
+### Bitwise ``OR`` with Two Integers
 
-```javascript
- db.switches.aggregate( [
-   { 
-     $project: { 
-       result: { 
-         $bitOr: [ "$a", "$b" ]
-       }
-     }
-   }
- ])
-```
+The following aggregation uses the ``$bitOr`` operator in the 
+:pipeline:`$project` stage:
 
-The operation returns the following results:
+.. code-block:: javascript 
 
-```javascript
- [
-   { _id: 0, result: 127 },
-   { _id: 1, result: 3 },
-   { _id: 2, result: 7 }
- ]
-```
-
-### Bitwise `OR` with a Long and Integer
-
-The following aggregation uses the `$bitOr` operator in the :pipeline:`$project` stage:
-
-```javascript
- db.switches.aggregate( [
-   { 
-     $project: { 
-       result: { 
-         $bitOr: [ "$a", Long("63") ]
-       }
-     }
-   }
- ])
-```
+    db.switches.aggregate( [
+      { 
+        $project: { 
+          result: { 
+            $bitOr: [ "$a", "$b" ]
+          }
+        }
+      }
+    ])
 
 The operation returns the following results:
 
-```javascript
- [
-   { _id: 0, result: Long("0") },
-   { _id: 1, result: Long("2") },
-   { _id: 2, result: Long("3") }
- ]
-```
+.. code-block:: javascript 
+  :copyable: false
+
+    [
+      { _id: 0, result: 127 },
+      { _id: 1, result: 3 },
+      { _id: 2, result: 7 }
+    ]
+
+### Bitwise ``OR`` with a Long and Integer
+
+The following aggregation uses the ``$bitOr`` operator in the 
+:pipeline:`$project` stage:
+
+.. code-block:: javascript 
+
+    db.switches.aggregate( [
+      { 
+        $project: { 
+          result: { 
+            $bitOr: [ "$a", Long("63") ]
+          }
+        }
+      }
+    ])
+
+The operation returns the following results:
+
+.. code-block:: javascript 
+  :copyable: false
+    
+    [
+      { _id: 0, result: Long("0") },
+      { _id: 1, result: Long("2") },
+      { _id: 2, result: Long("3") }
+    ]
 
 ## Learn More
 
-- `aggregation-pipeline-operators`
-- `update-bit`
+- :ref:`aggregation-pipeline-operators`
+
+- :ref:`update-bit`

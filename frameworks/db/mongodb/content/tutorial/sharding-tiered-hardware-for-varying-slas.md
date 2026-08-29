@@ -1,152 +1,214 @@
 ---
 type: "Framework Learn Page"
-framework: "mongodb"
+framework: "MongoDB"
 source_repo: "https://github.com/mongodb/docs.git"
 source_branch: "main"
 source_path: "content/manual/manual/source/tutorial/sharding-tiered-hardware-for-varying-slas.txt"
-source_commit: "ab9db26ed3d11618cdb61516d8180337d8e3f679"
-source_commit_short: "ab9db26e"
-source_commit_date: "2026-07-24T16:22:46-06:00"
-generated_at: "2026-07-25T11:51:15Z"
+source_commit: "b9f2bc487a2878b65e3c1f80024bebab76954f27"
+source_commit_short: "b9f2bc48"
+source_commit_date: "2026-08-28T17:09:45-05:00"
+generated_at: "2026-08-29T09:39:19.583371Z"
 ---
-
-===================================================
-
 # Self-Managed Tiered Hardware for Varying SLA or SLO
 
-.. include:: /includes/intro-zone-sharding.rst
+**meta:** :keywords: on-prem
+   :description: Learn to configure zones in sharded clusters for tiered hardware setups to meet varying SLA or SLO requirements.
 
-> **Tip:** .. include:: /includes/extracts/zoned-sharding-pre-define-zone.rst
+.. default-domain:: mongodb
 
-This tutorial uses `zone-sharding` to route documents based on creation date either to shards zoned for supporting recent documents, or those zoned for supporting archived documents.
+**contents:** On this page
+   :local:
+   :backlinks: none
+   :depth: 1
+   :class: singlecol
 
-The following are some example use cases for segmenting data based on Service Level Agreement (SLA) or Service Level Objective (SLO):
+**include:** /includes/intro-zone-sharding.rst
 
-- An application requires providing low-latency access to recently inserted /
-updated documents
+**tip:** .. include:: /includes/extracts/zoned-sharding-pre-define-zone.rst
 
-- An application requires prioritizing low-latency access to a range
-or subset of documents
+This tutorial uses :ref:`zone-sharding` to route documents based on
+creation date either to shards zoned for supporting recent documents, or
+those zoned for supporting archived documents.
 
-- An application that benefits from ensuring specific ranges or subsets of data
-are stored on servers with hardware that suits the SLA's for accessing that data
+The following are some example use cases for segmenting data based on Service
+Level Agreement (SLA) or Service Level Objective (SLO):
 
-The following diagram illustrates a sharded cluster that uses hardware based zones to satisfy data access SLAs or SLOs.
+* An application requires providing low-latency access to recently inserted /
+  updated documents
 
-.. include:: /images/sharding-tiered-slas-overview.rst
+* An application requires prioritizing low-latency access to a range
+  or subset of documents
+
+* An application that benefits from ensuring specific ranges or subsets of data
+  are stored on servers with hardware that suits the SLA's for accessing
+  that data
+
+The following diagram illustrates a sharded cluster that uses hardware based
+zones to satisfy data access SLAs or SLOs.
+
+**include:** /images/sharding-tiered-slas-overview.rst
+
+
 
 ## Scenario
 
-A photo sharing application requires fast access to photos uploaded within the last 6 months. The application stores the location of each photo along with its metadata in the `photoshare` database under the `data` collection.
+A photo sharing application requires fast access to photos uploaded within the
+last 6 months. The application stores the location of each photo along with
+its metadata in the ``photoshare`` database under the ``data`` collection.
 
 The following documents represent photos uploaded by a single user:
 
-```javascript
-{
-  "_id" : 10003010,
-  "creation_date" : ISODate("2012-12-19T06:01:17.171Z"),
-  "userid" : 123,
-  "photo_location" : "example.net/storage/usr/photo_1.jpg"
-}
-{
-  "_id" : 10003011,
-  "creation_date" : ISODate("2013-12-19T06:01:17.171Z"),
-  "userid" : 123,
-  "photo_location" : "example.net/storage/usr/photo_2.jpg"
-}
-{
-  "_id" : 10003012,
-  "creation_date" : ISODate("2016-01-19T06:01:17.171Z"),
-  "userid" : 123,
-  "photo_location" : "example.net/storage/usr/photo_3.jpg"
-}
-```
+.. code-block:: javascript
 
-Note that only the document with `_id : 10003012` was uploaded within the past year (as of June 2016).
+   {
+     "_id" : 10003010,
+     "creation_date" : ISODate("2012-12-19T06:01:17.171Z"),
+     "userid" : 123,
+     "photo_location" : "example.net/storage/usr/photo_1.jpg"
+   }
+   {
+     "_id" : 10003011,
+     "creation_date" : ISODate("2013-12-19T06:01:17.171Z"),
+     "userid" : 123,
+     "photo_location" : "example.net/storage/usr/photo_2.jpg"
+   }
+   {
+     "_id" : 10003012,
+     "creation_date" : ISODate("2016-01-19T06:01:17.171Z"),
+     "userid" : 123,
+     "photo_location" : "example.net/storage/usr/photo_3.jpg"
+   }
+
+Note that only the document with ``_id : 10003012`` was uploaded within
+the past year (as of June 2016).
 
 ### Shard Key
 
-The photo collection uses the `{ creation_date : 1 }` index as the shard key.
+The photo collection uses the ``{ creation_date : 1 }`` index as the shard key.
 
-The `creation_date` field in each document allows for creating zones on the creation date.
+The ``creation_date`` field in each document allows for creating zones
+on the creation date.
 
 ### Architecture
 
-The sharded cluster deployment currently consists of three `shards <shard>`.
+The sharded cluster deployment currently consists of three :term:`shards
+<shard>`.
 
-.. include:: /images/sharding-tiered-slas-architecture.rst
+**include:** /images/sharding-tiered-slas-architecture.rst
+
 
 ### Zones
 
-The application requires adding each shard to a zone based on its hardware tier. Each hardware tier represents a specific hardware configuration designed to satisfy a given SLA or SLO.
+The application requires adding each shard to a zone based on its
+hardware tier. Each hardware tier represents a specific hardware configuration
+designed to satisfy a given SLA or SLO.
 
-.. include:: /images/sharding-tiered-slas-tags.rst
+**include:** /images/sharding-tiered-slas-tags.rst
 
-Fast Tier ("recent") These are the fastest performing machines, with large amounts of RAM, fast SSD disks, and powerful CPUs.
+Fast Tier ("recent")
+   These are the fastest performing machines, with large
+   amounts of RAM, fast SSD disks, and powerful CPUs.
 
-The zone requires a range with:
+   The zone requires a range with:
 
-- a lower bound of `{ creation_date : ISODate(YYYY-mm-dd)}`,
-where the Year, Month, and Date specified by `YYYY-mm-dd` is within the last 6 months.
+   * a lower bound of ``{ creation_date : ISODate(YYYY-mm-dd)}``,
+     where the Year, Month, and Date specified by ``YYYY-mm-dd`` is within the
+     last 6 months.
 
-- an upper bound of `{ creation_date : MaxKey }`.
-Archival Tier ("archive") These machines use less RAM, slower disks, and more basic CPUs. However, they have a greater amount of storage per server.
+   * an upper bound of ``{ creation_date : MaxKey }``.
 
-The zone requires a range with:
+Archival Tier ("archive")
+   These machines use less RAM, slower disks, and more basic CPUs. However,
+   they have a greater amount of storage per server.
 
-- a lower bound of `{ creation_date : MinKey }`.
-- an upper bound of `{ creation_date : ISODate(YYYY-mm-dd)}`,
-where the Year, Month, and Date match the values used for the `recent` tier's lower bound.
+   The zone requires a range with:
 
-> **Note:** The :bsontype:`MinKey` and :bsontype:`MaxKey` values are reserved special
-values for comparisons.
+   * a lower bound of ``{ creation_date : MinKey }``.
 
-As performance needs increase, adding additional shards and associating them to the appropriate zone based on their hardware tier allows for the cluster to scale horizontally.
+   * an upper bound of ``{ creation_date : ISODate(YYYY-mm-dd)}``,
+     where the Year, Month, and Date match the values used for the ``recent``
+     tier's lower bound.
 
-When defining zone ranges based on time spans, weigh the benefits of infrequent updates to the zone ranges against the amount of data that must be migrated on an update. For example, setting a limit of 1 year for data to be considered 'recent' likely covers more data than setting a limit of 1 month. While there are more migrations required when rotating on a 1 month scale, the amount of documents that must be migrated is lower than rotating on a 1 year scale.
+**note:** The :bsontype:`MinKey` and :bsontype:`MaxKey` values are reserved special
+   values for comparisons.
+
+As performance needs increase, adding additional shards and associating them
+to the appropriate zone based on their hardware tier allows for the cluster to
+scale horizontally.
+
+When defining zone ranges based on time spans, weigh the benefits of
+infrequent updates to the zone ranges against the amount of data that
+must be migrated on an update. For example, setting a limit of 1 year for
+data to be considered 'recent' likely covers more data than setting a limit
+of 1 month. While there are more migrations required when rotating on a
+1 month scale, the amount of documents that must be migrated is lower than
+rotating on a 1 year scale.
 
 ## Write Operations
 
-With zones, if an inserted or updated document matches a configured zone, it can only be written to a shard inside that zone.
+With zones, if an inserted or updated document matches a
+configured zone, it can only be written to a shard inside that zone.
 
-MongoDB can write documents that do not match a configured zone to any shard in the cluster.
+MongoDB can write documents that do not match a configured zone to any
+shard in the cluster.
 
-> **Note:** The behavior described above requires the cluster to be in a steady state
-with no chunks violating a configured zone. See the following section
-on the `balancer <sharding-tiered-hardware-balancing>` for more
-information.
+**note:** The behavior described above requires the cluster to be in a steady state
+   with no chunks violating a configured zone. See the following section
+   on the :ref:`balancer <sharding-tiered-hardware-balancing>` for more
+   information.
 
 ## Read Operations
 
-MongoDB can route queries to a specific shard if the query includes the shard key.
+MongoDB can route queries to a specific shard if the query includes the 
+shard key. 
 
-For example, MongoDB can attempt a `targeted read operation <sharding-mongos-targeted>` on the following query because it includes `creation_date` in the query document:
+For example, MongoDB can attempt a :ref:`targeted read operation
+<sharding-mongos-targeted>` on the following query because it includes
+``creation_date`` in the query document:
 
-```javascript
-photoDB = db.getSiblingDB("photoshare")
-photoDB.data.find( { "creation_date" : ISODate("2015-01-01") } )
-```
+.. code-block:: javascript
 
-If the requested document falls within the `recent` zone range, MongoDB would route this query to the shards inside that zone, ensuring a faster read compared to a cluster-wide `broadcast read operation <sharding-mongos-broadcast>`
+   photoDB = db.getSiblingDB("photoshare")
+   photoDB.data.find( { "creation_date" : ISODate("2015-01-01") } )
+   
+If the requested document falls within the ``recent`` zone range, MongoDB
+would route this query to the shards inside that zone, ensuring a faster read
+compared to a cluster-wide :ref:`broadcast read operation
+<sharding-mongos-broadcast>`
+
+.. _sharding-tiered-hardware-balancing:
 
 ## Balancer
 
-The `balancer <sharding-balancing>` `migrates <sharding-chunk-migration>` chunks to the appropriate shard respecting any configured zones. Until the migration, shards may contain chunks that violate configured zones. Once balancing completes, shards should only contain chunks whose ranges do not violate its assigned zones.
+The :ref:`balancer <sharding-balancing>` :ref:`migrates
+<sharding-chunk-migration>` chunks to the appropriate shard respecting any
+configured zones. Until the migration, shards may contain chunks that violate
+configured zones. Once balancing completes, shards should only
+contain chunks whose ranges do not violate its assigned zones.
 
-Adding or removing zones or zone ranges can result in chunk migrations. Depending on the size of your data set and the number of chunks a zone or zone range affects, these migrations may impact cluster performance. Consider running your `balancer <sharding-balancing>` during specific scheduled windows. See `sharding-schedule-balancing-window` for a tutorial on how to set a scheduling window.
+Adding or removing zones or zone ranges can result in chunk migrations.
+Depending on the size of your data set and the number of chunks a zone or zone
+range affects, these migrations may impact cluster performance. Consider
+running your :ref:`balancer <sharding-balancing>` during specific scheduled
+windows. See :ref:`sharding-schedule-balancing-window` for a tutorial on how
+to set a scheduling window.
 
 ## Security
 
-For sharded clusters running with `authorization`, authenticate as a user with at least the :authrole:`clusterManager` role on the `admin` database.
+For sharded clusters running with :ref:`authorization`, authenticate as a user
+with at least the :authrole:`clusterManager` role on the ``admin`` database.
 
 ## Procedure
 
-You must be connected to a :binary:`~bin.mongos` to create zones or zone ranges. You cannot create zone or zone ranges by connecting directly to a `shard`.
+You must be connected to a :binary:`~bin.mongos` to create zones or zone ranges.
+You cannot create zone or zone ranges by connecting directly to a
+:term:`shard`.
 
-.. include:: /includes/steps/sharding-tiered-hardware-for-varying-slas.rst
+**include:** /includes/steps/sharding-tiered-hardware-for-varying-slas.rst
 
 ### Updating Zone Ranges
 
-To update the shard ranges, perform the following operations as a part of a cron job or other scheduled procedure:
+To update the shard ranges, perform the following operations as a part of
+a cron job or other scheduled procedure:
 
-.. include:: /includes/steps/sharding-tiered-hardware-for-varying-slas-update.rst
+**include:** /includes/steps/sharding-tiered-hardware-for-varying-slas-update.rst

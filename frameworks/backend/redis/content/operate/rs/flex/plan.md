@@ -1,14 +1,15 @@
 ---
 type: "Framework Learn Page"
-framework: "redis"
+framework: "Redis"
 source_repo: "https://github.com/redis/docs.git"
 source_branch: "main"
 source_path: "content/operate/rs/flex/plan.md"
-source_commit: "9d30f68c3dad1a6b3b7d30fe604b911348ce8152"
-source_commit_short: "9d30f68c"
-source_commit_date: "2026-07-24T10:52:10-07:00"
-generated_at: "2026-07-25T11:51:22Z"
+source_commit: "f8693349287b0efbef3c865b6f6a2aceca88594d"
+source_commit_short: "f869334"
+source_commit_date: "2026-08-28T10:01:19-05:00"
+generated_at: "2026-08-29T09:38:55.323024Z"
 ---
+# Plan
 
 ---
 title: Plan a Flex deployment for Redis Software
@@ -53,7 +54,7 @@ When planning a Flex deployment, consider the following flash drive requirements
 
 - For the best performance, the SSDs should be NVMe based. NVMe Gen 5 or Gen 4 is recommended. Gen 3 is also supported, but not recommended for best performance.
 
-- Flash storage must be greater than the total provisioned database size to account for write buffers, space amplification, and more.
+- Flash storage must be greater than the total provisioned database size to account for write buffers, space amplification, and more. Flash space should be approximately three times the total memory limit of all Flex databases on the node. Because you can increase a database's memory limit after creation, size flash storage for the expected peak memory limit.
 
 See the general Redis Software [hardware requirements]({{<relref "/operate/rs/installing-upgrading/install/plan-deployment/hardware-requirements">}}) for additional requirements.
 

@@ -1,35 +1,74 @@
 ---
 type: "Framework Learn Page"
-framework: "mongodb"
+framework: "MongoDB"
 source_repo: "https://github.com/mongodb/docs.git"
 source_branch: "main"
 source_path: "content/manual/manual/source/reference/operator/query/box.txt"
-source_commit: "ab9db26ed3d11618cdb61516d8180337d8e3f679"
-source_commit_short: "ab9db26e"
-source_commit_date: "2026-07-24T16:22:46-06:00"
-generated_at: "2026-07-25T11:51:15Z"
+source_commit: "b9f2bc487a2878b65e3c1f80024bebab76954f27"
+source_commit_short: "b9f2bc48"
+source_commit_date: "2026-08-28T17:09:45-05:00"
+generated_at: "2026-08-29T09:39:20.247515Z"
 ---
-
-===============================
-
 # $box (query predicate operator)
 
+**meta:** :description: Specify a rectangle for a `$geoWithin` query using `$box` to find documents within defined grid coordinates.
+
+.. default-domain:: mongodb
+
+**contents:** On this page
+   :local:
+   :backlinks: none
+   :depth: 1
+   :class: singlecol
+
 ## Definition
+
+**query:** $box
+
+   Specifies a rectangle for a :term:`geospatial` :query:`$geoWithin`
+   query to return documents that are within the bounds of the
+   rectangle, according to their point-based location data. When used
+   with the :query:`$box` operator, :query:`$geoWithin` returns
+   documents based on :ref:`grid coordinates
+   <geospatial-legacy>` and does *not* query
+   for GeoJSON shapes.
+
+   To use the :query:`$box` operator, you must specify the bottom
+   left and top right corners of the rectangle in an array object:
+
+   .. code-block:: javascript
+
+      {
+        <location field>: {
+           $geoWithin: {
+              $box: [
+                [ <bottom left coordinates> ],
+                [ <upper right coordinates> ]
+              ]
+           }
+        }
+      }
+
+   .. important::
+      If you use longitude and latitude, specify **longitude first**.
 
 ## Behavior
 
 The query calculates distances using flat (planar) geometry.
 
-.. include:: /includes/note-geospatial-index-must-exist.rst
+.. |operator| replace:: :query:`$box`
+**include:** /includes/note-geospatial-index-must-exist.rst
 
-Only the `2d <2d-index>` geospatial index supports :query:`$box`.
+Only the :ref:`2d <2d-index>` geospatial index supports :query:`$box`.
 
 ## Example
 
-The following example query returns all documents that are within the box having points at: `[ 0 , 0 ]`, `[ 0 , 100 ]`, `[ 100 , 0 ]`, and `[ 100 , 100 ]`.
+The following example query returns all documents that are within the
+box having points at: ``[ 0 , 0 ]``, ``[ 0 , 100 ]``, ``[ 100 , 0 ]``,
+and ``[ 100 , 100 ]``.
 
-```javascript
-db.places.find( {
-   loc: { $geoWithin: { $box:  [ [ 0, 0 ], [ 100, 100 ] ] } }
-} )
-```
+.. code-block:: javascript
+
+   db.places.find( {
+      loc: { $geoWithin: { $box:  [ [ 0, 0 ], [ 100, 100 ] ] } }
+   } )

@@ -1,25 +1,78 @@
 ---
 type: "Framework Learn Page"
-framework: "mongodb"
+framework: "MongoDB"
 source_repo: "https://github.com/mongodb/docs.git"
 source_branch: "main"
 source_path: "content/manual/manual/source/reference/method/db.hostInfo.txt"
-source_commit: "ab9db26ed3d11618cdb61516d8180337d8e3f679"
-source_commit_short: "ab9db26e"
-source_commit_date: "2026-07-24T16:22:46-06:00"
-generated_at: "2026-07-25T11:51:15Z"
+source_commit: "b9f2bc487a2878b65e3c1f80024bebab76954f27"
+source_commit_short: "b9f2bc48"
+source_commit_date: "2026-08-28T17:09:45-05:00"
+generated_at: "2026-08-29T09:39:19.932836Z"
 ---
-
-==============================
-
 # db.hostInfo() (mongosh method)
+
+**meta:** :description: Retrieve system information for the server running `mongod` or `mongos` using the `db.hostInfo()` method.
+
+.. default-domain:: mongodb
+
+**contents:** On this page
+   :local:
+   :backlinks: none
+   :depth: 1
+   :class: singlecol
+
+**method:** db.hostInfo()
+
+   Returns a document with information about the underlying system
+   that the :binary:`~bin.mongod` or :binary:`~bin.mongos` runs on. Some of the
+   returned fields are only included on some platforms.
+
+   :method:`db.hostInfo()` provides a :binary:`~bin.mongosh` helper
+   method around the :dbcommand:`hostInfo` command. The output of
+   :method:`db.hostInfo()` on a Linux system will resemble the
+   following:
+
+   .. code-block:: javascript
+
+      {
+         "system" : {
+                "currentTime" : ISODate("<timestamp>"),
+                "hostname" : "<hostname>",
+                "cpuAddrSize" : <number>,
+                "memSizeMB" : <number>, 
+                "memLimitMB" : <number>,  
+                "numCores" : <number>,
+                "cpuArch" : "<identifier>",
+                "numaEnabled" : <boolean>
+         },
+         "os" : {
+                "type" : "<string>",
+                "name" : "<string>",
+                "version" : "<string>"
+         },
+         "extra" : {
+                "versionString" : "<string>",
+                "libcVersion" : "<string>",
+                "kernelVersion" : "<string>",
+                "cpuFrequencyMHz" : "<string>",
+                "cpuFeatures" : "<string>",
+                "pageSize" : <number>,
+                "numPages" : <number>,
+                "maxOpenFiles" : <number>
+         },
+         "ok" : <return>
+      }
+
+   See :data:`hostInfo` for full documentation of the output of
+   :method:`db.hostInfo()`.
+
 
 ## Compatibility
 
-This method is available in deployments hosted in the following environments:
+This method is available in deployments hosted in the following environments: 
 
-.. include:: /includes/fact-environments-atlas-only.rst
+**include:** /includes/fact-environments-atlas-only.rst
 
-.. include:: /includes/fact-environments-atlas-support-no-free.rst
+**include:** /includes/fact-environments-atlas-support-no-free.rst
 
-.. include:: /includes/fact-environments-onprem-only.rst
+**include:** /includes/fact-environments-onprem-only.rst

@@ -1,126 +1,169 @@
 ---
 type: "Framework Learn Page"
-framework: "mongodb"
+framework: "MongoDB"
 source_repo: "https://github.com/mongodb/docs.git"
 source_branch: "main"
 source_path: "content/manual/manual/source/tutorial/sharding-segmenting-shards.txt"
-source_commit: "ab9db26ed3d11618cdb61516d8180337d8e3f679"
-source_commit_short: "ab9db26e"
-source_commit_date: "2026-07-24T16:22:46-06:00"
-generated_at: "2026-07-25T11:51:15Z"
+source_commit: "b9f2bc487a2878b65e3c1f80024bebab76954f27"
+source_commit_short: "b9f2bc48"
+source_commit_date: "2026-08-28T17:09:45-05:00"
+generated_at: "2026-08-29T09:39:19.612429Z"
 ---
-
-==========================================
-
 # Segmenting Data by Application or Customer
 
-.. include:: /includes/intro-zone-sharding.rst
+**meta:** :description: Learn to segment data in sharded clusters using zones based on shard keys for optimized performance and resource allocation.
 
-> **Tip:** .. include:: /includes/extracts/zoned-sharding-pre-define-zone.rst
+.. default-domain:: mongodb
 
-This tutorial shows you how to segment data using `zone-sharding`.
+**contents:** On this page
+   :local:
+   :backlinks: none
+   :depth: 1
+   :class: singlecol
 
-Consider the following scenarios where segmenting data by application or customer may be necessary:
+**include:** /includes/intro-zone-sharding.rst
 
-- A database serving multiple applications
-- A database serving multiple customers
-- A database that requires isolating ranges or subsets of application
-or customer data
+**tip:** .. include:: /includes/extracts/zoned-sharding-pre-define-zone.rst
 
-- A database that requires resource allocation for ranges or subsets of
-application or customer data
+This tutorial shows you how to segment data using :ref:`zone-sharding`.
 
-This diagram illustrates a sharded cluster using zones to segment data based on application or customer. This allows for data to be isolated to specific shards. Additionally, each shard can have specific hardware allocated to fit the performance requirement of the data stored on that shard.
+Consider the following scenarios where segmenting data by application or
+customer may be necessary:
 
-.. include:: /images/sharding-segmenting-shards-overview.rst
+* A database serving multiple applications
+* A database serving multiple customers
+* A database that requires isolating ranges or subsets of application
+  or customer data
+* A database that requires resource allocation for ranges or subsets of
+  application or customer data
+
+This diagram illustrates a sharded cluster using zones to
+segment data based on application or customer. This allows for data to
+be isolated to specific shards. Additionally, each shard can have specific
+hardware allocated to fit the performance requirement of the data stored on
+that shard.
+
+**include:** /images/sharding-segmenting-shards-overview.rst
 
 ## Scenario
 
-An application tracks the score of a user along with a `client` field, storing scores in the `gamify` database under the `users` collection. Each possible value of `client` requires its own zone to allow for data segmentation. It also allows the administrator to optimize the hardware for each shard associated to a `client` for performance and cost.
+An application tracks the score of a user along with a ``client`` field,
+storing scores in the ``gamify`` database under the ``users`` collection.
+Each possible value of ``client`` requires its own zone to allow for
+data segmentation. It also allows the administrator to optimize the
+hardware for each shard associated to a ``client`` for performance and cost.
 
 The following documents represent a partial view of two users:
 
-```javascript
-{
-  "_id" : ObjectId("56f08c447fe58b2e96f595fa"),
-  "client" : "robot",
-  "userid" : 123,
-  "high_score" : 181,
-  ...,
-}
-{
-  "_id" : ObjectId("56f08c447fe58b2e96f595fb"),
-  "client" : "fruitos",
-  "userid" : 456,
-  "high_score" : 210,
-  ...,
-}
-```
+.. code-block:: javascript
+
+   {
+     "_id" : ObjectId("56f08c447fe58b2e96f595fa"),
+     "client" : "robot",
+     "userid" : 123,
+     "high_score" : 181,
+     ...,
+   }
+   {
+     "_id" : ObjectId("56f08c447fe58b2e96f595fb"),
+     "client" : "fruitos",
+     "userid" : 456,
+     "high_score" : 210,
+     ...,
+   }
 
 ### Shard Key
 
-The `users` collection uses the `{ client : 1, userid : 1 }` compound index as the shard key.
+The ``users`` collection uses the ``{ client : 1, userid : 1 }`` compound
+index as the shard key.
 
-The `client` field in each document allows creating a zone for each distinct client value.
+The ``client`` field in each document allows creating a zone for each
+distinct client value.
 
-The `userid` field provides a high `cardinality <shard-key-cardinality>` and low `frequency <shard-key-frequency>` component to the shard key relative to `country`.
+The ``userid`` field provides a high :ref:`cardinality
+<shard-key-cardinality>` and low :ref:`frequency <shard-key-frequency>`
+component to the shard key relative to ``country``.
 
-See `Choosing a Shard Key <sharding-shard-key-requirements>` for more general instructions on selecting a shard key.
+See :ref:`Choosing a Shard Key <sharding-shard-key-requirements>` for more
+general instructions on selecting a shard key.
 
 ### Architecture
 
-The application requires adding shard to a zone associated to a specific `client`.
+The application requires adding shard to a zone associated to a specific
+``client``.
 
-The sharded cluster deployment currently consists of four `shards <shard>`.
+The sharded cluster deployment currently consists of four :term:`shards
+<shard>`.
 
-.. include:: /images/sharding-segmenting-shards-architecture.rst
+**include:** /images/sharding-segmenting-shards-architecture.rst
 
 ### Zones
 
 For this application, there are two client zones.
 
-.. include:: /images/sharding-segmenting-shards-tags.rst
+**include:** /images/sharding-segmenting-shards-tags.rst
 
-Robot client ("robot") This zone represents all documents where `client : robot`.
+Robot client ("robot")
+   This zone represents all documents where ``client : robot``.
 
-FruitOS client ("fruitos") This zone represents all documents where `client : fruitos`.
+FruitOS client ("fruitos")
+   This zone represents all documents where ``client : fruitos``.
 
 ### Write Operations
 
-With zones, if an inserted or updated document matches a configured zone, it can only be written to a shard inside that zone.
+With zones, if an inserted or updated document matches a
+configured zone, it can only be written to a shard inside that zone.
 
-MongoDB can write documents that do not match a configured zone to any shard in the cluster.
+MongoDB can write documents that do not match a configured zone to any
+shard in the cluster.
 
-> **Note:** The behavior described above requires the cluster to be in a steady state
-with no chunks violating a configured zone. See the following section
-on the `balancer <sharding-tiered-hardware-balancing>` for more
-information.
+**note:** The behavior described above requires the cluster to be in a steady state
+   with no chunks violating a configured zone. See the following section
+   on the :ref:`balancer <sharding-tiered-hardware-balancing>` for more
+   information.
 
 ### Read Operations
 
-MongoDB can route queries to a specific shard if the query includes at least the `client` field.
+MongoDB can route queries to a specific shard if the query includes at least
+the ``client`` field.
 
-For example, MongoDB can attempt a `targeted read operation <sharding-mongos-targeted>` on the following query:
+For example, MongoDB can attempt a :ref:`targeted read operation
+<sharding-mongos-targeted>` on the following query:
 
-```javascript
-chatDB = db.getSiblingDB("gamify")
-chatDB.users.find( { "client" : "robot" , "userid" : "123" } )
-```
+.. code-block:: javascript
 
-Queries without the `client` field perform `broadcast operations <sharding-mongos-broadcast>`.
+   chatDB = db.getSiblingDB("gamify")
+   chatDB.users.find( { "client" : "robot" , "userid" : "123" } )
+
+Queries without the ``client`` field perform :ref:`broadcast operations
+<sharding-mongos-broadcast>`.
 
 ### Balancer
 
-The `balancer <sharding-balancing>` `migrates <sharding-chunk-migration>` chunks to the appropriate shard respecting any configured zones. Until the migration, shards may contain chunks that violate configured zones. Once balancing completes, shards should only contain chunks whose ranges do not violate its assigned zones.
+The :ref:`balancer <sharding-balancing>` :ref:`migrates
+<sharding-chunk-migration>` chunks to the appropriate shard respecting any
+configured zones. Until the migration, shards may contain chunks that violate
+configured zones. Once balancing completes, shards should only
+contain chunks whose ranges do not violate its assigned zones.
 
-Adding or removing zones or zone ranges can result in chunk migrations. Depending on the size of your data set and the number of chunks a zone or zone range affects, these migrations may impact cluster performance. Consider running your `balancer <sharding-balancing>` during specific scheduled windows. See `sharding-schedule-balancing-window` for a tutorial on how to set a scheduling window.
+Adding or removing zones or zone ranges can result in chunk migrations.
+Depending on the size of your data set and the number of chunks a zone or zone
+range affects, these migrations may impact cluster performance. Consider
+running your :ref:`balancer <sharding-balancing>` during specific scheduled
+windows. See :ref:`sharding-schedule-balancing-window` for a tutorial on how
+to set a scheduling window.
 
 ### Security
 
-For sharded clusters running with `authorization`, authenticate as a user with at least the :authrole:`clusterManager` role on the `admin` database.
+For sharded clusters running with :ref:`authorization`, authenticate as a user
+with at least the :authrole:`clusterManager` role on the ``admin`` database.
 
 ## Procedure
 
-You must be connected to a :binary:`~bin.mongos` associated to the target `sharded cluster` to proceed. You cannot create zones or zone ranges by connecting directly to a `shard`.
+You must be connected to a :binary:`~bin.mongos` associated to the target
+:term:`sharded cluster` to proceed. You cannot create zones or zone ranges by
+connecting directly to a :term:`shard`.
 
-.. include:: /includes/steps/sharding-segmenting-shards.rst
+**include:** /includes/steps/sharding-segmenting-shards.rst
+
+

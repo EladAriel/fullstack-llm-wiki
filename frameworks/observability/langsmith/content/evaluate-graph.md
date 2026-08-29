@@ -4,10 +4,10 @@ framework: "LangSmith"
 source_repo: "https://github.com/langchain-ai/docs.git"
 source_branch: "main"
 source_path: "src/langsmith/evaluate-graph.mdx"
-source_commit: "2aae1dfc98ee953a9a5185fb6fcdd9efb3f4d878"
-source_commit_short: "2aae1df"
-source_commit_date: "2026-07-25T00:27:23+00:00"
-generated_at: "2026-07-25T19:08:33.399680Z"
+source_commit: "a174f9cf7c91ee5eb14ee2382eb48bfe6e4956e9"
+source_commit_short: "a174f9c"
+source_commit_date: "2026-08-28T17:04:12-07:00"
+generated_at: "2026-08-29T09:39:50.584126Z"
 ---
 ---
 title: How to evaluate a graph
@@ -198,7 +198,7 @@ async def main():
         max_concurrency=4,  # optional
         experiment_prefix="claude-sonnet-4-6-baseline",  # optional
         metadata={  # optional, used to populate model/prompt/tool columns in UI
-            "models": "google_genai:gemini-3.5-flash",
+            "models": "google_genai:gemini-3.6-flash",
             "tools": [{"name": "search", "description": "Call to surf the web."}],
         },
     )
@@ -226,7 +226,7 @@ async def main():
         max_concurrency=4,  # optional
         experiment_prefix="claude-sonnet-4-6-baseline",  # optional
         metadata={  # optional, used to populate model/prompt/tool columns in UI
-            "models": "google_genai:gemini-3.5-flash",
+            "models": "google_genai:gemini-3.6-flash",
             "tools": [{"name": "search", "description": "Call to surf the web."}],
         },
     )
@@ -257,7 +257,7 @@ async def main():
         max_concurrency=4,  # optional
         experiment_prefix="claude-sonnet-4-6-baseline",  # optional
         metadata={  # optional, used to populate model/prompt/tool columns in UI
-            "models": "google_genai:gemini-3.5-flash",
+            "models": "google_genai:gemini-3.6-flash",
             "tools": [{"name": "search", "description": "Call to surf the web."}],
         },
     )
@@ -279,7 +279,7 @@ async def main():
         max_concurrency=4,  # optional
         experiment_prefix="claude-sonnet-4-6-model-node",  # optional
         metadata={  # optional, used to populate model/prompt/tool columns in UI
-            "models": "google_genai:gemini-3.5-flash",
+            "models": "google_genai:gemini-3.6-flash",
             "tools": [{"name": "search", "description": "Call to surf the web."}],
         },
     )
@@ -443,7 +443,7 @@ async def main():
         max_concurrency=4,  # optional
         experiment_prefix="claude-sonnet-4-6-baseline",  # optional
         metadata={  # optional, used to populate model/prompt/tool columns in UI
-            "models": "google_genai:gemini-3.5-flash",
+            "models": "google_genai:gemini-3.6-flash",
             "tools": [{"name": "search", "description": "Call to surf the web."}],
         },
     )

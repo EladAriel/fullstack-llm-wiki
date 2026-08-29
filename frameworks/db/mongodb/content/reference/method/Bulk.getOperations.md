@@ -1,76 +1,137 @@
 ---
 type: "Framework Learn Page"
-framework: "mongodb"
+framework: "MongoDB"
 source_repo: "https://github.com/mongodb/docs.git"
 source_branch: "main"
 source_path: "content/manual/manual/source/reference/method/Bulk.getOperations.txt"
-source_commit: "ab9db26ed3d11618cdb61516d8180337d8e3f679"
-source_commit_short: "ab9db26e"
-source_commit_date: "2026-07-24T16:22:46-06:00"
-generated_at: "2026-07-25T11:51:15Z"
+source_commit: "b9f2bc487a2878b65e3c1f80024bebab76954f27"
+source_commit_short: "b9f2bc48"
+source_commit_date: "2026-08-28T17:09:45-05:00"
+generated_at: "2026-08-29T09:39:19.910584Z"
 ---
-
-=====================================
-
 # Bulk.getOperations() (mongosh method)
+
+**meta:** :description: Retrieve executed write operations from a bulk operation using `Bulk.getOperations()` after calling `Bulk.execute()`.
+
+.. default-domain:: mongodb
+
+**contents:** On this page
+   :local:
+   :backlinks: none
+   :depth: 1
+   :class: singlecol
+
+**method:** Bulk.getOperations()
+
+   Returns an array of write operations executed through
+   :method:`Bulk.execute()`. The returned write operations are in
+   groups as determined by MongoDB for execution. For information on
+   how MongoDB groups the list of bulk write operations, see
+   :ref:`Bulk.execute() Behavior <bulk-execute-behavior>`.
+
+   Only use :method:`Bulk.getOperations()` after a
+   :method:`Bulk.execute()`. Calling :method:`Bulk.getOperations()`
+   before you call :method:`Bulk.execute()` will result in an
+   *incomplete* list.
 
 ## Compatibility
 
-This command is available in deployments hosted in the following environments:
+This command is available in deployments hosted in the following
+environments: 
 
-.. include:: /includes/fact-environments-atlas-only.rst
+**include:** /includes/fact-environments-atlas-only.rst
 
-.. include:: /includes/fact-environments-atlas-support-all.rst
+**include:** /includes/fact-environments-atlas-support-all.rst
+
+.. _bulk-getOperations-example:
 
 ## Example
 
-The following initializes a :method:`Bulk()` operations builder on the `items` collection, adds a series of write operations, executes the operations, and then calls :method:`~Bulk.getOperations()` on the `bulk` builder object:
+The following initializes a :method:`Bulk()` operations builder on the
+``items`` collection, adds a series of write operations, executes the
+operations, and then calls :method:`~Bulk.getOperations()` on the
+``bulk`` builder object:
 
-```javascript
-var bulk = db.items.initializeUnorderedBulkOp();
+.. code-block:: javascript
 
-for (var i = 1; i <= 1500; i++) {
-    bulk.insert( { x: i } );
-}
+   var bulk = db.items.initializeUnorderedBulkOp();
 
-bulk.execute();
-bulk.getOperations();
-```
-
-The :method:`~Bulk.getOperations()` method returns an array with the operations executed. The output shows that MongoDB divided the operations into 2 groups, one with 1000 operations and one with 500. For information on how MongoDB groups the list of bulk write operations, see `Bulk.execute() Behavior <bulk-execute-behavior>`
-
-Although the method returns all 1500 operations in the returned array, this page omits some of the results for brevity.
-
-```javascript
-[
-   {
-      "originalZeroIndex" : 0,
-      "batchType" : 1,
-      "operations" : [
-         { "_id" : ObjectId("53a8959f1990ca24d01c6165"), "x" : 1 },
-
-         ... // Content omitted for brevity
-
-         { "_id" : ObjectId("53a8959f1990ca24d01c654c"), "x" : 1000 }
-      ]
-   },
-   {
-      "originalZeroIndex" : 1000,
-      "batchType" : 1,
-      "operations" : [
-         { "_id" : ObjectId("53a8959f1990ca24d01c654d"), "x" : 1001 },
-
-         ... // Content omitted for brevity
-
-         { "_id" : ObjectId("53a8959f1990ca24d01c6740"), "x" : 1500 }
-      ]
+   for (var i = 1; i <= 1500; i++) {
+       bulk.insert( { x: i } );
    }
-]
-```
+
+   bulk.execute();
+   bulk.getOperations();
+
+The :method:`~Bulk.getOperations()` method returns an array with the
+operations executed. The output shows that MongoDB divided the
+operations into 2 groups, one with 1000 operations and one with 500.
+For information on how MongoDB groups the list of bulk write
+operations, see :ref:`Bulk.execute() Behavior <bulk-execute-behavior>`
+
+Although the method returns all 1500 operations in the returned array,
+this page omits some of the results for brevity.
+
+.. code-block:: javascript
+
+   [
+      {
+         "originalZeroIndex" : 0,
+         "batchType" : 1,
+         "operations" : [
+            { "_id" : ObjectId("53a8959f1990ca24d01c6165"), "x" : 1 },
+
+            ... // Content omitted for brevity
+
+            { "_id" : ObjectId("53a8959f1990ca24d01c654c"), "x" : 1000 }
+         ]
+      },
+      {
+         "originalZeroIndex" : 1000,
+         "batchType" : 1,
+         "operations" : [
+            { "_id" : ObjectId("53a8959f1990ca24d01c654d"), "x" : 1001 },
+
+            ... // Content omitted for brevity
+
+            { "_id" : ObjectId("53a8959f1990ca24d01c6740"), "x" : 1500 }
+         ]
+      }
+   ]
 
 ## Returned Fields
 
 The array contains documents with the following fields:
 
-> **Seealso:** - :method:`Bulk()`
-- :method:`Bulk.execute()`
+**data:** originalZeroIndex
+
+   Specifies the order in which the operation was added to the bulk
+   operations builder, based on a zero index; e.g. first operation
+   added to the bulk operations builder will have
+   :data:`originalZeroIndex` value of ``0``.
+
+**data:** batchType
+
+   Specifies the write operations type.
+
+   .. list-table::
+      :header-rows: 1
+
+      * - ``batchType``
+        - Operation
+
+      * - 1
+        - Insert
+
+      * - 2
+        - Update
+
+      * - 3
+        - Remove
+
+**data:** operations
+
+   Array of documents that contain the details of the operation.
+
+**seealso:** - :method:`Bulk()`
+   - :method:`Bulk.execute()`

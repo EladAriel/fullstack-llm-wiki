@@ -1,25 +1,34 @@
 ---
 type: "Framework Learn Page"
-framework: "postgres"
+framework: "PostgreSQL"
 source_repo: "https://github.com/postgres/postgres.git"
 source_branch: "master"
 source_path: "doc/src/sgml/ref/alter_materialized_view.sgml"
-source_commit: "38afc3dcb25c45b744d4025029ce0a6c90b7059f"
-source_commit_short: "38afc3dc"
-source_commit_date: "2026-07-25T19:08:27+09:00"
-generated_at: "2026-07-25T11:50:59Z"
+source_commit: "6c5f1d6074208146930b67c2054509c3e82f6f7f"
+source_commit_short: "6c5f1d6"
+source_commit_date: "2026-08-28T23:24:47+02:00"
+generated_at: "2026-08-29T09:39:24.592929Z"
 ---
-
 ALTER MATERIALIZED VIEW
+ 
 
-ALTER MATERIALIZED VIEW
-7
-SQL - Language Statements
+ 
+  
+# ALTER MATERIALIZED VIEW
 
-ALTER MATERIALIZED VIEW
-change the definition of a materialized view
+  7
+  SQL - Language Statements
+ 
 
-```
+ 
+  
+# ALTER MATERIALIZED VIEW
+
+  change the definition of a materialized view
+ 
+
+ 
+
 ALTER MATERIALIZED VIEW [ IF EXISTS ] name
     action [, ... ]
 ALTER MATERIALIZED VIEW name
@@ -47,36 +56,150 @@ where action is one of:
     SET ( storage_parameter [= value] [, ... ] )
     RESET ( storage_parameter [, ... ] )
     OWNER TO { new_owner | CURRENT_ROLE | CURRENT_USER | SESSION_USER }
+
+ 
+
+ 
+  
+# Description
+
+  
+   ALTER MATERIALIZED VIEW changes various auxiliary
+   properties of an existing materialized view.
+  
+
+  
+   You must own the materialized view to use ALTER MATERIALIZED
+   VIEW.  To change a materialized view's schema, you must also have
+   CREATE privilege on the new schema.
+   To alter the owner, you must be able to SET ROLE to the
+   new owning role, and that role must have CREATE
+   privilege on the materialized view's schema.
+   (These restrictions enforce that altering
+   the owner doesn't do anything you couldn't do by dropping and recreating the
+   materialized view.  However, a superuser can alter ownership of any view
+   anyway.)
+  
+
+  
+   The statement subforms and actions available for
+   ALTER MATERIALIZED VIEW are a subset of those available
+   for ALTER TABLE, and have the same meaning when used for
+   materialized views.  See the descriptions for
+   ALTER TABLE
+   for details.
+  
+
+ 
+
+ 
+  
+# Parameters
+
+   
+
+    
+     name
+     
+      
+       The name (optionally schema-qualified) of an existing materialized view.
+      
+
+     
+    
+
+    
+     column_name
+     
+      
+       Name of an existing column.
+      
+
+     
+    
+
+    
+     extension_name
+     
+      
+       The name of the extension that the materialized view is to depend on (or no longer
+       dependent on, if NO is specified).  A materialized view
+       that's marked as dependent on an extension is automatically dropped when
+       the extension is dropped.
+      
+
+     
+    
+
+    
+     new_column_name
+     
+      
+       New name for an existing column.
+      
+
+     
+    
+
+   
+    new_owner
+    
+     
+      The user name of the new owner of the materialized view.
+     
+
+    
+   
+
+   
+    new_name
+    
+     
+      The new name for the materialized view.
+     
+
+    
+   
+
+   
+    new_schema
+    
+     
+      The new schema for the materialized view.
+     
+
+    
+   
+  
+ 
+
+ 
+  
+# Examples
+
+  
+   To rename the materialized view foo to
+   bar:
+
 ```
 
-## Description
-
-`ALTER MATERIALIZED VIEW` changes various auxiliary properties of an existing materialized view.
-
-You must own the materialized view to use `ALTER MATERIALIZED VIEW`. To change a materialized view's schema, you must also have `CREATE` privilege on the new schema. To alter the owner, you must be able to `SET ROLE` to the new owning role, and that role must have `CREATE` privilege on the materialized view's schema. (These restrictions enforce that altering the owner doesn't do anything you couldn't do by dropping and recreating the materialized view. However, a superuser can alter ownership of any view anyway.)
-
-The statement subforms and actions available for `ALTER MATERIALIZED VIEW` are a subset of those available for `ALTER TABLE`, and have the same meaning when used for materialized views. See the descriptions for ALTER TABLE for details.
-
-## Parameters
-
-- The name (optionally schema-qualified) of an existing materialized view.
-- Name of an existing column.
-- The name of the extension that the materialized view is to depend on (or no longer dependent on, if `NO` is specified). A materialized view that's marked as dependent on an extension is automatically dropped when the extension is dropped.
-- New name for an existing column.
-- The user name of the new owner of the materialized view.
-- The new name for the materialized view.
-- The new schema for the materialized view.
-
-## Examples
-
-To rename the materialized view `foo` to `bar`:
-
-```
 ALTER MATERIALIZED VIEW foo RENAME TO bar;
+
 ```
 
-## Compatibility
+ 
 
-`ALTER MATERIALIZED VIEW` is a PostgreSQL extension.
+ 
+  
+# Compatibility
 
-## See Also
+  
+   ALTER MATERIALIZED VIEW is a
+   PostgreSQL extension.
+  
+
+ 
+
+ 
+  
+# See Also

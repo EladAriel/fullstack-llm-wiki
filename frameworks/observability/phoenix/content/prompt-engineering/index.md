@@ -1,7 +1,7 @@
 ---
 type: "Framework Learn Directory Index"
 framework: "Arize Phoenix"
-generated_at: "2026-07-25T19:08:24.985891Z"
+generated_at: "2026-08-29T09:39:58.962181Z"
 ---
 # Prompt-Engineering
 
@@ -21,3 +21,10 @@ This directory contains Arize Phoenix learning pages related to prompt-engineeri
 - [How To Prompts](how-to-prompts.md)
 - [Overview Prompts](overview-prompts.md)
 - [Tutorial](tutorial.md)
+
+## Subdirectories
+
+- [Concepts Prompts](concepts-prompts/index.md)
+- [How To Prompts](how-to-prompts/index.md)
+- [Overview Prompts](overview-prompts/index.md)
+- [Tutorial](tutorial/index.md)

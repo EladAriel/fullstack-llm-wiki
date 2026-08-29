@@ -1,77 +1,151 @@
 ---
 type: "Framework Learn Page"
-framework: "mongodb"
+framework: "MongoDB"
 source_repo: "https://github.com/mongodb/docs.git"
 source_branch: "main"
 source_path: "content/manual/manual/source/reference/method/db.runCommand.txt"
-source_commit: "ab9db26ed3d11618cdb61516d8180337d8e3f679"
-source_commit_short: "ab9db26e"
-source_commit_date: "2026-07-24T16:22:46-06:00"
-generated_at: "2026-07-25T11:51:15Z"
+source_commit: "b9f2bc487a2878b65e3c1f80024bebab76954f27"
+source_commit_short: "b9f2bc48"
+source_commit_date: "2026-08-28T17:09:45-05:00"
+generated_at: "2026-08-29T09:39:19.965534Z"
 ---
-
-================================
+.. _db-runcommand-method:
 
 # db.runCommand() (mongosh method)
 
+**meta:** :description: Run database commands with `db.runCommand()` for a consistent interface across shells and drivers, with options for read preferences and MongoDB compatibility.
+
+.. default-domain:: mongodb
+
+**contents:** On this page
+   :local:
+   :backlinks: none
+   :depth: 1
+   :class: singlecol
+
 ## Definition
+
+**method:** db.runCommand(command, [options])
+
+   Provides a helper to run specified :ref:`database commands
+   <database-commands>`. This is the preferred method to issue
+   database commands, as it provides a consistent interface between
+   the shell and drivers.
+
+
+   .. list-table::
+      :header-rows: 1
+      :widths: 20 20 80
+   
+      * - Parameter
+        - Type
+        - Description
+   
+      * - ``command``
+        - document or string
+        - :term:`Document <document>` or string that specifies the 
+          command. If specified as a string, ``db.runCommand()``
+          transforms the string into a document.
+ 
+      * - ``options``
+        - document
+        - Starting in mongosh 2.0, options that specify how ``mongosh`` 
+          runs the command.
+
+      * - ``options.readPreference`` 
+      
+          .. _runCommand-options-readPref-arg:
+
+        - :ref:`read preference <read-preference>`
+        - Read preference to run the command with. If not specified, 
+          defaults to :readmode:`primary`. ``db.runCommand()`` ignores 
+          any other read preference global configuration set, including 
+          using :method:`~Mongo.setReadPref()` or by specifying 
+          ``readPreference`` in a :ref:`connection string 
+          <mongodb-uri>`.
+
+          In mongosh 1.x, ``db.runCommand()`` does not take an 
+          ``options`` argument. To set the read preference, use
+          ``Mongo.setReadPref()`` or specify ``readPreference`` in the 
+          connection string.
+
+   To specify a time limit in milliseconds, see
+   :ref:`<terminate-running-ops>`.
 
 ## Compatibility
 
-This method is available in deployments hosted in the following environments:
+This method is available in deployments hosted in the following environments: 
 
-.. include:: /includes/fact-environments-atlas-only.rst
+**include:** /includes/fact-environments-atlas-only.rst
 
-.. include:: /includes/fact-environments-atlas-support-all.rst
+**include:** /includes/fact-environments-atlas-support-all.rst
 
-.. include:: /includes/fact-environments-onprem-only.rst
+**include:** /includes/fact-environments-onprem-only.rst
 
 ## Behavior
 
-:method:`db.runCommand()` runs the command in the context of the current database. Some commands are only applicable in the context of the `admin` database, and you must change your `db` object before running these commands or use :method:`db.adminCommand()`.
+:method:`db.runCommand()` runs the command in the context of the
+current database. Some commands are only applicable in the context of
+the ``admin`` database, and you must change your ``db`` object
+before running these commands or use :method:`db.adminCommand()`.
+
+.. _runCommand-read-pref-behavior:
 
 ### Read Preference
 
-Starting in mongosh 2.0, you can specify the read preference for a command with the `options <runCommand-options-readPref-arg>` argument. If you do not specify a read preference, `db.runCommand()` defaults to :readmode:`primary`.
+Starting in mongosh 2.0, you can specify the read preference for a
+command with the :ref:`options <runCommand-options-readPref-arg>` 
+argument. If you do not specify a read preference, ``db.runCommand()``
+defaults to :readmode:`primary`. 
 
-> **Warning:** In mongosh 2.0, `db.runCommand()` ignores any other read preference
-global configuration set, including using `Mongo.setReadPref()` or
-by specifying `readPreference` in a connection string.
-In mongosh 1.x, `db.runCommand()` does not take an `options`
-argument. `db.runCommand()` uses the read preference specified either
-by using `Mongo.setReadPref()` or by specifying `readPreference` in
-the connection string.
+**warning:** In mongosh 2.0, ``db.runCommand()`` ignores any other read preference 
+   global configuration set, including using ``Mongo.setReadPref()`` or 
+   by specifying ``readPreference`` in a connection string.
+
+   In mongosh 1.x, ``db.runCommand()`` does not take an ``options`` 
+   argument. ``db.runCommand()`` uses the read preference specified either
+   by using ``Mongo.setReadPref()`` or by specifying ``readPreference`` in 
+   the connection string.
 
 ## Examples
 
-The following examples show how to use `db.runCommand()` to run database commands.
+The following examples show how to use ``db.runCommand()`` to run
+database commands.
 
 ### hello Command Without Specified Read Preference
 
-This example shows how to use `db.runCommand()` to run the :dbcommand:`hello` command.
+This example shows how to use ``db.runCommand()`` to run the 
+:dbcommand:`hello` command.
 
-```javascript
-db.runCommand( { hello: 1 } )
-```
+.. code-block:: javascript
 
-For details on output, see `hello Output <hello-cmd-output>`.
+   db.runCommand( { hello: 1 } )
 
-For details on read preference behavior, see `runCommand-read-pref-behavior`.
+For details on output, see :ref:`hello Output <hello-cmd-output>`.
+
+For details on read preference behavior, see 
+:ref:`runCommand-read-pref-behavior`.
 
 ### hello Command with readPreference: secondaryPreferred
 
-This example shows how to use `db.runCommand()` to run the :dbcommand:`hello` command with the :readmode:`secondaryPreferred` read preference.
+This example shows how to use ``db.runCommand()`` to run the 
+:dbcommand:`hello` command with the :readmode:`secondaryPreferred` 
+read preference. 
 
-```javascript
-db.runCommand( { hello: 1 }, { readPreference: "secondaryPreferred" } )
-```
+.. code-block:: javascript
 
-For details on output, see `hello Output <hello-cmd-output>`.
+   db.runCommand( { hello: 1 }, { readPreference: "secondaryPreferred" } )
 
-For details on read preference behavior, see `runCommand-read-pref-behavior`.
+For details on output, see :ref:`hello Output <hello-cmd-output>`.
+
+For details on read preference behavior, see 
+:ref:`runCommand-read-pref-behavior`.
+
+.. _command-response:
 
 ## Response
 
-The method returns a response document that contains the following fields:
+The method returns a response document that contains the following
+fields:
 
-.. include:: /includes/fact-runCommand-results.rst
+**include:** /includes/fact-runCommand-results.rst

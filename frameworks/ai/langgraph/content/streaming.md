@@ -4,12 +4,11 @@ framework: "LangGraph"
 source_repo: "https://github.com/langchain-ai/docs"
 source_branch: "main"
 source_path: "src/oss/langgraph/streaming.mdx"
-source_commit: "2aae1dfc98ee953a9a5185fb6fcdd9efb3f4d878"
-source_commit_short: "2aae1dfc"
-source_commit_date: "2026-07-25T00:27:23Z"
-generated_at: "2026-07-25T11:51:08Z"
+source_commit: "a174f9cf7c91ee5eb14ee2382eb48bfe6e4956e9"
+source_commit_short: "a174f9c"
+source_commit_date: "2026-08-28T17:04:12-07:00"
+generated_at: "2026-08-29T09:38:45.959098Z"
 ---
-
 ---
 title: Streaming
 ---
@@ -1290,6 +1289,65 @@ for await (const chunk of await graph.stream(
   console.log(chunk);
 }
 ```
+:::
+
+:::python
+<Note>
+    This applies to every `stream_mode`, including `"messages"`. Agent builders like @[`create_agent`] return a **compiled graph**, so adding one as a node turns it into a subgraph. Without `subgraphs=True`, `stream_mode="messages"` on the parent graph will not emit token chunks from the inner agent's LLM calls. Invoking `agent.stream(...)` directly will, which is why this often shows up only after wrapping.
+
+    ```python
+    from langchain.agents import create_agent
+    from langgraph.graph import END, START, StateGraph
+
+    graph = (
+        StateGraph(State)
+        .add_node("agent", create_agent(model, tools, state_schema=State))
+        .add_edge(START, "agent")
+        .add_edge("agent", END)
+        .compile()
+    )
+
+    for chunk in graph.stream(
+        {"messages": [{"role": "user", "content": "..."}]},
+        stream_mode="messages",
+        subgraphs=True,  # [!code highlight]
+        version="v2",
+    ):
+        print(chunk["type"])  # "messages"
+        print(chunk["ns"])    # () for root, ("agent:<task_id>",) for subgraph
+        print(chunk["data"])  # (token, metadata)
+    ```
+</Note>
+:::
+
+:::js
+<Note>
+    This applies to every `streamMode`, including `"messages"`. @[`createAgent`] returns a `ReactAgent` wrapper; pass `agent.graph` when adding it as a node so the parent treats it as a subgraph. With `subgraphs: true`, message chunks are `[namespace, [token, metadata]]`, so you can tell which subgraph emitted them.
+
+    ```typescript
+    import { createAgent } from "langchain";
+    import { END, START, StateGraph } from "@langchain/langgraph";
+
+    const agent = createAgent({ model, tools, stateSchema: State });
+
+    const graph = new StateGraph(State)
+        .addNode("agent", agent.graph)
+        .addEdge(START, "agent")
+        .addEdge("agent", END)
+        .compile();
+
+    for await (const [ns, data] of await graph.stream(
+        { messages: [{ role: "user", content: "..." }] },
+        {
+            streamMode: "messages",
+            subgraphs: true, // [!code highlight]
+        }
+    )) {
+        const [token, metadata] = data;
+        console.log(ns, token, metadata);
+    }
+    ```
+</Note>
 :::
 
 <Accordion title="Extended example: streaming from subgraphs">

@@ -1,7 +1,7 @@
 ---
 type: "Framework Learn Directory Index"
 framework: "Grafana"
-generated_at: "2026-07-25T19:08:09.115621Z"
+generated_at: "2026-08-29T09:39:37.585818Z"
 ---
 # Configure-Notifications
 
@@ -22,3 +22,8 @@ This directory contains Grafana learning pages related to configure-notification
 - [Create Silence](create-silence.md)
 - [Inhibition Rules](inhibition-rules.md)
 - [Mute Timings](mute-timings.md)
+
+## Subdirectories
+
+- [Manage Contact Points](manage-contact-points/index.md)
+- [Template Notifications](template-notifications/index.md)

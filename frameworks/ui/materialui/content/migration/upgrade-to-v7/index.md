@@ -1,7 +1,7 @@
 ---
 type: "Framework Learn Directory Index"
 framework: "Material UI"
-generated_at: "2026-07-25T13:39:41.092666Z"
+generated_at: "2026-08-29T09:40:18.324922Z"
 ---
 # Upgrade-To-V7
 

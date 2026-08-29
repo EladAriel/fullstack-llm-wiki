@@ -1,45 +1,80 @@
 ---
 type: "Framework Learn Page"
-framework: "mongodb"
+framework: "MongoDB"
 source_repo: "https://github.com/mongodb/docs.git"
 source_branch: "main"
 source_path: "content/manual/manual/source/core/indexes/index-types/index-single.txt"
-source_commit: "ab9db26ed3d11618cdb61516d8180337d8e3f679"
-source_commit_short: "ab9db26e"
-source_commit_date: "2026-07-24T16:22:46-06:00"
-generated_at: "2026-07-25T11:51:15Z"
+source_commit: "b9f2bc487a2878b65e3c1f80024bebab76954f27"
+source_commit_short: "b9f2bc48"
+source_commit_date: "2026-08-28T17:09:45-05:00"
+generated_at: "2026-08-29T09:39:19.829256Z"
 ---
-
-====================
+.. _indexes-single-field:
 
 # Single Field Indexes
 
-Single field indexes store information from a single field in a collection. By default, all collections have an index on the `_id field <index-type-id>`. You can add additional indexes to speed up important queries and operations.
+.. default-domain:: mongodb
 
-You can create an index on any field in a document, including top-level fields, embedded fields, or fields inside embedded documents. When you create an index, specify the field and the sort order (`1` for ascending, `-1` for descending).
+**facet:** :name: genre
+   :values: reference
+
+**meta:** :description: Details on when and how to use single indexes in a MongoDB database.
+
+**contents:** On this page
+   :local:
+   :backlinks: none
+   :depth: 1
+   :class: singlecol
+
+
+Single field indexes store information from a single field in a
+collection. By default, all collections have an index on the :ref:`_id
+field <index-type-id>`. You can add additional indexes to speed up
+important queries and operations.
+
+You can create an index on any field in a document, including top-level fields, 
+embedded fields, or fields inside embedded documents. When you create an index, 
+specify the field and the sort order (``1`` for ascending, ``-1`` for descending).
 
 To create a single-field index, use the following prototype:
 
-.. include:: /includes/indexes/code-examples/create-single-field-index.rst
+**include:** /includes/indexes/code-examples/create-single-field-index.rst
 
-This image shows an ascending index on a single field, `score`:
+This image shows an ascending index on a single field, ``score``:
 
-.. include:: /images/index-ascending.rst
+**include:** /images/index-ascending.rst
 
-In this example, each document in the collection that has a value for the `score` field is added to the index in ascending order.
+In this example, each document in the collection that has a value for
+the ``score`` field is added to the index in ascending order.
+
+.. |page-topic| replace:: :atlas:`create and manage single field indexes in the UI </atlas-ui/indexes>`
+
+.. cta-banner::
+   :url: https://www.mongodb.com/docs/atlas/atlas-ui/indexes/
+   :icon: Cloud
+
+   .. include:: /includes/fact-atlas-compatible.rst
 
 ## Use Cases
 
-If your application repeatedly runs queries on the same field, you can create an index on that field to improve performance. For example, your human resources department often needs to look up employees by employee ID. You can create an index on the employee ID field to improve the performance of that query.
+If your application repeatedly runs queries on the same field, you can
+create an index on that field to improve performance. For example, your
+human resources department often needs to look up employees by employee
+ID. You can create an index on the employee ID field to improve the
+performance of that query.
 
 ## Get Started
 
 To create an index on a single field, see these examples:
 
-- `index-create-ascending-single-field`
-- `index-embedded-fields`
-- `index-embedded-documents`
-## Contents
+- :ref:`index-create-ascending-single-field`
 
-- Create </core/indexes/index-types/index-single/create-single-field-index>
-- Embedded Documents </core/indexes/index-types/index-single/create-embedded-object-index>
+- :ref:`index-embedded-fields`
+
+- :ref:`index-embedded-documents`
+
+**toctree:** :titlesonly: 
+   :hidden: 
+
+   Create </core/indexes/index-types/index-single/create-single-field-index>
+   Embedded Documents </core/indexes/index-types/index-single/create-embedded-object-index>

@@ -1,99 +1,131 @@
 ---
 type: "Framework Learn Page"
-framework: "mongodb"
+framework: "MongoDB"
 source_repo: "https://github.com/mongodb/docs.git"
 source_branch: "main"
 source_path: "content/manual/manual/source/reference/operator/update/min.txt"
-source_commit: "ab9db26ed3d11618cdb61516d8180337d8e3f679"
-source_commit_short: "ab9db26e"
-source_commit_date: "2026-07-24T16:22:46-06:00"
-generated_at: "2026-07-25T11:51:15Z"
+source_commit: "b9f2bc487a2878b65e3c1f80024bebab76954f27"
+source_commit_short: "b9f2bc48"
+source_commit_date: "2026-08-28T17:09:45-05:00"
+generated_at: "2026-08-29T09:39:20.106763Z"
 ---
-
-======================
-
 # $min (update operator)
+
+**meta:** :description: Update field values using `$min` to set a field to a specified value if it's less than the current value, applicable to numbers and dates.
+
+.. default-domain:: mongodb
+
+**contents:** On this page
+   :local:
+   :backlinks: none
+   :depth: 1
+   :class: singlecol
 
 ## Definition
 
+**update:** $min
+
+   The :update:`$min` updates the value of the field to a specified
+   value *if* the specified value is **less than** the current value of
+   the field. The :update:`$min` operator can compare values of
+   different types, using the :ref:`BSON comparison order
+   <faq-dev-compare-order-for-BSON-types>`.
+
+   .. code-block:: javascript
+
+      { $min: { <field1>: <value1>, ... } }
+
+   .. include:: /includes/use-dot-notation.rst
+
 ## Behavior
 
-.. include:: /includes/fact-update-operator-processing-order.rst
+**include:** /includes/fact-update-operator-processing-order.rst
 
-If the field does not exist, the :update:`$min` operator sets the field to the specified value.
+If the field does not exist, the :update:`$min` operator sets the
+field to the specified value.
 
-For comparisons between values of different types, such as a number and a null, :update:`$min` uses the `BSON comparison order <faq-dev-compare-order-for-BSON-types>`.
+For comparisons between values of different types, such as a number and
+a null, :update:`$min` uses the :ref:`BSON comparison order
+<faq-dev-compare-order-for-BSON-types>`.
 
-.. include:: /includes/extracts/update-operation-empty-operand-expressions-min.rst
+**include:** /includes/extracts/update-operation-empty-operand-expressions-min.rst
 
 ## Examples
 
-### Use `$min` to Compare Numbers
+### Use ``$min`` to Compare Numbers
 
-Create the `scores` collection:
+Create the ``scores`` collection:
 
-```javascript
-db.scores.insertOne( { _id: 1, highScore: 800, lowScore: 200 } )
-```
+.. code-block:: javascript
 
-The `lowScore` for the document currently has the value `200`. The following operation uses :update:`$min` to compare `200` to the specified value `150` and updates the value of `lowScore` to `150` since `150` is less than `200`:
+   db.scores.insertOne( { _id: 1, highScore: 800, lowScore: 200 } )
 
-```javascript
-db.scores.updateOne( { _id: 1 }, { $min: { lowScore: 150 } } )
-```
+The ``lowScore`` for the document currently has the value
+``200``. The following operation uses :update:`$min` to compare
+``200`` to the specified value ``150`` and updates the value of
+``lowScore`` to ``150`` since ``150`` is less than ``200``:
 
-The `scores` collection now contains the following modified document:
+.. code-block:: javascript
 
-```javascript
-{ _id: 1, highScore: 800, lowScore: 150 }
-```
+   db.scores.updateOne( { _id: 1 }, { $min: { lowScore: 150 } } )
 
-The next operation has no effect since the current value of the field `lowScore`, i.e `150`, is less than `250`:
+The ``scores`` collection now contains the following modified document:
 
-```javascript
-db.scores.updateOne( { _id: 1 }, { $min: { lowScore: 250 } } )
-```
+.. code-block:: javascript
 
-The document remains unchanged in the `scores` collection:
+   { _id: 1, highScore: 800, lowScore: 150 }
 
-```javascript
-{ _id: 1, highScore: 800, lowScore: 150 }
-```
+The next operation has no effect since the current value of the
+field ``lowScore``, i.e ``150``, is less than ``250``:
 
-### Use `$min` to Compare Dates
+.. code-block:: javascript
 
-Create the `tags` collection:
+   db.scores.updateOne( { _id: 1 }, { $min: { lowScore: 250 } } )
 
-```javascript
-db.tags.insertOne(
+The document remains unchanged in the ``scores`` collection:
+
+.. code-block:: javascript
+
+   { _id: 1, highScore: 800, lowScore: 150 }
+
+### Use ``$min`` to Compare Dates
+
+Create the ``tags`` collection:
+
+.. code-block:: javascript
+
+   db.tags.insertOne(
+      {
+        _id: 1,
+        desc: "crafts",
+        dateEntered: ISODate("2013-10-01T05:00:00Z"),
+        dateExpired: ISODate("2013-10-01T16:38:16Z")
+      }
+   )
+
+The following operation compares the current value of the
+``dateEntered`` field, i.e. ``ISODate("2013-10-01T05:00:00Z")``,
+with the specified date ``new Date("2013-09-25")`` to determine
+whether to update the field:
+
+.. code-block:: javascript
+
+   db.tags.updateOne(
+      { _id: 1 },
+      { $min: { dateEntered: new Date("2013-09-25") } }
+   )
+
+The operation updates the ``dateEntered`` field:
+
+.. code-block:: javascript
+   :emphasize-lines: 4
+
    {
      _id: 1,
      desc: "crafts",
-     dateEntered: ISODate("2013-10-01T05:00:00Z"),
+     dateEntered: ISODate("2013-09-25T00:00:00Z"),
      dateExpired: ISODate("2013-10-01T16:38:16Z")
    }
-)
-```
 
-The following operation compares the current value of the `dateEntered` field, i.e. `ISODate("2013-10-01T05:00:00Z")`, with the specified date `new Date("2013-09-25")` to determine whether to update the field:
-
-```javascript
-db.tags.updateOne(
-   { _id: 1 },
-   { $min: { dateEntered: new Date("2013-09-25") } }
-)
-```
-
-The operation updates the `dateEntered` field:
-
-```javascript
-{
-  _id: 1,
-  desc: "crafts",
-  dateEntered: ISODate("2013-09-25T00:00:00Z"),
-  dateExpired: ISODate("2013-10-01T16:38:16Z")
-}
-```
-
-> **Seealso:** - :method:`db.collection.updateMany()`
-- :method:`db.collection.findAndModify()`
+**seealso:** - :method:`db.collection.updateMany()`
+   - :method:`db.collection.findAndModify()`

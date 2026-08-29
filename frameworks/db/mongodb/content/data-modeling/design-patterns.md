@@ -1,38 +1,59 @@
 ---
 type: "Framework Learn Page"
-framework: "mongodb"
+framework: "MongoDB"
 source_repo: "https://github.com/mongodb/docs.git"
 source_branch: "main"
 source_path: "content/manual/manual/source/data-modeling/design-patterns.txt"
-source_commit: "ab9db26ed3d11618cdb61516d8180337d8e3f679"
-source_commit_short: "ab9db26e"
-source_commit_date: "2026-07-24T16:22:46-06:00"
-generated_at: "2026-07-25T11:51:15Z"
+source_commit: "b9f2bc487a2878b65e3c1f80024bebab76954f27"
+source_commit_short: "b9f2bc48"
+source_commit_date: "2026-08-28T17:09:45-05:00"
+generated_at: "2026-08-29T09:39:19.771406Z"
 ---
-
-======================
+.. _schema-design-patterns:
+.. _data-modeling-patterns:
 
 # Schema Design Patterns
 
-Use schema design patterns to optimize your data model based on how your application queries and uses data.
+**meta:** :description: Optimize your data model with schema design patterns to enhance query performance and manage schema changes effectively.
 
-`schema-design-computed-values` Perform calculations in the database so results are ready when the client requests data.
+.. dismissible-skills-card::
+   :skill: Schema Design Patterns & Antipatterns
+   :url: https://learn.mongodb.com/skills?openTab=data%20modeling
 
-`schema-pattern-group-data` Group data into series to improve performance and account for outliers.
 
-`polymorphic-data` Handle variable document fields and data types in a single collection.
+Use schema design patterns to optimize your data model based on how your
+application queries and uses data.
 
-`schema-pattern-migrations` Prepare for schema changes to account for changing technical requirements.
+:ref:`schema-design-computed-values`
+  Perform calculations in the database so results are ready when the
+  client requests data.
 
-`archive-data-pattern` Move old data to a separate location to increase storage and improve performance where data is accessed most frequently.
+:ref:`schema-pattern-group-data`
+   Group data into series to improve performance and account for
+   outliers.
 
-`data-modeling-single-collection-pattern` Use references to group related documents of different types into a single collection.
+:ref:`polymorphic-data`
+   Handle variable document fields and data types in a single
+   collection.
 
-## Contents
+:ref:`schema-pattern-migrations`
+   Prepare for schema changes to account for changing technical
+   requirements.
 
-- Computed Values </data-modeling/design-patterns/handle-computed-values>
-- Group Data </data-modeling/design-patterns/group-data>
-- Polymorphic Data </data-modeling/design-patterns/polymorphic-data>
-- Versioning </data-modeling/design-patterns/data-versioning>
-- Archive Data </data-modeling/design-patterns/archive>
-- Single Collection </data-modeling/design-patterns/single-collection>
+:ref:`archive-data-pattern`
+   Move old data to a separate location to increase storage and improve
+   performance where data is accessed most frequently.
+
+:ref:`data-modeling-single-collection-pattern`
+   Use references to group related documents of different types into a
+   single collection.
+
+**toctree:** :titlesonly: 
+   :hidden: 
+
+   Computed Values </data-modeling/design-patterns/handle-computed-values>
+   Group Data </data-modeling/design-patterns/group-data>
+   Polymorphic Data </data-modeling/design-patterns/polymorphic-data>
+   Versioning </data-modeling/design-patterns/data-versioning>
+   Archive Data </data-modeling/design-patterns/archive>
+   Single Collection </data-modeling/design-patterns/single-collection>

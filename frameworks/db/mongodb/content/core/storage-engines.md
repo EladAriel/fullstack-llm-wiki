@@ -1,28 +1,54 @@
 ---
 type: "Framework Learn Page"
-framework: "mongodb"
+framework: "MongoDB"
 source_repo: "https://github.com/mongodb/docs.git"
 source_branch: "main"
 source_path: "content/manual/manual/source/core/storage-engines.txt"
-source_commit: "ab9db26ed3d11618cdb61516d8180337d8e3f679"
-source_commit_short: "ab9db26e"
-source_commit_date: "2026-07-24T16:22:46-06:00"
-generated_at: "2026-07-25T11:51:15Z"
+source_commit: "b9f2bc487a2878b65e3c1f80024bebab76954f27"
+source_commit_short: "b9f2bc48"
+source_commit_date: "2026-08-28T17:09:45-05:00"
+generated_at: "2026-08-29T09:39:19.510692Z"
 ---
-
-============================================
+.. _storage-engines:
 
 # Storage Engines for Self-Managed Deployments
 
-The `storage engine` is the component of the database that is responsible for managing how data is stored, both in memory and on disk. MongoDB supports multiple storage engines, as different engines perform better for specific workloads. Choosing the appropriate storage engine for your use case can significantly impact the performance of your applications.
+**meta:** :keywords: on-prem
+   :description: Explore different storage engines in MongoDB, including WiredTiger and In-Memory, to optimize data management for specific workloads.
 
-|arrow| WiredTiger Storage Engine (Default) `WiredTiger <storage-wiredtiger>` is the default storage engine and is recommended for new deployments. WiredTiger provides a document-level concurrency model, checkpointing, and compression, among other features.
+.. default-domain:: mongodb
 
-In MongoDB Enterprise, WiredTiger also supports `/core/security-encryption-at-rest`. See `encrypted-storage-engine`.
+**contents:** On this page
+   :local:
+   :backlinks: none
+   :depth: 1
+   :class: singlecol
 
-|arrow| In-Memory Storage Engine An `In-Memory storage engine <storage-inmemory>` is available in MongoDB Enterprise. Rather than storing documents on-disk, it retains them in-memory for more predictable data latencies.
+The :term:`storage engine` is the component of the database that is
+responsible for managing how data is stored, both in memory and on disk.
+MongoDB supports multiple storage engines, as different engines perform
+better for specific workloads. Choosing the appropriate storage engine
+for your use case can significantly impact the performance of your
+applications.
 
-## Contents
+|arrow| WiredTiger Storage Engine (*Default*)
+   :ref:`WiredTiger <storage-wiredtiger>` is the default storage engine and is 
+   recommended for new deployments. WiredTiger provides a document-level 
+   concurrency model, checkpointing, and compression, among other features. 
+   
+   In MongoDB Enterprise, WiredTiger also supports
+   :doc:`/core/security-encryption-at-rest`. See
+   :ref:`encrypted-storage-engine`.
 
-- WiredTiger </core/self-managed-wiredtiger>
-- In-Memory </core/inmemory>
+|arrow| In-Memory Storage Engine
+   An :ref:`In-Memory storage engine <storage-inmemory>` is available 
+   in MongoDB Enterprise. Rather than storing documents on-disk, it
+   retains them in-memory for more predictable data latencies.
+
+**toctree:** :titlesonly: 
+   :hidden: 
+
+   WiredTiger </core/self-managed-wiredtiger>
+   In-Memory </core/inmemory>
+
+.. |arrow| unicode:: U+27A4

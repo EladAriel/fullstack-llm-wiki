@@ -4,10 +4,10 @@ framework: "LangSmith"
 source_repo: "https://github.com/langchain-ai/docs.git"
 source_branch: "main"
 source_path: "src/langsmith/shared-responsibility-model.mdx"
-source_commit: "2aae1dfc98ee953a9a5185fb6fcdd9efb3f4d878"
-source_commit_short: "2aae1df"
-source_commit_date: "2026-07-25T00:27:23+00:00"
-generated_at: "2026-07-25T19:08:33.373040Z"
+source_commit: "a174f9cf7c91ee5eb14ee2382eb48bfe6e4956e9"
+source_commit_short: "a174f9c"
+source_commit_date: "2026-08-28T17:04:12-07:00"
+generated_at: "2026-08-29T09:39:50.648499Z"
 ---
 # Shared Responsibility Model
 
@@ -17,13 +17,15 @@ sidebarTitle: Shared responsibility model
 description: Overview of how LangChain and customers share security responsibilities for the LangSmith platform.
 ---
 
-LangSmith operates as a multi-tenant SaaS solution. Our security model is designed to be simple: LangChain secures the platform infrastructure and application, while you secure your specific usage, data inputs, and the AI agents you build.
+LangSmith is a multi-tenant SaaS product. Under the shared responsibility model, LangChain secures the platform infrastructure and application, and you secure your usage, data inputs, and the agents you build.
+
+For the Bring Your Own Cloud (BYOC) equivalent, see the [BYOC shared responsibility model](/langsmith/byoc-shared-responsibility).
 
 ## Responsibility matrix
 
 | Domain | LangChain responsibility (provider) | Customer responsibility (user) |
 | :---- | :---- | :---- |
-| **Infrastructure** | We manage the underlying cloud infrastructure (via GCP), including servers, networking, OS patching, and capacity planning. GCP owns the physical data centers. | N/A. You do not provision or maintain compute resources in the SaaS environment. |
+| **Infrastructure** | We manage the underlying cloud infrastructure (via AWS and GCP), including servers, networking, OS patching, and capacity planning. AWS and GCP own the physical data centers. | N/A. You do not provision or maintain compute resources in the SaaS environment. |
 | **Application** | We secure the LangSmith application code, API endpoints, and database clusters, including code scanning and penetration testing. | You are responsible for the security and safety of the AI chains and agents you build using our SDKs. |
 | **Data** | We enforce tenant isolation and encrypt data at rest using AES-256 and in transit using TLS 1.2 or higher. | You control what data is sent to us and must filter sensitive PII via the SDK before it leaves your environment. |
 | **Identity** | We provide the guardrails, including SSO/SCIM, MFA enforcement options, and RBAC frameworks. | You manage your user roster, assign roles (e.g., Admin vs. Viewer), and revoke access for terminated employees. |
@@ -32,7 +34,7 @@ LangSmith operates as a multi-tenant SaaS solution. Our security model is design
 ## LangChain responsibilities (the platform)
 
 - We maintain SOC 2 Type II, GDPR, and HIPAA compliance and undergo annual third-party audits and penetration testing.
-- We manage all underlying infrastructure on Google Cloud Platform (GCP), including network firewalls, DDoS protection via Cloud Armor, and container security.
+- We manage all underlying infrastructure on Amazon Web Services (AWS) and Google Cloud Platform (GCP), including network firewalls, DDoS protection, and container security.
 - We maintain high availability in accordance with our SLA, maintain daily backups, and handle disaster recovery for the LangSmith service.
 - We patch confirmed platform vulnerabilities within strict service level agreements, with critical severity issues remediated in less than 2 weeks and high severity issues within 30 days.
 - We encrypt all customer data at rest using AES-256 and in transit using TLS 1.2 or higher.

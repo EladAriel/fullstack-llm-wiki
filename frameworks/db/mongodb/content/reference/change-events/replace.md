@@ -1,60 +1,147 @@
 ---
 type: "Framework Learn Page"
-framework: "mongodb"
+framework: "MongoDB"
 source_repo: "https://github.com/mongodb/docs.git"
 source_branch: "main"
 source_path: "content/manual/manual/source/reference/change-events/replace.txt"
-source_commit: "ab9db26ed3d11618cdb61516d8180337d8e3f679"
-source_commit_short: "ab9db26e"
-source_commit_date: "2026-07-24T16:22:46-06:00"
-generated_at: "2026-07-25T11:51:15Z"
+source_commit: "b9f2bc487a2878b65e3c1f80024bebab76954f27"
+source_commit_short: "b9f2bc48"
+source_commit_date: "2026-08-28T17:09:45-05:00"
+generated_at: "2026-08-29T09:39:19.875811Z"
 ---
+.. _change-stream-replace:
 
-=================
+# ``replace`` Event
 
-# `replace` Event
+**meta:** :description: Understand the `replace` event in MongoDB change streams, which occurs when a document is replaced with a new one during an update operation.
+
+.. default-domain:: mongodb
+
+**contents:** On this page
+   :local:
+   :backlinks: none
+   :depth: 2
+   :class: singlecol
+
+.. |idref| replace:: ce-replace
 
 ## Summary
 
+**data:** replace
+
+  A ``replace`` event occurs when an operation replaces all fields in a
+  document with new values, such as when :method:`replaceOne
+  <db.collection.replaceOne>` is called or when an :dbcommand:`update`
+  command performs a document replacement.
+
 ## Description
+
+.. list-table::
+   :header-rows: 1
+   :widths: 20 20 60
+
+   * - Field
+     - Type
+     - Description
+   * - ``_id``
+     - Document
+     - .. include:: /includes/change-stream/id
+   * - ``clusterTime``
+     - Timestamp
+     - .. include:: /includes/change-stream/clusterTime
+
+   * - ``collectionUUID``
+     - UUID
+     - .. include:: /includes/change-stream/collectionUUID
+
+       .. include:: /includes/change-stream/change-event-UUID
+        
+   * - ``documentKey``
+     - document
+     - .. include:: /includes/change-stream/documentKey
+
+
+   * - ``fullDocument``
+     - document
+     - The new document created by the operation. 
+
+       .. include:: /includes/change-stream/fullDocument-postimage
+
+   * - ``fullDocumentBeforeChange``
+     - document
+     - .. include:: /includes/change-stream/fullDocumentBeforeChange
+
+   * - ``lsid``
+     - document
+     - .. include:: /includes/change-stream/lsid
+
+   * - ``ns``
+     - document
+     - .. include:: /includes/change-stream/ns
+
+   * - ``ns.coll``
+     - string
+     - .. include:: /includes/change-stream/ns.coll
+
+   * - ``ns.db``
+     - string
+     - .. include:: /includes/change-stream/ns.db
+
+
+   * - ``operationType``
+     - string
+     - .. include:: /includes/change-stream/operationType
+
+       Returns a value of ``replace`` for these change events.
+
+   * - ``txnNumber``
+     - NumberLong
+     - .. include:: /includes/change-stream/txnNumber
+
+   * - ``wallTime``
+     - :term:`ISODate`
+     - .. include:: /includes/change-stream/wallTime
 
 ## Behavior
 
-#### Document Pre- and Post-Images
+## Document Pre- and Post-Images
 
-.. include:: /includes/change-stream-pre-and-post-images-change-events.rst
+**include:** /includes/change-stream-pre-and-post-images-change-events.rst
 
-.. include:: /includes/change-stream-pre-and-post-images-additional-information.rst
+**include:** /includes/change-stream-pre-and-post-images-additional-information.rst
 
 ### Update Operations
 
-.. include:: /includes/fact-modify-change-event
+**include:** /includes/fact-modify-change-event
 
 ## Examples
 
-The following example illustrates a `replace` event:
+The following example illustrates a ``replace`` event:
 
-```json
-{
-   "_id": { <Resume Token> },
-   "operationType": "replace",
-   "clusterTime": <Timestamp>,
-   "wallTime": <ISODate>,
-   "ns": {
-      "db": "engineering",
-      "coll": "users"
-   },
-   "documentKey": {
-      "_id": ObjectId("599af247bb69cd89961c986d")
-   },
-   "fullDocument": {
-      "_id": ObjectId("599af247bb69cd89961c986d"),
-      "userName": "alice123",
-      "name": "Alice"
+.. code-block:: json
+   :copyable: false
+
+   {
+      "_id": { <Resume Token> },
+      "operationType": "replace",
+      "clusterTime": <Timestamp>,
+      "wallTime": <ISODate>,
+      "ns": {
+         "db": "engineering",
+         "coll": "users"
+      },
+      "documentKey": {
+         "_id": ObjectId("599af247bb69cd89961c986d")
+      },
+      "fullDocument": {
+         "_id": ObjectId("599af247bb69cd89961c986d"),
+         "userName": "alice123",
+         "name": "Alice"
+      }
    }
-}
-```
 
-A `replace` event can result from `replaceOne()` or from an `update` command that performs a full-document replacement.
+A ``replace`` event can result from ``replaceOne()`` or from an ``update``
+command that performs a full-document replacement.
 
-The `fullDocument` of a `replace` event represents the replacement document after the operation completes.
+The ``fullDocument`` of a ``replace`` event represents the replacement
+document after the operation completes.

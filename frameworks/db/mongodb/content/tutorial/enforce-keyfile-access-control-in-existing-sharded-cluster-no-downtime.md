@@ -1,190 +1,268 @@
 ---
 type: "Framework Learn Page"
-framework: "mongodb"
+framework: "MongoDB"
 source_repo: "https://github.com/mongodb/docs.git"
 source_branch: "main"
 source_path: "content/manual/manual/source/tutorial/enforce-keyfile-access-control-in-existing-sharded-cluster-no-downtime.txt"
-source_commit: "ab9db26ed3d11618cdb61516d8180337d8e3f679"
-source_commit_short: "ab9db26e"
-source_commit_date: "2026-07-24T16:22:46-06:00"
-generated_at: "2026-07-25T11:51:15Z"
+source_commit: "b9f2bc487a2878b65e3c1f80024bebab76954f27"
+source_commit_short: "b9f2bc48"
+source_commit_date: "2026-08-28T17:09:45-05:00"
+generated_at: "2026-08-29T09:39:19.572542Z"
 ---
-
-====================================================
-
 # Update Sharded Cluster to Keyfile Auth (No Downtime)
+
+.. default-domain:: mongodb
+
+**meta:** :keywords: on-prem
+   :description: Transition a self-managed sharded cluster to keyfile authentication without downtime using `security.transitionToAuth`.
+                    
+**contents:** On this page
+   :local:
+   :backlinks: none
+   :depth: 1
+   :class: singlecol
 
 ## Overview
 
-> **Important:** The following procedure applies to sharded clusters using MongoDB
-3.4 or later.
-Earlier versions of MongoDB do not support no-downtime upgrade. For
-sharded clusters using earlier versions of MongoDB, see
-`/tutorial/enforce-keyfile-access-control-in-existing-sharded-cluster`.
+**important:** The following procedure applies to sharded clusters using MongoDB
+   3.4 or later.
 
-A MongoDB sharded cluster can enforce `user authentication <authentication>` as well as `internal authentication <inter-process-auth>` of its components to secure against unauthorized access.
+   Earlier versions of MongoDB do not support no-downtime upgrade. For
+   sharded clusters using earlier versions of MongoDB, see
+   :doc:`/tutorial/enforce-keyfile-access-control-in-existing-sharded-cluster`.
 
-The following tutorial describes a procedure using :setting:`security.transitionToAuth` to transition an existing sharded cluster to enforce authentication without incurring downtime.
+A MongoDB sharded cluster can enforce :ref:`user authentication
+<authentication>` as well as :ref:`internal authentication
+<inter-process-auth>` of its components to secure against unauthorized
+access.
 
-Before you attempt this tutorial, please familiarize yourself with the contents of this document.
+The following tutorial describes a procedure using
+:setting:`security.transitionToAuth` to transition an existing sharded
+cluster to enforce authentication without incurring downtime.
+
+Before you attempt this tutorial, please familiarize yourself with the
+contents of this document.
 
 ## Considerations
 
 ### Cloud Manager and Ops Manager
 
-If you are using Cloud Manager or Ops Manager to manage your deployment, refer to Configure Access Control for MongoDB Deployments in the :mms-docs:`Cloud Manager manual </tutorial/edit-host-authentication-credentials>` or :opsmgr:`Ops Manager manual </tutorial/edit-host-authentication-credentials>` to enforce authentication.
+If you are using Cloud Manager or Ops Manager to manage your deployment,
+refer to *Configure Access Control for MongoDB Deployments*
+in the :mms-docs:`Cloud Manager manual
+</tutorial/edit-host-authentication-credentials>`
+or :opsmgr:`Ops Manager manual
+</tutorial/edit-host-authentication-credentials>` to enforce authentication.
 
 ### IP Binding
 
-.. include:: /includes/fact-default-bind-ip-change.rst
+**include:** /includes/fact-default-bind-ip-change.rst
 
 ### Internal and Client Authentication Mechanisms
 
-This tutorial configures authentication using `authentication-scram` for client authentication and a `keyfile <internal-auth-keyfile>` for internal authentication.
+This tutorial configures authentication using
+:ref:`authentication-scram` for client authentication and a
+:ref:`keyfile <internal-auth-keyfile>` for internal authentication.
 
-Refer to the `authentication` documentation for a complete list of available client and internal authentication mechanisms.
+Refer to the :ref:`authentication` documentation for a complete list of
+available client and internal authentication mechanisms.
 
 ### Architecture
 
-This tutorial assumes that each shard replica set, as well as the config server replica set, can elect a new `primary` after stepping down its existing primary.
+This tutorial assumes that each shard replica set, as well as the config
+server replica set, can elect a new :term:`primary` after stepping down its
+existing primary.
 
-A replica set can elect a primary only if both of the following conditions are true:
+A replica set can elect a primary only if both of the following conditions are
+true:
 
 - A majority of voting replica set members are available after stepping down
-the `primary`.
+  the :term:`primary`.
 
-- There is at least one available `secondary` member that is not
-`delayed <replica-set-delayed-members>`, `hidden <replica-set-hidden-members>`, or `Priority 0 <replica-set-secondary-only-members>`.
+- There is at least one available :term:`secondary` member that is not
+  :ref:`delayed <replica-set-delayed-members>`, :ref:`hidden
+  <replica-set-hidden-members>`, or :ref:`Priority 0
+  <replica-set-secondary-only-members>`.
 
-### Minimum number of `mongos` instances
+### Minimum number of ``mongos`` instances
 
-Ensure your sharded cluster has at least two mongos instances available. This tutorial requires restarting each :binary:`~bin.mongos` in the cluster. If your sharded cluster has only one :binary:`~bin.mongos` instance, this results in downtime during the period that the :binary:`~bin.mongos` is offline.
+Ensure your sharded cluster has at least two mongos instances
+available. This tutorial requires restarting each :binary:`~bin.mongos` in
+the cluster. If your sharded cluster has only one :binary:`~bin.mongos`
+instance, this results in downtime during the period that the
+:binary:`~bin.mongos` is offline.
+
+.. _security-shardcluster-nodowntime-enable-access-control:
 
 ## Before You Begin
 
-.. include:: /includes/dSO-role-intro.rst
+**include:** /includes/dSO-role-intro.rst
 
-.. include:: /includes/dSO-warning.rst
+**include:** /includes/dSO-warning.rst
 
 ## Enforce Keyfile Access Control on an Existing Sharded Cluster
 
 ### Create and Distribute the Keyfile
 
-.. include:: /includes/extracts/keyfile-intro-sharded-cluster.rst
+**include:** /includes/extracts/keyfile-intro-sharded-cluster.rst
 
-```bash
-openssl rand -base64 755 > <path-to-keyfile>
-chmod 400 <path-to-keyfile>
-```
+.. code-block:: bash
 
-.. include:: /includes/extracts/keyfile-distribution-sharded-cluster.rst
+   openssl rand -base64 755 > <path-to-keyfile>
+   chmod 400 <path-to-keyfile>
 
-For more information on using keyfiles for internal authentication, refer to `internal-auth-keyfile`.
+**include:** /includes/extracts/keyfile-distribution-sharded-cluster.rst
+
+For more information on using keyfiles for internal authentication, refer to
+:ref:`internal-auth-keyfile`.
+
+.. _security-shardcluster-nodowntime-adminusers-clientusers:
 
 ### Configure Sharded Cluster Admin User and Client Users
 
-You must connect to a :binary:`~bin.mongos` to complete the steps in this section. The users created in these steps are cluster-level users and cannot be used for accessing individual shard replica sets.
+You must connect to a :binary:`~bin.mongos` to complete the steps in this
+section. The users created in these steps are cluster-level users and
+cannot be used for accessing individual shard replica sets.
 
-.. include:: /includes/steps/enable-authentication-in-shardcluster-nodowntime-uac.rst
+**include:** /includes/steps/enable-authentication-in-shardcluster-nodowntime-uac.rst
 
-### Transition Each `mongos` Instance to Enforce Authentication
+### Transition Each ``mongos`` Instance to Enforce Authentication
 
-.. include:: /includes/steps/enable-authentication-in-shardcluster-nodowntime-transition-mongos.rst
+**include:** /includes/steps/enable-authentication-in-shardcluster-nodowntime-transition-mongos.rst
 
-At the end of this section, all :binary:`~bin.mongos` instances in the sharded cluster are running with :setting:`security.transitionToAuth` and :setting:`security.keyFile` internal authentication.
+At the end of this section, all :binary:`~bin.mongos` instances in the
+sharded cluster are running with :setting:`security.transitionToAuth`
+and :setting:`security.keyFile` internal authentication.
 
 ### Transition Config Server Replica Set Members to Enforce Authentication
 
-.. include:: /includes/steps/enable-authentication-in-shardcluster-nodowntime-transition-config.rst
+**include:** /includes/steps/enable-authentication-in-shardcluster-nodowntime-transition-config.rst
 
-At the end of this section, all :binary:`~bin.mongod` instances in the config server replica set is running with :setting:`security.transitionToAuth` and :setting:`security.keyFile` internal authentication.
+At the end of this section, all :binary:`~bin.mongod` instances in the config
+server replica set is running with :setting:`security.transitionToAuth` and
+:setting:`security.keyFile` internal authentication.
 
 ### Transition Each Shard Replica Set Members to Enforce Authentication
 
-Create the shard-local administrator ++++++++++++++++++++++++++++++++++++
+### Create the shard-local administrator
 
-In a sharded cluster that enforces authentication, each shard replica set should have its own `shard-local administrator <shard-local-users>`. You cannot use a shard-local administrator for one shard to access another shard or the sharded cluster.
+In a sharded cluster that enforces authentication, each shard replica
+set should have its own :ref:`shard-local administrator
+<shard-local-users>`. You cannot use a shard-local administrator for
+one shard to access another shard or the sharded cluster.
 
-Connect to the `primary` member of each shard replica set and create a user with the :method:`db.createUser()` method, assigning it the following roles:
+Connect to the :term:`primary` member of each shard replica set and create a
+user with the :method:`db.createUser()` method, assigning it the following
+roles:
 
-- :authrole:`clusterAdmin` on the `admin` database
-- :authrole:`userAdmin` roles on the `admin` database
-> **Tip:** .. include:: /includes/extracts/4.2-changes-passwordPrompt.rst
+- :authrole:`clusterAdmin` on the ``admin`` database
+- :authrole:`userAdmin` roles on the ``admin`` database
 
-```javascript
-admin = db.getSiblingDB("admin")
-admin.createUser(
-  {
-    user: "admin",
-    pwd: passwordPrompt(),  // or cleartext password
-    roles: [
-      { role: "clusterAdmin", db: "admin" },
-      { role: "userAdmin", db: "admin" }
-    ]
-  }
-)
-```
+**tip:** .. include:: /includes/extracts/4.2-changes-passwordPrompt.rst
 
-At the completion of this tutorial, if you want to connect to the shard to perform maintenance operation that require direct connection to a shard, you must authenticate as the shard-local administrator.
+.. code-block:: javascript
 
-> **Note:** Direct connections to a shard should only be for shard-specific
-maintenance and configuration. In general, clients should connect to
-the sharded cluster through the :binary:`~bin.mongos`.
+   admin = db.getSiblingDB("admin")
+   admin.createUser(
+     {
+       user: "admin",
+       pwd: passwordPrompt(),  // or cleartext password
+       roles: [
+         { role: "clusterAdmin", db: "admin" },
+         { role: "userAdmin", db: "admin" }
+       ]
+     }
+   )
 
-Procedure +++++++++
+At the completion of this tutorial, if you want to connect to the shard
+to perform maintenance operation that require direct connection to a
+shard, you must authenticate as the shard-local administrator.
 
-Transitioning one shard replica set at a time, repeat these steps for each shard replica set in the sharded cluster.
+**note:** Direct connections to a shard should only be for shard-specific
+   maintenance and configuration. In general, clients should connect to
+   the sharded cluster through the :binary:`~bin.mongos`.
 
-.. include:: /includes/steps/enable-authentication-in-shardcluster-nodowntime-transition-shards.rst
+### Procedure
 
-At this point in the tutorial, every component of the sharded cluster is running with `--transitionToAuth` and :setting:`security.keyFile` internal authentication. The sharded cluster has at least one administrative user, and each shard replica set has a shard-local administrative user.
+Transitioning one shard replica set at a time, repeat these steps for
+each shard replica set in the sharded cluster.
 
-The remaining sections involve taking the sharded cluster out of the transition state to fully enforce authentication.
+**include:** /includes/steps/enable-authentication-in-shardcluster-nodowntime-transition-shards.rst
 
-### Restart Each `mongos` Instance without `transitionToAuth`
+At this point in the tutorial, every component of the sharded cluster is
+running with ``--transitionToAuth`` and :setting:`security.keyFile`
+internal authentication. The sharded cluster has at least one administrative
+user, and each shard replica set has a shard-local administrative user.
 
-> **Important:** At the end of this section, clients must specify authentication
-credentials to connect to the sharded cluster. Update clients to specify
-authentication credentials before completing this section to avoid loss of
-connectivity.
+The remaining sections involve taking the sharded cluster out of the
+transition state to fully enforce authentication.
 
-To complete the transition to fully enforcing authentication in the sharded cluster, you must restart each :binary:`~bin.mongos` instance without the :setting:`security.transitionToAuth` setting.
+### Restart Each ``mongos`` Instance without ``transitionToAuth``
 
-.. include:: /includes/steps/enable-authentication-in-shardcluster-nodowntime-auth-mongos.rst
+**important:** At the end of this section, clients must specify authentication
+  credentials to connect to the sharded cluster. Update clients to specify
+  authentication credentials *before* completing this section to avoid loss of
+  connectivity.
 
-At the end of this section, all :binary:`~bin.mongos` instances enforce client authentication and :setting:`security.keyFile` internal authentication.
+To complete the transition to fully enforcing authentication in the
+sharded cluster, you must restart each :binary:`~bin.mongos` instance without
+the :setting:`security.transitionToAuth` setting.
 
-### Restart Each Config Server Replica Set Member without `transitionToAuth`
 
-> **Important:** At the end of this step, clients must specify authentication credentials to
-connect to the config server replica set. Update clients to specify
-authentication credentials before completing this section to avoid loss of
-connectivity.
+**include:** /includes/steps/enable-authentication-in-shardcluster-nodowntime-auth-mongos.rst
 
-To complete the transition to fully enforcing authentication in the sharded cluster, you must restart each :binary:`~bin.mongod` instance without the :setting:`security.transitionToAuth` setting.
+At the end of this section, all :binary:`~bin.mongos` instances enforce client
+authentication and :setting:`security.keyFile` internal authentication.
 
-.. include:: /includes/steps/enable-authentication-in-shardcluster-nodowntime-auth-config.rst
+### Restart Each Config Server Replica Set Member without ``transitionToAuth``
 
-At the end of this section, all :binary:`~bin.mongod` instances in the config server replica set enforce client authentication and :setting:`security.keyFile` internal authentication.
+**important:** At the end of this step, clients must specify authentication credentials to
+  connect to the config server replica set. Update clients to specify
+  authentication credentials *before* completing this section to avoid loss of
+  connectivity.
 
-### Restart Each Member in Each Shard Replica Set without `transitionToAuth`
+To complete the transition to fully enforcing authentication in the
+sharded cluster, you must restart each :binary:`~bin.mongod` instance without
+the :setting:`security.transitionToAuth` setting.
 
-> **Important:** At the end of this step, clients must specify authentication credentials to
-connect to the shard replica set. Update clients to specify authentication
-credentials before completing this section to avoid loss of connectivity.
+**include:** /includes/steps/enable-authentication-in-shardcluster-nodowntime-auth-config.rst
 
-To complete the transition to fully enforcing authentication in the sharded cluster, you must restart every member of every shard replica set in the sharded cluster without the :setting:`security.transitionToAuth` setting.
+At the end of this section, all :binary:`~bin.mongod` instances in the config
+server replica set enforce client authentication and
+:setting:`security.keyFile` internal authentication.
 
-Transitioning one shard replica set at a time, repeat these steps for each shard replica set in the sharded cluster.
+### Restart Each Member in Each Shard Replica Set without ``transitionToAuth``
 
-.. include:: /includes/steps/enable-authentication-in-shardcluster-nodowntime-auth-shard.rst
+**important:** At the end of this step, clients must specify authentication credentials to
+  connect to the shard replica set. Update clients to specify authentication
+  credentials *before* completing this section to avoid loss of connectivity.
 
-At the end of this section, all :binary:`~bin.mongos` and :binary:`~bin.mongod` instances in the sharded cluster enforce client authentication and :setting:`security.keyFile` internal authentication. Clients can only connect to the sharded cluster by using the configured client authentication mechanism. Additional components can only join the cluster by specifying the correct keyfile.
+To complete the transition to fully enforcing authentication in the sharded
+cluster, you must restart every member of every shard replica set in the
+sharded cluster without the :setting:`security.transitionToAuth` setting.
+
+Transitioning one shard replica set at a time, repeat these steps for
+each shard replica set in the sharded cluster.
+
+**include:** /includes/steps/enable-authentication-in-shardcluster-nodowntime-auth-shard.rst
+
+At the end of this section, all :binary:`~bin.mongos` and :binary:`~bin.mongod`
+instances in the sharded cluster enforce client authentication and
+:setting:`security.keyFile` internal authentication. Clients can only connect
+to the sharded cluster by using the configured client authentication mechanism.
+Additional components can only join the cluster by specifying the correct
+keyfile.
 
 ## X.509 Certificate Internal Authentication
 
-MongoDB supports X.509 certificate authentication for use with a secure TLS/SSL connection. Sharded cluster members and replica set members can use X.509 certificates to verify their membership to the cluster or the replica set instead of using `internal-auth-keyfile`.
+MongoDB supports X.509 certificate authentication for use with a secure TLS/SSL
+connection. Sharded cluster members and replica set members can use X.509
+certificates to verify their membership to the cluster or the replica set
+instead of using :ref:`internal-auth-keyfile`.
 
-For details on using X.509 certificates for internal authentication, see `/tutorial/configure-x509-member-authentication`.
+For details on using X.509 certificates for internal authentication, see
+:doc:`/tutorial/configure-x509-member-authentication`.
 
-`/tutorial/upgrade-keyfile-to-x509` describes how to upgrade a deployment's internal auth mechanism from keyfile-based authentication to X.509 certificate-based auth.
+:doc:`/tutorial/upgrade-keyfile-to-x509` describes how to upgrade a
+deployment's internal auth mechanism from keyfile-based authentication to X.509
+certificate-based auth.

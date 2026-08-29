@@ -1,49 +1,154 @@
 ---
 type: "Framework Learn Page"
-framework: "mongodb"
+framework: "MongoDB"
 source_repo: "https://github.com/mongodb/docs.git"
 source_branch: "main"
 source_path: "content/manual/manual/source/tutorial/resharding-for-adding-and-removing-shards.txt"
-source_commit: "ab9db26ed3d11618cdb61516d8180337d8e3f679"
-source_commit_short: "ab9db26e"
-source_commit_date: "2026-07-24T16:22:46-06:00"
-generated_at: "2026-07-25T11:51:15Z"
+source_commit: "b9f2bc487a2878b65e3c1f80024bebab76954f27"
+source_commit_short: "b9f2bc48"
+source_commit_date: "2026-08-28T17:09:45-05:00"
+generated_at: "2026-08-29T09:39:19.628046Z"
 ---
-
-=========================================
+.. _resharding-for-adding-and-removing-shards-tutorial:
 
 # Resharding for Adding and Removing Shards
 
+**facet:** :name: genre
+   :values: tutorial
+
+**meta:** :description: Learn how to use resharding to distribute sharded collections to new shards and remove shards. Monitor progress with the $currentOp aggregation pipeline stage.
+
 ## About this Task
 
-You can use resharding to distribute your sharded collections to new shards. You can also use it to remove shards faster than chunk migrations.
+You can use resharding to distribute your sharded collections to new 
+shards. You can also use it to remove shards faster than chunk 
+migrations.
 
-.. include:: /includes/resharding-operation-phases.rst
+**include:** /includes/resharding-operation-phases.rst
 
 ## Before you Begin
 
-Before you reshard, you must calculate your cluster's `<resharding-storage-req>`, `<resharding-latency-req>`, and any `<resharding-addl-reqs>`.
+Before you reshard, you must calculate your cluster's 
+:ref:`<resharding-storage-req>`, :ref:`<resharding-latency-req>`,
+and any :ref:`<resharding-addl-reqs>`.
+
+.. _resharding-storage-req:
 
 ### Storage Requirements
 
-.. include:: /includes/reshard-to-same-key/storage.rst
+**include:** /includes/reshard-to-same-key/storage.rst
+
+.. _resharding-latency-req:
 
 ### Latency Requirements
 
-.. include:: /includes/reshard-to-same-key/latency.rst
+**include:** /includes/reshard-to-same-key/latency.rst
 
 ### Reshard Limitations
 
-.. include:: /includes/fact-reshard-limitations.rst
+**include:** /includes/fact-reshard-limitations.rst
+
+
+.. _resharding-addl-reqs:
 
 ### Additional Resource Requirements
 
-.. include:: /includes/reshard-to-same-key/addl-resource-reqs.rst
+**include:** /includes/reshard-to-same-key/addl-resource-reqs.rst
 
 ## Steps
 
+**procedure:** :style: normal
+   
+   .. step:: Add or remove shards to your cluster.
+
+      To add shards to your cluster, see 
+      :ref:`<sharding-procedure-add-shard>`. To remove shards from your
+      cluster, see :ref:`<remove-shards-from-cluster-tutorial>`.
+
+   .. step:: Reshard sharded collections one at a time to the same shard key.
+
+      Use the ``reshardCollection`` command with the ``forceRedistribution`` 
+      option to redistribute data across the cluster.
+      
+      .. code-block:: javascript
+
+         db.adminCommand( 
+            {
+               reshardCollection: "<db>.<collection>",
+               key: { "<shardkey>" },
+               forceRedistribution: true
+            } 
+         )
+
+      Resharding with ``forceRedistribution: true`` rewrites the data 
+      across all shards in the cluster that are not in a draining state.
+      By default, resharding uses ``numInitialChunks: 90``. Resharding 
+      creates at least ``numInitialChunks - 1`` chunks in a cluster. If 
+      you have more than 90 shards, specify a higher number of 
+      ``numInitialChunks`` in the ``reshardCollection`` command.
+
+      .. note::
+   
+         .. include:: /includes/fact-resharding-if-key-is-hashed.rst
+            
+   .. step:: Monitor the resharding operation. 
+   
+      To monitor the resharding operation, you can use the
+      :pipeline:`$currentOp` pipeline stage:
+   
+      .. code-block:: javascript
+   
+         db.getSiblingDB("admin").aggregate(
+            [
+              { $currentOp: { allUsers: true, localOps: false } },
+              {
+                $match: {
+                  type: "op",
+                  "originatingCommand.reshardCollection": "<database>.<collection>"
+                }
+              }
+            ]
+         )
+   
+      .. note::
+   
+         To see updated values, you need to continuously run the
+         pipeline.
+   
+      The :pipeline:`$currentOp` pipeline outputs:
+   
+      - ``totalOperationTimeElapsedSecs``: elapsed operation time in
+        seconds
+      - .. include:: /includes/remainingOperationTimeEstimatedSecs-details.rst
+   
+      .. code-block:: javascript
+   
+         [
+           {
+             shard: '<shard>',
+             type: 'op',
+             desc: 'ReshardingRecipientService | ReshardingDonorService | ReshardingCoordinatorService <reshardingUUID>',
+             op: 'command',
+             ns: '<database>.<collection>',
+             originatingCommand: {
+               reshardCollection: '<database>.<collection>',
+               key: <shardkey>,
+               unique: <boolean>,
+               collation: { locale: 'simple' }
+             },
+             totalOperationTimeElapsedSecs: <number>,
+             remainingOperationTimeEstimatedSecs: <number>,
+             ...
+           },
+           ...
+         ]
+      
+      Resharding with ``forceRedistribution: true`` rewrites the 
+      collection data to all the relevant shards and drops the old 
+      collection. It is the fastest method to move data in a cluster.
+
 ## Learn More
 
-- `<reshard-to-same-key>`
-- `<sharding-resharding>`
+- :ref:`<reshard-to-same-key>`
+- :ref:`<sharding-resharding>`
 - :method:`sh.reshardCollection()`

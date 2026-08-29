@@ -1,65 +1,91 @@
 ---
 type: "Framework Learn Page"
-framework: "mongodb"
+framework: "MongoDB"
 source_repo: "https://github.com/mongodb/docs.git"
 source_branch: "main"
 source_path: "content/manual/manual/source/core/indexes/index-types/index-hashed.txt"
-source_commit: "ab9db26ed3d11618cdb61516d8180337d8e3f679"
-source_commit_short: "ab9db26e"
-source_commit_date: "2026-07-24T16:22:46-06:00"
-generated_at: "2026-07-25T11:51:15Z"
+source_commit: "b9f2bc487a2878b65e3c1f80024bebab76954f27"
+source_commit_short: "b9f2bc48"
+source_commit_date: "2026-08-28T17:09:45-05:00"
+generated_at: "2026-08-29T09:39:19.830749Z"
 ---
-
-==============
+.. _index-type-hashed:
+.. _index-hashed-index:
 
 # Hashed Indexes
 
-Hashed indexes collect and store hashes of the values of the indexed field.
+**meta:** :description: Explore how hashed indexes store hashes of indexed field values and support sharding with hashed shard keys, ideal for monotonically changing fields.
 
-Hashed indexes support `sharding <sharding-background>` using hashed shard keys. `Hashed based sharding <sharding-hashed-sharding>` uses a hashed index of a field as the shard key to partition data across your sharded cluster.
+.. default-domain:: mongodb
+
+**contents:** On this page
+   :local:
+   :backlinks: none
+   :depth: 2
+   :class: singlecol
+
+Hashed indexes collect and store hashes of the values of the indexed
+field.
+
+Hashed indexes support :ref:`sharding <sharding-background>`
+using hashed shard keys. :ref:`Hashed based sharding
+<sharding-hashed-sharding>` uses a hashed index of a field as the shard
+key to partition data across your sharded cluster.
 
 ## Use Cases
 
-.. include:: /includes/indexes/hashed-sharding-use-cases.rst
+**include:** /includes/indexes/hashed-sharding-use-cases.rst
 
 ## Behavior
 
+.. _hashed-index-warning:
+
 ### Floating-Point Numbers
 
-Hashed indexes truncate floating-point numbers to 64-bit integers before hashing. For example, a hashed index uses the same hash to store the values `2.3`, `2.2`, and `2.9`. This is a **collision**, where multiple values are assigned to a single hash key. Collisions may negatively impact query performance.
+Hashed indexes truncate floating-point numbers to 64-bit integers before
+hashing. For example, a hashed index uses the same hash to store the
+values ``2.3``, ``2.2``, and ``2.9``. This is a **collision**, where
+multiple values are assigned to a single hash key. Collisions may
+negatively impact query performance.
 
-To prevent collisions, do not use a hashed index for floating-point numbers that cannot be reliably converted to 64-bit integers and then back to floating point.
+To prevent collisions, do not use a hashed index for floating-point
+numbers that cannot be reliably converted to 64-bit integers and then
+back to floating point.
 
-Hashed indexes do not support floating-point numbers larger than 2\ :sup:`53`.
+Hashed indexes do not support floating-point numbers larger than 2\
+:sup:`53`.
 
 ### Limitations
 
-Hashed indexes have limitations for array fields and the unique property.
+Hashed indexes have limitations for array fields and the unique
+property.
 
-Array Fields ````````````
+### Array Fields
 
-The hashing function does not support `multikey indexes <index-type-multikey>`:
+The hashing function does not support :ref:`multikey indexes
+<index-type-multikey>`:
 
 - You cannot create a hashed index on a field that contains an array
-or insert an array into a hashed indexed field.
-
+  *or* insert an array into a hashed indexed field.
 - If any field in a compound index is an array, no field in that
-index can use a hashed index. This includes non-array fields.
-
+  index can use a hashed index. This includes non-array fields.
 - You cannot use hashed indexes in a compound index that becomes a
-multikey index.
+  multikey index.
 
-Covered Queries ```````````````
+### Covered Queries
 
-.. include:: /includes/fact-hashed-index-covered-query.rst
+**include:** /includes/fact-hashed-index-covered-query.rst
 
-Unique Constraint `````````````````
+### Unique Constraint
 
-You cannot specify a `unique constraint <index-type-unique>` on a hashed index. Instead, you can create an additional non-hashed index with the unique constraint. MongoDB can use that non-hashed index to enforce uniqueness on the chosen field.
+You cannot specify a :ref:`unique constraint <index-type-unique>` on a
+hashed index. Instead, you can create an additional non-hashed index
+with the unique constraint. MongoDB can use that non-hashed index to
+enforce uniqueness on the chosen field.
 
 ## Get Started
 
-To create a hashed index, see `hashed-index-create`.
+To create a hashed index, see :ref:`hashed-index-create`.
 
 ## Details
 
@@ -67,21 +93,28 @@ This section describes technical details for hashed indexes.
 
 ### Hashing Function
 
-> **Important:** When MongoDB uses a hashed index to resolve a query, it uses a
-hashing function to automatically compute the hash values.
-Applications do **not** need to compute hashes.
+**important:** When MongoDB uses a hashed index to resolve a query, it uses a
+   hashing function to automatically compute the hash values.
+   Applications do **not** need to compute hashes.
 
-To see what the hashed value would be for a key, use the :method:`convertShardKeyToHashed()` method. This method uses the same hashing function as the hashed index.
+To see what the hashed value would be for a key, use the
+:method:`convertShardKeyToHashed()` method. This method uses the same
+hashing function as the hashed index.
 
 ### Embedded Documents
 
-The hashing function collapses embedded documents and computes the hash for the entire value.
+The hashing function collapses embedded documents and computes the hash
+for the entire value.
 
 ## Learn More
 
-- `sharding-background`
-- `sharding-hashed-sharding`
-- `hashed-versus-ranged-sharding`
-## Contents
+- :ref:`sharding-background`
 
-- Create </core/indexes/index-types/index-hashed/create>
+- :ref:`sharding-hashed-sharding`
+
+- :ref:`hashed-versus-ranged-sharding`
+
+**toctree:** :titlesonly:
+   :hidden:
+
+   Create </core/indexes/index-types/index-hashed/create>

@@ -1,51 +1,104 @@
 ---
 type: "Framework Learn Page"
-framework: "mongodb"
+framework: "MongoDB"
 source_repo: "https://github.com/mongodb/docs.git"
 source_branch: "main"
 source_path: "content/manual/manual/source/reference/command/balancerStop.txt"
-source_commit: "ab9db26ed3d11618cdb61516d8180337d8e3f679"
-source_commit_short: "ab9db26e"
-source_commit_date: "2026-07-24T16:22:46-06:00"
-generated_at: "2026-07-25T11:51:15Z"
+source_commit: "b9f2bc487a2878b65e3c1f80024bebab76954f27"
+source_commit_short: "b9f2bc48"
+source_commit_date: "2026-08-28T17:09:45-05:00"
+generated_at: "2026-08-29T09:39:20.012192Z"
 ---
-
-===============================
-
 # balancerStop (database command)
+
+**meta:** :description: Disable the balancer in a sharded cluster using the `balancerStop` command, ensuring to re-enable it after maintenance to avoid performance issues.
+
+.. default-domain:: mongodb
+
+**contents:** On this page
+   :local:
+   :backlinks: none
+   :depth: 1
+   :class: singlecol
 
 ## Definition
 
+**dbcommand:** balancerStop
+
+   Disables the balancer in a sharded cluster. If a balancing round is
+   in progress, the operation waits for balancing to complete.
+
+   You can only issue the :dbcommand:`balancerStop` command against the
+   ``admin`` database on a :binary:`~bin.mongos` instance.
+
+   .. include:: /includes/stop-balancer-automerger.rst
+
+   .. important::
+
+      .. include:: /includes/sharding/disable-balancer-warning.rst
+
+   .. |method| replace:: :method:`sh.stopBalancer` 
+      helper method
+   .. include:: /includes/fact-dbcommand-tip
+
 ## Compatibility
 
-This command is available in deployments hosted in the following environments:
+This command is available in deployments hosted in the following environments: 
 
-.. include:: /includes/fact-environments-atlas-only.rst
+**include:** /includes/fact-environments-atlas-only.rst
 
-.. include:: /includes/fact-environments-onprem-only.rst
+**include:** /includes/fact-environments-onprem-only.rst
 
 ## Syntax
 
 The command has the following syntax:
 
-```javascript
-db.adminCommand( 
-   { 
-     balancerStop: 1, 
-     maxTimeMS: <number> 
-   }
-)
-```
+.. code-block:: javascript
+
+   db.adminCommand( 
+      { 
+        balancerStop: 1, 
+        maxTimeMS: <number> 
+      }
+   )
 
 ### Command Fields
 
+.. list-table::
+   :header-rows: 1
+   :widths: 20 20 80
+
+   * - Field
+
+     - Type
+
+     - Description
+
+   * - ``balancerStop``
+
+     - any
+
+     - Any value.
+       
+       
+
+   * - ``maxTimeMS``
+
+     - integer
+
+     - Time limit for disabling the balancer.
+       
+       Defaults to 60000 milliseconds.
+       
+
 ## Example
 
-To stop the balancer thread, connect to a :binary:`~bin.mongos` instance and issue the following command:
+To stop the balancer thread, connect to a :binary:`~bin.mongos` instance
+and issue the following command:
 
-```javascript
-db.adminCommand( { balancerStop: 1 } )
-```
+.. code-block:: javascript
+
+   db.adminCommand( { balancerStop: 1 } )
 
 ## Learn More
 

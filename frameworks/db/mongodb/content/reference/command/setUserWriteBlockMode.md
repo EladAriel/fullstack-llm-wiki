@@ -1,92 +1,148 @@
 ---
 type: "Framework Learn Page"
-framework: "mongodb"
+framework: "MongoDB"
 source_repo: "https://github.com/mongodb/docs.git"
 source_branch: "main"
 source_path: "content/manual/manual/source/reference/command/setUserWriteBlockMode.txt"
-source_commit: "ab9db26ed3d11618cdb61516d8180337d8e3f679"
-source_commit_short: "ab9db26e"
-source_commit_date: "2026-07-24T16:22:46-06:00"
-generated_at: "2026-07-25T11:51:15Z"
+source_commit: "b9f2bc487a2878b65e3c1f80024bebab76954f27"
+source_commit_short: "b9f2bc48"
+source_commit_date: "2026-08-28T17:09:45-05:00"
+generated_at: "2026-08-29T09:39:20.074847Z"
 ---
-
-========================================
-
 # setUserWriteBlockMode (database command)
+
+**meta:** :description: Block or unblock writes to a cluster using the `setUserWriteBlockMode` command, with bypass privileges available.
+
+**contents:** On this page
+   :local:
+   :backlinks: none
+   :depth: 1
+   :class: singlecol
 
 ## Definition
 
+**dbcommand:** setUserWriteBlockMode
+
+   .. versionadded:: 6.0
+
+   The ``setUserWriteBlockMode`` command blocks and unblocks writes to
+   the entire cluster.
+
+   During cluster synchronization, ``mongosync`` uses the ``setUserWriteBlockMode`` 
+   command to block writes on both the source and destination clusters.
+   For more information, see the HTTP API :ref:`start <c2c-api-start>` command.
+
+   If you already blocked writes on a replica set, subsequent calls to ``setUserWriteBlockMode`` 
+   with ``global: true`` fail with an ``IllegalOperation`` error if the 
+   specified ``reason`` does not match the reason you provided when you initially enabled 
+   write-blocking. The error message includes both the current reason and 
+   the reason specified in the failed command. Sharded clusters do not enforce this constraint.
+
+   .. note::
+
+      Users and applications with the
+      :authaction:`bypassWriteBlockingMode` privilege can bypass the
+      block and continue to perform writes.
+
 ## Compatibility
 
-This command is available in deployments hosted in the following environments:
+This command is available in deployments hosted in the following environments: 
 
-.. include:: /includes/fact-environments-atlas-only.rst
+**include:** /includes/fact-environments-atlas-only.rst
 
-.. include:: /includes/fact-environments-atlas-support-no-free.rst
+**include:** /includes/fact-environments-atlas-support-no-free.rst
 
-.. include:: /includes/fact-environments-onprem-only.rst
+**include:** /includes/fact-environments-onprem-only.rst
 
 ## Syntax
 
 The command has the following syntax:
 
-```javascript
-db.adminCommand(
-   {
-     setUserWriteBlockMode: 1,
-     global: <boolean>,
-     reason: <string>  // Optional
-   }
-)
-```
+.. code-block:: javascript
+
+   db.adminCommand(
+      {
+        setUserWriteBlockMode: 1,
+        global: <boolean>,
+        reason: <string>  // Optional
+      }
+   )
 
 ## Command Fields
 
 The command takes the following fields:
 
+.. list-table::
+   :header-rows: 1
+   :widths: 25 15 80
+
+   * - Field
+     - Type
+     - Description
+
+   * - ``setUserWriteBlockMode``
+     - integer
+     - Set this field to ``1``.
+
+   * - ``global``
+     - boolean
+     - Blocks writes on a cluster when set to ``true``.  To enable writes on
+       a cluster, set ``global: false``.
+       
+   * - ``reason``
+     - string
+     - Optional. Specifies the reason for blocking writes. 
+       Accepts the following values:
+       
+       - ``"Unspecified"`` - Default when you do not provide any reason. 
+       - ``"ClusterToClusterMigrationInProgress"`` - Indicates blocked writes due to ongoing ``mongosync`` migration.
+       - ``"DiskUseThresholdExceeded"`` - Indicates blocked writes because disk usage has exceeded a threshold.
+     
 ## Required Access
 
-To execute the `setUserWriteBlockMode` command, the user must have the :authaction:`setUserWriteBlockMode` privilege.
+To execute the ``setUserWriteBlockMode`` command, the user must
+have the :authaction:`setUserWriteBlockMode` privilege.
+
 
 ## Example
 
 #. Enable user write block mode:
 
-```javascript
-   db.adminCommand( {
-      setUserWriteBlockMode: 1,
-      global: true
-   } )
-```
+   .. code-block:: javascript
+
+      db.adminCommand( {
+         setUserWriteBlockMode: 1,
+         global: true
+      } )
 
 #. Add a record to the collection:
 
-```javascript
-   db.names.insertOne( { name: "George Washington Cable" } )
+   .. code-block:: javascript
 
-The server blocks the write because the user write block is enabled.
+      db.names.insertOne( { name: "George Washington Cable" } )
 
-Example  Output:
+   The server blocks the write because the user write block is enabled.
 
-.. code-block:: text
+   Example  Output:
 
-   MongoServerError: User writes blocked
-```
+   .. code-block:: text
+
+      MongoServerError: User writes blocked
 
 #. Disable user write block mode:
 
-```javascript
-   db.adminCommand( {
-      setUserWriteBlockMode: 1,
-      global: false 
-   } )
-```
+   .. code-block:: javascript
+
+      db.adminCommand( {
+         setUserWriteBlockMode: 1,
+         global: false 
+      } )
 
 #. Add a record to the collection:
 
-```javascript
-   db.names.insertOne( { name: "George Washington Cable" } )
+   .. code-block:: javascript
 
-The :method:`~db.collection.insertOne()` method writes to a collection.  The
-server allows the write because the user write block is disabled. 
-```
+      db.names.insertOne( { name: "George Washington Cable" } )
+
+   The :method:`~db.collection.insertOne()` method writes to a collection.  The
+   server allows the write because the user write block is disabled. 

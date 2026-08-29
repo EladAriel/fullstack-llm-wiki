@@ -1,97 +1,122 @@
 ---
 type: "Framework Learn Page"
-framework: "mongodb"
+framework: "MongoDB"
 source_repo: "https://github.com/mongodb/docs.git"
 source_branch: "main"
 source_path: "content/manual/manual/source/core/indexes/index-types/geospatial/2d/create/define-location-range.txt"
-source_commit: "ab9db26ed3d11618cdb61516d8180337d8e3f679"
-source_commit_short: "ab9db26e"
-source_commit_date: "2026-07-24T16:22:46-06:00"
-generated_at: "2026-07-25T11:51:15Z"
+source_commit: "b9f2bc487a2878b65e3c1f80024bebab76954f27"
+source_commit_short: "b9f2bc48"
+source_commit_date: "2026-08-28T17:09:45-05:00"
+generated_at: "2026-08-29T09:39:19.847738Z"
 ---
-
-====================================
+.. _2d-index-define-location-range:
 
 # Define Location Range for a 2d Index
 
-You can define the range of coordinates included in a `2d index <2d-index>`. By default, 2d indexes have longitude and latitude boundaries of:
+**meta:** :description: Define the coordinate range for a 2d index in MongoDB to improve query performance and restrict data insertion within specified bounds.
 
-- Greater than or equal to `-180`
-- Less than `180`
-To change the location range of a 2d index, specify the `min` and `max` options when you create the index:
+.. default-domain:: mongodb
 
-```javascript
-db.<collection>.createIndex(
-   {
-      <location field>: "2d"
-   },
-   {
-      min: <lower bound>,
-      max: <upper bound>
-   }
-)
-```
+**contents:** On this page
+   :local:
+   :backlinks: none
+   :depth: 2
+   :class: singlecol
 
-The `min` and `max` bounds are **inclusive** and apply to both longitude and latitude.
+You can define the range of coordinates included in a :ref:`2d index
+<2d-index>`. By default, 2d indexes have longitude and latitude
+boundaries of:
+
+- Greater than or equal to ``-180``
+- Less than ``180``
+
+To change the location range of a 2d index, specify the ``min`` and
+``max`` options when you create the index:
+
+.. code-block:: javascript
+
+   db.<collection>.createIndex(
+      {
+         <location field>: "2d"
+      },
+      {
+         min: <lower bound>,
+         max: <upper bound>
+      }
+   )
+
+The ``min`` and ``max`` bounds are **inclusive** and apply to both
+longitude and latitude.
 
 ## About this Task
 
-> **Important:** The default location bounds for 2d indexes allow latitudes less than
--90 and greater than 90, which are invalid values. The behavior of
-geospatial queries with these invalid points is not defined.
+**important:** The default location bounds for 2d indexes allow latitudes less than
+   -90 and greater than 90, which are invalid values. The behavior of
+   geospatial queries with these invalid points is not defined.
 
-Defining a smaller location range for a 2d index reduces the amount of data stored in the index, and can improve query performance.
+Defining a smaller location range for a 2d index reduces the amount of
+data stored in the index, and can improve query performance.
 
-You cannot create a 2d index if your collection contains coordinate data outside of the index's location range.
+You cannot create a 2d index if your collection contains coordinate data
+outside of the index's location range.
 
-After you create a 2d index, you cannot insert a document that contains coordinate data outside of the index's location range.
+After you create a 2d index, you cannot insert a document that contains
+coordinate data outside of the index's location range.
 
 ## Before You Begin
 
-.. include:: /includes/indexes/2d-sample-docs.rst
+**include:** /includes/indexes/2d-sample-docs.rst
 
 ## Procedure
 
-Create a 2d index on the `address` field. Specify the following location bounds:
+Create a 2d index on the ``address`` field. Specify the following
+location bounds:
 
-- `min` bound of `-75`
-- `max` bound of `60`
-```javascript
-db.contacts.createIndex(
-   {
-      address: "2d"
-   },
-   {
-      min: -75,
-      max: 60
-   }
-)
-```
+- ``min`` bound of ``-75``
+- ``max`` bound of ``60``
+
+.. code-block:: javascript
+
+   db.contacts.createIndex(
+      {
+         address: "2d"
+      },
+      {
+         min: -75,
+         max: 60
+      }
+   )
 
 ## Results
 
-The index covers a smaller location range and has increased performance than a default 2d index.
+The index covers a smaller location range and has increased performance
+than a default 2d index.
 
-After you create the index, you cannot insert a document that contains coordinate data outside of the index's location range. For example, you **cannot** insert the following document:
+After you create the index, you cannot insert a document that contains
+coordinate data outside of the index's location range. For example, you
+**cannot** insert the following document:
 
-```javascript
-db.contacts.insertOne(
-   {
-      name: "Paige Polson",
-      phone: "402-555-0190",
-      address: [ 70, 42.3 ]
-   }
-)
-```
+.. code-block:: javascript
 
-The `address` field has a longitude value of `70`, which is higher than the `max` bound of `60`.
+   db.contacts.insertOne(
+      {
+         name: "Paige Polson",
+         phone: "402-555-0190",
+         address: [ 70, 42.3 ]
+      }
+   )
+
+The ``address`` field has a longitude value of ``70``, which is higher
+than the ``max`` bound of ``60``.
 
 ## Next Steps
 
-.. include:: /includes/indexes/2d-index-create-next-steps.rst
+**include:** /includes/indexes/2d-index-create-next-steps.rst
 
 ## Learn More
 
-- `2d-index-define-location-precision`
-- `geospatial-geometry`
-- `geospatial-legacy`
+- :ref:`2d-index-define-location-precision`
+
+- :ref:`geospatial-geometry`
+
+- :ref:`geospatial-legacy`

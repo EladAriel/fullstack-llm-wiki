@@ -1,14 +1,15 @@
 ---
 type: "Framework Learn Page"
-framework: "jest"
+framework: "Jest"
 source_repo: "https://github.com/jestjs/jest"
 source_branch: "main"
 source_path: "docs/Configuration.md"
-source_commit: "1865dd8659f5131715c780fa92f40623fce2f9c9"
-source_commit_short: "1865dd86"
-source_commit_date: "2026-06-21T13:50:36+02:00"
-generated_at: "2026-06-21T11:51:37Z"
+source_commit: "be425a0b0e3bd60a74e4a7e350aa38c63a2d25ef"
+source_commit_short: "be425a0"
+source_commit_date: "2026-08-28T13:51:49+02:00"
+generated_at: "2026-08-29T09:40:10.461031Z"
 ---
+# Configuration
 
 ---
 id: configuration
@@ -868,7 +869,7 @@ If you specify a global reference value (like an object or array) here, and some
 
 Default: `undefined`
 
-This option allows the use of a custom global setup module, which must export a function (it can be sync or async). The function will be triggered once before all test suites and it will receive two arguments: Jest's [`globalConfig`](https://github.com/jestjs/jest/blob/v29.2.1/packages/jest-types/src/Config.ts#L358-L422) and [`projectConfig`](https://github.com/jestjs/jest/blob/v29.2.1/packages/jest-types/src/Config.ts#L424-L481).
+This option allows the use of a custom global setup module, which must export a function (it can be sync or async). The function will be triggered once before all test files and it will receive two arguments: Jest's [`globalConfig`](https://github.com/jestjs/jest/blob/v29.2.1/packages/jest-types/src/Config.ts#L358-L422) and [`projectConfig`](https://github.com/jestjs/jest/blob/v29.2.1/packages/jest-types/src/Config.ts#L424-L481).
 
 :::info
 
@@ -903,7 +904,7 @@ module.exports = async function (globalConfig, projectConfig) {
 
 Default: `undefined`
 
-This option allows the use of a custom global teardown module which must export a function (it can be sync or async). The function will be triggered once after all test suites and it will receive two arguments: Jest's [`globalConfig`](https://github.com/jestjs/jest/blob/v29.2.1/packages/jest-types/src/Config.ts#L358-L422) and [`projectConfig`](https://github.com/jestjs/jest/blob/v29.2.1/packages/jest-types/src/Config.ts#L424-L481).
+This option allows the use of a custom global teardown module which must export a function (it can be sync or async). The function will be triggered once after all test files and it will receive two arguments: Jest's [`globalConfig`](https://github.com/jestjs/jest/blob/v29.2.1/packages/jest-types/src/Config.ts#L358-L422) and [`projectConfig`](https://github.com/jestjs/jest/blob/v29.2.1/packages/jest-types/src/Config.ts#L424-L481).
 
 :::info
 
@@ -1504,6 +1505,8 @@ This option allows the use of a custom resolver. This resolver must be a module 
 1. a function expecting a string as the first argument for the path to resolve and an options object as the second argument. The function should either return a path to the module that should be resolved or throw an error if the module can't be found. _or_
 2. an object containing `async` and/or `sync` properties. The `sync` property should be a function with the shape explained above, and the `async` property should also be a function that accepts the same arguments, but returns a promise which resolves with the path to the module or rejects with an error.
 
+The resolver may be written as either CommonJS or an ES module, including one that uses a top-level await. An ES module can export the function or the `sync`/`async` object as its `default` export, or expose `sync` and `async` as named exports.
+
 The options object provided to resolvers has the shape:
 
 ```ts
@@ -1808,7 +1811,7 @@ This option has no effect if you use [native ESM](ECMAScriptModules.md).
 
 Default: `[]`
 
-A list of paths to modules that run some code to configure or set up the testing environment. Each setupFile will be run once per test file. Since every test runs in its own environment, these scripts will be executed in the testing environment before executing [`setupFilesAfterEnv`](#setupfilesafterenv-array) and before the test code itself.
+A list of paths to modules that run some code to configure or set up the testing environment. Each setup file will be run once per test file. Since every test file runs in its own environment, these scripts will be executed in the testing environment before executing [`setupFilesAfterEnv`](#setupfilesafterenv-array) and before the test code itself.
 
 :::tip
 
@@ -1820,7 +1823,7 @@ If your setup script is a CJS module, it may export an async function. Jest will
 
 Default: `[]`
 
-A list of paths to modules that run some code to configure or set up the testing framework before each test file in the suite is executed. Since [`setupFiles`](#setupfiles-array) executes before the test framework is installed in the environment, this script file presents you the opportunity of running some code immediately after the test framework has been installed in the environment but before the test code itself.
+A list of paths to modules that run some code to configure or set up the testing framework before each test file is executed. Since [`setupFiles`](#setupfiles-array) executes before the test framework is installed in the environment, this script file presents you the opportunity of running some code immediately after the test framework has been installed in the environment but before the test code itself.
 
 In other words, `setupFilesAfterEnv` modules are meant for code which is repeating in each test file. Having the test framework installed makes Jest [globals](GlobalAPI.md), [`jest` object](JestObjectAPI.md) and [`expect`](ExpectAPI.md) accessible in the modules. For example, you can add extra matchers from [`jest-extended`](https://github.com/jest-community/jest-extended) library or call [setup and teardown](SetupAndTeardown.md) hooks:
 
@@ -2132,8 +2135,33 @@ Test environment options that will be passed to the `testEnvironment`. The relev
 
 When using the `node` environment, you can configure various options that are passed to `runInContext`. These options include:
 
-- **`globalsCleanup`** (**'on'** | **'soft'** | **'off'**): Controls cleanup of global variables between tests. Default: `'soft'`.
+- **`globalsCleanup`** (**'on'** | **'soft'** | **'off'**): Controls cleanup of global variables between test files. Default: `'soft'`. See [Cleaning up globals](#cleaning-up-globals) below.
 - All the options listed in the [vm.runInContext](https://nodejs.org/api/vm.html#scriptrunincontextcontextifiedobject-options) documentation
+
+##### Cleaning up globals
+
+When a test file finishes, Jest deletes the properties of the objects that the file put on the global scope. This releases memory that a worker would otherwise hold until it exits.
+
+The `globalsCleanup` option controls that deletion:
+
+- `'on'`: the properties are deleted. Code that reads such a property after its test file finished gets `undefined`.
+- `'soft'` (default): the properties are kept, but reading or writing one emits a `JEST-01` deprecation warning. Nothing breaks, so this is a migration path towards `'on'`.
+- `'off'`: no cleanup and no warning.
+
+If you see a `JEST-01` warning, some code holds on to a global past the end of the test file that created it. Either release that reference, or turn the cleanup off:
+
+```js
+const {defineConfig} = require('jest');
+
+module.exports = defineConfig({
+  testEnvironment: 'node',
+  testEnvironmentOptions: {
+    globalsCleanup: 'off',
+  },
+});
+```
+
+The mode is set once per worker process, by the first test environment that worker creates. A per-file `@jest-environment-options` docblock therefore only takes effect if that file is the first one the worker runs.
 
 #### JSDOM Environment Options
 

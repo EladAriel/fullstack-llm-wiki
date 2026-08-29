@@ -4,10 +4,10 @@ framework: "LangSmith"
 source_repo: "https://github.com/langchain-ai/docs.git"
 source_branch: "main"
 source_path: "src/langsmith/sandbox-service-urls.mdx"
-source_commit: "2aae1dfc98ee953a9a5185fb6fcdd9efb3f4d878"
-source_commit_short: "2aae1df"
-source_commit_date: "2026-07-25T00:27:23+00:00"
-generated_at: "2026-07-25T19:08:33.349875Z"
+source_commit: "a174f9cf7c91ee5eb14ee2382eb48bfe6e4956e9"
+source_commit_short: "a174f9c"
+source_commit_date: "2026-08-28T17:04:12-07:00"
+generated_at: "2026-08-29T09:39:50.682537Z"
 ---
 ---
 title: Sandbox service URLs
@@ -82,7 +82,9 @@ The service must be running and listening on the specified port before you reque
 
 ### Make requests
 
-The returned `ServiceURL` object has built-in HTTP helpers that handle authentication automatically. Tokens refresh transparently before they expire, so no manual management is needed.
+The returned `ServiceURL` object has built-in HTTP helpers that inject the auth header for you.
+
+Tokens are short-lived (default 10 minutes, max 24 hours) and there is no server-side refresh mechanism. When a token expires, request a new one by calling `sb.service(port=...)` again.
 
 ```python
 svc = sb.service(port=8000)

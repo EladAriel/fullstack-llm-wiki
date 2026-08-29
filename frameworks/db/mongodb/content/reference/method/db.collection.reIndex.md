@@ -1,39 +1,73 @@
 ---
 type: "Framework Learn Page"
-framework: "mongodb"
+framework: "MongoDB"
 source_repo: "https://github.com/mongodb/docs.git"
 source_branch: "main"
 source_path: "content/manual/manual/source/reference/method/db.collection.reIndex.txt"
-source_commit: "ab9db26ed3d11618cdb61516d8180337d8e3f679"
-source_commit_short: "ab9db26e"
-source_commit_date: "2026-07-24T16:22:46-06:00"
-generated_at: "2026-07-25T11:51:15Z"
+source_commit: "b9f2bc487a2878b65e3c1f80024bebab76954f27"
+source_commit_short: "b9f2bc48"
+source_commit_date: "2026-08-28T17:09:45-05:00"
+generated_at: "2026-08-29T09:39:19.985874Z"
 ---
-
-========================================
-
 # db.collection.reIndex() (mongosh method)
 
-.. include:: /includes/fact-mongosh-shell-method-alt
+**meta:** :description: Recreate all indexes on a collection using `db.collection.reIndex()`, which is resource-intensive and only available on standalone instances.
+
+.. default-domain:: mongodb
+
+**contents:** On this page
+   :local:
+   :backlinks: none
+   :depth: 1
+   :class: singlecol
+
+
+**include:** /includes/fact-mongosh-shell-method-alt
 
 ## Definition
 
+**method:** db.collection.reIndex()
+   
+   .. deprecated:: 6.0
+   
+   Attempting to run the :method:`db.collection.reIndex()` method 
+   writes a warning message to the log.
+
+   .. |dbcommand| replace:: :dbcommand:`reIndex` command
+
+   The :method:`db.collection.reIndex()` drops all indexes on a
+   collection and recreates them. This operation may be expensive for
+   collections that have a large amount of data and/or a large number
+   of indexes.
+
+   .. warning::
+
+      - :method:`db.collection.reIndex()` may only be run on 
+        :term:`standalone` instances. 
+      - For most users, the :method:`db.collection.reIndex()` command 
+        is unnecessary.
+
+
 ## Compatibility
 
-This method is available in deployments hosted in the following environments:
+.. |command| replace:: method
 
-.. include:: /includes/fact-environments-onprem-only.rst
+This method is available in deployments hosted in the following environments: 
 
-.. include:: /includes/fact-environments-no-atlas-support.rst
+**include:** /includes/fact-environments-onprem-only.rst
 
+**include:** /includes/fact-environments-no-atlas-support.rst
+        
 ## Behavior
 
-For MongoDB 5.0 or later, :method:`db.collection.reIndex()` may only be run on `standalone` instances.
+For MongoDB 5.0 or later, :method:`db.collection.reIndex()` may only be 
+run on :term:`standalone` instances.
 
 ### Resource Locking
 
-:method:`db.collection.reIndex()` obtains an exclusive (W) lock on the collection and blocks other operations on the collection until it completes.
+:method:`db.collection.reIndex()` obtains an exclusive (W) lock on the 
+collection and blocks other operations on the collection until it completes.
 
-For more information on locking in MongoDB, see `/faq/concurrency`.
+For more information on locking in MongoDB, see :doc:`/faq/concurrency`.
 
-> **Seealso:** `/indexes`
+**seealso:** :doc:`/indexes`

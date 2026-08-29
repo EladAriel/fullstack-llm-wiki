@@ -1,123 +1,168 @@
 ---
 type: "Framework Learn Page"
-framework: "mongodb"
+framework: "MongoDB"
 source_repo: "https://github.com/mongodb/docs.git"
 source_branch: "main"
 source_path: "content/manual/manual/source/tutorial/model-iot-data.txt"
-source_commit: "ab9db26ed3d11618cdb61516d8180337d8e3f679"
-source_commit_short: "ab9db26e"
-source_commit_date: "2026-07-24T16:22:46-06:00"
-generated_at: "2026-07-25T11:51:15Z"
+source_commit: "b9f2bc487a2878b65e3c1f80024bebab76954f27"
+source_commit_short: "b9f2bc48"
+source_commit_date: "2026-08-28T17:09:45-05:00"
+generated_at: "2026-08-29T09:39:19.582608Z"
 ---
-
-==============
-
 # Model IoT Data
 
-The Internet of Things (IoT) is a network of physical objects that are connected to the internet. Many of these devices, like sensors, generate data.
+**meta:** :description: Model IoT data using the bucket pattern to optimize storage and facilitate trend analysis, avoiding its use with time series collections for better performance.
 
-To store and retrieve this data efficiently, you can use the bucket pattern.
+.. default-domain:: mongodb
+
+**contents:** On this page
+   :local:
+   :backlinks: none
+   :depth: 1
+   :class: singlecol
+
+The Internet of Things (IoT) is a network of physical objects that are
+connected to the internet. Many of these devices, like sensors, generate
+data.
+
+To store and retrieve this data efficiently, you can use the bucket
+pattern.
 
 ## The Bucket Pattern
 
-A common method to organize IoT data is to group the data into buckets. Bucketing organizes specific groups of data to help:
+A common method to organize IoT data is to group the data
+into buckets. Bucketing organizes specific groups of data to help:
 
 - Discover historical trends,
 - Forecast future trends, and
 - Optimize storage usage.
+
 Common parameters to group data by are:
 
 - time
 - data source (if you have multiple data sets)
 - customer
 - type of data (for example, transaction type in financial data)
-> **Note:** Starting in MongoDB 5.0, :ref:`time series collections
-<manual-timeseries-collection>` are the recommended collection type
-for time series data. Do **not** use the bucket pattern in
-conjunction with time series collections as this can degrade
-performance.
 
-Consider a collection that stores temperature data obtained from a sensor. The sensor records the temperature every minute and stores the data in a collection called `temperatures`:
+**note:** Starting in MongoDB 5.0, :ref:`time series collections
+   <manual-timeseries-collection>` are the recommended collection type
+   for time series data. Do **not** use the bucket pattern in
+   conjunction with time series collections as this can degrade
+   performance.
 
-```javascript
-// temperatures collection
+Consider a collection that stores temperature data obtained from a
+sensor. The sensor records the temperature every minute and
+stores the data in a collection called ``temperatures``:
 
-{
-  "_id": 1,
-  "sensor_id": 12345,
-  "timestamp": ISODate("2019-01-31T10:00:00.000Z"),
-  "temperature": 40
-}
-{
-  "_id": 2,
-  "sensor_id": 12345,
-  "timestamp": ISODate("2019-01-31T10:01:00.000Z"),
-  "temperature": 40
-}
-{
-  "_id": 3,
-  "sensor_id": 12345,
-  "timestamp": ISODate("2019-01-31T10:02:00.000Z"),
-  "temperature": 41
-}
-...
-```
+.. code-block:: javascript
 
-This approach does not scale well in terms of data and index size. For example, if the application requires indexes on the `sensor_id` and `timestamp` fields, every incoming reading from the sensor would need to be indexed to improve performance.
+   // temperatures collection
 
-You can leverage the document model to bucket the data into documents that hold the measurements for a particular timespan. Consider the following updated schema which buckets the readings taken every minute into hour-long groups:
+   {
+     "_id": 1,
+     "sensor_id": 12345,
+     "timestamp": ISODate("2019-01-31T10:00:00.000Z"),
+     "temperature": 40
+   }
+   {
+     "_id": 2,
+     "sensor_id": 12345,
+     "timestamp": ISODate("2019-01-31T10:01:00.000Z"),
+     "temperature": 40
+   }
+   {
+     "_id": 3,
+     "sensor_id": 12345,
+     "timestamp": ISODate("2019-01-31T10:02:00.000Z"),
+     "temperature": 41
+   }
+   ...
 
-```javascript
-{
-  "_id": 1,
-  "sensor_id": 12345,
-  "start_date": ISODate("2019-01-31T10:00:00.000Z"),
-  "end_date": ISODate("2019-01-31T10:59:59.000Z"),
-  "measurements": [
-    {
-      "timestamp": ISODate("2019-01-31T10:00:00.000Z"),
-      "temperature": 40
-    },
-    {
-      "timestamp": ISODate("2019-01-31T10:01:00.000Z"),
-      "temperature": 40
-    },
-    ...
-    {
-      "timestamp": ISODate("2019-01-31T10:42:00.000Z"),
-      "temperature": 42
-    }
-  ],
-  "transaction_count": 42,
-  "sum_temperature": 1783
-}
-```
+This approach does not scale well in terms of data and index size. For
+example, if the application requires indexes on the ``sensor_id`` and
+``timestamp`` fields, every incoming reading from the sensor would need
+to be indexed to improve performance.
 
-This updated schema improves scalability and mirrors how the application actually uses the data. A user likely wouldn't query for a specific temperature reading. Instead, a user would likely query for temperature behavior over the course of an hour or day. The Bucket pattern helps facilitate those queries by grouping the data into uniform time periods.
+You can leverage the document model to bucket the data into documents
+that hold the measurements for a particular timespan. Consider
+the following updated schema which buckets the readings taken
+every minute into hour-long groups:
 
-Combine the Computed and Bucket Patterns ````````````````````````````````````````
+.. _bucket-example-doc:
 
-The `example document <bucket-example-doc>` contains two computed fields: `transaction_count` and `sum_temperature`. If the application frequently needs to retrieve the sum of temperatures for a given hour, computing a running total of the sum can help save application resources. This Computed Pattern approach eliminates the need to calculate the sum each time the data is requested.
+.. code-block:: javascript
 
-The pre-aggregated `sum_temperature` and `transaction_count` values enable further computations such as the average temperature (`sum_temperature` / `transaction_count`) for a particular bucket. It is much more likely that users will query the application for the average temperature between 2:00 and 3:00 PM rather than querying for the specific temperature at 2:03 PM. Bucketing and pre-computing certain values allows the application to more readily provide that information.
+   {
+     "_id": 1,
+     "sensor_id": 12345,
+     "start_date": ISODate("2019-01-31T10:00:00.000Z"),
+     "end_date": ISODate("2019-01-31T10:59:59.000Z"),
+     "measurements": [
+       {
+         "timestamp": ISODate("2019-01-31T10:00:00.000Z"),
+         "temperature": 40
+       },
+       {
+         "timestamp": ISODate("2019-01-31T10:01:00.000Z"),
+         "temperature": 40
+       },
+       ...
+       {
+         "timestamp": ISODate("2019-01-31T10:42:00.000Z"),
+         "temperature": 42
+       }
+     ],
+     "transaction_count": 42,
+     "sum_temperature": 1783
+   }
+
+This updated schema improves scalability and mirrors how the application
+actually uses the data. A user likely wouldn't query for a specific
+temperature reading. Instead, a user would likely query for temperature
+behavior over the course of an hour or day. The Bucket pattern helps
+facilitate those queries by grouping the data into uniform time periods.
+
+### Combine the Computed and Bucket Patterns
+
+The :ref:`example document <bucket-example-doc>` contains two computed
+fields: ``transaction_count`` and ``sum_temperature``. If the
+application frequently needs to retrieve the sum of temperatures for a
+given hour, computing a running total of the sum can help save
+application resources. This Computed Pattern approach eliminates the
+need to calculate the sum each time the data is requested.
+
+The pre-aggregated ``sum_temperature`` and ``transaction_count`` values
+enable further computations such as the average temperature
+(``sum_temperature`` / ``transaction_count``) for a particular bucket.
+It is much more likely that users will query the application for
+the average temperature between 2:00 and 3:00 PM rather than querying
+for the specific temperature at 2:03 PM. Bucketing and pre-computing
+certain values allows the application to more readily provide that
+information.
 
 ## Time Representations in MongoDB
 
-MongoDB `stores times in UTC <document-bson-type-date>` by default, and converts any local time representations into this form. Applications that must operate or report on some unmodified local time value may store the time zone alongside the UTC timestamp, and compute the original local time in their application logic.
+MongoDB :ref:`stores times in UTC <document-bson-type-date>` by default,
+and converts any local time representations into this form.
+Applications that must operate or report on some unmodified local time
+value may store the time zone alongside the UTC timestamp, and compute
+the original local time in their application logic.
 
 ## Example
 
-In the MongoDB shell, you can store both the current date and the current client's offset from UTC.
+In the MongoDB shell, you can store both the current date and the
+current client's offset from UTC.
 
-```javascript
-var now = new Date();
-db.data.insertOne( { date: now,
-                offset: now.getTimezoneOffset() } );
-```
+.. code-block:: javascript
 
-You can reconstruct the original local time by applying the saved offset:
+   var now = new Date();
+   db.data.insertOne( { date: now,
+                   offset: now.getTimezoneOffset() } );
 
-```javascript
-var record = db.data.findOne();
-var localNow = new Date( record.date.getTime() -  ( record.offset * 60000 ) );
-```
+You can reconstruct the original local time by applying the saved
+offset:
+
+.. code-block:: javascript
+
+   var record = db.data.findOne();
+   var localNow = new Date( record.date.getTime() -  ( record.offset * 60000 ) );

@@ -1,29 +1,28 @@
 ---
 type: "Framework Learn Page"
-framework: "tanstack"
+framework: "TanStack"
 source_repo: "https://github.com/tanstack/query"
 source_branch: "main"
 source_path: "docs/framework/svelte/reference/functions/mutationOptions.md"
-source_commit: "fd50fa14d283c7d6664a796f758498d1ad5bfce7"
-source_commit_short: "fd50fa14"
-source_commit_date: "2026-07-24T22:22:47+10:00"
-generated_at: "2026-07-25T11:50:41Z"
+source_commit: "2969edf32f7e0c48e2a108d84712d6e01edfde21"
+source_commit_short: "2969edf"
+source_commit_date: "2026-08-28T01:03:02+09:00"
+generated_at: "2026-08-29T09:40:33.399654Z"
 ---
+# Mutationoptions
 
 ---
 id: mutationOptions
 title: mutationOptions
 ---
 
-# Function: mutationOptions()
-
 ## Call Signature
 
 ```ts
-function mutationOptions<TData, TError, TVariables, TOnMutateResult>(options): WithRequired<CreateMutationOptions<TData, TError, TVariables, TOnMutateResult>, 'mutationKey'>
+function mutationOptions<TData, TError, TVariables, TOnMutateResult>(options): WithRequired<CreateMutationOptions<TData, TError, TVariables, TOnMutateResult>, "mutationKey">;
 ```
 
-Defined in: [packages/svelte-query/src/mutationOptions.ts](https://github.com/TanStack/query/blob/main/packages/svelte-query/src/mutationOptions.ts)
+Defined in: [packages/svelte-query/src/mutationOptions.ts:4](https://github.com/TanStack/query/blob/main/packages/svelte-query/src/mutationOptions.ts#L4)
 
 ### Type Parameters
 
@@ -47,19 +46,19 @@ Defined in: [packages/svelte-query/src/mutationOptions.ts](https://github.com/Ta
 
 #### options
 
-`WithRequired`\<[`CreateMutationOptions`](../type-aliases/CreateMutationOptions.md)\<`TData`, `TError`, `TVariables`, `TOnMutateResult`\>, `'mutationKey'`\>
+`WithRequired`\<[`CreateMutationOptions`](../type-aliases/CreateMutationOptions.md)\<`TData`, `TError`, `TVariables`, `TOnMutateResult`\>, `"mutationKey"`\>
 
 ### Returns
 
-`WithRequired`\<[`CreateMutationOptions`](../type-aliases/CreateMutationOptions.md)\<`TData`, `TError`, `TVariables`, `TOnMutateResult`\>, `'mutationKey'`\>
+`WithRequired`\<[`CreateMutationOptions`](../type-aliases/CreateMutationOptions.md)\<`TData`, `TError`, `TVariables`, `TOnMutateResult`\>, `"mutationKey"`\>
 
 ## Call Signature
 
 ```ts
-function mutationOptions<TData, TError, TVariables, TOnMutateResult>(options): Omit<CreateMutationOptions<TData, TError, TVariables, TOnMutateResult>, 'mutationKey'>
+function mutationOptions<TData, TError, TVariables, TOnMutateResult>(options): Omit<CreateMutationOptions<TData, TError, TVariables, TOnMutateResult>, "mutationKey">;
 ```
 
-Defined in: [packages/svelte-query/src/mutationOptions.ts](https://github.com/TanStack/query/blob/main/packages/svelte-query/src/mutationOptions.ts)
+Defined in: [packages/svelte-query/src/mutationOptions.ts:18](https://github.com/TanStack/query/blob/main/packages/svelte-query/src/mutationOptions.ts#L18)
 
 ### Type Parameters
 
@@ -83,8 +82,8 @@ Defined in: [packages/svelte-query/src/mutationOptions.ts](https://github.com/Ta
 
 #### options
 
-`Omit`\<[`CreateMutationOptions`](../type-aliases/CreateMutationOptions.md)\<`TData`, `TError`, `TVariables`, `TOnMutateResult`\>, `'mutationKey'`\>
+`Omit`\<[`CreateMutationOptions`](../type-aliases/CreateMutationOptions.md)\<`TData`, `TError`, `TVariables`, `TOnMutateResult`\>, `"mutationKey"`\>
 
 ### Returns
 
-`Omit`\<[`CreateMutationOptions`](../type-aliases/CreateMutationOptions.md)\<`TData`, `TError`, `TVariables`, `TOnMutateResult`\>, `'mutationKey'`\>
+`Omit`\<[`CreateMutationOptions`](../type-aliases/CreateMutationOptions.md)\<`TData`, `TError`, `TVariables`, `TOnMutateResult`\>, `"mutationKey"`\>

@@ -1,78 +1,172 @@
 ---
 type: "Framework Learn Page"
-framework: "mongodb"
+framework: "MongoDB"
 source_repo: "https://github.com/mongodb/docs.git"
 source_branch: "main"
 source_path: "content/manual/manual/source/reference/method/Bulk.find.updateOne.txt"
-source_commit: "ab9db26ed3d11618cdb61516d8180337d8e3f679"
-source_commit_short: "ab9db26e"
-source_commit_date: "2026-07-24T16:22:46-06:00"
-generated_at: "2026-07-25T11:51:15Z"
+source_commit: "b9f2bc487a2878b65e3c1f80024bebab76954f27"
+source_commit_short: "b9f2bc48"
+source_commit_date: "2026-08-28T17:09:45-05:00"
+generated_at: "2026-08-29T09:39:19.948413Z"
 ---
-
-======================================
-
 # Bulk.find.updateOne() (mongosh method)
 
-.. include:: /includes/fact-bulkwrite.rst
+**meta:** :description: Perform single document updates in bulk operations using `Bulk.find.updateOne()` with conditions specified by `Bulk.find()`.
+
+.. default-domain:: mongodb
+
+**contents:** On this page
+   :local:
+   :backlinks: none
+   :depth: 1
+   :class: singlecol
+
+**include:** /includes/fact-bulkwrite.rst
 
 ## Description
 
+**method:** Bulk.find.updateOne(<update>)
+
+   Adds a single document update operation to a bulk operations list.
+
+   Use the :method:`Bulk.find()` method to specify the condition that
+   determines which document to update. The
+   :method:`Bulk.find.updateOne()` method limits the update to a single
+   document. To update multiple documents, see
+   :method:`Bulk.find.update()`.
+
+   :method:`Bulk.find.updateOne()` accepts the following parameter:
+
+
+   .. list-table::
+      :header-rows: 1
+      :widths: 20 20 80
+   
+      * - Parameter
+   
+        - Type
+   
+        - Description
+
+      * - :ref:`update <bulk-find-updateOne-parameter>`
+
+        - document or pipeline
+
+        - .. _bulk-find-updateOne-parameter:
+
+          The modifications to apply. Can be one of the following:
+
+          .. list-table::
+             :widths: 40 80
+             :class: border-table
+
+             * - A replacement document
+             
+               - Contains only field and value pairs.
+
+                 See also :method:`Bulk.find.replaceOne()`.
+            
+             * - Update document
+               
+               - Contains only :ref:`update operator expressions
+                 <update-operators>`.
+
+             * - Aggregation pipeline
+
+               - Contains only the following aggregation stages:
+
+                 .. include:: /includes/list-update-agg-stages.rst
+
+          For more information on the update modification parameter, see the
+          :method:`db.collection.updateOne` reference page.
+          
+          The sum of the associated ``<query>`` document from the
+          :method:`Bulk.find()` and the update document must be
+          less than or equal to the :limit:`maximum BSON document size <BSON
+          Document Size>`.
+          
+          
+   
+
+
+   - To specify an :term:`upsert: true <upsert>` for this operation,
+     use with :method:`Bulk.find.upsert()`.
+
+   - To specify ``arrayFilters`` to update specific array
+     elements, use with :method:`Bulk.find.arrayFilters()`.
+
+   - To specify the index to use for the associated
+     :method:`Bulk.find()`, see :method:`Bulk.find.hint()`.
+
+   - To replace a document wholesale, see also
+     :method:`Bulk.find.replaceOne()`.
+
 ## Compatibility
 
-This command is available in deployments hosted in the following environments:
+This command is available in deployments hosted in the following
+environments: 
 
-.. include:: /includes/fact-environments-atlas-only.rst
+**include:** /includes/fact-environments-atlas-only.rst
 
-.. include:: /includes/fact-environments-atlas-support-all.rst
+**include:** /includes/fact-environments-atlas-support-all.rst
 
 ## Behavior
 
-If the `<update>` document contains only `update operator <update-operators>` expressions, as in:
+If the ``<update>`` document contains only :ref:`update operator
+<update-operators>` expressions, as in:
 
-```javascript
-{
-  $set: { status: "D" },
-  $inc: { points: 2 }
-}
-```
+.. code-block:: javascript
 
-Then, :method:`Bulk.find.updateOne()` updates only the corresponding fields, `status` and `points`, in the document.
+   {
+     $set: { status: "D" },
+     $inc: { points: 2 }
+   }
+
+Then, :method:`Bulk.find.updateOne()` updates only the corresponding
+fields, ``status`` and ``points``, in the document.
 
 ## Example
 
-The following example initializes a :method:`Bulk()` operations builder for the `items` collection, and adds various :method:`~Bulk.find.updateOne` operations to the list of operations.
+The following example initializes a :method:`Bulk()` operations builder
+for the ``items`` collection, and adds various
+:method:`~Bulk.find.updateOne` operations to the list of operations.
 
-```javascript
-var bulk = db.items.initializeUnorderedBulkOp();
-bulk.find( { status: "D" } ).updateOne( { $set: { status: "I", points: "0" } } );
-bulk.execute();
-```
+.. code-block:: javascript
+
+   var bulk = db.items.initializeUnorderedBulkOp();
+   bulk.find( { status: "D" } ).updateOne( { $set: { status: "I", points: "0" } } );
+   bulk.execute();
+
+.. _example-bulk-find-update-one-agg:
 
 ### Update with Aggregation Pipeline
 
-Update methods can accept an aggregation pipeline. For example, the following uses:
+Update methods can accept an aggregation pipeline. For
+example, the following uses:
 
 - the :pipeline:`$set` stage which can provide similar
-behavior to the :update:`$set` update operator expression,
+  behavior to the :update:`$set` update operator expression,
 
 - the aggregation variable :variable:`NOW`, which resolves to the
-current datetime and can provide similar behavior to a :update:`$currentDate` update operator expression. To access aggregation variables, prefix the variable with double dollar signs `$$` and enclose in quotes.
+  current datetime and can provide similar behavior to a
+  :update:`$currentDate` update operator expression. To access
+  aggregation variables, prefix the variable with double dollar signs
+  ``$$`` and enclose in quotes.
 
-```javascript
-var bulk = db.items.initializeUnorderedBulkOp();
-bulk.find( {  status: "P" } ).updateOne(
-   [  
-      { $set: { points: 0, lastModified: "$$NOW" } }
-   ]
-);
-bulk.execute();
-```
+.. code-block:: javascript
 
-> **Seealso:** - :method:`db.collection.initializeUnorderedBulkOp()`
-- :method:`db.collection.initializeOrderedBulkOp()`
-- :method:`Bulk.find()`
-- :method:`Bulk.find.update()`
-- :method:`Bulk.find.replaceOne()`
-- :method:`Bulk.execute()`
-- `All Bulk Methods <bulk-methods>`
+   var bulk = db.items.initializeUnorderedBulkOp();
+   bulk.find( {  status: "P" } ).updateOne(
+      [  
+         { $set: { points: 0, lastModified: "$$NOW" } }
+      ]
+   );
+   bulk.execute();
+
+**seealso:** - :method:`db.collection.initializeUnorderedBulkOp()`
+   - :method:`db.collection.initializeOrderedBulkOp()`
+   - :method:`Bulk.find()`
+   - :method:`Bulk.find.update()`
+   - :method:`Bulk.find.replaceOne()`
+   - :method:`Bulk.execute()`
+   - :ref:`All Bulk Methods <bulk-methods>`

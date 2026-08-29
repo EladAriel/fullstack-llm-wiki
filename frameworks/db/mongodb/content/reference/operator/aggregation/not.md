@@ -1,61 +1,113 @@
 ---
 type: "Framework Learn Page"
-framework: "mongodb"
+framework: "MongoDB"
 source_repo: "https://github.com/mongodb/docs.git"
 source_branch: "main"
 source_path: "content/manual/manual/source/reference/operator/aggregation/not.txt"
-source_commit: "ab9db26ed3d11618cdb61516d8180337d8e3f679"
-source_commit_short: "ab9db26e"
-source_commit_date: "2026-07-24T16:22:46-06:00"
-generated_at: "2026-07-25T11:51:15Z"
+source_commit: "b9f2bc487a2878b65e3c1f80024bebab76954f27"
+source_commit_short: "b9f2bc48"
+source_commit_date: "2026-08-28T17:09:45-05:00"
+generated_at: "2026-08-29T09:39:20.144862Z"
 ---
-
-==========================
-
 # $not (expression operator)
+
+**meta:** :description: Evaluate boolean expressions with the `$not` operator in MongoDB aggregation to return the opposite boolean value.
+
+.. default-domain:: mongodb
+
+**contents:** On this page
+   :local:
+   :backlinks: none
+   :depth: 1
+   :class: singlecol
 
 ## Definition
 
+**expression:** $not
+
+   Evaluates a boolean and returns the opposite boolean value; i.e.
+   when passed an expression that evaluates to ``true``,
+   :expression:`$not` returns ``false``; when passed an expression that
+   evaluates to ``false``, :expression:`$not` returns ``true``.
+
+   :expression:`$not` has the following syntax:
+
+   .. code-block:: javascript
+
+      { $not: [ <expression> ] }
+
+   For more information on expressions, see
+   :ref:`aggregation-expressions`.
+
 ## Behavior
 
-.. include:: /includes/extracts/fact-agg-boolean-not.rst
+**include:** /includes/extracts/fact-agg-boolean-not.rst
+
+.. list-table::
+   :header-rows: 1
+   :widths: 70 30
+
+   * - Example
+
+     - Result
+
+   * - ``{ $not: [ true ] }``
+
+     - ``false``
+
+   * - ``{ $not: [ [ false ] ] }``
+
+     - ``false``
+
+   * - ``{ $not: [ false ] }``
+
+     - ``true``
+
+   * - ``{ $not: [ null ] }``
+
+     - ``true``
+
+   * - ``{ $not: [ 0 ] }``
+
+     - ``true``
 
 ## Example
 
-Consider an `inventory` collection with the following documents:
+Consider an ``inventory`` collection with the following documents:
 
-```javascript
-db.inventory.insertMany( [ 
-   { _id: 1, item: "abc1", description: "product 1", qty: 300 },
-   { _id: 2, item: "abc2", description: "product 2", qty: 200 },
-   { _id: 3, item: "xyz1", description: "product 3", qty: 250 },
-   { _id: 4, item: "VWZ1", description: "product 4", qty: 300 },
-   { _id: 5, item: "VWZ2", description: "product 5", qty: 180 }
-] )
-```
+.. code-block:: javascript
 
-The following operation uses the :expression:`$not` operator to determine if `qty` is not greater than `250`:
+   db.inventory.insertMany( [ 
+      { _id: 1, item: "abc1", description: "product 1", qty: 300 },
+      { _id: 2, item: "abc2", description: "product 2", qty: 200 },
+      { _id: 3, item: "xyz1", description: "product 3", qty: 250 },
+      { _id: 4, item: "VWZ1", description: "product 4", qty: 300 },
+      { _id: 5, item: "VWZ2", description: "product 5", qty: 180 }
+   ] )
 
-```javascript
-db.inventory.aggregate(
-   [
-     {
-       $project:
-          {
-            item: 1,
-            result: { $not: [ { $gt: [ "$qty", 250 ] } ] }
-          }
-     }
-   ]
-)
-```
+The following operation uses the :expression:`$not` operator to
+determine if ``qty`` is not greater than ``250``:
+
+.. code-block:: javascript
+
+   db.inventory.aggregate(
+      [
+        {
+          $project:
+             {
+               item: 1,
+               result: { $not: [ { $gt: [ "$qty", 250 ] } ] }
+             }
+        }
+      ]
+   )
 
 The operation returns the following results:
 
-```javascript
-{ _id: 1, item: "abc1", result: false }
-{ _id: 2, item: "abc2", result: true }
-{ _id: 3, item: "xyz1", result: true }
-{ _id: 4, item: "VWZ1", result: false }
-{ _id: 5, item: "VWZ2", result: true }
-```
+.. code-block:: javascript
+
+   { _id: 1, item: "abc1", result: false }
+   { _id: 2, item: "abc2", result: true }
+   { _id: 3, item: "xyz1", result: true }
+   { _id: 4, item: "VWZ1", result: false }
+   { _id: 5, item: "VWZ2", result: true }

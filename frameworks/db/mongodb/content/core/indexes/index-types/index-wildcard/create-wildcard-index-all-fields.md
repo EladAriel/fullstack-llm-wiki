@@ -1,145 +1,170 @@
 ---
 type: "Framework Learn Page"
-framework: "mongodb"
+framework: "MongoDB"
 source_repo: "https://github.com/mongodb/docs.git"
 source_branch: "main"
 source_path: "content/manual/manual/source/core/indexes/index-types/index-wildcard/create-wildcard-index-all-fields.txt"
-source_commit: "ab9db26ed3d11618cdb61516d8180337d8e3f679"
-source_commit_short: "ab9db26e"
-source_commit_date: "2026-07-24T16:22:46-06:00"
-generated_at: "2026-07-25T11:51:15Z"
+source_commit: "b9f2bc487a2878b65e3c1f80024bebab76954f27"
+source_commit_short: "b9f2bc48"
+source_commit_date: "2026-08-28T17:09:45-05:00"
+generated_at: "2026-08-29T09:39:19.841157Z"
 ---
-
-=====================================
+.. _create-wildcard-index-all-fields:
 
 # Create a Wildcard Index on All Fields
 
-You can create a wildcard index that supports queries on all possible document fields. Wildcard indexes support queries on arbitrary or unknown field names.
+**meta:** :description: Create a wildcard index to support queries on all fields in a collection, excluding `_id`, using the `$**` specifier.
 
-To create a wildcard index on all fields (excluding `_id`), use the wildcard specifier (`$**`) as the index key:
+.. default-domain:: mongodb
 
-```javascript
-db.<collection>.createIndex( { "$**": <sortOrder> } )
-```
+**contents:** On this page
+   :local:
+   :backlinks: none
+   :depth: 1
+   :class: singlecol
+
+You can create a wildcard index that supports queries on all possible
+document fields. Wildcard indexes support queries on arbitrary or
+unknown field names.
+
+To create a wildcard index on all fields (excluding ``_id``), use the
+wildcard specifier (``$**``) as the index key:
+
+.. code-block:: javascript
+
+   db.<collection>.createIndex( { "$**": <sortOrder> } )
 
 ## About this Task
 
-.. include:: /includes/indexes/wildcard-use-case-warning.rst
+**include:** /includes/indexes/wildcard-use-case-warning.rst
 
 ## Before You Begin
 
-Create an `artwork` collection that contains the following documents:
+Create an ``artwork`` collection that contains the following documents:
 
-```javascript
-db.artwork.insertMany( [
-   {
-      "name": "The Scream",
-      "artist": "Edvard Munch",
-      "style": "modern",
-      "themes": [ "humanity", "horror" ]
-   },
-   {
-      "name": "Acrobats",
-      "artist": {
-         "name": "Raoul Dufy",
-         "nationality": "French",
-         "yearBorn": 1877
+.. code-block:: javascript
+
+   db.artwork.insertMany( [
+      {
+         "name": "The Scream",
+         "artist": "Edvard Munch",
+         "style": "modern",
+         "themes": [ "humanity", "horror" ]
       },
-      "originalTitle": "Les acrobates",
-      "dimensions": [ 65, 49 ] 
-   },
-   {
-      "name": "The Thinker",
-      "type": "sculpture",
-      "materials": [ "bronze" ],
-      "year": 1904
-   }
-] )
-```
+      {
+         "name": "Acrobats",
+         "artist": {
+            "name": "Raoul Dufy",
+            "nationality": "French",
+            "yearBorn": 1877
+         },
+         "originalTitle": "Les acrobates",
+         "dimensions": [ 65, 49 ] 
+      },
+      {
+         "name": "The Thinker",
+         "type": "sculpture",
+         "materials": [ "bronze" ],
+         "year": 1904
+      }
+   ] )
 
-Each document contains details about the artwork. The field names vary between documents depending on the information available about the piece.
+Each document contains details about the artwork. The field names vary
+between documents depending on the information available about the
+piece.
 
 ## Procedure
 
-The following operation creates a wildcard index on all document fields in the `artwork collection (excluding id`):
+The following operation creates a wildcard index on all document fields
+in the ``artwork`` collection (excluding ``_id``):
 
-```javascript
-db.artwork.createIndex( { "$**" : 1 } )
-```
+.. code-block:: javascript
+
+   db.artwork.createIndex( { "$**" : 1 } )
 
 ## Results
 
-This index supports single-field queries on any field in the collection. If a document contains an embedded document or array, the wildcard index traverses the document or array and stores the value for all fields in the document or array.
+This index supports single-field queries on any field in the collection.
+If a document contains an embedded document or array, the wildcard index
+traverses the document or array and stores the value for all fields in
+the document or array.
 
 For example, the index supports the following queries:
 
 - Query:
-```javascript
-  db.artwork.find( { "style": "modern" } )
 
-Output:
+  .. code-block:: javascript
 
-.. code-block:: javascript
-  :copyable: false
+     db.artwork.find( { "style": "modern" } )
 
-  [
-     {
-        _id: ObjectId("6352c401b1fac2ee2e957f09"),
-        name: 'The Scream',
-        artist: 'Edvard Munch',
-        style: 'modern',
-        themes: [ 'humanity', 'horror' ]
-     }
-  ]
-```
+  Output:
 
-- Query:
-```javascript
-  db.artwork.find( { "artist.nationality": "French" } )
+  .. code-block:: javascript
+     :copyable: false
 
-Output:
-
-.. code-block:: javascript
-  :copyable: false
-
-  [
-     {
-        _id: ObjectId("6352c525b1fac2ee2e957f0d"),
-        name: 'Acrobats',
-        artist: { name: 'Raoul Dufy', nationality: 'French', yearBorn: 1877 },
-        originalTitle: 'Les acrobates',
-        dimensions: [ 65, 49 ]
-     }
-  ]
-```
+     [
+        {
+           _id: ObjectId("6352c401b1fac2ee2e957f09"),
+           name: 'The Scream',
+           artist: 'Edvard Munch',
+           style: 'modern',
+           themes: [ 'humanity', 'horror' ]
+        }
+     ]
 
 - Query:
-```javascript
-  db.artwork.find( { "materials": "bronze" } )
 
-Output:
+  .. code-block:: javascript
 
-.. code-block:: javascript
-  :copyable: false
+     db.artwork.find( { "artist.nationality": "French" } )
 
-  [
-     {
-        _id: ObjectId("6352c387b1fac2ee2e957f08"),
-        name: 'The Thinker',
-        type: 'sculpture',
-        materials: [ 'bronze' ],
-        year: 1904
-     }
-  ]
-```
+  Output:
+
+  .. code-block:: javascript
+     :copyable: false
+
+     [
+        {
+           _id: ObjectId("6352c525b1fac2ee2e957f0d"),
+           name: 'Acrobats',
+           artist: { name: 'Raoul Dufy', nationality: 'French', yearBorn: 1877 },
+           originalTitle: 'Les acrobates',
+           dimensions: [ 65, 49 ]
+        }
+     ]
+
+- Query:
+
+  .. code-block:: javascript
+
+     db.artwork.find( { "materials": "bronze" } )
+
+  Output:
+
+  .. code-block:: javascript
+     :copyable: false
+
+     [
+        {
+           _id: ObjectId("6352c387b1fac2ee2e957f08"),
+           name: 'The Thinker',
+           type: 'sculpture',
+           materials: [ 'bronze' ],
+           year: 1904
+        }
+     ]
 
 ## Learn More
 
-To learn how to create a wildcard index that projects specific fields to cover, see the following pages:
+To learn how to create a wildcard index that projects specific fields to
+cover, see the following pages:
 
-- `wc-compound-index-wcProject`
-- `create-wildcard-index-multiple-fields`
+- :ref:`wc-compound-index-wcProject`
+
+- :ref:`create-wildcard-index-multiple-fields`
+
 To learn more about behaviors for wildcard indexes, see:
 
-- `wildcard-index-embedded-object-behavior`
-- `wildcard-index-restrictions`
+- :ref:`wildcard-index-embedded-object-behavior`
+
+- :ref:`wildcard-index-restrictions`

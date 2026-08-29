@@ -4,17 +4,17 @@ framework: "LangSmith"
 source_repo: "https://github.com/langchain-ai/docs.git"
 source_branch: "main"
 source_path: "src/langsmith/optimize-classifier.mdx"
-source_commit: "2aae1dfc98ee953a9a5185fb6fcdd9efb3f4d878"
-source_commit_short: "2aae1df"
-source_commit_date: "2026-07-25T00:27:23+00:00"
-generated_at: "2026-07-25T19:08:33.361591Z"
+source_commit: "a174f9cf7c91ee5eb14ee2382eb48bfe6e4956e9"
+source_commit_short: "a174f9c"
+source_commit_date: "2026-08-28T17:04:12-07:00"
+generated_at: "2026-08-29T09:39:50.681032Z"
 ---
 ---
 title: Optimize a classifier
 sidebarTitle: Optimize a classifier
 ---
 
-This tutorial walks through optimizing a classifier based on user a feedback. Classifiers are great to optimize because its generally pretty simple to collect the desired output, which makes it easy to create few shot examples based on user feedback. That is exactly what we will do in this example.
+This tutorial shows you how to optimize a classifier based on user feedback. Classifiers are great to optimize because its generally pretty simple to collect the desired output, which makes it easy to create few shot examples based on user feedback. That is exactly what we will do in this example.
 
 ## The objective
 
@@ -93,10 +93,13 @@ run_id = uuid7()
 topic_classifier(
     "fix bug in LCEL",
     langsmith_extra={"run_id": run_id})
+# Resolve the UUID of the project that owns the trace
+session_id = ls_client.create_project(project_name="classifier", upsert=True).id
 ls_client.create_feedback(
     run_id,
     key="user-score",
     score=1.0,
+    session_id=session_id,
 )
 ```
 
@@ -108,10 +111,12 @@ run_id = uuid7()
 topic_classifier(
     "fix bug in documentation",
     langsmith_extra={"run_id": run_id})
+session_id = ls_client.create_project(project_name="classifier", upsert=True).id
 ls_client.create_feedback(
     run_id,
     key="correction",
-    correction="documentation")
+    correction="documentation",
+    session_id=session_id)
 ```
 
 ## Set up automations

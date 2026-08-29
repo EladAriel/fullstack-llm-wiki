@@ -1,15 +1,14 @@
 ---
 type: "Framework Learn Page"
-framework: "redis"
+framework: "Redis"
 source_repo: "https://github.com/redis/docs.git"
 source_branch: "main"
 source_path: "content/develop/ai/redisvl/user_guide/cli.md"
-source_commit: "9d30f68c3dad1a6b3b7d30fe604b911348ce8152"
-source_commit_short: "9d30f68c"
-source_commit_date: "2026-07-24T10:52:10-07:00"
-generated_at: "2026-07-25T11:51:22Z"
+source_commit: "f8693349287b0efbef3c865b6f6a2aceca88594d"
+source_commit_short: "f869334"
+source_commit_date: "2026-08-28T10:01:19-05:00"
+generated_at: "2026-08-29T09:38:55.851246Z"
 ---
-
 ---
 linkTitle: The RedisVL CLI
 title: The RedisVL CLI
@@ -253,19 +252,14 @@ By default rvl first checks if you have `REDIS_URL` environment variable defined
 !rvl index listall --host localhost --port 6379
 ```
 
-# NBVAL_SKIP
-# Not run in CI. This cell would block until the nbval cell timeout
-# connect to rediss://jane_doe:password123@localhost:6379
-!rvl index listall --user jane_doe -a password123 --ssl
-
 
 ```python
+# NBVAL_SKIP
+# Not run in CI: there is no TLS-enabled Redis to connect to, so the client
+# blocks on the handshake until the nbval cell timeout expires.
 # connect to rediss://jane_doe:password123@localhost:6379
 !rvl index listall --user jane_doe -a password123 --ssl
 ```
-
-    Index deleted successfully
-
 
 
 ```python

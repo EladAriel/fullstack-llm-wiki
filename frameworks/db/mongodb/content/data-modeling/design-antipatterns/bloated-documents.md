@@ -1,134 +1,177 @@
 ---
 type: "Framework Learn Page"
-framework: "mongodb"
+framework: "MongoDB"
 source_repo: "https://github.com/mongodb/docs.git"
 source_branch: "main"
 source_path: "content/manual/manual/source/data-modeling/design-antipatterns/bloated-documents.txt"
-source_commit: "ab9db26ed3d11618cdb61516d8180337d8e3f679"
-source_commit_short: "ab9db26e"
-source_commit_date: "2026-07-24T16:22:46-06:00"
-generated_at: "2026-07-25T11:51:15Z"
+source_commit: "b9f2bc487a2878b65e3c1f80024bebab76954f27"
+source_commit_short: "b9f2bc48"
+source_commit_date: "2026-08-28T17:09:45-05:00"
+generated_at: "2026-08-29T09:39:20.297643Z"
 ---
-
-=================
+.. _bloated-documents-antipattern:
 
 # Bloated Documents
 
-Storing data fields that are related to each other but not accessed together can create bloated documents that lead to excessive RAM and bandwidth usage. The `working set`, consisting of frequently accessed data and indexes, is stored in the RAM allotment. When the working set fits in RAM, MongoDB can query from memory instead of from disk, which improves performance. However, if documents are too large, the working set might not fit into RAM, causing performance to degrade as MongoDB has to access data from disk.
+.. default-domain:: mongodb
 
-To prevent bloated documents, restructure your schema with smaller documents and use `document references <data-modeling-referencing>` to separate fields that aren't returned together. This approach reduces the working set size and improves performance.
+**contents:** On this page
+   :local:
+   :backlinks: none
+   :depth: 3
+   :class: singlecol
+
+.. dismissible-skills-card::
+   :skill: Schema Design Patterns & Antipatterns
+   :url: https://learn.mongodb.com/skills?openTab=data%20modeling
+
+Storing data fields that are related to each other but not accessed 
+together can create bloated documents that lead to excessive RAM and 
+bandwidth usage. The :term:`working set`, consisting of frequently accessed 
+data and indexes, is stored in the RAM allotment. When the working 
+set fits in RAM, MongoDB can query from memory instead of from disk, 
+which improves performance. However, if documents are too large, the 
+working set might not fit into RAM, causing performance to degrade as 
+MongoDB has to access data from disk.
+
+To prevent bloated documents, restructure your schema with smaller documents 
+and use :ref:`document references <data-modeling-referencing>` to separate 
+fields that aren't returned together. This approach reduces the working set 
+size and improves performance. 
 
 ## About this Task
 
-Consider the following schema that contains book information used on a bookstore website's main page. The main page only displays the book title, author, and front cover image. You must click on the book to see additional details.
+Consider the following schema that contains book information used on a 
+bookstore website's main page. The main page only displays the book title, 
+author, and front cover image. You must click on the book to see additional 
+details.
 
-```javascript
-{  
-   title: "Tale of Two Cities",
-   author: "Charles Dickens",
-   genre: "Historical Fiction",
-   cover_image: "<url>",
-   year: 1859,
-   pages: 448,
-   price: 15.99,
-   description: "A historical novel set during the French Revolution.
-}
-```
+.. code-block:: javascript
+   :copyable: false
 
-In the current schema, to display the information for the website's main page, all of the book information must be queried. To reduce document size and streamline queries, you can split the large document into two smaller collections.
-
-## Example
-
-In the following example, the book information is split into two collections: `mainBookInfo` and `additionalBookDetails`.
-
-- The `mainBookInfo` collection contains the information displayed on
-the website's main page.
-
-- The `additionalBookDetails` collection contains extra details revealed
-after a user clicks on the book.
-
-The `mainBookInfo` collection:
-
-```javascript
-db.mainBookInfo.insertOne(
-   {
-      _id: 1234,
+   {  
       title: "Tale of Two Cities",
       author: "Charles Dickens",
       genre: "Historical Fiction",
-      cover_image: "<url>"
-   }
-)
-```
-
-The `additionalBookDetails` collection:
-
-```javascript
-db.additionalBookDetails.insertOne(
-   {  
-      title: "Tale of Two Cities",
-      bookId: 1234,
+      cover_image: "<url>",
       year: 1859,
       pages: 448,
       price: 15.99,
-      description: "A historical novel set during the French Revolution."
+      description: "A historical novel set during the French Revolution.
    }
-)
-```
 
-The two collections are linked by the `_id` field in the `mainBookInfo` collection and the `bookId` field in the `additionalBookDetails` collection. On the home page, only the `mainBookInfo` collection is used to provide the necessary information. When a user selects a book to learn more about, the website queries the `additionalBookDetails collection using the id` field to match with the `bookId` field.
+In the current schema, to display the information for the website's 
+main page, all of the book information must be queried. To reduce document 
+size and streamline queries, you can split the large document into two 
+smaller collections.  
 
-By splitting the information into two collections, you ensure that your documents do not grow too large and exceed RAM allotment.
+## Example
 
-Join Collections with $lookup `````````````````````````````
+In the following example, the book information is split into two 
+collections: ``mainBookInfo`` and ``additionalBookDetails``. 
 
-To join the data from the `mainBookInfo` collection and the `additionalBookDetails` collection, the application needs to perform a :pipeline:`$lookup` operation.
+- The ``mainBookInfo`` collection contains the information displayed on 
+  the website's main page.
 
-The following aggregation operation joins the `mainBookInfo` and `additionalBookDetails` collection from the previous example.
+- The ``additionalBookDetails`` collection contains extra details revealed 
+  after a user clicks on the book.
 
-```javascript
-db.mainBookInfo.aggregate( [ 
-   {
-      $lookup: {
-         from: "additionalBookDetails",
-         localField: "_id", 
-         foreignField: "bookId",
-         as: "details"
+The ``mainBookInfo`` collection:
+
+.. code-block:: javascript
+
+   db.mainBookInfo.insertOne(
+      {
+         _id: 1234,
+         title: "Tale of Two Cities",
+         author: "Charles Dickens",
+         genre: "Historical Fiction",
+         cover_image: "<url>"
       }
-   },
-   {
-      $replaceRoot: {
-         newRoot: { $mergeObjects: [ { $arrayElemAt: [ "$details", 0 ] }, "$$ROOT" ] }
+   )
+
+The ``additionalBookDetails`` collection:
+
+.. code-block:: javascript
+
+   db.additionalBookDetails.insertOne(
+      {  
+         title: "Tale of Two Cities",
+         bookId: 1234,
+         year: 1859,
+         pages: 448,
+         price: 15.99,
+         description: "A historical novel set during the French Revolution."
       }
-   },
-   {
-      $project: { details: 0 }
-   }
- ] )
-```
+   )
+
+The two collections are linked by the ``_id`` field in the ``mainBookInfo`` 
+collection and the ``bookId`` field in the ``additionalBookDetails`` 
+collection. On the home page, only the ``mainBookInfo`` collection is 
+used to provide the necessary information. When a user selects a book to 
+learn more about, the website queries the ``additionalBookDetails`` 
+collection using the ``_id`` field to match with the ``bookId`` field. 
+
+By splitting the information into two collections, you ensure that your 
+documents do not grow too large and exceed RAM allotment.
+
+### Join Collections with $lookup
+
+To join the data from the ``mainBookInfo`` collection and the 
+``additionalBookDetails`` collection, the application needs to perform a 
+:pipeline:`$lookup` operation.
+
+The following aggregation operation joins the ``mainBookInfo`` and 
+``additionalBookDetails`` collection from the previous example.
+
+.. code-block:: javascript
+
+   db.mainBookInfo.aggregate( [ 
+      {
+         $lookup: {
+            from: "additionalBookDetails",
+            localField: "_id", 
+            foreignField: "bookId",
+            as: "details"
+         }
+      },
+      {
+         $replaceRoot: {
+            newRoot: { $mergeObjects: [ { $arrayElemAt: [ "$details", 0 ] }, "$$ROOT" ] }
+         }
+      },
+      {
+         $project: { details: 0 }
+      }
+    ] )
 
 The operation returns the following:
 
-```javascript
-[
-   {
-     _id: ObjectId('666b1235eda086b5e22dbcf1'),
-     title: 'Tale of Two Cities',
-     author: 'Charles Dickens',
-     genre: 'Historical Fiction',
-     cover_image: '<url>',
-     bookId: 1234,
-     year: 1859,
-     pages: 448,
-     price: 15.99,
-     description: 'A historical novel set during the French Revolution.'
-   }
-]
-```
+.. code-block:: javascript
+   :copyable: false
 
-In this example, the `$lookup` operation joins the `mainBookInfo` collection with the `additionalBookDetails collection using the id` and `bookId` fields. The :expression:`$mergeObjects` and :pipeline:`$replaceRoot` operations merge the joined documents from the `mainBookInfo` and `additionalBookDetails` collections.
+   [
+      {
+        _id: ObjectId('666b1235eda086b5e22dbcf1'),
+        title: 'Tale of Two Cities',
+        author: 'Charles Dickens',
+        genre: 'Historical Fiction',
+        cover_image: '<url>',
+        bookId: 1234,
+        year: 1859,
+        pages: 448,
+        price: 15.99,
+        description: 'A historical novel set during the French Revolution.'
+      }
+   ]
+
+In this example, the ``$lookup`` operation joins the ``mainBookInfo`` 
+collection with the ``additionalBookDetails`` collection using the ``_id`` 
+and ``bookId`` fields. The :expression:`$mergeObjects` and 
+:pipeline:`$replaceRoot` operations merge the joined documents from 
+the ``mainBookInfo`` and ``additionalBookDetails`` collections.
 
 ## Learn More
 
-- `schema-design-antipatterns`
-- `embedding-vs-references`
+- :ref:`schema-design-antipatterns`
+- :ref:`embedding-vs-references`

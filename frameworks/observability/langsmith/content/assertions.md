@@ -4,10 +4,10 @@ framework: "LangSmith"
 source_repo: "https://github.com/langchain-ai/docs.git"
 source_branch: "main"
 source_path: "src/langsmith/assertions.mdx"
-source_commit: "2aae1dfc98ee953a9a5185fb6fcdd9efb3f4d878"
-source_commit_short: "2aae1df"
-source_commit_date: "2026-07-25T00:27:23+00:00"
-generated_at: "2026-07-25T19:08:33.380401Z"
+source_commit: "a174f9cf7c91ee5eb14ee2382eb48bfe6e4956e9"
+source_commit_short: "a174f9c"
+source_commit_date: "2026-08-28T17:04:12-07:00"
+generated_at: "2026-08-29T09:39:50.668079Z"
 ---
 # Assertions
 
@@ -26,7 +26,7 @@ Use assertions when:
 - You want to capture acceptance criteria in plain English without leaving the review flow.
 
 <Note>
-Assertions are available on [single-run annotation queues](/langsmith/annotation-queues#single-run-annotation-queues). [Pairwise queues](/langsmith/annotation-queues#pairwise-annotation-queues) are unchanged. Assertions are available in the LangSmith UI only.
+Assertions are available on **run** items in [single-run annotation queues](/langsmith/annotation-queues#single-run-annotation-queues). They are not available on [thread](/langsmith/observability-concepts#threads) items or [pairwise queues](/langsmith/annotation-queues#pairwise-annotation-queues). Assertions are available in the LangSmith UI only.
 </Note>
 
 <Tip>

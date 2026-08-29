@@ -1,14 +1,15 @@
 ---
 type: "Framework Learn Page"
-framework: "redis"
+framework: "Redis"
 source_repo: "https://github.com/redis/docs.git"
 source_branch: "main"
 source_path: "content/operate/oss_and_stack/install/install-stack/docker.md"
-source_commit: "9d30f68c3dad1a6b3b7d30fe604b911348ce8152"
-source_commit_short: "9d30f68c"
-source_commit_date: "2026-07-24T10:52:10-07:00"
-generated_at: "2026-07-25T11:51:22Z"
+source_commit: "f8693349287b0efbef3c865b6f6a2aceca88594d"
+source_commit_short: "f869334"
+source_commit_date: "2026-08-28T10:01:19-05:00"
+generated_at: "2026-08-29T09:38:55.246028Z"
 ---
+# Docker
 
 ---
 categories:
@@ -52,7 +53,10 @@ If you don’t have `redis-cli` installed locally, you can run it from the Docke
 $ docker exec -it redis redis-cli
 {{< / highlight >}}
 
-If you do have `redis-cli` installed locally, you can run it from your terminal:
+If you want to install `redis-cli` locally, see
+[Install redis-cli]({{< relref "/operate/oss_and_stack/install/install-stack/install-redis-cli" >}}).
+
+If you already have `redis-cli` installed locally, you can run it from your terminal:
 
 {{< highlight bash >}}
 $ redis-cli -h 127.0.0.1 -p 6379

@@ -4,10 +4,10 @@ framework: "LangSmith"
 source_repo: "https://github.com/langchain-ai/docs.git"
 source_branch: "main"
 source_path: "src/langsmith/evaluation-types.mdx"
-source_commit: "2aae1dfc98ee953a9a5185fb6fcdd9efb3f4d878"
-source_commit_short: "2aae1df"
-source_commit_date: "2026-07-25T00:27:23+00:00"
-generated_at: "2026-07-25T19:08:33.347248Z"
+source_commit: "a174f9cf7c91ee5eb14ee2382eb48bfe6e4956e9"
+source_commit_short: "a174f9c"
+source_commit_date: "2026-08-28T17:04:12-07:00"
+generated_at: "2026-08-29T09:39:50.597488Z"
 ---
 # Evaluation Types
 
@@ -73,7 +73,7 @@ Learn [how run pairwise evaluations](/langsmith/evaluate-pairwise).
 
 Online evaluation assesses production application outputs in near real-time. Without reference outputs, these evaluations focus on detecting issues, monitoring quality trends, and identifying edge cases that inform future offline testing.
 
-Online evaluators typically run server-side. LangSmith provides built-in [LLM-as-judge evaluators](/langsmith/llm-as-judge) for configuration, and supports custom code evaluators that run within LangSmith.
+Online evaluators typically run server-side. LangSmith supports custom [LLM-as-judge evaluators](/langsmith/llm-as-judge) and code evaluators. [LangChain Tuned Evaluators](/langsmith/tuned-evaluators) provide specialized judges managed by LangChain.
 
 ![Online](/langsmith/images/online.png)
 

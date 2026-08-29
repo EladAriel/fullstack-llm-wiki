@@ -1,73 +1,138 @@
 ---
 type: "Framework Learn Page"
-framework: "mongodb"
+framework: "MongoDB"
 source_repo: "https://github.com/mongodb/docs.git"
 source_branch: "main"
 source_path: "content/manual/manual/source/reference/method/db.getUsers.txt"
-source_commit: "ab9db26ed3d11618cdb61516d8180337d8e3f679"
-source_commit_short: "ab9db26e"
-source_commit_date: "2026-07-24T16:22:46-06:00"
-generated_at: "2026-07-25T11:51:15Z"
+source_commit: "b9f2bc487a2878b65e3c1f80024bebab76954f27"
+source_commit_short: "b9f2bc48"
+source_commit_date: "2026-08-28T17:09:45-05:00"
+generated_at: "2026-08-29T09:39:19.903859Z"
 ---
-
-==============================
-
 # db.getUsers() (mongosh method)
+
+**meta:** :description: Retrieve information for all users in a database using `db.getUsers()`, with options to filter, show credentials, or omit custom data.
+
+.. default-domain:: mongodb
+
+**contents:** On this page
+   :local:
+   :backlinks: none
+   :depth: 1
+   :class: singlecol
 
 ## Definition
 
+**method:** db.getUsers(<options>)
+
+   Returns information for all the users in the database.
+
+   :method:`db.getUsers()` wraps the :dbcommand:`usersInfo: 1 <usersInfo>`  command.
+
+   The :method:`db.getUsers()` method can take the following options:
+   
+   .. code-block:: none
+
+      db.getUsers( { 
+         showCredentials: <Boolean>,
+         showCustomData: <Boolean>,
+         filter: <document>
+      } )
+
+   .. list-table::
+      :header-rows: 1
+      :widths: 20 20 80
+   
+      * - Field
+        - Type
+        - Description
+   
+      * - ``showCredentials``
+        - boolean
+        - Optional. Set to ``true`` to display the user's password
+          hash.
+          
+          By default, this field is ``false``.
+
+      * - ``showCustomData``
+        - boolean
+        - Optional. Set to ``false`` to omit the user's ``customData``
+          from the output.
+          
+          By default, this field is ``true``.
+
+          .. versionadded:: 5.2
+
+      * - ``filter``
+        - document
+        - Optional. A document that specifies :pipeline:`$match` stage
+          conditions to return information for users that match the
+          filter conditions.
+
+   For more information, see :dbcommand:`usersInfo`.
+
 ## Compatibility
 
-This method is available in deployments hosted in the following environments:
+This method is available in deployments hosted in the following
+environments:
 
-.. include:: /includes/fact-environments-no-atlas-support.rst
+**include:** /includes/fact-environments-no-atlas-support.rst
 
-.. include:: /includes/fact-environments-onprem-only.rst
+**include:** /includes/fact-environments-onprem-only.rst
 
 ## Required Access
 
-.. include:: /includes/access-user-info.rst
+**include:** /includes/access-user-info.rst
 
 ## Examples
 
 ### View All Users for a Database that Match the Specified Filter
 
-The :method:`db.getUsers()` method can accept a `filter` document to return information for users that match the filter condition.
+The :method:`db.getUsers()` method can accept a ``filter`` document
+to return information for users that match the filter condition.
 
-To view all users for the current database who have `SCRAM-SHA-256` credentials:
+To view all users for the current database who have ``SCRAM-SHA-256``
+credentials:
 
-```javascript
-db.getUsers({ filter: { mechanisms: "SCRAM-SHA-256" } })
-```
+.. code-block:: javascript
 
-When viewing all users, you can specify the `showCredentials` option but not the `showPrivileges` or the `showAuthenticationRestrictions` options.
+   db.getUsers({ filter: { mechanisms: "SCRAM-SHA-256" } })
+
+When viewing all users, you can specify the ``showCredentials`` option
+but not the ``showPrivileges`` or the
+``showAuthenticationRestrictions`` options.
 
 ### Omit Custom Data from Output
 
-.. versionadded:: 5.2
+**versionadded:** 5.2
 
-.. include:: /includes/fact-omit-custom-data-example-setup.rst
+   To omit users' custom data from the :method:`db.getUsers()` output,
+   set the ``showCustomData`` option to ``false``.
 
-To retrieve the user but omit the custom data from the output, run :method:`db.getUsers()` with `showCustomData` set to `false`:
+**include:** /includes/fact-omit-custom-data-example-setup.rst
 
-```javascript
-db.getSiblingDB("products").getUsers( { showCustomData: false } )
-```
+To retrieve the user but omit the custom data from the output, run
+:method:`db.getUsers()` with ``showCustomData`` set to ``false``:
+
+.. code-block:: javascript
+
+   db.getSiblingDB("products").getUsers( { showCustomData: false } )
 
 Example output:
 
-```javascript
-{
-   users: [
-     {
-       _id: 'products.accountAdmin01',
-       userId: UUID("0955afc1-303c-4683-a029-8e17dd5501f4"),
-       user: 'accountAdmin01',
-       db: 'products',
-       roles: [ { role: 'readWrite', db: 'products' } ],
-       mechanisms: [ 'SCRAM-SHA-1', 'SCRAM-SHA-256' ]
-     }
-   ],
-   ok: 1
-}
-```
+.. code-block:: javascript
+   :copyable: false
+
+   {
+      users: [
+        {
+          _id: 'products.accountAdmin01',
+          userId: UUID("0955afc1-303c-4683-a029-8e17dd5501f4"),
+          user: 'accountAdmin01',
+          db: 'products',
+          roles: [ { role: 'readWrite', db: 'products' } ],
+          mechanisms: [ 'SCRAM-SHA-1', 'SCRAM-SHA-256' ]
+        }
+      ],
+      ok: 1
+   }

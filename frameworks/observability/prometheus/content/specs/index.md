@@ -1,7 +1,7 @@
 ---
 type: "Framework Learn Directory Index"
 framework: "Prometheus"
-generated_at: "2026-07-25T19:07:59.772605Z"
+generated_at: "2026-08-29T09:39:59.853965Z"
 ---
 # Specs
 
@@ -18,3 +18,8 @@ This directory contains Prometheus learning pages related to specs.
 ## Pages in This Directory
 
 - [Native_Histograms](native_histograms.md)
+
+## Subdirectories
+
+- [Om](om/index.md)
+- [Prw](prw/index.md)

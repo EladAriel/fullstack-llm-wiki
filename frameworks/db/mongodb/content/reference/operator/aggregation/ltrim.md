@@ -1,70 +1,163 @@
 ---
 type: "Framework Learn Page"
-framework: "mongodb"
+framework: "MongoDB"
 source_repo: "https://github.com/mongodb/docs.git"
 source_branch: "main"
 source_path: "content/manual/manual/source/reference/operator/aggregation/ltrim.txt"
-source_commit: "ab9db26ed3d11618cdb61516d8180337d8e3f679"
-source_commit_short: "ab9db26e"
-source_commit_date: "2026-07-24T16:22:46-06:00"
-generated_at: "2026-07-25T11:51:15Z"
+source_commit: "b9f2bc487a2878b65e3c1f80024bebab76954f27"
+source_commit_short: "b9f2bc48"
+source_commit_date: "2026-08-28T17:09:45-05:00"
+generated_at: "2026-08-29T09:39:20.228449Z"
 ---
-
-============================
-
 # $ltrim (expression operator)
 
+**meta:** :description: Use `$ltrim` in MongoDB to remove whitespace or specified characters from the beginning of a string in aggregation operations.
+
+.. default-domain:: mongodb
+
+**contents:** On this page
+   :local:
+   :backlinks: none
+   :depth: 1
+   :class: singlecol
+
 ## Definition
+
+**expression:** $ltrim
+
+   Removes whitespace characters, including null, or the specified
+   characters from the beginning of a string.
+
+   :expression:`$ltrim` has the following syntax:
+
+   .. code-block:: javascript
+
+      { $ltrim: { input: <string>,  chars: <string> } }
+
+
+   The :expression:`$ltrim` takes a document with the following fields:
+
+   .. list-table::
+      :widths: 20 80
+      :header-rows: 1
+
+      * - Field
+        - Description
+
+      * - ``input``
+
+        - The string to trim. The argument can be any valid
+          :ref:`expression <aggregation-expressions>` that resolves to
+          a string. For more information on expressions, see
+          :ref:`aggregation-expressions`.
+
+      * - ``chars``
+
+        - Optional. The character(s) to trim from the beginning of the
+          ``input``.
+
+          The argument can be any valid :ref:`expression
+          <aggregation-expressions>` that resolves to a string. The
+          :expression:`$ltrim` operator breaks down the string into
+          individual UTF `code point
+          <http://www.unicode.org/glossary/#code_point>`_ to trim from
+          ``input``.
+
+          If unspecified, :expression:`$ltrim` removes whitespace
+          characters, including the null character. For the list of
+          whitespace characters, see :ref:`ltrim-white-space`.
+
+   .. seealso::
+
+      - :expression:`$trim`
+      - :expression:`$rtrim`
 
 ## Behavior
 
 - By default, :expression:`$ltrim` removes whitespace characters,
-including the null character, from the beginning of the input string:
+  including the null character, from the beginning of the input string:
 
-- You can override the default characters to trim using the `chars`
-field.
+  .. list-table::
+     :header-rows: 1
+     :widths: 60 40
 
-For example, the following trims any `g` and `e` from the start of the input string. Since the input starts with a whitespace, neither character can be trimmed from the start of the string.
+     * - Example
+       - Results
+
+
+     * - ``{ $ltrim: { input: "  \n good  bye \t  " } }``
+       - ``"good  bye \t  "``
+
+- You can override the default characters to trim using the ``chars``
+  field.
+
+  For example, the following trims any ``g`` and ``e`` from the start
+  of the input string. Since the input starts with a whitespace,
+  neither character can be trimmed from the start of the string.
+
+  .. list-table::
+     :header-rows: 1
+     :widths: 70 30
+
+     * - Example
+       - Results
+
+     * - ``{ $ltrim: { input: " ggggoodbyeeeee", chars: "ge" } }``
+       - ``" ggggoodbyeeeee"``
 
 - If overriding the default characters to trim, you can explicitly
-include the whitespace character(s) to trim in the `chars` field.
+  include the whitespace character(s) to trim in the ``chars`` field.
 
-For example, the following trims any space, `g`, or `d` from the start of the input string.
+  For example, the following trims any space, ``g``, or ``d`` from the
+  start of the input string.
+
+  .. list-table::
+     :header-rows: 1
+     :widths: 70 30
+
+     * - Example
+       - Results
+
+     * - ``{ $ltrim: { input: "    ggggoodbyeeeee ", chars: " gd" } }``
+       - ``"oodbyeeeee "``
+
+.. _ltrim-white-space:
 
 ### Whitespace Characters
 
 By default, :expression:`$ltrim` removes the following characters:
 
-.. include:: /includes/list-table-trim-white-space.rst
+**include:** /includes/list-table-trim-white-space.rst
 
 ## Limitations
 
-.. include:: /includes/fact-trim-chars-length-limit.rst
+**include:** /includes/fact-trim-chars-length-limit.rst
 
 ## Example
 
-Consider an `inventory` collection with the following documents:
+Consider an ``inventory`` collection with the following documents:
 
-```javascript
-db.inventory.insertMany( [
-   { _id: 1, item: "ABC1", quarter: "13Q1", description: " product 1" },
-   { _id: 2, item: "ABC2", quarter: "13Q4", description: "product 2 \n The product is in stock.  \n\n  " },
-   { _id: 3, item: "XYZ1", quarter: "14Q2", description: null },
-] )
-```
+.. code-block:: javascript
 
-The following operation uses the :expression:`$ltrim` operator to remove leading whitespaces from the `description` field:
+   db.inventory.insertMany( [
+      { _id: 1, item: "ABC1", quarter: "13Q1", description: " product 1" },
+      { _id: 2, item: "ABC2", quarter: "13Q4", description: "product 2 \n The product is in stock.  \n\n  " },
+      { _id: 3, item: "XYZ1", quarter: "14Q2", description: null },
+   ] )
 
-```javascript
-db.inventory.aggregate([
-   { $project: { item: 1, description: { $ltrim: { input: "$description" } } } }
-])
-```
+The following operation uses the :expression:`$ltrim` operator to remove
+leading whitespaces from the ``description`` field:
+
+.. code-block:: javascript
+
+   db.inventory.aggregate([
+      { $project: { item: 1, description: { $ltrim: { input: "$description" } } } }
+   ])
 
 The operation returns the following results:
 
-```javascript
-{ _id: 1, item: "ABC1", description: "product 1" }
-{ _id: 2, item: "ABC2", description: "product 2 \n The product is in stock.  \n\n  " }
-{ _id: 3, item: "XYZ1", description: null }
-```
+.. code-block:: javascript
+
+   { _id: 1, item: "ABC1", description: "product 1" }
+   { _id: 2, item: "ABC2", description: "product 2 \n The product is in stock.  \n\n  " }
+   { _id: 3, item: "XYZ1", description: null }

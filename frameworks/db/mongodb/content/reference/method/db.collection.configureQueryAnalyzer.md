@@ -1,63 +1,121 @@
 ---
 type: "Framework Learn Page"
-framework: "mongodb"
+framework: "MongoDB"
 source_repo: "https://github.com/mongodb/docs.git"
 source_branch: "main"
 source_path: "content/manual/manual/source/reference/method/db.collection.configureQueryAnalyzer.txt"
-source_commit: "ab9db26ed3d11618cdb61516d8180337d8e3f679"
-source_commit_short: "ab9db26e"
-source_commit_date: "2026-07-24T16:22:46-06:00"
-generated_at: "2026-07-25T11:51:15Z"
+source_commit: "b9f2bc487a2878b65e3c1f80024bebab76954f27"
+source_commit_short: "b9f2bc48"
+source_commit_date: "2026-08-28T17:09:45-05:00"
+generated_at: "2026-08-29T09:39:19.933921Z"
 ---
-
-=======================================================
+.. _configureQueryAnalyzer-method:
 
 # db.collection.configureQueryAnalyzer() (mongosh method)
 
+**meta:** :description: Configure query sampling for collections to analyze shard key metrics using `db.collection.configureQueryAnalyzer()`.
+
+**contents:** On this page
+   :local:
+   :backlinks: none
+   :depth: 1
+   :class: singlecol
+
 ## Definition
+
+**method:** db.collection.configureQueryAnalyzer(options)
+
+   Configures query sampling for a collection on a replica set or
+   sharded cluster. Sampled queries provide information to 
+   :dbcommand:`analyzeShardKey` to calculate metrics about read and 
+   write distribution of a shard key.
+   
+   The :method:`db.collection.configureQueryAnalyzer()` method wraps the
+   :dbcommand:`configureQueryAnalyzer` command.
+
+   :returns: 
+      A document containing fields describing the old configuration, if
+      one exists, and fields describing the new configuration. For
+      details, see :ref:`<cqa-output>`.
+
 
 ## Compatibility
 
+.. |command| replace:: method
+
 This method is available in deployments hosted in the following environments:
 
-.. include:: /includes/fact-environments-atlas-only.rst
+**include:** /includes/fact-environments-atlas-only.rst
 
-.. include:: /includes/fact-environments-atlas-support-no-free.rst
+**include:** /includes/fact-environments-atlas-support-no-free.rst
 
-.. include:: /includes/fact-environments-onprem-only.rst
+**include:** /includes/fact-environments-onprem-only.rst
 
 ## Syntax
 
 The method has the following syntax:
 
-```javascript
-db.collection.configureQueryAnalyzer( 
-   {
-     mode: <string>,
-     samplesPerSecond: <double>
-   } 
-)
-```
+.. code-block:: javascript
+
+   db.collection.configureQueryAnalyzer( 
+      {
+        mode: <string>,
+        samplesPerSecond: <double>
+      } 
+   )
 
 ### Fields
 
+.. |CQA| replace:: ``db.collection.configureQueryAnalyzer()``
+
 |CQA| has the following fields:
+
+.. list-table::
+   :header-rows: 1
+   :widths: 10 10 10 70 
+ 
+   * - Field
+     - Type
+     - Necessity
+     - Description
+
+   * - ``mode``
+     - string
+     - Required
+     - Mode the query analyzer runs in. Must be set to either
+       ``"full"`` or ``"off"``.
+
+   * - ``samplesPerSecond``
+     - double
+     - Optional
+     - Number of samples per second.
+
+       - When ``mode`` is set to ``"full"``, ``samplesPerSecond`` must
+         be set between ``0`` and ``50``.
+       - When ``mode`` is set to ``"off"``, the server ignores
+         ``samplesPerSecond``.
+
+       For details, see :ref:`samplesPerSeconds Upper Limit 
+       <samplesPerSecond-limit>`.
 
 ## Access Control
 
-For details, see `configureQueryAnalyzer Access Control <cqa-access-control>`.
+For details, see :ref:`configureQueryAnalyzer Access Control 
+<cqa-access-control>`.
 
 ## Behavior
 
-For behavior, see `configureQueryAnalyzer Behavior <cqa-behavior>`.
+For behavior, see :ref:`configureQueryAnalyzer Behavior 
+<cqa-behavior>`.
 
 ## Output
 
-For details, see `configureQueryAnalyzer Output <cqa-output>`.
+For details, see :ref:`configureQueryAnalyzer Output <cqa-output>`.
 
 ## Examples
 
-For examples, see `configureQueryAnalyzer Examples <cqa-examples>`.
+For examples, see :ref:`configureQueryAnalyzer Examples 
+<cqa-examples>`.
 
 ## Learn More
 

@@ -1,15 +1,14 @@
 ---
 type: "Framework Learn Page"
-framework: "nextjs"
+framework: "Next.js"
 source_repo: "https://github.com/vercel/next.js/"
 source_branch: "canary"
 source_path: "docs/01-app/02-guides/migrating/from-vite.mdx"
-source_commit: "dcf242a17b5d4622bbd9624db531a9d84177619f"
-source_commit_short: "dcf242a1"
-source_commit_date: "2026-07-25T10:16:19+02:00"
-generated_at: "2026-07-25T11:50:53Z"
+source_commit: "33a5d542e519fe4e05c8c8c2c2845da9f741699b"
+source_commit_short: "33a5d542"
+source_commit_date: "2026-08-29T00:04:45-07:00"
+generated_at: "2026-08-29T09:40:24.314336Z"
 ---
-
 ---
 title: How to migrate from Vite to Next.js
 nav_title: Vite
@@ -537,15 +536,14 @@ client-side.
 
 - Change all environment variables with the `VITE_` prefix to `NEXT_PUBLIC_`.
 
-Vite exposes a few built-in environment variables on the special `import.meta.env` object which
-aren’t supported by Next.js. You need to update their usage as follows:
+Turbopack supports Vite's built-in `import.meta.env.MODE`, `DEV`, `PROD`, `BASE_URL`, and `SSR`
+properties with no changes needed. `BASE_URL` reflects the Next.js
+[`basePath`](/docs/app/api-reference/config/next-config-js/basePath) configuration and includes a
+trailing slash, matching Vite's format.
 
-- `import.meta.env.MODE` ⇒ `process.env.NODE_ENV`
-- `import.meta.env.PROD` ⇒ `process.env.NODE_ENV === 'production'`
-- `import.meta.env.DEV` ⇒ `process.env.NODE_ENV !== 'production'`
-- `import.meta.env.SSR` ⇒ `typeof window !== 'undefined'`
+**`import.meta.glob`** is supported by Turbopack (the default Next.js bundler) with no changes needed.
 
-**`import.meta.glob`** is supported by Turbopack (the default Next.js bundler) with no changes needed. If you were using the `as` option (deprecated in Vite 5), replace it with `query`:
+Turbopack has no built-in handling for Vite's `?raw` and `?url` queries, so the `as` option (deprecated in Vite 5) and its `query` replacement need a matching rule in `next.config.ts`:
 
 ```js
 // Before (Vite)
@@ -555,32 +553,36 @@ const modules = import.meta.glob('./dir/*.txt', { as: 'raw' })
 const modules = import.meta.glob('./dir/*.txt', { query: '?raw' })
 ```
 
-See the [import.meta.glob docs](/docs/app/api-reference/turbopack#importmetaglob) for the full API.
+```ts filename="next.config.ts"
+import type { NextConfig } from 'next'
 
-Next.js also doesn't provide a built-in `BASE_URL` environment variable. However, you can still
-configure one, if you need it:
+const nextConfig: NextConfig = {
+  turbopack: {
+    rules: {
+      // Any file imported with `?raw` is loaded as a string
+      '*': { condition: { query: '?raw' }, type: 'text' },
+    },
+  },
+}
 
-1. **Add the following to your `.env` file:**
-
-```bash filename=".env"
-# ...
-NEXT_PUBLIC_BASE_PATH="/some-base-path"
+export default nextConfig
 ```
 
-2. **Set [`basePath`](/docs/app/api-reference/config/next-config-js/basePath) to `process.env.NEXT_PUBLIC_BASE_PATH` in your `next.config.mjs` file:**
+See the [import.meta.glob docs](/docs/app/api-reference/turbopack#importmetaglob) for the full API.
+
+If your Vite application configured a custom base URL, set the equivalent
+[`basePath`](/docs/app/api-reference/config/next-config-js/basePath) in your `next.config.mjs` file:
 
 ```js filename="next.config.mjs"
 /** @type {import('next').NextConfig} */
 const nextConfig = {
   output: 'export', // Outputs a Single-Page Application (SPA).
   distDir: './dist', // Changes the build output directory to `./dist/`.
-  basePath: process.env.NEXT_PUBLIC_BASE_PATH, // Sets the base path to `/some-base-path`.
+  basePath: '/some-base-path',
 }
 
 export default nextConfig
 ```
-
-3. **Update `import.meta.env.BASE_URL` usages to `process.env.NEXT_PUBLIC_BASE_PATH`**
 
 ### Step 8: Update Scripts in `package.json`
 

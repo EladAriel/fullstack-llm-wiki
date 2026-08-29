@@ -1,14 +1,15 @@
 ---
 type: "Framework Learn Page"
-framework: "redis"
+framework: "Redis"
 source_repo: "https://github.com/redis/docs.git"
 source_branch: "main"
 source_path: "content/operate/rs/8.0/monitoring/metrics_stream_engine/_index.md"
-source_commit: "9d30f68c3dad1a6b3b7d30fe604b911348ce8152"
-source_commit_short: "9d30f68c"
-source_commit_date: "2026-07-24T10:52:10-07:00"
-generated_at: "2026-07-25T11:51:22Z"
+source_commit: "f8693349287b0efbef3c865b6f6a2aceca88594d"
+source_commit_short: "f869334"
+source_commit_date: "2026-08-28T10:01:19-05:00"
+generated_at: "2026-08-29T09:38:55.709793Z"
 ---
+# _Index
 
 ---
 Title: Monitoring v2
@@ -56,7 +57,7 @@ Filter [Libraries and tools]({{<relref "/integrate">}}) by "observability" for a
 
 For a list of all available v2 metrics, see [Prometheus metrics v2]({{<relref "/operate/rs/8.0/monitoring/metrics_stream_engine/prometheus-metrics-v2">}}).
 
-The v2 scraping endpoint also exposes metrics for `node_exporter` version 1.8.1. For more information, see the [Prometheus node_exporter GitHub repository](https://github.com/prometheus/node_exporter).
+The v2 scraping endpoint also exposes metrics for `node_exporter`. For more information, see the [Prometheus node_exporter GitHub repository](https://github.com/prometheus/node_exporter).
 
 ## Transition from Prometheus v1 to Prometheus v2
 

@@ -1,33 +1,18 @@
 ---
 type: "Framework Learn Page"
-framework: "beanie"
+framework: "Beanie"
 source_repo: "https://github.com/BeanieODM/beanie"
 source_branch: "main"
 source_path: "docs/index.md"
-source_commit: "00c0f745ef12c4be145209d2ef69c2181d4d3a17"
-source_commit_short: "00c0f745"
-source_commit_date: "2026-03-29T13:57:21+02:00"
-generated_at: "2026-06-21T11:21:43Z"
-generated_filename: "_source_index.md"
+source_commit: "aa290b5739b52c7f62e43e37724b63038d1e5a81"
+source_commit_short: "aa290b5"
+source_commit_date: "2026-08-07T10:16:44-06:00"
+generated_at: "2026-08-29T09:38:56.937109Z"
 ---
-
 [![Beanie](https://raw.githubusercontent.com/roman-right/beanie/main/assets/logo/white_bg.svg)](https://github.com/roman-right/beanie)
 
 [![shields badge](https://shields.io/badge/-docs-blue)](https://beanie-odm.dev)
 [![pypi](https://img.shields.io/pypi/v/beanie.svg)](https://pypi.python.org/pypi/beanie)
-
-## 📢 Important Update 📢
-
-We are excited to announce that Beanie is transitioning from solo development to a team-based approach! This move will help us enhance the project with new features and more collaborative development.
-
-At this moment we are establishing a board of members that will decide all the future steps of the project. We are looking for contributors and maintainers to join the board.
-
-### Join Us
-If you are interested in contributing or want to stay updated, please join our Discord channel. We're looking forward to your ideas and contributions!
-
-[Join our Discord](https://discord.gg/AwwTrbCASP)
-
-Let’s make Beanie better, together!
 
 ## Overview
 
@@ -140,8 +125,3 @@ Iliya Hosseini](https://github.com/IHosseini083)
   the valuable changes
 - **[Discord](https://discord.gg/AwwTrbCASP)** - ask your questions, share
   ideas or just say `Hello!!`
-
-----
-Supported by [JetBrains](https://jb.gg/OpenSource)
-
-[![JetBrains](https://raw.githubusercontent.com/roman-right/beanie/main/assets/logo/jetbrains.svg)](https://jb.gg/OpenSource)

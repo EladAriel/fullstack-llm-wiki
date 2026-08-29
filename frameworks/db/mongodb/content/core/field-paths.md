@@ -1,165 +1,217 @@
 ---
 type: "Framework Learn Page"
-framework: "mongodb"
+framework: "MongoDB"
 source_repo: "https://github.com/mongodb/docs.git"
 source_branch: "main"
 source_path: "content/manual/manual/source/core/field-paths.txt"
-source_commit: "ab9db26ed3d11618cdb61516d8180337d8e3f679"
-source_commit_short: "ab9db26e"
-source_commit_date: "2026-07-24T16:22:46-06:00"
-generated_at: "2026-07-25T11:51:15Z"
+source_commit: "b9f2bc487a2878b65e3c1f80024bebab76954f27"
+source_commit_short: "b9f2bc48"
+source_commit_date: "2026-08-28T17:09:45-05:00"
+generated_at: "2026-08-29T09:39:19.520133Z"
 ---
-
-===========
+.. _agg-field-paths:
 
 # Field Paths
 
-Use `field path <field path>` expressions to access fields in input documents. Prefix the field name or the `dotted field path <document-dot-notation>` (for embedded documents) with a dollar sign `$`.
+.. default-domain:: mongodb
+
+**facet:** :name: programming_language
+   :values: shell
+
+**facet:** :name: genre 
+   :values: reference
+
+**meta:** :description: Learn how to use field path expressions in MongoDB to access document fields. Apply these values in queries and aggregations for dynamic data processing.
+
+**contents:** On this page
+   :local:
+   :backlinks: none
+   :depth: 1
+   :class: singlecol
+
+
+Use :term:`field path <field path>` expressions to access fields in
+input documents. Prefix the field name or the :ref:`dotted field path
+<document-dot-notation>` (for embedded documents) with a dollar sign
+``$``.
+
+.. _agg-nested-fields:
 
 ## Nested Fields
 
-The following examples use the [planets](https://www.mongodb.com/docs/atlas/sample-data/sample-guides/#collections) collection from the [Atlas Sample Databases](https://www.mongodb.com/docs/atlas/sample-data/). Each document in this collection has the following structure:
+The following examples use the `planets
+<https://www.mongodb.com/docs/atlas/sample-data/sample-guides/#collections>`_
+collection from the `Atlas Sample Databases
+<https://www.mongodb.com/docs/atlas/sample-data/>`_. Each document in
+this collection has the following structure:
 
-```javascript
-{
-   _id: new ObjectId("6220f6b78a733c51b416c80e"),
-   name: "Uranus",
-   orderFromSun: 7,
-   hasRings: true,
-   mainAtmosphere: [ "H2", "He", "CH4" ],
-   surfaceTemperatureC: { min: null, max: null, mean: -197.2 }
-}
-```
+.. code-block:: javascript
+   :copyable: false
 
-To specify the nested `mean` field within `surfaceTemperatureC`, use `dot notation` (`"field.nestedField"`) with a dollar sign `$`. This aggregation pipeline projects only the `mean` nested field value for each document:
-
-```javascript
-db.planets.aggregate( [
    {
-      $project: {
-         nested_field: "$surfaceTemperatureC.mean"
-      }
+      _id: new ObjectId("6220f6b78a733c51b416c80e"),
+      name: "Uranus",
+      orderFromSun: 7,
+      hasRings: true,
+      mainAtmosphere: [ "H2", "He", "CH4" ],
+      surfaceTemperatureC: { min: null, max: null, mean: -197.2 }
    }
-] )
-```
+
+To specify the nested ``mean`` field within ``surfaceTemperatureC``,
+use :term:`dot notation` (``"field.nestedField"``) with a dollar sign
+``$``. This aggregation pipeline projects only the ``mean`` nested
+field value for each document:
+
+.. code-block:: javascript
+   :copyable: true
+
+   db.planets.aggregate( [
+      {
+         $project: {
+            nested_field: "$surfaceTemperatureC.mean"
+         }
+      }
+   ] )
 
 An example returned document:
 
-```javascript
-{ _id: ObjectId('6220f6b78a733c51b416c80e'), nested_field: -197.2 }
-```
+.. code-block:: javascript
+   :copyable: true
+
+   { _id: ObjectId('6220f6b78a733c51b416c80e'), nested_field: -197.2 }
+
+
+.. _agg-array-of-nested-fields:
 
 ## Array of Nested Fields
 
-Use `dot notation` in a field path to access a field nested within an array. For example, consider a `products` collection whose `instock` field holds an array of nested `warehouse` fields:
+Use :term:`dot notation` in a field path to access a field nested
+within an array. For example, consider a ``products`` collection whose
+``instock`` field holds an array of nested ``warehouse`` fields:
 
-```javascript
-db.products.insertMany( [
-   { item: "journal", instock: [ { warehouse: "A"}, { warehouse: "C" } ] },
-   { item: "notebook", instock: [ { warehouse: "C" } ] },
-   { item: "paper", instock: [ { warehouse: "A" }, { warehouse: "B" } ] },
-   { item: "planner", instock: [ { warehouse: "A" }, { warehouse: "B" } ] },
-   { item: "postcard", instock: [ { warehouse: "B" }, { warehouse: "C" } ] }
-] )
-```
+.. code-block:: javascript
 
-The following aggregation pipeline uses `$instock.warehouse` to access the nested `warehouse` fields.
+   db.products.insertMany( [
+      { item: "journal", instock: [ { warehouse: "A"}, { warehouse: "C" } ] },
+      { item: "notebook", instock: [ { warehouse: "C" } ] },
+      { item: "paper", instock: [ { warehouse: "A" }, { warehouse: "B" } ] },
+      { item: "planner", instock: [ { warehouse: "A" }, { warehouse: "B" } ] },
+      { item: "postcard", instock: [ { warehouse: "B" }, { warehouse: "C" } ] }
+   ] )
 
-```javascript
-db.products.aggregate( [
-   {
-      $project: {
-         item: 1,
-         warehouses: "$instock.warehouse"
+The following aggregation pipeline uses ``$instock.warehouse`` to access
+the nested ``warehouse`` fields. 
+
+.. code-block:: javascript
+   :copyable: true
+
+   db.products.aggregate( [
+      {
+         $project: {
+            item: 1,
+            warehouses: "$instock.warehouse"
+         }
       }
-   }
-] )
-```
+   ] )
 
-In this example, `$instock.warehouse` outputs an array of values that are in the nested `warehouse` field for each document. The pipeline returns the following documents:
+In this example, ``$instock.warehouse`` outputs an array of values that
+are in the nested ``warehouse`` field for each document. The pipeline
+returns the following documents:
 
-```javascript
-[
-   {
-      _id: ObjectId('6740b55e33b29cf6b1d884f7'),
-      item: "journal",
-      warehouses: [ "A", "C" ]
-   },
-   {
-      _id: ObjectId('6740b55e33b29cf6b1d884f8'),
-      item: "notebook",
-      warehouses: [ "C" ]
-   },
-   {
-      _id: ObjectId('6740b55e33b29cf6b1d884f9'),
-      item: "paper",
-      warehouses: [ "A", "B" ]
-   },
-   {
-      _id: ObjectId('6740b55e33b29cf6b1d884fa'),
-      item: "planner",
-      warehouses: [ "A", "B" ]
-   },
-   {
-      _id: ObjectId('6740b55e33b29cf6b1d884fb'),
-      item: "postcard",
-      warehouses: [ "B", "C" ]
-   }
-]
-```
+.. code-block:: javascript
+   :copyable: false
+
+   [
+      {
+         _id: ObjectId('6740b55e33b29cf6b1d884f7'),
+         item: "journal",
+         warehouses: [ "A", "C" ]
+      },
+      {
+         _id: ObjectId('6740b55e33b29cf6b1d884f8'),
+         item: "notebook",
+         warehouses: [ "C" ]
+      },
+      {
+         _id: ObjectId('6740b55e33b29cf6b1d884f9'),
+         item: "paper",
+         warehouses: [ "A", "B" ]
+      },
+      {
+         _id: ObjectId('6740b55e33b29cf6b1d884fa'),
+         item: "planner",
+         warehouses: [ "A", "B" ]
+      },
+      {
+         _id: ObjectId('6740b55e33b29cf6b1d884fb'),
+         item: "postcard",
+         warehouses: [ "B", "C" ]
+      }
+   ]
+
+.. _agg-nested-array-of-arrays:
 
 ## Array of Nested Arrays
 
-You can also use `dot notation` with a dollar sign `$` in a field path to access an array within a nested array. The following example uses a `fruits` collection with this document:
+You can also use :term:`dot notation` with a dollar sign ``$`` in a
+field path to access an array within a nested array. The following
+example uses a ``fruits`` collection with this document:
 
-```javascript
-db.fruits.insertOne(
+.. code-block:: javascript
+   :copyable: true
+
+   db.fruits.insertOne(
+      {
+         _id: ObjectId("5ba53172ce6fa2fcfc58e0ac"),
+         inventory: [
+            {
+               apples: [
+                  "macintosh",
+                  "golden delicious",
+               ]
+            },
+            {
+               oranges: [
+                  "mandarin",
+               ]
+            },
+            {
+               apples: [
+                  "braeburn",
+                  "honeycrisp",
+               ]
+            }
+         ]
+      }
+   )
+
+The following aggregation pipeline accesses the nested ``apples``
+arrays inside ``inventory``:
+
+.. code-block:: javascript
+   :copyable: true
+
+   db.fruits.aggregate( [
+      { $project:
+         { all_apples: "$inventory.apples" } }
+   ] )
+
+In this pipeline, ``$inventory.apples`` resolves to an array of nested
+arrays. The pipeline returns the following document:
+
+.. code-block:: javascript
+   :copyable: false
+
    {
-      _id: ObjectId("5ba53172ce6fa2fcfc58e0ac"),
-      inventory: [
-         {
-            apples: [
-               "macintosh",
-               "golden delicious",
-            ]
-         },
-         {
-            oranges: [
-               "mandarin",
-            ]
-         },
-         {
-            apples: [
-               "braeburn",
-               "honeycrisp",
-            ]
-         }
+      _id: ObjectId('5ba53172ce6fa2fcfc58e0ac'),
+      all_apples: [
+         [ "macintosh", "golden delicious" ],
+         [ "braeburn", "honeycrisp" ]
       ]
    }
-)
-```
-
-The following aggregation pipeline accesses the nested `apples` arrays inside `inventory`:
-
-```javascript
-db.fruits.aggregate( [
-   { $project:
-      { all_apples: "$inventory.apples" } }
-] )
-```
-
-In this pipeline, `$inventory.apples` resolves to an array of nested arrays. The pipeline returns the following document:
-
-```javascript
-{
-   _id: ObjectId('5ba53172ce6fa2fcfc58e0ac'),
-   all_apples: [
-      [ "macintosh", "golden delicious" ],
-      [ "braeburn", "honeycrisp" ]
-   ]
-}
-```
 
 ## Learn More
 
-For more information on accessing and interacting with nested elements, see `document-dot-notation` and `array-match-embedded-documents`.
+For more information on accessing and interacting with nested elements,
+see :ref:`document-dot-notation` and
+:ref:`array-match-embedded-documents`. 

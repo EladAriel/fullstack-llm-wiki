@@ -1,38 +1,24 @@
 ---
 type: "Framework Learn Directory Index"
-framework: "zod"
-directory: "content/blog"
-source_repo: "https://github.com/colinhacks/zod"
-source_branch: "main"
-source_commit: "912f0f51b0ced654d0069741e7160834dca742ee"
-source_commit_short: "912f0f51"
-source_commit_date: "2026-06-10T10:17:29-07:00"
-generated_at: "2026-06-21T11:57:59Z"
+framework: "Zod"
+generated_at: "2026-08-29T09:40:34.224286Z"
 ---
 # Blog
 
-This directory contains zod learning pages related to blog.
+This directory contains Zod learning pages related to blog.
 
 ## Breadcrumbs
 
-[Wiki Home](../../index.md) -> [Content](../index.md) -> [Blog](index.md)
+[Wiki Home](../index.md) -> [Content](index.md)
 
 ## Navigation
 
-- Parent: [Parent Index](../index.md)
-
-## Child Directories
-
-- None
+- Wiki Home: [Root Index](../index.md)
 
 ## Pages in This Directory
 
 - [Clerk Fellowship](clerk-fellowship.md)
-
-## IDE LLM Guidance
-
-When answering implementation questions related to this directory:
-
-1. Prefer the most specific page listed above.
-2. If the topic is broad, read the child directory index first.
-3. Use source metadata from each page when giving answers.
+- [How A Zod Schema Class Is Built](how-a-zod-schema-class-is-built.md)
+- [Introducing Z Compile](introducing-z-compile.md)
+- [Reducing Memory Footprint](reducing-memory-footprint.md)
+- [Zod 4 5](zod-4-5.md)

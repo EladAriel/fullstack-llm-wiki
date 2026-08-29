@@ -1,39 +1,89 @@
 ---
 type: "Framework Learn Page"
-framework: "mongodb"
+framework: "MongoDB"
 source_repo: "https://github.com/mongodb/docs.git"
 source_branch: "main"
 source_path: "content/manual/manual/source/core/capped-collections/convert-collection-to-capped.txt"
-source_commit: "ab9db26ed3d11618cdb61516d8180337d8e3f679"
-source_commit_short: "ab9db26e"
-source_commit_date: "2026-07-24T16:22:46-06:00"
-generated_at: "2026-07-25T11:51:15Z"
+source_commit: "b9f2bc487a2878b65e3c1f80024bebab76954f27"
+source_commit_short: "b9f2bc48"
+source_commit_date: "2026-08-28T17:09:45-05:00"
+generated_at: "2026-08-29T09:39:19.783772Z"
 ---
-
-==============================
+.. _capped-collections-convert:
 
 # Convert a Collection to Capped
 
-To convert a non-capped collection to a `capped collection <manual-capped-collection>`, use the :dbcommand:`convertToCapped` database command.
+**meta:** :description: Convert a non-capped collection to a capped collection using the `convertToCapped` command, ensuring exclusive database lock during the operation.
 
-The `convertToCapped` command holds a database-exclusive lock for the duration of the operation. Other operations that lock the same database are blocked until the `convertToCapped` operation completes.
+**contents:** On this page
+   :local:
+   :backlinks: none
+   :depth: 2
+   :class: singlecol
+
+**facet:** :name: genre
+   :values: tutorial
+
+To convert a non-capped collection to a :ref:`capped collection
+<manual-capped-collection>`, use the :dbcommand:`convertToCapped`
+database command.
+
+The ``convertToCapped`` command holds a database-exclusive lock for the
+duration of the operation. Other operations that lock the same database
+are blocked until the ``convertToCapped`` operation completes.
 
 ## About this Task
 
-.. include:: /includes/capped-collections/use-ttl-index.rst
+**include:** /includes/capped-collections/use-ttl-index.rst
 
 ## Before you Begin
 
-Create a non-capped collection called `log2`:
+Create a non-capped collection called ``log2``:
 
-```javascript
-db.createCollection("log2")
-```
+.. code-block:: javascript
+
+   db.createCollection("log2")
 
 ## Steps
 
+**procedure:** :style: normal
+
+   .. step:: Convert the collection to a capped collection
+
+      To convert the ``log2`` collection to a capped collection, run the
+      :dbcommand:`convertToCapped` command:
+
+      .. code-block:: javascript
+
+         db.runCommand( {
+            convertToCapped: "log2",
+            size: 100000
+         } )
+
+      The ``log2`` collection has a maximum size of 100,000 bytes.
+
+   .. step:: Confirm that the collection is capped
+
+      To confirm that the ``log2`` collection is now capped, use the
+      :method:`~db.collection.isCapped()` method:
+
+      .. io-code-block::
+         :copyable: true
+
+         .. input::
+            :language: javascript
+
+            db.log2.isCapped()
+
+         .. output::
+            :language: javascript
+
+               true
+
 ## Learn More
 
-- `faq-concurrency-database-lock`
-- `capped-collections-change-size`
-- `capped-collections-query`
+- :ref:`faq-concurrency-database-lock`
+
+- :ref:`capped-collections-change-size`
+
+- :ref:`capped-collections-query`

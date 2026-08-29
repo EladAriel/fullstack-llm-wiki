@@ -1,14 +1,15 @@
 ---
 type: "Framework Learn Page"
-framework: "redis"
+framework: "Redis"
 source_repo: "https://github.com/redis/docs.git"
 source_branch: "main"
 source_path: "content/develop/_index.md"
-source_commit: "9d30f68c3dad1a6b3b7d30fe604b911348ce8152"
-source_commit_short: "9d30f68c"
-source_commit_date: "2026-07-24T10:52:10-07:00"
-generated_at: "2026-07-25T11:51:22Z"
+source_commit: "f8693349287b0efbef3c865b6f6a2aceca88594d"
+source_commit_short: "f869334"
+source_commit_date: "2026-08-28T10:01:19-05:00"
+generated_at: "2026-08-29T09:38:55.107225Z"
 ---
+# _Index
 
 ---
 title: Develop with Redis
@@ -48,4 +49,4 @@ or analyze and manage your database with our
 
 | {{< image-card image="images/icon_logo/icon-developers-64-midnight.png" alt="Quick start icon" title="Quick start" url="/develop/get-started" >}} | {{< image-card image="images/icon_logo/icon-data-structures-64-midnight.png" alt="Data types icon" title="Data types" url="/develop/data-types" >}} | {{< image-card image="images/icon_logo/icon-text-search-64-midnight.png" alt="Redis Search icon" title="Redis Search" url="/develop/ai/search-and-query" >}} |
 |:---:| :---: | :---: |
-| [Vector database]({{< relref "/develop/get-started/vector-database" >}})</br>[Document store]({{< relref "/develop/get-started/document-database" >}})</br>[Data structure store]({{< relref "/develop/get-started/data-store" >}})</br>[RAG with Redis]({{< relref "/develop/get-started/rag" >}})</br>[GenAI]({{< relref "/develop/get-started/redis-in-ai" >}}) | [String]({{< relref "/develop/data-types/strings" >}})</br>[JSON]({{< relref "/develop/data-types/json" >}})</br>[Hash]({{< relref "/develop/data-types/hashes" >}})</br>[Vector set]({{< relref "/develop/data-types/vector-sets" >}})</br>[Probabilistic types]({{< relref "/develop/data-types/probabilistic" >}}) | [Get started]({{< relref "/develop/ai/search-and-query" >}})</br>[Schema field types]({{< relref "/develop/ai/search-and-query/indexing/field-and-type-options" >}})</br>[Indexing]({{< relref "/develop/ai/search-and-query/indexing" >}})</br>[Querying]({{< relref "/develop/ai/search-and-query/query" >}})
+| [Vector database]({{< relref "/develop/get-started/search-tutorial/vector-search" >}})</br>[Document store]({{< relref "/develop/get-started/search-tutorial" >}})</br>[Data structure store]({{< relref "/develop/get-started/data-store" >}})</br>[RAG with Redis]({{< relref "/develop/get-started/rag" >}})</br>[GenAI]({{< relref "/develop/get-started/redis-in-ai" >}}) | [String]({{< relref "/develop/data-types/strings" >}})</br>[JSON]({{< relref "/develop/data-types/json" >}})</br>[Hash]({{< relref "/develop/data-types/hashes" >}})</br>[Vector set]({{< relref "/develop/data-types/vector-sets" >}})</br>[Probabilistic types]({{< relref "/develop/data-types/probabilistic" >}}) | [Get started]({{< relref "/develop/ai/search-and-query" >}})</br>[Schema field types]({{< relref "/develop/ai/search-and-query/indexing/field-and-type-options" >}})</br>[Indexing]({{< relref "/develop/ai/search-and-query/indexing" >}})</br>[Querying]({{< relref "/develop/ai/search-and-query/query" >}})

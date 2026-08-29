@@ -1,86 +1,208 @@
 ---
 type: "Framework Learn Page"
-framework: "mongodb"
+framework: "MongoDB"
 source_repo: "https://github.com/mongodb/docs.git"
 source_branch: "main"
 source_path: "content/manual/manual/source/reference/command/createUser.txt"
-source_commit: "ab9db26ed3d11618cdb61516d8180337d8e3f679"
-source_commit_short: "ab9db26e"
-source_commit_date: "2026-07-24T16:22:46-06:00"
-generated_at: "2026-07-25T11:51:15Z"
+source_commit: "b9f2bc487a2878b65e3c1f80024bebab76954f27"
+source_commit_short: "b9f2bc48"
+source_commit_date: "2026-08-28T17:09:45-05:00"
+generated_at: "2026-08-29T09:39:20.064314Z"
 ---
-
-=============================
-
 # createUser (database command)
+
+.. default-domain:: mongodb
+
+**meta:** :description: Create a new database user with defined database permissions.
+
+**contents:** On this page
+   :local:
+   :backlinks: none
+   :depth: 1
+   :class: singlecol
 
 ## Definition
 
+**dbcommand:** createUser
+
+   .. |local-cmd-name| replace:: :dbcommand:`createUser`
+
+   Creates a new user on the database where you run the command. The
+   :dbcommand:`createUser` command returns a *duplicate user* error if the
+   user exists.
+
+   .. |method| replace:: :method:`db.createUser` helper method
+   .. include:: /includes/fact-dbcommand-tip
+
 ## Compatibility
 
-This command is available in deployments hosted in the following environments:
+This command is available in deployments hosted in the following environments: 
 
-.. include:: /includes/fact-environments-onprem-only.rst
+**include:** /includes/fact-environments-onprem-only.rst
 
-.. include:: /includes/fact-environments-no-atlas-support.rst
+**include:** /includes/fact-environments-no-atlas-support.rst
 
 ## Syntax
 
 The command has the following syntax:
 
-> **Tip:** .. include:: /includes/extracts/4.2-changes-passwordPrompt.rst
+**tip:** .. include:: /includes/extracts/4.2-changes-passwordPrompt.rst
 
-```javascript
-db.runCommand(
-   {
-     createUser: "<name>",
-     pwd: passwordPrompt(),      // Or  "<cleartext password>"
-     customData: { <any information> },
-     roles: [
-       { role: "<role>", db: "<database>" } | "<role>",
-       ...
-     ],
-     writeConcern: { <write concern> },
-     authenticationRestrictions: [
-        { clientSource: [ "<IP|CIDR range>", ... ], serverAddress: [ "<IP|CIDR range>", ... ] }, 
-        ...
-     ],
-     mechanisms: [ "<scram-mechanism>", ... ], 
-     digestPassword: <boolean>,
-     comment: <any>
-   }
-)
-```
+.. code-block:: javascript
+
+   db.runCommand(
+      {
+        createUser: "<name>",
+        pwd: passwordPrompt(),      // Or  "<cleartext password>"
+        customData: { <any information> },
+        roles: [
+          { role: "<role>", db: "<database>" } | "<role>",
+          ...
+        ],
+        writeConcern: { <write concern> },
+        authenticationRestrictions: [
+           { clientSource: [ "<IP|CIDR range>", ... ], serverAddress: [ "<IP|CIDR range>", ... ] }, 
+           ...
+        ],
+        mechanisms: [ "<scram-mechanism>", ... ], 
+        digestPassword: <boolean>,
+        comment: <any>
+      }
+   )
 
 ### Command Fields
 
 :dbcommand:`createUser` has the following fields:
 
+.. list-table::
+  :header-rows: 1
+  :widths: 20 20 80
+
+  * - Field
+    - Type
+    - Description
+  * - ``createUser``
+    - string
+    - The name of the new user.
+  * - ``pwd``
+    - string
+    - The user's password. The ``pwd`` field is not
+      required if you run |local-cmd-name| on the ``$external``
+      database to create users who have credentials stored externally to
+      MongoDB.
+
+      The value can be either:
+
+      - The user's password in cleartext string
+      - :method:`passwordPrompt()`, to prompt for the user's password
+
+      .. include:: /includes/extracts/4.2-changes-passwordPrompt.rst
+
+  * - ``customData``
+    - document
+    - Optional. Any arbitrary information. This field can be used to store any data
+      an admin wishes to associate with this particular user. For example,
+      this could be the user's full name or employee id.
+
+  * - ``roles``
+    - array
+    - The roles granted to the user. Can specify an empty array ``[]`` to
+      create users without roles.
+
+  * - ``digestPassword``
+    - boolean
+    - Optional. Indicates whether the server or the client digests the password.
+
+      If true, the server receives undigested password from the client and
+      digests the password.
+
+      If false, the client digests the password and passes the digested
+      password to the server. Not compatible with ``SCRAM-SHA-256``
+
+      The default value is ``true``.
+
+  * - ``writeConcern``
+    - document
+    - .. include:: /includes/fact-write-concern-spec-link.rst
+  * - ``authenticationRestrictions``
+    - array
+    - Optional. The authentication restrictions the server enforces on the created
+      user. Specifies a list of IP addresses and
+      :abbr:`CIDR (Classless Inter-Domain Routing)` ranges from which the
+      user is allowed to connect to the server or from which the server can
+      accept users.
+  * - ``mechanisms``
+    - array
+    - Optional. Specify the specific SCRAM mechanism or mechanisms for creating
+      SCRAM user credentials. If :parameter:`authenticationMechanisms` is
+      specified, you can only specify a subset of the
+      :parameter:`authenticationMechanisms`.
+      
+      Valid values are:
+      
+      - ``"SCRAM-SHA-1"``
+      - Uses the ``SHA-1`` hashing function.
+      - ``"SCRAM-SHA-256"``
+      - Uses the ``SHA-256`` hashing function.
+      - Requires featureCompatibilityVersion set to ``4.0``.
+      - Requires digestPassword to be ``true``.
+      
+      The default for featureCompatibilityVersion is ``4.0`` is both
+      ``SCRAM-SHA-1`` and ``SCRAM-SHA-256``.
+      
+      The default for featureCompatibilityVersion is ``3.6`` is
+      ``SCRAM-SHA-1``.
+  
+  * - ``digestPassword``
+    - boolean
+    - Optional. Indicates whether the server or the client digests the password.
+      
+      If true, the server receives undigested password from the client and
+      digests the password.
+      
+      If false, the client digests the password and passes the digested
+      password to the server. Not compatible with ``SCRAM-SHA-256``
+      
+      The default value is ``true``. 
+
+  * - ``comment``
+    - any
+    - .. include:: /includes/extracts/comment-content.rst
+
 ### Roles
 
-.. include:: /includes/fact-roles-array-contents.rst
+**include:** /includes/fact-roles-array-contents.rst
+
+.. _create-user-auth-restrictions:
 
 ### Authentication Restrictions
 
-.. include:: /includes/fact-auth-restrictions-array-contents.rst
+**include:** /includes/fact-auth-restrictions-array-contents.rst
+
+.. TODO rename section (or make it subsection or something)
 
 ## Behavior
 
 ### User ID
 
-MongoDB automatically assigns a unique `userId` to the user upon creation.
+MongoDB automatically assigns a unique ``userId`` to the user upon creation.
 
 ### Encryption
 
-.. include:: /includes/fact-cleartext-passwords-tls.rst
+.. |command| replace:: :dbcommand:`createUser`
+
+**include:** /includes/fact-cleartext-passwords-tls.rst
 
 ### External Credentials
 
-Users created on the `$external` database should have credentials stored externally to MongoDB, as, for example, with `MongoDB Enterprise installations that use Kerberos </tutorial/control-access-to-mongodb-with-kerberos-authentication>`.
+Users created on the ``$external`` database should have credentials
+stored externally to MongoDB, as, for example, with :doc:`MongoDB
+Enterprise installations that use Kerberos
+</tutorial/control-access-to-mongodb-with-kerberos-authentication>`.
 
-.. include:: /includes/extracts/sessions-external-username-limit.rst
+**include:** /includes/extracts/sessions-external-username-limit.rst
 
-### `local` Database
+### ``local`` Database
 
 You cannot create users on the local database.
 
@@ -88,26 +210,31 @@ You cannot create users on the local database.
 
 Usernames must consist of at least one character and cannot be larger than 7MB.
 
+.. _createUser-required-access:
+
 ## Required Access
 
-.. include:: /includes/access-create-user.rst
+**include:** /includes/access-create-user.rst
 
 ## Example
 
-The following :dbcommand:`createUser` command creates a user `accountAdmin01` on the `products` database. The command gives `accountAdmin01` the `clusterAdmin` and `readAnyDatabase` roles on the `admin` database and the `readWrite` role on the `products` database:
+The following :dbcommand:`createUser` command creates a user ``accountAdmin01`` on the
+``products`` database. The command gives ``accountAdmin01`` the
+``clusterAdmin`` and ``readAnyDatabase`` roles on the ``admin`` database
+and the ``readWrite`` role on the ``products`` database:
 
-> **Tip:** .. include:: /includes/extracts/4.2-changes-passwordPrompt.rst
+**tip:** .. include:: /includes/extracts/4.2-changes-passwordPrompt.rst
 
-```javascript
-db.getSiblingDB("products").runCommand( {
-      createUser: "accountAdmin01",
-      pwd: passwordPrompt(), 
-      customData: { employeeId: 12345 },
-      roles: [
-               { role: "clusterAdmin", db: "admin" },
-               { role: "readAnyDatabase", db: "admin" },
-               "readWrite"
-             ],
-      writeConcern: { w: "majority" , wtimeout: 5000 }
-} )
-```
+.. code-block:: javascript
+
+   db.getSiblingDB("products").runCommand( {
+         createUser: "accountAdmin01",
+         pwd: passwordPrompt(), 
+         customData: { employeeId: 12345 },
+         roles: [
+                  { role: "clusterAdmin", db: "admin" },
+                  { role: "readAnyDatabase", db: "admin" },
+                  "readWrite"
+                ],
+         writeConcern: { w: "majority" , wtimeout: 5000 }
+  } )

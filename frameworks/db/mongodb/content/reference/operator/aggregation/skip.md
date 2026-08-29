@@ -1,20 +1,48 @@
 ---
 type: "Framework Learn Page"
-framework: "mongodb"
+framework: "MongoDB"
 source_repo: "https://github.com/mongodb/docs.git"
 source_branch: "main"
 source_path: "content/manual/manual/source/reference/operator/aggregation/skip.txt"
-source_commit: "ab9db26ed3d11618cdb61516d8180337d8e3f679"
-source_commit_short: "ab9db26e"
-source_commit_date: "2026-07-24T16:22:46-06:00"
-generated_at: "2026-07-25T11:51:15Z"
+source_commit: "b9f2bc487a2878b65e3c1f80024bebab76954f27"
+source_commit_short: "b9f2bc48"
+source_commit_date: "2026-08-28T17:09:45-05:00"
+generated_at: "2026-08-29T09:39:20.178156Z"
 ---
-
-=========================
-
 # $skip (aggregation stage)
 
+**meta:** :description: Use the $skip aggregation stage to skip a specified number of documents in a MongoDB aggregation pipeline and pass the remaining documents to the next stage.
+
+.. default-domain:: mongodb
+
+**contents:** On this page
+   :local:
+   :backlinks: none
+   :depth: 1
+   :class: singlecol
+
 ## Definition
+
+**pipeline:** $skip
+
+   Skips over the specified number of :term:`documents <document>` that
+   pass into the stage and passes the remaining documents to the next
+   stage in the :term:`pipeline`.
+
+   The :pipeline:`$skip` stage has the following prototype form:
+
+   .. code-block:: javascript
+
+      { $skip: <positive 64-bit integer> }
+
+   :pipeline:`$skip` takes a positive integer that specifies the
+   maximum number of documents to skip.
+
+   .. note::
+
+      Starting in MongoDB 5.0, the :pipeline:`$skip` pipeline aggregation
+      has a 64-bit integer limit. Values passed to the pipeline which
+      exceed this limit will return a invalid argument error.
 
 ## Behavior
 
@@ -24,31 +52,115 @@ If using the :pipeline:`$skip` stage with any of:
 
 - the :pipeline:`$sort` aggregation stage,
 - the :method:`~cursor.sort()` method, or
-- the `sort` field to the :dbcommand:`findAndModify` command or the
-:method:`~db.collection.findAndModify()` shell method,
+- the ``sort`` field to the :dbcommand:`findAndModify` command or the
+  :method:`~db.collection.findAndModify()` shell method,
 
-be sure to include at least one field in your sort that contains unique values, before passing results to the :pipeline:`$skip` stage.
+be sure to include at least one field in your sort that contains
+unique values, before passing results to the :pipeline:`$skip` stage.
 
-Sorting on fields that contain duplicate values may return a different sort order for those duplicate fields over multiple executions, especially when the collection is actively receiving writes.
+Sorting on fields that contain duplicate values may return a different
+sort order for those duplicate fields over multiple executions,
+especially when the collection is actively receiving writes.
 
-The easiest way to guarantee sort consistency is to include the `_id` field in your sort query.
+The easiest way to guarantee sort consistency is to include the
+``_id`` field in your sort query.
 
 See the following for more information on each:
 
 - :ref:`Consistent sorting with $sort (aggregation)
-<sort-aggregation-consistent-sorting>`
-
+  <sort-aggregation-consistent-sorting>`
 - :ref:`Consistent sorting with the sort() shell method
-<sort-cursor-consistent-sorting>`
-
+  <sort-cursor-consistent-sorting>`
 - :ref:`Consistent sorting with the findAndModify command
-<findandmodify-command-consistent-sorting>`
-
+  <findandmodify-command-consistent-sorting>`
 - :ref:`Consistent sorting with the findAndModify() shell method
-<findandmodify-method-consistent-sorting>`
+  <findandmodify-method-consistent-sorting>`
 
 ## Examples
 
+.. tabs-drivers::
+
+   .. tab::
+      :tabid: shell
+
+      Consider the following example:
+
+      .. code-block:: javascript
+
+         db.article.aggregate([
+             { $skip : 5 }
+         ]);
+
+      This operation skips the first 5 documents passed to it by the
+      pipeline. :pipeline:`$skip` has no effect on the content of the
+      documents it passes along the pipeline.
+
+   .. tab::
+      :tabid: csharp
+
+      .. sharedinclude:: dbx/csharp/aggregation/rst-files/sample-data-mflix-intro.rst
+
+      The following ``Movie`` class models the documents in the
+      ``sample_mflix.movies`` collection:
+
+      .. literalinclude:: /code-examples/tested/csharp/driver/Aggregation/Builders/Movie.snippet.movie-class.cs
+         :language: csharp
+
+      .. sharedinclude:: dbx/csharp/aggregation/rst-files/method-intro.rst
+
+         .. replacement:: stage-name
+
+            ``$skip``
+
+         .. replacement:: method-name-and-link
+
+            `Skip() <{+csharp-api-docs+}/MongoDB.Driver/MongoDB.Driver.PipelineStageDefinitionBuilder.Skip.html>`__
+
+         .. replacement:: stage-specific-info
+
+         .. replacement:: method-description
+
+            sorts movies by title and ID and skips the first ``5``
+            documents:
+
+         .. replacement:: more-method-description
+
+      .. io-code-block::
+         :copyable: true
+
+         .. input:: /code-examples/tested/csharp/driver/Aggregation/Builders/Skip.snippet.skip.cs
+            :language: csharp
+            :category: usage example
+
+         .. output:: /code-examples/tested/csharp/driver/Aggregation/Builders/OutputFiles/SkipOutput.txt
+            :language: json
+            :visible: false
+
+   .. tab::
+      :tabid: nodejs
+
+      .. include:: /includes/driver-examples/node/aggregation/stage-intro.rst
+
+         .. replacement:: stage-name
+
+            ``$skip`` 
+
+         .. replacement:: stage-specific-info
+         
+         .. replacement:: method-description
+
+            skips the first five documents in the input collection and passes
+            the remaining documents to the next stage in the pipeline
+
+         .. replacement:: more-method-description
+
+      .. literalinclude:: /includes/driver-examples/node/aggregation/examples.js
+         :start-after: //start skip
+         :end-before: //end skip
+         :language: javascript
+         :dedent: 2
+
 ## Learn More
 
-To see full aggregation examples that use the :pipeline:`$skip` stage, see the `aggregation-complete-examples`.
+To see full aggregation examples that use the :pipeline:`$skip` stage, see the
+:ref:`aggregation-complete-examples`.

@@ -4,10 +4,10 @@ framework: "Grafana"
 source_repo: "https://github.com/grafana/grafana.git"
 source_branch: "main"
 source_path: "docs/sources/setup-grafana/configure-security/export-logs.md"
-source_commit: "d18e58d33aa8741f08fbab4aa73bdaf1f04e3be5"
-source_commit_short: "d18e58d3"
-source_commit_date: "2026-07-25T13:50:43+02:00"
-generated_at: "2026-07-25T19:08:09.066658Z"
+source_commit: "5e3a02f81d2aadf4bf24fe49ed97d872556f5bf9"
+source_commit_short: "5e3a02f8"
+source_commit_date: "2026-08-29T10:58:19+09:00"
+generated_at: "2026-08-29T09:39:37.406692Z"
 ---
 ---
 aliases:
@@ -76,6 +76,10 @@ Logs of usage insights contain the following fields, where the fields followed b
 | `cachedQueries`\* | number | Number of fetched queries that came from the cache. |
 
 ## Configuration
+
+{{< admonition type="caution" >}}
+Grafana Cloud provides provisioned dashboards for usage insights. Refer to the [Grafana Cloud documentation](/docs/grafana-cloud/usage-insights/) for more information. If you export usage insights to a separate Loki instance, these dashboards stop receiving usage insights data. This is a current limitation of the feature in Grafana Cloud.
+{{< /admonition >}}
 
 To export your logs, enable the usage insights feature and [configure](../../configure-grafana/) an export location in the configuration file:
 

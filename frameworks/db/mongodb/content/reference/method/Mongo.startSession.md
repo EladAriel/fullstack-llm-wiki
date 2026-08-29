@@ -1,35 +1,132 @@
 ---
 type: "Framework Learn Page"
-framework: "mongodb"
+framework: "MongoDB"
 source_repo: "https://github.com/mongodb/docs.git"
 source_branch: "main"
 source_path: "content/manual/manual/source/reference/method/Mongo.startSession.txt"
-source_commit: "ab9db26ed3d11618cdb61516d8180337d8e3f679"
-source_commit_short: "ab9db26e"
-source_commit_date: "2026-07-24T16:22:46-06:00"
-generated_at: "2026-07-25T11:51:15Z"
+source_commit: "b9f2bc487a2878b65e3c1f80024bebab76954f27"
+source_commit_short: "b9f2bc48"
+source_commit_date: "2026-08-28T17:09:45-05:00"
+generated_at: "2026-08-29T09:39:19.997291Z"
 ---
-
-=====================================
-
 # Mongo.startSession() (mongosh method)
+
+**meta:** :description: Start a session in `mongosh` with options like causal consistency, read concern, and retryable writes.
+
+.. default-domain:: mongodb
+
+**contents:** On this page
+   :local:
+   :backlinks: none
+   :depth: 1
+   :class: singlecol
 
 ## Definition
 
+**method:** Mongo.startSession(<options>)
+
+   Starts a :ref:`session <server-sessions>` for the connection.
+   :binary:`~bin.mongosh` assigns the session ID to commands associated
+   with the session.
+
+   .. |dbcommand| replace:: :dbcommand:`startSession` command
+   .. include:: /includes/fact-mongosh-shell-method-alt
+
+   .. include:: /includes/client-sessions-reuse.rst
+
+   The :method:`~Mongo.startSession()` method can take a document with
+   session options. The options available are:
+
+   .. list-table::
+      :header-rows: 1
+      :widths: 20 80
+
+      * - Field
+        - Description
+
+      * - causalConsistency
+
+        - Boolean. Enables or disables :ref:`causal consistency
+          <causal-consistency>` for the session.
+          :method:`Mongo.startSession()` enables ``causalConsistency``
+          by default. Mutually exclusive with ``snapshot``.
+
+          After starting a session, you cannot modify its
+          ``causalConsistency`` setting.
+
+          The session may have causal consistency enabled even
+          though the :method:`Mongo` connection object may have
+          causal consistency disabled or vice versa. To set causal
+          consistency on the connection object, see
+          :method:`Mongo.setCausalConsistency()`.
+
+      * - readConcern
+
+        - Document. Specifies the :ref:`read concern <read-concern>`.
+
+          To modify the setting after starting a session, see
+          :method:`Session.getOptions().setReadConcern()
+          <Session.getOptions()>`.
+
+      * - readPreference
+
+        - Document. Specifies the :ref:`read preference <read-preference>`.
+
+          The readPreference document contains the ``mode`` field and
+          the optional ``tags`` field:
+
+          .. code-block:: javascript
+
+             { mode: <string>, tags: <array> }
+
+          To modify the setting after starting a session, see
+          :method:`Session.getOptions().setReadPreference()
+          <Session.getOptions()>`.
+
+      * - retryWrites
+
+        - Boolean. Enables or disables the ability to retry writes upon
+          encountering transient network errors.
+
+          If you start :binary:`~bin.mongosh` with the
+          :option:`--retryWrites <mongosh --retryWrites>` option, ``retryWrites`` is enabled by
+          default for :method:`Mongo.startSession()`.
+
+          After starting a session, you cannot modify its
+          ``retryWrites`` setting.
+
+      * - snapshot 
+
+        - Boolean. Enables :ref:`snapshot reads <read-concern-snapshot>`
+          for the session for MongoDB 5.0+ deployments. Mutually
+          exclusive with ``causalConsistency``. 
+
+      * - writeConcern
+
+        - Document. Specifies the :ref:`write concern <write-concern>`.
+
+          To modify the setting after starting a session, see
+          :method:`Session.getOptions().setWriteConcern()
+          <Session.getOptions()>`.
+
 ## Compatibility
+
+.. |command| replace:: method
 
 This method is available in deployments hosted in the following environments:
 
-.. include:: /includes/fact-environments-atlas-only.rst
+**include:** /includes/fact-environments-atlas-only.rst
 
-.. include:: /includes/fact-environments-atlas-support-all.rst
+**include:** /includes/fact-environments-atlas-support-all.rst
 
-.. include:: /includes/fact-environments-onprem-only.rst
+**include:** /includes/fact-environments-onprem-only.rst
 
 ## Examples
 
-The following starts a session with causal consistency and retryable writes enabled on the :method:`Mongo` connection object associated with :binary:`~bin.mongosh`'s global `db` variable:
+The following starts a session with causal consistency and retryable
+writes enabled on the :method:`Mongo` connection object associated with
+:binary:`~bin.mongosh`'s global ``db`` variable:
 
-```javascript
-db = db.getMongo().startSession({retryWrites: true, causalConsistency: true}).getDatabase(db.getName());
-```
+.. code-block:: javascript
+
+   db = db.getMongo().startSession({retryWrites: true, causalConsistency: true}).getDatabase(db.getName());

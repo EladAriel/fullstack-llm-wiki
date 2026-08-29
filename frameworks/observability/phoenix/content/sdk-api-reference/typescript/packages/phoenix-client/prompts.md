@@ -4,10 +4,10 @@ framework: "Arize Phoenix"
 source_repo: "https://github.com/Arize-ai/phoenix.git"
 source_branch: "main"
 source_path: "docs/phoenix/sdk-api-reference/typescript/packages/phoenix-client/prompts.mdx"
-source_commit: "69b3ab92c37ff65812feaa2dbf0b1c0ad5ae55fe"
-source_commit_short: "69b3ab9"
-source_commit_date: "2026-07-25T11:48:12-06:00"
-generated_at: "2026-07-25T19:08:24.951228Z"
+source_commit: "c48e50e9906fcc56c1c103ebd93ef3c95ed6b6e7"
+source_commit_short: "c48e50e"
+source_commit_date: "2026-08-29T01:45:20-06:00"
+generated_at: "2026-08-29T09:39:58.812455Z"
 ---
 # Prompts
 
@@ -16,7 +16,7 @@ title: "Prompts"
 description: "Manage prompts with @arizeai/phoenix-client"
 ---
 
-The prompts module lets you create prompt versions in Phoenix, fetch them back by selector, list prompts, and adapt prompt versions to supported provider SDKs.
+The prompts module lets you create prompt versions in Phoenix, fetch them back by selector, list prompts, update a prompt's description and metadata, delete a prompt, and adapt prompt versions to supported provider SDKs.
 
 <section className="hidden" data-agent-context="relevant-source-files" aria-label="Relevant source files">
   <h2>Relevant Source Files</h2>
@@ -56,6 +56,39 @@ const prompt = await getPrompt({
 
 `prompt` can be selected by `{ name }`, `{ name, tag }`, or `{ versionId }`.
 
+## Update Description And Metadata
+
+```ts
+import { updatePrompt } from "@arizeai/phoenix-client/prompts";
+
+await updatePrompt({
+  promptIdentifier: "support-response",
+  description: "Customer support reply prompt",
+  metadata: { team: "ml", env: "production" },
+});
+```
+
+`promptIdentifier` is a prompt name or ID. Omit a field to leave it unchanged, and pass `description: null` to clear it. `metadata` replaces the existing metadata object as a whole rather than merging into it.
+
+Requires a Phoenix server on 19.18.0 or later.
+
+## Delete A Prompt
+
+```ts
+import { deletePrompt } from "@arizeai/phoenix-client/prompts";
+
+await deletePrompt({ prompt: { name: "support-response" } });
+
+// Or by prompt id
+await deletePrompt({ prompt: { promptId: "UHJvbXB0OjE=" } });
+```
+
+`prompt` takes the same selector style as `getPrompt`, narrowed to the two selectors that identify a prompt rather than one of its versions: `{ name }` and `{ promptId }`. Passing a version selector — `{ versionId }`, or `{ name, tag }` — rejects instead of falling back to the whole prompt, so a variable holding a version never deletes more than you named.
+
+Deletion cascades: every version of the prompt, along with its version tags and labels, is removed with it, and the deletion cannot be undone. A prompt that does not exist rejects with `Prompt not found: <identifier>`.
+
+Requires a Phoenix server on 13.20.0 or later.
+
 ## Convert To Another SDK
 
 ```ts
@@ -78,8 +111,10 @@ Supported `sdk` targets:
   <h2>Source Map</h2>
   <ul>
     <li><code>src/prompts/createPrompt.ts</code></li>
+    <li><code>src/prompts/deletePrompt.ts</code></li>
     <li><code>src/prompts/getPrompt.ts</code></li>
     <li><code>src/prompts/listPrompts.ts</code></li>
+    <li><code>src/prompts/updatePrompt.ts</code></li>
     <li><code>src/prompts/sdks/toSDK.ts</code></li>
     <li><code>src/types/prompts.ts</code></li>
   </ul>
