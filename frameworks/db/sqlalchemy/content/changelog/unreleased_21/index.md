@@ -1,29 +1,19 @@
 ---
 type: "Framework Learn Directory Index"
-framework: "sqlalchemy"
-directory: "content/changelog/unreleased_21"
-source_repo: "https://github.com/sqlalchemy/sqlalchemy"
-source_branch: "main"
-source_commit: "aa1a5575358d3aa14953b04dced02f4763fed2e7"
-source_commit_short: "aa1a5575"
-source_commit_date: "2026-07-23T18:02:59Z"
-generated_at: "2026-07-25T11:50:45Z"
+framework: "SQLAlchemy"
+generated_at: "2026-08-29T09:39:27.746583Z"
 ---
-# Unreleased 21
+# Unreleased_21
 
-This directory contains sqlalchemy learning pages related to unreleased 21.
+This directory contains SQLAlchemy learning pages related to unreleased_21.
 
 ## Breadcrumbs
 
-[Wiki Home](../../../index.md) -> [Content](../../index.md) -> [Changelog](../index.md) -> [Unreleased 21](index.md)
+[Wiki Home](../index.md) -> [Content](index.md)
 
 ## Navigation
 
-- Parent: [Parent Index](../index.md)
-
-## Child Directories
-
-- None
+- Wiki Home: [Root Index](../index.md)
 
 ## Pages in This Directory
 
@@ -31,14 +21,22 @@ This directory contains sqlalchemy learning pages related to unreleased 21.
 - [11122](11122.md)
 - [11297](11297.md)
 - [12398](12398.md)
+- [13113](13113.md)
+- [13227](13227.md)
 - [13311](13311.md)
 - [13420](13420.md)
+- [13433](13433.md)
+- [13441](13441.md)
+- [13479](13479.md)
+- [13506](13506.md)
+- [13507](13507.md)
+- [13526](13526.md)
+- [13534](13534.md)
+- [13535](13535.md)
+- [13538](13538.md)
 - [2943](2943.md)
-
-## IDE LLM Guidance
-
-When answering implementation questions related to this directory:
-
-1. Prefer the most specific page listed above.
-2. If the topic is broad, read the child directory index first.
-3. Use source metadata from each page when giving answers.
+- [6511](6511.md)
+- [8311](8311.md)
+- [9693](9693.md)
+- [Dbapi_Version](dbapi_version.md)
+- [Min_Python_Bump](min_python_bump.md)

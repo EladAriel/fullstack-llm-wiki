@@ -1,177 +1,204 @@
 ---
 type: "Framework Learn Page"
-framework: "mongodb"
+framework: "MongoDB"
 source_repo: "https://github.com/mongodb/docs.git"
 source_branch: "main"
 source_path: "content/manual/manual/source/appendix/security/appendixB-openssl-server.txt"
-source_commit: "ab9db26ed3d11618cdb61516d8180337d8e3f679"
-source_commit_short: "ab9db26e"
-source_commit_date: "2026-07-24T16:22:46-06:00"
-generated_at: "2026-07-25T11:51:15Z"
+source_commit: "b9f2bc487a2878b65e3c1f80024bebab76954f27"
+source_commit_short: "b9f2bc48"
+source_commit_date: "2026-08-28T17:09:45-05:00"
+generated_at: "2026-08-29T09:39:19.854178Z"
 ---
-
-====================================================
+.. _appendix-server-certificate:
 
 # Appendix B - OpenSSL Server Certificates for Testing
 
-> **Warning:** This page is provided for :red:`testing purposes` only and the
-certificates are for :red:`testing purposes only`.
-The following tutorial provides some basic steps for creating
-:red:`test` X.509 certificates:
-- Do not use these certificates for production. Instead, follow your
-  security policies.
-- For information on OpenSSL, refer to the official OpenSSL docs.
-  Although this tutorial uses OpenSSL, the material should not be
-  taken as an authoritative reference on OpenSSL.
+.. default-domain:: mongodb
+
+**meta:** :keywords: on-prem
+   :description: Create test X.509 server certificates using OpenSSL for MongoDB deployments, ensuring not to use them in production environments.
+
+**warning:** Disclaimer
+
+
+   This page is provided for :red:`testing purposes` only and the
+   certificates are for :red:`testing purposes only`.
+
+   The following tutorial provides some basic steps for creating
+   :red:`test` X.509 certificates:
+
+   - Do not use these certificates for production. Instead, follow your
+     security policies.
+
+   - For information on OpenSSL, refer to the official OpenSSL docs.
+     Although this tutorial uses OpenSSL, the material should not be
+     taken as an authoritative reference on OpenSSL.
 
 ## Prerequisite
 
-The procedure outlined on this page uses the :red:`test` intermediate authority certificate and key :file:`mongodb-test-ia.crt` and :file:`mongodb-test-ia.key` created in `/appendix/security/appendixA-openssl-ca` .
+The procedure outlined on this page uses the :red:`test` intermediate authority
+certificate and key :file:`mongodb-test-ia.crt` and :file:`mongodb-test-ia.key`
+created in :doc:`/appendix/security/appendixA-openssl-ca` .
 
 ## Procedure
 
-The following procedure outlines the steps to create :red:`test` certificates for MongoDB servers. For steps to create :red:`test` certificates for MongoDB clients, see `/appendix/security/appendixC-openssl-client`.
+The following procedure outlines the steps to create :red:`test` certificates
+for MongoDB servers. For steps to create :red:`test` certificates for MongoDB
+clients, see :doc:`/appendix/security/appendixC-openssl-client`.
 
 ### A. Create the OpenSSL Configuration File
 
-#. Create a :red:`test` configuration file `openssl-test-server.cnf` for your server with the following content:
+#. Create a :red:`test` configuration file ``openssl-test-server.cnf`` for
+   your server with the following content:
 
-```cfg
-   # NOT FOR PRODUCTION USE. OpenSSL configuration file for testing.
+   .. code-block:: cfg
+      :emphasize-lines: 20-23,27,32,36,40,44
 
-   [ req ]
-   default_bits = 4096
-   default_keyfile = myTestServerCertificateKey.pem    ## The default private key file name.
-   default_md = sha256
-   distinguished_name = req_dn
-   req_extensions = v3_req
+      # NOT FOR PRODUCTION USE. OpenSSL configuration file for testing.
 
-   [ v3_req ]
-   subjectKeyIdentifier  = hash
-   basicConstraints = CA:FALSE
-   keyUsage = critical, digitalSignature, keyEncipherment
-   nsComment = "OpenSSL Generated Certificate for TESTING only.  NOT FOR PRODUCTION USE."
-   extendedKeyUsage  = serverAuth, clientAuth
-   subjectAltName = @alt_names
 
-   [ alt_names ]
-   DNS.1 =         ##TODO: Enter the DNS names. The DNS names should match the server names.
-   DNS.2 =         ##TODO: Enter the DNS names. The DNS names should match the server names.
-   IP.1 =          ##TODO: Enter the IP address.
-   IP.2 =          ##TODO: Enter the IP address. 
+      [ req ]
+      default_bits = 4096
+      default_keyfile = myTestServerCertificateKey.pem    ## The default private key file name.
+      default_md = sha256
+      distinguished_name = req_dn
+      req_extensions = v3_req
 
-   [ req_dn ]
-   countryName = Country Name (2 letter code)
-   countryName_default = TestServerCertificateCountry
-   countryName_min = 2
-   countryName_max = 2
+      [ v3_req ]
+      subjectKeyIdentifier  = hash
+      basicConstraints = CA:FALSE
+      keyUsage = critical, digitalSignature, keyEncipherment
+      nsComment = "OpenSSL Generated Certificate for TESTING only.  NOT FOR PRODUCTION USE."
+      extendedKeyUsage  = serverAuth, clientAuth
+      subjectAltName = @alt_names
 
-   stateOrProvinceName = State or Province Name (full name)
-   stateOrProvinceName_default = TestServerCertificateState
-   stateOrProvinceName_max = 64
+      [ alt_names ]
+      DNS.1 =         ##TODO: Enter the DNS names. The DNS names should match the server names.
+      DNS.2 =         ##TODO: Enter the DNS names. The DNS names should match the server names.
+      IP.1 =          ##TODO: Enter the IP address.
+      IP.2 =          ##TODO: Enter the IP address. 
 
-   localityName = Locality Name (eg, city)
-   localityName_default = TestServerCertificateLocality
-   localityName_max = 64
+      [ req_dn ]
+      countryName = Country Name (2 letter code)
+      countryName_default = TestServerCertificateCountry
+      countryName_min = 2
+      countryName_max = 2
 
-   organizationName = Organization Name (eg, company)
-   organizationName_default = TestServerCertificateOrg
-   organizationName_max = 64
+      stateOrProvinceName = State or Province Name (full name)
+      stateOrProvinceName_default = TestServerCertificateState
+      stateOrProvinceName_max = 64
 
-   organizationalUnitName = Organizational Unit Name (eg, section)
-   organizationalUnitName_default = TestServerCertificateOrgUnit
-   organizationalUnitName_max = 64
+      localityName = Locality Name (eg, city)
+      localityName_default = TestServerCertificateLocality
+      localityName_max = 64
 
-   commonName = Common Name (eg, YOUR name)
-   commonName_max = 64
-```
+      organizationName = Organization Name (eg, company)
+      organizationName_default = TestServerCertificateOrg
+      organizationName_max = 64
 
-#. In the `[alt_names]` section, enter the appropriate DNS names and/or IP addresses for the MongoDB server. You can specify multiple DNS names for a MongoDB server.
+      organizationalUnitName = Organizational Unit Name (eg, section)
+      organizationalUnitName_default = TestServerCertificateOrgUnit
+      organizationalUnitName_max = 64
 
-For OpenSSL SAN identifiers, MongoDB supports:
+      commonName = Common Name (eg, YOUR name)
+      commonName_max = 64
 
-- DNS names and/or
-- IP address fields
-#. Optional. You can update the default Distinguished Name (DN) values.
+#. In the ``[alt_names]`` section, enter the appropriate
+   DNS names and/or IP addresses for the MongoDB server. You can
+   specify multiple DNS names for a MongoDB server.
+   
+   For OpenSSL SAN identifiers, MongoDB supports:
 
-> **Tip:** - Specify a non-empty value for at least one of the following
-  attributes: Organization (`O`), the Organizational Unit
-  (`OU`), or the Domain Component (`DC`).
-- When creating :red:`test` server certificates for internal membership
-  authentication, the following attributes, if specified, must match
-  exactly across the member certificates: Organization (`O`),
-  Organizational Unit (`OU`), the Domain Component (`DC`).
-  For more information on requirements for internal membership
-  authentication, see :ref:`membership authentication
-  <internal-auth-x509>`.
+   - DNS names and/or
+   - IP address fields 
+
+#. *Optional*. You can update the default Distinguished Name (DN)
+   values. 
+
+**tip:** - Specify a non-empty value for at least one of the following
+     attributes: Organization (``O``), the Organizational Unit
+     (``OU``), or the Domain Component (``DC``).
+
+   - When creating :red:`test` server certificates for internal membership
+     authentication, the following attributes, if specified, must match
+     exactly across the member certificates: Organization (``O``),
+     Organizational Unit (``OU``), the Domain Component (``DC``).
+     
+     For more information on requirements for internal membership
+     authentication, see :ref:`membership authentication
+     <internal-auth-x509>`.
 
 ### B. Generate the Test PEM File for Server
 
-> **Important:** Before proceeding, ensure that you have entered the
-appropriate DNS names in the `[alt_names]` section of the
-configuration file `openssl-test-server.cnf`.
+**important:** Before proceeding, ensure that you have entered the
+   appropriate DNS names in the ``[alt_names]`` section of the
+   configuration file ``openssl-test-server.cnf``.
 
 #. Create the :red:`test` key file :file:`mongodb-test-server1.key`.
 
-```bash
-   openssl genrsa -out mongodb-test-server1.key 4096
-```
+   .. code-block:: bash
+
+      openssl genrsa -out mongodb-test-server1.key 4096
 
 #. Create the :red:`test` certificate signing request :file:`mongodb-test-server1.csr`.
 
-When asked for Distinguished Name values, enter the appropriate values for your test certificate:
+   When asked for Distinguished Name values, enter the appropriate
+   values for your test certificate:
 
-- Specify a non-empty value for at least one of the following
-attributes: Organization (`O`), the Organizational Unit (`OU`), or the Domain Component (`DC`).
+   - Specify a non-empty value for at least one of the following
+     attributes: Organization (``O``), the Organizational Unit
+     (``OU``), or the Domain Component (``DC``).
 
-- When creating :red:`test` server certificates for internal membership
-authentication, the following attributes, if specified, must match exactly across the member certificates: Organization (`O`), Organizational Unit (`OU`), the Domain Component (`DC`).
-
-```bash
-   openssl req -new -key mongodb-test-server1.key -out mongodb-test-server1.csr -config openssl-test-server.cnf
-```
-
-#. Create the :red:`test` server certificate :file:`mongodb-test-server1.crt`.
-
-```bash
-   openssl x509 -sha256 -req -days 365 -in mongodb-test-server1.csr -CA mongodb-test-ia.crt -CAkey mongodb-test-ia.key -CAcreateserial -out mongodb-test-server1.crt -extfile openssl-test-server.cnf -extensions v3_req
-```
-
-#. Create the :red:`test` PEM file for the server.
-
-```bash
-   cat mongodb-test-server1.crt mongodb-test-server1.key > test-server1.pem
-
-You can use the :red:`test` PEM file when configuring a
-:binary:`~bin.mongod` or a :binary:`~bin.mongos` for TLS/SSL
-:red:`testing`.  For example:
-
-.. example:: 
-
-   .. code-block:: javascript
-
-      mongod --tlsMode requireTLS --tlsCertificateKeyFile test-server1.pem  --tlsCAFile test-ca.pem
-
-On macOS,
-   If you are :red:`testing` with Keychain Access to manage
-   certificates, create a pkcs-12 file to add to Keychain Access
-   instead of a PEM file:
+   - When creating :red:`test` server certificates for internal membership
+     authentication, the following attributes, if specified, must match
+     exactly across the member certificates: Organization (``O``),
+     Organizational Unit (``OU``), the Domain Component (``DC``).
 
    .. code-block:: bash
 
-      openssl pkcs12 -export -out test-server1.pfx -inkey mongodb-test-server1.key -in mongodb-test-server1.crt -certfile mongodb-test-ia.crt
+      openssl req -new -key mongodb-test-server1.key -out mongodb-test-server1.csr -config openssl-test-server.cnf
 
-   Once added to Keychain Access, instead of specifying the certificate key
-   file, you can use the :option:`--tlsCertificateSelector <mongod
-   --tlsCertificateSelector>` to specify the certificate to use. If
-   the CA file is also in Keychain Access, you can omit
-   ``--tlsCAFile`` as well.
+#. Create the :red:`test` server certificate :file:`mongodb-test-server1.crt`.
 
-   .. code-block:: javascript
+   .. code-block:: bash
 
-      mongod --tlsMode requireTLS --tlsCertificateSelector subject="<TestServerCertificateCommonName>"
-```
+      openssl x509 -sha256 -req -days 365 -in mongodb-test-server1.csr -CA mongodb-test-ia.crt -CAkey mongodb-test-ia.key -CAcreateserial -out mongodb-test-server1.crt -extfile openssl-test-server.cnf -extensions v3_req
 
-> **Seealso:** - `appendix-ca-certificate`
-- `appendix-client-certificate`
-- `x509-member-certificate`
+#. Create the :red:`test` PEM file for the server.
+
+   .. code-block:: bash
+
+      cat mongodb-test-server1.crt mongodb-test-server1.key > test-server1.pem
+
+   You can use the :red:`test` PEM file when configuring a
+   :binary:`~bin.mongod` or a :binary:`~bin.mongos` for TLS/SSL
+   :red:`testing`.  For example:
+
+   .. example:: 
+      
+      .. code-block:: javascript
+
+         mongod --tlsMode requireTLS --tlsCertificateKeyFile test-server1.pem  --tlsCAFile test-ca.pem
+
+   On macOS,
+      If you are :red:`testing` with Keychain Access to manage
+      certificates, create a pkcs-12 file to add to Keychain Access
+      instead of a PEM file:
+
+      .. code-block:: bash
+
+         openssl pkcs12 -export -out test-server1.pfx -inkey mongodb-test-server1.key -in mongodb-test-server1.crt -certfile mongodb-test-ia.crt
+
+      Once added to Keychain Access, instead of specifying the certificate key
+      file, you can use the :option:`--tlsCertificateSelector <mongod
+      --tlsCertificateSelector>` to specify the certificate to use. If
+      the CA file is also in Keychain Access, you can omit
+      ``--tlsCAFile`` as well.
+
+      .. code-block:: javascript
+
+         mongod --tlsMode requireTLS --tlsCertificateSelector subject="<TestServerCertificateCommonName>"
+
+**seealso:** - :ref:`appendix-ca-certificate`
+   - :ref:`appendix-client-certificate`
+   - :ref:`x509-member-certificate`

@@ -1,79 +1,144 @@
 ---
 type: "Framework Learn Page"
-framework: "mongodb"
+framework: "MongoDB"
 source_repo: "https://github.com/mongodb/docs.git"
 source_branch: "main"
 source_path: "content/manual/manual/source/reference/cluster-parameters/defaultMaxTimeMS.txt"
-source_commit: "ab9db26ed3d11618cdb61516d8180337d8e3f679"
-source_commit_short: "ab9db26e"
-source_commit_date: "2026-07-24T16:22:46-06:00"
-generated_at: "2026-07-25T11:51:15Z"
+source_commit: "b9f2bc487a2878b65e3c1f80024bebab76954f27"
+source_commit_short: "b9f2bc48"
+source_commit_date: "2026-08-28T17:09:45-05:00"
+generated_at: "2026-08-29T09:39:19.882221Z"
 ---
-
-================
+.. _cluster-param-defaultMaxTimeMS:
 
 # defaultMaxTimeMS
 
+**meta:** :keywords: on-prem
+
+**facet:** :name: genre
+   :values: reference
+
+**contents:** On this page
+   :local:
+   :backlinks: none
+   :depth: 2
+   :class: singlecol
+
+.. |both| replace:: Available for both :binary:`~bin.mongod` and :binary:`~bin.mongos`.
+
 ## Definition
+
+**parameter:** defaultMaxTimeMS
+   
+   .. versionadded:: 8.0
+      
+   |both|
+   
+   .. include:: /includes/cluster-parameters/defaultMaxTimeMS.rst
 
 ## Access Control
 
-.. include:: /includes/cluster-parameters/access-control.rst
+**include:** /includes/cluster-parameters/access-control.rst
 
 ## Syntax
 
-To set `defaultMaxTimeMS` for your deployment, run the following command on the `admin` database:
+To set ``defaultMaxTimeMS`` for your deployment, run the following command on 
+the ``admin`` database:
 
-```javascript
-db.adminCommand(
-   {
-      setClusterParameter: {
-         defaultMaxTimeMS: { readOperations: <value> }
+.. code-block:: javascript
+
+   db.adminCommand(
+      {
+         setClusterParameter: {
+            defaultMaxTimeMS: { readOperations: <value> }
+         }
       }
-   }
-)
-```
+   )
 
-To view the current value for `defaultMaxTimeMS`, run the following command on the `admin` database:
+To view the current value for ``defaultMaxTimeMS``, run the following
+command on the ``admin`` database: 
 
-```javascript
-db.adminCommand( { getClusterParameter: "defaultMaxTimeMS" } )
-```
+.. code-block:: javascript
+
+   db.adminCommand( { getClusterParameter: "defaultMaxTimeMS" } )
 
 ## Behavior
 
-By default, `defaultMaxTimeMS.readOperations` is 0, meaning no default query timeout is set. If there is no default query timeout, the query runs until it either returns a result or fails.
+By default, ``defaultMaxTimeMS.readOperations`` is 0, meaning no default
+query timeout is set. If there is no default query timeout, the query
+runs until it either returns a result or fails.
 
-If a query specifies a :method:`~cursor.maxTimeMS()` option, that value overrides the `defaultMaxTimeMS` value.
+If a query specifies a :method:`~cursor.maxTimeMS()` option, that value
+overrides the ``defaultMaxTimeMS`` value.
 
 ### Long-Running Queries
 
-If your deployment needs to run long queries, such as `analytics node <analytics-nodes-overview>` queries, you must specify a timeout for those queries at the operation level using :method:`~cursor.maxTimeMS()`. If you don't specify an operation timeout, those queries use the `defaultMaxTimeMS` timeout, and won't run for the required amount of time.
-
+If your deployment needs to run long queries, such as :ref:`analytics
+node <analytics-nodes-overview>` queries, you must specify a timeout for
+those queries at the operation level using
+:method:`~cursor.maxTimeMS()`. If you don't specify an operation
+timeout, those queries use the ``defaultMaxTimeMS`` timeout, and won't
+run for the required amount of time.
+   
 ## Example
 
-The following command sets the default query timeout `5000` milliseconds:
+The following command sets the default query timeout ``5000``
+milliseconds:
 
-```javascript
-db.runCommand( {
-   setClusterParameter: {
-      defaultMaxTimeMS: { readOperations: 5000 }
-   }
-} )
-```
+.. code-block:: javascript
+   
+   db.runCommand( {
+      setClusterParameter: {
+         defaultMaxTimeMS: { readOperations: 5000 }
+      }
+   } )
 
-To check the value of `defaultMaxTimeMS`, run the following command:
+To check the value of ``defaultMaxTimeMS``, run the following command:
+
+.. io-code-block::
+
+   .. input::
+      :language: javascript
+
+      db.adminCommand( { getClusterParameter: "defaultMaxTimeMS" } )
+
+   .. output::
+      :language: javascript
+      :emphasize-lines: 6
+
+      {
+         "clusterParameters" : [
+            {
+               "_id" : "defaultMaxTimeMS",
+               "clusterParameterTime" : Timestamp(1711564868, 17),
+               "readOperations" : Long(5000)
+            }
+         ],
+         "ok" : 1,
+         "$clusterTime" : {
+            "clusterTime" : Timestamp(1712161244, 1),
+            "signature" : {
+               "hash" : BinData(0,"AAAAAAAAAAAAAAAAAAAAAAAAAAA="),
+               "keyId" : Long(0)
+            }
+         },
+         "operationTime" : Timestamp(1712161244, 1)
+      }
 
 ### Results
 
-After you set `defaultMaxTimeMS` for your deployment, consider these queries:
+After you set ``defaultMaxTimeMS`` for your deployment, consider these
+queries:
 
-```javascript
-db.test.find( { name: "Carol" } )
+.. code-block:: javascript
 
-db.test.find( { name: "Carol" } ).maxTimeMS( 8000 )
-```
+   db.test.find( { name: "Carol" } )
+   
+   db.test.find( { name: "Carol" } ).maxTimeMS( 8000 )
 
-The first query uses the `defaultMaxTimeMS` value of 5,000 milliseconds.
+The first query uses the ``defaultMaxTimeMS`` value of 5,000
+milliseconds.
 
-The second query specifies :method:`~cursor.maxTimeMS()`, which overrides the `defaultMaxTimeMS` and causes the query to timeout after 8,000 milliseconds.
+The second query specifies :method:`~cursor.maxTimeMS()`, which
+overrides the ``defaultMaxTimeMS`` and causes the query to timeout after
+8,000 milliseconds.

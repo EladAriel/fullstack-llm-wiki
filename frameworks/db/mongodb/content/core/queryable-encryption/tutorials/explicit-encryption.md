@@ -1,44 +1,259 @@
 ---
 type: "Framework Learn Page"
-framework: "mongodb"
+framework: "MongoDB"
 source_repo: "https://github.com/mongodb/docs.git"
 source_branch: "main"
 source_path: "content/manual/manual/source/core/queryable-encryption/tutorials/explicit-encryption.txt"
-source_commit: "ab9db26ed3d11618cdb61516d8180337d8e3f679"
-source_commit_short: "ab9db26e"
-source_commit_date: "2026-07-24T16:22:46-06:00"
-generated_at: "2026-07-25T11:51:15Z"
+source_commit: "b9f2bc487a2878b65e3c1f80024bebab76954f27"
+source_commit_short: "b9f2bc48"
+source_commit_date: "2026-08-28T17:09:45-05:00"
+generated_at: "2026-08-29T09:39:19.824804Z"
 ---
+**facet:** :name: programming_language
+   :values: csharp, go, java, javascript/typescript, python
 
-=======================
+**meta:** :keywords: code example, node.js, compass, java sync
+
+.. _qe-tutorials-manual-encryption:
 
 # Use {+manual-enc-title+}
 
+.. default-domain:: mongodb
+
+**contents:** On this page
+   :local:
+   :backlinks: none
+   :depth: 2
+   :class: singlecol
+
 ## Overview
 
-This guide shows you how to encrypt a document with {+manual-enc+} and a MongoDB driver.
+This guide shows you how to encrypt a document with {+manual-enc+}
+and a MongoDB driver.
 
-After completing this guide, you should be able to configure a driver to encrypt fields in a document using {+manual-enc+}. With this knowledge, you should be able to create a client application that uses {+manual-enc+}. with automatic decryption.
+After completing this guide, you should be able to configure a driver to
+encrypt fields in a document using {+manual-enc+}. With this knowledge,
+you should be able to create a client application that uses {+manual-enc+}.
+with automatic decryption.
 
-.. include:: /includes/queryable-encryption/quick-start/production-warning.rst
+**include:** /includes/queryable-encryption/quick-start/production-warning.rst
 
 ## Before You Get Started
 
-.. include:: /includes/queryable-encryption/set-up-section.rst
+**include:** /includes/queryable-encryption/set-up-section.rst
 
 ### Full Application Code
 
-To see the complete code for the sample application, select your programming language in the language selector.
+To see the complete code for the sample application, select your programming
+language in the language selector.
+
+.. tabs-drivers::
+
+   .. tab:: Node.js
+      :tabid: nodejs
+
+      `Complete Node.js Application <{+sample-app-url-qe-old+}/node/exp/reader/>`__
+
+   .. tab:: Python
+      :tabid: python
+
+      `Complete Python Application <{+sample-app-url-qe-old+}/python/exp/reader/>`__
+
+   .. tab:: Java
+      :tabid: java
+
+      `Complete Java Application <{+sample-app-url-qe-old+}/java/exp/reader/>`__
+
+   .. tab:: Go
+      :tabid: go
+
+      `Complete Go Application <{+sample-app-url-qe-old+}/go/exp/reader/>`__
+
+   .. tab:: C#
+      :tabid: csharp
+
+      `Complete C# Application <{+sample-app-url-qe-old+}/dotnet/exp/reader/>`__
+
+
+.. tabs-selector:: drivers
 
 ## Procedure
 
+**procedure:** :style: normal
+
+   .. step:: Create a {+cmk-long+}
+
+      .. include:: /includes/queryable-encryption/tutorials/exp/cmk.rst
+
+      .. see:: Complete Code
+
+         .. tabs-drivers::
+
+            .. tab::
+               :tabid: nodejs
+
+               To view the complete code for making a {+cmk-long+}, see
+               `the {+qe+} sample application repository <{+sample-app-url-qe-old+}/node/exp/reader/make_data_key.js>`__.
+
+            .. tab::
+               :tabid: python
+
+               To view the complete code for making a {+cmk-long+}, see
+               `the {+qe+} sample application repository <{+sample-app-url-qe-old+}/python/exp/reader/make_data_key.py>`__.
+
+            .. tab::
+               :tabid: java-sync
+
+               To view the complete code for making a {+cmk-long+}, see
+               `the {+qe+} sample application repository <{+sample-app-url-qe-old+}/java/exp/reader/src/main/java/com/mongodb/qe/MakeDataKey.java>`__.
+
+            .. tab::
+               :tabid: go
+
+               To view the complete code for making a {+cmk-long+}, see
+               `the {+qe+} sample application repository <{+sample-app-url-qe-old+}/go/exp/reader/make-data-key.go>`__.
+
+            .. tab::
+               :tabid: csharp
+
+               To view the complete code for making a {+cmk-long+}, see
+               `the {+qe+} sample application repository <{+sample-app-url-qe-old+}/dotnet/exp/reader/QueryableEncryption/MakeDataKey.cs>`__.
+
+   .. step:: Create a Unique Index on your {+key-vault-long+}
+
+      .. include:: /includes/queryable-encryption/tutorials/exp/key-vault-index.rst
+
+   .. step:: Create your {+dek-long+}s and Encrypted Collection
+
+      .. include:: /includes/queryable-encryption/tutorials/exp/dek.rst
+
+      .. see:: Complete Code
+
+         .. tabs-drivers::
+
+            .. tab::
+               :tabid: nodejs
+
+               To view the complete code for making a {+dek-long+}, see
+               `the {+qe+} sample application repository <{+sample-app-url-qe-old+}/node/exp/reader/make_data_key.js>`__.
+
+            .. tab::
+               :tabid: python
+
+               To view the complete code for making a {+dek-long+}, see
+               `the {+qe+} sample application repository <{+sample-app-url-qe-old+}/python/exp/reader/make_data_key.py>`__.
+
+            .. tab::
+               :tabid: java-sync
+
+               To view the complete code for making a {+dek-long+}, see
+               `the {+qe+} sample application repository <{+sample-app-url-qe-old+}/java/exp/reader/src/main/java/com/mongodb/qe/MakeDataKey.java>`__.
+
+            .. tab::
+               :tabid: go
+
+               To view the complete code for making a {+dek-long+}, see
+               `the {+qe+} sample application repository <{+sample-app-url-qe-old+}/go/exp/reader/make-data-key.go>`__.
+
+            .. tab::
+               :tabid: csharp
+
+               To view the complete code for making a {+dek-long+}, see
+               `the {+qe+} sample application repository <{+sample-app-url-qe-old+}/dotnet/exp/reader/QueryableEncryption/MakeDataKey.cs>`__.
+
+
+   .. step:: Configure your MongoClient for Encrypted Reads and Writes
+
+      .. include:: /includes/queryable-encryption/tutorials/exp/client.rst
+
+   .. step:: Insert a Document with Encrypted Fields
+
+      .. include:: /includes/queryable-encryption/tutorials/exp/insert.rst
+
+      .. see:: Complete Code
+
+         .. tabs-drivers::
+
+            .. tab::
+               :tabid: nodejs
+
+               To view the complete code to insert a document encrypted with {+manual-enc+}, see
+               `the {+qe+} sample application repository <{+sample-app-url-qe-old+}/node/exp/reader/insert_encrypted_document.js>`__.
+
+            .. tab::
+               :tabid: python
+
+               To view the complete code to insert a document encrypted with {+manual-enc+}, see
+               `the {+qe+} sample application repository <{+sample-app-url-qe-old+}/python/exp/reader/insert_encrypted_document.py>`__.
+
+            .. tab::
+               :tabid: java-sync
+
+               To view the complete code to insert a document encrypted with {+manual-enc+}, see
+               `the {+qe+} sample application repository <{+sample-app-url-qe-old+}/java/exp/reader/src/main/java/com/mongodb/qe/InsertEncryptedDocument.java>`__.
+
+            .. tab::
+               :tabid: go
+
+               To view the complete code to insert a document encrypted with {+manual-enc+}, see
+               `the {+qe+} sample application repository <{+sample-app-url-qe-old+}/go/exp/reader/insert-encrypted-document.go>`__.
+
+            .. tab::
+               :tabid: csharp
+
+               To view the complete code to insert a document encrypted with {+manual-enc+}, see
+               `the {+qe+} sample application repository <{+sample-app-url-qe-old+}/dotnet/exp/reader/QueryableEncryption/InsertEncryptedDocument.cs>`__.
+
+
+   .. step:: Retrieve Your {+in-use-doc-title+}
+
+      .. include:: /includes/queryable-encryption/tutorials/exp/find.rst
+
+      .. see:: Complete Code
+
+         .. tabs-drivers::
+
+            .. tab::
+               :tabid: nodejs
+
+               To view the code to retrieve your {+in-use-doc+}, see
+               `the {+qe+} sample application repository <{+sample-app-url-qe-old+}/node/exp/reader/insert_encrypted_document.js>`__.
+
+            .. tab::
+               :tabid: python
+
+               To view the code to retrieve your {+in-use-doc+}, see
+               `the {+qe+} sample application repository <{+sample-app-url-qe-old+}/python/exp/reader/insert_encrypted_document.py>`__.
+
+            .. tab::
+               :tabid: java-sync
+
+               To view the code to retrieve your {+in-use-doc+}, see
+               `the {+qe+} sample application repository <{+sample-app-url-qe-old+}/java/exp/reader/src/main/java/com/mongodb/qe/InsertEncryptedDocument.java>`__.
+
+            .. tab::
+               :tabid: go
+
+               To view the code to retrieve your {+in-use-doc+}, see
+               `the {+qe+} sample application repository <{+sample-app-url-qe-old+}/go/exp/reader/insert-encrypted-document.go>`__.
+
+            .. tab::
+               :tabid: csharp
+
+               To view the code to retrieve your {+in-use-doc+}, see
+               `the {+qe+} sample application repository <{+sample-app-url-qe-old+}/dotnet/exp/reader/QueryableEncryption/InsertEncryptedDocument.cs>`__.
+
+
 ## Learn More
 
-To view a tutorial on using {+qe+} with a remote KMS, see `<qe-tutorial-automatic-encryption>`.
+To view a tutorial on using {+qe+} with a remote
+KMS, see :ref:`<qe-tutorial-automatic-encryption>`.
 
-To learn how {+qe+} works, see `<qe-fundamentals-manual-encryption>`.
+To learn how {+qe+} works, see
+:ref:`<qe-fundamentals-manual-encryption>`.
 
-To learn more about the topics mentioned in this guide, see the following links:
+To learn more about the topics mentioned in this guide, see the
+following links:
 
-- `<qe-reference-keys-key-vaults>`
-- `<qe-fundamentals-kms-providers>`
+- :ref:`<qe-reference-keys-key-vaults>`
+- :ref:`<qe-fundamentals-kms-providers>`

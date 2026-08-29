@@ -1,87 +1,128 @@
 ---
 type: "Framework Learn Page"
-framework: "mongodb"
+framework: "MongoDB"
 source_repo: "https://github.com/mongodb/docs.git"
 source_branch: "main"
 source_path: "content/manual/manual/source/reference/method/db.collection.getIndexes.txt"
-source_commit: "ab9db26ed3d11618cdb61516d8180337d8e3f679"
-source_commit_short: "ab9db26e"
-source_commit_date: "2026-07-24T16:22:46-06:00"
-generated_at: "2026-07-25T11:51:15Z"
+source_commit: "b9f2bc487a2878b65e3c1f80024bebab76954f27"
+source_commit_short: "b9f2bc48"
+source_commit_date: "2026-08-28T17:09:45-05:00"
+generated_at: "2026-08-29T09:39:19.944293Z"
 ---
-
-===========================================
-
 # db.collection.getIndexes() (mongosh method)
 
-.. include:: includes/wayfinding/mongosh-method-getIndexes.rst
+**meta:** :description: Retrieve a list of existing indexes on a MongoDB collection using the `db.collection.getIndexes()` method.
+
+.. default-domain:: mongodb
+
+**contents:** On this page
+   :local:
+   :backlinks: none
+   :depth: 1
+   :class: singlecol
+
+**include:** includes/wayfinding/mongosh-method-getIndexes.rst
 
 ## Definition
+
+**method:** db.collection.getIndexes()
+
+
+   .. |dbcommand| replace:: :dbcommand:`listIndexes` command
+
+
+   Returns an array that holds a list of documents that identify and
+   describe the existing indexes on the collection, including
+   :ref:`hidden indexes <index-type-hidden>` and indexes that are currently being built. 
+
+   You must call
+   :method:`db.collection.getIndexes()` on a collection. For example:
+
+   .. code-block:: javascript
+
+      db.collection.getIndexes()
+
+   Change ``collection`` to the name of the collection for which to
+   return index information.
 
 ## Compatibility
 
 This method is available in deployments hosted in the following environments:
 
-.. include:: /includes/fact-environments-atlas-only.rst
+**include:** /includes/fact-environments-atlas-only.rst
 
-.. include:: /includes/fact-environments-atlas-support-all.rst
+**include:** /includes/fact-environments-atlas-support-all.rst
 
-.. include:: /includes/fact-environments-onprem-only.rst
+**include:** /includes/fact-environments-onprem-only.rst
 
 ## Behavior
 
 ### {+fts+} Indexes
 
-`getIndexes()` does not return information on :atlas:`{+fts+} indexes </atlas-search/atlas-search-overview/#fts-indexes>`. For information on Atlas Search indexes, use :pipeline:`$listSearchIndexes`.
+``getIndexes()`` does not return information on :atlas:`{+fts+} indexes
+</atlas-search/atlas-search-overview/#fts-indexes>`. For information on Atlas 
+Search indexes, use :pipeline:`$listSearchIndexes`.
+
+.. |operation| replace:: :method:`db.collection.getIndexes()`
+.. |operations| replace:: :dbcommand:`listIndexes`
 
 ### Client Disconnection
 
-.. include:: /includes/extracts/4.2-changes-disconnect.rst
+**include:** /includes/extracts/4.2-changes-disconnect.rst
 
 ### Replica Set Member State Restriction
 
-.. include:: /includes/extracts/4.4-changes-repl-state-restrictions-operation.rst
+**include:** /includes/extracts/4.4-changes-repl-state-restrictions-operation.rst
 
 ### Wildcard Indexes
 
-.. include:: /includes/indexes/fact-wildcard-index-ordering.rst
+**include:** /includes/indexes/fact-wildcard-index-ordering.rst
 
 ## Required Access
 
-To run :method:`db.collection.getIndexes()` when access control is enforced, users must have privileges to :authaction:`listIndexes` on the collection.
+To run :method:`db.collection.getIndexes()` when access control is
+enforced, users must have privileges to :authaction:`listIndexes` on the
+collection. 
 
-The built-in role :authrole:`read` provides the required privileges to run :method:`db.collection.getIndexes()` for the collections in a database.
+The built-in role :authrole:`read` provides the required privileges to
+run :method:`db.collection.getIndexes()` for the collections in a
+database.
 
 ## Output
 
-:method:`db.collection.getIndexes()` returns an array of documents that hold index information for the collection. For example:
+:method:`db.collection.getIndexes()` returns an array of documents that
+hold index information for the collection. For example:
 
-```javascript
-[
-   {
-      "v" : 2,
-      "key" : {
-         "_id" : 1
-      },
-      "name" : "_id_"
-   },
-   {
-      "v" : 2,
-      "key" : {
-         "status" : 1
-      },
-      "name" : "status_1"
-   },
-   {
-      "v" : 2,
-      "key" : {
-         "points" : 1
-      },
-      "name" : "points_1"
-   }
-]
-```
+.. code-block:: javascript
+   :copyable: false
 
-Index information includes the keys and options used to create the index. The index option `hidden` is only available if the value is `true`.
+   [
+      {
+         "v" : 2,
+         "key" : {
+            "_id" : 1
+         },
+         "name" : "_id_"
+      },
+      {
+         "v" : 2,
+         "key" : {
+            "status" : 1
+         },
+         "name" : "status_1"
+      },
+      {
+         "v" : 2,
+         "key" : {
+            "points" : 1
+         },
+         "name" : "points_1"
+      }
+   ]
 
-For information on the keys and index options, see :method:`db.collection.createIndex()`.
+
+Index information includes the keys and options used to create the
+index. The index option ``hidden`` is only available if the value is ``true``.
+
+For information on the keys and index options, see
+:method:`db.collection.createIndex()`.

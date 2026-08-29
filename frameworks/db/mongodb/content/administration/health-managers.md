@@ -1,81 +1,111 @@
 ---
 type: "Framework Learn Page"
-framework: "mongodb"
+framework: "MongoDB"
 source_repo: "https://github.com/mongodb/docs.git"
 source_branch: "main"
 source_path: "content/manual/manual/source/administration/health-managers.txt"
-source_commit: "ab9db26ed3d11618cdb61516d8180337d8e3f679"
-source_commit_short: "ab9db26e"
-source_commit_date: "2026-07-24T16:22:46-06:00"
-generated_at: "2026-07-25T11:51:15Z"
+source_commit: "b9f2bc487a2878b65e3c1f80024bebab76954f27"
+source_commit_short: "b9f2bc48"
+source_commit_date: "2026-08-28T17:09:45-05:00"
+generated_at: "2026-08-29T09:39:19.768332Z"
 ---
+.. _health-managers-overview:
 
-.. include:: /includes/health-manager-short-names.rst
-
-==================================================================
+**include:** /includes/health-manager-short-names.rst
 
 # Configure Self-Managed Sharded Cluster Health with Health Managers
 
-This document describes how to use |HMS| to monitor and manage sharded cluster health issues.
+**meta:** :keywords: on-prem
+   :description: Configure Health Managers to monitor and manage sharded cluster health issues, including automatic mongos removal and progress monitoring.
+              
+.. default-domain:: mongodb
+
+**contents:** On this page
+   :local:
+   :backlinks: none
+   :depth: 1
+   :class: singlecol
+
+This document describes how to use |HMS| to monitor and manage sharded 
+cluster health issues.
 
 ## Overview
 
-A |HM| runs health checks on a `health manager facet` at a specified `intensity level <health-managers-intensity-levels>`. |HM| checks run at specified time intervals. A |HM| can be configured to move a failing `mongos <mongos>` out of a cluster automatically. `Progress Monitor <health-managers-progress-monitor>` ensures that |HM| checks do not become stuck or unresponsive.
+A |HM| runs health checks on a :term:`health manager facet`
+at a specified :ref:`intensity level 
+<health-managers-intensity-levels>`. |HM| checks
+run at specified time intervals. A |HM| can be configured to 
+move a failing :ref:`mongos <mongos>` out of a cluster automatically. 
+:ref:`Progress Monitor <health-managers-progress-monitor>` ensures 
+that |HM| checks do not become stuck or unresponsive.
+
+.. _health-managers-facets:
 
 ### Health Manager Facets
 
 The following table shows the available |HM| facets:
 
-.. include:: /includes/fact-health-manager-facets.rst
+**include:** /includes/fact-health-manager-facets.rst
+
+.. _health-managers-intensity-levels:
 
 ### Health Manager Intensity Levels
 
 The following table shows the available |HM| intensity levels:
 
-.. include:: /includes/fact-health-manager-intensities.rst
+**include:** /includes/fact-health-manager-intensities.rst
+
+.. _health-managers-active-fault:
 
 ## Active Fault Duration
 
-When a failure is detected and the |HM| intensity level is set to `critical`, the |HM| waits the amount of time specified by :parameter:`activeFaultDurationSecs` before stopping and moving the `mongos <mongos>` out of the cluster automatically.
+When a failure is detected and the |HM| intensity level
+is set to ``critical``, the |HM| waits the amount of time specified by 
+:parameter:`activeFaultDurationSecs` before stopping and moving the 
+:ref:`mongos <mongos>` out of the cluster automatically.
+
+.. _health-managers-progress-monitor:
 
 ## Progress Monitor
 
-.. include:: /includes/fact-progressMonitor.rst
+**include:** /includes/fact-progressMonitor.rst
 
-### `progressMonitor` Fields
+### ``progressMonitor`` Fields
 
-.. include:: /includes/fact-progress-monitor-fields.rst
+**include:** /includes/fact-progress-monitor-fields.rst
 
 ## Examples
 
-The following examples show how |HMS| can be configured. For information on |HM| parameters, see `Health Manager Parameters <health-manager-parameters>`.
+The following examples show how |HMS| can be configured. For
+information on |HM| parameters, see :ref:`Health Manager Parameters
+<health-manager-parameters>`.
 
 ### Intensity
 
-.. include:: /includes/example-healthMonitoringIntensities.rst
+**include:** /includes/example-healthMonitoringIntensities.rst
 
-.. include:: /includes/fact-healthMonitoringIntensities-values-array.rst
+**include:** /includes/fact-healthMonitoringIntensities-values-array.rst
 
 See :parameter:`healthMonitoringIntensities` for details.
 
 ### Intervals
 
-.. include:: /includes/example-healthMonitoringIntervals.rst
+**include:** /includes/example-healthMonitoringIntervals.rst
 
-.. include:: /includes/fact-healthMonitoringIntervals-values-array.rst
+**include:** /includes/fact-healthMonitoringIntervals-values-array.rst
 
 See :parameter:`healthMonitoringIntervals` for details.
 
 ### Active Fault Duration
 
-.. include:: /includes/example-activeFaultDurationSecs.rst
+**include:** /includes/example-activeFaultDurationSecs.rst
 
 See :parameter:`activeFaultDurationSecs` for details.
 
 ### Progress Monitor
 
-.. include:: /includes/fact-progressMonitor.rst
+**include:** /includes/fact-progressMonitor.rst
 
-.. include:: /includes/example-progress-monitor.rst
+**include:** /includes/example-progress-monitor.rst
 
 See :parameter:`progressMonitor` for details.

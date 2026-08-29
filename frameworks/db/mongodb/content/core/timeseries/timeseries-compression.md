@@ -1,30 +1,43 @@
 ---
 type: "Framework Learn Page"
-framework: "mongodb"
+framework: "MongoDB"
 source_repo: "https://github.com/mongodb/docs.git"
 source_branch: "main"
 source_path: "content/manual/manual/source/core/timeseries/timeseries-compression.txt"
-source_commit: "ab9db26ed3d11618cdb61516d8180337d8e3f679"
-source_commit_short: "ab9db26e"
-source_commit_date: "2026-07-24T16:22:46-06:00"
-generated_at: "2026-07-25T11:51:15Z"
+source_commit: "b9f2bc487a2878b65e3c1f80024bebab76954f27"
+source_commit_short: "b9f2bc48"
+source_commit_date: "2026-08-28T17:09:45-05:00"
+generated_at: "2026-08-29T09:39:19.796049Z"
 ---
-
-=======================
+.. _timeseries-compression:
 
 # Time Series Compression
 
-This page describes how MongoDB compresses data in time series collections, and how you can optimize compression.
+**meta:** :description: Discover how MongoDB uses zstd and column compression to optimize data storage in time series collections.
+
+.. default-domain:: mongodb
+
+**contents:** On this page
+   :local:
+   :backlinks: none
+   :depth: 1
+   :class: singlecol
+
+This page describes how MongoDB compresses data in time series
+collections, and how you can optimize compression.
 
 ## Default Compression Algorithm
 
-Time series collections use `zstd` compression, which differs from the global default compression algorithm, `snappy`.
+Time series collections use :term:`zstd` compression, which differs from
+the global default compression algorithm, :term:`snappy`.
 
 ## Column Compression
 
-.. include:: /includes/timeseries-compression-overview.rst
+**include:** /includes/timeseries-compression-overview.rst
 
-These enhancements further reduce size of data on disk when compressed with `zstd`, and also significantly reduce space used in the WiredTiger cache.
+These enhancements further reduce size of data on disk when compressed
+with ``zstd``, and also significantly reduce space used in the
+WiredTiger cache.
 
 The types of compression introduced are:
 
@@ -32,18 +45,29 @@ The types of compression introduced are:
 - Object compression
 - Array compression (starting in MongoDB 6.0)
 - Run Length encoding (RLE)
+
 ### Delta Encoding (Delta Compression)
 
-Delta Encoding takes advantage of the data in your time series collection having time-series characteristics. Instead of storing absolute values, Delta Encoding assumes that the measurements will not change rapidly between each other. This approach reduces the amount of information required by only storing the difference between measurements.
+Delta Encoding takes advantage of the data in your time series
+collection having time-series characteristics. Instead of storing
+absolute values, Delta Encoding assumes that the measurements will not
+change rapidly between each other. This approach reduces the amount of
+information required by only storing the difference between
+measurements.
 
 ### Delta of Delta Encoding (Delta of Delta Compression)
 
-With data that increases monotonically, Delta of Delta Encoding can further minimize the size of the number stored by calculating a delta of the delta itself.
+With data that increases monotonically, Delta of Delta Encoding can
+further minimize the size of the number stored by calculating a delta of
+the delta itself.
 
 ### Object and Array Compression
 
-Column compression ensures that if you are using objects and arrays in your documents, you receive the same compression benefits had those embedded fields existed at the root level of your document.
+Column compression ensures that if you are using objects and arrays in
+your documents, you receive the same compression benefits had those
+embedded fields existed at the root level of your document.
 
 ## Learn More
 
-To learn how to optimize compression, see `tsc-best-practice-optimize-compression`.
+To learn how to optimize compression, see
+:ref:`tsc-best-practice-optimize-compression`.

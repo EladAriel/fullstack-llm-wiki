@@ -1,57 +1,106 @@
 ---
 type: "Framework Learn Page"
-framework: "mongodb"
+framework: "MongoDB"
 source_repo: "https://github.com/mongodb/docs.git"
 source_branch: "main"
 source_path: "content/manual/manual/source/reference/command/cloneCollectionAsCapped.txt"
-source_commit: "ab9db26ed3d11618cdb61516d8180337d8e3f679"
-source_commit_short: "ab9db26e"
-source_commit_date: "2026-07-24T16:22:46-06:00"
-generated_at: "2026-07-25T11:51:15Z"
+source_commit: "b9f2bc487a2878b65e3c1f80024bebab76954f27"
+source_commit_short: "b9f2bc48"
+source_commit_date: "2026-08-28T17:09:45-05:00"
+generated_at: "2026-08-29T09:39:20.049771Z"
 ---
-
-==========================================
-
 # cloneCollectionAsCapped (database command)
+
+**meta:** :description: Create a new capped collection from an existing non-capped collection using the `cloneCollectionAsCapped` command, specifying the maximum size in bytes.
+
+.. default-domain:: mongodb
+
+**contents:** On this page
+   :local:
+   :backlinks: none
+   :depth: 1
+   :class: singlecol
 
 ## Definition
 
+**dbcommand:** cloneCollectionAsCapped
+
+   The :dbcommand:`cloneCollectionAsCapped` command creates a new
+   :term:`capped collection` from an existing, non-capped collection
+   within the same database. The operation does not affect the
+   original non-capped collection.
+
 ## Compatibility
 
-This command is available in deployments hosted in the following environments:
+This command is available in deployments hosted in the following environments: 
 
-.. include:: /includes/fact-environments-atlas-only.rst
+**include:** /includes/fact-environments-atlas-only.rst
 
-.. include:: /includes/fact-environments-atlas-support-no-free.rst
+**include:** /includes/fact-environments-atlas-support-no-free.rst
 
-.. include:: /includes/fact-environments-onprem-only.rst
+**include:** /includes/fact-environments-onprem-only.rst   
 
 ## Syntax
 
 The command has the following syntax:
 
-```javascript
-db.runCommand(
-  { 
-    cloneCollectionAsCapped: <existing collection>, 
-    toCollection: <capped collection>,
-    size: <capped size>,
-    writeConcern: <document>,
-    comment: <any>  
-  }
-)
-```
+.. code-block:: javascript
+
+  db.runCommand(
+     { 
+       cloneCollectionAsCapped: <existing collection>, 
+       toCollection: <capped collection>,
+       size: <capped size>,
+       writeConcern: <document>,
+       comment: <any>  
+     }
+  )
 
 ### Command Fields
 
 The command takes the following fields:
 
-The command copies an `existing collection` and creates a new `capped collection` with a maximum size specified by the `capped size` in bytes.
+.. list-table::
+   :header-rows: 1
+   :widths: 20 80
+ 
+   * - Field
+     - Description
+ 
+   * - cloneCollectionAsCapped
+     - The name of the existing collection to copy.
+ 
+   * - toCollection
+     - The name of the new capped collection to create.
+ 
+       The name of the new capped collection must be
+       distinct and cannot be the same as that of the original existing
+       collection.
+ 
+   * - size
+     - The maximum size,in bytes,  for the capped collection.
+ 
+   * - writeConcern
+ 
+     - Optional. A document expressing the :doc:`write concern
+       </reference/write-concern>` of the :dbcommand:`drop` command.
+       Omit to use the default write concern.
+ 
+   * - ``comment``
+   
+     - .. include:: /includes/extracts/comment-content.rst
 
-To replace the original non-capped collection with a capped collection, use the :dbcommand:`convertToCapped` command.
+The command copies an ``existing collection`` and creates a new
+``capped collection`` with a maximum size specified by the ``capped
+size`` in bytes.  
+
+To replace the original non-capped collection with a
+capped collection, use the :dbcommand:`convertToCapped` command.
 
 ## Behavior
 
-If the `capped size` is less than the size of the source collection, then not all documents in the source collection will exist in the destination capped collection.
+If the ``capped size`` is less than the size of the source collection,
+then not all documents in the source collection will exist in the destination
+capped collection.
 
-.. include:: /includes/fact-database-lock.rst
+**include:** /includes/fact-database-lock.rst

@@ -1,66 +1,92 @@
 ---
 type: "Framework Learn Page"
-framework: "mongodb"
+framework: "MongoDB"
 source_repo: "https://github.com/mongodb/docs.git"
 source_branch: "main"
 source_path: "content/manual/manual/source/tutorial/enforce-keyfile-access-control-in-existing-sharded-cluster.txt"
-source_commit: "ab9db26ed3d11618cdb61516d8180337d8e3f679"
-source_commit_short: "ab9db26e"
-source_commit_date: "2026-07-24T16:22:46-06:00"
-generated_at: "2026-07-25T11:51:15Z"
+source_commit: "b9f2bc487a2878b65e3c1f80024bebab76954f27"
+source_commit_short: "b9f2bc48"
+source_commit_date: "2026-08-28T17:09:45-05:00"
+generated_at: "2026-08-29T09:39:19.648313Z"
 ---
-
-=============================================================
-
 # Update Self-Managed Sharded Cluster to Keyfile Authentication
+
+.. default-domain:: mongodb
+
+**meta:** :keywords: on-prem
+   :description: Learn how to enforce keyfile authentication in a self-managed sharded cluster for internal security and access control.
+                    
+**contents:** On this page
+   :local:
+   :backlinks: none
+   :depth: 1
+   :class: singlecol
 
 ## Overview
 
-Enforcing access control on a `sharded cluster` requires configuring:
+Enforcing access control on a :term:`sharded cluster` requires configuring:
 
 - Security between components of the cluster using
-`Internal Authentication<replica-set-security>`.
+  :ref:`Internal Authentication<replica-set-security>`.
 
 - Security between connecting clients and the cluster using
-`/core/authorization`.
+  :doc:`/core/authorization`.
 
-For this tutorial, each member of the sharded cluster must use the same internal authentication mechanism and settings. This means enforcing internal authentication on each :binary:`~bin.mongos` and :binary:`~bin.mongod` in the cluster.
+For this tutorial, each member of the sharded cluster *must* use the same
+internal authentication mechanism and settings. This means enforcing internal
+authentication on each :binary:`~bin.mongos` and :binary:`~bin.mongod` in the cluster.
 
-The following tutorial uses a `keyfile <internal-auth-keyfile>` to enable internal authentication.
+The following tutorial uses a :ref:`keyfile <internal-auth-keyfile>` to
+enable internal authentication.
 
-Enforcing internal authentication also enforces user access control. To connect to the replica set, clients like :binary:`~bin.mongosh` need to use a `user account<authorization>`. See `security-shardClust-enforce-access-control`.
+Enforcing internal authentication also enforces user access control. To
+connect to the replica set, clients like :binary:`~bin.mongosh` need to
+use a :ref:`user account<authorization>`. See
+:ref:`security-shardClust-enforce-access-control`.
 
 ### CloudManager and OpsManager
 
-If Cloud Manager or Ops Manager is managing your deployment, internal authentication is automatically enforced.
+If Cloud Manager or Ops Manager is managing your deployment, internal
+authentication is automatically enforced.
 
-To configure Access Control on a managed deployment, see: `Configure Access Control for MongoDB Deployments` in the :mms-docs:`Cloud Manager manual </tutorial/edit-host-authentication-credentials>` or in the :opsmgr:`Ops Manager manual </tutorial/edit-host-authentication-credentials>`.
+To configure Access Control on a
+managed deployment, see: ``Configure Access Control for MongoDB Deployments``
+in the :mms-docs:`Cloud Manager manual
+</tutorial/edit-host-authentication-credentials>`
+or in the :opsmgr:`Ops Manager manual
+</tutorial/edit-host-authentication-credentials>`.
 
 ## Considerations
 
-.. include:: /includes/important-hostnames.rst
+**include:** /includes/important-hostnames.rst
 
 ### IP Binding
 
-.. include:: /includes/fact-default-bind-ip-change.rst
+**include:** /includes/fact-default-bind-ip-change.rst
 
 ### Operating System
 
-This tutorial primarily refers to the :binary:`~bin.mongod` process. Windows users should use the :binary:`mongod.exe` program instead.
+This tutorial primarily refers to the :binary:`~bin.mongod` process.
+Windows users should use the :binary:`mongod.exe` program instead.
 
 ### Keyfile Security
 
-Keyfiles are bare-minimum forms of security and are best suited for testing or development environments. For production environments we recommend using `X.509 certificates<security-auth-x509>`.
+Keyfiles are bare-minimum forms of security and are best suited for testing or
+development environments. For production environments we recommend using
+:ref:`X.509 certificates<security-auth-x509>`.
+
+.. _security-shardClust-enforce-access-control:
 
 ### Access Control
 
-.. include:: /includes/internal-authentication-tutorials-access-control-consideration.rst
+**include:** /includes/internal-authentication-tutorials-access-control-consideration.rst
 
 ### Users
 
-.. include:: /includes/sharded-clusters-users.rst
+**include:** /includes/sharded-clusters-users.rst
 
-See the `/core/security-users` security documentation for more information.
+See the :doc:`/core/security-users` security documentation for more
+information.
 
 ### Downtime
 
@@ -68,21 +94,27 @@ Upgrading a sharded cluster to enforce access control requires downtime.
 
 ## Before You Begin
 
-.. include:: /includes/dSO-role-intro.rst
+**include:** /includes/dSO-role-intro.rst
 
-.. include:: /includes/dSO-warning.rst
+**include:** /includes/dSO-warning.rst
 
 ## Procedures
 
+.. _security-update-existing-sharded-deployment-with-auth:
+
 ### Enforce Keyfile Internal Authentication on Existing Sharded Cluster Deployment
 
-.. include:: /includes/steps/enable-authentication-in-sharded-cluster.rst
+**include:** /includes/steps/enable-authentication-in-sharded-cluster.rst
+
 
 ## X.509 Internal Authentication
 
-For details on using X.509 for internal authentication, see `/tutorial/configure-x509-member-authentication`.
+For details on using X.509 for internal authentication, see
+:doc:`/tutorial/configure-x509-member-authentication`.
 
-To upgrade from keyfile internal authentication to X.509 internal authentication, see `/tutorial/upgrade-keyfile-to-x509`.
+To upgrade from keyfile internal authentication to X.509 internal
+authentication, see
+:doc:`/tutorial/upgrade-keyfile-to-x509`.
 
-> **Seealso:** - `/core/sharded-cluster-components`
-- `/core/sharded-cluster-requirements`
+**seealso:** - :doc:`/core/sharded-cluster-components`
+   - :doc:`/core/sharded-cluster-requirements`

@@ -4,10 +4,10 @@ framework: "Arize Phoenix"
 source_repo: "https://github.com/Arize-ai/phoenix.git"
 source_branch: "main"
 source_path: "docs/phoenix/sdk-api-reference/python/arize-phoenix-otel.mdx"
-source_commit: "69b3ab92c37ff65812feaa2dbf0b1c0ad5ae55fe"
-source_commit_short: "69b3ab9"
-source_commit_date: "2026-07-25T11:48:12-06:00"
-generated_at: "2026-07-25T19:08:24.946479Z"
+source_commit: "c48e50e9906fcc56c1c103ebd93ef3c95ed6b6e7"
+source_commit_short: "c48e50e"
+source_commit_date: "2026-08-29T01:45:20-06:00"
+generated_at: "2026-08-29T09:39:58.808712Z"
 ---
 ---
 title: "arize-phoenix-otel"
@@ -26,6 +26,10 @@ pip install "arize-phoenix-otel>=0.16.0"
 
 <Note>
 Starting in **0.16.0**, `phoenix.otel` re-exports the OpenInference context managers and semantic conventions, so manual instrumentation no longer requires separately installing `openinference-instrumentation` or `openinference-semantic-conventions`. On older versions, import them from `openinference.instrumentation` and `openinference.semconv.trace` instead.
+</Note>
+
+<Note>
+`arize-phoenix-otel` is versioned independently of the Phoenix server; the two are not coupled. Any recent SDK version works with any Phoenix server version — there is no version pairing to track. See [Version compatibility](/docs/phoenix/tracing/concepts-tracing/otel-openinference/phoenix-otel-helpers#version-compatibility).
 </Note>
 
 ## Quick Start

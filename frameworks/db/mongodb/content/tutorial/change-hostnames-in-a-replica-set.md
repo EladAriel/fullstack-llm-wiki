@@ -1,308 +1,389 @@
 ---
 type: "Framework Learn Page"
-framework: "mongodb"
+framework: "MongoDB"
 source_repo: "https://github.com/mongodb/docs.git"
 source_branch: "main"
 source_path: "content/manual/manual/source/tutorial/change-hostnames-in-a-replica-set.txt"
-source_commit: "ab9db26ed3d11618cdb61516d8180337d8e3f679"
-source_commit_short: "ab9db26e"
-source_commit_date: "2026-07-24T16:22:46-06:00"
-generated_at: "2026-07-25T11:51:15Z"
+source_commit: "b9f2bc487a2878b65e3c1f80024bebab76954f27"
+source_commit_short: "b9f2bc48"
+source_commit_date: "2026-08-28T17:09:45-05:00"
+generated_at: "2026-08-29T09:39:19.636109Z"
 ---
-
-==============================================
-
 # Change Hostnames in a Self-Managed Replica Set
 
-For most `replica sets <replica set>`, the hostnames in the :rsconf:`members[n].host` field never change. However, if the organization's needs change, you might need to migrate some or all host names.
+**meta:** :keywords: on-prem
+   :description: Change hostnames in a self-managed replica set using DNS hostnames to avoid IP address changes and ensure availability or perform a complete hostname update.
 
-> **Note:** set configuration to avoid confusion and complexity.
+.. default-domain:: mongodb
 
-.. include:: /includes/important-hostnames.rst
+**contents:** On this page
+   :local:
+   :backlinks: none
+   :depth: 1
+   :class: singlecol
+
+For most :term:`replica sets <replica set>`, the hostnames in the 
+:rsconf:`members[n].host` field never change. However, if the
+organization's needs change, you might need to migrate some or all host names.
+
+**note:** Always use resolvable hostnames for the value of the
+   :rsconf:`members[n].host` field in the replica
+   set configuration to avoid confusion and complexity.
+
+**include:** /includes/important-hostnames.rst
 
 ## Overview
 
-This document provides two separate procedures for changing the hostnames in the :rsconf:`members[n].host` field. Use either of the following approaches:
+This document provides two separate procedures for changing the
+hostnames in the :rsconf:`members[n].host`
+field. Use either of the following approaches:
 
 - :ref:`Change hostnames without disrupting availability
-<replica-set-change-hostname-no-downtime>`. This approach ensures your applications will always be able to read and write data to the replica set, but the approach can take a long time and may incur downtime at the application layer.
+  <replica-set-change-hostname-no-downtime>`. This approach ensures your
+  applications will always be able to read and write data to the replica
+  set, but the approach can take a long time and may incur downtime at
+  the application layer.
 
-If you use the first procedure, you must configure your applications to connect to the replica set at both the old and new locations, which often requires a restart and reconfiguration at the application layer and which may affect the availability of your applications. Re-configuring applications is beyond the scope of this document.
+  If you use the first procedure, you must configure your applications
+  to connect to the replica set at both the old and new locations, which
+  often requires a restart and reconfiguration at the application layer
+  and which may affect the availability of your applications.
+  Re-configuring applications is beyond the scope of this document.
 
 - :ref:`Stop all members running on the old hostnames at once
-<replica-set-change-hostname-downtime>`. This approach has a shorter maintenance window, but the replica set will be unavailable during the operation.
+  <replica-set-change-hostname-downtime>`. This approach has a shorter
+  maintenance window, but the replica set will be unavailable during
+  the operation.
 
-> **Seealso:** - :ref:`Replica Set Reconfiguration Process
-  <replica-set-reconfiguration-usage>`
-- `/tutorial/deploy-replica-set`
-- `/tutorial/expand-replica-set`
+**seealso:** - :ref:`Replica Set Reconfiguration Process
+     <replica-set-reconfiguration-usage>`
+   - :doc:`/tutorial/deploy-replica-set`
+   - :doc:`/tutorial/expand-replica-set`
+
+.. _procedure-assumption-change-hostnames-replica-set:
 
 ## Assumptions
 
-Given a `replica set` with three members:
+Given a :term:`replica set` with three members:
 
-- `database0.example.com:27017` (the `primary`)
-- `database1.example.com:27017`
-- `database2.example.com:27017`
+- ``database0.example.com:27017`` (the :term:`primary`)
+
+- ``database1.example.com:27017``
+
+- ``database2.example.com:27017``
+
 And with the following :method:`rs.conf()` output:
 
-```javascript
-{
-    "_id" : "rs",
-    "version" : 3,
-    "members" : [
-        {
-            "_id" : 0,
-            "host" : "database0.example.com:27017"
-        },
-        {
-            "_id" : 1,
-            "host" : "database1.example.com:27017"
-        },
-        {
-            "_id" : 2,
-            "host" : "database2.example.com:27017"
-        }
-    ]
-}
-```
+.. code-block:: javascript
+
+   {
+       "_id" : "rs",
+       "version" : 3,
+       "members" : [
+           {
+               "_id" : 0,
+               "host" : "database0.example.com:27017"
+           },
+           {
+               "_id" : 1,
+               "host" : "database1.example.com:27017"
+           },
+           {
+               "_id" : 2,
+               "host" : "database2.example.com:27017"
+           }
+       ]
+   }
 
 The following procedures change the members' hostnames as follows:
 
-- `mongodb0.example.net:27017` (the primary)
-- `mongodb1.example.net:27017`
-- `mongodb2.example.net:27017`
+- ``mongodb0.example.net:27017`` (the primary)
+
+- ``mongodb1.example.net:27017``
+
+- ``mongodb2.example.net:27017``
+
 Use the most appropriate procedure for your deployment.
+
+.. _replica-set-change-hostname-no-downtime:
 
 ## Change Hostnames while Maintaining Replica Set Availability
 
-This procedure uses the above `assumptions <procedure-assumption-change-hostnames-replica-set>`.
+This procedure uses the above :ref:`assumptions <procedure-assumption-change-hostnames-replica-set>`.
 
-#. For each `secondary` in the replica set, perform the following sequence of operations:
+#. For each :term:`secondary` in the replica set, perform the
+   following sequence of operations:
 
-a. Stop the secondary.
+   a. Stop the secondary.
 
-#. Restart the secondary at the new location.
+   #. Restart the secondary at the new location.
 
-#. Connect :binary:`~bin.mongosh` to the replica set's primary. In our example, the primary runs on port `27017` so you would issue the following command:
+   #. Connect :binary:`~bin.mongosh` to the replica set's primary. In
+      our example, the primary runs on port ``27017`` so you would
+      issue the following command:
 
-```bash
-      mongosh --port 27017
+      .. code-block:: bash
 
-#. Use :method:`rs.reconfig()` to update the :doc:`replica set
-   configuration document </reference/replica-configuration>` with
-   the new hostname.
+         mongosh --port 27017
 
-   For example, the following sequence of commands updates the
-   hostname for the secondary at the array index ``1`` of the
-   ``members`` array (i.e. ``members[1]``) in the replica set
-   configuration document:
+   #. Use :method:`rs.reconfig()` to update the :doc:`replica set
+      configuration document </reference/replica-configuration>` with
+      the new hostname.
+
+      For example, the following sequence of commands updates the
+      hostname for the secondary at the array index ``1`` of the
+      ``members`` array (i.e. ``members[1]``) in the replica set
+      configuration document:
+
+      .. code-block:: javascript
+
+         cfg = rs.conf()
+         cfg.members[1].host = "mongodb1.example.net:27017"
+         rs.reconfig(cfg)
+
+      For more information on updating the configuration document, see
+      :ref:`replica-set-reconfiguration-usage`.
+
+   #. Make sure your client applications are able to access the
+      set at the new location and that the secondary has a chance to
+      catch up with the other members of the set.
+
+      Repeat the above steps for each non-primary member of the set.
+
+#. Connect :binary:`~bin.mongosh` to the primary and step down the
+   primary using the :method:`rs.stepDown()` method:
+
+   .. code-block:: javascript
+
+      rs.stepDown()
+
+   The replica set elects another member to the become primary.
+
+#. When the step down succeeds, shut down the old primary.
+
+#. Start the :binary:`~bin.mongod` instance that will become the new primary
+   in the new location.
+
+#. Connect to the current primary, which was just elected, and update
+   the :doc:`replica set configuration document
+   </reference/replica-configuration>` with the hostname of the node that
+   is to become the new primary.
+
+   For example, if the old primary was at position ``0`` and the new
+   primary's hostname is ``mongodb0.example.net:27017``, you would run:
 
    .. code-block:: javascript
 
       cfg = rs.conf()
-      cfg.members[1].host = "mongodb1.example.net:27017"
+      cfg.members[0].host = "mongodb0.example.net:27017"
       rs.reconfig(cfg)
-
-   For more information on updating the configuration document, see
-   :ref:`replica-set-reconfiguration-usage`.
-
-#. Make sure your client applications are able to access the
-   set at the new location and that the secondary has a chance to
-   catch up with the other members of the set.
-
-   Repeat the above steps for each non-primary member of the set.
-```
-
-#. Connect :binary:`~bin.mongosh` to the primary and step down the primary using the :method:`rs.stepDown()` method:
-
-```javascript
-   rs.stepDown()
-
-The replica set elects another member to the become primary.
-```
-
-#. When the step down succeeds, shut down the old primary.
-
-#. Start the :binary:`~bin.mongod` instance that will become the new primary in the new location.
-
-#. Connect to the current primary, which was just elected, and update the `replica set configuration document </reference/replica-configuration>` with the hostname of the node that is to become the new primary.
-
-For example, if the old primary was at position `0` and the new primary's hostname is `mongodb0.example.net:27017`, you would run:
-
-```javascript
-   cfg = rs.conf()
-   cfg.members[0].host = "mongodb0.example.net:27017"
-   rs.reconfig(cfg)
-```
 
 #. Connect :binary:`~bin.mongosh` to the new primary.
 
-#. To confirm the new configuration, call :method:`rs.conf()` in :binary:`~bin.mongosh`.
+#. To confirm the new configuration, call :method:`rs.conf()` in
+   :binary:`~bin.mongosh`.
 
-Your output should resemble:
+   Your output should resemble:
 
-```javascript
-   {
-       "_id" : "rs",
-       "version" : 4,
-       "members" : [
-           {
-               "_id" : 0,
-               "host" : "mongodb0.example.net:27017"
-           },
-           {
-               "_id" : 1,
-               "host" : "mongodb1.example.net:27017"
-           },
-           {
-               "_id" : 2,
-               "host" : "mongodb2.example.net:27017"
-           }
-       ]
-   }
-```
+   .. code-block:: javascript
+
+      {
+          "_id" : "rs",
+          "version" : 4,
+          "members" : [
+              {
+                  "_id" : 0,
+                  "host" : "mongodb0.example.net:27017"
+              },
+              {
+                  "_id" : 1,
+                  "host" : "mongodb1.example.net:27017"
+              },
+              {
+                  "_id" : 2,
+                  "host" : "mongodb2.example.net:27017"
+              }
+          ]
+      }
+
+.. _replica-set-change-hostname-downtime:
 
 ## Change All Hostnames at the Same Time
 
-This procedure uses the above `assumptions  <procedure-assumption-change-hostnames-replica-set>`.
+This procedure uses the above :ref:`assumptions  <procedure-assumption-change-hostnames-replica-set>`.
+
+.. _repl-set-change-hostname-prereq:
 
 ### Prerequisites
 
-The following procedure reads and updates the `system.replset` collection in the `local` database.
+The following procedure reads and updates the ``system.replset``
+collection in the ``local`` database.
 
-If your deployment enforces `access control </core/authorization>`, the user performing the procedure must have :authaction:`find` and :authaction:`update` privilege actions on the `system.replset` collection.
+If your deployment enforces :doc:`access control
+</core/authorization>`, the user performing the procedure must have
+:authaction:`find` and :authaction:`update` privilege actions on the
+``system.replset`` collection.
 
 To create a role that provides the necessary privileges:
 
-#. Log in as a user with privileges to manage users and roles, such as a user with :authrole:`userAdminAnyDatabase` role. The following procedure uses the `myUserAdmin` created in `/tutorial/enable-authentication`.
+#. Log in as a user with privileges to manage users and roles, such as
+   a user with :authrole:`userAdminAnyDatabase` role. The following
+   procedure uses the ``myUserAdmin`` created in
+   :doc:`/tutorial/enable-authentication`.
 
-```javascript
-    mongosh --port 27017 -u myUserAdmin --authenticationDatabase 'admin' -p 
-```
+   .. code-block:: javascript
 
-#. Create a user role that provides the necessary privileges on the `system.replset` collection in the `local` database:
+       mongosh --port 27017 -u myUserAdmin --authenticationDatabase 'admin' -p 
 
-```javascript
-   db.adminCommand( { 
-      createRole: "systemreplsetRole",
-      privileges: [
-         { resource: { db: "local", collection: "system.replset" }, actions: ["find","update"] } 
-      ],
-      roles: []
-   } );
-```
+#. Create a user role that provides the necessary privileges on the
+   ``system.replset`` collection in the ``local`` database:
 
-#. Grant the role to the user who will be performing the rename procedure. For example, the following assumes an existing user `"userPerformingRename"` in the `admin` database.
+   .. code-block:: javascript
 
-```javascript
-   use admin
-   db.grantRolesToUser( "userPerformingRename", [ { role: "systemreplsetRole", db: "admin" } ] ); 
-```
+      db.adminCommand( { 
+         createRole: "systemreplsetRole",
+         privileges: [
+            { resource: { db: "local", collection: "system.replset" }, actions: ["find","update"] } 
+         ],
+         roles: []
+      } );
+
+#. Grant the role to the user who will be performing the rename
+   procedure. For example, the following assumes an existing user
+   ``"userPerformingRename"`` in the ``admin`` database.
+
+   .. code-block:: javascript
+
+      use admin
+      db.grantRolesToUser( "userPerformingRename", [ { role: "systemreplsetRole", db: "admin" } ] ); 
 
 ### Procedure
 
-#. Stop all members in the `replica set`.
+#. Stop all members in the :term:`replica set`.
 
-#. Restart each member on a different port and without using the :option:`--replSet <mongod --replSet>` run-time option. Changing the port number during maintenance prevents clients from connecting to this host while you perform maintenance. Use the member's usual :option:`--dbpath <mongod --dbpath>`, which in this example is `/data/db1`. Use a command that resembles the following:
+#. Restart each member *on a different port* and *without* using the
+   :option:`--replSet <mongod --replSet>` run-time option. Changing
+   the port number during maintenance prevents clients from connecting
+   to this host while you perform maintenance. Use the member's usual
+   :option:`--dbpath <mongod --dbpath>`, which in this
+   example is ``/data/db1``. Use a command that resembles the following:
 
-.. include:: /includes/warning-bind-ip-security-considerations.rst
-
-#. For each member of the replica set, perform the following sequence of operations:
-
-a. Connect :binary:`~bin.mongosh` to the :binary:`~bin.mongod` running on the new, temporary port. For example, for a member running on a temporary port of `37017`, you would issue this command:
-
-```bash
-      mongosh --port 37017
-
-   If running with access control, connect as a user with
-   appropriate privileges. See
-   :ref:`repl-set-change-hostname-prereq`.
+   .. include:: /includes/warning-bind-ip-security-considerations.rst
 
    .. code-block:: bash
 
-      mongosh --port 37017 -u userPerformingRename --authenticationDatabase=admin  -p
+      mongod --dbpath /data/db1/ --port 37017 --bind_ip localhost,<hostname(s)|ip address(es)>
 
-#. Edit the replica set configuration manually. The replica set
-   configuration is the only document in the ``system.replset``
-   collection in the ``local`` database. 
+   .. include:: /includes/important-hostnames.rst
+      
+#. For each member of the replica set, perform the following sequence
+   of operations:
 
-   |
+   a. Connect :binary:`~bin.mongosh` to the :binary:`~bin.mongod`
+      running on the new, temporary port. For example, for a member
+      running on a temporary port of ``37017``, you would issue this
+      command:
 
-   To change the hostnames, edit the replica set configuration to
-   provide the new hostnames and ports for all members of the
-   replica set.
+      .. code-block:: bash
 
-   #. Switch to the ``local`` database.
+         mongosh --port 37017
 
-      .. code-block:: javascript
+      If running with access control, connect as a user with
+      appropriate privileges. See
+      :ref:`repl-set-change-hostname-prereq`.
 
-         use local
+      .. code-block:: bash
 
-   #. Create a JavaScript variable for the configuration document.
-      Modify the value of the ``_id`` field to match your replica
-      set.
+         mongosh --port 37017 -u userPerformingRename --authenticationDatabase=admin  -p
 
-      .. code-block:: javascript
+   #. Edit the replica set configuration manually. The replica set
+      configuration is the only document in the ``system.replset``
+      collection in the ``local`` database. 
 
-         cfg = db.system.replset.findOne( { "_id": "rs0" } )
+      |
 
-   #. Provide new hostnames and ports for each member of the replica
-      set. Modify the hostnames and ports to match your replica set.
+      To change the hostnames, edit the replica set configuration to
+      provide the new hostnames and ports for all members of the
+      replica set.
 
-      .. code-block:: javascript
+      #. Switch to the ``local`` database.
 
-         cfg.members[0].host = "mongodb0.example.net:27017"
-         cfg.members[1].host = "mongodb1.example.net:27017"
-         cfg.members[2].host = "mongodb2.example.net:27017"
+         .. code-block:: javascript
 
-   #. Update the hostnames and ports in the ``system.replset``
-      collection:
+            use local
 
-      .. code-block:: javascript
+      #. Create a JavaScript variable for the configuration document.
+         Modify the value of the ``_id`` field to match your replica
+         set.
 
-         db.system.replset.updateOne( { "_id": "rs0" }, { $set: cfg } )
+         .. code-block:: javascript
 
-   #. Verify the changes:
+            cfg = db.system.replset.findOne( { "_id": "rs0" } )
 
-      .. code-block:: javascript
+      #. Provide new hostnames and ports for each member of the replica
+         set. Modify the hostnames and ports to match your replica set.
 
-         db.system.replset.find( {}, { "members.host": 1 } )
+         .. code-block:: javascript
 
-#. Stop the :binary:`~bin.mongod` process on the member.
-```
+            cfg.members[0].host = "mongodb0.example.net:27017"
+            cfg.members[1].host = "mongodb1.example.net:27017"
+            cfg.members[2].host = "mongodb2.example.net:27017"
 
-#. After re-configuring all members of the set, start each :binary:`~bin.mongod` instance in the normal way: use the usual port number and use the :option:`--replSet <mongod --replSet>` option. For example:
+      #. Update the hostnames and ports in the ``system.replset``
+         collection:
 
-.. include:: /includes/warning-bind-ip-security-considerations.rst
+         .. code-block:: javascript
 
-#. Connect to one of the :binary:`~bin.mongod` instances using :binary:`~bin.mongosh`. For example:
+            db.system.replset.updateOne( { "_id": "rs0" }, { $set: cfg } )
 
-```bash
-   mongosh --port 27017
-```
+      #. Verify the changes:
 
-#. To confirm the new configuration, call :method:`rs.conf()` in :binary:`~bin.mongosh`.
+         .. code-block:: javascript
 
-Your output should resemble:
+            db.system.replset.find( {}, { "members.host": 1 } )
 
-```javascript
-   {
-       "_id" : "rs0",
-       "version" : 4,
-       "members" : [
-           {
-               "_id" : 0,
-               "host" : "mongodb0.example.net:27017"
-           },
-           {
-               "_id" : 1,
-               "host" : "mongodb1.example.net:27017"
-           },
-           {
-               "_id" : 2,
-               "host" : "mongodb2.example.net:27017"
-           }
-       ]
-   }
-```
+   #. Stop the :binary:`~bin.mongod` process on the member.
+
+#. After re-configuring all members of the set, start each
+   :binary:`~bin.mongod` instance in the normal way: use the usual port
+   number and use the :option:`--replSet <mongod --replSet>` option. For
+   example:
+
+   .. include:: /includes/warning-bind-ip-security-considerations.rst
+
+   .. code-block:: bash
+
+      mongod --dbpath /data/db1/ --port 27017 --replSet rs0 --bind_ip localhost,<hostname(s)|ip address(es)>
+
+#. Connect to one of the :binary:`~bin.mongod` instances
+   using :binary:`~bin.mongosh`. For example:
+
+   .. code-block:: bash
+
+      mongosh --port 27017
+
+#. To confirm the new configuration, call :method:`rs.conf()` in
+   :binary:`~bin.mongosh`.
+
+   Your output should resemble:
+
+   .. code-block:: javascript
+
+      {
+          "_id" : "rs0",
+          "version" : 4,
+          "members" : [
+              {
+                  "_id" : 0,
+                  "host" : "mongodb0.example.net:27017"
+              },
+              {
+                  "_id" : 1,
+                  "host" : "mongodb1.example.net:27017"
+              },
+              {
+                  "_id" : 2,
+                  "host" : "mongodb2.example.net:27017"
+              }
+          ]
+      }

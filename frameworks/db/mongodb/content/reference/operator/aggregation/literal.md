@@ -1,81 +1,131 @@
 ---
 type: "Framework Learn Page"
-framework: "mongodb"
+framework: "MongoDB"
 source_repo: "https://github.com/mongodb/docs.git"
 source_branch: "main"
 source_path: "content/manual/manual/source/reference/operator/aggregation/literal.txt"
-source_commit: "ab9db26ed3d11618cdb61516d8180337d8e3f679"
-source_commit_short: "ab9db26e"
-source_commit_date: "2026-07-24T16:22:46-06:00"
-generated_at: "2026-07-25T11:51:15Z"
+source_commit: "b9f2bc487a2878b65e3c1f80024bebab76954f27"
+source_commit_short: "b9f2bc48"
+source_commit_date: "2026-08-28T17:09:45-05:00"
+generated_at: "2026-08-29T09:39:20.169726Z"
 ---
-
-==============================
-
 # $literal (expression operator)
+
+**meta:** :description: Use `$literal` in MongoDB aggregation to return values without parsing, treating expressions as constants.
+
+.. default-domain:: mongodb
+
+**contents:** On this page
+   :local:
+   :backlinks: none
+   :depth: 1
+   :class: singlecol
 
 ## Definition
 
+**expression:** $literal
+
+   Returns a value without parsing. Use for values that the aggregation
+   pipeline may interpret as an expression.
+
+   The :expression:`$literal` expression has the following syntax:
+
+   .. code-block:: none
+
+      { $literal: <value> }
+
 ## Behavior
 
-If the `<value>` is an `expression <aggregation-expressions>`, :expression:`$literal` does not evaluate the expression but instead returns the unparsed expression.
+If the ``<value>`` is an :ref:`expression <aggregation-expressions>`,
+:expression:`$literal` does not evaluate the expression but instead
+returns the unparsed expression.
+
+.. list-table::
+   :header-rows: 1
+   :widths: 60 40
+
+   * - Example
+
+     - Result
+
+   * - ``{ $literal: { $add: [ 2, 3 ] } }``
+
+     -  ``{ "$add" : [ 2, 3 ] }``
+
+   * - ``{ $literal:  { $literal: 1 } }``
+
+     -  ``{ "$literal" : 1 }``
 
 ## Examples
 
-### Treat `$` as a Literal
+### Treat ``$`` as a Literal
 
-In `expression <aggregation-expressions>`, the dollar sign `$` evaluates to a field path; i.e. provides access to the field. For example, the :expression:`$eq` expression `$eq: [ "$price", "$1" ]` performs an equality check between the value in the field named `price` and the value in the field named `1` in the document.
+In :ref:`expression <aggregation-expressions>`,
+the dollar sign ``$`` evaluates to a field path; i.e. provides access
+to the field. For example, the :expression:`$eq` expression ``$eq: [
+"$price", "$1" ]`` performs an equality check between the value in the
+field named ``price`` and the value in the field named ``1`` in the
+document.
 
-The following example uses a :expression:`$literal` expression to treat a string that contains a dollar sign `"$1"` as a constant value.
+The following example uses a :expression:`$literal` expression to treat
+a string that contains a dollar sign ``"$1"`` as a constant value.
 
-A `storeInventory` collection has the following documents:
+A ``storeInventory`` collection has the following documents:
 
-```javascript
-db.storeInventory.insertMany( [
-   { "_id" : 1, "item" : "napkins", price: "$2.50" },
-   { "_id" : 2, "item" : "coffee", price: "1" },
-   { "_id" : 3, "item" : "soap", price: "$1" }
-] )
-```
+.. code-block:: javascript
 
-```javascript
-db.storeInventory.aggregate( [
-   { $project: { costsOneDollar: { $eq: [ "$price", { $literal: "$1" } ] } } }
-] )
-```
+   db.storeInventory.insertMany( [
+      { "_id" : 1, "item" : "napkins", price: "$2.50" },
+      { "_id" : 2, "item" : "coffee", price: "1" },
+      { "_id" : 3, "item" : "soap", price: "$1" }
+   ] )
 
-This operation projects a field named `costsOneDollar` that holds a boolean value, indicating whether the value of the `price` field is equal to the string `"$1"`:
 
-```javascript
-{ "_id" : 1, "costsOneDollar" : false }
-{ "_id" : 2, "costsOneDollar" : false }
-{ "_id" : 3, "costsOneDollar" : true }
-```
+.. code-block:: javascript
 
-### Project a New Field with Value `1`
+   db.storeInventory.aggregate( [
+      { $project: { costsOneDollar: { $eq: [ "$price", { $literal: "$1" } ] } } }
+   ] )
 
-The :pipeline:`$project` stage uses the expression `<field>: 1` to include the `<field>` in the output. The following example uses the :expression:`$literal` to return a new field set to the value of `1`.
+This operation projects a field named ``costsOneDollar`` that holds a
+boolean value, indicating whether the value of the ``price`` field is
+equal to the string ``"$1"``:
 
-A `books` collection has the following documents:
+.. code-block:: javascript
+   :copyable: false
 
-```javascript
-db.books.insertMany([
-   { "_id" : 1, "title" : "Dracula", "condition": "new" },
-   { "_id" : 2, "title" : "The Little Prince", "condition": "new" }
-])
-```
+   { "_id" : 1, "costsOneDollar" : false }
+   { "_id" : 2, "costsOneDollar" : false }
+   { "_id" : 3, "costsOneDollar" : true }
 
-The :expression:`{ $literal: 1 } <$literal>` expression returns a new `editionNumber` field set to the value `1`:
+### Project a New Field with Value ``1``
 
-```javascript
-db.books.aggregate( [
-   { $project: { "title": 1, "editionNumber": { $literal: 1 } } }
-] )
-```
+The :pipeline:`$project` stage uses the expression ``<field>: 1`` to
+include the ``<field>`` in the output. The following example uses the
+:expression:`$literal` to return a new field set to the value of ``1``.
+
+A ``books`` collection has the following documents:
+
+.. code-block:: javascript
+
+   db.books.insertMany([
+      { "_id" : 1, "title" : "Dracula", "condition": "new" },
+      { "_id" : 2, "title" : "The Little Prince", "condition": "new" }
+   ])
+
+The :expression:`{ $literal: 1 } <$literal>` expression returns a new
+``editionNumber`` field set to the value ``1``:
+
+.. code-block:: javascript
+
+   db.books.aggregate( [
+      { $project: { "title": 1, "editionNumber": { $literal: 1 } } }
+   ] )
 
 The operation results in the following documents:
 
-```javascript
-{ "_id" : 1, "title" : "Dracula", "editionNumber" : 1 }
-{ "_id" : 2, "title" : "The Little Prince", "editionNumber" : 1 }
-```
+.. code-block:: javascript
+   :copyable: false
+
+   { "_id" : 1, "title" : "Dracula", "editionNumber" : 1 }
+   { "_id" : 2, "title" : "The Little Prince", "editionNumber" : 1 }

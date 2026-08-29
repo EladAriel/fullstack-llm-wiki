@@ -1,59 +1,170 @@
 ---
 type: "Framework Learn Page"
-framework: "mongodb"
+framework: "MongoDB"
 source_repo: "https://github.com/mongodb/docs.git"
 source_branch: "main"
 source_path: "content/manual/manual/source/administration/connection-pool-overview.txt"
-source_commit: "ab9db26ed3d11618cdb61516d8180337d8e3f679"
-source_commit_short: "ab9db26e"
-source_commit_date: "2026-07-24T16:22:46-06:00"
-generated_at: "2026-07-25T11:51:15Z"
+source_commit: "b9f2bc487a2878b65e3c1f80024bebab76954f27"
+source_commit_short: "b9f2bc48"
+source_commit_date: "2026-08-28T17:09:45-05:00"
+generated_at: "2026-08-29T09:39:19.763687Z"
 ---
-
-========================
+.. _connection-pool-overview:
 
 # Connection Pool Overview
 
-This document describes how to use a connection pool to manage connections between applications and MongoDB instances.
+**meta:** :description: Manage connections between applications and MongoDB instances using a connection pool to reduce latency and optimize resource usage for your application.
+
+**facet:** :name: genre
+   :values: reference
+
+.. default-domain:: mongodb
+
+**contents:** On this page
+   :local:
+   :backlinks: none
+   :depth: 1
+   :class: singlecol
+
+This document describes how to use a connection pool to manage 
+connections between applications and MongoDB instances. 
 
 ## What is a Connection Pool?
 
 ### Definition
 
-A connection pool is a cache of open, ready-to-use database connections maintained by the :driver:`driver </>`. Your application can get connections from the pool, perform operations, and return connections to the pool. Connection pools are thread-safe.
+A connection pool is a cache of open, ready-to-use database connections
+maintained by the :driver:`driver </>`. Your application can get
+connections from the pool, perform operations, and return connections
+to the pool. Connection pools are thread-safe.
 
 ### Benefits of a Connection Pool
 
-A connection pool reduces application latency and the number of new connections created. The pool creates connections at startup, and connections return to the pool automatically — applications do not need to return them manually. Some connections are active and some are available. If your application requests a connection and one is available in the pool, a new connection does not need to be created.
+A connection pool reduces application latency and the number of new
+connections created. The pool creates connections at startup, and
+connections return to the pool automatically — applications do not
+need to return them manually. Some connections are active and some
+are available. If your application requests a connection and one is
+available in the pool, a new connection does not need to be created.
 
 ## Create and Use a Connection Pool
 
-### Use an Instance of Your Driver's `MongoClient` Object
+### Use an Instance of Your Driver's ``MongoClient`` Object
 
-Most :driver:`drivers </>` provide an object of type `MongoClient`.
+Most :driver:`drivers </>` provide an object of type ``MongoClient``.
 
-Use one `MongoClient` instance per application unless the application is connecting to many separate clusters. Each `MongoClient` instance manages its own connection pool to the MongoDB cluster or node specified when the `MongoClient` is created. `MongoClient` objects are thread-safe in most drivers.
+Use one ``MongoClient`` instance per application unless the
+application is connecting to many separate clusters. Each 
+``MongoClient`` instance manages its own connection pool to the 
+MongoDB cluster or node specified when the ``MongoClient`` is created.
+``MongoClient`` objects are thread-safe in most drivers.
 
-> **Note:** Store your `MongoClient` instance in a place that is globally
-available to your application.
+**note:** Store your ``MongoClient`` instance in a place that is globally
+   available to your application.
 
 ### Authentication
 
-To use a connection pool with LDAP, see `LDAP Connection Pool Behavior <ldap-connection-pool-behavior>`.
+To use a connection pool with LDAP, see
+:ref:`LDAP Connection Pool Behavior <ldap-connection-pool-behavior>`.
 
 ## Sharded Cluster Connection Pooling
 
-:binary:`~bin.mongos` routers have connection pools for each node in the cluster. The availability of connections to individual nodes within a sharded cluster affects latency. Operations must wait for a connection to be established.
+:binary:`~bin.mongos` routers have connection pools for each node in the 
+cluster. The availability of connections to individual nodes within a 
+sharded cluster affects latency. Operations must wait for a connection
+to be established.
+
+.. _connection-pool-settings:
 
 ## Connection Pool Configuration Settings
 
 You can specify connection pool settings in these locations:
 
-- The `MongoDB URI <mongodb-uri>`
-- Your application's `MongoClient` instance
+- The :ref:`MongoDB URI <mongodb-uri>`
+
+- Your application's ``MongoClient`` instance
+
 - Your application framework's configuration files
+
 ### Settings
 
-## Contents
+.. list-table::
+   :widths: 25,75                                                          
+   :header-rows: 1
 
-- Tuning </tutorial/connection-pool-performance-tuning>
+   * - Setting
+     - Description
+     
+   * - :urioption:`connectTimeoutMS`
+
+     - Most drivers default to never time out. Some versions of the 
+       Java drivers (for example, version 3.7) default to ``10``. 
+       
+       *Default:* ``0`` for most drivers. See your :driver:`driver </>` 
+       documentation.
+   
+   * - :urioption:`maxConnecting`
+   
+     - Maximum number of connections a pool may be establishing
+       concurrently.
+
+       ``maxConnecting`` is supported for all drivers **except** the
+       :driver:`Rust Driver </rust/current/>`.
+
+       .. include:: /includes/connection-pool/max-connecting-use-case.rst
+
+       *Default:* ``2``
+   
+   * - :urioption:`maxIdleTimeMS`
+   
+     - The maximum number of milliseconds that a connection can 
+       remain idle in the pool before being removed and closed.
+
+       *Default:* See your :driver:`driver </>` documentation.
+   
+   * - :urioption:`maxPoolSize`
+
+     - .. _maxpoolsize-cp-setting:
+       
+       Maximum number of connections opened in the pool. When the 
+       connection pool reaches the maximum number of connections, new 
+       connections wait up to the value of
+       :urioption:`waitQueueTimeoutMS`.
+
+       *Default:* ``100`` 
+
+   * - :urioption:`minPoolSize`
+
+     - .. _minpoolsize-cp-setting:
+       
+       Minimum number of connections opened in the pool. 
+       The value of :urioption:`minPoolSize` must be less than 
+       the value of :urioption:`maxPoolSize`.
+
+       *Default*: ``0``
+
+   * - :urioption:`socketTimeoutMS`
+
+     - Number of milliseconds to wait before timeout on a TCP 
+       connection.
+       
+       Do *not* use :urioption:`socketTimeoutMS` as a mechanism for 
+       preventing long-running server operations.
+
+       Setting low socket timeouts may result in operations that error 
+       before the server responds.
+       
+       *Default*: ``0``, which means no timeout.
+
+   * - :urioption:`waitQueueTimeoutMS`
+
+     - Maximum wait time in milliseconds that a thread can wait for 
+       a connection to become available. A value of ``0`` means there
+       is no limit. 
+
+       *Default*: ``0``
+
+**toctree:** :titlesonly:
+   :hidden:
+
+   Tuning </tutorial/connection-pool-performance-tuning>

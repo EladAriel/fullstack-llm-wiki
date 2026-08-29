@@ -1,49 +1,107 @@
 ---
 type: "Framework Learn Page"
-framework: "mongodb"
+framework: "MongoDB"
 source_repo: "https://github.com/mongodb/docs.git"
 source_branch: "main"
 source_path: "content/manual/manual/source/reference/cluster-parameters/changeStreamOptions.txt"
-source_commit: "ab9db26ed3d11618cdb61516d8180337d8e3f679"
-source_commit_short: "ab9db26e"
-source_commit_date: "2026-07-24T16:22:46-06:00"
-generated_at: "2026-07-25T11:51:15Z"
+source_commit: "b9f2bc487a2878b65e3c1f80024bebab76954f27"
+source_commit_short: "b9f2bc48"
+source_commit_date: "2026-08-28T17:09:45-05:00"
+generated_at: "2026-08-29T09:39:19.881876Z"
 ---
-
-===================
+.. _changeStreamOptions:
 
 # changeStreamOptions
 
+**meta:** :keywords: on-prem
+
+.. default-domain:: mongodb
+
+**contents:** On this page
+   :local:
+   :backlinks: none
+   :depth: 2
+   :class: singlecol
+
+.. |both| replace:: Available for both :binary:`~bin.mongod` and :binary:`~bin.mongos`.
+
 ## Definition
+
+**parameter:** changeStreamOptions
+   
+   .. versionadded:: 6.0
+      
+   |both|
+   
+   .. include:: /includes/fact-changeStreamOptions.rst
 
 ## Syntax
 
-To set `changeStreamOptions` for your deployment, run the following command on the `admin` database:
+To set ``changeStreamOptions`` for your deployment, run the following command on 
+the ``admin`` database:
 
-```javascript
-db.adminCommand( { setClusterParameter: { changeStreamOptions: <value> } } )
-```
+.. code-block:: javascript
 
-To view current values for the `changeStreamOptions` cluster parameter, run the following command on the `admin` database:
+   db.adminCommand( { setClusterParameter: { changeStreamOptions: <value> } } )
 
-```javascript
-db.adminCommand( { getClusterParameter: "changeStreamOptions" } )
-```
+To view current values for the ``changeStreamOptions`` cluster parameter, run 
+the following command on the ``admin`` database: 
+
+.. code-block:: javascript
+
+   db.adminCommand( { getClusterParameter: "changeStreamOptions" } )
 
 ## Parameter Fields
 
+**parameter:** changeStreamOptions.preAndPostImages.expireAfterSeconds
+   
+   .. versionadded:: 6.0
+
+   *Default*: off
+   
+   Controls the retention policy of change stream pre- and post-images.
+   Pre- and post-images are the versions of a document before and after 
+   document modification respectively. ``expireAfterSeconds`` 
+   controls how long MongoDB retains pre- and post-images. 
+
+   When ``expireAfterSeconds`` is ``off``, MongoDB uses the default retention 
+   policy: pre- and post-images are retained until the corresponding change 
+   stream events are removed from the :term:`oplog`.  
+
+   To set the minimum pre- and post-image retention time, specify an integer 
+   value for ``expireAfterSeconds``.
+
+   .. important:: 
+
+      Services that use change streams, including 
+      :appservices:`Triggers </triggers/database-triggers>` and 
+      :appservices:`Device Sync </sync>`, might rely on the availability of 
+      pre-image data. If you set ``expireAfterSeconds`` too low, you may 
+      increase the risk of interrupting sync or triggers processing.
+      
+      When setting ``expireAfterSeconds`` for pre-images, ensure that you: 
+      
+      - Specify a value that isn't lower than the typical change stream lag for 
+        the service.
+        
+      - Add buffer time to allow the service to resume manually before risking 
+        oplog data loss.
+
 ## Behavior
 
-If a change stream event is removed from the oplog, then the corresponding pre- and post-images are also deleted regardless of the retention time specified with :parameter:`changeStreamOptions.preAndPostImages.expireAfterSeconds`.
-
+If a change stream event is removed from the oplog, then the corresponding pre- 
+and post-images are also deleted regardless of the retention time specified with 
+:parameter:`changeStreamOptions.preAndPostImages.expireAfterSeconds`.
+   
 ## Example
 
-The following example sets the retention time for pre- and post-images in change streams to `100` seconds:
+The following example sets the retention time for pre- and post-images in change 
+streams to ``100`` seconds:
 
-```javascript
-db.runCommand( {
-   setClusterParameter: {
-      changeStreamOptions: { preAndPostImages: { expireAfterSeconds: 100 } }
-   }
-} )
-```
+.. code-block:: javascript
+   
+   db.runCommand( {
+      setClusterParameter: {
+         changeStreamOptions: { preAndPostImages: { expireAfterSeconds: 100 } }
+      }
+   } )

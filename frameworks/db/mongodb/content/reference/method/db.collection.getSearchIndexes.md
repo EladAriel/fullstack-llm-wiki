@@ -1,91 +1,143 @@
 ---
 type: "Framework Learn Page"
-framework: "mongodb"
+framework: "MongoDB"
 source_repo: "https://github.com/mongodb/docs.git"
 source_branch: "main"
 source_path: "content/manual/manual/source/reference/method/db.collection.getSearchIndexes.txt"
-source_commit: "ab9db26ed3d11618cdb61516d8180337d8e3f679"
-source_commit_short: "ab9db26e"
-source_commit_date: "2026-07-24T16:22:46-06:00"
-generated_at: "2026-07-25T11:51:15Z"
+source_commit: "b9f2bc487a2878b65e3c1f80024bebab76954f27"
+source_commit_short: "b9f2bc48"
+source_commit_date: "2026-08-28T17:09:45-05:00"
+generated_at: "2026-08-29T09:39:19.887527Z"
 ---
-
-=================================================
-
 # db.collection.getSearchIndexes() (mongosh method)
+
+**meta:** :description: Retrieve information about existing {+fts+} indexes on a specified collection using `db.collection.getSearchIndexes()`.
+
+.. default-domain:: mongodb
+
+**contents:** On this page
+   :local:
+   :backlinks: none
+   :depth: 2
+   :class: singlecol
 
 ## Definition
 
-.. versionadded:: 7.0 (Also available starting in 6.0.7)
+**method:** db.collection.getSearchIndexes()
 
-.. include:: /includes/atlas-search-commands/command-descriptions/getSearchIndexes-description.rst
+**versionadded:** 7.0 (*Also available starting in 6.0.7*)
 
-.. include:: /includes/fact-mongosh-shell-method.rst
+.. |fts-indexes| replace:: :atlas:`{+fts+} indexes </atlas-search/atlas-search-overview/#fts-indexes>` or :atlas:`{+avs+} indexes </atlas-vector-search/vector-search-overview/>` 
+
+**include:** /includes/atlas-search-commands/command-descriptions/getSearchIndexes-description.rst
+
+**include:** /includes/fact-mongosh-shell-method.rst
 
 ## Compatibility
 
-This method is available in deployments hosted in the following environments:
+This method is available in deployments hosted in the following environments: 
 
-.. include:: /includes/fact-environments-atlas-only.rst
+**include:** /includes/fact-environments-atlas-only.rst
+
+
 
 ## Syntax
 
 Command syntax:
 
-```javascript
-db.<collection>.getSearchIndexes(<indexName>)
-```
+.. code-block:: javascript
+
+   db.<collection>.getSearchIndexes(<indexName>)
 
 ## Command Fields
 
-`getSearchIndexes()` takes this field:
+``getSearchIndexes()`` takes this field:
+
+.. list-table::
+  :header-rows: 1
+  :widths: 20 20 20 80
+
+  * - Field
+    - Type
+    - Necessity
+    - Description
+
+  * - ``indexName``
+    - string
+    - Optional
+    - Name of the index to return information about. If you omit the
+      ``indexName`` field, ``getSearchIndexes()`` returns information
+      about all {+fts+} indexes on the collection.
 
 ## Access Control
 
-.. include:: /includes/atlas-search-commands/access-control/list-access-control.rst
+.. |method-name| replace:: ``getSearchIndexes()``
+
+**include:** /includes/atlas-search-commands/access-control/list-access-control.rst
 
 ## Output
 
-.. include:: /includes/atlas-search-commands/command-output/listSearchIndex-output.rst
+.. |status-link| replace:: :ref:`search-index-status`
+
+.. |index-details-link| replace:: :ref:`search-index-details`
+
+.. |synonym-detail-link| replace:: :ref:`search-mapping-details`
+
+**include:** /includes/atlas-search-commands/command-output/listSearchIndex-output.rst
+
+.. _search-index-details:
 
 ### Index Status Details
 
-.. include:: /includes/atlas-search-commands/command-output/search-index-details.rst
+**include:** /includes/atlas-search-commands/command-output/search-index-details.rst
+
+.. _search-mapping-details:
 
 ### Synonym Mapping Details
 
-.. include:: /includes/atlas-search-commands/command-output/search-index-synonym-details.rst
+**include:** /includes/atlas-search-commands/command-output/search-index-synonym-details.rst
+
+.. _search-index-status:
 
 ### {+fts+} Index Statuses
 
-.. include:: /includes/atlas-search-commands/command-output/search-index-statuses.rst
+**include:** /includes/atlas-search-commands/command-output/search-index-statuses.rst
 
 ## Examples
 
 These examples demonstrate how to:
 
-- `getSearchIndexes-return-all`
-- `getSearchIndexes-return-one`
+- :ref:`getSearchIndexes-return-all`
+
+- :ref:`getSearchIndexes-return-one`
+
+.. _getSearchIndexes-return-all:
+
 ### Return All Search Indexes
 
-The following example returns all {+fts+} indexes on the `movies` collection. The `movies` collection contains two search indexes: `default` and `synonym_mappings`.
+The following example returns all {+fts+} indexes on the ``movies``
+collection. The ``movies`` collection contains two search indexes:
+``default`` and ``synonym_mappings``.
 
-```javascript
-db.movies.getSearchIndexes()
-```
+.. code-block:: javascript
+   
+   db.movies.getSearchIndexes()
 
 Sample output:
 
-.. include:: /includes/atlas-search-commands/command-output/examples/multi-doc-example-output.rst
+**include:** /includes/atlas-search-commands/command-output/examples/multi-doc-example-output.rst
+
+.. _getSearchIndexes-return-one:
 
 ### Return a Single Search Index
 
-The following example returns the `synonym_mappings` index on the `movies` collection:
+The following example returns the ``synonym_mappings`` index on the
+``movies`` collection:
 
-```javascript
-db.movies.getSearchIndexes("synonym_mappings")
-```
+.. code-block:: javascript
+   
+   db.movies.getSearchIndexes("synonym_mappings")
 
 Sample output:
 
-.. include:: /includes/atlas-search-commands/command-output/examples/single-doc-synonyms-example-output.rst
+**include:** /includes/atlas-search-commands/command-output/examples/single-doc-synonyms-example-output.rst

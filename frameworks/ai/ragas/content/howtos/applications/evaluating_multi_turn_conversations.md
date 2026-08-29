@@ -5,11 +5,10 @@ source_repo: "https://github.com/vibrantlabsai/ragas"
 source_branch: "main"
 source_path: "docs/howtos/applications/evaluating_multi_turn_conversations.md"
 source_commit: "298b68274234c060deacab3cf5fb52aa3a20e885"
-source_commit_short: "298b6827"
+source_commit_short: "298b682"
 source_commit_date: "2026-02-24T13:17:18+05:30"
-generated_at: "2026-06-23T13:55:50Z"
+generated_at: "2026-08-29T09:38:15.975981Z"
 ---
-
 # Evaluating Multi-Turn Conversations
 
 This tutorial is inspired by Hamel’s notes on evaluating multi-turn conversations for LLM-based applications. The goal is to create a simple and actionable evaluation framework using Ragas metrics that clearly defines what makes a conversation successful. By the end of this tutorial, you will be able to perform multi-turn evaluations based on insights gathered from the error analysis of your AI application.

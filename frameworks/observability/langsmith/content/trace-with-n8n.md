@@ -4,10 +4,10 @@ framework: "LangSmith"
 source_repo: "https://github.com/langchain-ai/docs.git"
 source_branch: "main"
 source_path: "src/langsmith/trace-with-n8n.mdx"
-source_commit: "2aae1dfc98ee953a9a5185fb6fcdd9efb3f4d878"
-source_commit_short: "2aae1df"
-source_commit_date: "2026-07-25T00:27:23+00:00"
-generated_at: "2026-07-25T19:08:33.378711Z"
+source_commit: "a174f9cf7c91ee5eb14ee2382eb48bfe6e4956e9"
+source_commit_short: "a174f9c"
+source_commit_date: "2026-08-28T17:04:12-07:00"
+generated_at: "2026-08-29T09:39:50.602457Z"
 ---
 # Trace With N8N
 
@@ -33,13 +33,13 @@ LangSmith tracing is available for **self-hosted n8n instances** only.
 1. Set the following environment variables in the environment where you host your n8n instance, in the same way as the rest of your [n8n configuration](https://docs.n8n.io/hosting/configuration/configuration-methods/).
 
    Required environment variables:
-   - `LANGCHAIN_TRACING_V2` — Set to `true` to enable tracing.
-   - `LANGCHAIN_API_KEY` — Your LangSmith API key.
+   - `LANGCHAIN_TRACING_V2`: Set to `true` to enable tracing.
+   - `LANGCHAIN_API_KEY`: Your LangSmith API key.
 
    Optional environment variables:
-   - `LANGCHAIN_ENDPOINT` — LangSmith API endpoint. Defaults to `https://api.smith.langchain.com`. Set this if using self-hosted LangSmith, GCP EU (`https://eu.api.smith.langchain.com`), GCP APAC (`https://apac.api.smith.langchain.com`), or AWS US (`https://aws.api.smith.langchain.com`).
-   - `LANGCHAIN_PROJECT` — Project name for traces. Defaults to `"default"`.
-   - `LANGCHAIN_CALLBACKS_BACKGROUND` — Set to `true` for asynchronous trace upload (default), or `false` for synchronous uploads. (default: `true`)
+   - `LANGCHAIN_ENDPOINT`: LangSmith API endpoint. Defaults to `https://api.smith.langchain.com`. Set this if using self-hosted LangSmith, GCP EU (`https://eu.api.smith.langchain.com`), GCP APAC (`https://apac.api.smith.langchain.com`), or AWS US (`https://aws.api.smith.langchain.com`).
+   - `LANGCHAIN_PROJECT`: Project name for traces. Defaults to `"default"`.
+   - `LANGCHAIN_CALLBACKS_BACKGROUND`: Set to `true` for asynchronous trace upload (default), or `false` for synchronous uploads. (default: `true`)
 
 1. Restart your n8n instance for the environment variables to take effect.
 

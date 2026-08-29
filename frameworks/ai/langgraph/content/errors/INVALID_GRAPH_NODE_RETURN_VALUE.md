@@ -4,18 +4,19 @@ framework: "LangGraph"
 source_repo: "https://github.com/langchain-ai/docs"
 source_branch: "main"
 source_path: "src/oss/langgraph/errors/INVALID_GRAPH_NODE_RETURN_VALUE.mdx"
-source_commit: "2aae1dfc98ee953a9a5185fb6fcdd9efb3f4d878"
-source_commit_short: "2aae1dfc"
-source_commit_date: "2026-07-25T00:27:23Z"
-generated_at: "2026-07-25T11:51:08Z"
+source_commit: "a174f9cf7c91ee5eb14ee2382eb48bfe6e4956e9"
+source_commit_short: "a174f9c"
+source_commit_date: "2026-08-28T17:04:12-07:00"
+generated_at: "2026-08-29T09:38:45.967175Z"
 ---
+# Invalid_Graph_Node_Return_Value
 
 ---
 title: INVALID_GRAPH_NODE_RETURN_VALUE
 ---
 
 :::python
-A LangGraph [`StateGraph`](https://langchain-ai.github.io/langgraph/reference/graphs/#langgraph.graph.state.StateGraph)
+A LangGraph @[`StateGraph`]
 received a non-dict return type from a node. Here's an example:
 
 ```python
@@ -48,7 +49,7 @@ Nodes in your graph must return a dict containing one or more keys defined in yo
 :::
 
 :::js
-A LangGraph [`StateGraph`](https://langchain-ai.github.io/langgraph/reference/graphs/#langgraph.graph.state.StateGraph)
+A LangGraph @[`StateGraph`]
 received a non-object return type from a node. Here's an example:
 
 ```typescript

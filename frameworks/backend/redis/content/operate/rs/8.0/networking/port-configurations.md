@@ -1,14 +1,15 @@
 ---
 type: "Framework Learn Page"
-framework: "redis"
+framework: "Redis"
 source_repo: "https://github.com/redis/docs.git"
 source_branch: "main"
 source_path: "content/operate/rs/8.0/networking/port-configurations.md"
-source_commit: "9d30f68c3dad1a6b3b7d30fe604b911348ce8152"
-source_commit_short: "9d30f68c"
-source_commit_date: "2026-07-24T10:52:10-07:00"
-generated_at: "2026-07-25T11:51:22Z"
+source_commit: "f8693349287b0efbef3c865b6f6a2aceca88594d"
+source_commit_short: "f869334"
+source_commit_date: "2026-08-28T10:01:19-05:00"
+generated_at: "2026-08-29T09:38:55.621788Z"
 ---
+# Port Configurations
 
 ---
 Title: Network port configurations
@@ -57,11 +58,15 @@ Redis Software's port usage falls into three general categories:
 | TCP | 8002, 8004, 8006 | <span title="Configurable">&#x2705; Yes</span> | Internal | Default system health monitoring (envoy admin, envoy management server, gossip envoy admin)|
 | TCP | 8444, 9080 | <span title="Not configurable">&#x274c; No</span> | Internal | Traffic between web proxy and cnm_http/cm |
 
+{{< note >}}
+The cluster uses ports 20000-29999 for internal shard traffic. You can't change the range, but `reserved_ports` excludes specific ports or port ranges from shard assignment.
+{{< /note >}}
+
 ## Change port configuration
 
 ### Reserve ports
 
-Redis Software reserves some ports by default (`system_reserved_ports`). To reserve other ports or port ranges and prevent the cluster from assigning them to database endpoints, configure `reserved_ports` using one of the following methods:
+Redis Software reserves some ports by default (`system_reserved_ports`). To reserve other ports or port ranges and prevent the cluster from assigning them to database endpoints or internal shard traffic, configure `reserved_ports` using one of the following methods:
 
 - [rladmin cluster config]({{< relref "/operate/rs/8.0/references/cli-utilities/rladmin/cluster/config" >}})
 
@@ -72,7 +77,7 @@ Redis Software reserves some ports by default (`system_reserved_ports`). To rese
     For example:
 
     ```sh
-    rladmin cluster config reserved_ports 11000 13000-13010
+    rladmin cluster config reserved_ports 11000 13000-13010 20048
     ```
 
 - [Update cluster settings]({{< relref "/operate/rs/8.0/references/rest-api/requests/cluster#put-cluster" >}}) REST API request
@@ -86,7 +91,7 @@ Redis Software reserves some ports by default (`system_reserved_ports`). To rese
 
     ```sh
     PUT /v1/cluster
-    { "reserved_ports": ["11000", "13000-13010"] }
+    { "reserved_ports": ["11000", "13000-13010", "20048"] }
     ```
 
 ### Change the Cluster Manager UI port

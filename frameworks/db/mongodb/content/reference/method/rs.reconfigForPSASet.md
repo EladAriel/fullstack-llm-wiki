@@ -1,154 +1,157 @@
 ---
 type: "Framework Learn Page"
-framework: "mongodb"
+framework: "MongoDB"
 source_repo: "https://github.com/mongodb/docs.git"
 source_branch: "main"
 source_path: "content/manual/manual/source/reference/method/rs.reconfigForPSASet.txt"
-source_commit: "ab9db26ed3d11618cdb61516d8180337d8e3f679"
-source_commit_short: "ab9db26e"
-source_commit_date: "2026-07-24T16:22:46-06:00"
-generated_at: "2026-07-25T11:51:15Z"
+source_commit: "b9f2bc487a2878b65e3c1f80024bebab76954f27"
+source_commit_short: "b9f2bc48"
+source_commit_date: "2026-08-28T17:09:45-05:00"
+generated_at: "2026-08-29T09:39:19.993584Z"
 ---
-
-=======================================
-
 # rs.reconfigForPSASet() (mongosh method)
 
+**meta:** :description: Safely reconfigure a replica set to a primary-secondary-arbiter architecture using `rs.reconfigForPSASet()`.
+
+.. default-domain:: mongodb
+
+**contents:** On this page
+   :local:
+   :backlinks: none
+   :depth: 1
+   :class: singlecol
+
 ## Definition
+
+**method:** rs.reconfigForPSASet( memberIndex, config, { options } )
+
+   .. versionadded:: 5.0
+
+   Safely perform some reconfiguration changes on a
+   primary-secondary-arbiter (PSA) replica set or on a replica set that
+   is changing to a PSA architecture. You should only use this method in
+   one of the following cases:
+
+   - You want to reconfigure a secondary in an existing three-member
+     replica set with a PSA architecture to become a voting,
+     data-bearing node with a non-zero :rsconf:`priority
+     <members[n].priority>`.
+   - You want to add a new voting, data-bearing node with a non-zero
+     priority to an existing two-member replica set that contains one
+     voting, data-bearing node and one arbiter.
+
+   .. warning::
+
+      If the secondary you are adding is lagged and the resulting
+      replica set is a PSA configuration, the first configuration change
+      will change the number of nodes that need to commit a change with
+      :writeconcern:`"majority"`. In this case, your commit point will
+      lag until the secondary has caught up.
+
+   For details about the behavior of this method, see
+   :ref:`reconfigForPSASet-behavior`.
 
 ## Compatibility
 
 This method is available in deployments hosted in the following environments:
 
-.. include:: /includes/fact-environments-onprem-only.rst
+**include:** /includes/fact-environments-onprem-only.rst
 
 ## Syntax
 
 The :method:`rs.reconfigForPSASet()` method has the following syntax:
 
-```bash
-rs.reconfigForPSASet(
-  memberIndex: <num>,
-  config: <configuration>,
-  {
-    "force" : <boolean>,
-    "maxTimeMS" : <int>
-  }
-)
-```
+.. code-block:: bash
+
+   rs.reconfigForPSASet(
+     memberIndex: <num>,
+     config: <configuration>,
+     {
+       "force" : <boolean>,
+       "maxTimeMS" : <int>
+     }
+   )
+
+.. list-table::
+   :header-rows: 1
+   :widths: 20 20 80
+
+   * - Parameter
+
+     - Type
+
+     - Description
+
+   * - ``memberIndex``
+
+     - integer
+
+     - The index of the secondary that is being added or modified.
+
+   * - ``config``
+
+     - document
+
+     - A :ref:`document <replica-set-configuration-settings>` that
+       specifies the new configuration of a replica set.
+
+   * - ``force``
+
+     - boolean
+
+     - *Optional*
+
+       :red:`WARNING:` Running the :method:`rs.reconfigForPSASet()`
+       method with ``force: true`` is not recommended and can lead to
+       committed writes being rolled back.
+
+       Specify ``true`` to force the available replica set members to
+       accept the new configuration. Defaults to ``false``.
+
+       Force reconfiguration can result in unexpected or undesired
+       behavior, including :ref:`rollback <replica-set-rollbacks>` of
+       :writeconcern:`"majority"` committed writes.
+
+   * - ``maxTimeMS``
+
+     - integer
+
+     - *Optional*
+
+       Specifies a cumulative time limit in milliseconds
+       for processing each reconfiguration during the
+       :method:`rs.reconfigForPSASet()` operation. By default,
+       :method:`rs.reconfigForPSASet()` waits indefinitely for the
+       replica configurations to propagate to a majority of replica
+       set members.
+
+.. _reconfigForPSASet-behavior:
 
 ## Behavior
 
-The :method:`rs.reconfigForPSASet()` method reconfigures your replica set in two steps:
+The :method:`rs.reconfigForPSASet()` method reconfigures your replica
+set in two steps:
 
 1. The method reconfigures your replica set to add or modify a secondary
-with  `{ votes: 1, priority: 0 }`.
-
+   with  ``{ votes: 1, priority: 0 }``.
 2. Once the added or modified secondary has caught up with all committed
-writes, the method reconfigures the secondary to have the :rsconf:`priority <members[n].priority>` specified in the :method:`rs.reconfigForPSASet()` command (`{ votes: 1, priority: <num> }`).
+   writes, the method reconfigures the secondary to have the
+   :rsconf:`priority <members[n].priority>` specified in the
+   :method:`rs.reconfigForPSASet()` command
+   (``{ votes: 1, priority: <num> }``).
 
-The two-step approach avoids the possibility of rolling back committed writes in the case of a failover to the new secondary before the new secondary has all committed writes from the previous configuration.
+The two-step approach avoids the possibility of rolling back committed
+writes in the case of a failover to the new secondary before the new
+secondary has all committed writes from the previous configuration.
+
+.. _reconfigForPSASet-usage:
 
 ## Example
 
-A replica set named `rs0` has the following configuration:
+A replica set named ``rs0`` has the following configuration:
 
-```javascript
-{
-   "_id" : "rs0",
-   "version" : 1,
-   "term": 1,
-   "members" : [
-      {
-         "_id" : 0,
-         "host" : "mongodb0.example.net:27017",
-         "arbiterOnly" : false,
-         "buildIndexes" : true,
-         "hidden" : false,
-         "priority" : 1,
-         "tags" : {},
-         "secondaryDelaySecs" : Long("0"),
-         "votes" : 1
-      },
-      {
-         "_id" : 2,
-         "host" : "mongodb1.example.net:27017",
-         "arbiterOnly" : true,
-         "buildIndexes" : true,
-         "hidden" : false,
-         "priority" : 0,
-         "tags" : {},
-         "secondaryDelaySecs" : Long("0"),
-         "votes" : 1
-      }
-   ],
-   "protocolVersion" : Long("1"),
-   "writeConcernMajorityJournalDefault": true,
-   "settings" : {
-      "chainingAllowed" : true,
-      "heartbeatIntervalMillis" : 2000,
-      "heartbeatTimeoutSecs" : 10,
-      "electionTimeoutMillis" : 10000,
-      "catchUpTimeoutMillis" : 2000,
-      "getLastErrorModes" : {},
-      "getLastErrorDefaults" : {
-         "w" : 1,
-         "wtimeout" : 0
-      },
-      "replicaSetId" : ObjectId("60e6f83923193faa336889d2")
-   }
-}
-```
+.. code-block:: javascript
 
-The following sequence of operations add a new secondary to the replica set. The operations are issued in the :binary:`~bin.mongosh` shell while connected to the primary.
-
-```javascript
-cfg = rs.conf();
-cfg["members"] = [
-  {
-     "_id" : 0,
-     "host" : "mongodb0.example.net:27017",
-     "arbiterOnly" : false,
-     "buildIndexes" : true,
-     "hidden" : false,
-     "priority" : 1,
-     "tags" : {},
-     "secondaryDelaySecs" : Long("0"),
-     "votes" : 1
-  },
-  {
-     "_id" : 1,
-     "host" : "mongodb1.example.net:27017",
-     "arbiterOnly" : false,
-     "buildIndexes" : true,
-     "hidden" : false,
-     "priority" : 2,
-     "tags" : {},
-     "secondaryDelaySecs" : Long("0"),
-     "votes" : 1
-  },
-  {
-     "_id" : 2,
-     "host" : "mongodb2.example.net:27017",
-     "arbiterOnly" : true,
-     "buildIndexes" : true,
-     "hidden" : false,
-     "priority" : 0,
-     "tags" : {},
-     "secondaryDelaySecs" : Long("0"),
-     "votes" : 1
-  }
-]
-rs.reconfigForPSASet(1, cfg);
-```
-
-#. The first statement uses the :method:`rs.conf()` method to retrieve a document containing the current `configuration <replSetGetConfig-output>` for the replica set and stores the document in the local variable `cfg`.
-
-#. The second statement adds the new secondary to the `members` array. In this configuration the new secondary is added at `memberIndex` `1`. The `memberIndex` is the same as the array index. For additional settings, see `replica set configuration settings <replSetGetConfig-output>`.
-
-#. The last statement calls the :method:`rs.reconfigForPSASet()` method with the `memberIndex` `1` and the modified `cfg`. The `memberIndex` is the array position of the new member in the `members` array. Upon successful reconfiguration, the replica set configuration resembles the following:
-
-```javascript
    {
       "_id" : "rs0",
       "version" : 1,
@@ -166,19 +169,8 @@ rs.reconfigForPSASet(1, cfg);
             "votes" : 1
          },
          {
-            "_id" : 1,
-            "host" : "mongodb1.example.net:27017",
-            "arbiterOnly" : false,
-            "buildIndexes" : true,
-            "hidden" : false,
-            "priority" : 2,
-            "tags" : {},
-            "secondaryDelaySecs" : Long("0"),
-            "votes" : 1
-         },
-         {
             "_id" : 2,
-            "host" : "mongodb2.example.net:27017",
+            "host" : "mongodb1.example.net:27017",
             "arbiterOnly" : true,
             "buildIndexes" : true,
             "hidden" : false,
@@ -204,10 +196,128 @@ rs.reconfigForPSASet(1, cfg);
          "replicaSetId" : ObjectId("60e6f83923193faa336889d2")
       }
    }
-```
 
-> **Seealso:** - :method:`rs.conf()`
-- :method:`rs.reconfig()`
-- `replSetGetConfig-output`
-- `/administration/replica-set-member-configuration`
-- `/administration/replica-set-maintenance`
+The following sequence of operations add a new secondary to the replica
+set. The operations are issued in the :binary:`~bin.mongosh` shell while
+connected to the primary.
+
+.. code-block:: javascript
+
+   cfg = rs.conf();
+   cfg["members"] = [
+     {
+        "_id" : 0,
+        "host" : "mongodb0.example.net:27017",
+        "arbiterOnly" : false,
+        "buildIndexes" : true,
+        "hidden" : false,
+        "priority" : 1,
+        "tags" : {},
+        "secondaryDelaySecs" : Long("0"),
+        "votes" : 1
+     },
+     {
+        "_id" : 1,
+        "host" : "mongodb1.example.net:27017",
+        "arbiterOnly" : false,
+        "buildIndexes" : true,
+        "hidden" : false,
+        "priority" : 2,
+        "tags" : {},
+        "secondaryDelaySecs" : Long("0"),
+        "votes" : 1
+     },
+     {
+        "_id" : 2,
+        "host" : "mongodb2.example.net:27017",
+        "arbiterOnly" : true,
+        "buildIndexes" : true,
+        "hidden" : false,
+        "priority" : 0,
+        "tags" : {},
+        "secondaryDelaySecs" : Long("0"),
+        "votes" : 1
+     }
+   ]
+   rs.reconfigForPSASet(1, cfg);
+
+#. The first statement uses the :method:`rs.conf()` method to retrieve
+   a document containing the current :ref:`configuration
+   <replSetGetConfig-output>` for the replica set and stores the
+   document in the local variable ``cfg``.
+
+#. The second statement adds the new secondary to the ``members`` array.
+   In this configuration the new secondary is added at ``memberIndex``
+   ``1``. The ``memberIndex`` is the same as the array index. For
+   additional settings, see :ref:`replica set configuration settings
+   <replSetGetConfig-output>`.
+
+#. The last statement calls the :method:`rs.reconfigForPSASet()` method
+   with the ``memberIndex`` ``1`` and the modified ``cfg``. The
+   ``memberIndex`` is the array position of the new member in the
+   ``members`` array. Upon successful reconfiguration, the replica set
+   configuration resembles the following:
+
+   .. code-block:: javascript
+
+      {
+         "_id" : "rs0",
+         "version" : 1,
+         "term": 1,
+         "members" : [
+            {
+               "_id" : 0,
+               "host" : "mongodb0.example.net:27017",
+               "arbiterOnly" : false,
+               "buildIndexes" : true,
+               "hidden" : false,
+               "priority" : 1,
+               "tags" : {},
+               "secondaryDelaySecs" : Long("0"),
+               "votes" : 1
+            },
+            {
+               "_id" : 1,
+               "host" : "mongodb1.example.net:27017",
+               "arbiterOnly" : false,
+               "buildIndexes" : true,
+               "hidden" : false,
+               "priority" : 2,
+               "tags" : {},
+               "secondaryDelaySecs" : Long("0"),
+               "votes" : 1
+            },
+            {
+               "_id" : 2,
+               "host" : "mongodb2.example.net:27017",
+               "arbiterOnly" : true,
+               "buildIndexes" : true,
+               "hidden" : false,
+               "priority" : 0,
+               "tags" : {},
+               "secondaryDelaySecs" : Long("0"),
+               "votes" : 1
+            }
+         ],
+         "protocolVersion" : Long("1"),
+         "writeConcernMajorityJournalDefault": true,
+         "settings" : {
+            "chainingAllowed" : true,
+            "heartbeatIntervalMillis" : 2000,
+            "heartbeatTimeoutSecs" : 10,
+            "electionTimeoutMillis" : 10000,
+            "catchUpTimeoutMillis" : 2000,
+            "getLastErrorModes" : {},
+            "getLastErrorDefaults" : {
+               "w" : 1,
+               "wtimeout" : 0
+            },
+            "replicaSetId" : ObjectId("60e6f83923193faa336889d2")
+         }
+      }
+
+**seealso:** - :method:`rs.conf()`
+   - :method:`rs.reconfig()`
+   - :ref:`replSetGetConfig-output`
+   - :doc:`/administration/replica-set-member-configuration`
+   - :doc:`/administration/replica-set-maintenance`

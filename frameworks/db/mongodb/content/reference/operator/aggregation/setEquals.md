@@ -1,91 +1,210 @@
 ---
 type: "Framework Learn Page"
-framework: "mongodb"
+framework: "MongoDB"
 source_repo: "https://github.com/mongodb/docs.git"
 source_branch: "main"
 source_path: "content/manual/manual/source/reference/operator/aggregation/setEquals.txt"
-source_commit: "ab9db26ed3d11618cdb61516d8180337d8e3f679"
-source_commit_short: "ab9db26e"
-source_commit_date: "2026-07-24T16:22:46-06:00"
-generated_at: "2026-07-25T11:51:15Z"
+source_commit: "b9f2bc487a2878b65e3c1f80024bebab76954f27"
+source_commit_short: "b9f2bc48"
+source_commit_date: "2026-08-28T17:09:45-05:00"
+generated_at: "2026-08-29T09:39:20.196325Z"
 ---
-
-=================================
-
 # $setEquals  (expression operator)
+
+**meta:** :description: Compare arrays using `$setEquals` to check if they contain the same distinct elements, ignoring duplicates and order.
+
+.. default-domain:: mongodb
+
+**contents:** On this page
+   :local:
+   :backlinks: none
+   :depth: 1
+   :class: singlecol
 
 ## Definition
 
+**expression:** $setEquals
+
+   Compares two or more arrays and returns ``true`` if they have the
+   same distinct elements and ``false`` otherwise.
+
+   :expression:`$setEquals` has the following syntax:
+
+   .. code-block:: javascript
+
+      { $setEquals: [ <expression1>, <expression2>, ... ] }
+
+   The arguments can be any valid :ref:`expression
+   <aggregation-expressions>` as long as they each resolve to an array.
+   For more information on expressions, see
+   :ref:`aggregation-expressions`.
+
 ## Behavior
 
-.. include:: /includes/important-set-operator-semantics.rst
+.. |set-operator-name| replace:: :expression:`$setEquals`
 
-.. include:: /includes/extracts/fact-agg-top-level-expressions-setEquals.rst
+**include:** /includes/important-set-operator-semantics.rst
+   :end-before: set-output
+
+**include:** /includes/extracts/fact-agg-top-level-expressions-setEquals.rst
+
+.. list-table::
+   :header-rows: 1
+   :widths: 30 15 55
+   :class: border-table
+
+   * - Example
+     - Result
+     - Notes
+
+   * - .. code-block:: javascript
+          :copyable: false
+
+          { $setEquals: [ 
+            [ "a", "c" ],
+            [ "a", "b" ]
+          ] }
+      
+     - ``false``
+
+     - The arrays do not contain the same elements.
+
+   * - .. code-block:: javascript
+          :copyable: false
+
+          { $setEquals: [
+            [ "a", "c" ],
+            [ "a", "b", "c" ]
+          ] }
+
+     - ``false``
+
+     - The arrays do not contain the same elements.
+
+   * - .. code-block:: javascript
+          :copyable: false
+
+          { $setEquals: [
+            [ "a", "b", "a" ],
+            [ "b", "a" ]
+          ] }
+      
+     - ``true``
+
+     - Both arrays contain the same unique elements. When treated as 
+       sets, the first array is ``[ "a", "b" ]`` because duplicates 
+       are ignored.
+
+   * - .. code-block:: javascript
+          :copyable: false
+
+          { $setEquals: [
+            [ "a", "b" ],
+            [ [ "a", "b" ] ]
+          ] }
+
+     - ``false``
+
+     - The elements in the arrays are not equal. The first array 
+       contains the strings ``"a"`` and ``"b"``, while the second 
+       contains an array ``[ "a", "b" ]``.
+
+   * - .. code-block:: javascript
+          :copyable: false
+
+          { $setEquals: [
+            [ ],
+            [ "a", "b" ]
+          ] }
+
+     - ``false``
+
+     - The elements in the arrays are not equal. The first array is 
+       empty and the second array has two string elements.
+
+   * - .. code-block:: javascript
+          :copyable: false
+
+          { $setEquals: [
+            [ "a", "a" ],
+            [ "a", "b" ]
+          ] }
+
+     - ``false``
+
+     - The arrays do not contain the same unique elements. The first 
+       array only contains ``"a"``, while the second array contains 
+       ``"a"`` and ``"b"``.
 
 ## Example
 
-Consider a `bakeryOrders` collection with the following documents:
+Consider a ``bakeryOrders`` collection with the following documents:
 
-```javascript
- db.bakeryOrders.insertMany( [
-    { _id: 0, cakes: ["chocolate", "vanilla"], cupcakes: ["chocolate", "vanilla"] },
-    { _id: 1, cakes: ["chocolate", "vanilla"], cupcakes: ["vanilla", "chocolate"] },
-    { _id: 2, cakes: ["chocolate", "chocolate"], cupcakes: ["chocolate"] },
-    { _id: 3, cakes: ["vanilla"], cupcakes: ["chocolate"] },
-    { _id: 4, cakes: ["vanilla"], cupcakes: [] }
- ] )
-```
+.. code-block:: javascript
 
-The following operation uses the :expression:`$setEquals` operator to determine if the `cakes` array and the `cupcakes` array in each order contain the same flavors:
+    db.bakeryOrders.insertMany( [
+       { _id: 0, cakes: ["chocolate", "vanilla"], cupcakes: ["chocolate", "vanilla"] },
+       { _id: 1, cakes: ["chocolate", "vanilla"], cupcakes: ["vanilla", "chocolate"] },
+       { _id: 2, cakes: ["chocolate", "chocolate"], cupcakes: ["chocolate"] },
+       { _id: 3, cakes: ["vanilla"], cupcakes: ["chocolate"] },
+       { _id: 4, cakes: ["vanilla"], cupcakes: [] }
+    ] )
 
-```javascript
-db.bakeryOrders.aggregate(
-   [
-      { 
-         $project: { 
-            _id: 0, 
-            cakes: 1, 
-            cupcakes: 1, 
-            sameFlavors: { $setEquals: [ "$cakes", "$cupcakes" ] } 
-         } 
-      }
-   ] )
-```
+The following operation uses the :expression:`$setEquals` operator to
+determine if the ``cakes`` array and the ``cupcakes`` array in each order
+contain the same flavors:
 
-> **Note:** The :pipeline:`$project` stage specifies which fields are included
-in the output documents. In this example, the :pipeline:`$project`
-stage:
-- Excludes the `_id` field from the output.
-- Includes the `cakes` and `cupcakes` fields in the output.
-- Outputs the result of the `$setEquals` operator in a new field
-  called `sameFlavors`.
+.. code-block:: javascript
+
+   db.bakeryOrders.aggregate(
+      [
+         { 
+            $project: { 
+               _id: 0, 
+               cakes: 1, 
+               cupcakes: 1, 
+               sameFlavors: { $setEquals: [ "$cakes", "$cupcakes" ] } 
+            } 
+         }
+      ] )
+
+**note:** $project
+
+   The :pipeline:`$project` stage specifies which fields are included
+   in the output documents. In this example, the :pipeline:`$project` 
+   stage:
+
+   - Excludes the ``_id`` field from the output.
+   - Includes the ``cakes`` and ``cupcakes`` fields in the output.
+   - Outputs the result of the ``$setEquals`` operator in a new field 
+     called ``sameFlavors``.
 
 The operation returns the following results:
 
-```javascript
-{
- cakes: [ "chocolate", "vanilla" ],
- cupcakes: [ "chocolate", "vanilla" ],
- sameFlavors: true
-},
-{
- cakes: [ "chocolate", "vanilla" ],
- cupcakes: [ "vanilla", "chocolate" ],
- sameFlavors: true
-},
-{ 
- cakes: [ "chocolate", "chocolate" ],
- cupcakes: [ "chocolate" ],
- sameFlavors: true
-},
-{
- cakes: [ "vanilla" ],
- cupcakes: [ "chocolate" ],
- sameFlavors: false
-},
-{ 
-   cakes: [ "vanilla" ], 
-   cupcakes: [], 
-   sameFlavors: false 
-}
-```
+.. code-block:: javascript
+
+   {
+    cakes: [ "chocolate", "vanilla" ],
+    cupcakes: [ "chocolate", "vanilla" ],
+    sameFlavors: true
+   },
+   {
+    cakes: [ "chocolate", "vanilla" ],
+    cupcakes: [ "vanilla", "chocolate" ],
+    sameFlavors: true
+   },
+   { 
+    cakes: [ "chocolate", "chocolate" ],
+    cupcakes: [ "chocolate" ],
+    sameFlavors: true
+   },
+   {
+    cakes: [ "vanilla" ],
+    cupcakes: [ "chocolate" ],
+    sameFlavors: false
+   },
+   { 
+      cakes: [ "vanilla" ], 
+      cupcakes: [], 
+      sameFlavors: false 
+   }

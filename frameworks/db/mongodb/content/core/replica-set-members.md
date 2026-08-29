@@ -1,58 +1,105 @@
 ---
 type: "Framework Learn Page"
-framework: "mongodb"
+framework: "MongoDB"
 source_repo: "https://github.com/mongodb/docs.git"
 source_branch: "main"
 source_path: "content/manual/manual/source/core/replica-set-members.txt"
-source_commit: "ab9db26ed3d11618cdb61516d8180337d8e3f679"
-source_commit_short: "ab9db26e"
-source_commit_date: "2026-07-24T16:22:46-06:00"
-generated_at: "2026-07-25T11:51:15Z"
+source_commit: "b9f2bc487a2878b65e3c1f80024bebab76954f27"
+source_commit_short: "b9f2bc48"
+source_commit_date: "2026-08-28T17:09:45-05:00"
+generated_at: "2026-08-29T09:39:19.504136Z"
 ---
-
-===================
+.. _replica-set-members:
 
 # Replica Set Members
 
-A replica set in MongoDB is a group of :binary:`~bin.mongod` processes that provide redundancy and high availability. The members of a replica set are:
+**meta:** :description: Understand the roles and configurations of primary, secondary, and arbiter members in a MongoDB replica set for redundancy and high availability.
 
-`replica-set-primary-member` The primary receives all write operations.
+.. default-domain:: mongodb
 
-`replica-set-secondary-members` Secondaries replicate operations from the primary to maintain an identical data set. Secondaries may have additional configurations for special usage profiles. For example, secondaries may be `non-voting <replica-set-non-voting-members>` or `priority 0 <replica-set-secondary-only-members>`.
+**contents:** On this page
+   :local:
+   :backlinks: none
+   :depth: 1
+   :class: singlecol
 
-The minimum recommended configuration for a replica set is a three member replica set with three data-bearing members: one `primary <replica-set-primary-member>` and two `secondary <replica-set-secondary-members>` members. In some circumstances (such as you have a primary and a secondary but cost constraints prohibit adding another secondary), you may choose to include an `arbiter <replica-set-arbiters>`. An arbiter participates in `elections <replica-set-elections>` but does not hold data (i.e. does not provide data redundancy).
+A *replica set* in MongoDB is a group of :binary:`~bin.mongod` processes
+that provide redundancy and high availability. The members of a
+replica set are:
+
+:ref:`replica-set-primary-member`
+   The primary receives all write operations.
+
+:ref:`replica-set-secondary-members`
+   Secondaries replicate operations from the primary to maintain an
+   identical data set. Secondaries may have additional configurations
+   for special usage profiles. For example, secondaries may be
+   :ref:`non-voting <replica-set-non-voting-members>` or
+   :ref:`priority 0 <replica-set-secondary-only-members>`.
+
+The minimum recommended configuration for a replica set is a three
+member replica set with three data-bearing members: one :ref:`primary
+<replica-set-primary-member>` and two :ref:`secondary
+<replica-set-secondary-members>` members. In some circumstances (such
+as you have a primary and a secondary but cost constraints prohibit
+adding another secondary), you may choose to include an :ref:`arbiter
+<replica-set-arbiters>`. An arbiter participates in :ref:`elections
+<replica-set-elections>` but does not hold data (i.e. does not provide
+data redundancy).
 
 A replica set can have up to 50 members but only 7 voting members.
 
-> **Seealso:** - `replSetGetStatus.votingMembersCount`
-- `replSetGetStatus.writableVotingMembersCount`
+**seealso:** - :data:`replSetGetStatus.votingMembersCount`
+
+   - :data:`replSetGetStatus.writableVotingMembersCount`
+
+
+.. _replica-set-primary-member:
 
 ## Primary
 
-.. include:: /core/replica-set-primary.txt
+**include:** /core/replica-set-primary.txt
+   :start-after: start-content
+   :end-before: start-content-election-example
 
-## Contents
+**toctree:** :titlesonly:
+   :hidden:
 
-- Primary </core/replica-set-primary>
+   Primary </core/replica-set-primary>
+
+.. _replica-set-secondary-members:
 
 ## Secondaries
 
-.. include:: /core/replica-set-secondary.txt
+**include:** /core/replica-set-secondary.txt
+   :start-after: start-content
+   :end-before: start-content-election-example
 
-.. include:: /core/replica-set-secondary.txt
+**include:** /core/replica-set-secondary.txt
+   :start-after: end-content-election-example
+   :end-before: end-content
 
-## Contents
+**toctree:** :titlesonly:
+   :hidden:
 
-- Secondary </core/replica-set-secondary>
+   Secondary </core/replica-set-secondary>
+
+
+.. _replica-set-arbiters:
 
 ## Arbiter
 
-.. include:: /core/replica-set-arbiter.txt
+**include:** /core/replica-set-arbiter.txt
+   :start-after: start-content
+   :end-before: end-content
 
-For considerations when using an arbiter, see `/core/replica-set-arbiter`.
+For considerations when using an arbiter, see :doc:`/core/replica-set-arbiter`.
 
-## Contents
+**toctree:** :titlesonly:
+   :hidden:
 
-- Arbiter </core/replica-set-arbiter>
+   Arbiter </core/replica-set-arbiter>
 
-.. include:: /includes/footnote-two-primaries-edge-cases.rst
+.. [#edge-cases-2-primaries]
+
+   .. include:: /includes/footnote-two-primaries-edge-cases.rst

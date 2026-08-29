@@ -4,10 +4,10 @@ framework: "Arize Phoenix"
 source_repo: "https://github.com/Arize-ai/phoenix.git"
 source_branch: "main"
 source_path: "docs/phoenix/self-hosting/architecture.mdx"
-source_commit: "69b3ab92c37ff65812feaa2dbf0b1c0ad5ae55fe"
-source_commit_short: "69b3ab9"
-source_commit_date: "2026-07-25T11:48:12-06:00"
-generated_at: "2026-07-25T19:08:24.831139Z"
+source_commit: "c48e50e9906fcc56c1c103ebd93ef3c95ed6b6e7"
+source_commit_short: "c48e50e"
+source_commit_date: "2026-08-29T01:45:20-06:00"
+generated_at: "2026-08-29T09:39:58.801992Z"
 ---
 # Architecture
 
@@ -41,6 +41,8 @@ The default storage option. Phoenix stores data in `~/.phoenix/` or the director
 ### PostgreSQL
 
 Recommended for production. Provides better performance, concurrent access, and standard database tooling for backups and replication.
+
+The minimum supported PostgreSQL version is **14**. Older versions have reached [end of life](https://www.postgresql.org/support/versioning/) and no longer receive security fixes; Phoenix is not tested against them.
 
 <Info>
 See the [Docker deployment guide](/docs/phoenix/self-hosting/deployment-options/docker#postgresql) for PostgreSQL setup examples.

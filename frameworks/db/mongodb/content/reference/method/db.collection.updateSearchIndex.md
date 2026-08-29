@@ -1,94 +1,142 @@
 ---
 type: "Framework Learn Page"
-framework: "mongodb"
+framework: "MongoDB"
 source_repo: "https://github.com/mongodb/docs.git"
 source_branch: "main"
 source_path: "content/manual/manual/source/reference/method/db.collection.updateSearchIndex.txt"
-source_commit: "ab9db26ed3d11618cdb61516d8180337d8e3f679"
-source_commit_short: "ab9db26e"
-source_commit_date: "2026-07-24T16:22:46-06:00"
-generated_at: "2026-07-25T11:51:15Z"
+source_commit: "b9f2bc487a2878b65e3c1f80024bebab76954f27"
+source_commit_short: "b9f2bc48"
+source_commit_date: "2026-08-28T17:09:45-05:00"
+generated_at: "2026-08-29T09:39:19.894543Z"
 ---
-
-==================================================
-
 # db.collection.updateSearchIndex() (mongosh method)
+
+**meta:** :description: Update an existing {+fts+} index using `db.collection.updateSearchIndex()` with specified fields and definitions.
+
+.. default-domain:: mongodb
+
+**contents:** On this page
+   :local:
+   :backlinks: none
+   :depth: 2
+   :class: singlecol
 
 ## Definition
 
-.. versionadded:: 7.0 (Also available starting in 6.0.7)
+**method:** db.collection.updateSearchIndex()
 
-.. include:: /includes/atlas-search-commands/command-descriptions/updateSearchIndex-description.rst
+**versionadded:** 7.0 (*Also available starting in 6.0.7*)
 
-.. include:: /includes/fact-mongosh-shell-method-alt.rst
+.. |fts-index| replace:: :atlas:`{+fts+} index </atlas-search/atlas-search-overview/#fts-indexes>` or :atlas:`{+avs+} index </atlas-vector-search/vector-search-overview/>`
+
+**include:** /includes/atlas-search-commands/command-descriptions/updateSearchIndex-description.rst
+
+.. |dbcommand| replace:: :dbcommand:`updateSearchIndex` command
+
+**include:** /includes/fact-mongosh-shell-method-alt.rst
 
 ## Compatibility
 
-This method is available in deployments hosted in the following environments:
+This method is available in deployments hosted in the following environments: 
 
-.. include:: /includes/fact-environments-atlas-only.rst
+**include:** /includes/fact-environments-atlas-only.rst
+
+
 
 ## Syntax
 
 Command syntax:
 
-```javascript
-db.<collection>.updateSearchIndex(
-   <name>,
-   {
-      <definition>
-   }
-)
-```
+.. code-block:: javascript
+
+   db.<collection>.updateSearchIndex(
+      <name>,
+      {
+         <definition>
+      }
+   )
 
 ## Command Fields
 
-`updateSearchIndex()` takes these fields:
+``updateSearchIndex()`` takes these fields:
+
+.. list-table::
+  :header-rows: 1
+  :widths: 20 20 20 80
+
+  * - Field
+    - Type
+    - Necessity
+    - Description
+
+  * - ``name``
+    - string
+    - Required
+    - Name of the search index to update.
+
+  * - ``definition``
+    - document
+    - Required
+    - Document describing the index to create. The ``definition`` syntax
+      depends on whether you create a standard search index or a Vector
+      Search index. For the ``definition`` syntax, see:
+      
+      - :ref:`search-index-definition-update`
+      - :ref:`vector-search-index-definition-update`
+
+.. _search-index-definition-update:
 
 ### Search Index Definition Syntax
 
-.. include:: /includes/atlas-search-commands/search-index-definition-fields.rst
+**include:** /includes/atlas-search-commands/search-index-definition-fields.rst
+
+.. _vector-search-index-definition-update:
 
 ### Vector Search Index Definition Syntax
 
-.. include:: /includes/atlas-search-commands/vector-search-index-definition-fields.rst
+**include:** /includes/atlas-search-commands/vector-search-index-definition-fields.rst
 
 ## Behavior
 
-.. include:: /includes/atlas-search-commands/behavior/update-behavior.rst
+.. |method-name| replace:: ``updateSearchIndex()``
+.. |method-name-title| replace:: ``updateSearchIndex()``
+
+**include:** /includes/atlas-search-commands/behavior/update-behavior.rst
 
 ## Access Control
 
-.. include:: /includes/atlas-search-commands/access-control/update-access-control.rst
+**include:** /includes/atlas-search-commands/access-control/update-access-control.rst
 
 ## Example
 
-The following example creates a new {+fts+} index and then updates that index.
+The following example creates a new {+fts+} index and then updates that
+index.
 
-#. Create a search index named `searchIndex01` on the `movies` collection:
+#. Create a search index named ``searchIndex01`` on the ``movies``
+   collection:
 
-```javascript
-   db.movies.createSearchIndex(
-      "searchIndex01",
-      {
-         mappings: { dynamic: true },
-         storedSource: {
-            exclude: [ "imdb.rating" ]
+   .. code-block:: javascript
+
+      db.movies.createSearchIndex(
+         "searchIndex01",
+         {
+            mappings: { dynamic: true },
+            storedSource: {
+               exclude: [ "imdb.rating" ]
+            }
          }
-      }
-   )
-```
+      )
 
-#. Update the `searchIndex01` index:
+#. Update the ``searchIndex01`` index:
 
-```javascript
-   db.movies.updateSearchIndex(
-      "searchIndex01",
-      {
-         mappings: { dynamic: true },
-         storedSource: {
-            exclude: [ "movies" ]
+   .. code-block:: javascript
+
+      db.movies.updateSearchIndex(
+         "searchIndex01",
+         {
+            mappings: { dynamic: true },
+            storedSource: {
+               exclude: [ "movies" ]
+            }
          }
-      }
-   )
-```
+      )

@@ -1,7 +1,7 @@
 ---
 type: "Framework Learn Directory Index"
 framework: "Arize Phoenix"
-generated_at: "2026-07-25T19:08:24.999391Z"
+generated_at: "2026-08-29T09:39:58.973349Z"
 ---
 # Experiments
 
@@ -17,6 +17,7 @@ This directory contains Arize Phoenix learning pages related to experiments.
 
 ## Pages in This Directory
 
+- [Assign A Tag To An Experiment](assign-a-tag-to-an-experiment.md)
 - [Create Experiment On A Dataset](create-experiment-on-a-dataset.md)
 - [Create Or Update Evaluation For An Experiment Run](create-or-update-evaluation-for-an-experiment-run.md)
 - [Create Run For An Experiment](create-run-for-an-experiment.md)
@@ -28,3 +29,6 @@ This directory contains Arize Phoenix learning pages related to experiments.
 - [Get Incomplete Runs For An Experiment](get-incomplete-runs-for-an-experiment.md)
 - [List Experiments By Dataset](list-experiments-by-dataset.md)
 - [List Runs For An Experiment](list-runs-for-an-experiment.md)
+- [List The Tags Applied To An Experiment](list-the-tags-applied-to-an-experiment.md)
+- [Remove A Tag From An Experiment](remove-a-tag-from-an-experiment.md)
+- [Update An Experiment By Id](update-an-experiment-by-id.md)

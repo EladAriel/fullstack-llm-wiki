@@ -1,79 +1,119 @@
 ---
 type: "Framework Learn Page"
-framework: "mongodb"
+framework: "MongoDB"
 source_repo: "https://github.com/mongodb/docs.git"
 source_branch: "main"
 source_path: "content/manual/manual/source/tutorial/change-replica-set-wiredtiger.txt"
-source_commit: "ab9db26ed3d11618cdb61516d8180337d8e3f679"
-source_commit_short: "ab9db26e"
-source_commit_date: "2026-07-24T16:22:46-06:00"
-generated_at: "2026-07-25T11:51:15Z"
+source_commit: "b9f2bc487a2878b65e3c1f80024bebab76954f27"
+source_commit_short: "b9f2bc48"
+source_commit_date: "2026-08-28T17:09:45-05:00"
+generated_at: "2026-08-29T09:39:19.604628Z"
 ---
-
-===============================================
-
 # Change a Self-Managed Replica Set to WiredTiger
 
-> **Note:** - .. include:: /includes/collMod-note.rst
-- You must upgrade to WiredTiger. MongoDB removed the deprecated MMAPv1
-  storage engine in version 4.2.
+**meta:** :keywords: on-prem
+   :description: Update a replica set to WiredTiger storage engine in a rolling fashion to avoid downtime, starting with secondary members.
 
-Use this tutorial to update a replica set to use `WiredTiger <storage-wiredtiger>`. The procedure updates the replica set in a rolling fashion to avoid downtime.
+.. default-domain:: mongodb
+
+
+**note:** - .. include:: /includes/collMod-note.rst
+
+   - You must upgrade to WiredTiger. MongoDB removed the deprecated MMAPv1 
+     storage engine in version 4.2. 
+
+Use this tutorial to update a replica set to use :ref:`WiredTiger
+<storage-wiredtiger>`. The procedure updates the replica set in a
+rolling fashion to avoid downtime.
 
 ## Considerations
 
-Replica sets can have members with different storage engines. As such, you can update members to use the WiredTiger storage engine in a rolling fashion.
+Replica sets can have members with different storage engines. As such,
+you can update members to use the WiredTiger storage engine in a
+rolling fashion.
+
+.. _rs-mmapv1-wt-4.0-psa:
 
 ### PSA 3-member Architecture
 
-The :readconcern:`"majority"` read concern, available for WiredTiger, is enabled by default. However, in three-member replica sets with a primary-secondary-arbiter (PSA) architecture, you can disable the :readconcern:`"majority"` read concern. Disabling the :readconcern:`"majority"` read concern for a three-member PSA architecture avoids possible cache-pressure build up.
+The :readconcern:`"majority"` read concern, available for WiredTiger, 
+is enabled by default. However, in three-member replica sets with a 
+primary-secondary-arbiter (PSA) architecture, you can disable the 
+:readconcern:`"majority"` read concern. 
+Disabling the :readconcern:`"majority"` read concern for a three-member 
+PSA architecture avoids possible cache-pressure build up.
 
-The `procedure <change-replica-set-wiredtiger-procedure>` below disables :readconcern:`"majority"` read concern for PSA architecture by including :option:`--enableMajorityReadConcern false <mongod --enableMajorityReadConcern>`.
+The :ref:`procedure <change-replica-set-wiredtiger-procedure>`
+below disables :readconcern:`"majority"` read concern for
+PSA architecture by including
+:option:`--enableMajorityReadConcern false <mongod
+--enableMajorityReadConcern>`.  
 
-> **Note:** .. include:: /includes/extracts/changestream-disable-rc-majority.rst
+**note:** .. include:: /includes/extracts/changestream-disable-rc-majority.rst
 
-For more information on PSA architecture and read concern :readconcern:`"majority"`, see `disable-read-concern-majority`.
+For more information on PSA architecture and read concern
+:readconcern:`"majority"`,
+see :ref:`disable-read-concern-majority`.
 
 ### Default Bind to Localhost
 
-.. include:: /includes/fact-default-bind-ip-change.rst
+**include:** /includes/fact-default-bind-ip-change.rst
 
 ### XFS and WiredTiger
 
-With the WiredTiger storage engine, using XFS for data bearing nodes is recommended on Linux. For more information, see `prod-notes-linux-file-system`.
+With the WiredTiger storage engine, using XFS for data bearing nodes is
+recommended on Linux. For more information, see
+:ref:`prod-notes-linux-file-system`.
 
 ### MMAPv1 Only Restrictions
 
-.. include:: /includes/fact-mmapv1-only-restrictions.rst
+**include:** /includes/fact-mmapv1-only-restrictions.rst
+
+.. _change-replica-set-wiredtiger-procedure:
 
 ## Procedure
 
-The following procedure updates the replica set in a rolling fashion. The procedure updates the `secondary` members first, then steps down the `primary`, and updates the stepped-down member.
+The following procedure updates the replica set in a rolling fashion.
+The procedure updates the :term:`secondary` members first, then steps
+down the :term:`primary`, and updates the stepped-down member.
 
-To update a member to WiredTiger, the procedure removes a member's data, starts :binary:`~bin.mongod` with WiredTiger, and performs an `initial sync <resync-replica-member>`.
+
+To update a member to WiredTiger, the procedure removes a member's
+data, starts :binary:`~bin.mongod` with WiredTiger, and performs an
+:ref:`initial sync <resync-replica-member>`.
+
 
 ### A. Update the secondary members to WiredTiger.
 
+
 Update the secondary members one at a time:
 
-.. include:: /includes/steps/change-replica-set-wiredtiger.rst
+**include:** /includes/steps/change-replica-set-wiredtiger.rst
 
-Repeat the steps for the remaining secondary members, updating them one at a time.
+Repeat the steps for the remaining secondary members, updating them one
+at a time.
 
 ### B. Step down the primary.
 
-> **Important:** If updating all members of the replica set to use WiredTiger, ensure
-that all secondary members have been updated first before updating
-the primary.
+**important:** If updating all members of the replica set to use WiredTiger, ensure
+   that all secondary members have been updated first before updating
+   the primary.
 
-Once all the secondary members have been upgraded to WiredTiger, connect :binary:`~bin.mongosh` to the primary and use :method:`rs.stepDown()` to step down the primary and force an election of a new primary.
+Once all the secondary members have been upgraded to WiredTiger,
+connect :binary:`~bin.mongosh` to the primary and use
+:method:`rs.stepDown()` to step down the primary and force an election
+of a new primary.
 
-```javascript
-rs.stepDown()
-```
+.. code-block:: javascript
+
+   rs.stepDown()
 
 ### C. Update the stepped down primary.
 
-When the primary has stepped down and become a secondary, update the secondary to use WiredTiger as before:
+When the primary has stepped down and become a secondary, update the
+secondary to use WiredTiger as before:
 
-.. include:: /includes/steps/change-replica-set-wiredtiger.rst
+**include:** /includes/steps/change-replica-set-wiredtiger.rst
+
+
+.. |seemore| replace:: See :ref:`rs-mmapv1-wt-4.0-psa`.

@@ -1,58 +1,95 @@
 ---
 type: "Framework Learn Page"
-framework: "mongodb"
+framework: "MongoDB"
 source_repo: "https://github.com/mongodb/docs.git"
 source_branch: "main"
 source_path: "content/manual/manual/source/core/indexes/index-properties.txt"
-source_commit: "ab9db26ed3d11618cdb61516d8180337d8e3f679"
-source_commit_short: "ab9db26e"
-source_commit_date: "2026-07-24T16:22:46-06:00"
-generated_at: "2026-07-25T11:51:15Z"
+source_commit: "b9f2bc487a2878b65e3c1f80024bebab76954f27"
+source_commit_short: "b9f2bc48"
+source_commit_date: "2026-08-28T17:09:45-05:00"
+generated_at: "2026-08-29T09:39:19.806603Z"
 ---
-
-================
+.. _index-properties:
 
 # Index Properties
 
-Index properties affect how the query planner uses an index and how indexed documents are stored. You can specify index properties as optional parameters when you create an index.
+**meta:** :description: MongoDB index properties include case-insensitive, hidden, partial, sparse, Time-To-Live (TTL), and unique indexes and their impacts on query planning.
 
-The following sections explain the index properties that you can specify when building an index.
+.. default-domain:: mongodb
 
-> **Note:** Not all index types are compatible with all index properties.
+**contents:** On this page
+   :local:
+   :backlinks: none
+   :depth: 1
+   :class: singlecol
+
+Index properties affect how the query planner uses an index and how
+indexed documents are stored. You can specify index properties as
+optional parameters when you create an index.
+
+The following sections explain the index properties that you can specify
+when building an index.
+
+**note:** Not all index types are compatible with all index properties.
 
 ## Case-Insensitive Indexes
 
-`Case-insensitive indexes <index-feature-case-insensitive>` support queries on strings without considering letter case.
+:ref:`Case-insensitive indexes <index-feature-case-insensitive>` support
+queries on strings without considering letter case.
 
 ## Hidden Indexes
 
-`Hidden indexes <index-type-hidden>` are not visible to the `query planner <query-plans-query-optimization>` and cannot be used to support a query.
+:ref:`Hidden indexes <index-type-hidden>` are not visible to the
+:ref:`query planner <query-plans-query-optimization>` and cannot be used
+to support a query.
 
-You can use hidden indexes to evaluate the potential impact of dropping an index without actually dropping it. If the impact is negative, you can unhide the index instead of having to recreate a dropped index. Hidden indexes are fully maintained and can be used immediately once unhidden.
+You can use hidden indexes to evaluate the potential impact of dropping
+an index without actually dropping it. If the impact is negative, you
+can unhide the index instead of having to recreate a dropped index.
+Hidden indexes are fully maintained and can be used immediately once
+unhidden.
+
+.. _partial-index:
 
 ## Partial Indexes
 
-`Partial indexes <index-type-partial>` only index the documents in a collection that meet a specified filter expression. Partial indexes have lower storage requirements and reduced performance costs for index creation and maintenance.
+:ref:`Partial indexes <index-type-partial>` only index the documents in
+a collection that meet a specified filter expression. Partial indexes
+have lower storage requirements and reduced performance costs for index
+creation and maintenance.
 
-Partial indexes offer a superset of the functionality of sparse indexes and should be preferred over sparse indexes.
+Partial indexes offer a superset of the functionality of sparse indexes
+and should be preferred over sparse indexes.
 
 ## Sparse Indexes
 
-`Sparse indexes <index-type-sparse>` only contain entries for documents that have the indexed field. These indexes skip documents that do not have the indexed field.
+:ref:`Sparse indexes <index-type-sparse>` only contain entries for
+documents that have the indexed field. These indexes skip documents that
+do not have the indexed field.
+
+.. _ttl-index:
 
 ## TTL Indexes
 
-`TTL indexes <index-feature-ttl>` automatically remove documents from a collection after a certain amount of time. Use these indexes for data that only needs to persist for a finite amount of time, like machine generated event data, logs, and session information.
+:ref:`TTL indexes <index-feature-ttl>` automatically remove documents
+from a collection after a certain amount of time. Use these indexes for
+data that only needs to persist for a finite amount of time, like
+machine generated event data, logs, and session information.
+
+.. _unique-index:
 
 ## Unique Indexes
 
-`Unique indexes <index-type-unique>` cause MongoDB to reject duplicate values for the indexed field. These indexes are useful when your documents contain a unique identifier, such as a `userId`.
+:ref:`Unique indexes <index-type-unique>` cause MongoDB to reject
+duplicate values for the indexed field. These indexes are useful when
+your documents contain a unique identifier, such as a ``userId``.
 
-## Contents
+**toctree:** :titlesonly: 
+   :hidden: 
 
-- Case-Insensitive </core/index-case-insensitive>
-- Hidden </core/index-hidden>
-- Partial </core/index-partial>
-- Sparse </core/index-sparse>
-- TTL </core/index-ttl>
-- Unique </core/index-unique>
+   Case-Insensitive </core/index-case-insensitive>
+   Hidden </core/index-hidden>
+   Partial </core/index-partial>
+   Sparse </core/index-sparse>
+   TTL </core/index-ttl>
+   Unique </core/index-unique>

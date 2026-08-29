@@ -1,79 +1,174 @@
 ---
 type: "Framework Learn Page"
-framework: "mongodb"
+framework: "MongoDB"
 source_repo: "https://github.com/mongodb/docs.git"
 source_branch: "main"
 source_path: "content/manual/manual/source/reference/operator/aggregation/year.txt"
-source_commit: "ab9db26ed3d11618cdb61516d8180337d8e3f679"
-source_commit_short: "ab9db26e"
-source_commit_date: "2026-07-24T16:22:46-06:00"
-generated_at: "2026-07-25T11:51:15Z"
+source_commit: "b9f2bc487a2878b65e3c1f80024bebab76954f27"
+source_commit_short: "b9f2bc48"
+source_commit_date: "2026-08-28T17:09:45-05:00"
+generated_at: "2026-08-29T09:39:20.171381Z"
 ---
-
-============================
-
 # $year  (expression operator)
+
+**meta:** :description: Extract the year from a date using the `$year` aggregation operator, with optional timezone support.
+
+.. default-domain:: mongodb
+
+**contents:** On this page
+   :local:
+   :backlinks: none
+   :depth: 1
+   :class: singlecol
 
 ## Definition
 
+**expression:** $year
+
+   Returns the year portion of a date.
+
+   The :expression:`$year` expression has the following
+   :ref:`operator expression syntax <aggregation-expressions>`:
+
+   .. code-block:: javascript
+
+      { $year: <dateExpression> }
+
+   .. include:: /includes/fact-iso-date-objects.rst
+
 ## Behavior
 
-> **Note:**
+.. list-table::
+   :header-rows: 1
+   :widths: 90 10
+   :class: border-table
+
+   * - Example
+     - Result
+
+   * - .. code-block:: javascript
+          :copyable: false
+
+          { $year: new Date("2016-01-01") }
+
+     - 2016
+
+   * - .. code-block:: javascript
+          :copyable: false
+
+          { $year: { date: new Date("Jan 7, 2003") } }
+
+     - 2003
+
+   * - .. code-block:: javascript
+          :copyable: false
+
+          { $year: {
+              date: new Date("August 14, 2011"),
+              timezone: "America/Chicago"
+          } }
+
+     - 2011
+
+   * - .. code-block:: javascript
+          :copyable: false
+
+          { $year: ISODate("1998-11-07T00:00:00Z") }
+
+     - 1998
+
+   * - .. code-block:: javascript
+          :copyable: false
+
+          { $year: {
+              date: ISODate("1998-11-07T00:00:00Z"),
+              timezone: "-0400"
+          } }
+
+     - 1998
+
+   * - .. code-block:: javascript
+          :copyable: false
+
+          { $year: "March 28, 1976" }
+
+     - ``error``
+
+   * - .. code-block:: javascript
+          :copyable: false
+
+          { $year: Date("2016-01-01") }
+
+     - ``error``
+
+   * - .. code-block:: javascript
+          :copyable: false
+
+          { $year: "2009-04-09" }
+
+     - ``error``
+
+**note:** ``$year`` cannot take a string as an argument.
 
 ## Example
 
-Consider a `sales` collection with the following documents:
+Consider a ``sales`` collection with the following documents:
 
-```javascript
-db.sales.insertOne(
- {
-  "_id" : 1,
-  "item" : "abc",
-  "price" : 10,
-  "quantity" : 2,
-  "date" : ISODate("2014-01-01T08:15:39.736Z")
- } 
-)
-```
 
-The following aggregation uses the :expression:`$year` and other date operators to break down the `date` field:
+.. code-block:: javascript
+   :copyable: true
 
-```javascript
-db.sales.aggregate(
-   [
-     {
-       $project:
-         {
-           year: { $year: "$date" },
-           month: { $month: "$date" },
-           day: { $dayOfMonth: "$date" },
-           hour: { $hour: "$date" },
-           minutes: { $minute: "$date" },
-           seconds: { $second: "$date" },
-           milliseconds: { $millisecond: "$date" },
-           dayOfYear: { $dayOfYear: "$date" },
-           dayOfWeek: { $dayOfWeek: "$date" },
-           week: { $week: "$date" }
-         }
-     }
-   ]
-)
-```
+   db.sales.insertOne(
+    {
+     "_id" : 1,
+     "item" : "abc",
+     "price" : 10,
+     "quantity" : 2,
+     "date" : ISODate("2014-01-01T08:15:39.736Z")
+    } 
+  )
+
+The following aggregation uses the :expression:`$year` and other
+date operators to break down the ``date`` field:
+
+
+.. code-block:: javascript
+   :emphasize-lines: 6
+
+   db.sales.aggregate(
+      [
+        {
+          $project:
+            {
+              year: { $year: "$date" },
+              month: { $month: "$date" },
+              day: { $dayOfMonth: "$date" },
+              hour: { $hour: "$date" },
+              minutes: { $minute: "$date" },
+              seconds: { $second: "$date" },
+              milliseconds: { $millisecond: "$date" },
+              dayOfYear: { $dayOfYear: "$date" },
+              dayOfWeek: { $dayOfWeek: "$date" },
+              week: { $week: "$date" }
+            }
+        }
+      ]
+   )
 
 The operation returns the following result:
 
-```javascript
-{
-  "_id" : 1,
-  "year" : 2014,
-  "month" : 1,
-  "day" : 1,
-  "hour" : 8,
-  "minutes" : 15,
-  "seconds" : 39,
-  "milliseconds" : 736,
-  "dayOfYear" : 1,
-  "dayOfWeek" : 4,
-  "week" : 0
-}
-```
+.. code-block:: javascript
+
+   {
+     "_id" : 1,
+     "year" : 2014,
+     "month" : 1,
+     "day" : 1,
+     "hour" : 8,
+     "minutes" : 15,
+     "seconds" : 39,
+     "milliseconds" : 736,
+     "dayOfYear" : 1,
+     "dayOfWeek" : 4,
+     "week" : 0
+   }

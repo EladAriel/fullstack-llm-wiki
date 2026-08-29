@@ -1,14 +1,15 @@
 ---
 type: "Framework Learn Page"
-framework: "redis"
+framework: "Redis"
 source_repo: "https://github.com/redis/docs.git"
 source_branch: "main"
 source_path: "content/commands/ts.mrange.md"
-source_commit: "9d30f68c3dad1a6b3b7d30fe604b911348ce8152"
-source_commit_short: "9d30f68c"
-source_commit_date: "2026-07-24T10:52:10-07:00"
-generated_at: "2026-07-25T11:51:22Z"
+source_commit: "f8693349287b0efbef3c865b6f6a2aceca88594d"
+source_commit_short: "f869334"
+source_commit_date: "2026-08-28T10:01:19-05:00"
+generated_at: "2026-08-29T09:38:55.082364Z"
 ---
+# Ts.Mrange
 
 ---
 acl_categories:
@@ -113,6 +114,11 @@ arguments:
   name: groupby
   optional: true
   type: block
+- name: EXCLUDEEMPTY
+  optional: true
+  since: 8.10.0
+  token: EXCLUDEEMPTY
+  type: pure-token
 categories:
 - docs
 - develop
@@ -137,13 +143,13 @@ summary: Query a range across multiple time series by filters in forward directi
 syntax: "TS.MRANGE fromTimestamp toTimestamp\n  [LATEST]\n  [FILTER_BY_TS ts...]\n\
   \  [FILTER_BY_VALUE min max]\n  [WITHLABELS | <SELECTED_LABELS label...>]\n  [COUNT\
   \ count]\n  [[ALIGN align] AGGREGATION aggregators bucketDuration [BUCKETTIMESTAMP\
-  \ bt] [EMPTY]]\n  FILTER filterExpr...\n  [GROUPBY label REDUCE reducer]\n"
+  \ bt] [EMPTY]]\n  FILTER filterExpr...\n  [GROUPBY label REDUCE reducer]\n  [EXCLUDEEMPTY]\n"
 syntax_fmt: "TS.MRANGE fromTimestamp toTimestamp [LATEST] [FILTER_BY_TS\_Timestamp\n\
   \  [Timestamp ...]] [FILTER_BY_VALUE min max] [WITHLABELS |\n  SELECTED_LABELS label1\
   \ [label1 ...]] [COUNT\_count] [[ALIGN\_value]\n  AGGREGATION\ aggregators bucketDuration\
   \ [BUCKETTIMESTAMP]\n  [EMPTY]] FILTER\_<l=v | l!=v | l= | l!= | l=(v1,v2,...) |\n\
   \  l!=(v1,v2,...) [l=v | l!=v | l= | l!= | l=(v1,v2,...) |\n  l!=(v1,v2,...) ...]>\
-  \ [GROUPBY label REDUCE reducer]"
+  \ [GROUPBY label REDUCE reducer] [EXCLUDEEMPTY]"
 title: TS.MRANGE
 ---
 {{< note >}}
@@ -178,20 +184,9 @@ is the end timestamp for the range query (integer Unix timestamp in milliseconds
 <details open>
 <summary><code>FILTER filterExpr...</code></summary>
 
-filters time series based on their labels and label values. Each filter expression has one of the following syntaxes:
+filters time series based on their labels and label values.
 
-  - `label!=` - the time series has a label named `label`
-  - `label=value` - the time series has a label named `label` with a value equal to `value`
-  - `label=(value1,value2,...)` - the time series has a label named `label` with a value equal to one of the values in the list
-  - `label=` - the time series does not have a label named `label`
-  - `label!=value` - the time series does not have a label named `label` with a value equal to `value`
-  - `label!=(value1,value2,...)` - the time series does not have a label named `label` with a value equal to any of the values in the list
-
-  <note><b>Notes:</b>
-   - At least one filter expression with a syntax `label=value` or `label=(value1,value2,...)` is required.
-   - Filter expressions are conjunctive. For example, the filter `type=temperature room=study` means that a time series is a temperature time series of a study room.
-   - Whitespaces are unallowed in a filter expression except between quotes or double quotes in values - e.g., `x="y y"` or `x='(y y,z z)'`.
-   </note>
+{{< embed-md "ts-filter-expr.md" >}}
 </details>
 
 ## Optional arguments
@@ -357,6 +352,16 @@ When combined with `AGGREGATION` the `GROUPBY`/`REDUCE` is applied post aggregat
     - `__source__`, the list of time series keys used to compute the grouped series (e.g., `"key1,key2,key3"`)
 </note>
 
+</details>
+
+<details open>
+<summary><code>EXCLUDEEMPTY</code> (since Redis 8.10)</summary>
+
+excludes from the reply any time series that has no samples in the requested range. By default, every time series that passes `FILTER filterExpr...` is reported, even those with no samples in the range (reported with an empty samples list).
+
+A time series whose only samples in the range are NaN is not considered empty and is still reported.
+
+`EXCLUDEEMPTY` cannot be used together with `GROUPBY label REDUCE reducer`; combining them replies with an error.
 </details>
 
 <note><b>Note:</b> An `MRANGE` command cannot be part of a transaction when running on a Redis cluster.</note>
@@ -552,6 +557,73 @@ Query all time series with the metric label equal to `cpu`, but only return the 
          2) "SF"
    3) 1) 1) (integer) 1548149180000
          2) 99
+{{< / highlight >}}
+</details>
+
+<details open>
+<summary><b>Exclude empty time series from the reply</b></summary>
+
+Create three time series that share the label `s=1`, then add samples so that only two of them have data in the `- 500` range.
+
+{{< highlight bash >}}
+127.0.0.1:6379> TS.CREATE s LABELS s 1 t 1
+OK
+127.0.0.1:6379> TS.CREATE t LABELS s 1 t 1
+OK
+127.0.0.1:6379> TS.CREATE u LABELS s 1 t 1
+OK
+127.0.0.1:6379> TS.MADD s 100 100 t 100 100 s 200 200 t 300 300 s 400 400 t 400 400 u 2000 2000
+1) (integer) 100
+2) (integer) 100
+3) (integer) 200
+4) (integer) 300
+5) (integer) 400
+6) (integer) 400
+7) (integer) 2000
+{{< / highlight >}}
+
+Query the `- 500` range with `EXCLUDEEMPTY`. Time series `u`, whose only sample is at timestamp `2000`, has no samples in the range and is omitted from the reply.
+
+{{< highlight bash >}}
+127.0.0.1:6379> TS.MRANGE - 500 WITHLABELS EXCLUDEEMPTY FILTER s=1
+1) 1) "s"
+   2) 1) 1) "s"
+         2) "1"
+      2) 1) "t"
+         2) "1"
+   3) 1) 1) (integer) 100
+         2) 100
+      2) 1) (integer) 200
+         2) 200
+      3) 1) (integer) 400
+         2) 400
+2) 1) "t"
+   2) 1) 1) "s"
+         2) "1"
+      2) 1) "t"
+         2) "1"
+   3) 1) 1) (integer) 100
+         2) 100
+      2) 1) (integer) 300
+         2) 300
+      3) 1) (integer) 400
+         2) 400
+{{< / highlight >}}
+
+Without `EXCLUDEEMPTY`, `u` is also reported, with an empty samples list.
+
+{{< highlight bash >}}
+127.0.0.1:6379> TS.MRANGE - 500 WITHLABELS FILTER s=1
+1) 1) "s"
+   ...
+2) 1) "t"
+   ...
+3) 1) "u"
+   2) 1) 1) "s"
+         2) "1"
+      2) 1) "t"
+         2) "1"
+   3) (empty array)
 {{< / highlight >}}
 </details>
 

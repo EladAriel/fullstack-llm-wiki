@@ -1,19 +1,19 @@
 ---
 type: "Framework Learn Page"
-framework: "redis"
+framework: "Redis"
 source_repo: "https://github.com/redis/docs.git"
 source_branch: "main"
 source_path: "content/develop/ai/search-and-query/vectors/_index.md"
-source_commit: "9d30f68c3dad1a6b3b7d30fe604b911348ce8152"
-source_commit_short: "9d30f68c"
-source_commit_date: "2026-07-24T10:52:10-07:00"
-generated_at: "2026-07-25T11:51:22Z"
+source_commit: "f8693349287b0efbef3c865b6f6a2aceca88594d"
+source_commit_short: "f869334"
+source_commit_date: "2026-08-28T10:01:19-05:00"
+generated_at: "2026-08-29T09:38:55.833060Z"
 ---
-
 ---
 aliases:
 - /develop/interact/search-and-query/advanced-concepts/vectors
 - /interact/search-and-query/advanced-concepts/vectors/
+- /develop/ai/vector-fields/
 categories:
 - docs
 - develop
@@ -33,7 +33,11 @@ weight: 8
 
 Redis includes a [high-performance vector database](https://redis.io/blog/benchmarking-results-for-vector-databases/) that lets you perform semantic searches over vector embeddings. You can augment these searches with filtering over text, numerical, geospatial, and tag metadata.
 
-To quickly get started, check out the [Redis vector quickstart guide]({{< relref "develop/get-started/vector-database" >}}) and the [Redis AI Resources](https://github.com/redis-developer/redis-ai-resources) Github repo.
+To quickly get started, check out the [Redis vector quickstart guide]({{< relref "develop/get-started/search-tutorial/vector-search" >}}) and the [Redis AI Resources](https://github.com/redis-developer/redis-ai-resources) Github repo. To generate a working example, open the [AI agent builder]({{< relref "/develop/ai/agent-builder" >}}) and choose the **Knowledge Assistant** template.
+
+{{< alert title="See vector search in action" >}}
+[Redis Repo Memory](https://github.com/marketplace/actions/redis-repo-memory) is a GitHub Action that gives your repository a memory: on every pull request it embeds the change and uses Redis KNN vector search to surface semantically related past PRs, issues, and commits — a concise, real-world example of the concepts on this page. See the [source on GitHub](https://github.com/redis-learn/redis-repo-memory).
+{{< /alert >}}
 
 
 ## Overview
@@ -488,7 +492,7 @@ Optional runtime parameters for SVS-VAMANA indexes are:
 
 ## Vector search examples
 
-Below are a number of examples to help you get started. For more comprehensive walkthroughs, see the [Redis vector quickstart guide]({{< relref "develop/get-started/vector-database" >}}) and the [Redis AI Resources](https://github.com/redis-developer/redis-ai-resources) Github repo.
+Below are a number of examples to help you get started. For more comprehensive walkthroughs, see the [Redis vector quickstart guide]({{< relref "develop/get-started/search-tutorial/vector-search" >}}) and the [Redis AI Resources](https://github.com/redis-developer/redis-ai-resources) Github repo.
 
 ### KNN vector search examples
 

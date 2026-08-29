@@ -1,7 +1,7 @@
 ---
 type: "Framework Learn Directory Index"
 framework: "Grafana"
-generated_at: "2026-07-25T19:08:09.114880Z"
+generated_at: "2026-08-29T09:39:37.583115Z"
 ---
 # Getting-Started
 
@@ -18,3 +18,7 @@ This directory contains Grafana learning pages related to getting-started.
 ## Pages in This Directory
 
 - [_Index](_index.md)
+
+## Subdirectories
+
+- [First Dashboards](first-dashboards/index.md)

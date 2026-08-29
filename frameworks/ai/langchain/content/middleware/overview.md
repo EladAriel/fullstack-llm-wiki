@@ -4,12 +4,11 @@ framework: "LangChain"
 source_repo: "https://github.com/langchain-ai/docs"
 source_branch: "main"
 source_path: "src/oss/langchain/middleware/overview.mdx"
-source_commit: "2aae1dfc98ee953a9a5185fb6fcdd9efb3f4d878"
-source_commit_short: "2aae1dfc"
-source_commit_date: "2026-07-25T00:27:23Z"
-generated_at: "2026-07-25T11:51:05Z"
+source_commit: "a174f9cf7c91ee5eb14ee2382eb48bfe6e4956e9"
+source_commit_short: "a174f9c"
+source_commit_date: "2026-08-28T17:04:12-07:00"
+generated_at: "2026-08-29T09:38:24.255174Z"
 ---
-
 ---
 title: Overview
 description: Control and customize agent execution at every step
@@ -84,9 +83,11 @@ Middleware is not a separate runtime: hooks run inside the compiled [LangGraph](
 
 Reach for this pattern when the surrounding topology is more than a standard "loop until done": classifying input before routing to one of several agents, fanning out work in parallel, or stitching agent calls together with deterministic steps.
 
-`HumanInTheLoopMiddleware` matches against each tool's `.name`. In Python, `@tool`-decorated functions take their name from the function (so the key below is `"send_email"`); in TypeScript, the key matches the `name` you pass to `tool({...}, { name })`.
+`HumanInTheLoopMiddleware` matches against each tool's `.name`.
 
 :::python
+`@tool`-decorated functions take their name from the function, so the key below is `"send_email"`.
+
 ```python
 from langchain.agents import AgentState, create_agent
 from langchain.agents.middleware import HumanInTheLoopMiddleware
@@ -111,6 +112,8 @@ graph = (
 :::
 
 :::js
+The key matches the `name` you pass to `tool({...}, { name })`.
+
 ```typescript
 import { AgentState, createAgent, humanInTheLoopMiddleware } from "langchain";
 import { StateGraph, START } from "@langchain/langgraph";

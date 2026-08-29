@@ -5,11 +5,10 @@ source_repo: "https://github.com/vibrantlabsai/ragas"
 source_branch: "main"
 source_path: "docs/howtos/integrations/_langgraph_agent_evaluation.md"
 source_commit: "298b68274234c060deacab3cf5fb52aa3a20e885"
-source_commit_short: "298b6827"
+source_commit_short: "298b682"
 source_commit_date: "2026-02-24T13:17:18+05:30"
-generated_at: "2026-06-23T13:55:50Z"
+generated_at: "2026-08-29T09:38:15.979805Z"
 ---
-
 # Building and Evaluating a ReAct Agent for Fetching Metal Prices
 
 AI agents are becoming increasingly valuable in domains like finance, e-commerce, and customer support. These agents can autonomously interact with APIs, retrieve real-time data, and perform tasks that align with user goals. Evaluating these agents is crucial to ensure they are effective, accurate, and responsive to different inputs.

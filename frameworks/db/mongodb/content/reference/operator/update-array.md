@@ -1,39 +1,114 @@
 ---
 type: "Framework Learn Page"
-framework: "mongodb"
+framework: "MongoDB"
 source_repo: "https://github.com/mongodb/docs.git"
 source_branch: "main"
 source_path: "content/manual/manual/source/reference/operator/update-array.txt"
-source_commit: "ab9db26ed3d11618cdb61516d8180337d8e3f679"
-source_commit_short: "ab9db26e"
-source_commit_date: "2026-07-24T16:22:46-06:00"
-generated_at: "2026-07-25T11:51:15Z"
+source_commit: "b9f2bc487a2878b65e3c1f80024bebab76954f27"
+source_commit_short: "b9f2bc48"
+source_commit_date: "2026-08-28T17:09:45-05:00"
+generated_at: "2026-08-29T09:39:19.865583Z"
 ---
-
-======================
-
 # Array Update Operators
 
-.. include:: /includes/extracts/operators-toc-explanation.rst
+**meta:** :description: Explore various array update operators in MongoDB, including `$`, `$addToSet`, `$pop`, `$pull`, `$push`, and their modifiers like `$each` and `$sort`.
+
+.. default-domain:: mongodb
+
+**contents:** On this page
+   :local:
+   :backlinks: none
+   :depth: 1
+   :class: singlecol
+
+**include:** /includes/extracts/operators-toc-explanation.rst
 
 ## Update Operators
 
-## Contents
+.. list-table::
+   :widths: 30,70
+   :header-rows: 1
 
-- $ </reference/operator/update/positional>
-- $[] </reference/operator/update/positional-all>
-- $[identifier] </reference/operator/update/positional-filtered>
-- $addToSet </reference/operator/update/addToSet>
-- $pop </reference/operator/update/pop>
-- $pull </reference/operator/update/pull>
-- $push </reference/operator/update/push>
-- $pullAll </reference/operator/update/pullAll>
+   * - Name
+
+     - Description
+
+   * - :update:`$`
+
+     - Acts as a placeholder to update the first element that matches the query condition.
+
+   * - :update:`$[]`
+
+     - Acts as a placeholder to update all elements in an array for the documents that match the query condition.
+
+   * - :update:`$[\<identifier\>]`
+
+     - Acts as a placeholder to update all elements that match the ``arrayFilters`` condition for the documents that match the query condition.
+
+   * - :update:`$addToSet`
+
+     - Adds elements to an array only if they do not already exist in the set.
+
+   * - :update:`$pop`
+
+     - Removes the first or last item of an array.
+
+   * - :update:`$pull`
+
+     - Removes all array elements that match a specified query.
+
+   * - :update:`$push`
+
+     - Adds an item to an array.
+
+   * - :update:`$pullAll`
+
+     - Removes all matching values from an array.
+
+
+**toctree:** :titlesonly: 
+   :hidden: 
+
+   $ </reference/operator/update/positional>
+   $[] </reference/operator/update/positional-all>
+   $[identifier] </reference/operator/update/positional-filtered>
+   $addToSet </reference/operator/update/addToSet>
+   $pop </reference/operator/update/pop>
+   $pull </reference/operator/update/pull>
+   $push </reference/operator/update/push>
+   $pullAll </reference/operator/update/pullAll>
 
 ## Update Operator Modifiers
 
-## Contents
+.. list-table::
+   :widths: 30,70
+   :header-rows: 1
 
-- $each </reference/operator/update/each>
-- $position </reference/operator/update/position>
-- $slice </reference/operator/update/slice>
-- $sort </reference/operator/update/sort>
+   * - Name
+
+     - Description
+
+   * - :update:`$each`
+
+     - Modifies the :update:`$push` and :update:`$addToSet` operators to append multiple items for array updates.
+
+   * - :update:`$position`
+
+     - Modifies the :update:`$push` operator to specify the position in the array to add elements.
+
+   * - :update:`$slice`
+
+     - Modifies the :update:`$push` operator to limit the size of updated arrays.
+
+   * - :update:`$sort`
+
+     - Modifies the :update:`$push` operator to reorder documents stored in an array.
+
+
+**toctree:** :titlesonly: 
+   :hidden: 
+
+   $each </reference/operator/update/each>
+   $position </reference/operator/update/position>
+   $slice </reference/operator/update/slice>
+   $sort </reference/operator/update/sort>

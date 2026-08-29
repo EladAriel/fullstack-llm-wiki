@@ -4,12 +4,11 @@ framework: "Langfuse"
 source_repo: "https://github.com/langfuse/langfuse-docs"
 source_branch: "main"
 source_path: "content/docs/api-and-data-platform/features/cli.mdx"
-source_commit: "fcd1eca34a924867563c3c4e801254c4e66c0021"
-source_commit_short: "fcd1eca3"
-source_commit_date: "2026-07-25T00:45:45Z"
-generated_at: "2026-07-25T11:51:12Z"
+source_commit: "ba26344559edee69ba55c5d3aa80e632f56c1626"
+source_commit_short: "ba26344"
+source_commit_date: "2026-08-29T02:57:18+00:00"
+generated_at: "2026-08-29T09:38:37.757144Z"
 ---
-
 ---
 title: CLI
 sidebarTitle: CLI
@@ -19,6 +18,8 @@ description: Interact with the full Langfuse API from the command line. Built fo
 # Langfuse CLI
 
 The Langfuse CLI wraps the entire [Langfuse API](/docs/api-and-data-platform/features/public-api) so you can interact with Langfuse directly from the terminal. It is built for AI coding agents and power users who prefer the command line.
+
+For tools that cannot run commands or install packages, connect the [Langfuse MCP server](/docs/api-and-data-platform/features/mcp-server) instead. Both provide access to Langfuse features beyond prompt management.
 
 <Frame fullWidth>
   ![Langfuse CLI](/images/changelog/2026-02-17-langfuse-cli.jpg)
@@ -60,7 +61,9 @@ The CLI picks these up automatically — there is no separate `login` step. Keys
 
 The CLI can do anything the [Langfuse API](/docs/api-and-data-platform/features/public-api) can do.
 
-It dynamically wraps the full OpenAPI spec, so every endpoint (traces, prompts, datasets, scores, sessions, metrics, and more) is available as a CLI command. See the full [API Reference](https://api.reference.langfuse.com) for details.
+It is generated from the full OpenAPI spec, so every endpoint (traces, observations, prompts, datasets, scores, sessions, metrics, and more) is available as a CLI command. See the full [API Reference](https://api.reference.langfuse.com) for details.
+
+Failures exit with a machine-readable code, so agents can tell what went wrong without parsing stderr: usage (2), configuration (3), network (4), HTTP failure (5), and local errors (6).
 
 ## Why use it
 

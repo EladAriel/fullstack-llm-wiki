@@ -1,94 +1,134 @@
 ---
 type: "Framework Learn Page"
-framework: "mongodb"
+framework: "MongoDB"
 source_repo: "https://github.com/mongodb/docs.git"
 source_branch: "main"
 source_path: "content/manual/manual/source/reference/operator/aggregation/maxN-array-element.txt"
-source_commit: "ab9db26ed3d11618cdb61516d8180337d8e3f679"
-source_commit_short: "ab9db26e"
-source_commit_date: "2026-07-24T16:22:46-06:00"
-generated_at: "2026-07-25T11:51:15Z"
+source_commit: "b9f2bc487a2878b65e3c1f80024bebab76954f27"
+source_commit_short: "b9f2bc48"
+source_commit_date: "2026-08-28T17:09:45-05:00"
+generated_at: "2026-08-29T09:39:20.190372Z"
 ---
-
-===========================
+.. _maxN:
 
 # $maxN (expression operator)
 
+**meta:** :description: Retrieve the largest `n` values from an array using the `$maxN` operator in MongoDB aggregation.
+
+.. default-domain:: mongodb
+
+**contents:** On this page
+   :local:
+   :backlinks: none
+   :depth: 1
+   :class: singlecol
+
 ## Definition
 
-> **Seealso:** :expression:`$minN`
+**expression:** $maxN
+
+   .. versionadded:: 5.2
+
+   Returns the ``n`` largest values in an array.
+
+**seealso:** :expression:`$minN`
 
 ## Syntax
 
 :expression:`$maxN` has the following syntax:
 
-```javascript
-{ $maxN: { n: <expression>, input: <expression> } }
-```
+.. code-block:: javascript
+
+   { $maxN: { n: <expression>, input: <expression> } }
+
+.. list-table::
+   :header-rows: 1
+   :class: border-table
+
+   * - Field
+     - Description
+
+   * - ``n``
+     - An :ref:`expression <aggregation-expressions>` that resolves to a 
+       positive integer. The integer specifies the number of array elements
+       that :expression:`$maxN` returns. 
+
+   * - ``input``
+     - An :ref:`expression <aggregation-expressions>` that resolves to the 
+       array from which to return the maximal ``n`` elements.
 
 ## Behavior
 
-- You cannot specify a value of `n` less than `1`.
-- :expression:`$maxN` filters out `null` values found in the `input`
-array.
+- You cannot specify a value of ``n`` less than ``1``.
 
-- If the specified `n` is greater than or equal to the number of elements
-in the `input` array, :expression:`$maxN` returns all elements in the `input` array.
+- :expression:`$maxN` filters out ``null`` values found in the ``input`` 
+  array.
 
-- If `input` resolves to a non-array value, the aggregation
-operation errors.
+- If the specified ``n`` is greater than or equal to the number of elements 
+  in the ``input`` array, :expression:`$maxN` returns all elements in the 
+  ``input`` array.
 
-- If `input` contains both numeric and string elements, the string elements
-are sorted before numeric elements according to the `BSON comparison order <bson-types-comparison-order>`.
+- If ``input`` resolves to a non-array value, the aggregation 
+  operation errors.
+
+- If ``input`` contains both numeric and string elements, the string elements 
+  are sorted before numeric elements according to the 
+  :ref:`BSON comparison order <bson-types-comparison-order>`. 
 
 ## Example
 
-Create a `scores` collection with the following documents:
+Create a ``scores`` collection with the following documents:
 
-```javascript
-db.scores.insertMany([
-    { "playerId" : 1, "score" : [ 1, 2, 3 ] },
-    { "playerId" : 2, "score" : [ 12, 90, 7, 89, 8 ] },
-    { "playerId" : 3, "score" : [ null ] },
-    { "playerId" : 4, "score" : [ ] }
-    { "playerId" : 5, "score" : [ 1293, "2", 3489, 9 ]}
-])
-```
+.. code-block:: javascript
+   :copyable: true
 
-The following example uses the :expression:`$maxN` operator to retrieve the two highest scores for each player. The highest scores are returned in the new field `maxScores` created by :pipeline:`$addFields`.
+   db.scores.insertMany([
+       { "playerId" : 1, "score" : [ 1, 2, 3 ] },
+       { "playerId" : 2, "score" : [ 12, 90, 7, 89, 8 ] },
+       { "playerId" : 3, "score" : [ null ] },
+       { "playerId" : 4, "score" : [ ] }
+       { "playerId" : 5, "score" : [ 1293, "2", 3489, 9 ]}
+   ])
 
-```javascript
-db.scores.aggregate([
-   { $addFields: { maxScores: { $maxN: { n: 2, input: "$score" } } } }
-])
-```
+The following example uses the :expression:`$maxN` operator to retrieve the two 
+highest scores for each player. The highest scores are returned in the new field 
+``maxScores`` created by :pipeline:`$addFields`. 
+
+.. code-block:: javascript
+   :copyable: true
+
+   db.scores.aggregate([
+      { $addFields: { maxScores: { $maxN: { n: 2, input: "$score" } } } }
+   ])
 
 The operation returns the following results:
 
-```javascript
-[{
-  "playerId": 1,
-  "score": [ 1, 2, 3 ],
-  "maxScores": [ 3, 2 ]
-},
-{
-  "playerId": 2,
-  "score": [ 12, 90, 7, 89, 8 ],
-  "maxScores": [ 90, 89 ]
-},
-{
-  "playerId": 3,
-  "score": [ null ],
-  "maxScores": [ ]
-},
-{
-  "playerId": 4,
-  "score": [ ],
-  "maxScores": [ ]
-},
-{ 
-  "playerId": 5,
-  "score": [ 1293, "2", 3489, 9 ],
-  "maxScores": [ "2", 3489 ]
-}]
-```
+.. code-block:: javascript
+   :copyable: true
+   :emphasize-lines: 4, 9, 14, 19, 24
+
+   [{
+     "playerId": 1,
+     "score": [ 1, 2, 3 ],
+     "maxScores": [ 3, 2 ]
+   },
+   {
+     "playerId": 2,
+     "score": [ 12, 90, 7, 89, 8 ],
+     "maxScores": [ 90, 89 ]
+   },
+   {
+     "playerId": 3,
+     "score": [ null ],
+     "maxScores": [ ]
+   },
+   {
+     "playerId": 4,
+     "score": [ ],
+     "maxScores": [ ]
+   },
+   { 
+     "playerId": 5,
+     "score": [ 1293, "2", 3489, 9 ],
+     "maxScores": [ "2", 3489 ]
+   }]

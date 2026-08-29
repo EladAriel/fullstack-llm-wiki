@@ -4,10 +4,10 @@ framework: "LangSmith"
 source_repo: "https://github.com/langchain-ai/docs.git"
 source_branch: "main"
 source_path: "src/langsmith/organization-workspace-operations.mdx"
-source_commit: "2aae1dfc98ee953a9a5185fb6fcdd9efb3f4d878"
-source_commit_short: "2aae1df"
-source_commit_date: "2026-07-25T00:27:23+00:00"
-generated_at: "2026-07-25T19:08:33.373680Z"
+source_commit: "a174f9cf7c91ee5eb14ee2382eb48bfe6e4956e9"
+source_commit_short: "a174f9c"
+source_commit_date: "2026-08-28T17:04:12-07:00"
+generated_at: "2026-08-29T09:39:50.631925Z"
 ---
 # Organization Workspace Operations
 
@@ -35,8 +35,8 @@ For an overview of LangSmith's RBAC system, role definitions, and permission con
 |-------------------------------|---------------------------|
 | **Core management:**<br/>• [Organization settings](#organization-settings): Org info and configuration<br/>• [Workspaces](#workspaces): Workspace management<br/>• [Organization members](#organization-members): Member management<br/>• [Roles and permissions](#roles-and-permissions): Custom roles | **Core resources:**<br/>• [Projects](#projects): Organize traces and runs<br/>• [Runs](#runs): Individual execution traces<br/>• [Datasets](#datasets): Test datasets for evaluation<br/>• [Examples](#examples): Individual dataset examples<br/>• [Experiments](#experiments): Comparative experiments |
 | **Security and authentication:**<br/>• [SSO and authentication](#sso-and-authentication): Single sign-on setup<br/>• [SCIM](#scim): Identity provisioning<br/>• [Access policies](#access-policies): Attribute-based access control | **Monitoring and analysis:**<br/>• [Rules](#rules): Automated run rules<br/>• [Alerts](#alerts): Alert rules for monitoring<br/>• [Feedback](#feedback): Scores and labels on outputs<br/>• [Annotation Queues](#annotation-queues): Human review queues<br/>• [Charts](#charts): Custom visualizations |
-| **Billing and accounts:**<br/>• [Billing and payments](#billing-and-payments): Subscription management<br/>• [API keys](#api-keys): Org-level keys | **Development and configuration:**<br/>• [Prompts](#prompts): Prompt templates (LangChain Hub)<br/>• [Deployments](#deployments): Deployment configurations<br/>• [MCP Servers](#mcp-servers): Model Context Protocol servers<br/>• [Fleet](#fleet): Fleet admin operations |
-| **Analytics:**<br/>• [Charts and dashboards](#organization-charts-and-dashboards): Org-level visualizations<br/>• [Usage and analytics](#usage-and-analytics): Usage tracking and TTL settings | **Workspace management:**<br/>• [Workspace settings](#workspace-settings-and-management): Members, settings<br/>• [Tags](#tags): Metadata tagging system<br/>• [Bulk Exports](#bulk-exports): Data export operations |
+| **Billing and accounts:**<br/>• [Billing and payments](#billing-and-payments): Subscription management<br/>• [API keys](#api-keys): Org-level keys | **Development and configuration:**<br/>• [Prompts](#prompts): Prompt templates (LangChain Hub)<br/>• [Custom apps](#custom-apps): User-authored mini web apps<br/>• [Deployments](#deployments): Deployment configurations<br/>• [MCP Servers](#mcp-servers): Model Context Protocol servers<br/>• [Fleet](#fleet): Fleet admin operations |
+| **Analytics:**<br/>• [Charts and dashboards](#organization-charts-and-dashboards): Org-level visualizations<br/>• [Usage and analytics](#usage-and-analytics): Usage tracking and TTL settings | **Workspace management:**<br/>• [Model price map](#model-price-map): Per-token model prices<br/>• [Workspace settings](#workspace-settings-and-management): Members, settings<br/>• [Tags](#tags): Metadata tagging system<br/>• [Bulk Exports](#bulk-exports): Data export operations |
 
 **Additional information:**
 
@@ -113,7 +113,7 @@ Organization-level workspace management operations.
 
 ### SCIM
 
-System for Cross-domain Identity Management for user provisioning.
+System for Cross-domain Identity Management for user provisioning. For setup instructions, refer to the [SCIM setup guide](/langsmith/user-management#set-up-scim-for-your-organization).
 
 | Operation | Org Admin | Org Operator | Org User | Org Viewer | Required Permission |
 |-----------|:---------:|:------------:|:--------:|:----------:|---------------------|
@@ -151,15 +151,16 @@ Attribute-based access control (ABAC) policies for fine-grained permissions.
 | Operation | Org Admin | Org Operator | Org User | Org Viewer | Required Permission |
 |-----------|:---------:|:------------:|:--------:|:----------:|---------------------|
 | List org-scoped service keys | ✓ | ✓ | ✓ | ✓ | `organization:read` |
-| Create org-scoped service key (workspace-scoped)* | ✓ | ✓ | ⚠ | ✗ | `organization:pats:create` |
+| Create org-scoped service key (workspace-scoped)* | ✓ | ✓ | ⚠ | ✗ | `organization:pats:create` + `workspaces:manage-keys` |
 | Create org-scoped service key (org-wide)* | ✓ | ✗ | ✗ | ✗ | `organization:pats:create` + `organization:manage` |
+| Delete org-scoped service key (workspace-scoped)* | ✓ | ✓ | ⚠ | ✗ | `organization:read` + `workspaces:manage-keys` |
 | Update service key role | ✓ | ✗ | ✗ | ✗ | `organization:manage` |
 | List personal access tokens (PATs) | ✓ | ✓ | ✓ | ✗ | `organization:read` |
 | Create personal access token (PAT) | ✓ | ✓ | ✓ | ✗ | `organization:pats:create` |
 | Delete personal access token (PAT) | ✓ | ✓ | ✓ | ✗ | `organization:read` |
 
 <Note>
-\* Organization Operators and Organization Users can create workspace-scoped service keys only for workspaces where they are a Workspace Admin. Org-wide service keys require the Organization Admin role.
+\* Organization Operators and Organization Users can create or delete workspace-scoped service keys only in workspaces where their role grants `workspaces:manage-keys`, such as the Workspace Admin role. Creating an org-wide service key requires the Organization Admin role.
 </Note>
 
 ### Organization charts and dashboards
@@ -219,18 +220,18 @@ Projects organize traces and runs from your LLM applications.
 | Delete filter view | ✓ | ✗ | ✗ | `projects:delete` |
 | Delete a project | ✓ | ✗ | ✗ | `projects:delete` |
 | Delete multiple projects | ✓ | ✗ | ✗ | `projects:delete` |
-| Get insights jobs (beta) | ✓ | ✓ | ✓ | `projects:read` |
-| Get specific insights job (beta) | ✓ | ✓ | ✓ | `projects:read` |
-| Create insights job (beta) | ✓ | ✓ | ✓ | `projects:read` + `rules:create` |
-| Update insights job (beta) | ✓ | ✓ | ✗ | `projects:update` |
-| Delete insights job (beta) | ✓ | ✗ | ✗ | `projects:delete` |
-| Get insights job configs (beta) | ✓ | ✓ | ✓ | `rules:read` |
-| Create insights job config (beta) | ✓ | ✓ | ✗ | `rules:create` |
-| Auto-generate insights job config (beta) | ✓ | ✓ | ✗ | `rules:create` |
-| Update insights job config (beta) | ✓ | ✓ | ✗ | `rules:update` |
-| Delete insights job config (beta) | ✓ | ✓ | ✗ | `rules:delete` |
-| Get run cluster from insights job (beta) | ✓ | ✓ | ✓ | `projects:read` |
-| Get runs from insights job (beta) | ✓ | ✓ | ✓ | `projects:read` |
+| Get insights jobs | ✓ | ✓ | ✓ | `projects:read` |
+| Get specific insights job | ✓ | ✓ | ✓ | `projects:read` |
+| Create insights job | ✓ | ✓ | ✓ | `projects:read` + `rules:create` |
+| Update insights job | ✓ | ✓ | ✗ | `projects:update` |
+| Delete insights job | ✓ | ✗ | ✗ | `projects:delete` |
+| Get insights job configs | ✓ | ✓ | ✓ | `rules:read` |
+| Create insights job config | ✓ | ✓ | ✗ | `rules:create` |
+| Auto-generate insights job config | ✓ | ✓ | ✗ | `rules:create` |
+| Update insights job config | ✓ | ✓ | ✗ | `rules:update` |
+| Delete insights job config | ✓ | ✓ | ✗ | `rules:delete` |
+| Get run cluster from insights job | ✓ | ✓ | ✓ | `projects:read` |
+| Get runs from insights job | ✓ | ✓ | ✓ | `projects:read` |
 
 <Note>
 \* `projects:increase-trace-tier` and `projects:decrease-trace-tier` are independent and can be granted separately in custom roles. For example, you can allow a role to decrease retention without allowing it to increase retention. If a user lacks both permissions, the retention settings UI is hidden entirely. If they have only one, the UI is partially enabled (the disallowed direction is disabled).
@@ -271,6 +272,7 @@ Automated run rules that trigger actions based on run conditions.
 | Get last applied rule | ✓ | ✓ | ✓ | `rules:read` |
 | Manually trigger a rule | ✓ | ✓ | ✗ | `rules:update` |
 | Trigger multiple rules | ✓ | ✓ | ✗ | `rules:update` |
+| Configure per-action data retention | ✓ | ✗ | ✗ | `rules:configure-retention` |
 
 ### Alerts
 
@@ -298,7 +300,7 @@ Test datasets with examples for evaluation.
 | Update dataset metadata | ✓ | ✓ | ✗ | `datasets:update` |
 | Delete a dataset | ✓ | ✗ | ✗ | `datasets:delete` |
 | Upload CSV dataset | ✓ | ✓ | ✗ | `datasets:create` |
-| Clone dataset | ✓ | ✓ | ✗ | `datasets:update` |
+| Clone dataset | ✓ | ✓ | ✗ | `datasets:clone` |
 | Get dataset version | ✓ | ✓ | ✓ | `datasets:read` |
 | Get dataset versions | ✓ | ✓ | ✓ | `datasets:read` |
 | Diff dataset versions | ✓ | ✓ | ✓ | `datasets:read` |
@@ -424,6 +426,23 @@ Human review queues for LLM outputs.
 | Create identity annotation queue run status | ✓ | ✓ | ✗ | `annotation-queues:update` |
 | Export archived runs | ✓ | ✓ | ✓ | `annotation-queues:read` |
 
+### Custom apps
+
+User-authored mini web apps rendered within LangSmith.
+
+| Operation | Workspace Admin | Workspace Editor | Workspace Viewer | Required Permission |
+|-----------|:---------------:|:--------------:|:----------------:|---------------------|
+| List custom apps | ✓ | ✓ | ✓ | `custom-apps:read` |
+| Get custom app | ✓ | ✓ | ✓ | `custom-apps:read` |
+| Create custom app | ✓ | ✓ | ✗ | `custom-apps:create` |
+| Update custom app | ✓ | ✓ | ✗ | `custom-apps:update` |
+| Delete custom app | ✓ | ✓ | ✗ | `custom-apps:delete` |
+| Delete custom apps (bulk) | ✓ | ✓ | ✗ | `custom-apps:delete` |
+| Download custom app source | ✓ | ✓ | ✗ | `custom-apps:download` |
+| Record custom app view | ✓ | ✓ | ✓ | `custom-apps:read` |
+| Share custom app org-wide | ✓ | ✓ | ✗ | `custom-apps:update` |
+| Claim (unshare) custom app | ✓ | ✓ | ✗ | `custom-apps:update` |
+
 ### Prompts
 
 Prompt templates and chains in the LangChain Hub.
@@ -494,6 +513,21 @@ Custom visualizations and dashboards.
 | View deployment | ✓ | ✓ | ✓ | `deployments:read` |
 | Update deployment | ✓ | ✓ | ✗ | `deployments:update` |
 | Delete deployment | ✓ | ✗ | ✗ | `deployments:delete` |
+
+### Model price map
+
+Per-token model prices used to compute run costs. See [Cost tracking](/langsmith/cost-tracking).
+
+| Operation | Workspace Admin | Workspace Editor | Workspace Viewer | Required Permission |
+|-----------|:---------------:|:--------------:|:----------------:|---------------------|
+| View model prices | ✓ | ✓ | ✓ | `model-price-map:read` |
+| Create a model price entry | ✓ | ✓ | ✗ | `model-price-map:create` |
+| Update a model price entry | ✓ | ✓ | ✗ | `model-price-map:update` |
+| Delete a model price entry | ✓ | ✓ | ✗ | `model-price-map:delete` |
+
+<Note>
+These permissions replace the `runs:read` and `runs:create` checks that previously gated model prices. Built-in roles keep the access they had. Custom roles created after this change need the `model-price-map` permissions granted explicitly; they appear as their own checkboxes in the custom role editor.
+</Note>
 
 ### Workspace settings and management
 

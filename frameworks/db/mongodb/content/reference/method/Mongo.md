@@ -1,202 +1,518 @@
 ---
 type: "Framework Learn Page"
-framework: "mongodb"
+framework: "MongoDB"
 source_repo: "https://github.com/mongodb/docs.git"
 source_branch: "main"
 source_path: "content/manual/manual/source/reference/method/Mongo.txt"
-source_commit: "ab9db26ed3d11618cdb61516d8180337d8e3f679"
-source_commit_short: "ab9db26e"
-source_commit_date: "2026-07-24T16:22:46-06:00"
-generated_at: "2026-07-25T11:51:15Z"
+source_commit: "b9f2bc487a2878b65e3c1f80024bebab76954f27"
+source_commit_short: "b9f2bc48"
+source_commit_date: "2026-08-28T17:09:45-05:00"
+generated_at: "2026-08-29T09:39:19.899740Z"
 ---
-
-========================
-
 # Mongo() (mongosh method)
+
+**meta:** :description: Instantiate a database connection using the `Mongo()` JavaScript constructor with optional parameters for host, encryption, and API configuration.
+
+.. default-domain:: mongodb
+
+**contents:** On this page
+   :local:
+   :backlinks: none
+   :depth: 2
+   :class: singlecol
 
 ## Description
 
-> **Seealso:** :method:`Mongo.getDB()` and :method:`db.getMongo()`
+**method:** Mongo(host, {+auto-encrypt-options+}, api)
+
+   JavaScript constructor to instantiate a database connection from
+   :binary:`~bin.mongosh` or from a JavaScript file.
+
+   The :method:`Mongo()` method has the following parameters:
+
+   .. list-table::
+      :header-rows: 1
+      :widths: 20 20 80
+
+      * - Parameter
+
+        - Type
+
+        - Description
+
+      * - ``host``
+
+        - string or ``Mongo`` instance
+
+        - *Optional*. Host or connection string. 
+         
+          The host can either be a connection string or in the form of ``<host>`` or
+          ``<host><:port>``. The connection string can be in the form of
+          a ``Mongo`` instance. If you specify a ``Mongo`` instance, the
+          :method:`Mongo()` constructor uses the connection string of
+          the specified Mongo instance.
+
+          If omitted, :method:`Mongo` instantiates a connection to the
+          localhost interface on the default port ``27017``.
+
+      * - ``{+auto-encrypt-options+}``
+
+        - document
+
+        - *Optional*. Configuration parameters for enabling
+          :ref:`security-in-use-encryption`.
+
+          ``{+auto-encrypt-options+}`` overrides the
+          existing in-use encryption configuration of
+          the database connection. If omitted, :method:`Mongo()`
+          inherits the in-use encryption configuration
+          of the current database connection.
+
+          See :ref:`{+auto-encrypt-options+}` for usage and syntax 
+          details.
+
+      * - ``api``
+
+        - document
+
+        - *Optional*. Configuration options for enabling the       
+          :ref:`Stable API <stable-api>`.
+
+          See :ref:`mongo-api-options` for usage and syntax details.
+
+**seealso:** :method:`Mongo.getDB()` and :method:`db.getMongo()`
 
 ## Compatibility
 
-This method is available in deployments hosted in the following environments:
+This method is available in deployments hosted in the following environments: 
 
-.. include:: /includes/fact-environments-atlas-only.rst
+**include:** /includes/fact-environments-atlas-only.rst
 
-.. include:: /includes/fact-environments-onprem-only.rst
+**include:** /includes/fact-environments-onprem-only.rst
 
-## `{+title-auto-encrypt-options+}`
+.. _{+auto-encrypt-options+}:
 
-The `{+auto-encrypt-options+}` document specifies configuration options for `security-in-use-encryption`. If your database connection has an existing in-use encryption configuration, `{+auto-encrypt-options+}` overrides that configuration. MongoDB provides two approaches to In-Use Encryption: `manual-csfle-feature` and `qe-manual-feature-qe`.
+## ``{+title-auto-encrypt-options+}``
 
-For example, starting :binary:`~bin.mongosh` with client-side field level encryption command-line options enables client-side encryption for that connection. New database connections created using :method:`Mongo()` inherit the encryption settings unless :method:`Mongo()` includes `{+auto-encrypt-options+}`.
+The ``{+auto-encrypt-options+}`` document specifies
+configuration options for :ref:`security-in-use-encryption`.
+If your database connection has an existing in-use encryption configuration,
+``{+auto-encrypt-options+}`` overrides that configuration. MongoDB provides two approaches
+to In-Use Encryption: :ref:`manual-csfle-feature` and :ref:`qe-manual-feature-qe`. 
 
-The `{+auto-encrypt-options+}` document has the following syntax:
+For example, starting :binary:`~bin.mongosh`
+with client-side field level encryption command-line options enables
+client-side encryption for that connection. New database connections
+created using :method:`Mongo()` inherit the encryption settings *unless*
+:method:`Mongo()` includes ``{+auto-encrypt-options+}``.
 
-```none
-{
-  "keyVaultClient" : <object>,
-  "keyVaultNamespace" : "<string>",
-  "kmsProviders" : <object>,
-  "schemaMap" : <object>,
-  "bypassAutoEncryption" : <boolean>,
-  "tlsOptions": <object>,
-  "encryptedFieldsMap": <object>
-}
-```
+The ``{+auto-encrypt-options+}`` document has the following
+syntax: 
 
-The `{+auto-encrypt-options+}` document takes the following parameters:
+.. code-block:: none
 
-## `api`
+   {
+     "keyVaultClient" : <object>,
+     "keyVaultNamespace" : "<string>",
+     "kmsProviders" : <object>,
+     "schemaMap" : <object>,
+     "bypassAutoEncryption" : <boolean>,
+     "tlsOptions": <object>,
+     "encryptedFieldsMap": <object>
+   }
 
-The `api` parameter specifies configuration options for the `Stable API <stable-api>`. You can enable or disable optional behavior using the following options:
+The ``{+auto-encrypt-options+}`` document takes the
+following parameters:
 
-.. include:: /includes/stable-api-options.rst
+.. list-table::
+   :header-rows: 1
+   :widths: 25 15 80
 
-The `api` parameter has the following syntax:
+   * - Parameter
 
-```javascript
-{ api: { version: <string>, strict: <boolean>, deprecationErrors: <boolean> } }
-```
+     - Type
+
+     - Description
+
+   * - ``keyVaultClient``
+
+     - :method:`Mongo()` connection object.
+
+     - *(Optional)* The MongoDB cluster hosting the key vault
+       collection.
+
+       Specify a :method:`Mongo()` connection object pointing to the
+       cluster:
+
+       .. code-block:: javascript
+
+          var keyVaultClient = Mongo(<MongoDB URI>);
+
+          var autoEncryptionOptions = {
+            "keyVaultClient" : keyVaultClient,
+            "keyVaultNamespace" : "<database>.<collection>",
+            "kmsProviders" : { ... }
+          }
+
+       If ``keyVaultClient`` is omitted, the ``host`` specified to the
+       :method:`Mongo()` object containing the
+       ``{+auto-encrypt-options+}`` document is used as the
+       key vault host.
+
+   * - ``keyVaultNamespace``
+
+     - string
+
+     - *(Required)* The full :term:`namespace` of the key vault
+       collection.
+
+   * - ``kmsProviders``
+
+     - document
+
+     - *(Required)*  The :ref:`Key Management Service (KMS)
+       <qe-fundamentals-kms-providers>` used by client-side field level
+       encryption for managing a Customer Master Key (CMK). Client-side
+       field level encryption uses the CMK for encrypting and decrypting
+       data encryption keys.
+
+       {+csfle+} supports the following KMS
+       providers:
+
+       - :ref:`Amazon Web Services KMS <qe-fundamentals-kms-providers-aws>`
+       - :ref:`Azure Key Vault <qe-fundamentals-kms-providers-azure>`
+       - :ref:`Google Cloud Platform KMS <qe-fundamentals-kms-providers-gcp>`
+       - :ref:`Locally Managed Key <qe-fundamentals-kms-providers-local>`
+
+       If possible, consider defining the credentials provided in
+       ``kmsProviders`` as environment variables, and then passing them
+       to :binary:`~bin.mongosh` using the :option:`--eval
+       <mongosh --eval>` option. This minimizes the chances of credentials
+       leaking into logs. See :ref:`Create a Data Key 
+       <qe-field-level-encryption-data-key-create>` for examples of
+       this approach for each supported KMS. 
+
+       Amazon Web Services KMS
+         .. include:: /includes/extracts/csfle-aws-kms-4.2.0-4.2.1-broken.rst
+
+         Specify the ``aws`` document to ``kmsProviders`` with the
+         following fields:
+
+         .. code-block:: json
+
+            "kmsProviders" : {
+               "aws" : {
+                 "accessKeyId" : "AWSAccessKeyId",
+                 "secretAccessKey" : "AWSSecretAccessKey"
+               }
+             }
+
+         The specified ``accessKeyId`` must correspond to an IAM user
+         with all ``List`` and ``Read`` permissions for the KMS service.
+
+         In some environments, the AWS SDK can pick up credentials
+         automatically. To enable AWS KMS usage without providing
+         explicit credentials to the AWS SDK, you can pass the
+         ``kmsProvider`` details to the ``Mongo()`` constructor.  
+
+         .. code-block:: json
+
+            { 
+              "kmsProviders" : { "aws" : { } }
+            }
+
+       Azure Key Vault
+         Specify the ``azure`` document to ``kmsProviders`` with  the
+         following fields:
+
+         .. code-block:: json
+
+            "kmsProviders" : {
+              "azure" : {
+                "tenantId" : "AzureTenantId",
+                "clientId" : "AzureClientId",
+                "clientSecret" : "AzureClientSecret"
+              }
+            }
+
+         .. versionadded:: 5.0
+
+       Google Cloud KMS
+         Specify the ``gcp`` document to ``kmsProviders`` with  the
+         following fields:
+
+         .. code-block:: json
+
+            "kmsProviders" : {
+              "gcp" : {
+                "email" : "GCPEmail",
+                "privateKey" : "GCPPrivateKey"
+              }
+            }
+
+         .. versionadded:: 5.0
+
+       Locally Managed Key
+         Specify the ``local`` document to ``kmsProviders`` with  the
+         following field:
+
+         .. code-block:: json
+
+            "kmsProviders" : {
+              "local" : {
+                 "key" : BinData(0, "<96 byte base-64 encoded key>")
+              }
+            }
+
+         The specified ``key`` *must* be a base64-encoded
+         96-byte string with no newline characters.
+
+   * - ``schemaMap``
+
+     - document
+
+     - *(Optional)* The automatic client-side field level encryption
+       rules specified using the JSON schema Draft 4 standard syntax and
+       encryption-specific keywords. This option is mutually exclusive
+       with ``explicitEncryptionOnly``. If a collection is present on both the
+       ``schemaMap`` and the ``encryptedFieldsMap``, ``libmongocrypt`` errors on initialization.
+
+       For complete documentation, see
+       :ref:`csfle-fundamentals-create-schema`.
+
+   * - ``bypassAutoEncryption``
+
+     - boolean
+
+     - *(Optional)* Specify ``true`` to bypass automatic client-side field
+       level encryption rules and perform explicit (manual) per-field
+       encryption.
+
+   * - ``bypassQueryAnalysis``
+
+     - boolean
+
+     - *(Optional)* Specify ``true`` to use explicit encryption on
+       indexed fields without the ``crypt_shared`` library. For details,
+       see :ref:`qe-reference-mongo-client`.
+
+   * - ``explicitEncryptionOnly``
+     - boolean 
+     - *(Optional)* Specify ``true`` to use neither automatic encryption
+       nor automatic decryption. You can use :method:`getKeyVault()` and
+       :method:`getClientEncryption()` to perform explicit
+       encryption. This option is mutually exclusive with ``schemaMap``.
+       If omitted, defaults to ``false``.
+
+   * - ``tlsOptions``
+     - object 
+     - *(Optional)* The path to the TLS client certificate and private key file in PEM format
+       (``tlsCertificateKeyFile``), TLS client certificate and private key file password
+       (``tlsCertificateKeyFilePassword``), or TLS certificate authority file
+       (``tlsCAFile``) to use to connect to the KMS in PEM format. To learn more 
+       about these options, see 
+       `TLS Options
+       <https://www.mongodb.com/docs/mongodb-shell/reference/options/#tls-options>`_. 
+       
+   * - ``encryptedFieldsMap``
+
+     - document
+
+     - *(Optional)* The map of collection namespaces to ``encryptedFields`` documents.
+       ``encryptedFields`` is a BSON document that describes the Queryable Encryption encrypted
+       fields. If a collection is present on both the
+       ``schemaMap`` and the ``encryptedFieldsMap``, ``libmongocrypt`` errors on
+       initialization.
+
+       To learn more about encrypted fields in Queryable Encryption, see
+       :ref:`qe-encryption-schema`.
+
+.. _mongo-api-options:
+
+## ``api``
+
+The ``api`` parameter specifies configuration options for the 
+:ref:`Stable API <stable-api>`. You can enable or disable optional
+behavior using the following options:
+
+**include:** /includes/stable-api-options.rst
+  
+.. |param| replace:: Option
+.. |apiVersion| replace:: ``version``
+.. |strict| replace:: ``strict``
+.. |deprecation| replace:: ``deprecationErrors``
+
+The ``api`` parameter has the following syntax:
+
+.. code-block:: javascript
+
+   { api: { version: <string>, strict: <boolean>, deprecationErrors: <boolean> } }
 
 ## Examples
 
 ### Connect to a MongoDB Cluster
 
-The following operation creates a new connection object from within a :binary:`~bin.mongosh` session:
+The following operation creates a new connection object from within a
+:binary:`~bin.mongosh` session:
 
-```javascript
-cluster = Mongo("mongodb://mymongo.example.net:27017/?replicaSet=myMongoCluster")
-```
+.. code-block:: javascript
 
-Issue operations against the `cluster` object to interact with the `mymongo.example.net:27017` cluster:
+   cluster = Mongo("mongodb://mymongo.example.net:27017/?replicaSet=myMongoCluster")
 
-```javascript
-myDB = cluster.getDB("myDB"); //returns the database object
-myColl = myDB.getCollection("myColl"); // returns the collection object
-```
+Issue operations against the ``cluster`` object to interact with the
+``mymongo.example.net:27017`` cluster:
+
+.. code-block:: javascript
+
+   myDB = cluster.getDB("myDB"); //returns the database object
+   myColl = myDB.getCollection("myColl"); // returns the collection object
+
+.. _mongo-connection-client-side-encryption-enabled:
 
 ### Connect to a Cluster with Client-Side Encryption Enabled
 
-.. include:: /includes/csfle-connection-boilerplate-example.rst
+**include:** /includes/csfle-connection-boilerplate-example.rst
 
-Issue operations against the `cluster` object to interact with the `mymongo.example.net:27017` cluster and perform explicit encryption:
+Issue operations against the ``cluster`` object to interact with the
+``mymongo.example.net:27017`` cluster and perform explicit encryption:
 
-```javascript
-// returns the database object
-myDB = cluster.getDB("myDB");
+.. code-block:: javascript
 
-// returns the collection object
-myColl = myDB.getCollection("myColl");
+   // returns the database object
+   myDB = cluster.getDB("myDB");
 
-// returns object for managing data encryption keys
-keyVault = cluster.getKeyVault();
+   // returns the collection object
+   myColl = myDB.getCollection("myColl");
 
-// returns object for explicit encryption/decryption
-clientEncryption = cluster.getClientEncryption();
-```
+   // returns object for managing data encryption keys
+   keyVault = cluster.getKeyVault();
 
-See `in-use-encryption-methods` for a complete list of client-side field level encryption methods.
+   // returns object for explicit encryption/decryption
+   clientEncryption = cluster.getClientEncryption();
+
+See :ref:`in-use-encryption-methods` for
+a complete list of client-side field level encryption methods.
+
+.. _mongo-connection-automatic-client-side-encryption-enabled:
 
 ### Connect to a Cluster with Automatic Client-Side Encryption Enabled
 
-To configure client-side field level encryption for a locally managed key:
+To configure client-side field level encryption for a locally managed
+key:
 
 - generate a base64-encoded 96-byte string with no line breaks
 - use :binary:`mongosh` to load the key
-```bash
-export TEST_LOCAL_KEY=$(echo "$(head -c 96 /dev/urandom | base64 | tr -d '\n')")
 
-mongosh --nodb
-```
+.. code-block:: bash
+   :emphasize-lines: 1
 
-The following operation creates a new connection object from within a :binary:`~bin.mongosh` session. The `{+auto-encrypt-options+}` option specifies the required options for enabling `automatic client-side encryption <field-level-encryption-automatic>` on the `hr.employees` collection:
+   export TEST_LOCAL_KEY=$(echo "$(head -c 96 /dev/urandom | base64 | tr -d '\n')")
 
-```javascript
-var autoEncryptionOpts = {
-  "keyVaultNamespace" : "encryption.__dataKeys",
-  "kmsProviders" : {
-    "local" : {
-      "key" : BinData(0, process.env["TEST_LOCAL_KEY"])
-    }
-  },
-  schemaMap : {
-    "hr.employees" : {
-      "bsonType": "object",
-      "properties" : {
-        "taxid" : {
-          "encrypt" : {
-            "keyId" : [UUID("bffb361b-30d3-42c0-b7a4-d24a272b72e3")],
-            "bsonType" : "string",
-            "algorithm" : "AEAD_AES_256_CBC_HMAC_SHA_512-Random"
-          }
-        },
-        "taxid-short": {
-          "encrypt": {
-            "keyId": [UUID("33408ee9-e499-43f9-89fe-5f8533870617")],
-            "algorithm": "AEAD_AES_256_CBC_HMAC_SHA_512-Deterministic",
-            "bsonType": "string"
-          }
-        }
-      }
-    }
-  }
-}
+   mongosh --nodb
 
-cluster = Mongo(
-  "mongodb://mymongo.example.net:27017/?replicaSet=myMongoCluster",
-  autoEncryptionOpts
-)
-```
+The following operation creates a new connection object from within a
+:binary:`~bin.mongosh` session. The
+:ref:`{+auto-encrypt-options+}` option specifies
+the required options for enabling :ref:`automatic client-side encryption
+<field-level-encryption-automatic>` on the ``hr.employees`` collection:
 
-Issue operations against the `cluster` object to interact with the `mymongo.example.net:27017` cluster and utilize automatic encryption:
+.. code-block:: javascript
+   :emphasize-lines: 4-6, 8-21, 24-27
 
-```javascript
-// returns the database object
-myDB = cluster.getDB("myDB");
+   var autoEncryptionOpts = {
+     "keyVaultNamespace" : "encryption.__dataKeys",
+     "kmsProviders" : {
+       "local" : {
+         "key" : BinData(0, process.env["TEST_LOCAL_KEY"])
+       }
+     },
+     schemaMap : {
+       "hr.employees" : {
+         "bsonType": "object",
+         "properties" : {
+           "taxid" : {
+             "encrypt" : {
+               "keyId" : [UUID("bffb361b-30d3-42c0-b7a4-d24a272b72e3")],
+               "bsonType" : "string",
+               "algorithm" : "AEAD_AES_256_CBC_HMAC_SHA_512-Random"
+             }
+           },
+           "taxid-short": {
+             "encrypt": {
+               "keyId": [UUID("33408ee9-e499-43f9-89fe-5f8533870617")],
+               "algorithm": "AEAD_AES_256_CBC_HMAC_SHA_512-Deterministic",
+               "bsonType": "string"
+             }
+           }
+         }
+       }
+     }
+   }
 
-// returns the collection object
-myColl = myDB.getCollection("myColl");
+   cluster = Mongo(
+     "mongodb://mymongo.example.net:27017/?replicaSet=myMongoCluster",
+     autoEncryptionOpts
+   )
 
-myColl.insertOne(
-  {
-    "name" : "J Doe",
-    "taxid" : "123-45-6789",
-    "taxid-short" : "6789"
-  }
-)
-```
+Issue operations against the ``cluster`` object to interact with the
+``mymongo.example.net:27017`` cluster and utilize automatic encryption:
 
-The specified automatic encryption rules encrypt the `taxid` and `taxid-short` fields using the specified data encryption key and algorithm. Only clients configured for the correct KMS and access to the specified data encryption key can decrypt the field.
+.. code-block:: javascript
 
-The following operation creates a new connection object from within a :binary:`~bin.mongosh` session. The `mongo.tlsOptions` option enables a connection using KMIP as the KMS provider:
+   // returns the database object
+   myDB = cluster.getDB("myDB");
 
-```javascript
-var csfleConnection = {
-  keyVaultNamespace: "encryption.__keyVault",
-  kmsProviders: { kmip: { endpoint: "kmip.example.com:123" } },
-  tlsOptions: { kmip: { tlsCertificateKeyFile: "/path/to/client/cert-and-key-bundle.pem" } }
-}
+   // returns the collection object
+   myColl = myDB.getCollection("myColl");
 
-cluster = Mongo(
-  "mongodb://mymongo.example.net:27017/?replicaSet=myMongoCluster",
-  csfleConnection
-);
-```
+   myColl.insertOne(
+     {
+       "name" : "J Doe",
+       "taxid" : "123-45-6789",
+       "taxid-short" : "6789"
+     }
+   )
 
-See `in-use-encryption-methods` for a complete list of client-side field level encryption methods.
+The specified automatic encryption rules encrypt the ``taxid`` and
+``taxid-short`` fields using the specified data encryption key and
+algorithm. Only clients configured for the correct KMS *and* access to
+the specified data encryption key can decrypt the field.
+
+The following operation creates a new connection object from within a
+:binary:`~bin.mongosh` session. The ``mongo.tlsOptions`` option enables
+a connection using KMIP as the KMS provider:
+
+.. code-block:: javascript
+
+   var csfleConnection = {
+     keyVaultNamespace: "encryption.__keyVault",
+     kmsProviders: { kmip: { endpoint: "kmip.example.com:123" } },
+     tlsOptions: { kmip: { tlsCertificateKeyFile: "/path/to/client/cert-and-key-bundle.pem" } }
+   }
+
+   cluster = Mongo(
+     "mongodb://mymongo.example.net:27017/?replicaSet=myMongoCluster",
+     csfleConnection
+   );
+
+See :ref:`in-use-encryption-methods` for
+a complete list of client-side field level encryption methods.
 
 ### Connect to a Cluster with the Stable API Enabled
 
-The following operation creates a new connection object from within a :binary:`~bin.mongosh` session. The `mongo-api-options` option enables Stable API V1 and specifies that you cannot run deprecated command or commands outside of the Stable API.
+The following operation creates a new connection object from within a
+:binary:`~bin.mongosh` session. The :ref:`mongo-api-options` option 
+enables Stable API V1 and specifies that you cannot 
+run deprecated command or commands outside of the Stable API.
 
-```javascript
-cluster = Mongo(
-  "mongodb://mymongo.example.net:27017/?replicaSet=myMongoCluster", 
-   null, 
-   { api: { version: "1", strict: true, deprecationErrors: true } }
-)
-```
+.. code-block:: javascript
 
-To interact with the `mymongo.example.net:27017` cluster, issue operations against the `cluster` object. For a full list of Stable API commands, see `<api-v1-command-list>`.
+   cluster = Mongo(
+     "mongodb://mymongo.example.net:27017/?replicaSet=myMongoCluster", 
+      null, 
+      { api: { version: "1", strict: true, deprecationErrors: true } }
+   )
+
+To interact with the ``mymongo.example.net:27017`` cluster, issue
+operations against the ``cluster`` object. For a full list of Stable API
+commands, see :ref:`<api-v1-command-list>`.

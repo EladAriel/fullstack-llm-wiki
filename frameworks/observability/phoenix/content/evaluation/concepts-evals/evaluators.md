@@ -4,10 +4,10 @@ framework: "Arize Phoenix"
 source_repo: "https://github.com/Arize-ai/phoenix.git"
 source_branch: "main"
 source_path: "docs/phoenix/evaluation/concepts-evals/evaluators.mdx"
-source_commit: "69b3ab92c37ff65812feaa2dbf0b1c0ad5ae55fe"
-source_commit_short: "69b3ab9"
-source_commit_date: "2026-07-25T11:48:12-06:00"
-generated_at: "2026-07-25T19:08:24.925823Z"
+source_commit: "c48e50e9906fcc56c1c103ebd93ef3c95ed6b6e7"
+source_commit_short: "c48e50e"
+source_commit_date: "2026-08-29T01:45:20-06:00"
+generated_at: "2026-08-29T09:39:58.885950Z"
 ---
 # Evaluators
 
@@ -19,7 +19,7 @@ description: Definition and types of Evaluators. Score abstraction.
 At the core, an Evaluator is anything that returns a Score. Evaluators can be split into two broad categories:
 
 * LLM-based: evaluators that use an LLM to perform the judgement.
-  * Examples: faithfulness, document relevance
+  * Examples: faithfulness, retrieval relevance
 * Code: evaluators that use a deterministic process or heuristic calculation.
   * Examples: exact match, BLEU, precision
 

@@ -1,121 +1,157 @@
 ---
 type: "Framework Learn Page"
-framework: "mongodb"
+framework: "MongoDB"
 source_repo: "https://github.com/mongodb/docs.git"
 source_branch: "main"
 source_path: "content/manual/manual/source/reference/method/cursor.returnKey.txt"
-source_commit: "ab9db26ed3d11618cdb61516d8180337d8e3f679"
-source_commit_short: "ab9db26e"
-source_commit_date: "2026-07-24T16:22:46-06:00"
-generated_at: "2026-07-25T11:51:15Z"
+source_commit: "b9f2bc487a2878b65e3c1f80024bebab76954f27"
+source_commit_short: "b9f2bc48"
+source_commit_date: "2026-08-28T17:09:45-05:00"
+generated_at: "2026-08-29T09:39:19.959200Z"
 ---
-
-===================================
-
 # cursor.returnKey() (mongosh method)
+
+**meta:** :description: Modify a cursor to return index keys instead of documents using `cursor.returnKey()`.
+
+.. default-domain:: mongodb
+
+**contents:** On this page
+   :local:
+   :backlinks: none
+   :depth: 1
+   :class: singlecol
 
 ## Definition
 
+**method:** cursor.returnKey()
+
+
+   .. include:: /includes/fact-mongosh-shell-method.rst
+
+   .. tip::
+
+      :expression:`$meta` supports the keyword ``"indexKey"`` to return index 
+      key metadata if an index is used. The use of 
+      :expression:`{ $meta: "indexKey" } <$meta>` is preferred over 
+      :method:`cursor.returnKey()`.
+
+   Modifies the cursor to return index keys rather than the documents.
+   
+   The :method:`cursor.returnKey()` has the following form:
+   
+   .. code-block:: javascript
+   
+      cursor.returnKey()
+
+   :returns:
+
+      The :ref:`cursor <cursors>` that :method:`~cursor.returnKey()` is attached to 
+      with a modified result set. This allows for additional cursor modifiers 
+      to be chained.
+
 ## Compatibility
 
-This method is available in deployments hosted in the following environments:
+This method is available in deployments hosted in the following environments: 
 
-.. include:: /includes/fact-environments-atlas-only.rst
+**include:** /includes/fact-environments-atlas-only.rst
 
-.. include:: /includes/fact-environments-atlas-support-all.rst
+**include:** /includes/fact-environments-atlas-support-all.rst
 
-.. include:: /includes/fact-environments-onprem-only.rst
+**include:** /includes/fact-environments-onprem-only.rst
 
 ## Behavior
 
-If the query does not use an index to perform the read operation, the cursor returns empty documents.
+If the query does not use an index to perform the read operation, the 
+cursor returns empty documents.
 
 ## Example
 
-The `restaurants` collection contains documents with the following schema:
+The ``restaurants`` collection contains documents with the following schema:
 
-```javascript
-db.restaurants.insertOne( 
-   {
-      _id: ObjectId("564f3a35b385149fc7e3fab9"),
-      address: {
-         building: "2780",
-         coord: [
-            -73.98241999999999,
-            40.579505
-         ],
-         street: "Stillwell Avenue",
-         zipcode: "11224"
-      },
-      borough: "Brooklyn",
-      cuisine: "American ",
-      grades: [
-         {
-            date: ISODate("2014-06-10T00:00:00Z"),
-            grade: "A",
-            score: 5
+.. code-block:: javascript
+
+   db.restaurants.insertOne( 
+      {
+         _id: ObjectId("564f3a35b385149fc7e3fab9"),
+         address: {
+            building: "2780",
+            coord: [
+               -73.98241999999999,
+               40.579505
+            ],
+            street: "Stillwell Avenue",
+            zipcode: "11224"
          },
-         {
-            date: ISODate("2013-06-05T00:00:00Z"),
-            grade: "A",
-            score: 7
-         }
-      ],
-      name: "Riviera Caterer",
-      restaurant_id: "40356018"
+         borough: "Brooklyn",
+         cuisine: "American ",
+         grades: [
+            {
+               date: ISODate("2014-06-10T00:00:00Z"),
+               grade: "A",
+               score: 5
+            },
+            {
+               date: ISODate("2013-06-05T00:00:00Z"),
+               grade: "A",
+               score: 7
+            }
+         ],
+         name: "Riviera Caterer",
+         restaurant_id: "40356018"
+      }
+   )
+   
+The collection has two indexes in addition to the default ``_id`` index:
+
+.. code-block:: javascript
+
+   {
+      "v" : 1,
+      "key" : {
+         "_id" : 1
+      },
+      "name" : "_id_",
+      "ns" : "guidebook.restaurant"
+   },
+   {
+      "v" : 1,
+      "key" : {
+         "cuisine" : 1
+      },
+      "name" : "cuisine_1",
+      "ns" : "guidebook.restaurant"
+   },
+   {
+      "v" : 1,
+      "key" : {
+         "_fts" : "text",
+         "_ftsx" : 1
+      },
+      "name" : "name_text",
+      "ns" : "guidebook.restaurant",
+      "weights" : {
+         "name" : 1
+      },
+      "default_language" : "english",
+      "language_override" : "language",
+      "textIndexVersion" : 3
    }
-)
-```
+      
+The following code uses the :method:`cursor.returnKey()` method to return 
+only the indexed fields used for executing the query:
 
-The collection has two indexes in addition to the default `_id` index:
+.. code-block:: javascript
 
-```javascript
-{
-   "v" : 1,
-   "key" : {
-      "_id" : 1
-   },
-   "name" : "_id_",
-   "ns" : "guidebook.restaurant"
-},
-{
-   "v" : 1,
-   "key" : {
-      "cuisine" : 1
-   },
-   "name" : "cuisine_1",
-   "ns" : "guidebook.restaurant"
-},
-{
-   "v" : 1,
-   "key" : {
-      "_fts" : "text",
-      "_ftsx" : 1
-   },
-   "name" : "name_text",
-   "ns" : "guidebook.restaurant",
-   "weights" : {
-      "name" : 1
-   },
-   "default_language" : "english",
-   "language_override" : "language",
-   "textIndexVersion" : 3
-}
-```
-
-The following code uses the :method:`cursor.returnKey()` method to return only the indexed fields used for executing the query:
-
-```javascript
-var csr = db.restaurant.find( { "cuisine" : "Japanese" } )
-csr.returnKey()
-```
-
+   var csr = db.restaurant.find( { "cuisine" : "Japanese" } )
+   csr.returnKey()
+   
 This returns the following:
 
-```javascript
-{ "cuisine" : "Japanese" }
-{ "cuisine" : "Japanese" }
-{ "cuisine" : "Japanese" }
-{ "cuisine" : "Japanese" }
-...
-```
+.. code-block:: javascript
+   :copyable: false
+
+   { "cuisine" : "Japanese" }
+   { "cuisine" : "Japanese" }
+   { "cuisine" : "Japanese" }
+   { "cuisine" : "Japanese" }
+   ...

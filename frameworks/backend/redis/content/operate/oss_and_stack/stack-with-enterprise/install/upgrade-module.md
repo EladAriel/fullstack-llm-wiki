@@ -1,14 +1,15 @@
 ---
 type: "Framework Learn Page"
-framework: "redis"
+framework: "Redis"
 source_repo: "https://github.com/redis/docs.git"
 source_branch: "main"
 source_path: "content/operate/oss_and_stack/stack-with-enterprise/install/upgrade-module.md"
-source_commit: "9d30f68c3dad1a6b3b7d30fe604b911348ce8152"
-source_commit_short: "9d30f68c"
-source_commit_date: "2026-07-24T10:52:10-07:00"
-generated_at: "2026-07-25T11:51:22Z"
+source_commit: "f8693349287b0efbef3c865b6f6a2aceca88594d"
+source_commit_short: "f869334"
+source_commit_date: "2026-08-28T10:01:19-05:00"
+generated_at: "2026-08-29T09:38:55.252321Z"
 ---
+# Upgrade Module
 
 ---
 Title: Upgrade modules
@@ -79,10 +80,6 @@ To upgrade a module enabled for a database:
         rladmin upgrade db < database-name | database-ID > latest_with_modules
         ```
 
-    {{<warning>}}
-The upgrade process does not validate the module upgrade arguments, and incorrect arguments can cause unexpected downtime. Test module upgrade commands in a test environment before you upgrade modules in production. 
-    {{</warning>}}
-
     - Use `keep_redis_version` to upgrade the modules without upgrading the database to the latest Redis version.
     
         `keep_redis_version` is deprecated as of Redis Software version 7.8.2. To upgrade modules without upgrading the Redis database version, set `redis_version` to the current Redis database version instead.
@@ -92,6 +89,10 @@ The upgrade process does not validate the module upgrade arguments, and incorrec
         ```sh
         and module module_name <module_name> version <new_module_version_number> module_args "<module arguments>"
         ```
+
+        {{<warning>}}
+The upgrade process does not validate the module upgrade arguments, and incorrect arguments can cause unexpected downtime. Test module upgrade commands in a test environment before you upgrade modules in production.
+        {{</warning>}}
 
         For the module arguments, use one of the following:
 

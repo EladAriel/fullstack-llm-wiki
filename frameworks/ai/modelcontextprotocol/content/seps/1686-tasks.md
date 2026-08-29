@@ -4,11 +4,12 @@ framework: "Model Context Protocol"
 source_repo: "https://github.com/modelcontextprotocol/modelcontextprotocol"
 source_branch: "main"
 source_path: "docs/seps/1686-tasks.mdx"
-source_commit: "7634684382c3d14cf7e9f14073fe40a2d8ace3fa"
-source_commit_short: "76346843"
-source_commit_date: "2026-07-23T16:49:30-07:00"
-generated_at: "2026-07-25T11:50:39Z"
+source_commit: "ca4ab3027f7c844cd3039c956438d72e8253f7f5"
+source_commit_short: "ca4ab30"
+source_commit_date: "2026-08-28T21:24:44-07:00"
+generated_at: "2026-08-29T09:38:48.016501Z"
 ---
+# 1686 Tasks
 
 ---
 title: "SEP-1686: Tasks"
@@ -25,6 +26,14 @@ description: "Tasks"
   </Badge>
 </div>
 
+<Note>
+  This SEP has reached Final status and is preserved as a historical record of
+  the design as accepted. Changes made to the protocol after finalization are
+  not reflected here. Refer to the [current
+  specification](/specification/latest) and its changelog for authoritative
+  requirements.
+</Note>
+
 | Field         | Value                                                                           |
 | ------------- | ------------------------------------------------------------------------------- |
 | **SEP**       | 1686                                                                            |
@@ -39,6 +48,8 @@ description: "Tasks"
 ---
 
 ## Abstract
+
+> This SEP is preserved as a historical record of the experimental tasks feature shipped in the `2025-11-25` specification. The code examples below are non-normative pseudocode written against the v1 SDKs. The draft specification moves tasks out of the core protocol and into the `io.modelcontextprotocol/tasks` extension ([SEP-2663](./2663-tasks-extension.md)).
 
 This SEP improves support for task-based workflows in the Model Context Protocol (MCP). It introduces both the **task primitive** and the associated **task ID**, which can be used to query the state and results of a task, up to a server-defined duration after the task has completed. This primitive is designed to augment other requests (such as tool calls) to enable call-now, fetch-later execution patterns across all requests for servers that support this primitive.
 

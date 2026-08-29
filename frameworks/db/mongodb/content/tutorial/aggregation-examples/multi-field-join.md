@@ -1,31 +1,239 @@
 ---
 type: "Framework Learn Page"
-framework: "mongodb"
+framework: "MongoDB"
 source_repo: "https://github.com/mongodb/docs.git"
 source_branch: "main"
 source_path: "content/manual/manual/source/tutorial/aggregation-examples/multi-field-join.txt"
-source_commit: "ab9db26ed3d11618cdb61516d8180337d8e3f679"
-source_commit_short: "ab9db26e"
-source_commit_date: "2026-07-24T16:22:46-06:00"
-generated_at: "2026-07-25T11:51:15Z"
+source_commit: "b9f2bc487a2878b65e3c1f80024bebab76954f27"
+source_commit_short: "b9f2bc48"
+source_commit_date: "2026-08-28T17:09:45-05:00"
+generated_at: "2026-08-29T09:39:19.851744Z"
 ---
-
-=========================
+.. _agg-example-join-multi:
 
 # Perform Multi-Field Joins
 
-This tutorial illustrates how to construct an aggregation pipeline, perform the aggregation on a collection, and display the results using the language of your choice.
+**facet:** :name: genre
+   :values: tutorial
+
+**meta:** :keywords: code example
+
+**contents:** On this page
+   :local:
+   :backlinks: none
+   :depth: 1
+   :class: singlecol
+
+This tutorial illustrates how to construct an aggregation pipeline,
+perform the aggregation on a collection, and display the results using
+the language of your choice. 
 
 ## About This Task
 
-This tutorial demonstrates how to combine data from a collection that describes product information with another collection that describes customer orders. The results show a list of products ordered in 2020 and details about each order.
+This tutorial demonstrates how to combine data from a collection that
+describes product information with another collection that describes
+customer orders. The results show a list of products ordered in 2020
+and details about each order.
 
-This aggregation performs a multi-field join by using :pipeline:`$lookup`. A multi-field join occurs when there are multiple corresponding fields in the documents of two collections. The aggregation matches these documents on the corresponding fields and combines information from both into one document.
+This aggregation performs a multi-field join by using :pipeline:`$lookup`. A
+multi-field join occurs when there are multiple corresponding fields in
+the documents of two collections. The aggregation matches these
+documents on the corresponding fields and combines information from both
+into one document.
 
 ## Before You Begin
 
-.. include:: /includes/language-or-shell-selector-instructions.rst
+**include:** /includes/language-or-shell-selector-instructions.rst
+
+.. tabs-selector:: drivers
+
+.. tabs-drivers::
+
+   .. tab::
+      :tabid: shell
+
+      .. include:: /includes/aggregation/aggregation-examples/multi-field-join/mongosh-multi-field-join.rst
+         :start-after: start-prep-steps
+         :end-before: end-prep-steps
+
+   .. tab::
+      :tabid: python
+         
+      .. include:: /includes/aggregation/aggregation-examples/multi-field-join/python-multi-field-join.rst
+         :start-after: start-prep-steps
+         :end-before: end-prep-steps
+
+   .. tab::
+      :tabid: java-sync
+           
+      .. include:: /includes/aggregation/aggregation-examples/multi-field-join/java-sync-multi-field-join.rst
+         :start-after: start-prep-steps
+         :end-before: end-prep-steps
+
+   .. tab::
+      :tabid: kotlin-coroutine
+           
+      .. include:: /includes/aggregation/aggregation-examples/multi-field-join/kotlin-multi-field-join.rst
+         :start-after: start-prep-steps
+         :end-before: end-prep-steps
+
+   .. tab::
+      :tabid: scala
+           
+      .. include:: /includes/aggregation/aggregation-examples/multi-field-join/scala-multi-field-join.rst
+         :start-after: start-prep-steps
+         :end-before: end-prep-steps
+
+   .. tab:: 
+      :tabid: csharp
+      
+      .. include:: /includes/aggregation/aggregation-examples/multi-field-join/csharp-multi-field-join.rst
+         :start-after: start-prep-steps
+         :end-before: end-prep-steps
+
+   .. tab::
+      :tabid: c
+      
+      .. include:: /includes/aggregation/aggregation-examples/multi-field-join/c-multi-field-join.rst
+         :start-after: start-prep-steps
+         :end-before: end-prep-steps
+
+   .. tab::
+      :tabid: cpp
+           
+      .. include:: /includes/aggregation/aggregation-examples/multi-field-join/cpp-multi-field-join.rst
+         :start-after: start-prep-steps
+         :end-before: end-prep-steps
+
+   .. tab::
+      :tabid: nodejs
+
+      .. include:: /includes/aggregation/aggregation-examples/multi-field-join/nodejs-multi-field-join.rst
+         :start-after: start-prep-steps
+         :end-before: end-prep-steps
+
+   .. tab::
+      :tabid: php
+
+      .. include:: /includes/aggregation/aggregation-examples/multi-field-join/php-multi-field-join.rst
+         :start-after: start-prep-steps
+         :end-before: end-prep-steps
+
+   .. tab::
+      :tabid: ruby
+
+      .. include:: /includes/aggregation/aggregation-examples/multi-field-join/ruby-multi-field-join.rst
+         :start-after: start-prep-steps
+         :end-before: end-prep-steps
+
+   .. tab::
+      :tabid: go
+
+      .. include:: /includes/aggregation/aggregation-examples/multi-field-join/golang-multi-field-join.rst
+         :start-after: start-prep-steps
+         :end-before: end-prep-steps
+
+   .. tab::
+      :tabid: rust
+
+      .. include:: /includes/aggregation/aggregation-examples/multi-field-join/rust-multi-field-join.rst
+         :start-after: start-prep-steps
+         :end-before: end-prep-steps
 
 ## Steps
 
-The following steps demonstrate how to create and run an aggregation pipeline to join collections on multiple fields.
+The following steps demonstrate how to create and run an aggregation
+pipeline to join collections on multiple fields.
+
+.. tabs-drivers::
+
+   .. tab::
+      :tabid: shell
+
+      .. include:: /includes/aggregation/aggregation-examples/multi-field-join/mongosh-multi-field-join.rst
+         :start-after: start-tutorial
+         :end-before: end-tutorial
+
+   .. tab::
+      :tabid: python
+         
+      .. include:: /includes/aggregation/aggregation-examples/multi-field-join/python-multi-field-join.rst
+         :start-after: start-tutorial
+         :end-before: end-tutorial
+
+   .. tab::
+      :tabid: java-sync
+           
+      .. include:: /includes/aggregation/aggregation-examples/multi-field-join/java-sync-multi-field-join.rst
+         :start-after: start-tutorial
+         :end-before: end-tutorial
+
+   .. tab::
+      :tabid: kotlin-coroutine
+           
+      .. include:: /includes/aggregation/aggregation-examples/multi-field-join/kotlin-multi-field-join.rst
+         :start-after: start-tutorial
+         :end-before: end-tutorial
+
+   .. tab::
+      :tabid: scala
+           
+      .. include:: /includes/aggregation/aggregation-examples/multi-field-join/scala-multi-field-join.rst
+         :start-after: start-tutorial
+         :end-before: end-tutorial
+
+   .. tab:: 
+      :tabid: csharp
+      
+      .. include:: /includes/aggregation/aggregation-examples/multi-field-join/csharp-multi-field-join.rst
+         :start-after: start-tutorial
+         :end-before: end-tutorial
+
+   .. tab::
+      :tabid: c
+      
+      .. include:: /includes/aggregation/aggregation-examples/multi-field-join/c-multi-field-join.rst
+         :start-after: start-tutorial
+         :end-before: end-tutorial
+
+   .. tab::
+      :tabid: cpp
+           
+      .. include:: /includes/aggregation/aggregation-examples/multi-field-join/cpp-multi-field-join.rst
+         :start-after: start-tutorial
+         :end-before: end-tutorial
+
+   .. tab::
+      :tabid: nodejs
+
+      .. include:: /includes/aggregation/aggregation-examples/multi-field-join/nodejs-multi-field-join.rst
+         :start-after: start-tutorial
+         :end-before: end-tutorial
+
+   .. tab::
+      :tabid: php
+
+      .. include:: /includes/aggregation/aggregation-examples/multi-field-join/php-multi-field-join.rst
+         :start-after: start-tutorial
+         :end-before: end-tutorial
+
+   .. tab::
+      :tabid: ruby
+
+      .. include:: /includes/aggregation/aggregation-examples/multi-field-join/ruby-multi-field-join.rst
+         :start-after: start-tutorial
+         :end-before: end-tutorial
+
+   .. tab::
+      :tabid: go
+
+      .. include:: /includes/aggregation/aggregation-examples/multi-field-join/golang-multi-field-join.rst
+         :start-after: start-tutorial
+         :end-before: end-tutorial
+
+   .. tab::
+      :tabid: rust
+
+      .. include:: /includes/aggregation/aggregation-examples/multi-field-join/rust-multi-field-join.rst
+         :start-after: start-tutorial
+         :end-before: end-tutorial

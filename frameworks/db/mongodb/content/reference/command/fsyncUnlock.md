@@ -1,70 +1,121 @@
 ---
 type: "Framework Learn Page"
-framework: "mongodb"
+framework: "MongoDB"
 source_repo: "https://github.com/mongodb/docs.git"
 source_branch: "main"
 source_path: "content/manual/manual/source/reference/command/fsyncUnlock.txt"
-source_commit: "ab9db26ed3d11618cdb61516d8180337d8e3f679"
-source_commit_short: "ab9db26e"
-source_commit_date: "2026-07-24T16:22:46-06:00"
-generated_at: "2026-07-25T11:51:15Z"
+source_commit: "b9f2bc487a2878b65e3c1f80024bebab76954f27"
+source_commit_short: "b9f2bc48"
+source_commit_date: "2026-08-28T17:09:45-05:00"
+generated_at: "2026-08-29T09:39:20.063820Z"
 ---
-
-==============================
-
 # fsyncUnlock (database command)
 
+.. default-domain:: mongodb
+
+**facet:** :name: genre
+   :values: reference
+
+**contents:** On this page
+   :local:
+   :backlinks: none
+   :depth: 1
+   :class: singlecol
+
+**meta:** :description: fsyncUnlock reduces the lock count on the server or cluster.
+
 ## Definition
+
+**dbcommand:** fsyncUnlock
+
+   Reduces the lock count on the server or cluster. To enable write operations,
+   the lock count must be zero.
+
+   .. |fsyncLockUnlock| replace:: the :dbcommand:`fsync` and
+      ``fsyncUnlock`` commands
+   .. include:: /includes/fsync-mongos
+
+   Use this command to unblock writes after you finish a backup operation.
+
+   .. include:: /includes/fsync-lock-command
+
+   :dbcommand:`fsyncUnlock` is an administrative operation. Typically
+   you will use :dbcommand:`fsyncUnlock` following a database
+   :ref:`backup operation <backup-methods>`.
+
+   .. |method| replace:: :method:`db.fsyncUnlock` helper method
+   .. include:: /includes/fact-dbcommand-tip
 
 ## Compatibility
 
 This command is available in deployments hosted in the following environments:
 
-.. include:: /includes/fact-environments-onprem-only.rst
+**include:** /includes/fact-environments-onprem-only.rst
 
 ## Syntax
 
 The command has the following syntax:
 
-```javascript
-db.adminCommand(
-   {
-     fsyncUnlock: 1,
-     comment: <any>
-   }
-)
-```
+.. code-block:: javascript
 
-The `comment` field is optional and may contain a comment of any data type.
+   db.adminCommand(
+      {
+        fsyncUnlock: 1,
+        comment: <any>
+      }
+   )
+
+The ``comment`` field is optional and may contain a comment of any data
+type.
 
 ## Results
 
 The operation returns a document with the following fields:
 
+.. list-table::
+   :header-rows: 1
+   :widths: 30 70
+
+   * - Field
+     - Description
+
+   * - ``info``
+     - Information on the status of the operation
+
+   * - ``lockCount`` 
+     - The number of locks remaining on the instance after the operation.
+
+   * - ``ok``
+     - The status code.
+
 ## Examples
 
-Consider a situation where :method:`db.fsyncLock()` has been issued two times. The following :dbcommand:`fsyncUnlock` operation reduces the locks taken by :method:`db.fsyncLock()` by 1:
+Consider a situation where :method:`db.fsyncLock()` has been issued two
+times. The following :dbcommand:`fsyncUnlock` operation reduces the
+locks taken by :method:`db.fsyncLock()` by 1:
 
-```javascript
-db.adminCommand( { fsyncUnlock: 1 } )
-```
+.. code-block:: javascript
 
-The operation returns the following document:
-
-```javascript
-{ "info" : "fsyncUnlock completed", "lockCount" : Long(1), "ok" : 1 }
-```
-
-As the `lockCount` is greater than 0, the :binary:`~bin.mongod` instance is locked against writes. To unlock the instance for writes, run the unlock operation again:
-
-```javascript
-db.adminCommand( { fsyncUnlock: 1 } )
-```
+   db.adminCommand( { fsyncUnlock: 1 } )
 
 The operation returns the following document:
 
-```javascript
-{ "info" : "fsyncUnlock completed", "lockCount" : Long(0), "ok" : 1 }
-```
+.. code-block:: javascript
+
+   { "info" : "fsyncUnlock completed", "lockCount" : Long(1), "ok" : 1 }
+
+As the ``lockCount`` is greater than 0, the :binary:`~bin.mongod` instance
+is locked against writes. To unlock the instance for writes, run the
+unlock operation again:
+
+.. code-block:: javascript
+
+   db.adminCommand( { fsyncUnlock: 1 } )
+
+The operation returns the following document:
+
+.. code-block:: javascript
+
+   { "info" : "fsyncUnlock completed", "lockCount" : Long(0), "ok" : 1 }
 
 The :binary:`~bin.mongod` instance is unlocked for writes.

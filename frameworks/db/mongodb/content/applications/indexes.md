@@ -1,42 +1,78 @@
 ---
 type: "Framework Learn Page"
-framework: "mongodb"
+framework: "MongoDB"
 source_repo: "https://github.com/mongodb/docs.git"
 source_branch: "main"
 source_path: "content/manual/manual/source/applications/indexes.txt"
-source_commit: "ab9db26ed3d11618cdb61516d8180337d8e3f679"
-source_commit_short: "ab9db26e"
-source_commit_date: "2026-07-24T16:22:46-06:00"
-generated_at: "2026-07-25T11:51:15Z"
+source_commit: "b9f2bc487a2878b65e3c1f80024bebab76954f27"
+source_commit_short: "b9f2bc48"
+source_commit_date: "2026-08-28T17:09:45-05:00"
+generated_at: "2026-08-29T09:39:19.725819Z"
 ---
-
-===================
+.. _manual-indexing-strategies:
+.. _indexing-strategies:
 
 # Indexing Strategies
 
-The best indexes for your application depend on several factors, including the kinds of queries you expect, the ratio of reads to writes, and the amount of free memory on your system.
+**meta:** :description: Develop effective indexing strategies by considering query types, read-write ratios, and memory, and profile index configurations to optimize query performance.
 
-Before building indexes, map out your application's queries and the fields they access. Indexes have a performance cost, but are worth it for frequent queries on large data sets. Consider the frequency of each query and whether it justifies an index.
+.. default-domain:: mongodb
 
-Profile multiple index configurations against production-representative data to find which performs best. Inspect existing indexes to confirm they support your current and planned queries. Drop indexes that are no longer used.
+**contents:** On this page
+   :local:
+   :backlinks: none
+   :depth: 1
+   :class: singlecol
 
-Generally, MongoDB only uses one index to fulfill most queries. However, each clause of an :query:`$or` query may use a different index.
+.. dismissible-skills-card::
+   :skill: Indexing Design Fundamentals
+   :url: https://learn.mongodb.com/skills?openTab=indexes
+
+The best indexes for your application depend on several factors,
+including the kinds of queries you expect, the ratio of reads to
+writes, and the amount of free memory on your system.
+
+Before building indexes, map out your application's queries and the
+fields they access. Indexes have a performance cost, but are worth it
+for frequent queries on large data sets. Consider the frequency of
+each query and whether it justifies an index.
+
+Profile multiple index configurations against production-representative
+data to find which performs best. Inspect existing indexes to confirm
+they support your current and planned queries. Drop indexes that are
+no longer used.
+
+Generally, MongoDB only uses *one* index to fulfill most queries.
+However, each clause of an :query:`$or` query may use a different
+index.
 
 The following documents introduce indexing strategies:
 
-`Use the ESR (Equality, Sort, Range) Guideline <esr-indexing-guideline>` Arrange compound index keys to optimize equality, sort, and range operations.
+:ref:`Use the ESR (Equality, Sort, Range) Guideline <esr-indexing-guideline>`
+   Arrange compound index keys to optimize equality, sort, and range
+   operations.
 
-`create-indexes-to-support-queries` An index supports a query when it contains all the fields the query scans, greatly improving performance.
+:ref:`create-indexes-to-support-queries`
+   An index supports a query when it contains all the fields the query
+   scans, greatly improving performance.
 
-`sorting-with-indexes` Use these strategies to specify index field order and support efficient sort queries.
+:ref:`sorting-with-indexes`
+   Use these strategies to specify index field order and support
+   efficient sort queries.
 
-`index-selectivity` Understand how index selectivity affects query performance and design indexes that answer queries efficiently.
+:ref:`index-selectivity`
+   Understand how index selectivity affects query performance and
+   design indexes that answer queries efficiently.
 
-`unique-indexes-schema-validation` Combine index properties and schema validation to implement your application design.
+:ref:`unique-indexes-schema-validation`
+   Combine index properties and schema validation to implement your
+   application design.
 
-## Contents
 
-- Equality, Sort, Range Guideline </tutorial/equality-sort-range-guideline>
-- Sort Query Results </tutorial/sort-results-with-indexes>
-- Ensure Query Selectivity </tutorial/create-queries-that-ensure-selectivity>
-- Unique Indexes and Schema Validation </tutorial/unique-indexes-schema-validation>
+**toctree:** :titlesonly: 
+   :hidden: 
+
+   Equality, Sort, Range Guideline </tutorial/equality-sort-range-guideline>
+   Sort Query Results </tutorial/sort-results-with-indexes>
+   Ensure Query Selectivity </tutorial/create-queries-that-ensure-selectivity>
+   Unique Indexes and Schema Validation </tutorial/unique-indexes-schema-validation>

@@ -1,14 +1,15 @@
 ---
 type: "Framework Learn Page"
-framework: "redis"
+framework: "Redis"
 source_repo: "https://github.com/redis/docs.git"
 source_branch: "main"
 source_path: "content/commands/memory-stats.md"
-source_commit: "9d30f68c3dad1a6b3b7d30fe604b911348ce8152"
-source_commit_short: "9d30f68c"
-source_commit_date: "2026-07-24T10:52:10-07:00"
-generated_at: "2026-07-25T11:51:22Z"
+source_commit: "f8693349287b0efbef3c865b6f6a2aceca88594d"
+source_commit_short: "f869334"
+source_commit_date: "2026-08-28T10:01:19-05:00"
+generated_at: "2026-08-29T09:38:55.012173Z"
 ---
+# Memory Stats
 
 ---
 acl_categories:
@@ -63,6 +64,7 @@ values. The following metrics are reported:
      caches
 *   `functions.caches`: the summed size in bytes of the overheads of the Function scripts'
      caches
+*   `hash.templates`: Total memory in bytes used by all compact hash templates (see [`INFO`]({{< relref "/commands/info" >}})'s `used_memory_hash_templates`). Added in Redis 8.10.
 *   `dbXXX`: For each of the server's databases, the overheads of the main and
      expiry dictionaries (`overhead.hashtable.main` and
     `overhead.hashtable.expires`, respectively) are reported in bytes

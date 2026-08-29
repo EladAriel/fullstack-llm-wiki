@@ -1,71 +1,111 @@
 ---
 type: "Framework Learn Page"
-framework: "mongodb"
+framework: "MongoDB"
 source_repo: "https://github.com/mongodb/docs.git"
 source_branch: "main"
 source_path: "content/manual/manual/source/tutorial/rotate-log-files.txt"
-source_commit: "ab9db26ed3d11618cdb61516d8180337d8e3f679"
-source_commit_short: "ab9db26e"
-source_commit_date: "2026-07-24T16:22:46-06:00"
-generated_at: "2026-07-25T11:51:15Z"
+source_commit: "b9f2bc487a2878b65e3c1f80024bebab76954f27"
+source_commit_short: "b9f2bc48"
+source_commit_date: "2026-08-28T17:09:45-05:00"
+generated_at: "2026-08-29T09:39:19.645588Z"
 ---
-
-================
-
 # Rotate Log Files
+
+**meta:** :description: Rotate MongoDB log files with the `logRotate` command, `SIGUSR1` signal, or `logrotate` utility. Configure log rotation settings for different environments.
+
+.. default-domain:: mongodb
+
+**contents:** On this page
+   :local:
+   :backlinks: none
+   :depth: 1
+   :class: singlecol
 
 ## Overview
 
-When used with the `--logpath` option or :setting:`systemLog.path` setting, :binary:`~bin.mongod` and :binary:`~bin.mongos` instances report a live account of all activity and operations to a log file. When reporting activity data to a log file, by default, MongoDB only rotates logs in response to the :dbcommand:`logRotate` command, or when the :binary:`~bin.mongod` or :binary:`~bin.mongos` process receives a `SIGUSR1` signal from the operating system. Both server logs and `audit logs <auditing>` may be rotated with the :dbcommand:`logRotate` command, either together or independently.
+When used with the ``--logpath`` option or :setting:`systemLog.path`
+setting, :binary:`~bin.mongod` and :binary:`~bin.mongos` instances
+report a live account of all activity and operations to a log file. 
+When reporting activity data to a log file, by default, MongoDB only
+rotates logs in response to the :dbcommand:`logRotate` command, or when
+the :binary:`~bin.mongod` or :binary:`~bin.mongos` process receives a
+``SIGUSR1`` signal from the operating system. Both server logs and
+:ref:`audit logs <auditing>` may be rotated with the
+:dbcommand:`logRotate` command, either together or independently.
 
-MongoDB's standard log rotation approach archives the current log file and starts a new one. To do this, the :binary:`~bin.mongod` or :binary:`~bin.mongos` instance renames the current log file by appending a UTC timestamp to the filename, in `ISODate` format. It then opens a new log file, closes the old log file, and sends all new log entries to the new log file.
+MongoDB's standard log rotation approach archives the current
+log file and starts a new one. To do this, the :binary:`~bin.mongod` or
+:binary:`~bin.mongos` instance renames the current log file by appending
+a UTC timestamp to the filename, in :term:`ISODate` format. It then
+opens a new log file, closes the old log file, and sends all new log
+entries to the new log file.
 
-You can also configure MongoDB to support the Linux/Unix `logrotate` utility by setting :setting:`systemLog.logRotate` or `--logRotate` to `reopen`. With `reopen`, :binary:`~bin.mongod` or :binary:`~bin.mongos` closes the log file, and then reopens a log file with the same name, expecting that another process renamed the file prior to rotation.
+You can also configure MongoDB to support the Linux/Unix ``logrotate``
+utility by setting :setting:`systemLog.logRotate` or
+``--logRotate`` to ``reopen``. With ``reopen``, :binary:`~bin.mongod`
+or :binary:`~bin.mongos` closes the log file, and
+then reopens a log file with the same name, expecting that another
+process renamed the file prior to rotation.
 
-Finally, you can configure :binary:`~bin.mongod` to send log data to the `syslog` using the :option:`--syslog <mongod --syslog>` option. In this case, you can take advantage of alternate log rotation tools.
+Finally, you can configure :binary:`~bin.mongod` to send log data to the
+``syslog`` using the :option:`--syslog <mongod --syslog>` option. In
+this case, you can take advantage of alternate log rotation tools.
 
-> **Note:** :dbcommand:`logRotate` isn't a replicated command. You must connect
-to each instance of a replica set and run :dbcommand:`logRotate`
-to rotate the logs for replica set members.
+**note:** :dbcommand:`logRotate` isn't a replicated command. You must connect 
+   to each instance of a replica set and run :dbcommand:`logRotate` 
+   to rotate the logs for replica set members.
+
 
 To rotate the log files, you must perform one of these steps:
 
-- Send a `SIGUSR1` signal to the :binary:`~bin.mongod` or
-:binary:`~bin.mongos` process.
+- Send a ``SIGUSR1`` signal to the :binary:`~bin.mongod` or
+  :binary:`~bin.mongos` process.
 
 - Run the MongoDB :dbcommand:`logRotate` command.
-- Run the Linux/Unix `logrotate` utility.
+
+- Run the Linux/Unix ``logrotate`` utility.
+
 See the examples later on this page.
 
-> **Seealso:** For information on logging, see the
-`monitoring-standard-loggging` section.
+**seealso:** For information on logging, see the
+   :ref:`monitoring-standard-loggging` section.
 
 ## Default Log Rotation Behavior
 
-By default, MongoDB uses the `--logRotate rename` behavior. With `rename`, :binary:`~bin.mongod` or :binary:`~bin.mongos` renames the current log file by appending a UTC timestamp to the filename, opens a new log file, closes the old log file, and sends all new log entries to the new log file.
+By default, MongoDB uses the
+``--logRotate rename`` behavior. 
+With ``rename``, :binary:`~bin.mongod` or
+:binary:`~bin.mongos` renames the current log file by appending a UTC 
+timestamp to the filename, opens a new log file, closes the old log
+file, and sends all new log entries to the new log file.
 
-.. include:: /includes/steps/log-rotate-rename.rst
+**include:** /includes/steps/log-rotate-rename.rst
 
-## Log Rotation with `--logRotate reopen`
+## Log Rotation with ``--logRotate reopen``
 
-Log rotation with `--logRotate reopen` closes and opens the log file following the typical Linux/Unix log rotate behavior.
+Log rotation with ``--logRotate reopen`` closes and opens
+the log file following the typical Linux/Unix log rotate behavior.
 
-.. include:: /includes/steps/log-rotate-reopen.rst
+**include:** /includes/steps/log-rotate-reopen.rst
 
 ## Syslog Log Rotation
 
-With syslog log rotation, :binary:`~bin.mongod` sends log data to the syslog rather than writing it to a file.
+With syslog log rotation, :binary:`~bin.mongod` sends log data to the
+syslog rather than writing it to a file.
 
-.. include:: /includes/fact-component-in-syslog.rst
+**include:** /includes/fact-component-in-syslog.rst
 
-.. include:: /includes/steps/log-rotate-syslog.rst
+**include:** /includes/steps/log-rotate-syslog.rst
 
-## Forcing a Log Rotation with `SIGUSR1`
+## Forcing a Log Rotation with ``SIGUSR1``
 
-For Linux and Unix-based systems, you can use the `SIGUSR1` signal to rotate the logs for a single process.
+For Linux and Unix-based systems, you can use the ``SIGUSR1`` signal
+to rotate the logs for a single process.
 
-For example, if a running :binary:`~bin.mongod` instance has a process ID (PID) of `2200`, the following command rotates the log file for that instance on Linux:
+For example, if a running :binary:`~bin.mongod` instance has a
+process ID (PID) of ``2200``, the following command rotates the log
+file for that instance on Linux:
 
-```bash
-kill -SIGUSR1 2200
-```
+.. code-block:: bash
+
+   kill -SIGUSR1 2200

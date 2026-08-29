@@ -1,55 +1,142 @@
 ---
 type: "Framework Learn Page"
-framework: "mongodb"
+framework: "MongoDB"
 source_repo: "https://github.com/mongodb/docs.git"
 source_branch: "main"
 source_path: "content/manual/manual/source/reference/method/db.collection.getShardLocation.txt"
-source_commit: "ab9db26ed3d11618cdb61516d8180337d8e3f679"
-source_commit_short: "ab9db26e"
-source_commit_date: "2026-07-24T16:22:46-06:00"
-generated_at: "2026-07-25T11:51:15Z"
+source_commit: "b9f2bc487a2878b65e3c1f80024bebab76954f27"
+source_commit_short: "b9f2bc48"
+source_commit_date: "2026-08-28T17:09:45-05:00"
+generated_at: "2026-08-29T09:39:19.901000Z"
 ---
-
-=================================================
-
 # db.collection.getShardLocation() (mongosh method)
+
+**meta:** :description: Get the shards where a collection is located using `db.collection.getShardLocation()`.
+
+**contents:** On this page
+   :local:
+   :backlinks: none
+   :depth: 1
+   :class: singlecol
 
 ## Definition
 
+**method:** db.collection.getShardLocation()
+
+   .. versionadded:: 8.1
+
+   Returns a document containing the shards where the collection is
+   located and whether the collection is sharded.
+
+   .. important:: ``mongosh`` Method
+
+      This page documents a :binary:`~bin.mongosh` method. This is *not*
+      the documentation for database commands or language-specific
+      drivers.
+      
+      The ``getShardLocation()`` method is a wrapper for the
+      :pipeline:`$listClusterCatalog` aggregation stage.
+
 ## Output
 
-The `getShardLocation()` method returns a document with the following fields:
+The ``getShardLocation()`` method returns a document with the following
+fields:
+
+.. list-table::
+   :header-rows: 1
+   :widths: 10 10 20
+
+   * - Field
+     - Type
+     - Description
+   * - ``shards``
+     - Array
+     - Shards where the collection's data resides.
+   * - ``sharded``
+     - Boolean
+     - Indicates whether the collection is sharded.
 
 If you run the method on an unsharded deployment:
 
-- The `shards` array is empty.
-- The `sharded` field is `false`.
+- The ``shards`` array is empty.
+- The ``sharded`` field is ``false``.
+
 ## Compatibility
 
-This method is available in deployments hosted in the following environments:
+This method is available in deployments hosted in the following
+environments:
 
-.. include:: /includes/fact-environments-atlas-only.rst
+**include:** /includes/fact-environments-atlas-only.rst
 
-.. include:: /includes/fact-environments-atlas-support-no-free.rst
+**include:** /includes/fact-environments-atlas-support-no-free.rst
 
-.. include:: /includes/fact-environments-onprem-only.rst
+**include:** /includes/fact-environments-onprem-only.rst
 
 ## Syntax
 
-```javascript
-db.<collection>.getShardLocation()
-```
+.. code-block:: javascript
+
+   db.<collection>.getShardLocation()
 
 ## Examples
 
 ### Sharded Collection
 
-The following example shows the shards that contain the data in the `sample_mflix.movies` collection:
+The following example shows the shards that contain the data in the
+``sample_mflix.movies`` collection:
+
+.. io-code-block::
+   :copyable: true
+
+   .. input::
+      :language: javascript
+
+      use sample_mflix
+
+      db.movies.getShardLocation()
+
+   .. output::
+      :language: javascript
+
+      { shards: [ 'shard01', 'shard02' ], sharded: true }
 
 ### Unsharded Collection on a Sharded Cluster
 
-If you run the command on a sharded cluster but the collection is not sharded, the `sharded` field is `false` and the `shards` array only contains the `config` shard:
+If you run the command on a sharded cluster but the collection is not
+sharded, the ``sharded`` field is ``false`` and the ``shards`` array
+only contains the ``config`` shard:
+
+.. io-code-block::
+   :copyable: true
+
+   .. input::
+      :language: javascript
+
+      use sample_mflix
+
+      db.movies.getShardLocation()
+
+   .. output::
+      :language: javascript
+
+      { shards: [ 'config' ], sharded: false }
 
 ### Unsharded Deployment
 
-If you run the command on an unsharded deployment, the `sharded` field is `false` and the `shards` array is empty:
+If you run the command on an unsharded deployment, the ``sharded`` field
+is ``false`` and the ``shards`` array is empty:
+
+.. io-code-block::
+   :copyable: true
+
+   .. input::
+      :language: javascript
+
+      use sample_mflix
+
+      db.movies.getShardLocation()
+
+   .. output::
+      :language: javascript
+
+      { shards: [], sharded: false }

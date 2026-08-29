@@ -1,50 +1,92 @@
 ---
 type: "Framework Learn Page"
-framework: "mongodb"
+framework: "MongoDB"
 source_repo: "https://github.com/mongodb/docs.git"
 source_branch: "main"
 source_path: "content/manual/manual/source/reference/method/db.dropAllUsers.txt"
-source_commit: "ab9db26ed3d11618cdb61516d8180337d8e3f679"
-source_commit_short: "ab9db26e"
-source_commit_date: "2026-07-24T16:22:46-06:00"
-generated_at: "2026-07-25T11:51:15Z"
+source_commit: "b9f2bc487a2878b65e3c1f80024bebab76954f27"
+source_commit_short: "b9f2bc48"
+source_commit_date: "2026-08-28T17:09:45-05:00"
+generated_at: "2026-08-29T09:39:20.002364Z"
 ---
-
-==================================
-
 # db.dropAllUsers() (mongosh method)
+
+**meta:** :description: Remove all users from the current database using the `db.dropAllUsers()` method, with optional write concern settings.
+
+.. default-domain:: mongodb
+
+**contents:** On this page
+   :local:
+   :backlinks: none
+   :depth: 1
+   :class: singlecol
 
 ## Definition
 
+**method:** db.dropAllUsers(writeConcern)
+
+   Removes all users from the current database.
+
+   .. |dbcommand| replace:: :dbcommand:`dropAllUsersFromDatabase` command
+   .. include:: /includes/fact-mongosh-shell-method-alt.rst
+
+   .. warning::
+
+      The :method:`db.dropAllUsers` method removes all users from the
+      database.
+
+   The :method:`db.dropAllUsers` method takes the following arguments:
+
+   .. |local-cmd-name| replace:: :method:`db.dropAllUsers()`
+
+   .. list-table::
+      :header-rows: 1
+      :widths: 20 20 80
+   
+      * - Field
+        - Type
+        - Description
+      * - ``writeConcern``
+        - document
+        - .. include:: /includes/fact-write-concern-spec-link.rst
+
+   The :method:`db.dropAllUsers()` method wraps the
+   :dbcommand:`dropAllUsersFromDatabase` command.
+
 ## Compatibility
 
-This method is available in deployments hosted in the following environments:
+This method is available in deployments hosted in the following
+environments:
 
-.. include:: /includes/fact-environments-no-atlas-support.rst
+**include:** /includes/fact-environments-no-atlas-support.rst
 
-.. include:: /includes/fact-environments-onprem-only.rst
+**include:** /includes/fact-environments-onprem-only.rst
 
 ## Behavior
 
 ### Replica set
 
-.. include:: /includes/fact-management-methods-write-concern.rst
+.. |command| replace:: :method:`db.dropAllUsers()`
+
+**include:** /includes/fact-management-methods-write-concern.rst
 
 ## Required Access
 
-.. include:: /includes/access-drop-user.rst
+**include:** /includes/access-drop-user.rst
 
 ## Example
 
-The following :method:`db.dropAllUsers()` operation drops every user from the `products` database.
+The following :method:`db.dropAllUsers()` operation drops every user from
+the ``products`` database.
 
-```javascript
-use products
-db.dropAllUsers( {w: "majority", wtimeout: 5000} )
-```
+.. code-block:: javascript
 
-The `n` field in the results document shows the number of users removed:
+   use products
+   db.dropAllUsers( {w: "majority", wtimeout: 5000} )
 
-```javascript
-{ "n" : 12, "ok" : 1 }
-```
+The ``n`` field in the results document shows the number of users
+removed:
+
+.. code-block:: javascript
+
+   { "n" : 12, "ok" : 1 }

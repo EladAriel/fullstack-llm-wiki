@@ -1,79 +1,131 @@
 ---
 type: "Framework Learn Page"
-framework: "mongodb"
+framework: "MongoDB"
 source_repo: "https://github.com/mongodb/docs.git"
 source_branch: "main"
 source_path: "content/manual/manual/source/core/indexes/index-types/geospatial/2d/query/points-within-a-shape.txt"
-source_commit: "ab9db26ed3d11618cdb61516d8180337d8e3f679"
-source_commit_short: "ab9db26e"
-source_commit_date: "2026-07-24T16:22:46-06:00"
-generated_at: "2026-07-25T11:51:15Z"
+source_commit: "b9f2bc487a2878b65e3c1f80024bebab76954f27"
+source_commit_short: "b9f2bc48"
+source_commit_date: "2026-08-28T17:09:45-05:00"
+generated_at: "2026-08-29T09:39:19.848512Z"
 ---
-
-====================================================
+.. _2d-index-query-within-flat-shape:
 
 # Query for Locations within a Shape on a Flat Surface
 
-To query for location data within a specified shape on a flat surface, use the :query:`$geoWithin` operator. To use `$geoWithin` with data that appears on a flat surface, use this syntax:
+**meta:** :description: Query location data within a specified shape using the `$geoWithin` operator on a flat surface without requiring a geospatial index.
 
-```javascript
-db.<collection>.find( {
-   <location field> : {
-      $geoWithin : {
-         <shape operator> : <coordinates>
-      }
-    }
- } )
-```
+.. default-domain:: mongodb
+
+**contents:** On this page
+   :local:
+   :backlinks: none
+   :depth: 2
+   :class: singlecol
+
+To query for location data within a specified shape on a flat surface,
+use the :query:`$geoWithin` operator. To use ``$geoWithin`` with data
+that appears on a flat surface, use this syntax: 
+
+.. code-block:: javascript
+
+   db.<collection>.find( {
+      <location field> : {
+         $geoWithin : {
+            <shape operator> : <coordinates>
+         }
+       }
+    } )
 
 Replace these values for your query:
 
+.. list-table::
+   :header-rows: 1
+   :widths: 10 30
+
+   * - Field
+     - Description
+
+   * - ``<collection>``
+     - The collection to query.
+   
+   * - ``<location field>``
+     -  The field that contains your location data. For queries on a
+        flat surface, your data must be stored as :ref:`legacy
+        coordinate pairs <geospatial-legacy>`.
+
+   * - ``<shape operator>``
+     - The shape to query within. You can specify one of the following
+       shapes:
+
+       - :query:`$box`
+       - :query:`$polygon`
+       - :query:`$center` (defines a circle)
+
+       The example on this page uses the ``$box`` operator. To see examples
+       of queries using other shapes, refer to those operator pages.
+
+   * - ``<coordinates>``
+     - The coordinates that define the edges of the shape to query
+       within. When used with the ``$box`` operator, the coordinates
+       represent the bottom-left and top-right corners of a rectangle.
+
+       .. include:: /includes/indexes/geojson-lat-long.rst
+
 ## About this Task
 
-`$geoWithin` does not require a geospatial index. However, a geospatial index improves query performance.
+``$geoWithin`` does not require a geospatial index. However, a
+geospatial index improves query performance.
 
 ## Before You Begin
 
-.. include:: /includes/indexes/2d-sample-docs.rst
+**include:** /includes/indexes/2d-sample-docs.rst
 
 ## Procedure
 
-Use `$geoWithin` to query the `contacts` collection. The following `$geoWithin` query uses the :query:`$box` operator to return documents that appear within a specified rectangle:
+Use ``$geoWithin`` to query the ``contacts`` collection. The following
+``$geoWithin`` query uses the :query:`$box` operator to return documents
+that appear within a specified rectangle:
 
-```javascript
-db.contacts.find( {
-   address: {
-      $geoWithin: {
-         $box: [ [ 49, 40 ], [ 60, 60 ] ]
+.. code-block:: javascript
+
+   db.contacts.find( {
+      address: {
+         $geoWithin: {
+            $box: [ [ 49, 40 ], [ 60, 60 ] ]
+         }
       }
-   }
-} )
-```
+   } )
 
 Output:
 
-```javascript
-[
-  {
-    _id: ObjectId("647e4e496cdaf4dc323ec92a"),
-    name: 'Evander Otylia',
-    phone: '202-555-0193',
-    address: [ 55.5, 42.3 ]
-  }
-]
-```
+.. code-block:: javascript
+   :copyable: false
 
-The values of the `$box` operator represent the bottom-left and top-right corners of of the rectangle to query within.
+   [
+     {
+       _id: ObjectId("647e4e496cdaf4dc323ec92a"),
+       name: 'Evander Otylia',
+       phone: '202-555-0193',
+       address: [ 55.5, 42.3 ]
+     }
+   ]
 
-The `$geoWithin` query shown earlier returns documents that are within a rectangle that has these vertices:
+The values of the ``$box`` operator represent the bottom-left and
+top-right corners of of the rectangle to query within.
 
-- `[ 49, 40 ]`
-- `[ 49, 60 ]`
-- `[ 60, 60 ]`
-- `[ 60, 40 ]`
+The ``$geoWithin`` query shown earlier returns documents that are within
+a rectangle that has these vertices:
+
+- ``[ 49, 40 ]``
+- ``[ 49, 60 ]``
+- ``[ 60, 60 ]``
+- ``[ 60, 40 ]``
+
 ## Learn More
 
-To learn how to use the `$geoWithin` operator with other shapes, see these pages:
+To learn how to use the ``$geoWithin`` operator with other shapes, see
+these pages:
 
 - To query within a polygon, see :query:`$polygon`.
 - To query within a circle, see :query:`$center`.

@@ -1,71 +1,146 @@
 ---
 type: "Framework Learn Page"
-framework: "mongodb"
+framework: "MongoDB"
 source_repo: "https://github.com/mongodb/docs.git"
 source_branch: "main"
 source_path: "content/manual/manual/source/reference/method/db.grantPrivilegesToRole.txt"
-source_commit: "ab9db26ed3d11618cdb61516d8180337d8e3f679"
-source_commit_short: "ab9db26e"
-source_commit_date: "2026-07-24T16:22:46-06:00"
-generated_at: "2026-07-25T11:51:15Z"
+source_commit: "b9f2bc487a2878b65e3c1f80024bebab76954f27"
+source_commit_short: "b9f2bc48"
+source_commit_date: "2026-08-28T17:09:45-05:00"
+generated_at: "2026-08-29T09:39:19.955609Z"
 ---
-
-===========================================
-
 # db.grantPrivilegesToRole() (mongosh method)
+
+**meta:** :description: Grant additional privileges to a user-defined role using the `db.grantPrivilegesToRole()` method in MongoDB.
+
+.. default-domain:: mongodb
+
+**contents:** On this page
+   :local:
+   :backlinks: none
+   :depth: 1
+   :class: singlecol
 
 ## Definition
 
+**method:** db.grantPrivilegesToRole(rolename, privileges, writeConcern)
+
+   Grants additional :ref:`privileges <privileges>` to a :ref:`user-defined
+   <user-defined-roles>` role.
+
+   .. |dbcommand| replace:: :dbcommand:`grantPrivilegesToRole` command
+   .. include:: /includes/fact-mongosh-shell-method-alt.rst
+
+   The :method:`db.grantPrivilegesToRole()` method uses the following syntax:
+
+   .. code-block:: javascript
+
+      db.grantPrivilegesToRole(
+          "< rolename >",
+          [
+              { resource: { <resource> }, actions: [ "<action>", ... ] },
+              ...
+          ],
+          { < writeConcern > }
+      )
+
+   The :method:`db.grantPrivilegesToRole()` method takes the following arguments:
+
+
+   .. list-table::
+      :header-rows: 1
+      :widths: 20 20 80
+   
+      * - Parameter
+        - Type
+        - Description
+      * - ``rolename``
+        - string
+        - The name of the role to grant privileges to.
+      * - ``privileges``
+        - array
+        - The privileges to add to the role. For the format of a privilege, see
+          :data:`~admin.system.roles.privileges`.
+      * - ``writeConcern``
+        - document
+        - .. include:: /includes/fact-write-concern-spec-link.rst
+
+   The :method:`db.grantPrivilegesToRole()` method can grant one or more
+   privileges. Each ``<privilege>`` has the following syntax:
+
+   .. code-block:: javascript
+
+      { resource: { <resource> }, actions: [ "<action>", ... ] }
+
+   .. |local-cmd-name| replace:: :method:`db.grantPrivilegesToRole()`
+
+
 ## Compatibility
 
-This method is available in deployments hosted in the following environments:
+This method is available in deployments hosted in the following
+environments:
 
-.. include:: /includes/fact-environments-no-atlas-support.rst
+**include:** /includes/fact-environments-no-atlas-support.rst
 
-.. include:: /includes/fact-environments-onprem-only.rst
-
+**include:** /includes/fact-environments-onprem-only.rst
+                                 
 ## Behavior
 
 ### Replica set
 
-.. include:: /includes/fact-management-methods-write-concern.rst
+.. |command| replace:: :method:`db.grantPrivilegesToRole()`
+
+**include:** /includes/fact-management-methods-write-concern.rst
 
 ### Scope
 
-Except for roles created in the `admin` database, a role can only include privileges that apply to its database
+Except for roles created in the ``admin`` database, a role can only
+include privileges that apply to its database 
 
-A role created in the `admin` database can include privileges that apply to the `admin` database, other databases or to the `cluster <resource-cluster>` resource.
+A role created in the ``admin`` database can include privileges that
+apply to the ``admin`` database, other databases or to the
+:ref:`cluster <resource-cluster>` resource.
 
 ### Privileges
 
-.. include:: /includes/fact-roles-privileges-multiple-collections.rst
+**include:** /includes/fact-roles-privileges-multiple-collections.rst
 
 ## Required Access
 
-.. include:: /includes/access-grant-privileges.rst
+**include:** /includes/access-grant-privileges.rst
 
 ## Example
 
-The following :method:`db.grantPrivilegesToRole()` operation grants two additional privileges to the role `inventoryCntrl01`, which exists on the `products` database. The operation is run on that database:
+The following :method:`db.grantPrivilegesToRole()` operation grants two
+additional privileges to the role ``inventoryCntrl01``, which exists on the
+``products`` database. The operation is run on that database:
 
-```javascript
-use products
-db.grantPrivilegesToRole(
-  "inventoryCntrl01",
-  [
-    {
-      resource: { db: "products", collection: "" },
-      actions: [ "insert" ]
-    },
-    {
-      resource: { db: "products", collection: "system.js" },
-      actions: [ "find" ]
-    }
-  ],
-  { w: "majority" }
-)
-```
+.. code-block:: javascript
 
-The first privilege permits users with this role to perform the `insert` `action <security-user-actions>` on all collections of the `products` database, except the `system collections </reference/system-collections>`. To access a system collection, a privilege must explicitly specify the system collection in the resource document, as in the second privilege.
+   use products
+   db.grantPrivilegesToRole(
+     "inventoryCntrl01",
+     [
+       {
+         resource: { db: "products", collection: "" },
+         actions: [ "insert" ]
+       },
+       {
+         resource: { db: "products", collection: "system.js" },
+         actions: [ "find" ]
+       }
+     ],
+     { w: "majority" }
+   )
 
-The second privilege permits users with this role to perform the :authaction:`find` `action <security-user-actions>` on the `product` database's system collection named `system.js <<database>.system.js>`.
+The first privilege permits users with this role to perform the
+``insert`` :ref:`action <security-user-actions>` on all collections of
+the ``products`` database, except the :doc:`system collections
+</reference/system-collections>`. To access a system collection, a
+privilege must explicitly specify the system collection in the resource
+document, as in the second privilege.
+
+The second privilege permits users with this role to perform the
+:authaction:`find` :ref:`action <security-user-actions>` on the
+``product`` database's system collection named :data:`system.js
+<<database>.system.js>`.

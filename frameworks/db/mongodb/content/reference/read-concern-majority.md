@@ -1,76 +1,155 @@
 ---
 type: "Framework Learn Page"
-framework: "mongodb"
+framework: "MongoDB"
 source_repo: "https://github.com/mongodb/docs.git"
 source_branch: "main"
 source_path: "content/manual/manual/source/reference/read-concern-majority.txt"
-source_commit: "ab9db26ed3d11618cdb61516d8180337d8e3f679"
-source_commit_short: "ab9db26e"
-source_commit_date: "2026-07-24T16:22:46-06:00"
-generated_at: "2026-07-25T11:51:15Z"
+source_commit: "b9f2bc487a2878b65e3c1f80024bebab76954f27"
+source_commit_short: "b9f2bc48"
+source_commit_date: "2026-08-28T17:09:45-05:00"
+generated_at: "2026-08-29T09:39:19.714070Z"
 ---
-
-===========================
+.. default-domain:: mongodb
 
 # Read Concern "majority"
 
-For read operations not associated with `multi-document transactions </core/transactions>`, read concern `"majority"` guarantees that the data read has been acknowledged by a majority of the replica set members. The documents read are durable and guaranteed to not roll back.
+**meta:** :keywords: read concern, majority, replica set, transactions, durability, committed reads, read-your-writes
+  :description: Ensure data read with read concern majority is acknowledged by most replica set members
+  
 
-For operations in `multi-document transactions </core/transactions>`, read concern `"majority"` provides its guarantees only if the transaction commits with `write concern "majority" <transactions-write-concern>`. Otherwise, the :readconcern:`"majority"` read concern provides no guarantees about the data read in transactions.
+**contents:** On this page
+   :local:
+   :backlinks: none
+   :depth: 1
+   :class: singlecol
 
-.. include:: /includes/fact-readConcern-most-recent-data-in-node.rst
+**readconcern:** "majority"
 
-For more information about what happens if a primary fails, see `replication-auto-failover`.
+For read operations not associated with :doc:`multi-document
+transactions </core/transactions>`, read concern ``"majority"``
+guarantees that the data read has been acknowledged by a majority of
+the replica set members. The documents read are durable and
+guaranteed to not roll back.
+
+For operations in :doc:`multi-document transactions
+</core/transactions>`, read concern ``"majority"`` provides its
+guarantees only if the transaction commits with :ref:`write concern
+"majority" <transactions-write-concern>`. Otherwise, the
+:readconcern:`"majority"` read concern provides no guarantees about the
+data read in transactions.
+
+**include:** /includes/fact-readConcern-most-recent-data-in-node.rst
+
+For more information about what happens if a primary fails, see
+:ref:`replication-auto-failover`.
 
 ## Performance
 
-Each replica set member maintains, in memory, a view of the data at the majority-commit point; the majority-commit point is calculated by the primary. To fulfill read concern `"majority"`, the node returns data from this view and is comparable in performance to other read concerns.
+Each replica set member maintains, in memory, a view of the data at the
+majority-commit point; the majority-commit point is calculated by the
+primary. To fulfill read concern ``"majority"``, the node returns data
+from this view and is comparable in performance to other read
+concerns.
 
 ## Latency
 
-Read concern `"majority"` does not decrease the performance of queries; it only modifies what returns to the client. Read concern `"majority"` allows only data that is durably stored on a majority of nodes in the replica set to return to the client. In comparison, queries with read concern `"local"` can return data that may be lost in certain scenarios, such as a rollback.
+Read concern ``"majority"`` does not decrease the performance of queries; it only modifies
+what returns to the client. Read concern ``"majority"`` allows only data that is
+durably stored on a majority of nodes in the replica set to return to the client. In
+comparison, queries with read concern ``"local"`` can return data that may be lost in
+certain scenarios, such as a rollback.
 
 ## Availability
 
-Read concern :readconcern:`"majority"` is available for use with or without causally consistent sessions and transactions.
+Read concern :readconcern:`"majority"` is available for use with or
+without causally consistent sessions and transactions.
 
-> **Warning:** .. include:: /includes/fact-psa-performance-issues.rst
+**warning:** .. include:: /includes/fact-psa-performance-issues.rst
 
 ## Example
 
-.. include:: /includes/fact-read-concern-write-timeline.rst
+**include:** /includes/fact-read-concern-write-timeline.rst
 
-Then, the following tables summarizes the state of the data that a read operation with :readconcern:`"majority"` read concern would see at time `T`.
+Then, the following tables summarizes the state of the data that a read
+operation with :readconcern:`"majority"` read concern would see at
+time ``T``.
 
-.. figure:: /images/read-concern-write-timeline.svg
+**figure:** /images/read-concern-write-timeline.svg
+   :alt: Timeline of a write operation to a three member replica set.
+   :figwidth: 330px
+
+
+.. list-table::
+   :header-rows: 1
+
+   * - Read Target
+     - Time ``T``
+     - State of Data
+
+   * - Primary
+     - Before t\ :sub:`3`
+     - Data reflects Write\ :sub:`prev`
+
+   * - Primary
+     - After t\ :sub:`3`
+     - Data reflects Write\ :sub:`0`
+
+   * - Secondary\ :sub:`1`
+     - Before t\ :sub:`5`
+     - Data reflects Write\ :sub:`prev`
+
+   * - Secondary\ :sub:`1`
+     - After t\ :sub:`5`
+     - Data reflects Write\ :sub:`0`
+
+   * - Secondary\ :sub:`2`
+     - Before or at t\ :sub:`6`
+     - Data reflects Write\ :sub:`prev`
+
+   * - Secondary\ :sub:`2`
+     - After t\ :sub:`6`
+     - Data reflects Write\ :sub:`0`
 
 ## Storage Engine Support
 
-Read concern :readconcern:`"majority"` is available for the WiredTiger storage engine.
+Read concern :readconcern:`"majority"` is available for the
+WiredTiger storage engine.
 
-> **Tip:** The :dbcommand:`serverStatus` command returns the
-:serverstatus:`storageEngine.supportsCommittedReads` field, which
-indicates whether the storage engine supports `"majority"` read
-concern.
+**tip:** The :dbcommand:`serverStatus` command returns the
+   :serverstatus:`storageEngine.supportsCommittedReads` field, which
+   indicates whether the storage engine supports ``"majority"`` read
+   concern.
 
-## Read Concern `"majority"` and Transactions
+.. _readconcern-majority-txn:
 
-> **Note:** You set the read concern at the transaction level, not at the
-individual operation level. To set the read concern for
-transactions, see `transactions-read-concern`.
+## Read Concern ``"majority"`` and Transactions
 
-For operations in `multi-document transactions </core/transactions>`, read concern `"majority"` provides its guarantees only if the transaction commits with `write concern "majority" <transactions-write-concern>`. Otherwise, the :readconcern:`"majority"` read concern provides no guarantees about the data read in transactions.
+**note:** You set the read concern at the transaction level, not at the
+   individual operation level. To set the read concern for
+   transactions, see :ref:`transactions-read-concern`.
 
-## Read Concern `"majority"` and Aggregation
+For operations in :doc:`multi-document transactions
+</core/transactions>`, read concern ``"majority"`` provides its
+guarantees only if the transaction commits with :ref:`write concern
+"majority" <transactions-write-concern>`. Otherwise, the
+:readconcern:`"majority"` read concern provides no guarantees about the
+data read in transactions.
 
-.. include:: /includes/fact-aggregate-readConcern.rst
+## Read Concern ``"majority"`` and Aggregation
+
+**include:** /includes/fact-aggregate-readConcern.rst
 
 ## Read Your Own Writes
 
-.. include:: /includes/fact-read-own-writes.rst
+**include:** /includes/fact-read-own-writes.rst
+
+.. If you change this headline please also change the redirect that
+.. links from #disable-read-concern-majority to this headline.
+
+.. _disable-read-concern-majority:
 
 ## Primary-Secondary-Arbiter Replica Sets
 
-.. include:: /includes/fact-eMRC-always-true-in-5.0.rst
+**include:** /includes/fact-eMRC-always-true-in-5.0.rst
 
-.. include:: /includes/fact-psa-performance-issues.rst
+**include:** /includes/fact-psa-performance-issues.rst

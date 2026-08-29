@@ -1,51 +1,79 @@
 ---
 type: "Framework Learn Page"
-framework: "mongodb"
+framework: "MongoDB"
 source_repo: "https://github.com/mongodb/docs.git"
 source_branch: "main"
 source_path: "content/manual/manual/source/reference/operator/aggregation/gt.txt"
-source_commit: "ab9db26ed3d11618cdb61516d8180337d8e3f679"
-source_commit_short: "ab9db26e"
-source_commit_date: "2026-07-24T16:22:46-06:00"
-generated_at: "2026-07-25T11:51:15Z"
+source_commit: "b9f2bc487a2878b65e3c1f80024bebab76954f27"
+source_commit_short: "b9f2bc48"
+source_commit_date: "2026-08-28T17:09:45-05:00"
+generated_at: "2026-08-29T09:39:20.166798Z"
 ---
-
-=========================
+.. _gt-aggregation-operator:
 
 # $gt (expression operator)
 
+**meta:** :description: Use the `$gt` operator in MongoDB to compare two values, returning true if the first is greater than the second, with examples provided.
+
+**contents:** On this page
+   :local:
+   :backlinks: none
+   :depth: 1
+   :class: singlecol
+
 ## Definition
+
+**expression:** $gt
+
+   Compares two values and returns:
+
+   - ``true`` when the first value is *greater than* the second value.
+
+   - ``false`` when the first value is *less than or equal to* the
+     second value.
+
+   .. include:: /includes/extracts/fact-agg-comparison-expression-gt.rst
+
+   ``$gt`` has the following syntax:
+
+   .. code-block:: javascript
+
+      { $gt: [ <expression1>, <expression2> ] }
+
+   For more information on expressions, see :ref:`aggregation-expressions`.
 
 ## Example
 
-Create an `inventory` collection with these documents:
+Create an ``inventory`` collection with these documents:
 
-.. include:: /includes/examples-create-inventory-2.rst
+**include:** /includes/examples-create-inventory-2.rst
 
-Use the `$gt` operator to determine if `qty` is greater than `250`:
+Use the ``$gt`` operator to determine if ``qty`` is greater than
+``250``:
 
-```javascript
-db.inventory.aggregate(
-   [
-     {
-       $project:
-          {
-            item: 1,
-            qty: 1,
-            qtyGt250: { $gt: [ "$qty", 250 ] },
-            _id: 0
-          }
-     }
-   ]
-)
-```
+.. code-block:: javascript
+
+   db.inventory.aggregate(
+      [
+        {
+          $project:
+             {
+               item: 1,
+               qty: 1,
+               qtyGt250: { $gt: [ "$qty", 250 ] },
+               _id: 0
+             }
+        }
+      ]
+   )
 
 The operation returns the following results:
 
-```javascript
-{ item : "abc1", qty : 300, qtyGt250 : true }
-{ item : "abc2", qty : 200, qtyGt250 : false }
-{ item : "xyz1", qty : 250, qtyGt250 : false }
-{ item : "VWZ1", qty : 300, qtyGt250 : true }
-{ item : "VWZ2", qty : 180, qtyGt250 : false }
-```
+.. code-block:: javascript
+   :copyable: false
+
+   { item : "abc1", qty : 300, qtyGt250 : true }
+   { item : "abc2", qty : 200, qtyGt250 : false }
+   { item : "xyz1", qty : 250, qtyGt250 : false }
+   { item : "VWZ1", qty : 300, qtyGt250 : true }
+   { item : "VWZ2", qty : 180, qtyGt250 : false }

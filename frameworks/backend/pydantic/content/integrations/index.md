@@ -1,34 +1,24 @@
 ---
 type: "Framework Learn Directory Index"
-framework: "pydantic"
-directory: "content/integrations"
-source_repo: "https://github.com/pydantic/pydantic"
-source_branch: "main"
-source_commit: "a2a6577d4c329dd574a45dbb01a8feaa16b1ad3d"
-source_commit_short: "a2a6577d"
-source_commit_date: "2026-07-23T15:38:17Z"
-generated_at: "2026-07-25T11:50:12Z"
+framework: "Pydantic"
+generated_at: "2026-08-29T09:38:50.597776Z"
 ---
 # Integrations
 
-This directory contains pydantic learning pages related to integrations.
+This directory contains Pydantic learning pages related to integrations.
 
 ## Breadcrumbs
 
-[Wiki Home](../../index.md) -> [Content](../index.md) -> [Integrations](index.md)
+[Wiki Home](../index.md) -> [Content](index.md)
 
 ## Navigation
 
-- Parent: [Parent Index](../index.md)
-
-## Child Directories
-
-- None
+- Wiki Home: [Root Index](../index.md)
 
 ## Pages in This Directory
 
-- [Aws Lambda](aws_lambda.md)
-- [Datamodel Code Generator](datamodel_code_generator.md)
+- [Aws_Lambda](aws_lambda.md)
+- [Datamodel_Code_Generator](datamodel_code_generator.md)
 - [Devtools](devtools.md)
 - [Documentation](documentation.md)
 - [Hypothesis](hypothesis.md)
@@ -39,12 +29,4 @@ This directory contains pydantic learning pages related to integrations.
 - [Pycharm](pycharm.md)
 - [Pyrefly](pyrefly.md)
 - [Rich](rich.md)
-- [Visual Studio Code](visual_studio_code.md)
-
-## IDE LLM Guidance
-
-When answering implementation questions related to this directory:
-
-1. Prefer the most specific page listed above.
-2. If the topic is broad, read the child directory index first.
-3. Use source metadata from each page when giving answers.
+- [Visual_Studio_Code](visual_studio_code.md)

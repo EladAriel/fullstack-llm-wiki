@@ -1,14 +1,15 @@
 ---
 type: "Framework Learn Page"
-framework: "tanstack"
+framework: "TanStack"
 source_repo: "https://github.com/tanstack/query"
 source_branch: "main"
 source_path: "docs/framework/react/reference/useQuery.md"
-source_commit: "fd50fa14d283c7d6664a796f758498d1ad5bfce7"
-source_commit_short: "fd50fa14"
-source_commit_date: "2026-07-24T22:22:47+10:00"
-generated_at: "2026-07-25T11:50:41Z"
+source_commit: "2969edf32f7e0c48e2a108d84712d6e01edfde21"
+source_commit_short: "2969edf"
+source_commit_date: "2026-08-28T01:03:02+09:00"
+generated_at: "2026-08-29T09:40:33.413657Z"
 ---
+# Usequery
 
 ---
 id: useQuery
@@ -40,7 +41,6 @@ const {
   isStale,
   isSuccess,
   isEnabled,
-  promise,
   refetch,
   status,
 } = useQuery(
@@ -184,8 +184,9 @@ const {
   - Defaults to `true`
   - If set to `false`, this instance of `useQuery` will not be subscribed to the cache. This means it won't trigger the `queryFn` on its own, and it won't receive updates if data gets into cache by other means.
 - `throwOnError: undefined | boolean | (error: TError, query: Query) => boolean`
+  - Optional
+  - Defaults to `false`
   - Set this to `true` if you want errors to be thrown in the render phase and propagate to the nearest error boundary
-  - Set this to `false` to disable `suspense`'s default behavior of throwing errors to the error boundary.
   - If set to a function, it will be passed the error and the query, and it should return a boolean indicating whether to show the error in an error boundary (`true`) or return the error as state (`false`)
 - `meta: Record<string, unknown>`
   - Optional
@@ -268,6 +269,3 @@ const {
     - Defaults to `true`
       - Per default, a currently running request will be cancelled before a new request is made
     - When set to `false`, no refetch will be made if there is already a request running.
-- `promise: Promise<TData>`
-  - A stable promise that will be resolved with the data of the query.
-  - Requires the `experimental_prefetchInRender` feature flag to be enabled on the `QueryClient`.

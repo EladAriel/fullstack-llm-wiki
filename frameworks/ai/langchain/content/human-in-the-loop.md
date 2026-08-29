@@ -4,12 +4,11 @@ framework: "LangChain"
 source_repo: "https://github.com/langchain-ai/docs"
 source_branch: "main"
 source_path: "src/oss/langchain/human-in-the-loop.mdx"
-source_commit: "2aae1dfc98ee953a9a5185fb6fcdd9efb3f4d878"
-source_commit_short: "2aae1dfc"
-source_commit_date: "2026-07-25T00:27:23Z"
-generated_at: "2026-07-25T11:51:05Z"
+source_commit: "a174f9cf7c91ee5eb14ee2382eb48bfe6e4956e9"
+source_commit_short: "a174f9c"
+source_commit_date: "2026-08-28T17:04:12-07:00"
+generated_at: "2026-08-29T09:38:24.252609Z"
 ---
-
 ---
 title: Human-in-the-loop
 ---
@@ -684,7 +683,7 @@ The middleware defines an `after_model` hook that runs after the model generates
 
 1. The agent invokes the model to generate a response.
 2. The middleware inspects the response for tool calls.
-3. If any calls require human input, the middleware builds a `HITLRequest` with `action_requests` and `review_configs` and calls @[interrupt].
+3. If any calls require human input, the middleware builds a @[HITLRequest] with `action_requests` and `review_configs` and calls @[interrupt].
 4. The agent waits for human decisions.
 5. Based on the `HITLResponse` decisions, the middleware executes approved or edited calls, synthesizes @[ToolMessage]'s for rejected calls, returns human replies directly as @[ToolMessage]'s for `respond` decisions, and resumes execution.
 

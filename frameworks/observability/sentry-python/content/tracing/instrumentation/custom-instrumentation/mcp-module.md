@@ -4,10 +4,10 @@ framework: "Sentry Python"
 source_repo: "https://github.com/getsentry/sentry-docs.git"
 source_branch: "master"
 source_path: "docs/platforms/python/tracing/instrumentation/custom-instrumentation/mcp-module.mdx"
-source_commit: "8557ccbd46b02c43301ef74ff54516736ecf9d69"
-source_commit_short: "8557ccb"
-source_commit_date: "2026-07-24T13:12:02-04:00"
-generated_at: "2026-07-25T19:08:13.536159Z"
+source_commit: "8b4e4a23b18ee70f5fdb05bcda48869c10be2f60"
+source_commit_short: "8b4e4a2"
+source_commit_date: "2026-08-28T22:17:56+00:00"
+generated_at: "2026-08-29T09:40:09.048320Z"
 ---
 ---
 title: Instrument MCP Servers
@@ -15,21 +15,28 @@ sidebar_order: 600
 description: "Learn how to manually instrument your code to use Sentry's MCP monitoring."
 ---
 
-With Sentry's [MCP monitoring](/product/agents/mcp/), you can track and debug MCP servers with full-stack context. You'll be able to monitor tool executions, prompt retrievals, resource access, and error rates. MCP monitoring data will be fully connected to your other Sentry data like logs, errors, and traces.
+With Sentry's [MCP monitoring](/product/mcp-servers/), you can track and debug MCP servers with full-stack context. You'll be able to monitor tool executions, prompt retrievals, resource access, and error rates. MCP monitoring data will be fully connected to your other Sentry data like logs, errors, and traces.
 
 As a prerequisite to setting up MCP monitoring with Python, you'll need to first <PlatformLink to="/tracing/">set up tracing</PlatformLink>. Once this is done, the Python SDK will automatically instrument MCP servers created with supported libraries. If that doesn't fit your use case, you can use custom instrumentation described below.
+
+<Alert>
+
+This page covers both transaction mode (default) and stream mode. See <PlatformLink to="/tracing/streamed-spans/">Streamed Spans</PlatformLink> to learn more.
+
+</Alert>
 
 ## Automatic Instrumentation
 
 The Python SDK supports automatic instrumentation for MCP servers. We recommend adding the MCP integration to your Sentry configuration to automatically capture spans for MCP operations.
 
-- [MCP (Model Context Protocol)](/product/agents/mcp/getting-started/)
+- [MCP (Model Context Protocol)](/product/mcp-servers/getting-started/)
 
 ## Manual Instrumentation
 
 For your MCP data to show up in Sentry, spans must be created with well-defined names and data attributes. See below for the different types of MCP operations you can instrument.
 
-The [@sentry_sdk.trace()](/platforms/python/tracing/instrumentation/custom-instrumentation/#span-templates) decorator can also be used to create these spans.
+In transaction mode, you can also use the [@sentry_sdk.trace()](/platforms/python/tracing/instrumentation/custom-instrumentation/#span-templates) decorator to create these spans, using its `template` parameter.
+In stream mode, these spans need to be created directly with `sentry_sdk.traces.start_span()`, as shown below.
 
 ## Spans
 
@@ -39,7 +46,7 @@ The [@sentry_sdk.trace()](/platforms/python/tracing/instrumentation/custom-instr
 
 #### Example Tool Execution Span:
 
-```python
+```python {tabTitle:Transaction Mode (Default)}
 import sentry_sdk
 import json
 
@@ -83,13 +90,59 @@ with sentry_sdk.start_span(
         raise
 ```
 
+```python {tabTitle:Stream Mode}
+import sentry_sdk
+import json
+
+sentry_sdk.init(...)
+
+# Example tool execution
+tool_name = "get_weather"
+tool_arguments = {"city": "San Francisco"}
+
+with sentry_sdk.traces.start_span(
+    name=f"tools/call {tool_name}",
+    attributes={"sentry.op": "mcp.server"},
+) as span:
+    # Set MCP-specific attributes
+    span.set_attributes({
+        "mcp.tool.name": tool_name,
+        "mcp.method.name": "tools/call",
+
+        # Set request metadata
+        "mcp.request.id": "req_123abc",
+        "mcp.session.id": "session_xyz789",
+        "mcp.transport": "stdio",  # or "http", "sse" for HTTP/WebSocket/SSE
+        "network.transport": "pipe",  # or "tcp" for HTTP/SSE
+    })
+
+    # Set tool arguments (optional, if send_default_pii=True)
+    for key, value in tool_arguments.items():
+        span.set_attribute(f"mcp.request.argument.{key}", value)
+
+    # Execute the tool
+    try:
+        result = execute_tool(tool_name, tool_arguments)
+
+        # Set result data
+        span.set_attribute("mcp.tool.result.content", json.dumps(result))
+        span.set_attribute("mcp.tool.result.is_error", False)
+
+        # Set result content count if applicable
+        if isinstance(result, (list, dict)):
+            span.set_attribute("mcp.tool.result.content_count", len(result))
+    except Exception as e:
+        span.set_attribute("mcp.tool.result.is_error", True)
+        raise
+```
+
 ### Prompt Retrieval Span
 
 <Include name="tracing/mcp-module/prompt-retrieval-span" />
 
 #### Example Prompt Retrieval Span:
 
-```python
+```python {tabTitle:Transaction Mode (Default)}
 import sentry_sdk
 import json
 
@@ -113,7 +166,7 @@ with sentry_sdk.start_span(
     span.set_data("mcp.transport", "http")
     span.set_data("network.transport", "tcp")
 
-    # Set prompt arguments (optional, if send_default_pii=True)
+    # Set prompt arguments (keep in mind this might contain PII data, so only set if that's ok)
     for key, value in prompt_arguments.items():
         span.set_data(f"mcp.request.argument.{key}", value)
 
@@ -127,8 +180,55 @@ with sentry_sdk.start_span(
     # For single-message prompts, set role and content
     if len(messages) == 1:
         span.set_data("mcp.prompt.result.message_role", messages[0].get("role"))
-        # Content is PII, only set if send_default_pii=True
+        # Note that content might contain PII data
         span.set_data(
+            "mcp.prompt.result.message_content",
+            json.dumps(messages[0].get("content"))
+        )
+```
+
+```python {tabTitle:Stream Mode}
+import sentry_sdk
+import json
+
+sentry_sdk.init(...)
+
+# Example prompt retrieval
+prompt_name = "code_review"
+prompt_arguments = {"language": "python"}
+
+with sentry_sdk.traces.start_span(
+    name=f"prompts/get {prompt_name}",
+    attributes={"sentry.op": "mcp.server"},
+) as span:
+    # Set MCP-specific attributes
+    span.set_attributes({
+        "mcp.prompt.name": prompt_name,
+        "mcp.method.name": "prompts/get",
+
+        # Set request metadata
+        "mcp.request.id": "req_456def",
+        "mcp.session.id": "session_xyz789",
+        "mcp.transport": "http",
+        "network.transport": "tcp",
+    })
+
+    # Set prompt arguments (keep in mind this might contain PII data, so only set if that's ok)
+    for key, value in prompt_arguments.items():
+        span.set_attribute(f"mcp.request.argument.{key}", value)
+
+    # Retrieve the prompt
+    prompt_result = get_prompt(prompt_name, prompt_arguments)
+
+    # Set result data
+    messages = prompt_result.get("messages", [])
+    span.set_attribute("mcp.prompt.result.message_count", len(messages))
+
+    # For single-message prompts, set role and content
+    if len(messages) == 1:
+        span.set_attribute("mcp.prompt.result.message_role", messages[0].get("role"))
+        # Note that content might contain PII data
+        span.set_attribute(
             "mcp.prompt.result.message_content",
             json.dumps(messages[0].get("content"))
         )
@@ -140,7 +240,7 @@ with sentry_sdk.start_span(
 
 #### Example Resource Read Span:
 
-```python
+```python {tabTitle:Transaction Mode (Default)}
 import sentry_sdk
 
 sentry_sdk.init(...)
@@ -161,6 +261,34 @@ with sentry_sdk.start_span(
     span.set_data("mcp.session.id", "session_xyz789")
     span.set_data("mcp.transport", "http")
     span.set_data("network.transport", "tcp")
+
+    # Access the resource
+    resource_data = read_resource(resource_uri)
+```
+
+```python {tabTitle:Stream Mode}
+import sentry_sdk
+
+sentry_sdk.init(...)
+
+# Example resource access
+resource_uri = "file:///path/to/resource.txt"
+
+with sentry_sdk.traces.start_span(
+    name=f"resources/read {resource_uri}",
+    attributes={"sentry.op": "mcp.server"},
+) as span:
+    # Set MCP-specific attributes
+    span.set_attributes({
+        "mcp.resource.uri": resource_uri,
+        "mcp.method.name": "resources/read",
+
+        # Set request metadata
+        "mcp.request.id": "req_789ghi",
+        "mcp.session.id": "session_xyz789",
+        "mcp.transport": "http",
+        "network.transport": "tcp",
+    })
 
     # Access the resource
     resource_data = read_resource(resource_uri)

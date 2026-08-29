@@ -1,15 +1,14 @@
 ---
 type: "Framework Learn Page"
-framework: "redis"
+framework: "Redis"
 source_repo: "https://github.com/redis/docs.git"
 source_branch: "main"
 source_path: "content/commands/info.md"
-source_commit: "9d30f68c3dad1a6b3b7d30fe604b911348ce8152"
-source_commit_short: "9d30f68c"
-source_commit_date: "2026-07-24T10:52:10-07:00"
-generated_at: "2026-07-25T11:51:22Z"
+source_commit: "f8693349287b0efbef3c865b6f6a2aceca88594d"
+source_commit_short: "f869334"
+source_commit_date: "2026-08-28T10:01:19-05:00"
+generated_at: "2026-08-29T09:38:55.045194Z"
 ---
-
 ---
 acl_categories:
 - '@slow'
@@ -158,7 +157,7 @@ Here is the meaning of all fields in the **memory** section:
 
 *   `used_memory`: Total number of bytes allocated by Redis using its
      allocator (either standard **libc**, **jemalloc**, or an alternative
-     allocator such as [**tcmalloc**][hcgcpgp])
+     allocator such as [**tcmalloc**](http://code.google.com/p/google-perftools/))
 *   `used_memory_human`: Human readable representation of previous value
 *   `used_memory_rss`: Number of bytes that Redis allocated as seen by the
      operating system (a.k.a resident set size). This is the number reported by
@@ -191,6 +190,7 @@ Here is the meaning of all fields in the **memory** section:
 *   `used_memory_functions`: Number of bytes overhead by Function scripts (part of used_memory). Added in Redis 7.0
 *   `used_memory_scripts`: `used_memory_scripts_eval` + `used_memory_functions` (part of used_memory). Added in Redis 7.0
 *   `used_memory_scripts_human`: Human readable representation of previous value
+*   `used_memory_hash_templates`: Total memory in bytes used by all compact hash templates (the shared template registry). Added in Redis 8.10.
 *   `maxmemory`: The value of the `maxmemory` configuration directive
 *   `maxmemory_human`: Human readable representation of previous value
 *   `maxmemory_policy`: The value of the `maxmemory-policy` configuration
@@ -358,6 +358,8 @@ Here is the meaning of all fields in the **stats** section:
 *   `current_eviction_exceeded_time`: The time passed since `used_memory` last rose above `maxmemory`, in milliseconds
 *   `keyspace_hits`: Number of successful lookup of keys in the main dictionary
 *   `keyspace_misses`: Number of failed lookup of keys in the main dictionary
+*   `hash_templates`: Number of distinct compact hash templates in the shared registry. Added in Redis 8.10.
+*   `hash_template_keys`: Total number of keys backed by a compact hash template. Added in Redis 8.10.
 *   `pubsub_channels`: Global number of pub/sub channels with client
      subscriptions
 *   `pubsub_patterns`: Global number of pub/sub pattern with client
@@ -656,8 +658,6 @@ It won't be included when `INFO` or `INFO ALL` are called, and it is returned on
 *   `allocator_active_lua`: Total bytes in the allocator active pages specifically for Lua, including external-fragmentation.
 *   `allocator_resident_lua`: Total bytes resident (RSS) in the allocator specifically for Lua. This includes pages that can be released to the OS (by `MEMORY PURGE`, or just waiting).
 *   `allocator_frag_bytes_lua`: Delta between `allocator_active_lua` and `allocator_allocated_lua`.
-
-[hcgcpgp]: http://code.google.com/p/google-perftools/
 
 **A note about the word slave used in this man page**: Starting with Redis 5, if not for backward compatibility, the Redis project no longer uses the word slave. Unfortunately in this command the word slave is part of the protocol, so we'll be able to remove such occurrences only when this API will be naturally deprecated.
 

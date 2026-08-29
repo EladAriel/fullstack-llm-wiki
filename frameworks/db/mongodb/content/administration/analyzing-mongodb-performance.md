@@ -1,47 +1,83 @@
 ---
 type: "Framework Learn Page"
-framework: "mongodb"
+framework: "MongoDB"
 source_repo: "https://github.com/mongodb/docs.git"
 source_branch: "main"
 source_path: "content/manual/manual/source/administration/analyzing-mongodb-performance.txt"
-source_commit: "ab9db26ed3d11618cdb61516d8180337d8e3f679"
-source_commit_short: "ab9db26e"
-source_commit_date: "2026-07-24T16:22:46-06:00"
-generated_at: "2026-07-25T11:51:15Z"
+source_commit: "b9f2bc487a2878b65e3c1f80024bebab76954f27"
+source_commit_short: "b9f2bc48"
+source_commit_date: "2026-08-28T17:09:45-05:00"
+generated_at: "2026-08-29T09:39:19.764109Z"
 ---
-
-===================
+.. _performance:
 
 # MongoDB Performance
 
-As you develop and operate applications with MongoDB, you may need to analyze the performance of the application and its database. When you encounter degraded performance, it is often a function of database access strategies, hardware availability, and the number of open database connections.
+**meta:** :description: Analyze MongoDB performance by examining database access strategies, indexing, schema design, and connection management to identify and address potential issues.
 
-You may experience performance limitations from inadequate or inappropriate indexing strategies or poor schema design patterns. `analyzing-performance-locks` discusses how these can impact MongoDB's internal locking.
+.. default-domain:: mongodb
 
-Performance issues may indicate that the database is operating at capacity and that it is time to add additional capacity to the database. In particular, the application's working set should fit in the available physical memory.
+**contents:** On this page
+   :local:
+   :backlinks: none
+   :depth: 1
+   :class: singlecol
 
-In some cases performance issues may be temporary and related to abnormal traffic load. As discussed in `number-of-connections`, scaling can help reduce excessive traffic.
+As you develop and operate applications with MongoDB, you may need to
+analyze the performance of the application and its database.
+When you encounter degraded performance, it is often a function of database
+access strategies, hardware availability, and the number of open database
+connections.
 
-Database profiling can help you understand what operations are causing degradation.
+You may experience performance limitations from inadequate or inappropriate
+indexing strategies or poor schema design patterns.
+:ref:`analyzing-performance-locks` discusses how these can impact
+MongoDB's internal locking.
+
+Performance issues may indicate that the database is operating at
+capacity and that it is time to add additional capacity to the
+database. In particular, the application's working set should fit in
+the available physical memory.
+
+In some cases performance issues may be temporary and related to
+abnormal traffic load. As discussed in :ref:`number-of-connections`, scaling
+can help reduce excessive traffic.
+
+Database profiling can help you understand what operations are
+causing degradation.
+
+.. _analyzing-performance-locks:
 
 ## Locking Performance
 
-MongoDB uses a locking system to ensure data set consistency. If certain operations are long-running or a queue forms, performance degrades as requests and operations wait for the lock.
+MongoDB uses a locking system to ensure data set consistency. If
+certain operations are long-running or a queue forms, performance
+degrades as requests and operations wait for the lock.
 
-Lock-related slowdowns can be intermittent. To see if the lock has been affecting your performance, see the `server-status-locks` section and the `globalLock` section of the :dbcommand:`serverStatus` output.
+Lock-related slowdowns can be intermittent. To see if the lock has been
+affecting your performance, see the :ref:`server-status-locks`
+section and the :ref:`globalLock` section of the
+:dbcommand:`serverStatus` output.
 
-> **Note:** Some `serverStatus` response fields are not returned on
-{+atlas+} Free clusters or {+flex-clusters+}. For more information,
-see `free-shard-commands-with-limits` in the {+atlas+}
-documentation.
+**note:** Some ``serverStatus`` response fields are not returned on 
+   {+atlas+} Free clusters or {+flex-clusters+}. For more information, 
+   see :ref:`free-shard-commands-with-limits` in the {+atlas+} 
+   documentation.
 
-Dividing :serverstatus:`locks.<type>.timeAcquiringMicros` by :serverstatus:`locks.<type>.acquireWaitCount` can give an approximate average wait time for a particular lock mode.
+Dividing :serverstatus:`locks.<type>.timeAcquiringMicros` by
+:serverstatus:`locks.<type>.acquireWaitCount`
+can give an approximate average wait time for a particular lock mode.
 
-:serverstatus:`locks.<type>.deadlockCount` provides the number of times the lock acquisitions encountered deadlocks.
+:serverstatus:`locks.<type>.deadlockCount` provides
+the number of times the lock acquisitions encountered deadlocks.
 
-If :serverstatus:`globalLock.currentQueue.total` is consistently high, many requests may be waiting for a lock. This indicates a possible concurrency issue that may be affecting performance.
+If :serverstatus:`globalLock.currentQueue.total` is consistently high,
+many requests may be waiting for a lock. This indicates a possible
+concurrency issue that may be affecting performance.
 
-If :serverstatus:`globalLock.totalTime` is high relative to :serverstatus:`uptime`, the database has been in a locked state for a significant period.
+If :serverstatus:`globalLock.totalTime` is
+high relative to :serverstatus:`uptime`, the database has been
+in a locked state for a significant period.
 
 Long queries can result from:
 
@@ -50,38 +86,61 @@ Long queries can result from:
 - Poor query structure
 - System architecture issues
 - Insufficient RAM resulting in disk reads
+
+.. _number-of-connections:
+
 ## Number of Connections
 
-In some cases, the number of connections between the applications and the database can overwhelm the server's ability to handle requests. The following fields in the :dbcommand:`serverStatus` document provide insight:
+In some cases, the number of connections between the applications and the
+database can overwhelm the server's ability to handle requests. The
+following fields in the :dbcommand:`serverStatus` document provide insight:
 
 - :serverstatus:`connections` is a container for the following
-two fields:
+  two fields:
 
-- :serverstatus:`connections.current` the total number of
-current clients connected to the database instance.
+  - :serverstatus:`connections.current` the total number of
+    current clients connected to the database instance.
 
-- :serverstatus:`connections.available` the total number of
-unused connections available for new clients.
+  - :serverstatus:`connections.available` the total number of
+    unused connections available for new clients.
 
-Many concurrent application requests may overwhelm the server's ability to keep up with demand. If this is the case, increase the capacity of your deployment.
+Many concurrent application requests may overwhelm the server's ability
+to keep up with demand. If this is the case,
+increase the capacity of your deployment.
 
-For write-heavy applications, deploy `sharding` and add one or more `shards <shard>` to a `sharded cluster` to distribute load among :binary:`~bin.mongod` instances.
+For write-heavy applications, deploy :term:`sharding` and add one or more
+:term:`shards <shard>` to a :term:`sharded cluster` to distribute load among
+:binary:`~bin.mongod` instances.
 
-Spikes in the number of connections can also result from application or driver errors. All officially supported MongoDB drivers implement connection pooling, which allows clients to use and reuse connections more efficiently. An extremely high number of connections, particularly without corresponding workload, often indicates a driver or other configuration error.
+Spikes in the number of connections can also result from
+application or driver errors. All officially supported MongoDB
+drivers implement connection pooling, which allows clients to use and
+reuse connections more efficiently. An extremely high number of
+connections, particularly without corresponding workload, often
+indicates a driver or other configuration error.
 
 ### Self-Managed Connection Limits
 
-Unless constrained by system-wide limits, the maximum number of incoming connections supported by MongoDB is configured with the :setting:`~net.maxIncomingConnections` setting. On Unix-based systems, system-wide limits can be modified using the `ulimit` command, or by editing your system's `/etc/sysctl` file. See `ulimit` for more information.
+Unless constrained by system-wide limits, the maximum number of
+incoming connections supported by MongoDB is configured with the
+:setting:`~net.maxIncomingConnections` setting. On Unix-based systems,
+system-wide limits can be modified using the ``ulimit`` command, or by
+editing your system's ``/etc/sysctl`` file. See :ref:`ulimit`
+for more information.
 
 ### {+atlas+} Connection Limits
 
-{+atlas+} sets the limit for concurrent incoming connections based on the cluster tier and class. To learn more, see `connection-limits` in the Atlas documentation.
+{+atlas+} sets the limit for concurrent incoming connections based on 
+the cluster tier and class. To learn more, see :ref:`connection-limits`
+in the Atlas documentation.
 
-## Contents
 
-- Connection Pool </administration/connection-pool-overview>
-- Performance Tuning </administration/performance-tuning>
-- Connection Storms </troubleshooting/connection-storms>
-- Server Selection Timeout </troubleshooting/server-selection-timeout>
-- Query </administration/query>
-- Configure Connection Establishment Rate Limiting </tutorial/configure-rate-limiter>
+**toctree:** :titlesonly:
+   :hidden:
+
+   Connection Pool </administration/connection-pool-overview>
+   Performance Tuning </administration/performance-tuning>
+   Connection Storms </troubleshooting/connection-storms>
+   Server Selection Timeout </troubleshooting/server-selection-timeout>
+   Query </administration/query>
+   Configure Connection Establishment Rate Limiting </tutorial/configure-rate-limiter>

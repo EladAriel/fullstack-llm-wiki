@@ -1,52 +1,456 @@
 ---
 type: "Framework Learn Page"
-framework: "mongodb"
+framework: "MongoDB"
 source_repo: "https://github.com/mongodb/docs.git"
 source_branch: "main"
 source_path: "content/manual/manual/source/reference/sql-aggregation-comparison.txt"
-source_commit: "ab9db26ed3d11618cdb61516d8180337d8e3f679"
-source_commit_short: "ab9db26e"
-source_commit_date: "2026-07-24T16:22:46-06:00"
-generated_at: "2026-07-25T11:51:15Z"
+source_commit: "b9f2bc487a2878b65e3c1f80024bebab76954f27"
+source_commit_short: "b9f2bc48"
+source_commit_date: "2026-08-28T17:09:45-05:00"
+generated_at: "2026-08-29T09:39:19.717691Z"
 ---
-
-================================
-
 # SQL to Aggregation Mapping Chart
 
-files in the includes directory. To change the content of the tables, edit those files.
+**meta:** :description: Compare SQL aggregation terms with MongoDB operators using a mapping chart for common data operations.
 
-The `aggregation pipeline <aggregation-pipeline>` maps to many common SQL aggregation operations.
+.. default-domain:: mongodb
 
-The following table compares common SQL aggregation terms, functions, and concepts with their corresponding MongoDB `aggregation operators <aggregation-pipeline-operator-reference>`:
+**contents:** On this page
+   :local:
+   :backlinks: none
+   :depth: 1
+   :class: singlecol
+
+.. all of the included table files are built from corresponding .yaml
+   files in the includes directory. To change the content of the
+   tables, edit those files.
+
+The :ref:`aggregation pipeline <aggregation-pipeline>` maps to many
+common SQL aggregation operations.
+
+The following table compares common SQL aggregation terms, functions,
+and concepts with their corresponding MongoDB
+:ref:`aggregation operators <aggregation-pipeline-operator-reference>`:
+
+.. list-table::
+   :header-rows: 1
+
+   * - SQL Terms, Functions, and Concepts
+     - MongoDB Aggregation Operators
+   * - WHERE
+     - :pipeline:`$match`
+   * - GROUP BY
+     - :pipeline:`$group`
+   * - HAVING
+     - :pipeline:`$match`
+   * - SELECT
+     - :pipeline:`$project`
+   * - ORDER BY
+     - :pipeline:`$sort`
+   * - LIMIT
+     - :pipeline:`$limit`
+   * - SUM()
+     - :group:`$sum`
+   * - COUNT()
+     - | :group:`$sum`
+       | :pipeline:`$sortByCount`
+   * - join
+     - :pipeline:`$lookup`
+
+   * - SELECT INTO NEW_TABLE
+     - :pipeline:`$out`
+
+   * - MERGE INTO TABLE
+     - :pipeline:`$merge` 
+
+   * - UNION ALL
+     - :pipeline:`$unionWith`
 
 For a list of all aggregation pipeline and expression operators, see:
 
-- `aggregation-pipeline-operator-reference`
-- `aggregation-pipeline-operators`
-> **Seealso:** `/reference/sql-comparison`
+- :ref:`aggregation-pipeline-operator-reference`
+
+- :ref:`aggregation-pipeline-operators`
+
+**seealso:** :doc:`/reference/sql-comparison`
 
 ## Examples
 
-The following table presents a quick reference of SQL aggregation statements and the corresponding MongoDB statements. The examples in the table assume the following conditions:
+The following table presents a quick reference of SQL aggregation
+statements and the corresponding MongoDB statements. The examples in
+the table assume the following conditions:
 
-- The SQL examples assume two tables, `orders` and
-`order_lineitem` that join by the `order_lineitem.order_id` and the `orders.id` columns.
+- The SQL examples assume *two* tables, ``orders`` and
+  ``order_lineitem`` that join by the ``order_lineitem.order_id`` and
+  the ``orders.id`` columns.
 
-- The MongoDB examples assume one collection `orders` that contain
-documents of the following prototype:
+- The MongoDB examples assume *one* collection ``orders`` that contain
+  documents of the following prototype:
 
-```javascript
-  {
-    cust_id: "abc123",
-    ord_date: ISODate("2012-11-02T17:04:11.102Z"),
-    status: 'A',
-    price: 50,
-    items: [ { sku: "xxx", qty: 25, price: 1 },
-             { sku: "yyy", qty: 25, price: 1 } ]
-  }
-```
+  .. code-block:: javascript
 
-> **Seealso:** - `/reference/sql-comparison`
-- :method:`db.collection.aggregate()`
-- `aggregation-pipeline-operator-reference`
+     {
+       cust_id: "abc123",
+       ord_date: ISODate("2012-11-02T17:04:11.102Z"),
+       status: 'A',
+       price: 50,
+       items: [ { sku: "xxx", qty: 25, price: 1 },
+                { sku: "yyy", qty: 25, price: 1 } ]
+     }
+
+.. list-table::
+   :header-rows: 1
+   :class: border-table
+
+   * - SQL Example
+
+     - MongoDB Example
+
+     - Description
+
+   * - .. code-block:: sql
+          :copyable: false
+
+
+          SELECT COUNT(*) AS count
+          FROM orders
+
+
+     - .. code-block:: javascript
+          :copyable: false
+
+          db.orders.aggregate( [
+             {
+               $group: {
+                  _id: null,
+                  count: { $sum: 1 }
+               }
+             }
+          ] )
+
+
+       Count all records
+       from ``orders``
+
+
+   * - .. code-block:: sql
+          :copyable: false
+
+          SELECT SUM(price) AS total
+          FROM orders
+
+
+     - .. code-block:: javascript
+          :copyable: false
+
+          db.orders.aggregate( [
+             {
+               $group: {
+                  _id: null,
+                  total: { $sum: "$price" }
+               }
+             }
+          ] )
+
+
+       Sum the ``price`` field
+       from ``orders``
+
+
+   * - .. code-block:: sql
+          :copyable: false
+
+          SELECT cust_id,
+                 SUM(price) AS total
+          FROM orders
+          GROUP BY cust_id
+
+
+     - .. code-block:: javascript
+          :copyable: false
+
+          db.orders.aggregate( [
+             {
+               $group: {
+                  _id: "$cust_id",
+                  total: { $sum: "$price" }
+               }
+             }
+          ] )
+
+
+       For each unique ``cust_id``,
+       sum the ``price`` field.
+
+
+   * - .. code-block:: sql
+          :copyable: false
+
+          SELECT cust_id,
+                 SUM(price) AS total
+          FROM orders
+          GROUP BY cust_id
+          ORDER BY total
+
+
+     - .. code-block:: javascript
+          :copyable: false
+
+          db.orders.aggregate( [
+             {
+               $group: {
+                  _id: "$cust_id",
+                  total: { $sum: "$price" }
+               }
+             },
+             { $sort: { total: 1 } }
+          ] )
+
+
+     - For each unique ``cust_id``,
+       sum the ``price`` field,
+       results sorted by sum.
+
+
+   * - .. code-block:: sql
+          :copyable: false
+
+          SELECT cust_id,
+                 ord_date,
+                 SUM(price) AS total
+          FROM orders
+          GROUP BY cust_id,
+                   ord_date
+
+
+     - .. code-block:: javascript
+          :copyable: false
+
+          db.orders.aggregate( [
+             {
+               $group: {
+                  _id: {
+                     cust_id: "$cust_id",
+                     ord_date: { $dateToString: {
+                        format: "%Y-%m-%d",
+                        date: "$ord_date"
+                     }}
+                  },
+                  total: { $sum: "$price" }
+               }
+             }
+          ] )
+
+
+     - For each unique
+       ``cust_id``, ``ord_date`` grouping,
+       sum the ``price`` field.
+       Excludes the time portion of the date.
+
+
+   * - .. code-block:: sql
+          :copyable: false
+
+          SELECT cust_id,
+                 count(*)
+          FROM orders
+          GROUP BY cust_id
+          HAVING count(*) > 1
+
+
+     - .. code-block:: javascript
+          :copyable: false
+
+          db.orders.aggregate( [
+             {
+               $group: {
+                  _id: "$cust_id",
+                  count: { $sum: 1 }
+               }
+             },
+             { $match: { count: { $gt: 1 } } }
+          ] )
+
+
+     - For ``cust_id`` with multiple records,
+       return the ``cust_id`` and
+       the corresponding record count.
+
+
+   * - .. code-block:: sql
+          :copyable: false
+
+          SELECT cust_id,
+                 ord_date,
+                 SUM(price) AS total
+          FROM orders
+          GROUP BY cust_id,
+                   ord_date
+          HAVING total > 250
+
+
+     - .. code-block:: javascript
+          :copyable: false
+
+          db.orders.aggregate( [
+             {
+               $group: {
+                  _id: {
+                     cust_id: "$cust_id",
+                     ord_date: { $dateToString: {
+                        format: "%Y-%m-%d",
+                        date: "$ord_date"
+                     }}
+                  },
+                  total: { $sum: "$price" }
+               }
+             },
+             { $match: { total: { $gt: 250 } } }
+          ] )
+
+
+     - For each unique ``cust_id``, ``ord_date``
+       grouping, sum the ``price`` field
+       and return only where the
+       sum is greater than 250.
+       Excludes the time portion of the date.
+
+
+   * - .. code-block:: sql
+          :copyable: false
+
+          SELECT cust_id,
+                 SUM(price) as total
+          FROM orders
+          WHERE status = 'A'
+          GROUP BY cust_id
+
+
+     - .. code-block:: javascript
+          :copyable: false
+
+          db.orders.aggregate( [
+             { $match: { status: 'A' } },
+             {
+               $group: {
+                  _id: "$cust_id",
+                  total: { $sum: "$price" }
+               }
+             }
+          ] )
+
+
+     - For each unique ``cust_id``
+       with status ``A``,
+       sum the ``price`` field.
+
+
+   * - .. code-block:: sql
+          :copyable: false
+
+          SELECT cust_id,
+                 SUM(price) as total
+          FROM orders
+          WHERE status = 'A'
+          GROUP BY cust_id
+          HAVING total > 250
+
+
+     - .. code-block:: javascript
+          :copyable: false
+
+          db.orders.aggregate( [
+             { $match: { status: 'A' } },
+             {
+               $group: {
+                  _id: "$cust_id",
+                  total: { $sum: "$price" }
+               }
+             },
+             { $match: { total: { $gt: 250 } } }
+          ] )
+
+
+     - For each unique ``cust_id``
+       with status ``A``,
+       sum the ``price`` field and return
+       only where the
+       sum is greater than 250.
+
+
+   * - .. code-block:: sql
+          :copyable: false
+
+          SELECT cust_id,
+                 SUM(li.qty) as qty
+          FROM orders o,
+               order_lineitem li
+          WHERE li.order_id = o.id
+          GROUP BY cust_id
+
+
+     - .. code-block:: javascript
+          :copyable: false
+
+          db.orders.aggregate( [
+             { $unwind: "$items" },
+             {
+               $group: {
+                  _id: "$cust_id",
+                  qty: { $sum: "$items.qty" }
+               }
+             }
+          ] )
+
+
+     - For each unique ``cust_id``,
+       sum the corresponding
+       line item ``qty`` fields
+       associated with the
+       orders.
+
+
+   * - .. code-block:: sql
+          :copyable: false
+
+          SELECT COUNT(*)
+          FROM (SELECT cust_id,
+                       ord_date
+                FROM orders
+                GROUP BY cust_id,
+                         ord_date)
+                as DerivedTable
+
+     - .. code-block:: javascript
+          :copyable: false
+
+          db.orders.aggregate( [
+             {
+               $group: {
+                  _id: {
+                     cust_id: "$cust_id",
+                     ord_date: { $dateToString: {
+                        format: "%Y-%m-%d",
+                        date: "$ord_date"
+                     }}
+                  }
+               }
+             },
+             {
+               $group: {
+                  _id: null,
+                  count: { $sum: 1 }
+               }
+             }
+          ] )
+
+
+     - Count the number of distinct
+       ``cust_id``, ``ord_date`` groupings.
+       Excludes the time portion of the date.
+
+**seealso:** - :doc:`/reference/sql-comparison`
+
+   - :method:`db.collection.aggregate()`
+
+   - :ref:`aggregation-pipeline-operator-reference`

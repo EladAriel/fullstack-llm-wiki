@@ -1,65 +1,102 @@
 ---
 type: "Framework Learn Page"
-framework: "mongodb"
+framework: "MongoDB"
 source_repo: "https://github.com/mongodb/docs.git"
 source_branch: "main"
 source_path: "content/manual/manual/source/tutorial/configure-a-hidden-replica-set-member.txt"
-source_commit: "ab9db26ed3d11618cdb61516d8180337d8e3f679"
-source_commit_short: "ab9db26e"
-source_commit_date: "2026-07-24T16:22:46-06:00"
-generated_at: "2026-07-25T11:51:15Z"
+source_commit: "b9f2bc487a2878b65e3c1f80024bebab76954f27"
+source_commit_short: "b9f2bc48"
+source_commit_date: "2026-08-28T17:09:45-05:00"
+generated_at: "2026-08-29T09:39:19.606641Z"
 ---
-
-==================================================
-
 # Configure a Hidden Self-Managed Replica Set Member
 
-Hidden members are part of a `replica set` but cannot become `primary` and are invisible to client applications. Hidden members may vote in `elections <replica-set-elections>`. For more information on hidden members and their uses, see `/core/replica-set-hidden-member`.
+**meta:** :keywords: on-prem
+   :description: Configure a hidden replica set member by setting its priority to 0 and hidden status to true, preventing it from becoming primary.
+
+.. default-domain:: mongodb
+
+**contents:** On this page
+   :local:
+   :backlinks: none
+   :depth: 1
+   :class: singlecol
+
+Hidden members are part of a :term:`replica set` but cannot become
+:term:`primary` and are invisible to client applications. Hidden members
+may vote in :ref:`elections <replica-set-elections>`. For
+more information on hidden members and their uses, see
+:doc:`/core/replica-set-hidden-member`.
 
 ## Considerations
 
-The most common use of hidden nodes is to support `backups <backup-restore-sharded-clusters>`.
+The most common use of hidden nodes is to support 
+:ref:`backups <backup-restore-sharded-clusters>`. 
 
-You can also use hidden nodes to support `delayed members <replica-set-delayed-members>`. However, if you only need to prevent a member from becoming primary, configure a `priority 0 member <replica-set-secondary-only-members>`.
+You can also use hidden nodes to support :ref:`delayed
+members <replica-set-delayed-members>`. However, if you only need
+to prevent a member from becoming primary, configure a 
+:ref:`priority 0 member <replica-set-secondary-only-members>`.
 
-If the :rsconf:`settings.chainingAllowed` setting allows secondary members to sync from other secondaries, MongoDB prefers non-hidden members over hidden members as sync targets. MongoDB only chooses hidden members as a last resort. To override this behavior and sync from a specific, hidden member, use the :dbcommand:`replSetSyncFrom` database command.
+If the :rsconf:`settings.chainingAllowed` setting allows secondary members to
+sync from other secondaries, MongoDB prefers non-hidden members over hidden
+members as sync targets. MongoDB only chooses hidden members as a last resort.
+To override this behavior and sync from a specific, hidden member,
+use the :dbcommand:`replSetSyncFrom` database command.
 
-> **Seealso:** `chained-replication`
+**seealso:** :ref:`chained-replication`
+
 
 ## Examples
 
 ### Member Configuration Document
 
-To configure a secondary member as hidden, set its :rsconf:`members[n].priority` value to `0` and set its :rsconf:`members[n].hidden` value to `true` in its member configuration:
+To configure a secondary member as hidden, set its
+:rsconf:`members[n].priority` value to ``0`` and
+set its :rsconf:`members[n].hidden` value to
+``true`` in its member configuration:
 
-```javascript
-{
-  "_id" : <num>
-  "host" : <hostname:port>,
-  "priority" : 0,
-  "hidden" : true
-}
-```
+.. code-block:: javascript
+   :emphasize-lines: 4-5
+
+   {
+     "_id" : <num>
+     "host" : <hostname:port>,
+     "priority" : 0,
+     "hidden" : true
+   }
+
+.. _configure-hidden-replica-set-member:
 
 ### Configuration Procedure
 
-The following example hides the secondary member currently at the index `0` in the :rsconf:`members` array. To configure a `hidden member`, use the following sequence of operations in a :binary:`~bin.mongosh` session that is connected to the primary, specifying the member to configure by its array index in the :rsconf:`members` array:
+The following example hides the secondary member currently at the index
+``0`` in the :rsconf:`members` array. To configure
+a :term:`hidden member`, use the following sequence of operations in a
+:binary:`~bin.mongosh` session that is connected to the primary,
+specifying the member to configure by its array index in the
+:rsconf:`members` array:
 
-```javascript
-cfg = rs.conf()
-cfg.members[0].priority = 0
-cfg.members[0].hidden = true
-rs.reconfig(cfg)
-```
+.. code-block:: javascript
 
-After re-configuring the set, this secondary member has a priority of `0` so that it cannot become primary and is hidden. The other members in the set will not advertise the hidden member in the :dbcommand:`hello` command or :method:`db.hello()` method output.
+   cfg = rs.conf()
+   cfg.members[0].priority = 0
+   cfg.members[0].hidden = true
+   rs.reconfig(cfg)
 
-.. include:: /includes/fact-rs-conf-array-index.rst
+After re-configuring the set, this secondary member has a priority of
+``0`` so that it cannot become primary and is hidden. The other members
+in the set will not advertise the hidden member in the
+:dbcommand:`hello` command or :method:`db.hello()` method output.
 
-.. include:: /includes/warning-rs-reconfig.rst
+**include:** /includes/fact-rs-conf-array-index.rst
+
+**include:** /includes/warning-rs-reconfig.rst
 
 ## Related Documents
 
-- `Replica Set Reconfiguration <replica-set-reconfiguration-usage>`
-- `/core/replica-set-elections`
-- `Read Preference <replica-set-read-preference>`
+- :ref:`Replica Set Reconfiguration <replica-set-reconfiguration-usage>`
+
+- :doc:`/core/replica-set-elections`
+
+- :ref:`Read Preference <replica-set-read-preference>`

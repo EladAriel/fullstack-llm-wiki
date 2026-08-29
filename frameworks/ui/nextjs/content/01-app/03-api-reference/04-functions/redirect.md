@@ -1,14 +1,15 @@
 ---
 type: "Framework Learn Page"
-framework: "nextjs"
+framework: "Next.js"
 source_repo: "https://github.com/vercel/next.js/"
 source_branch: "canary"
 source_path: "docs/01-app/03-api-reference/04-functions/redirect.mdx"
-source_commit: "dcf242a17b5d4622bbd9624db531a9d84177619f"
-source_commit_short: "dcf242a1"
-source_commit_date: "2026-07-25T10:16:19+02:00"
-generated_at: "2026-07-25T11:50:53Z"
+source_commit: "33a5d542e519fe4e05c8c8c2c2845da9f741699b"
+source_commit_short: "33a5d542"
+source_commit_date: "2026-08-29T00:04:45-07:00"
+generated_at: "2026-08-29T09:40:24.282003Z"
 ---
+# Redirect
 
 ---
 title: redirect
@@ -21,7 +22,7 @@ related:
 
 The `redirect` function allows you to redirect the user to another URL. `redirect` can be used while rendering in [Server and Client Components](/docs/app/getting-started/server-and-client-components), [Route Handlers](/docs/app/api-reference/file-conventions/route), and [Server Functions](/docs/app/getting-started/mutating-data).
 
-When used in a [streaming context](/docs/app/getting-started/linking-and-navigating#streaming), this will insert a meta tag to emit the redirect on the client side. When used in a server action, it will serve a 303 HTTP redirect response to the caller. Otherwise, it will serve a 307 HTTP redirect response to the caller.
+When used in a [streaming context](/docs/app/getting-started/linking-and-navigating#streaming), this will insert a meta tag to emit the redirect on the client side. In a Server Action, `redirect` performs a client-side navigation when JavaScript is available. For progressive enhancement form submissions, it serves a 303 HTTP redirect response. Otherwise, it serves a 307 HTTP redirect response.
 
 If a resource doesn't exist, you can use the [`notFound` function](/docs/app/api-reference/functions/not-found) instead.
 
@@ -224,7 +225,7 @@ The introduction of the `307` status code means that the request method is prese
 - `302` - Temporary redirect, will change the request method from `POST` to `GET`
 - `307` - Temporary redirect, will preserve the request method as `POST`
 
-The `redirect()` method uses a `307` by default, instead of a `302` temporary redirect, meaning your requests will _always_ be preserved as `POST` requests.
+The `redirect()` method uses a `307` by default, instead of a `302` temporary redirect, meaning the request method is preserved. Server Action form submissions are an exception: they use a `303` response so the browser follows the redirect with a `GET` request. When JavaScript is available, Server Actions perform a client-side navigation instead of an HTTP redirect.
 
 [Learn more](https://developer.mozilla.org/docs/Web/HTTP/Redirections) about HTTP Redirects.
 

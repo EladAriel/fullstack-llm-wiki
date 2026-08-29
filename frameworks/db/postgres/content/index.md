@@ -1,17 +1,11 @@
 ---
 type: "Framework Learn Directory Index"
-framework: "postgres"
-directory: "content"
-source_repo: "https://github.com/postgres/postgres.git"
-source_branch: "master"
-source_commit: "38afc3dcb25c45b744d4025029ce0a6c90b7059f"
-source_commit_short: "38afc3dc"
-source_commit_date: "2026-07-25T19:08:27+09:00"
-generated_at: "2026-07-25T11:50:59Z"
+framework: "PostgreSQL"
+generated_at: "2026-08-29T09:39:24.626316Z"
 ---
 # Content
 
-This directory contains postgres learning pages related to content.
+This directory contains PostgreSQL learning pages related to content.
 
 ## Breadcrumbs
 
@@ -21,11 +15,6 @@ This directory contains postgres learning pages related to content.
 
 - Wiki Home: [Root Index](../index.md)
 
-## Child Directories
-
-- [Func](func/index.md) - pages related to func
-- [Ref](ref/index.md) - pages related to ref
-
 ## Pages in This Directory
 
 - [Acronyms](acronyms.md)
@@ -33,6 +22,7 @@ This directory contains postgres learning pages related to content.
 - [Amcheck](amcheck.md)
 - [Appendix Obsolete Auth Radius](appendix-obsolete-auth-radius.md)
 - [Appendix Obsolete Default Roles](appendix-obsolete-default-roles.md)
+- [Appendix Obsolete Libpq Fastpath](appendix-obsolete-libpq-fastpath.md)
 - [Appendix Obsolete Pgreceivexlog](appendix-obsolete-pgreceivexlog.md)
 - [Appendix Obsolete Pgresetxlog](appendix-obsolete-pgresetxlog.md)
 - [Appendix Obsolete Pgxlogdump](appendix-obsolete-pgxlogdump.md)
@@ -100,7 +90,7 @@ This directory contains postgres learning pages related to content.
 - [Indextypes](indextypes.md)
 - [Indices](indices.md)
 - [Info](info.md)
-- [Information Schema](information_schema.md)
+- [Information_Schema](information_schema.md)
 - [Install Binaries](install-binaries.md)
 - [Installation](installation.md)
 - [Intagg](intagg.md)
@@ -202,10 +192,7 @@ This directory contains postgres learning pages related to content.
 - [Xplang](xplang.md)
 - [Xtypes](xtypes.md)
 
-## IDE LLM Guidance
+## Subdirectories
 
-When answering implementation questions related to this directory:
-
-1. Prefer the most specific page listed above.
-2. If the topic is broad, read the child directory index first.
-3. Use source metadata from each page when giving answers.
+- [Func](func/index.md)
+- [Ref](ref/index.md)

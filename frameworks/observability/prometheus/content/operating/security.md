@@ -4,10 +4,10 @@ framework: "Prometheus"
 source_repo: "https://github.com/prometheus/docs.git"
 source_branch: "main"
 source_path: "docs/operating/security.md"
-source_commit: "9d9e0343a9e6d138204cfe316a125a860a271849"
-source_commit_short: "9d9e034"
-source_commit_date: "2026-07-21T23:07:09+02:00"
-generated_at: "2026-07-25T19:07:59.765666Z"
+source_commit: "9ece2ea6375353799f014055bc577d795214aec0"
+source_commit_short: "9ece2ea"
+source_commit_date: "2026-08-27T10:23:11+02:00"
+generated_at: "2026-08-29T09:39:59.838799Z"
 ---
 # Security
 
@@ -123,6 +123,11 @@ database.
 Any user with access to the Alertmanager HTTP endpoint has access to its data.
 They can create and resolve alerts. They can create, modify and delete
 silences.
+
+Operators who do not configure any form of authentication must exercise
+caution: Alertmanager serves `/api/v2` with `Access-Control-Allow-Origin: *`.
+This grants API access to any website visited by a browser capable of reaching
+the service.
 
 Where notifications are sent to is determined by the configuration file. With
 certain templating setups it is possible for notifications to end up at an

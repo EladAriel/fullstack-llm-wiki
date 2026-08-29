@@ -4,10 +4,10 @@ framework: "Arize Phoenix"
 source_repo: "https://github.com/Arize-ai/phoenix.git"
 source_branch: "main"
 source_path: "docs/phoenix/cookbook/human-in-the-loop-workflows-annotations/aligning-llm-evals-with-human-annotations-typescript.mdx"
-source_commit: "69b3ab92c37ff65812feaa2dbf0b1c0ad5ae55fe"
-source_commit_short: "69b3ab9"
-source_commit_date: "2026-07-25T11:48:12-06:00"
-generated_at: "2026-07-25T19:08:24.871533Z"
+source_commit: "c48e50e9906fcc56c1c103ebd93ef3c95ed6b6e7"
+source_commit_short: "c48e50e"
+source_commit_date: "2026-08-29T01:45:20-06:00"
+generated_at: "2026-08-29T09:39:58.882435Z"
 ---
 # Aligning Llm Evals With Human Annotations Typescript
 
@@ -20,7 +20,7 @@ description: "In this tutorial, we’ll run a Mastra agent and build a custom ev
     <iframe width="100%" height="420" className="aspect-video" src="https://www.youtube.com/embed/RsFDe-sVcNE" title="Aligning LLM Evals with Human Annotations (TypeScript)" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>
 </Frame>
 
-In this tutorial, you’ll learn how to align your evaluator so it’s tailored to your specific use case. Instead of relying only on [pre-built evaluators](/docs/phoenix/evaluation/running-pre-tested-evals) in Phoenix—which are tested on general benchmark datasets but may miss the nuances of your application—we’ll show you how to build your own.
+In this tutorial, you’ll learn how to align your evaluator so it’s tailored to your specific use case. Instead of relying only on [pre-built evaluators](/docs/phoenix/evaluation/pre-built-metrics) in Phoenix—which are tested on general benchmark datasets but may miss the nuances of your application—we’ll show you how to build your own.
 
 We'll run a [**Mastra**](/docs/phoenix/integrations/typescript/mastra) **agent**, capture its traces, and then run evaluations on those traces. Using a small set of **human-annotated examples** as our ground truth, we’ll identify where the evaluator falls short. From there, we’ll refine the evaluation prompt and repeat the cycle until the evaluator’s outputs align with the human annotations.
 

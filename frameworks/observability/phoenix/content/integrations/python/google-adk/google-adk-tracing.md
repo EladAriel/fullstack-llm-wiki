@@ -4,10 +4,10 @@ framework: "Arize Phoenix"
 source_repo: "https://github.com/Arize-ai/phoenix.git"
 source_branch: "main"
 source_path: "docs/phoenix/integrations/python/google-adk/google-adk-tracing.mdx"
-source_commit: "69b3ab92c37ff65812feaa2dbf0b1c0ad5ae55fe"
-source_commit_short: "69b3ab9"
-source_commit_date: "2026-07-25T11:48:12-06:00"
-generated_at: "2026-07-25T19:08:24.860273Z"
+source_commit: "c48e50e9906fcc56c1c103ebd93ef3c95ed6b6e7"
+source_commit_short: "c48e50e"
+source_commit_date: "2026-08-29T01:45:20-06:00"
+generated_at: "2026-08-29T09:39:58.935477Z"
 ---
 ---
 title: "Google ADK Tracing"
@@ -124,7 +124,9 @@ remote_agent = agent_engines.create(
     ],
     extra_packages=["adk_agent.py"],
     env_vars={
-        "PHOENIX_COLLECTOR_ENDPOINT": "http://localhost:6006/v1/traces",  # Or your Phoenix deployment URL
+        # Agent Engine reaches this URL, not your machine, so localhost will not work here.
+        # Full OTLP traces URL, including the /v1/traces path
+        "PHOENIX_COLLECTOR_ENDPOINT": "https://your-phoenix.example.com/v1/traces",
         "PHOENIX_API_KEY": "<your-phoenix-api-key>",
     },
 )
@@ -139,6 +141,7 @@ tracer_provider = register(
     project_name="adk-agent",
     batch=False,  # Use sync export because Agent Engine pauses CPU after requests
     set_global_tracer_provider=False,  # Required: avoids conflict with Agent Engine's global provider
+    protocol="http/protobuf",  # Export over HTTPS — Agent Engine cannot reach a self-hosted gRPC port
 )
 GoogleADKInstrumentor().instrument(tracer_provider=tracer_provider)
 

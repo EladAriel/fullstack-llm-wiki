@@ -1,6 +1,6 @@
-# sentry-python Learn Wiki
+# Sentry Python Learn Wiki
 
-This is a local LLM-friendly wiki generated from the official sentry-python documentation.
+This is a local LLM-friendly wiki generated from the official Sentry Python documentation.
 
 ## Status
 
@@ -8,9 +8,10 @@ This is a local LLM-friendly wiki generated from the official sentry-python docu
 - Source repo: `https://github.com/getsentry/sentry-docs.git`
 - Source branch: `master`
 - Source docs path: `docs/platforms/python`
-- Source commit: `8557ccb`
-- Source commit date: `2026-07-24T13:12:02-04:00`
-- Wiki generated at: `2026-07-25T19:08:13.539201Z`
+- Source commit: `8b4e4a2`
+- Source commit date: `2026-08-28T22:17:56+00:00`
+- Wiki generated at: `2026-08-29T09:40:09.078142Z`
+- Page count: `146`
 
 ## How the IDE LLM should use this wiki
 
@@ -29,3 +30,19 @@ This is a local LLM-friendly wiki generated from the official sentry-python docu
 ## Top-Level Wiki Areas
 
 - [Content Index](content/index.md)
+- [Agent Tracing](content/agent-tracing/index.md)
+- [Configuration](content/configuration/index.md)
+- [Crons](content/crons/index.md)
+- [Data Management](content/data-management/index.md)
+- [Enriching Events](content/enriching-events/index.md)
+- [Feature Flags](content/feature-flags/index.md)
+- [Integrations](content/integrations/index.md)
+- [Legacy Sdk](content/legacy-sdk/index.md)
+- [Logs](content/logs/index.md)
+- [Metrics](content/metrics/index.md)
+- [Migration](content/migration/index.md)
+- [Profiling](content/profiling/index.md)
+- [Security Policy Reporting](content/security-policy-reporting/index.md)
+- [Tracing](content/tracing/index.md)
+- [Usage](content/usage/index.md)
+- [User Feedback](content/user-feedback/index.md)

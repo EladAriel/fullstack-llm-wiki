@@ -1,14 +1,15 @@
 ---
 type: "Framework Learn Page"
-framework: "shadcnui"
+framework: "shadcn/ui"
 source_repo: "https://github.com/shadcn-ui/ui"
 source_branch: "main"
 source_path: "apps/v4/content/docs/registry/api-reference.mdx"
-source_commit: "4baadbc6517070ae8f8feb2c97037adc2b305544"
-source_commit_short: "4baadbc6"
-source_commit_date: "2026-07-23T23:50:36+04:00"
-generated_at: "2026-07-25T11:50:48Z"
+source_commit: "683a5a9b370acdb7785a0529434e6a3b8c7e0441"
+source_commit_short: "683a5a9"
+source_commit_date: "2026-08-26T10:28:13+04:00"
+generated_at: "2026-08-29T09:40:26.953333Z"
 ---
+# Api Reference
 
 ---
 title: API Reference
@@ -16,8 +17,8 @@ description: Programmatic API for working with registries, schemas and presets.
 ---
 
 The `shadcn` package exposes a set of programmatic APIs in addition to the CLI.
-You can use these to fetch and resolve registry items, validate registry JSON,
-and build custom tooling on top of the registry.
+You can use these to fetch, resolve, and install registry items, validate
+registry JSON, and build custom tooling on top of the registry.
 
 Each API is available under a dedicated subpath import.
 
@@ -44,9 +45,10 @@ omit it to use the built-in registries.
 - **Type:** `Partial<Config>`
 - **Default:** built-in registries only
 
-The resolved contents of your `components.json` file. Its `registries` field
-maps a namespace (e.g. `@acme`) to a URL and any authentication headers or
-environment variables required to reach it.
+The registry configuration to use. Its `registries` field maps a namespace
+(e.g. `@acme`) to a URL and any authentication headers or environment
+variables required to reach it. Use
+[`getRegistriesConfig`](#getregistriesconfig) to load it from your project.
 
 ```ts showLineNumbers
 import { getRegistryItems } from "shadcn/registry"
@@ -75,6 +77,18 @@ can change between requests and you need fresh data each time.
 
 ```ts
 const fresh = await getRegistry("@shadcn", { useCache: false })
+```
+
+### getRegistriesConfig
+
+Load registry configuration from a project directory. The function reads
+`components.json` when present; otherwise it reads the top-level `registries`
+field from `package.json`.
+
+```ts showLineNumbers
+import { getRegistriesConfig } from "shadcn/registry"
+
+const config = await getRegistriesConfig(process.cwd())
 ```
 
 ### getRegistry
@@ -163,6 +177,38 @@ Returns a single merged tree:
 }
 ```
 
+### addRegistryItems
+
+Resolve and install registry items into an existing project. This is the
+programmatic equivalent of `shadcn add` and applies files, package dependencies,
+environment variables, CSS, and Tailwind configuration declared by the items.
+
+```ts showLineNumbers
+import { addRegistryItems, getRegistriesConfig } from "shadcn/registry"
+
+const cwd = process.cwd()
+const config = await getRegistriesConfig(cwd)
+
+await addRegistryItems(["@acme/agent"], {
+  cwd,
+  config,
+  overwrite: false,
+  silent: true,
+})
+```
+
+`addRegistryItems` does not read project configuration files itself. Pass the
+result of [`getRegistriesConfig`](#getregistriesconfig), or provide `config`
+directly. A config containing only `registries` is enough when every requested
+item and dependency is universal: a `registry:item` or `registry:file` whose
+files all declare explicit targets. Other items require a full resolved project
+config, including its aliases and `resolvedPaths`. Every custom registry
+namespace referenced by an item or dependency must be present in `config`.
+
+The function throws errors instead of exiting the process and never prompts.
+Existing files are skipped unless `overwrite` is enabled, and npm uses
+`--force` for React 19 peer dependency conflicts.
+
 ### getRegistries
 
 Fetch the registry directory.
@@ -210,6 +256,7 @@ Returns matching items wrapped in pagination metadata:
   "items": [
     {
       "name": "button",
+      "title": "Button",
       "type": "registry:ui",
       "description": "A button component.",
       "registry": "@shadcn",

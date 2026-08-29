@@ -1,14 +1,15 @@
 ---
 type: "Framework Learn Page"
-framework: "redis"
+framework: "Redis"
 source_repo: "https://github.com/redis/docs.git"
 source_branch: "main"
 source_path: "content/develop/ai/context-engine/langcache/_index.md"
-source_commit: "9d30f68c3dad1a6b3b7d30fe604b911348ce8152"
-source_commit_short: "9d30f68c"
-source_commit_date: "2026-07-24T10:52:10-07:00"
-generated_at: "2026-07-25T11:51:22Z"
+source_commit: "f8693349287b0efbef3c865b6f6a2aceca88594d"
+source_commit_short: "f869334"
+source_commit_date: "2026-08-28T10:01:19-05:00"
+generated_at: "2026-08-29T09:38:55.835331Z"
 ---
+# _Index
 
 ---
 Title: Redis LangCache
@@ -32,9 +33,9 @@ Cut LLM costs and improve response times with semantic caching.
 LangCache checks whether a semantically similar prompt has been answered before and returns the cached response instantly — no LLM call required. When there's no match, your app calls the LLM as usual and stores the result for future use.
 
 <div class="grid grid-cols-1 md:grid-cols-3 gap-6 my-8">
-  {{< image-card image="images/ai-LLM-memory.svg" alt="Quick start icon" title="Quick Start — Create a LangCache service on Redis Cloud and make your first API call" url="/operate/rc/context-engine/langcache/create-service" >}}
+  {{< image-card image="images/ai-LLM-memory.svg" alt="Quick start icon" title="Quick Start — Create a LangCache service on Redis Cloud and make your first API call" url="/operate/iris/langcache/create-service" >}}
   {{< image-card image="images/ai-search.svg" alt="API examples icon" title="API and SDK Examples — Search, store, and manage cache entries with REST, Python, or JS" url="/develop/ai/context-engine/langcache/api-examples" >}}
-  {{< image-card image="images/ai-brain-2.svg" alt="Monitor icon" title="Monitor Cache — Track hit rates, usage, and performance in Redis Cloud" url="/operate/rc/context-engine/langcache/monitor-cache" >}}
+  {{< image-card image="images/ai-brain-2.svg" alt="Monitor icon" title="Monitor Cache — Track hit rates, usage, and performance in Redis Cloud" url="/operate/iris/langcache/monitor-cache" >}}
 </div>
 
 ## What is LangCache?
@@ -146,7 +147,7 @@ See the [LangCache API and SDK examples]({{< relref "/develop/ai/context-engine/
 
 LangCache is currently in preview:
 
-- Public preview on [Redis Cloud]({{< relref "/operate/rc/context-engine/langcache" >}})
+- Public preview on [Redis Cloud]({{< relref "/operate/iris/langcache" >}})
 - Fully-managed [private preview](https://redis.io/langcache/)
 
 {{< multitabs id="langcache-get-started" 

@@ -1,14 +1,15 @@
 ---
 type: "Framework Learn Page"
-framework: "nextjs"
+framework: "Next.js"
 source_repo: "https://github.com/vercel/next.js/"
 source_branch: "canary"
 source_path: "docs/01-app/03-api-reference/03-file-conventions/proxy.mdx"
-source_commit: "dcf242a17b5d4622bbd9624db531a9d84177619f"
-source_commit_short: "dcf242a1"
-source_commit_date: "2026-07-25T10:16:19+02:00"
-generated_at: "2026-07-25T11:50:53Z"
+source_commit: "33a5d542e519fe4e05c8c8c2c2845da9f741699b"
+source_commit_short: "33a5d542"
+source_commit_date: "2026-08-29T00:04:45-07:00"
+generated_at: "2026-08-29T09:40:24.287372Z"
 ---
+# Proxy
 
 ---
 title: proxy.js
@@ -150,9 +151,11 @@ Read more details on [path-to-regexp](https://github.com/pillarjs/path-to-regexp
 
 ## Params
 
+Next.js calls the Proxy function with two arguments, [`request`](#request) and [`event`](#event), in that order. Declare only the ones you use.
+
 ### `request`
 
-When defining Proxy, the default export function accepts a single parameter, `request`. This parameter is an instance of `NextRequest`, which represents the incoming HTTP request.
+The first parameter is an instance of `NextRequest`, which represents the incoming HTTP request.
 
 ```tsx filename="proxy.ts" switcher
 import type { NextRequest } from 'next/server'
@@ -167,6 +170,36 @@ export function proxy(request) {
   // Proxy logic goes here
 }
 ```
+
+### `event`
+
+The second parameter is an instance of `NextFetchEvent`. It exposes a single method, `waitUntil(promise)`, which keeps the Proxy invocation alive until the promise settles, so background work like logging or analytics can finish after the response is sent. See [`waitUntil` and `NextFetchEvent`](#waituntil-and-nextfetchevent) for a full example.
+
+```tsx filename="proxy.ts" switcher
+import type { NextFetchEvent, NextRequest } from 'next/server'
+
+export function proxy(request: NextRequest, event: NextFetchEvent) {
+  event.waitUntil(
+    fetch('https://example.com/log', {
+      method: 'POST',
+      body: JSON.stringify({ pathname: request.nextUrl.pathname }),
+    })
+  )
+}
+```
+
+```js filename="proxy.js" switcher
+export function proxy(request, event) {
+  event.waitUntil(
+    fetch('https://example.com/log', {
+      method: 'POST',
+      body: JSON.stringify({ pathname: request.nextUrl.pathname }),
+    })
+  )
+}
+```
+
+### `NextProxy` type
 
 If you prefer a shorthand, you can use the `NextProxy` type. It infers the parameter types for both `request` (`NextRequest`) and `event` (`NextFetchEvent`) automatically:
 

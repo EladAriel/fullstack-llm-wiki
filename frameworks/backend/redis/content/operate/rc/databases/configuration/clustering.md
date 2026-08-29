@@ -1,14 +1,15 @@
 ---
 type: "Framework Learn Page"
-framework: "redis"
+framework: "Redis"
 source_repo: "https://github.com/redis/docs.git"
 source_branch: "main"
 source_path: "content/operate/rc/databases/configuration/clustering.md"
-source_commit: "9d30f68c3dad1a6b3b7d30fe604b911348ce8152"
-source_commit_short: "9d30f68c"
-source_commit_date: "2026-07-24T10:52:10-07:00"
-generated_at: "2026-07-25T11:51:22Z"
+source_commit: "f8693349287b0efbef3c865b6f6a2aceca88594d"
+source_commit_short: "f869334"
+source_commit_date: "2026-08-28T10:01:19-05:00"
+generated_at: "2026-08-29T09:38:55.294682Z"
 ---
+# Clustering
 
 ---
 Title: Clustering Redis Databases
@@ -18,7 +19,8 @@ categories:
 - operate
 - rc
 description: Redis Cloud uses clustering to manage very large databases (25 GB and
-  larger).  Here, you'll learn how to manage clustering and how to use hashing policies
+  larger) or high-throughput databases (25,000 ops/sec and higher).  Here, you'll
+  learn how to manage clustering and how to use hashing policies
   to control how data is managed.
 linkTitle: Clustering
 weight: $weight
@@ -33,7 +35,7 @@ For very large databases, Redis Cloud distributes database data to different clo
 
 - The operations performed against the database are CPU intensive enough to degrade performance.
 
-    Clustering distributes operational load, whether to instances on the same server or across multiple servers.
+    Multiple shards should be used when throughput grows to 25,000 ops/sec. Clustering distributes operational load, whether to instances on the same server or across multiple servers.
 
 This distribution is called _clustering_ because it manages the way data is distributed throughout the cluster of nodes that support the database.
 

@@ -1,29 +1,19 @@
 ---
 type: "Framework Learn Directory Index"
-framework: "redis"
-directory: "content/commands"
-source_repo: "https://github.com/redis/docs.git"
-source_branch: "main"
-source_commit: "9d30f68c3dad1a6b3b7d30fe604b911348ce8152"
-source_commit_short: "9d30f68c"
-source_commit_date: "2026-07-24T10:52:10-07:00"
-generated_at: "2026-07-25T11:51:22Z"
+framework: "Redis"
+generated_at: "2026-08-29T09:38:56.322890Z"
 ---
 # Commands
 
-This directory contains redis learning pages related to commands.
+This directory contains Redis learning pages related to commands.
 
 ## Breadcrumbs
 
-[Wiki Home](../../index.md) -> [Content](../index.md) -> [Commands](index.md)
+[Wiki Home](../index.md) -> [Content](index.md)
 
 ## Navigation
 
-- Parent: [Parent Index](../index.md)
-
-## Child Directories
-
-- None
+- Wiki Home: [Root Index](../index.md)
 
 ## Pages in This Directory
 
@@ -62,6 +52,14 @@ This directory contains redis learning pages related to commands.
 - [Arset](arset.md)
 - [Asking](asking.md)
 - [Auth](auth.md)
+- [Backup Abort](backup-abort.md)
+- [Backup Cleanup](backup-cleanup.md)
+- [Backup Help](backup-help.md)
+- [Backup List](backup-list.md)
+- [Backup Seal](backup-seal.md)
+- [Backup Start](backup-start.md)
+- [Backup Status](backup-status.md)
+- [Backup](backup.md)
 - [Bf.Add](bf.add.md)
 - [Bf.Card](bf.card.md)
 - [Bf.Exists](bf.exists.md)
@@ -76,10 +74,11 @@ This directory contains redis learning pages related to commands.
 - [Bgsave](bgsave.md)
 - [Bitcount](bitcount.md)
 - [Bitfield](bitfield.md)
-- [Bitfield Ro](bitfield_ro.md)
+- [Bitfield_Ro](bitfield_ro.md)
 - [Bitop](bitop.md)
 - [Bitpos](bitpos.md)
 - [Blmove](blmove.md)
+- [Blmovem](blmovem.md)
 - [Blmpop](blmpop.md)
 - [Blpop](blpop.md)
 - [Brpop](brpop.md)
@@ -181,9 +180,9 @@ This directory contains redis learning pages related to commands.
 - [Dump](dump.md)
 - [Echo](echo.md)
 - [Eval](eval.md)
-- [Eval Ro](eval_ro.md)
+- [Eval_Ro](eval_ro.md)
 - [Evalsha](evalsha.md)
-- [Evalsha Ro](evalsha_ro.md)
+- [Evalsha_Ro](evalsha_ro.md)
 - [Exec](exec.md)
 - [Exists](exists.md)
 - [Expire](expire.md)
@@ -191,13 +190,14 @@ This directory contains redis learning pages related to commands.
 - [Expiretime](expiretime.md)
 - [Failover](failover.md)
 - [Fcall](fcall.md)
-- [Fcall Ro](fcall_ro.md)
+- [Fcall_Ro](fcall_ro.md)
 - [Flushall](flushall.md)
 - [Flushdb](flushdb.md)
-- [Ft. List](ft._list.md)
+- [Ft._List](ft._list.md)
 - [Ft.Aggregate](ft.aggregate.md)
 - [Ft.Aliasadd](ft.aliasadd.md)
 - [Ft.Aliasdel](ft.aliasdel.md)
+- [Ft.Aliaslist](ft.aliaslist.md)
 - [Ft.Aliasupdate](ft.aliasupdate.md)
 - [Ft.Alter](ft.alter.md)
 - [Ft.Config Get](ft.config-get.md)
@@ -239,9 +239,9 @@ This directory contains redis learning pages related to commands.
 - [Geohash](geohash.md)
 - [Geopos](geopos.md)
 - [Georadius](georadius.md)
-- [Georadius Ro](georadius_ro.md)
+- [Georadius_Ro](georadius_ro.md)
 - [Georadiusbymember](georadiusbymember.md)
-- [Georadiusbymember Ro](georadiusbymember_ro.md)
+- [Georadiusbymember_Ro](georadiusbymember_ro.md)
 - [Geosearch](geosearch.md)
 - [Geosearchstore](geosearchstore.md)
 - [Get](get.md)
@@ -260,6 +260,11 @@ This directory contains redis learning pages related to commands.
 - [Hgetall](hgetall.md)
 - [Hgetdel](hgetdel.md)
 - [Hgetex](hgetex.md)
+- [Himport Discard](himport-discard.md)
+- [Himport Discardall](himport-discardall.md)
+- [Himport Prepare](himport-prepare.md)
+- [Himport Set](himport-set.md)
+- [Himport](himport.md)
 - [Hincrby](hincrby.md)
 - [Hincrbyfloat](hincrbyfloat.md)
 - [Hkeys](hkeys.md)
@@ -331,6 +336,7 @@ This directory contains redis learning pages related to commands.
 - [Linsert](linsert.md)
 - [Llen](llen.md)
 - [Lmove](lmove.md)
+- [Lmovem](lmovem.md)
 - [Lmpop](lmpop.md)
 - [Lolwut](lolwut.md)
 - [Lpop](lpop.md)
@@ -399,6 +405,7 @@ This directory contains redis learning pages related to commands.
 - [Redis 7 2 Commands](redis-7-2-commands.md)
 - [Redis 7 4 Commands](redis-7-4-commands.md)
 - [Redis 8 0 Commands](redis-8-0-commands.md)
+- [Redis 8 10 Commands](redis-8-10-commands.md)
 - [Redis 8 2 Commands](redis-8-2-commands.md)
 - [Redis 8 4 Commands](redis-8-4-commands.md)
 - [Redis 8 6 Commands](redis-8-6-commands.md)
@@ -427,6 +434,7 @@ This directory contains redis learning pages related to commands.
 - [Script Load](script-load.md)
 - [Script](script.md)
 - [Sdiff](sdiff.md)
+- [Sdiffcard](sdiffcard.md)
 - [Sdiffstore](sdiffstore.md)
 - [Select](select.md)
 - [Set](set.md)
@@ -449,7 +457,7 @@ This directory contains redis learning pages related to commands.
 - [Smismember](smismember.md)
 - [Smove](smove.md)
 - [Sort](sort.md)
-- [Sort Ro](sort_ro.md)
+- [Sort_Ro](sort_ro.md)
 - [Spop](spop.md)
 - [Spublish](spublish.md)
 - [Srandmember](srandmember.md)
@@ -460,6 +468,7 @@ This directory contains redis learning pages related to commands.
 - [Subscribe](subscribe.md)
 - [Substr](substr.md)
 - [Sunion](sunion.md)
+- [Sunioncard](sunioncard.md)
 - [Sunionstore](sunionstore.md)
 - [Sunsubscribe](sunsubscribe.md)
 - [Swapdb](swapdb.md)
@@ -477,7 +486,7 @@ This directory contains redis learning pages related to commands.
 - [Tdigest.Rank](tdigest.rank.md)
 - [Tdigest.Reset](tdigest.reset.md)
 - [Tdigest.Revrank](tdigest.revrank.md)
-- [Tdigest.Trimmed Mean](tdigest.trimmed_mean.md)
+- [Tdigest.Trimmed_Mean](tdigest.trimmed_mean.md)
 - [Time](time.md)
 - [Topk.Add](topk.add.md)
 - [Topk.Count](topk.count.md)
@@ -501,8 +510,12 @@ This directory contains redis learning pages related to commands.
 - [Ts.Mget](ts.mget.md)
 - [Ts.Mrange](ts.mrange.md)
 - [Ts.Mrevrange](ts.mrevrange.md)
+- [Ts.Nrange](ts.nrange.md)
+- [Ts.Nrevrange](ts.nrevrange.md)
 - [Ts.Queryindex](ts.queryindex.md)
+- [Ts.Querylabels](ts.querylabels.md)
 - [Ts.Range](ts.range.md)
+- [Ts.Read](ts.read.md)
 - [Ts.Revrange](ts.revrange.md)
 - [Ttl](ttl.md)
 - [Type](type.md)
@@ -587,11 +600,3 @@ This directory contains redis learning pages related to commands.
 - [Zscore](zscore.md)
 - [Zunion](zunion.md)
 - [Zunionstore](zunionstore.md)
-
-## IDE LLM Guidance
-
-When answering implementation questions related to this directory:
-
-1. Prefer the most specific page listed above.
-2. If the topic is broad, read the child directory index first.
-3. Use source metadata from each page when giving answers.

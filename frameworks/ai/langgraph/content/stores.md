@@ -4,12 +4,11 @@ framework: "LangGraph"
 source_repo: "https://github.com/langchain-ai/docs"
 source_branch: "main"
 source_path: "src/oss/langgraph/stores.mdx"
-source_commit: "2aae1dfc98ee953a9a5185fb6fcdd9efb3f4d878"
-source_commit_short: "2aae1dfc"
-source_commit_date: "2026-07-25T00:27:23Z"
-generated_at: "2026-07-25T11:51:08Z"
+source_commit: "a174f9cf7c91ee5eb14ee2382eb48bfe6e4956e9"
+source_commit_short: "a174f9c"
+source_commit_date: "2026-08-28T17:04:12-07:00"
+generated_at: "2026-08-29T09:38:45.964853Z"
 ---
-
 ---
 title: Stores
 description: LangGraph stores provide cross-thread long-term memory, complementing per-thread checkpointer persistence.
@@ -32,8 +31,14 @@ When using the [Agent Server](/langsmith/agent-server), you do not need to imple
 </Info>
 
 <Note>
-@[InMemoryStore] is suitable for development and testing. For production, use a persistent store like `PostgresStore`, `MongoDBStore`, or `RedisStore`. All implementations extend @[BaseStore], which is the type annotation to use in node function signatures.
+@[InMemoryStore] is suitable for development and testing. For production, use a persistent store like `PostgresStore`, `MongoDBStore`, `RedisStore`, or `UpstashStore`. All implementations extend @[BaseStore], which is the type annotation to use in node function signatures.
 </Note>
+
+:::python
+<Note>
+See [store integrations](/oss/integrations/long-term-memory/index) for the full list of available providers.
+</Note>
+:::
 
 ## Basic usage
 

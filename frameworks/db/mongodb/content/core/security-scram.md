@@ -1,26 +1,50 @@
 ---
 type: "Framework Learn Page"
-framework: "mongodb"
+framework: "MongoDB"
 source_repo: "https://github.com/mongodb/docs.git"
 source_branch: "main"
 source_path: "content/manual/manual/source/core/security-scram.txt"
-source_commit: "ab9db26ed3d11618cdb61516d8180337d8e3f679"
-source_commit_short: "ab9db26e"
-source_commit_date: "2026-07-24T16:22:46-06:00"
-generated_at: "2026-07-25T11:51:15Z"
+source_commit: "b9f2bc487a2878b65e3c1f80024bebab76954f27"
+source_commit_short: "b9f2bc48"
+source_commit_date: "2026-08-28T17:09:45-05:00"
+generated_at: "2026-08-29T09:39:19.524606Z"
 ---
-
-=====
+.. _authentication-scram:
 
 # SCRAM
 
-Salted Challenge Response Authentication Mechanism (SCRAM) is the default authentication mechanism for MongoDB.
+**meta:** :description: Explore SCRAM, the default authentication mechanism in MongoDB, offering secure password verification and supporting SHA-1 and SHA-256 hashing functions.
 
-When a user `authenticates <authentication-auth-as-user>` themselves, MongoDB uses SCRAM to verify the supplied user credentials against the user's `name <admin.system.users.user>`, `password <admin.system.users.credentials>` and `authentication database <admin.system.users.db>`.
+.. default-domain:: mongodb
 
-SCRAM is based on the IETF [RFC 5802](https://tools.ietf.org/html/rfc5802) standard that defines best practices for challenge-response authentication with passwords.
+**contents:** On this page
+   :local:
+   :backlinks: none
+   :depth: 1
+   :class: singlecol
 
-> **Important:** .. include:: /includes/security/fact-no-dual-auth-with-scram.rst
+.. dismissible-skills-card::
+   :skill: Networking Security: Self-Managed
+   :url: https://learn.mongodb.com/skills?openTab=security
+
+Salted Challenge Response Authentication Mechanism (SCRAM) is the
+default authentication mechanism for MongoDB.
+
+When a user :ref:`authenticates <authentication-auth-as-user>`
+themselves, MongoDB uses SCRAM to verify the supplied user credentials
+against the user's :data:`name <admin.system.users.user>`,
+:data:`password <admin.system.users.credentials>` and
+:data:`authentication database <admin.system.users.db>`.
+
+SCRAM is based on the IETF `RFC 5802
+<https://tools.ietf.org/html/rfc5802>`_ standard that defines best
+practices for challenge-response authentication with passwords.
+
+**important:** .. include:: /includes/security/fact-no-dual-auth-with-scram.rst
+
+.. _authentication-scram-sha-1:
+.. _authentication-scram-sha-256:
+.. _scram-features:
 
 ## Features
 
@@ -29,26 +53,57 @@ The SCRAM implementation in MongoDB provides:
 - A tunable work factor (the iteration count)
 - Per-user random salts
 - Bi-directional authentication between server and client
+
+.. _scram-mechanisms:
+
 ### SCRAM Mechanisms
 
 MongoDB supports the following SCRAM mechanisms:
+
+.. list-table::
+   :header-rows: 1
+   :widths: 30 70
+
+   * - SCRAM Mechanism
+     - Description
+
+   * - ``SCRAM-SHA-1``
+
+     - Uses the SHA-1 hashing function.
+
+       To modify the iteration count for ``SCRAM-SHA-1``, see
+       :parameter:`scramIterationCount`.
+
+   * - ``SCRAM-SHA-256``
+
+     - Uses the SHA-256 hashing function.
+
+       To modify the iteration count for ``SCRAM-SHA-256``, see
+       :parameter:`scramSHA256IterationCount`.
 
 When you create or update a SCRAM user, you can indicate:
 
 - the SCRAM mechanism to use
 - whether the server or the client digests the password
-When you use `SCRAM-SHA-256`, MongoDB requires server-side password hashing, which means that the server digests the password. For more information, see :method:`db.createUser()` and :method:`db.updateUser()`.
+
+When you use ``SCRAM-SHA-256``, MongoDB requires server-side password
+hashing, which means that the server digests the password. For more
+information, see :method:`db.createUser()` and
+:method:`db.updateUser()`.
 
 ## Driver Support
 
-The minimum driver versions that support `SCRAM` are:
+The minimum driver versions that support ``SCRAM`` are:
 
-.. include:: /includes/list-table-3.0-driver-compatibility.rst
+.. |driver-compatibility-heading| replace:: Version
+
+**include:** /includes/list-table-3.0-driver-compatibility.rst
 
 ## Additional Information
 
-.. include:: /includes/md5-and-scram-sha-1.rst
+**include:** /includes/md5-and-scram-sha-1.rst
 
-## Contents
+**toctree:** :titlesonly:
+   :hidden:
 
-- Authenticate Clients </tutorial/configure-scram-client-authentication>
+   Authenticate Clients </tutorial/configure-scram-client-authentication>

@@ -1,55 +1,121 @@
 ---
 type: "Framework Learn Page"
-framework: "mongodb"
+framework: "MongoDB"
 source_repo: "https://github.com/mongodb/docs.git"
 source_branch: "main"
 source_path: "content/manual/manual/source/reference/operator/topN.txt"
-source_commit: "ab9db26ed3d11618cdb61516d8180337d8e3f679"
-source_commit_short: "ab9db26e"
-source_commit_date: "2026-07-24T16:22:46-06:00"
-generated_at: "2026-07-25T11:51:15Z"
+source_commit: "b9f2bc487a2878b65e3c1f80024bebab76954f27"
+source_commit_short: "b9f2bc48"
+source_commit_date: "2026-08-28T17:09:45-05:00"
+generated_at: "2026-08-29T09:39:19.865015Z"
 ---
-
-===========================
+.. _topN_expression_operator:
 
 # $topN (expression operator)
 
+**meta:** :description: Use the `$topN` operator in MongoDB to return the top values of an array.
+
+.. default-domain:: mongodb
+
+**contents:** On this page
+   :local:
+   :backlinks: none
+   :depth: 1
+   :class: singlecol
+
 ## Definition
 
-> **Note:** This page describes the `$topN` expression operator. For the `$topN`
-accumulator operator, see `$topN (accumulator operator) <topN_accumulator_operator>`.
+**expression:** $topN
+
+   .. versionadded:: 8.3
+
+   Returns the top ``n`` elements of an array according to the specified sort
+   order. If the array contains fewer than ``n`` elements, ``$topN`` returns all
+   elements in the array.
+
+**note:** Disambiguation
+
+   This page describes the ``$topN`` expression operator. For the ``$topN``
+   accumulator operator, see :ref:`$topN (accumulator operator) <topN_accumulator_operator>`. 
 
 ## Syntax
 
-When used as an expression operator, `$topN` has the following syntax:
+When used as an expression operator, ``$topN`` has the following syntax:
 
-```none
-{
-   $topN:
-      {
-         n: <expression>,
-         sortBy: <expression>,
-         input: <expression>
-      }
-}
-```
+.. code-block:: none
+   :copyable: false
+
+   {
+      $topN:
+         {
+            n: <expression>,
+            sortBy: <expression>,
+            input: <expression>
+         }
+   }
+
+.. list-table::
+   :header-rows: 1
+   :widths: 15 15 70
+
+   * - Field
+     - Necessity
+     - Description
+
+   * - n
+
+     - Required
+
+     - The number of array elements to return.
+
+   * - sortBy
+
+     - Required
+
+     - Specifies the order of results. See :ref:`Sort Behavior <top_sort_behavior>` for more
+       information on ``sortBy`` values. 
+
+   * - input
+
+     - Required
+
+     - The array that ``$topN`` evaluates. 
 
 ## Behavior
 
+.. _topN_sort_behavior:
+
 ### Sort Behavior
 
-.. include:: /includes/sortBy-examples.rst
+**include:** /includes/sortBy-examples.rst
 
 ### Input Values
 
-The `input` field must resolve to an array. If you specify an `input` that is not an array, MongoDB errors.
+The ``input`` field must resolve to an array. If you specify an ``input`` that is not
+an array, MongoDB errors. 
 
 ## Example
 
-.. include:: /includes/sample-data-usage-singular.rst
+**include:** /includes/sample-data-usage-singular.rst
 
-The `movies` collection contains documents that resemble the following example:
+The ``movies`` collection contains documents that resemble the following
+example:
 
-The following aggregation pipeline uses `$topN` on the `cast` array:
+**literalinclude:** /includes/movies-sample-document.js
+   :language: javascript
+   :category: usage example
 
-In this example, `$topN` sorts the existing `cast` array in ascending alphabetical order and returns the first three values.
+The following aggregation pipeline uses ``$topN`` on the
+``cast`` array:
+
+.. io-code-block::
+   :copyable: true
+
+   .. input:: /code-examples/tested/command-line/mongosh/aggregation/expressions/topN/pipeline.snippet.use-topN-on-array.js
+      :language: javascript
+
+   .. output:: /code-examples/tested/command-line/mongosh/aggregation/expressions/topN/pipeline-output.sh
+      :language: javascript
+
+In this example, ``$topN`` sorts the existing ``cast`` array in ascending
+alphabetical order and returns the first three values.

@@ -1,31 +1,69 @@
 ---
 type: "Framework Learn Page"
-framework: "mongodb"
+framework: "MongoDB"
 source_repo: "https://github.com/mongodb/docs.git"
 source_branch: "main"
 source_path: "content/manual/manual/source/reference/command/authenticate.txt"
-source_commit: "ab9db26ed3d11618cdb61516d8180337d8e3f679"
-source_commit_short: "ab9db26e"
-source_commit_date: "2026-07-24T16:22:46-06:00"
-generated_at: "2026-07-25T11:51:15Z"
+source_commit: "b9f2bc487a2878b65e3c1f80024bebab76954f27"
+source_commit_short: "b9f2bc48"
+source_commit_date: "2026-08-28T17:09:45-05:00"
+generated_at: "2026-08-29T09:39:20.052224Z"
 ---
-
-===============================
-
 # authenticate (database command)
+
+**meta:** :description: Authenticate using the X.509 mechanism with `db.auth()` in `mongosh`, supporting MongoDB Atlas, Enterprise, and Community environments.
+
+.. default-domain:: mongodb
+
+**contents:** On this page
+   :local:
+   :backlinks: none
+   :depth: 1
+   :class: singlecol
+
+**dbcommand:** authenticate
+
+   Authenticates using the X.509 authentication mechanism. When using
+   :binary:`~bin.mongosh`, use the :method:`db.auth()` helper
+   as follows:
+
+   .. tip::
+
+      .. include:: /includes/extracts/4.2-changes-passwordPrompt.rst
+
+   .. code-block:: javascript
+
+       db.auth( "username", passwordPrompt() )
+
+   In earlier versions, to use the :method:`db.auth()` method, specify
+   the password:
+
+   .. code-block:: javascript
+
+       db.auth( "username", "password" )
+
+   .. see::
+
+      - :method:`db.auth()`
+      - :doc:`/security`
+
 
 ## Compatibility
 
-This command is available in deployments hosted in the following environments:
+This command is available in deployments hosted in the following environments: 
 
-.. include:: /includes/fact-environments-atlas-only.rst
+**include:** /includes/fact-environments-atlas-only.rst
 
-.. include:: /includes/fact-environments-atlas-support-no-free.rst
+**include:** /includes/fact-environments-atlas-support-no-free.rst
 
-.. include:: /includes/fact-environments-onprem-only.rst
+**include:** /includes/fact-environments-onprem-only.rst
 
 ## Behavior
 
+.. |operation| replace:: :dbcommand:`authenticate`
+
 ### Client Disconnection
 
-.. include:: /includes/extracts/4.2-changes-disconnect.rst
+**include:** /includes/extracts/4.2-changes-disconnect.rst
+
+.. read-lock, slave-ok

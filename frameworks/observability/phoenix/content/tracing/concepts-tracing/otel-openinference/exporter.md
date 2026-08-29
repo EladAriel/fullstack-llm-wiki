@@ -4,10 +4,10 @@ framework: "Arize Phoenix"
 source_repo: "https://github.com/Arize-ai/phoenix.git"
 source_branch: "main"
 source_path: "docs/phoenix/tracing/concepts-tracing/otel-openinference/exporter.mdx"
-source_commit: "69b3ab92c37ff65812feaa2dbf0b1c0ad5ae55fe"
-source_commit_short: "69b3ab9"
-source_commit_date: "2026-07-25T11:48:12-06:00"
-generated_at: "2026-07-25T19:08:24.924543Z"
+source_commit: "c48e50e9906fcc56c1c103ebd93ef3c95ed6b6e7"
+source_commit_short: "c48e50e"
+source_commit_date: "2026-08-29T01:45:20-06:00"
+generated_at: "2026-08-29T09:39:58.904147Z"
 ---
 ---
 title: "Exporter and OTLP"
@@ -83,6 +83,10 @@ For a TLS-fronted Phoenix deployment, drop `insecure=True` and pass `credentials
 
 ## OTLP/HTTP Configuration
 
+Phoenix serves OTLP/HTTP on port `6006` — the same port as its UI — **not** the OTLP-standard
+HTTP port `4318`. Point the exporter at `http://<host>:6006/v1/traces` (the `4318` in the table
+above is the generic OTLP default, not Phoenix's).
+
 ```python
 from opentelemetry.exporter.otlp.proto.http import Compression
 from opentelemetry.exporter.otlp.proto.http.trace_exporter import OTLPSpanExporter
@@ -149,7 +153,7 @@ The traces-only variant takes priority over the generic one when both are set. F
 
 A few exporter failure modes worth knowing about up front:
 
-- **Wrong OTLP port or endpoint** — gRPC defaults to 4317, HTTP to 4318. Mixing them up surfaces as connection refused or 404s.
+- **Wrong OTLP port or endpoint** — Phoenix listens for OTLP/gRPC on `4317` and OTLP/HTTP on `6006` (its UI port, not the OTLP-standard `4318`). Mixing them up surfaces as connection refused or 404s.
 - **Wrong encoding for the transport** — gRPC requires Protobuf. Trying to send JSON over gRPC will silently fail.
 - **Proxies breaking gRPC** — corporate proxies, service meshes, and some load balancers don't handle HTTP/2 well. If you see flaky gRPC errors, switch to HTTP.
 - **TLS mismatches** — forgetting `insecure=True` when running against a local collector over `http://` fails. So does setting `insecure=False` against an `http://` endpoint. Match `insecure` to the scheme: `True` for `http://`, `False` (default) for `https://`.

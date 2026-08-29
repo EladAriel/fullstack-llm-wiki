@@ -1,55 +1,205 @@
 ---
 type: "Framework Learn Page"
-framework: "mongodb"
+framework: "MongoDB"
 source_repo: "https://github.com/mongodb/docs.git"
 source_branch: "main"
 source_path: "content/manual/manual/source/reference/change-events.txt"
-source_commit: "ab9db26ed3d11618cdb61516d8180337d8e3f679"
-source_commit_short: "ab9db26e"
-source_commit_date: "2026-07-24T16:22:46-06:00"
-generated_at: "2026-07-25T11:51:15Z"
+source_commit: "b9f2bc487a2878b65e3c1f80024bebab76954f27"
+source_commit_short: "b9f2bc48"
+source_commit_date: "2026-08-28T17:09:45-05:00"
+generated_at: "2026-08-29T09:39:19.665282Z"
 ---
+.. _change-events:
 
-====================
+.. _change-stream-output:
 
 # Change Stream Events
 
+**meta:** :description: Monitor changes in MongoDB collections, databases, or deployments using change streams, which provide notifications for various operation types, including DDL events.
+
+.. default-domain:: mongodb
+
+**contents:** On this page
+   :local:
+   :backlinks: none
+   :depth: 2
+   :class: singlecol
+
 Change streams watch collections, databases, or deployments for changes.
 
-When a change occurs on a watched resource, the change stream returns a change event notification document, with information on the operation and the changes it makes.
+When a change occurs on a watched resource, the change stream returns a
+change event notification document, with information on the operation and
+the changes it makes.
+
+.. _change-event-operation-types:
 
 ## Operation Types
 
-> **Note:** The server might return update operations as replace events when
-the replace representation is more concise. If you listen for
-update operations, also listen for replace operations.
+.. list-table::
+   :header-rows: 1
+
+   * - Event
+     - Description
+
+
+   * - :data:`create`
+     - Occurs on the creation of a collection.
+
+       Requires that you set the :ref:`showExpandedEvents 
+       <change-streams-expanded-events>` option to ``true``.
+
+       .. versionadded:: 6.0
+
+
+   * - :data:`createIndexes`
+     - Occurs on the creation of indexes on the collection.
+
+       Requires that you set the :ref:`showExpandedEvents 
+       <change-streams-expanded-events>` option to ``true``.
+
+       .. versionadded:: 6.0
+
+
+   * - :data:`delete`
+     - Occurs when a document is removed from the collection. 
+
+
+   * - :data:`drop`
+     - Occurs when a collection is dropped from a database. 
+
+   * - :data:`dropDatabase`
+     - Occurs when a database is dropped. 
+
+   * - :data:`dropIndexes`
+     - Occurs when an index is dropped from the collection.
+
+       Requires that you set the :ref:`showExpandedEvents 
+       <change-streams-expanded-events>` option to ``true``.
+
+       .. versionadded:: 6.0
+
+
+   * - :data:`insert`
+     - Occurs when an operation adds documents to a collection.
+
+
+   * - :data:`invalidate`
+     - Occurs when an operation renders the change stream
+       invalid.
+
+
+   * - :data:`modify`
+     - Occurs when a collection is modified.
+
+       Requires that you set the :ref:`showExpandedEvents 
+       <change-streams-expanded-events>` option to ``true``.
+
+       .. versionadded:: 6.0
+
+
+   * - :data:`refineCollectionShardKey` 
+     - Occurs when a shard key is modified.
+
+       .. versionadded:: 6.1  
+
+
+   * - :data:`rename`
+     - Occurs when a collection is renamed.
+
+   * - :data:`replace`
+     - Occurs when an update operation removes a document from 
+       a collection and replaces it with a new document.
+
+
+   * - :data:`reshardCollection` 
+     - Occurs when the shard key for a collection and the distribution
+       of data changes.
+
+       Requires that you set the :ref:`showExpandedEvents 
+       <change-streams-expanded-events>` option to ``true``.
+
+       .. versionadded:: 6.1 *(Also available in 6.0.14)* 
+
+
+   * - :data:`shardCollection`
+     - Occurs when a collection is sharded.
+
+       Requires that you set the :ref:`showExpandedEvents 
+       <change-streams-expanded-events>` option to ``true``.
+
+       .. versionadded:: 6.0
+
+
+   * - :data:`update`
+     - Occurs when an operation updates a document in a collection.
+
+**note:** The server might return update operations as replace events when
+   the replace representation is more concise. If you listen for
+   update operations, also listen for replace operations.
+
+.. _change-stream-event-id:
 
 ## Resume Token
 
-Each change event includes an `_id` field, which is a `BSON` object that serves as an identifier for the change stream event. For an example of resuming a change stream by `resumeToken`, see `change-stream-resume`.
+Each change event includes an ``_id`` field, which is a :term:`BSON`
+object that serves as an identifier for the change stream event. For an
+example of resuming a change stream by ``resumeToken``, see
+:ref:`change-stream-resume`.
+
+.. _change-streams-expanded-events:
 
 ## Expanded Events
 
-.. versionadded:: 6.0
+**versionadded:** 6.0
 
-Change streams support data definition language (DDL) event notifications, such as `createIndexes <change-event-createIndexes>` and `dropIndexes <change-event-dropIndexes>`. To include expanded events, open a change stream cursor with the `showExpandedEvents` option.
+Change streams support data definition language (DDL) event
+notifications, such as
+:ref:`createIndexes <change-event-createIndexes>` and
+:ref:`dropIndexes <change-event-dropIndexes>`. To include expanded
+events, open a change stream cursor with the
+``showExpandedEvents`` option.
 
 For example:
 
-## Contents
+**tabs:** .. tab:: mongosh Method
+      :tabid: mongosh
 
-- create </reference/change-events/create>
-- createIndexes </reference/change-events/createIndexes>
-- delete </reference/change-events/delete>
-- drop </reference/change-events/drop>
-- dropDatabase </reference/change-events/dropDatabase>
-- dropIndexes </reference/change-events/dropIndexes>
-- insert </reference/change-events/insert>
-- invalidate </reference/change-events/invalidate>
-- modify </reference/change-events/modify>
-- refineCollectionShardKey </reference/change-events/refineCollectionShardKey>
-- rename </reference/change-events/rename>
-- replace </reference/change-events/replace>
-- reshardCollection </reference/change-events/reshardCollection>
-- shardCollection </reference/change-events/shardCollection>
-- update </reference/change-events/update>
+      .. code-block:: javascript
+
+         let cur = db.names.watch( [ ], {
+            showExpandedEvents: true
+         } )
+
+         cur.next()
+
+   .. tab:: Aggregation Stage
+      :tabid: agg-stage
+
+      .. code-block:: javascript
+
+         let cur = db.names.aggregate( [ { 
+            $changeStream: { 
+                showExpandedEvents: true 
+              } 
+            }
+          ] )
+
+         cur.next()
+
+**toctree:** :hidden:
+
+   create </reference/change-events/create>
+   createIndexes </reference/change-events/createIndexes>
+   delete </reference/change-events/delete>
+   drop </reference/change-events/drop>
+   dropDatabase </reference/change-events/dropDatabase>
+   dropIndexes </reference/change-events/dropIndexes>
+   insert </reference/change-events/insert>
+   invalidate </reference/change-events/invalidate>
+   modify </reference/change-events/modify>
+   refineCollectionShardKey </reference/change-events/refineCollectionShardKey>
+   rename </reference/change-events/rename>
+   replace </reference/change-events/replace>
+   reshardCollection </reference/change-events/reshardCollection>
+   shardCollection </reference/change-events/shardCollection>
+   update </reference/change-events/update>

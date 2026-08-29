@@ -1,96 +1,118 @@
 ---
 type: "Framework Learn Page"
-framework: "mongodb"
+framework: "MongoDB"
 source_repo: "https://github.com/mongodb/docs.git"
 source_branch: "main"
 source_path: "content/manual/manual/source/core/defragment-sharded-collections.txt"
-source_commit: "ab9db26ed3d11618cdb61516d8180337d8e3f679"
-source_commit_short: "ab9db26e"
-source_commit_date: "2026-07-24T16:22:46-06:00"
-generated_at: "2026-07-25T11:51:15Z"
+source_commit: "b9f2bc487a2878b65e3c1f80024bebab76954f27"
+source_commit_short: "b9f2bc48"
+source_commit_date: "2026-08-28T17:09:45-05:00"
+generated_at: "2026-08-29T09:39:19.506538Z"
 ---
-
-==============================
+.. _defragment-sharded-collections:
 
 # Defragment Sharded Collections
 
-.. include:: /includes/defragment-sharded-collections-conditions.rst
+**meta:** :description: Optimize CRUD operation times by defragmenting sharded collections, merging small chunks into larger ones, and managing shard balancing windows.
 
-To defragment a sharded collection, use the :dbcommand:`configureCollectionBalancing` command's `defragmentCollection` option. The option is available starting in MongoDB 6.0.
+.. default-domain:: mongodb
+
+**contents:** On this page
+   :local:
+   :backlinks: none
+   :depth: 1
+   :class: singlecol
+
+**include:** /includes/defragment-sharded-collections-conditions.rst
+
+To defragment a sharded collection, use the
+:dbcommand:`configureCollectionBalancing` command's
+``defragmentCollection`` option. The option is available starting in
+MongoDB 6.0.
 
 ## Before you Begin
 
 Consider these issues before you defragment collections:
 
 - Defragmentation might cause many metadata updates on the shards. If
-your CRUD operations are already taking longer than usual during migrations, you should only run defragmentation during a `shard balancing window <sharding-schedule-balancing-window>` to reduce the system workload.
-
+  your CRUD operations are already taking longer than usual during
+  migrations, you should only run defragmentation during a :ref:`shard
+  balancing window <sharding-schedule-balancing-window>` to reduce the
+  system workload.
 - If defragmentation is impacting workload and CRUD latency on the
-cluster, you can reduce the impact using the :parameter:`chunkDefragmentationThrottlingMS` parameter.
-
+  cluster, you can reduce the impact using the
+  :parameter:`chunkDefragmentationThrottlingMS` parameter.
 - Merged chunks lose their placement history.
-- This means that while defragmentation is running, snapshot reads and
-indirectly, transactions, could fail with stale chunk history errors.
 
-- Placement history records the shards that a chunk was stored on.
-Defragmentation erases the placement history and some operations could fail, but will typically resolve after around five minutes.
+  - This means that while defragmentation is running, snapshot reads and
+    indirectly, transactions, could fail with stale chunk history
+    errors.
+  - Placement history records the shards that a chunk was stored on.
+    Defragmentation erases the placement history and some operations
+    could fail, but will typically resolve after around five minutes.
 
 - Defragmentation affects the locality of the documents in a collection
-by moving data between shards. If a collection has ranges of data that are frequently accessed, after defragmenting the collection it is possible that the frequently accessed data will be on one shard. This might decrease the performance of CRUD operations by placing the workload on one shard instead of multiple shards.
+  by moving data between shards. If a collection has ranges of data that
+  are frequently accessed, after defragmenting the collection it is
+  possible that the frequently accessed data will be on one shard. This
+  might decrease the performance of CRUD operations by placing the
+  workload on one shard instead of multiple shards.
 
 ## Tasks
 
 - :ref:`Manually start defragmenting a sharded collection
-<start-defragmenting-sharded-collection>`
-
+  <start-defragmenting-sharded-collection>`
 - :ref:`Monitor defragmentation of a sharded collection
-<monitor-defragmentation-sharded-collection>`
-
+  <monitor-defragmentation-sharded-collection>`
 - :ref:`Manually stop defragmenting a sharded collection
-<stop-defragmenting-sharded-collection>`
+  <stop-defragmenting-sharded-collection>`
 
-> **Note:** Typically, you should use a :ref:`shard balancing window
-<sharding-schedule-balancing-window>` to specify when the balancer
-runs instead of manually starting and stopping defragmentation.
+**note:** Typically, you should use a :ref:`shard balancing window
+   <sharding-schedule-balancing-window>` to specify when the balancer
+   runs instead of manually starting and stopping defragmentation.
 
 ## Details
 
-This section describes additional details related to defragmenting sharded collections.
+This section describes additional details related to defragmenting
+sharded collections.
 
 ### Configure Collection Balancing Status
 
-The `defragmentCollection` field returned by the :dbcommand:`configureCollectionBalancing` command is only `true` when defragmentation is running.
+The ``defragmentCollection`` field returned by the
+:dbcommand:`configureCollectionBalancing` command is only ``true`` when
+defragmentation is running.
 
-After defragmentation automatically ends or you manually stop defragmentation, the `defragmentCollection` field is removed from the returned document.
+After defragmentation automatically ends or you manually stop
+defragmentation, the ``defragmentCollection`` field is removed from the
+returned document.
 
 ### Operations
 
-Secondary node reads are permitted during defragmentation, but might take longer to complete until metadata updates on the primary node are replicated to the secondary nodes.
+Secondary node reads are permitted during defragmentation, but might
+take longer to complete until metadata updates on the primary node are
+replicated to the secondary nodes.
 
 ### Chunk Size, Balancing, and Defragmentation
 
-For details about the MongoDB balancer, see `sharding-balancing`.
+For details about the MongoDB balancer, see :ref:`sharding-balancing`.
 
-.. include:: /includes/chunk-size-and-balancing.rst
+**include:** /includes/chunk-size-and-balancing.rst
 
 ## Learn More
 
-- Introduction to sharding, see `sharding-introduction`
-- Partition data with chunks, see `sharding-data-partitioning`
+- Introduction to sharding, see :ref:`sharding-introduction`
+- Partition data with chunks, see :ref:`sharding-data-partitioning`
 - Configure collection balancing, see
-:dbcommand:`configureCollectionBalancing`
-
+  :dbcommand:`configureCollectionBalancing`
 - Examine balancer collection status, see
-:dbcommand:`balancerCollectionStatus`
-
+  :dbcommand:`balancerCollectionStatus`
 - Configure shard balancing windows, see
-`sharding-schedule-balancing-window`
-
+  :ref:`sharding-schedule-balancing-window`
 - Monitor shards using MongoDB Atlas, see `Review Sharded Clusters
-<https://www.mongodb.com/docs/atlas/review-sharded-cluster-metrics/#review-sharded-clusters/>`__
+  <https://www.mongodb.com/docs/atlas/review-sharded-cluster-metrics/#review-sharded-clusters/>`__
 
-## Contents
+**toctree:** :titlesonly:
 
-- Start </core/defragment-sharded-collections/start-defragmenting-sharded-collection>
-- Monitor </core/defragment-sharded-collections/monitor-defragmentation-sharded-collection>
-- Stop </core/defragment-sharded-collections/stop-defragmenting-sharded-collection>
+   Start </core/defragment-sharded-collections/start-defragmenting-sharded-collection>
+   Monitor </core/defragment-sharded-collections/monitor-defragmentation-sharded-collection>
+   Stop </core/defragment-sharded-collections/stop-defragmenting-sharded-collection>

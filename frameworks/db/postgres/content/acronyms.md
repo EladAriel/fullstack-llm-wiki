@@ -1,15 +1,945 @@
 ---
 type: "Framework Learn Page"
-framework: "postgres"
+framework: "PostgreSQL"
 source_repo: "https://github.com/postgres/postgres.git"
 source_branch: "master"
 source_path: "doc/src/sgml/acronyms.sgml"
-source_commit: "38afc3dcb25c45b744d4025029ce0a6c90b7059f"
-source_commit_short: "38afc3dc"
-source_commit_date: "2026-07-25T19:08:27+09:00"
-generated_at: "2026-07-25T11:50:59Z"
+source_commit: "6c5f1d6074208146930b67c2054509c3e82f6f7f"
+source_commit_short: "6c5f1d6"
+source_commit_date: "2026-08-28T23:24:47+02:00"
+generated_at: "2026-08-29T09:39:24.356290Z"
 ---
+# Acronyms
 
-## Acronyms
+ 
+  This is a list of acronyms commonly used in the PostgreSQL
+  documentation and in discussions about PostgreSQL.
 
-This is a list of acronyms commonly used in the PostgreSQL documentation and in discussions about PostgreSQL. - Asynchronous I/O - [Access Control List](https://en.wikipedia.org/wiki/Access-control_list) - Access Method - [American National Standards Institute](https://en.wikipedia.org/wiki/American_National_Standards_Institute) - [Application Programming Interface](https://en.wikipedia.org/wiki/API) - [American Standard Code for Information Interchange](https://en.wikipedia.org/wiki/ASCII) - Backend Interface - [Certificate Authority](https://en.wikipedia.org/wiki/Certificate_authority) - [Classless Inter-Domain Routing](https://en.wikipedia.org/wiki/Classless_Inter-Domain_Routing) - [Comprehensive Perl Archive Network](https://www.cpan.org/) - [Certificate Revocation List](https://en.wikipedia.org/wiki/Certificate_revocation_list) - [Comma Separated Values](https://en.wikipedia.org/wiki/Comma-separated_values) - Common Table Expression - [Common Vulnerabilities and Exposures](https://cve.mitre.org/) - [Database Administrator](https://en.wikipedia.org/wiki/Database_administrator) - [Database Interface (Perl)](https://dbi.perl.org/) - [Database Management System](https://en.wikipedia.org/wiki/Database#Database_management_system) - [Data Definition Language](https://en.wikipedia.org/wiki/Data_definition_language), SQL commands such as `CREATE TABLE`, `ALTER USER` - [Data Manipulation Language](https://en.wikipedia.org/wiki/Data_manipulation_language), SQL commands such as `INSERT`, `UPDATE`, `DELETE` - [Daylight Saving Time](https://en.wikipedia.org/wiki/Daylight_saving_time) - Embedded C for PostgreSQL - [Embedded SQL](https://en.wikipedia.org/wiki/Embedded_SQL) - [Frequently Asked Questions](https://en.wikipedia.org/wiki/FAQ) - Free Space Map - Genetic Query Optimizer - Generalized Inverted Index - Generalized Search Tree - [Git](https://en.wikipedia.org/wiki/Git) - [Greenwich Mean Time](https://en.wikipedia.org/wiki/Greenwich_Mean_Time) - [Generic Security Services Application Programming Interface](https://en.wikipedia.org/wiki/Generic_Security_Services_Application_Program_Interface) - Grand Unified Configuration, the PostgreSQL subsystem that handles server configuration - Host-Based Authentication - Heap-Only Tuples - [International Electrotechnical Commission](https://en.wikipedia.org/wiki/International_Electrotechnical_Commission) - [Institute of Electrical and Electronics Engineers](https://standards.ieee.org/) - [Inter-Process Communication](https://en.wikipedia.org/wiki/Inter-process_communication) - Input/Output - [International Organization for Standardization](https://www.iso.org/home.html) - [International Standard Serial Number](https://en.wikipedia.org/wiki/ISSN) - [Java Database Connectivity](https://en.wikipedia.org/wiki/Java_Database_Connectivity) - [Just-in-Time compilation](https://en.wikipedia.org/wiki/Just-in-time_compilation) - [JavaScript Object Notation](https://www.json.org) - [Lightweight Directory Access Protocol](https://en.wikipedia.org/wiki/Lightweight_Directory_Access_Protocol) - Log Sequence Number - Most Common Frequency, that is the frequency associated with some Most Common Value - Most Common Value, one of the values appearing most often within a particular table column - [Man-in-the-middle attack](https://en.wikipedia.org/wiki/Man-in-the-middle_attack) - [Microsoft Visual C](https://en.wikipedia.org/wiki/Microsoft_Visual_C%2B%2B) - Multi-Version Concurrency Control - [National Language Support](https://en.wikipedia.org/wiki/Internationalization_and_localization) - [Open Database Connectivity](https://en.wikipedia.org/wiki/Open_Database_Connectivity) - Object Identifier - [Online Analytical Processing](https://en.wikipedia.org/wiki/Online_analytical_processing) - [Online Transaction Processing](https://en.wikipedia.org/wiki/Online_transaction_processing) - [Object-Relational Database Management System](https://en.wikipedia.org/wiki/Object%E2%80%93relational_database) - [Pluggable Authentication Modules](https://en.wikipedia.org/wiki/Pluggable_authentication_module) - PostgreSQL - PostgreSQL Extension System - [Process Identifier](https://en.wikipedia.org/wiki/Process_identifier) - Point-In-Time Recovery (Continuous Archiving) - Procedural Languages (server-side) - [Portable Operating System Interface](https://en.wikipedia.org/wiki/POSIX) - [Relational Database Management System](https://en.wikipedia.org/wiki/Relational_database#RDBMS) - [Request For Comments](https://en.wikipedia.org/wiki/Request_for_Comments) - [Standard Generalized Markup Language](https://en.wikipedia.org/wiki/Standard_Generalized_Markup_Language) - [Server Name Indication](https://en.wikipedia.org/wiki/Server_Name_Indication), [RFC 6066](https://datatracker.ietf.org/doc/html/rfc6066#section-3) - Server Programming Interface - Space-Partitioned Generalized Search Tree - [Structured Query Language](https://en.wikipedia.org/wiki/SQL) - Set-Returning Function - [Secure Shell](https://en.wikipedia.org/wiki/Secure_Shell) - [Secure Sockets Layer](https://en.wikipedia.org/wiki/Transport_Layer_Security#SSL_1.0,_2.0,_and_3.0) - [Security Support Provider Interface](https://msdn.microsoft.com/en-us/library/aa380493%28VS.85%29.aspx) - [Unix System V](https://en.wikipedia.org/wiki/UNIX_System_V) - [Transmission Control Protocol (TCP) / Internet Protocol (IP)](https://en.wikipedia.org/wiki/Transmission_Control_Protocol) - Tuple Identifier - [Transport Layer Security](https://en.wikipedia.org/wiki/Transport_Layer_Security) - The Oversized-Attribute Storage Technique - [Transaction Processing Performance Council](http://www.tpc.org/) - [Uniform Resource Locator](https://en.wikipedia.org/wiki/URL) - [Coordinated Universal Time](https://en.wikipedia.org/wiki/Coordinated_Universal_Time) - [Unicode Transformation Format](https://www.unicode.org/) - [Eight-Bit Unicode Transformation Format](https://en.wikipedia.org/wiki/UTF-8) - Universally Unique Identifier - Write-Ahead Log - Transaction Identifier - [Extensible Markup Language](https://en.wikipedia.org/wiki/XML)
+  
+
+   
+    AIO
+    
+     
+      Asynchronous I/O
+     
+
+    
+   
+
+   
+    ACL
+    
+     
+      Access Control List
+     
+
+    
+   
+
+   
+    AM
+    
+     
+      Access Method
+     
+
+    
+   
+
+   
+    ANSI
+    
+     
+      
+      American National Standards Institute
+     
+
+    
+   
+
+   
+    API
+    
+     
+      Application Programming Interface
+     
+
+    
+   
+
+   
+    ASCII
+    
+     
+      American Standard
+      Code for Information Interchange
+     
+
+    
+   
+
+   
+    BKI
+    
+     
+      Backend Interface
+     
+
+    
+   
+
+   
+    CA
+    
+     
+      Certificate Authority
+     
+
+    
+   
+
+   
+    CIDR
+    
+     
+      Classless
+      Inter-Domain Routing
+     
+
+    
+   
+
+   
+    CPAN
+    
+     
+      Comprehensive Perl Archive Network
+     
+
+    
+   
+
+   
+    CRL
+    
+     
+      Certificate
+      Revocation List
+     
+
+    
+   
+
+   
+    CSV
+    
+     
+      Comma
+      Separated Values
+     
+
+    
+   
+
+   
+    CTE
+    
+     
+      Common Table Expression
+     
+
+    
+   
+
+   
+    CVE
+    
+     
+      Common Vulnerabilities and Exposures
+     
+
+    
+   
+
+   
+    DBA
+    
+     
+      Database
+      Administrator
+     
+
+    
+   
+
+   
+    DBI
+    
+     
+      Database Interface (Perl)
+     
+
+    
+   
+
+   
+    DBMS
+    
+     
+      Database Management
+      System
+     
+
+    
+   
+
+   
+    DDL
+    
+     
+      Data
+      Definition Language, SQL commands such as CREATE
+      TABLE, ALTER USER
+     
+
+    
+   
+
+   
+    DML
+    
+     
+      Data
+      Manipulation Language, SQL commands such as INSERT,
+      UPDATE, DELETE
+     
+
+    
+   
+
+   
+    DST
+    
+     
+      Daylight
+      Saving Time
+     
+
+    
+   
+
+   
+    ECPG
+    
+     
+      Embedded C for PostgreSQL
+     
+
+    
+   
+
+   
+    ESQL
+    
+     
+      Embedded
+      SQL
+     
+
+    
+   
+
+   
+    FAQ
+    
+     
+      Frequently Asked
+      Questions
+     
+
+    
+   
+
+   
+    FSM
+    
+     
+      Free Space Map
+     
+
+    
+   
+
+   
+    GEQO
+    
+     
+      Genetic Query Optimizer
+     
+
+    
+   
+
+   
+    GIN
+    
+     
+      Generalized Inverted Index
+     
+
+    
+   
+
+   
+    GiST
+    
+     
+      Generalized Search Tree
+     
+
+    
+   
+
+   
+    Git
+    
+     
+      Git
+     
+
+    
+   
+
+   
+    GMT
+    
+     
+      Greenwich Mean Time
+     
+
+    
+   
+
+   
+    GSSAPI
+    
+     
+      Generic
+      Security Services Application Programming Interface
+     
+
+    
+   
+
+   
+    GUC
+    
+     
+      Grand Unified Configuration,
+      the PostgreSQL subsystem that handles server configuration
+     
+
+    
+   
+
+   
+    HBA
+    
+     
+      Host-Based Authentication
+     
+
+    
+   
+
+   
+    HOT
+    
+     
+      Heap-Only Tuples
+     
+
+    
+   
+
+   
+    IEC
+    
+     
+      International
+      Electrotechnical Commission
+     
+
+    
+   
+
+   
+    IEEE
+    
+     
+      Institute of Electrical and
+      Electronics Engineers
+     
+
+    
+   
+
+   
+    IPC
+    
+     
+      Inter-Process
+      Communication
+     
+
+    
+   
+
+   
+    I/O
+    
+     
+      Input/Output
+     
+
+    
+   
+
+   
+    ISO
+    
+     
+      International Organization for
+      Standardization
+     
+
+    
+   
+
+   
+    ISSN
+    
+     
+      International Standard
+      Serial Number
+     
+
+    
+   
+
+   
+    JDBC
+    
+     
+      Java
+      Database Connectivity
+     
+
+    
+   
+
+   
+    JIT
+    
+     
+      Just-in-Time
+      compilation
+     
+
+    
+   
+
+   
+    JSON
+    
+     
+      JavaScript Object Notation
+     
+
+    
+   
+
+   
+    LDAP
+    
+     
+      Lightweight
+      Directory Access Protocol
+     
+
+    
+   
+
+   
+    LSN
+    
+     
+      Log Sequence Number
+     
+
+    
+   
+
+   
+    MCF
+    
+     
+      Most Common Frequency, that is the frequency associated with some
+      Most Common Value
+     
+
+    
+   
+
+   
+    MCV
+    
+     
+      Most Common Value, one of the values appearing most often within a
+      particular table column
+     
+
+    
+   
+
+   
+    MITM
+    
+     
+      
+      Man-in-the-middle attack
+     
+
+    
+   
+
+   
+    MSVC
+    
+     
+      Microsoft
+      Visual C
+     
+
+    
+   
+
+   
+    MVCC
+    
+     
+      Multi-Version Concurrency Control
+     
+
+    
+   
+
+   
+    MXID
+    
+     
+      Multixact Identifier
+     
+
+    
+   
+
+   
+    NLS
+    
+     
+      National
+      Language Support
+     
+
+    
+   
+
+   
+    ODBC
+    
+     
+      Open
+      Database Connectivity
+     
+
+    
+   
+
+   
+    OID
+    
+     
+      Object Identifier
+     
+
+    
+   
+
+   
+    OLAP
+    
+     
+      Online Analytical
+      Processing
+     
+
+    
+   
+
+   
+    OLTP
+    
+     
+      Online Transaction
+      Processing
+     
+
+    
+   
+
+   
+    ORDBMS
+    
+     
+      Object-Relational
+      Database Management System
+     
+
+    
+   
+
+   
+    PAM
+    
+     
+      Pluggable
+      Authentication Modules
+     
+
+    
+   
+
+   
+    PGSQL
+    
+     
+      PostgreSQL
+     
+
+    
+   
+
+   
+    PGXS
+    
+     
+      PostgreSQL Extension System
+     
+
+    
+   
+
+   
+    PID
+    
+     
+      Process Identifier
+     
+
+    
+   
+
+   
+    PITR
+    
+     
+      Point-In-Time
+      Recovery (Continuous Archiving)
+     
+
+    
+   
+
+   
+    PL
+    
+     
+      Procedural Languages (server-side)
+     
+
+    
+   
+
+   
+    POSIX
+    
+     
+      Portable Operating
+      System Interface
+     
+
+    
+   
+
+   
+    RDBMS
+    
+     
+      Relational
+      Database Management System
+     
+
+    
+   
+
+   
+    RFC
+    
+     
+      Request For
+      Comments
+     
+
+    
+   
+
+   
+    SGML
+    
+     
+      Standard Generalized
+      Markup Language
+     
+
+    
+   
+
+   
+    SNI
+    
+     
+      
+       Server Name Indication,
+      RFC 6066
+     
+
+    
+   
+
+   
+    SPI
+    
+     
+      Server Programming Interface
+     
+
+    
+   
+
+   
+    SP-GiST
+    
+     
+      Space-Partitioned Generalized Search Tree
+     
+
+    
+   
+
+   
+    SQL
+    
+     
+      Structured Query Language
+     
+
+    
+   
+
+   
+    SRF
+    
+     
+      Set-Returning Function
+     
+
+    
+   
+
+   
+    SSH
+    
+     
+      Secure
+      Shell
+     
+
+    
+   
+
+   
+    SSL
+    
+     
+      Secure Sockets Layer
+     
+
+    
+   
+
+   
+    SSPI
+    
+     
+      Security
+      Support Provider Interface
+     
+
+    
+   
+
+   
+    SYSV
+    
+     
+      Unix System V
+     
+
+    
+   
+
+   
+    TCP/IP
+    
+     
+      Transmission
+      Control Protocol (TCP) / Internet Protocol (IP)
+     
+
+    
+   
+
+   
+    TID
+    
+     
+      Tuple Identifier
+     
+
+    
+   
+
+   
+    TLS
+    
+     
+      
+      Transport Layer Security
+     
+
+    
+   
+
+   
+    TOAST
+    
+     
+      The Oversized-Attribute Storage Technique
+     
+
+    
+   
+
+   
+    TPC
+    
+     
+      Transaction Processing
+      Performance Council
+     
+
+    
+   
+
+   
+    URL
+    
+     
+      Uniform Resource
+      Locator
+     
+
+    
+   
+
+   
+    UTC
+    
+     
+      Coordinated
+      Universal Time
+     
+
+    
+   
+
+   
+    UTF
+    
+     
+      Unicode Transformation
+      Format
+     
+
+    
+   
+
+   
+    UTF8
+    
+     
+      Eight-Bit Unicode
+      Transformation Format
+     
+
+    
+   
+
+   
+    UUID
+    
+     
+      Universally Unique Identifier
+     
+
+    
+   
+
+   
+    WAL
+    
+     
+      Write-Ahead Log
+     
+
+    
+   
+
+   
+    XID
+    
+     
+      Transaction Identifier
+     
+
+    
+   
+
+   
+    XML
+    
+     
+      Extensible Markup
+      Language

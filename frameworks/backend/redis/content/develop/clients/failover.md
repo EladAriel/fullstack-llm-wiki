@@ -1,14 +1,15 @@
 ---
 type: "Framework Learn Page"
-framework: "redis"
+framework: "Redis"
 source_repo: "https://github.com/redis/docs.git"
 source_branch: "main"
 source_path: "content/develop/clients/failover.md"
-source_commit: "9d30f68c3dad1a6b3b7d30fe604b911348ce8152"
-source_commit_short: "9d30f68c"
-source_commit_date: "2026-07-24T10:52:10-07:00"
-generated_at: "2026-07-25T11:51:22Z"
+source_commit: "f8693349287b0efbef3c865b6f6a2aceca88594d"
+source_commit_short: "f869334"
+source_commit_date: "2026-08-28T10:01:19-05:00"
+generated_at: "2026-08-29T09:38:55.801386Z"
 ---
+# Failover
 
 ---
 categories:
@@ -30,6 +31,7 @@ topics:
 - resilience
 - health checks
 relatedPages:
+- /develop/clients/dotnet/failover
 - /develop/clients/jedis/failover
 - /develop/clients/redis-py/failover
 scope: overview
@@ -52,6 +54,7 @@ along with their release state and available features.
 | [Jedis]({{< relref "/develop/clients/jedis/failover" >}}) | Yes | No | No | Yes |
 | [redis-py]({{< relref "/develop/clients/redis-py/failover" >}}) | Yes  (Preview) | Yes | Yes | Yes |
 | [Lettuce]({{< relref "/develop/clients/lettuce/failover" >}}) | Yes (Preview) | Yes | No | Yes |
+| [StackExchange.Redis]({{< relref "/develop/clients/dotnet/failover" >}}) | Yes | Yes | Yes | Yes |
 
 ## Concepts
 

@@ -4,12 +4,11 @@ framework: "Langfuse"
 source_repo: "https://github.com/langfuse/langfuse-docs"
 source_branch: "main"
 source_path: "content/docs/administration/scim-and-org-api.mdx"
-source_commit: "fcd1eca34a924867563c3c4e801254c4e66c0021"
-source_commit_short: "fcd1eca3"
-source_commit_date: "2026-07-25T00:45:45Z"
-generated_at: "2026-07-25T11:51:12Z"
+source_commit: "ba26344559edee69ba55c5d3aa80e632f56c1626"
+source_commit_short: "ba26344"
+source_commit_date: "2026-08-29T02:57:18+00:00"
+generated_at: "2026-08-29T09:38:37.749442Z"
 ---
-
 ---
 title: SCIM and Org API
 sidebarTitle: SCIM and Org API
@@ -89,8 +88,11 @@ Afterward, the role can be updated using the membership endpoints either on an o
 To remove a user from an organization, call the `DELETE /Users/{id}` endpoint.
 This will not delete the user itself, only its membership with the organization.
 
-You can either supply an initial password for users via the API and share it with them, or use Single Sign-On (SSO) to authenticate users.
-In the latter case, you need to:
+SCIM provisioning does not set a password.
+A `password` attribute in the request body is accepted for compatibility — Okta sends a placeholder value on every user create, even when password sync is disabled — but Langfuse ignores it, so provisioned users never receive a credential from SCIM.
+Provisioned users sign in via Single Sign-On (SSO), or set their own password through the "Forgot password" flow, which confirms that they control the email address.
+
+To authenticate provisioned users via SSO, you need to:
 
 - Langfuse Cloud: configure an Enterprise SSO provider ([docs](/security/auth)).
 - Self-hosted: configure `AUTH_<PROVIDER>_ALLOW_ACCOUNT_LINKING` for your SSO provider to ensure that the user accounts are linked correctly [SSO Docs](/self-hosting/security/authentication-and-sso#additional-configuration).
@@ -105,11 +107,23 @@ The following SCIM endpoints are available:
 - `GET /Users/{id}`
 - `DELETE /Users/{id}`
 
-### SCIM Vendor Guides
+### SCIM Vendor Guides [#scim-vendor-guides]
 
-#### Okta
+#### Okta [#okta]
 
-This guide will cover how to set up Okta user provisioning for Langfuse. First, you will need to set up [authentication via OIDC](/docs/administration/authentication-and-sso).
+This guide covers how to set up Okta user provisioning for Langfuse.
+
+<Callout type="info">
+  **Okta requires two separate applications.** Okta does not support enabling
+  [SCIM on a custom OIDC app](https://support.okta.com/help/s/article/configure-scim-for-a-custom-oidc-app?language=en_US).
+  Configure:
+
+1. An **OIDC application** for SSO — see [Authentication and SSO → Okta](/docs/administration/authentication-and-sso#okta)
+2. A separate **SAML application** for SCIM provisioning — steps below
+
+The SSO settings on the SCIM/SAML application do not need to work; Langfuse uses the OIDC app for authentication.
+
+</Callout>
 
 <Video
   src="https://static.langfuse.com/docs-videos/2025-08-06-okta-scim-setup.mov.mp4"
@@ -117,16 +131,16 @@ This guide will cover how to set up Okta user provisioning for Langfuse. First, 
   gifStyle
 />
 
-For user provisioning, Langfuse supports the SCIM 2.0 protocol.
-To set up user provisioning in Okta, follow these steps:
+Langfuse supports the SCIM 2.0 protocol for user provisioning.
+After your OIDC SSO app is in place, create a second Okta application for SCIM:
 
-1. **Create a SAML/SCIM Application**:
+1. **Create a SAML application for SCIM** (separate from your OIDC SSO app):
    - Log in to your Okta admin console.
    - Navigate to **Applications** > **Create App Integration**.
    - Choose **SAML 2.0** as the sign-in method and click **Next**.
    - Fill in the application settings. Use your self-hosted domain or one of the Langfuse Cloud domains.
      - **App name**: `Langfuse SCIM`
-     - **Single sign-on URL**: `https://your-langfuse-domain.com` (langfuse uses OIDC for authentication, see above, this will not be used)
+     - **Single sign-on URL**: `https://your-langfuse-domain.com` (placeholder only — Langfuse authenticates via the OIDC app, not this SAML SSO URL)
      - **Audience URI**: `langfuse`
    - Click **Next** and then **Finish**.
 2. **Configure SCIM Settings**:

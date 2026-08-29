@@ -1,61 +1,91 @@
 ---
 type: "Framework Learn Page"
-framework: "mongodb"
+framework: "MongoDB"
 source_repo: "https://github.com/mongodb/docs.git"
 source_branch: "main"
 source_path: "content/manual/manual/source/tutorial/add-shards-to-shard-cluster.txt"
-source_commit: "ab9db26ed3d11618cdb61516d8180337d8e3f679"
-source_commit_short: "ab9db26e"
-source_commit_date: "2026-07-24T16:22:46-06:00"
-generated_at: "2026-07-25T11:51:15Z"
+source_commit: "b9f2bc487a2878b65e3c1f80024bebab76954f27"
+source_commit_short: "b9f2bc48"
+source_commit_date: "2026-08-28T17:09:45-05:00"
+generated_at: "2026-08-29T09:39:19.571721Z"
 ---
-
-=======================
+.. _sharding-procedure-add-shard:
 
 # Add Shards to a Cluster
 
-You add shards to a `sharded cluster` after you create the cluster or any time that you need to add capacity to the cluster. If you have not created a sharded cluster, see `sharding-procedure-setup`.
+**meta:** :description: Add shards to a sharded cluster to increase capacity, ensuring all shards are replica sets and considering balancing and capacity planning.
 
-All shards must be `replica sets <replica set>`.
+.. default-domain:: mongodb
+
+**contents:** On this page
+   :local:
+   :backlinks: none
+   :depth: 1
+   :class: singlecol
+
+You add shards to a :term:`sharded cluster` after you create the cluster
+or any time that you need to add capacity to the cluster. If you have not
+created a sharded cluster, see :ref:`sharding-procedure-setup`.
+
+All shards must be :term:`replica sets
+<replica set>`.
 
 ## Considerations
 
 ### Balancing
 
-.. include:: /includes/fact-adding-shards-changes-cluster-balance.rst
+**include:** /includes/fact-adding-shards-changes-cluster-balance.rst
 
 ### Capacity Planning
 
-When adding a shard to a cluster, always ensure that the cluster has enough capacity to support the migration required for balancing the cluster without affecting legitimate production traffic.
+When adding a shard to a cluster, always ensure that the cluster has
+enough capacity to support the migration required for balancing the
+cluster without affecting legitimate production traffic.
 
 ### DDL Operations
 
-If you add a shard while your cluster executes a DDL operation (operation that modifies a collection such as :dbcommand:`reshardCollection`), the operation that adds a shard only executes after the concurrent DDL operation finishes.
+If you add a shard while your cluster executes a DDL operation
+(operation that modifies a collection such as
+:dbcommand:`reshardCollection`), the operation that adds a shard only
+executes after the concurrent DDL operation finishes. 
 
 ## Add a Shard to a Cluster
 
-You interact with a sharded cluster by connecting to a :binary:`~bin.mongos` instance.
+You interact with a sharded cluster by connecting to a :binary:`~bin.mongos`
+instance.
 
 1. In :binary:`~bin.mongosh`, connect to the :binary:`~bin.mongos`
-instance. For example, if a :binary:`~bin.mongos` is accessible at `mongos0.example.net` on port `27017`, issue the following command:
+   instance. For example, if a :binary:`~bin.mongos` is accessible at
+   ``mongos0.example.net`` on port ``27017``, issue the following
+   command:
 
-```bash
-   mongosh --host mongos0.example.net --port 27017
-```
+   .. code-block:: bash
 
-#. Add a shard replica set to the cluster using the :method:`sh.addShard()` method, as shown in the example below. Issue :method:`sh.addShard()` separately for each shard. Specify the name of the replica set and a member of the set.
+      mongosh --host mongos0.example.net --port 27017
 
-> **Note:**    You can instead use the :dbcommand:`addShard` database
-   command, which lets you specify a name and maximum size for the
-   shard. If you do not specify these, MongoDB automatically assigns
-   a name and maximum size. To use the database command, see
-   :dbcommand:`addShard`.
-The following example illustrates adding a shard with
-:method:`sh.addShard()`:
-To add a shard replica set named `rs1` with a member
-running on port `27018` on `mongodb0.example.net`, issue the
-following command:
-.. code-block:: javascript
-   sh.addShard( "rs1/mongodb0.example.net:27018" )
-.. note:: It might take some time for `chunks <chunk>` to
-   migrate to the new shard.
+#. Add a shard replica set to the cluster using the :method:`sh.addShard()`
+   method, as shown in the example below. Issue :method:`sh.addShard()`
+   separately for each shard. Specify the name of the replica set and a 
+   member of the set.
+
+   .. note:: Optional
+   
+      You can instead use the :dbcommand:`addShard` database
+      command, which lets you specify a name and maximum size for the
+      shard. If you do not specify these, MongoDB automatically assigns
+      a name and maximum size. To use the database command, see
+      :dbcommand:`addShard`.
+
+   The following example illustrates adding a shard with
+   :method:`sh.addShard()`:
+
+   To add a shard replica set named ``rs1`` with a member
+   running on port ``27018`` on ``mongodb0.example.net``, issue the
+   following command:
+
+   .. code-block:: javascript
+
+      sh.addShard( "rs1/mongodb0.example.net:27018" )
+
+   .. note:: It might take some time for :term:`chunks <chunk>` to
+      migrate to the new shard.

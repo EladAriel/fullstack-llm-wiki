@@ -1,60 +1,159 @@
 ---
 type: "Framework Learn Page"
-framework: "postgres"
+framework: "PostgreSQL"
 source_repo: "https://github.com/postgres/postgres.git"
 source_branch: "master"
 source_path: "doc/src/sgml/ref/alter_tablespace.sgml"
-source_commit: "38afc3dcb25c45b744d4025029ce0a6c90b7059f"
-source_commit_short: "38afc3dc"
-source_commit_date: "2026-07-25T19:08:27+09:00"
-generated_at: "2026-07-25T11:50:59Z"
+source_commit: "6c5f1d6074208146930b67c2054509c3e82f6f7f"
+source_commit_short: "6c5f1d6"
+source_commit_date: "2026-08-28T23:24:47+02:00"
+generated_at: "2026-08-29T09:39:24.589827Z"
 ---
-
 ALTER TABLESPACE
+ 
 
-ALTER TABLESPACE
-7
-SQL - Language Statements
+ 
+  
+# ALTER TABLESPACE
 
-ALTER TABLESPACE
-change the definition of a tablespace
+  7
+  SQL - Language Statements
+ 
 
-```
+ 
+  
+# ALTER TABLESPACE
+
+  change the definition of a tablespace
+ 
+
+ 
+
 ALTER TABLESPACE name RENAME TO new_name
 ALTER TABLESPACE name OWNER TO { new_owner | CURRENT_ROLE | CURRENT_USER | SESSION_USER }
 ALTER TABLESPACE name SET ( tablespace_option = value [, ... ] )
 ALTER TABLESPACE name RESET ( tablespace_option [, ... ] )
+
+ 
+
+ 
+  
+# Description
+
+  
+   ALTER TABLESPACE can be used to change the definition of
+   a tablespace.
+  
+
+  
+   You must own the tablespace to change the definition of a tablespace.
+   To alter the owner, you must also be able to SET ROLE
+   to the new owning role.
+   (Note that superusers have these privileges automatically.)
+  
+
+ 
+
+ 
+  
+# Parameters
+
+  
+   
+    name
+    
+     
+      The name of an existing tablespace.
+     
+
+    
+   
+
+   
+    new_name
+    
+     
+      The new name of the tablespace.  The new name cannot
+      begin with pg_, as such names
+      are reserved for system tablespaces.
+     
+
+    
+   
+
+   
+    new_owner
+    
+     
+      The new owner of the tablespace.
+     
+
+    
+   
+
+   
+    tablespace_option
+    
+     
+      A tablespace parameter to be set or reset.  Currently, the only
+      available parameters are seq_page_cost,
+      random_page_cost, effective_io_concurrency
+      and maintenance_io_concurrency.
+      Setting these values for a particular tablespace will override the
+      planner's usual estimate of the cost of reading pages from tables in
+      that tablespace, and how many concurrent I/Os are issued, as established
+      by the configuration parameters of the
+      same name (see ,
+      ,
+      ,
+      ).  This may be useful if
+      one tablespace is located on a disk which is faster or slower than the
+      remainder of the I/O subsystem.
+     
+
+    
+   
+
+  
+ 
+
+ 
+  
+# Examples
+
+  
+   Rename tablespace index_space to fast_raid:
+
 ```
 
-## Description
-
-`ALTER TABLESPACE` can be used to change the definition of a tablespace.
-
-You must own the tablespace to change the definition of a tablespace. To alter the owner, you must also be able to `SET ROLE` to the new owning role. (Note that superusers have these privileges automatically.)
-
-## Parameters
-
-- The name of an existing tablespace.
-- The new name of the tablespace. The new name cannot begin with `pg_`, as such names are reserved for system tablespaces.
-- The new owner of the tablespace.
-- A tablespace parameter to be set or reset. Currently, the only available parameters are `seq_page_cost`, `random_page_cost`, `effective_io_concurrency` and `maintenance_io_concurrency`. Setting these values for a particular tablespace will override the planner's usual estimate of the cost of reading pages from tables in that tablespace, and how many concurrent I/Os are issued, as established by the configuration parameters of the same name (see `guc-seq-page-cost`, `guc-random-page-cost`, `guc-effective-io-concurrency`, `guc-maintenance-io-concurrency`). This may be useful if one tablespace is located on a disk which is faster or slower than the remainder of the I/O subsystem.
-
-## Examples
-
-Rename tablespace `index_space` to `fast_raid`:
-
-```
 ALTER TABLESPACE index_space RENAME TO fast_raid;
-```
-
-Change the owner of tablespace `index_space`:
 
 ```
+
+  
+
+  
+   Change the owner of tablespace index_space:
+
+```
+
 ALTER TABLESPACE index_space OWNER TO mary;
+
 ```
 
-## Compatibility
+ 
 
-There is no `ALTER TABLESPACE` statement in the SQL standard.
+ 
+  
+# Compatibility
 
-## See Also
+  
+   There is no ALTER TABLESPACE statement in
+   the SQL standard.
+  
+
+ 
+
+ 
+  
+# See Also

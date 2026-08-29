@@ -1,67 +1,96 @@
 ---
 type: "Framework Learn Page"
-framework: "mongodb"
+framework: "MongoDB"
 source_repo: "https://github.com/mongodb/docs.git"
 source_branch: "main"
 source_path: "content/manual/manual/source/reference/command/killSessions.txt"
-source_commit: "ab9db26ed3d11618cdb61516d8180337d8e3f679"
-source_commit_short: "ab9db26e"
-source_commit_date: "2026-07-24T16:22:46-06:00"
-generated_at: "2026-07-25T11:51:15Z"
+source_commit: "b9f2bc487a2878b65e3c1f80024bebab76954f27"
+source_commit_short: "b9f2bc48"
+source_commit_date: "2026-08-28T17:09:45-05:00"
+generated_at: "2026-08-29T09:39:20.010634Z"
 ---
-
-===============================
-
 # killSessions (database command)
 
+**meta:** :description: Terminate specified sessions using the `killSessions` command, which affects in-progress operations and ignores sessions with transactions in prepared state.
+
+.. default-domain:: mongodb
+
+**contents:** On this page
+   :local:
+   :backlinks: none
+   :depth: 1
+   :class: singlecol
+
 ## Definition
+
+**dbcommand:** killSessions
+
+   The :dbcommand:`killSessions` command kills the specified sessions.
+   If access control is enabled, the command only kills the sessions
+   owned by the user. [#exception]_
 
 ## Syntax
 
 The command has the following syntax:
 
-```javascript
-db.runCommand( 
-   { 
-     killSessions: [ { id : <UUID> }, ... ] 
-   } 
-)
-```
+.. code-block:: javascript
+
+   db.runCommand( 
+      { 
+        killSessions: [ { id : <UUID> }, ... ] 
+      } 
+   )
 
 ## Compatibility
 
-This command is available in deployments hosted in the following environments:
+This command is available in deployments hosted in the following environments: 
 
-.. include:: /includes/fact-environments-atlas-only.rst
+**include:** /includes/fact-environments-atlas-only.rst
 
-.. include:: /includes/fact-environments-atlas-support-no-free.rst
+**include:** /includes/fact-environments-atlas-support-no-free.rst
 
-.. include:: /includes/fact-environments-onprem-only.rst
+**include:** /includes/fact-environments-onprem-only.rst
 
 ## Command Fields
 
-The command takes an array of documents that specify the UUID portion of the session id. Specify an empty array `[ ]` to kill all sessions, or if access control is enabled, all sessions owned by the user. [#exception]_
+The command takes an array of documents that specify the UUID portion
+of the session id. Specify an empty array ``[ ]`` to kill all sessions,
+or if access control is enabled, all sessions owned by the user.
+[#exception]_
 
 ## View Existing Sessions
 
-To view existing sessions, see :pipeline:`$listSessions` operation or :pipeline:`$listLocalSessions`.
+To view existing sessions, see :pipeline:`$listSessions` operation or
+:pipeline:`$listLocalSessions`.
 
-The |command| operation ignores sessions that have `transactions <transactions>` in prepared state. See `killSessions-behavior` for details.
+.. |command| replace:: :dbcommand:`killSessions`
+
+.. [#exception]
+
+   The |command| operation ignores sessions that have
+   :ref:`transactions <transactions>` in prepared state. See
+   :ref:`killSessions-behavior` for details.
+
+.. _killSessions-behavior:
 
 ## Behavior
 
 ### Session Identification
 
-MongoDB concatenates each of the specified UUIDs with the hash of the authenticated user credentials to identify the user's sessions to kill. If the user has no session that match, the :dbcommand:`killSessions` has no effect.
+MongoDB concatenates each of the specified UUIDs with the hash of the
+authenticated user credentials to identify the user's sessions to kill.
+If the user has no session that match, the :dbcommand:`killSessions`
+has no effect.
 
-.. include:: /includes/note-killSessions.rst
+**include:** /includes/note-killSessions.rst
 
+   
 ## Example
 
 The following operation kills the specified session for the user:
 
-```javascript
-db.runCommand( { killSessions: [ { id: UUID("f9b3d8d9-9496-4fff-868f-04a6196fc58a") } ] } )
-```
+.. code-block:: javascript
 
-> **Seealso:** `kill-write-ops-sharded-cluster`
+   db.runCommand( { killSessions: [ { id: UUID("f9b3d8d9-9496-4fff-868f-04a6196fc58a") } ] } )
+
+**seealso:** :ref:`kill-write-ops-sharded-cluster`

@@ -1,51 +1,117 @@
 ---
 type: "Framework Learn Page"
-framework: "mongodb"
+framework: "MongoDB"
 source_repo: "https://github.com/mongodb/docs.git"
 source_branch: "main"
 source_path: "content/manual/manual/source/tutorial/unshard-collection.txt"
-source_commit: "ab9db26ed3d11618cdb61516d8180337d8e3f679"
-source_commit_short: "ab9db26e"
-source_commit_date: "2026-07-24T16:22:46-06:00"
-generated_at: "2026-07-25T11:51:15Z"
+source_commit: "b9f2bc487a2878b65e3c1f80024bebab76954f27"
+source_commit_short: "b9f2bc48"
+source_commit_date: "2026-08-28T17:09:45-05:00"
+generated_at: "2026-08-29T09:39:19.596166Z"
 ---
-
-====================
+.. _unshard-collection-task:
 
 # Unshard a Collection
 
-You can unshard a sharded collection with the :dbcommand:`unshardCollection` command. When you unshard a collection, the collection cannot be partitioned across multiple `shards <shard>` and the `shard key` is removed.
+**contents:** On this page
+   :local:
+   :backlinks: none
+   :depth: 1
+   :class: singlecol
 
-By default, when you unshard a collection, MongoDB moves the collection's data to the shard with the least amount of data. Alternatively, you can specify which shard to place the data on.
+**facet:** :name: genre
+   :values: tutorial
+
+You can unshard a sharded collection with the
+:dbcommand:`unshardCollection` command. When you unshard a collection,
+the collection cannot be partitioned across multiple :term:`shards
+<shard>` and the :term:`shard key` is removed.
+
+By default, when you unshard a collection, MongoDB moves the
+collection's data to the shard with the least amount of data.
+Alternatively, you can specify which shard to place the data on. 
 
 ## About this Task
 
 ### Compatibility
 
-You can perform this task on deployments hosted in the following environments:
+You can perform this task on deployments hosted in the following
+environments: 
 
-.. include:: /includes/fact-environments-atlas-only.rst
+**include:** /includes/fact-environments-atlas-only.rst
 
-> **Note:** This task is not available on the {+atlas+} Free or Flex Tiers.
+**note:** This task is not available on the {+atlas+} Free or Flex Tiers.
 
-.. include:: /includes/fact-environments-onprem-only.rst
+**include:** /includes/fact-environments-onprem-only.rst
 
 ### Restrictions
 
-.. include:: /includes/uc-considerations.rst
+.. |uc| replace:: ``unshardCollection``
+
+**include:** /includes/uc-considerations.rst
 
 ## Access Control
 
-.. include:: /includes/access-control-unshardCollection.rst
+**include:** /includes/access-control-unshardCollection.rst
 
 ## Before you Begin
 
-.. include:: /includes/uc-reqs.rst
+**include:** /includes/uc-reqs.rst
 
 ## Steps
+
+**procedure:** :style: normal
+
+   .. step:: (Optional) List shard names
+
+      If you want to put the data from your sharded collection on a
+      specific shard, you need the target shard's name.
+
+      To see the list of shard names in your cluster, use the
+      :dbcommand:`listShards` command:
+
+      .. code-block:: javascript
+
+         db.adminCommand( { listShards: 1 } )
+
+      The ``shards._id`` field lists the name of each shard.
+   
+   .. step:: Unshard the collection
+
+      To unshard a collection, run the :dbcommand:`unshardCollection` command.
+      The following example unshards a collection called ``us_accounts`` in
+      the ``sales`` database:
+
+      .. code-block:: javascript
+
+         db.adminCommand( {
+            unshardCollection: "sales.us_accounts",
+            toShard: "shard1"
+         } )
+
+      After the unshard operation completes, the data in the
+      ``us_accounts`` collection is on ``shard1``. If you omit the
+      ``toShard`` field, the data is placed on the shard with the least
+      amount of data.
+
+   .. step:: Confirm that the collection is unsharded
+
+      To confirm that the collection is unsharded, use the
+      :pipeline:`$shardedDataDistribution` stage and try to match on the
+      unsharded namespace:
+      
+      .. code-block:: javascript
+
+         db.aggregate( [
+            { $shardedDataDistribution: { } }, 
+            { $match: {  "ns": "sales.us_accounts" } }
+         ] )
+
+      If the aggregation doesn't return any data, the collection is
+      unsharded.
 
 ## Learn More
 
 - :method:`sh.abortUnshardCollection()`
-- `remove-shards-from-cluster-tutorial`
-- `shard-key-refine`
+- :ref:`remove-shards-from-cluster-tutorial`
+- :ref:`shard-key-refine`

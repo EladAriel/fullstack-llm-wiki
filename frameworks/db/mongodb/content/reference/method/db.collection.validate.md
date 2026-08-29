@@ -1,121 +1,211 @@
 ---
 type: "Framework Learn Page"
-framework: "mongodb"
+framework: "MongoDB"
 source_repo: "https://github.com/mongodb/docs.git"
 source_branch: "main"
 source_path: "content/manual/manual/source/reference/method/db.collection.validate.txt"
-source_commit: "ab9db26ed3d11618cdb61516d8180337d8e3f679"
-source_commit_short: "ab9db26e"
-source_commit_date: "2026-07-24T16:22:46-06:00"
-generated_at: "2026-07-25T11:51:15Z"
+source_commit: "b9f2bc487a2878b65e3c1f80024bebab76954f27"
+source_commit_short: "b9f2bc48"
+source_commit_date: "2026-08-28T17:09:45-05:00"
+generated_at: "2026-08-29T09:39:19.938442Z"
 ---
-
-=========================================
-
 # db.collection.validate() (mongosh method)
 
-.. include:: includes/wayfinding/mongosh-method-validate.rst
+**meta:** :description: Validate a collection for data and index correctness, with options to repair inconsistencies and check BSON conformance.
+
+.. default-domain:: mongodb
+
+**contents:** On this page
+   :local:
+   :backlinks: none
+   :depth: 1
+   :class: singlecol
+
+**include:** includes/wayfinding/mongosh-method-validate.rst
+
+.. _validate-standalone-inconsistencies:
 
 ## Description
 
-.. versionchanged:: 6.2
+**versionchanged:** 6.2
+
+**method:** db.collection.validate(<documents>)
+
+   .. |dbcommand| replace:: :dbcommand:`validate` command
+
+   Validates a collection. The method scans a collection data and
+   indexes for correctness and returns the result. For details of the
+   output, see :ref:`validate-output`.
+
+   Starting in version 5.0, the :method:`db.collection.validate()`
+   method can also fix inconsistencies in the collection.
+   
+   .. include:: /includes/fact-validate-standalone-inconsistencies.rst
+
+   The :method:`db.collection.validate()` method is a wrapper around
+   the :dbcommand:`validate` command.
+
 
 ## Compatibility
 
+.. |command| replace:: method
+
 This method is available in deployments hosted in the following environments:
 
-.. include:: /includes/fact-environments-atlas-only.rst
+**include:** /includes/fact-environments-atlas-only.rst
 
-.. include:: /includes/fact-environments-atlas-support-all.rst
+**include:** /includes/fact-environments-atlas-support-all.rst
 
-.. include:: /includes/fact-environments-onprem-only.rst
+**include:** /includes/fact-environments-onprem-only.rst
 
 ## Syntax
 
 The :method:`db.collection.validate()` method has the following syntax:
 
-```javascript
-db.collection.validate( { 
-   full: <boolean>,  // Optional
-   repair: <boolean>,  // Optional, added in MongoDB 5.0
-   checkBSONConformance: <boolean>  // Optional, added in MongoDB 6.2
-} )
-```
+.. code-block:: javascript
+
+   db.collection.validate( { 
+      full: <boolean>,  // Optional
+      repair: <boolean>,  // Optional, added in MongoDB 5.0
+      checkBSONConformance: <boolean>  // Optional, added in MongoDB 6.2
+   } )
 
 ### Parameters
 
-The :method:`db.collection.validate()` method can take the following optional document parameter with the fields:
+The :method:`db.collection.validate()` method can take the
+following optional document parameter with the fields:
+
+.. list-table::
+   :header-rows: 1
+   :widths: 15 15 70
+
+   * - Field
+     - Type
+     - Description
+
+   * - :ref:`full <method-validate-full>`
+     - boolean
+
+     - .. _method-validate-full:
+     
+       *Optional*. A flag that determines whether the command performs
+       a slower but more thorough check or a faster but less thorough
+       check.
+
+       - If ``true``, performs a more thorough check with the following
+         exception:
+
+         - Full validation on the ``oplog`` for WiredTiger skips the more 
+           thorough check.
+
+       - If ``false``, omits some checks for a faster but less
+         thorough check.
+
+       The default is ``false``.
+
+       .. include:: /includes/fact-validate-wiredtiger-full-option.rst
+
+   * - :ref:`repair <method-validate-repair>`
+     - boolean
+
+     - .. _method-validate-repair:
+
+       .. include:: /includes/fact-validate-repair-option.rst
+
+   * - ``fixMultikey`` 
+     - boolean
+     - .. _method-validate-fixmultikey:
+
+       .. include:: /includes/fact-validate-fixmultikey.rst
+
+   * - :ref:`checkBSONConformance
+       <method-validate-checkBSONConformance>`
+     - boolean
+     - .. _method-validate-checkBSONConformance:
+
+       .. include:: /includes/fact-validate-conformance.rst
 
 ## Behavior
 
 ### Performance
 
-The :method:`db.collection.validate()` method is potentially resource intensive and may impact the performance of your MongoDB instance, particularly on larger data sets.
+The :method:`db.collection.validate()` method is potentially resource
+intensive and may impact the performance of your MongoDB instance,
+particularly on larger data sets.
 
-The :method:`db.collection.validate()` method obtains an exclusive lock on the collection. This will block all reads and writes on the collection until the operation finishes. When run on a secondary, the operation can block all other operations on that secondary until it finishes.
+The :method:`db.collection.validate()` method obtains an exclusive lock
+on the collection. This will block all reads and writes on the
+collection until the operation finishes. When run on a secondary, the
+operation can block all other operations on that secondary until it
+finishes.
 
-> **Warning:** Validation has exclusive lock requirements that affect performance
-on primaries and on secondaries that are servicing reads. Consider
-only running :method:`db.collection.validate()` on nodes that are
-not servicing reads or writes.
-To minimize impact on the primary, the majority of the data-bearing
-(non-arbiter), voting members in the cluster must be available and
-must not have significant replication lag.
-To minimize the impact of the validation operation on client
-applications, run :method:`db.collection.validate()` on a secondary
-node that is not servicing read requests. You can convert the
-current primary node to a secondary node, by running the
-:method:`rs.stepDown()` method.
-To completely isolate the :method:`db.collection.validate()`
-operation from client traffic, choose one of the following options:
-- Isolate a replica set member by following the :ref:`rolling
-  maintenance procedure <perform-maint-on-replica-set>` to
-  temporarily remove it from the cluster.
-- :ref:`Convert a secondary node
-  <configure-hidden-replica-set-member>` to a replica set
-  `hidden member <replica-set-hidden-members>` and perform the
-  validation on the hidden node.
+**warning:** Validation has exclusive lock requirements that affect performance
+   on primaries and on secondaries that are servicing reads. Consider
+   only running :method:`db.collection.validate()` on nodes that are
+   not servicing reads or writes.
+
+   To minimize impact on the primary, the majority of the data-bearing
+   (non-arbiter), voting members in the cluster must be available and
+   must not have significant replication lag.
+
+   To minimize the impact of the validation operation on client
+   applications, run :method:`db.collection.validate()` on a secondary
+   node that is not servicing read requests. You can convert the
+   current primary node to a secondary node, by running the
+   :method:`rs.stepDown()` method.
+
+   To completely isolate the :method:`db.collection.validate()`
+   operation from client traffic, choose one of the following options:
+   
+   - Isolate a replica set member by following the :ref:`rolling
+     maintenance procedure <perform-maint-on-replica-set>` to
+     temporarily remove it from the cluster.
+   - :ref:`Convert a secondary node
+     <configure-hidden-replica-set-member>` to a replica set
+     :ref:`hidden member <replica-set-hidden-members>` and perform the
+     validation on the hidden node.
 
 ### Data Throughput Metrics
 
-.. include:: /includes/extracts/4.4-validate-data-throughput.rst
+**include:** /includes/extracts/4.4-validate-data-throughput.rst
 
 ### Collection Validation Improvements
 
-.. include:: /includes/validate-improvements-introduction.rst
+**include:** /includes/validate-improvements-introduction.rst
 
 ## Examples
 
-- To validate a collection `myCollection` using the default validation
-setting (specifically, `full: false <method-validate-full>`):
+- To validate a collection ``myCollection`` using the default validation
+  setting (specifically, :ref:`full: false <method-validate-full>`):
 
-```javascript
-  db.myCollection.validate()
+  .. code-block:: javascript
 
-  db.myCollection.validate({ })
+     db.myCollection.validate()
 
-  db.myCollection.validate( { full: false } )
-```
+     db.myCollection.validate({ })
 
-- To perform a full validation of collection `myCollection`, specify
-`full: true <method-validate-full>`:
+     db.myCollection.validate( { full: false } )
 
-```javascript
-  db.myCollection.validate( { full: true } )
-```
+- To perform a full validation of collection ``myCollection``, specify
+  :ref:`full: true <method-validate-full>`:
 
-- To repair collection `myCollection`, specify
-`repair: true <method-validate-repair>`:
+  .. code-block:: javascript
 
-```javascript
-  db.myCollection.validate( { repair: true } )
-```
+     db.myCollection.validate( { full: true } )
 
-- To perform additional BSON conformance checks in `myCollection`,
-specify `checkBSONConformance: true <method-validate-checkBSONConformance>`:
+- To repair collection ``myCollection``, specify
+  :ref:`repair: true <method-validate-repair>`:
 
-```javascript
- db.myCollection.validate( { checkBSONConformance: true } )
-```
+  .. code-block:: javascript
 
-For details of the output, see `validate-output`.
+     db.myCollection.validate( { repair: true } )
+
+- To perform additional BSON conformance checks in ``myCollection``,
+  specify :ref:`checkBSONConformance: true
+  <method-validate-checkBSONConformance>`:
+
+  .. code-block:: javascript
+
+    db.myCollection.validate( { checkBSONConformance: true } )
+
+For details of the output, see :ref:`validate-output`.

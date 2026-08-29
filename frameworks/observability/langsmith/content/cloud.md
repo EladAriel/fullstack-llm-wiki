@@ -4,10 +4,10 @@ framework: "LangSmith"
 source_repo: "https://github.com/langchain-ai/docs.git"
 source_branch: "main"
 source_path: "src/langsmith/cloud.mdx"
-source_commit: "2aae1dfc98ee953a9a5185fb6fcdd9efb3f4d878"
-source_commit_short: "2aae1df"
-source_commit_date: "2026-07-25T00:27:23+00:00"
-generated_at: "2026-07-25T19:08:33.427131Z"
+source_commit: "a174f9cf7c91ee5eb14ee2382eb48bfe6e4956e9"
+source_commit_short: "a174f9c"
+source_commit_date: "2026-08-28T17:04:12-07:00"
+generated_at: "2026-08-29T09:39:50.671888Z"
 ---
 ---
 title: Cloud (SaaS)
@@ -163,7 +163,7 @@ All traffic leaving LangSmith services will be routed through a NAT gateway. All
 It may be helpful to allowlist these IP addresses if connecting to your own AzureOpenAI service or other endpoints that may be required by the Playground or Online Evaluation.
 
 <Note>
-Traffic from agents deployed on [LangSmith Deployment](/langsmith/deployment) egresses through a separate set of NAT IPs. For that list, refer to [Allowlist IP addresses](/langsmith/deploy-to-cloud#allowlist-ip-addresses) in the Cloud deployment guide.
+Traffic from agents deployed on [LangSmith Deployment](/langsmith/deployment) egresses through a separate set of NAT IPs. For that list, refer to [Allowlist IP addresses](/langsmith/cloud-platform-features#allowlist-ip-addresses) in the Cloud platform features reference.
 </Note>
 
 ### Ingress into LangChain SaaS

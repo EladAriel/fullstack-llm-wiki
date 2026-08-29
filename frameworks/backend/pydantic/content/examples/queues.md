@@ -1,21 +1,18 @@
 ---
 type: "Framework Learn Page"
-framework: "pydantic"
+framework: "Pydantic"
 source_repo: "https://github.com/pydantic/pydantic"
 source_branch: "main"
 source_path: "docs/examples/queues.md"
-source_commit: "a2a6577d4c329dd574a45dbb01a8feaa16b1ad3d"
-source_commit_short: "a2a6577d"
-source_commit_date: "2026-07-23T15:38:17Z"
-generated_at: "2026-07-25T11:50:12Z"
+source_commit: "4bc21c0fa28323c0f3e0be93c9ad114b705029c6"
+source_commit_short: "4bc21c0"
+source_commit_date: "2026-08-29T11:30:40+02:00"
+generated_at: "2026-08-29T09:38:50.585894Z"
 ---
+# Queues
 
 Pydantic is quite helpful for validating data that goes into and comes out of queues. Below,
 we'll explore how to validate / serialize data with various queue systems.
-
-!!! tip "Logfire integration"
-    Setting up observability for your queue system can be beneficial. Using [Logfire](../integrations/logfire.md),
-    validation and serialization errors will be recorded, alongside the rest of your queue logic.
 
 ## Redis queue
 
@@ -179,6 +176,19 @@ To test this example:
 
 1. Run the receiver script in one terminal to start the consumer.
 2. Run the sender script in another terminal to send messages.
+
+One thing to keep in mind with consumers like this: if `model_validate_json` raises a
+[`ValidationError`][pydantic_core.ValidationError], the message that caused it may no longer be on the
+queue by the time you investigate, making the failure hard to reproduce. It's worth recording failed
+validations as they happen, for example with [Logfire](../errors/troubleshooting.md), which captures
+their field locations and rejected values in structured errors:
+
+```python {test="skip"}
+import logfire
+
+logfire.configure()
+logfire.instrument_pydantic(record='failure')
+```
 
 ## ARQ
 

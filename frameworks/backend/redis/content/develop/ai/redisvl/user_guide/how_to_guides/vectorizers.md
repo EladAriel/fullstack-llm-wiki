@@ -1,15 +1,14 @@
 ---
 type: "Framework Learn Page"
-framework: "redis"
+framework: "Redis"
 source_repo: "https://github.com/redis/docs.git"
 source_branch: "main"
 source_path: "content/develop/ai/redisvl/user_guide/how_to_guides/vectorizers.md"
-source_commit: "9d30f68c3dad1a6b3b7d30fe604b911348ce8152"
-source_commit_short: "9d30f68c"
-source_commit_date: "2026-07-24T10:52:10-07:00"
-generated_at: "2026-07-25T11:51:22Z"
+source_commit: "f8693349287b0efbef3c865b6f6a2aceca88594d"
+source_commit_short: "f869334"
+source_commit_date: "2026-08-28T10:01:19-05:00"
+generated_at: "2026-08-29T09:38:56.012056Z"
 ---
-
 ---
 linkTitle: Create embeddings with vectorizers
 title: Create Embeddings with Vectorizers
@@ -19,7 +18,7 @@ weight: 04
 ---
 
 
-This guide demonstrates how to create embeddings using RedisVL's built-in text vectorizers. RedisVL supports multiple embedding providers: OpenAI, HuggingFace, Ollama, Vertex AI, Cohere, Mistral AI, Amazon Bedrock, VoyageAI, and custom vectorizers.
+This guide demonstrates how to create embeddings using RedisVL's built-in text vectorizers. RedisVL supports multiple embedding providers: OpenAI, HuggingFace, Ollama, Google (Vertex AI and the Gemini Developer API), Cohere, Mistral AI, Amazon Bedrock, VoyageAI, and custom vectorizers.
 
 ## Prerequisites
 
@@ -151,19 +150,22 @@ The only practical difference between OpenAI and Azure OpenAI is the variables r
 
 
 ```python
+# NBVAL_SKIP
 # additionally to the API Key, setup the API endpoint and version
 api_key = os.environ.get("AZURE_OPENAI_API_KEY") or getpass.getpass("Enter your AzureOpenAI API key: ")
 api_version = os.environ.get("OPENAI_API_VERSION") or getpass.getpass("Enter your AzureOpenAI API version: ")
 azure_endpoint = os.environ.get("AZURE_OPENAI_ENDPOINT") or getpass.getpass("Enter your AzureOpenAI API endpoint: ")
 deployment_name = os.environ.get("AZURE_OPENAI_DEPLOYMENT_NAME", "text-embedding-ada-002")
 
-# Skip Azure examples when required values are missing (e.g. CI or Run All without Azure).
+# Skip Azure examples when required values are missing (e.g. Run All without Azure configured).
 _azure_configured = bool(azure_endpoint and api_key and api_version)
 
 ```
 
 
 ```python
+# NBVAL_SKIP
+# Depends on the Azure OpenAI cell above, which is not executed in CI.
 from redisvl.utils.vectorize import AzureOpenAITextVectorizer
 
 if not _azure_configured:
@@ -187,6 +189,8 @@ else:
 
 
 ```python
+# NBVAL_SKIP
+# Depends on the Azure OpenAI cell above, which is not executed in CI.
 # Just like OpenAI, AzureOpenAI supports batching embeddings and asynchronous requests.
 sentences = [
     "That is a happy dog",
@@ -247,6 +251,8 @@ Make sure the Ollama daemon is running with `ollama serve`. By default, the Olla
 
 
 ```python
+# NBVAL_SKIP
+# No Ollama server in CI, so this only burns time on connection retries.
 from redisvl.utils.vectorize import OllamaTextVectorizer
 
 ollama_model = os.environ.get("OLLAMA_MODEL", "nomic-embed-text")
@@ -265,6 +271,8 @@ except (ImportError, ConnectionError, ValueError) as exc:
 
 
 ```python
+# NBVAL_SKIP
+# Depends on the Ollama cell above, which is not executed in CI.
 if ollama is not None:
     embeddings = ollama.embed_many(sentences, batch_size=2)
     print("Number of embeddings:", len(embeddings))
@@ -276,6 +284,8 @@ else:
 
 
 ```python
+# NBVAL_SKIP
+# Depends on the Ollama cell above, which is not executed in CI.
 if ollama is not None:
     embeddings = await ollama.aembed_many(sentences, batch_size=2)
     print("Number of async embeddings:", len(embeddings))
@@ -283,6 +293,8 @@ else:
     print("Skipping: run the Ollama cell above with a running Ollama server and pulled model.")
 
 ```
+
+**⚠️ Deprecated.** `VertexAIVectorizer` uses Google's Vertex AI model-garden SDK, which Google has deprecated with a scheduled removal. For text embeddings use the **Google Gen AI** vectorizer shown in the next section (`GoogleGenAIVectorizer`) on the supported `google-genai` SDK. Multimodal (image/video) migration is tracked in [issue #620](https://github.com/redis/redis-vl-python/issues/620).
 
 ### VertexAI
 
@@ -306,6 +318,8 @@ GCP_LOCATION=<your gcp geo region for vertex ai>
 
 
 ```python
+# NBVAL_SKIP
+# Deprecated vectorizer; not executed in CI so notebook validation makes no API calls.
 from redisvl.utils.vectorize import VertexAIVectorizer
 
 
@@ -319,6 +333,58 @@ vtx = VertexAIVectorizer(api_config={
 # embed a sentence
 test = vtx.embed("This is a test sentence.")
 test[:10]
+```
+
+### Google Gen AI
+
+The `GoogleGenAIVectorizer` uses Google's [`google-genai`](https://pypi.org/project/google-genai/) SDK — the supported replacement for the deprecated Vertex AI model-garden SDK. It reaches **both** Google embedding backends from a single client:
+
+- **Vertex AI / Gemini Enterprise** — GCP project auth (`project_id` + `location`, credentials via ADC).
+- **Gemini Developer API** — a single `api_key`.
+
+Install it with `pip install redisvl[google-genai]`.
+
+**Migrating from `VertexAIVectorizer`:**
+
+| | `VertexAIVectorizer` (deprecated) | `GoogleGenAIVectorizer` |
+|---|---|---|
+| SDK | `google-cloud-aiplatform` (deprecated) | `google-genai` (supported) |
+| Default model | `textembedding-gecko` (768 dims) | `gemini-embedding-001` (3072 dims) |
+| Backends | Vertex AI only | Vertex AI **and** Gemini Developer API |
+| Async | no | yes (`aembed`, `aembed_many`) |
+
+Because the default model and dimensions differ, embeddings are **not** interchangeable — reindex when you switch. When you request a reduced `output_dimensionality`, the vectorizer L2-normalizes the result so it stays valid for Redis COSINE / inner-product search.
+
+**Set one of the following:**
+
+```
+# Gemini Developer API
+GEMINI_API_KEY=<your gemini api key>
+
+# or Vertex AI
+GOOGLE_CLOUD_PROJECT=<your gcp project id>
+GOOGLE_CLOUD_LOCATION=<your gcp region>
+GOOGLE_APPLICATION_CREDENTIALS=<path to your gcp JSON creds>
+```
+
+
+
+```python
+# NBVAL_SKIP
+# Docs example; not executed in CI so notebook validation makes no API calls.
+from redisvl.utils.vectorize import GoogleGenAIVectorizer
+
+# Auto-detects the backend: GEMINI_API_KEY -> Gemini, else GCP project/location -> Vertex AI.
+# Guarded so this notebook still runs when Google credentials aren't configured.
+try:
+    genai_vectorizer = GoogleGenAIVectorizer(model="gemini-embedding-001")
+    print(f"backend={genai_vectorizer.backend}, dims={genai_vectorizer.dims}")
+    genai_test = genai_vectorizer.embed("This is a test sentence.")
+    print(genai_test[:10])
+except (ImportError, ValueError) as e:
+    print(f"Skipping GoogleGenAIVectorizer demo: {e}")
+    genai_vectorizer = None
+
 ```
 
 ### Cohere

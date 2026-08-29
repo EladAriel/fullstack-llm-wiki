@@ -1,87 +1,219 @@
 ---
 type: "Framework Learn Page"
-framework: "mongodb"
+framework: "MongoDB"
 source_repo: "https://github.com/mongodb/docs.git"
 source_branch: "main"
 source_path: "content/manual/manual/source/core/backups.txt"
-source_commit: "ab9db26ed3d11618cdb61516d8180337d8e3f679"
-source_commit_short: "ab9db26e"
-source_commit_date: "2026-07-24T16:22:46-06:00"
-generated_at: "2026-07-25T11:51:15Z"
+source_commit: "b9f2bc487a2878b65e3c1f80024bebab76954f27"
+source_commit_short: "b9f2bc48"
+source_commit_date: "2026-08-28T17:09:45-05:00"
+generated_at: "2026-08-29T09:39:19.555683Z"
 ---
-
-============================================
+.. _backup-methods:
 
 # Backup Methods for a Self-Managed Deployment
 
-When deploying MongoDB in production, have a backup and restore strategy to protect against data loss.
+.. default-domain:: mongodb
 
-.. include:: /includes/fact-self-managed.rst
+**facet:** :name: genre 
+   :values: reference
 
-.. include:: /includes/fact-atlas-link.rst
+**meta:** :description: Learn about backup methods available for self-managed MongoDB deployments. Backup options include Cloud Manager, Ops Manager, filesystem snapshots, mongodump.
+   :keywords: database backup, server backup, on-prem
+
+**contents:** On this page
+   :local:
+   :backlinks: none
+   :depth: 1
+   :class: singlecol
+
+When deploying MongoDB in production, have a backup and restore strategy to protect
+against data loss.
+
+.. |page-topic| replace:: backup methods
+.. |link-topic-ing| replace:: Backup Methods
+.. |atlas-url| replace:: :atlas:`Back Up, Restore, and Archive Data </backup-restore-cluster>`
+
+**include:** /includes/fact-self-managed.rst
+**include:** /includes/fact-atlas-link.rst
 
 ## Back Up with |MMS| or Ops Manager
 
-|MMS| is a hosted backup, monitoring, and automation service for MongoDB. |mms-home| supports backing up and restoring `replica sets <replica set>` and `sharded clusters <sharded cluster>` from a graphical user interface.
+|MMS| is a hosted backup, monitoring, and automation service for
+MongoDB. |mms-home| supports backing up and restoring
+:term:`replica sets <replica set>` and :term:`sharded clusters <sharded
+cluster>` from a graphical user interface.
+
+.. _backup-with-mms:
 
 ### |MMS|
 
-> **Important:** To back up your replica sets and sharded clusters using |MMS|,
-you must be using MongoDB Enterprise Server.
-For more information, see `install-mdb-enterprise`.
+**important:** To back up your replica sets and sharded clusters using |MMS|, 
+   you must be using MongoDB Enterprise Server. 
+   For more information, see :ref:`install-mdb-enterprise`.
 
-|MMS| backs up replica sets and sharded clusters by reading `oplog` data from your MongoDB deployment. |MMS| creates snapshots at set intervals and offers point-in-time recovery.
 
-> **Tip:** Sharded cluster snapshots are difficult to achieve with other MongoDB
-backup methods.
+|MMS| backs up replica sets and sharded clusters by reading
+:term:`oplog` data from your MongoDB deployment. |MMS| creates snapshots
+at set intervals and offers point-in-time recovery.
 
-To get started with |MMS| Backup, sign up for |mms-home|. For documentation on |MMS|, see the |mms-docs|.
+**tip:** Sharded cluster snapshots are difficult to achieve with other MongoDB
+   backup methods.
 
-.. include:: /includes/replacement-mms.rst
+To get started with |MMS| Backup, sign up for |mms-home|. For
+documentation on |MMS|, see the |mms-docs|.
+
+**include:** /includes/replacement-mms.rst
+
+.. _backup-with-mms-onprem:
 
 ### Ops Manager
 
-With Ops Manager, MongoDB subscribers can install and run the same backup software as |MMS| on their own infrastructure. Ops Manager is available with Enterprise Advanced subscriptions.
+With Ops Manager, MongoDB subscribers can install and run the same
+backup software as |MMS| on their own infrastructure. Ops Manager is
+available with Enterprise Advanced subscriptions.
 
-For more information about Ops Manager, see the [MongoDB Enterprise Advanced](https://www.mongodb.com/products/mongodb-enterprise-advanced) page and the :opsmgr:`Ops Manager Manual </>`.
+For more information about Ops Manager, see the `MongoDB Enterprise
+Advanced
+<https://www.mongodb.com/products/mongodb-enterprise-advanced>`_ page
+and the :opsmgr:`Ops Manager Manual </>`.
+
+.. _backup-with-file-copies:
 
 ## Back Up by Copying Underlying Data Files
 
-> **Note:** .. include:: /includes/fact-aes256-backups.rst
+**note:** Considerations for Encrypted Storage Engines using AES256-GCM 
 
-If using filesystem-based backups for MongoDB Enterprise, use the "hot" backup feature.
+   .. include:: /includes/fact-aes256-backups.rst
+
+If using filesystem-based backups for MongoDB Enterprise, use the
+"hot" backup feature.
 
 ### Back Up with Filesystem Snapshots
 
-If the volume where MongoDB stores its data files supports point-in-time snapshots, use those snapshots to create backups at an exact moment in time. File system snapshots are an operating system volume manager feature and are not specific to MongoDB. The operating system takes a snapshot of the volume to use as a baseline for backup. The mechanics of snapshots depend on the underlying storage system. For example, on Linux, the Logical Volume Manager (LVM) can create snapshots. Similarly, Amazon's EBS storage system for EC2 supports snapshots.
+If the volume where MongoDB stores its data files supports point-in-time
+snapshots, use those snapshots to create backups at an exact moment in
+time. File system snapshots are an operating system volume manager
+feature and are not specific to MongoDB. The operating system takes a
+snapshot of the volume to use as a baseline for backup. The mechanics of 
+snapshots depend on the underlying storage system. For example, on Linux, 
+the Logical Volume Manager (LVM) can create snapshots. Similarly, 
+Amazon's EBS storage system for EC2 supports snapshots.
 
-To get a correct snapshot of a running :binary:`~bin.mongod` process, you must have journaling enabled and the journal must reside on the same logical volume as the other MongoDB data files.
+To get a correct snapshot of a running :binary:`~bin.mongod` process, you
+must have journaling enabled and the journal must reside on the same
+logical volume as the other MongoDB data files.
 
-To get a consistent snapshot of a `sharded cluster`, you must disable the balancer and capture a snapshot from every shard as well as a config server at approximately the same moment in time. To backup sharded clusters, see `backup-sharded-dumps`.
+To get a consistent snapshot of a :term:`sharded cluster`, you must
+disable the balancer and capture a snapshot from every shard as well as a
+config server at approximately the same moment in time.
+To backup sharded clusters, see :ref:`backup-sharded-dumps`.
 
-For more information, see the `/tutorial/backup-with-filesystem-snapshots` and `/tutorial/backup-sharded-cluster-with-filesystem-snapshots` for complete instructions on using LVM to create snapshots.
+For more information, see the
+:doc:`/tutorial/backup-with-filesystem-snapshots` and
+:doc:`/tutorial/backup-sharded-cluster-with-filesystem-snapshots` for
+complete instructions on using LVM to create snapshots.
 
-### Back Up with `cp` or `rsync`
+### Back Up with ``cp`` or ``rsync``
 
-If your storage system does not support snapshots, you can copy the files directly using `cp`, `rsync`, or a similar tool. Since copying multiple files is not an atomic operation, you must stop all writes to the :binary:`~bin.mongod` before copying the files.
+If your storage system does not support snapshots, you can copy the
+files directly using ``cp``, ``rsync``, or a similar tool. Since
+copying multiple files is not an atomic operation, you must stop all
+writes to the :binary:`~bin.mongod` before copying the files.
 
-Backups produced by copying the underlying data do not support point in time recovery for `replica sets <replica set>` and are difficult to manage for larger sharded clusters. Additionally, these backups are larger because they include the indexes and duplicate underlying storage padding and fragmentation. :binary:`~bin.mongodump`, by contrast, creates smaller backups.
+Backups produced by copying the underlying data do not support point
+in time recovery for :term:`replica sets <replica set>` and are difficult to manage for
+larger sharded clusters. Additionally, these backups are larger
+because they include the indexes and duplicate underlying storage
+padding and fragmentation. :binary:`~bin.mongodump`, by contrast, creates
+smaller backups.
 
-## Back Up with `mongodump`
+.. _backup-with-mongodump:
 
-:binary:`~bin.mongodump` and :binary:`~bin.mongorestore` are tools for backing up and restoring small MongoDB deployments. To learn more, see `manual-tutorial-backup-and-restore`.
+## Back Up with ``mongodump``
 
-To backup sharded clusters, see `backup-sharded-dumps`.
+:binary:`~bin.mongodump` and :binary:`~bin.mongorestore` are
+tools for backing up and restoring small MongoDB deployments. To learn
+more, see :ref:`manual-tutorial-backup-and-restore`.
+
+To backup sharded clusters, see :ref:`backup-sharded-dumps`.
 
 ## Compare Backup Methods
 
 The following table compares backup methods for on-premises deployments.
 
-## Contents
+.. list-table::
+   :header-rows: 1
+   :stub-columns: 1
 
-- Use Snapshots </tutorial/backup-with-filesystem-snapshots>
-- Use MongoDB Tools </tutorial/backup-and-restore-tools>
-- Restore Replica Set </tutorial/restore-replica-set-from-backup>
-- Restore Sharded Clusters </administration/backup-sharded-clusters>
-- Recover Standalone </tutorial/recover-data-following-unexpected-shutdown>
-- Troubleshoot Backup and Restore Failures </troubleshooting/backup-restore-failures>
+   * - Backup Considerations
+     - Cloud Manager/Ops Manager
+     - Filesystem Snapshot
+     - :binary:`~bin.mongodump`/:binary:`~bin.mongorestore`
+
+   * - Backup :abbr:`RTO (recovery time objective)`
+     - Low/depends on `snapshot store type <https://www.mongodb.com/docs/ops-manager/current/core/backup-preparations/#snapshot-frequency-and-retention-policy>`__
+     - Low
+     - High
+   
+   * - Backup :abbr:`RPO (recovery point objective)`
+     - Low
+     - High
+     - High
+
+   * - Backup storage cost
+     - Low/depends on snapshot store type
+     - Medium
+     - High
+   
+   * - Staff Time to Manage Backups
+     - None/depends on snapshot store type
+     - High
+     - High
+
+   * - Continually Point-in-Time backup and restore
+     - Yes
+     - No
+     - No
+
+   * - Complexity of the restore
+     - Low if deployment is under automation
+     - High for a sharded cluster
+     - Low
+
+   * - Complexity of a sharded cluster backup
+     - Low
+     - High, requires extra steps
+     - High, requires extra steps
+
+   * - Impact of the backup to the source sharded cluster deployment
+     - Low
+     - High, requires write lock
+     - High, requires write lock
+
+   * - Consistencies in the sharded cluster backup
+     - Guaranteed
+     - Not guaranteed, use :dbcommand:`fsync` or :method:`db.fsyncLock()`
+       to reduce inconsistencies
+     - Not guaranteed, use :dbcommand:`fsync` or :method:`db.fsyncLock()`
+       to reduce inconsistencies
+
+   * - Incremental backup
+     - Yes, daily incremental backup and weekly full backup
+     - Depends on storage and tool
+     - No
+
+   * - Define scope of backups
+     - Yes, with `namespace filtering <https://www.mongodb.com/docs/ops-manager/current/core/backup-preparations/#namespaces-filter>`__
+     - No
+     - Yes
+
+**toctree:** :titlesonly:
+   :hidden:
+
+   Use Snapshots </tutorial/backup-with-filesystem-snapshots>
+   Use MongoDB Tools </tutorial/backup-and-restore-tools>
+   Restore Replica Set </tutorial/restore-replica-set-from-backup>
+   Restore Sharded Clusters </administration/backup-sharded-clusters>
+   Recover Standalone </tutorial/recover-data-following-unexpected-shutdown>
+   Troubleshoot Backup and Restore Failures </troubleshooting/backup-restore-failures>

@@ -10,6 +10,7 @@ from __future__ import annotations
 
 import argparse
 import datetime as dt
+import html
 import json
 import os
 import re
@@ -29,6 +30,7 @@ except Exception:
 REPO_ROOT = Path(__file__).resolve().parents[2]
 CACHE_ROOT = REPO_ROOT / ".cache" / "wiki-sources"
 FRAMEWORKS_ROOT = REPO_ROOT / "frameworks"
+SUPPORTED_SUFFIXES = {".md", ".mdx", ".rst", ".txt", ".sgml"}
 
 
 @dataclass(frozen=True)
@@ -75,7 +77,14 @@ class Source:
 
 
 def run(cmd: list[str], cwd: Optional[Path] = None) -> str:
-    res = subprocess.run(cmd, cwd=str(cwd) if cwd else None, check=True, text=True, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
+    res = subprocess.run(
+        cmd,
+        cwd=str(cwd) if cwd else None,
+        check=True,
+        text=True,
+        stdout=subprocess.PIPE,
+        stderr=subprocess.PIPE,
+    )
     return res.stdout.strip()
 
 
@@ -83,7 +92,17 @@ def ensure_clone(src: Source) -> None:
     src.cache_dir.mkdir(parents=True, exist_ok=True)
     git_dir = src.cache_dir / ".git"
     if not git_dir.exists():
-        run(["git", "clone", "--depth=1", "--branch", src.source_branch, src.source_repo, str(src.cache_dir)])
+        run(
+            [
+                "git",
+                "clone",
+                "--depth=1",
+                "--branch",
+                src.source_branch,
+                src.source_repo,
+                str(src.cache_dir),
+            ]
+        )
     else:
         # Ensure branch and update
         run(["git", "fetch", "origin", src.source_branch, "--depth=1"], cwd=src.cache_dir)
@@ -105,6 +124,7 @@ def get_head_metadata(src: Source) -> dict[str, str]:
 
 def should_exclude(path: Path, patterns: list[str]) -> bool:
     from fnmatch import fnmatch
+
     rel = path.as_posix()
     return any(fnmatch(rel, pat) for pat in patterns)
 
@@ -112,21 +132,88 @@ def should_exclude(path: Path, patterns: list[str]) -> bool:
 def iter_source_files(src: Source) -> Iterable[Path]:
     if not src.docs_dir.exists():
         return []
+    seen: set[Path] = set()
     for pattern in src.include_globs:
         for p in src.docs_dir.rglob("*"):
             if not p.is_file():
+                continue
+            if p in seen:
                 continue
             if not Path(p).match(pattern):
                 continue
             if src.exclude_globs and should_exclude(p.relative_to(src.docs_dir), src.exclude_globs):
                 continue
-            # Only process Markdown-like files
-            if p.suffix.lower() not in (".md", ".mdx"):
+            if p.suffix.lower() not in SUPPORTED_SUFFIXES:
                 continue
+            seen.add(p)
             yield p
 
 
-def write_metadata_json(src: Source, meta: dict[str, Any]) -> None:
+def convert_rst_like(body: str) -> str:
+    """Lightweight RST/Sphinx-txt to Markdown conversion for LLM consumption."""
+    lines = body.splitlines()
+    out: list[str] = []
+    i = 0
+    underline_chars = set("=-~^\"'`:#*+<>_")
+
+    while i < len(lines):
+        line = lines[i]
+        if (
+            i + 1 < len(lines)
+            and line.strip()
+            and lines[i + 1].strip()
+            and len(set(lines[i + 1].strip())) == 1
+            and lines[i + 1].strip()[0] in underline_chars
+            and len(lines[i + 1].strip()) >= max(3, len(line.strip()) // 4)
+        ):
+            ch = lines[i + 1].strip()[0]
+            level = 1 if ch in "=#*" else 2 if ch in "-^" else 3
+            out.append("#" * level + " " + line.strip())
+            i += 2
+            continue
+        # Drop isolated overline/underline rows
+        if line.strip() and len(set(line.strip())) == 1 and line.strip()[0] in underline_chars:
+            i += 1
+            continue
+        out.append(line)
+        i += 1
+
+    text = "\n".join(out)
+    # Soften common directive markers into readable lines
+    text = re.sub(r"^\.\.\s+(\w+)::\s*(.*)$", r"**\1:** \2", text, flags=re.MULTILINE)
+    return text
+
+
+def convert_sgml(body: str) -> str:
+    """Strip SGML/XML tags into readable Markdown-ish text."""
+    text = re.sub(r"<!--.*?-->", "", body, flags=re.DOTALL)
+    text = re.sub(r"<!DOCTYPE[^>]*>", "", text, flags=re.IGNORECASE)
+    # Prefer title-like tags as headings
+    text = re.sub(
+        r"<(title|sect\d*|chapter|section|refentrytitle|refname)\b[^>]*>(.*?)</\1>",
+        lambda m: "\n# " + re.sub(r"<[^>]+>", "", m.group(2)).strip() + "\n",
+        text,
+        flags=re.IGNORECASE | re.DOTALL,
+    )
+    text = re.sub(r"<programlisting\b[^>]*>(.*?)</programlisting>", r"\n```\n\1\n```\n", text, flags=re.I | re.S)
+    text = re.sub(r"<screen\b[^>]*>(.*?)</screen>", r"\n```\n\1\n```\n", text, flags=re.I | re.S)
+    text = re.sub(r"</para>", "\n\n", text, flags=re.I)
+    text = re.sub(r"<[^>]+>", "", text)
+    text = html.unescape(text)
+    text = re.sub(r"\n{3,}", "\n\n", text)
+    return text.strip() + "\n"
+
+
+def normalize_body(source_file: Path, body: str) -> str:
+    suffix = source_file.suffix.lower()
+    if suffix in (".rst", ".txt"):
+        return convert_rst_like(body)
+    if suffix == ".sgml":
+        return convert_sgml(body)
+    return body
+
+
+def write_metadata_json(src: Source, meta: dict[str, str], page_count: int) -> None:
     out = {
         "framework": src.framework,
         "display_name": src.display_name,
@@ -137,21 +224,16 @@ def write_metadata_json(src: Source, meta: dict[str, Any]) -> None:
         "source_commit_short": meta["source_commit_short"],
         "source_commit_date": meta["source_commit_date"],
         "wiki_generated_at": dt.datetime.now(dt.timezone.utc).isoformat().replace("+00:00", "Z"),
+        "page_count": page_count,
     }
     (src.target_dir / "metadata.json").write_text(json.dumps(out, indent=2) + "\n", encoding="utf-8")
-
-
-def normalize_title(text: str) -> Optional[str]:
-    # Try to extract first ATX heading
-    m = re.search(r"^#\s+(.+)$", text, flags=re.MULTILINE)
-    return m.group(1).strip() if m else None
 
 
 def page_frontmatter(src: Source, source_path: Path, head_meta: dict[str, str]) -> str:
     generated_at = dt.datetime.now(dt.timezone.utc).isoformat().replace("+00:00", "Z")
     rel = source_path.relative_to(src.cache_dir).as_posix()
     fm = [
-        '---',
+        "---",
         'type: "Framework Learn Page"',
         f'framework: "{src.display_name}"',
         f'source_repo: "{src.source_repo}"',
@@ -161,18 +243,21 @@ def page_frontmatter(src: Source, source_path: Path, head_meta: dict[str, str]) 
         f'source_commit_short: "{head_meta["source_commit_short"]}"',
         f'source_commit_date: "{head_meta["source_commit_date"]}"',
         f'generated_at: "{generated_at}"',
-        '---',
-        '',
+        "---",
+        "",
     ]
     return "\n".join(fm)
 
 
-def write_root_index(src: Source, head_meta: dict[str, str]) -> None:
+def write_root_index(src: Source, head_meta: dict[str, str], page_count: int) -> None:
     generated_at = dt.datetime.now(dt.timezone.utc).isoformat().replace("+00:00", "Z")
+    content_root = src.target_dir / "content"
+    top_dirs = sorted([p for p in content_root.iterdir() if p.is_dir()], key=lambda p: p.name.lower()) if content_root.exists() else []
+
     lines = [
-        f"# {src.framework} Learn Wiki",
+        f"# {src.display_name} Learn Wiki",
         "",
-        f"This is a local LLM-friendly wiki generated from the official {src.framework} documentation.",
+        f"This is a local LLM-friendly wiki generated from the official {src.display_name} documentation.",
         "",
         "## Status",
         "",
@@ -183,6 +268,7 @@ def write_root_index(src: Source, head_meta: dict[str, str]) -> None:
         f"- Source commit: `{head_meta['source_commit_short']}`",
         f"- Source commit date: `{head_meta['source_commit_date']}`",
         f"- Wiki generated at: `{generated_at}`",
+        f"- Page count: `{page_count}`",
         "",
         "## How the IDE LLM should use this wiki",
         "",
@@ -202,6 +288,10 @@ def write_root_index(src: Source, head_meta: dict[str, str]) -> None:
         "",
         "- [Content Index](content/index.md)",
     ]
+    for d in top_dirs:
+        title = d.name.replace("-", " ").replace("_", " ").title()
+        lines.append(f"- [{title}](content/{d.name}/index.md)")
+
     (src.target_dir / "index.md").write_text("\n".join(lines) + "\n", encoding="utf-8")
 
 
@@ -234,13 +324,45 @@ def write_dir_index(dir_path: Path, framework_name: str, rel_to_root: Path, head
     # List markdown files in the directory (non-index)
     page_links: list[str] = []
     for p in sorted(dir_path.glob("*.md")):
-        if p.name.lower() == "index.md":
+        if p.name.lower() in {"index.md", "_source_index.md"}:
             continue
         page_title = p.stem.replace("-", " ").title()
         page_links.append(f"- [{page_title}]({p.name})")
     if page_links:
         lines.extend(page_links)
+
+    # List subdirectories
+    subdirs = sorted([p for p in dir_path.iterdir() if p.is_dir()], key=lambda p: p.name.lower())
+    if subdirs:
+        lines.extend(["", "## Subdirectories", ""])
+        for sub in subdirs:
+            title = sub.name.replace("-", " ").replace("_", " ").title()
+            lines.append(f"- [{title}]({sub.name}/index.md)")
+
     (dir_path / "index.md").write_text("\n".join(lines) + "\n", encoding="utf-8")
+
+
+def preserve_nested_frameworks(target_dir: Path) -> dict[str, Path]:
+    """Move nested framework dirs (with metadata.json) aside before cleaning."""
+    preserved: dict[str, Path] = {}
+    if not target_dir.exists():
+        return preserved
+    for child in list(target_dir.iterdir()):
+        if child.is_dir() and (child / "metadata.json").exists():
+            tmp = Path("/tmp") / f"wiki-nested-{child.name}-{os.getpid()}"
+            if tmp.exists():
+                shutil.rmtree(tmp)
+            shutil.move(str(child), str(tmp))
+            preserved[child.name] = tmp
+    return preserved
+
+
+def restore_nested_frameworks(target_dir: Path, preserved: dict[str, Path]) -> None:
+    for name, tmp in preserved.items():
+        dest = target_dir / name
+        if dest.exists():
+            shutil.rmtree(dest)
+        shutil.move(str(tmp), str(dest))
 
 
 def build_one(src: Source) -> None:
@@ -248,40 +370,52 @@ def build_one(src: Source) -> None:
     ensure_clone(src)
     head_meta = get_head_metadata(src)
 
-    # Clean target directory (preserve .gitkeep if any)
+    ide_rule_text: Optional[str] = None
+    ide_rule_path = src.target_dir / "IDE_RULE.md"
+    if ide_rule_path.exists():
+        ide_rule_text = ide_rule_path.read_text(encoding="utf-8")
+
+    nested = preserve_nested_frameworks(src.target_dir)
+
+    # Clean target directory
     if src.target_dir.exists():
         shutil.rmtree(src.target_dir)
     (src.target_dir / "content").mkdir(parents=True, exist_ok=True)
 
-    # Copy and normalize pages
+    page_count = 0
     for source_file in iter_source_files(src):
         rel_from_docs = source_file.relative_to(src.docs_dir)
-        # Map .mdx to .md
         out_rel = rel_from_docs.with_suffix(".md")
+        # Keep original source indexes discoverable; directory indexes overwrite index.md
+        if out_rel.name.lower() == "index.md":
+            out_rel = out_rel.with_name("_source_index.md")
         out_path = src.target_dir / "content" / out_rel
         out_path.parent.mkdir(parents=True, exist_ok=True)
 
-        body = source_file.read_text(encoding="utf-8", errors="ignore")
+        body = normalize_body(source_file, source_file.read_text(encoding="utf-8", errors="ignore"))
         fm = page_frontmatter(src, source_file, head_meta)
 
-        # If the source has a top-level title, keep it; otherwise, synthesize one from filename
         if not re.search(r"^#\s+", body, flags=re.MULTILINE):
             title = rel_from_docs.stem.replace("-", " ").title()
             body = f"# {title}\n\n{body}"
 
         out_path.write_text(fm + body.lstrip(), encoding="utf-8")
+        page_count += 1
 
-    # Write root index and metadata
-    write_root_index(src, head_meta)
-    write_metadata_json(src, head_meta)
-
-    # Create simple directory indexes under content/
+    # Create directory indexes under content/
     content_root = src.target_dir / "content"
     for d in [content_root] + [p for p in content_root.rglob("*") if p.is_dir()]:
         rel = d.relative_to(src.target_dir)
         write_dir_index(d, src.display_name, rel, head_meta)
 
-    print(f"==> Wrote {src.target_dir}")
+    write_root_index(src, head_meta, page_count)
+    write_metadata_json(src, head_meta, page_count)
+
+    if ide_rule_text is not None:
+        (src.target_dir / "IDE_RULE.md").write_text(ide_rule_text, encoding="utf-8")
+
+    restore_nested_frameworks(src.target_dir, nested)
+    print(f"==> Wrote {src.target_dir} ({page_count} pages)")
 
 
 def load_sources(path: Path) -> list[Source]:
@@ -308,4 +442,3 @@ def main() -> int:
 
 if __name__ == "__main__":
     raise SystemExit(main())
-

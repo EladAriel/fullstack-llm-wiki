@@ -1,54 +1,113 @@
 ---
 type: "Framework Learn Page"
-framework: "mongodb"
+framework: "MongoDB"
 source_repo: "https://github.com/mongodb/docs.git"
 source_branch: "main"
 source_path: "content/manual/manual/source/reference/operator/bottom.txt"
-source_commit: "ab9db26ed3d11618cdb61516d8180337d8e3f679"
-source_commit_short: "ab9db26e"
-source_commit_date: "2026-07-24T16:22:46-06:00"
-generated_at: "2026-07-25T11:51:15Z"
+source_commit: "b9f2bc487a2878b65e3c1f80024bebab76954f27"
+source_commit_short: "b9f2bc48"
+source_commit_date: "2026-08-28T17:09:45-05:00"
+generated_at: "2026-08-29T09:39:19.865876Z"
 ---
-
-=============================
+.. _bottom_expression_operator:
 
 # $bottom (expression operator)
 
+**meta:** :description: Use the `$bottom` operator in MongoDB to return the last value of an array.
+
+.. default-domain:: mongodb
+
+**contents:** On this page
+   :local:
+   :backlinks: none
+   :depth: 1
+   :class: singlecol
+
 ## Definition
 
-> **Note:** This page describes the `$bottom` expression operator. For the `$bottom`
-accumulator operator, see `$bottom (accumulator operator) <bottom_accumulator_operator>`.
+**expression:** $bottom
+
+   .. versionadded:: 8.3
+
+   Returns the last element within an array according to the specified 
+   sort order. 
+
+**note:** Disambiguation
+
+   This page describes the ``$bottom`` expression operator. For the ``$bottom``
+   accumulator operator, see :ref:`$bottom (accumulator operator) <bottom_accumulator_operator>`. 
 
 ## Syntax
 
-When used as an expression operator, `$bottom` has the following syntax:
+When used as an expression operator, ``$bottom`` has the following syntax:
 
-```none
-{
-   $bottom:
-      {
-         sortBy: <expression>,
-         input: <expression>
-      }
-}
-```
+.. code-block:: none
+   :copyable: false
+
+   {
+      $bottom:
+         {
+            sortBy: <expression>,
+            input: <expression>
+         }
+   }
+
+.. list-table::
+   :header-rows: 1
+   :widths: 15 15 70
+
+   * - Field
+     - Necessity
+     - Description
+
+   * - sortBy
+
+     - Required
+
+     - Specifies the order of results. See :ref:`Sort Behavior
+       <bottom_sort_behavior>` for more information. 
+
+   * - input
+
+     - Required
+
+     - The array that ``$bottom`` evaluates. 
 
 ## Behavior
 
+.. _bottom_sort_behavior:
+
 ### Sort Behavior
 
-.. include:: /includes/sortBy-examples.rst
+**include:** /includes/sortBy-examples.rst
 
 ### Input Values
 
-The `input` field must resolve to an array. If you specify an `input` that is not an array, MongoDB errors.
+The ``input`` field must resolve to an array. If you specify an ``input`` that is not
+an array, MongoDB errors. 
 
 ## Example
 
-.. include:: /includes/sample-data-usage-singular.rst
+**include:** /includes/sample-data-usage-singular.rst
 
-The `movies` collection contains documents that resemble the following example:
+The ``movies`` collection contains documents that resemble the following
+example:
 
-The following aggregation pipeline uses  `$bottom` on the `cast` array:
+**literalinclude:** /includes/movies-sample-document.js
+   :language: javascript
+   :category: usage example
 
-In this example, `$bottom` sorts the existing `cast` array in ascending alphabetical order and returns the last value.
+The following aggregation pipeline uses  ``$bottom`` on the ``cast``
+array:
+
+.. io-code-block::
+   :copyable: true
+
+   .. input:: /code-examples/tested/command-line/mongosh/aggregation/expressions/bottom/pipeline.snippet.use-bottom-on-array.js
+      :language: javascript
+
+   .. output:: /code-examples/tested/command-line/mongosh/aggregation/expressions/bottom/pipeline-output.sh
+      :language: javascript
+
+In this example, ``$bottom`` sorts the existing ``cast`` array in ascending
+alphabetical order and returns the last value.

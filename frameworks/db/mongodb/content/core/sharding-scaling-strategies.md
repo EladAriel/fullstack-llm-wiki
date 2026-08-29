@@ -1,70 +1,106 @@
 ---
 type: "Framework Learn Page"
-framework: "mongodb"
+framework: "MongoDB"
 source_repo: "https://github.com/mongodb/docs.git"
 source_branch: "main"
 source_path: "content/manual/manual/source/core/sharding-scaling-strategies.txt"
-source_commit: "ab9db26ed3d11618cdb61516d8180337d8e3f679"
-source_commit_short: "ab9db26e"
-source_commit_date: "2026-07-24T16:22:46-06:00"
-generated_at: "2026-07-25T11:51:15Z"
+source_commit: "b9f2bc487a2878b65e3c1f80024bebab76954f27"
+source_commit_short: "b9f2bc48"
+source_commit_date: "2026-08-28T17:09:45-05:00"
+generated_at: "2026-08-29T09:39:19.539592Z"
 ---
-
-==================
+.. _sharding-scaling-strategies:
 
 # Scaling Strategies
 
-Database scaling is a fundamental challenge for growing applications. Whether you start a new application or experience growth, there are two main scaling strategies:
+**meta:** :keywords: on-prem
+
+.. default-domain:: mongodb
+
+**contents:** On this page
+   :local:
+   :backlinks: none
+   :depth: 1
+   :class: singlecol
+
+Database scaling is a fundamental challenge for growing applications. 
+Whether you start a new application or experience growth, there are 
+two main scaling strategies:
 
 - Vertical scaling – Upgrade a single server with additional resources.
+
 - Horizontal scaling – Distribute the workload across multiple servers.
-While vertical scaling can provide immediate relief to resource allocation, horizontal scaling is a more sustainable and flexible approach when scale is a factor.
 
-As applications grow, traditional database scaling forces difficult trade-offs between performance, complexity, and cost. MongoDB supports horizontal scaling through its `sharding architecture <sharding-background>`, which distributes data and workloads across multiple servers known as `shards <shards-concepts>`. If you’re building for scale, it’s crucial to consider sharding proactively to ensure seamless growth.
+While vertical scaling can provide immediate relief to resource allocation, 
+horizontal scaling is a more sustainable and flexible approach when scale is 
+a factor.
 
-MongoDB's sharded cluster architecture offers several strategies to scale your database:
+As applications grow, traditional database scaling forces difficult trade-offs 
+between performance, complexity, and cost. MongoDB supports horizontal scaling 
+through its :ref:`sharding architecture <sharding-background>`, which distributes data and 
+workloads across multiple servers known as :ref:`shards <shards-concepts>`. If 
+you’re building for scale, it’s crucial to consider sharding proactively to 
+ensure seamless growth.
 
-- Start early with a sharded cluster, even with a single shard, to future-proof
-your application.
+MongoDB's sharded cluster architecture offers several strategies to scale your 
+database:
 
-- Move unsharded collections between shards to isolate workloads, support
-multi-tenant architectures, comply with geographic requirements, optimize costs, and reduce collection density.
+- Start early with a sharded cluster, even with a single shard, to future-proof 
+  your application.
 
-- Shard specific collections when they approach resource limits or grow beyond
-3 TB in storage size.
+- Move unsharded collections between shards to isolate workloads, support 
+  multi-tenant architectures, comply with geographic requirements, optimize 
+  costs, and reduce collection density.
 
-- Unshard collections when application patterns change and the benefits of a
-sharded collection no longer outweigh the costs.
+- Shard specific collections when they approach resource limits or grow beyond 
+  3 TB in storage size.
 
-You can use these flexible scaling capabilities to optimize performance and control costs, while maintaining a single connection point for your applications.
+- Unshard collections when application patterns change and the benefits of a 
+  sharded collection no longer outweigh the costs.
+
+You can use these flexible scaling capabilities to optimize performance and 
+control costs, while maintaining a single connection point for your 
+applications.
 
 ## Strategies for Horizontal Scaling
 
-In a sharded cluster, each shard is a replica set. Multiple shards function as a part of the same cluster. Your application accesses all resources transparently by connecting to `mongos <mongos>`, which handles the complexity of routing requests to the right place.
+In a sharded cluster, each shard is a replica set. Multiple shards function 
+as a part of the same cluster. Your application accesses all resources 
+transparently by connecting to :ref:`mongos <mongos>`, which handles the 
+complexity of routing requests to the right place.
 
 There are two primary methods to distribute workloads in a sharded cluster:
 
-- Moving collections onto dedicated shards – Assign entire collections to
-specific shards, optimizing performance by distributing workloads strategically.
+- Moving collections onto dedicated shards – Assign entire collections to 
+  specific shards, optimizing performance by distributing workloads 
+  strategically.
 
-- Partitioning a collection across multiple shards – Split a single collection
-across multiple shards using a `shard key <sharding-shard-key>`, distributing data more evenly for scalability.
+- Partitioning a collection across multiple shards – Split a single collection 
+  across multiple shards using a :ref:`shard key <sharding-shard-key>`, 
+  distributing data more evenly for scalability.
 
-These approaches can be used independently or combined, depending on your requirements.
+These approaches can be used independently or combined, depending on your 
+requirements.
 
 ## Getting Started
 
-`/core/sharding-start-with-sharding` Learn the benefits of starting with a single shard when building your application.
+:doc:`/core/sharding-start-with-sharding`
+   Learn the benefits of starting with a single shard when building your 
+   application.
 
-`/core/sharding-manage-unsharded-collections` Learn about isolating collections on dedicated shards.
+:doc:`/core/sharding-manage-unsharded-collections`
+   Learn about isolating collections on dedicated shards.
 
-`/core/sharding-distribute-collection-data` Learn about sharding a collection.
+:doc:`/core/sharding-distribute-collection-data`
+   Learn about sharding a collection.
 
-`/core/sharding-consolidate-collection-data` Learn about unsharding a collection.
+:doc:`/core/sharding-consolidate-collection-data`
+   Learn about unsharding a collection.
 
-## Contents
+**toctree:** :titlesonly: 
+   :hidden: 
 
-- Start with Sharded Clusters </core/sharding-start-with-sharding>
-- Manage Unsharded Collections </core/sharding-manage-unsharded-collections>
-- Distribute Collection Data </core/sharding-distribute-collection-data>
-- Consolidate Collection Data </core/sharding-consolidate-collection-data>
+   Start with Sharded Clusters </core/sharding-start-with-sharding>
+   Manage Unsharded Collections </core/sharding-manage-unsharded-collections>
+   Distribute Collection Data </core/sharding-distribute-collection-data>
+   Consolidate Collection Data </core/sharding-consolidate-collection-data>

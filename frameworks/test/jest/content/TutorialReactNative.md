@@ -1,14 +1,15 @@
 ---
 type: "Framework Learn Page"
-framework: "jest"
+framework: "Jest"
 source_repo: "https://github.com/jestjs/jest"
 source_branch: "main"
 source_path: "docs/TutorialReactNative.md"
-source_commit: "1865dd8659f5131715c780fa92f40623fce2f9c9"
-source_commit_short: "1865dd86"
-source_commit_date: "2026-06-21T13:50:36+02:00"
-generated_at: "2026-06-21T11:51:37Z"
+source_commit: "be425a0b0e3bd60a74e4a7e350aa38c63a2d25ef"
+source_commit_short: "be425a0"
+source_commit_date: "2026-08-28T13:51:49+02:00"
+generated_at: "2026-08-29T09:40:10.454747Z"
 ---
+# Tutorialreactnative
 
 ---
 id: tutorial-react-native
@@ -37,6 +38,12 @@ Run `yarn test` to run tests with Jest.
 :::tip
 
 If you are upgrading your react-native application and previously used the `jest-react-native` or `react-native` preset, remove the dependency from your `package.json` file and change the preset to `react-native` in `jest.config.js` instead.
+
+:::
+
+:::note
+
+Recent versions of React Native moved the preset into its own package, `@react-native/jest-preset`. If your `jest.config.js` still points to `preset: 'react-native'` and Jest fails to resolve it, install `@react-native/jest-preset` and change the preset to `@react-native/jest-preset` instead.
 
 :::
 
@@ -83,16 +90,20 @@ const styles = StyleSheet.create({
 export default Intro;
 ```
 
-Now let's use React's test renderer and Jest's snapshot feature to interact with the component and capture the rendered output and create a snapshot file:
+Now let's use [`@testing-library/react-native`](https://callstack.github.io/react-native-testing-library/) and Jest's snapshot feature to render the component and capture the rendered output as a snapshot file. `@testing-library/react-native` replaces the now-[deprecated](https://react.dev/warnings/react-test-renderer) `react-test-renderer`, and needs `test-renderer` installed alongside it as a peer dependency:
+
+```bash
+yarn add --dev @testing-library/react-native test-renderer
+```
 
 ```tsx title="__tests__/Intro-test.js"
+import {render, screen} from '@testing-library/react-native';
 import React from 'react';
-import renderer from 'react-test-renderer';
 import Intro from '../Intro';
 
-test('renders correctly', () => {
-  const tree = renderer.create(<Intro />).toJSON();
-  expect(tree).toMatchSnapshot();
+test('renders correctly', async () => {
+  await render(<Intro />);
+  expect(screen.toJSON()).toMatchSnapshot();
 });
 ```
 
@@ -143,7 +154,7 @@ The preset sets up the environment and is very opinionated and based on what we 
 
 ### Environment
 
-`react-native` ships with a Jest preset, so the `preset` field of your `jest.config.js` should point to `react-native`. The preset is a node environment that mimics the environment of a React Native app. Because it doesn't load any DOM or browser APIs, it greatly improves Jest's startup time.
+`react-native` ships with a Jest preset, so the `preset` field of your `jest.config.js` should point to `react-native` (or, on recent React Native versions, to the separate `@react-native/jest-preset` package). The preset is a node environment that mimics the environment of a React Native app. Because it doesn't load any DOM or browser APIs, it greatly improves Jest's startup time.
 
 ### transformIgnorePatterns customization
 

@@ -1,14 +1,15 @@
 ---
 type: "Framework Learn Page"
-framework: "pydantic"
+framework: "Pydantic"
 source_repo: "https://github.com/pydantic/pydantic"
 source_branch: "main"
 source_path: "docs/examples/files.md"
-source_commit: "a2a6577d4c329dd574a45dbb01a8feaa16b1ad3d"
-source_commit_short: "a2a6577d"
-source_commit_date: "2026-07-23T15:38:17Z"
-generated_at: "2026-07-25T11:50:12Z"
+source_commit: "4bc21c0fa28323c0f3e0be93c9ad114b705029c6"
+source_commit_short: "4bc21c0"
+source_commit_date: "2026-08-29T11:30:40+02:00"
+generated_at: "2026-08-29T09:38:50.586243Z"
 ---
+# Files
 
 `pydantic` is a great tool for validating data coming from various sources.
 In this section, we will look at how to validate data from different types of files.
@@ -143,11 +144,10 @@ print(people)
 1. We use [`TypeAdapter`][pydantic.type_adapter.TypeAdapter] to validate a list of `Person` objects.
 [`TypeAdapter`][pydantic.type_adapter.TypeAdapter] is a Pydantic construct used to validate data against a single type.
 
-!!! tip "Logfire integration"
-    With two records, spotting a bad one is easy. In a pipeline processing files with thousands of records,
-    the error's `loc` gives you the index of the failing one, and if the pipeline runs unattended,
-    [Logfire](../errors/troubleshooting.md) records each failed validation with its input, so you can find
-    the offending record after the run.
+With two records, spotting a bad one is easy. In a pipeline processing files with thousands of records,
+the error's `loc` gives you the index of the failing one, and if the pipeline runs unattended,
+[Logfire](../errors/troubleshooting.md) records failed validations with their field locations and
+rejected values, so you can find the offending record after the run.
 
 ## JSON lines files
 

@@ -1,14 +1,15 @@
 ---
 type: "Framework Learn Page"
-framework: "redis"
+framework: "Redis"
 source_repo: "https://github.com/redis/docs.git"
 source_branch: "main"
 source_path: "content/operate/kubernetes/re-databases/enrich-metrics-with-tags.md"
-source_commit: "9d30f68c3dad1a6b3b7d30fe604b911348ce8152"
-source_commit_short: "9d30f68c"
-source_commit_date: "2026-07-24T10:52:10-07:00"
-generated_at: "2026-07-25T11:51:22Z"
+source_commit: "f8693349287b0efbef3c865b6f6a2aceca88594d"
+source_commit_short: "f869334"
+source_commit_date: "2026-08-28T10:01:19-05:00"
+generated_at: "2026-08-29T09:38:55.125331Z"
 ---
+# Enrich Metrics With Tags
 
 ---
 Title: Enrich database metrics with tags
@@ -86,15 +87,6 @@ Tag key allowlist entries (`metricsTagKeysExposed`) must follow these rules:
 - Duplicate keys are rejected. The operator rejects the resource if the same key appears more than once, ignoring case.
 - A maximum of 50 keys is allowed.
 
-<!-- REVIEWER QUESTION: are these allowlist key rules correct for 8.2.0? The "lowercased" and "may contain
-     spaces, -, ., +, @, :" bullets above come from the v8.2.0-8 CRD field comment, but the metrics discussion
-     indicates the cluster tightened validation to the Prometheus label regex [a-zA-Z_][a-zA-Z0-9_]* (no
-     hyphens/spaces/dots, and lowercasing removed, so mixed case is allowed). If the regex form is right, these two
-     bullets need rewriting.
-
-     REVIEWER QUESTION: for keySizeBuckets / keyItemsBuckets, what are the valid units/suffixes (does "128M" mean
-     megabytes and "1M" mean one million items?) and must the boundaries be in ascending order? -->
-
 ## Tag a database
 
 Set tags on a Redis Enterprise database (REDB) with `spec.tags`, a set of key-value pairs:
@@ -149,16 +141,6 @@ When you upgrade to a release with this feature, `status.managedTags` starts emp
 {{< /note >}}
 
 ## View tagged metrics in Prometheus
-
-<!-- REVIEWER QUESTIONS for this section (needed before it can be written):
-
-     Endpoint: are exposed tags (and the key-distribution histogram metrics) available on the /v2 metrics endpoint
-     only, or also on the legacy v1 / port-8070 stream? The discussion points to /v2. If it's /v2-only, the
-     connect-prometheus-operator cross-link below is the v1 path and is wrong for this feature.
-
-     Label model: confirm that exposed tags appear on a single db_tags metric queried via PromQL joins, not as a
-     label on every DB metric. Please provide the exact db_tags metric name, its label set, and a canonical PromQL
-     join example. Label names must match the Prometheus regex [a-zA-Z_][a-zA-Z0-9_]*. -->
 
 For instructions on connecting Prometheus to Redis Enterprise for Kubernetes, see [Export metrics to Prometheus]({{< relref "/operate/kubernetes/re-clusters/connect-prometheus-operator" >}}).
 

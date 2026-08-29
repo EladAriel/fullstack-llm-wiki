@@ -1,51 +1,91 @@
 ---
 type: "Framework Learn Page"
-framework: "mongodb"
+framework: "MongoDB"
 source_repo: "https://github.com/mongodb/docs.git"
 source_branch: "main"
 source_path: "content/manual/manual/source/reference/command/mergeAllChunksOnShard.txt"
-source_commit: "ab9db26ed3d11618cdb61516d8180337d8e3f679"
-source_commit_short: "ab9db26e"
-source_commit_date: "2026-07-24T16:22:46-06:00"
-generated_at: "2026-07-25T11:51:15Z"
+source_commit: "b9f2bc487a2878b65e3c1f80024bebab76954f27"
+source_commit_short: "b9f2bc48"
+source_commit_date: "2026-08-28T17:09:45-05:00"
+generated_at: "2026-08-29T09:39:20.083081Z"
 ---
-
-========================================
-
 # mergeAllChunksOnShard (database command)
+
+**meta:** :description: Execute the `mergeAllChunksOnShard` command to merge all mergeable chunks on a specified shard for a given collection in MongoDB.
+
+.. default-domain:: mongodb
+
+**contents:** On this page
+   :local:
+   :backlinks: none
+   :depth: 1
+   :class: singlecol
 
 ## Definition
 
+**dbcommand:** mergeAllChunksOnShard
+
+   ``mergeAllChunksOnShard`` finds and merges all :ref:`mergeable 
+   chunks <mergeability>` that a shard owns for a given collection.
+
 ## Compatibility
 
-This command is available in deployments hosted in the following environments:
+This command is available in deployments hosted in the following environments: 
 
-.. include:: /includes/fact-environments-atlas-only.rst
+**include:** /includes/fact-environments-atlas-only.rst
 
-.. include:: /includes/fact-environments-onprem-only.rst
+**include:** /includes/fact-environments-onprem-only.rst
 
 ## Syntax
 
 The command has the following syntax:
 
-```javascript
-db.adminCommand( 
-  { 
-    mergeAllChunksOnShard: <name of the collection>,
-    shard: <name of the shard>,
-    maxNumberOfChunksToMerge: <maximum number of chunks to merge> /* optional */
-  } 
-)
-```
+.. code-block:: javascript
+
+   db.adminCommand( 
+     { 
+       mergeAllChunksOnShard: <name of the collection>,
+       shard: <name of the shard>,
+       maxNumberOfChunksToMerge: <maximum number of chunks to merge> /* optional */
+     } 
+   )
 
 ## Command Fields
 
 The command takes the following fields:
 
+.. list-table::
+   :header-rows: 1
+   :widths: 20 20 30 30
+
+   * - Field
+     - Type
+     - Necessity
+     - Description
+ 
+   * - ``mergeAllChunksOnShard``
+     - string
+     - Required
+     - Name of the collection. 
+  
+   * - ``shard``
+     - string
+     - Required
+     - Name of the shard.
+
+   * - ``maxNumberOfChunksToMerge``
+     - integer
+     - Optional
+     - Maximum number of chunks to merge.
+
 ## Behavior
 
-.. include:: /includes/mergeability.rst
+.. _mergeability:
+
+**include:** /includes/mergeability.rst
 
 ## Example
 
-.. include:: /includes/mergeAllChunksOnShard-example.rst
+**include:** /includes/mergeAllChunksOnShard-example.rst
+
+.. admin-only

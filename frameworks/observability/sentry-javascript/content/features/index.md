@@ -1,7 +1,7 @@
 ---
 type: "Framework Learn Directory Index"
 framework: "Sentry JavaScript (React)"
-generated_at: "2026-07-25T19:08:17.701610Z"
+generated_at: "2026-08-29T09:40:04.523501Z"
 ---
 # Features
 
@@ -22,3 +22,7 @@ This directory contains Sentry JavaScript (React) learning pages related to feat
 - [Error Boundary](error-boundary.md)
 - [Redux](redux.md)
 - [Tanstack Router](tanstack-router.md)
+
+## Subdirectories
+
+- [React Router](react-router/index.md)

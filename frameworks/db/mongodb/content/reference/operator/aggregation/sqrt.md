@@ -1,64 +1,104 @@
 ---
 type: "Framework Learn Page"
-framework: "mongodb"
+framework: "MongoDB"
 source_repo: "https://github.com/mongodb/docs.git"
 source_branch: "main"
 source_path: "content/manual/manual/source/reference/operator/aggregation/sqrt.txt"
-source_commit: "ab9db26ed3d11618cdb61516d8180337d8e3f679"
-source_commit_short: "ab9db26e"
-source_commit_date: "2026-07-24T16:22:46-06:00"
-generated_at: "2026-07-25T11:51:15Z"
+source_commit: "b9f2bc487a2878b65e3c1f80024bebab76954f27"
+source_commit_short: "b9f2bc48"
+source_commit_date: "2026-08-28T17:09:45-05:00"
+generated_at: "2026-08-29T09:39:20.234946Z"
 ---
-
-===========================
-
 # $sqrt (expression operator)
+
+**meta:** :description: Calculate the square root of a positive number using the `$sqrt` operator in MongoDB aggregation, returning results as a double or decimal.
+
+.. default-domain:: mongodb
+
+**contents:** On this page
+   :local:
+   :backlinks: none
+   :depth: 1
+   :class: singlecol
 
 ## Definition
 
+**expression:** $sqrt
+
+   Calculates the square root of a positive number and returns the
+   result as a double.
+
+   :expression:`$sqrt` has the following syntax:
+
+   .. code-block:: javascript
+
+      { $sqrt: <number> }
+
+   The argument can be any valid :ref:`expression
+   <aggregation-expressions>` as long as it resolves to a *non-negative*
+   number. For more information
+   on expressions, see :ref:`aggregation-expressions`.
+
 ## Behavior
 
-.. include:: /includes/agg-expression-double-unless-decimal-behavior.rst
+**include:** /includes/agg-expression-double-unless-decimal-behavior.rst
 
-.. include:: /includes/extracts/agg-expression-null-operand-sqrt.rst
+**include:** /includes/extracts/agg-expression-null-operand-sqrt.rst
 
 :expression:`$sqrt` errors on negative numbers.
 
+.. list-table::
+   :header-rows: 1
+   :widths: 85 15
+
+   * - Example
+     - Results
+
+   * - ``{ $sqrt: 25 }``
+     - ``5``
+
+   * - ``{ $sqrt: 30 }``
+     - ``5.477225575051661``
+
+   * - ``{ $sqrt: null }``
+     - ``null``
+
 ## Example
 
-A collection `points` contains the following documents:
+A collection ``points`` contains the following documents:
 
-```javascript
-db.points.insertMany( [ 
-   { _id: 1, p1: { x: 5, y: 8 }, p2: { x: 0, y: 5} },
-   { _id: 2, p1: { x: -2, y: 1 }, p2: { x: 1, y: 5} },
-   { _id: 3, p1: { x: 4, y: 4 }, p2: { x: 4, y: 0} }
-] )
-```
+.. code-block:: javascript
 
-The following example uses :expression:`$sqrt` to calculate the distance between `p1` and `p2`:
+   db.points.insertMany( [ 
+      { _id: 1, p1: { x: 5, y: 8 }, p2: { x: 0, y: 5} },
+      { _id: 2, p1: { x: -2, y: 1 }, p2: { x: 1, y: 5} },
+      { _id: 3, p1: { x: 4, y: 4 }, p2: { x: 4, y: 0} }
+   ] )
 
-```javascript
-db.points.aggregate([
-   {
-     $project: {
-        distance: {
-           $sqrt: { 
-               $add: [
-                  { $pow: [ { $subtract: [ "$p2.y", "$p1.y" ] }, 2 ] },
-                  { $pow: [ { $subtract: [ "$p2.x", "$p1.x" ] }, 2 ] }
-               ]
+The following example uses :expression:`$sqrt` to calculate the
+distance between ``p1`` and ``p2``:
+
+.. code-block:: javascript
+
+   db.points.aggregate([
+      {
+        $project: {
+           distance: {
+              $sqrt: { 
+                  $add: [
+                     { $pow: [ { $subtract: [ "$p2.y", "$p1.y" ] }, 2 ] },
+                     { $pow: [ { $subtract: [ "$p2.x", "$p1.x" ] }, 2 ] }
+                  ]
+              }
            }
         }
-     }
-   }
-])
-```
+      }
+   ])
 
 The operation returns the following results:
 
-```javascript
-{ _id: 1, distance: 5.830951894845301 }
-{ _id: 2, distance: 5 }
-{ _id: 3, distance: 4 }
-```
+.. code-block:: javascript
+
+   { _id: 1, distance: 5.830951894845301 }
+   { _id: 2, distance: 5 }
+   { _id: 3, distance: 4 }

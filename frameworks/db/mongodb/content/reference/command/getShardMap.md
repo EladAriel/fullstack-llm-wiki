@@ -1,45 +1,87 @@
 ---
 type: "Framework Learn Page"
-framework: "mongodb"
+framework: "MongoDB"
 source_repo: "https://github.com/mongodb/docs.git"
 source_branch: "main"
 source_path: "content/manual/manual/source/reference/command/getShardMap.txt"
-source_commit: "ab9db26ed3d11618cdb61516d8180337d8e3f679"
-source_commit_short: "ab9db26e"
-source_commit_date: "2026-07-24T16:22:46-06:00"
-generated_at: "2026-07-25T11:51:15Z"
+source_commit: "b9f2bc487a2878b65e3c1f80024bebab76954f27"
+source_commit_short: "b9f2bc48"
+source_commit_date: "2026-08-28T17:09:45-05:00"
+generated_at: "2026-08-29T09:39:20.012480Z"
 ---
-
-==============================
-
 # getShardMap (database command)
+
+**meta:** :description: Retrieve shard and config server details of your MongoDB cluster using the `getShardMap` command, including hostnames and connection strings.
+
+.. default-domain:: mongodb
+
+**contents:** On this page
+   :local:
+   :backlinks: none
+   :depth: 1
+   :class: singlecol
+
+**dbcommand:** getShardMap
+
+   :dbcommand:`getShardMap` returns the following information about
+   your cluster:
+   
+   - The names of your shards and the config server replica set
+   - Hostnames and connection strings for the nodes that comprise the
+     cluster's shards and the config server replica set
+
+   You must use the admin database to run :dbcommand:`getShardMap`.
 
 ## Compatibility
 
-This command is available in deployments hosted in the following environments:
+This command is available in deployments hosted in the following environments: 
 
-.. include:: /includes/fact-environments-atlas-only.rst
+**include:** /includes/fact-environments-atlas-only.rst
 
-.. include:: /includes/fact-environments-atlas-support-no-free.rst
+**include:** /includes/fact-environments-atlas-support-no-free.rst
 
-.. include:: /includes/fact-environments-onprem-only.rst
+**include:** /includes/fact-environments-onprem-only.rst
 
 ## Syntax
 
 The command has the following syntax:
 
-```javascript
-db.runCommand("getShardMap")
-```
+.. code-block:: javascript
+
+   db.runCommand("getShardMap")
 
 ### Output Document
 
 Here's an example of the output the command returns:
 
-.. include:: /includes/getShardMap-example-output.rst
+**include:** /includes/getShardMap-example-output.rst
 
 The command returns the following fields:
 
+.. list-table::
+   :header-rows: 1
+   :widths: 20 80
+
+   * - Field
+     - Description
+
+   * - ``"map"``
+
+     - List of shards in the cluster, the config server for the
+       cluster, and the hostname and port for every node in the cluster.
+   
+   * - ``"hosts"``
+
+     - List of hostnames and ports for the nodes of the cluster and the
+       shards or config server to which they map.
+
+   * - ``"connStrings"``
+
+     - List of connection strings for the nodes grouped by the shard or
+       config server the node belongs to.
+
 ## Learn More
 
-For more sharding commands, see `db-commands-sharding`.
+For more sharding commands, see :ref:`db-commands-sharding`.
+
+.. slave-ok, admin-only

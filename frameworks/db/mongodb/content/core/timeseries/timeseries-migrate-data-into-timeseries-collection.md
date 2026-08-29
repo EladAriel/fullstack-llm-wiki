@@ -1,35 +1,56 @@
 ---
 type: "Framework Learn Page"
-framework: "mongodb"
+framework: "MongoDB"
 source_repo: "https://github.com/mongodb/docs.git"
 source_branch: "main"
 source_path: "content/manual/manual/source/core/timeseries/timeseries-migrate-data-into-timeseries-collection.txt"
-source_commit: "ab9db26ed3d11618cdb61516d8180337d8e3f679"
-source_commit_short: "ab9db26e"
-source_commit_date: "2026-07-24T16:22:46-06:00"
-generated_at: "2026-07-25T11:51:15Z"
+source_commit: "b9f2bc487a2878b65e3c1f80024bebab76954f27"
+source_commit_short: "b9f2bc48"
+source_commit_date: "2026-08-28T17:09:45-05:00"
+generated_at: "2026-08-29T09:39:19.795770Z"
 ---
-
-==========================================
+.. _migrate-data-into-a-timeseries-collection:
 
 # Migrate Data into a Time Series Collection
 
-If your collection stores data that you want to compare across time intervals, use a time series collection to improve performance and storage. For more information on the benefits of time series collections, see `manual-timeseries-collection`.
+.. default-domain:: mongodb
 
-You can use the following methods to migrate data from an existing collection into a `time series collection <manual-timeseries-collection>`:
+**contents:** On this page
+   :local:
+   :backlinks: none
+   :depth: 2
+   :class: singlecol
 
-- `Migrate with an Aggregation Pipeline <migrate-data-into-a-timeseries-collection-with-aggregation>`
-- `Migrate with Database Tools <migrate-data-into-a-timeseries-collection-with-tools>`
-- [Migrate with Relational Migrator](https://www.mongodb.com/docs/relational-migrator/mapping-rules/mapping-rule-options/time-series/)_
+**meta:** :keywords: IOT
+   :description: Migrate data into a time series collection using aggregation pipelines, database tools, or relational migrator for improved performance and storage.
+
+If your collection stores data that you want to compare across time intervals,
+use a time series collection to improve performance and storage. For more
+information on the benefits of time series collections, see
+:ref:`manual-timeseries-collection`. 
+
+You can use the following methods to
+migrate data from an existing collection into a :ref:`time series collection
+<manual-timeseries-collection>`:
+
+- :ref:`Migrate with an Aggregation Pipeline <migrate-data-into-a-timeseries-collection-with-aggregation>`
+- :ref:`Migrate with Database Tools <migrate-data-into-a-timeseries-collection-with-tools>`
+- `Migrate with Relational Migrator <https://www.mongodb.com/docs/relational-migrator/mapping-rules/mapping-rule-options/time-series/>`__
+
 ## Considerations
 
-If you use MongoDB 7.0 or greater and already have your data in a MongoDB database, migrate with an `aggregation pipeline <migrate-data-into-a-timeseries-collection-with-aggregation>`.
+If you use MongoDB 7.0 or greater and already have your data in a MongoDB
+database, migrate with an :ref:`aggregation pipeline
+<migrate-data-into-a-timeseries-collection-with-aggregation>`. 
 
-If your data is in a relational database, use [Relational Migrator](https://www.mongodb.com/docs/relational-migrator/mapping-rules/mapping-rule-options/time-series/)_ to migrate your data into a time series collection.
+If your data is in a relational database, use `Relational Migrator
+<https://www.mongodb.com/docs/relational-migrator/mapping-rules/mapping-rule-options/time-series/>`__
+to migrate your data into a time series collection. 
 
-If your deployment is not in one of those cases, use `Database Tools <migrate-data-into-a-timeseries-collection-with-tools>` to migrate your data.
+If your deployment is not in one of those cases, use :ref:`Database Tools
+<migrate-data-into-a-timeseries-collection-with-tools>` to migrate your data. 
 
-## Contents
+**toctree:** :titlesonly:
 
-- Use Aggregation </core/timeseries/timeseries-migrate-with-aggregation>
-- Use Tools </core/timeseries/timeseries-migrate-with-tools>
+   Use Aggregation </core/timeseries/timeseries-migrate-with-aggregation>
+   Use Tools </core/timeseries/timeseries-migrate-with-tools>

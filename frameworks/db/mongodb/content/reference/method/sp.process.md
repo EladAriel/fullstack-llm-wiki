@@ -1,121 +1,154 @@
 ---
 type: "Framework Learn Page"
-framework: "mongodb"
+framework: "MongoDB"
 source_repo: "https://github.com/mongodb/docs.git"
 source_branch: "main"
 source_path: "content/manual/manual/source/reference/method/sp.process.txt"
-source_commit: "ab9db26ed3d11618cdb61516d8180337d8e3f679"
-source_commit_short: "ab9db26e"
-source_commit_date: "2026-07-24T16:22:46-06:00"
-generated_at: "2026-07-25T11:51:15Z"
+source_commit: "b9f2bc487a2878b65e3c1f80024bebab76954f27"
+source_commit_short: "b9f2bc48"
+source_commit_date: "2026-08-28T17:09:45-05:00"
+generated_at: "2026-08-29T09:39:19.937953Z"
 ---
-
-=============================
-
 # sp.process() (mongosh method)
+
+**meta:** :description: Create an ephemeral Stream Processor using `sp.process()` on Atlas Stream Processing Workspaces with customizable pipeline and options.
+
+.. default-domain:: mongodb
+
+**contents:** On this page
+   :local:
+   :backlinks: none
+   :depth: 2
+   :class: singlecol
 
 ## Definition
 
-.. versionadded:: 7.0
+**method:** sp.process()
+
+Creates an ephemeral :ref:`Stream Processor <atlas-sp>` on the
+current {+spw+}.
 
 ## Compatibility
 
-.. include:: /includes/fact-environments-atlas-support-stream-processing-only.rst
+**include:** /includes/fact-environments-atlas-support-stream-processing-only.rst
 
 ## Syntax
 
-The :method:`sp.process()` method has the following syntax:
+The :method:`sp.process()` method has the following
+syntax:
 
-```json
-sp.process(
-  [
-    <pipeline>
-  ],
-  {
-    <options>
-  }
-)
-```
+.. code-block:: json
+
+   sp.process(
+     [
+       <pipeline>
+     ],
+     {
+       <options>
+     }
+   )
 
 ## Command Fields
 
-`sp.createStreamProcessor()` takes these fields:
+``sp.process()`` takes these fields:
+
+**include:** /includes/fact-sp-process-fields.rst
 
 ## Behavior
 
-`sp.process()` creates an ephemeral, unnamed stream processor on the current stream processing workspace and immediately initializes it. This stream processor only persists as long as it runs. If you terminate an ephemeral stream processor, you must create it again in order to use it.
+``sp.process()`` creates an ephemeral, unnamed stream
+processor on the current stream processing workspace and immediately
+initializes it. This stream processor persists only while it
+runs. If you terminate an ephemeral stream processor, you must create
+it again to use it.
+
+An ephemeral stream processor stops when any of the following occurs:
+
+- The processor returns the number of documents set by
+  ``options.limit``.
+- 10 minutes elapse.
+- You stop the processor.
 
 ## Access Control
 
-The user running `sp.process()` must have the :atlasrole:`atlasAdmin` role.
+The user running ``sp.process()`` must have the
+:atlasrole:`atlasAdmin` role.
 
 ## Example
 
-The following example creates an ephemeral stream processor which ingests data from the `sample_stream_solar` connection. The processor excludes all documents where the value of the `device_id` field is `device_8`, passing the rest to a :atlas:`tumbling window </atlas-sp/overview/#tumbling-windows>` with a 10-second duration. Each window groups the documents it receives, then returns various useful statistics of each group. The stream processor then merges these records to `solar_db.solar_coll` over the `mongodb1` connection.
+The following example creates an ephemeral stream processor that
+ingests data from the ``sample_stream_solar`` connection. The
+processor excludes all documents where the value of the ``device_id``
+field is ``device_8``, passing the rest to a :ref:`tumbling window
+<tumbling-windows>` with a 10-second duration. Each window groups the
+documents it receives, then returns various statistics of each group.
+The stream processor then merges these records to
+``solar_db.solar_coll`` over the ``mongodb1`` connection.
 
-```json
-sp.process(
-  [
-    {
-      $source: {
-connectionName: 'sample_stream_solar',
-timeField: {
-$dateFromString: {
-dateString: '$timestamp'
-}
-}
-}
-    },
-    {
-      $match: {
-$expr: {
-$ne: [
-"$device_id",
-"device_8"
-]
-}
-}
-    },
-    {
-      $tumblingWindow: {
-interval: {
-size: Int32(10),
-unit: "second"
-},
-"pipeline": [
-{
-$group: {
-"_id": {  "device_id": "$device_id" },
-"max_temp": { $max: "$obs.temp" },
-"max_watts": { $max: "$obs.watts" },
-"min_watts": { $min: "$obs.watts" },
-"avg_watts": { $avg: "$obs.watts" },
-"median_watts": {
-$median: {
-input: "$obs.watts",
-method: "approximate"
-}
-}
-}
-}
-]
-}
-    },
-    {
-      $merge: {
-into: {
-connectionName: "mongodb1",
-db: "solar_db",
-coll: "solar_coll"
-},
-on: ["_id"]
-}
-    }
-  ]
-)
-```
+.. code-block:: json
+   :copyable: true
+
+   sp.process(
+     [
+       {
+         $source: {
+           connectionName: 'sample_stream_solar',
+           timeField: {
+             $dateFromString: {
+               dateString: '$timestamp'
+             }
+           }
+         }
+       },
+       {
+         $match: {
+           $expr: {
+             $ne: [
+               "$device_id",
+               "device_8"
+             ]
+           }
+         }
+       },
+       {
+         $tumblingWindow: {
+           interval: {
+             size: Int32(10),
+             unit: "second"
+           },
+           "pipeline": [
+             {
+               $group: {
+                 "_id": { "device_id": "$device_id" },
+                 "max_temp": { $max: "$obs.temp" },
+                 "max_watts": { $max: "$obs.watts" },
+                 "min_watts": { $min: "$obs.watts" },
+                 "avg_watts": { $avg: "$obs.watts" },
+                 "median_watts": {
+                   $median: {
+                     input: "$obs.watts",
+                     method: "approximate"
+                   }
+                 }
+               }
+             }
+           ]
+         }
+       },
+       {
+         $merge: {
+           into: {
+             connectionName: "mongodb1",
+             db: "solar_db",
+             coll: "solar_coll"
+           },
+           on: ["_id"]
+         }
+       }
+     ]
+   )
 
 ## Learn More
 
-- :atlas:`Stream Aggregation </atlas-sp/stream-aggregation>`
-- :atlas:`Manage Stream Processors </atlas-sp/manage-stream-processor>`
+- :ref:`atlas-sp-aggregation`
+- :ref:`atlas-sp-manage-processor`

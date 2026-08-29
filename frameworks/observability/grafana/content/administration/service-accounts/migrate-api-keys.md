@@ -4,10 +4,10 @@ framework: "Grafana"
 source_repo: "https://github.com/grafana/grafana.git"
 source_branch: "main"
 source_path: "docs/sources/administration/service-accounts/migrate-api-keys.md"
-source_commit: "d18e58d33aa8741f08fbab4aa73bdaf1f04e3be5"
-source_commit_short: "d18e58d3"
-source_commit_date: "2026-07-25T13:50:43+02:00"
-generated_at: "2026-07-25T19:08:09.038279Z"
+source_commit: "5e3a02f81d2aadf4bf24fe49ed97d872556f5bf9"
+source_commit_short: "5e3a02f8"
+source_commit_date: "2026-08-29T10:58:19+09:00"
+generated_at: "2026-08-29T09:39:37.484911Z"
 ---
 ---
 aliases:
@@ -131,7 +131,7 @@ Your current setup
 curl -X POST -H "Content-Type: application/json" -d '{"name": "my-api-key", "role": "Viewer"}' http://admin:admin@localhost:3000/api/auth/keys
 
 # response from the api
-{"id":2,"name":"my-api-key","key":"REDACTED_GRAFANA_API_KEY"}%
+{"id":2,"name":"my-api-key","key":"eyJrIjoiTFRSN1RBOVc3SGhjblc0bWZodXZ3MnNDcU92Um5VZUIiLKJuIjoibXktYXBpLWtleSIsImlkIjoxfQ=="}%
 ```
 
 New setup
@@ -147,10 +147,10 @@ curl -X POST -H "Content-Type: application/json" -d '{"name": "my-service-accoun
 curl -X POST -H "Content-Type: application/json" -d '{"name": "my-service-account-token"}' http://admin:admin@localhost:3000/api/serviceaccounts/1/tokens
 
 # response with the created SAT id,name and key.
-{"id":2,"name":"my-service-account-token","key":"glsa_REDACTED_SERVICE_ACCOUNT_TOKEN"}%
+{"id":2,"name":"my-service-account-token","key":"glsa_iNValIdinValiDinvalidinvalidinva_5b582697"}%
 
 # now you can authenticate the same way as you did with the API key
-curl --request GET --url http://localhost:3000/api/folders --header 'Authorization: Bearer glsa_REDACTED_SERVICE_ACCOUNT_TOKEN'
+curl --request GET --url http://localhost:3000/api/folders --header 'Authorization: Bearer glsa_iNValIdinValiDinvalidinvalidinva_5b582697'
 
 # response
 [{"id":1,"uid":"a5261a84-eebc-4733-83a9-61f4713561d1","title":"gdev dashboards"}]%

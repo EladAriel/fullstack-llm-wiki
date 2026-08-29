@@ -1,67 +1,186 @@
 ---
 type: "Framework Learn Page"
-framework: "sqlalchemy"
+framework: "SQLAlchemy"
 source_repo: "https://github.com/sqlalchemy/sqlalchemy"
 source_branch: "main"
 source_path: "doc/build/dialects/mssql.rst"
-source_commit: "aa1a5575358d3aa14953b04dced02f4763fed2e7"
-source_commit_short: "aa1a5575"
-source_commit_date: "2026-07-23T18:02:59Z"
-generated_at: "2026-07-25T11:50:45Z"
+source_commit: "85cafd1a131fa8afeeeab23151940480b3fb0042"
+source_commit_short: "85cafd1"
+source_commit_date: "2026-08-28T20:17:49+00:00"
+generated_at: "2026-08-29T09:39:27.547469Z"
 ---
+.. _mssql_toplevel:
 
 # Microsoft SQL Server
 
+**automodule:** sqlalchemy.dialects.mssql.base
+
 ## SQL Server SQL Constructs
+
+**currentmodule:** sqlalchemy.dialects.mssql
+
+**autofunction:** try_cast
 
 ## SQL Server Data Types
 
-As with all SQLAlchemy dialects, all UPPERCASE types that are known to be valid with SQL server are importable from the top level dialect, whether they originate from `sqlalchemy.types` or from the local dialect:
+As with all SQLAlchemy dialects, all UPPERCASE types that are known to be
+valid with SQL server are importable from the top level dialect, whether
+they originate from :mod:`sqlalchemy.types` or from the local dialect::
 
-```
-from sqlalchemy.dialects.mssql import (
-    BIGINT,
-    BINARY,
-    BIT,
-    CHAR,
-    DATE,
-    DATETIME,
-    DATETIME2,
-    DATETIMEOFFSET,
-    DECIMAL,
-    DOUBLE_PRECISION,
-    FLOAT,
-    IMAGE,
-    INTEGER,
-    JSON,
-    MONEY,
-    NCHAR,
-    NTEXT,
-    NUMERIC,
-    NVARCHAR,
-    REAL,
-    SMALLDATETIME,
-    SMALLINT,
-    SMALLMONEY,
-    SQL_VARIANT,
-    TEXT,
-    TIME,
-    TIMESTAMP,
-    TINYINT,
-    UNIQUEIDENTIFIER,
-    VARBINARY,
-    VARCHAR,
-)
-```
+    from sqlalchemy.dialects.mssql import (
+        BIGINT,
+        BINARY,
+        BIT,
+        CHAR,
+        DATE,
+        DATETIME,
+        DATETIME2,
+        DATETIMEOFFSET,
+        DECIMAL,
+        DOUBLE_PRECISION,
+        FLOAT,
+        IMAGE,
+        INTEGER,
+        JSON,
+        MONEY,
+        NCHAR,
+        NTEXT,
+        NUMERIC,
+        NVARCHAR,
+        REAL,
+        SMALLDATETIME,
+        SMALLINT,
+        SMALLMONEY,
+        SQL_VARIANT,
+        TEXT,
+        TIME,
+        TIMESTAMP,
+        TINYINT,
+        UNIQUEIDENTIFIER,
+        VARBINARY,
+        VARCHAR,
+    )
 
-Types which are specific to SQL Server, or have SQL Server-specific construction arguments, are as follows:
+Types which are specific to SQL Server, or have SQL Server-specific
+construction arguments, are as follows:
 
-in the dialect module, just imported from sqltypes.  this avoids warnings in the sphinx build
+.. note: where :noindex: is used, indicates a type that is not redefined
+   in the dialect module, just imported from sqltypes.  this avoids warnings
+   in the sphinx build
+
+**currentmodule:** sqlalchemy.dialects.mssql
+
+**autoclass:** BIT
+   :members: __init__
+
+
+**autoclass:** CHAR
+   :members: __init__
+   :noindex:
+
+
+**autoclass:** DATETIME2
+   :members: __init__
+
+
+**autoclass:** DATETIMEOFFSET
+   :members: __init__
+
+**autoclass:** DOUBLE_PRECISION
+   :members: __init__
+
+**autoclass:** IMAGE
+   :members: __init__
+
+
+**autoclass:** JSON
+   :members: __init__
+
+
+**autoclass:** MONEY
+   :members: __init__
+
+
+**autoclass:** NCHAR
+   :members: __init__
+   :noindex:
+
+
+**autoclass:** NTEXT
+   :members: __init__
+
+
+**autoclass:** NVARCHAR
+   :members: __init__
+   :noindex:
+
+**autoclass:** REAL
+   :members: __init__
+
+**autoclass:** ROWVERSION
+   :members: __init__
+
+**autoclass:** SMALLDATETIME
+   :members: __init__
+
+
+**autoclass:** SMALLMONEY
+   :members: __init__
+
+
+**autoclass:** SQL_VARIANT
+   :members: __init__
+
+
+**autoclass:** TEXT
+   :members: __init__
+   :noindex:
+
+**autoclass:** TIME
+   :members: __init__
+
+
+**autoclass:** TIMESTAMP
+   :members: __init__
+
+**autoclass:** TINYINT
+   :members: __init__
+
+
+**autoclass:** UNIQUEIDENTIFIER
+   :members: __init__
+
+
+**autoclass:** VARBINARY
+   :members: __init__
+   :noindex:
+
+**autoclass:** VARCHAR
+   :members: __init__
+   :noindex:
+
+**autoclass:** NVARCHAR
+   :noindex:
+
+**autoclass:** XML
+   :members: __init__
+
+.. _mssql_pyodbc:
 
 ## PyODBC
+**automodule:** sqlalchemy.dialects.mssql.pyodbc
+
+.. _mssql_python:
 
 ## mssql-python
+**automodule:** sqlalchemy.dialects.mssql.mssqlpython
 
 ## pymssql
+**automodule:** sqlalchemy.dialects.mssql.pymssql
+
+
+.. _mssql_aioodbc:
 
 ## aioodbc
+
+**automodule:** sqlalchemy.dialects.mssql.aioodbc

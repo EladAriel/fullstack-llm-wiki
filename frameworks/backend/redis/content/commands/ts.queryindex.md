@@ -1,14 +1,15 @@
 ---
 type: "Framework Learn Page"
-framework: "redis"
+framework: "Redis"
 source_repo: "https://github.com/redis/docs.git"
 source_branch: "main"
 source_path: "content/commands/ts.queryindex.md"
-source_commit: "9d30f68c3dad1a6b3b7d30fe604b911348ce8152"
-source_commit_short: "9d30f68c"
-source_commit_date: "2026-07-24T10:52:10-07:00"
-generated_at: "2026-07-25T11:51:22Z"
+source_commit: "f8693349287b0efbef3c865b6f6a2aceca88594d"
+source_commit_short: "f869334"
+source_commit_date: "2026-08-28T10:01:19-05:00"
+generated_at: "2026-08-29T09:38:55.070501Z"
 ---
+# Ts.Queryindex
 
 ---
 acl_categories:
@@ -72,20 +73,9 @@ Get all time series keys matching a filter list. Note: all matching keys will be
 <details open>
 <summary><code>filterExpr...</code></summary>
 
-filters time series based on their labels and label values. Each filter expression has one of the following syntaxes:
+filters time series based on their labels and label values.
 
-  - `label!=` - the time series has a label named `label`
-  - `label=value` - the time series has a label named `label` with a value equal to `value`
-  - `label=(value1,value2,...)` - the time series has a label named `label` with a value equal to one of the values in the list
-  - `label=` - the time series does not have a label named `label`
-  - `label!=value` - the time series does not have a label named `label` with a value equal to `value`
-  - `label!=(value1,value2,...)` - the time series does not have a label named `label` with a value equal to any of the values in the list
-
-  <note><b>Notes:</b>
-   - At least one filter expression with a syntax `label=value` or `label=(value1,value2,...)` is required.
-   - Filter expressions are conjunctive. For example, the filter `type=temperature room=study` means that a time series is a temperature time series of a study room.
-   - Whitespaces are unallowed in a filter expression except between quotes or double quotes in values - e.g., `x="y y"` or `x='(y y,z z)'`.
-   </note>
+{{< embed-md "ts-filter-expr.md" >}}
 </details>
 
 <note><b>Note:</b> The `QUERYINDEX` command cannot be part of a transaction when running on a Redis cluster.</note>
@@ -97,32 +87,32 @@ filters time series based on their labels and label values. Each filter expressi
 
 Create a set of sensors to measure temperature and humidity in your study and kitchen.
 
-{{< highlight bash >}}
-127.0.0.1:6379> TS.CREATE telemetry:study:temperature LABELS room study type temperature
+{{% redis-cli %}}
+redis> TS.CREATE telemetry:study:temperature LABELS room study type temperature
 OK
-127.0.0.1:6379> TS.CREATE telemetry:study:humidity LABELS room study type humidity
+redis> TS.CREATE telemetry:study:humidity LABELS room study type humidity
 OK
-127.0.0.1:6379> TS.CREATE telemetry:kitchen:temperature LABELS room kitchen type temperature
+redis> TS.CREATE telemetry:kitchen:temperature LABELS room kitchen type temperature
 OK
-127.0.0.1:6379> TS.CREATE telemetry:kitchen:humidity LABELS room kitchen type humidity
+redis> TS.CREATE telemetry:kitchen:humidity LABELS room kitchen type humidity
 OK
-{{< / highlight >}}
+{{% /redis-cli %}}
 
 Retrieve keys of all time series representing sensors located in the kitchen. 
 
-{{< highlight bash >}}
-127.0.0.1:6379> TS.QUERYINDEX room=kitchen
+{{% redis-cli %}}
+redis> TS.QUERYINDEX room=kitchen
 1) "telemetry:kitchen:humidity"
 2) "telemetry:kitchen:temperature"
-{{< / highlight >}}
+{{% /redis-cli %}}
 
 To retrieve the keys of all time series representing sensors that measure temperature, use this query:
 
-{{< highlight bash >}}
-127.0.0.1:6379> TS.QUERYINDEX type=temperature
+{{% redis-cli %}}
+redis> TS.QUERYINDEX type=temperature
 1) "telemetry:kitchen:temperature"
 2) "telemetry:study:temperature"
-{{< / highlight >}}
+{{% /redis-cli %}}
 </details>
 
 ## Redis Software and Redis Cloud compatibility

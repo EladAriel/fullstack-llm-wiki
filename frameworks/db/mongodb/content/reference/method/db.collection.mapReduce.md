@@ -1,93 +1,337 @@
 ---
 type: "Framework Learn Page"
-framework: "mongodb"
+framework: "MongoDB"
 source_repo: "https://github.com/mongodb/docs.git"
 source_branch: "main"
 source_path: "content/manual/manual/source/reference/method/db.collection.mapReduce.txt"
-source_commit: "ab9db26ed3d11618cdb61516d8180337d8e3f679"
-source_commit_short: "ab9db26e"
-source_commit_date: "2026-07-24T16:22:46-06:00"
-generated_at: "2026-07-25T11:51:15Z"
+source_commit: "b9f2bc487a2878b65e3c1f80024bebab76954f27"
+source_commit_short: "b9f2bc48"
+source_commit_date: "2026-08-28T17:09:45-05:00"
+generated_at: "2026-08-29T09:39:19.974584Z"
 ---
-
-==========================================
-
 # db.collection.mapReduce() (mongosh method)
 
-> **Note:** .. include:: /includes/fact-use-aggregation-not-map-reduce.rst
+**meta:** :description: Explore alternatives to the deprecated map-reduce method in MongoDB, focusing on using aggregation pipelines for better performance and usability.
 
-.. include:: /includes/fact-mongosh-shell-method-alt
+.. default-domain:: mongodb
+
+**contents:** On this page
+   :local:
+   :backlinks: none
+   :depth: 1
+   :class: singlecol
+
+**note:** Aggregation Pipeline as Alternative to Map-Reduce
+
+   .. include:: /includes/fact-use-aggregation-not-map-reduce.rst
+
+
+**include:** /includes/fact-mongosh-shell-method-alt
 
 ## Definition
 
+**method:** db.collection.mapReduce(map,reduce, { <options> })
+
+   .. |dbcommand| replace:: :dbcommand:`mapReduce` command
+
+   .. note::
+
+      .. include:: /includes/extracts/views-unsupported-mapReduce.rst
+
 ## Compatibility
 
-This method is available in deployments hosted in the following environments:
+This method is available in deployments hosted in the following environments: 
 
-.. include:: /includes/fact-environments-atlas-only.rst
+**include:** /includes/fact-environments-atlas-only.rst
 
-.. include:: /includes/fact-environments-atlas-support-no-free.rst
+**include:** /includes/fact-environments-atlas-support-no-free.rst
 
-.. include:: /includes/fact-environments-onprem-only.rst
+**include:** /includes/fact-environments-onprem-only.rst
 
 ## Syntax
 
-> **Note:** .. include:: /includes/extracts/4.4-changes-mapreduce-ignore-verbose.rst
-.. include:: /includes/extracts/4.2-changes-map-reduce-deprecation.rst
+**note:** .. include:: /includes/extracts/4.4-changes-mapreduce-ignore-verbose.rst
+
+   .. include:: /includes/extracts/4.2-changes-map-reduce-deprecation.rst
+
 
 :method:`db.collection.mapReduce()` has the following syntax:
 
-```javascript
-db.collection.mapReduce(
-                         <map>,
-                         <reduce>,
-                         {
-                           out: <collection>,
-                           query: <document>,
-                           sort: <document>,
-                           limit: <number>,
-                           finalize: <function>,
-                           scope: <document>,
-                           jsMode: <boolean>,
-                           verbose: <boolean>,
-                           bypassDocumentValidation: <boolean>
-                         }
-                       )
-```
+.. code-block:: javascript
+
+   db.collection.mapReduce(
+                            <map>,
+                            <reduce>,
+                            {
+                              out: <collection>,
+                              query: <document>,
+                              sort: <document>,
+                              limit: <number>,
+                              finalize: <function>,
+                              scope: <document>,
+                              jsMode: <boolean>,
+                              verbose: <boolean>,
+                              bypassDocumentValidation: <boolean>
+                            }
+                          )
 
 ### Parameters
 
 :method:`db.collection.mapReduce()` takes the following parameters:
 
+
+.. list-table::
+   :header-rows: 1
+   :widths: 20 20 80
+
+   * - Parameter
+
+     - Type
+
+     - Description
+
+   * - ``map``
+
+     - JavaScript or String
+
+     - A JavaScript function that associates or "maps" a ``value`` with
+       a ``key`` and emits the ``key`` and value ``pair``. You can
+       specify the function as :ref:`BSON type <bson-types>` JavaScript 
+       (BSON Type 13) or String (BSON Type 2).
+       
+       See :ref:`Requirements for the map Function <mapreduce-map-mtd>` 
+       for more information.
+       
+       
+
+   * - ``reduce``
+
+     - JavaScript or String
+
+     - A JavaScript function that "reduces" to a single object all the
+       ``values`` associated with a particular ``key``. You can specify
+       the function as BSON type JavaScript (BSON Type 13) or String 
+       (BSON Type 2).
+       
+       See :ref:`Requirements for the reduce Function 
+       <mapreduce-reduce-mtd>` for more information.
+       
+       
+
+   * - ``options``
+
+     - document
+
+     - A document that specifies additional parameters to
+       :method:`db.collection.mapReduce()`.
+
 ## Fields
 
-The following table describes additional arguments that :method:`db.collection.mapReduce()` can accept.
+The following table describes additional arguments that
+:method:`db.collection.mapReduce()` can accept.
 
-> **Note:** .. include:: /includes/fact-group-map-reduce-where-limitations-in-24.rst
 
-.. include:: /includes/parameters-map-reduce.rst
+.. list-table::
+   :header-rows: 1
+   :widths: 20 20 80
 
-.. include:: /includes/parameters-map-reduce.rst
+   * - Field
 
-.. include:: /includes/parameters-map-reduce.rst
+     - Type
 
-.. include:: /includes/parameters-map-reduce.rst
+     - Description
 
-.. include:: /includes/examples-map-reduce.rst
+   * - ``out``
+
+     - string or document
+
+     - Specifies the location of the result of the map-reduce operation.
+       You can output to a collection, output to a collection with an
+       action, or output inline. You may output to a collection when
+       performing map-reduce operations on the primary members of the set;
+       on :term:`secondary` members you may only use the ``inline`` output.
+       
+       See :ref:`out Options <mapreduce-out-mtd>` for more information.
+       
+       
+       
+
+   * - ``query``
+
+     - document
+
+     - Specifies the selection criteria using :ref:`query operators
+       <query-selectors>` for determining the documents input to the
+       ``map`` function.
+       
+       
+
+   * - ``sort``
+
+     - document
+
+     - Sorts the *input* documents. This option is useful for
+       optimization. For example, specify the sort key to be the same as
+       the emit key so that there are fewer reduce operations. The sort key
+       must be in an existing index for this collection.
+       
+       
+
+   * - ``limit``
+
+     - number
+
+     - Specifies a maximum number of documents for the input into the
+       ``map`` function.
+       
+       
+
+   * - ``finalize``
+
+     - Javascript or String
+
+     - Optional. A JavaScript function that modifies the output after
+       the ``reduce`` function. You can specify the function as BSON type
+       JavaScript (BSON Type 13) or String (BSON Type 2).
+       
+       See :ref:`Requirements for the finalize Function
+       <mapreduce-finalize-mtd>` for more information.
+       
+       
+
+   * - ``scope``
+
+     - document
+
+     - Specifies global variables that are accessible in the ``map``,
+       ``reduce`` and ``finalize`` functions.
+       
+       
+
+   * - ``jsMode``
+
+     - boolean
+
+     - Specifies whether to convert intermediate data into BSON
+       format between the execution of the ``map`` and ``reduce``
+       functions.
+       
+       Defaults to ``false``.
+       
+       If ``false``:
+       
+       - Internally, MongoDB converts the JavaScript objects emitted
+         by the ``map``
+         function to BSON objects. These BSON
+         objects are then converted back to JavaScript objects when
+         calling the ``reduce`` function.
+       
+       - The map-reduce operation places the intermediate BSON objects
+         in temporary, on-disk storage. This allows the map-reduce
+         operation to execute over arbitrarily large data sets.
+       
+       If ``true``:
+       
+       - Internally, the JavaScript objects emitted during ``map``
+         function remain as JavaScript objects. There is no need to
+         convert the objects for the ``reduce`` function, which
+         can result in faster execution.
+       
+       - You can only use ``jsMode`` for result sets with fewer than
+         500,000 distinct ``key`` arguments to the mapper's ``emit()``
+         function.
+       
+       
+
+   * - ``verbose``
+
+     - boolean
+
+     - Specifies whether to include the ``timing`` information in the
+       result information. Set ``verbose`` to ``true`` to include
+       the ``timing`` information.
+       
+       Defaults to ``false``.
+
+       This option is ignored. The result
+       information always excludes the ``timing`` information.
+       You can view timing information by running
+       :method:`db.collection.explain()` with
+       :method:`db.collection.mapReduce()` in the ``"executionStats"``
+       or ``"allPlansExecution"`` ``verbosity`` modes.
+       
+
+   * - ``collation``
+
+     - document
+
+     - Optional. 
+       
+       .. include:: /includes/extracts/collation-option.rst
+       
+       
+   * - ``bypassDocumentValidation``
+
+     - boolean
+
+     - Optional. Enables :dbcommand:`mapReduce` to bypass schema validation
+       during the operation. This lets you insert documents that do not
+       meet the validation requirements.
+
+**note:** .. include:: /includes/fact-group-map-reduce-where-limitations-in-24.rst
+
+.. _mapreduce-map-mtd:
+
+**include:** /includes/parameters-map-reduce.rst
+   :start-after: start-map
+   :end-before: end-map
+
+.. _mapreduce-reduce-mtd:
+
+**include:** /includes/parameters-map-reduce.rst
+   :start-after: start-reduce
+   :end-before: end-reduce
+
+.. _mapreduce-out-mtd:
+
+**include:** /includes/parameters-map-reduce.rst
+   :start-after: start-out
+   :end-before: end-out
+
+.. _mapreduce-finalize-mtd:
+
+**include:** /includes/parameters-map-reduce.rst
+   :start-after: start-finalize
+   :end-before: end-finalize
+
+**include:** /includes/examples-map-reduce.rst
 
 ## Output
 
-The output of the :method:`db.collection.mapReduce()` method is identical to that of the :dbcommand:`mapReduce` command. See the `Output <mapReduce-output>` section of the :dbcommand:`mapReduce` command for information on the :method:`db.collection.mapReduce()` output.
+The output of the :method:`db.collection.mapReduce()` method is
+identical to that of the :dbcommand:`mapReduce` command. See the
+:ref:`Output <mapReduce-output>` section of the :dbcommand:`mapReduce`
+command for information on the :method:`db.collection.mapReduce()`
+output.
 
 ## Restrictions
 
-:method:`db.collection.mapReduce()` no longer supports `afterClusterTime <afterClusterTime>`. As such, :method:`db.collection.mapReduce()` cannot be associatd with `causally consistent sessions <causal-consistency>`.
+:method:`db.collection.mapReduce()` no longer supports
+:ref:`afterClusterTime <afterClusterTime>`. As such,
+:method:`db.collection.mapReduce()` cannot be associatd with
+:ref:`causally consistent sessions <causal-consistency>`.
+
 
 ## Additional Information
 
-- `troubleshoot-map-function`
-- `troubleshoot-reduce-function`
+- :ref:`troubleshoot-map-function`
+
+- :ref:`troubleshoot-reduce-function`
+
 - :dbcommand:`mapReduce` command
-- `aggregation`
-- `Map-Reduce <map-reduce>`
-- `incremental-map-reduce`
+
+- :ref:`aggregation`
+
+- :ref:`Map-Reduce <map-reduce>`
+
+- :ref:`incremental-map-reduce`

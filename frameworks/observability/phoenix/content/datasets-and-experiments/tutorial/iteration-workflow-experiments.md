@@ -4,10 +4,10 @@ framework: "Arize Phoenix"
 source_repo: "https://github.com/Arize-ai/phoenix.git"
 source_branch: "main"
 source_path: "docs/phoenix/datasets-and-experiments/tutorial/iteration-workflow-experiments.mdx"
-source_commit: "69b3ab92c37ff65812feaa2dbf0b1c0ad5ae55fe"
-source_commit_short: "69b3ab9"
-source_commit_date: "2026-07-25T11:48:12-06:00"
-generated_at: "2026-07-25T19:08:24.874319Z"
+source_commit: "c48e50e9906fcc56c1c103ebd93ef3c95ed6b6e7"
+source_commit_short: "c48e50e"
+source_commit_date: "2026-08-29T01:45:20-06:00"
+generated_at: "2026-08-29T09:39:58.951944Z"
 ---
 ---
 title: "Iterating with Experiments in Your Workflow"
@@ -99,5 +99,5 @@ The experiment comparison view allows you to:
 You've now learned the fundamentals of running experiments with Phoenix. Explore advanced experiment features to enhance your evaluation workflow:
 
 <Card title="Using Repetitions in Experiments" icon="repeat" href="/docs/phoenix/datasets-and-experiments/how-to-experiments/repetitions" description="Repeat runs for stability"/>
-<Card title="Custom Evaluators" icon="wand-magic-sparkles" href="/docs/phoenix/datasets-and-experiments/how-to-experiments/using-evaluators" description="Custom evaluator walkthrough"/>
+<Card title="Custom Evaluators" icon="wand-sparkles" href="/docs/phoenix/datasets-and-experiments/how-to-experiments/using-evaluators" description="Custom evaluator walkthrough"/>
 <Card title="Dataset Splits" icon="layer-group" href="/docs/phoenix/datasets-and-experiments/how-to-experiments/splits" description="Train/validation/test splits"/>

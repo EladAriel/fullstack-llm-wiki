@@ -1,50 +1,109 @@
 ---
 type: "Framework Learn Page"
-framework: "mongodb"
+framework: "MongoDB"
 source_repo: "https://github.com/mongodb/docs.git"
 source_branch: "main"
 source_path: "content/manual/manual/source/reference/command/rolesInfo.txt"
-source_commit: "ab9db26ed3d11618cdb61516d8180337d8e3f679"
-source_commit_short: "ab9db26e"
-source_commit_date: "2026-07-24T16:22:46-06:00"
-generated_at: "2026-07-25T11:51:15Z"
+source_commit: "b9f2bc487a2878b65e3c1f80024bebab76954f27"
+source_commit_short: "b9f2bc48"
+source_commit_date: "2026-08-28T17:09:45-05:00"
+generated_at: "2026-08-29T09:39:20.028743Z"
 ---
-
-============================
+.. _rolesinfo-database-command:
 
 # rolesInfo (database command)
 
+**meta:** :description: Retrieve inheritance and privilege information for specified roles using the `rolesInfo` command, including user-defined and built-in roles.
+
+.. default-domain:: mongodb
+
+**contents:** On this page
+   :local:
+   :backlinks: none
+   :depth: 2
+   :class: singlecol
+
 ## Definition
+
+.. |getRoleMethod| replace:: ``rolesInfo``
+
+**dbcommand:** rolesInfo
+
+   Returns inheritance and privilege information for specified roles,
+   including both :ref:`user-defined roles <user-defined-roles>` and
+   :ref:`built-in roles <built-in-roles>`.
+
+   The :dbcommand:`rolesInfo` command can also retrieve all roles
+   scoped to a database.
 
 ## Compatibility
 
-This command is available in deployments hosted in the following environments:
+This command is available in deployments hosted in the following environments: 
 
-.. include:: /includes/fact-environments-atlas-only.rst
+**include:** /includes/fact-environments-atlas-only.rst
 
-.. include:: /includes/fact-environments-atlas-support-all.rst
+**include:** /includes/fact-environments-atlas-support-all.rst
 
-.. include:: /includes/fact-environments-onprem-only.rst
-
+**include:** /includes/fact-environments-onprem-only.rst
+   
 ## Syntax
 
 The command has the following syntax:
 
-```javascript
-db.runCommand(
-   {  
-     rolesInfo: { role: <name>, db: <db> },
-     showAuthenticationRestrictions: <Boolean>,
-     showBuiltinRoles: <Boolean>,
-     showPrivileges: <Boolean>,
-     comment: <any>
-   }
-)
-```
+.. code-block:: javascript
+  
+   db.runCommand(
+      {  
+        rolesInfo: { role: <name>, db: <db> },
+        showAuthenticationRestrictions: <Boolean>,
+        showBuiltinRoles: <Boolean>,
+        showPrivileges: <Boolean>,
+        comment: <any>
+      }
+   )
 
 ## Command Fields
 
 The command takes the following fields:
+
+.. list-table::
+   :header-rows: 1
+   :widths: 20 20 80
+ 
+   * - Field
+     - Type
+     - Description
+ 
+   * - ``rolesInfo``
+     - string, document, array,  or integer
+     - The role(s) to return information about. For the syntax for specifying
+       roles, see :ref:`rolesinfo-behavior`.
+   
+   * - ``showAuthenticationRestrictions``
+     - boolean
+     - .. include:: /includes/fact-show-auth-restrictions-description.rst
+
+   * - ``showBuiltinRoles``
+     - boolean
+     - Optional. When the ``rolesInfo`` field is set to ``1``, set
+       ``showBuiltinRoles`` to ``true`` to include :ref:`built-in roles
+       <built-in-roles>` in the output. By default, this field is set to
+       ``false``, and the output for ``rolesInfo: 1`` displays only
+       :ref:`user-defined roles <user-defined-roles>`.
+       
+   * - ``showPrivileges``
+     - boolean
+     - Optional. Set the field to ``true`` to show role privileges,
+       including both privileges inherited from other roles and
+       privileges defined directly. By default, the command returns only
+       the roles from which this role inherits privileges and does not
+       return specific privileges.
+       
+   * - ``comment``
+     - any
+     - .. include:: /includes/extracts/comment-content.rst
+
+.. _rolesinfo-behavior:
 
 ## Behavior
 
@@ -52,246 +111,335 @@ The command takes the following fields:
 
 To specify a role from the current database, specify the role by its name:
 
-```javascript
-{ rolesInfo: "<rolename>" }
-```
+.. code-block:: javascript
 
-To specify a role from another database, specify the role by a document that specifies the role and database:
+   { rolesInfo: "<rolename>" }
 
-```javascript
-{ rolesInfo: { role: "<rolename>", db: "<database>" } }
-```
+To specify a role from another database, specify the role by a document that
+specifies the role and database:
+
+.. code-block:: javascript
+
+   { rolesInfo: { role: "<rolename>", db: "<database>" } }
 
 ### Return Information for Multiple Roles
 
-To specify multiple roles, use an array. Specify each role in the array as a document or string. Use a string only if the role exists on the database on which the command runs:
+To specify multiple roles, use an array. Specify each role in the array as a
+document or string. Use a string only if the role exists on the database on
+which the command runs:
 
-```javascript
-{
-  rolesInfo: [
-     "<rolename>",
-     { role: "<rolename>", db: "<database>" },
-     ...
-  ]
-}
-```
+.. code-block:: javascript
+
+   {
+     rolesInfo: [
+        "<rolename>",
+        { role: "<rolename>", db: "<database>" },
+        ...
+     ]
+   }
 
 ### Return Information for All Roles in the Database
 
-To specify all roles in the database on which the command runs, specify `rolesInfo: 1`. By default MongoDB displays all the `user-defined roles <user-defined-roles>` in the database. To include `built-in roles <built-in-roles>` as well, include the parameter-value pair `showBuiltinRoles: true`:
+To specify all roles in the database on which the command runs, specify
+``rolesInfo: 1``. By default MongoDB displays all the :ref:`user-defined roles
+<user-defined-roles>` in the database. To include :ref:`built-in roles
+<built-in-roles>` as well, include the parameter-value pair
+``showBuiltinRoles: true``:
 
-```javascript
-{ rolesInfo: 1, showBuiltinRoles: true }
-```
+.. code-block:: javascript
+
+   { rolesInfo: 1, showBuiltinRoles: true }
 
 ## Required Access
 
-.. include:: /includes/access-roles-info.rst
+**include:** /includes/access-roles-info.rst
+
+.. _rolesinfo-output:
 
 ## Output
 
+**data:** rolesInfo.role
+
+   The name of the role.
+
+**data:** rolesInfo.db
+
+   The database on which the role is defined. Every database has :ref:`built-in
+   roles <built-in-roles>`. A database might also have :ref:`user-defined
+   roles <user-defined-roles>`.
+
+**data:** rolesInfo.isBuiltin
+
+   A value of ``true`` indicates the role is a :ref:`built-in role
+   <built-in-roles>`. A value of ``false`` indicates the role is a
+   :ref:`user-defined role <user-defined-roles>`.
+
+**data:** rolesInfo.roles
+
+   The roles that directly provide privileges to this role and the databases
+   on which the roles are defined.
+
+**data:** rolesInfo.inheritedRoles
+
+   All roles from which this role inherits privileges. This includes the roles
+   in the :data:`rolesInfo.roles` array as well as the roles from which the
+   roles in the :data:`rolesInfo.roles` array inherit privileges. All
+   privileges apply to the current role. The documents in this field list the
+   roles and the databases on which they are defined.
+
+**data:** rolesInfo.privileges
+
+   The privileges directly specified by this role; i.e. the array
+   excludes privileges inherited from other roles. By default the
+   output does not include the :data:`~rolesInfo.privileges` field. To
+   include the field, specify ``showPrivileges: true`` when running the
+   :dbcommand:`rolesInfo` command.
+
+   Each privilege document specifies the :ref:`resources
+   <resource-document>` and the :doc:`actions
+   </reference/privilege-actions>` allowed on the resources.
+
+**data:** rolesInfo.inheritedPrivileges
+
+   All privileges granted by this role, including those inherited from
+   other roles. By default the output does not include the
+   :data:`~rolesInfo.inheritedPrivileges` field. To include the field,
+   specify ``showPrivileges: true`` when running the
+   :dbcommand:`rolesInfo` command.
+
+   Each privilege document specifies the :ref:`resources
+   <resource-document>` and the :doc:`actions
+   </reference/privilege-actions>` allowed on the resources.
+
 ## Examples
 
-The examples in this section show how to use the `rolesInfo` command to:
+The examples in this section show how to use the ``rolesInfo`` command
+to:
 
-- `rolesInfo-example-single-role`
-- `rolesInfo-example-multiple-roles`
-- `rolesInfo-example-user-defined-roles`
-- `rolesInfo-example-user-defined-and-built-in-roles`
-- `rolesInfo-example-auth-restrictions`
+- :ref:`rolesInfo-example-single-role`
+
+- :ref:`rolesInfo-example-multiple-roles`
+
+- :ref:`rolesInfo-example-user-defined-roles`
+
+- :ref:`rolesInfo-example-user-defined-and-built-in-roles`
+
+- :ref:`rolesInfo-example-auth-restrictions`
+
+.. _rolesInfo-example-single-role:
+
 ### View Information for a Single Role
 
-The following command returns the role inheritance information for the role `associate` defined in the `products` database:
+The following command returns the role inheritance information for the
+role ``associate`` defined in the ``products`` database:
 
-```javascript
-db.runCommand(
-    {
-      rolesInfo: { role: "associate", db: "products" }
-    }
-)
-```
+.. code-block:: javascript
 
-The following command returns the role inheritance information for the role `siteManager` on the database on which the command runs:
+   db.runCommand(
+       {
+         rolesInfo: { role: "associate", db: "products" }
+       }
+   )
 
-```javascript
-db.runCommand(
-    {
-      rolesInfo: "siteManager"
-    }
-)
-```
+The following command returns the role inheritance information for the role
+``siteManager`` on the database on which the command runs:
 
-The following command returns both the role inheritance and the privileges for the role `associate` defined on the `products` database:
+.. code-block:: javascript
 
-```javascript
-db.runCommand(
-    {
-      rolesInfo: { role: "associate", db: "products" },
-      showPrivileges: true
-    }
-)
-```
+   db.runCommand(
+       {
+         rolesInfo: "siteManager"
+       }
+   )
+
+The following command returns *both* the role inheritance and the privileges
+for the role ``associate`` defined on the ``products`` database:
+
+.. code-block:: javascript
+
+   db.runCommand(
+       {
+         rolesInfo: { role: "associate", db: "products" },
+         showPrivileges: true
+       }
+   )
+
+.. _rolesInfo-example-multiple-roles:
 
 ### View Information for Multiple Roles
 
-The following command returns information for two roles on two different databases:
+The following command returns information for two roles on two different
+databases:
 
-```javascript
-db.runCommand(
-    {
-      rolesInfo: [
-         { role: "associate", db: "products" },
-         { role: "manager", db: "resources" }
-      ]
-    }
-)
-```
+.. code-block:: javascript
 
-The following returns both the role inheritance and the privileges:
+   db.runCommand(
+       {
+         rolesInfo: [
+            { role: "associate", db: "products" },
+            { role: "manager", db: "resources" }
+         ]
+       }
+   )
 
-```javascript
-db.runCommand(
-    {
-      rolesInfo: [
-         { role: "associate", db: "products" },
-         { role: "manager", db: "resources" }
-      ],
-      showPrivileges: true
-    }
-)
-```
+The following returns *both* the role inheritance and the privileges:
+
+.. code-block:: javascript
+
+   db.runCommand(
+       {
+         rolesInfo: [
+            { role: "associate", db: "products" },
+            { role: "manager", db: "resources" }
+         ],
+         showPrivileges: true
+       }
+   )
+
+.. _rolesInfo-example-user-defined-roles:
 
 ### View All User-Defined Roles for a Database
 
-The following operation returns all `user-defined roles <user-defined-roles>` on the database on which the command runs and includes privileges:
+The following operation returns all :ref:`user-defined roles
+<user-defined-roles>` on the database on which the command runs and includes
+privileges:
 
-```javascript
-db.runCommand(
-    {
-      rolesInfo: 1,
-      showPrivileges: true
-    }
-)
-```
+.. code-block:: javascript
+
+   db.runCommand(
+       {
+         rolesInfo: 1,
+         showPrivileges: true
+       }
+   )
 
 Example output (shortened for readability):
 
-```javascript
-{
-  roles: [
-    {
-      _id: 'products.associate',
-      role: 'associate',
-      db: 'products',
-      privileges: [
-        {
-          resource: { db: 'products', collection: '' },
-          actions: [ 'bypassDocumentValidation' ]
-        }
-      ],
-      roles: [ { role: 'readWrite', db: 'products' } ],
-      isBuiltin: false,
-      inheritedRoles: [ { role: 'readWrite', db: 'products' } ],
-      inheritedPrivileges: [
-        {
-          resource: { db: 'products', collection: '' },
-          actions: [ 'bypassDocumentValidation' ]
-        },
-        {
-          resource: { db: 'products', collection: '' },
-          actions: [
-            'changeStream',
-            'collStats',
-            'compactStructuredEncryptionData',
-            ...
-          ]
-        },
-        ...
-      ]
-    }
-  ],
-  ok: 1
-}
-```
+.. code-block:: javascript
+   :copyable: false
+
+   {
+     roles: [
+       {
+         _id: 'products.associate',
+         role: 'associate',
+         db: 'products',
+         privileges: [
+           {
+             resource: { db: 'products', collection: '' },
+             actions: [ 'bypassDocumentValidation' ]
+           }
+         ],
+         roles: [ { role: 'readWrite', db: 'products' } ],
+         isBuiltin: false,
+         inheritedRoles: [ { role: 'readWrite', db: 'products' } ],
+         inheritedPrivileges: [
+           {
+             resource: { db: 'products', collection: '' },
+             actions: [ 'bypassDocumentValidation' ]
+           },
+           {
+             resource: { db: 'products', collection: '' },
+             actions: [
+               'changeStream',
+               'collStats',
+               'compactStructuredEncryptionData',
+               ...
+             ]
+           },
+           ...
+         ]
+       }
+     ],
+     ok: 1
+   }
+
+.. _rolesInfo-example-user-defined-and-built-in-roles:
 
 ### View All User-Defined and Built-In Roles for a Database
 
-The following operation returns all roles on the database on which the command runs, including both built-in and user-defined roles:
+The following operation returns all roles on the database on which the command
+runs, including both built-in and user-defined roles:
 
-```javascript
-db.runCommand(
-    {
-      rolesInfo: 1,
-      showBuiltinRoles: true
-    }
-)
-```
+.. code-block:: javascript
+
+   db.runCommand(
+       {
+         rolesInfo: 1,
+         showBuiltinRoles: true
+       }
+   )
 
 Example output (shortened for readability):
 
-```javascript
-{
-  roles: [
-    {
-      role: 'enableSharding',
-      db: 'products',
-      isBuiltin: true,
-      roles: [],
-      inheritedRoles: []
-    },
-    {
-      role: 'userAdmin',
-      db: 'products',
-      isBuiltin: true,
-      roles: [],
-      inheritedRoles: []
-    },
-    {
-      role: 'read',
-      db: 'products',
-      isBuiltin: true,
-      roles: [],
-      inheritedRoles: []
-    },
-    ...
-  ],
-  ok: 1
-}
-```
+.. code-block:: javascript
+   :copyable: false
+
+   {
+     roles: [
+       {
+         role: 'enableSharding',
+         db: 'products',
+         isBuiltin: true,
+         roles: [],
+         inheritedRoles: []
+       },
+       {
+         role: 'userAdmin',
+         db: 'products',
+         isBuiltin: true,
+         roles: [],
+         inheritedRoles: []
+       },
+       {
+         role: 'read',
+         db: 'products',
+         isBuiltin: true,
+         roles: [],
+         inheritedRoles: []
+       },
+       ...
+     ],
+     ok: 1
+   }
+
+.. _rolesInfo-example-auth-restrictions:
 
 ### View Authentication Restrictions for Roles
 
-The following operation returns all user-defined roles on the `products` database and includes authentication restrictions:
+The following operation returns all user-defined roles on the
+``products`` database and includes authentication restrictions:
 
-```javascript
-db.runCommand(
-    {
-      rolesInfo: 1,
-      showAuthenticationRestrictions: true
-    }
-)
-```
+.. code-block:: javascript
+
+   db.runCommand(
+       {
+         rolesInfo: 1,
+         showAuthenticationRestrictions: true
+       }
+   )
 
 Example output:
 
-```javascript
-{
-  roles: [
-    {
-      _id: 'products.associate',
-      role: 'associate',
-      db: 'products',
-      roles: [ { role: 'readWrite', db: 'products' } ],
-      authenticationRestrictions: [
-        [ { clientSource: [ '198.51.100.0' ] } ]
-      ],
-      isBuiltin: false,
-      inheritedRoles: [ { role: 'readWrite', db: 'products' } ],
-      inheritedAuthenticationRestrictions: [
-        [ { clientSource: [ '198.51.100.0' ] } ]
-      ]
-    }
-  ],
-  ok: 1
-}
-```
+.. code-block:: javascript
+   :copyable: false
+
+   {
+     roles: [
+       {
+         _id: 'products.associate',
+         role: 'associate',
+         db: 'products',
+         roles: [ { role: 'readWrite', db: 'products' } ],
+         authenticationRestrictions: [
+           [ { clientSource: [ '198.51.100.0' ] } ]
+         ],
+         isBuiltin: false,
+         inheritedRoles: [ { role: 'readWrite', db: 'products' } ],
+         inheritedAuthenticationRestrictions: [
+           [ { clientSource: [ '198.51.100.0' ] } ]
+         ]
+       }
+     ],
+     ok: 1
+   }

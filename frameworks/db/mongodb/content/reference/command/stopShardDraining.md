@@ -1,59 +1,96 @@
 ---
 type: "Framework Learn Page"
-framework: "mongodb"
+framework: "MongoDB"
 source_repo: "https://github.com/mongodb/docs.git"
 source_branch: "main"
 source_path: "content/manual/manual/source/reference/command/stopShardDraining.txt"
-source_commit: "ab9db26ed3d11618cdb61516d8180337d8e3f679"
-source_commit_short: "ab9db26e"
-source_commit_date: "2026-07-24T16:22:46-06:00"
-generated_at: "2026-07-25T11:51:15Z"
+source_commit: "b9f2bc487a2878b65e3c1f80024bebab76954f27"
+source_commit_short: "b9f2bc48"
+source_commit_date: "2026-08-28T17:09:45-05:00"
+generated_at: "2026-08-29T09:39:20.062967Z"
 ---
+# stopShardDraining (database command)
 
-#################################### stopShardDraining (database command) ####################################
+**meta:** :description: Stops the balancer from draining chunks from the given shard. The shard resumes its role in the sharded cluster and is included in rebalancing operations.
+
+
+.. default-domain:: mongodb
+
+**contents:** On this page
+   :local:
+   :backlinks: none
+   :depth: 1
+   :class: singlecol
 
 ## Definition
 
+**dbcommand:** stopShardDraining
+
+   .. include:: /includes/command/stopShardDraining
+
+   When the command runs, it tells the balancer that you want
+   the shard to remain in the cluster. The balancer then stops
+   draining the shard and again includes the shard in rebalance
+   operations, shifting chunks back onto the shard.
+
+   The command returns an error if the shard doesn't exist,
+   otherwise it returns ``ok``.
+
+   To start draining a shard, use the
+   :dbcommand:`startShardDraining` command. 
+
+   To check the status of a draining shard, use the
+   :dbcommand:`shardDrainingStatus` command.
+
+   To remove a shard after it finishes draining, use the
+   :dbcommand:`commitShardRemoval` command.
+
+   .. versionadded:: 8.3
+
 ## Compatibility
 
-This command is available in deployments hosted in the following environments:
+This command is available in deployments hosted in the following environments: 
 
-.. include:: /includes/fact-environments-onprem-only.rst
+**include:** /includes/fact-environments-onprem-only.rst
 
-> **Note:** .. include:: /includes/edit-shards-atlas-compatibility.rst
+**note:** .. include:: /includes/edit-shards-atlas-compatibility.rst
 
 ## Syntax
 
 The command has the following syntax:
 
-```javascript
-db.adminCommand( { 
-     stopShardDraining: <shard> 
-} )
-```
+.. code-block:: javascript
+
+   db.adminCommand( { 
+        stopShardDraining: <shard> 
+   } )
 
 ## Behavior
 
 ### Access Requirements
 
-.. include:: /includes/removeShard-access-requirements.rst
+**include:** /includes/removeShard-access-requirements.rst
 
 ## Examples
 
-To start draining a shard, use the :method:`db.adminCommand` method to run the :dbcommand:`startShardDraining` command:
+To start draining a shard, use the :method:`db.adminCommand`
+method to run the :dbcommand:`startShardDraining` command:
 
-```javascript
-db.adminCommand( { startShardDraining: "shard04" } )
-```
+.. code-block:: javascript
 
-To stop draining the shard, use the :method:`db.adminCommand` method to run the `stopShardDraining` command:
+   db.adminCommand( { startShardDraining: "shard04" } )
 
-```javascript
-db.adminCommand( { stopShardDraining: "shard04" } )
-```
+To stop draining the shard, use the :method:`db.adminCommand`
+method to run the ``stopShardDraining`` command:
+
+.. code-block:: javascript
+
+   db.adminCommand( { stopShardDraining: "shard04" } )
 
 ## Learn More
 
 - :dbcommand:`startShardDraining`
+
 - :dbcommand:`shardDrainingStatus`
+
 - :dbcommand:`commitShardRemoval`

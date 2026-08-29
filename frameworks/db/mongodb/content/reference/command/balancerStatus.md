@@ -1,58 +1,113 @@
 ---
 type: "Framework Learn Page"
-framework: "mongodb"
+framework: "MongoDB"
 source_repo: "https://github.com/mongodb/docs.git"
 source_branch: "main"
 source_path: "content/manual/manual/source/reference/command/balancerStatus.txt"
-source_commit: "ab9db26ed3d11618cdb61516d8180337d8e3f679"
-source_commit_short: "ab9db26e"
-source_commit_date: "2026-07-24T16:22:46-06:00"
-generated_at: "2026-07-25T11:51:15Z"
+source_commit: "b9f2bc487a2878b65e3c1f80024bebab76954f27"
+source_commit_short: "b9f2bc48"
+source_commit_date: "2026-08-28T17:09:45-05:00"
+generated_at: "2026-08-29T09:39:20.019647Z"
 ---
-
-=================================
-
 # balancerStatus (database command)
+
+**meta:** :description: Check the status of the balancer in MongoDB using the `balancerStatus` command to see if it's running or stopped.
+
+.. default-domain:: mongodb
+
+**contents:** On this page
+   :local:
+   :backlinks: none
+   :depth: 1
+   :class: singlecol
 
 ## Definition
 
+**dbcommand:** balancerStatus
+
+   Returns a document that contains information about the status of the
+   balancer.
+
+   You can only issue the :dbcommand:`balancerStatus` against the
+   ``admin`` database.
+
+   .. |method| replace:: :method:`sh.isBalancerRunning` 
+      helper method
+   .. include:: /includes/fact-dbcommand-tip
+
 ## Compatibility
 
-This command is available in deployments hosted in the following environments:
+This command is available in deployments hosted in the following environments: 
 
-.. include:: /includes/fact-environments-atlas-only.rst
+**include:** /includes/fact-environments-atlas-only.rst
 
-.. include:: /includes/fact-environments-onprem-only.rst
+**include:** /includes/fact-environments-onprem-only.rst
 
 ## Syntax
 
 The command has the following syntax:
 
-```javascript
-db.adminCommand( 
-   { 
-     balancerStatus: 1 
-   } 
-)
-```
+.. code-block:: javascript
+
+   db.adminCommand( 
+      { 
+        balancerStatus: 1 
+      } 
+   )
 
 ## Output Document
 
 The following is an example of a document returned by the command:
 
-```json
-{
-   "mode" : "full",
-   "inBalancerRound" : false,
-   "numBalancerRounds" : Long(86),
-   "ok" : 1
-}
-```
+.. code-block:: json
+
+   {
+      "mode" : "full",
+      "inBalancerRound" : false,
+      "numBalancerRounds" : Long(86),
+      "ok" : 1
+   }
+
+.. list-table::
+   :header-rows: 1
+   :widths: 20 80
+
+   * - Field
+     - Description
+
+   * - ``"mode"``
+
+     - A string that specifies whether the balancer thread is running
+       or stopped. Possible values are:
+
+       - "full"
+           Balancer thread is running but not necessarily in a
+           balancing round.
+
+       - "off"
+           Balancer thread is stopped. No chunk balancing can occur in
+           this mode.
+   
+   * - ``"inBalancerRound"``
+
+     - A boolean that specifies if the balancer is in a
+       balancing round. If ``inBalancerRound=true``, it is now
+       distributing chunks.
+
+       ``inBalancerRound`` can be ``true`` when ``mode=off``. If you turn the balancer
+       off while it's in a balancing round, the server lets it finish
+       rather than interrupting it.
+
+   * - ``"numBalancerRounds"``
+
+     - The number of balancer rounds which have occurred since the
+       config servers were started. This value is not persisted and is
+       reset to 0 upon restart of the config servers.
 
 ## Example
 
 Connect to a :binary:`~bin.mongos` instance and issue the following command:
 
-```javascript
-db.adminCommand( { balancerStatus: 1 } )
-```
+.. code-block:: javascript
+
+   db.adminCommand( { balancerStatus: 1 } )

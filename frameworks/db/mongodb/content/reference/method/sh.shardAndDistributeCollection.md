@@ -1,26 +1,155 @@
 ---
 type: "Framework Learn Page"
-framework: "mongodb"
+framework: "MongoDB"
 source_repo: "https://github.com/mongodb/docs.git"
 source_branch: "main"
 source_path: "content/manual/manual/source/reference/method/sh.shardAndDistributeCollection.txt"
-source_commit: "ab9db26ed3d11618cdb61516d8180337d8e3f679"
-source_commit_short: "ab9db26e"
-source_commit_date: "2026-07-24T16:22:46-06:00"
-generated_at: "2026-07-25T11:51:15Z"
+source_commit: "b9f2bc487a2878b65e3c1f80024bebab76954f27"
+source_commit_short: "b9f2bc48"
+source_commit_date: "2026-08-28T17:09:45-05:00"
+generated_at: "2026-08-29T09:39:19.946128Z"
 ---
-
-==================================================
-
 # sh.shardAndDistributeCollection() (mongosh method)
+
+.. default-domain:: mongodb
+
+**contents:** On this page
+   :local:
+   :backlinks: none
+   :depth: 1
+   :class: singlecol
+
+.. |command| replace:: ``sh.shardAndDistributeCollection``
 
 ## Definition
 
+**method:** sh.shardAndDistributeCollection(namespace, key, unique, options)
+
+   Shards a collection and immediately redistributes the data using the provided 
+   :term:`shard key`. The immediate redistribution of data allows for faster 
+   data movement and reduced impact to workloads.
+
+   .. include:: /includes/fact-mongosh-shell-method.rst
+
+   Running ``sh.shardAndDistributeCollection()`` in :binary:`~bin.mongosh` has  
+   the same result as consecutively running the :dbcommand:`shardCollection` and 
+   :dbcommand:`reshardCollection` commands.
+
 ## Parameters
 
-`sh.shardAndDistributeCollection()` takes the following parameters:
+``sh.shardAndDistributeCollection()`` takes the following parameters:
 
-The `options` argument supports the following options:
+.. list-table::
+    :header-rows: 1
+    :widths: 20 15 15 50
+
+    * - Parameter
+      - Type
+      - Necessity
+      - Description
+
+    * - ``namespace``
+      - String
+      - Required
+      - The :term:`namespace` of the collection to shard in the format
+        ``"<database>.<collection>"``.
+
+    * - ``key``
+      - Document
+      - Required
+      - The document that specifies the field or fields to use as the
+        :ref:`shard key <sharding-shard-key>`. 
+        
+        ``{ <field1>: <1|"hashed">, ... }``
+
+        Set the field value to either:
+        
+        - ``1`` for :ref:`range-based sharding <sharding-ranged>`
+        
+        - ``"hashed"`` to specify a
+          :ref:`hashed shard key <hashed-shard-keys>`.
+        
+          Shard keys must be supported by an index. The index must exist before 
+          you run the ``shardAndDistributeCollection()`` method.
+             
+        See also: :ref:`sharding-shard-key-indexes`
+
+    * - ``unique``
+      - Boolean
+      - Optional
+      - Specify ``true`` to ensure that the underlying index
+        enforces a unique constraint. Defaults to ``false``. 
+
+        When using :ref:`hashed shard keys <sharding-hashed>`, you can't 
+        specify ``true``.
+
+    * - ``options``
+      - Document
+      - Optional
+      - A document containing optional fields, including
+        ``numInitialChunks`` and ``collation``.
+
+
+The ``options`` argument supports the following options:
+
+.. list-table::
+    :header-rows: 1
+    :widths: 20 20 80
+
+    * - Parameter
+      - Type
+      - Description
+
+    * - ``numInitialChunks``
+      - Integer
+      - Specifies the initial number of chunks to create across all shards in 
+        the cluster when sharding and resharding a collection. MongoDB then 
+        creates and balances chunks across the cluster. The
+        ``numInitialChunks`` parameter must result in less than ``8192`` per 
+        shard. The default number of chunks per shard is 90.
+
+        .. include:: /includes/fact-resharding-if-key-is-hashed.rst
+
+    * - ``collation``
+      - Document
+      - If the collection specified to ``shardAndDistributeCollection()``
+        has a default :ref:`collation <collation>`, you *must* include a 
+        collation document with ``{ locale : "simple" }``, or the 
+        ``shardAndDistributeCollection()`` method fails.
+
+    * - ``presplitHashedZones``
+      - Boolean
+      - Specify ``true`` to perform initial chunk creation
+        and distribution for an empty or non-existing collection based
+        on the defined zones and zone ranges for the collection. For
+        :ref:`hashed sharding <sharding-hashed>` only.
+
+        ``shardAndDistributeCollection()`` with ``presplitHashedZones: true`` 
+        returns an error if any of the following are true:
+
+        - The shard key does not contain a hashed field (i.e. is not a 
+          :ref:`single field hashed index <index-hashed-index>` or 
+          :ref:`compound hashed index <index-type-compound-hashed>`).
+
+        - The collection has no defined zones or zone ranges.
+
+        - The defined zone ranges do not meet the :ref:`requirements 
+          <updateZoneKeyRange-method-init-chunk-distribution>`.
+
+    * - ``timeseries``
+      - Document
+      - Specify this option to create a new sharded :ref:`time series 
+        collection <manual-timeseries-collection>`.
+        
+        To shard an existing time series collection, omit this parameter.
+        
+        When the collection specified to ``shardAndDistributeCollection`` is a 
+        time series collection and the ``timeseries`` option is not specified, 
+        MongoDB uses the values that define the existing time series collection 
+        to populate the ``timeseries`` field.
+        
+        For detailed syntax, see
+        :ref:`method-sharded-time-series-collection-options`.
 
 ## Considerations
 
@@ -28,93 +157,118 @@ The following factors can impact performance or the distribution of your data.
 
 ### Shard Keys
 
-Although you can `change your shard key <change-a-shard-key>` later, carefully consider your shard key choice to optimize scalability and perfomance.
+Although you can :ref:`change your shard key <change-a-shard-key>`
+later, carefully consider your shard key choice to optimize scalability and 
+perfomance.
 
-Shard Keys on Time Series Collections `````````````````````````````````````
+### Shard Keys on Time Series Collections
 
-.. include:: /includes/time-series/fact-shard-key-limitations.rst
+**include:** /includes/time-series/fact-shard-key-limitations.rst
 
-> **Seealso:** - `sharding-shard-key`
-- `sharding-shard-key-selection`
+**seealso:** - :ref:`sharding-shard-key`
+  - :ref:`sharding-shard-key-selection`
 
 ### Hashed Shard Keys
 
-`Hashed shard keys <sharding-hashed-sharding>` use a `hashed index <index-type-hashed>` or a `compound hashed index <index-type-compound-hashed>` as the shard key.
+:ref:`Hashed shard keys <sharding-hashed-sharding>` use a
+:ref:`hashed index <index-type-hashed>` or a
+:ref:`compound hashed index <index-type-compound-hashed>`
+as the shard key.
 
-To specify a hashed shard key field, use `field: "hashed"` .
+To specify a hashed shard key field, use ``field: "hashed"`` .
 
-.. include:: /includes/note-hashed-shard-key-during-chunk-migration.rst
+**include:** /includes/note-hashed-shard-key-during-chunk-migration.rst
 
-> **Seealso:** `sharding-hashed`
+**seealso:** :ref:`sharding-hashed`
 
 ### Zone Sharding and Initial Chunk Distribution
 
-.. include:: /includes/extracts/zoned-sharding-shard-operation-chunk-distribution-with-links.rst
+**include:** /includes/extracts/zoned-sharding-shard-operation-chunk-distribution-with-links.rst
 
-For an example, see `pre-define-zone-range-example`. If sharding a collection using a ranged or single-field hashed shard key, the `numInitialChunks` option has no effect if zones and zone ranges have been defined for the empty collection.
+For an example, see :ref:`pre-define-zone-range-example`. If sharding a
+collection using a ranged or single-field hashed shard key, the
+``numInitialChunks`` option has no effect if zones and zone ranges have
+been defined for the empty collection.
 
-To shard a collection using a `compound hashed index <index-type-compound-hashed>`, see `sh.shardCollection-zones-compound-hashed`.
+To shard a collection using a :ref:`compound hashed index
+<index-type-compound-hashed>`, see
+:ref:`sh.shardCollection-zones-compound-hashed`.
 
-Initial Chunk Distribution with Compound Hashed Indexes ```````````````````````````````````````````````````````
+### Initial Chunk Distribution with Compound Hashed Indexes
 
-.. include:: /includes/extracts/zoned-sharding-shard-operation-chunk-distribution-hashed-short.rst
+**include:** /includes/extracts/zoned-sharding-shard-operation-chunk-distribution-hashed-short.rst
 
-The `numInitialChunks` option has no effect if zones and zone ranges have been defined for the empty collection and `presplitHashedZones <method-shard-collection-presplitHashedZones>` is `false`.
+The ``numInitialChunks`` option has no effect if zones and zone ranges
+have been defined for the empty collection *and*
+:ref:`presplitHashedZones <method-shard-collection-presplitHashedZones>`
+is ``false``.
 
-For an example, see `pre-define-zone-range-hashed-example`.
+For an example, see :ref:`pre-define-zone-range-hashed-example`.
 
-> **Seealso:** `initial-ranges`
-
+**seealso:** :ref:`initial-ranges`
+ 
 ### Uniqueness
 
-If you specify `unique: true`, you must create the index before using `sh.shardAndDistributeCollection()`.
+If you specify ``unique: true``, you must create the index
+before using ``sh.shardAndDistributeCollection()``.
+  
+Although you can have a unique :term:`compound index` where the shard
+key is a :ref:`prefix <compound-index-prefix>`, if you use the ``unique``
+parameter, the collection must have a unique index that is on the shard
+key.
 
-Although you can have a unique `compound index` where the shard key is a `prefix <compound-index-prefix>`, if you use the `unique` parameter, the collection must have a unique index that is on the shard key.
+**seealso:** :ref:`Sharded Collection and Unique Indexes <sharding-shard-key-unique>`
 
-> **Seealso:** `Sharded Collection and Unique Indexes <sharding-shard-key-unique>`
-
-.. include:: /includes/fact-shardCollection-collation.rst
-
+**include:** /includes/fact-shardCollection-collation.rst
+  
 ### Write Concern
 
-.. include:: /includes/extracts/mongos-operations-wc-shard-collection.rst
+**include:** /includes/extracts/mongos-operations-wc-shard-collection.rst
 
 ## Examples
 
-The following examples show how you can use the `sh.shardAndDistributeCollection()` method with or without optional parameters.
+The following examples show how you can use the 
+``sh.shardAndDistributeCollection()`` method with or without optional 
+parameters. 
 
 ### Simple Usage
 
-A database named `records` contains a collection named `people`. The following command shards the collection by the `zipcode` field and immediately redistributes the data in the `records.people` collection:
+A database named ``records`` contains a collection named ``people``. The 
+following command shards the collection by the ``zipcode`` field and 
+immediately redistributes the data in the ``records.people`` collection:
 
-```javascript
-sh.shardAndDistributeCollection("records.people", { zipcode: 1 } )
-```
+.. code-block:: javascript
+
+   sh.shardAndDistributeCollection("records.people", { zipcode: 1 } )
 
 ### Usage with Options
 
-The `phonebook` database has a `contacts` collection with no default `collation <createCollection-collation-example>`. The following example uses `sh.shardAndDistributeCollection()` to shard and redistribute the `phonebook.contacts` collection with:
+The ``phonebook`` database has a ``contacts`` collection with no
+default :ref:`collation <createCollection-collation-example>`. The 
+following example uses ``sh.shardAndDistributeCollection()`` to shard and 
+redistribute the ``phonebook.contacts`` collection with:
 
-- A `Hashed shard key <sharding-hashed-sharding>` on the
-`last_name` field.
+- A :ref:`Hashed shard key <sharding-hashed-sharding>` on the
+  ``last_name`` field.
+- ``5`` initial chunks.
+- ``simple`` collation.
 
-- `5` initial chunks.
-- `simple` collation.
-```javascript
-sh.shardAndDistributeCollection(
-  "phonebook.contacts",
-  { last_name: "hashed" },
-  false,
-  {
-    numInitialChunks: 5,
-    collation: { locale: "simple" }
-  }
-)
-```
+.. code-block:: javascript
+
+   sh.shardAndDistributeCollection(
+     "phonebook.contacts",
+     { last_name: "hashed" },
+     false,
+     {
+       numInitialChunks: 5,
+       collation: { locale: "simple" }
+     }
+   )
+
 
 ## Learn More
 
 - :dbcommand:`reshardCollection`
 - :method:`sh.balancerCollectionStatus()`
 - :dbcommand:`shardCollection`
-- `sharding-background`
+- :ref:`sharding-background`

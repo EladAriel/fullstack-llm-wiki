@@ -1,99 +1,141 @@
 ---
 type: "Framework Learn Page"
-framework: "mongodb"
+framework: "MongoDB"
 source_repo: "https://github.com/mongodb/docs.git"
 source_branch: "main"
 source_path: "content/manual/manual/source/core/indexes/index-types/index-text/limit-number-of-items-scanned-for-text-search.txt"
-source_commit: "ab9db26ed3d11618cdb61516d8180337d8e3f679"
-source_commit_short: "ab9db26e"
-source_commit_date: "2026-07-24T16:22:46-06:00"
-generated_at: "2026-07-25T11:51:15Z"
+source_commit: "b9f2bc487a2878b65e3c1f80024bebab76954f27"
+source_commit_short: "b9f2bc48"
+source_commit_date: "2026-08-28T17:09:45-05:00"
+generated_at: "2026-08-29T09:39:19.832164Z"
 ---
-
-============================================================
+.. _limit-entries-scanned:
 
 # Limit Text Index Entries Scanned on Self-Managed Deployments
 
-.. include:: /includes/fact-fts-avs-text-index.rst
+.. default-domain:: mongodb
 
-If you run `$text` queries on a large dataset, a single-field text index may scan a large number of entries to return results, which can result in slow queries.
+**meta:** :keywords: on-prem
+   :description: Improve performance for $text queries by creating a compound text index with an equality match to limit scanned entries.
+                    
+**contents:** On this page
+   :local:
+   :backlinks: none
+   :depth: 2
+   :class: singlecol
 
-To improve query performance, you can create a `compound text index <compound-text-index-example>` and include an equality match in your `$text` queries. If the compound index contains the field used in your equality match, the index scans fewer entries and returns results faster.
+**include:** /includes/fact-fts-avs-text-index.rst
+
+If you run ``$text`` queries on a large dataset, a single-field text index may 
+scan a large number of entries to return results, which can result in slow queries.
+
+To improve query performance, you can create a :ref:`compound text index
+<compound-text-index-example>` and include an equality match in your
+``$text`` queries. If the compound index contains the field used in
+your equality match, the index scans fewer entries and returns results
+faster.
 
 ## About this Task
 
-In this example, a store manager queries an `inventory` collection that contains these documents:
+In this example, a store manager queries an ``inventory`` collection
+that contains these documents:
 
-```javascript
-db.inventory.insertMany( [ 
-   { _id: 1, department: "tech", description: "lime green computer" },
-   { _id: 2, department: "tech", description: "wireless red mouse" },
-   { _id: 3, department: "kitchen", description: "green placemat" },
-   { _id: 4, department: "kitchen", description: "red peeler" },
-   { _id: 5, department: "food", description: "green apple" },
-   { _id: 6, department: "food", description: "red potato" }
-] )
-```
+.. code-block:: javascript
 
-The manager performs `$text` queries for items within a specific department.
+   db.inventory.insertMany( [ 
+      { _id: 1, department: "tech", description: "lime green computer" },
+      { _id: 2, department: "tech", description: "wireless red mouse" },
+      { _id: 3, department: "kitchen", description: "green placemat" },
+      { _id: 4, department: "kitchen", description: "red peeler" },
+      { _id: 5, department: "food", description: "green apple" },
+      { _id: 6, department: "food", description: "red potato" }
+   ] )
 
-A compound text index on the `department` and `description` fields limits the index keys scanned to only documents within the specified `department`. The compound text index provides improved performance compared to a single-field text index on the `description` field.
+
+The manager performs ``$text`` queries for items within a specific
+department.
+
+A compound text index on the ``department`` and ``description`` fields
+limits the index keys scanned to only documents within the specified
+``department``. The compound text index provides improved performance
+compared to a single-field text index on the ``description`` field.
 
 ## Procedure
 
-Create a compound index on the `inventory` collection that contains the following fields:
+Create a compound index on the ``inventory`` collection that contains
+the following fields:
 
-- An ascending or descending index key on the `department` field
-- A `text` index key on the `description` field
-```javascript
-db.inventory.createIndex(
-   {
-     department: 1,
-     description: "text"
-   }
-)
-```
+- An ascending or descending index key on the ``department`` field
+- A ``text`` index key on the ``description`` field
+
+.. code-block:: javascript
+
+   db.inventory.createIndex(
+      {
+        department: 1,
+        description: "text"
+      }
+   )
 
 ## Results
 
-After you create the compound index, `$text` queries only scan documents that match a specified equality condition on the `department` field.
+After you create the compound index, ``$text`` queries only scan
+documents that match a specified equality condition on the
+``department`` field.
 
-For example, the following query scans documents with `department` equal to `kitchen` where the `description` field contains the string `green`:
+For example, the following query scans documents with ``department``
+equal to ``kitchen`` where the ``description`` field contains the string
+``green``:
 
-```javascript
-db.inventory.find( { department: "kitchen", $text: { $search: "green" } } )
-```
+.. code-block:: javascript
+
+   db.inventory.find( { department: "kitchen", $text: { $search: "green" } } )
 
 Output:
 
-```javascript
-[ { _id: 3, department: 'kitchen', description: 'green placemat' } ]
-```
+.. code-block:: javascript
+   :copyable: false
+
+   [ { _id: 3, department: 'kitchen', description: 'green placemat' } ]
 
 ### View Number of Documents Examined
 
-To see how many documents were scanned to return the query, view the query's `executionStats`:
+To see how many documents were scanned to return the query, view the
+query's :ref:`executionStats`:
 
-```javascript
-db.inventory.find(
-   {
-      department: "kitchen", $text: { $search: "green" }
-   }
-).explain("executionStats")
-```
+.. code-block:: javascript
 
-The number of index keys examined is indicated in the `totalKeysExamined <explain.executionStats.totalKeysExamined>` field. Queries that examine more index keys generally take longer to complete.
+   db.inventory.find(
+      {
+         department: "kitchen", $text: { $search: "green" }
+      }
+   ).explain("executionStats")
+   
+The number of index keys examined is indicated in the
+:data:`totalKeysExamined <explain.executionStats.totalKeysExamined>`
+field. Queries that examine more index keys generally take longer to
+complete.
 
-With the compound index on `department` and `description`, the query only examines **one** index key. There is only one document in the collection where `department` is `kitchen` and the `description` contains the string `green`.
+With the compound index on ``department`` and ``description``, the query
+only examines **one** index key. There is only one document in the
+collection where ``department`` is ``kitchen`` and the ``description``
+contains the string ``green``.
 
-However, if the query used a single-field text index only on the `description` field, the query would examine **three** index keys. There are three documents in the collection where the `description` field contains the string `green`.
+However, if the query used a single-field text index only on the
+``description`` field, the query would examine **three** index keys.
+There are three documents in the collection where the ``description``
+field contains the string ``green``.
 
-In a small collection like the one used in the preceding example, there isn't a noticeable difference in performance between single-field and compound text indexes. However, in larger collections, increased index entry scans can noticeably hinder performance. For best performance, create text indexes that limit the number of index entries scanned to best fit your equality matches.
+In a small collection like the one used in the preceding example, there
+isn't a noticeable difference in performance between single-field and
+compound text indexes. However, in larger collections, increased index
+entry scans can noticeably hinder performance. For best performance,
+create text indexes that limit the number of index entries scanned to
+best fit your equality matches.
 
 ## Learn More
 
 - :ref:`Compound text index restrictions
-<text-index-compound-restrictions>`
-
-- `specify-weights`
-- `text-index-properties`
+  <text-index-compound-restrictions>`
+- :ref:`specify-weights`
+- :ref:`text-index-properties`

@@ -1,14 +1,15 @@
 ---
 type: "Framework Learn Page"
-framework: "redis"
+framework: "Redis"
 source_repo: "https://github.com/redis/docs.git"
 source_branch: "main"
 source_path: "content/develop/clients/hiredis/handle-replies.md"
-source_commit: "9d30f68c3dad1a6b3b7d30fe604b911348ce8152"
-source_commit_short: "9d30f68c"
-source_commit_date: "2026-07-24T10:52:10-07:00"
-generated_at: "2026-07-25T11:51:22Z"
+source_commit: "f8693349287b0efbef3c865b6f6a2aceca88594d"
+source_commit_short: "f869334"
+source_commit_date: "2026-08-28T10:01:19-05:00"
+generated_at: "2026-08-29T09:38:56.067176Z"
 ---
+# Handle Replies
 
 ---
 categories:
@@ -238,7 +239,7 @@ reply = NULL;
 Arrays (reply type `REDIS_REPLY_ARRAY`) and maps (reply type `REDIS_REPLY_MAP`)
 are returned by commands that retrieve several values at the
 same time. For both types, the number of elements in the reply is contained in
-`reply->elements` and the pointer to the array itself is is `reply->element`.
+`reply->elements` and the pointer to the array itself is `reply->element`.
 Each item in the array is of type `redisReply`. The array elements
 are typically simple types rather than arrays or maps.
 

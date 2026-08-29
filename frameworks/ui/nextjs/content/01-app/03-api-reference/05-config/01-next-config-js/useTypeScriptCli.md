@@ -1,14 +1,15 @@
 ---
 type: "Framework Learn Page"
-framework: "nextjs"
+framework: "Next.js"
 source_repo: "https://github.com/vercel/next.js/"
 source_branch: "canary"
 source_path: "docs/01-app/03-api-reference/05-config/01-next-config-js/useTypeScriptCli.mdx"
-source_commit: "dcf242a17b5d4622bbd9624db531a9d84177619f"
-source_commit_short: "dcf242a1"
-source_commit_date: "2026-07-25T10:16:19+02:00"
-generated_at: "2026-07-25T11:50:53Z"
+source_commit: "33a5d542e519fe4e05c8c8c2c2845da9f741699b"
+source_commit_short: "33a5d542"
+source_commit_date: "2026-08-29T00:04:45-07:00"
+generated_at: "2026-08-29T09:40:24.308370Z"
 ---
+# Usetypescriptcli
 
 ---
 title: useTypeScriptCli
@@ -16,7 +17,7 @@ description: Run the project-local TypeScript CLI for type checking during produ
 version: experimental
 ---
 
-The `experimental.useTypeScriptCli` option makes `next build` run the project-local `tsc` command instead of loading the TypeScript JavaScript compiler API. You can use this option with TypeScript 6, and it enables [TypeScript 7](https://devblogs.microsoft.com/typescript/announcing-typescript-7-0/) support while its JavaScript API is unavailable.
+By default, `next build` runs the project-local `tsc` command instead of loading the TypeScript JavaScript compiler API. This supports TypeScript 6 and enables [TypeScript 7](https://devblogs.microsoft.com/typescript/announcing-typescript-7-0/) while its JavaScript API is unavailable.
 
 Install TypeScript 7 in your project:
 
@@ -36,14 +37,14 @@ yarn add -D typescript@^7
 bun add -D typescript@^7
 ```
 
-Then, explicitly enable the CLI checker:
+The CLI checker is enabled by default. To use the TypeScript JavaScript compiler API instead, set `experimental.useTypeScriptCli` to `false`:
 
 ```ts filename="next.config.ts" switcher
 import type { NextConfig } from 'next'
 
 const nextConfig: NextConfig = {
   experimental: {
-    useTypeScriptCli: true,
+    useTypeScriptCli: false,
   },
 }
 
@@ -54,14 +55,14 @@ export default nextConfig
 /** @type {import('next').NextConfig} */
 const nextConfig = {
   experimental: {
-    useTypeScriptCli: true,
+    useTypeScriptCli: false,
   },
 }
 
 module.exports = nextConfig
 ```
 
-Next.js does not select the CLI checker automatically. If TypeScript 7 is installed without this option, `next build` exits with instructions to enable it or install a TypeScript version supported by the default checker.
+If you opt out while using TypeScript 7, `next build` exits because the TypeScript JavaScript compiler API is unavailable.
 
 ## Behavior
 

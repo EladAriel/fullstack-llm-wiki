@@ -1,72 +1,135 @@
 ---
 type: "Framework Learn Page"
-framework: "mongodb"
+framework: "MongoDB"
 source_repo: "https://github.com/mongodb/docs.git"
 source_branch: "main"
 source_path: "content/manual/manual/source/reference/method/cursor.readPref.txt"
-source_commit: "ab9db26ed3d11618cdb61516d8180337d8e3f679"
-source_commit_short: "ab9db26e"
-source_commit_date: "2026-07-24T16:22:46-06:00"
-generated_at: "2026-07-25T11:51:15Z"
+source_commit: "b9f2bc487a2878b65e3c1f80024bebab76954f27"
+source_commit_short: "b9f2bc48"
+source_commit_date: "2026-08-28T17:09:45-05:00"
+generated_at: "2026-08-29T09:39:19.963379Z"
 ---
-
-==================================
-
 # cursor.readPref() (mongosh method)
+
+**meta:** :description: Control query routing in replica sets using `cursor.readPref()` with options for read preference mode, tag sets, and hedged reads.
+
+.. default-domain:: mongodb
+
+**contents:** On this page
+   :local:
+   :backlinks: none
+   :depth: 1
+   :class: singlecol
 
 ## Definition
 
+**method:** cursor.readPref(mode, tagSet)
+
+
+   .. include:: /includes/fact-mongosh-shell-method.rst
+
+
+   Append :method:`~cursor.readPref()` to a cursor to
+   control how the client routes the query to members
+   of the replica set.
+
+   .. note::
+
+      You must apply :method:`~cursor.readPref()` to the cursor before retrieving
+      any documents from the database.
+
 ### Parameters
 
-:method:`~cursor.readPref()` does not support the `replica-set-read-preference-max-staleness` option for read preference.
+.. list-table::
+   :header-rows: 1
+   :widths: 20 20 80
+
+   * - Parameter
+
+     - Type
+
+     - Description
+
+   * - :ref:`mode <cursor-readpref-mode>`
+
+     - string
+
+     - .. _cursor-readpref-mode:
+     
+       One of the following :term:`read preference` modes: :readmode:`primary`,
+       :readmode:`primaryPreferred`, :readmode:`secondary`,
+       :readmode:`secondaryPreferred`, or :readmode:`nearest`
+
+   * - :ref:`tagSet <cursor-readpref-tagset>`
+
+     - array of documents
+
+     - .. _cursor-readpref-tagset:
+
+       Optional. A :ref:`tag set
+       <replica-set-read-preference-tag-sets>` used to target reads to
+       members with the specified tag(s). ``tagSet`` is not available
+       if using :readmode:`primary`.
+
+       For details, see :ref:`replica-set-read-preference-tag-sets`.
+
+:method:`~cursor.readPref()` does not support the
+:ref:`replica-set-read-preference-max-staleness` option for read
+preference.
 
 ## Compatibility
 
-This method is available in deployments hosted in the following environments:
+This method is available in deployments hosted in the following environments: 
 
-.. include:: /includes/fact-environments-atlas-only.rst
+**include:** /includes/fact-environments-atlas-only.rst
 
-.. include:: /includes/fact-environments-atlas-support-all.rst
+**include:** /includes/fact-environments-atlas-support-all.rst
 
-.. include:: /includes/fact-environments-onprem-only.rst
+**include:** /includes/fact-environments-onprem-only.rst
 
 ## Examples
 
 ### Specify Read Preference Mode
 
-The following operation uses the read preference `mode <cursor-readpref-mode>` to target the read to a secondary member.
+The following operation uses the read preference :ref:`mode
+<cursor-readpref-mode>` to target the read to a secondary member.
 
-```javascript
-db.collection.find({ }).readPref( "secondary")
-```
+.. code-block:: javascript
+
+   db.collection.find({ }).readPref( "secondary")
 
 ### Specify Read Preference Tag Set
 
-To target secondaries with specific tags, include both the `mode <cursor-readpref-mode>` and the `tagSet <cursor-readpref-tagset>` array:
+To target secondaries with specific tags, include both the :ref:`mode
+<cursor-readpref-mode>` and the :ref:`tagSet <cursor-readpref-tagset>`
+array:
 
-```javascript
-db.collection.find({ }).readPref( 
-   "secondary", 
-   [ 
-      { "datacenter": "B" },    // First, try matching by the datacenter tag
-      { "region": "West"},      // If not found, then try matching by the region tag
-      { }                       // If not found, then use the empty document to match all eligible members
-   ]
-)
-```
+.. code-block:: javascript
 
-During the secondary selection process, MongoDB tries to find secondary members with the `datacenter: "B"` tag first.
+   db.collection.find({ }).readPref( 
+      "secondary", 
+      [ 
+         { "datacenter": "B" },    // First, try matching by the datacenter tag
+         { "region": "West"},      // If not found, then try matching by the region tag
+         { }                       // If not found, then use the empty document to match all eligible members
+      ]
+   )
+
+During the secondary selection process, MongoDB tries to find secondary
+members with the ``datacenter: "B"`` tag first.
 
 - If found, MongoDB limits the eligible secondaries to those with the
-`datacenter: "B"` tag and ignores the remaining tags.
-
+  ``datacenter: "B"`` tag and ignores the remaining tags. 
+  
 - If none are found, then, MongoDB tries to find secondary members with
-the `"region": "West"` tag.
+  the ``"region": "West"`` tag. 
 
-- If found, MongoDB limits the eligible secondaries to those with the
-`"region": "West"` tag.
+  - If found, MongoDB limits the eligible secondaries to those with the
+    ``"region": "West"`` tag.
 
-- If none are found, MongoDB uses any eligible secondaries.
-See `read-pref-order-matching` for details.
+  - If none are found, MongoDB uses any eligible secondaries.
 
-> **Seealso:** `/tutorial/configure-replica-set-tag-sets`
+
+See :ref:`read-pref-order-matching` for details.
+
+**seealso:** :doc:`/tutorial/configure-replica-set-tag-sets`

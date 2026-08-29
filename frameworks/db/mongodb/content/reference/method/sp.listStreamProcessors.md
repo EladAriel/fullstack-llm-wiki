@@ -1,56 +1,205 @@
 ---
 type: "Framework Learn Page"
-framework: "mongodb"
+framework: "MongoDB"
 source_repo: "https://github.com/mongodb/docs.git"
 source_branch: "main"
 source_path: "content/manual/manual/source/reference/method/sp.listStreamProcessors.txt"
-source_commit: "ab9db26ed3d11618cdb61516d8180337d8e3f679"
-source_commit_short: "ab9db26e"
-source_commit_date: "2026-07-24T16:22:46-06:00"
-generated_at: "2026-07-25T11:51:15Z"
+source_commit: "b9f2bc487a2878b65e3c1f80024bebab76954f27"
+source_commit_short: "b9f2bc48"
+source_commit_date: "2026-08-28T17:09:45-05:00"
+generated_at: "2026-08-29T09:39:19.991995Z"
 ---
-
-==========================================
-
 # sp.listStreamProcessors() (mongosh method)
+
+**meta:** :description: Retrieve details of named stream processors on a Stream Processing Workspace using `sp.listStreamProcessors()`.
+
+.. default-domain:: mongodb
+
+**contents:** On this page
+   :local:
+   :backlinks: none
+   :depth: 2
+   :class: singlecol
 
 ## Definition
 
-.. versionadded:: 7.0
+**method:** sp.listStreamProcessors()
+
+**versionadded:** 7.0
+
+   Returns documents for each named
+   :atlas:`Stream Processor
+   </atlas-sp/overview/#mongodb-expression-exp.Stream-Processor>` on
+   the current :atlas:`Stream Processing Workspace
+   </atlas-sp/overview/#mongodb-expression-exp.Stream-Processing-Instance>`. Each
+   document provides descriptive information including the name,
+   current state, and pipeline of a stream processor.
 
 ## Compatibility
 
-.. include:: /includes/fact-environments-atlas-support-stream-processing-only.rst
+**include:** /includes/fact-environments-atlas-support-stream-processing-only.rst
 
 ## Syntax
-
+   
 The :method:`sp.listStreamProcessors()` method has the following syntax:
 
-```json
-sp.listStreamProcessors(
-  {
-   <filter>
-  }
-)
-```
+.. code-block:: json
+
+   sp.listStreamProcessors(
+     {
+      <filter>
+     }
+   )
+
 
 ## Command Fields
 
-`sp.listStreamProcessors()` takes these fields:
+``sp.listStreamProcessors()`` takes these fields:
+
+.. list-table::
+   :header-rows: 1
+   :widths: 20 20 20 40
+
+   * - Field
+     - Type
+     - Necessity	  
+     - Description
+
+   * - ``filter``
+     - document
+     - Optional
+     - Document specifying which fields to filter stream processors
+       on. If you provide a filter, the command will only return
+       those processors which match the values for all
+       the fields you specify.
 
 ## Behavior
 
-`sp.listStreamProcessors()` returns documents describing all of the named stream processors on the current stream processing workspace to `STDOUT`.
+``sp.listStreamProcessors()`` returns documents describing all of
+the named stream processors on the current stream processing workspace
+to ``STDOUT``. 
 
 ## Access Control
 
-The user running `sp.listStreamProcessors()` must have the :atlasrole:`atlasAdmin` role.
+The user running ``sp.listStreamProcessors()`` must have the
+:atlasrole:`atlasAdmin` role.
 
 ## Example
 
-The following example shows an expected response from `sp.listStreamProcessors()` when the command is called without any filter:
+The following example shows an expected response from
+``sp.listStreamProcessors()`` when the command is called without any
+filter:
 
-The following example shows an expected response if you invoke `sp.listStreamProcessors()` filtering for only those stream processors with a `state` of `running`.
+.. io-code-block::
+   :copyable: true
+
+   .. input:: 
+      :language: sh
+
+      sp.listStreamProcessors()
+
+   .. output:: 
+      :language: json
+      :linenos:
+
+      {
+	id: '0135',
+	name: "proc01",
+	last_modified: ISODate("2023-03-20T20:15:54.601Z"),
+	state: "RUNNING",
+	error_msg: '',
+	pipeline: [
+	  {
+	    $source: {
+	      connectionName: "myKafka", 
+	      topic: "stuff"
+	    }
+	  },
+	  {
+	    $match: { 
+	      temperature: 46 
+	    }
+	  },
+	  {
+	    $emit: {
+	      connectionName: "mySink",
+	      topic: "output",
+	    }  
+	  }
+	],
+	lastStateChange: ISODate("2023-03-20T20:15:59.442Z")
+      },
+      {   
+	id: '0218',
+	name: "proc02",
+	last_modified: ISODate("2023-03-21T20:17:33.601Z"),
+	state: "STOPPED",
+	error_msg: '',
+	pipeline: [
+	  {
+	    $source: {
+	      connectionName: "myKafka", 
+	      topic: "things"
+	    }
+	  },
+	  {
+	    $match: { 
+	      temperature: 41 
+	    }
+	  },
+	  {
+	    $emit: {
+	      connectionName: "mySink",
+	      topic: "results",
+	    }  
+	  }
+	],
+	lastStateChange: ISODate("2023-03-21T20:18:26.139Z")
+      }
+
+The following example shows an expected response if you invoke
+``sp.listStreamProcessors()`` filtering for only those stream
+processors with a ``state`` of ``running``.
+
+.. io-code-block::
+   :copyable: true
+
+   .. input:: 
+      :language: sh
+
+      sp.listStreamProcessors({"state": "running"})
+
+   .. output:: 
+      :language: json
+      :linenos:
+
+      {
+	id: '0135',
+	name: "proc01",
+	last_modified: ISODate("2023-03-20T20:15:54.601Z"),
+	state: "RUNNING",
+	error_msg: '',
+	pipeline: [
+	  {
+	    $source: {
+	      connectionName: "myKafka", 
+	      topic: "stuff"
+	    }
+	  },
+	  {
+	    $match: { 
+	      temperature: 46 
+	    }
+	  },
+	  {
+	    $emit: {
+	      connectionName: "mySink",
+	      topic: "output",
+	    }  
+	  }
+	],
+	lastStateChange: ISODate("2023-03-20T20:15:59.442Z")
+      }
 
 ## Learn More
 

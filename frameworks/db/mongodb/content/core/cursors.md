@@ -1,77 +1,128 @@
 ---
 type: "Framework Learn Page"
-framework: "mongodb"
+framework: "MongoDB"
 source_repo: "https://github.com/mongodb/docs.git"
 source_branch: "main"
 source_path: "content/manual/manual/source/core/cursors.txt"
-source_commit: "ab9db26ed3d11618cdb61516d8180337d8e3f679"
-source_commit_short: "ab9db26e"
-source_commit_date: "2026-07-24T16:22:46-06:00"
-generated_at: "2026-07-25T11:51:15Z"
+source_commit: "b9f2bc487a2878b65e3c1f80024bebab76954f27"
+source_commit_short: "b9f2bc48"
+source_commit_date: "2026-08-28T17:09:45-05:00"
+generated_at: "2026-08-29T09:39:19.517700Z"
 ---
-
-=======
+.. _cursors:
 
 # Cursors
 
-A `cursor` points to the results of a `query <read-operations-queries>`. Cursors let you iterate over database results one batch at a time.
+**meta:** :description: Learn about cursors in MongoDB. Cursors point to the
+      results of a query and let you iterate over database results one
+      batch at a time.
+
+.. default-domain:: mongodb
+
+**contents:** On this page
+   :local:
+   :backlinks: none
+   :depth: 1
+   :class: singlecol
+
+A :term:`cursor` points to the results of a :ref:`query
+<read-operations-queries>`. Cursors let you iterate over database
+results one batch at a time.
 
 ## Use Cases
 
-The `find()` and `aggregate()` methods return a cursor with a batch of results. Iterate the cursor manually or use :method:`~cursor.toArray()` to access documents. For more information, see `<read-operations-cursors>`.
+The ``find()`` and ``aggregate()`` methods return a cursor with a batch
+of results. Iterate the cursor manually or use :method:`~cursor.toArray()`
+to access documents. For more information, see
+:ref:`<read-operations-cursors>`.
 
-For `capped collections <manual-capped-collection>`, use a tailable cursor to retrieve documents as they are inserted. For more information, see `<tailable-cursors-landing-page>`.
+For :ref:`capped collections <manual-capped-collection>`, use a
+tailable cursor to retrieve documents as they are inserted. For more
+information, see :ref:`<tailable-cursors-landing-page>`.
+
+.. _cursor-behaviors:
 
 ## Behavior
 
-MongoDB closes cursors created within a `client session <read-isolation-consistency-recency>` when:
+MongoDB closes cursors created within a :ref:`client session
+<read-isolation-consistency-recency>` when:
 
 - The client exhausts the cursor.
 - You manually close the cursor.
 - You manually terminate the session.
-- The `session <server-sessions>` times out.
-:parameter:`cursorTimeoutMillis` sets the timeout for idle cursors (default: 10 minutes). MongoDB closes idle cursors outside sessions after this time. Returning a batch extends the timeout. Use :dbcommand:`killCursors` to close cursors manually.
+- The :ref:`session <server-sessions>` times out.
 
-:parameter:`localLogicalSessionTimeoutMinutes` sets the session timeout (default: 30 minutes). Use :dbcommand:`refreshSessions` to extend a session and :dbcommand:`killSessions` to end it.
+:parameter:`cursorTimeoutMillis` sets the timeout for idle cursors
+(default: 10 minutes). MongoDB closes idle cursors outside sessions
+after this time. Returning a batch extends the timeout. Use
+:dbcommand:`killCursors` to close cursors manually.
 
-Drivers and :binary:`~bin.mongosh` create implicit sessions for cursors opened outside explicit sessions.
+:parameter:`localLogicalSessionTimeoutMinutes` sets the session timeout
+(default: 30 minutes). Use :dbcommand:`refreshSessions` to extend a
+session and :dbcommand:`killSessions` to end it.
+
+Drivers and :binary:`~bin.mongosh` create implicit sessions for cursors
+opened outside explicit sessions. 
+
+.. _cursor-isolation:
+.. _cursor-concurrent-updates:
 
 ### Concurrent Updates While Using a Cursor
 
-.. include:: /includes/fact-concurrent-updates-cursor.rst
+**include:** /includes/fact-concurrent-updates-cursor.rst
 
-### Cursor Results for Non-Existent `mongos` Databases
+### Cursor Results for Non-Existent ``mongos`` Databases
 
-.. include:: /includes/fact-mongos-db-agg-validation.rst
+**include:** /includes/fact-mongos-db-agg-validation.rst
 
 ## Get Started
 
-- `<read-operations-cursors>`
-- `<tailable-cursors-landing-page>`
+- :ref:`<read-operations-cursors>`
+- :ref:`<tailable-cursors-landing-page>`
 - :driver:`MongoDB Drivers </>`
+
+.. _cursor-id:
+
 ## Details
 
-:dbcommand:`find` and :dbcommand:`aggregate` operations execute until they fill a `batch <cursor-batches>`. The query then pauses. This paused query is a cursor, identified by a cursor ID.
+:dbcommand:`find` and :dbcommand:`aggregate` operations execute until
+they fill a :ref:`batch <cursor-batches>`. The query then pauses. This
+paused query is a *cursor*, identified by a *cursor ID*.
 
-The database returns the batch and cursor ID. Drivers and `mongosh` store this in a client-side cursor. If more documents exist, the cursor retrieves the next batch via :dbcommand:`getMore`. Use :method:`cursor.objsLeftInBatch()` to check remaining batch results and :method:`cursor.hasNext()` to check for more results.
+The database returns the batch and cursor ID. Drivers and ``mongosh``
+store this in a client-side cursor. If more documents exist, the cursor
+retrieves the next batch via :dbcommand:`getMore`. Use
+:method:`cursor.objsLeftInBatch()` to check remaining batch results and
+:method:`cursor.hasNext()` to check for more results.
+
+.. _cursor-batches:
 
 ### Cursor Batches
 
-Cursors return results in batches, limited by the 16 MiB `maximum BSON document size <limit-bson-document-size>`. Use :method:`cursor.batchSize()` to set the document limit. `find()` and `aggregate()` default to a batch size of `101`. Subsequent :dbcommand:`getMore` operations have no default limit, only the 16 MiB message size.
+Cursors return results in batches, limited by the 16 MiB :ref:`maximum
+BSON document size <limit-bson-document-size>`. Use
+:method:`cursor.batchSize()` to set the document limit. ``find()`` and
+``aggregate()`` default to a batch size of ``101``. Subsequent
+:dbcommand:`getMore` operations have no default limit, only the 16 MiB
+message size.
 
 ### Sorting
 
-Queries with a sort operation without an index must load all documents into memory before returning results.
+Queries with a sort operation *without* an index must load all
+documents into memory before returning results.
 
 ### Cursor Information
 
-:method:`db.serverStatus()` returns cursor metrics in the `metrics.cursor` field. See :serverstatus:`metrics.cursor`.
+:method:`db.serverStatus()` returns cursor metrics in the
+``metrics.cursor`` field. See :serverstatus:`metrics.cursor`.
 
 ## Learn More
 
 - :driver:`MongoDB Drivers </>`
-- `<doc-cursor-methods>`
-## Contents
+- :ref:`<doc-cursor-methods>`
 
-- Iterate a Cursor </tutorial/iterate-a-cursor/>
-- Tailable Cursors </core/tailable-cursors>
+
+**toctree:** :titlesonly:
+   
+   Iterate a Cursor </tutorial/iterate-a-cursor/>
+   Tailable Cursors </core/tailable-cursors>

@@ -1,7 +1,7 @@
 ---
 type: "Framework Learn Directory Index"
 framework: "Material UI"
-generated_at: "2026-07-25T13:39:41.056940Z"
+generated_at: "2026-08-29T09:40:18.312778Z"
 ---
 # Content
 
@@ -17,3 +17,16 @@ This directory contains Material UI learning pages related to content.
 
 ## Pages in This Directory
 
+
+## Subdirectories
+
+- [All Components](all-components/index.md)
+- [Components](components/index.md)
+- [Customization](customization/index.md)
+- [Design Resources](design-resources/index.md)
+- [Discover More](discover-more/index.md)
+- [Experimental Api](experimental-api/index.md)
+- [Getting Started](getting-started/index.md)
+- [Guides](guides/index.md)
+- [Integrations](integrations/index.md)
+- [Migration](migration/index.md)

@@ -4,10 +4,10 @@ framework: "Grafana"
 source_repo: "https://github.com/grafana/grafana.git"
 source_branch: "main"
 source_path: "docs/sources/alerting/monitor-status/view-active-notifications.md"
-source_commit: "d18e58d33aa8741f08fbab4aa73bdaf1f04e3be5"
-source_commit_short: "d18e58d3"
-source_commit_date: "2026-07-25T13:50:43+02:00"
-generated_at: "2026-07-25T19:08:08.943846Z"
+source_commit: "5e3a02f81d2aadf4bf24fe49ed97d872556f5bf9"
+source_commit_short: "5e3a02f8"
+source_commit_date: "2026-08-29T10:58:19+09:00"
+generated_at: "2026-08-29T09:39:37.464633Z"
 ---
 ---
 aliases:
@@ -34,6 +34,11 @@ labels:
 title: View active notifications
 weight: 800
 refs:
+  view-notification-history:
+    - pattern: /docs/grafana/
+      destination: /docs/grafana/<GRAFANA_VERSION>/alerting/monitor-status/view-notification-history/
+    - pattern: /docs/grafana-cloud/
+      destination: /docs/grafana-cloud/alerting-and-irm/alerting/monitor-status/view-notification-history/
   alertmanager:
     - pattern: /docs/grafana/
       destination: /docs/grafana/<GRAFANA_VERSION>/alerting/set-up/configure-alertmanager/
@@ -58,6 +63,8 @@ In this view, you can:
 - Filter for alert instances that match specific criteria.
 
 The Active notifications view is useful for debugging and verifying how notifications are grouped based on your notification policy settings.
+
+To review notifications that were already sent, refer to [View notification history](ref:view-notification-history).
 
 ## View alert groups and notification state
 
@@ -113,3 +120,5 @@ To view notification errors, navigate to **Alerts & IRM** -> **Alerting** -> **N
 Each contact point displays a message about the status of their latest notification deliveries.
 
 If a contact point is failing, a red message indicates that there are errors delivering notifications. Hover over the error message to see the notification error details.
+
+To review past delivery attempts across contact points, refer to [View notification history](ref:view-notification-history).

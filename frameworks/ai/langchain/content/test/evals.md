@@ -4,12 +4,11 @@ framework: "LangChain"
 source_repo: "https://github.com/langchain-ai/docs"
 source_branch: "main"
 source_path: "src/oss/langchain/test/evals.mdx"
-source_commit: "2aae1dfc98ee953a9a5185fb6fcdd9efb3f4d878"
-source_commit_short: "2aae1dfc"
-source_commit_date: "2026-07-25T00:27:23Z"
-generated_at: "2026-07-25T11:51:05Z"
+source_commit: "a174f9cf7c91ee5eb14ee2382eb48bfe6e4956e9"
+source_commit_short: "a174f9c"
+source_commit_date: "2026-08-28T17:04:12-07:00"
+generated_at: "2026-08-29T09:38:24.259746Z"
 ---
-
 ---
 title: Agent Evals
 description: Evaluate agent trajectories using deterministic matching or LLM-as-judge evaluators with AgentEvals and LangSmith.
@@ -53,9 +52,15 @@ The [`agentevals`](https://github.com/langchain-ai/agentevals) package provides 
 ## Install AgentEvals
 
 :::python
-```bash
-pip install agentevals
+<CodeGroup>
+```bash pip
+pip install -U agentevals
 ```
+
+```bash uv
+uv add agentevals
+```
+</CodeGroup>
 :::
 
 :::js

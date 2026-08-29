@@ -1,7 +1,7 @@
 ---
 type: "Framework Learn Directory Index"
 framework: "Arize Phoenix"
-generated_at: "2026-07-25T19:08:24.985438Z"
+generated_at: "2026-08-29T09:39:58.962049Z"
 ---
 # Tracing
 
@@ -21,3 +21,10 @@ This directory contains Arize Phoenix learning pages related to tracing.
 - [How To Tracing](how-to-tracing.md)
 - [Llm Traces](llm-traces.md)
 - [Tutorial](tutorial.md)
+
+## Subdirectories
+
+- [Concepts Tracing](concepts-tracing/index.md)
+- [How To Tracing](how-to-tracing/index.md)
+- [Llm Traces](llm-traces/index.md)
+- [Tutorial](tutorial/index.md)

@@ -1,138 +1,232 @@
 ---
 type: "Framework Learn Page"
-framework: "mongodb"
+framework: "MongoDB"
 source_repo: "https://github.com/mongodb/docs.git"
 source_branch: "main"
 source_path: "content/manual/manual/source/reference/command/planCacheSetFilter.txt"
-source_commit: "ab9db26ed3d11618cdb61516d8180337d8e3f679"
-source_commit_short: "ab9db26e"
-source_commit_date: "2026-07-24T16:22:46-06:00"
-generated_at: "2026-07-25T11:51:15Z"
+source_commit: "b9f2bc487a2878b65e3c1f80024bebab76954f27"
+source_commit_short: "b9f2bc48"
+source_commit_date: "2026-08-28T17:09:45-05:00"
+generated_at: "2026-08-29T09:39:20.074465Z"
 ---
-
-=====================================
-
 # planCacheSetFilter (database command)
+
+**meta:** :description: Set an index filter for a collection to optimize query planning, with examples for different query shapes and compatibility details.
+
+.. default-domain:: mongodb
+
+**contents:** On this page
+   :local:
+   :backlinks: none
+   :depth: 1
+   :class: singlecol
 
 ## Definition
 
+**dbcommand:** planCacheSetFilter
+
+   Set an :ref:`index filter <index-filters>` for a collection. If
+   an index filter already exists for the :term:`plan cache query shape`, the
+   command overrides the previous index filter.
+
 ### Query Settings
 
-.. include:: /includes/persistent-query-settings-avoid-index-filters.rst
+**include:** /includes/persistent-query-settings-avoid-index-filters.rst
 
 ## Compatibility
 
 This command is available in deployments hosted in the following environments:
 
-.. include:: /includes/fact-environments-atlas-only.rst
+**include:** /includes/fact-environments-atlas-only.rst
 
-.. include:: /includes/fact-environments-atlas-support-no-free.rst
+**include:** /includes/fact-environments-atlas-support-no-free.rst
 
-.. include:: /includes/fact-environments-onprem-only.rst
+**include:** /includes/fact-environments-onprem-only.rst
 
 ## Syntax
 
 The command has the following syntax:
 
-```javascript
-db.runCommand(
-   {
-      planCacheSetFilter: <collection>,
-      query: <query>,
-      sort: <sort>,
-      projection: <projection>,
-      collation: { <collation> },
-      indexes: [ <index1>, <index2>, ...],
-      comment: <any>
-   }
-)
-```
+.. code-block:: javascript
+
+   db.runCommand(
+      {
+         planCacheSetFilter: <collection>,
+         query: <query>,
+         sort: <sort>,
+         projection: <projection>,
+         collation: { <collation> },
+         indexes: [ <index1>, <index2>, ...],
+         comment: <any>
+      }
+   )
 
 The plan cache query shape for the index filter is the combination of:
 
-- `query`
-- `sort`
-- `projection`
-- `collation`
+- ``query``
+- ``sort``
+- ``projection``
+- ``collation``
+
 ## Command Fields
 
 The command has the following fields:
 
-Index filters only exist for the duration of the server process and do not persist after shutdown. To clear the index filters, use the :dbcommand:`planCacheClearFilters` command.
+.. list-table::
+   :header-rows: 1
+   :widths: 20 20 80
+   
+   * - Field
+     - Type
+     - Description
+   
+   * - ``planCacheSetFilter``
+     - string
+     - The name of the collection for the index filter.
+   
+   * - ``query``
+     - document
+     - The query predicate for the index filter.
+          
+       Only the predicate structure, including the field names,
+       is used in the index filter. The field values in the query
+       predicate are not used. Therefore, the query predicate in an
+       index filter is used by similar queries that differ only in the
+       field values.
+          
+   * - ``sort``
+     - document
+     - Optional. The sort for the index filter.
+          
+   * - ``projection``
+     - document
+     - Optional. The projection for the index filter.
+   
+   * - ``collation`` 
+     - document
+     - .. include:: /includes/extracts/collation-option.rst
+
+       .. include:: /includes/index-filters-and-collations.rst
+
+   * - ``indexes``   
+     - array
+     - An array of index filters for the specified plan cache query shape.
+          
+       Specify the index filters as one of these arrays:
+
+       - Index specification documents. For example, ``[ { x : 1 }, ...
+         ]``.
+       - Index names. For example, ``[ "x_1", ... ]``.
+          
+       The :ref:`query optimizer <read-operations-query-optimization>` uses either a
+       collection scan or the index arrays for the query plan. If the
+       specified indexes do not exist or are :doc:`hidden
+       </core/index-hidden>`, the optimizer uses a collection scan.
+
+       For multiple indexes with the same key pattern, you must 
+       specify the index as an array of names.
+            
+   * - ``comment``
+     - any
+     - .. include:: /includes/extracts/comment-content.rst
+
+Index filters only exist for the duration of the server process and do
+not persist after shutdown. To clear the index filters, use the
+:dbcommand:`planCacheClearFilters` command.
 
 ## Required Access
 
-A user must have access that includes the :authaction:`planCacheIndexFilter` action.
+A user must have access that includes the
+:authaction:`planCacheIndexFilter` action.
+
+.. _planCacheSetFilter-output:
 
 ## Examples
 
 ### Set Filter on Plan Cache Query Shape Consisting of Predicate Only
 
-The following example creates an index filter on the `orders` collection such that for queries that consist only of an equality match on the `status` field without any projection and sort, the query optimizer evaluates only the two specified indexes and the collection scan for the winning plan:
+The following example creates an index filter on the ``orders``
+collection such that for queries that consist only of an equality
+match on the ``status`` field without any projection and sort, the
+query optimizer evaluates only the two specified indexes and the
+collection scan for the winning plan:
 
-```javascript
-db.runCommand(
-   {
-      planCacheSetFilter: "orders",
-      query: { status: "A" },
-      indexes: [
-         { cust_id: 1, status: 1 },
-         { status: 1, order_date: -1 }
-      ]
-   }
-)
-```
+.. code-block:: javascript
 
-In the query predicate, only the structure of the predicate, including the field names, are significant; the values are insignificant. As such, the created filter applies to the following operations:
+   db.runCommand(
+      {
+         planCacheSetFilter: "orders",
+         query: { status: "A" },
+         indexes: [
+            { cust_id: 1, status: 1 },
+            { status: 1, order_date: -1 }
+         ]
+      }
+   )
 
-```javascript
-db.orders.find( { status: "D" } )
-db.orders.find( { status: "P" } )
-```
+In the query predicate, only the structure of the predicate, including
+the field names, are significant; the values are insignificant. As
+such, the created filter applies to the following operations:
 
-To see whether MongoDB will apply an index filter for a plan cache query shape, check the `explain.queryPlanner.indexFilterSet` field of either the :method:`db.collection.explain()` or the :method:`cursor.explain()` method.
+.. code-block:: javascript
+
+   db.orders.find( { status: "D" } )
+   db.orders.find( { status: "P" } )
+
+To see whether MongoDB will apply an index filter for a plan cache query shape,
+check the :data:`~explain.queryPlanner.indexFilterSet` field of either
+the :method:`db.collection.explain()` or the :method:`cursor.explain()`
+method.
 
 ### Set Filter on Plan Cache Query Shape Consisting of Predicate, Projection, and Sort
 
-The following example creates an index filter for the `orders` collection. The filter applies to queries whose predicate is an equality match on the `item` field, where only the `quantity` field is projected and an ascending sort by `order_date` is specified.
+The following example creates an index filter for the ``orders``
+collection. The filter applies to queries whose predicate is an
+equality match on the ``item`` field, where only the ``quantity`` field
+is projected and an ascending sort by ``order_date`` is specified.
 
-```javascript
-db.runCommand(
-   {
-      planCacheSetFilter: "orders",
-      query: { item: "ABC" },
-      projection: { quantity: 1, _id: 0 },
-      sort: { order_date: 1 },
-      indexes: [
-         { item: 1, order_date: 1 , quantity: 1 }
-      ]
-   }
-)
-```
+.. code-block:: javascript
 
-For the plan cache query shape, the query optimizer will only consider indexed plans which use the index `{ item: 1, order_date: 1, quantity: 1 }`.
+   db.runCommand(
+      {
+         planCacheSetFilter: "orders",
+         query: { item: "ABC" },
+         projection: { quantity: 1, _id: 0 },
+         sort: { order_date: 1 },
+         indexes: [
+            { item: 1, order_date: 1 , quantity: 1 }
+         ]
+      }
+   )
+
+For the plan cache query shape, the query optimizer will only consider indexed
+plans which use the index ``{ item: 1, order_date: 1, quantity: 1 }``.
 
 ### Set Filter on Plan Cache Query Shape Consisting of Predicate and Collation
 
-The following example creates an index filter for the `orders` collection. The filter applies to queries whose predicate is an equality match on the `item` field and the collation `en_US` (English United States).
+The following example creates an index filter for the ``orders``
+collection. The filter applies to queries whose predicate is an equality
+match on the ``item`` field and the collation ``en_US`` (English United
+States).
 
-```javascript
-db.runCommand(
-   {
-      planCacheSetFilter: "orders",
-      query: { item: "Movie" },
-      collation: { locale: "en_US" },
-      indexes: [
-         { item: 1, order_date: 1 , quantity: 1 }
-      ]
-   }
-)
-```
+.. code-block:: javascript
 
-For the plan cache query shape, the query optimizer only uses indexed plans that use the index `{ item: 1, order_date: 1, quantity: 1 }`.
+   db.runCommand(
+      {
+         planCacheSetFilter: "orders",
+         query: { item: "Movie" },
+         collation: { locale: "en_US" },
+         indexes: [
+            { item: 1, order_date: 1 , quantity: 1 }
+         ]
+      }
+   )
 
-.. include:: /includes/index-filters-and-collations.rst
+For the plan cache query shape, the query optimizer only uses indexed plans that
+use the index ``{ item: 1, order_date: 1, quantity: 1 }``.
 
-> **Seealso:** - :dbcommand:`planCacheClearFilters`
-- :dbcommand:`planCacheListFilters`
-- :pipeline:`$planCacheStats`
+**include:** /includes/index-filters-and-collations.rst
+
+**seealso:** - :dbcommand:`planCacheClearFilters`
+   - :dbcommand:`planCacheListFilters`
+   - :pipeline:`$planCacheStats`

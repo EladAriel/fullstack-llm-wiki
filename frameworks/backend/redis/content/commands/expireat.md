@@ -1,14 +1,15 @@
 ---
 type: "Framework Learn Page"
-framework: "redis"
+framework: "Redis"
 source_repo: "https://github.com/redis/docs.git"
 source_branch: "main"
 source_path: "content/commands/expireat.md"
-source_commit: "9d30f68c3dad1a6b3b7d30fe604b911348ce8152"
-source_commit_short: "9d30f68c"
-source_commit_date: "2026-07-24T10:52:10-07:00"
-generated_at: "2026-07-25T11:51:22Z"
+source_commit: "f8693349287b0efbef3c865b6f6a2aceca88594d"
+source_commit_short: "f869334"
+source_commit_date: "2026-08-28T10:01:19-05:00"
+generated_at: "2026-08-29T09:38:55.016174Z"
 ---
+# Expireat
 
 ---
 acl_categories:
@@ -87,10 +88,8 @@ title: EXPIREAT
 ---
 `EXPIREAT` has the same effect and semantic as [`EXPIRE`]({{< relref "/commands/expire" >}}), but instead of
 specifying the number of seconds representing the TTL (time to live), it takes
-an absolute [Unix timestamp][hewowu] (seconds since January 1, 1970). A
+an absolute [Unix timestamp](http://en.wikipedia.org/wiki/Unix_time) (seconds since January 1, 1970). A
 timestamp in the past will delete the key immediately.
-
-[hewowu]: http://en.wikipedia.org/wiki/Unix_time
 
 Please for the specific semantics of the command refer to the documentation of
 [`EXPIRE`]({{< relref "/commands/expire" >}}).

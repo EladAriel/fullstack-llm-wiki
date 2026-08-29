@@ -1,14 +1,15 @@
 ---
 type: "Framework Learn Page"
-framework: "nextjs"
+framework: "Next.js"
 source_repo: "https://github.com/vercel/next.js/"
 source_branch: "canary"
 source_path: "docs/01-app/02-guides/view-transitions.mdx"
-source_commit: "dcf242a17b5d4622bbd9624db531a9d84177619f"
-source_commit_short: "dcf242a1"
-source_commit_date: "2026-07-25T10:16:19+02:00"
-generated_at: "2026-07-25T11:50:53Z"
+source_commit: "33a5d542e519fe4e05c8c8c2c2845da9f741699b"
+source_commit_short: "33a5d542"
+source_commit_date: "2026-08-29T00:04:45-07:00"
+generated_at: "2026-08-29T09:40:24.277181Z"
 ---
+# View Transitions
 
 ---
 title: Designing view transitions
@@ -24,21 +25,27 @@ React's `<ViewTransition>` component integrates with the browser's [View Transit
 
 This guide walks through four patterns that cover the most common cases: morphing shared elements, animating loading states, adding directional navigation, and crossfading content within the same route.
 
-## Use the vercel-react-view-transitions skill
+## Add view transitions with an agent
 
-The [`vercel-react-view-transitions`](https://github.com/vercel-labs/agent-skills/tree/main/skills/react-view-transitions) skill teaches a coding agent the patterns in this guide, plus the CSS recipes and troubleshooting for applying them to an existing app.
+The [`vercel-react-view-transitions`](https://skills.sh/vercel-labs/agent-skills/vercel-react-view-transitions) skill teaches a coding agent the patterns in this guide, plus the CSS recipes and troubleshooting for applying them to an existing app.
 
 Install the skill:
 
 ```bash filename="Terminal"
-npx skills add https://github.com/vercel-labs/agent-skills --skill vercel-react-view-transitions
+npx skills add vercel-labs/agent-skills --skill vercel-react-view-transitions
 ```
 
-Then give the agent this prompt:
+Then prompt the agent with something like:
 
 ```prompt
 Add view transitions to this app using the vercel-react-view-transitions skill.
 ```
+
+Or prompt for a specific transition, such as:
+
+- Morphing a thumbnail into a hero image
+- Sliding between routes forward and back
+- Crossfading content within the same route
 
 To apply the patterns yourself, follow the walkthrough below.
 

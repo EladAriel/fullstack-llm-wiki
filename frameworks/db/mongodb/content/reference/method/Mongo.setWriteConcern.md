@@ -1,49 +1,93 @@
 ---
 type: "Framework Learn Page"
-framework: "mongodb"
+framework: "MongoDB"
 source_repo: "https://github.com/mongodb/docs.git"
 source_branch: "main"
 source_path: "content/manual/manual/source/reference/method/Mongo.setWriteConcern.txt"
-source_commit: "ab9db26ed3d11618cdb61516d8180337d8e3f679"
-source_commit_short: "ab9db26e"
-source_commit_date: "2026-07-24T16:22:46-06:00"
-generated_at: "2026-07-25T11:51:15Z"
+source_commit: "b9f2bc487a2878b65e3c1f80024bebab76954f27"
+source_commit_short: "b9f2bc48"
+source_commit_date: "2026-08-28T17:09:45-05:00"
+generated_at: "2026-08-29T09:39:19.959524Z"
 ---
-
-========================================
-
 # Mongo.setWriteConcern() (mongosh method)
+
+**meta:** :description: Set the write concern for a MongoDB connection, specifying acknowledgment requirements and timeout settings.
+
+.. default-domain:: mongodb
+
+**contents:** On this page
+   :local:
+   :backlinks: none
+   :depth: 1
+   :class: singlecol
 
 ## Definition
 
+**method:** Mongo.setWriteConcern()
+
+   Sets the :term:`write concern` for the :method:`Mongo()
+   <db.getMongo()>` connection object.
+
+   See the :ref:`write-concern` for an introduction to write concerns
+   in MongoDB.
+
 ## Compatibility
 
-This method is available in deployments hosted in the following environments:
+This method is available in deployments hosted in the following environments: 
 
-.. include:: /includes/fact-environments-atlas-only.rst
+**include:** /includes/fact-environments-atlas-only.rst
 
-.. include:: /includes/fact-environments-onprem-only.rst
+**include:** /includes/fact-environments-onprem-only.rst
 
 ## Syntax
 
 The command takes the following form:
 
-```javascript
-db.getMongo().setWriteConcern( { w: <value>, j: <boolean>, wtimeout: <number> } )
-```
+.. code-block:: javascript
 
-The fields are:
+   db.getMongo().setWriteConcern( { w: <value>, j: <boolean>, wtimeout: <number> } )
+
+The fields are: 
+
+.. list-table::
+   :header-rows: 1
+
+   * - Field
+     - Description
+
+   * - ``w``
+     - The number of :binary:`~bin.mongod` or :binary:`~bin.mongod`
+       instances that must acknowledge a write. Possible values are:
+
+       - "majority". A majority of the target instances must
+         acknowledge the write.
+       - <number>. The specified number of target instances must
+         acknowledge the write.
+       - <custom write concern name>. A user defined write concern, the
+         tagged instances must acknowledge the write.
+
+       See :ref:`write concern specification <wc-w>` for details.
+
+   * -  ``j``
+     - A boolean value. ``j: true`` requests acknowledgment that the
+       write operation has been written to the :ref:`on-disk journal
+       <journaling-internals>`.
+     
+   * - ``wtimeout``
+     - The number of milliseconds to wait for acknowledgment of the
+       write concern. ``wtimeout`` is only applicable when ``w`` has a
+       value greater than ``1``.
 
 ## Example
 
 In the following example:
 
 - Two :binary:`~bin.mongod` or :binary:`~bin.mongod` instances must
-acknowledge writes.
+  acknowledge writes.
+- There is a ``1`` second timeout to wait for write acknowledgments.
 
-- There is a `1` second timeout to wait for write acknowledgments.
-```javascript
-db.getMongo().setWriteConcern( { w: 2, wtimeout: 1000 } )
-```
+.. code-block:: javascript
 
-> **Seealso:** - :method:`~Mongo.getWriteConcern()`
+   db.getMongo().setWriteConcern( { w: 2, wtimeout: 1000 } )
+
+**seealso:** - :method:`~Mongo.getWriteConcern()`

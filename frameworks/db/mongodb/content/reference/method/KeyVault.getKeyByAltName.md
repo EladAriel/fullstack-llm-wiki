@@ -1,70 +1,96 @@
 ---
 type: "Framework Learn Page"
-framework: "mongodb"
+framework: "MongoDB"
 source_repo: "https://github.com/mongodb/docs.git"
 source_branch: "main"
 source_path: "content/manual/manual/source/reference/method/KeyVault.getKeyByAltName.txt"
-source_commit: "ab9db26ed3d11618cdb61516d8180337d8e3f679"
-source_commit_short: "ab9db26e"
-source_commit_date: "2026-07-24T16:22:46-06:00"
-generated_at: "2026-07-25T11:51:15Z"
+source_commit: "b9f2bc487a2878b65e3c1f80024bebab76954f27"
+source_commit_short: "b9f2bc48"
+source_commit_date: "2026-08-28T17:09:45-05:00"
+generated_at: "2026-08-29T09:39:19.994714Z"
 ---
-
-===========================================
+.. _keyvault-getkeybyaltname-method:
 
 # KeyVault.getKeyByAltName() (mongosh method)
 
+**meta:** :description: Retrieve data encryption keys using `KeyVault.getKeyByAltName()` with client-side field level encryption enabled.
+
+.. default-domain:: mongodb
+
+**contents:** On this page
+   :local:
+   :backlinks: none
+   :depth: 1
+   :class: singlecol
+
+**method:** KeyVault.getKeyByAltName(keyAltName)
+
+   Gets all data encryption keys with the specified ``keyAltName``. 
+
+   :returns:
+  
+     Document representing a matching data encryption key.
+
+
 ## Compatibility
 
-This command is available in deployments hosted in the following environments:
+This command is available in deployments hosted in the following
+environments: 
 
-.. include:: /includes/fact-environments-atlas-only.rst
+**include:** /includes/fact-environments-atlas-only.rst
 
-.. include:: /includes/fact-environments-onprem-only.rst
+**include:** /includes/fact-environments-onprem-only.rst
+
 
 ## Syntax
 
 :method:`~KeyVault.getKeyByAltName()` has the following syntax:
 
-```none
-keyVault = db.getMongo().getKeyVault()
+.. code-block:: none
 
-keyVault.getKeyByAltName("keyAltName")
-```
+   keyVault = db.getMongo().getKeyVault()
+   
+   keyVault.getKeyByAltName("keyAltName")
+
 
 ## Behavior
 
 ### Requires Configuring Client-Side Field Level Encryption on Database Connection
 
-.. include:: /includes/extracts/csfle-requires-enabling-encryption.rst
+**include:** /includes/extracts/csfle-requires-enabling-encryption.rst
 
 ## Example
 
-The following example uses a locally managed KMS for the client-side field level encryption configuration.
+The following example uses a locally managed KMS for the client-side
+field level encryption configuration. 
 
-.. include:: /includes/csfle-connection-boilerplate-example.rst
+**include:** /includes/csfle-connection-boilerplate-example.rst
 
-Retrieve the :method:`KeyVault <getKeyVault()>` object and use the :method:`KeyVault.getKeyByAltName()` method to retrieve the data encryption key whose `keyAltNames` array includes the specified key alternate name:
+Retrieve the :method:`KeyVault <getKeyVault()>` object and use the
+:method:`KeyVault.getKeyByAltName()` method to retrieve the data
+encryption key whose ``keyAltNames`` array includes the specified key
+alternate name:
 
-```javascript
-keyVault.getKeyByAltName("data-encryption-key")
-```
+.. code-block:: javascript
 
-:method:`~KeyVault.getKeyByAltName()` returns the following data encryption key:
+   keyVault.getKeyByAltName("data-encryption-key")
 
-```json
-{
-    "_id" : UUID("b4b41b33-5c97-412e-a02b-743498346079"),
-    "keyMaterial" : BinData(0,"PXRsLOAYxhzTS/mFQAI8486da7BwZgqA91UI7NKz/T/AjB0uJZxTvhvmQQsKbCJYsWVS/cp5Rqy/FUX2zZwxJOJmI3rosPhzV0OI5y1cuXhAlLWlj03CnTcOSRzE/YIrsCjMB0/NyiZ7MRWUYzLAEQnE30d947XCiiHIb8a0kt2SD0so8vZvSuP2n0Vtz4NYqnzF0CkhZSWFa2e2yA=="),
-    "creationDate" : ISODate("2019-08-12T21:21:30.569Z"),
-    "updateDate" : ISODate("2019-08-12T21:21:30.569Z"),
-    "status" : 0,
-    "version" : Long(0),
-    "masterKey" : {
-        "provider" : "local"
-    },
-    "keyAltNames" : [
-        "data-encryption-key"
-    ]
-}
-```
+:method:`~KeyVault.getKeyByAltName()` returns the following data
+encryption key:
+
+.. code-block:: json
+
+   {
+       "_id" : UUID("b4b41b33-5c97-412e-a02b-743498346079"),
+       "keyMaterial" : BinData(0,"PXRsLOAYxhzTS/mFQAI8486da7BwZgqA91UI7NKz/T/AjB0uJZxTvhvmQQsKbCJYsWVS/cp5Rqy/FUX2zZwxJOJmI3rosPhzV0OI5y1cuXhAlLWlj03CnTcOSRzE/YIrsCjMB0/NyiZ7MRWUYzLAEQnE30d947XCiiHIb8a0kt2SD0so8vZvSuP2n0Vtz4NYqnzF0CkhZSWFa2e2yA=="),
+       "creationDate" : ISODate("2019-08-12T21:21:30.569Z"),
+       "updateDate" : ISODate("2019-08-12T21:21:30.569Z"),
+       "status" : 0,
+       "version" : Long(0),
+       "masterKey" : {
+           "provider" : "local"
+       },
+       "keyAltNames" : [
+           "data-encryption-key"
+       ]
+   }

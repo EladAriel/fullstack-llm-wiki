@@ -1,77 +1,100 @@
 ---
 type: "Framework Learn Page"
-framework: "mongodb"
+framework: "MongoDB"
 source_repo: "https://github.com/mongodb/docs.git"
 source_branch: "main"
 source_path: "content/manual/manual/source/reference/method/passwordPrompt.txt"
-source_commit: "ab9db26ed3d11618cdb61516d8180337d8e3f679"
-source_commit_short: "ab9db26e"
-source_commit_date: "2026-07-24T16:22:46-06:00"
-generated_at: "2026-07-25T11:51:15Z"
+source_commit: "b9f2bc487a2878b65e3c1f80024bebab76954f27"
+source_commit_short: "b9f2bc48"
+source_commit_date: "2026-08-28T17:09:45-05:00"
+generated_at: "2026-08-29T09:39:19.893027Z"
 ---
-
-=================================
-
 # passwordPrompt() (mongosh method)
+
+**meta:** :description: Use `passwordPrompt()` in `mongosh` to securely input passwords without displaying them in the shell.
+
+.. default-domain:: mongodb
+
+**contents:** On this page
+   :local:
+   :backlinks: none
+   :depth: 1
+   :class: singlecol
+
 
 ## Definition
 
+**method:** passwordPrompt()
+
+   Prompts for the password in :binary:`~bin.mongosh`. The
+   entered password is not displayed in the shell. Use
+   :method:`passwordPrompt()` in conjunction with methods that accept
+   password as a parameter instead of specifying the password in
+   cleartext to those methods.
+
 ## Examples
 
-### Use `passwordPrompt()` with `db.createUser()`
+### Use ``passwordPrompt()`` with ``db.createUser()``
 
 The :method:`db.createUser()` requires a password to be specified.
 
-You can use :method:`passwordPrompt()` as the value for the `pwd` instead of specifying the password.
+You can use :method:`passwordPrompt()` as the value for the ``pwd`` instead of 
+specifying the password.
 
-```javascript
-db.createUser( { 
-   user:"user123",
-   pwd: passwordPrompt(),   // Instead of specifying the password in cleartext
-   roles:[ "readWrite" ]
-} )
-```
+.. code-block:: javascript
+
+   db.createUser( { 
+      user:"user123",
+      pwd: passwordPrompt(),   // Instead of specifying the password in cleartext
+      roles:[ "readWrite" ]
+   } )
 
 Enter the password when prompted.
 
-### Use `passwordPrompt()` with `db.auth()`
+### Use ``passwordPrompt()`` with ``db.auth()``
 
-When you run the `db-auth-syntax-username-password` command you can replace the password with the :method:`passwordPrompt()` method.
+When you run the :ref:`db-auth-syntax-username-password` command you can 
+replace the password with the :method:`passwordPrompt()` method.
 
-If you omit the password from the `db-auth-syntax-username-password` command, the user is prompted to enter a password.
+If you omit the password from the :ref:`db-auth-syntax-username-password` 
+command, the user is prompted to enter a password.
 
-The following example prompts the user to enter a password which is not displayed in the shell:
+The following example prompts the user to enter a password
+which is not displayed in the shell:
 
-```javascript
-db.auth("user123")
-```
+.. code-block:: javascript
 
-### Use `passwordPrompt()` with `db.changeUserPassword()`
+   db.auth("user123")
 
-The :method:`db.changeUserPassword()` requires a password to be specified.
+### Use ``passwordPrompt()`` with ``db.changeUserPassword()``
+
+The :method:`db.changeUserPassword()` requires a password to be
+specified.
 
 You can use :method:`passwordPrompt()` instead of specifying the password.
 
-```javascript
-db.changeUserPassword("user123", passwordPrompt())
-```
+.. code-block:: javascript
+
+   db.changeUserPassword("user123", passwordPrompt())
 
 Enter the password when prompted.
 
-### Use `passwordPrompt()` with `db.updateUser()`
+### Use ``passwordPrompt()`` with ``db.updateUser()``
 
-When changing the password with :method:`db.updateUser()`, the method requires a password to be specified.
+When changing the password with :method:`db.updateUser()`, the method
+requires a password to be specified.
 
-You can use :method:`passwordPrompt()` as the value for the `pwd` instead of specifying the password.
+You can use :method:`passwordPrompt()` as the value for the ``pwd`` instead of 
+specifying the password.
 
-```javascript
-db.updateUser(
-   "user123",
-   {
-     pwd: passwordPrompt(),
-     mechanisms: [ "SCRAM-SHA-256" ]
-   }
-)
-```
+.. code-block:: javascript
+
+   db.updateUser(
+      "user123",
+      {
+        pwd: passwordPrompt(),
+        mechanisms: [ "SCRAM-SHA-256" ]
+      }
+   )
 
 Enter the password when prompted.

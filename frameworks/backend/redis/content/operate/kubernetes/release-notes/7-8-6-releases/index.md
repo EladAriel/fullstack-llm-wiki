@@ -1,29 +1,19 @@
 ---
 type: "Framework Learn Directory Index"
-framework: "redis"
-directory: "content/operate/kubernetes/release-notes/7-8-6-releases"
-source_repo: "https://github.com/redis/docs.git"
-source_branch: "main"
-source_commit: "9d30f68c3dad1a6b3b7d30fe604b911348ce8152"
-source_commit_short: "9d30f68c"
-source_commit_date: "2026-07-24T10:52:10-07:00"
-generated_at: "2026-07-25T11:51:22Z"
+framework: "Redis"
+generated_at: "2026-08-29T09:38:56.349647Z"
 ---
-# 7 8 6 Releases
+# 7-8-6-Releases
 
-This directory contains redis learning pages related to 7 8 6 releases.
+This directory contains Redis learning pages related to 7-8-6-releases.
 
 ## Breadcrumbs
 
-[Wiki Home](../../../../../index.md) -> [Content](../../../../index.md) -> [Operate](../../../index.md) -> [Kubernetes](../../index.md) -> [Release Notes](../index.md) -> [7 8 6 Releases](index.md)
+[Wiki Home](../index.md) -> [Content](index.md)
 
 ## Navigation
 
-- Parent: [Parent Index](../index.md)
-
-## Child Directories
-
-- None
+- Wiki Home: [Root Index](../index.md)
 
 ## Pages in This Directory
 
@@ -35,16 +25,9 @@ This directory contains redis learning pages related to 7 8 6 releases.
 - [7 8 6 14 April2026](7-8-6-14-april2026.md)
 - [7 8 6 15 May2026](7-8-6-15-may2026.md)
 - [7 8 6 16 July2026](7-8-6-16-july2026.md)
+- [7 8 6 19 August2026](7-8-6-19-august2026.md)
 - [7 8 6 2 June2025](7-8-6-2-june2025.md)
 - [7 8 6 3 June2025](7-8-6-3-june2025.md)
 - [7 8 6 5 August2025](7-8-6-5-august2025.md)
 - [7 8 6 8 October2025](7-8-6-8-october2025.md)
-- [Index](_index.md)
-
-## IDE LLM Guidance
-
-When answering implementation questions related to this directory:
-
-1. Prefer the most specific page listed above.
-2. If the topic is broad, read the child directory index first.
-3. Use source metadata from each page when giving answers.
+- [_Index](_index.md)

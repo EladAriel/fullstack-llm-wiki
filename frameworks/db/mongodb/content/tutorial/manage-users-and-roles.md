@@ -1,92 +1,131 @@
 ---
 type: "Framework Learn Page"
-framework: "mongodb"
+framework: "MongoDB"
 source_repo: "https://github.com/mongodb/docs.git"
 source_branch: "main"
 source_path: "content/manual/manual/source/tutorial/manage-users-and-roles.txt"
-source_commit: "ab9db26ed3d11618cdb61516d8180337d8e3f679"
-source_commit_short: "ab9db26e"
-source_commit_date: "2026-07-24T16:22:46-06:00"
-generated_at: "2026-07-25T11:51:15Z"
+source_commit: "b9f2bc487a2878b65e3c1f80024bebab76954f27"
+source_commit_short: "b9f2bc48"
+source_commit_date: "2026-08-28T17:09:45-05:00"
+generated_at: "2026-08-29T09:39:19.611682Z"
 ---
-
-==================================================
+.. _manage-users-and-roles:
 
 # Manage Users and Roles on Self-Managed Deployments
 
-The following examples cover user and role management under the MongoDB authorization model for self-managed deployments. To create a user, see `create-users`.
+.. default-domain:: mongodb
+
+**meta:** :description: Manage MongoDB users and roles on self-managed deployments. Create custom roles, modify users, and view roles and privileges with the authorization model.
+   :keywords: on-prem
+
+**contents:** On this page
+   :local:
+   :backlinks: none
+   :depth: 1
+   :class: singlecol
+
+
+The following examples cover user and role management under
+the MongoDB authorization model for self-managed deployments. To
+create a user, see :ref:`create-users`.
 
 ## Prerequisites
 
-If you have `enabled access control <enable-access-control>` for your deployment, you must authenticate as a user with the required privileges specified in each section. To perform the operations listed in this tutorial, user administrators require the :authrole:`userAdminAnyDatabase` role, or :authrole:`userAdmin` role in the specific databases. For details on adding a user administrator as the first user, see `<enable-access-control>`
+If you have :ref:`enabled access control <enable-access-control>` 
+for your deployment, you must authenticate as a user with the required 
+privileges specified in each section. To perform the operations listed 
+in this tutorial, user administrators require the 
+:authrole:`userAdminAnyDatabase` role, or :authrole:`userAdmin` role 
+in the specific databases. For details on adding a user administrator 
+as the first user, see :ref:`<enable-access-control>` 
+   
+
+.. _create-user-defined-role:
 
 ## Create a User-Defined Role
 
-> **Note:** To create user-defined roles in {+atlas+}, see
-`add-mongodb-roles` in the {+atlas+} documentation.
+**note:** To create user-defined roles in {+atlas+}, see 
+   :ref:`add-mongodb-roles` in the {+atlas+} documentation.
 
-MongoDB provides `built-in roles <built-in-roles>` for common access patterns. If built-in roles don't cover your required privileges, create a user-defined role.
+MongoDB provides :ref:`built-in roles <built-in-roles>` for common
+access patterns. If built-in roles don't cover your required
+privileges, create a user-defined role.
 
-.. include:: /includes/fact-roles-privileges-scope.rst
+**include:** /includes/fact-roles-privileges-scope.rst
 
-To create a new role, use the :method:`db.createRole()` method, specifying the privileges in the `privileges` array and the inherited roles in the `roles` array.
+To create a new role, use the :method:`db.createRole()` method,
+specifying the privileges in the ``privileges`` array and the 
+inherited roles in the ``roles`` array.
 
-MongoDB uses the combination of the database name and the role name to uniquely define a role. Each role is scoped to the database in which you create the role, but MongoDB stores all role information in the `admin.system.roles` collection in the `admin` database.
+MongoDB uses the combination of the database name and the role 
+name to uniquely define a role. Each role is scoped to the 
+database in which you create the role, but MongoDB stores all 
+role information in the :data:`admin.system.roles` collection in 
+the ``admin`` database.
 
-.. include:: /includes/self-managed-user-defined-roles.rst
+**include:** /includes/self-managed-user-defined-roles.rst
+
+.. _modify-existing-user-access:
 
 ## Modify Access for an Existing User
 
-> **Note:** To modify an existing database user's roles in {+atlas+},
-see `<modify-mongodb-users>` in the {+atlas+} documentation.
+**note:** To modify an existing database user's roles in {+atlas+}, 
+   see :ref:`<modify-mongodb-users>` in the {+atlas+} documentation.
+
+.. _assign-role-to-user-prereq:
 
 ### Prerequisites
 
 - .. include:: /includes/access-grant-roles.rst
+
 - .. include:: /includes/access-revoke-roles.rst
+
 - .. include:: /includes/access-roles-info.rst
+
 ### Procedure
 
-.. include:: /includes/steps/change-user-privileges.rst
+**include:** /includes/steps/change-user-privileges.rst
 
 ## Modify the Password for an Existing User
 
-> **Note:** To modify an existing {+atlas+} user's password, see
-`<modify-mongodb-users>` in the {+atlas+} documentation.
+**note:** To modify an existing {+atlas+} user's password, see 
+   :ref:`<modify-mongodb-users>` in the {+atlas+} documentation.
+
+.. _change-password-prereq:
 
 ### Prerequisites
 
-.. include:: /includes/access-change-password.rst
+**include:** /includes/access-change-password.rst
 
 ### Procedure
 
-.. include:: /includes/steps/change-user-password.rst
+**include:** /includes/steps/change-user-password.rst
 
-> **Seealso:** `<change-password-custom-data>`
+**seealso:** :ref:`<change-password-custom-data>`
 
 ## View a User's Roles
 
-> **Note:** To view a user's roles in {+atlas+}, see
-`<view-mongodb-users>` in the {+atlas+}
-documentation.
+**note:** To view a user's roles in {+atlas+}, see 
+   :ref:`<view-mongodb-users>` in the {+atlas+}
+   documentation.
 
 ### Prerequisites
 
-.. include:: /includes/access-user-info.rst
+**include:** /includes/access-user-info.rst
 
 ### Procedure
 
-.. include:: /includes/steps/verify-user-privileges.rst
+**include:** /includes/steps/verify-user-privileges.rst
 
 ## View a Role's Privileges
 
-> **Note:** To view a role's privileges in {+atlas+}, see
-`<view-mongodb-roles>` in the {+atlas+} documentation.
+**note:** To view a role's privileges in {+atlas+}, see 
+   :ref:`<view-mongodb-roles>` in the {+atlas+} documentation.
 
 ### Prerequisites
 
-.. include:: /includes/access-roles-info.rst
+**include:** /includes/access-roles-info.rst
 
 ### Procedure
 
-.. include:: /includes/steps/view-role-info.rst
+**include:** /includes/steps/view-role-info.rst

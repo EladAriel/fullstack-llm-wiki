@@ -1,67 +1,181 @@
 ---
 type: "Framework Learn Page"
-framework: "mongodb"
+framework: "MongoDB"
 source_repo: "https://github.com/mongodb/docs.git"
 source_branch: "main"
 source_path: "content/manual/manual/source/reference/operator/aggregation/toDouble.txt"
-source_commit: "ab9db26ed3d11618cdb61516d8180337d8e3f679"
-source_commit_short: "ab9db26e"
-source_commit_date: "2026-07-24T16:22:46-06:00"
-generated_at: "2026-07-25T11:51:15Z"
+source_commit: "b9f2bc487a2878b65e3c1f80024bebab76954f27"
+source_commit_short: "b9f2bc48"
+source_commit_date: "2026-08-28T17:09:45-05:00"
+generated_at: "2026-08-29T09:39:20.138142Z"
 ---
-
-===============================
-
 # $toDouble (expression operator)
+
+.. default-domain:: mongodb
+
+**contents:** On this page
+   :local:
+   :backlinks: none
+   :depth: 1
+   :class: singlecol
+
+**meta:** :description: Learn how to convert a value to a double.
+   :keywords: type conversion
 
 ## Definition
 
+**expression:** $toDouble
+
+   Converts a value to a double. If the value cannot be converted to
+   an double, :expression:`$toDouble` errors. If the value is null or
+   missing, :expression:`$toDouble` returns null.
+
+   :expression:`$toDouble` has the following syntax:
+
+   .. code-block:: javascript
+
+      {
+         $toDouble: <expression>
+      }
+
+   The :expression:`$toDouble` takes any valid :ref:`expression
+   <aggregation-expressions>`.
+
+   The :expression:`$toDouble` is a shorthand for the following
+   :expression:`$convert` expression:
+
+   .. code-block:: javascript
+
+      { $convert: { input: <expression>, to: "double" } }
+
 ## Behavior
 
-The following table lists the input types that can be converted to a double:
+The following table lists the input types that can be converted to a
+double:
 
-.. include:: /includes/strings-to-non-decimal.rst
+.. list-table::
+   :header-rows: 1
+   :widths: 20 80
+
+   * - Input Type
+     - Behavior
+
+   * - Boolean
+     - | Returns ``0`` for  ``false``.
+       | Returns ``1`` for ``true``.
+
+   * - Double
+     - No-op. Returns the double.
+
+   * - Decimal
+     - Returns the decimal value as a double.
+
+       The decimal value must fall within the minimum and
+       maximum value for a double.
+
+       You cannot convert a decimal value whose value is less
+       than the minimum double value or is greater than the maximum
+       double value.
+
+   * - Integer
+
+     - Returns the int value as a double.
+
+   * - Long
+
+     - Returns the long value as a double.
+
+   * - String
+     - Returns the numerical value of the string as a double.
+
+       The string value must be of a base\ :sub:`10` numeric value (e.g.
+       ``"-5.5"``, ``"123456"``) and fall within the minimum and
+       maximum value for a double.
+
+       You cannot convert a string value of a non-base\ :sub:`10`
+       number (e.g. ``"0x6400"``) or a value that falls
+       outside the minimum and maximum value for a double.
+
+   * - Date
+
+     - Returns the number of milliseconds since the epoch that
+       corresponds to the date value.
+
+**include:** /includes/strings-to-non-decimal.rst
 
 The following table lists some conversion to double examples:
 
+.. list-table::
+   :header-rows: 1
+   :widths: 80 20
+
+   * - Example
+     - Results
+
+   * - ``$toDouble: true``
+     - 1
+
+   * - ``$toDouble: false``
+     - 0
+
+   * - ``$toDouble: 2.5``
+     -  2.5
+
+   * - ``$toDouble: Int32(5)``
+     - 5
+
+   * - ``$toDouble: Long(10000)``
+     - 10000
+
+   * - ``$toDouble: "-5.5"``
+     - -5.5 
+
+   * - ``$toDouble: ISODate("2018-03-27T05:04:47.890Z")``
+     -  1522127087890
+
+.. _subnormal-numbers-parse-behavior-toDouble:
+
 ### Subnormal Numbers
 
-.. include:: /includes/fact-float-parse-behavior-8.3.rst
+**include:** /includes/fact-float-parse-behavior-8.3.rst
 
 ## Example
 
-Create a collection `weather` with the following documents:
+Create a collection ``weather`` with the following documents:
 
-```javascript
-db.weather.insertMany( [
-   { _id: 1, date: new Date("2018-06-01"), temp: "26.1C" },
-   { _id: 2,  date: new Date("2018-06-02"), temp: "25.1C" },
-   { _id: 3,  date: new Date("2018-06-03"), temp: "25.4C" },
-] )
-```
+.. code-block:: javascript
 
-The following aggregation operation on the `weather` collection parses the `temp` value and converts to a double:
+   db.weather.insertMany( [
+      { _id: 1, date: new Date("2018-06-01"), temp: "26.1C" },
+      { _id: 2,  date: new Date("2018-06-02"), temp: "25.1C" },
+      { _id: 3,  date: new Date("2018-06-03"), temp: "25.4C" },
+   ] )
 
-```javascript
-// Define stage to add degrees field with converted value
+The following aggregation operation on the ``weather`` collection
+parses the ``temp`` value and converts to a double:
 
-tempConversionStage = { 
-   $addFields: { 
-      degrees: { $toDouble: { $substrBytes: [ "$temp", 0, 4 ] } } 
-   }
-};
+.. code-block:: javascript
 
-db.weather.aggregate( [
-   tempConversionStage,
-] )
-```
+   // Define stage to add degrees field with converted value
+
+   tempConversionStage = { 
+      $addFields: { 
+         degrees: { $toDouble: { $substrBytes: [ "$temp", 0, 4 ] } } 
+      }
+   };
+
+
+   db.weather.aggregate( [
+      tempConversionStage,
+   ] )
 
 The operation returns the following documents:
 
-```javascript
-{ "_id" : 1, "date" : ISODate("2018-06-01T00:00:00Z"), "temp" : "26.1C", "degrees" : 26.1 }
-{ "_id" : 2, "date" : ISODate("2018-06-02T00:00:00Z"), "temp" : "25.1C", "degrees" : 25.1 }
-{ "_id" : 3, "date" : ISODate("2018-06-03T00:00:00Z"), "temp" : "25.4C", "degrees" : 25.4 }
-```
+.. code-block:: javascript
 
-.. include:: /includes/note-conversion-error-use-convert.rst
+
+   { "_id" : 1, "date" : ISODate("2018-06-01T00:00:00Z"), "temp" : "26.1C", "degrees" : 26.1 }
+   { "_id" : 2, "date" : ISODate("2018-06-02T00:00:00Z"), "temp" : "25.1C", "degrees" : 25.1 }
+   { "_id" : 3, "date" : ISODate("2018-06-03T00:00:00Z"), "temp" : "25.4C", "degrees" : 25.4 }
+
+**include:** /includes/note-conversion-error-use-convert.rst

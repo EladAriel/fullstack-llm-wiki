@@ -4,12 +4,11 @@ framework: "Langfuse"
 source_repo: "https://github.com/langfuse/langfuse-docs"
 source_branch: "main"
 source_path: "content/docs/observability/features/events-table-charts.mdx"
-source_commit: "fcd1eca34a924867563c3c4e801254c4e66c0021"
-source_commit_short: "fcd1eca3"
-source_commit_date: "2026-07-25T00:45:45Z"
-generated_at: "2026-07-25T11:51:12Z"
+source_commit: "ba26344559edee69ba55c5d3aa80e632f56c1626"
+source_commit_short: "ba26344"
+source_commit_date: "2026-08-29T02:57:18+00:00"
+generated_at: "2026-08-29T09:38:37.753403Z"
 ---
-
 ---
 title: Chart any table
 description: Toggle the Observations table into a chart over the same query. Pick a chart type, metric, aggregation, and breakdown, then add the chart to a dashboard.
@@ -22,9 +21,11 @@ The Observations table has a **Table | Chart** toggle in its toolbar. Switch to 
 
 The view you are in is stored in the URL, along with the chart's type, metric, aggregation, and breakdown. The chart is reversible and shareable: send someone the link and they land on the same chart, with the same filters, that you were looking at. Only settings you changed from the defaults appear in the URL, so a plain chart link stays short.
 
+Looking for spikes rather than a full chart? [Pulse](/docs/observability/features/pulse) is a compact outlier strip that sits above the table without replacing it, and lets you click or drag a spike to narrow the table to that window.
+
 <Callout type="info">
   The chart view runs on the [Langfuse v4](/docs/v4) data model. On Langfuse
-  Cloud, turn on **Fast** on the Observations table to use it. On self-hosted
+  Cloud, turn on the **Langfuse v4 preview** to use it. On self-hosted
   deployments, it is available after [upgrading to Langfuse
   v4](/self-hosting/upgrade/upgrade-guides/upgrade-v3-to-v4).
 </Callout>

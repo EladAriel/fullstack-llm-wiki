@@ -1,86 +1,141 @@
 ---
 type: "Framework Learn Page"
-framework: "mongodb"
+framework: "MongoDB"
 source_repo: "https://github.com/mongodb/docs.git"
 source_branch: "main"
 source_path: "content/manual/manual/source/reference/method/db.collection.drop.txt"
-source_commit: "ab9db26ed3d11618cdb61516d8180337d8e3f679"
-source_commit_short: "ab9db26e"
-source_commit_date: "2026-07-24T16:22:46-06:00"
-generated_at: "2026-07-25T11:51:15Z"
+source_commit: "b9f2bc487a2878b65e3c1f80024bebab76954f27"
+source_commit_short: "b9f2bc48"
+source_commit_date: "2026-08-28T17:09:45-05:00"
+generated_at: "2026-08-29T09:39:19.999195Z"
 ---
-
-=====================================
-
 # db.collection.drop() (mongosh method)
 
-.. include:: /includes/wayfinding/mongosh-method-drop.rst
+.. COMMENT Be sure to synchronize with the corresponding command.
+
+.. default-domain:: mongodb
+
+**meta:** :description: Use the db.collection.drop() method to remove a collection or view from a database. The method also removes any indexes associated with the dropped collection.
+
+**facet:** :name: programming_language 
+   :values: shell
+
+**contents:** On this page
+   :local:
+   :backlinks: none
+   :depth: 1
+   :class: singlecol
+
+**include:** /includes/wayfinding/mongosh-method-drop.rst
 
 ## Definition
 
-> **Note:** If the specified collection does not exist, `db.collection.drop()`
-still returns `true`.
+**method:** db.collection.drop(<options>)
+
+   .. |dbcommand| replace:: :dbcommand:`drop` command
+
+   Removes a collection or :ref:`view <views-landing-page>` from the
+   database. The method also removes any indexes associated with the
+   dropped collection. ``drop()`` is a wrapper around the
+   :dbcommand:`drop` command.
+
+   :returns: ``true`` 
+
+**note:** If the specified collection does not exist, ``db.collection.drop()``
+   still returns ``true``.
 
 ## Compatibility
 
+.. |operator-method| replace:: ``db.collection.drop()``
+
 This method is available in deployments hosted in the following environments:
 
-.. include:: /includes/fact-environments-atlas-only.rst
+**include:** /includes/fact-environments-atlas-only.rst
 
-.. include:: /includes/fact-environments-atlas-support-all.rst
+**include:** /includes/fact-environments-atlas-support-all.rst
 
-.. include:: /includes/fact-environments-onprem-only.rst
+**include:** /includes/fact-environments-onprem-only.rst
 
 ## Syntax
 
-The `drop()` method has the following form:
+The ``drop()`` method has the following form:
 
-```javascript
-db.collection.drop( { writeConcern: <document> } )
-```
+.. code-block:: javascript
 
-The `drop()` method takes an optional document with the following field:
+   db.collection.drop( { writeConcern: <document> } )
 
+The ``drop()`` method takes an optional document with the following
+field:
+
+.. list-table::
+   :header-rows: 1
+   :widths: 20 80
+
+   * - Field
+     - Description
+
+   * - writeConcern
+     - Optional. A document expressing the :ref:`write concern
+       <write-concern>` of the ``drop()`` operation. Omit to use the
+       default write concern.
+
+       .. include:: /includes/extracts/mongos-operations-wc-drop.rst
+         
 ## Behavior
 
-- The `drop()` method and :dbcommand:`drop` command create an
-`invalidate event <change-event-invalidate>` for any `change streams <changeStreams>` opened on the dropped collection.
+- The ``drop()`` method and :dbcommand:`drop` command create an
+  :ref:`invalidate event <change-event-invalidate>` for any
+  :ref:`change streams <changeStreams>` opened on the dropped
+  collection.
 
 - .. include:: /includes/extracts/4.4-changes-drop-in-progress-indexes.rst
-- .. include:: /includes/extracts/zoned-sharding-drop-collection-change.rst
-- .. include:: /includes/extracts/5.0-changes-drop-sharding.rst
-- Starting in MongoDB 6.0, `drop()` drops the specified collection
-and any internal collections related to encrypted fields.
 
-> **Important:**   The `mongosh` `drop()` method's behavior differs from the
-  driver's `drop` method's behavior. The driver's connection
-  must have automatic encryption enabled to drop both the specified
-  collection and any internal collections related to encrypted
-  fields. `mongosh` always drops the specified collection and
-  any internal collections related to encrypted fields.
+- .. include:: /includes/extracts/zoned-sharding-drop-collection-change.rst
+
+- .. include:: /includes/extracts/5.0-changes-drop-sharding.rst
+
+- Starting in MongoDB 6.0, ``drop()`` drops the specified collection
+  and any internal collections related to encrypted fields.
+
+  .. important::
+
+     The ``mongosh`` ``drop()`` method's behavior differs from the
+     driver's ``drop`` method's behavior. The driver's connection
+     must have automatic encryption enabled to drop both the specified
+     collection and any internal collections related to encrypted
+     fields. ``mongosh`` *always* drops the specified collection and
+     any internal collections related to encrypted fields.
+
+
+.. _sharding-drop-collections-same-name:
 
 ### Reusing Dropped Collection Names on Sharded Clusters
 
-For a sharded cluster running **MongoDB 5.0 or later**, no special action is required. Use the `drop()` method and then create a new collection with the same name.
+For a sharded cluster running **MongoDB 5.0 or later**,
+no special action is required. Use the ``drop()`` method
+and then create a new collection with the same name.
 
 ### Resource Locking
 
-.. include:: /includes/extracts/drop-method-resource-lock.rst
+**include:** /includes/extracts/drop-method-resource-lock.rst
 
 ## Example
 
 ### Drop a Collection Using Default Write Concern
 
-The following operation drops the `students` collection in the current database.
+The following operation drops the ``students`` collection in the
+current database.
 
-```javascript
-db.students.drop()
-```
+.. code-block:: javascript
 
-### Drop a Collection Using `w: 1` Write Concern
+   db.students.drop()
 
-The following operation drops the `students` collection in the current database. The operation uses the :writeconcern:`1 <\<number\>>` write concern:
+### Drop a Collection Using ``w: 1`` Write Concern
 
-```javascript
-db.students.drop( { writeConcern: { w: 1, j: true } } )
-```
+The following operation drops the ``students`` collection in the
+current database. The operation uses the
+:writeconcern:`1 <\<number\>>` write concern:
+
+.. code-block:: javascript
+
+   db.students.drop( { writeConcern: { w: 1, j: true } } )

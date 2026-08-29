@@ -1,28 +1,42 @@
 ---
 type: "Framework Learn Page"
-framework: "mongodb"
+framework: "MongoDB"
 source_repo: "https://github.com/mongodb/docs.git"
 source_branch: "main"
 source_path: "content/manual/manual/source/tutorial/convert-standalone-to-replica-set.txt"
-source_commit: "ab9db26ed3d11618cdb61516d8180337d8e3f679"
-source_commit_short: "ab9db26e"
-source_commit_date: "2026-07-24T16:22:46-06:00"
-generated_at: "2026-07-25T11:51:15Z"
+source_commit: "b9f2bc487a2878b65e3c1f80024bebab76954f27"
+source_commit_short: "b9f2bc48"
+source_commit_date: "2026-08-28T17:09:45-05:00"
+generated_at: "2026-08-29T09:39:19.609273Z"
 ---
-
-=========================================================
+.. _server-replica-set-deploy-convert:
 
 # Convert a Standalone Self-Managed mongod to a Replica Set
 
-Use a `standalone` :binary:`mongod` instance for testing and development. A standalone instance isn't a good choice for a production deployment because it can be a single point of failure. A `replica set <replication>` provides redundancy and availability. Always use a replica set in production.
+.. default-domain:: mongodb
 
-If you have a standalone server with data that you want to use in production, convert the standalone server to a replica set first.
+**meta:** :description: Convert a standalone mongod to a replica set for production, ensuring redundancy. Check security before exposing the cluster.
+   :keywords: on-prem
 
-> **Important:** If you convert a development server to a replica set for production
-use, consult the `security checklist <security-checklist>` first.
-Do this before you expose your cluster to the internet.
+Use a :term:`standalone` :binary:`mongod` instance for testing and
+development. A standalone instance isn't a good choice for a production
+deployment because it can be a single point of failure. A :ref:`replica
+set <replication>` provides redundancy and availability. Always use a
+replica set in production.
 
-You can migrate from a standalone server to a [MongoDB Atlas](https://www.mongodb.com/docs/atlas)_ cluster. MongoDB Atlas is the fully managed service for MongoDB deployments in the cloud. To learn more, see [Migrate or Import Data](https://www.mongodb.com/docs/atlas/import/)_ in the {+atlas+} documentation.
+If you have a standalone server with data that you want to use in
+production, convert the standalone server to a replica set first.
+
+**important:** If you convert a development server to a replica set for production
+   use, consult the :ref:`security checklist <security-checklist>` first.
+   Do this before you expose your cluster to the internet.
+
+You can migrate from a standalone server
+to a `MongoDB Atlas <https://www.mongodb.com/docs/atlas>`__ cluster.
+MongoDB Atlas is the fully managed service for MongoDB deployments in
+the cloud. To learn more, see `Migrate or Import Data
+<https://www.mongodb.com/docs/atlas/import/>`__ in the {+atlas+}
+documentation.
 
 ## About This Task
 
@@ -30,26 +44,164 @@ You can migrate from a standalone server to a [MongoDB Atlas](https://www.mongod
 
 The tutorial uses the following servers:
 
+.. list-table::
+   :header-rows: 1
+
+   * - Hostname
+     - Port
+     - Description
+
+   * - ``mongodb0.example.net``
+     - ``27017``
+     - A running standalone MongoDB Server with data.
+
+   * - ``mongodb1.example.net``
+     - ``27017``
+     - A new MongoDB Server to join the replica set.
+
+   * - ``mongodb2.example.net``
+     - ``27017``
+     - A new MongoDB Server to join the replica set.
+
 ## Before You Begin
 
 ### Cluster Type
 
-Before you convert your standalone instance, consider whether a `replica set <replication>` or a `sharded cluster <sharding-background>` is more appropriate for your workload.
+Before you convert your standalone instance, consider whether a
+:ref:`replica set <replication>` or a :ref:`sharded cluster
+<sharding-background>` is more appropriate for your workload.
 
-A sharded cluster provides redundancy and availability by distributing data across `shards <shards-concepts>`, which are usually hosted on multiple servers to allow horizontal scaling.
+A sharded cluster provides redundancy and availability by
+distributing data across :ref:`shards <shards-concepts>`, which are
+usually hosted on multiple servers to allow horizontal scaling.
 
 ### Authorization
 
-To use authorization with a replica set, you must also configure replica set members to use X.509 certificates or keyfiles to perform internal authentication.
+To use authorization with a replica set, you must also configure
+replica set members to use X.509 certificates or keyfiles to
+perform internal authentication.
 
 For more information, see:
 
-- `x509-internal-authentication`
-- `deploy-repl-set-with-keyfile`
+- :ref:`x509-internal-authentication`
+- :ref:`deploy-repl-set-with-keyfile`
+
 ## Procedure
+
+**procedure:** :style: normal
+
+   .. step:: Shut down the standalone instance.
+
+      Use :binary:`mongosh` to :ref:`connect <mdb-shell-connect>` to
+      your existing ``mongod`` instance:
+
+      .. code-block:: shell
+
+         mongosh "mongodb://mongodb0.example.net:27017"
+
+      Switch to the ``admin`` database and run :dbcommand:`shutdown`.
+
+      .. code-block:: javascript
+
+         use admin
+         db.adminCommand(
+            {
+               shutdown: 1,
+               comment: "Convert to replica set"
+            }
+         )
+
+      When you run the ``shutdown`` command, the server responds with a message
+      similar to the following example:
+
+      ``MongoNetworkError: connection <connection number> to <host>:<port> closed``
+
+   .. step:: Configure Replica Set Members
+
+      Update the configuration file on each server to set
+      the :setting:`~replication.replSetName` setting.
+
+      .. code-block:: yaml
+
+         replication:
+           replSetName: "rs0"
+
+   .. step:: Configure Member Authentication
+
+      .. include:: /includes/configure-rs-members
+
+   .. step:: Start MongoDB
+
+      Start :program:`mongod` for each member.
+
+   .. step:: Initialize the replica set.
+
+       To initialize the replica set, use ``mongosh`` to reconnect to
+       your server instance.
+
+       .. code-block:: shell
+
+          mongosh "mongodb://mongodb0.example.net:27017"
+
+       Then, run the :method:`rs.initiate` method:
+
+       .. code-block:: javascript
+
+          rs.initiate()
+
+       You only have to initiate the replica set once.
+
+       To view the replica set configuration, use :method:`rs.conf()`.
+
+       To check the status of the replica set, use :method:`rs.status()`.
+
+   .. step:: Add nodes to the replica set.
+
+      The new replica set has a single, primary node. Review the
+      documentation on clusters before you add additional nodes:
+
+      - :ref:`Replica set architectures
+        <replica-set-deployment-overview>`
+      - :ref:`Adding members to a replica set
+        <server-replica-set-deploy-expand>`
+
+      To add nodes, run the :method:`rs.add` method:
+
+      .. code-block:: javascript
+
+         rs.add("mongodb1.example.net:27017")
+         rs.add("mongodb2.example.net:27017")
+
+   .. step:: Check replication status.
+
+      To check that the replica set is correctly configured, run
+      the :method:`rs.status` method and check that the new
+      members are listed in the :data:`~replSetGetStatus.members`
+      field:
+
+      .. code-block:: javascript
+
+         rs.status()
+
+   .. step:: Update Your Application Connection String.
+
+      After you convert the standalone server to a replica set,
+      update the :ref:`connection string <mongodb-uri>` used by
+      your applications to the connection string for your
+      replica set:
+
+      - ``mongodb0.example.net:27017``
+      - ``mongodb1.example.net:27017``
+      - ``mongodb2.example.net:27017``
+
+      .. code-block:: none
+
+         mongodb://mongodb0.example.net:27017,mongodb1.example.net:27017,mongodb2.example.net:27017
+
+      Then, restart your applications.
 
 ## Learn More
 
-- `Configuration options <configuration-options>`
-- `Deploy a standalone instance <tutorials-installation>`
-- `Deploy a new replica set <server-replica-set-deploy>`
+- :ref:`Configuration options <configuration-options>`
+- :ref:`Deploy a standalone instance <tutorials-installation>`
+- :ref:`Deploy a new replica set <server-replica-set-deploy>`

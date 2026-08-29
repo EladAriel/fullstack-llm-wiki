@@ -1,6 +1,6 @@
-# opentelemetry-js Learn Wiki
+# OpenTelemetry JS Learn Wiki
 
-This is a local LLM-friendly wiki generated from the official opentelemetry-js documentation.
+This is a local LLM-friendly wiki generated from the official OpenTelemetry JS documentation.
 
 ## Status
 
@@ -8,9 +8,10 @@ This is a local LLM-friendly wiki generated from the official opentelemetry-js d
 - Source repo: `https://github.com/open-telemetry/opentelemetry.io.git`
 - Source branch: `main`
 - Source docs path: `content/en/docs/languages/js`
-- Source commit: `8fd99e1`
-- Source commit date: `2026-07-25T10:22:15-04:00`
-- Wiki generated at: `2026-07-25T19:07:58.994129Z`
+- Source commit: `669d1a4`
+- Source commit date: `2026-08-29T01:16:15+00:00`
+- Wiki generated at: `2026-08-29T09:39:53.279463Z`
+- Page count: `16`
 
 ## How the IDE LLM should use this wiki
 
@@ -29,3 +30,4 @@ This is a local LLM-friendly wiki generated from the official opentelemetry-js d
 ## Top-Level Wiki Areas
 
 - [Content Index](content/index.md)
+- [Getting Started](content/getting-started/index.md)

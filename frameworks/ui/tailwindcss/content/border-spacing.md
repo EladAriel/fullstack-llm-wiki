@@ -4,10 +4,10 @@ framework: "Tailwind CSS"
 source_repo: "https://github.com/tailwindlabs/tailwindcss.com.git"
 source_branch: "main"
 source_path: "src/docs/border-spacing.mdx"
-source_commit: "1e700c43f5f270a1a55c4a33e71f01952f24b8c2"
-source_commit_short: "1e700c4"
-source_commit_date: "2026-07-16T19:14:03+02:00"
-generated_at: "2026-07-25T13:40:03.120537Z"
+source_commit: "bd868a314bd05ca78acd047e3da289274dd6ccd7"
+source_commit_short: "bd868a3"
+source_commit_date: "2026-08-11T20:09:16+02:00"
+generated_at: "2026-08-29T09:40:31.731911Z"
 ---
 # Border Spacing
 
@@ -22,12 +22,15 @@ export const description = "Utilities for controlling the spacing between table 
 <ApiTable
   rows={[
     ["border-spacing-<number>", "border-spacing: calc(var(--spacing) * <number>);"],
+    ["border-spacing-px", "border-spacing: 1px;"],
     ["border-spacing-(<custom-property>)", "border-spacing: var(<custom-property>);"],
     ["border-spacing-[<value>]", "border-spacing: <value>;"],
     ["border-spacing-x-<number>", "border-spacing: calc(var(--spacing) * <number>) var(--tw-border-spacing-y);"],
+    ["border-spacing-x-px", "border-spacing: 1px var(--tw-border-spacing-y);"],
     ["border-spacing-x-(<custom-property>)", "border-spacing: var(<custom-property>) var(--tw-border-spacing-y);"],
     ["border-spacing-x-[<value>]", "border-spacing: <value> var(--tw-border-spacing-y);"],
     ["border-spacing-y-<number>", "border-spacing: var(--tw-border-spacing-x) calc(var(--spacing) * <number>);"],
+    ["border-spacing-y-px", "border-spacing: var(--tw-border-spacing-x) 1px;"],
     ["border-spacing-y-(<custom-property>)", "border-spacing: var(--tw-border-spacing-x) var(<custom-property>);"],
     ["border-spacing-y-[<value>]", "border-spacing: var(--tw-border-spacing-x) <value>;"],
   ]}

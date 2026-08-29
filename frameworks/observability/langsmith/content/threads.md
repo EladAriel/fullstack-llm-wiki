@@ -4,10 +4,10 @@ framework: "LangSmith"
 source_repo: "https://github.com/langchain-ai/docs.git"
 source_branch: "main"
 source_path: "src/langsmith/threads.mdx"
-source_commit: "2aae1dfc98ee953a9a5185fb6fcdd9efb3f4d878"
-source_commit_short: "2aae1df"
-source_commit_date: "2026-07-25T00:27:23+00:00"
-generated_at: "2026-07-25T19:08:33.371390Z"
+source_commit: "a174f9cf7c91ee5eb14ee2382eb48bfe6e4956e9"
+source_commit_short: "a174f9c"
+source_commit_date: "2026-08-28T17:04:12-07:00"
+generated_at: "2026-08-29T09:39:50.598095Z"
 ---
 ---
 title: Configure threads
@@ -309,3 +309,4 @@ On the **Threads** tab of a project, you can save commonly used filters: [Set a 
 - [Filter traces](/langsmith/filter-traces-in-application): filter by thread metadata in the tracing UI.
 - [Set up multi-turn online evaluators](/langsmith/online-evaluations-multi-turn): evaluate threads rather than individual runs.
 - [Log user feedback using the SDK](/langsmith/attach-user-feedback): attach feedback to runs within a thread.
+- [Create and manage datasets in the UI](/langsmith/manage-datasets-in-application#manually-from-a-tracing-project): add threads to a dataset.

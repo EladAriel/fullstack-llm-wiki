@@ -1,7 +1,7 @@
 ---
 type: "Framework Learn Directory Index"
 framework: "Helicone"
-generated_at: "2026-07-25T19:08:22.289032Z"
+generated_at: "2026-08-29T09:39:42.361764Z"
 ---
 # Gateway
 
@@ -21,3 +21,8 @@ This directory contains Helicone learning pages related to gateway.
 - [Prompt Integration](prompt-integration.md)
 - [Provider Routing](provider-routing.md)
 - [Web Search](web-search.md)
+
+## Subdirectories
+
+- [Concepts](concepts/index.md)
+- [Integrations](integrations/index.md)

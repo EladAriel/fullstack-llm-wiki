@@ -1,65 +1,108 @@
 ---
 type: "Framework Learn Page"
-framework: "mongodb"
+framework: "MongoDB"
 source_repo: "https://github.com/mongodb/docs.git"
 source_branch: "main"
 source_path: "content/manual/manual/source/reference/method/cursor.noCursorTimeout.txt"
-source_commit: "ab9db26ed3d11618cdb61516d8180337d8e3f679"
-source_commit_short: "ab9db26e"
-source_commit_date: "2026-07-24T16:22:46-06:00"
-generated_at: "2026-07-25T11:51:15Z"
+source_commit: "b9f2bc487a2878b65e3c1f80024bebab76954f27"
+source_commit_short: "b9f2bc48"
+source_commit_date: "2026-08-28T17:09:45-05:00"
+generated_at: "2026-08-29T09:39:19.942570Z"
 ---
-
-=========================================
+.. _cursor-noCursorTimeout:
 
 # cursor.noCursorTimeout() (mongosh method)
 
+**meta:** :description: Prevent automatic closure of a cursor after inactivity using `noCursorTimeout()` in MongoDB.
+
+**contents:** On this page
+   :local:
+   :backlinks: none
+   :depth: 1
+   :class: singlecol
+
 ## Definition
+
+**method:** cursor.noCursorTimeout()
+
+   .. include:: /includes/fact-mongosh-shell-method.rst
+
+   Instructs the server to avoid closing a cursor automatically after a period
+   of inactivity.
+
+   The :method:`~cursor.noCursorTimeout()` method has the following
+   prototype form:
+
+   .. code-block:: javascript
+
+      db.collection.find(<query>).noCursorTimeout()
 
 ## Compatibility
 
-This method is available in deployments hosted in the following environments:
+This method is available in deployments hosted in the following environments: 
 
-.. include:: /includes/fact-environments-atlas-only.rst
+**include:** /includes/fact-environments-atlas-only.rst
 
-.. include:: /includes/fact-environments-atlas-support-no-free.rst
+**include:** /includes/fact-environments-atlas-support-no-free.rst
 
-.. include:: /includes/fact-environments-onprem-only.rst
+**include:** /includes/fact-environments-onprem-only.rst
 
 ## Behavior
 
-### Session Idle Timeout Overrides `noCursorTimeout`
+### Session Idle Timeout Overrides ``noCursorTimeout``
 
-.. include:: /includes/extracts/sessions-cursor-timeout.rst
+**include:** /includes/extracts/sessions-cursor-timeout.rst
 
-Consider an application that issues a :method:`db.collection.find()` with :method:`cursor.noCursorTimeout`. The server returns a cursor along with a batch of documents defined by the :method:`cursor.batchSize()` of the :method:`~db.collection.find()`. The session refreshes each time the application requests a new batch of documents from the server. However, if the application takes longer than 30 minutes to process the current batch of documents, the session is marked as expired and closed. When the server closes the session, it also kills the cursor despite the cursor being configured with :method:`~cursor.noCursorTimeout`. When the application requests the next batch of documents, the server returns an error.
+Consider an application that issues a :method:`db.collection.find()`
+with :method:`cursor.noCursorTimeout`. The server returns a cursor along
+with a batch of documents defined by the :method:`cursor.batchSize()` of
+the :method:`~db.collection.find()`. The session refreshes each time the
+application requests a new batch of documents from the server. However,
+if the application takes longer than 30 minutes to process the current
+batch of documents, the session is marked as expired and closed. When
+the server closes the session, it also kills the cursor *despite* the
+cursor being configured with :method:`~cursor.noCursorTimeout`. When the
+application requests the next batch of documents, the server returns an
+error.
 
-### Refresh a Cursor with `refreshSessions`
+.. _refresh-session-cursor-example:
 
-For operations that return a cursor, if the cursor may be idle for longer than 30 minutes, issue the operation within an explicit session using :method:`Mongo.startSession()` and periodically refresh the session using the :dbcommand:`refreshSessions` command. For example:
+### Refresh a Cursor with ``refreshSessions``
 
-```bash
-var session = db.getMongo().startSession()
-var sessionId = session
-sessionId  // show the sessionId
+For operations that return a cursor, if the cursor may be idle for
+longer than 30 minutes, issue the operation within an explicit session
+using :method:`Mongo.startSession()` and periodically refresh the
+session using the :dbcommand:`refreshSessions` command. For example:
 
-var cursor = session.getDatabase("examples").getCollection("data").find().noCursorTimeout()
-var refreshTimestamp = new Date() // take note of time at operation start
+.. code-block:: bash
 
-while (cursor.hasNext()) {
+   var session = db.getMongo().startSession()
+   var sessionId = session
+   sessionId  // show the sessionId
 
-  // Check if more than 5 minutes have passed since the last refresh
-  if ( (new Date()-refreshTimestamp)/1000 > 300 ) { 
-    print("refreshing session")
-    db.adminCommand({"refreshSessions" : [sessionId]})
-    refreshTimestamp = new Date()
-  }
+   var cursor = session.getDatabase("examples").getCollection("data").find().noCursorTimeout()
+   var refreshTimestamp = new Date() // take note of time at operation start
 
-  // process cursor normally
+   while (cursor.hasNext()) {
+  
+     // Check if more than 5 minutes have passed since the last refresh
+     if ( (new Date()-refreshTimestamp)/1000 > 300 ) { 
+       print("refreshing session")
+       db.adminCommand({"refreshSessions" : [sessionId]})
+       refreshTimestamp = new Date()
+     }
 
-}
-```
+     // process cursor normally
+  
+   }
 
-In the example operation, the :method:`db.collection.find()` method is associated with an explicit session. The cursor is configured with :method:`cursor.noCursorTimeout()` to prevent the server from closing the cursor if idle. The `while` loop includes a block that uses :dbcommand:`refreshSessions` to refresh the session every 5 minutes. Since the session will never exceed the 30 minute idle timeout, the cursor can remain open indefinitely.
+In the example operation, the :method:`db.collection.find()` method is
+associated with an explicit session. The cursor is configured with
+:method:`cursor.noCursorTimeout()` to prevent the server from closing
+the cursor if idle. The ``while`` loop includes a block that uses
+:dbcommand:`refreshSessions` to refresh the session every 5 minutes.
+Since the session will never exceed the 30 minute idle timeout, the
+cursor can remain open indefinitely.
 
-For MongoDB drivers, defer to the :driver:`driver documentation </>` for instructions and syntax for creating sessions.
+For MongoDB drivers, defer to the :driver:`driver documentation
+</>` for instructions and syntax for creating sessions. 

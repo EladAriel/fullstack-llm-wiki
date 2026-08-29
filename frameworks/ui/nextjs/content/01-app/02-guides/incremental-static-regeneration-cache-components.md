@@ -1,14 +1,15 @@
 ---
 type: "Framework Learn Page"
-framework: "nextjs"
+framework: "Next.js"
 source_repo: "https://github.com/vercel/next.js/"
 source_branch: "canary"
 source_path: "docs/01-app/02-guides/incremental-static-regeneration-cache-components.mdx"
-source_commit: "dcf242a17b5d4622bbd9624db531a9d84177619f"
-source_commit_short: "dcf242a1"
-source_commit_date: "2026-07-25T10:16:19+02:00"
-generated_at: "2026-07-25T11:50:53Z"
+source_commit: "33a5d542e519fe4e05c8c8c2c2845da9f741699b"
+source_commit_short: "33a5d542"
+source_commit_date: "2026-08-29T00:04:45-07:00"
+generated_at: "2026-08-29T09:40:24.273152Z"
 ---
+# Incremental Static Regeneration Cache Components
 
 ---
 title: Incremental Static Regeneration with Cache Components
@@ -22,7 +23,7 @@ related:
     - app/getting-started/caching
 ---
 
-[Incremental Static Regeneration (ISR)](/docs/app/glossary#incremental-static-regeneration-isr) with [`cacheComponents`](/docs/app/api-reference/config/next-config-js/cacheComponents) gives every route an instant first visit, even for URLs that weren't included in the build.
+[Incremental Static Regeneration (ISR)](/docs/app/glossary#incremental-static-regeneration-isr) with [`cacheComponents`](/docs/app/api-reference/config/next-config-js/cacheComponents) and [Partial Prefetching](/docs/app/api-reference/config/next-config-js/partialPrefetching) gives every route an instant first visit, even for URLs that weren't included in the build.
 
 During build, Partial Prerendering splits each render into two parts:
 
@@ -33,13 +34,14 @@ For a visit to a URL whose params were included in `generateStaticParams`, Next.
 
 If you have used [ISR](/docs/app/guides/incremental-static-regeneration) or [`fallback: true`](https://nextjs.org/docs/pages/api-reference/functions/get-static-paths#fallback-true) in the Pages Router, this is the Cache Components equivalent.
 
-Make sure [`cacheComponents`](/docs/app/api-reference/config/next-config-js/cacheComponents) is enabled in your project:
+Enable both [`cacheComponents`](/docs/app/api-reference/config/next-config-js/cacheComponents) and [Partial Prefetching](/docs/app/api-reference/config/next-config-js/partialPrefetching). Cache Components produces the App Shell, while Partial Prefetching upgrades it to a full route once the params are known.
 
-```ts filename="next.config.ts" highlight={4}
+```ts filename="next.config.ts" highlight={4-5}
 import type { NextConfig } from 'next'
 
 const nextConfig: NextConfig = {
   cacheComponents: true,
+  partialPrefetching: true,
 }
 
 export default nextConfig
@@ -200,6 +202,8 @@ The first visit to `/shoes/basketball-shoes`. Neither param was prerendered. Nex
 
 After the first visit, Next.js renders these routes in the background with the now-known params. The next visitor to the same URLs gets the upgraded result.
 
+A prefetch counts as that first visit. When a [`<Link>`](/docs/app/api-reference/components/link) to an unlisted URL enters the viewport, or you call [`router.prefetch`](/docs/app/api-reference/functions/use-router), Next.js starts the background upgrade before the click, so navigation lands on the upgraded result.
+
 > **Good to know**: The App Shell for unlisted params is served from Next.js 16.3. Earlier versions wait for a full server render before sending the response.
 
 ### What the upgrade produces
@@ -209,8 +213,6 @@ After the first visit, Next.js renders the page in the background with the known
 - If every data access is cached and all params are resolved, the upgrade produces a **fully static page**.
 - If all params are resolved but the render still hits uncached data or runtime APIs (`cookies`, `headers`) wrapped in `<Suspense>` boundaries, the upgrade produces a **cached page with those fallbacks**. The uncached or runtime parts stream in at request time.
 - Params are resolved in route order. A param value not returned by `generateStaticParams` stays unresolved and prevents any deeper params from upgrading.
-
-> **Good to know**: Prefetching also triggers upgrades. When a [`<Link>`](/docs/app/api-reference/components/link) enters the viewport or [`router.prefetch`](/docs/app/api-reference/functions/use-router) is called, Next.js can upgrade the App Shell in the background, so the next visitor gets the more specific version even before anyone actually navigates to the page.
 
 ## Choosing what to prerender
 

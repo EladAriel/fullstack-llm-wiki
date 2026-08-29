@@ -1,14 +1,15 @@
 ---
 type: "Framework Learn Page"
-framework: "redis"
+framework: "Redis"
 source_repo: "https://github.com/redis/docs.git"
 source_branch: "main"
 source_path: "content/operate/rs/7.8/references/metrics/prometheus-metrics-v2.md"
-source_commit: "9d30f68c3dad1a6b3b7d30fe604b911348ce8152"
-source_commit_short: "9d30f68c"
-source_commit_date: "2026-07-24T10:52:10-07:00"
-generated_at: "2026-07-25T11:51:22Z"
+source_commit: "f8693349287b0efbef3c865b6f6a2aceca88594d"
+source_commit_short: "f869334"
+source_commit_date: "2026-08-28T10:01:19-05:00"
+generated_at: "2026-08-29T09:38:55.466647Z"
 ---
+# Prometheus Metrics V2
 
 ---
 Title: Prometheus metrics v2 preview
@@ -35,7 +36,7 @@ You can [integrate Redis Enterprise Software with Prometheus and Grafana]({{<rel
 
 The v2 metrics in the following tables are available as of Redis Enterprise Software version 7.8.0. For help transitioning from v1 metrics to v2 PromQL, see [Prometheus v1 metrics and equivalent v2 PromQL]({{<relref "/operate/rs/7.8/references/metrics/prometheus-metrics-v1-to-v2">}}).
 
-The v2 scraping endpoint also exposes metrics for `node_exporter` version 1.8.1. For more information, see the [Prometheus node_exporter GitHub repository](https://github.com/prometheus/node_exporter).
+The v2 scraping endpoint also exposes metrics for `node_exporter`. For more information, see the [Prometheus node_exporter GitHub repository](https://github.com/prometheus/node_exporter).
 
 ## Database metrics
 

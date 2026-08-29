@@ -1,36 +1,79 @@
 ---
 type: "Framework Learn Page"
-framework: "mongodb"
+framework: "MongoDB"
 source_repo: "https://github.com/mongodb/docs.git"
 source_branch: "main"
 source_path: "content/manual/manual/source/data-modeling/design-patterns/polymorphic-data.txt"
-source_commit: "ab9db26ed3d11618cdb61516d8180337d8e3f679"
-source_commit_short: "ab9db26e"
-source_commit_date: "2026-07-24T16:22:46-06:00"
-generated_at: "2026-07-25T11:51:15Z"
+source_commit: "b9f2bc487a2878b65e3c1f80024bebab76954f27"
+source_commit_short: "b9f2bc48"
+source_commit_date: "2026-08-28T17:09:45-05:00"
+generated_at: "2026-08-29T09:39:20.298855Z"
 ---
-
-================
+.. _polymorphic-data:
 
 # Polymorphic Data
 
-.. include:: /includes/data-modeling/polymorphic-overview.rst
+.. default-domain:: mongodb
 
-Generally, documents in a collection are similar in structure but may contain slight variations depending on the application. To group similar, non-identical documents in a single collection you can use the `Polymorphic <polymorphic-schema-pattern>` and the `Inheritance <inheritance-schema-pattern>` schema design patterns.
+**contents:** On this page
+   :local:
+   :backlinks: none
+   :depth: 1
+   :class: singlecol
 
-These schema designs can improve performance by storing data based on query access patterns, rather than storing data strictly based on document shape.
+**include:** /includes/data-modeling/polymorphic-overview.rst
+
+Generally, documents in a collection are similar in structure but may
+contain slight variations depending on the application. To group
+similar, non-identical documents in a single collection you can use the
+:ref:`Polymorphic <polymorphic-schema-pattern>` and the
+:ref:`Inheritance <inheritance-schema-pattern>` schema design patterns.
+
+These schema designs can improve performance by storing data based on
+query access patterns, rather than storing data strictly based on
+document shape.
 
 ## Use Cases
 
+.. list-table::
+   :header-rows: 1
+   :widths: 10 10
+
+   * - Scenario
+     - Design Pattern Application
+
+   * - Your application tracks professional athletes across different
+       sports. Your queries access all athletes, but the attributes
+       stored for each athlete vary depending on their sport.
+     - Use the **polymorphic pattern** to group athletes in a single
+       collection. Even though the documents have different shapes, they
+       can still be accessed with a single query.
+
+   * - Your application tracks books in a bookstore. Books can be available in 
+       different forms: ebook, print, or audiobook. All books share the fields of 
+       ``title``, ``author``, and ``genre`` but have additional differing fields 
+       depending on their format.
+     - Use the **inheritance pattern** to group books into a single collection. 
+       Each book format is a child entity of the parent entity of ``book`` 
+       that provides the shared fields of ``title``, ``author``, and ``genre`` 
+       across all formats. Despite the additional differing fields of the child 
+       entities, the shared fields from the parent entity allow them to be grouped 
+       into a single collection.
+
 ## Get Started
 
-- `polymorphic-schema-pattern`
-- `inheritance-schema-pattern`
+- :ref:`polymorphic-schema-pattern`
+
+- :ref:`inheritance-schema-pattern`
+
 ## Learn More
 
-- `data-modeling-schema-design`
-- `schema-design-patterns`
-## Contents
+- :ref:`data-modeling-schema-design`
 
-- Polymorphic Pattern </data-modeling/design-patterns/polymorphic-data/polymorphic-schema-pattern>
-- Inheritance Pattern </data-modeling/design-patterns/polymorphic-data/inheritance-schema-pattern>
+- :ref:`schema-design-patterns`
+
+**toctree:** :titlesonly: 
+   :hidden: 
+
+   Polymorphic Pattern </data-modeling/design-patterns/polymorphic-data/polymorphic-schema-pattern>
+   Inheritance Pattern </data-modeling/design-patterns/polymorphic-data/inheritance-schema-pattern>

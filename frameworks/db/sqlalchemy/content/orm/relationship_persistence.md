@@ -1,219 +1,308 @@
 ---
 type: "Framework Learn Page"
-framework: "sqlalchemy"
+framework: "SQLAlchemy"
 source_repo: "https://github.com/sqlalchemy/sqlalchemy"
 source_branch: "main"
 source_path: "doc/build/orm/relationship_persistence.rst"
-source_commit: "aa1a5575358d3aa14953b04dced02f4763fed2e7"
-source_commit_short: "aa1a5575"
-source_commit_date: "2026-07-23T18:02:59Z"
-generated_at: "2026-07-25T11:50:45Z"
+source_commit: "85cafd1a131fa8afeeeab23151940480b3fb0042"
+source_commit_short: "85cafd1"
+source_commit_date: "2026-08-28T20:17:49+00:00"
+generated_at: "2026-08-29T09:39:27.577606Z"
 ---
-
 # Special Relationship Persistence Patterns
+
+.. _post_update:
 
 ## Rows that point to themselves / Mutually Dependent Rows
 
-This is a very specific case where relationship() must perform an INSERT and a second UPDATE in order to properly populate a row (and vice versa an UPDATE and DELETE in order to delete without violating foreign key constraints). The two use cases are:
+This is a very specific case where relationship() must perform an INSERT and a
+second UPDATE in order to properly populate a row (and vice versa an UPDATE
+and DELETE in order to delete without violating foreign key constraints). The
+two use cases are:
 
-- A table contains a foreign key to itself, and a single row will
-have a foreign key value pointing to its own primary key.
-
-- Two tables each contain a foreign key referencing the other
-table, with a row in each table referencing the other.
+* A table contains a foreign key to itself, and a single row will
+  have a foreign key value pointing to its own primary key.
+* Two tables each contain a foreign key referencing the other
+  table, with a row in each table referencing the other.
 
 For example:
 
-```text
-           user
- ---------------------------------
- user_id    name   related_user_id
-    1       'ed'          1
-```
+**sourcecode:** text
+
+## user
+    user_id    name   related_user_id
+       1       'ed'          1
 
 Or:
 
-```text
-              widget                                                  entry
- -------------------------------------------             ---------------------------------
- widget_id     name        favorite_entry_id             entry_id      name      widget_id
-    1       'somewidget'          5                         5       'someentry'     1
-```
+**sourcecode:** text
 
-In the first case, a row points to itself. Technically, a database that uses sequences such as PostgreSQL or Oracle Database can INSERT the row at once using a previously generated value, but databases which rely upon autoincrement-style primary key identifiers cannot. The `sqlalchemy.orm.relationship` always assumes a "parent/child" model of row population during flush, so unless you are populating the primary key/foreign key columns directly, `sqlalchemy.orm.relationship` needs to use two statements.
+                 widget                                                  entry
+    -------------------------------------------             ---------------------------------
+    widget_id     name        favorite_entry_id             entry_id      name      widget_id
+       1       'somewidget'          5                         5       'someentry'     1
 
-In the second case, the "widget" row must be inserted before any referring "entry" rows, but then the "favorite_entry_id" column of that "widget" row cannot be set until the "entry" rows have been generated. In this case, it's typically impossible to insert the "widget" and "entry" rows using just two INSERT statements; an UPDATE must be performed in order to keep foreign key constraints fulfilled. The exception is if the foreign keys are configured as "deferred until commit" (a feature some databases support) and if the identifiers were populated manually (again essentially bypassing `sqlalchemy.orm.relationship`).
+In the first case, a row points to itself. Technically, a database that uses
+sequences such as PostgreSQL or Oracle Database can INSERT the row at once
+using a previously generated value, but databases which rely upon
+autoincrement-style primary key identifiers cannot. The
+:func:`~sqlalchemy.orm.relationship` always assumes a "parent/child" model of
+row population during flush, so unless you are populating the primary
+key/foreign key columns directly, :func:`~sqlalchemy.orm.relationship` needs to
+use two statements.
 
-To enable the usage of a supplementary UPDATE statement, we use the `_orm.relationship.post_update option of orm.relationship.  This specifies that the linkage between the two rows should be created using an UPDATE statement after both rows have been INSERTED; it also causes the rows to be de-associated with each other via UPDATE before a DELETE is emitted.  The flag should be placed on just one of the relationships, preferably the many-to-one side.  Below we illustrate a complete example, including two schema.ForeignKey` constructs:
+In the second case, the "widget" row must be inserted before any referring
+"entry" rows, but then the "favorite_entry_id" column of that "widget" row
+cannot be set until the "entry" rows have been generated. In this case, it's
+typically impossible to insert the "widget" and "entry" rows using just two
+INSERT statements; an UPDATE must be performed in order to keep foreign key
+constraints fulfilled. The exception is if the foreign keys are configured as
+"deferred until commit" (a feature some databases support) and if the
+identifiers were populated manually (again essentially bypassing
+:func:`~sqlalchemy.orm.relationship`).
 
-```
-from sqlalchemy import Integer, ForeignKey
-from sqlalchemy.orm import mapped_column
-from sqlalchemy.orm import DeclarativeBase
-from sqlalchemy.orm import relationship
+To enable the usage of a supplementary UPDATE statement,
+we use the :paramref:`_orm.relationship.post_update` option
+of :func:`_orm.relationship`.  This specifies that the linkage between the
+two rows should be created using an UPDATE statement after both rows
+have been INSERTED; it also causes the rows to be de-associated with
+each other via UPDATE before a DELETE is emitted.  The flag should
+be placed on just *one* of the relationships, preferably the
+many-to-one side.  Below we illustrate
+a complete example, including two :class:`_schema.ForeignKey` constructs::
 
-class Base(DeclarativeBase):
-    pass
+    from sqlalchemy import Integer, ForeignKey
+    from sqlalchemy.orm import mapped_column
+    from sqlalchemy.orm import DeclarativeBase
+    from sqlalchemy.orm import relationship
 
-class Entry(Base):
-    __tablename__ = "entry"
-    entry_id = mapped_column(Integer, primary_key=True)
-    widget_id = mapped_column(Integer, ForeignKey("widget.widget_id"))
-    name = mapped_column(String(50))
 
-class Widget(Base):
-    __tablename__ = "widget"
+    class Base(DeclarativeBase):
+        pass
 
-    widget_id = mapped_column(Integer, primary_key=True)
-    favorite_entry_id = mapped_column(
-        Integer, ForeignKey("entry.entry_id", name="fk_favorite_entry")
+
+    class Entry(Base):
+        __tablename__ = "entry"
+        entry_id = mapped_column(Integer, primary_key=True)
+        widget_id = mapped_column(Integer, ForeignKey("widget.widget_id"))
+        name = mapped_column(String(50))
+
+
+    class Widget(Base):
+        __tablename__ = "widget"
+
+        widget_id = mapped_column(Integer, primary_key=True)
+        favorite_entry_id = mapped_column(
+            Integer, ForeignKey("entry.entry_id", name="fk_favorite_entry")
+        )
+        name = mapped_column(String(50))
+
+        entries = relationship(Entry, primaryjoin=widget_id == Entry.widget_id)
+        favorite_entry = relationship(
+            Entry, primaryjoin=favorite_entry_id == Entry.entry_id, post_update=True
+        )
+
+When a structure against the above configuration is flushed, the "widget" row will be
+INSERTed minus the "favorite_entry_id" value, then all the "entry" rows will
+be INSERTed referencing the parent "widget" row, and then an UPDATE statement
+will populate the "favorite_entry_id" column of the "widget" table (it's one
+row at a time for the time being):
+
+**sourcecode:** pycon+sql
+
+    >>> w1 = Widget(name="somewidget")
+    >>> e1 = Entry(name="someentry")
+    >>> w1.favorite_entry = e1
+    >>> w1.entries = [e1]
+    >>> session.add_all([w1, e1])
+    >>> session.commit()
+    {execsql}BEGIN (implicit)
+    INSERT INTO widget (favorite_entry_id, name) VALUES (?, ?)
+    (None, 'somewidget')
+    INSERT INTO entry (widget_id, name) VALUES (?, ?)
+    (1, 'someentry')
+    UPDATE widget SET favorite_entry_id=? WHERE widget.widget_id = ?
+    (1, 1)
+    COMMIT
+
+An additional configuration we can specify is to supply a more
+comprehensive foreign key constraint on ``Widget``, such that
+it's guaranteed that ``favorite_entry_id`` refers to an ``Entry``
+that also refers to this ``Widget``.  We can use a composite foreign key,
+as illustrated below::
+
+    from sqlalchemy import (
+        Integer,
+        ForeignKey,
+        String,
+        UniqueConstraint,
+        ForeignKeyConstraint,
     )
-    name = mapped_column(String(50))
+    from sqlalchemy.orm import DeclarativeBase
+    from sqlalchemy.orm import mapped_column
+    from sqlalchemy.orm import relationship
 
-    entries = relationship(Entry, primaryjoin=widget_id == Entry.widget_id)
-    favorite_entry = relationship(
-        Entry, primaryjoin=favorite_entry_id == Entry.entry_id, post_update=True
-    )
-```
 
-When a structure against the above configuration is flushed, the "widget" row will be INSERTed minus the "favorite_entry_id" value, then all the "entry" rows will be INSERTed referencing the parent "widget" row, and then an UPDATE statement will populate the "favorite_entry_id" column of the "widget" table (it's one row at a time for the time being):
+    class Base(DeclarativeBase):
+        pass
 
-```pycon+sql
- >>> w1 = Widget(name="somewidget")
- >>> e1 = Entry(name="someentry")
- >>> w1.favorite_entry = e1
- >>> w1.entries = [e1]
- >>> session.add_all([w1, e1])
- >>> session.commit()
- {execsql}BEGIN (implicit)
- INSERT INTO widget (favorite_entry_id, name) VALUES (?, ?)
- (None, 'somewidget')
- INSERT INTO entry (widget_id, name) VALUES (?, ?)
- (1, 'someentry')
- UPDATE widget SET favorite_entry_id=? WHERE widget.widget_id = ?
- (1, 1)
- COMMIT
-```
 
-An additional configuration we can specify is to supply a more comprehensive foreign key constraint on `Widget`, such that it's guaranteed that `favorite_entry_id` refers to an `Entry` that also refers to this `Widget`.  We can use a composite foreign key, as illustrated below:
+    class Entry(Base):
+        __tablename__ = "entry"
+        entry_id = mapped_column(Integer, primary_key=True)
+        widget_id = mapped_column(Integer, ForeignKey("widget.widget_id"))
+        name = mapped_column(String(50))
+        __table_args__ = (UniqueConstraint("entry_id", "widget_id"),)
 
-```
-from sqlalchemy import (
-    Integer,
-    ForeignKey,
-    String,
-    UniqueConstraint,
-    ForeignKeyConstraint,
-)
-from sqlalchemy.orm import DeclarativeBase
-from sqlalchemy.orm import mapped_column
-from sqlalchemy.orm import relationship
 
-class Base(DeclarativeBase):
-    pass
+    class Widget(Base):
+        __tablename__ = "widget"
 
-class Entry(Base):
-    __tablename__ = "entry"
-    entry_id = mapped_column(Integer, primary_key=True)
-    widget_id = mapped_column(Integer, ForeignKey("widget.widget_id"))
-    name = mapped_column(String(50))
-    __table_args__ = (UniqueConstraint("entry_id", "widget_id"),)
+        widget_id = mapped_column(Integer, autoincrement="ignore_fk", primary_key=True)
+        favorite_entry_id = mapped_column(Integer)
 
-class Widget(Base):
-    __tablename__ = "widget"
+        name = mapped_column(String(50))
 
-    widget_id = mapped_column(Integer, autoincrement="ignore_fk", primary_key=True)
-    favorite_entry_id = mapped_column(Integer)
+        __table_args__ = (
+            ForeignKeyConstraint(
+                ["widget_id", "favorite_entry_id"],
+                ["entry.widget_id", "entry.entry_id"],
+                name="fk_favorite_entry",
+            ),
+        )
 
-    name = mapped_column(String(50))
+        entries = relationship(
+            Entry, primaryjoin=widget_id == Entry.widget_id, foreign_keys=Entry.widget_id
+        )
+        favorite_entry = relationship(
+            Entry,
+            primaryjoin=favorite_entry_id == Entry.entry_id,
+            foreign_keys=favorite_entry_id,
+            post_update=True,
+        )
 
-    __table_args__ = (
-        ForeignKeyConstraint(
-            ["widget_id", "favorite_entry_id"],
-            ["entry.widget_id", "entry.entry_id"],
-            name="fk_favorite_entry",
-        ),
-    )
+The above mapping features a composite :class:`_schema.ForeignKeyConstraint`
+bridging the ``widget_id`` and ``favorite_entry_id`` columns.  To ensure
+that ``Widget.widget_id`` remains an "autoincrementing" column we specify
+:paramref:`_schema.Column.autoincrement` to the value ``"ignore_fk"``
+on :class:`_schema.Column`, and additionally on each
+:func:`_orm.relationship` we must limit those columns considered as part of
+the foreign key for the purposes of joining and cross-population.
 
-    entries = relationship(
-        Entry, primaryjoin=widget_id == Entry.widget_id, foreign_keys=Entry.widget_id
-    )
-    favorite_entry = relationship(
-        Entry,
-        primaryjoin=favorite_entry_id == Entry.entry_id,
-        foreign_keys=favorite_entry_id,
-        post_update=True,
-    )
-```
-
-The above mapping features a composite `_schema.ForeignKeyConstraint` bridging the `widget_id` and `favorite_entry_id` columns.  To ensure that `Widget.widget_id remains an "autoincrementing" column we specify schema.Column.autoincrement` to the value `"ignore_fk" on schema.Column, and additionally on each orm.relationship` we must limit those columns considered as part of the foreign key for the purposes of joining and cross-population.
+.. _passive_updates:
 
 ## Mutable Primary Keys / Update Cascades
 
-When the primary key of an entity changes, related items which reference the primary key must also be updated as well. For databases which enforce referential integrity, the best strategy is to use the database's ON UPDATE CASCADE functionality in order to propagate primary key changes to referenced foreign keys - the values cannot be out of sync for any moment unless the constraints are marked as "deferrable", that is, not enforced until the transaction completes.
+When the primary key of an entity changes, related items
+which reference the primary key must also be updated as
+well. For databases which enforce referential integrity,
+the best strategy is to use the database's ON UPDATE CASCADE
+functionality in order to propagate primary key changes
+to referenced foreign keys - the values cannot be out
+of sync for any moment unless the constraints are marked as "deferrable",
+that is, not enforced until the transaction completes.
 
-It is **highly recommended** that an application which seeks to employ natural primary keys with mutable values to use the `ON UPDATE CASCADE` capabilities of the database.   An example mapping which illustrates this is:
+It is **highly recommended** that an application which seeks to employ
+natural primary keys with mutable values to use the ``ON UPDATE CASCADE``
+capabilities of the database.   An example mapping which
+illustrates this is::
 
-```
-class User(Base):
-    __tablename__ = "user"
-    __table_args__ = {"mysql_engine": "InnoDB"}
+    class User(Base):
+        __tablename__ = "user"
+        __table_args__ = {"mysql_engine": "InnoDB"}
 
-    username = mapped_column(String(50), primary_key=True)
-    fullname = mapped_column(String(100))
+        username = mapped_column(String(50), primary_key=True)
+        fullname = mapped_column(String(100))
 
-    addresses = relationship("Address")
+        addresses = relationship("Address")
 
-class Address(Base):
-    __tablename__ = "address"
-    __table_args__ = {"mysql_engine": "InnoDB"}
 
-    email = mapped_column(String(50), primary_key=True)
-    username = mapped_column(
-        String(50), ForeignKey("user.username", onupdate="cascade")
-    )
-```
+    class Address(Base):
+        __tablename__ = "address"
+        __table_args__ = {"mysql_engine": "InnoDB"}
 
-Above, we illustrate `onupdate="cascade" on the schema.ForeignKey` object, and we also illustrate the `mysql_engine='InnoDB'` setting which, on a MySQL backend, ensures that the `InnoDB` engine supporting referential integrity is used.  When using SQLite, referential integrity should be enabled, using the configuration described at `sqlite_foreign_keys`.
+        email = mapped_column(String(50), primary_key=True)
+        username = mapped_column(
+            String(50), ForeignKey("user.username", onupdate="cascade")
+        )
 
-> **Seealso:**  `passive_deletes` - supporting ON DELETE CASCADE with relationships
- `.orm.mapper.passive_updates - similar feature on orm.Mapper`
+Above, we illustrate ``onupdate="cascade"`` on the :class:`_schema.ForeignKey`
+object, and we also illustrate the ``mysql_engine='InnoDB'`` setting
+which, on a MySQL backend, ensures that the ``InnoDB`` engine supporting
+referential integrity is used.  When using SQLite, referential integrity
+should be enabled, using the configuration described at
+:ref:`sqlite_foreign_keys`.
 
-#### Simulating limited ON UPDATE CASCADE without foreign key support
+**seealso:** :ref:`passive_deletes` - supporting ON DELETE CASCADE with relationships
 
-In those cases when a database that does not support referential integrity is used, and natural primary keys with mutable values are in play, SQLAlchemy offers a feature in order to allow propagation of primary key values to already-referenced foreign keys to a **limited** extent, by emitting an UPDATE statement against foreign key columns that immediately reference a primary key column whose value has changed. The primary platforms without referential integrity features are MySQL when the `MyISAM` storage engine is used, and SQLite when the `PRAGMA foreign_keys=ON` pragma is not used.  Oracle Database also has no support for `ON UPDATE CASCADE`, but because it still enforces referential integrity, needs constraints to be marked as deferrable so that SQLAlchemy can emit UPDATE statements.
+    :paramref:`.orm.mapper.passive_updates` - similar feature on :class:`_orm.Mapper`
 
-The feature is enabled by setting the `_orm.relationship.passive_updates` flag to `False, most preferably on a one-to-many or many-to-many orm.relationship`.  When "updates" are no longer "passive" this indicates that SQLAlchemy will issue UPDATE statements individually for objects referenced in the collection referred to by the parent object with a changing primary key value.  This also implies that collections will be fully loaded into memory if not already locally present.
 
-Our previous mapping using `passive_updates=False` looks like:
+## Simulating limited ON UPDATE CASCADE without foreign key support
 
-```
-class User(Base):
-    __tablename__ = "user"
+In those cases when a database that does not support referential integrity
+is used, and natural primary keys with mutable values are in play,
+SQLAlchemy offers a feature in order to allow propagation of primary key
+values to already-referenced foreign keys to a **limited** extent,
+by emitting an UPDATE statement against foreign key columns that immediately
+reference a primary key column whose value has changed.
+The primary platforms without referential integrity features are
+MySQL when the ``MyISAM`` storage engine is used, and SQLite when the
+``PRAGMA foreign_keys=ON`` pragma is not used.  Oracle Database also
+has no support for ``ON UPDATE CASCADE``, but because it still enforces
+referential integrity, needs constraints to be marked as deferrable
+so that SQLAlchemy can emit UPDATE statements.
 
-    username = mapped_column(String(50), primary_key=True)
-    fullname = mapped_column(String(100))
+The feature is enabled by setting the
+:paramref:`_orm.relationship.passive_updates` flag to ``False``,
+most preferably on a one-to-many or
+many-to-many :func:`_orm.relationship`.  When "updates" are no longer
+"passive" this indicates that SQLAlchemy will
+issue UPDATE statements individually for
+objects referenced in the collection referred to by the parent object
+with a changing primary key value.  This also implies that collections
+will be fully loaded into memory if not already locally present.
 
-    # passive_updates=False *only* needed if the database
-    # does not implement ON UPDATE CASCADE
-    addresses = relationship("Address", passive_updates=False)
+Our previous mapping using ``passive_updates=False`` looks like::
 
-class Address(Base):
-    __tablename__ = "address"
+    class User(Base):
+        __tablename__ = "user"
 
-    email = mapped_column(String(50), primary_key=True)
-    username = mapped_column(String(50), ForeignKey("user.username"))
-```
+        username = mapped_column(String(50), primary_key=True)
+        fullname = mapped_column(String(100))
 
-Key limitations of `passive_updates=False` include:
+        # passive_updates=False *only* needed if the database
+        # does not implement ON UPDATE CASCADE
+        addresses = relationship("Address", passive_updates=False)
 
-- it performs much more poorly than direct database ON UPDATE CASCADE,
-because it needs to fully pre-load affected collections using SELECT and also must emit  UPDATE statements against those values, which it will attempt to run  in "batches" but still runs on a per-row basis at the DBAPI level.
 
-- the feature cannot "cascade" more than one level.  That is,
-if mapping X has a foreign key which refers to the primary key of mapping Y, but then mapping Y's primary key is itself a foreign key to mapping Z, `passive_updates=False` cannot cascade a change in primary key value from `Z` to `X`.
+    class Address(Base):
+        __tablename__ = "address"
 
-- Configuring `passive_updates=False` only on the many-to-one
-side of a relationship will not have a full effect, as the unit of work searches only through the current identity map for objects that may be referencing the one with a mutating primary key, not throughout the database.
+        email = mapped_column(String(50), primary_key=True)
+        username = mapped_column(String(50), ForeignKey("user.username"))
 
-As virtually all databases other than Oracle Database now support `ON UPDATE CASCADE`, it is highly recommended that traditional `ON UPDATE CASCADE` support be used in the case that natural and mutable primary key values are in use.
+Key limitations of ``passive_updates=False`` include:
+
+* it performs much more poorly than direct database ON UPDATE CASCADE,
+  because it needs to fully pre-load affected collections using SELECT
+  and also must emit  UPDATE statements against those values, which it
+  will attempt to run  in "batches" but still runs on a per-row basis
+  at the DBAPI level.
+
+* the feature cannot "cascade" more than one level.  That is,
+  if mapping X has a foreign key which refers to the primary key
+  of mapping Y, but then mapping Y's primary key is itself a foreign key
+  to mapping Z, ``passive_updates=False`` cannot cascade a change in
+  primary key value from ``Z`` to ``X``.
+
+* Configuring ``passive_updates=False`` only on the many-to-one
+  side of a relationship will not have a full effect, as the
+  unit of work searches only through the current identity
+  map for objects that may be referencing the one with a
+  mutating primary key, not throughout the database.
+
+As virtually all databases other than Oracle Database now support ``ON UPDATE
+CASCADE``, it is highly recommended that traditional ``ON UPDATE CASCADE``
+support be used in the case that natural and mutable primary key values are in
+use.

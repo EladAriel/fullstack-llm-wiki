@@ -1,14 +1,15 @@
 ---
 type: "Framework Learn Page"
-framework: "redis"
+framework: "Redis"
 source_repo: "https://github.com/redis/docs.git"
 source_branch: "main"
 source_path: "content/integrate/amazon-bedrock/set-up-redis.md"
-source_commit: "9d30f68c3dad1a6b3b7d30fe604b911348ce8152"
-source_commit_short: "9d30f68c"
-source_commit_date: "2026-07-24T10:52:10-07:00"
-generated_at: "2026-07-25T11:51:22Z"
+source_commit: "f8693349287b0efbef3c865b6f6a2aceca88594d"
+source_commit_short: "f869334"
+source_commit_date: "2026-08-28T10:01:19-05:00"
+generated_at: "2026-08-29T09:38:56.157248Z"
 ---
+# Set Up Redis
 
 ---
 LinkTitle: Set up Redis
@@ -27,6 +28,8 @@ summary: With Amazon Bedrock, users can access foundational AI models from a var
   artificial intelligence.
 type: integration
 weight: 1
+aliases:
+- /integrate/aws-bedrock/set-up-redis/
 ---
 
 You need to set up your Redis Cloud database before you can set it as the vector database in Amazon Bedrock. To do this, you need to:
@@ -49,7 +52,7 @@ To set up a Redis Cloud instance for Bedrock, you need to:
 
 1.  Select the [Redis Cloud](https://aws.amazon.com/marketplace/pp/prodview-mwscixe4ujhkq?sr=0-1&ref_=beagle&applicationId=AWSMPContessa) AWS marketplace link from Bedrock to be taken to the Redis Cloud plan listing.
 
-    {{<image filename="images/rc/aws-marketplace-rc-flexible-plan.png" alt="The Redis Cloud listing on AWS Marketplace" >}}
+    {{<image filename="images/rc/aws-marketplace-rc-listing.png" alt="The Redis Cloud listing on AWS Marketplace" >}}
 
 1.  Subscribe to Redis Cloud listing, locate the **Set Up Your Account** button, and then select it to begin mapping your Redis Cloud account with your AWS Marketplace account.
 

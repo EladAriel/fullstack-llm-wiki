@@ -1,57 +1,143 @@
 ---
 type: "Framework Learn Page"
-framework: "postgres"
+framework: "PostgreSQL"
 source_repo: "https://github.com/postgres/postgres.git"
 source_branch: "master"
 source_path: "doc/src/sgml/func/func-trigger.sgml"
-source_commit: "38afc3dcb25c45b744d4025029ce0a6c90b7059f"
-source_commit_short: "38afc3dc"
-source_commit_date: "2026-07-25T19:08:27+09:00"
-generated_at: "2026-07-25T11:50:59Z"
+source_commit: "6c5f1d6074208146930b67c2054509c3e82f6f7f"
+source_commit_short: "6c5f1d6"
+source_commit_date: "2026-08-28T23:24:47+02:00"
+generated_at: "2026-08-29T09:39:24.523519Z"
 ---
+# Trigger Functions
 
-## Trigger Functions
+  
+   While many uses of triggers involve user-written trigger functions,
+   PostgreSQL provides a few built-in trigger
+   functions that can be used directly in user-defined triggers.  These
+   are summarized in .
+   (Additional built-in trigger functions exist, which implement foreign
+   key constraints and deferred index constraints.  Those are not documented
+   here since users need not use them directly.)
+  
 
-While many uses of triggers involve user-written trigger functions, PostgreSQL provides a few built-in trigger functions that can be used directly in user-defined triggers. These are summarized in `builtin-triggers-table`. (Additional built-in trigger functions exist, which implement foreign key constraints and deferred index constraints. Those are not documented here since users need not use them directly.)
+  
+   For more information about creating triggers, see
+   .
+  
 
-For more information about creating triggers, see `sql-createtrigger`.
+   
+    Built-In Trigger Functions
+    
+     
+      
+       
+        Function
+       
+       
+        Description
+       
+       
+        Example Usage
+       
+      
+     
 
-## Built-In Trigger Functions
+     
+       
+       
+        
+         suppress_redundant_updates_trigger
+        
+        suppress_redundant_updates_trigger ( )
+        trigger
+       
+       
+        Suppresses do-nothing update operations.  See below for details.
+       
+       
+        CREATE TRIGGER ... suppress_redundant_updates_trigger()
+       
+      
 
-Function
+      
+       
+        
+         tsvector_update_trigger
+        
+        tsvector_update_trigger ( )
+        trigger
+       
+       
+        Automatically updates a tsvector column from associated
+        plain-text document column(s).  The text search configuration to use
+        is specified by name as a trigger argument.  See
+         for details.
+       
+       
+        CREATE TRIGGER ... tsvector_update_trigger(tsvcol, 'pg_catalog.swedish', title, body)
+       
+      
 
-Description
+      
+       
+        
+         tsvector_update_trigger_column
+        
+        tsvector_update_trigger_column ( )
+        trigger
+       
+       
+        Automatically updates a tsvector column from associated
+        plain-text document column(s).  The text search configuration to use
+        is taken from a regconfig column of the table.  See
+         for details.
+       
+       
+        CREATE TRIGGER ... tsvector_update_trigger_column(tsvcol, tsconfigcol, title, body)
+       
+      
+     
+    
+   
 
-Example Usage
+   
+      The suppress_redundant_updates_trigger function,
+      when applied as a row-level BEFORE UPDATE trigger,
+      will prevent any update that does not actually change the data in the
+      row from taking place.  This overrides the normal behavior which always
+      performs a physical row update
+      regardless of whether or not the data has changed. (This normal behavior
+      makes updates run faster, since no checking is required, and is also
+      useful in certain cases.)
+    
 
-suppress_redundant_updates_trigger `suppress_redundant_updates_trigger` ( ) trigger
+    
+      Ideally, you should avoid running updates that don't actually
+      change the data in the record. Redundant updates can cost considerable
+      unnecessary time, especially if there are lots of indexes to alter,
+      and space in dead rows that will eventually have to be vacuumed.
+      However, detecting such situations in client code is not
+      always easy, or even possible, and writing expressions to detect
+      them can be error-prone. An alternative is to use
+      suppress_redundant_updates_trigger, which will skip
+      updates that don't change the data. You should use this with care,
+      however. The trigger takes a small but non-trivial time for each record,
+      so if most of the records affected by updates do actually change,
+      use of this trigger will make updates run slower on average.
+    
 
-Suppresses do-nothing update operations. See below for details.
+    
+      The suppress_redundant_updates_trigger function can be
+      added to a table like this:
 
-`CREATE TRIGGER ... suppress_redundant_updates_trigger()`
-
-tsvector_update_trigger `tsvector_update_trigger` ( ) trigger
-
-Automatically updates a `tsvector` column from associated plain-text document column(s). The text search configuration to use is specified by name as a trigger argument. See `textsearch-update-triggers` for details.
-
-`CREATE TRIGGER ... tsvector_update_trigger(tsvcol, 'pg_catalog.swedish', title, body)`
-
-tsvector_update_trigger_column `tsvector_update_trigger_column` ( ) trigger
-
-Automatically updates a `tsvector` column from associated plain-text document column(s). The text search configuration to use is taken from a `regconfig` column of the table. See `textsearch-update-triggers` for details.
-
-`CREATE TRIGGER ... tsvector_update_trigger_column(tsvcol, tsconfigcol, title, body)`
-
-The `suppress_redundant_updates_trigger` function, when applied as a row-level `BEFORE UPDATE` trigger, will prevent any update that does not actually change the data in the row from taking place. This overrides the normal behavior which always performs a physical row update regardless of whether or not the data has changed. (This normal behavior makes updates run faster, since no checking is required, and is also useful in certain cases.)
-
-Ideally, you should avoid running updates that don't actually change the data in the record. Redundant updates can cost considerable unnecessary time, especially if there are lots of indexes to alter, and space in dead rows that will eventually have to be vacuumed. However, detecting such situations in client code is not always easy, or even possible, and writing expressions to detect them can be error-prone. An alternative is to use `suppress_redundant_updates_trigger`, which will skip updates that don't change the data. You should use this with care, however. The trigger takes a small but non-trivial time for each record, so if most of the records affected by updates do actually change, use of this trigger will make updates run slower on average.
-
-The `suppress_redundant_updates_trigger` function can be added to a table like this:
-
-```
 CREATE TRIGGER z_min_update
 BEFORE UPDATE ON tablename
 FOR EACH ROW EXECUTE FUNCTION suppress_redundant_updates_trigger();
-```
 
-In most cases, you need to fire this trigger last for each row, so that it does not override other triggers that might wish to alter the row. Bearing in mind that triggers fire in name order, you would therefore choose a trigger name that comes after the name of any other trigger you might have on the table. (Hence the z prefix in the example.)
+      In most cases, you need to fire this trigger last for each row, so that
+      it does not override other triggers that might wish to alter the row.
+      Bearing in mind that triggers fire in name order, you would therefore
+      choose a trigger name that comes after the name of any other trigger
+      you might have on the table.  (Hence the z prefix in the
+      example.)

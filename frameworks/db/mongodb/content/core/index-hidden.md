@@ -1,202 +1,244 @@
 ---
 type: "Framework Learn Page"
-framework: "mongodb"
+framework: "MongoDB"
 source_repo: "https://github.com/mongodb/docs.git"
 source_branch: "main"
 source_path: "content/manual/manual/source/core/index-hidden.txt"
-source_commit: "ab9db26ed3d11618cdb61516d8180337d8e3f679"
-source_commit_short: "ab9db26e"
-source_commit_date: "2026-07-24T16:22:46-06:00"
-generated_at: "2026-07-25T11:51:15Z"
+source_commit: "b9f2bc487a2878b65e3c1f80024bebab76954f27"
+source_commit_short: "b9f2bc48"
+source_commit_date: "2026-08-28T17:09:45-05:00"
+generated_at: "2026-08-29T09:39:19.506134Z"
 ---
-
-===============
+.. _index-type-hidden:
 
 # Hidden Indexes
 
-Hidden indexes are not visible to the `query planner </core/query-plans>` and cannot be used to support a query.
+**meta:** :description: Hide indexes from the query planner to assess the impact of dropping them without deletion, and unhide them if needed.
 
-By hiding an index from the planner, you can evaluate the potential impact of dropping an index without actually dropping the index. If the impact is negative, you can unhide the index instead of having to recreate a dropped index.
+.. default-domain:: mongodb
+
+**contents:** On this page
+   :local:
+   :backlinks: none
+   :depth: 1
+   :class: singlecol
+
+Hidden indexes are not visible to the :doc:`query planner
+</core/query-plans>` and cannot be used to support a query.
+
+By hiding an index from the planner, you can evaluate the potential
+impact of dropping an index without actually dropping the index. If the
+impact is negative, you can unhide the index instead of having to
+recreate a dropped index.
 
 ## Behavior
 
-Apart from being hidden from the planner, hidden indexes behave like unhidden indexes. For example:
+Apart from being hidden from the planner, hidden indexes behave like
+unhidden indexes. For example:
 
-- If a hidden index is a `unique index <index-type-unique>`, the
-index still applies its unique constraint to the documents.
+- If a hidden index is a :ref:`unique index <index-type-unique>`, the
+  index still applies its unique constraint to the documents.
 
-- If a hidden index is a `TTL index <index-feature-ttl>`, the index
-still expires documents.
+- If a hidden index is a :ref:`TTL index <index-feature-ttl>`, the index
+  still expires documents.
 
 - Hidden indexes are included in :dbcommand:`listIndexes` and
-:method:`db.collection.getIndexes()` results.
+  :method:`db.collection.getIndexes()` results.
 
 - Hidden indexes are updated upon write operations to the collection
-and continue to consume disk space and memory. As such, they are included in various statistics operations, such as :method:`db.collection.stats()` and :pipeline:`$indexStats`.
+  and continue to consume disk space and memory. As such, they are
+  included in various statistics operations, such as
+  :method:`db.collection.stats()` and :pipeline:`$indexStats`.
 
 - Hiding an unhidden index or unhiding a hidden index resets its
-:pipeline:`$indexStats`. Hiding an already hidden index or unhiding an already unhidden index does not reset the :pipeline:`$indexStats`.
+  :pipeline:`$indexStats`. Hiding an already hidden index or unhiding
+  an already unhidden index does not reset the :pipeline:`$indexStats`.
 
 ## Restrictions
 
 - To hide an index, you must have :ref:`featureCompatibilityVersion
-<view-fcv>` set to `{+minimum-lts-version+}` or greater.
+  <view-fcv>` set to ``{+minimum-lts-version+}`` or greater.
+  
+- You cannot hide the ``_id`` index.
 
-- You cannot hide the `_id` index.
 - You cannot :method:`cursor.hint()` a hidden index.
+
 ## Examples
 
 ### Create a Hidden Index
 
-To create a `hidden` index, use the :method:`db.collection.createIndex()` method with the `hidden <method-createIndex-hidden>` option set to `true`.
+To create a ``hidden`` index, use the
+:method:`db.collection.createIndex()` method with the :ref:`hidden
+<method-createIndex-hidden>` option set to ``true``.
 
-> **Note:** To use the `hidden` option with
-:method:`db.collection.createIndex()`, you must have
-`featureCompatibilityVersion <view-fcv>` set to
-`{+minimum-lts-version+}` or greater.
+**note:** To use the ``hidden`` option with
+   :method:`db.collection.createIndex()`, you must have
+   :ref:`featureCompatibilityVersion <view-fcv>` set to 
+   ``{+minimum-lts-version+}`` or greater. 
 
-For example, the following operation creates a hidden ascending index on the `borough` field:
+For example, the following operation creates a hidden ascending index
+on the ``borough`` field:
 
-```javascript
-db.addresses.createIndex(
-   { borough: 1 },
-   { hidden: true }
-);
-```
+.. code-block:: javascript
 
-To verify, run :method:`db.collection.getIndexes()` on the `addresses` collection:
+   db.addresses.createIndex(
+      { borough: 1 },
+      { hidden: true }
+   );
 
-```javascript
-db.addresses.getIndexes()
-```
+To verify, run :method:`db.collection.getIndexes()` on the
+``addresses`` collection:
+
+.. code-block:: javascript
+
+   db.addresses.getIndexes()
 
 The operation returns the following information:
 
-```javascript
-[
-   {
-      "v" : 2,
-      "key" : {
-         "_id" : 1
-      },
-      "name" : "_id_"
-   },
-   {
-      "v" : 2,
-      "key" : {
-         "borough" : 1
-      },
-      "name" : "borough_1",
-      "hidden" : true
-   }
-]
-```
+.. code-block:: javascript
+   :emphasize-lines: 15
+   :copyable: false
 
-The index option `hidden` is only returned if the value is `true`.
+   [
+      {
+         "v" : 2,
+         "key" : {
+            "_id" : 1
+         },
+         "name" : "_id_"
+      },
+      {
+         "v" : 2,
+         "key" : {
+            "borough" : 1
+         },
+         "name" : "borough_1",
+         "hidden" : true
+      }
+   ]
+   
+The index option ``hidden`` is only returned if the value is ``true``.
+
+.. _hide-existing-index:
 
 ### Hide an Existing Index
 
-> **Note:** - To hide an index, you must have :ref:`featureCompatibilityVersion
-  <view-fcv>` set to `{+minimum-lts-version+}` or greater.
-- You cannot hide the `_id` index.
+**note:** - To hide an index, you must have :ref:`featureCompatibilityVersion
+     <view-fcv>` set to ``{+minimum-lts-version+}`` or greater. 
 
-To hide an existing index, you can use the :dbcommand:`collMod` command or :binary:`~bin.mongosh` helper :method:`db.collection.hideIndex()`.
+   - You cannot hide the ``_id`` index.
+
+To hide an existing index, you can use the :dbcommand:`collMod` command
+or :binary:`~bin.mongosh` helper
+:method:`db.collection.hideIndex()`.
 
 For example, create an index without hiding:
 
-```javascript
-db.restaurants.createIndex( { borough: 1, ratings: 1 } );
-```
+.. code-block:: javascript
+
+   db.restaurants.createIndex( { borough: 1, ratings: 1 } );
 
 To hide the index, you can specify either:
 
 - the index key specification document to the
-:method:`db.collection.hideIndex()` method:
+  :method:`db.collection.hideIndex()` method:
 
-```javascript
-  db.restaurants.hideIndex( { borough: 1, ratings: 1 } ); // Specify the index key specification document
-```
+  .. code-block:: javascript
+
+     db.restaurants.hideIndex( { borough: 1, ratings: 1 } ); // Specify the index key specification document
 
 - the index name to the :method:`db.collection.hideIndex()` method:
-```javascript
-  db.restaurants.hideIndex( "borough_1_ratings_1" );  // Specify the index name
-```
 
-To verify, run :method:`db.collection.getIndexes()` on the `restaurants` collection:
+  .. code-block:: javascript
 
-```javascript
-db.restaurants.getIndexes()
-```
+     db.restaurants.hideIndex( "borough_1_ratings_1" );  // Specify the index name
+
+To verify, run :method:`db.collection.getIndexes()` on the
+``restaurants`` collection:
+
+.. code-block:: javascript
+
+   db.restaurants.getIndexes()
 
 The operation returns the following information:
 
-```javascript
-[
-   {
-      "v" : 2,
-      "key" : {
-         "_id" : 1
-      },
-      "name" : "_id_"
-   },
-   {
-      "v" : 2,
-      "key" : {
-         "borough" : 1,
-         "ratings" : 1
-      },
-      "name" : "borough_1_ratings_1",
-      "hidden" : true
-   }
-]
-```
+.. code-block:: javascript
+   :emphasize-lines: 16
+   :copyable: false
 
-The index option `hidden` is only returned if the value is `true`.
+   [
+      {
+         "v" : 2,
+         "key" : {
+            "_id" : 1
+         },
+         "name" : "_id_"
+      },
+      {
+         "v" : 2,
+         "key" : {
+            "borough" : 1,
+            "ratings" : 1
+         },
+         "name" : "borough_1_ratings_1",
+         "hidden" : true
+      }
+   ]
+
+The index option ``hidden`` is only returned if the value is ``true``.
 
 ### Unhide an Existing Index
 
-To unhide a hidden index, you can use the :dbcommand:`collMod` command or :binary:`~bin.mongosh` helper :method:`db.collection.unhideIndex()`. You can specify either:
+To unhide a hidden index, you can use the :dbcommand:`collMod` command
+or :binary:`~bin.mongosh` helper
+:method:`db.collection.unhideIndex()`. You can specify either:
 
 - the index key specification document to the
-:method:`db.collection.unhideIndex()` method:
+  :method:`db.collection.unhideIndex()` method:
 
-```javascript
-  db.restaurants.unhideIndex( { borough: 1, city: 1 } );  // Specify the index key specification document
-```
+  .. code-block:: javascript
+
+     db.restaurants.unhideIndex( { borough: 1, city: 1 } );  // Specify the index key specification document
 
 - the index name to the :method:`db.collection.unhideIndex()` method:
-```javascript
-  db.restaurants.unhideIndex( "borough_1_ratings_1" );    // Specify the index name
-```
+  
+  .. code-block:: javascript
 
-To verify, run :method:`db.collection.getIndexes()` on the `restaurants` collection:
+     db.restaurants.unhideIndex( "borough_1_ratings_1" );    // Specify the index name
 
-```javascript
-db.restaurants.getIndexes()
-```
+To verify, run :method:`db.collection.getIndexes()` on the
+``restaurants`` collection:
+
+.. code-block:: javascript
+
+   db.restaurants.getIndexes()
 
 The operation returns the following information:
 
-```javascript
-[
-   {
-      "v" : 2,
-      "key" : {
-         "_id" : 1
-      },
-      "name" : "_id_"
-   },
-   {
-      "v" : 2,
-      "key" : {
-         "borough" : 1,
-         "ratings" : 1
-      },
-      "name" : "borough_1_ratings_1"
-   }
-]
-```
+.. code-block:: javascript
+   :copyable: false
 
-The index option `hidden` no longer appears as part of the `borough_1_ratings_1` index since the field is only returned if the value is `true`.
+   [
+      {
+         "v" : 2,
+         "key" : {
+            "_id" : 1
+         },
+         "name" : "_id_"
+      },
+      {
+         "v" : 2,
+         "key" : {
+            "borough" : 1,
+            "ratings" : 1
+         },
+         "name" : "borough_1_ratings_1"
+      }
+   ]
 
-Because indexes are fully maintained while hidden, the index is immediately available for use once unhidden.
+The index option ``hidden`` no longer appears as part of the
+``borough_1_ratings_1`` index since the field is only returned if the
+value is ``true``.
+
+Because indexes are fully maintained while hidden, the index is
+immediately available for use once unhidden.

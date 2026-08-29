@@ -1,57 +1,136 @@
 ---
 type: "Framework Learn Page"
-framework: "mongodb"
+framework: "MongoDB"
 source_repo: "https://github.com/mongodb/docs.git"
 source_branch: "main"
 source_path: "content/manual/manual/source/reference/operator/aggregation/in.txt"
-source_commit: "ab9db26ed3d11618cdb61516d8180337d8e3f679"
-source_commit_short: "ab9db26e"
-source_commit_date: "2026-07-24T16:22:46-06:00"
-generated_at: "2026-07-25T11:51:15Z"
+source_commit: "b9f2bc487a2878b65e3c1f80024bebab76954f27"
+source_commit_short: "b9f2bc48"
+source_commit_date: "2026-08-28T17:09:45-05:00"
+generated_at: "2026-08-29T09:39:20.237605Z"
 ---
-
-=========================
+.. _in-aggregation-operator:
 
 # $in (expression operator)
 
+**meta:** :description: Determine if a specified value exists within an array using the `$in` aggregation operator in MongoDB.
+
+.. default-domain:: mongodb
+
+**contents:** On this page
+   :local:
+   :backlinks: none
+   :depth: 1
+   :class: singlecol
+
 ## Definition
+
+**expression:** $in
+
+   Returns a boolean indicating whether a specified value is in an
+   array.
+
+   .. note::
+
+      This document describes the :expression:`$in` aggregation
+      operator. For the ``$in`` query operator, see
+      :doc:`/reference/operator/query/in`.
+
+   :expression:`$in` has the following :ref:`operator expression syntax
+   <agg-quick-ref-operator-expressions>`:
+
+   .. code-block:: javascript
+
+      { $in: [ <expression>, <array expression> ] }
+
+   .. list-table::
+      :header-rows: 1
+      :widths: 40 60
+
+      * - Operand
+        - Description
+
+      * - ``<expression>`` 
+
+        - Any valid expression :ref:`expression
+          <aggregation-expressions>`.
+
+      * - ``<array expression>`` 
+
+        - Any valid :ref:`expression <aggregation-expressions>` that
+          resolves to an array.
+
+   Unlike the :query:`$in` query operator, the aggregation
+   :expression:`$in` operator does not support matching by
+   :ref:`regular expressions <query-in-regex>`.
+
+   .. list-table::
+      :header-rows: 1
+      :widths: 95 5
+
+      * - Example
+        - Results
+
+      * - ``{ $in: [ 2, [ 1, 2, 3 ] ] }``
+        - ``true``
+
+      * - ``{ $in: [ "abc", [ "xyz", "abc" ] ] }``
+        - ``true``
+
+      * - ``{ $in: [ "xy", [ "xyz", "abc" ] ] }``
+        - ``false``
+
+      * - ``{ $in: [ [ "a" ], [ "a" ] ] }``
+        - ``false``
+
+      * - ``{ $in: [ [ "a" ], [ [ "a" ] ] ] }``
+        - ``true``
+
+      * - ``{ $in: [ /^a/, [ "a" ] ] }``
+        - ``false``
+
+      * - ``{ $in: [ /^a/, [ /^a/ ] ] }``
+        - ``true``
 
 ## Behavior
 
-:expression:`$in` fails with an error in either of the following cases: if the $in expression is not given exactly two arguments, or if the second argument does not resolve to an array.
+:expression:`$in` fails with an error in either of the
+following cases: if the $in expression is not given exactly two
+arguments, or if the second argument does not resolve to an array.
 
 ## Example
 
-A collection named `fruit` has the following documents:
+A collection named ``fruit`` has the following documents:
 
-```javascript
-{ "_id" : 1, "location" : "24th Street",
-  "in_stock" : [ "apples", "oranges", "bananas" ] }
-{ "_id" : 2, "location" : "36th Street",
-  "in_stock" : [ "bananas", "pears", "grapes" ] }
-{ "_id" : 3, "location" : "82nd Street",
-  "in_stock" : [ "cantaloupes", "watermelons", "apples" ] }
-```
+.. code-block:: javascript
 
-The following aggregation operation looks at the `in_stock` array in each document and determines whether the string `bananas` is present.
+   { "_id" : 1, "location" : "24th Street",
+     "in_stock" : [ "apples", "oranges", "bananas" ] }
+   { "_id" : 2, "location" : "36th Street",
+     "in_stock" : [ "bananas", "pears", "grapes" ] }
+   { "_id" : 3, "location" : "82nd Street",
+     "in_stock" : [ "cantaloupes", "watermelons", "apples" ] }
 
-```javascript
-db.fruit.aggregate([
-  {
-    $project: {
-      "store location" : "$location",
-      "has bananas" : {
-        $in: [ "bananas", "$in_stock" ]
-      }
-    }
-  }
-])
-```
+The following aggregation operation looks at the ``in_stock`` array in
+each document and determines whether the string ``bananas`` is present.
+
+.. code-block:: javascript
+
+   db.fruit.aggregate([
+     {
+       $project: {
+         "store location" : "$location",
+         "has bananas" : {
+           $in: [ "bananas", "$in_stock" ]
+         }
+       }
+     }
+   ])
 
 The operation returns the following results:
 
-```javascript
-{ "_id" : 1, "store location" : "24th Street", "has bananas" : true }
-{ "_id" : 2, "store location" : "36th Street", "has bananas" : true }
-{ "_id" : 3, "store location" : "82nd Street", "has bananas" : false }
-```
+.. code-block:: javascript
+
+   { "_id" : 1, "store location" : "24th Street", "has bananas" : true }
+   { "_id" : 2, "store location" : "36th Street", "has bananas" : true }
+   { "_id" : 3, "store location" : "82nd Street", "has bananas" : false }

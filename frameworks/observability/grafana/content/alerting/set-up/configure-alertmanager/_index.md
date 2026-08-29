@@ -4,10 +4,10 @@ framework: "Grafana"
 source_repo: "https://github.com/grafana/grafana.git"
 source_branch: "main"
 source_path: "docs/sources/alerting/set-up/configure-alertmanager/_index.md"
-source_commit: "d18e58d33aa8741f08fbab4aa73bdaf1f04e3be5"
-source_commit_short: "d18e58d3"
-source_commit_date: "2026-07-25T13:50:43+02:00"
-generated_at: "2026-07-25T19:08:08.959944Z"
+source_commit: "5e3a02f81d2aadf4bf24fe49ed97d872556f5bf9"
+source_commit_short: "5e3a02f8"
+source_commit_date: "2026-08-29T10:58:19+09:00"
+generated_at: "2026-08-29T09:39:37.470164Z"
 ---
 ---
 aliases:
@@ -71,6 +71,12 @@ New Grafana Cloud stacks will use Grafana-managed alerting (GMA) by default. Dat
 This applies to the default Loki and Prometheus Grafana Cloud data sources managed by Grafana Labs and Cloud Alertmanager, which will not be available nor will Grafana provision the data source for it. If you add your own Mimir, Loki, or Alertmanager data sources, you can continue to use data source-managed alerts.
 
 Cloud users can import DMA rules into GMA rules with the import tool. See the [import data source-managed alerts to Grafana-managed alerts documentation](https://grafana.com/docs/grafana/latest/alerting/alerting-rules/alerting-migration/) for information on how to do this.
+{{< /admonition >}}
+
+{{< admonition type="note" >}}
+The standalone Alertmanager UI in Grafana Cloud (for example, `https://alertmanager-<REGION>.grafana.net/alertmanager/`) is deprecated and no longer available.
+
+All Alertmanager functionality, including silences, notification policies, contact points, and mute timings, is now available in the Grafana Alerting UI. Use the `Choose Alertmanager` dropdown to select the Alertmanager you want to manage. To manage silences, go to **Alerts & IRM** > **Alerting** > **Silences**.
 {{< /admonition >}}
 
 # Configure Alertmanagers

@@ -1,50 +1,89 @@
 ---
 type: "Framework Learn Page"
-framework: "mongodb"
+framework: "MongoDB"
 source_repo: "https://github.com/mongodb/docs.git"
 source_branch: "main"
 source_path: "content/manual/manual/source/core/replica-set-secondary.txt"
-source_commit: "ab9db26ed3d11618cdb61516d8180337d8e3f679"
-source_commit_short: "ab9db26e"
-source_commit_date: "2026-07-24T16:22:46-06:00"
-generated_at: "2026-07-25T11:51:15Z"
+source_commit: "b9f2bc487a2878b65e3c1f80024bebab76954f27"
+source_commit_short: "b9f2bc48"
+source_commit_date: "2026-08-28T17:09:45-05:00"
+generated_at: "2026-08-29T09:39:19.521789Z"
 ---
-
-=============================
+.. _replica-set-secondary-members-ref:
 
 # Replica Set Secondary Members
 
-A secondary maintains a copy of the `primary's <primary>` data set. To replicate data, a secondary applies operations from the primary's `oplog <replica-set-oplog>` to its own data set in an asynchronous process. [#slow-oplogs]_ A replica set can have one or more secondaries.
+**meta:** :description: Understand how secondary members in a replica set maintain data copies and can become primary during failover.
 
-The following three-member replica set has two secondary members. The secondaries replicate the primary's oplog and apply the operations to their data sets.
+.. default-domain:: mongodb
 
-.. include:: /images/replica-set-primary-with-two-secondaries.rst
+**contents:** On this page
+   :local:
+   :backlinks: none
+   :depth: 1
+   :class: singlecol
 
-Although clients cannot write data to secondaries, clients can read data from secondary members. See `/core/read-preference` for more information on how clients direct read operations to replica sets.
+.. start-content
 
-A secondary can become a primary. If the current primary becomes unavailable, the replica set holds an `election` to choose which of the secondaries becomes the new primary.
+A secondary maintains a copy of the :term:`primary's <primary>` data
+set. To replicate data, a secondary applies operations from the
+primary's :ref:`oplog <replica-set-oplog>` to its own data set
+in an asynchronous process. [#slow-oplogs]_ A replica set can have one or more
+secondaries.
 
-In the following three-member replica set, the primary becomes unavailable. This triggers an election where one of the remaining secondaries becomes the new primary.
+The following three-member replica set has two secondary
+members. The secondaries replicate the primary's oplog and apply
+the operations to their data sets.
 
-.. include:: /images/replica-set-trigger-election.rst
+**include:** /images/replica-set-primary-with-two-secondaries.rst
 
-See `/core/replica-set-elections` for more details.
+Although clients cannot write data to secondaries, clients can read
+data from secondary members. See :doc:`/core/read-preference` for more
+information on how clients direct read operations to replica sets.
 
-You can configure a secondary member for a specific purpose. You can configure a secondary to:
+A secondary can become a primary.
+If the current primary becomes unavailable, the replica set
+holds an :term:`election` to choose which of the secondaries
+becomes the new primary.
+
+.. start-content-election-example
+
+In the following three-member replica set, the primary becomes unavailable.
+This triggers an election where one of the remaining
+secondaries becomes the new primary.
+
+**include:** /images/replica-set-trigger-election.rst
+
+.. end-content-election-example
+
+See
+:doc:`/core/replica-set-elections` for more details.
+
+You can configure a secondary member for a specific purpose. You can
+configure a secondary to:
 
 - Prevent it from becoming a primary in an election, which allows it to
-reside in a secondary data center or to serve as a cold standby. See `/core/replica-set-priority-0-member`.
+  reside in a secondary data center or to serve as a cold standby. See
+  :doc:`/core/replica-set-priority-0-member`.
 
 - Prevent applications from reading from it, which allows it to run applications
-that require separation from normal traffic. See `/core/replica-set-hidden-member`.
+  that require separation from normal traffic. See
+  :doc:`/core/replica-set-hidden-member`.
 
 - Keep a running "historical" snapshot for use in recovery from
-certain errors, such as unintentionally deleted databases. See `/core/replica-set-delayed-member`.
+  certain errors, such as unintentionally deleted databases. See
+  :doc:`/core/replica-set-delayed-member`.
 
-.. include:: /includes/extracts/4.2-changes-slow-oplog-log-message-footnote.rst
+.. [#slow-oplogs]
 
-## Contents
+   .. include:: /includes/extracts/4.2-changes-slow-oplog-log-message-footnote.rst
 
-- Priority 0 Members </core/replica-set-priority-0-member>
-- Hidden Members  </core/replica-set-hidden-member>
-- Delayed Members </core/replica-set-delayed-member>
+
+.. end-content
+
+**toctree:** :titlesonly:
+   :hidden:
+
+   Priority 0 Members </core/replica-set-priority-0-member>
+   Hidden Members  </core/replica-set-hidden-member>
+   Delayed Members </core/replica-set-delayed-member>

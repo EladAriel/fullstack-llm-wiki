@@ -1,41 +1,26 @@
 ---
 type: "Framework Learn Directory Index"
-framework: "nextjs"
-directory: "content/02-pages"
-source_repo: "https://github.com/vercel/next.js/"
-source_branch: "canary"
-source_commit: "dcf242a17b5d4622bbd9624db531a9d84177619f"
-source_commit_short: "dcf242a1"
-source_commit_date: "2026-07-25T10:16:19+02:00"
-generated_at: "2026-07-25T11:50:53Z"
+framework: "Next.js"
+generated_at: "2026-08-29T09:40:24.345935Z"
 ---
-# 02 Pages
+# 02-Pages
 
-This directory contains nextjs learning pages related to 02 pages.
+This directory contains Next.js learning pages related to 02-pages.
 
 ## Breadcrumbs
 
-[Wiki Home](../../index.md) -> [Content](../index.md) -> [02 Pages](index.md)
+[Wiki Home](../index.md) -> [Content](index.md)
 
 ## Navigation
 
-- Parent: [Parent Index](../index.md)
-
-## Child Directories
-
-- [01 Getting Started](01-getting-started/index.md) - pages related to 01 getting started
-- [02 Guides](02-guides/index.md) - pages related to 02 guides
-- [03 Building Your Application](03-building-your-application/index.md) - pages related to 03 building your application
-- [04 Api Reference](04-api-reference/index.md) - pages related to 04 api reference
+- Wiki Home: [Root Index](../index.md)
 
 ## Pages in This Directory
 
-- [Original Source Index](_source_index.md)
 
-## IDE LLM Guidance
+## Subdirectories
 
-When answering implementation questions related to this directory:
-
-1. Prefer the most specific page listed above.
-2. If the topic is broad, read the child directory index first.
-3. Use source metadata from each page when giving answers.
+- [01 Getting Started](01-getting-started/index.md)
+- [02 Guides](02-guides/index.md)
+- [03 Building Your Application](03-building-your-application/index.md)
+- [04 Api Reference](04-api-reference/index.md)

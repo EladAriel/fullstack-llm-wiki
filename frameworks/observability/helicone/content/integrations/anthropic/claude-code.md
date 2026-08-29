@@ -4,10 +4,10 @@ framework: "Helicone"
 source_repo: "https://github.com/Helicone/helicone.git"
 source_branch: "main"
 source_path: "docs/integrations/anthropic/claude-code.mdx"
-source_commit: "67df07b8d807a960f2e53d9ec2a9c49513ca2379"
-source_commit_short: "67df07b"
-source_commit_date: "2026-07-21T05:35:38-07:00"
-generated_at: "2026-07-25T19:08:22.207989Z"
+source_commit: "607c855f787d6cc66e83692874bf90f880a08d62"
+source_commit_short: "607c855"
+source_commit_date: "2026-08-25T19:59:29-04:00"
+generated_at: "2026-08-29T09:39:42.353595Z"
 ---
 # Claude Code
 

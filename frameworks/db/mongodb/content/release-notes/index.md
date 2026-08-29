@@ -1,29 +1,19 @@
 ---
 type: "Framework Learn Directory Index"
-framework: "mongodb"
-directory: "content/release-notes"
-source_repo: "https://github.com/mongodb/docs.git"
-source_branch: "main"
-source_commit: "ab9db26ed3d11618cdb61516d8180337d8e3f679"
-source_commit_short: "ab9db26e"
-source_commit_date: "2026-07-24T16:22:46-06:00"
-generated_at: "2026-07-25T11:51:15Z"
+framework: "MongoDB"
+generated_at: "2026-08-29T09:39:20.588235Z"
 ---
-# Release Notes
+# Release-Notes
 
-This directory contains mongodb learning pages related to release notes.
+This directory contains MongoDB learning pages related to release-notes.
 
 ## Breadcrumbs
 
-[Wiki Home](../../index.md) -> [Content](../index.md) -> [Release Notes](index.md)
+[Wiki Home](../index.md) -> [Content](index.md)
 
 ## Navigation
 
-- Parent: [Parent Index](../index.md)
-
-## Child Directories
-
-- None
+- Wiki Home: [Root Index](../index.md)
 
 ## Pages in This Directory
 
@@ -43,14 +33,6 @@ This directory contains mongodb learning pages related to release notes.
 - [8.0 Upgrade Standalone](8.0-upgrade-standalone.md)
 - [8.0 Upgrade](8.0-upgrade.md)
 - [8.0](8.0.md)
-- [8.2 Changelog](8.2-changelog.md)
-- [8.2 Compatibility](8.2-compatibility.md)
-- [8.2 Downgrade](8.2-downgrade.md)
-- [8.2 Upgrade Replica Set](8.2-upgrade-replica-set.md)
-- [8.2 Upgrade Sharded Cluster](8.2-upgrade-sharded-cluster.md)
-- [8.2 Upgrade Standalone](8.2-upgrade-standalone.md)
-- [8.2 Upgrade](8.2-upgrade.md)
-- [8.2](8.2.md)
 - [8.3 Changelog](8.3-changelog.md)
 - [8.3 Compatibility](8.3-compatibility.md)
 - [8.3 Downgrade Replica Set](8.3-downgrade-replica-set.md)
@@ -71,11 +53,3 @@ This directory contains mongodb learning pages related to release notes.
 - [8.3 Upgrade](8.3-upgrade.md)
 - [8.3](8.3.md)
 - [Drivers Write Concern](drivers-write-concern.md)
-
-## IDE LLM Guidance
-
-When answering implementation questions related to this directory:
-
-1. Prefer the most specific page listed above.
-2. If the topic is broad, read the child directory index first.
-3. Use source metadata from each page when giving answers.

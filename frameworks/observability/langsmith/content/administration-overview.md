@@ -4,10 +4,10 @@ framework: "LangSmith"
 source_repo: "https://github.com/langchain-ai/docs.git"
 source_branch: "main"
 source_path: "src/langsmith/administration-overview.mdx"
-source_commit: "2aae1dfc98ee953a9a5185fb6fcdd9efb3f4d878"
-source_commit_short: "2aae1df"
-source_commit_date: "2026-07-25T00:27:23+00:00"
-generated_at: "2026-07-25T19:08:33.379893Z"
+source_commit: "a174f9cf7c91ee5eb14ee2382eb48bfe6e4956e9"
+source_commit_short: "a174f9c"
+source_commit_date: "2026-08-28T17:04:12-07:00"
+generated_at: "2026-08-29T09:39:50.609792Z"
 ---
 # Administration Overview
 
@@ -216,7 +216,7 @@ Use [resource tags](#resource-tags) to organize resources by environment using t
 While both types of tags can use environment terminology like `dev`, `staging`, and `prod`, they serve different purposes:
 
 - **Resource tags** (`Environment: prod`): Use these to *organize and filter* resources across your workspace. Apply resource tags to tracing projects, datasets, and other resources (including prompts) to group them by environment, which enables filtering in the UI.
-- [Commit tags](/langsmith/manage-prompts#commit-tags) (`prod` tag): Use these to manage which [prompt version](/langsmith/prompt-engineering) your code references. Commit tags are labels that point to specific commits in a prompt's history. When your code pulls a prompt by tag name (e.g., `client.pull_prompt("prompt-name:prod")`), it retrieves whichever commit that tag currently points to. To promote a prompt from `staging` to `prod`, move the commit tag to point to the desired version.
+- [Commit tags](/langsmith/manage-prompts#commit-tags) (`prod` tag): Use these to manage which [prompt version](/langsmith/prompt-context-hub#prompts) your code references. Commit tags are labels that point to specific commits in a prompt's history. When your code pulls a prompt by tag name (e.g., `client.pull_prompt("prompt-name:prod")`), it retrieves whichever commit that tag currently points to. To promote a prompt from `staging` to `prod`, move the commit tag to point to the desired version.
 
 Resource tags organize **which resources** belong to an environment. Commit tags let you control **which version** of a prompt your code references without changing the code itself.
 </Note>
@@ -267,8 +267,8 @@ Retention behavior by action:
 
 * **Feedback via API or SDK**: Feedback is added to any run on the trace (or any trace in the thread) through an API or SDK call that explicitly passes `extend_trace_retention=true` (`extendTraceRetention: true` in TypeScript). For more information, see [Attach user feedback](/langsmith/attach-user-feedback). The LangSmith UI sends feedback and notes without extending retention.
 * **Online evaluators**: An online evaluator scores the trace and its retention setting is enabled. Both trace-level and thread-level evaluators can opt out of this upgrade.
-* **Automation rules**: An [automation rule](/langsmith/rules#create-a-rule) with retention extension enabled matches any run within a trace.
-* **Manual annotation queue adds** (no upgrade): Manually adding runs to an [annotation queue](/langsmith/annotation-queues#assign-runs-to-a-single-run-queue) does not upgrade retention by default.
+* **Automation rules**: An [automation rule](/langsmith/rules#create-a-rule) with retention extension enabled matches any run within a trace. Matching a single run upgrades the entire trace, not just that run. A rule whose [item type](/langsmith/rules#set-the-item-type-to-runs-or-threads) is **Threads** upgrades every trace in the matched thread, not only the most recent one.
+* **Manual annotation queue adds** (no upgrade): Manually adding runs or threads to an [annotation queue](/langsmith/annotation-queues#assign-runs-and-threads-to-a-single-run-queue) does not upgrade retention by default.
 
 This change applies to new actions only. Traces that were already upgraded by a previous action keep their extended retention.
 

@@ -1,101 +1,146 @@
 ---
 type: "Framework Learn Page"
-framework: "postgres"
+framework: "PostgreSQL"
 source_repo: "https://github.com/postgres/postgres.git"
 source_branch: "master"
 source_path: "doc/src/sgml/dict-xsyn.sgml"
-source_commit: "38afc3dcb25c45b744d4025029ce0a6c90b7059f"
-source_commit_short: "38afc3dc"
-source_commit_date: "2026-07-25T19:08:27+09:00"
-generated_at: "2026-07-25T11:50:59Z"
+source_commit: "6c5f1d6074208146930b67c2054509c3e82f6f7f"
+source_commit_short: "6c5f1d6"
+source_commit_date: "2026-08-28T23:24:47+02:00"
+generated_at: "2026-08-29T09:39:24.457821Z"
 ---
-
-## dict_xsyn -- example synonym full-text search dictionary
-
-dict_xsyn
-
-`dict_xsyn` (Extended Synonym Dictionary) is an example of an add-on dictionary template for full-text search. This dictionary type replaces words with groups of their synonyms, and so makes it possible to search for a word using any of its synonyms.
-
-## Configuration
-
-A `dict_xsyn` dictionary accepts the following options:
-
-- `matchorig` controls whether the original word is accepted by the dictionary. Default is `true`.
-- `matchsynonyms` controls whether the synonyms are accepted by the dictionary. Default is `false`.
-- `keeporig` controls whether the original word is included in the dictionary's output. Default is `true`.
-- `keepsynonyms` controls whether the synonyms are included in the dictionary's output. Default is `true`.
-- `rules` is the base name of the file containing the list of synonyms. This file must be stored in `$SHAREDIR/tsearch_data/` (where `$SHAREDIR` means the PostgreSQL installation's shared-data directory). Its name must end in `.rules` (which is not to be included in the `rules` parameter).
-
-The rules file has the following format:
-
-- Each line represents a group of synonyms for a single word, which is given first on the line. Synonyms are separated by whitespace, thus:
-
-```
-  word syn1 syn2 syn3
-  ```
-- The sharp (`#`) sign is a comment delimiter. It may appear at any position in a line. The rest of the line will be skipped.
+# dict_xsyn — example synonym full-text search dictionary
 
  
-
-Look at `xsyn_sample.rules`, which is installed in `$SHAREDIR/tsearch_data/`, for an example.
-
+  dict_xsyn
  
 
  
-
+  dict_xsyn (Extended Synonym Dictionary) is an example of an
+  add-on dictionary template for full-text search.  This dictionary type
+  replaces words with groups of their synonyms, and so makes it possible to
+  search for a word using any of its synonyms.
  
 
-## Usage
+ 
+  Configuration
 
+  
+   A dict_xsyn dictionary accepts the following options:
+  
+  
+   
+    
+     matchorig controls whether the original word is accepted by
+     the dictionary. Default is true.
+    
+   
+   
+    
+     matchsynonyms controls whether the synonyms are
+     accepted by the dictionary. Default is false.
+    
+   
+   
+    
+     keeporig controls whether the original word is included in
+     the dictionary's output. Default is true.
+    
+   
+   
+    
+     keepsynonyms controls whether the synonyms are included in
+     the dictionary's output. Default is true.
+    
+   
+   
+    
+     rules is the base name of the file containing the list of
+     synonyms.  This file must be stored in
+     $SHAREDIR/tsearch_data/ (where $SHAREDIR means
+     the PostgreSQL installation's shared-data directory).
+     Its name must end in .rules (which is not to be included in
+     the rules parameter).
+    
+   
+  
+  
+   The rules file has the following format:
+  
+  
+   
+    
+     Each line represents a group of synonyms for a single word, which is
+     given first on the line. Synonyms are separated by whitespace, thus:
+
+word syn1 syn2 syn3
+
+    
+   
+   
+    
+     The sharp (#) sign is a comment delimiter. It may appear at
+     any position in a line.  The rest of the line will be skipped.
+    
+   
+  
+
+  
+   Look at xsyn_sample.rules, which is installed in
+   $SHAREDIR/tsearch_data/, for an example.
+  
  
 
-Installing the `dict_xsyn` extension creates a text search template `xsyn_template` and a dictionary `xsyn` based on it, with default parameters. You can alter the parameters, for example
+ 
+  Usage
 
-```
+  
+   Installing the dict_xsyn extension creates a text search
+   template xsyn_template and a dictionary xsyn
+   based on it, with default parameters.  You can alter the
+   parameters, for example
+
 mydb# ALTER TEXT SEARCH DICTIONARY xsyn (RULES='my_rules', KEEPORIG=false);
 ALTER TEXT SEARCH DICTIONARY
-```
 
-or create new dictionaries based on the template.
+   or create new dictionaries based on the template.
+  
 
- 
+  
+   To test the dictionary, you can try
 
-To test the dictionary, you can try
-
-```
 mydb=# SELECT ts_lexize('xsyn', 'word');
-ts_lexize
+      ts_lexize
 -----------------------
-{syn1,syn2,syn3}
+ {syn1,syn2,syn3}
 
 mydb# ALTER TEXT SEARCH DICTIONARY xsyn (RULES='my_rules', KEEPORIG=true);
 ALTER TEXT SEARCH DICTIONARY
 
 mydb=# SELECT ts_lexize('xsyn', 'word');
-ts_lexize
+      ts_lexize
 -----------------------
-{word,syn1,syn2,syn3}
+ {word,syn1,syn2,syn3}
 
 mydb# ALTER TEXT SEARCH DICTIONARY xsyn (RULES='my_rules', KEEPORIG=false, MATCHSYNONYMS=true);
 ALTER TEXT SEARCH DICTIONARY
 
 mydb=# SELECT ts_lexize('xsyn', 'syn1');
-ts_lexize
+      ts_lexize
 -----------------------
-{syn1,syn2,syn3}
+ {syn1,syn2,syn3}
 
 mydb# ALTER TEXT SEARCH DICTIONARY xsyn (RULES='my_rules', KEEPORIG=true, MATCHORIG=false, KEEPSYNONYMS=false);
 ALTER TEXT SEARCH DICTIONARY
 
 mydb=# SELECT ts_lexize('xsyn', 'syn1');
-ts_lexize
+      ts_lexize
 -----------------------
-{word}
-```
+ {word}
 
-Real-world usage will involve including it in a text search configuration as described in `textsearch`. That might look like this:
+   Real-world usage will involve including it in a text search
+   configuration as described in .
+   That might look like this:
 
-```
 ALTER TEXT SEARCH CONFIGURATION english
-ALTER MAPPING FOR word, asciiword WITH xsyn, english_stem;
-```
+    ALTER MAPPING FOR word, asciiword WITH xsyn, english_stem;

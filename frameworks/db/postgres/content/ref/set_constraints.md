@@ -1,48 +1,134 @@
 ---
 type: "Framework Learn Page"
-framework: "postgres"
+framework: "PostgreSQL"
 source_repo: "https://github.com/postgres/postgres.git"
 source_branch: "master"
 source_path: "doc/src/sgml/ref/set_constraints.sgml"
-source_commit: "38afc3dcb25c45b744d4025029ce0a6c90b7059f"
-source_commit_short: "38afc3dc"
-source_commit_date: "2026-07-25T19:08:27+09:00"
-generated_at: "2026-07-25T11:50:59Z"
+source_commit: "6c5f1d6074208146930b67c2054509c3e82f6f7f"
+source_commit_short: "6c5f1d6"
+source_commit_date: "2026-08-28T23:24:47+02:00"
+generated_at: "2026-08-29T09:39:24.565475Z"
 ---
-
 SET CONSTRAINTS
+ 
 
-SET CONSTRAINTS
-7
-SQL - Language Statements
+ 
+  
+# SET CONSTRAINTS
 
-SET CONSTRAINTS
-set constraint check timing for the current transaction
+  7
+  SQL - Language Statements
+ 
 
-```
+ 
+  
+# SET CONSTRAINTS
+
+  set constraint check timing for the current transaction
+ 
+
+ 
+
 SET CONSTRAINTS { ALL | name [, ...] } { DEFERRED | IMMEDIATE }
-```
 
-## Description
+ 
 
-`SET CONSTRAINTS` sets the behavior of constraint checking within the current transaction. `IMMEDIATE` constraints are checked at the end of each statement. `DEFERRED` constraints are not checked until transaction commit. Each constraint has its own `IMMEDIATE` or `DEFERRED` mode.
+ 
+  
+# Description
 
-Upon creation, a constraint is given one of three characteristics: `DEFERRABLE INITIALLY DEFERRED`, `DEFERRABLE INITIALLY IMMEDIATE`, or `NOT DEFERRABLE`. The third class is always `IMMEDIATE` and is not affected by the `SET CONSTRAINTS` command. The first two classes start every transaction in the indicated mode, but their behavior can be changed within a transaction by `SET CONSTRAINTS`.
+  
+   SET CONSTRAINTS sets the behavior of constraint
+   checking within the current transaction. IMMEDIATE
+   constraints are checked at the end of each
+   statement. DEFERRED constraints are not checked until
+   transaction commit.  Each constraint has its own
+   IMMEDIATE or DEFERRED mode.
+  
 
-`SET CONSTRAINTS` with a list of constraint names changes the mode of just those constraints (which must all be deferrable). Each constraint name can be schema-qualified. The current schema search path is used to find the first matching name if no schema name is specified. `SET CONSTRAINTS ALL` changes the mode of all deferrable constraints.
+  
+   Upon creation, a constraint is given one of three
+   characteristics: DEFERRABLE INITIALLY DEFERRED,
+   DEFERRABLE INITIALLY IMMEDIATE, or
+   NOT DEFERRABLE. The third
+   class is always IMMEDIATE and is not affected by the
+   SET CONSTRAINTS command.  The first two classes start
+   every transaction in the indicated mode, but their behavior can be changed
+   within a transaction by SET CONSTRAINTS.
+  
 
-When `SET CONSTRAINTS` changes the mode of a constraint from `DEFERRED` to `IMMEDIATE`, the new mode takes effect retroactively: any outstanding data modifications that would have been checked at the end of the transaction are instead checked during the execution of the `SET CONSTRAINTS` command. If any such constraint is violated, the `SET CONSTRAINTS` fails (and does not change the constraint mode). Thus, `SET CONSTRAINTS` can be used to force checking of constraints to occur at a specific point in a transaction.
+  
+   SET CONSTRAINTS with a list of constraint names changes
+   the mode of just those constraints (which must all be deferrable).  Each
+   constraint name can be schema-qualified.  The
+   current schema search path is used to find the first matching name if
+   no schema name is specified.  SET CONSTRAINTS ALL
+   changes the mode of all deferrable constraints.
+  
 
-Currently, only `UNIQUE`, `PRIMARY KEY`, `REFERENCES` (foreign key), and `EXCLUDE` constraints are affected by this setting. `NOT NULL` and `CHECK` constraints are always checked immediately when a row is inserted or modified (not at the end of the statement). Uniqueness and exclusion constraints that have not been declared `DEFERRABLE` are also checked immediately.
+  
+   When SET CONSTRAINTS changes the mode of a constraint
+   from DEFERRED
+   to IMMEDIATE, the new mode takes effect
+   retroactively: any outstanding data modifications that would have
+   been checked at the end of the transaction are instead checked during the
+   execution of the SET CONSTRAINTS command.
+   If any such constraint is violated, the SET CONSTRAINTS
+   fails (and does not change the constraint mode).  Thus, SET
+   CONSTRAINTS can be used to force checking of constraints to
+   occur at a specific point in a transaction.
+  
 
-The firing of triggers that are declared as constraint triggers is also controlled by this setting -- they fire at the same time that the associated constraint should be checked.
+  
+   Currently, only UNIQUE, PRIMARY KEY,
+   REFERENCES (foreign key), and EXCLUDE
+   constraints are affected by this setting.
+   NOT NULL and CHECK constraints are
+   always checked immediately when a row is inserted or modified
+   (not at the end of the statement).
+   Uniqueness and exclusion constraints that have not been declared
+   DEFERRABLE are also checked immediately.
+  
 
-## Notes
+  
+   The firing of triggers that are declared as constraint triggers
+   is also controlled by this setting — they fire at the same time
+   that the associated constraint should be checked.
+  
 
-Because PostgreSQL does not require constraint names to be unique within a schema (but only per-table), it is possible that there is more than one match for a specified constraint name. In this case `SET CONSTRAINTS` will act on all matches. For a non-schema-qualified name, once a match or matches have been found in some schema in the search path, schemas appearing later in the path are not searched.
+ 
 
-This command only alters the behavior of constraints within the current transaction. Issuing this outside of a transaction block emits a warning and otherwise has no effect.
+ 
+  
+# Notes
 
-## Compatibility
+  
+   Because PostgreSQL does not require constraint
+   names to be unique within a schema (but only per-table), it is possible
+   that there is more than one match for a specified constraint name.
+   In this case SET CONSTRAINTS will act on all matches.
+   For a non-schema-qualified name, once a match or matches have been found in
+   some schema in the search path, schemas appearing later in the path are not
+   searched.
+  
 
-This command complies with the behavior defined in the SQL standard, except for the limitation that, in PostgreSQL, it does not apply to `NOT NULL` and `CHECK` constraints. Also, PostgreSQL checks non-deferrable uniqueness constraints immediately, not at end of statement as the standard would suggest.
+  
+   This command only alters the behavior of constraints within the
+   current transaction.  Issuing this outside of a transaction block
+   emits a warning and otherwise has no effect.
+  
+
+ 
+
+ 
+  
+# Compatibility
+
+  
+   This command complies with the behavior defined in the SQL
+   standard, except for the limitation that, in
+   PostgreSQL, it does not apply to
+   NOT NULL and CHECK constraints.
+   Also, PostgreSQL checks non-deferrable
+   uniqueness constraints immediately, not at end of statement as the
+   standard would suggest.

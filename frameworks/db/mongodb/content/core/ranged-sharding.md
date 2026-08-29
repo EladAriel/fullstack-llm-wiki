@@ -1,74 +1,100 @@
 ---
 type: "Framework Learn Page"
-framework: "mongodb"
+framework: "MongoDB"
 source_repo: "https://github.com/mongodb/docs.git"
 source_branch: "main"
 source_path: "content/manual/manual/source/core/ranged-sharding.txt"
-source_commit: "ab9db26ed3d11618cdb61516d8180337d8e3f679"
-source_commit_short: "ab9db26e"
-source_commit_date: "2026-07-24T16:22:46-06:00"
-generated_at: "2026-07-25T11:51:15Z"
+source_commit: "b9f2bc487a2878b65e3c1f80024bebab76954f27"
+source_commit_short: "b9f2bc48"
+source_commit_date: "2026-08-28T17:09:45-05:00"
+generated_at: "2026-08-29T09:39:19.521477Z"
 ---
-
-===============
+.. _sharding-ranged:
 
 # Ranged Sharding
 
-Range-based sharding involves dividing data into contiguous ranges determined by the shard key values. In this model, documents with "close" shard key values are likely to be in the same `chunk` or `shard`. This allows for efficient queries where reads target documents within a contiguous range. However, both read and write performance may decrease with poor shard key selection. See `sharding-ranged-shard-key`.
+**meta:** :description: Implement range-based sharding by dividing data into contiguous ranges using shard key values for efficient queries.
 
-.. include:: /images/sharding-range-based.rst
+.. default-domain:: mongodb
 
-Range-based sharding is the default sharding methodology if no other options such as those required for `/core/hashed-sharding` or `zones <zone-sharding>` are configured.
+Range-based sharding involves dividing data into contiguous ranges determined
+by the shard key values. In this model, documents with "close" shard key
+values are likely to be in the same :term:`chunk` or :term:`shard`. This
+allows for efficient queries where reads target documents within a contiguous
+range. However, both read and write performance may decrease with poor shard
+key selection. See :ref:`sharding-ranged-shard-key`.
+
+**include:** /images/sharding-range-based.rst
+
+Range-based sharding is the default sharding methodology if no other options
+such as those required for :doc:`/core/hashed-sharding` or
+:ref:`zones <zone-sharding>` are configured.
+
+.. _sharding-ranged-shard-key:
 
 ## Shard Key Selection
 
-Ranged sharding is most efficient when the shard key displays the following traits:
+Ranged sharding is most efficient when the shard key displays the following
+traits:
 
-- Large `shard-key-range`
-- Low `shard-key-frequency`
-- Non-`shard-key-monotonic`
-The following image illustrates a sharded cluster using the field `X` as the shard key. If the values for `X` have a large range, low frequency, and change at a non-monotonic rate, the distribution of inserts may look similar to the following:
+* Large :ref:`shard-key-range`
+* Low :ref:`shard-key-frequency`
+* Non-:ref:`shard-key-monotonic`
 
-.. include:: /images/sharded-cluster-ranged-distribution-good.rst
+
+The following image illustrates a sharded cluster using the field ``X`` as the
+shard key. If the values for ``X`` have a large range, low frequency, and
+change at a non-monotonic rate, the distribution of inserts may look similar
+to the following:
+
+**include:** /images/sharded-cluster-ranged-distribution-good.rst
 
 ## Shard a Collection
 
-Use the :method:`sh.shardCollection()` method, specifying the full namespace of the collection and the target `index` or `compound index` to use as the `shard key`.
+Use the :method:`sh.shardCollection()` method, specifying the full namespace
+of the collection and the target :term:`index` or :term:`compound index`
+to use as the :term:`shard key`.
 
-```javascript
-sh.shardCollection( "database.collection", { <shard key> } )
-```
+.. code-block:: javascript
 
-> **Important:** - Starting in MongoDB 5.0, you can :ref:`reshard a collection
-  <sharding-resharding>` by changing a collection's shard key.
-- You can `refine a shard key <shard-key-refine>` by adding a suffix
-  field or fields to the existing shard key.
+   sh.shardCollection( "database.collection", { <shard key> } )
+
+**important:** - Starting in MongoDB 5.0, you can :ref:`reshard a collection
+     <sharding-resharding>` by changing a collection's shard key.
+   - You can :ref:`refine a shard key <shard-key-refine>` by adding a suffix 
+     field or fields to the existing shard key.
 
 ### Shard a Populated Collection
 
-If you shard a populated collection, only one chunk is created initially. The balancer then migrates ranges from that chunk if necessary according to the configured range size.
+If you shard a populated collection, only one chunk is created 
+initially. The balancer then migrates ranges from that chunk if 
+necessary according to the configured range size.
 
 ### Shard an Empty Collection
 
 If you shard an empty collection:
 
-- With no `zones and zone ranges <zone-sharding>` specified for the
-empty or non-existing collection:
+- With no :ref:`zones and zone ranges <zone-sharding>` specified for the
+  empty or non-existing collection:
 
-- The sharding operation creates a single empty chunk to cover the
-entire range of the shard key values.
+  - The sharding operation creates a single empty chunk to cover the
+    entire range of the shard key values.
 
-- After the initial chunk creation, the balancer migrates the initial
-chunk across the shards as appropriate as well as manages the chunk distribution going forward.
+  - After the initial chunk creation, the balancer migrates the initial
+    chunk across the shards as appropriate as well as manages the chunk
+    distribution going forward.
 
 - With zones and zone ranges specified for the
-empty or a non-existing collections:
+  empty or a non-existing collections:
 
-- The sharding operation creates empty chunks for the defined zone
-ranges as well as any additional chunks to cover the entire range of the shard key values and performs an initial chunk distribution based on the zone ranges. This initial creation and distribution of chunks allows for faster setup of zoned sharding.
+  - The sharding operation creates empty chunks for the defined zone
+    ranges as well as any additional chunks to cover the entire range
+    of the shard key values and performs an initial chunk distribution
+    based on the zone ranges. This initial creation and distribution of
+    chunks allows for faster setup of zoned sharding.
 
-- After the initial distribution, the balancer manages the chunk
-distribution going forward.
+  - After the initial distribution, the balancer manages the chunk
+    distribution going forward.
 
-> **Seealso:** To learn how to deploy a sharded cluster and implement ranged
-sharding, see `sharding-procedure-setup`.
+**seealso:** To learn how to deploy a sharded cluster and implement ranged
+   sharding, see :ref:`sharding-procedure-setup`.

@@ -1,45 +1,23 @@
 ---
 type: "Framework Learn Directory Index"
-framework: "redis"
-directory: "content/develop/clients"
-source_repo: "https://github.com/redis/docs.git"
-source_branch: "main"
-source_commit: "9d30f68c3dad1a6b3b7d30fe604b911348ce8152"
-source_commit_short: "9d30f68c"
-source_commit_date: "2026-07-24T10:52:10-07:00"
-generated_at: "2026-07-25T11:51:22Z"
+framework: "Redis"
+generated_at: "2026-08-29T09:38:56.331573Z"
 ---
 # Clients
 
-This directory contains redis learning pages related to clients.
+This directory contains Redis learning pages related to clients.
 
 ## Breadcrumbs
 
-[Wiki Home](../../../index.md) -> [Content](../../index.md) -> [Develop](../index.md) -> [Clients](index.md)
+[Wiki Home](../index.md) -> [Content](index.md)
 
 ## Navigation
 
-- Parent: [Parent Index](../index.md)
-
-## Child Directories
-
-- [Dotnet](dotnet/index.md) - pages related to dotnet
-- [Go](go/index.md) - pages related to go
-- [Hiredis](hiredis/index.md) - pages related to hiredis
-- [Ioredis](ioredis/index.md) - pages related to ioredis
-- [Jedis](jedis/index.md) - pages related to jedis
-- [Lettuce](lettuce/index.md) - pages related to lettuce
-- [Nodejs](nodejs/index.md) - pages related to nodejs
-- [Om Clients](om-clients/index.md) - pages related to om clients
-- [Patterns](patterns/index.md) - pages related to patterns
-- [Php](php/index.md) - pages related to php
-- [Redis Py](redis-py/index.md) - pages related to redis py
-- [Ruby](ruby/index.md) - pages related to ruby
-- [Rust](rust/index.md) - pages related to rust
+- Wiki Home: [Root Index](../index.md)
 
 ## Pages in This Directory
 
-- [Index](_index.md)
+- [_Index](_index.md)
 - [Client Side Caching](client-side-caching.md)
 - [Error Handling](error-handling.md)
 - [Failover](failover.md)
@@ -49,10 +27,18 @@ This directory contains redis learning pages related to clients.
 - [Sch](sch.md)
 - [Version Support](version-support.md)
 
-## IDE LLM Guidance
+## Subdirectories
 
-When answering implementation questions related to this directory:
-
-1. Prefer the most specific page listed above.
-2. If the topic is broad, read the child directory index first.
-3. Use source metadata from each page when giving answers.
+- [Dotnet](dotnet/index.md)
+- [Go](go/index.md)
+- [Hiredis](hiredis/index.md)
+- [Ioredis](ioredis/index.md)
+- [Jedis](jedis/index.md)
+- [Lettuce](lettuce/index.md)
+- [Nodejs](nodejs/index.md)
+- [Om Clients](om-clients/index.md)
+- [Patterns](patterns/index.md)
+- [Php](php/index.md)
+- [Redis Py](redis-py/index.md)
+- [Ruby](ruby/index.md)
+- [Rust](rust/index.md)

@@ -1,183 +1,289 @@
 ---
 type: "Framework Learn Page"
-framework: "mongodb"
+framework: "MongoDB"
 source_repo: "https://github.com/mongodb/docs.git"
 source_branch: "main"
 source_path: "content/manual/manual/source/reference/operator/aggregation/function.txt"
-source_commit: "ab9db26ed3d11618cdb61516d8180337d8e3f679"
-source_commit_short: "ab9db26e"
-source_commit_date: "2026-07-24T16:22:46-06:00"
-generated_at: "2026-07-25T11:51:15Z"
+source_commit: "b9f2bc487a2878b65e3c1f80024bebab76954f27"
+source_commit_short: "b9f2bc48"
+source_commit_date: "2026-08-28T17:09:45-05:00"
+generated_at: "2026-08-29T09:39:20.177078Z"
 ---
-
-===============================
+.. _function-aggregation-operator:
 
 # $function (expression operator)
 
+**meta:** :description: Define custom aggregation functions in JavaScript using the `$function` operator, noting its performance impact and deprecation in MongoDB 8.0.
+
+.. default-domain:: mongodb
+
+**contents:** On this page
+   :local:
+   :backlinks: none
+   :depth: 1
+   :class: singlecol
+
 ## Definition
+
+**expression:** $function
+
+   .. important:: Server-side JavaScript Deprecated
+
+      .. include:: /includes/server-side-js-deprecated.rst
+
+   Defines a custom aggregation function or expression in JavaScript.
+
+   You can use the :expression:`$function` operator to define custom
+   functions to implement behavior not supported by the MongoDB Query
+   Language. See also :group:`$accumulator`.
+
+   .. important::
+
+      Executing JavaScript inside an aggregation expression may
+      decrease performance. Only use the :expression:`$function`
+      operator if the provided :ref:`pipeline operators
+      <aggregation-pipeline-operator-reference>` cannot fulfill your
+      application's needs.
 
 ## Syntax
 
 The :expression:`$function` operator has the following syntax:
 
-```javascript
-{ 
-  $function: {
-    body: <code>,
-    args: <array expression>,
-    lang: "js"
-  }
-}
-```
+.. code-block:: javascript
+
+   { 
+     $function: {
+       body: <code>,
+       args: <array expression>,
+       lang: "js"
+     }
+   }
+
+.. list-table::
+   :header-rows: 1
+   :widths: 20 20 80
+
+   * - Field
+     - Type
+     - Description
+     
+
+   * - :ref:`body <function-body>`
+
+     - String or Code
+
+     - .. _function-body:
+
+       The function definition. You can specify the function
+       definition as either BSON type Code or String. See also
+       :ref:`lang <function-lang>`.
+
+       ``function(arg1, arg2, ...) { ... }``
+
+       or
+
+       ``"function(arg1, arg2, ...) { ... }"``
+
+
+   * - :ref:`args <function-args>`
+
+     - Array
+
+     - .. _function-args:
+
+       Arguments passed to the function :ref:`body <function-body>`.
+       If the :ref:`body <function-body>` function does not take an
+       argument, you can specify an empty array ``[ ]``.
+
+       The array elements can be any BSON type, including Code. See
+       :ref:`function-example-where-alternative`.
+
+   * - :ref:`lang <function-lang>`
+
+     - String
+
+     - .. _function-lang:
+
+       The language used in the :ref:`body <function-body>`. You
+       must specify ``lang: "js"``.
+
 
 ## Considerations
 
 ### Schema Validation Restriction
 
-You cannot use :expression:`$function` as part of a `schema validation <schema-validation-query-expression>` query predicate.
+You cannot use :expression:`$function` as part of a :ref:`schema
+validation <schema-validation-query-expression>` query predicate.
 
 ### Javascript Enablement
 
-To use :expression:`$function`, you must have server-side scripting enabled (default).
+To use :expression:`$function`, you must have server-side scripting
+enabled (default).
 
-If you do not use :expression:`$function` (or :group:`$accumulator`, :query:`$where`, or :dbcommand:`mapReduce`), disable server-side scripting:
+If you do not use :expression:`$function` (or :group:`$accumulator`,
+:query:`$where`, or :dbcommand:`mapReduce`), disable server-side
+scripting: 
 
 - For a :binary:`~bin.mongod` instance, see
-:setting:`security.javascriptEnabled` configuration option or :option:`--noscripting <mongod --noscripting>` command-line option.
+  :setting:`security.javascriptEnabled` configuration option or
+  :option:`--noscripting <mongod --noscripting>` command-line option.
 
 - For a :binary:`~bin.mongos` instance, see
-:setting:`security.javascriptEnabled` configuration option or the :option:`--noscripting <mongos --noscripting>` command-line option.
+  :setting:`security.javascriptEnabled` configuration option or the
+  :option:`--noscripting <mongos --noscripting>` command-line option.
+  
+  | In earlier versions, MongoDB does not allow JavaScript execution on
+    :binary:`~bin.mongos` instances.
 
-| In earlier versions, MongoDB does not allow JavaScript execution on :binary:`~bin.mongos` instances.
+See also :ref:`security-checklist-javascript`.
 
-See also `security-checklist-javascript`.
+### Alternative to ``$where``
 
-### Alternative to `$where`
+The query operator :query:`$where` can also be used to specify
+JavaScript expression. However:
+   
+- The :query:`$expr` operator allows the use of 
+  :ref:`aggregation expressions <aggregation-expressions>` within the
+  query language.
 
-The query operator :query:`$where` can also be used to specify JavaScript expression. However:
-
-- The :query:`$expr` operator allows the use of
-`aggregation expressions <aggregation-expressions>` within the query language.
-
-- The :expression:`$function` and :group:`$accumulator` allows users to define
-custom aggregation expressions in JavaScript if the provided pipeline operators cannot fulfill your application's needs.
-
+- The :expression:`$function` and :group:`$accumulator` allows users to define 
+  custom aggregation expressions in JavaScript if the provided pipeline 
+  operators cannot fulfill your application's needs.
+   
 Given the available aggregation operators:
 
 - The use of :query:`$expr` with aggregation operators that do not use
-JavaScript (i.e. non-:expression:`$function` and non-:group:`$accumulator` operators) is faster than :query:`$where` because it does not execute JavaScript and should be preferred if possible.
+  JavaScript (i.e. non-:expression:`$function` and
+  non-:group:`$accumulator` operators) is faster than :query:`$where`
+  because it does not execute JavaScript and should be preferred if
+  possible.
 
 - However, if you must create custom expressions,
-:expression:`$function` is preferred over :query:`$where`.
+  :expression:`$function` is preferred over :query:`$where`.
 
 ### Unsupported Array and String Functions
 
-.. include:: /includes/fact-6.0-js-engine-change.rst
+**include:** /includes/fact-6.0-js-engine-change.rst
 
 ## Examples
 
 ### Example 1: Usage Example
 
-Create a sample collection named `players` with the following documents:
+Create a sample collection named ``players`` with the following
+documents:
 
-```javascript
-db.players.insertMany([
-   { _id: 1, name: "Miss Cheevous",  scores: [ 10, 5, 10 ] },
-   { _id: 2, name: "Miss Ann Thrope", scores: [ 10, 10, 10 ] },
-   { _id: 3, name: "Mrs. Eppie Delta ", scores: [ 9, 8, 8 ] }
-])
-```
+.. code-block:: javascript
 
-The following aggregation operation uses :pipeline:`$addFields` to add new fields to each document:
+   db.players.insertMany([
+      { _id: 1, name: "Miss Cheevous",  scores: [ 10, 5, 10 ] },
+      { _id: 2, name: "Miss Ann Thrope", scores: [ 10, 10, 10 ] },
+      { _id: 3, name: "Mrs. Eppie Delta ", scores: [ 9, 8, 8 ] }
+   ])
 
-- `isFound` whose value is determined by the custom
-:expression:`$function` expression that checks whether the MD5 hash of the name is equal to a specified hash.
+The following aggregation operation uses :pipeline:`$addFields` to
+add new fields to each document:
 
-- `message` whose value is determined by the custom
-:expression:`$function` expression that format a string message using a template.
+- ``isFound`` whose value is determined by the custom
+  :expression:`$function` expression that checks whether the MD5
+  hash of the name is equal to a specified hash.
 
-```javascript
-db.players.aggregate( [
-   { $addFields:
-      {
-        isFound:
-            { $function:
-               {
-                  body: function(name) { 
-                     return hex_md5(name) == "15b0a220baa16331e8d80e15367677ad"
-                  },
-                  args: [ "$name" ],
-                  lang: "js"
+- ``message`` whose value is determined by the custom
+  :expression:`$function` expression that format a string message
+  using a template.
+
+.. code-block:: javascript
+
+   db.players.aggregate( [
+      { $addFields:
+         {
+           isFound:
+               { $function:
+                  {
+                     body: function(name) { 
+                        return hex_md5(name) == "15b0a220baa16331e8d80e15367677ad"
+                     },
+                     args: [ "$name" ],
+                     lang: "js"
+                  }
+               },
+            message: 
+               { $function:
+                  {
+                     body: function(name, scores) {
+                        let total = Array.sum(scores);
+                        return `Hello ${name}.  Your total score is ${total}.`
+                     },
+                     args: [ "$name", "$scores"],
+                     lang: "js"
+                  }
                }
-            },
-         message: 
-            { $function:
-               {
-                  body: function(name, scores) {
-                     let total = Array.sum(scores);
-                     return `Hello ${name}.  Your total score is ${total}.`
-                  },
-                  args: [ "$name", "$scores"],
-                  lang: "js"
-               }
-            }
+          }
        }
-    }
-] )
-```
+   ] )
 
 The operation returns the following documents:
 
-```javascript
-{ "_id" : 1, "name" : "Miss Cheevous", "scores" : [ 10, 5, 10 ], "isFound" : false, "message" : "Hello Miss Cheevous.  Your total score is 25." }
-{ "_id" : 2, "name" : "Miss Ann Thrope", "scores" : [ 10, 10, 10 ], "isFound" : true, "message" : "Hello Miss Ann Thrope.  Your total score is 30." }
-{ "_id" : 3, "name" : "Mrs. Eppie Delta ", "scores" : [ 9, 8, 8 ], "isFound" : false, "message" : "Hello Mrs. Eppie Delta .  Your total score is 25." }
-```
+.. code-block:: javascript
+   :copyable: false
 
-> **Tip:** Starting in MongoDB 8.3, you can use :expression:`$hexHash`
-as a native aggregation alternative to `hex_md5`.
-`$hexHash` does not require server-side JavaScript and
-supports the SHA-256 and XXH64 algorithms in addition to MD5.
-Note that `$hexHash` returns an uppercase hexadecimal string,
-while `hex_md5` returns lowercase. MD5 is a legacy algorithm
-and is disabled in FIPS mode.
+   { "_id" : 1, "name" : "Miss Cheevous", "scores" : [ 10, 5, 10 ], "isFound" : false, "message" : "Hello Miss Cheevous.  Your total score is 25." }
+   { "_id" : 2, "name" : "Miss Ann Thrope", "scores" : [ 10, 10, 10 ], "isFound" : true, "message" : "Hello Miss Ann Thrope.  Your total score is 30." }
+   { "_id" : 3, "name" : "Mrs. Eppie Delta ", "scores" : [ 9, 8, 8 ], "isFound" : false, "message" : "Hello Mrs. Eppie Delta .  Your total score is 25." }
 
-### Example 2: Alternative to `$where`
+**tip:** Starting in MongoDB 8.3, you can use :expression:`$hexHash`
+   as a native aggregation alternative to ``hex_md5``.
+   ``$hexHash`` does not require server-side JavaScript and
+   supports the SHA-256 and XXH64 algorithms in addition to MD5.
+   Note that ``$hexHash`` returns an uppercase hexadecimal string,
+   while ``hex_md5`` returns lowercase. MD5 is a legacy algorithm
+   and is disabled in FIPS mode.
 
-> **Note:** The :query:`$expr` operator allows the use of
-`aggregation expressions <aggregation-expressions>` within the
-query language. And the :expression:`$function` and :group:`$accumulator`
-allows users to define custom aggregation expressions in JavaScript if the
-provided pipeline operators cannot fulfill your application's needs.
-Given the available aggregation operators:
-- The use of :query:`$expr` with aggregation operators that do not
-  use JavaScript (i.e. non-:expression:`$function` and
-  non-:group:`$accumulator` operators) is faster than
-  :query:`$where` because it does not execute JavaScript and should
-  be preferred if possible.
-- However, if you must create custom expressions,
-  :expression:`$function` is preferred over :query:`$where`.
+.. _function-example-where-alternative:
 
-As an alternative to a query that uses the :query:`$where` operator, you can use :query:`$expr` and :expression:`$function`. For example, consider the following :query:`$where` example.
+### Example 2: Alternative to ``$where``
 
-```javascript
-db.players.find( { $where: function() { 
-   return (hex_md5(this.name) == "15b0a220baa16331e8d80e15367677ad") 
-} } );
-```
+**note:** Aggregation Alternatives Preferred over ``$where``
+
+   The :query:`$expr` operator allows the use of 
+   :ref:`aggregation expressions <aggregation-expressions>` within the
+   query language. And the :expression:`$function` and :group:`$accumulator` 
+   allows users to define custom aggregation expressions in JavaScript if the 
+   provided pipeline operators cannot fulfill your application's needs.
+   
+   Given the available aggregation operators:
+
+   - The use of :query:`$expr` with aggregation operators that do not
+     use JavaScript (i.e. non-:expression:`$function` and
+     non-:group:`$accumulator` operators) is faster than
+     :query:`$where` because it does not execute JavaScript and should
+     be preferred if possible.
+
+   - However, if you must create custom expressions,
+     :expression:`$function` is preferred over :query:`$where`.
+
+As an alternative to a query that uses the :query:`$where` operator,
+you can use :query:`$expr` and :expression:`$function`. For example,
+consider the following :query:`$where` example.
+
+.. code-block:: javascript
+
+   db.players.find( { $where: function() { 
+      return (hex_md5(this.name) == "15b0a220baa16331e8d80e15367677ad") 
+   } } );
 
 The :method:`db.collection.find()` operation returns the following document:
 
-```javascript
-{ "_id" : 2, "name" : "Miss Ann Thrope", "scores" : [ 10, 10, 10 ] }
-```
+.. code-block:: javascript
+   :copyable: false
+   
+   { "_id" : 2, "name" : "Miss Ann Thrope", "scores" : [ 10, 10, 10 ] }
 
 The example can be expressed using :query:`$expr` and :expression:`$function`:
 
-```javascript
-db.players.find( {$expr: { $function: {
-      body: function(name) { return hex_md5(name) == "15b0a220baa16331e8d80e15367677ad"; },
-      args: [ "$name" ],
-      lang: "js"
-} } } )
-```
+.. code-block:: javascript
+
+   db.players.find( {$expr: { $function: {
+         body: function(name) { return hex_md5(name) == "15b0a220baa16331e8d80e15367677ad"; },
+         args: [ "$name" ],
+         lang: "js"
+   } } } )

@@ -1,86 +1,153 @@
 ---
 type: "Framework Learn Page"
-framework: "mongodb"
+framework: "MongoDB"
 source_repo: "https://github.com/mongodb/docs.git"
 source_branch: "main"
 source_path: "content/manual/manual/source/tutorial/remove-replica-set-member.txt"
-source_commit: "ab9db26ed3d11618cdb61516d8180337d8e3f679"
-source_commit_short: "ab9db26e"
-source_commit_date: "2026-07-24T16:22:46-06:00"
-generated_at: "2026-07-25T11:51:15Z"
+source_commit: "b9f2bc487a2878b65e3c1f80024bebab76954f27"
+source_commit_short: "b9f2bc48"
+source_commit_date: "2026-08-28T17:09:45-05:00"
+generated_at: "2026-08-29T09:39:19.649158Z"
 ---
-
-==============================================
+.. _server-replica-set-remove-member:
 
 # Remove Members from a Self-Managed Replica Set
 
-To remove a member of a `replica set` use either of the following procedures.
+**meta:** :keywords: on-prem
+   :description: Learn how to remove a member from a self-managed replica set using `rs.remove()` or `rs.reconfig()`.
 
-## Remove a Member Using `rs.remove()`
+.. default-domain:: mongodb
+
+**contents:** On this page
+   :local:
+   :backlinks: none
+   :depth: 1
+   :class: singlecol
+
+To remove a member of a :term:`replica set` use either of the
+following procedures.
+
+## Remove a Member Using ``rs.remove()``
 
 1. Shut down the :binary:`~bin.mongod` instance for the member you wish to
-remove. To shut down the instance, connect using :binary:`~bin.mongosh` and use the :method:`db.shutdownServer()` method.
+   remove. To shut down the instance, connect using
+   :binary:`~bin.mongosh` and use the :method:`db.shutdownServer()`
+   method.
 
-#. Connect to the replica set's current `primary`. To determine the current primary, use :method:`db.hello()` while connected to any member of the replica set.
+#. Connect to the replica set's current :term:`primary`. To determine
+   the current primary, use :method:`db.hello()` while connected to
+   any member of the replica set.
 
-#. Use :method:`rs.remove()` in either of the following forms to remove the member:
+#. Use :method:`rs.remove()` in either of the following forms to
+   remove the member:
 
-```javascript
-   rs.remove("mongod3.example.net:27017")
-   rs.remove("mongod3.example.net")
+   .. code-block:: javascript
 
-MongoDB may disconnect the shell briefly if the replica set needs to elect a
-new primary. The shell then automatically reconnects in such cases. The
-shell may display a ``DBClientCursor::init call() failed`` error even
-though the command succeeds.
-```
+      rs.remove("mongod3.example.net:27017")
+      rs.remove("mongod3.example.net")
 
-## Remove a Member Using `rs.reconfig()`
+   MongoDB may disconnect the shell briefly if the replica set needs to elect a
+   new primary. The shell then automatically reconnects in such cases. The
+   shell may display a ``DBClientCursor::init call() failed`` error even
+   though the command succeeds.
 
-You can remove a member by reconfiguring the replica set using a `replica configuration document </reference/replica-configuration>` where that member is removed from the :rsconf:`members` array.
+.. _remove-member-using-reconfig:
 
-:method:`rs.reconfig()` allows adding or removing no more than `1` :rsconf:`voting <members[n].votes>` member at a time. To remove multiple voting members from the replica set, issue a series of :method:`rs.reconfig()` operations to remove one member at a time. See `replSetReconfig-cmd-single-node` for more information.
+## Remove a Member Using ``rs.reconfig()``
+
+You can remove a member by reconfiguring the replica set 
+using a :doc:`replica configuration
+document </reference/replica-configuration>` where that member 
+is removed from the :rsconf:`members` array.
+
+:method:`rs.reconfig()` allows adding or removing no more than ``1`` 
+:rsconf:`voting <members[n].votes>` member at a time. To remove multiple voting 
+members from the replica set, issue a series of :method:`rs.reconfig()` 
+operations to remove one member at a time. See 
+:ref:`replSetReconfig-cmd-single-node` for more information.
 
 ### Procedure
 
 1. Shut down the :binary:`~bin.mongod` instance for the member you wish to
-remove. To shut down the instance, connect using :binary:`~bin.mongosh` and use the :method:`db.shutdownServer()` method.
+   remove. To shut down the instance, connect using
+   :binary:`~bin.mongosh` and use the :method:`db.shutdownServer()`
+   method.
 
-#. Connect to the replica set's current `primary`. To determine the current primary, use :method:`db.hello()` while connected to any member of the replica set.
+#. Connect to the replica set's current :term:`primary`. To determine
+   the current primary, use :method:`db.hello()` while connected to
+   any member of the replica set.
 
-#. Issue the :method:`rs.conf()` method to view the current configuration document and determine the position in the `members` array of the member to remove:
+#. Issue the :method:`rs.conf()` method to view the current
+   configuration document and determine the position in the
+   ``members`` array of the member to remove:
 
-#. Assign the current configuration document to the variable `cfg`:
+   .. example::
 
-```javascript
-   cfg = rs.conf()
-```
+      ``mongod_C.example.net`` is in position ``2`` of the
+      following configuration file:
 
-#. Modify the `cfg` object to remove the member.
+      .. code-block:: javascript
 
-#. Overwrite the replica set configuration document with the new configuration by issuing the following:
+         {
+             "_id" : "rs",
+             "version" : 7,
+             "members" : [
+                 {
+                     "_id" : 0,
+                     "host" : "mongod_A.example.net:27017"
+                 },
+                 {
+                     "_id" : 1,
+                     "host" : "mongod_B.example.net:27017"
+                 },
+                 {
+                     "_id" : 2,
+                     "host" : "mongod_C.example.net:27017"
+                 }
+             ]
+         }
 
-```javascript
-   rs.reconfig(cfg)
-```
+#. Assign the current configuration document to the variable ``cfg``:
+
+   .. code-block:: javascript
+
+      cfg = rs.conf()
+
+#. Modify the ``cfg`` object to remove the member.
+
+   .. example::
+
+      To remove ``mongod_C.example.net:27017`` use the following
+      JavaScript operation:
+
+      .. code-block:: javascript
+
+         cfg.members.splice(2,1)
+
+#. Overwrite the replica set configuration document with the new
+   configuration by issuing the following:
+
+   .. code-block:: javascript
+
+      rs.reconfig(cfg)
 
 #. To confirm the new configuration, issue :method:`rs.conf()`.
 
-For the example above the output would be:
+   For the example above the output would be:
 
-```javascript
-   {
-       "_id" : "rs",
-       "version" : 8,
-       "members" : [
-           {
-               "_id" : 0,
-               "host" : "mongod_A.example.net:27017"
-           },
-           {
-               "_id" : 1,
-               "host" : "mongod_B.example.net:27017"
-           }
-       ]
-   }
-```
+   .. code-block:: javascript
+
+      {
+          "_id" : "rs",
+          "version" : 8,
+          "members" : [
+              {
+                  "_id" : 0,
+                  "host" : "mongod_A.example.net:27017"
+              },
+              {
+                  "_id" : 1,
+                  "host" : "mongod_B.example.net:27017"
+              }
+          ]
+      }

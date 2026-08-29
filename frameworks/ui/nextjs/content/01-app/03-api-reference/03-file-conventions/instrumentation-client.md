@@ -1,14 +1,15 @@
 ---
 type: "Framework Learn Page"
-framework: "nextjs"
+framework: "Next.js"
 source_repo: "https://github.com/vercel/next.js/"
 source_branch: "canary"
 source_path: "docs/01-app/03-api-reference/03-file-conventions/instrumentation-client.mdx"
-source_commit: "dcf242a17b5d4622bbd9624db531a9d84177619f"
-source_commit_short: "dcf242a1"
-source_commit_date: "2026-07-25T10:16:19+02:00"
-generated_at: "2026-07-25T11:50:53Z"
+source_commit: "33a5d542e519fe4e05c8c8c2c2845da9f741699b"
+source_commit_short: "33a5d542"
+source_commit_date: "2026-08-29T00:04:45-07:00"
+generated_at: "2026-08-29T09:40:24.288867Z"
 ---
+# Instrumentation Client
 
 ---
 title: instrumentation-client.js
@@ -136,6 +137,8 @@ The `instrumentation-client.js` file executes at a specific point in the applica
 
 This timing makes it ideal for setting up error tracking, analytics, and performance monitoring that needs to capture early application lifecycle events.
 
+Only synchronous, top-level code is guaranteed to complete before hydration. Asynchronous work started here (a `Promise`, `import()`, or top-level `await`) is not awaited and may resolve after hydration has begun, so treat it as fire-and-forget. When something must be in place before your components run, use one of the synchronous patterns in [Polyfills](#polyfills).
+
 ## See also
 
 `next.config.js` plugins (for example, wrappers like `withSentry`) can register their own client instrumentation module via the [`instrumentationClientInject`](/docs/app/api-reference/config/next-config-js/instrumentationClientInject) option. Injected modules run before this file, in array order, and may export the same router transition start hook. Application code should continue to use this file convention directly.
@@ -248,11 +251,23 @@ export function onRouterTransitionStart(url) {
 
 ### Polyfills
 
-Load polyfills before application code runs. Use static imports for immediate loading and dynamic imports for conditional loading based on feature detection.
+As noted in [Execution timing](#execution-timing), only synchronous, top-level code here runs before hydration, so a conditional `import()` or top-level `await` may resolve after hydration has already started.
 
-```ts filename="instrumentation-client.ts" switcher
-import './lib/polyfills'
+To guarantee a polyfill is applied before your components run, statically import it and apply it synchronously after feature detection. Because the import is static, the polyfill ships to every visitor:
 
+```ts filename="instrumentation-client.ts"
+import ResizeObserverPolyfill from './lib/polyfills/resize-observer'
+
+if (!window.ResizeObserver) {
+  window.ResizeObserver = ResizeObserverPolyfill
+}
+```
+
+Avoid loading a polyfill with a conditional `import()` here. The import is fire-and-forget, so the polyfill may be applied after hydration has already begun, which can be too late for your components:
+
+```ts filename="instrumentation-client.ts"
+// Avoid: the dynamic import is fire-and-forget, so `ResizeObserver`
+// may still be undefined when your components run.
 if (!window.ResizeObserver) {
   import('./lib/polyfills/resize-observer').then((mod) => {
     window.ResizeObserver = mod.default
@@ -260,15 +275,9 @@ if (!window.ResizeObserver) {
 }
 ```
 
-```js filename="instrumentation-client.js" switcher
-import './lib/polyfills'
+For anything loaded on demand, prefer polyfilling in the code that uses the feature. See [Custom Polyfills](/docs/architecture/supported-browsers#custom-polyfills) for that and other strategies.
 
-if (!window.ResizeObserver) {
-  import('./lib/polyfills/resize-observer').then((mod) => {
-    window.ResizeObserver = mod.default
-  })
-}
-```
+Next.js already injects a baseline of [widely used polyfills](/docs/architecture/supported-browsers#polyfills) (such as `fetch`, `URL`, and `Object.assign`) for the browsers that need them, so you only need to add polyfills for features outside that baseline.
 
 ## Version history
 

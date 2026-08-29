@@ -1,14 +1,15 @@
 ---
 type: "Framework Learn Page"
-framework: "tanstack"
+framework: "TanStack"
 source_repo: "https://github.com/tanstack/query"
 source_branch: "main"
 source_path: "docs/framework/react/react-native.md"
-source_commit: "fd50fa14d283c7d6664a796f758498d1ad5bfce7"
-source_commit_short: "fd50fa14"
-source_commit_date: "2026-07-24T22:22:47+10:00"
-generated_at: "2026-07-25T11:50:41Z"
+source_commit: "2969edf32f7e0c48e2a108d84712d6e01edfde21"
+source_commit_short: "2969edf"
+source_commit_date: "2026-08-28T01:03:02+09:00"
+generated_at: "2026-08-29T09:40:33.362775Z"
 ---
+# React Native
 
 ---
 id: react-native
@@ -21,13 +22,15 @@ React Query is designed to work out of the box with React Native.
 
 There are several options available for React Native DevTools integration:
 
-1. **Native macOS App**: A 3rd party app for debugging React Query in any js-based application:
+1. **Rozenite Plugin**: A 3rd party plugin for [React Native DevTools](https://reactnative.dev/docs/react-native-devtools) users: https://www.rozenite.dev/docs/official-plugins/tanstack-query
+
+2. **Native macOS App**: A 3rd party app for debugging React Query in any js-based application:
    https://github.com/LovesWorking/rn-better-dev-tools
 
-2. **Flipper Plugin**: A 3rd party plugin for Flipper users:
+3. **Flipper Plugin**: A 3rd party plugin for Flipper users:
    https://github.com/bgaleotti/react-query-native-devtools
 
-3. **Reactotron Plugin**: A 3rd party plugin for Reactotron users:
+4. **Reactotron Plugin**: A 3rd party plugin for Reactotron users:
    https://github.com/hsndmr/reactotron-react-query
 
 ## Online status management

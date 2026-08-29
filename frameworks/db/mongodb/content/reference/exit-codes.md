@@ -1,17 +1,141 @@
 ---
 type: "Framework Learn Page"
-framework: "mongodb"
+framework: "MongoDB"
 source_repo: "https://github.com/mongodb/docs.git"
 source_branch: "main"
 source_path: "content/manual/manual/source/reference/exit-codes.txt"
-source_commit: "ab9db26ed3d11618cdb61516d8180337d8e3f679"
-source_commit_short: "ab9db26e"
-source_commit_date: "2026-07-24T16:22:46-06:00"
-generated_at: "2026-07-25T11:51:15Z"
+source_commit: "b9f2bc487a2878b65e3c1f80024bebab76954f27"
+source_commit_short: "b9f2bc48"
+source_commit_date: "2026-08-28T17:09:45-05:00"
+generated_at: "2026-08-29T09:39:19.706804Z"
 ---
-
-=====================================================
+.. _server-exit-codes:
 
 # Exit Codes and Statuses for a Self-Managed Deployment
 
-MongoDB will return one of the following codes and statuses when exiting. Use this guide to interpret logs and when troubleshooting issues with :binary:`~bin.mongod` and :binary:`~bin.mongos` instances.
+**meta:** :keywords: on-prem
+   :description: Interpret MongoDB exit codes and statuses for troubleshooting `mongod` and `mongos` instances.
+
+.. default-domain:: mongodb
+
+**contents:** On this page
+   :local:
+   :backlinks: none
+   :depth: 1
+   :class: singlecol
+
+MongoDB will return one of the following codes and statuses when
+exiting. Use this guide to interpret logs and when troubleshooting
+issues with :binary:`~bin.mongod` and :binary:`~bin.mongos` instances.
+
+.. _exit-codes:
+
+.. list-table::
+   :header-rows: 1
+   :widths: 12 88
+
+   * - Code
+     - Cause
+
+   * - .. error:: 0
+     - Returned by MongoDB applications upon successful exit.
+
+
+   * - .. error:: 1
+     - Returned by :binary:`~bin.mongod` as a generic failure when no 
+       other error codes apply.
+
+
+   * - .. error:: 2
+     - The specified options are in error or are incompatible
+       with other options.
+
+
+   * - .. error:: 3
+     - Returned by :binary:`~bin.mongod` if there is a mismatch between 
+       hostnames specified on the command line and in the 
+       ``local.sources`` collection when running a replica set.
+
+
+   * - .. error:: 4
+     - The version of the database is different from the version
+       supported by the :binary:`~bin.mongod` (or
+       :binary:`mongod.exe`) instance.  The instance exits
+       cleanly.
+
+
+   * - .. error:: 5
+     - Returned by :binary:`~bin.mongos` if a problem is encountered
+       during initialization.
+
+
+   * - .. error:: 12
+     - Returned by the :binary:`mongod.exe` process on Windows
+       when it receives a Control-C, Close, Break or Shutdown event.
+
+
+   * - .. error:: 14
+     - Returned by MongoDB applications which encounter an
+       unrecoverable error, an uncaught exception or uncaught signal.
+       The system exits without performing a clean shutdown.
+
+
+   * - .. error:: 20
+     - *Message:* ``ERROR: wsastartup failed <reason>``
+
+       Returned by MongoDB applications on Windows following an error
+       in the WSAStartup function, used to initialize the networking
+       subsystem.
+
+       *Message:* ``NT Service Error``
+
+       Returned by MongoDB applications for Windows due to failures
+       installing, starting or removing the NT Service for the
+       application.
+
+
+   * - .. error:: 48
+     - Returned by :binary:`~bin.mongod` or :binary:`~bin.mongos`
+       when an error prevents a newly started instance from listening 
+       for incoming connections.
+
+
+   * - .. error:: 50
+     - Returned by :binary:`~bin.mongod` during server initialization 
+       if it fails to fork the process.
+       
+
+   * - .. error:: 51
+     - Returned by :binary:`~bin.mongod` during server initialization 
+       if the daemon fails to send a ready signal. The process exits 
+       cleanly.
+
+
+   * - .. error:: 61
+     - Returned by the :ref:`storage-node-watchdog` if any of the 
+       filesystems with monitored directories are unresponsive.
+
+
+   * - .. error:: 62
+     - Returned by :binary:`~bin.mongod` when the datafiles in
+       :option:`--dbpath <mongod --dbpath>` are incompatible with the
+       version of :binary:`~bin.mongod` currently running. 
+       
+       To resolve data incompatibility issues after upgrading,  
+       refer to the release notes for your version of MongoDB and search 
+       for "Compatibility Changes."
+
+
+   * - .. error:: 87
+     - Returned by :binary:`~bin.mongod` or :binary:`~bin.mongos` when 
+       the process health check triggers a crash.
+
+
+   * - .. error:: 100
+     - Returned by :binary:`~bin.mongod` when the process throws an
+       uncaught exception.
+
+
+   * - .. error:: 102
+     - Returned by :binary:`~bin.mongod` or :binary:`~bin.mongos` when 
+       the process fails to rotate audit logs on startup.

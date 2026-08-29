@@ -1,63 +1,110 @@
 ---
 type: "Framework Learn Page"
-framework: "mongodb"
+framework: "MongoDB"
 source_repo: "https://github.com/mongodb/docs.git"
 source_branch: "main"
 source_path: "content/manual/manual/source/reference/operator/aggregation/pow.txt"
-source_commit: "ab9db26ed3d11618cdb61516d8180337d8e3f679"
-source_commit_short: "ab9db26e"
-source_commit_date: "2026-07-24T16:22:46-06:00"
-generated_at: "2026-07-25T11:51:15Z"
+source_commit: "b9f2bc487a2878b65e3c1f80024bebab76954f27"
+source_commit_short: "b9f2bc48"
+source_commit_date: "2026-08-28T17:09:45-05:00"
+generated_at: "2026-08-29T09:39:20.230302Z"
 ---
-
-==========================
-
 # $pow (expression operator)
+
+**meta:** :description: Calculate the power of a number using the `$pow` operator in MongoDB aggregation, handling mixed input types and overflow scenarios.
+
+.. default-domain:: mongodb
+
+**contents:** On this page
+   :local:
+   :backlinks: none
+   :depth: 1
+   :class: singlecol
+
+.. Substitution used in includes and in the body of this text
+.. |operatorName| replace:: ``$pow``
 
 ## Definition
 
+**expression:** $pow 
+
+   Raises a number to the specified exponent and returns the result.
+   :expression:`$pow` has the following syntax:
+
+   .. code-block:: javascript
+
+      { $pow: [ <number>, <exponent> ] }
+
+   The ``<number>`` expression can be any valid :ref:`expression
+   <aggregation-expressions>` as long as it resolves to a number.
+
+   The ``<exponent>`` expression can be any valid :ref:`expression
+   <aggregation-expressions>` as long as it resolves to a number.
+
+   You cannot raise ``0`` to a negative exponent.
+
 ## Behavior
 
-.. include:: /includes/agg-expression-order-of-return-behavior.rst
+**include:** /includes/agg-expression-order-of-return-behavior.rst
 
-.. include:: /includes/extracts/agg-expression-null-operand-pow.rst
+**include:** /includes/extracts/agg-expression-null-operand-pow.rst
+
+.. list-table::
+   :header-rows: 1
+   :widths: 85 15
+
+   * - Example
+     - Results
+
+   * - ``{ $pow: [ 5, 0 ] }``
+     - ``1``
+
+   * - ``{ $pow: [ 5, 2 ] }``
+     - ``25``
+
+   * - ``{ $pow: [ 5, -2 ] }``
+     - ``0.04``
+
+   * - ``{ $pow: [ -5, 0.5 ] }``
+     - ``NaN``
 
 ## Example
 
-Create a collection called `quizzes` with the following documents:
+Create a collection called ``quizzes`` with the following documents:
 
-```javascript
-db.quizzes.insertMany( [
-   { 
-      _id : 1, 
-      scores : [
-         { name : "dave123", score : 85 },
-         { name : "dave2", score : 90 },
-         { name : "ahn", score : 71 }
-      ]
-   },
-   {
-      _id : 2,
-      scores : [
-         { name : "li", quiz : 2, score : 96 },
-         { name : "annT", score : 77 },
-         { name : "ty", score : 82 }
-      ]
-   }
-] )
-```
+.. code-block:: javascript
+
+   db.quizzes.insertMany( [
+      { 
+         _id : 1, 
+         scores : [
+            { name : "dave123", score : 85 },
+            { name : "dave2", score : 90 },
+            { name : "ahn", score : 71 }
+         ]
+      },
+      {
+         _id : 2,
+         scores : [
+            { name : "li", quiz : 2, score : 96 },
+            { name : "annT", score : 77 },
+            { name : "ty", score : 82 }
+         ]
+      }
+   ] )
 
 The following example calculates the variance for each quiz:
 
-```javascript
-db.quizzes.aggregate( [
-   { $project: { variance: { $pow: [ { $stdDevPop: "$scores.score" }, 2 ] } } }
-] )
-```
+.. code-block:: javascript
+
+   db.quizzes.aggregate( [
+      { $project: { variance: { $pow: [ { $stdDevPop: "$scores.score" }, 2 ] } } }
+   ] )
 
 The operation returns the following results:
 
-```javascript
-{ _id : 1, variance : 64.66666666666667 }
-{ _id : 2, variance : 64.66666666666667 }
-```
+.. code-block:: javascript
+   :copyable: false
+
+   { _id : 1, variance : 64.66666666666667 }
+   { _id : 2, variance : 64.66666666666667 }

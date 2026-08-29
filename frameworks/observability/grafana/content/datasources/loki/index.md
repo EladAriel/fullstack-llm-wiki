@@ -1,7 +1,7 @@
 ---
 type: "Framework Learn Directory Index"
 framework: "Grafana"
-generated_at: "2026-07-25T19:08:09.117487Z"
+generated_at: "2026-08-29T09:39:37.587866Z"
 ---
 # Loki
 
@@ -18,4 +18,12 @@ This directory contains Grafana learning pages related to loki.
 ## Pages in This Directory
 
 - [_Index](_index.md)
-- [Configure Loki Data Source](configure-loki-data-source.md)
+
+## Subdirectories
+
+- [Alerting](alerting/index.md)
+- [Annotations](annotations/index.md)
+- [Configure](configure/index.md)
+- [Query Editor](query-editor/index.md)
+- [Template Variables](template-variables/index.md)
+- [Troubleshooting](troubleshooting/index.md)

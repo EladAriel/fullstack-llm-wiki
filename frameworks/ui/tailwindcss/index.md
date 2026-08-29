@@ -1,6 +1,6 @@
-# tailwindcss Learn Wiki
+# Tailwind CSS Learn Wiki
 
-This is a local LLM-friendly wiki generated from the official tailwindcss documentation.
+This is a local LLM-friendly wiki generated from the official Tailwind CSS documentation.
 
 ## Status
 
@@ -8,9 +8,10 @@ This is a local LLM-friendly wiki generated from the official tailwindcss docume
 - Source repo: `https://github.com/tailwindlabs/tailwindcss.com.git`
 - Source branch: `main`
 - Source docs path: `src/docs`
-- Source commit: `1e700c4`
-- Source commit date: `2026-07-16T19:14:03+02:00`
-- Wiki generated at: `2026-07-25T13:40:03.123431Z`
+- Source commit: `bd868a3`
+- Source commit date: `2026-08-11T20:09:16+02:00`
+- Wiki generated at: `2026-08-29T09:40:31.767213Z`
+- Page count: `197`
 
 ## How the IDE LLM should use this wiki
 

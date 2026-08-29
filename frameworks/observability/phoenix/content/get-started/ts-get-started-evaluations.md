@@ -4,16 +4,18 @@ framework: "Arize Phoenix"
 source_repo: "https://github.com/Arize-ai/phoenix.git"
 source_branch: "main"
 source_path: "docs/phoenix/get-started/ts-get-started-evaluations.mdx"
-source_commit: "69b3ab92c37ff65812feaa2dbf0b1c0ad5ae55fe"
-source_commit_short: "69b3ab9"
-source_commit_date: "2026-07-25T11:48:12-06:00"
-generated_at: "2026-07-25T19:08:24.824348Z"
+source_commit: "c48e50e9906fcc56c1c103ebd93ef3c95ed6b6e7"
+source_commit_short: "c48e50e"
+source_commit_date: "2026-08-29T01:45:20-06:00"
+generated_at: "2026-08-29T09:39:58.796680Z"
 ---
 # Ts Get Started Evaluations
 
 ---
 title: "Measure Performance with Evaluations"
 ---
+
+import AgentAssistedOnboardingPrereq from "../../snippets/agent-assisted-onboarding-prereq.mdx";
 
 An evaluation produces a score or label for an output, so you can track quality across runs. Evaluations attach quality signals to runs so that correctness or relevance can be reasoned about consistently instead of judged case by case. Traces tell us what happened during a run, but they don’t tell us whether the output was good; evaluations fill that gap by letting us score outputs in a consistent, repeatable way. 
 
@@ -25,10 +27,12 @@ Since we already have traces, we can take this a step further by scoring them ag
 
 ## **Before We Start**
 
-To follow along, you’ll need to have completed [Get Started with Tracing](https://arize.com/docs/phoenix/get-started/ts-get-started-tracing) so you should have: 
+To follow along, you’ll need to have completed [Get Started with Tracing](/docs/phoenix/get-started/ts-get-started-tracing) so you should have: 
 
 - Financial Analysis and Research Chatbot 
 - Trace Data in Phoenix
+
+<AgentAssistedOnboardingPrereq />
 
 ---
 <Info>
@@ -93,7 +97,7 @@ To follow along, you’ll need to have completed [Get Started with Tracing](http
     - An LLM that performs the evaluation
     - The data we want to score
 
-    In this step, we’ll define a basic completeness evaluation that checks whether the agent’s output completely answers the input. Phoenix also provides [pre-built evaluation templates](https://arize.com/docs/phoenix/evaluation/running-pre-tested-evals) you can use or adapt for other metrics like relevance or hallucinations.
+    In this step, we’ll define a basic completeness evaluation that checks whether the agent’s output completely answers the input. Phoenix also provides [pre-built evaluation templates](https://arize.com/docs/phoenix/evaluation/pre-built-metrics) you can use or adapt for other metrics like relevance or hallucinations.
 
     First, create a file called `evals.ts` in `src/mastra/evals` to hold our evaluation code.
 

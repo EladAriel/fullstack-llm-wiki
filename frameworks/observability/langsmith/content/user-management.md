@@ -4,16 +4,17 @@ framework: "LangSmith"
 source_repo: "https://github.com/langchain-ai/docs.git"
 source_branch: "main"
 source_path: "src/langsmith/user-management.mdx"
-source_commit: "2aae1dfc98ee953a9a5185fb6fcdd9efb3f4d878"
-source_commit_short: "2aae1df"
-source_commit_date: "2026-07-25T00:27:23+00:00"
-generated_at: "2026-07-25T19:08:33.360145Z"
+source_commit: "a174f9cf7c91ee5eb14ee2382eb48bfe6e4956e9"
+source_commit_short: "a174f9c"
+source_commit_date: "2026-08-28T17:04:12-07:00"
+generated_at: "2026-08-29T09:39:50.638142Z"
 ---
 # User Management
 
 ---
 title: User management
 sidebarTitle: User management
+keywords: ['scim']
 ---
 
 import SaasRegionUrls from '/snippets/langsmith/saas-region-urls.mdx';
@@ -114,7 +115,7 @@ For troubleshooting, refer to the [SAML SSO FAQs](/langsmith/faq#saml-sso-faqs).
 ### Prerequisites
 
 <Note>
-SAML SSO is available for organizations on the [Enterprise plan](https://www.langchain.com/pricing-langsmith). Please [contact sales](https://www.langchain.com/contact-sales) to learn more.
+SAML SSO is available for organizations on the [Enterprise plan](https://www.langchain.com/pricing-langsmith). [Contact our sales team](https://www.langchain.com/contact-sales) to learn more.
 </Note>
 
 - Your organization must be on an Enterprise plan.
@@ -345,7 +346,6 @@ For additional information, see Okta's [documentation](https://help.okta.com/en-
 1. Fill in `Sign-On Options`:
    - `Application username format`: `Email`
    - `Update application username on`: `Create and update`
-   - `Allow users to securely see their password`: leave **unchecked**.
 1. Copy the **Metadata URL** from the **Sign On Options** page to use in the next step.
 
 **Via Custom App Integration**
@@ -406,7 +406,7 @@ Looking for a lighter-weight alternative to SCIM that doesn't require IdP admin 
 System for Cross-domain Identity Management (SCIM) is an open standard that allows for the automation of user provisioning. Using SCIM, you can automatically provision and de-provision users in your LangSmith [organization and workspaces](/langsmith/administration-overview), keeping user access synchronized with your organization's identity provider.
 
 <Note>
-SCIM is available for organizations on the [Enterprise plan](https://www.langchain.com/pricing). [Contact sales](https://www.langchain.com/contact-sales) to learn more.
+SCIM is available for organizations on the [Enterprise plan](https://www.langchain.com/pricing). [Contact our sales team](https://www.langchain.com/contact-sales) to learn more.
 
 SCIM is available on Helm chart versions 0.10.41 (application version 0.10.108) and later.
 
@@ -777,7 +777,7 @@ Other identity providers have not been tested but may function depending on thei
 ### SSO Groups Sync (alternative)
 
 <Note>
-SSO Groups Sync is available for organizations on the [Enterprise plan](/langsmith/pricing-plans) with SAML SSO (cloud) or OIDC (self-hosted) configured. [Contact sales](https://www.langchain.com/contact-sales) to learn more.
+SSO Groups Sync is available for organizations on the [Enterprise plan](/langsmith/pricing-plans) with SAML SSO (cloud) or OIDC (self-hosted) configured. [Contact our sales team](https://www.langchain.com/contact-sales) to learn more.
 </Note>
 
 SSO Groups Sync is a simpler alternative to [SCIM](#set-up-scim-for-your-organization) for organizations that can't or prefer not to configure SCIM group push. Instead of pushing groups from your IdP to LangSmith on a separate sync interval, LangSmith reads group memberships directly from a configurable claim in the SSO token at login time and applies org-level and workspace-level role assignments using the same [naming convention](#group-naming-convention) as SCIM.

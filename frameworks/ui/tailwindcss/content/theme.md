@@ -4,10 +4,10 @@ framework: "Tailwind CSS"
 source_repo: "https://github.com/tailwindlabs/tailwindcss.com.git"
 source_branch: "main"
 source_path: "src/docs/theme.mdx"
-source_commit: "1e700c43f5f270a1a55c4a33e71f01952f24b8c2"
-source_commit_short: "1e700c4"
-source_commit_date: "2026-07-16T19:14:03+02:00"
-generated_at: "2026-07-25T13:40:03.100983Z"
+source_commit: "bd868a314bd05ca78acd047e3da289274dd6ccd7"
+source_commit_short: "bd868a3"
+source_commit_date: "2026-08-11T20:09:16+02:00"
+generated_at: "2026-08-29T09:40:31.723966Z"
 ---
 # Theme
 
@@ -83,7 +83,7 @@ For example, theme variables defined in the `--font-*` namespace determine all o
 @theme {
   /* [!code highlight:4] */
   /* prettier-ignore */
-  --font-sans: ui-sans-serif, system-ui, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji";
+  --font-sans: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", "Noto Sans", Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji";
   --font-serif: ui-serif, Georgia, Cambria, "Times New Roman", Times, serif;
   /* prettier-ignore */
   --font-mono: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
@@ -343,7 +343,7 @@ That `theme.css` file includes the default color palette, type scale, shadows, f
 /* [!code filename:node_modules/tailwindcss/theme.css] */
 @theme {
   /* prettier-ignore */
-  --font-sans: ui-sans-serif, system-ui, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji";
+  --font-sans: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", "Noto Sans", Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji";
   --font-serif: ui-serif, Georgia, Cambria, "Times New Roman", Times, serif;
   --font-mono: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
 
@@ -583,7 +583,7 @@ All of your theme variables are turned into regular CSS variables when you compi
 /* [!code filename:dist.css] */
 :root {
   /* prettier-ignore */
-  --font-sans: ui-sans-serif, system-ui, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji";
+  --font-sans: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", "Noto Sans", Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji";
   --font-serif: ui-serif, Georgia, Cambria, "Times New Roman", Times, serif;
   --font-mono: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
 
@@ -685,7 +685,7 @@ For reference, here's a complete list of the theme variables included by default
 /* [!code filename:tailwindcss/theme.css] */
 @theme {
   /* prettier-ignore */
-  --font-sans: ui-sans-serif, system-ui, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji";
+  --font-sans: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", "Noto Sans", Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji";
   --font-serif: ui-serif, Georgia, Cambria, "Times New Roman", Times, serif;
   --font-mono: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
 

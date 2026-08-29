@@ -1,46 +1,62 @@
 ---
 type: "Framework Learn Page"
-framework: "mongodb"
+framework: "MongoDB"
 source_repo: "https://github.com/mongodb/docs.git"
 source_branch: "main"
 source_path: "content/manual/manual/source/release-notes.txt"
-source_commit: "ab9db26ed3d11618cdb61516d8180337d8e3f679"
-source_commit_short: "ab9db26e"
-source_commit_date: "2026-07-24T16:22:46-06:00"
-generated_at: "2026-07-25T11:51:15Z"
+source_commit: "b9f2bc487a2878b65e3c1f80024bebab76954f27"
+source_commit_short: "b9f2bc48"
+source_commit_date: "2026-08-28T17:09:45-05:00"
+generated_at: "2026-08-29T09:39:19.474761Z"
 ---
+# Release Notes
+
+.. start-include-here
+
+.. _server-release-notes-landing:
 
 ## Release Notes
 
-Always install the latest, stable version of MongoDB. For more information on types of MongoDB releases, see `release-version-numbers`.
+**meta:** :description: Explore release notes for current and previous stable MongoDB versions, including EOL releases.
+
+Always install the latest, stable version of MongoDB. For more
+information on types of MongoDB releases, see
+:ref:`release-version-numbers`.
 
 To see changes in MongoDB releases, see the following release notes.
 
 ### Current Stable Release
 
-(8.3-series)
+(*8.3-series*)
 
-- `release-notes-8.3`
+- :ref:`release-notes-8.3`
+
 ### Previous Stable Releases
 
-- `release-notes-8.2`
-- `release-notes-8.0`
-- `release-notes-7.0`
+- :ref:`release-notes-8.0`
+- :ref:`release-notes-7.0`
+
 ### EOL Releases
 
-For documentation associated with an EOL release, see [the legacy documentation](https://www.mongodb.com/docs/legacy/)_.
+For documentation associated with an EOL release, see 
+`the legacy documentation <https://www.mongodb.com/docs/legacy/>`__.
 
-## Contents
+**toctree:** :maxdepth: 1
+   :hidden:
 
-- 8.3 (Stable Release) </release-notes/8.3>
-- 8.2 </release-notes/8.2>
-- 8.0 </release-notes/8.0>
-- 7.0 </release-notes/7.0>
+   8.3 (Stable Release) </release-notes/8.3>
+   8.0 </release-notes/8.0>
+   7.0 </release-notes/7.0>
+
+.. end-include-here
+
+.. this page is primarily accessible via the /reference
 
 ### Additional Information
 
-See also: `/reference/versioning`
+See also: :doc:`/reference/versioning`
 
-## Contents
+**toctree:** :maxdepth: 1
+   :hidden:
 
-- Versioning </reference/versioning>
+   Versioning </reference/versioning>

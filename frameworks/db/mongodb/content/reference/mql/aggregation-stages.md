@@ -1,103 +1,126 @@
 ---
 type: "Framework Learn Page"
-framework: "mongodb"
+framework: "MongoDB"
 source_repo: "https://github.com/mongodb/docs.git"
 source_branch: "main"
 source_path: "content/manual/manual/source/reference/mql/aggregation-stages.txt"
-source_commit: "ab9db26ed3d11618cdb61516d8180337d8e3f679"
-source_commit_short: "ab9db26e"
-source_commit_date: "2026-07-24T16:22:46-06:00"
-generated_at: "2026-07-25T11:51:15Z"
+source_commit: "b9f2bc487a2878b65e3c1f80024bebab76954f27"
+source_commit_short: "b9f2bc48"
+source_commit_date: "2026-08-28T17:09:45-05:00"
+generated_at: "2026-08-29T09:39:19.862968Z"
 ---
-
-==================
+.. _aggregation-pipeline-operator-reference:
 
 # Aggregation Stages
 
-In the :method:`db.collection.aggregate` and :method:`db.aggregate` methods, `pipeline <aggregation-pipeline>` stages appear in an array. Documents pass through the stages in sequence. In the Atlas UI, arrange pipeline stages with the `aggregation pipeline builder <atlas-ui-agg-pipeline>`.
+**contents:** On this page
+   :local:
+   :backlinks: none
+   :depth: 1
+   :class: singlecol
+
+.. dismissible-skills-card::
+   :skill: Fundamentals of Data Transformation
+   :url: https://learn.mongodb.com/skills?openTab=aggregation
+
+**meta:** :description: Contains a list of aggregation stages used to build aggregation pipelines.
+
+.. |fts-indexes| replace:: :atlas:`{+fts+} indexes </atlas-search/atlas-search-overview/#fts-indexes>`
+
+In the :method:`db.collection.aggregate` and
+:method:`db.aggregate` methods,
+:ref:`pipeline <aggregation-pipeline>` stages appear in an array.
+Documents pass through the stages in sequence. In the Atlas UI,
+arrange pipeline stages with the
+:ref:`aggregation pipeline builder <atlas-ui-agg-pipeline>`.
 
 ## db.collection.aggregate() Stages
 
-All stages except the :pipeline:`$out`, :pipeline:`$merge`, :pipeline:`$geoNear`, :pipeline:`$changeStream`, and :pipeline:`$changeStreamSplitLargeEvent` stages can appear multiple times in a pipeline.
+All stages except the :pipeline:`$out`, :pipeline:`$merge`,
+:pipeline:`$geoNear`, :pipeline:`$changeStream`, and
+:pipeline:`$changeStreamSplitLargeEvent` stages can appear multiple
+times in a pipeline.
 
-.. include:: /includes/extracts/operators-toc-explanation.rst
+**include:** /includes/extracts/operators-toc-explanation.rst
 
-```javascript
-db.collection.aggregate( [ { <stage> }, ... ] )
-```
+.. code-block:: javascript
 
-.. include:: /includes/extracts/agg-stages-db.collection.aggregate.rst
+   db.collection.aggregate( [ { <stage> }, ... ] )
 
-To learn about expressions that you can use in pipeline stages, see `operator-ref-landing`.
+**include:** /includes/extracts/agg-stages-db.collection.aggregate.rst
+
+To learn about expressions that you can use in pipeline stages, see
+:ref:`operator-ref-landing`.
 
 ## db.aggregate() Stages
 
 MongoDB also provides the :method:`db.aggregate` method:
 
-```javascript
-db.aggregate( [ { <stage> }, ... ] )
-```
+.. code-block:: javascript
 
-.. include:: /includes/extracts/agg-stages-db.aggregate.rst
+   db.aggregate( [ { <stage> }, ... ] )
+
+**include:** /includes/extracts/agg-stages-db.aggregate.rst
 
 ## Stages Available for Updates
 
 Use the aggregation pipeline for updates in:
 
-.. include:: /includes/table-update-with-aggregation-availability.rst
+**include:** /includes/table-update-with-aggregation-availability.rst
 
 For updates, the pipeline supports these stages:
 
-.. include:: /includes/list-update-agg-stages.rst
+**include:** /includes/list-update-agg-stages.rst
 
-## Contents
+**toctree:** :titlesonly: 
+   :hidden: 
 
-- $addFields </reference/operator/aggregation/addFields>
-- $bucket </reference/operator/aggregation/bucket>
-- $bucketAuto </reference/operator/aggregation/bucketAuto>
-- $changeStream </reference/operator/aggregation/changeStream>
-- $changeStreamSplitLargeEvent </reference/operator/aggregation/changeStreamSplitLargeEvent>
-- $collStats </reference/operator/aggregation/collStats>
-- $count </reference/operator/aggregation/count>
-- $currentOp </reference/operator/aggregation/currentOp>
-- $densify </reference/operator/aggregation/densify>
-- $documents </reference/operator/aggregation/documents>
-- $facet </reference/operator/aggregation/facet>
-- $fill </reference/operator/aggregation/fill>
-- $geoNear </reference/operator/aggregation/geoNear>
-- $graphLookup </reference/operator/aggregation/graphLookup>
-- $group </reference/operator/aggregation/group>
-- $indexStats </reference/operator/aggregation/indexStats>
-- $limit </reference/operator/aggregation/limit>
-- $listClusterCatalog </reference/operator/aggregation/listClusterCatalog>
-- $listLocalSessions </reference/operator/aggregation/listLocalSessions>
-- $listSampledQueries </reference/operator/aggregation/listSampledQueries>
-- $listSearchIndexes </reference/operator/aggregation/listSearchIndexes>
-- $listSessions </reference/operator/aggregation/listSessions>
-- $lookup </reference/operator/aggregation/lookup>
-- $match </reference/operator/aggregation/match>
-- $merge </reference/operator/aggregation/merge>
-- $out </reference/operator/aggregation/out>
-- $planCacheStats </reference/operator/aggregation/planCacheStats>
-- $project </reference/operator/aggregation/project>
-- $querySettings </reference/operator/aggregation/querySettings>
-- $queryStats </reference/operator/aggregation/queryStats>
-- $rankFusion </reference/operator/aggregation/rankFusion>
-- $redact </reference/operator/aggregation/redact>
-- $replaceRoot </reference/operator/aggregation/replaceRoot>
-- $replaceWith </reference/operator/aggregation/replaceWith>
-- $sample </reference/operator/aggregation/sample>
-- $score </reference/operator/aggregation/score>
-- $scoreFusion </reference/operator/aggregation/scoreFusion>
-- $search </reference/operator/aggregation/search>
-- $searchMeta </reference/operator/aggregation/searchMeta>
-- $set </reference/operator/aggregation/set>
-- $setWindowFields </reference/operator/aggregation/setWindowFields>
-- $shardedDataDistribution </reference/operator/aggregation/shardedDataDistribution>
-- $skip </reference/operator/aggregation/skip>
-- $sort </reference/operator/aggregation/sort>
-- $sortByCount </reference/operator/aggregation/sortByCount>
-- $unionWith </reference/operator/aggregation/unionWith>
-- $unset </reference/operator/aggregation/unset>
-- $unwind </reference/operator/aggregation/unwind>
-- $vectorSearch </reference/operator/aggregation/vectorSearch>
+   $addFields </reference/operator/aggregation/addFields>
+   $bucket </reference/operator/aggregation/bucket>
+   $bucketAuto </reference/operator/aggregation/bucketAuto>
+   $changeStream </reference/operator/aggregation/changeStream>
+   $changeStreamSplitLargeEvent </reference/operator/aggregation/changeStreamSplitLargeEvent>
+   $collStats </reference/operator/aggregation/collStats>
+   $count </reference/operator/aggregation/count>
+   $currentOp </reference/operator/aggregation/currentOp>
+   $densify </reference/operator/aggregation/densify>
+   $documents </reference/operator/aggregation/documents>
+   $facet </reference/operator/aggregation/facet>
+   $fill </reference/operator/aggregation/fill>
+   $geoNear </reference/operator/aggregation/geoNear>
+   $graphLookup </reference/operator/aggregation/graphLookup>
+   $group </reference/operator/aggregation/group>
+   $indexStats </reference/operator/aggregation/indexStats>
+   $limit </reference/operator/aggregation/limit>
+   $listClusterCatalog </reference/operator/aggregation/listClusterCatalog>
+   $listLocalSessions </reference/operator/aggregation/listLocalSessions>
+   $listSampledQueries </reference/operator/aggregation/listSampledQueries>
+   $listSearchIndexes </reference/operator/aggregation/listSearchIndexes>
+   $listSessions </reference/operator/aggregation/listSessions>
+   $lookup </reference/operator/aggregation/lookup>
+   $match </reference/operator/aggregation/match>
+   $merge </reference/operator/aggregation/merge>
+   $out </reference/operator/aggregation/out>
+   $planCacheStats </reference/operator/aggregation/planCacheStats>
+   $project </reference/operator/aggregation/project>
+   $querySettings </reference/operator/aggregation/querySettings>
+   $queryStats </reference/operator/aggregation/queryStats>
+   $rankFusion </reference/operator/aggregation/rankFusion>
+   $redact </reference/operator/aggregation/redact>
+   $replaceRoot </reference/operator/aggregation/replaceRoot>
+   $replaceWith </reference/operator/aggregation/replaceWith>
+   $sample </reference/operator/aggregation/sample>
+   $score </reference/operator/aggregation/score>
+   $scoreFusion </reference/operator/aggregation/scoreFusion>
+   $search </reference/operator/aggregation/search>
+   $searchMeta </reference/operator/aggregation/searchMeta>
+   $set </reference/operator/aggregation/set>
+   $setWindowFields </reference/operator/aggregation/setWindowFields>
+   $shardedDataDistribution </reference/operator/aggregation/shardedDataDistribution>
+   $skip </reference/operator/aggregation/skip>
+   $sort </reference/operator/aggregation/sort>
+   $sortByCount </reference/operator/aggregation/sortByCount>
+   $unionWith </reference/operator/aggregation/unionWith>
+   $unset </reference/operator/aggregation/unset>
+   $unwind </reference/operator/aggregation/unwind>
+   $vectorSearch </reference/operator/aggregation/vectorSearch>

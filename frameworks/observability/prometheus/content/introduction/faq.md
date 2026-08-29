@@ -4,10 +4,10 @@ framework: "Prometheus"
 source_repo: "https://github.com/prometheus/docs.git"
 source_branch: "main"
 source_path: "docs/introduction/faq.md"
-source_commit: "9d9e0343a9e6d138204cfe316a125a860a271849"
-source_commit_short: "9d9e034"
-source_commit_date: "2026-07-21T23:07:09+02:00"
-generated_at: "2026-07-25T19:07:59.755680Z"
+source_commit: "9ece2ea6375353799f014055bc577d795214aec0"
+source_commit_short: "9ece2ea"
+source_commit_date: "2026-08-27T10:23:11+02:00"
+generated_at: "2026-08-29T09:39:59.843566Z"
 ---
 # Faq
 
@@ -71,7 +71,7 @@ Python, and Ruby.
 
 All repositories in the Prometheus GitHub organization that have reached
 version 1.0.0 broadly follow
-[semantic versioning](http://semver.org/). Breaking changes are indicated by
+[semantic versioning](https://semver.org/). Breaking changes are indicated by
 increments of the major version. Exceptions are possible for experimental
 components, which are clearly marked as such in announcements.
 
@@ -108,8 +108,8 @@ If you want to extract Prometheus metrics from application logs, Grafana Loki is
 ### Who wrote Prometheus?
 
 Prometheus was initially started privately by
-[Matt T. Proud](http://www.matttproud.com) and
-[Julius Volz](http://juliusv.com). The majority of its
+[Matt T. Proud](https://www.matttproud.com) and
+[Julius Volz](https://juliusv.com). The majority of its
 initial development was sponsored by [SoundCloud](https://soundcloud.com).
 
 It's now maintained and extended by a wide range of [companies](https://prometheus.devstats.cncf.io/d/5/companies-table?orgId=1) and [individuals](https://prometheus.io/governance/).
@@ -206,7 +206,7 @@ latency-critical code.
 
 We restrained ourselves to 64-bit floats to simplify the design. The
 [IEEE 754 double-precision binary floating-point
-format](http://en.wikipedia.org/wiki/Double-precision_floating-point_format)
+format](https://en.wikipedia.org/wiki/Double-precision_floating-point_format)
 supports integer precision for values up to 2<sup>53</sup>. Supporting
 native 64 bit integers would (only) help if you need integer precision
 above 2<sup>53</sup> but below 2<sup>63</sup>. In principle, support

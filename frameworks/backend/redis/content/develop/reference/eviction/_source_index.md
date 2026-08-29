@@ -1,15 +1,15 @@
 ---
 type: "Framework Learn Page"
-framework: "redis"
+framework: "Redis"
 source_repo: "https://github.com/redis/docs.git"
 source_branch: "main"
 source_path: "content/develop/reference/eviction/index.md"
-source_commit: "9d30f68c3dad1a6b3b7d30fe604b911348ce8152"
-source_commit_short: "9d30f68c"
-source_commit_date: "2026-07-24T10:52:10-07:00"
-generated_at: "2026-07-25T11:51:22Z"
-generated_filename: "_source_index.md"
+source_commit: "f8693349287b0efbef3c865b6f6a2aceca88594d"
+source_commit_short: "f869334"
+source_commit_date: "2026-08-28T10:01:19-05:00"
+generated_at: "2026-08-29T09:38:56.095601Z"
 ---
+# Index
 
 ---
 categories:
@@ -329,7 +329,7 @@ This distinction makes LRM particularly useful in scenarios where:
 
 To configure LRM eviction, the following policies are available:
 
-* `volatile-lrm` Evict using LRM among the keys with an an associated expiration (TTL).
+* `volatile-lrm` Evict using LRM among the keys with an associated expiration (TTL).
 * `allkeys-lrm` Evict any key using LRM.
 
 Like LRU, LRM uses an approximation algorithm that samples a small number of keys at random and evicts the ones with the longest time since last modification. The same `maxmemory-samples` configuration directive that affects LRU performance also applies to LRM.

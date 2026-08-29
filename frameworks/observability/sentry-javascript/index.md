@@ -1,6 +1,6 @@
-# sentry-javascript Learn Wiki
+# Sentry JavaScript (React) Learn Wiki
 
-This is a local LLM-friendly wiki generated from the official sentry-javascript documentation.
+This is a local LLM-friendly wiki generated from the official Sentry JavaScript (React) documentation.
 
 ## Status
 
@@ -8,9 +8,10 @@ This is a local LLM-friendly wiki generated from the official sentry-javascript 
 - Source repo: `https://github.com/getsentry/sentry-docs.git`
 - Source branch: `master`
 - Source docs path: `docs/platforms/javascript/guides/react`
-- Source commit: `8557ccb`
-- Source commit date: `2026-07-24T13:12:02-04:00`
-- Wiki generated at: `2026-07-25T19:08:17.701249Z`
+- Source commit: `8b4e4a2`
+- Source commit date: `2026-08-28T22:17:56+00:00`
+- Wiki generated at: `2026-08-29T09:40:04.523761Z`
+- Page count: `13`
 
 ## How the IDE LLM should use this wiki
 
@@ -29,3 +30,4 @@ This is a local LLM-friendly wiki generated from the official sentry-javascript 
 ## Top-Level Wiki Areas
 
 - [Content Index](content/index.md)
+- [Features](content/features/index.md)

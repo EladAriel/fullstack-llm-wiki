@@ -4,10 +4,10 @@ framework: "Grafana"
 source_repo: "https://github.com/grafana/grafana.git"
 source_branch: "main"
 source_path: "docs/sources/setup-grafana/configure-access/configure-scim-provisioning/configure-scim-with-okta/_index.md"
-source_commit: "d18e58d33aa8741f08fbab4aa73bdaf1f04e3be5"
-source_commit_short: "d18e58d3"
-source_commit_date: "2026-07-25T13:50:43+02:00"
-generated_at: "2026-07-25T19:08:09.081478Z"
+source_commit: "5e3a02f81d2aadf4bf24fe49ed97d872556f5bf9"
+source_commit_short: "5e3a02f8"
+source_commit_date: "2026-08-29T10:58:19+09:00"
+generated_at: "2026-08-29T09:39:37.412173Z"
 ---
 ---
 aliases:
@@ -64,10 +64,11 @@ To enable SCIM provisioning in Grafana, create a service account and generate an
 
 1. Navigate to **Administration > Users and access > Service accounts**
 1. Click **Add service account**
-1. Create the service account with a name (for example, "SCIM provisioning").
-1. In the **Roles** dropdown, select the following roles for the service account:
-   - **User administration** — required for user sync (create, read, update, and remove users in the organization)
-   - **Teams** — required for group sync (create, read, update, and delete teams, and manage team memberships)
+1. Enter a display name for the service account (for example, "SCIM provisioning").
+1. In the **Role** picker, set the basic role to **No basic role**.
+1. In the same **Role** picker, select the following roles for the service account:
+   - **User administration: Writer (organizational)** — required for user sync (create, read, update, and remove users in the organization)
+   - **Teams: Writer** — required for group sync (create, read, update, and delete teams, and manage team memberships)
 1. Create a new token for the service account and save it securely. This token will be used in the Okta configuration.
 
 ## Configure SCIM in Okta

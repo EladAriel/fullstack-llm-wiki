@@ -4,10 +4,10 @@ framework: "LangSmith"
 source_repo: "https://github.com/langchain-ai/docs.git"
 source_branch: "main"
 source_path: "src/langsmith/llm-gateway-rate-limit-policies.mdx"
-source_commit: "2aae1dfc98ee953a9a5185fb6fcdd9efb3f4d878"
-source_commit_short: "2aae1df"
-source_commit_date: "2026-07-25T00:27:23+00:00"
-generated_at: "2026-07-25T19:08:33.425384Z"
+source_commit: "a174f9cf7c91ee5eb14ee2382eb48bfe6e4956e9"
+source_commit_short: "a174f9c"
+source_commit_date: "2026-08-28T17:04:12-07:00"
+generated_at: "2026-08-29T09:39:50.666647Z"
 ---
 # Llm Gateway Rate Limit Policies
 
@@ -17,7 +17,7 @@ description: Limit the number of requests or tokens a user, workspace, or API ke
 ---
 
 <Note>
-**Private beta:** The LLM Gateway is in private [beta](/langsmith/release-stages). [Sign up for the waitlist](https://www.langchain.com/langsmith-llm-gateway-waitlist) to get access.
+**Beta:** The LLM Gateway is in [beta](/langsmith/release-stages).
 </Note>
 
 A rate limit policy restricts how many **requests** or **tokens** a subject can consume through the [LLM Gateway](/langsmith/llm-gateway) in a short rolling time window. The gateway enforces the limit in real time and blocks any request that would push the subject past it, returning a `429` response with a `Retry-After` header:
@@ -84,7 +84,10 @@ Creating and managing policies requires `organization:manage` permission. For th
 
 Policies take effect immediately.
 
+A rate limit policy can also carry a condition on a custom request header, so traffic from a single subject splits into separate limits by header value. Use this to give each of your own end customers its own throughput allowance under one API key. For more information, see [Per-customer policies](/langsmith/llm-gateway-header-policies).
+
 ## Next steps
 
 - [Spend policies](/langsmith/llm-gateway-spend-policies): set cost caps alongside rate limits.
-- [PII and secrets redaction](/langsmith/llm-gateway-redaction): add data protection policies.
+- [Per-customer policies](/langsmith/llm-gateway-header-policies): split a limit by a custom request header so each end customer gets its own allowance.
+- [Data protection](/langsmith/llm-gateway-data-protection): add data protection policies.

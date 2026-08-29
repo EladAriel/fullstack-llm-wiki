@@ -1,14 +1,15 @@
 ---
 type: "Framework Learn Page"
-framework: "redis"
+framework: "Redis"
 source_repo: "https://github.com/redis/docs.git"
 source_branch: "main"
 source_path: "content/operate/rs/monitoring/_index.md"
-source_commit: "9d30f68c3dad1a6b3b7d30fe604b911348ce8152"
-source_commit_short: "9d30f68c"
-source_commit_date: "2026-07-24T10:52:10-07:00"
-generated_at: "2026-07-25T11:51:22Z"
+source_commit: "f8693349287b0efbef3c865b6f6a2aceca88594d"
+source_commit_short: "f869334"
+source_commit_date: "2026-08-28T10:01:19-05:00"
+generated_at: "2026-08-29T09:38:55.331364Z"
 ---
+# _Index
 
 ---
 Title: Monitoring with metrics and alerts
@@ -36,7 +37,7 @@ See [Metrics and alerts for monitoring v1]({{<relref "/operate/rs/monitoring/v1_
 
 ## Metrics stream engine
 
-The new metrics stream engine is generally available as of [Redis Software version 8.0]({{<relref "/operate/rs/release-notes/rs-8-0-releases">}}) This new engine exposes the v2 Prometheus scraping endpoint at `https://<IP>:8070/v2`, exports all time-series metrics to external monitoring tools, and enables real-time monitoring.
+The new metrics stream engine is generally available as of [Redis Software version 8.0]({{<relref "/operate/rs/release-notes/rs-8-0-releases">}}) This new engine exposes the v2 Prometheus scraping endpoint at `https://<cluster_name>:8070/v2`, exports all time-series metrics to external monitoring tools, and enables real-time monitoring.
 
 See [Metrics stream engine for monitoring v2]({{<relref "/operate/rs/monitoring/metrics_stream_engine">}}) for more information.
 

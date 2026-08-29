@@ -1,100 +1,150 @@
 ---
 type: "Framework Learn Page"
-framework: "mongodb"
+framework: "MongoDB"
 source_repo: "https://github.com/mongodb/docs.git"
 source_branch: "main"
 source_path: "content/manual/manual/source/tutorial/install-mongodb-enterprise-on-ubuntu.txt"
-source_commit: "ab9db26ed3d11618cdb61516d8180337d8e3f679"
-source_commit_short: "ab9db26e"
-source_commit_date: "2026-07-24T16:22:46-06:00"
-generated_at: "2026-07-25T11:51:15Z"
+source_commit: "b9f2bc487a2878b65e3c1f80024bebab76954f27"
+source_commit_short: "b9f2bc48"
+source_commit_date: "2026-08-28T17:09:45-05:00"
+generated_at: "2026-08-29T09:39:19.615467Z"
 ---
-
-============================================
+.. _install-mdb-enterprise-ubuntu:
 
 # Install MongoDB Enterprise Edition on Ubuntu
 
-.. include:: /includes/minor-release.rst
+.. default-domain:: mongodb
+
+**meta:** :description: Install MongoDB Enterprise Edition on Ubuntu LTS releases using the apt package manager.
+   :keywords: on-prem
+                 
+**contents:** On this page
+   :local:
+   :backlinks: none
+   :depth: 1
+   :class: twocols
+
+.. |arrow| unicode:: U+27A4
+.. |edition| replace:: Enterprise
+.. |package-name| replace:: ``{+package-name-enterprise+}``
+.. |distro-name| replace:: Ubuntu
+.. |package-manager| replace:: ``apt``
+.. |executable-name| replace:: ``mongod``
+
+**include:** /includes/minor-release.rst
 
 ## Overview
 
-Use this tutorial to install MongoDB {+version+} |edition| Edition on LTS (long-term support) releases of Ubuntu Linux using the |package-manager| package manager.
+Use this tutorial to install MongoDB {+version+} |edition| Edition on
+LTS (long-term support) releases of Ubuntu Linux using the
+|package-manager| package manager.
 
-:products:`MongoDB Enterprise Edition</mongodb-enterprise-advanced>` is available on select platforms and contains support for features related to security and monitoring.
+:products:`MongoDB Enterprise Edition</mongodb-enterprise-advanced>`
+is available on select platforms and contains support for features
+related to security and monitoring.
 
 ### MongoDB Version
 
-.. include:: /includes/fact-install-past-mongodb.rst
+**include:** /includes/fact-install-past-mongodb.rst
 
 ## Considerations
 
 ### Platform Support
-
-.. include:: /includes/fact-platform-support-enterprise-ubuntu.rst
+   
+**include:** /includes/fact-platform-support-enterprise-ubuntu.rst
 
 ### Production Notes
 
-.. include:: /includes/fact-see-production-notes.rst
+**include:** /includes/fact-see-production-notes.rst
 
+.. _enterprise-official-packages:
+             
 ### Official MongoDB Packages
 
-.. include:: /includes/important-dont-use-distro-packages.rst
+**include:** /includes/important-dont-use-distro-packages.rst
 
-See `ubuntu-enterprise-package-content` for the complete list of official packages.
+See :ref:`ubuntu-enterprise-package-content` for the complete list of
+official packages.
+
+.. _install-enterprise-ubuntu-pkg:
 
 ## Install MongoDB Enterprise Edition
 
-Follow these steps to install MongoDB |edition| Edition using the |package-manager| package manager.
+Follow these steps to install MongoDB |edition| Edition using the
+|package-manager| package manager.
 
-.. include:: /includes/deploy/enterprise-ubuntu
+**include:** /includes/deploy/enterprise-ubuntu
 
-> **Note:** .. include:: /includes/install-mongodb-apt-commands.rst
+**note:** .. include:: /includes/install-mongodb-apt-commands.rst
 
-For help with troubleshooting errors encountered while installing MongoDB on Ubuntu, see our `troubleshooting <install-ubuntu-troubleshooting>` guide.
+For help with troubleshooting errors encountered while installing
+MongoDB on Ubuntu, see our
+:ref:`troubleshooting <install-ubuntu-troubleshooting>` guide.
 
 ## Run MongoDB Enterprise Edition
 
-.. include:: /includes/fact-installation-directories.rst
+.. |mongod-user| replace:: ``mongodb``
+.. |mongod-datadir| replace:: ``/var/lib/mongodb``
 
-.. include:: /includes/fact-installation-ulimit.rst
+**include:** /includes/fact-installation-directories.rst
+
+**include:** /includes/fact-installation-ulimit.rst
 
 ### Procedure
 
-Follow these steps to run MongoDB |edition| Edition on your system. These instructions assume that you are using the official |package-name| package, not the unofficial `mongodb` package provided by |distro-name|, and are using the default settings.
+Follow these steps to run MongoDB |edition| Edition on your system.
+These instructions assume that you are using the official |package-name|
+package, not the unofficial ``mongodb`` package provided by
+|distro-name|, and are using the default settings.
 
 **Init System**
 
-.. include:: /includes/fact-systemd-vs-initd.rst
+**include:** /includes/fact-systemd-vs-initd.rst
+
+**tabs:** .. tab:: systemd (systemctl)
+      :tabid: systemd-systemctl
+
+      .. include:: /includes/steps/run-mongodb-on-debian-systemd.rst
+
+   .. tab:: System V Init (service)
+      :tabid: systemvinit-service
+
+      .. include:: /includes/steps/run-mongodb-on-debian.rst
 
 ## Uninstall MongoDB
 
-.. include:: /includes/fact-uninstall.rst
+**include:** /includes/fact-uninstall.rst
 
-.. include:: /includes/steps/uninstall-mongodb-enterprise-on-debian.rst
+**include:** /includes/steps/uninstall-mongodb-enterprise-on-debian.rst
 
 ## Additional Information
 
+
 ### Upgrading MongoDB Enterprise Edition
 
-When upgrading MongoDB |edition| Edition, ensure that you are using the `official packages <enterprise-official-packages>`. Specify the same version for each component as in this example:
+When upgrading MongoDB |edition| Edition, ensure that you are using the :ref:`official packages <enterprise-official-packages>`.
+Specify the same version for each component as in this example:
 
-```sh
-VERSION=${VERSION} sudo apt install -y \
-  mongodb-enterprise=${VERSION} \
-  mongodb-enterprise-server=${VERSION} \
-  mongodb-enterprise-mongos=${VERSION} \
-  mongodb-enterprise-tools=${VERSION} \
-  --allow-downgrades --allow-change-held-packages
-```
+.. code-block:: sh
+
+   VERSION=${VERSION} sudo apt install -y \
+     mongodb-enterprise=${VERSION} \
+     mongodb-enterprise-server=${VERSION} \
+     mongodb-enterprise-mongos=${VERSION} \
+     mongodb-enterprise-tools=${VERSION} \
+     --allow-downgrades --allow-change-held-packages
 
 ### Localhost Binding by Default
 
-.. include:: /includes/fact-installation-bind-ip-default-in-config.rst
+**include:** /includes/fact-installation-bind-ip-default-in-config.rst
+
+.. _ubuntu-enterprise-package-content:
 
 ### MongoDB Enterprise Edition Packages
 
-.. include:: /includes/list-mongodb-enterprise-packages.rst
+**include:** /includes/list-mongodb-enterprise-packages.rst
 
-## Contents
+**toctree:** :hidden:
+   :titlesonly:
 
-- Install using .tgz Tarball </tutorial/install-mongodb-enterprise-on-ubuntu-tarball>
+   Install using .tgz Tarball </tutorial/install-mongodb-enterprise-on-ubuntu-tarball>

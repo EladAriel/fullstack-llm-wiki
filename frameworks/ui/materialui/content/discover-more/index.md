@@ -1,7 +1,7 @@
 ---
 type: "Framework Learn Directory Index"
 framework: "Material UI"
-generated_at: "2026-07-25T13:39:41.061572Z"
+generated_at: "2026-08-29T09:40:18.313530Z"
 ---
 # Discover-More
 
@@ -17,3 +17,12 @@ This directory contains Material UI learning pages related to discover-more.
 
 ## Pages in This Directory
 
+
+## Subdirectories
+
+- [Backers](backers/index.md)
+- [Changelog](changelog/index.md)
+- [Related Projects](related-projects/index.md)
+- [Roadmap](roadmap/index.md)
+- [Showcase](showcase/index.md)
+- [Vision](vision/index.md)

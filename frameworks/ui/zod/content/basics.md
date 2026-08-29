@@ -1,18 +1,19 @@
 ---
 type: "Framework Learn Page"
-framework: "zod"
+framework: "Zod"
 source_repo: "https://github.com/colinhacks/zod"
 source_branch: "main"
 source_path: "packages/docs/content/basics.mdx"
-source_commit: "912f0f51b0ced654d0069741e7160834dca742ee"
-source_commit_short: "912f0f51"
-source_commit_date: "2026-06-10T10:17:29-07:00"
-generated_at: "2026-06-21T11:57:59Z"
+source_commit: "e6b6ab347675cd2bd54b1bdbed16f98c59be82a9"
+source_commit_short: "e6b6ab3"
+source_commit_date: "2026-08-28T17:35:38-07:00"
+generated_at: "2026-08-29T09:40:34.218571Z"
 ---
+# Basics
 
 ---
 title: Basic usage
-description: "Basic usage guide covering schema definition, parsing data, error handling, and type inference"
+description: "Basic usage guide covering schema definition, parsing data, error handling, type inference, and matching an existing type"
 ---
 
 import { Tabs, Tab } from 'fumadocs-ui/components/tabs';
@@ -140,6 +141,15 @@ await schema.safeParseAsync("hello");
 ```
 </Callout>
 
+When you only need to know whether an input is acceptable, use the top-level `z.validate()` function. It returns a boolean, never builds an error, and acts as a type guard on the schema's input type.
+
+```ts
+z.validate(Player, { username: "billie", xp: 100 }); // true
+z.validate(Player, { username: 42, xp: "100" });     // false
+```
+
+Use `z.validateAsync()` for schemas with async refinements or transforms. On a [compiled schema](/compile), `z.validate()` answers directly from the compiled fast path.
+
 ## Inferring types
 
 Zod infers a static type from your schema definitions. You can extract this type with the `z.infer<>` utility and use it however you like.
@@ -167,6 +177,67 @@ type MySchemaIn = z.input<typeof mySchema>;
 
 type MySchemaOut = z.output<typeof mySchema>; // equivalent to z.infer<typeof mySchema>
 // number
+```
+
+## Matching an existing type
+
+Sometimes the type comes first: a database model, a type from a generated client, an interface you don't own. Pass it to `z.toZod<T>()` and TypeScript checks that the schema's output type is exactly `T`.
+
+```ts
+type Player = {
+  username: string;
+  xp: number;
+};
+
+const Player = z.toZod<Player>()(
+  z.object({
+    username: z.string(),
+    xp: z.number(),
+  })
+);
+
+Player.shape.username; // ZodString — the schema is returned unchanged
+```
+
+The check is exact type equality, so any drift from the type is a compile error:
+
+```ts
+z.toZod<Player>()(
+  z.object({
+    username: z.string(),
+    xp: z.number(),
+    admin: z.boolean(), // ❌ extra key
+  })
+);
+```
+
+The usual alternative is `satisfies z.ZodType<Player>`, which only checks assignability. It catches a missing required key, but extra keys, omitted optional keys, and a bare `z.any()` all slip through:
+
+```ts
+z.object({
+  username: z.string(),
+  xp: z.number(),
+  admin: z.boolean(),
+}) satisfies z.ZodType<Player>; // ✅ no error
+
+z.any() satisfies z.ZodType<Player>; // ✅ no error
+```
+
+Exactness applies to the type as TypeScript wrote it, so an intersection target matches `.and()` rather than `.safeExtend()`:
+
+```ts
+type Entry = { id: string } & { label: string };
+
+z.toZod<Entry>()(z.object({ id: z.string() }).and(z.object({ label: z.string() }))); // ✅
+z.toZod<Entry>()(z.object({ id: z.string() }).safeExtend({ label: z.string() })); // ❌
+```
+
+Flatten the target and `.safeExtend()` matches instead:
+
+```ts
+type Flatten<T> = { [K in keyof T]: T[K] } & {};
+
+z.toZod<Flatten<Entry>>()(z.object({ id: z.string() }).safeExtend({ label: z.string() })); // ✅
 ```
 
 ---

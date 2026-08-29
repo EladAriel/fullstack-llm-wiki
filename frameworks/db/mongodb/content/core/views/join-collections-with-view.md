@@ -1,51 +1,78 @@
 ---
 type: "Framework Learn Page"
-framework: "mongodb"
+framework: "MongoDB"
 source_repo: "https://github.com/mongodb/docs.git"
 source_branch: "main"
 source_path: "content/manual/manual/source/core/views/join-collections-with-view.txt"
-source_commit: "ab9db26ed3d11618cdb61516d8180337d8e3f679"
-source_commit_short: "ab9db26e"
-source_commit_date: "2026-07-24T16:22:46-06:00"
-generated_at: "2026-07-25T11:51:15Z"
+source_commit: "b9f2bc487a2878b65e3c1f80024bebab76954f27"
+source_commit_short: "b9f2bc48"
+source_commit_date: "2026-08-28T17:09:45-05:00"
+generated_at: "2026-08-29T09:39:19.801029Z"
 ---
-
-==================================
+.. _manual-views-lookup:
 
 # Use a View to Join Two Collections
 
-Use :pipeline:`$lookup` to create a view over two collections. Applications can query the view without constructing or maintaining complex pipelines.
+.. default-domain:: mongodb
+
+**facet:** :name: programming_language
+   :values: shell
+
+**facet:** :name: genre
+   :values: tutorial
+
+**meta:** :description: Use $lookup to create a view over two collections and then run queries against the view without having to construct or maintain complex pipelines.
+
+**contents:** On this page
+   :local:
+   :backlinks: none
+   :depth: 2
+   :class: singlecol
+
+Use :pipeline:`$lookup` to create a view over two collections.
+Applications can query the view without constructing or
+maintaining complex pipelines.
 
 ## Example
 
-.. include:: /includes/sample-data-usage.rst
+**include:** /includes/sample-data-usage.rst
 
 ### Create a Joined View
 
+**literalinclude:** /code-examples/tested/command-line/mongosh/aggregation/stages/lookup/create-view.snippet.create-view.js
+   :language: javascript
+   :copyable: true
+   :category: usage example
+
 In the example:
 
-- The :pipeline:`$match` stage filters the `movies` collection to
-documents released in 2014 onward.
-
-- The :pipeline:`$lookup stage uses the id` field in the
-`movies` collection to join documents in the `comments` collection that have a matching `movie_id` field.
-
+- The :pipeline:`$match` stage filters the ``movies`` collection to
+  documents released in 2014 onward.
+- The :pipeline:`$lookup` stage uses the ``_id`` field in the
+  ``movies`` collection to join documents in the ``comments``
+  collection that have a matching ``movie_id`` field.
 - The matching documents are added as an array in the
-`movieComments` field.
-
+  ``movieComments`` field.
 - The :pipeline:`$project` stage selects a subset of the available
-fields, including `numComments`, which is the count of comments for each movie.
+  fields, including ``numComments``, which is the count of comments
+  for each movie.
 
 ### Query the View
 
 Query the view for the five movies with the most comments:
 
-```javascript
-[
-  { _id: '<title>', totalComments: <num> },
-  { _id: '<title>', totalComments: <num> },
-  { _id: '<title>', totalComments: <num> },
-  { _id: '<title>', totalComments: <num> },
-  { _id: '<title>', totalComments: <num> }
-]
-```
+**literalinclude:** /code-examples/tested/command-line/mongosh/aggregation/stages/lookup/query-view.snippet.query-view.js
+   :language: javascript
+   :copyable: true
+   :category: usage example
+
+.. code-block:: javascript
+   :copyable: false
+
+   [
+     { _id: '<title>', totalComments: <num> },
+     { _id: '<title>', totalComments: <num> },
+     { _id: '<title>', totalComments: <num> },
+     { _id: '<title>', totalComments: <num> },
+     { _id: '<title>', totalComments: <num> }
+   ]

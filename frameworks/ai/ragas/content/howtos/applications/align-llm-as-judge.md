@@ -5,11 +5,10 @@ source_repo: "https://github.com/vibrantlabsai/ragas"
 source_branch: "main"
 source_path: "docs/howtos/applications/align-llm-as-judge.md"
 source_commit: "298b68274234c060deacab3cf5fb52aa3a20e885"
-source_commit_short: "298b6827"
+source_commit_short: "298b682"
 source_commit_date: "2026-02-24T13:17:18+05:30"
-generated_at: "2026-06-23T13:55:50Z"
+generated_at: "2026-08-29T09:38:15.978102Z"
 ---
-
 # How to Align an LLM as a Judge
 
 In this guide, you'll learn how to systematically evaluate and align an LLM-as-judge metric with human expert judgments using Ragas.

@@ -1,60 +1,126 @@
 ---
 type: "Framework Learn Page"
-framework: "mongodb"
+framework: "MongoDB"
 source_repo: "https://github.com/mongodb/docs.git"
 source_branch: "main"
 source_path: "content/manual/manual/source/core/timeseries/timeseries-considerations.txt"
-source_commit: "ab9db26ed3d11618cdb61516d8180337d8e3f679"
-source_commit_short: "ab9db26e"
-source_commit_date: "2026-07-24T16:22:46-06:00"
-generated_at: "2026-07-25T11:51:15Z"
+source_commit: "b9f2bc487a2878b65e3c1f80024bebab76954f27"
+source_commit_short: "b9f2bc48"
+source_commit_date: "2026-08-28T17:09:45-05:00"
+generated_at: "2026-08-29T09:39:19.796449Z"
 ---
-
-======================================
+.. _manual-timeseries-considerations:
 
 # Time Series Collections Considerations
 
-Time series collections generally behave like normal collections, but with additional exceptions. For information on time series collection behavior and structure, see `manual-timeseries-collection`.
+.. default-domain:: mongodb
+
+**facet:** :name: genre
+   :values: reference
+
+**contents:** On this page
+   :local:
+   :backlinks: none
+   :depth: 2
+   :class: singlecol
+
+Time series collections generally behave like normal collections, but
+with additional exceptions. For information on time series
+collection behavior and structure, see
+:ref:`manual-timeseries-collection`. 
+
+.. _timeseries-metafield-considerations:
 
 ## metaField Considerations
 
-A `metaField` should rarely change and can be any data type. A `metaField` can be an object and can contain subfields. Once you define a field as the `metaField`, you can change the value of the `metaField` but you cannot redefine the `metaField` as another field. For example, if you create time series documents with the `metaField` defined as field `A`, you cannot later convert a field `B` to be the `metaField`. However, if the value of `A` is an object, you can add new subfields to `A`.
+A ``metaField`` should rarely change and can be any data type. A
+``metaField`` can be an object and can contain subfields. Once you
+define a field as the ``metaField``, you can change the value of the
+``metaField`` but you cannot redefine the ``metaField`` as another
+field. For example, if you create time series documents with the
+``metaField`` defined as field ``A``, you cannot later convert a field
+``B`` to be the ``metaField``. However, if the value of ``A`` is an
+object, you can add new subfields to ``A``. 
 
-> **Note:** Using an array as a `metaField` may cause unexpected collection
-behavior because array equality depends on specific order.
+**note:** Using an array as a ``metaField`` may cause unexpected collection
+   behavior because array equality depends on specific order.
 
-MongoDB uses the `metaField` to partition data for efficient organization and retrieval. When you create a time series collection, MongoDB groups documents into buckets. Documents within a bucket share an identical `metaField` value and have `timeField` values that are close together.
+MongoDB uses the ``metaField`` to partition data for efficient
+organization and retrieval. When you create a time series collection,
+MongoDB groups documents into buckets. Documents within a bucket share
+an identical ``metaField`` value and have ``timeField`` values that are
+close together.
 
-The number of buckets in a time series collection depends on the number of unique `metaField` values. Collections with fine-grained or dynamic `metaField` values may generate more, sparsely packed, short-lived buckets than collections with simple `metaField` values that rarely or never change. Fine-grained and dynamic `metaField` values typically decrease storage and query effiency.
+The number of buckets in a time series collection depends on the number
+of unique ``metaField`` values. Collections with fine-grained or dynamic
+``metaField`` values may generate more, sparsely packed, short-lived
+buckets than collections with simple ``metaField`` values that rarely or
+never change. Fine-grained and dynamic ``metaField`` values typically
+decrease storage and query effiency. 
 
-`metaField` Best Practices ````````````````````````````
+.. _timeseries-metafield-best-practices:
 
-.. include:: /includes/time-series/fact-metafield-best-practices.rst
+### ``metaField`` Best Practices
+**include:** /includes/time-series/fact-metafield-best-practices.rst
 
 ## Storage and Cardinality
 
-When you insert data into a time series collection, the internal collection automatically organizes the data into an optimized storage format using `buckets <timeseries-bucketing-specifics>`. If a suitable bucket exists, MongoDB inserts new data into that bucket. If a suitable bucket does not exist, MongoDB creates a new bucket. To optimize storage, choose a `metaField` that rarely changes to create time series collections with fewer, more densely packed buckets.
+When you insert data into a time series collection, the internal
+collection automatically organizes the data into an optimized storage
+format using :ref:`buckets <timeseries-bucketing-specifics>`. If a
+suitable bucket exists, MongoDB inserts new data into that bucket. If a
+suitable bucket does not exist, MongoDB creates a new bucket. To
+optimize storage, choose a ``metaField`` that rarely changes to create
+time series collections with fewer, more densely packed buckets.
 
-Collections with fine-grained or changing `metaField` values generate many sparsely packed, short-lived buckets, increasing the cardinality of your collection. Increasing cardinality leads to decreased storage and query efficiency.
+Collections with fine-grained or changing ``metaField`` values generate
+many sparsely packed, short-lived buckets, increasing the cardinality of
+your collection. Increasing cardinality leads to decreased storage and
+query efficiency. 
+
+.. _timeseries-granularity-considerations:
 
 ## Granularity
 
-You can use the `granularity` parameter to specify how frequently MongoDB buckets your time series data based on the data ingestion rate. The following table shows the maximum time interval included in one bucket of data when using a given `granularity` value:
+You can use the ``granularity`` parameter to specify how frequently
+MongoDB buckets your time series data based on the data ingestion rate.
+The following table shows the maximum time interval included in one
+bucket of data when using a given ``granularity`` value:
 
-.. include:: /includes/table-timeseries-granularity-intervals.rst
+**include:** /includes/table-timeseries-granularity-intervals.rst
 
-By default, `granularity` is set to `seconds`. You can improve performance by setting the `granularity` value to the closest match to the time span between incoming measurements from the same data source. For example, if you are recording weather data from thousands of sensors but only record data from each sensor once per 5 minutes, set `granularity` to `"minutes"`. The less frequently you append new documents, the greater the storage and performance benefits of coarser granularity.
+By default, ``granularity`` is set to ``seconds``. You can improve 
+performance by setting the ``granularity`` value to the closest match to
+the time span between incoming measurements from the same data source.
+For example, if you are recording weather data from thousands of sensors
+but only record data from each sensor once per 5 minutes, set
+``granularity`` to ``"minutes"``. The less frequently you append new documents,
+the greater the storage and performance benefits of coarser granularity.
 
-Setting the `granularity` to `hours` groups up to a month's worth of data ingest events into a single bucket, resulting in longer traversal times and slower queries. Setting it to `seconds` leads to multiple buckets per polling interval, many of which might contain only a single document.
+Setting the ``granularity`` to ``hours`` groups up to a month's 
+worth of data ingest events into a single bucket, resulting in longer 
+traversal times and slower queries. Setting it to ``seconds`` 
+leads to multiple buckets per polling interval, many of which 
+might contain only a single document.
 
-You should also consider typical queries when choosing the `granularity` value. For example, if you expect your queries to fetch 1 day of data at a time, use "minutes". A finer granularity, like "seconds", creates buckets that cover one hour. This requires more buckets to represent the same data, which negatively affects storage and query performance. A coarser granularity, like "hours" (which has a 30-day bucket span), requires queries to fetch 30 days of data at a time and then filter out most of it.
+You should also consider typical queries when choosing the
+``granularity`` value. For example, if you expect your queries to fetch
+1 day of data at a time, use "minutes". A finer granularity, like
+"seconds", creates buckets that cover one hour. This requires more
+buckets to represent the same data, which negatively affects storage and
+query performance. A coarser granularity, like "hours" (which has a
+30-day bucket span), requires queries to fetch 30 days of data at a time
+and then filter out most of it.
 
-For examples, see `timeseries-granularity`.
+For examples, see :ref:`timeseries-granularity`. 
 
 ## Compression and Hardware
 
-All time series collection use a compressed bucket format when you append data into opened or reopened buckets. Compressing time series data in the cache supports high `cardinality` workloads while preserving efficient query performance.
+All time series collection use a compressed bucket format when you
+append data into opened or reopened buckets. Compressing time series
+data in the cache supports high :term:`cardinality` workloads while preserving
+efficient query performance. 
 
 ## Zone Sharding
 
-.. include:: /includes/fact-zone-timeseries-support
+**include:** /includes/fact-zone-timeseries-support

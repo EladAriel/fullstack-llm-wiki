@@ -1,76 +1,111 @@
 ---
 type: "Framework Learn Page"
-framework: "mongodb"
+framework: "MongoDB"
 source_repo: "https://github.com/mongodb/docs.git"
 source_branch: "main"
 source_path: "content/manual/manual/source/reference/method/cursor.forEach.txt"
-source_commit: "ab9db26ed3d11618cdb61516d8180337d8e3f679"
-source_commit_short: "ab9db26e"
-source_commit_date: "2026-07-24T16:22:46-06:00"
-generated_at: "2026-07-25T11:51:15Z"
+source_commit: "b9f2bc487a2878b65e3c1f80024bebab76954f27"
+source_commit_short: "b9f2bc48"
+source_commit_date: "2026-08-28T17:09:45-05:00"
+generated_at: "2026-08-29T09:39:19.905039Z"
 ---
-
-=================================
-
 # cursor.forEach() (mongosh method)
+
+**meta:** :description: Iterate over documents in a MongoDB cursor using `forEach()` to apply a JavaScript function to each document.
+
+.. default-domain:: mongodb
+
+**contents:** On this page
+   :local:
+   :backlinks: none
+   :depth: 1
+   :class: singlecol
 
 ## Definition
 
+**method:** cursor.forEach(function)
+
+   .. include:: /includes/fact-mongosh-shell-method.rst
+
+   Iterates the cursor to apply a JavaScript ``function`` to each
+   document from the cursor.
+
 ## Compatibility
 
-This method is available in deployments hosted in the following environments:
+This method is available in deployments hosted in the following environments: 
 
-.. include:: /includes/fact-environments-atlas-only.rst
+**include:** /includes/fact-environments-atlas-only.rst
 
-.. include:: /includes/fact-environments-atlas-support-all.rst
+**include:** /includes/fact-environments-atlas-support-all.rst
 
-.. include:: /includes/fact-environments-onprem-only.rst
+**include:** /includes/fact-environments-onprem-only.rst
 
 ## Syntax
 
 The method has the following syntax:
 
-```javascript
-db.collection.find().forEach( <function> )
-```
+.. code-block:: javascript
+   :copyable: false
+
+   db.collection.find().forEach( <function> )
 
 ## Method Fields
 
 The method accepts the following field:
 
+.. list-table::
+   :header-rows: 1
+   :widths: 20 20 80
+
+   * - Field
+     - Type
+     - Description
+
+   * - ``function``
+     - JavaScript code
+     - Function to apply to each document returned from the cursor. The
+       function signature includes one field that stores the current
+       document that is read from the cursor.
+
 ## Examples
 
-Create the `users` collection:
+Create the ``users`` collection:
 
-```none
-db.users.insertMany( [
-   { name: "John" },
-   { name: "Jane" }
-] )
-```
+.. code-block:: none
 
-The following example uses `forEach()` with the :method:`~db.collection.find()` method to print the user names that are read from the `users` collection. `myDoc` stores the current document.
+   db.users.insertMany( [
+      { name: "John" },
+      { name: "Jane" }
+   ] )
 
-```none
-db.users.find().forEach( function( myDoc ) {
-   print( "User name: " + myDoc.name )
-} )
-```
+The following example uses ``forEach()`` with the
+:method:`~db.collection.find()` method to print the user names that are
+read from the ``users`` collection. ``myDoc`` stores the current
+document.
+
+.. code-block:: none
+
+   db.users.find().forEach( function( myDoc ) {
+      print( "User name: " + myDoc.name )
+   } )
 
 Example output:
 
-```none
-User name: John
-User name: Jane
-```
+.. code-block:: none
+   :copyable: false
 
-Starting in :binary:`~bin.mongosh` 2.1.0, you can also use `for-of` loops. The following example returns the same results as the previous example:
+   User name: John
+   User name: Jane
 
-```none
-for ( const myDoc of db.users.find() ) {
-   print( "User name: " + myDoc.name )
-}
-```
+Starting in :binary:`~bin.mongosh` 2.1.0, you can also use ``for-of``
+loops. The following example returns the same results as the previous
+example:
+
+.. code-block:: none
+
+   for ( const myDoc of db.users.find() ) {
+      print( "User name: " + myDoc.name )
+   }
 
 ## Learn More
 

@@ -1,45 +1,94 @@
 ---
 type: "Framework Learn Page"
-framework: "mongodb"
+framework: "MongoDB"
 source_repo: "https://github.com/mongodb/docs.git"
 source_branch: "main"
 source_path: "content/manual/manual/source/reference/method/cursor.maxAwaitTimeMS.txt"
-source_commit: "ab9db26ed3d11618cdb61516d8180337d8e3f679"
-source_commit_short: "ab9db26e"
-source_commit_date: "2026-07-24T16:22:46-06:00"
-generated_at: "2026-07-25T11:51:15Z"
+source_commit: "b9f2bc487a2878b65e3c1f80024bebab76954f27"
+source_commit_short: "b9f2bc48"
+source_commit_date: "2026-08-28T17:09:45-05:00"
+generated_at: "2026-08-29T09:39:19.991309Z"
 ---
-
-========================================
+.. _cursor-maxAwaitTimeMS:
 
 # cursor.maxAwaitTimeMS() (mongosh method)
 
+**meta:** :description: Specify the maximum wait time for new documents in a tailable cursor query using `maxAwaitTimeMS()`.
+
+.. default-domain:: mongodb
+
+**contents:** On this page
+   :local:
+   :backlinks: none
+   :depth: 1
+   :class: singlecol
+
 ## Definition
 
-> **Important:** This method, :method:`~cursor.maxAwaitTimeMS()`, sets a limit on how
-long a `tailable cursor <tailable-cursors-landing-page>` waits
-for the next response. :method:`~cursor.maxTimeMS()` sets a limit on
-total processing time.
+**method:** cursor.maxAwaitTimeMS(<time limit>)
+
+   .. include:: /includes/fact-mongosh-shell-method.rst
+
+   Specifies the maximum time for the server to wait for new documents
+   that match a :ref:`tailable cursor <tailable-cursors-landing-page>`
+   query on a :ref:`capped collection <manual-capped-collection>`. For
+   more information on iterating a cursor returned by a query, see:
+   :ref:`read-operations-cursors`.
+
+   The :method:`~cursor.maxAwaitTimeMS()` method has the following
+   prototype form:
+
+   .. code-block:: javascript
+
+      db.collection.find(
+         { <query> },
+         { <projection> }
+      ).tailable( { awaitData: true } ).maxAwaitTimeMS( <milliseconds> )
+
+   The :method:`~cursor.maxAwaitTimeMS()` method has the following
+   parameter:
+
+   .. list-table::
+      :header-rows: 1
+      :widths: 20 20 80
+   
+      * - Parameter
+        - Type
+        - Description
+
+      * - ``milliseconds``
+        - integer
+        - Specifies a maximum wait time for new documents.
+
+**important:** This method, :method:`~cursor.maxAwaitTimeMS()`, sets a limit on how
+   long a :ref:`tailable cursor <tailable-cursors-landing-page>` waits
+   for the next response. :method:`~cursor.maxTimeMS()` sets a limit on
+   total processing time.
 
 ## Compatibility
 
-This method is available in deployments hosted in the following environments:
+This method is available in deployments hosted in the following environments: 
 
-.. include:: /includes/fact-environments-atlas-only.rst
+**include:** /includes/fact-environments-atlas-only.rst
 
-.. include:: /includes/fact-environments-atlas-support-all.rst
+**include:** /includes/fact-environments-atlas-support-all.rst
 
-.. include:: /includes/fact-environments-onprem-only.rst
+**include:** /includes/fact-environments-onprem-only.rst
 
 ## Example
 
-Query the `capped <manual-capped-collection>` `sales` collection to find agent Mary Kay's weekly sales totals:
+Query the :ref:`capped <manual-capped-collection>` ``sales`` collection
+to find agent Mary Kay's weekly sales totals:
 
-```javascript
-db.sales.find( 
-   { agent: "Mary Kay" },
-   { _id: 0, agent: 1, weeklyTotal: 1  }
-).tailable( { awaitData: true } ).maxAwaitTimeMS( 1000 )
-```
+.. code-block:: javascript
+   :emphasize-lines: 4
 
-The highlighted line creates a `tailable cursor <tailable-cursors-landing-page>` on the `sales` collection. The :method:`~cursor.maxAwaitTimeMS()` sets a one second maximum wait time for the next cursor update.
+   db.sales.find( 
+      { agent: "Mary Kay" },
+      { _id: 0, agent: 1, weeklyTotal: 1  }
+   ).tailable( { awaitData: true } ).maxAwaitTimeMS( 1000 )
+
+The highlighted line creates a :ref:`tailable cursor
+<tailable-cursors-landing-page>` on the ``sales`` collection. The
+:method:`~cursor.maxAwaitTimeMS()` sets a one second maximum wait time
+for the next cursor update.

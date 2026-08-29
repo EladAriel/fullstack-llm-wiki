@@ -1,57 +1,146 @@
 ---
 type: "Framework Learn Page"
-framework: "mongodb"
+framework: "MongoDB"
 source_repo: "https://github.com/mongodb/docs.git"
 source_branch: "main"
 source_path: "content/manual/manual/source/reference/method/db.createView.txt"
-source_commit: "ab9db26ed3d11618cdb61516d8180337d8e3f679"
-source_commit_short: "ab9db26e"
-source_commit_date: "2026-07-24T16:22:46-06:00"
-generated_at: "2026-07-25T11:51:15Z"
+source_commit: "b9f2bc487a2878b65e3c1f80024bebab76954f27"
+source_commit_short: "b9f2bc48"
+source_commit_date: "2026-08-28T17:09:45-05:00"
+generated_at: "2026-08-29T09:39:19.908282Z"
 ---
-
-================================
-
 # db.createView() (mongosh method)
+
+**meta:** :description: Create a view in MongoDB by applying an aggregation pipeline to a source collection, with options for collation settings.
+
+.. default-domain:: mongodb
+
+**contents:** On this page
+   :local:
+   :backlinks: none
+   :depth: 1
+   :class: singlecol
+   
+**method:** db.createView()
+
+   .. include:: /includes/views/disambiguate-standard-materialized.rst
+
+   Creates a :ref:`view <views-landing-page>` as the result of applying
+   the specified :ref:`aggregation pipeline <aggregation-pipeline>` to
+   the source collection or view. Views act as read-only collections,
+   and are computed on demand during read operations. You must create
+   views in the same database as the source collection. MongoDB
+   executes read operations on views as part of the underlying
+   aggregation pipeline.
+
+   .. include:: /includes/extracts/views-restriction-output-to-disk.rst
 
 ## Compatibility
 
-This method is available in deployments hosted in the following environments:
+This method is available in deployments hosted in the following environments: 
 
-.. include:: /includes/fact-environments-atlas-only.rst
+**include:** /includes/fact-environments-atlas-only.rst
 
-.. include:: /includes/fact-environments-atlas-support-all.rst
+**include:** /includes/fact-environments-atlas-support-all.rst
 
-.. include:: /includes/fact-environments-onprem-only.rst
+**include:** /includes/fact-environments-onprem-only.rst
+
 
 ## Syntax
 
-`db.createView` has the following syntax:
+``db.createView`` has the following syntax:
 
-```javascript
-db.createView(<view>, <source>, <pipeline>, <collation>)
-```
+.. code-block:: javascript
+
+   db.createView(<view>, <source>, <pipeline>, <collation>)
 
 The method has the following parameters:
 
-The `db.createView()` method wraps the following :dbcommand:`create` command operation:
+.. list-table::
+   :header-rows: 1
+   :widths: 20 20 80
 
-```javascript
-db.runCommand( { create: <view>, viewOn: <source>, pipeline: <pipeline>, collation: <collation> } )
-```
+   * - Parameter
 
-> **Important:** Operations that list collections, such as
-:method:`db.getCollectionInfos()` and :method:`db.getCollectionNames()`,
-include views in their outputs.
-.. include:: /includes/extracts/views-public-definition.rst
+     - Type
+
+     - Description
+
+   * - ``view``
+
+     - string
+
+     - The name of the view to create.
+       
+       
+
+   * - ``source``
+
+     - string
+
+     - The name of the source collection or view from which to create
+       the view. The name does not include the database name and implies
+       the same database as the view to create; it is not the full
+       namespace of the collection or view. You must create views in the
+       same database as the source collection.
+       
+       
+
+   * - ``pipeline``
+
+     - array
+
+     - An array that consists of the :ref:`aggregation pipeline stage(s)
+       <aggregation-pipeline>`.  :method:`db.createView` creates the view by
+       applying the specified ``pipeline`` to the ``source`` collection or view.
+       
+       .. include:: /includes/extracts/views-restriction-output-to-disk.rst
+               
+       .. include:: /includes/extracts/views-public-definition.rst
+
+   * - ``collation``
+
+     - document
+
+     - Optional. Specifies the default :ref:`collation <collation>` for the view.
+       
+       .. include:: /includes/extracts/collation-description.rst
+       
+       If the underlying ``source`` is a collection, the view does not
+       inherit the collection's collation settings. 
+       
+       If no collation is specified, the view's default collation is the
+       "simple" binary comparison collator.
+       
+       If the underlying ``source`` is another view, the view must specify
+       the same collation settings.
+       
+       .. include:: /includes/extracts/collation-option-specification.rst
+
+
+The ``db.createView()`` method wraps the following
+:dbcommand:`create` command operation:
+
+.. code-block:: javascript
+
+   db.runCommand( { create: <view>, viewOn: <source>, pipeline: <pipeline>, collation: <collation> } )
+   
+**important:** View Names are Included in Collection List Output
+   
+   Operations that list collections, such as
+   :method:`db.getCollectionInfos()` and :method:`db.getCollectionNames()`,
+   include views in their outputs.
+
+   .. include:: /includes/extracts/views-public-definition.rst
 
 ## Examples
 
 To see examples of creating a view, see the following pages:
 
-- `manual-views-create`
-- `manual-views-lookup`
-- `manual-views-collation`
+- :ref:`manual-views-create`
+- :ref:`manual-views-lookup`
+- :ref:`manual-views-collation`
+
 ## Behavior
 
-To see behavioral details of views, see `manual-views-behavior`.
+To see behavioral details of views, see :ref:`manual-views-behavior`.

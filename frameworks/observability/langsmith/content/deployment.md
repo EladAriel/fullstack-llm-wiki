@@ -4,10 +4,10 @@ framework: "LangSmith"
 source_repo: "https://github.com/langchain-ai/docs.git"
 source_branch: "main"
 source_path: "src/langsmith/deployment.mdx"
-source_commit: "2aae1dfc98ee953a9a5185fb6fcdd9efb3f4d878"
-source_commit_short: "2aae1df"
-source_commit_date: "2026-07-25T00:27:23+00:00"
-generated_at: "2026-07-25T19:08:33.379470Z"
+source_commit: "a174f9cf7c91ee5eb14ee2382eb48bfe6e4956e9"
+source_commit_short: "a174f9c"
+source_commit_date: "2026-08-28T17:04:12-07:00"
+generated_at: "2026-08-29T09:39:50.594401Z"
 ---
 # Deployment
 
@@ -20,7 +20,7 @@ mode: "wide"
 
 import DeployFrameworksPlatformsCard from '/snippets/langsmith/deploy-frameworks-platforms-card.mdx';
 
-**LangSmith Deployment** is a workflow orchestration runtime purpose-built for agent workloads. It provides the managed infrastructure agents need to run reliably in production at scale, supporting the full lifecycle from local development to deployment.
+**LangSmith Deployment** is a workflow orchestration runtime purpose-built for agent workloads. It provides the managed infrastructure agents need to run reliably in production at scale, supporting the full lifecycle from local development to deployment. Deploy to Cloud, BYOC, or your own infrastructure.
 
 <Note>
 This page covers how your **agents** run in production with **LangSmith Deployment**.
@@ -61,13 +61,21 @@ Deploy Google Agent Development Kit (ADK) agent as a LangGraph with the `deploym
 Deploy Claude Agent SDK, Strands, CrewAI, AutoGen, and other agent frameworks with the Functional API or `deployments-wrap-sdk`.
 </Card>
 
-</CardGroup>
+<Card
+  title="Looking to deploy Deep Agents?"
+  cta="View Managed Deep Agents"
+  href="/langsmith/managed-deep-agents-overview"
+  type="tip"
+  className="card-tip"
+>
+Use Managed Deep Agents: the managed runtime for deploying code-first Deep Agents.
+</Card>
 
-A managed runtime for deploying code-first Deep Agents is available in private beta; see [Managed Deep Agents](/langsmith/managed-deep-agents-overview).
+</CardGroup>
 
 ## LangSmith Deployment environments
 
-Pick a environment based on where you want the [control plane](/langsmith/control-plane) and [data plane](/langsmith/data-plane) (Agent Servers and their databases) to run. All infrastructure types use the same [Agent Server](/langsmith/agent-server) runtime.
+Pick an environment based on where you want the [control plane](/langsmith/control-plane) and [data plane](/langsmith/data-plane) (Agent Servers and their databases) to run. All infrastructure types use the same [Agent Server](/langsmith/agent-server) runtime.
 
 <CardGroup cols={2}>
 
@@ -125,11 +133,11 @@ Once deployed, agents work with [Agent Server](/langsmith/assistants)'s executio
 <CardGroup cols={2}>
 
 <Card
-  title="Find and fix failures with Engine"
-  icon="/images/brand/engine-icon-dark.png"
-  href="/langsmith/engine-overview"
+  title="Update prompts and contexts without redeploying"
+  icon="edit"
+  href="/langsmith/prompt-context-hub"
 >
-Once agents are in production, use LangSmith Engine to detect recurring failures in their traces, diagnose root causes, and resolve them.
+Manage the prompts and versioned contexts your deployed agents pull at runtime, so you can change behavior without a full deploy.
 </Card>
 
 <Card
@@ -138,6 +146,18 @@ Once agents are in production, use LangSmith Engine to detect recurring failures
   href="/langsmith/use-remote-graph"
 >
 Call your deployed graph from client code as if it were a local compiled graph.
+</Card>
+
+</CardGroup>
+
+<CardGroup cols={1}>
+
+<Card
+  title="Find and fix failures with Engine"
+  icon="/images/brand/engine-icon-dark.png"
+  href="/langsmith/engine-overview"
+>
+Once agents are in production, use LangSmith Engine to detect recurring failures in their traces, diagnose root causes, and resolve them.
 </Card>
 
 </CardGroup>

@@ -4,30 +4,33 @@ framework: "pytest"
 source_repo: "https://github.com/pytest-dev/pytest"
 source_branch: "main"
 source_path: "doc/en/announce/release-2.1.1.rst"
-source_commit: "344c23787cdb3431dcc441b8b63ee9950f04b921"
-source_commit_short: "344c2378"
-source_commit_date: "2026-07-24T17:37:16+02:00"
-generated_at: "2026-07-25T11:50:13Z"
+source_commit: "fdba12e1708313f56e9cf713d260c029764ca2b7"
+source_commit_short: "fdba12e"
+source_commit_date: "2026-08-27T21:55:50+02:00"
+generated_at: "2026-08-29T09:40:11.185568Z"
 ---
-
 # py.test 2.1.1: assertion fixes and improved junitxml output
 
-pytest-2.1.1 is a backward compatible maintenance release of the popular py.test testing tool.  See extensive docs with examples here:
+pytest-2.1.1 is a backward compatible maintenance release of the
+popular py.test testing tool.  See extensive docs with examples here:
 
-http://pytest.org/
+     http://pytest.org/
 
-Most bug fixes address remaining issues with the perfected assertions introduced with 2.1.0 - many thanks to the bug reporters and to Benjamin Peterson for helping to fix them.  Also, junitxml output now produces system-out/err tags which lead to better displays of tracebacks with Jenkins.
+Most bug fixes address remaining issues with the perfected assertions
+introduced with 2.1.0 - many thanks to the bug reporters and to Benjamin
+Peterson for helping to fix them.  Also, junitxml output now produces
+system-out/err tags which lead to better displays of tracebacks with Jenkins.
 
-Also a quick note to package maintainers and others interested: there now is a "pytest" man page which can be generated with "make man" in doc/.
+Also a quick note to package maintainers and others interested: there now
+is a "pytest" man page which can be generated with "make man" in doc/.
 
-If you want to install or upgrade pytest, just type one of:
+If you want to install or upgrade pytest, just type one of::
 
-```
-pip install -U pytest # or
-easy_install -U pytest
-```
+    pip install -U pytest # or
+    easy_install -U pytest
 
-best, holger krekel / https://merlinux.eu/
+best,
+holger krekel / https://merlinux.eu/
 
 ## Changes between 2.1.0 and 2.1.1
 

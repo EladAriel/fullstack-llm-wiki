@@ -1,113 +1,167 @@
 ---
 type: "Framework Learn Page"
-framework: "mongodb"
+framework: "MongoDB"
 source_repo: "https://github.com/mongodb/docs.git"
 source_branch: "main"
 source_path: "content/manual/manual/source/reference/command/convertToCapped.txt"
-source_commit: "ab9db26ed3d11618cdb61516d8180337d8e3f679"
-source_commit_short: "ab9db26e"
-source_commit_date: "2026-07-24T16:22:46-06:00"
-generated_at: "2026-07-25T11:51:15Z"
+source_commit: "b9f2bc487a2878b65e3c1f80024bebab76954f27"
+source_commit_short: "b9f2bc48"
+source_commit_date: "2026-08-28T17:09:45-05:00"
+generated_at: "2026-08-29T09:39:20.088562Z"
 ---
-
-==================================
-
 # convertToCapped (database command)
+
+**meta:** :description: Convert a non-capped collection to a capped collection using the `convertToCapped` command, specifying the maximum size in bytes for the capped collection.
+
+.. default-domain:: mongodb
+
+**contents:** On this page
+   :local:
+   :backlinks: none
+   :depth: 1
+   :class: singlecol
 
 ## Definition
 
+**dbcommand:** convertToCapped
+
+   .. warning:: Do Not Run This Command On Sharded Collections
+
+
+      MongoDB does **not** support the :dbcommand:`convertToCapped`
+      command on sharded collections.
+
+   The :dbcommand:`convertToCapped` command converts an existing,
+   non-capped collection to a :term:`capped collection` within the same
+   database.
+
 ## Compatibility
 
-This command is available in deployments hosted in the following environments:
+This command is available in deployments hosted in the following environments: 
 
-.. include:: /includes/fact-environments-atlas-only.rst
+**include:** /includes/fact-environments-atlas-only.rst
 
-.. include:: /includes/fact-environments-onprem-only.rst
-
+**include:** /includes/fact-environments-onprem-only.rst
+   
 ## Syntax
 
 The command has the following syntax:
 
-```javascript
-db.runCommand(
-   { 
-     convertToCapped: <collection>,
-     size: <capped size>,
-     writeConcern: <document>,
-     comment: <any>  
-   }
-)
-```
+.. code-block:: javascript
+
+   db.runCommand(
+      { 
+        convertToCapped: <collection>,
+        size: <capped size>,
+        writeConcern: <document>,
+        comment: <any>  
+      }
+   )
 
 ### Command Fields
 
 The command takes the following fields:
 
-:dbcommand:`convertToCapped` takes an existing collection (`<collection>`) and transforms it into a capped collection with a maximum size in bytes, specified by the `size` argument (`<capped size>`).
+.. list-table::
+   :header-rows: 1
+   :widths: 20 80
+ 
+   * - Field
+     - Description
+ 
+   * - convertToCapped
+     - The name of the existing collection to convert.
+ 
+   * - size
+     - The maximum size, in bytes, for the capped collection.
+ 
+   * - writeConcern
+ 
+     - Optional. A document expressing the :doc:`write concern
+       </reference/write-concern>` of the :dbcommand:`drop` command.
+       Omit to use the default write concern.
+ 
+   * - ``comment``
+ 
+     - .. include:: /includes/extracts/comment-content.rst
 
-During the conversion process, the :dbcommand:`convertToCapped` command exhibits the following behavior:
+:dbcommand:`convertToCapped` takes an existing collection
+(``<collection>``) and transforms it into a capped collection with
+a maximum size in bytes, specified by the ``size`` argument
+(``<capped size>``).
+
+During the conversion process, the :dbcommand:`convertToCapped`
+command exhibits the following behavior:
 
 - MongoDB traverses the documents in the original collection in
-`natural order` and loads the documents into a new capped collection.
+  :term:`natural order` and loads the documents into a new
+  capped collection.
 
-- If the `capped size` specified for the capped collection is
-smaller than the size of the original uncapped collection, then MongoDB will overwrite documents in the capped collection based on insertion order, or first in, first out order.
+- If the ``capped size`` specified for the capped collection is
+  smaller than the size of the original uncapped collection, then
+  MongoDB will overwrite documents in the capped collection based
+  on insertion order, or *first in, first out* order.
 
 - Internally, to convert the collection, MongoDB uses the following
-procedure
+  procedure
 
-- :dbcommand:`cloneCollectionAsCapped` command creates the capped
-collection and imports the data.
+  - :dbcommand:`cloneCollectionAsCapped` command creates the capped
+    collection and imports the data.
 
-- MongoDB drops the original collection.
-- :dbcommand:`renameCollection` renames the new capped collection
-to the name of the original collection.
+  - MongoDB drops the original collection.
+
+  - :dbcommand:`renameCollection` renames the new capped collection
+    to the name of the original collection.
 
 - .. include:: /includes/fact-database-lock.rst
-> **Warning:** .. include:: /includes/fact-convertToCapped-indexes.rst
+
+**warning:** .. include:: /includes/fact-convertToCapped-indexes.rst
 
 ## Example
 
 ### Convert a Collection
 
-The following example uses :method:`db.collection.insertOne()` to create an `events` collection, and :method:`db.collection.stats()` to obtain information about the collection:
+The following example uses :method:`db.collection.insertOne()` to create
+an ``events`` collection, and :method:`db.collection.stats()` to obtain
+information about the collection:
 
-```javascript
-db.events.insertOne( { click: 'button-1', time: new Date() } )
-db.events.stats()
-```
+.. code-block:: javascript
+
+   db.events.insertOne( { click: 'button-1', time: new Date() } )
+   db.events.stats()
 
 MongoDB will return the following:
 
-```javascript
-{
+.. code-block:: javascript
+
+   {
+           "ns" : "test.events",
+           ...
+           "capped" : false,
+           ...
+   }
+
+To convert the ``events`` collection into a capped collection and view the
+updated collection information, run the following commands:
+
+.. code-block:: javascript
+
+   db.runCommand( { convertToCapped: 'events', size: 8192 } )
+   db.events.stats()
+
+MongoDB will return the following:
+
+.. code-block:: javascript
+
+   {
         "ns" : "test.events",
         ...
-        "capped" : false,
+        "capped" : true,
+        "max" : Long("9223372036854775807"),
+        "maxSize" : 8192,
         ...
-}
-```
+   }
 
-To convert the `events` collection into a capped collection and view the updated collection information, run the following commands:
+**include:** /includes/fact-convertToCapped-indexes.rst
 
-```javascript
-db.runCommand( { convertToCapped: 'events', size: 8192 } )
-db.events.stats()
-```
-
-MongoDB will return the following:
-
-```javascript
-{
-     "ns" : "test.events",
-     ...
-     "capped" : true,
-     "max" : Long("9223372036854775807"),
-     "maxSize" : 8192,
-     ...
-}
-```
-
-.. include:: /includes/fact-convertToCapped-indexes.rst
-
-> **Seealso:** :dbcommand:`create`
+**seealso:** :dbcommand:`create`

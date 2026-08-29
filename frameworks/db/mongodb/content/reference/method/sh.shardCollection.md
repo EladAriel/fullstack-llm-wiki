@@ -1,125 +1,325 @@
 ---
 type: "Framework Learn Page"
-framework: "mongodb"
+framework: "MongoDB"
 source_repo: "https://github.com/mongodb/docs.git"
 source_branch: "main"
 source_path: "content/manual/manual/source/reference/method/sh.shardCollection.txt"
-source_commit: "ab9db26ed3d11618cdb61516d8180337d8e3f679"
-source_commit_short: "ab9db26e"
-source_commit_date: "2026-07-24T16:22:46-06:00"
-generated_at: "2026-07-25T11:51:15Z"
+source_commit: "b9f2bc487a2878b65e3c1f80024bebab76954f27"
+source_commit_short: "b9f2bc48"
+source_commit_date: "2026-08-28T17:09:45-05:00"
+generated_at: "2026-08-29T09:39:19.942197Z"
 ---
-
-=====================================
-
 # sh.shardCollection() (mongosh method)
+
+**meta:** :description: Shard a collection using a specified shard key to distribute documents across shards, with options for unique constraints and initial chunk distribution.
+
+.. default-domain:: mongodb
+
+**contents:** On this page
+   :local:
+   :backlinks: none
+   :depth: 1
+   :class: singlecol
 
 ## Definition
 
+**method:** sh.shardCollection(namespace, key, unique, options)
+
+   .. |command| replace:: :method:`sh.shardCollection`
+
+   Shards a collection using the ``key`` as a the :term:`shard key`.
+   The shard key determines how MongoDB distributes the collection's
+   documents among the shards.
+
+   .. note::
+
+      .. versionchanged:: 6.0
+
+      Starting in MongoDB 6.0, sharding a collection does **not** require you to
+      first run the :method:`sh.enableSharding` method to configure the database.
+
+
+   .. |dbcommand| replace:: :dbcommand:`shardCollection` command
+   .. include:: /includes/fact-mongosh-shell-method-alt.rst
+
+
+   :method:`sh.shardCollection()` takes the following
+   arguments:
+
+   .. list-table::
+      :header-rows: 1
+      :widths: 20 20 80
+   
+      * - Parameter
+   
+        - Type
+   
+        - Description
+   
+      * - ``namespace``
+   
+        - string
+   
+        - The :term:`namespace` of the collection to shard in the form
+          ``"<database>.<collection>"``.
+
+      * - ``key``
+   
+        - document
+   
+        - The document that specifies the field or fields to use as the
+          :ref:`shard key <sharding-shard-key>`. 
+          
+          ``{ <field1>: <1|"hashed">, ... }``
+
+          Set the field value to either:
+          
+          - ``1`` for :ref:`range-based sharding <sharding-ranged>`
+          
+          - ``"hashed"`` to specify a
+            :ref:`hashed shard key <hashed-shard-keys>`.
+          
+          :ref:`shard key <sharding-shard-key>` must be
+          supported by an index. Unless the collection is empty, the
+          index must exist prior to the :dbcommand:`shardCollection`
+          command. If the collection is empty, MongoDB creates the
+          index prior to sharding the collection if the index that can
+          support the shard key does not already exist.
+          
+          See also :ref:`sharding-shard-key-indexes`
+          
+          
+   
+      * - ``unique``
+   
+        - boolean
+   
+        - Optional. Specify ``true`` to ensure that the underlying index
+          enforces a unique constraint. Defaults to ``false``. 
+
+          You cannot specify ``true`` when using :ref:`hashed shard keys 
+          <sharding-hashed>`.
+
+          For :ref:`Legacy mongo Shell <mongo>`, you must explicitly
+          specify the value for ``unique`` if you specify the
+          ``options`` document. :binary:`~bin.mongosh` doesn't require
+          ``unique`` when you specify the ``options`` document.
+   
+      * - ``options``
+   
+        - document
+   
+        - Optional. A document containing optional fields, including
+          ``collation``.
+
+   The ``options`` argument supports the following options:
+
+   .. list-table::
+      :header-rows: 1
+      :widths: 20 20 80
+   
+      * - Parameter
+   
+        - Type
+   
+        - Description
+   
+      * - ``collation``
+   
+        - document
+   
+        - Optional. If the collection specified to ``shardCollection``
+          has a default :ref:`collation <collation>`, you *must* include 
+          a collation document with``{ locale : "simple" }``, or the 
+          ``shardCollection`` command fails. At least one of the indexes
+          whose fields support the shard key pattern must have the simple
+          collation.
+
+      * - :ref:`presplitHashedZones 
+          <method-shard-collection-presplitHashedZones>`
+
+        - boolean
+
+        - .. _method-shard-collection-presplitHashedZones:
+        
+          Optional. Specify ``true`` to perform initial chunk creation
+          and distribution for an empty or non-existing collection based
+          on the defined zones and zone ranges for the collection. For
+          :ref:`hashed sharding <sharding-hashed>` only.
+
+          ``shardCollection()`` with ``presplitHashedZones: true`` returns
+          an error if any of the following are true:
+
+          - The shard key does not contain a hashed field 
+            (i.e. is not a :ref:`single field hashed index 
+            <index-hashed-index>` or :ref:`compound hashed index
+            <index-type-compound-hashed>`).
+
+          - The collection has no defined zones or zone ranges.
+
+          - The defined zone ranges do not meet the 
+            :ref:`requirements 
+            <updateZoneKeyRange-method-init-chunk-distribution>`.
+
+      * - :ref:`timeseries <method-shard-collection-timeseries>`
+
+        - document
+
+        - .. _method-shard-collection-timeseries:
+
+          .. include:: /includes/time-series/fact-timeseries-param-desc.rst
+          
+          For detailed syntax, see
+          :ref:`method-sharded-time-series-collection-options`.
+
+.. _method-sharded-time-series-collection-options:
+
 ### Time Series Options
 
-.. versionadded:: 5.1
+**versionadded:** 5.1
 
-To create a new `time series collection <manual-timeseries-collection>` that is sharded, specify the `timeseries <cmd-shard-collection-timeseries>` option to :method:`sh.shardCollection()`.
+To create a new :ref:`time series collection
+<manual-timeseries-collection>` that is sharded, specify the
+:ref:`timeseries <cmd-shard-collection-timeseries>` option to
+:method:`sh.shardCollection()`.
 
-The `timeseries <cmd-shard-collection-timeseries>` option takes the following fields:
+The :ref:`timeseries <cmd-shard-collection-timeseries>` option takes
+the following fields:
+
+.. list-table::
+   :header-rows: 1
+   :widths: 20 20 80
+
+   * - Field
+     - Type
+     - Description
+
+   * - ``timeField``
+     - string
+     - .. include:: /includes/time-series/fact-time-field-description.rst
+
+   * - ``metaField``
+     - string
+     - .. include:: /includes/time-series/fact-meta-field-description.rst
+
+   * - ``granularity``
+     - string
+     - .. include:: /includes/time-series/fact-granularity-description.rst
 
 ## Compatibility
 
-This method is available in deployments hosted in the following environments:
+This method is available in deployments hosted in the following environments: 
 
-.. include:: /includes/fact-environments-atlas-only.rst
+**include:** /includes/fact-environments-atlas-only.rst
 
-.. include:: /includes/fact-environments-atlas-support-no-free.rst
+**include:** /includes/fact-environments-atlas-support-no-free.rst
 
-.. include:: /includes/fact-environments-onprem-only.rst
+**include:** /includes/fact-environments-onprem-only.rst         
 
 ## Considerations
 
 ### Shard Keys
 
-While you can `change your shard key <change-a-shard-key>` later, it is important to carefully consider your shard key choice to avoid scalability and perfomance issues.
+While you can :ref:`change your shard key <change-a-shard-key>`
+later, it is important to carefully consider your shard key choice to
+avoid scalability and perfomance issues.
 
-Shard Keys on Time Series Collections `````````````````````````````````````
+### Shard Keys on Time Series Collections
 
-.. include:: /includes/time-series/fact-shard-key-limitations.rst
+**include:** /includes/time-series/fact-shard-key-limitations.rst
 
-> **Seealso:** - `sharding-shard-key`
-- `sharding-shard-key-selection`
+**seealso:** - :ref:`sharding-shard-key`
+  - :ref:`sharding-shard-key-selection`
 
 ### Hashed Shard Keys
 
-`Hashed shard keys <sharding-hashed-sharding>` use a `hashed index <index-type-hashed>` or  a `compound hashed index <index-type-compound-hashed>` as the shard key.
+:ref:`Hashed shard keys <sharding-hashed-sharding>` use a
+:ref:`hashed index <index-type-hashed>` or  a
+:ref:`compound hashed index <index-type-compound-hashed>`
+as the shard key.
 
-Use the form `field: "hashed"` to specify a hashed shard key field.
+Use the form ``field: "hashed"`` to specify a hashed shard key field.
 
-.. include:: /includes/note-hashed-shard-key-during-chunk-migration.rst
+**include:** /includes/note-hashed-shard-key-during-chunk-migration.rst
 
-> **Seealso:** `/core/hashed-sharding`
+**seealso:** :doc:`/core/hashed-sharding`
+
+.. _sh.shardCollection-zones:
 
 ### Zone Sharding and Initial Chunk Distribution
 
-.. include:: /includes/extracts/zoned-sharding-shard-operation-chunk-distribution-with-links.rst
+**include:** /includes/extracts/zoned-sharding-shard-operation-chunk-distribution-with-links.rst
 
-To shard a collection using a `compound hashed index <index-type-compound-hashed>`, see `sh.shardCollection-zones-compound-hashed`.
+To shard a collection using a :ref:`compound hashed index
+<index-type-compound-hashed>`, see
+:ref:`sh.shardCollection-zones-compound-hashed`.
 
-Initial Chunk Distribution with Compound Hashed Indexes ```````````````````````````````````````````````````````
+.. _sh.shardCollection-zones-compound-hashed:
 
-.. include:: /includes/extracts/zoned-sharding-shard-operation-chunk-distribution-hashed-short.rst
+### Initial Chunk Distribution with Compound Hashed Indexes
 
-See `pre-define-zone-range-hashed-example` for an example.
+**include:** /includes/extracts/zoned-sharding-shard-operation-chunk-distribution-hashed-short.rst
 
-> **Seealso:** `initial-ranges`
+See :ref:`pre-define-zone-range-hashed-example` for an example.
 
+**seealso:** :ref:`initial-ranges`
+ 
 ### Uniqueness
 
-If specifying `unique: true`:
+If specifying ``unique: true``:
 
-.. include:: /includes/extracts/shard-collection-unique-restriction-method.rst
+**include:** /includes/extracts/shard-collection-unique-restriction-method.rst
 
-See also `Sharded Collection and Unique Indexes <sharding-shard-key-unique>`
+See also :ref:`Sharded Collection and Unique Indexes
+<sharding-shard-key-unique>`
 
-.. include:: /includes/fact-shardCollection-collation.rst
-
+**include:** /includes/fact-shardCollection-collation.rst
+  
 ### Write Concern
 
-.. include:: /includes/extracts/mongos-operations-wc-shard-collection.rst
+**include:** /includes/extracts/mongos-operations-wc-shard-collection.rst
 
 ### Reshard to Balance
 
-.. include:: /includes/fact-reshard-init-shard-mongosh
+**include:** /includes/fact-reshard-init-shard-mongosh
 
 ## Examples
 
 ### Simple Usage
 
-Given a collection named `people` in a database named `records`, the following command shards the collection by the `zipcode` field:
+Given a collection named ``people`` in a database named ``records``,
+the following command shards the collection by the
+``zipcode`` field:
 
-```javascript
-sh.shardCollection("records.people", { zipcode: 1 } )
-```
+.. code-block:: javascript
+
+   sh.shardCollection("records.people", { zipcode: 1 } )
 
 ### Usage with Options
 
-The `phonebook` database has a collection `contacts` with no default `collation <createCollection-collation-example>`. The following example uses :method:`sh.shardCollection()` to shard the `phonebook.contacts` with:
+The ``phonebook`` database has a collection ``contacts`` with no
+default :ref:`collation <createCollection-collation-example>`. The 
+following example uses
+:method:`sh.shardCollection()` to shard the ``phonebook.contacts`` with:
 
-- a `hashed shard key <sharding-hashed-sharding>` on the
-`last_name` field,
+- a :ref:`hashed shard key <sharding-hashed-sharding>` on the
+  ``last_name`` field,
+- ``5`` initial chunks, and
+- a collation of ``simple``. 
 
-- `5` initial chunks, and
-- a collation of `simple`.
-```javascript
-sh.shardCollection(
-  "phonebook.contacts",
-  { last_name: "hashed" },
-  false,
-  {
-    collation: { locale: "simple" }
-  }
-)
-```
+.. code-block:: javascript
 
-> **Seealso:** - :dbcommand:`refineCollectionShardKey`
-- :method:`sh.balancerCollectionStatus()`
-- :dbcommand:`shardCollection`
-- `/sharding`
+   sh.shardCollection(
+     "phonebook.contacts",
+     { last_name: "hashed" },
+     false,
+     {
+       collation: { locale: "simple" }
+     }
+   )
+
+
+**seealso:** - :dbcommand:`refineCollectionShardKey`
+   - :method:`sh.balancerCollectionStatus()`
+   - :dbcommand:`shardCollection`
+   - :doc:`/sharding`

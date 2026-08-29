@@ -4,10 +4,10 @@ framework: "LangSmith"
 source_repo: "https://github.com/langchain-ai/docs.git"
 source_branch: "main"
 source_path: "src/langsmith/llm-gateway-spend-policies.mdx"
-source_commit: "2aae1dfc98ee953a9a5185fb6fcdd9efb3f4d878"
-source_commit_short: "2aae1df"
-source_commit_date: "2026-07-25T00:27:23+00:00"
-generated_at: "2026-07-25T19:08:33.365412Z"
+source_commit: "a174f9cf7c91ee5eb14ee2382eb48bfe6e4956e9"
+source_commit_short: "a174f9c"
+source_commit_date: "2026-08-28T17:04:12-07:00"
+generated_at: "2026-08-29T09:39:50.589099Z"
 ---
 # Llm Gateway Spend Policies
 
@@ -17,7 +17,7 @@ description: Set cost limits on LLM usage across your organization and prevent r
 ---
 
 <Note>
-**Private beta:** The LLM Gateway is in private [beta](/langsmith/release-stages). [Sign up for the waitlist](https://www.langchain.com/langsmith-llm-gateway-waitlist) to get access.
+**Beta:** The LLM Gateway is in [beta](/langsmith/release-stages).
 </Note>
 
 A spend policy defines a cost cap for a specific scope (organization, workspace, API key, or user) over a time window (monthly, weekly, daily, or hourly). The [LLM Gateway](/langsmith/llm-gateway) tracks spend in real time and blocks any request that would push spend past the cap, returning a `402` response:
@@ -67,14 +67,17 @@ You can apply multiple time windows to the same scope. For example, a workspace 
 Creating and managing policies requires `organization:manage` permission. For the full permissions breakdown, refer to [Traces, Engine, and access control](/langsmith/llm-gateway-access).
 </Warning>
 
-1. Go to **Settings → Gateway → LLM Gateway**.
-1. Click **Create policy**.
+1. Go to **Settings → Gateway → LLM Gateway** and select **Cost Controls**.
+1. Click **Create spend limit**.
 1. Select the scope (organization, workspace, API key, or user).
+1. (Optional) To apply the same default limit independently to every custom header value, apply the limit to every subject of the selected type by default, select **Separate limits by custom header**, and enter the header name.
 1. Set the time window (monthly, weekly, daily, or hourly).
 1. Set the spend cap in USD.
-1. Save.
+1. Click **Create spend limit**.
 
 Policies take effect immediately. The gateway evaluates them on every incoming request with sub-second enforcement latency.
+
+A spend policy can also use a custom request header to give each of your own end customers an independent cap under one API key. For more information, see [Per-customer policies](/langsmith/llm-gateway-header-policies).
 
 ## View spend
 
@@ -90,5 +93,5 @@ This is useful for diagnosing whether a blocked request represents a genuine cos
 
 ## Next steps
 
-- [PII and secrets redaction](/langsmith/llm-gateway-redaction): add data protection policies alongside cost controls.
-
+- [Per-customer policies](/langsmith/llm-gateway-header-policies): split a cap by a custom request header so each end customer gets its own limit.
+- [Data protection](/langsmith/llm-gateway-data-protection): add data protection policies alongside cost controls.

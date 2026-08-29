@@ -1,43 +1,139 @@
 ---
 type: "Framework Learn Page"
-framework: "mongodb"
+framework: "MongoDB"
 source_repo: "https://github.com/mongodb/docs.git"
 source_branch: "main"
 source_path: "content/manual/manual/source/reference/change-events/reshardCollection.txt"
-source_commit: "ab9db26ed3d11618cdb61516d8180337d8e3f679"
-source_commit_short: "ab9db26e"
-source_commit_date: "2026-07-24T16:22:46-06:00"
-generated_at: "2026-07-25T11:51:15Z"
+source_commit: "b9f2bc487a2878b65e3c1f80024bebab76954f27"
+source_commit_short: "b9f2bc48"
+source_commit_date: "2026-08-28T17:09:45-05:00"
+generated_at: "2026-08-29T09:39:19.876550Z"
 ---
-
-=======================
+.. _change-event-reshardCollection:
 
 # reshardCollection Event
 
+**meta:** :description: Understand the reshardCollection event, which occurs when a collection's shard key and data distribution change, with detailed field descriptions and an example.
+
+.. default-domain:: mongodb
+
+**contents:** On this page
+   :local:
+   :backlinks: none
+   :depth: 2
+   :class: singlecol
+
+.. |idref| replace:: ce-reshardCollection
+
 ## Summary
+
+**data:** reshardCollection
+
+   .. versionadded:: 6.1 *(Also available in 6.0.14)*
+
+   A ``reshardCollection`` event occurs when:
+   
+   - The shard key for a collection and the distribution of your data is changed, and 
+   - The change stream has :ref:`showExpandedEvents <change-streams-expanded-events>` 
+     set to ``true``.
 
 ## Description
 
+.. list-table::
+   :header-rows: 1
+   :widths: 20 20 60
+
+   * - Field
+     - Type
+     - Description
+
+   * - ``_id``
+     - Document
+     - .. include:: /includes/change-stream/id
+
+   * - ``clusterTime``
+     - Timestamp
+     - .. include:: /includes/change-stream/clusterTime
+
+   * - ``collectionUUID``
+     - UUID
+     - .. include:: /includes/change-stream/collectionUUID
+
+   * - ``ns``
+     - Document
+     - .. include:: /includes/change-stream/ns
+
+   * - ``ns.coll``
+     - String
+     - .. include:: /includes/change-stream/ns.coll
+
+   * - ``ns.db``
+     - String
+     - .. include:: /includes/change-stream/ns.db
+
+   * - ``operationDescription``
+     - Document
+     - .. include:: /includes/change-stream/operationDescription
+
+   * - | ``operationDescription.``
+       | ``reshardUUID``
+     - UUID
+     - .. include:: /includes/change-stream/od-reshardUUID
+
+   * - ``operationDescription.``
+       | ``shardKey``
+     - Document
+     - .. include:: /includes/change-stream/od-shardKey
+
+   * - ``operationDescription.``
+       | ``oldShardKey``
+     - Document
+     - .. include:: /includes/change-stream/od-oldShardKey
+
+   * - ``operationDescription.``
+       | ``unique``
+     - Boolean
+     - .. include:: /includes/change-stream/od-unique
+
+   * - ``operationDescription.``
+       | ``numInitialChunks``
+     - NumberLong
+     - Number of chunks created on each shard during a 
+       ``reshardCollection`` operation.
+       
+       .. include:: /includes/fact-resharding-if-key-is-hashed.rst
+
+   * - | ``operationDescription.``
+       | ``collation``
+     - Document
+     - .. include:: /includes/change-stream/od-collation
+
+   * - | ``operationDescription.``
+       | ``zones``
+     - Array 
+     - .. include:: /includes/change-stream/od-zones
+
 ## Example
-
-The following example shows a `reshardCollection` event:
-
-```json
-{
-   "_id": { <ResumeToken> },
-   "operationType": "reshardCollection",
-   "collectionUUID": 0,
-   "ns": {"db": "reshard_collection_event", "coll": "coll"},
-   "operationDescription": {
-     "reshardUUID": 0,
-     "shardKey": {"newKey": 1},
-     "oldShardKey": {"_id": 1},
-     "unique": false,
-     "numInitialChunks": Long(1),
-     "collation": {"locale": "simple"},
-     "zones": [
-         {"zone": "zone1", "min": {"newKey": {"$minKey": 1}}, "max": {"newKey": {"$maxKey": 1}}}
-     ]
+   
+The following example shows a ``reshardCollection`` event:
+   
+.. code-block:: json
+   :copyable: false
+   
+   {
+      "_id": { <ResumeToken> },
+      "operationType": "reshardCollection",
+      "collectionUUID": 0,
+      "ns": {"db": "reshard_collection_event", "coll": "coll"},
+      "operationDescription": {
+        "reshardUUID": 0,
+        "shardKey": {"newKey": 1},
+        "oldShardKey": {"_id": 1},
+        "unique": false,
+        "numInitialChunks": Long(1),
+        "collation": {"locale": "simple"},
+        "zones": [
+            {"zone": "zone1", "min": {"newKey": {"$minKey": 1}}, "max": {"newKey": {"$maxKey": 1}}}
+        ]
+      }
    }
-}
-```

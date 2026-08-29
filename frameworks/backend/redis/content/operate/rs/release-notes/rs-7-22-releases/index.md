@@ -1,33 +1,23 @@
 ---
 type: "Framework Learn Directory Index"
-framework: "redis"
-directory: "content/operate/rs/release-notes/rs-7-22-releases"
-source_repo: "https://github.com/redis/docs.git"
-source_branch: "main"
-source_commit: "9d30f68c3dad1a6b3b7d30fe604b911348ce8152"
-source_commit_short: "9d30f68c"
-source_commit_date: "2026-07-24T10:52:10-07:00"
-generated_at: "2026-07-25T11:51:22Z"
+framework: "Redis"
+generated_at: "2026-08-29T09:38:56.374284Z"
 ---
-# Rs 7 22 Releases
+# Rs-7-22-Releases
 
-This directory contains redis learning pages related to rs 7 22 releases.
+This directory contains Redis learning pages related to rs-7-22-releases.
 
 ## Breadcrumbs
 
-[Wiki Home](../../../../../index.md) -> [Content](../../../../index.md) -> [Operate](../../../index.md) -> [Rs](../../index.md) -> [Release Notes](../index.md) -> [Rs 7 22 Releases](index.md)
+[Wiki Home](../index.md) -> [Content](index.md)
 
 ## Navigation
 
-- Parent: [Parent Index](../index.md)
-
-## Child Directories
-
-- None
+- Wiki Home: [Root Index](../index.md)
 
 ## Pages in This Directory
 
-- [Index](_index.md)
+- [_Index](_index.md)
 - [Rs 7 22 0 216](rs-7-22-0-216.md)
 - [Rs 7 22 0 241](rs-7-22-0-241.md)
 - [Rs 7 22 0 250](rs-7-22-0-250.md)
@@ -36,16 +26,9 @@ This directory contains redis learning pages related to rs 7 22 releases.
 - [Rs 7 22 2 133](rs-7-22-2-133.md)
 - [Rs 7 22 2 14](rs-7-22-2-14.md)
 - [Rs 7 22 2 170](rs-7-22-2-170.md)
+- [Rs 7 22 2 179](rs-7-22-2-179.md)
 - [Rs 7 22 2 20](rs-7-22-2-20.md)
 - [Rs 7 22 2 41](rs-7-22-2-41.md)
 - [Rs 7 22 2 55](rs-7-22-2-55.md)
 - [Rs 7 22 2 79](rs-7-22-2-79.md)
 - [Rs 7 22 2 93](rs-7-22-2-93.md)
-
-## IDE LLM Guidance
-
-When answering implementation questions related to this directory:
-
-1. Prefer the most specific page listed above.
-2. If the topic is broad, read the child directory index first.
-3. Use source metadata from each page when giving answers.

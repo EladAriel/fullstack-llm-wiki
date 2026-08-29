@@ -4,12 +4,11 @@ framework: "Langfuse"
 source_repo: "https://github.com/langfuse/langfuse-docs"
 source_branch: "main"
 source_path: "content/docs/metrics/features/metrics-api.mdx"
-source_commit: "fcd1eca34a924867563c3c4e801254c4e66c0021"
-source_commit_short: "fcd1eca3"
-source_commit_date: "2026-07-25T00:45:45Z"
-generated_at: "2026-07-25T11:51:12Z"
+source_commit: "ba26344559edee69ba55c5d3aa80e632f56c1626"
+source_commit_short: "ba26344"
+source_commit_date: "2026-08-29T02:57:18+00:00"
+generated_at: "2026-08-29T09:38:37.763618Z"
 ---
-
 ---
 title: Metrics API
 sidebarTitle: Metrics API
@@ -26,6 +25,17 @@ GET /api/public/v2/metrics
 
 The **Metrics API** enables you to retrieve customized analytics from your Langfuse data.
 This endpoint allows you to specify dimensions, metrics, filters, and time granularity to build powerful custom reports and dashboards for your LLM applications.
+
+## What you can do
+
+Use the Metrics API to:
+
+- Aggregate cost, token usage, volume, latency, and score data.
+- Group results by supported dimensions, such as model or trace attributes.
+- Filter data and analyze trends over time.
+- Power custom reports, dashboards, billing, and monitoring workflows.
+
+For supported views, fields, query parameters, response schemas, and interactive examples, see the [v2 Metrics API Reference](https://api.reference.langfuse.com/#tag/metricsv2/GET/api/public/v2/metrics). For practical Python examples, see the [Metrics API v2 cookbook](/guides/cookbook/example_metrics_api_v2).
 
 <Callout type="info">
 
@@ -57,7 +67,7 @@ On self-hosted Langfuse v3, use the [Metrics API v1](/faq/all/deprecated-api-mig
 GET /api/public/v2/metrics
 ```
 
-The v2 Metrics API provides significant performance improvements through an optimized data architecture built on a new events table schema that minimizes database work per query.
+The v2 Metrics API provides significant performance improvements through an optimized data architecture built on the wide observations table, which minimizes database work per query.
 
 ### Key Changes from v1
 
@@ -79,6 +89,23 @@ The v2 Metrics API enforces a default `config.row_limit` of 100 rows per query t
 ### High Cardinality Dimensions
 
 Certain dimensions like `id`, `traceId`, `userId`, and `sessionId` cannot be used for grouping in the v2 Metrics API. Grouping by these high cardinality fields is extremely expensive and rarely useful in practice. These dimensions remain available for filtering.
+
+### Semantic-root filtering and grouping
+
+The v2-only `isRootObservation` boolean dimension identifies application entry points. `true` includes both outer roots with no parent and app roots whose OpenTelemetry instrumentation or infrastructure parent was filtered from export by the SDK. Use it to count, filter, or group application entry points without missing the latter case. See [Logical root observations](/docs/api-and-data-platform/features/observations-api#logical-root-observations) for the distinction between physical and logical roots and trace-counting edge cases.
+
+For example, add this condition to a query's `filters` array to count semantic roots:
+
+```json
+[
+  {
+    "column": "isRootObservation",
+    "operator": "=",
+    "value": true,
+    "type": "boolean"
+  }
+]
+```
 
 ### Ordering by metrics
 
@@ -102,9 +129,3 @@ curl \
   }' \
   https://cloud.langfuse.com/api/public/v2/metrics
 ```
-
-<Callout type="info">
-
-**API Reference:** See the full [v2 Metrics API Reference](https://api.reference.langfuse.com/#tag/metricsv2/GET/api/public/v2/metrics) for all available parameters, response schemas, and interactive examples.
-
-</Callout>

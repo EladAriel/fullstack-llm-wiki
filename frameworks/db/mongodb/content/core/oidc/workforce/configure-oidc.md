@@ -1,35 +1,265 @@
 ---
 type: "Framework Learn Page"
-framework: "mongodb"
+framework: "MongoDB"
 source_repo: "https://github.com/mongodb/docs.git"
 source_branch: "main"
 source_path: "content/manual/manual/source/core/oidc/workforce/configure-oidc.txt"
-source_commit: "ab9db26ed3d11618cdb61516d8180337d8e3f679"
-source_commit_short: "ab9db26e"
-source_commit_date: "2026-07-24T16:22:46-06:00"
-generated_at: "2026-07-25T11:51:15Z"
+source_commit: "b9f2bc487a2878b65e3c1f80024bebab76954f27"
+source_commit_short: "b9f2bc48"
+source_commit_date: "2026-08-28T17:09:45-05:00"
+generated_at: "2026-08-29T09:39:19.826366Z"
 ---
-
-====================================================
+.. _configure-oidc:
 
 # Configure MongoDB with Workforce Identity Federation
 
-Configure MongoDB with Workforce Identity Federation to authenticate users across different platforms using a single set of credentials. This enhances security and simplifies user management.
+**facet:** :name: genre
+   :values: tutorial
 
-> **Important:** .. include:: includes/fact-OIDC-linux-only.rst
+**meta:** :keywords: security
+   :description: Configure MongoDB Enterprise with Workforce Identity Federation to authenticate users across platforms using an external identity provider and OpenID Connect.
+
+**contents:** On this page
+   :local:
+   :backlinks: none
+   :depth: 1
+   :class: singlecol
+
+Configure MongoDB with Workforce Identity Federation to authenticate users 
+across different platforms using a single set of credentials. This 
+enhances security and simplifies user management. 
+
+**important:** .. include:: includes/fact-OIDC-linux-only.rst
 
 ## Before you Begin
 
-- Ensure that you are on MongoDB Enterprise.
-.. include:: /includes/fact-confirm-enterprise-binaries.rst
+- Ensure that you are on MongoDB Enterprise. 
 
-- Configure your external |idp-abbr|. For more details, see
-`workforce-external-provider`.
+  .. include:: /includes/fact-confirm-enterprise-binaries.rst
+
+- Configure your external |idp-abbr|. For more details, see 
+  :ref:`workforce-external-provider`. 
 
 ## Steps
 
+**procedure:** :style: normal
+
+   .. step:: Configure the MongoDB server with OpenID Connect (OIDC)
+
+      .. note::
+
+         When configuring MongoDB for Workforce Identity Federation,
+         omit the ``supportsHumanFlows`` field in
+         :parameter:`oidcIdentityProviders`.
+
+      You can configure the MongoDB server using your configuration file or 
+      command line.
+
+      .. tabs::
+
+         .. tab:: Configuration file
+            :tabid: config file
+
+            To use your configuration file, specify these parameters in
+            the file: 
+
+            .. code-block:: yaml
+
+               setParameter:
+                  authenticationMechanisms: "MONGODB-OIDC,SCRAM-SHA-256"
+                  oidcIdentityProviders: |
+                     [
+                       {
+                         "issuer": "https://okta-test.okta.com",
+                         "audience": "example@kernel.mongodb.com",
+                         "authNamePrefix": "okta-issuer",
+                         "authorizationClaim": "groups",
+                         "clientId": "0zzw3ggfd2ase33"
+                       }
+                     ]
+
+            To specify multiple |idps|, add additional
+            objects to the ``oidcIdentityProviders`` array. When you
+            specify multiple |idps|, you must specify a
+            ``matchPattern`` for each provider. For example:
+
+            .. code-block:: yaml
+
+               setParameter:
+                  authenticationMechanisms: "MONGODB-OIDC,SCRAM-SHA-256"
+                  oidcIdentityProviders: |
+                     [
+                       {
+                         "issuer": "https://okta-test.okta.com",
+                         "audience": "example@kernel.mongodb.com",
+                         "authNamePrefix": "okta-issuer",
+                         "authorizationClaim": "groups",
+                         "matchPattern": "@okta.com$",
+                         "clientId": "0zzw3ggfd2ase33"
+                       },
+                       {
+                         "issuer": "https://azure-test.azure.com",
+                         "audience": "example2@kernel.mongodb.com",
+                         "authNamePrefix": "azure-issuer",
+                         "authorizationClaim": "groups",
+                         "matchPattern": "@azure.com$",
+                         "clientId": "1zzw3ggfd2ase33"
+                       }
+                     ]
+
+         .. tab:: Command line
+            :tabid: command line
+
+            To use the command line, specify the following startup
+            options: 
+
+            .. code-block:: sh
+
+               mongod --auth --setParameter authenticationMechanisms=MONGODB-OIDC,SCRAM-SHA-256 --setParameter \ 
+               'oidcIdentityProviders=[ { 
+                  "issuer": "https://okta-test.okta.com", 
+                  "audience": "example@kernel.mongodb.com",
+                  "authNamePrefix": "okta-issuer",
+                  "authorizationClaim": "groups",
+                  "clientId": "0zzw3ggfd2ase33",
+               } ]'
+
+            To specify multiple |idps|, add additional
+            objects to the ``oidcIdentityProviders`` array. When you
+            specify multiple |idps|, you must specify a
+            ``matchPattern`` for each provider. For example:
+
+            .. code-block:: sh
+
+               mongod --auth --setParameter authenticationMechanisms=MONGODB-OIDC,SCRAM-SHA-256 --setParameter \ 
+               'oidcIdentityProviders=[ {
+                  "issuer": "https://okta-test.okta.com", 
+                  "audience": "example@kernel.mongodb.com", 
+                  "authNamePrefix": "okta-issuer",
+                  "authorizationClaim": "groups",
+                  "matchPattern": "@okta.com$",
+                  "clientId": "0zzw3ggfd2ase33", 
+               }, {
+                  "issuer": "https://azure-test.azure.com", 
+                  "audience": "example2@kernel.mongodb.com", 
+                  "authNamePrefix": "azure-issuer", 
+                  "authorizationClaim": "groups",
+                  "matchPattern": "@azure.com$", 
+                  "clientId": "1zzw3ggfd2ase33",       
+               } ]'
+
+   .. step:: *(Optional)* Enable internal authorization
+
+      To enable internal authorization, set the
+      ``useAuthorizationClaim`` field of the ``oidcIdentityProviders``
+      parameter to ``false``. This setting enables more flexible user
+      management by relying on user documents rather than authorization
+      claims from the |idp|.
+
+      .. important::
+
+         If ``useAuthorizationClaim`` is set to ``false``, **do not**
+         include the ``authorizationClaim`` field.
+
+      .. tabs::
+
+         .. tab:: Configuration file
+            :tabid: update internal auth
+
+            .. code-block:: yaml
+               :emphasize-lines: 9
+
+               setParameter:
+                  authenticationMechanisms: "MONGODB-OIDC,SCRAM-SHA-256"
+                  oidcIdentityProviders: |
+                     [
+                       {
+                         "issuer": "https://okta-test.okta.com",
+                         "audience": "example@kernel.mongodb.com",
+                         "authNamePrefix": "okta-issuer",
+                         "useAuthorizationClaim": false,
+                         "clientId": "0zzw3ggfd2ase33"
+                       }
+                     ]
+
+            To specify multiple |idps|, add additional
+            objects to the ``oidcIdentityProviders`` array. For example:
+
+            .. code-block:: yaml
+               :emphasize-lines: 9,16
+
+               setParameter:
+                  authenticationMechanisms: "MONGODB-OIDC,SCRAM-SHA-256"
+                  oidcIdentityProviders: |
+                     [
+                       {
+                         "issuer": "https://okta-test.okta.com",
+                         "audience": "example@kernel.mongodb.com",
+                         "authNamePrefix": "okta-issuer",
+                         "useAuthorizationClaim": false,
+                         "clientId": "0zzw3ggfd2ase33"
+                       },
+                       {
+                         "issuer": "https://azure-test.azure.com",
+                         "audience": "example2@kernel.mongodb.com",
+                         "authNamePrefix": "azure-issuer",
+                         "useAuthorizationClaim": false,
+                         "clientId": "1zzw3ggfd2ase33"
+                       }
+                     ]
+
+         .. tab:: Command line
+            :tabid: update command line internal auth
+
+            .. code-block::
+               :emphasize-lines: 6
+
+               mongod --auth --setParameter authenticationMechanisms=MONGODB-OIDC,SCRAM-SHA-256 --setParameter \ 
+               'oidcIdentityProviders=[ { 
+                  "issuer": "https://okta-test.okta.com", 
+                  "audience": "example@kernel.mongodb.com", 
+                  "authNamePrefix": "okta-issuer",
+                  "useAuthorizationClaim": false,
+                  "clientId": "0zzw3ggfd2ase33"
+               } ]'
+
+            To specify multiple |idps|, add additional
+            objects to the ``oidcIdentityProviders`` array. For example:
+
+            .. code-block::
+               :emphasize-lines: 6,12
+
+               mongod --auth --setParameter authenticationMechanisms=MONGODB-OIDC,SCRAM-SHA-256 --setParameter \ 
+               'oidcIdentityProviders=[ { 
+                     "issuer": "https://okta-test.okta.com", 
+                     "audience": "example@kernel.mongodb.com", 
+                     "authNamePrefix": "okta-issuer", 
+                     "useAuthorizationClaim": false, 
+                     "clientId": "0zzw3ggfd2ase33"
+                  }, {
+                     "issuer": "https://azure-test.azure.com", 
+                     "audience": "example2@kernel.mongodb.com", 
+                     "authNamePrefix": "azure-issuer", 
+                     "useAuthorizationClaim": false, 
+                     "clientId": "1zzw3ggfd2ase33"
+                  } ]'
+
+      .. include:: /includes/oidc-use-authClaim-false.rst
+
+   .. step:: *(Conditional)* CA Certificates for Internal X509 TLS
+
+      .. include:: includes/oidc-ca-certificates-note.rst
+
+.. _oidcIdentityProviders-for-sharded-clusters:
+
 ## oidcIdentityProviders for Sharded Clusters
 
-In a sharded cluster, configure :parameter:`oidcIdentityProviders` on every |mongos| instance. Clients authenticate through `mongos`, which requires this configuration to verify |idp| tokens. If clients connect directly to config servers or shard :binary:`~bin.mongod` instances, you must also configure `oidcIdentityProviders` on those instances.
+In a sharded cluster, configure :parameter:`oidcIdentityProviders` on
+every |mongos| instance. Clients authenticate through ``mongos``, which
+requires this configuration to verify |idp| tokens. If clients connect
+directly to config servers or shard :binary:`~bin.mongod` instances,
+you must also configure ``oidcIdentityProviders`` on those instances.
 
-Apply the steps in this tutorial to each `mongos` instance in your deployment. To configure database users for Workforce Identity Federation, see `database-user-workforce`.
+Apply the steps in this tutorial to each ``mongos`` instance in your
+deployment. To configure database users for Workforce Identity
+Federation, see :ref:`database-user-workforce`.

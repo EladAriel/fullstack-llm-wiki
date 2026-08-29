@@ -1,100 +1,136 @@
 ---
 type: "Framework Learn Page"
-framework: "mongodb"
+framework: "MongoDB"
 source_repo: "https://github.com/mongodb/docs.git"
 source_branch: "main"
 source_path: "content/manual/manual/source/reference/command/getAuditConfig.txt"
-source_commit: "ab9db26ed3d11618cdb61516d8180337d8e3f679"
-source_commit_short: "ab9db26e"
-source_commit_date: "2026-07-24T16:22:46-06:00"
-generated_at: "2026-07-25T11:51:15Z"
+source_commit: "b9f2bc487a2878b65e3c1f80024bebab76954f27"
+source_commit_short: "b9f2bc48"
+source_commit_date: "2026-08-28T17:09:45-05:00"
+generated_at: "2026-08-29T09:39:20.082749Z"
 ---
-
-=================================
-
 # getAuditConfig (database command)
 
-> **Important:** .. include:: /includes/deprecated-get-set-auditconfig.rst
+**meta:** :description: Retrieve audit configurations from `mongod` and `mongos` using the deprecated `getAuditConfig` command.
+
+.. default-domain:: mongodb
+
+**contents:** On this page
+   :local:
+   :backlinks: none
+   :depth: 1
+   :class: singlecol
+
+**important:** .. include:: /includes/deprecated-get-set-auditconfig.rst
 
 ## Definition
 
+**dbcommand:** getAuditConfig
+
+   .. versionadded:: 5.0
+
+   :dbcommand:`getAuditConfig` is an administrative command that
+   retrieves audit configurations from :binary:`~bin.mongod` and
+   :binary:`~bin.mongos` server instances.
+
 ## Compatibility
 
-This command is available in deployments hosted in the following environments:
+This command is available in deployments hosted in the following environments: 
 
-.. include:: /includes/fact-environments-onprem-only.rst
+**include:** /includes/fact-environments-onprem-only.rst
 
-.. include:: /includes/fact-environments-no-atlas-support.rst
+**include:** /includes/fact-environments-no-atlas-support.rst
 
 ## Syntax
 
 The command has the following syntax:
 
-```javascript
-db.adminCommand( 
-   { 
-     getAuditConfig: 1 
-   } 
-)
-```
+.. code-block:: javascript
+
+   db.adminCommand( 
+      { 
+        getAuditConfig: 1 
+      } 
+   )
 
 ## Behavior
 
-`Auditing <auditing>` must be enabled to use :dbcommand:`getAuditConfig`.
+:ref:`Auditing <auditing>` must be enabled to use
+:dbcommand:`getAuditConfig`.
 
-Nodes that are not participating in a runtime audit configuration return their current configuration file settings for `auditLog.filter` and `setParameter.auditAuthorizationSuccess`.
+Nodes that are not participating in a runtime audit configuration
+return their current configuration file settings for
+``auditLog.filter`` and ``setParameter.auditAuthorizationSuccess``.
 
-Nodes that are participating in the runtime audit synthesize their current configuration from memory. Configuration updates are distributed via the `oplog` mechanism which means updates on :binary:`~bin.mongod` nodes are distributed to secondary nodes very quickly. However, the distribution mechanism is different on :binary:`~bin.mongos` nodes. :binary:`~bin.mongos` nodes have to :parameter:`poll <auditConfigPollingFrequencySecs>` the primary server at regular intervals for configuration updates. You may see stale data due to polling delay if you run :dbcommand:`setAuditConfig` on the primary server and :dbcommand:`getAuditConfig` on a `shard <sharding-introduction>` before the shard has polled the primary server for updated configuration details.
+Nodes that are participating in the runtime audit synthesize their
+current configuration from memory. Configuration updates are
+distributed via the :term:`oplog` mechanism which means updates on
+:binary:`~bin.mongod` nodes are distributed to secondary nodes very
+quickly. However, the distribution mechanism is different on
+:binary:`~bin.mongos` nodes. :binary:`~bin.mongos` nodes have to 
+:parameter:`poll <auditConfigPollingFrequencySecs>` the primary server
+at regular intervals for configuration updates. You may see stale data
+due to polling delay if you run :dbcommand:`setAuditConfig` on the
+primary server and :dbcommand:`getAuditConfig` on a :ref:`shard 
+<sharding-introduction>` before the shard has polled the primary server
+for updated configuration details.
 
-> **Note:** If you are writing automated audit scripts, note that the quoting
-style and the types used to represent the cluster signature differ
-between `mongosh` and the legacy `mongo` shell. In `mongosh`
-the types are Binary and Long. The corresponding types in the legacy
-shell are BinData and NumberLong.
-.. code-block:: javascript
-   :copyable: false
-   // mongosh
-   signature: {
-      hash: Binary(Buffer.from("0000000000000000000000000000000000000000", "hex"), 0),
-      keyId: Long("0")
-   }
-   // mongo
-   "signature" : {
-"hash" : BinData(0,"AAAAAAAAAAAAAAAAAAAAAAAAAAA="),
-"keyId" : Long(0)
-}
+**note:** If you are writing automated audit scripts, note that the quoting
+   style and the types used to represent the cluster signature differ
+   between ``mongosh`` and the legacy ``mongo`` shell. In ``mongosh``
+   the types are Binary and Long. The corresponding types in the legacy
+   shell are BinData and NumberLong.
+
+   .. code-block:: javascript
+      :copyable: false
+
+      // mongosh
+      signature: {
+         hash: Binary(Buffer.from("0000000000000000000000000000000000000000", "hex"), 0),
+         keyId: Long("0")
+      }
+
+      // mongo
+      "signature" : {
+			      "hash" : BinData(0,"AAAAAAAAAAAAAAAAAAAAAAAAAAA="),
+			      "keyId" : Long(0)
+		    }
 
 ## Examples
 
-Run :dbcommand:`getAuditConfig` on the `admin` database .
+Run :dbcommand:`getAuditConfig` on the ``admin`` database .
 
-```javascript
-db.adminCommand({getAuditConfig: 1})
-```
+.. code-block:: javascript
 
-The example server is configured to audit read and write operations. It has a filter which captures the desired operations and the `auditAuthorizationSuccess` value has been set to `true`.
+   db.adminCommand({getAuditConfig: 1})
 
-```javascript
-{
-  generation: ObjectId("60e73e74680a655705f16525"),
-  filter: {
-    atype: 'authCheck',
-    'param.command': {
-      '$in': [ 'find', 'insert', 'delete', 'update', 'findandmodify' ]
-    }
-  },
-  auditAuthorizationSuccess: true,
-  ok: 1,
-  '$clusterTime': {
-    clusterTime: Timestamp(1, 1625767540),
-    signature: {
-      hash: Binary(Buffer.from("0000000000000000000000000000000000000000", "hex"), 0),
-      keyId: Long("0")
-    }
-  },
-  operationTime: Timestamp(1, 1625767540)
-}
-```
+The example server is configured to audit read and write operations. It
+has a filter which captures the desired operations and the
+``auditAuthorizationSuccess`` value has been set to ``true``.
 
-> **Seealso:** :method:`db.adminCommand`, :dbcommand:`setAuditConfig`,
-`configure audit filters <audit-filter>`
+.. code-block:: javascript
+   :copyable: false
+   :emphasize-lines: 3-7, 9
+
+   {
+     generation: ObjectId("60e73e74680a655705f16525"),
+     filter: {
+       atype: 'authCheck',
+       'param.command': {
+         '$in': [ 'find', 'insert', 'delete', 'update', 'findandmodify' ]
+       }
+     },
+     auditAuthorizationSuccess: true,
+     ok: 1,
+     '$clusterTime': {
+       clusterTime: Timestamp(1, 1625767540),
+       signature: {
+         hash: Binary(Buffer.from("0000000000000000000000000000000000000000", "hex"), 0),
+         keyId: Long("0")
+       }
+     },
+     operationTime: Timestamp(1, 1625767540)
+   }
+
+**seealso:** :method:`db.adminCommand`, :dbcommand:`setAuditConfig`,
+   :ref:`configure audit filters <audit-filter>`

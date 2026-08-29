@@ -1,14 +1,15 @@
 ---
 type: "Framework Learn Page"
-framework: "beanie"
+framework: "Beanie"
 source_repo: "https://github.com/BeanieODM/beanie"
 source_branch: "main"
 source_path: "docs/tutorial/lazy_parse.md"
-source_commit: "00c0f745ef12c4be145209d2ef69c2181d4d3a17"
-source_commit_short: "00c0f745"
-source_commit_date: "2026-03-29T13:57:21+02:00"
-generated_at: "2026-06-21T11:21:43Z"
+source_commit: "aa290b5739b52c7f62e43e37724b63038d1e5a81"
+source_commit_short: "aa290b5"
+source_commit_date: "2026-08-07T10:16:44-06:00"
+generated_at: "2026-08-29T09:38:56.939822Z"
 ---
+# Lazy_Parse
 
 ## Using Lazy Parsing in Queries
 Lazy parsing allows you to skip the parsing and validation process for documents and instead call it on demand for each field separately. This can be useful for optimizing performance in certain scenarios.

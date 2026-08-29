@@ -1,7 +1,7 @@
 ---
 type: "Framework Learn Directory Index"
 framework: "Helicone"
-generated_at: "2026-07-25T19:08:22.289386Z"
+generated_at: "2026-08-29T09:39:42.369714Z"
 ---
 # Gemini
 
@@ -17,3 +17,8 @@ This directory contains Helicone learning pages related to gemini.
 
 ## Pages in This Directory
 
+
+## Subdirectories
+
+- [Api](api/index.md)
+- [Vertex](vertex/index.md)

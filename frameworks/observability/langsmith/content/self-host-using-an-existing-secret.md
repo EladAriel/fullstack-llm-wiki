@@ -4,10 +4,10 @@ framework: "LangSmith"
 source_repo: "https://github.com/langchain-ai/docs.git"
 source_branch: "main"
 source_path: "src/langsmith/self-host-using-an-existing-secret.mdx"
-source_commit: "2aae1dfc98ee953a9a5185fb6fcdd9efb3f4d878"
-source_commit_short: "2aae1df"
-source_commit_date: "2026-07-25T00:27:23+00:00"
-generated_at: "2026-07-25T19:08:33.396725Z"
+source_commit: "a174f9cf7c91ee5eb14ee2382eb48bfe6e4956e9"
+source_commit_short: "a174f9c"
+source_commit_date: "2026-08-28T17:04:12-07:00"
+generated_at: "2026-08-29T09:39:50.642255Z"
 ---
 # Self Host Using An Existing Secret
 
@@ -67,10 +67,21 @@ stringData:
   insights_encryption_key: foo
   # Chat (formerly Polly)
   polly_encryption_key: foo
+  # Required only when enabling Engine.
+  engine_encryption_key: foo
+  # Optional; include only while rotating engine_encryption_key. Accepted for
+  # decryption only, so runs encrypted just before the swap still complete.
+  engine_encryption_key_previous: foo
   # Optional. Ed25519/OKP JWKS (JSON) that signs OAuth Authorization Server /
   # Remote MCP tokens. Required only to enable the LangSmith Remote MCP server
   # (see /langsmith/langsmith-remote-mcp); omit it otherwise.
   langsmith_signing_jwks: foo
+  # Required only when enabling LangSmith Sandboxes.
+  sandbox_x_service_auth_jwt_secret: foo
+  # Ed25519 private JWK.
+  sandbox_callback_signing_jwk: '<ed25519-private-jwk>'
+  # Optional; include only while rotating sandbox_x_service_auth_jwt_secret.
+  sandbox_x_service_auth_jwt_secret_previous: foo
 ```
 
 ## Configuration

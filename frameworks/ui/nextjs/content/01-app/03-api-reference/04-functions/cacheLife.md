@@ -1,14 +1,15 @@
 ---
 type: "Framework Learn Page"
-framework: "nextjs"
+framework: "Next.js"
 source_repo: "https://github.com/vercel/next.js/"
 source_branch: "canary"
 source_path: "docs/01-app/03-api-reference/04-functions/cacheLife.mdx"
-source_commit: "dcf242a17b5d4622bbd9624db531a9d84177619f"
-source_commit_short: "dcf242a1"
-source_commit_date: "2026-07-25T10:16:19+02:00"
-generated_at: "2026-07-25T11:50:53Z"
+source_commit: "33a5d542e519fe4e05c8c8c2c2845da9f741699b"
+source_commit_short: "33a5d542"
+source_commit_date: "2026-08-29T00:04:45-07:00"
+generated_at: "2026-08-29T09:40:24.282386Z"
 ---
+# Cachelife
 
 ---
 title: cacheLife
@@ -46,7 +47,7 @@ const nextConfig = {
   cacheComponents: true,
 }
 
-export default nextConfig
+module.exports = nextConfig
 ```
 
 `cacheLife` can only be used within a cache directive scope.
@@ -111,6 +112,7 @@ Cache profiles control caching behavior through three timing properties:
 During this time, the client-side router displays cached content immediately without any network request. After this period expires, the router must check with the server on the next navigation or request. This provides instant page loads from the client cache, but data may be outdated.
 
 - If omitted, defaults to the `default` profile's `stale` value (5 minutes, see [`staleTimes`](/docs/app/api-reference/config/next-config-js/staleTimes))
+- Also determines whether the content can be part of the route's [App Shell](/docs/app/glossary#app-shell). See [Prerendering behavior](#prerendering-behavior).
 
 ```tsx
 cacheLife({ stale: 300 }) // 5 minutes
@@ -272,7 +274,13 @@ When you call revalidation functions from a Server Action ([`revalidateTag`](/do
 
 ### Prerendering behavior
 
-Caches with very short lifetimes — zero `revalidate` or `expire` under 5 minutes — are automatically excluded from prerenders and become "dynamic holes" instead. This includes the `seconds` profile.
+A short cache lifetime changes where the cached content can be delivered from:
+
+- **`revalidate` of `0`, or `expire` under 5 minutes**: excluded from prerenders, becoming a "dynamic hole" resolved at request time.
+- **`stale` under 30 seconds**: excluded from prerenders, because a prefetch would expire before the user could click.
+- **`stale` of at least 30 seconds but under 5 minutes**: included in prerenders, but excluded from the route's [App Shell](/docs/app/glossary#app-shell).
+
+Of the presets, only `seconds` falls under any of these thresholds: its `expire` of 1 minute excludes it from prerenders.
 
 This behavior allows you to mix static and dynamic content within the same page. Static parts are prerendered, while short-lived caches create boundaries where data is fetched at request time rather than build time. Use a `<Suspense>` boundary around dynamic caches to provide a fallback while content loads.
 

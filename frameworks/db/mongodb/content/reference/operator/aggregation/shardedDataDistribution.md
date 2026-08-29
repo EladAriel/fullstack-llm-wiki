@@ -1,41 +1,165 @@
 ---
 type: "Framework Learn Page"
-framework: "mongodb"
+framework: "MongoDB"
 source_repo: "https://github.com/mongodb/docs.git"
 source_branch: "main"
 source_path: "content/manual/manual/source/reference/operator/aggregation/shardedDataDistribution.txt"
-source_commit: "ab9db26ed3d11618cdb61516d8180337d8e3f679"
-source_commit_short: "ab9db26e"
-source_commit_date: "2026-07-24T16:22:46-06:00"
-generated_at: "2026-07-25T11:51:15Z"
+source_commit: "b9f2bc487a2878b65e3c1f80024bebab76954f27"
+source_commit_short: "b9f2bc48"
+source_commit_date: "2026-08-28T17:09:45-05:00"
+generated_at: "2026-08-29T09:39:20.115221Z"
 ---
-
-============================================
-
 # $shardedDataDistribution (aggregation stage)
+
+**meta:** :description: Retrieve data distribution metrics for sharded collections using the `$shardedDataDistribution` aggregation stage on `mongos`.
+
+.. default-domain:: mongodb
+
+**contents:** On this page
+   :local:
+   :backlinks: none
+   :depth: 2
+   :class: singlecol
 
 ## Definition
 
+**pipeline:** $shardedDataDistribution
+
+   .. versionadded:: 6.0.3
+
+   Returns information on the distribution of data in sharded collections. 
+
+   .. note:: 
+
+      This aggregation stage is only available on :program:`mongos`.
+
+   This aggregation stage must be run on the ``admin`` database.  The user must
+   have the :authaction:`shardedDataDistribution` privilege action.
+
 ## Syntax
 
-The `shardedDataDistribution` stage has the following syntax:
+The ``shardedDataDistribution`` stage has the following syntax: 
 
-```javascript
-db.aggregate( [
-   { $shardedDataDistribution: { } }
-] )
-```
+.. code-block:: javascript
+
+   db.aggregate( [
+      { $shardedDataDistribution: { } }
+   ] )
+
+
 
 ## Output Fields
 
-The `$shardedDataDistribution` stage outputs an array of documents for each sharded collection in the database.  These documents contain the following fields:
+The ``$shardedDataDistribution`` stage outputs an array of documents
+for each sharded collection in the database.  These documents contain the
+following fields:
 
-.. include:: /includes/sharding/shardedDataDistribution-output.rst
+**include:** /includes/sharding/shardedDataDistribution-output.rst
 
-.. include:: /includes/sharding/shardedDataDistribution-output-limitation.rst
+**include:** /includes/sharding/shardedDataDistribution-output-limitation.rst
 
 ## Behavior
 
-.. include:: /includes/fact-unexpected-shutdown-accuracy.rst
+.. |cmd| replace:: ``$shardedDataDistribution``
+.. |opt| replace:: size and count
+
+**include:** /includes/fact-unexpected-shutdown-accuracy.rst
 
 ## Examples
+
+.. tabs-drivers::
+
+   .. tab::
+      :tabid: shell
+
+### Return All Sharded Data Distibution Metrics
+
+      To return all sharded data distribution metrics, run the following:
+
+      .. code-block:: javascript
+
+         db.aggregate([
+            { $shardedDataDistribution: { } }
+         ])
+
+      Example output:
+
+      .. include:: /includes/shardedDataDistribution-output-example.rst
+
+### Return Metrics for a Specific Shard
+
+      To return sharded data distribution metrics for a specific shard,
+      run the following:
+
+      .. code-block:: javascript
+
+         db.aggregate([ 
+            { $shardedDataDistribution: { } },
+            { $match: {  "shards.shardName": "<name of the shard>" } }
+         ])
+
+### Return Metrics for a Namespace
+
+      To return sharded data distribution data for a namespace, run the
+      following:
+
+      .. code-block:: javascript
+
+         db.aggregate([ 
+            { $shardedDataDistribution: { } }, 
+            { $match: {  "ns": "<database>.<collection>" } }
+         ])
+
+      .. _shardedDataDistribution-no-orphaned-docs:
+
+### Confirm No Orphaned Documents Remain
+
+      .. include:: /includes/shardedDataDistribution-orphaned-docs.rst
+
+   .. tab::
+      :tabid: nodejs
+
+      .. include:: /includes/driver-examples/node/aggregation/stage-intro.rst
+
+         .. replacement:: stage-name
+
+            ``$shardedDataDistribution``
+
+         .. replacement:: stage-specific-info
+
+### Return All Sharded Data Distribution Metrics
+
+         .. replacement:: method-description
+
+            returns information about the distribution of data in sharded
+            collections
+
+         .. replacement:: more-method-description
+
+      .. literalinclude:: /includes/driver-examples/node/aggregation/examples.js
+         :start-after: //start shardedDataDistribution
+         :end-before: //end shardedDataDistribution
+         :language: javascript
+         :dedent: 2
+
+### Return Metrics for a Specific Shard
+      
+      The following example returns information about the distribution of data
+      for a specific shard:
+
+      .. literalinclude:: /includes/driver-examples/node/aggregation/examples.js
+         :start-after: //start sDName
+         :end-before: //end sDName
+         :language: javascript
+         :dedent: 2
+
+### Return Metrics for a Namespace
+      
+      The following example returns information about the distribution of data
+      for a specific namespace:
+
+      .. literalinclude:: /includes/driver-examples/node/aggregation/examples.js
+         :start-after: //start sDNamespace
+         :end-before: //end sDNamespace
+         :language: javascript
+         :dedent: 2

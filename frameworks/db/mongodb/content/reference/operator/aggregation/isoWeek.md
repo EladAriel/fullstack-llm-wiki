@@ -1,58 +1,153 @@
 ---
 type: "Framework Learn Page"
-framework: "mongodb"
+framework: "MongoDB"
 source_repo: "https://github.com/mongodb/docs.git"
 source_branch: "main"
 source_path: "content/manual/manual/source/reference/operator/aggregation/isoWeek.txt"
-source_commit: "ab9db26ed3d11618cdb61516d8180337d8e3f679"
-source_commit_short: "ab9db26e"
-source_commit_date: "2026-07-24T16:22:46-06:00"
-generated_at: "2026-07-25T11:51:15Z"
+source_commit: "b9f2bc487a2878b65e3c1f80024bebab76954f27"
+source_commit_short: "b9f2bc48"
+source_commit_date: "2026-08-28T17:09:45-05:00"
+generated_at: "2026-08-29T09:39:20.195194Z"
 ---
-
-==============================
-
 # $isoWeek (expression operator)
+
+**meta:** :description: Use `$isoWeek` to return the ISO 8601 week number for a given date, with options for timezone specification.
+
+.. default-domain:: mongodb
+
+**contents:** On this page
+   :local:
+   :backlinks: none
+   :depth: 1
+   :class: singlecol
 
 ## Definition
 
+**expression:** $isoWeek
+
+   Returns the week number in ISO 8601 format, ranging from ``1`` to
+   ``53``. Week numbers start at ``1`` with the week (Monday through
+   Sunday) that contains the year's first Thursday.
+
+   The :expression:`$isoWeek` expression has the following
+   :ref:`operator expression syntax <aggregation-expressions>`:
+
+   .. code-block:: javascript
+
+      { $isoWeek: <dateExpression> }
+
+   .. include:: /includes/fact-iso-date-objects.rst
+
 ## Behavior
 
-> **Note:**
+.. list-table::
+   :header-rows: 1
+   :widths: 85 15
+   :class: border-table
+
+   * - Example
+     - Result
+
+   * - .. code-block:: javascript
+          :copyable: false
+
+          { $isoWeek: { date: new Date("Jan 4, 2016") } }
+
+     - 1
+
+   * - .. code-block:: javascript
+          :copyable: false
+
+          { $isoWeek: new Date("2016-01-01") }
+
+     - 53
+
+   * - .. code-block:: javascript
+          :copyable: false
+
+          { $isoWeek: {
+              date: new Date("August 14, 2011"),
+              timezone: "America/Chicago"
+          } }
+
+     - 32
+
+   * - .. code-block:: javascript
+          :copyable: false
+
+          { $isoWeek: ISODate("1998-11-02T00:00:00Z") }
+
+     - 45
+
+   * - .. code-block:: javascript
+          :copyable: false
+
+          { $isoWeek: {
+              date: ISODate("1998-11-02T00:00:00Z"),
+              timezone: "-0500"
+          } }
+
+     - 44
+
+   * - .. code-block:: javascript
+          :copyable: false
+
+          { $isoWeek: "March 28, 1976" }
+
+     - ``error``
+
+   * - .. code-block:: javascript
+          :copyable: false
+
+          { $isoWeek: Date("2016-01-01") }
+
+     - ``error``
+
+   * - .. code-block:: javascript
+          :copyable: false
+
+          { $isoWeek: "2009-04-09" }
+
+     - ``error``
+
+**note:** ``$isoWeek`` cannot take a string as an argument.
 
 ## Example
 
-A collection called `deliveries` contains the following documents:
+A collection called ``deliveries`` contains the following documents:
 
-```javascript
-db.deliveries.insertMany( [
-   { _id: 1, date: ISODate("2006-10-24T00:00:00Z"), city: "Boston" },
-   { _id: 2, date: ISODate("2011-08-18T00:00:00Z"), city: "Detroit" }
-] )
-```
 
-The following operation returns the week number for each `date` field.
+.. code-block:: javascript
 
-```javascript
-db.deliveries.aggregate( [
-  {
-    $project: {
-      _id: 0,
-      city: "$city",
-      weekNumber: { $isoWeek: "$date" }
-    }
-  }
-] )
-```
+   db.deliveries.insertMany( [
+      { _id: 1, date: ISODate("2006-10-24T00:00:00Z"), city: "Boston" },
+      { _id: 2, date: ISODate("2011-08-18T00:00:00Z"), city: "Detroit" }
+   ] )
+
+The following operation returns the week number for each ``date`` field.
+
+
+.. code-block:: javascript
+
+   db.deliveries.aggregate( [
+     {
+       $project: {
+         _id: 0,
+         city: "$city",
+         weekNumber: { $isoWeek: "$date" }
+       }
+     }
+   ] )
 
 The operation returns the following results:
 
-```javascript
-[
-   { city: "Boston", weekNumber: 43 },
-   { city: "Detroit", weekNumber: 33 }
-]
-```
+.. code-block:: javascript
+   :copyable: false
 
-> **Seealso:** - `/reference/operator/aggregation/isoDayOfWeek`
-- `/reference/operator/aggregation/isoWeekYear`
+   [
+      { city: "Boston", weekNumber: 43 },
+      { city: "Detroit", weekNumber: 33 }
+   ]
+
+**seealso:** - :doc:`/reference/operator/aggregation/isoDayOfWeek`
+   - :doc:`/reference/operator/aggregation/isoWeekYear`

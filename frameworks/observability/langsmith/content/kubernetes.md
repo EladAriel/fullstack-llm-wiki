@@ -4,10 +4,10 @@ framework: "LangSmith"
 source_repo: "https://github.com/langchain-ai/docs.git"
 source_branch: "main"
 source_path: "src/langsmith/kubernetes.mdx"
-source_commit: "2aae1dfc98ee953a9a5185fb6fcdd9efb3f4d878"
-source_commit_short: "2aae1df"
-source_commit_date: "2026-07-25T00:27:23+00:00"
-generated_at: "2026-07-25T19:08:33.423998Z"
+source_commit: "a174f9cf7c91ee5eb14ee2382eb48bfe6e4956e9"
+source_commit_short: "a174f9c"
+source_commit_date: "2026-08-28T17:04:12-07:00"
+generated_at: "2026-08-29T09:39:50.629230Z"
 ---
 # Kubernetes
 
@@ -28,7 +28,7 @@ After completing this page, you'll have:
 - **Backend services**: (queue, playground, ACE).
 - **Datastores**: (PostgreSQL, Redis, ClickHouse, optional blob storage).
 
-For [agent deployment](/langsmith/deployment): To add deployment capabilities, complete this guide first, then follow [Enable LangSmith Deployment, Fleet, Insights, and Chat](/langsmith/deploy-self-hosted-full-platform).
+For [agent deployment](/langsmith/deployment): To add deployment capabilities, complete this guide first, then follow [Enable LangSmith Deployment](/langsmith/deploy-self-hosted-full-platform#enable-langsmith-deployment).
 
 LangChain has successfully tested LangSmith on the following Kubernetes distributions:
 
@@ -127,6 +127,9 @@ For the minimum supported version of each datastore, refer to [Minimum versions 
 
    1. LangSmith requires egress to `https://beacon.langchain.com` for license verification and usage reporting. This is required for LangSmith to function properly. You can find more information on egress requirements in the [Egress](/langsmith/self-host-egress) section.
 
+<Note>
+LangSmith services listen on both IPv4 and IPv6 by default as of 0.14.0. No additional configuration is required for IPv4-only, IPv6-only, or dual-stack clusters.
+</Note>
 
 ## Configure your Helm charts:
 
@@ -215,6 +218,10 @@ You will also need to specify connection details for any external databases you 
    * Replace `<namespace>` with the namespace you want to deploy LangSmith to.
    * Replace `<version>` with the version of LangSmith you want to install from the previous step. Most users should install the latest version available.
 
+   <Note>
+   The namespace specified with `-n <namespace>` must already exist before running this command. If it does not exist, you can either create it first with `kubectl create namespace <namespace>`, or add the `--create-namespace` flag to the helm command above.
+   </Note>
+
    Once the `helm install` command runs and finishes successfully, you should see output similar to this:
 
    ```
@@ -296,7 +303,7 @@ As a next step, it is strongly recommended you work with your infrastructure adm
 
 Review our [configuration section](/langsmith/self-hosted) for more information on how to configure these options.
 
-## Enable LangSmith Deployment, Fleet, Insights, and Chat
+## Enable LangSmith Deployment, Fleet, Insights, Chat, and Sandboxes
 
 To go beyond observability, tracing, and evaluation, you can enable the following features on your self-hosted instance:
 
@@ -304,5 +311,6 @@ To go beyond observability, tracing, and evaluation, you can enable the followin
 - **[Fleet](/langsmith/fleet/index)**: create and manage AI agents without writing code.
 - **[Insights](/langsmith/insights)**: get AI-powered analysis of your traces and application data.
 - **[Chat](/langsmith/chat)**: an in-workspace chat experience across LangSmith to help you analyze traces, threads, prompts, and experiment results.
+- **[Sandboxes](/langsmith/sandboxes)**: run code, expose temporary services, and create memory snapshots from LangSmith.
 
-Follow the [Enable LangSmith Deployment, Fleet, Insights, and Chat](/langsmith/deploy-self-hosted-full-platform) guide to set up these components.
+Follow the [Enable additional features](/langsmith/deploy-self-hosted-full-platform) guide to set up these components.

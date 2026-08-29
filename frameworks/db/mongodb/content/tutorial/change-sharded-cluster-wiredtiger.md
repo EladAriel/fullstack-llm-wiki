@@ -1,86 +1,113 @@
 ---
 type: "Framework Learn Page"
-framework: "mongodb"
+framework: "MongoDB"
 source_repo: "https://github.com/mongodb/docs.git"
 source_branch: "main"
 source_path: "content/manual/manual/source/tutorial/change-sharded-cluster-wiredtiger.txt"
-source_commit: "ab9db26ed3d11618cdb61516d8180337d8e3f679"
-source_commit_short: "ab9db26e"
-source_commit_date: "2026-07-24T16:22:46-06:00"
-generated_at: "2026-07-25T11:51:15Z"
+source_commit: "b9f2bc487a2878b65e3c1f80024bebab76954f27"
+source_commit_short: "b9f2bc48"
+source_commit_date: "2026-08-28T17:09:45-05:00"
+generated_at: "2026-08-29T09:39:19.598675Z"
 ---
-
-===================================================
-
 # Change a Self-Managed Sharded Cluster to WiredTiger
 
-> **Note:** You must upgrade to WiredTiger. MongoDB removed the deprecated MMAPv1 storage
-engine in version 4.2.
+**meta:** :keywords: on-prem
+   :description: Upgrade a self-managed sharded cluster to WiredTiger storage engine following a step-by-step procedure.
 
-Use this tutorial to update a sharded cluster to use `WiredTiger <storage-wiredtiger>`.
+.. default-domain:: mongodb
+
+**note:** You must upgrade to WiredTiger. MongoDB removed the deprecated MMAPv1 storage 
+   engine in version 4.2. 
+
+Use this tutorial to update a sharded cluster to use :ref:`WiredTiger 
+<storage-wiredtiger>`.
 
 ## Considerations
 
 ### Downtime
 
-If you change the host or port of any `shard`, you must update the shard configuration as well.
+If you change the host or port of any :term:`shard`, you must update
+the shard configuration as well.
+
+.. _sharded-cluster-mmapv1-wt-4.0-psa:
 
 ### PSA 3-member Architecture
 
-The :readconcern:`"majority"` read concern, available for WiredTiger, is enabled by default. However, if you have a three-member shard replica set with a primary-secondary-arbiter (PSA) architecture, you can disable :readconcern:`"majority"` read concern for that shard replica set. Disabling :readconcern:`"majority"` for a three member PSA architecture avoids possible cache-pressure build up.
+The :readconcern:`"majority"` read concern,
+available for WiredTiger, is enabled by default. However,
+if you have a three-member shard replica set with a
+primary-secondary-arbiter (PSA) architecture, you can disable
+:readconcern:`"majority"` read concern for that shard replica set.
+Disabling :readconcern:`"majority"` for a three member PSA architecture
+avoids possible cache-pressure build up.
 
-> **Note:** .. include:: /includes/extracts/changestream-disable-rc-majority.rst
-.. include:: /includes/fact-disable-majority-rc-rollbacks.rst
-.. include:: /includes/extracts/transactions-read-concern-majority.rst
+**note:** .. include:: /includes/extracts/changestream-disable-rc-majority.rst
 
-For more information on PSA architecture and read concern :readconcern:`"majority"`, see `disable-read-concern-majority`.
+   .. include:: /includes/fact-disable-majority-rc-rollbacks.rst
+
+   .. include:: /includes/extracts/transactions-read-concern-majority.rst
+
+For more information on PSA architecture and read concern
+:readconcern:`"majority"`, see :ref:`disable-read-concern-majority`.
 
 ### Default Bind to Localhost
 
-.. include:: /includes/fact-default-bind-ip-change.rst
+**include:** /includes/fact-default-bind-ip-change.rst
 
 ### Config Servers
 
-Config servers must be deployed as replica sets (CSRS). As such, config servers already use the WiredTiger storage engine.
+Config servers must be deployed as replica sets (CSRS). As such, config
+servers already use the WiredTiger storage engine.
 
 ### XFS and WiredTiger
 
-With the WiredTiger storage engine, using XFS for data bearing nodes is recommended on Linux. For more information, see `prod-notes-linux-file-system`.
+With the WiredTiger storage engine, using XFS for data bearing nodes is
+recommended on Linux. For more information, see
+:ref:`prod-notes-linux-file-system`.
 
 ### MMAPv1 Only Restrictions
 
-.. include:: /includes/fact-mmapv1-only-restrictions.rst
+**include:** /includes/fact-mmapv1-only-restrictions.rst
 
 ## Before You Begin
 
-.. include:: /includes/dSO-role-intro.rst
+**include:** /includes/dSO-role-intro.rst
 
-.. include:: /includes/dSO-warning.rst
+**include:** /includes/dSO-warning.rst
 
 ## Procedure
 
-For each replica set `shard <shard>`, to change the storage engine to WiredTiger:
+For each replica set :term:`shard <shard>`, to change the storage
+engine to WiredTiger:
 
 ### A. Update the secondary members to WiredTiger.
 
 Update the secondary members one at a time:
 
-.. include:: /includes/steps/change-replica-set-wiredtiger.rst
+**include:** /includes/steps/change-replica-set-wiredtiger.rst
 
-Repeat the steps for the remaining secondary members, updating them one at a time.
+Repeat the steps for the remaining secondary members, updating them one
+at a time.
 
 ### B. Step down the primary.
 
-Once all the secondary members have been upgraded to WiredTiger, connect :binary:`~bin.mongosh` to the primary and use :method:`rs.stepDown()` to step down the primary and force an election of a new primary.
+Once all the secondary members have been upgraded to WiredTiger,
+connect :binary:`~bin.mongosh` to the primary and use
+:method:`rs.stepDown()` to step down the primary and force an election
+of a new primary.
 
-```javascript
-rs.stepDown()
-```
+.. code-block:: javascript
+
+   rs.stepDown()
 
 ### C. Update the old primary.
 
-When the primary has stepped down and become a secondary, update the secondary to use WiredTiger as before:
+When the primary has stepped down and become a secondary, update the
+secondary to use WiredTiger as before:
 
-.. include:: /includes/steps/change-replica-set-wiredtiger.rst
+**include:** /includes/steps/change-replica-set-wiredtiger.rst
+
 
 Repeat the procedure for the other shards.
+
+.. |seemore| replace:: See :ref:`sharded-cluster-mmapv1-wt-4.0-psa`.

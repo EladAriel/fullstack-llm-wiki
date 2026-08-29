@@ -4,10 +4,10 @@ framework: "LangSmith"
 source_repo: "https://github.com/langchain-ai/docs.git"
 source_branch: "main"
 source_path: "src/langsmith/sandbox-cli.mdx"
-source_commit: "2aae1dfc98ee953a9a5185fb6fcdd9efb3f4d878"
-source_commit_short: "2aae1df"
-source_commit_date: "2026-07-25T00:27:23+00:00"
-generated_at: "2026-07-25T19:08:33.357930Z"
+source_commit: "a174f9cf7c91ee5eb14ee2382eb48bfe6e4956e9"
+source_commit_short: "a174f9c"
+source_commit_date: "2026-08-28T17:04:12-07:00"
+generated_at: "2026-08-29T09:39:50.679551Z"
 ---
 # Sandbox Cli
 
@@ -15,6 +15,8 @@ generated_at: "2026-07-25T19:08:33.357930Z"
 title: Sandbox CLI
 description: Create, inspect, connect to, and tunnel into LangSmith sandboxes from the command line.
 ---
+
+import LangsmithEndpointValues from '/snippets/langsmith/langsmith-endpoint-values.mdx';
 
 The [LangSmith CLI](/langsmith/langsmith-cli) includes sandbox commands for creating snapshots, booting sandboxes, running commands, opening interactive shells, and tunneling TCP connections into a sandbox.
 
@@ -29,16 +31,19 @@ curl -fsSL https://cli.langsmith.com/install.sh | sh
 langsmith self-update
 ```
 
-Authenticate the CLI with your LangSmith API key:
+Authenticate the CLI with your LangSmith API key, and point it at the environment that key belongs to:
 
 ```bash
 export LANGSMITH_API_KEY="<LANGSMITH_API_KEY>"
+export LANGSMITH_ENDPOINT="<LANGSMITH_ENDPOINT>"
 ```
 
-CLI output is JSON by default. Add `--format pretty` to list commands for human-readable tables:
+<LangsmithEndpointValues />
+
+CLI output is human-readable tables by default. Add `--format json` for scriptable output:
 
 ```bash
-langsmith --format pretty sandbox list
+langsmith --format json sandbox list
 ```
 
 ## End-to-end workflow
@@ -46,13 +51,12 @@ langsmith --format pretty sandbox list
 Create a sandbox, then run commands inside it:
 
 ```bash
-langsmith sandbox create my-vm \
-  --vcpus 2 \
-  --memory 1gb \
-  --wait
+langsmith sandbox create my-vm
 
 langsmith sandbox exec my-vm -- python --version
 ```
+
+`create` boots the sandbox and returns once it reports `ready`, so the next command can run straight away. There is no separate wait step. Pass `--console` to drop into an interactive shell as soon as the sandbox comes up.
 
 When you are done with a sandbox, delete it:
 
@@ -67,33 +71,30 @@ Build snapshots from Docker images:
 ```bash
 langsmith sandbox snapshot build my-snapshot \
   --docker-image ubuntu:24.04 \
-  --capacity 8gb \
-  --wait
+  --capacity 8gb
 ```
+
+`build` queues the build and returns immediately with the snapshot's `status`. Poll `langsmith sandbox snapshot get <SNAPSHOT_ID>` until it reports `ready`. `--capacity` defaults to `4gb` and caps at `64gb`.
 
 For private images, create a registry first (see [Private registries](/langsmith/sandbox-snapshots#private-registries)), then pass its id with `--registry-id`:
 
 ```bash
 langsmith sandbox snapshot build internal-python \
   --docker-image registry.example.com/internal/python:3.12 \
-  --registry-id "$REGISTRY_ID" \
-  --wait
+  --registry-id "$REGISTRY_ID"
 ```
 
 Capture the filesystem from a running sandbox:
 
 ```bash
-langsmith sandbox snapshot capture ml-ready \
-  --box my-vm \
-  --wait
+langsmith sandbox snapshot capture ml-ready --box my-vm
 ```
 
-List, inspect, wait for, and delete snapshots:
+List, inspect, and delete snapshots:
 
 ```bash
 langsmith sandbox snapshot list
 langsmith sandbox snapshot get <SNAPSHOT_ID>
-langsmith sandbox snapshot wait <SNAPSHOT_ID>
 langsmith sandbox snapshot delete <SNAPSHOT_ID>
 ```
 
@@ -102,11 +103,13 @@ langsmith sandbox snapshot delete <SNAPSHOT_ID>
 Create a sandbox with the default runtime. Add `--snapshot-id` only when you want to boot from a reusable custom snapshot:
 
 ```bash
-langsmith sandbox create my-vm \
-  --vcpus 4 \
-  --memory 1gb \
-  --rootfs-capacity 8gb \
-  --wait
+langsmith sandbox create my-vm --rootfs-capacity 8gb
+```
+
+Size the sandbox with `--vcpus` and `--memory`. Memory is tied to CPU at 4 GiB per vCPU and must stay within 50% of that target, so a 2-vCPU sandbox accepts 4 to 12 GiB. Omit `--memory` and it follows the ratio.
+
+```bash
+langsmith sandbox create my-vm --vcpus 2 --memory 8gb
 ```
 
 List and inspect sandboxes:
@@ -114,24 +117,23 @@ List and inspect sandboxes:
 ```bash
 langsmith sandbox list
 langsmith sandbox get my-vm
-langsmith sandbox wait my-vm
 ```
 
-Stop and start a sandbox while preserving its filesystem:
+Stop a sandbox to release resources early. Its filesystem is preserved, and the next `exec`, `console`, or service request wakes it automatically, so there is no start step to run:
 
 ```bash
 langsmith sandbox stop my-vm
-langsmith sandbox start my-vm --wait
+langsmith sandbox exec my-vm -- echo awake
 ```
 
 Update resources or proxy configuration:
 
 ```bash
-langsmith sandbox update my-vm --vcpus 8 --memory 2gb
+langsmith sandbox update my-vm --rootfs-capacity 16gb
 langsmith sandbox update my-vm --proxy-config @proxy.json
 ```
 
-Resource changes take effect the next time the sandbox starts. Proxy configuration changes take effect immediately.
+Resource changes take effect the next time the sandbox boots. Proxy configuration changes take effect immediately.
 
 ### Proxy configuration
 
@@ -260,15 +262,12 @@ The sandbox image must run `sshd` on port `22`. If `sshd` is not running, `ssh-s
 | `langsmith sandbox snapshot build <name> --docker-image <image>` | Build a snapshot from a Docker image. |
 | `langsmith sandbox snapshot capture <name> --box <sandbox>` | Capture a snapshot from a running sandbox. |
 | `langsmith sandbox snapshot get <snapshot-id>` | Inspect a snapshot. |
-| `langsmith sandbox snapshot wait <snapshot-id>` | Wait for a snapshot to become ready. |
 | `langsmith sandbox snapshot delete <snapshot-id>` | Delete a snapshot. |
 | `langsmith sandbox create <name>` | Create a sandbox with the default runtime. |
 | `langsmith sandbox list` | List sandboxes. |
 | `langsmith sandbox get <name>` | Inspect a sandbox. |
 | `langsmith sandbox update <name>` | Update sandbox resources or proxy config. |
-| `langsmith sandbox wait <name>` | Wait for a sandbox to become ready. |
-| `langsmith sandbox start <name>` | Start a stopped sandbox. |
-| `langsmith sandbox stop <name>` | Stop a running sandbox while preserving filesystem state. |
+| `langsmith sandbox stop <name>` | Stop a running sandbox while preserving filesystem state. A later `exec`, `console`, or service request wakes it again. |
 | `langsmith sandbox delete <name>` | Delete a sandbox. |
 | `langsmith sandbox exec <name> -- <command>` | Run a one-off command inside a sandbox. |
 | `langsmith sandbox console <name>` | Open an interactive shell inside a sandbox. |

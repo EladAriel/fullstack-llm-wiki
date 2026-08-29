@@ -1,7 +1,7 @@
 ---
 type: "Framework Learn Directory Index"
 framework: "Prometheus"
-generated_at: "2026-07-25T19:07:59.771547Z"
+generated_at: "2026-08-29T09:39:59.853813Z"
 ---
 # Practices
 

@@ -1,75 +1,106 @@
 ---
 type: "Framework Learn Page"
-framework: "mongodb"
+framework: "MongoDB"
 source_repo: "https://github.com/mongodb/docs.git"
 source_branch: "main"
 source_path: "content/manual/manual/source/reference/operator/aggregation/sampleRate.txt"
-source_commit: "ab9db26ed3d11618cdb61516d8180337d8e3f679"
-source_commit_short: "ab9db26e"
-source_commit_date: "2026-07-24T16:22:46-06:00"
-generated_at: "2026-07-25T11:51:15Z"
+source_commit: "b9f2bc487a2878b65e3c1f80024bebab76954f27"
+source_commit_short: "b9f2bc48"
+source_commit_date: "2026-08-28T17:09:45-05:00"
+generated_at: "2026-08-29T09:39:20.140465Z"
 ---
-
-==================================
-
 # $sampleRate  (expression operator)
+
+**meta:** :description: Use `$sampleRate` in aggregation to randomly select documents based on a specified probability, expressed as a percentage.
+
+.. default-domain:: mongodb
+
+**contents:** On this page
+   :local:
+   :backlinks: none
+   :depth: 1
+   :class: singlecol
 
 ## Definition
 
+**expression:** $sampleRate
+
+   Matches a random selection of input documents. The number of
+   documents selected approximates the sample rate expressed as a
+   percentage of the total number of documents.
+
+   The :expression:`$sampleRate` operator has the following syntax:
+
+   .. code-block:: javascript
+
+      { $sampleRate: <non-negative float> }
+
 ## Behavior
 
-The selection process uses a uniform random distribution. The sample rate is a floating point number between 0 and 1, inclusive, which represents the probability that a given document will be selected as it passes through the pipeline.
+The selection process uses a uniform random distribution. The sample
+rate is a floating point number between 0 and 1, inclusive, which
+represents the probability that a given document will be selected as it
+passes through the pipeline.
 
-For example, a sample rate of `0.33` selects roughly one document in three.
+For example, a sample rate of ``0.33`` selects roughly one document in
+three.
 
 This expression:
 
-```javascript
- { $match: { $sampleRate: 0.33 } }
-```
+.. code-block:: javascript
+
+    { $match: { $sampleRate: 0.33 } }
 
 is equivalent to using the :expression:`$rand` operator as follows:
 
-```javascript
-{ $match: { $expr: { $lt: [ { $rand: {} }, 0.33 ] } } }
-```
+.. code-block:: javascript
 
-Repeated runs on the same data will produce different outcomes since the selection process is non-deterministic. In general, smaller datasets will show more variability in the number of documents selected on each run. As collection size increases, the number of documents chosen will approach the expected value for a uniform random distribution.
+   { $match: { $expr: { $lt: [ { $rand: {} }, 0.33 ] } } }
 
-> **Note:** If an exact number of documents is required from each run, the
-:pipeline:`$sample` operator should be used instead of `$sampleRate`.
+Repeated runs on the same data will produce different outcomes since
+the selection process is non-deterministic. In general, smaller
+datasets will show more variability in the number of documents
+selected on each run. As collection size increases, the number of
+documents chosen will approach the expected value for a uniform random
+distribution.
+
+**note:** If an exact number of documents is required from each run, the
+   :pipeline:`$sample` operator should be used instead of ``$sampleRate``.
 
 ## Examples
 
 This code creates a small collection with 100 documents.
 
-```javascript
-N = 100
-bulk = db.collection.initializeUnorderedBulkOp()
-for ( i = 0; i < N; i++) { bulk.insert( {_id: i, r: 0} ) }
-bulk.execute()
-```
+.. code-block:: javascript
 
-The `$sampleRate` operator can be used in a pipeline to select random documents from the collection. In this example we use `$sampleRate` to select about one third of the documents.
+   N = 100
+   bulk = db.collection.initializeUnorderedBulkOp()
+   for ( i = 0; i < N; i++) { bulk.insert( {_id: i, r: 0} ) }
+   bulk.execute()
 
-```javascript
-db.collection.aggregate(
-   [
-     { $match: { $sampleRate: 0.33 } },
-     { $count: "numMatches" }
-   ]
-)
-```
+The ``$sampleRate`` operator can be used in a pipeline to select random
+documents from the collection. In this example we use ``$sampleRate``
+to select about one third of the documents.
+
+.. code-block:: javascript
+
+   db.collection.aggregate(
+      [
+        { $match: { $sampleRate: 0.33 } },
+        { $count: "numMatches" }
+      ]
+   )
 
 This is the output from 5 runs on the sample collection:
 
-```javascript
-   { "numMatches" : 38 }
-   { "numMatches" : 36 }
-   { "numMatches" : 29 }
-   { "numMatches" : 29 }
-   { "numMatches" : 28 }
-```
+.. code-block:: javascript
+      :copyable: false
 
-> **Seealso:** - :pipeline:`$sample`
-- :expression:`$rand`
+      { "numMatches" : 38 }
+      { "numMatches" : 36 }
+      { "numMatches" : 29 }
+      { "numMatches" : 29 }
+      { "numMatches" : 28 }
+
+**seealso:** - :pipeline:`$sample`
+   - :expression:`$rand`

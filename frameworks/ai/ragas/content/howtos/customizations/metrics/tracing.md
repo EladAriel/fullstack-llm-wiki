@@ -5,11 +5,10 @@ source_repo: "https://github.com/vibrantlabsai/ragas"
 source_branch: "main"
 source_path: "docs/howtos/customizations/metrics/tracing.md"
 source_commit: "298b68274234c060deacab3cf5fb52aa3a20e885"
-source_commit_short: "298b6827"
+source_commit_short: "298b682"
 source_commit_date: "2026-02-24T13:17:18+05:30"
-generated_at: "2026-06-23T13:55:50Z"
+generated_at: "2026-08-29T09:38:15.985748Z"
 ---
-
 # Tracing and logging evaluations with Observability tools
 
 Logging and tracing results from LLM are important for any language model-based application. This is a tutorial on how to do tracing with Ragas. Ragas provides `callbacks` functionality which allows you to hook various tracers like LangSmith, wandb, Opik, etc easily.  In this notebook, I will be using LangSmith for tracing.

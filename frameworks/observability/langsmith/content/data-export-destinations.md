@@ -4,10 +4,10 @@ framework: "LangSmith"
 source_repo: "https://github.com/langchain-ai/docs.git"
 source_branch: "main"
 source_path: "src/langsmith/data-export-destinations.mdx"
-source_commit: "2aae1dfc98ee953a9a5185fb6fcdd9efb3f4d878"
-source_commit_short: "2aae1df"
-source_commit_date: "2026-07-25T00:27:23+00:00"
-generated_at: "2026-07-25T19:08:33.411069Z"
+source_commit: "a174f9cf7c91ee5eb14ee2382eb48bfe6e4956e9"
+source_commit_short: "a174f9c"
+source_commit_date: "2026-08-28T17:04:12-07:00"
+generated_at: "2026-08-29T09:39:50.617256Z"
 ---
 ---
 title: Manage bulk export destinations
@@ -28,6 +28,7 @@ This page covers:
 - Required bucket [permissions](#permissions-required) for AWS S3 and GCS.
 - How to [create a destination](#create-a-destination) via the API, including provider-specific examples and credential options.
 - How to [rotate destination credentials](#rotate-destination-credentials) without recreating the destination.
+- How to [switch authentication mode](#switch-authentication-mode) between static credentials and AWS IAM role assumption.
 - How to [debug destination errors](#debug-destination-errors).
 
 ## Configuration fields
@@ -299,7 +300,7 @@ curl --request PATCH \
 
 The `session_token` field is optional, which you can include for [temporary credentials](https://docs.aws.amazon.com/IAM/latest/UserGuide/id_credentials_temp_use-resources.html).
 
-[**Required permission**](/langsmith/organization-workspace-operations): `bulk-exports:manage` (or `workspaces:manage`, which historically granted this access).
+[**Required permission**](/langsmith/organization-workspace-operations#bulk-exports): `bulk-exports:manage`.
 
 Before storing new credentials, LangSmith validates them by performing a test write to the bucket using the existing destination configuration. The request fails with `400` if the credentials do not have sufficient write permissions. If the request fails, refer to [Debug destination errors](#debug-destination-errors).
 
@@ -323,6 +324,197 @@ Returns the updated destination object. Credential values are never returned—o
 1. Call the PATCH endpoint with the new credentials. LangSmith validates them before saving.
 1. Keep old credentials active until all in-flight bulk export runs finish (up to the [maximum run duration](/langsmith/data-export-monitor#automatic-retry-behavior)).
 1. Revoke old credentials once no runs are using them.
+
+## Authenticate with an AWS IAM role
+
+AWS IAM role assumption lets GCP-hosted LangSmith SaaS export to S3 without storing static AWS credentials. Configure an AWS role that trusts the LangSmith service accounts for your production region, then provide its ARN when you create or update a destination.
+
+Pass `aws_role_arn` instead of `credentials` to use IAM role assumption.
+
+<Note>
+IAM role assumption is available only on GCP-hosted LangSmith SaaS. It is not available on AWS-hosted SaaS or self-hosted deployments.
+</Note>
+
+### Create the AWS role
+
+Create an AWS IAM role with a trust policy that permits web identity federation from the three subject IDs for your region. Grant the role access to your export bucket. Select your LangSmith region to use the corresponding subject IDs. Each Terraform example uses the minimum required `s3:PutObject` permission:
+
+<CodeGroup>
+
+```hcl US
+resource "aws_iam_role" "langsmith_bulk_export" {
+  name                 = "langsmith-bulk-export"
+  max_session_duration = 43200
+
+  assume_role_policy = jsonencode({
+    Version = "2012-10-17"
+    Statement = [{
+      Effect    = "Allow"
+      Principal = { Federated = "accounts.google.com" }
+      Action    = "sts:AssumeRoleWithWebIdentity"
+      Condition = {
+        StringEquals = {
+          "accounts.google.com:oaud" = "langsmith-bulk-export"
+          "accounts.google.com:sub" = [
+            "110136955440523778103",
+            "116331607438151298187",
+            "115251468294701876731",
+          ]
+        }
+      }
+    }]
+  })
+
+  inline_policy {
+    name = "langsmith-bulk-export-s3"
+    policy = jsonencode({
+      Version = "2012-10-17"
+      Statement = [{
+        Effect   = "Allow"
+        Action   = "s3:PutObject"
+        Resource = "arn:aws:s3:::YOUR_BUCKET_NAME/*"
+      }]
+    })
+  }
+}
+```
+
+```hcl EU
+resource "aws_iam_role" "langsmith_bulk_export" {
+  name                 = "langsmith-bulk-export"
+  max_session_duration = 43200
+
+  assume_role_policy = jsonencode({
+    Version = "2012-10-17"
+    Statement = [{
+      Effect    = "Allow"
+      Principal = { Federated = "accounts.google.com" }
+      Action    = "sts:AssumeRoleWithWebIdentity"
+      Condition = {
+        StringEquals = {
+          "accounts.google.com:oaud" = "langsmith-bulk-export"
+          "accounts.google.com:sub" = [
+            "110207823358662523645",
+            "115689110758588220909",
+            "109691164801275818274",
+          ]
+        }
+      }
+    }]
+  })
+
+  inline_policy {
+    name = "langsmith-bulk-export-s3"
+    policy = jsonencode({
+      Version = "2012-10-17"
+      Statement = [{
+        Effect   = "Allow"
+        Action   = "s3:PutObject"
+        Resource = "arn:aws:s3:::YOUR_BUCKET_NAME/*"
+      }]
+    })
+  }
+}
+```
+
+```hcl APAC
+resource "aws_iam_role" "langsmith_bulk_export" {
+  name                 = "langsmith-bulk-export"
+  max_session_duration = 43200
+
+  assume_role_policy = jsonencode({
+    Version = "2012-10-17"
+    Statement = [{
+      Effect    = "Allow"
+      Principal = { Federated = "accounts.google.com" }
+      Action    = "sts:AssumeRoleWithWebIdentity"
+      Condition = {
+        StringEquals = {
+          "accounts.google.com:oaud" = "langsmith-bulk-export"
+          "accounts.google.com:sub" = [
+            "105923862603785245337",
+            "114288557158507552617",
+            "116622461022404604716",
+          ]
+        }
+      }
+    }]
+  })
+
+  inline_policy {
+    name = "langsmith-bulk-export-s3"
+    policy = jsonencode({
+      Version = "2012-10-17"
+      Statement = [{
+        Effect   = "Allow"
+        Action   = "s3:PutObject"
+        Resource = "arn:aws:s3:::YOUR_BUCKET_NAME/*"
+      }]
+    })
+  }
+}
+```
+
+</CodeGroup>
+
+See [AWS S3 permissions](#aws-s3-permissions) for optional permissions.
+
+## Switch authentication mode
+
+Switch an existing destination between static credentials and [AWS IAM role assumption](#authenticate-with-an-aws-iam-role) without recreating it. Use `PATCH /api/v1/bulk-exports/destinations/{destination_id}`.
+
+[**Required permission**](/langsmith/organization-workspace-operations#bulk-exports): `bulk-exports:manage`.
+
+LangSmith supports two mutually exclusive modes:
+
+- **Static credentials** (`credentials`): An `access_key_id` and `secret_access_key` (with an optional `session_token` for temporary credentials).
+- **IAM role assumption** (`aws_role_arn`): LangSmith assumes the specified AWS IAM role, so no static credentials are stored.
+
+To switch to AWS IAM role assumption, provide `aws_role_arn` in the PATCH body. To switch to static credentials, provide `credentials`. When either field is present and nonempty, LangSmith clears the other.
+
+Before switching, ensure the new authentication configuration has write access to the destination bucket. LangSmith validates the configuration with a test write before saving it.
+
+### Switch from static credentials to AWS IAM role
+
+Provide `aws_role_arn` in the PATCH body. This clears any previously stored credentials.
+
+```bash
+curl --request PATCH \
+  --url 'https://api.smith.langchain.com/api/v1/bulk-exports/destinations/{destination_id}' \
+  --header 'Content-Type: application/json' \
+  --header 'X-API-Key: YOUR_API_KEY' \
+  --header 'X-Tenant-Id: YOUR_WORKSPACE_ID' \
+  --data '{
+    "aws_role_arn": "arn:aws:iam::123456789012:role/LangSmithBulkExportRole"
+  }'
+```
+
+### Switch from AWS IAM role to static credentials
+
+Provide a `credentials` object in the PATCH body. This clears the stored role ARN.
+
+```bash
+curl --request PATCH \
+  --url 'https://api.smith.langchain.com/api/v1/bulk-exports/destinations/{destination_id}' \
+  --header 'Content-Type: application/json' \
+  --header 'X-API-Key: YOUR_API_KEY' \
+  --header 'X-Tenant-Id: YOUR_WORKSPACE_ID' \
+  --data '{
+    "credentials": {
+      "access_key_id": "YOUR_NEW_ACCESS_KEY_ID",
+      "secret_access_key": "YOUR_NEW_SECRET_ACCESS_KEY"
+    }
+  }'
+```
+
+### Behavior during the switch
+
+The same transition behavior described in [credential rotation](#credential-rotation-behavior) applies when switching authentication modes:
+
+- **New bulk export runs** use the new authentication mode immediately after the PATCH completes.
+- **Already running bulk export runs** continue using the previous authentication mode until they finish.
+
+If the test write fails because the new configuration does not have sufficient write permissions, the request returns `400`.
 
 ## Debug destination errors
 

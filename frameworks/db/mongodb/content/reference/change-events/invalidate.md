@@ -1,40 +1,89 @@
 ---
 type: "Framework Learn Page"
-framework: "mongodb"
+framework: "MongoDB"
 source_repo: "https://github.com/mongodb/docs.git"
 source_branch: "main"
 source_path: "content/manual/manual/source/reference/change-events/invalidate.txt"
-source_commit: "ab9db26ed3d11618cdb61516d8180337d8e3f679"
-source_commit_short: "ab9db26e"
-source_commit_date: "2026-07-24T16:22:46-06:00"
-generated_at: "2026-07-25T11:51:15Z"
+source_commit: "b9f2bc487a2878b65e3c1f80024bebab76954f27"
+source_commit_short: "b9f2bc48"
+source_commit_date: "2026-08-28T17:09:45-05:00"
+generated_at: "2026-08-29T09:39:19.877260Z"
 ---
-
-================
+.. _change-event-invalidate:
 
 # invalidate Event
 
+**meta:** :description: Understand how `invalidate` events occur in change streams when operations like drop or rename make the stream invalid.
+
+.. default-domain:: mongodb
+
+**contents:** On this page
+   :local:
+   :backlinks: none
+   :depth: 2
+   :class: singlecol
+
+.. |idref| replace:: ce-invalidate
+
 ## Summary
+
+**data:** invalidate
+
+   An ``invalidate`` event occurs when an operation renders the change stream
+   invalid. For example, a change stream opened on a collection that was later 
+   dropped or renamed would cause an ``invalidate`` event.
 
 ## Description
 
+.. list-table::
+   :header-rows: 1
+   :widths: 20 20 60
+
+   * - Field
+     - Type
+     - Description
+
+   * - ``_id``
+     - Document
+     - .. include:: /includes/change-stream/id
+
+   * - ``clusterTime``
+     - Timestamp
+     - .. include:: /includes/change-stream/clusterTime
+
+   * - ``operationType``
+     - string
+     - .. include:: /includes/change-stream/operationType
+
+       Returns a value of ``invalidate`` for these change events.
+
+   * - ``wallTime``
+     - :term:`ISODate`
+     - .. include:: /includes/change-stream/wallTime
+
 ## Example
 
-The following example illustrates an `invalidate` event:
+The following example illustrates an ``invalidate`` event:
 
-```json
-{
-   "_id": { <Resume Token> },
-   "operationType": "invalidate",
-   "clusterTime": <Timestamp>,
-   "wallTime": <ISODate>
-}
-```
+.. code-block:: json
+   :copyable: false
 
-Change streams opened on collections raise an `invalidate` event when a `drop <change-event-drop>`, `rename <change-event-rename>`, or `dropDatabase <change-event-dropDatabase>` operation occurs that affects the watched collection.
+   {
+      "_id": { <Resume Token> },
+      "operationType": "invalidate",
+      "clusterTime": <Timestamp>,
+      "wallTime": <ISODate>
+   }
 
-Change streams opened on databases raise an `invalidate` event when a `dropDatabase <change-event-dropDatabase>` event occurs that affects the watched database.
+Change streams opened on collections raise an ``invalidate`` event when a 
+:ref:`drop <change-event-drop>`, :ref:`rename <change-event-rename>`, 
+or :ref:`dropDatabase <change-event-dropDatabase>` operation occurs 
+that affects the watched collection.
 
-`invalidate` events close the change stream cursor.
+Change streams opened on databases raise an ``invalidate`` event when a
+:ref:`dropDatabase <change-event-dropDatabase>` event occurs that affects
+the watched database.
 
-.. include:: /includes/extracts/changestream-invalid-events.rst
+``invalidate`` events close the change stream cursor.
+
+**include:** /includes/extracts/changestream-invalid-events.rst

@@ -1,7 +1,7 @@
 ---
 type: "Framework Learn Directory Index"
 framework: "Arize Phoenix"
-generated_at: "2026-07-25T19:08:24.991381Z"
+generated_at: "2026-08-29T09:39:58.968371Z"
 ---
 # Server-Evals
 
@@ -23,3 +23,8 @@ This directory contains Arize Phoenix learning pages related to server-evals.
 - [Llm Evaluators](llm-evaluators.md)
 - [Overview](overview.md)
 - [Pre Built Metrics](pre-built-metrics.md)
+
+## Subdirectories
+
+- [Code Evaluators](code-evaluators/index.md)
+- [Pre Built Metrics](pre-built-metrics/index.md)

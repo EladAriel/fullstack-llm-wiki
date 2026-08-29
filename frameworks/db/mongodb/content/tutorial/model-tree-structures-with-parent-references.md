@@ -1,63 +1,79 @@
 ---
 type: "Framework Learn Page"
-framework: "mongodb"
+framework: "MongoDB"
 source_repo: "https://github.com/mongodb/docs.git"
 source_branch: "main"
 source_path: "content/manual/manual/source/tutorial/model-tree-structures-with-parent-references.txt"
-source_commit: "ab9db26ed3d11618cdb61516d8180337d8e3f679"
-source_commit_short: "ab9db26e"
-source_commit_date: "2026-07-24T16:22:46-06:00"
-generated_at: "2026-07-25T11:51:15Z"
+source_commit: "b9f2bc487a2878b65e3c1f80024bebab76954f27"
+source_commit_short: "b9f2bc48"
+source_commit_date: "2026-08-28T17:09:45-05:00"
+generated_at: "2026-08-29T09:39:19.574411Z"
 ---
-
-============================================
-
 # Model Tree Structures with Parent References
+
+**meta:** :description: Model tree structures in MongoDB using parent references to store hierarchical data efficiently.
+
+.. default-domain:: mongodb
+
+**contents:** On this page
+   :local:
+   :backlinks: none
+   :depth: 1
+   :class: singlecol
 
 ## Overview
 
-This page describes a data model that describes a tree-like structure in MongoDB documents by storing `references <data-modeling-referencing>` to "parent" nodes in children nodes.
+This page describes a data model that describes a tree-like
+structure in MongoDB documents by storing
+:ref:`references <data-modeling-referencing>` to "parent" nodes in
+children nodes.
 
 ## Pattern
 
-The Parent References pattern stores each tree node in a document; in addition to the tree node, the document stores the ID of the node's parent.
+.. start-model-tree-structures-include-here
+
+The *Parent References* pattern stores each tree node in a document; in
+addition to the tree node, the document stores the ID of the node's
+parent.
 
 Consider the following hierarchy of categories:
 
-.. include:: /images/data-model-tree.rst
+**include:** /images/data-model-tree.rst
 
-The following example models the tree using Parent References, storing the reference to the parent category in the field `parent`:
 
-```javascript
-db.categories.insertMany( [
-   { _id: "MongoDB", parent: "Databases" },
-   { _id: "dbm", parent: "Databases" },
-   { _id: "Databases", parent: "Programming" },
-   { _id: "Languages", parent: "Programming" },
-   { _id: "Programming", parent: "Books" },
-   { _id: "Books", parent: null }
-] )
-```
+The following example models the tree using *Parent References*,
+storing the reference to the parent category in the field ``parent``:
+
+.. code-block:: javascript
+
+   db.categories.insertMany( [
+      { _id: "MongoDB", parent: "Databases" },
+      { _id: "dbm", parent: "Databases" },
+      { _id: "Databases", parent: "Programming" },
+      { _id: "Languages", parent: "Programming" },
+      { _id: "Programming", parent: "Books" },
+      { _id: "Books", parent: null }
+   ] )
 
 - The query to retrieve the parent of a node is fast and
-straightforward:
+  straightforward:
 
-```javascript
-  db.categories.findOne( { _id: "MongoDB" } ).parent
-```
+  .. code-block:: javascript
 
-- You can create an index on the field `parent` to enable fast search
-by the parent node:
+     db.categories.findOne( { _id: "MongoDB" } ).parent
 
-```javascript
-  db.categories.createIndex( { parent: 1 } )
-```
+- You can create an index on the field ``parent`` to enable fast search
+  by the parent node:
 
-- You can query by the `parent` field to find its immediate children
-nodes:
+  .. code-block:: javascript
 
-```javascript
-  db.categories.find( { parent: "Databases" } )
-```
+     db.categories.createIndex( { parent: 1 } )
+
+- You can query by the ``parent`` field to find its immediate children
+  nodes:
+
+  .. code-block:: javascript
+
+     db.categories.find( { parent: "Databases" } )
 
 - To retrieve subtrees, see :pipeline:`$graphLookup`.

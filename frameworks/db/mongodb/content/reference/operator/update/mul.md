@@ -1,129 +1,200 @@
 ---
 type: "Framework Learn Page"
-framework: "mongodb"
+framework: "MongoDB"
 source_repo: "https://github.com/mongodb/docs.git"
 source_branch: "main"
 source_path: "content/manual/manual/source/reference/operator/update/mul.txt"
-source_commit: "ab9db26ed3d11618cdb61516d8180337d8e3f679"
-source_commit_short: "ab9db26e"
-source_commit_date: "2026-07-24T16:22:46-06:00"
-generated_at: "2026-07-25T11:51:15Z"
+source_commit: "b9f2bc487a2878b65e3c1f80024bebab76954f27"
+source_commit_short: "b9f2bc48"
+source_commit_date: "2026-08-28T17:09:45-05:00"
+generated_at: "2026-08-29T09:39:20.107555Z"
 ---
-
-======================
-
 # $mul (update operator)
+
+**meta:** :description: Multiply a field's value by a number using the `$mul` operator, which can create fields and handle mixed numeric types.
+
+.. default-domain:: mongodb
+
+**contents:** On this page
+   :local:
+   :backlinks: none
+   :depth: 1
+   :class: singlecol
 
 ## Definition
 
+**update:** $mul
+
+   Multiply the value of a field by a number. To specify a
+   :update:`$mul` expression, use the following prototype:
+
+   .. code-block:: javascript
+
+      { $mul: { <field1>: <number1>, ... } }
+
+   The field to update must contain a numeric value.
+
+   .. include:: /includes/use-dot-notation.rst
+
 ## Behavior
 
-.. include:: /includes/extracts/update-operation-empty-operand-expressions-mul.rst
+**include:** /includes/extracts/update-operation-empty-operand-expressions-mul.rst
 
-.. include:: /includes/fact-update-operator-processing-order.rst
+**include:** /includes/fact-update-operator-processing-order.rst
 
 ### Missing Field
 
-If the field does not exist in a document, :update:`$mul` creates the field and sets the value to zero of the same numeric type as the multiplier.
+If the field does not exist in a document, :update:`$mul` creates the
+field and sets the value to zero of the same numeric type as the
+multiplier.
 
 ### Atomic
 
 :update:`$mul` is an atomic operation within a single document.
 
+.. _multiplication-type-conversion:
+
 ### Mixed Type
+Multiplication with values of mixed numeric types (32-bit integer,
+64-bit integer, Double, Decimal128) may result in conversion of numeric type. For
+multiplication with values of mixed numeric types, the following type
+conversion rules apply:
 
-Multiplication with values of mixed numeric types (32-bit integer, 64-bit integer, Double, Decimal128) may result in conversion of numeric type. For multiplication with values of mixed numeric types, the following type conversion rules apply:
+.. list-table::
+   :header-rows: 1
+   :stub-columns: 1
 
-> **Note:** - If the product of two 32-bit integers exceeds the maximum value
-  for a 32-bit integer, the result is a 64-bit integer.
-- Integer operations of any type that exceed the maximum value for a
-  64-bit integer produce an error.
+   * - Data Type
+     - 32-bit Integer
+     - 64-bit Integer
+     - Double
+     - Decimal128
+
+   * - 32-bit Integer
+     - 32-bit or 64-bit Integer
+     - 64-bit Integer
+     - Double
+     - Decimal128
+
+   * - 64-bit Integer
+     - 64-bit Integer
+     - 64-bit Integer
+     - Double
+     - Decimal128
+
+   * - Double
+     - Double
+     - Double
+     - Double
+     - Decimal128
+
+   * - Decimal128
+     - Decimal128
+     - Decimal128
+     - Decimal128
+     - Decimal128
+
+**note:** - If the product of two 32-bit integers exceeds the maximum value
+     for a 32-bit integer, the result is a 64-bit integer.
+
+   - Integer operations of any type that exceed the maximum value for a
+     64-bit integer produce an error.
 
 ## Examples
 
 ### Multiply the Value of a Field
 
-Create the `products` collection:
+Create the ``products`` collection:
 
-```javascript
-db.products.insertOne(
-   { "_id" : 1, "item" : "Hats", "price" : Decimal128("10.99"), "quantity" : 25 }
-)
-```
+.. code-block:: javascript
 
-In the following operation, :method:`db.collection.updateOne()` updates the document. The :update:`$mul` operator multiplies the `price` field by `1.25` and the `quantity` field by `2`:
+   db.products.insertOne(
+      { "_id" : 1, "item" : "Hats", "price" : Decimal128("10.99"), "quantity" : 25 }
+   )
 
-```javascript
-db.products.updateOne(
-   { _id: 1 },
-   { $mul: 
-      {
-         price: Decimal128( "1.25" ),
-         quantity: 2
-       }
-   }
-)
-```
+In the following operation, :method:`db.collection.updateOne()` updates
+the document. The :update:`$mul` operator multiplies the ``price``
+field by ``1.25`` and the ``quantity`` field by ``2``:
 
-In the updated document:
+.. code-block:: javascript
 
-- `price` is the original value, 10.99, multiplied by 1.25
-- `quantity` is the original value, 25, multiplied by 2
-```javascript
- { _id: 1, item: 'Hats', price: Decimal128("13.7375"), quantity: 50 }
-```
+   db.products.updateOne(
+      { _id: 1 },
+      { $mul: 
+         {
+            price: Decimal128( "1.25" ),
+            quantity: 2
+          }
+      }
+   )
 
-### Apply `$mul` Operator to a Non-existing Field
+In the updated document: 
 
-Add the following document to the `products` collection:
+- ``price`` is the original value, 10.99, multiplied by 1.25
+- ``quantity`` is the original value, 25, multiplied by 2
 
-```javascript
-db.products.insertOne( { _id: 2,  item: "Unknown" } )
-```
+.. code-block:: javascript
 
-In the following operation, :method:`db.collection.updateOne()` attempts to apply the :update:`$mul` operator to a field that is not in the document:
+    { _id: 1, item: 'Hats', price: Decimal128("13.7375"), quantity: 50 }
 
-```javascript
-db.products.updateOne(
-   { _id: 2 },
-   { $mul: { price: Decimal128("100") } }
-)
-```
+### Apply ``$mul`` Operator to a Non-existing Field
+
+Add the following document to the ``products`` collection:
+
+.. code-block:: javascript
+
+   db.products.insertOne( { _id: 2,  item: "Unknown" } )
+
+In the following operation, :method:`db.collection.updateOne()` attempts to
+apply the :update:`$mul` operator to a field that is not in the document:
+
+.. code-block:: javascript
+
+   db.products.updateOne(
+      { _id: 2 },
+      { $mul: { price: Decimal128("100") } }
+   )
 
 The :method:`db.collection.updateOne()` operation
 
-- inserts the `price` field
+- inserts the ``price`` field
 - sets  Decimal128("0")
-```javascript
-{ "_id" : 2, "item" : "Unknown", "price" : Long(0) }
-```
 
-The `price` field has the same type, Decimal128, as the multiplier.
+.. code-block:: javascript
+
+   { "_id" : 2, "item" : "Unknown", "price" : Long(0) }
+
+The ``price`` field has the same type, Decimal128, as the multiplier.
 
 ### Multiply Mixed Numeric Types
 
-Add the following document to the `products` collection:
+Add the following document to the ``products`` collection:
 
-```javascript
-db.products.insertOne( { _id: 3,  item: "Scarf", price: Decimal128("10") } )
-```
+.. code-block:: javascript
 
-In the following operation, :method:`db.collection.updateOne()` uses the :update:`$mul` operator to multiply the value in the `price` field `Decimal128(10) <shell-type-decimal>` by `Int32(5) <shell-type-int>`:
+   db.products.insertOne( { _id: 3,  item: "Scarf", price: Decimal128("10") } )
 
-```javascript
-db.products.updateOne(
-   { _id: 3 },
-   { $mul: { price: Int32(5) } }
-)
-```
+In the following operation, :method:`db.collection.updateOne()` uses
+the :update:`$mul` operator to multiply the value in the ``price``
+field :ref:`Decimal128(10) <shell-type-decimal>` by :ref:`Int32(5)
+<shell-type-int>`:
+
+.. code-block:: javascript
+
+   db.products.updateOne(
+      { _id: 3 },
+      { $mul: { price: Int32(5) } }
+   )
 
 The operation results in the following document:
 
-```javascript
-{ _id: 3, item: 'Scarf', price: Decimal128("50") }
-```
+.. code-block:: javascript
 
-The value in the `price` field is of type `Decimal128 <shell-type-decimal>`. See `Multiplication Type Conversion Rules <multiplication-type-conversion>` for details.
+   { _id: 3, item: 'Scarf', price: Decimal128("50") }
 
-> **Seealso:** - :method:`db.collection.updateMany()`
-- :method:`db.collection.findAndModify()`
+The value in the ``price`` field is of type :ref:`Decimal128
+<shell-type-decimal>`. See :ref:`Multiplication Type Conversion Rules
+<multiplication-type-conversion>` for details.
+
+**seealso:** - :method:`db.collection.updateMany()`
+   - :method:`db.collection.findAndModify()`

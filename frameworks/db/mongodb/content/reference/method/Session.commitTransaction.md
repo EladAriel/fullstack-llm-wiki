@@ -1,143 +1,186 @@
 ---
 type: "Framework Learn Page"
-framework: "mongodb"
+framework: "MongoDB"
 source_repo: "https://github.com/mongodb/docs.git"
 source_branch: "main"
 source_path: "content/manual/manual/source/reference/method/Session.commitTransaction.txt"
-source_commit: "ab9db26ed3d11618cdb61516d8180337d8e3f679"
-source_commit_short: "ab9db26e"
-source_commit_date: "2026-07-24T16:22:46-06:00"
-generated_at: "2026-07-25T11:51:15Z"
+source_commit: "b9f2bc487a2878b65e3c1f80024bebab76954f27"
+source_commit_short: "b9f2bc48"
+source_commit_date: "2026-08-28T17:09:45-05:00"
+generated_at: "2026-08-29T09:39:19.961592Z"
 ---
-
-============================================
-
 # Session.commitTransaction() (mongosh method)
+
+**meta:** :description: Commit changes in a multi-document transaction using `Session.commitTransaction()` to ensure atomicity and consistency across sharded clusters and replica sets.
+
+.. default-domain:: mongodb
+
+**contents:** On this page
+   :local:
+   :backlinks: none
+   :depth: 1
+   :class: singlecol
 
 ## Definition
 
+**method:** Session.commitTransaction()
+
+   Saves the changes made by the operations in the :ref:`multi-document
+   transaction <transactions>` and ends the transaction.
+   
+   .. include:: /includes/transaction-support
+   
+   ``Session.commitTransaction()`` does not return a value.
+
+   .. |dbcommand| replace:: :dbcommand:`commitTransaction` command
+   .. include:: /includes/fact-mongosh-shell-method-alt
+
+
+
 ## Compatibility
+
+.. |command| replace:: method
 
 This method is available in deployments hosted in the following environments:
 
-.. include:: /includes/fact-environments-atlas-only.rst
+**include:** /includes/fact-environments-atlas-only.rst
 
-.. include:: /includes/fact-environments-atlas-support-all.rst
+**include:** /includes/fact-environments-atlas-support-all.rst
 
-.. include:: /includes/fact-environments-onprem-only.rst
+**include:** /includes/fact-environments-onprem-only.rst
 
+                
 ## Behavior
 
 ### Write Concern
 
-When commiting the transaction, the session uses the write concern specified at the transaction start. See :method:`Session.startTransaction()`.
+When commiting the transaction, the session uses the write concern
+specified at the transaction start. See
+:method:`Session.startTransaction()`.
 
-If you commit using :writeconcern:`"w: 1" <\<number\>>` write concern, your transaction can be `rolled back during the failover process </core/replica-set-rollbacks>`.
+If you commit using :writeconcern:`"w: 1" <\<number\>>` write concern,
+your transaction can be :doc:`rolled back during the failover process
+</core/replica-set-rollbacks>`.
 
 ### Atomicity
 
-When a transaction commits, all data changes made in the transaction are saved and visible outside the transaction. That is, a transaction will not commit some of its changes while rolling back others.
+When a transaction commits, all data changes made in the transaction
+are saved and visible outside the transaction. That is, a transaction
+will not commit some of its changes while rolling back others.
 
-.. include:: /includes/extracts/transactions-committed-visibility.rst
+**include:** /includes/extracts/transactions-committed-visibility.rst
 
 ### Retryable
 
-If the commit operation encounters an error, MongoDB drivers retry the commit operation a single time regardless of whether :urioption:`retryWrites` is set to `false`. For more information, see `transactions-retry`.
+If the commit operation encounters an error, MongoDB drivers retry the
+commit operation a single time regardless of whether
+:urioption:`retryWrites` is set to ``false``. For more information, see
+:ref:`transactions-retry`.
 
 ## Example
 
-Consider a scenario where as changes are made to an employee's record in the `hr` database, you want to ensure that the `events` collection in the `reporting` database are in sync with the `hr` changes. That is, you want to ensure that these writes are done as a single transaction, such that either both operations succeed or fail.
+Consider a scenario where as changes are made to an employee's record
+in the ``hr`` database, you want to ensure that the ``events``
+collection in the ``reporting`` database are in sync with the ``hr``
+changes. That is, you want to ensure that these writes are done as a
+single transaction, such that either both operations succeed or fail.
 
-The `employees` collection in the `hr` database has the following documents:
+The ``employees`` collection in the ``hr`` database has the following
+documents:
 
-```javascript
-{ "_id" : ObjectId("5af0776263426f87dd69319a"), "employee" : 3, "name" : { "title" : "Mr.", "name" : "Iba Ochs" }, "status" : "Active", "department" : "ABC" }
-{ "_id" : ObjectId("5af0776263426f87dd693198"), "employee" : 1, "name" : { "title" : "Miss", "name" : "Ann Thrope" }, "status" : "Active", "department" : "ABC" }
-{ "_id" : ObjectId("5af0776263426f87dd693199"), "employee" : 2, "name" : { "title" : "Mrs.", "name" : "Eppie Delta" }, "status" : "Active", "department" : "XYZ" }
-```
+.. code-block:: javascript
 
-The `events` collection in the `reporting` database has the following documents:
+   { "_id" : ObjectId("5af0776263426f87dd69319a"), "employee" : 3, "name" : { "title" : "Mr.", "name" : "Iba Ochs" }, "status" : "Active", "department" : "ABC" }
+   { "_id" : ObjectId("5af0776263426f87dd693198"), "employee" : 1, "name" : { "title" : "Miss", "name" : "Ann Thrope" }, "status" : "Active", "department" : "ABC" }
+   { "_id" : ObjectId("5af0776263426f87dd693199"), "employee" : 2, "name" : { "title" : "Mrs.", "name" : "Eppie Delta" }, "status" : "Active", "department" : "XYZ" }
 
-```javascript
-{ "_id" : ObjectId("5af07daa051d92f02462644a"), "employee" : 1, "status" : { "new" : "Active", "old" : null }, "department" : { "new" : "ABC", "old" : null } }
-{ "_id" : ObjectId("5af07daa051d92f02462644b"), "employee" : 2, "status" : { "new" : "Active", "old" : null }, "department" : { "new" : "XYZ", "old" : null } }
-{ "_id" : ObjectId("5af07daa051d92f02462644c"), "employee" : 3, "status" : { "new" : "Active", "old" : null }, "department" : { "new" : "ABC", "old" : null } }
-```
 
-The following example opens a transaction, updates an employee's status to `Inactive` in the `employees` status and inserts a corresponding document to the `events` collection, and commits the two operations as a single transaction.
+The ``events`` collection in the ``reporting`` database has the
+following documents:
 
-```javascript
-// Runs the txnFunc and retries if TransientTransactionError encountered
+.. code-block:: javascript
 
-function runTransactionWithRetry(txnFunc, session) {
-    while (true) {
-        try {
-            txnFunc(session);  // performs transaction
-            break;
-        } catch (error) {
-            // If transient error, retry the whole transaction
-            if (error?.errorLabels?.includes("TransientTransactionError")  ) {
-                print("TransientTransactionError, retrying transaction ...");
-                continue;
-            } else {
-                throw error;
-            }
-        }
-    }   
-}
+   { "_id" : ObjectId("5af07daa051d92f02462644a"), "employee" : 1, "status" : { "new" : "Active", "old" : null }, "department" : { "new" : "ABC", "old" : null } }
+   { "_id" : ObjectId("5af07daa051d92f02462644b"), "employee" : 2, "status" : { "new" : "Active", "old" : null }, "department" : { "new" : "XYZ", "old" : null } }
+   { "_id" : ObjectId("5af07daa051d92f02462644c"), "employee" : 3, "status" : { "new" : "Active", "old" : null }, "department" : { "new" : "ABC", "old" : null } }
 
-// Retries commit if UnknownTransactionCommitResult encountered
+The following example opens a transaction, updates an employee's status
+to ``Inactive`` in the ``employees`` status and inserts a corresponding
+document to the ``events`` collection, and commits the two operations
+as a single transaction.
 
-function commitWithRetry(session) {
-    while (true) {
-        try {
-            session.commitTransaction(); // Uses write concern set at transaction start.
-            print("Transaction committed.");
-            break;
-        } catch (error) {
-            // Can retry commit
-            if (error?.errorLabels?.includes("UnknownTransactionCommitResult") ) {
-                print("UnknownTransactionCommitResult, retrying commit operation ...");
-                continue;
-            } else {
-                print("Error during commit ...");
-                throw error;
-            }
+.. code-block:: javascript
+
+   // Runs the txnFunc and retries if TransientTransactionError encountered
+
+   function runTransactionWithRetry(txnFunc, session) {
+       while (true) {
+           try {
+               txnFunc(session);  // performs transaction
+               break;
+           } catch (error) {
+               // If transient error, retry the whole transaction
+               if (error?.errorLabels?.includes("TransientTransactionError")  ) {
+                   print("TransientTransactionError, retrying transaction ...");
+                   continue;
+               } else {
+                   throw error;
+               }
+           }
+       }   
+   }
+
+   // Retries commit if UnknownTransactionCommitResult encountered
+
+   function commitWithRetry(session) {
+       while (true) {
+           try {
+               session.commitTransaction(); // Uses write concern set at transaction start.
+               print("Transaction committed.");
+               break;
+           } catch (error) {
+               // Can retry commit
+               if (error?.errorLabels?.includes("UnknownTransactionCommitResult") ) {
+                   print("UnknownTransactionCommitResult, retrying commit operation ...");
+                   continue;
+               } else {
+                   print("Error during commit ...");
+                   throw error;
+               }
+          }
        }
-    }
-}
+   }
 
-// Updates two collections in a transactions
+   // Updates two collections in a transactions
 
-function updateEmployeeInfo(session) {
-    employeesCollection = session.getDatabase("hr").employees;
-    eventsCollection = session.getDatabase("reporting").events;
+   function updateEmployeeInfo(session) {
+       employeesCollection = session.getDatabase("hr").employees;
+       eventsCollection = session.getDatabase("reporting").events;
 
-    session.startTransaction( { readConcern: { level: "snapshot" }, writeConcern: { w: "majority" } } );
+       session.startTransaction( { readConcern: { level: "snapshot" }, writeConcern: { w: "majority" } } );
 
-    try{
-        employeesCollection.updateOne( { employee: 3 }, { $set: { status: "Inactive" } } );
-        eventsCollection.insertOne( { employee: 3, status: { new: "Inactive", old: "Active" } } );
-    } catch (error) {
-        print("Caught exception during transaction, aborting.");
-        session.abortTransaction();
-        throw error;
-    }
+       try{
+           employeesCollection.updateOne( { employee: 3 }, { $set: { status: "Inactive" } } );
+           eventsCollection.insertOne( { employee: 3, status: { new: "Inactive", old: "Active" } } );
+       } catch (error) {
+           print("Caught exception during transaction, aborting.");
+           session.abortTransaction();
+           throw error;
+       }
 
-    commitWithRetry(session);
-}
+       commitWithRetry(session);
+   }
 
-// Start a session.
-session = db.getMongo().startSession( { readPreference: { mode: "primary" } } );
+   // Start a session.
+   session = db.getMongo().startSession( { readPreference: { mode: "primary" } } );
 
-try{
-   runTransactionWithRetry(updateEmployeeInfo, session);
-} catch (error) {
-   // Do something with error
-} finally {
-   session.endSession();
-}
-```
+   try{
+      runTransactionWithRetry(updateEmployeeInfo, session);
+   } catch (error) {
+      // Do something with error
+   } finally {
+      session.endSession();
+   }
 
-> **Seealso:** - :method:`Session.abortTransaction()`
-- :method:`Session.commitTransaction()`
+**seealso:** - :method:`Session.abortTransaction()`
+   - :method:`Session.commitTransaction()`

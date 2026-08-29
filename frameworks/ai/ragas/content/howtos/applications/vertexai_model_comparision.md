@@ -5,11 +5,10 @@ source_repo: "https://github.com/vibrantlabsai/ragas"
 source_branch: "main"
 source_path: "docs/howtos/applications/vertexai_model_comparision.md"
 source_commit: "298b68274234c060deacab3cf5fb52aa3a20e885"
-source_commit_short: "298b6827"
+source_commit_short: "298b682"
 source_commit_date: "2026-02-24T13:17:18+05:30"
-generated_at: "2026-06-23T13:55:50Z"
+generated_at: "2026-08-29T09:38:15.976801Z"
 ---
-
 # Compare models provided by VertexAI on RAG-based Q&A task using Ragas metrics
 
 This tutorial is part of a three-part series on how to use Vertex AI models with Ragas. It is recommended that you have gone through [Getting Started: Ragas with Vertex AI](./vertexai_x_ragas.md), even if you have not followed it you’ll be golden. You can check to the Align LLM Metrics tutorial by [clicking](./vertexai_alignment.md).

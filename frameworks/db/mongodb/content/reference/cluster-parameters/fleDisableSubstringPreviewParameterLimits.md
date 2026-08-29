@@ -1,49 +1,76 @@
 ---
 type: "Framework Learn Page"
-framework: "mongodb"
+framework: "MongoDB"
 source_repo: "https://github.com/mongodb/docs.git"
 source_branch: "main"
 source_path: "content/manual/manual/source/reference/cluster-parameters/fleDisableSubstringPreviewParameterLimits.txt"
-source_commit: "ab9db26ed3d11618cdb61516d8180337d8e3f679"
-source_commit_short: "ab9db26e"
-source_commit_date: "2026-07-24T16:22:46-06:00"
-generated_at: "2026-07-25T11:51:15Z"
+source_commit: "b9f2bc487a2878b65e3c1f80024bebab76954f27"
+source_commit_short: "b9f2bc48"
+source_commit_date: "2026-08-28T17:09:45-05:00"
+generated_at: "2026-08-29T09:39:19.881548Z"
 ---
-
-=========================================
+.. _fleDisableSubstringPreviewParameterLimits:
 
 # fleDisableSubstringPreviewParameterLimits
 
+**meta:** :keywords: on-prem
+
+.. default-domain:: mongodb
+
+**contents:** On this page
+   :local:
+   :backlinks: none
+   :depth: 2
+   :class: singlecol
+
+.. |both| replace:: Available for both :binary:`~bin.mongod` and :binary:`~bin.mongos`.
+
 ## Definition
+
+**parameter:** fleDisableSubstringPreviewParameterLimits
+   
+   .. versionadded:: 8.2
+      
+   |both|
+   
+   Overrides the string length limitations for :ref:`substring queries 
+   <qe-substring-parameters>` on {+qe+} enabled collections. 
+   
+   You can only set ``fleDisableSubstringPreviewParameterLimits`` on 
+   :binary:`~bin.mongos` or a replica set primary. The value is set 
+   cluster-wide.
 
 ## Syntax
 
-To set `fleDisableSubstringPreviewParameterLimits` for your deployment, run the following command on the `admin` database:
+To set ``fleDisableSubstringPreviewParameterLimits`` for your deployment, run
+the following command on the ``admin`` database:
 
-```javascript
-db.adminCommand(
-   {
-      setClusterParameter: {
-         fleDisableSubstringPreviewParameterLimits: { shouldOverride: true }
+.. code-block:: javascript
+
+   db.adminCommand(
+      {
+         setClusterParameter: {
+            fleDisableSubstringPreviewParameterLimits: { shouldOverride: true }
+         }
       }
-   }
-)
-```
+   )
 
-To view the current value, run the following command on the `admin` database:
+To view the current value, run the following command on the ``admin`` database: 
 
-```javascript
-db.adminCommand( { getClusterParameter: "fleDisableSubstringPreviewParameterLimits" } )
-```
+.. code-block:: javascript
+
+   db.adminCommand( { getClusterParameter: "fleDisableSubstringPreviewParameterLimits" } )
 
 ## Behavior
 
-By default, MongoDB enforces soft limits for {+qe+} encrypted string fields with `substring queries <qe-substring-parameters>` enabled:
+By default, MongoDB enforces soft limits for {+qe+} encrypted string fields
+with :ref:`substring queries <qe-substring-parameters>` enabled:
 
-- `strMaxLength` is limited to 60 characters
-- `strMaxQueryLength` is limited to 10 characters
-- `strMinQueryLength` must be 2 or higher
+- ``strMaxLength`` is limited to 60 characters
+- ``strMaxQueryLength`` is limited to 10 characters
+- ``strMinQueryLength`` must be 2 or higher
+
 This parameter overrides these restrictions.
 
-> **Important:** Querying long encrypted strings strongly impacts performance. Limit
-string length and query length whenever possible.
+**important:** Querying long encrypted strings strongly impacts performance. Limit
+   string length and query length whenever possible.

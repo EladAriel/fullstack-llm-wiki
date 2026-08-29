@@ -4,10 +4,10 @@ framework: "LangSmith"
 source_repo: "https://github.com/langchain-ai/docs.git"
 source_branch: "main"
 source_path: "src/langsmith/llm-as-judge.mdx"
-source_commit: "2aae1dfc98ee953a9a5185fb6fcdd9efb3f4d878"
-source_commit_short: "2aae1df"
-source_commit_date: "2026-07-25T00:27:23+00:00"
-generated_at: "2026-07-25T19:08:33.369722Z"
+source_commit: "a174f9cf7c91ee5eb14ee2382eb48bfe6e4956e9"
+source_commit_short: "a174f9c"
+source_commit_date: "2026-08-28T17:04:12-07:00"
+generated_at: "2026-08-29T09:39:50.659356Z"
 ---
 # Llm As Judge
 
@@ -53,11 +53,7 @@ Add specific instructions for your LLM-as-a-judge evaluator prompt and configure
 
 ### Prompt
 
-Create a new prompt, or choose an existing prompt from the [prompt hub](/langsmith/prompt-engineering-quickstart).
-
-* **Create your own prompt**: Create a custom prompt inline.
-
-* **Pull a prompt from the prompt hub**: Use the **Select a prompt** dropdown to select from an existing prompt. You can't edit these prompts directly within the prompt editor, but you can view the prompt and the schema it uses. To make changes, edit the prompt in the Playground and commit the version, and then pull in your new prompt in the evaluator.
+Create a custom prompt inline for your evaluator.
 
 ### Model
 
@@ -95,7 +91,7 @@ Feedback configuration is the scoring criteria that your LLM-as-a-judge evaluato
    * **Categorical**: Select from predefined categories.
    * **Continuous**: Numerical scoring within a specified range.
 
-Behind the scenes, feedback configuration is added as [structured output](/oss/langchain/structured-output) to the LLM-as-a-judge prompt. If you're using an existing prompt from the hub, you must add an output schema to the prompt before configuring an evaluator to use it. Each top-level key in the output schema will be treated as a separate piece of feedback.
+Behind the scenes, feedback configuration is added as [structured output](/oss/langchain/structured-output) to the LLM-as-a-judge prompt. Each top-level key in the output schema will be treated as a separate piece of feedback.
 
 ## Step 3. Save the evaluator
 

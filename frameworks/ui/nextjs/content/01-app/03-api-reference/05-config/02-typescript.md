@@ -1,14 +1,15 @@
 ---
 type: "Framework Learn Page"
-framework: "nextjs"
+framework: "Next.js"
 source_repo: "https://github.com/vercel/next.js/"
 source_branch: "canary"
 source_path: "docs/01-app/03-api-reference/05-config/02-typescript.mdx"
-source_commit: "dcf242a17b5d4622bbd9624db531a9d84177619f"
-source_commit_short: "dcf242a1"
-source_commit_date: "2026-07-25T10:16:19+02:00"
-generated_at: "2026-07-25T11:50:53Z"
+source_commit: "33a5d542e519fe4e05c8c8c2c2845da9f741699b"
+source_commit_short: "33a5d542"
+source_commit_date: "2026-08-29T00:04:45-07:00"
+generated_at: "2026-08-29T09:40:24.293976Z"
 ---
+# 02 Typescript
 
 ---
 title: TypeScript
@@ -25,7 +26,7 @@ To add TypeScript to an existing project, rename a file to `.ts` / `.tsx`. Run `
 
 ## Using TypeScript 7
 
-[TypeScript 7](https://devblogs.microsoft.com/typescript/announcing-typescript-7-0/) does not currently provide the JavaScript compiler API that Next.js uses for type checking by default. To use TypeScript 7 during `next build`, install it in your project:
+[TypeScript 7](https://devblogs.microsoft.com/typescript/announcing-typescript-7-0/) does not currently provide the JavaScript compiler API. To use TypeScript 7 during `next build`, install it in your project:
 
 ```bash package="pnpm"
 pnpm add -D typescript@^7
@@ -43,32 +44,7 @@ yarn add -D typescript@^7
 bun add -D typescript@^7
 ```
 
-Then, opt in to running the project-local `tsc` CLI instead of the JavaScript API with [`experimental.useTypeScriptCli`](/docs/app/api-reference/config/next-config-js/useTypeScriptCli):
-
-```ts filename="next.config.ts" switcher
-import type { NextConfig } from 'next'
-
-const nextConfig: NextConfig = {
-  experimental: {
-    useTypeScriptCli: true,
-  },
-}
-
-export default nextConfig
-```
-
-```js filename="next.config.js" switcher
-/** @type {import('next').NextConfig} */
-const nextConfig = {
-  experimental: {
-    useTypeScriptCli: true,
-  },
-}
-
-module.exports = nextConfig
-```
-
-Next.js does not enable this option automatically. If you install TypeScript 7 without enabling `experimental.useTypeScriptCli`, `next build` exits with instructions to enable the option or install a TypeScript version supported by the default checker.
+Next.js uses the project-local `tsc` CLI by default, so no additional configuration is required. To use the JavaScript compiler API instead, set [`experimental.useTypeScriptCli`](/docs/app/api-reference/config/next-config-js/useTypeScriptCli) to `false`.
 
 > **Good to know**:
 >
@@ -97,7 +73,7 @@ You can enable the plugin in VS Code by:
   height="637"
 />
 
-Now, when editing files, the custom plugin will be enabled. By default, the custom type checker is used when running `next build`. When [`experimental.useTypeScriptCli`](#using-typescript-7) is enabled, the project-local `tsc` CLI is used instead.
+Now, when editing files, the custom plugin will be enabled. By default, the project-local `tsc` CLI is used when running `next build`. Set [`experimental.useTypeScriptCli`](#using-typescript-7) to `false` to use the custom type checker instead.
 
 The TypeScript plugin can help with:
 
@@ -319,6 +295,7 @@ export function proxy(request: NextRequest) {
 
 ```tsx filename="app/some/page.tsx"
 import type { Route } from 'next'
+import Link from 'next/link'
 
 export default function Page() {
   return <Link href={'/proxy-redirect' as Route}>Link Text</Link>
@@ -378,7 +355,7 @@ export function Nav() {
 
 > **How does it work?**
 >
-> When running `next dev` or `next build`, Next.js generates a hidden `.d.ts` file inside `.next` that contains information about all existing routes in your application (all valid routes as the `href` type of `Link`). This `.d.ts` file is included in `tsconfig.json` and the TypeScript compiler will check that `.d.ts` and provide feedback in your editor about invalid links.
+> When running, `next typegen`, `next dev` or `next build`, Next.js generates a hidden `.d.ts` file inside `.next` that contains information about all existing routes in your application (all valid routes as the `href` type of `Link`). This `.d.ts` file is included in `tsconfig.json` and the TypeScript compiler will check that `.d.ts` and provide feedback in your editor about invalid links.
 
 ### Type IntelliSense for Environment Variables
 

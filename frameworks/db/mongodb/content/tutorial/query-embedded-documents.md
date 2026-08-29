@@ -1,90 +1,145 @@
 ---
 type: "Framework Learn Page"
-framework: "mongodb"
+framework: "MongoDB"
 source_repo: "https://github.com/mongodb/docs.git"
 source_branch: "main"
 source_path: "content/manual/manual/source/tutorial/query-embedded-documents.txt"
-source_commit: "ab9db26ed3d11618cdb61516d8180337d8e3f679"
-source_commit_short: "ab9db26e"
-source_commit_date: "2026-07-24T16:22:46-06:00"
-generated_at: "2026-07-25T11:51:15Z"
+source_commit: "b9f2bc487a2878b65e3c1f80024bebab76954f27"
+source_commit_short: "b9f2bc48"
+source_commit_date: "2026-08-28T17:09:45-05:00"
+generated_at: "2026-08-29T09:39:19.617700Z"
 ---
+**include:** /includes/java-sync-links.rst
+**include:** /includes/java-async-links.rst
 
-.. include:: /includes/java-sync-links.rst
-
-.. include:: /includes/java-async-links.rst
-
-==================================
+.. _read-operations-subdocuments:
+.. _read-operations-embedded-documents:
 
 # Query on Embedded/Nested Documents
 
+.. default-domain:: mongodb
+
+**facet:** :name: programming_language
+   :values: shell, csharp, go, java, python, php, ruby, scala, javascript/typescript, kotlin
+
+**meta:** :description: MongoDB Manual: How to query or select on embedded or nested documents, subdocuments and fields.
+   :keywords: filter, subdocuments, compound conditions, motor, java sync, java async, reactive streams, code example, node.js, compass, coroutine
+
+**contents:** On this page
+   :local:
+   :backlinks: none
+   :depth: 1
+
 Query embedded documents in MongoDBwith the following methods:
 
-.. include:: /includes/fact-methods.rst
+.. |atlas-ref| replace:: :ref:`query-embedded-documents-atlas-ui`
 
-.. include:: /includes/language-selector-instructions.rst
+**include:** /includes/fact-methods.rst
 
-.. include:: /includes/driver-examples/driver-example-query-intro.rst
+**include:** /includes/language-selector-instructions.rst
 
-.. include:: /includes/driver-examples/driver-example-query-14.rst
+.. tabs-selector:: drivers
+
+.. |query_operations| replace:: query operations on embedded/nested documents
+
+**include:** /includes/driver-examples/driver-example-query-intro.rst
+
+**include:** /includes/driver-examples/driver-example-query-14.rst
 
 ## Query Nested Fields with Dot Notation
 
-Specify query conditions on fields in an embedded/nested document with `dot notation` `"field.nestedField"`.
+Specify query conditions on fields in an embedded/nested document with
+:term:`dot notation` ``"field.nestedField"``. 
 
-> **Note:** When you query with dot notation, the field and nested field must be
-inside quotation marks.
+**note:** When you query with dot notation, the field and nested field must be
+  inside quotation marks.
 
 ### Specify Equality Match on a Nested Field
 
-The following example selects all documents where the field `uom` nested in the `size` field equals `"in"`:
+The following example selects all documents where the field ``uom``
+nested in the ``size`` field equals ``"in"``:
 
-.. include:: /includes/driver-examples/driver-example-query-17.rst
+**include:** /includes/driver-examples/driver-example-query-17.rst
 
 ### Specify Match using Query Operator
 
-.. include:: /includes/extracts/filter-query-operators.rst
+**include:** /includes/extracts/filter-query-operators.rst
 
-The following query uses the less than operator (:query:`$lt`) on the field `h` embedded in the `size` field:
+The following query uses the less than operator (:query:`$lt`) on
+the field ``h`` embedded in the ``size`` field:
 
-.. include:: /includes/driver-examples/driver-example-query-18.rst
+**include:** /includes/driver-examples/driver-example-query-18.rst
 
-### Specify `AND` Condition
+### Specify ``AND`` Condition
 
-The following query selects all documents where the nested field `h` is less than `15`, the nested field `uom` equals `"in"`, and the `status` field equals `"D"`:
+The following query selects all documents where the nested field ``h``
+is less than ``15``, the nested field ``uom`` equals ``"in"``, and the
+``status`` field equals ``"D"``:
 
-.. include:: /includes/driver-examples/driver-example-query-19.rst
+**include:** /includes/driver-examples/driver-example-query-19.rst
 
 ## Match an Embedded/Nested Document
 
-.. include:: /includes/extracts/filter-equality-embedded.rst
+**include:** /includes/extracts/filter-equality-embedded.rst
 
-For example, the following query selects all documents where the field `size` equals the document `{ h: 14, w: 21, uom: "cm" }`:
+For example, the following query selects all documents where the field
+``size`` equals the document ``{ h: 14, w: 21, uom: "cm" }``:
 
-.. include:: /includes/driver-examples/driver-example-query-15.rst
+**include:** /includes/driver-examples/driver-example-query-15.rst
 
-> **Warning:** MongoDB does not recommend `comparisons <query-comparison>` on embedded
-documents because the operations require an exact match of the specified
-`<value>` document, including the field order.
-For example, the following query does not match any documents in the
-`inventory` collection:
-.. include:: /includes/driver-examples/driver-example-query-16.rst
-Queries that use comparisons on embedded documents can result in
-unpredictable behavior when used with a driver that does not use ordered data
-structures for expressing queries.
+
+**warning:** MongoDB does not recommend :ref:`comparisons <query-comparison>` on embedded 
+   documents because the operations require an *exact* match of the specified 
+   ``<value>`` document, including the field order.
+
+   For example, the following query does not match any documents in the
+   ``inventory`` collection:
+
+   .. include:: /includes/driver-examples/driver-example-query-16.rst
+
+   Queries that use comparisons on embedded documents can result in 
+   unpredictable behavior when used with a driver that does not use ordered data 
+   structures for expressing queries. 
+
+.. _query-embedded-documents-atlas-ui:
 
 ## Query Embedded Documents with {+atlas+}
 
-This example uses the :atlas:`sample movies dataset </sample-data/sample-mflix/>`. To load the sample dataset into your {+atlas+} deployment, see :atlas:`Load Sample Data </sample-data/#std-label-load-sample-data>`.
+This example uses the :atlas:`sample movies dataset 
+</sample-data/sample-mflix/>`. To load the sample dataset into your
+{+atlas+} deployment, see :atlas:`Load Sample Data 
+</sample-data/#std-label-load-sample-data>`.
 
 To query an embedded document in {+atlas+}, follow these steps:
+
+**procedure:** :style: normal
+
+   .. include:: /includes/atlas-nav/steps-db-deployments-page.rst
+
+   .. step:: Navigate to the collection
+
+      .. include:: /includes/steps-nav-atlas-sample-movies.rst
+
+   .. step:: Specify the query filter document
+
+      .. include:: /includes/steps-specify-query-filter.rst
+
+      .. code-block:: javascript
+
+         { "awards.wins": 1 }
+
+   .. step:: Click :guilabel:`Apply`
+
+      This query filter returns all documents in the 
+      ``sample_mflix.movies`` collection where the embedded  document
+      for the ``awards`` field contains ``{ wins: 1 }``.
 
 ## Additional Query Tutorials
 
 For additional query examples, see:
 
-- `match-values-with-all`
-- `all-with-elemMatch`
-- `read-operations-queries`
-- `read-operations-arrays`
-- `array-match-embedded-documents`
+- :ref:`match-values-with-all`
+- :ref:`all-with-elemMatch`
+- :ref:`read-operations-queries`
+- :ref:`read-operations-arrays`
+- :ref:`array-match-embedded-documents`

@@ -1,7 +1,7 @@
 ---
 type: "Framework Learn Directory Index"
 framework: "Grafana"
-generated_at: "2026-07-25T19:08:09.129335Z"
+generated_at: "2026-08-29T09:39:37.612438Z"
 ---
 # Configure
 

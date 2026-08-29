@@ -1,109 +1,219 @@
 ---
 type: "Framework Learn Page"
-framework: "mongodb"
+framework: "MongoDB"
 source_repo: "https://github.com/mongodb/docs.git"
 source_branch: "main"
 source_path: "content/manual/manual/source/reference/method/db.auth.txt"
-source_commit: "ab9db26ed3d11618cdb61516d8180337d8e3f679"
-source_commit_short: "ab9db26e"
-source_commit_date: "2026-07-24T16:22:46-06:00"
-generated_at: "2026-07-25T11:51:15Z"
+source_commit: "b9f2bc487a2878b65e3c1f80024bebab76954f27"
+source_commit_short: "b9f2bc48"
+source_commit_date: "2026-08-28T17:09:45-05:00"
+generated_at: "2026-08-29T09:39:19.904273Z"
 ---
-
-==========================
+.. _db-auth-method:
 
 # db.auth() (mongosh method)
 
+**meta:** :description: Authenticate users to a database using `db.auth()` in the shell, with options for password prompts and authentication mechanisms.
+
+.. default-domain:: mongodb
+
+**contents:** On this page
+   :local:
+   :backlinks: none
+   :depth: 1
+   :class: singlecol
+
 ## Definition
+
+**method:** db.auth()
+
+   Allows a user to authenticate to the database from within the
+   shell.
+
+   .. tip::
+
+      .. include:: /includes/extracts/4.2-changes-passwordPrompt.rst
+
+      .. include:: /includes/extracts/4.4-changes-passwordPrompt.rst
 
 ## Compatibility
 
-This method is available in deployments hosted in the following environments:
+This method is available in deployments hosted in the following
+environments:
 
-.. include:: /includes/fact-environments-no-atlas-support.rst
+**include:** /includes/fact-environments-no-atlas-support.rst
 
-.. include:: /includes/fact-environments-onprem-only.rst
+**include:** /includes/fact-environments-onprem-only.rst
 
 ## Syntax
 
 The :method:`db.auth()` has the following syntax forms:
 
-### `db.auth(<username>, <password>)`
+.. _db-auth-syntax-username-password:
+
+### ``db.auth(<username>, <password>)``
 
 You can either:
 
 - Omit the password to prompt the user to enter a password:
-```javascript
-   db.auth( <username> )
-```
+
+  .. code-block:: javascript
+
+      db.auth( <username> )
 
 - Use :method:`passwordPrompt()` to prompt the user to enter
-a password:
+  a password:
+  
+  .. code-block:: javascript
 
-```javascript
-   db.auth( <username>, passwordPrompt() )
-```
+      db.auth( <username>, passwordPrompt() )
 
 - Specify a cleartext password.
-```javascript
-   db.auth( <username>, <password> )
-```
 
-### `db.auth(<user document>)`
+  .. code-block:: javascript
 
-```javascript
-db.auth( {
-   user: <username>,
-   pwd: passwordPrompt(),   // Or "<cleartext password>"
-   mechanism: <authentication mechanism>,
-   digestPassword: <boolean>
-} )
-```
+      db.auth( <username>, <password> )
 
-.. include:: /includes/note-auth-methods-excluded-from-shell-history.rst
+.. _db-auth-syntax-user-document:
 
-Returns :method:`db.auth()` returns `0` when authentication is **not** successful, and `1` when the operation is successful.
+### ``db.auth(<user document>)``
+
+.. code-block:: javascript
+
+   db.auth( {
+      user: <username>,
+      pwd: passwordPrompt(),   // Or "<cleartext password>"
+      mechanism: <authentication mechanism>,
+      digestPassword: <boolean>
+   } )
+
+
+.. list-table::
+   :header-rows: 1
+   :widths: 20 20 80
+
+   * - Parameter
+
+     - Type
+
+     - Description
+
+   * - ``user``
+
+     - string
+
+     - The name of the user with access privileges for this database.
+       
+       
+
+   * - ``pwd``
+
+     - string
+
+     - The user's password. The value can be either:
+       
+       - the user's password in cleartext string, or
+       
+       - :method:`passwordPrompt()` to prompt for the user's password. 
+              
+         .. include:: /includes/extracts/4.2-changes-passwordPrompt.rst
+
+          When using the user document syntax, you cannot omit the
+          ``pwd``.
+       
+       
+
+   * - ``mechanism``
+
+     - string
+
+     - Optional. The :option:`authentication mechanism <mongosh --authenticationMechanism>` 
+       to use.
+
+       For available mechanisms, see :option:`authentication mechanisms <mongosh --authenticationMechanism>`.
+
+       If unspecified, uses the :dbcommand:`hello` command to determine
+       the SASL mechanism or mechanisms for the specified user. See
+       :data:`~hello.saslSupportedMechs`.
+
+   * - ``digestPassword``
+
+     - boolean
+
+     - Optional. Determines whether or not the supplied password should be pre-hashed
+       before being used with the specified authentication mechanism. 
+       
+       - For :ref:`SCRAM-SHA-1 <scram-mechanisms>`, although you may
+         specify ``true``, setting this value to ``true`` does not improve
+         security and may interfere with credentials using other mechanisms.
+       
+       - For all other methods, this value must be set to ``false``
+         (default value). Any other value will result in authentication
+         failure since those methods do not understand MongoDB pre-hashing.
+       
+       The default value is ``false``.
+
+.. |operation-name| replace:: :method:`db.auth()`
+**include:** /includes/note-auth-methods-excluded-from-shell-history.rst
+
+Returns
+  :method:`db.auth()` returns ``0`` when authentication is
+  **not** successful, and ``1`` when the operation is successful.
 
 ## Behavior
 
+.. |operation| replace:: :method:`db.auth()`
+
 ### Client Disconnection
 
-.. include:: /includes/extracts/4.2-changes-disconnect.rst
+**include:** /includes/extracts/4.2-changes-disconnect.rst
 
 ## Example
 
-> **Tip:** .. include:: /includes/extracts/4.2-changes-passwordPrompt.rst
-.. include:: /includes/extracts/4.4-changes-passwordPrompt.rst
+**tip:** .. include:: /includes/extracts/4.2-changes-passwordPrompt.rst
+
+   .. include:: /includes/extracts/4.4-changes-passwordPrompt.rst
 
 ### Authenticate after Connecting to the Shell
 
-To authenticate after connecting :binary:`~bin.mongosh`, issue :method:`db.auth()` in the user's `authentication database <authentication-database>`:
+To authenticate after connecting :binary:`~bin.mongosh`, issue
+:method:`db.auth()` in the user's :ref:`authentication database
+<authentication-database>`:
 
-```javascript
-use test
-db.auth( "myTestDBUser", passwordPrompt() )
-```
+.. code-block:: javascript
 
-You can omit the `password` value entirely to prompt the user to enter their password:
+   use test
+   db.auth( "myTestDBUser", passwordPrompt() )
 
-```javascript
-use test
-db.auth( "myTestDBUser" )
-```
+You can omit the ``password`` value entirely to prompt the user to enter their 
+password:
 
-Starting in MongoDB 5.0, if your connection specifies the `--apiStrict` option, you may not use the :method:`db.auth()` method to:
+.. code-block:: javascript
+
+   use test
+   db.auth( "myTestDBUser" )
+
+Starting in MongoDB 5.0, if your connection specifies the 
+``--apiStrict`` option, you may not use the :method:`db.auth()` 
+method to:
 
 - Authenticate again as the same user on the same database.
-- Authenticate as a different user when previously authenticated
-on the same database.
+- Authenticate as a different user when previously authenticated 
+  on the same database.
+- Authenticate with a new database when previously authenticated on a 
+  different database.
 
-- Authenticate with a new database when previously authenticated on a
-different database.
 
 ### Authenticate when Connecting to the Shell
 
-Alternatively, you can use :binary:`~bin.mongosh`'s command-line options :option:`--username <mongosh --username>`, :option:`--password <mongosh --password>`, :option:`--authenticationDatabase <mongosh --authenticationDatabase>`, and :option:`--authenticationMechanism <mongosh --authenticationMechanism>` to specify authentication credentials when connecting :binary:`~bin.mongosh`:
+Alternatively, you can use :binary:`~bin.mongosh`'s
+command-line options :option:`--username <mongosh --username>`,
+:option:`--password <mongosh --password>`,
+:option:`--authenticationDatabase <mongosh --authenticationDatabase>`,
+and :option:`--authenticationMechanism <mongosh
+--authenticationMechanism>` to specify authentication credentials when
+connecting :binary:`~bin.mongosh`:
 
-```bash
-mongosh --username "myTestDBUser" --password --authenticationDatabase test --authenticationMechanism SCRAM-SHA-256
-```
+.. code-block:: bash
+
+   mongosh --username "myTestDBUser" --password --authenticationDatabase test --authenticationMechanism SCRAM-SHA-256

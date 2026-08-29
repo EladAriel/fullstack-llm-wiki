@@ -1,88 +1,126 @@
 ---
 type: "Framework Learn Page"
-framework: "mongodb"
+framework: "MongoDB"
 source_repo: "https://github.com/mongodb/docs.git"
 source_branch: "main"
 source_path: "content/manual/manual/source/core/indexes/drop-index.txt"
-source_commit: "ab9db26ed3d11618cdb61516d8180337d8e3f679"
-source_commit_short: "ab9db26e"
-source_commit_date: "2026-07-24T16:22:46-06:00"
-generated_at: "2026-07-25T11:51:15Z"
+source_commit: "b9f2bc487a2878b65e3c1f80024bebab76954f27"
+source_commit_short: "b9f2bc48"
+source_commit_date: "2026-08-28T17:09:45-05:00"
+generated_at: "2026-08-29T09:39:19.805847Z"
 ---
-
-=============
+.. _drop-an-index:
 
 # Drop an Index
 
-You can remove a specific index from a collection. You may need to drop an index if you see a negative performance impact, want to replace it with a new index, or no longer need the index.
+**meta:** :description: Remove specific or multiple indexes from a collection using shell methods, ensuring to evaluate potential performance impacts before dropping.
+
+.. default-domain:: mongodb
+
+**contents:** On this page
+   :local:
+   :backlinks: none
+   :depth: 2
+   :class: singlecol
+
+You can remove a specific index from a collection. You may need to drop
+an index if you see a negative performance impact, want to replace it
+with a new index, or no longer need the index.
 
 To drop an index, use one of the following shell methods:
 
+.. list-table::
+   :header-rows: 1
+   :widths: 30 70
+
+   * - Method
+     - Description
+
+   * - :method:`db.collection.dropIndex()`
+     - Drops a specific index from the collection.
+
+   * - :method:`db.collection.dropIndexes()`
+     - Drops all removable indexes from the collection or an array of
+       indexes, if specified.
+
 ## About this Task
 
-You can drop any index except the default index on the `_id field. To drop the id` index, you must drop the entire collection.
+You can drop any index except the default index on the ``_id`` field.
+To drop the ``_id`` index, you must drop the entire collection.
 
-If you drop an index that's actively used in production, you may experience performance degradation. Before you drop an index, consider `hiding the index <index-type-hidden>` to evaluate the potential impact of the drop.
+If you drop an index that's actively used in production, you 
+may experience performance degradation. Before you drop an index,
+consider :ref:`hiding the index <index-type-hidden>` to evaluate
+the potential impact of the drop. 
 
 ## Before You Begin
 
-To drop an index, you need its name. To get all index names for a collection, run the :method:`~db.collection.getIndexes()` method:
+To drop an index, you need its name. To get all index names for a
+collection, run the :method:`~db.collection.getIndexes()` method:
 
-```javascript
-db.<collection>.getIndexes()
-```
+.. code-block:: javascript
+
+   db.<collection>.getIndexes()
 
 ## Procedures
 
-After you identify which indexes to drop, use one of the following drop methods for the specified collection:
+After you identify which indexes to drop, use one of the following drop
+methods for the specified collection:
 
 ### Drop a Single Index
 
-To drop a specific index, use the :method:`~db.collection.dropIndex()` method and specify the index name:
+To drop a specific index, use the :method:`~db.collection.dropIndex()`
+method and specify the index name:
 
-```javascript
-db.<collection>.dropIndex("<indexName>")
-```
+.. code-block:: javascript
+
+   db.<collection>.dropIndex("<indexName>")
 
 ### Drop Multiple Indexes
 
-To drop multiple indexes, use the :method:`~db.collection.dropIndexes()` method and specify an array of index names:
+To drop multiple indexes, use the :method:`~db.collection.dropIndexes()` 
+method and specify an array of index names:
 
-```javascript
-db.<collection>.dropIndexes( [ "<index1>", "<index2>", "<index3>" ] )
-```
+.. code-block:: javascript
 
-### Drop All Indexes Except the `_id` Index
+   db.<collection>.dropIndexes( [ "<index1>", "<index2>", "<index3>" ] )
 
-To drop all indexes except the `_id` index, use the :method:`~db.collection.dropIndexes()` method:
+### Drop All Indexes Except the ``_id`` Index
 
-```javascript
-db.<collection>.dropIndexes()
-```
+To drop all indexes except the ``_id`` index, use 
+the :method:`~db.collection.dropIndexes()` method:
+
+.. code-block:: javascript
+
+   db.<collection>.dropIndexes()
 
 ## Results
 
-After you drop an index, the system returns information about the status of the operation.
+After you drop an index, the system returns information about
+the status of the operation.
 
 Example output:
 
-```javascript
-... 
-{ "nIndexesWas" : 3, "ok" : 1 }
-...
-```
+.. code-block:: javascript
+   :copyable: false
 
-The value of `nIndexesWas` reflects the number of indexes before removing an index.
+   ... 
+   { "nIndexesWas" : 3, "ok" : 1 }
+   ...
 
-To confirm that the index was dropped, run the :method:`db.collection.getIndexes()` method:
+The value of ``nIndexesWas`` reflects the number of indexes before
+removing an index.
 
-```javascript
-db.<collection>.getIndexes()
-```
+To confirm that the index was dropped, run the
+:method:`db.collection.getIndexes()` method:
 
-The dropped index no longer appears in the `getIndexes()` output.
+.. code-block:: javascript
+
+   db.<collection>.getIndexes()
+
+The dropped index no longer appears in the ``getIndexes()`` output.
 
 ## Learn More
 
-- To learn more about managing your existing indexes, see `manage-indexes`.
+- To learn more about managing your existing indexes, see :ref:`manage-indexes`.
 - To learn how to remove an index in |compass|, see :compass:`Manage Indexes in Compass </indexes>`.

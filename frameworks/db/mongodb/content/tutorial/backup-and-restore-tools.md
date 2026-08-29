@@ -1,174 +1,271 @@
 ---
 type: "Framework Learn Page"
-framework: "mongodb"
+framework: "MongoDB"
 source_repo: "https://github.com/mongodb/docs.git"
 source_branch: "main"
 source_path: "content/manual/manual/source/tutorial/backup-and-restore-tools.txt"
-source_commit: "ab9db26ed3d11618cdb61516d8180337d8e3f679"
-source_commit_short: "ab9db26e"
-source_commit_date: "2026-07-24T16:22:46-06:00"
-generated_at: "2026-07-25T11:51:15Z"
+source_commit: "b9f2bc487a2878b65e3c1f80024bebab76954f27"
+source_commit_short: "b9f2bc48"
+source_commit_date: "2026-08-28T17:09:45-05:00"
+generated_at: "2026-08-29T09:39:19.616311Z"
 ---
-
-======================================
+.. _manual-tutorial-backup-and-restore:
 
 # Back Up and Restore with MongoDB Tools
 
-This tutorial covers creating backups and restoring data using :binary:`~bin.mongodump` and :binary:`~bin.mongorestore`.
+.. default-domain:: mongodb
 
-To restore a backup of your self-hosted deployment to a managed [{+atlas+} deployment](https://www.mongodb.com/docs/atlas)_, see :atlas:`Seed with mongorestore </import/mongorestore/>`.
+**meta:** :description: Back up MongoDB deployments. Use Cloud Backups for managed Atlas deployments. Use mongodump and mongorestore to back up and restore self-managed deployments.
+   :keywords: on-prem
+                 
+**contents:** On this page
+   :local:
+   :backlinks: none
+   :depth: 2
+   :class: singlecol
+
+This tutorial covers creating backups and restoring data using
+:binary:`~bin.mongodump` and :binary:`~bin.mongorestore`.
+
+To restore a backup of your self-hosted deployment
+to a managed `{+atlas+} deployment
+<https://www.mongodb.com/docs/atlas>`__,
+see :atlas:`Seed with mongorestore </import/mongorestore/>`.
 
 ## Considerations
 
+.. _binary-bson-dumps:
+
 ### Deployments
 
-The :binary:`~bin.mongorestore` and :binary:`~bin.mongodump` utilities work with `BSON <bson-types>` data dumps, and are useful for creating backups of small deployments. For resilient and non-disruptive backups, use `file system snapshots <backup-restore-filesystem-snapshots>` or block-level disk snapshots with :atlas:`Cloud Backups </backup/cloud-backup/overview>` from {+atlas+}.
+The :binary:`~bin.mongorestore` and :binary:`~bin.mongodump` utilities 
+work with :ref:`BSON <bson-types>` data dumps, and are 
+useful for creating backups of small deployments. For resilient and 
+non-disruptive backups, use :ref:`file system snapshots <backup-restore-filesystem-snapshots>`
+or block-level disk snapshots with  
+:atlas:`Cloud Backups </backup/cloud-backup/overview>` from {+atlas+}.
 
-> **Note:** .. include:: /includes/extracts/sharded-clusters-backup-restore-mongodump-mongorestore-restriction.rst
+**note:** Back Up Sharded Clusters with {+atlas+}
+
+   .. include:: /includes/extracts/sharded-clusters-backup-restore-mongodump-mongorestore-restriction.rst
 
 ### Performance Impacts
 
-.. include:: /includes/extracts/tools-performance-considerations-dump-restore.rst
+**include:** /includes/extracts/tools-performance-considerations-dump-restore.rst
+
+.. _considerations-output-format:
 
 ### Output Format
 
-:binary:`~bin.mongorestore` and :binary:`~bin.mongodump` can output data to an archive file, which is a single-file alternative to multiple BSON files. Archive files are special-purpose formats that support non-contiguous file writes. They enable concurrent backups from MongoDB and restores to MongoDB. Archive files also optimize disk I/O during backup and restore.
+:binary:`~bin.mongorestore` and :binary:`~bin.mongodump` can output data
+to an archive file, which is a single-file alternative to multiple BSON
+files. Archive files are special-purpose formats that support
+non-contiguous file writes. They enable concurrent backups from MongoDB
+and restores to MongoDB. Archive files also optimize disk I/O during
+backup and restore.
 
-You can also write archive files to standard output (`stdout`). Writing to standard output enables data migration over networks, reduced disk I/O, and concurrency gains in both MongoDB tools and your storage engine.
+You can also write archive files to standard output (``stdout``).
+Writing to standard output enables data migration over networks,
+reduced disk I/O, and concurrency gains in both MongoDB tools and
+your storage engine.
 
-For more information on archive files, see the :option:`--archive <mongodump --archive>` option.
+For more information on archive files, see the
+:option:`--archive <mongodump --archive>` option. 
 
 ### Stale Backups
 
-.. include:: /includes/fact-stale-backup
+**include:** /includes/fact-stale-backup
+
+.. _backup-mongodump:
+.. _backup-and-restore-tools:
 
 ## Procedures
 
-### Back Up a Database with `mongodump`
+### Back Up a Database with ``mongodump``
 
-The :binary:`~bin.mongodump` utility backs up data by connecting to a running :binary:`~bin.mongod`. It can back up an entire server, database, or collection, or use a query to back up part of a collection. `mongodump` excludes the content of the `local` database from its output.
+The :binary:`~bin.mongodump` utility backs up data by connecting to
+a running :binary:`~bin.mongod`. It can back up an entire server,
+database, or collection, or use a query to back up part of a
+collection. ``mongodump`` excludes the content of the ``local``
+database from its output.
 
-Without any arguments, `mongodump` connects to the MongoDB instance on the local system on port `27017` and creates a database backup named `dump/` in the current directory:
+Without any arguments, ``mongodump`` connects to the MongoDB instance
+on the local system on port ``27017`` and creates a database backup
+named ``dump/`` in the current directory:
 
-```bash
-mongodump
-```
+.. code-block:: bash
+
+   mongodump
 
 To specify the host and port, use one of the following:
 
-- Specify the `--uri` string using an
-`SRV <connections-dns-seedlist>` or `standard <connections-standard-connection-string-format>` connection string:
+- Specify the ``--uri`` string using an
+  :ref:`SRV <connections-dns-seedlist>` or
+  :ref:`standard <connections-standard-connection-string-format>`
+  connection string:
 
-```bash
-  mongodump --uri="mongodb+srv://username:password@cluster0.example.mongodb.net" <additional_options>
-```
+  .. code-block:: bash
+     :copyable: false
 
-- Specify the hostname and port in `--host`:
-```bash
-  mongodump --host="mongodb0.example.com:27017" <additional_options>
-```
+     mongodump --uri="mongodb+srv://username:password@cluster0.example.mongodb.net" <additional_options>
 
-- Specify `--host` and `--port` separately:
-```bash
-  mongodump --host="mongodb0.example.com" --port=27017 <additional_options>
-```
+- Specify the hostname and port in ``--host``:
 
-To specify a different output directory, use :option:`--out <mongodump.--out>` (or `-o`):
+  .. code-block:: bash
+     :copyable: false
 
-```bash
-mongodump --out=/opt/backup/mongodump-1
-```
+     mongodump --host="mongodb0.example.com:27017" <additional_options>
 
-To limit the dump to a specific database or collection, use :option:`--db <mongodump.--db>` and :option:`--collection <mongodump.--collection>`:
+- Specify ``--host`` and ``--port`` separately:
 
-```none
-mongodump --collection=myCollection --db=test
-```
+  .. code-block:: bash
+     :copyable: false
 
-This creates a dump of `myCollection` from the `test` database in a :file:`dump/` subdirectory of the current directory.
+     mongodump --host="mongodb0.example.com" --port=27017 <additional_options>
 
-`mongodump` overwrites existing files in the output folder (default: `dump/`). Before running it multiple times, back up or rename the output folder.
+To specify a different output directory, use
+:option:`--out <mongodump.--out>` (or ``-o``):
 
-Required Access ```````````````
+.. code-block:: bash
 
-.. include:: /includes/access-mongodump-collections.rst
+   mongodump --out=/opt/backup/mongodump-1
 
-Specify Host and Port `````````````````````
+To limit the dump to a specific database or collection, use
+:option:`--db <mongodump.--db>` and
+:option:`--collection <mongodump.--collection>`:
 
-Use :option:`--host <mongodump.--host>` and :option:`--port <mongodump.--port>` to connect to a remote instance:
+.. code-block:: none
 
-```bash
-mongodump \
-   --host=mongodb1.example.net \
-   --port=3017 \
-   --username=user \
-   --password="pass" \
-   --out=/opt/backup/mongodump-1
-```
+   mongodump --collection=myCollection --db=test
 
-Specify username and password on any `mongodump` command to authenticate.
+This creates a dump of ``myCollection`` from the ``test`` database
+in a :file:`dump/` subdirectory of the current directory.
 
-Create Backups Using Oplogs ```````````````````````````
+``mongodump`` overwrites existing files in the output folder
+(default: ``dump/``). Before running it multiple times, back up or
+rename the output folder.
 
-The :option:`--oplog <mongodump.--oplog>` option collects `oplog` entries during the backup so you can restore the database to its state at the moment the backup completed.
+### Required Access
 
-With `--oplog`, `mongodump` copies all data from the source database and all oplog entries from the beginning to the end of the backup. Use this in conjunction with :option:`mongorestore --oplogReplay <mongorestore.--oplogReplay>` to restore a backup that reflects the exact moment `mongodump` completed.
+**include:** /includes/access-mongodump-collections.rst
 
-### Restore a Database with `mongorestore`
+.. _backup-from-non-local:
 
-The :binary:`~bin.mongorestore` utility restores a binary backup created by `mongodump` by connecting to a running `mongod` directly. By default, `mongorestore` looks for a database backup in the :file:`dump/` directory and can restore an entire backup or a subset.
+### Specify Host and Port
 
-.. include:: /includes/fact-uuid-restore-from-backup.rst
+Use :option:`--host <mongodump.--host>` and
+:option:`--port <mongodump.--port>` to connect to a remote instance:
 
-To connect `mongorestore` to an active `mongod`:
+.. code-block:: bash
 
-```bash
-mongorestore --uri <connection string> <path to the backup>
-```
+   mongodump \
+      --host=mongodb1.example.net \
+      --port=3017 \
+      --username=user \
+      --password="pass" \
+      --out=/opt/backup/mongodump-1
+
+Specify username and password on any ``mongodump`` command to
+authenticate.
+
+### Create Backups Using Oplogs
+
+The :option:`--oplog <mongodump.--oplog>` option collects
+:term:`oplog` entries during the backup so you can restore the
+database to its state at the moment the backup completed.
+
+With ``--oplog``, ``mongodump`` copies all data from the source
+database and all oplog entries from the beginning to the end of the
+backup. Use this in conjunction with
+:option:`mongorestore --oplogReplay <mongorestore.--oplogReplay>` to
+restore a backup that reflects the exact moment ``mongodump``
+completed.
+
+.. _backup-restore-dump:
+
+### Restore a Database with ``mongorestore``
+
+The :binary:`~bin.mongorestore` utility restores a binary backup
+created by ``mongodump`` by connecting to a running ``mongod``
+directly. By default, ``mongorestore`` looks for a database backup
+in the :file:`dump/` directory and can restore an entire backup or
+a subset.
+
+**include:** /includes/fact-uuid-restore-from-backup.rst
+
+To connect ``mongorestore`` to an active ``mongod``:
+
+.. code-block:: bash
+   :copyable: false
+
+   mongorestore --uri <connection string> <path to the backup>
 
 For example, to restore from a directory:
 
-```bash
-mongorestore /opt/backup/mongodump-1
-```
+.. code-block:: bash
 
-This restores the backup to the `mongod` instance on `localhost:27017`.
+   mongorestore /opt/backup/mongodump-1
 
-Access Control ``````````````
+This restores the backup to the ``mongod`` instance on
+``localhost:27017``.
 
-To restore data to a deployment that has `access control </core/authorization>` enabled, the :authrole:`restore` role provides the necessary privileges if the data does not include `system.profile <<database>.system.profile>` collection data and you run `mongorestore` without the `--oplogReplay` option.
+### Access Control
 
-.. include:: /includes/access-mongorestore-collections.rst
+To restore data to a deployment that has :doc:`access control
+</core/authorization>` enabled, the :authrole:`restore` role provides
+the necessary privileges *if* the data does not include
+:data:`system.profile <<database>.system.profile>` collection data
+and you run ``mongorestore`` without the ``--oplogReplay`` option.
 
-Specify Host and Port `````````````````````
+**include:** /includes/access-mongorestore-collections.rst
 
-By default, `mongorestore` connects to `localhost:27017`. To restore to a different host or port, use `--host` and `--port`:
+### Specify Host and Port
 
-```bash
-mongorestore --host=mongodb1.example.net --port=3017
-```
+By default, ``mongorestore`` connects to ``localhost:27017``. To
+restore to a different host or port, use ``--host`` and ``--port``:
 
-To authenticate, include :option:`--username <mongorestore.--username>` and :option:`--authenticationDatabase <mongorestore.--authenticationDatabase>`. Omit :option:`--password <mongorestore.--password>` to have `mongorestore` prompt for the password:
+.. code-block:: bash
 
-```bash
-mongorestore \
-   --host=mongodb1.example.net \
-   --port=3017 \
-   --username=user \
-   --authenticationDatabase=admin \
-   /opt/backup/mongodump-1
-```
+   mongorestore --host=mongodb1.example.net --port=3017
 
-Use an Oplog File to Restore Data ``````````````````````````````````
+To authenticate, include
+:option:`--username <mongorestore.--username>` and
+:option:`--authenticationDatabase
+<mongorestore.--authenticationDatabase>`. Omit
+:option:`--password <mongorestore.--password>` to have
+``mongorestore`` prompt for the password:
 
-To capture writes that occur while `mongodump` is running, use `--oplog`. `mongodump` creates an `oplog.bson` file with oplog entries for each write during the run. Apply those operations with `--oplogReplay` when restoring.
+.. code-block:: bash
 
-For examples, see `mongodump-examples` and `mongorestore-examples`.
+   mongorestore \
+      --host=mongodb1.example.net \
+      --port=3017 \
+      --username=user \
+      --authenticationDatabase=admin \
+      /opt/backup/mongodump-1
 
-`mongorestore --oplogReplay` restores all data from `oplog.bson` but does not support restoring to an arbitrary point in time. Use it to ensure the restored data reflects any writes that occurred during the `mongodump --oplog` run.
+.. _backup-restore-oplogreplay:
 
-> **Note:** `--oplog` is intended for use with replica sets. For sharded
-clusters, including replica sets that are part of a sharded
-environment, see `backup-sharded-dumps`.
+### Use an Oplog File to Restore Data
 
-Use :option:`--objcheck <mongorestore.--objcheck>` to validate document integrity during insertion, or :option:`--drop <mongorestore.--drop>` to drop each collection before restoring.
+To capture writes that occur while ``mongodump`` is running, use
+``--oplog``. ``mongodump`` creates an ``oplog.bson`` file with oplog
+entries for each write during the run. Apply those operations with
+``--oplogReplay`` when restoring.
+
+For examples, see :ref:`mongodump-examples` and
+:ref:`mongorestore-examples`.
+
+``mongorestore --oplogReplay`` restores all data from ``oplog.bson``
+but does not support restoring to an arbitrary point in time. Use it
+to ensure the restored data reflects any writes that occurred during
+the ``mongodump --oplog`` run.
+
+**note:** ``--oplog`` is intended for use with replica sets. For sharded
+   clusters, including replica sets that are part of a sharded
+   environment, see :ref:`backup-sharded-dumps`.
+
+Use :option:`--objcheck <mongorestore.--objcheck>` to validate
+document integrity during insertion, or
+:option:`--drop <mongorestore.--drop>` to drop each collection
+before restoring.

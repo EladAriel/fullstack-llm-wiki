@@ -1,101 +1,138 @@
 ---
 type: "Framework Learn Page"
-framework: "mongodb"
+framework: "MongoDB"
 source_repo: "https://github.com/mongodb/docs.git"
 source_branch: "main"
 source_path: "content/manual/manual/source/reference/operator/aggregation/createObjectId.txt"
-source_commit: "ab9db26ed3d11618cdb61516d8180337d8e3f679"
-source_commit_short: "ab9db26e"
-source_commit_date: "2026-07-24T16:22:46-06:00"
-generated_at: "2026-07-25T11:51:15Z"
+source_commit: "b9f2bc487a2878b65e3c1f80024bebab76954f27"
+source_commit_short: "b9f2bc48"
+source_commit_date: "2026-08-28T17:09:45-05:00"
+generated_at: "2026-08-29T09:39:20.182765Z"
 ---
-
-===================================================
-
 # $createObjectId (aggregation) (expression operator)
+
+.. default-domain:: mongodb
+
+**contents:** On this page
+   :local:
+   :backlinks: none
+   :depth: 1
+   :class: singlecol
+
+**meta:** :description: Learn to generate random ObjectId values in aggregation expressions.
+   :keywords: objectid, id generation
 
 ## Definition
 
-.. versionadded:: 8.3
+**versionadded:** 8.3
+
+**expression:** $createObjectId
 
 Generate a new random :method:`ObjectId` value.
 
-Use :expression:`$createObjectId` to generate unique ObjectId values in an aggregation pipeline or expression-based update.
+Use :expression:`$createObjectId` to generate unique ObjectId values in
+an aggregation pipeline or expression-based update.
 
-For example, you can generate new identifier fields or replace existing `id values so other stages can distinguish between documents. This includes operators that rely on a stable id` value, like :pipeline:`$graphLookup`.
+For example, you can generate new identifier fields or replace existing
+``id`` values so other stages can distinguish between documents. This
+includes operators that rely on a stable ``_id`` value, like
+:pipeline:`$graphLookup`.
 
 ## Syntax
 
 :expression:`$createObjectId` has the following syntax:
 
-```javascript
-{
-   $createObjectId: { }
-}
-```
+.. code-block:: javascript
 
-> **Note:** You must use an empty object (`{}`) as the argument.
+   {
+      $createObjectId: { }
+   }
+
+**note:** You must use an empty object (``{}``) as the argument.
 
 ## Behavior
 
 :expression:`$createObjectId` behaves as follows:
 
-> **Tip:** To convert an existing value to an ObjectId, use :expression:`$toObjectId`.
+.. list-table::
+   :header-rows: 1
+   :widths: 25 75
+
+   * - Argument
+     - Behavior
+
+   * - ``{}``
+     - Returns a new random value of BSON type :method:`ObjectId`.
+
+   * - Any other value
+     - The operation fails with ``FailedToParse``.
+
+**tip:** To convert an existing value to an ObjectId, use :expression:`$toObjectId`.
 
 ## Example
 
-.. include:: /includes/sample-data-usage.rst
+**include:** /includes/sample-data-usage.rst
 
 ### Generate identifiers in a view
 
-This example adds ObjectId values to a `view <views-landing-page> so other aggregation stages can rely on a stable id` value.
+This example adds ObjectId values to a :ref:`view <views-landing-page>` so
+other aggregation stages can rely on a stable ``_id`` value.
 
-In the `sample_mflix` database, create a view over the `movies collection that hides the original id` field:
+In the ``sample_mflix`` database, create a view over the ``movies`` collection
+that hides the original ``_id`` field:
 
-```javascript
-db.createView(
-   "moviesView",
-   "movies",
-   [
-      { $project: { _id: 0, title: 1, cast: 1 } }
-   ]
-)
-```
+.. code-block:: javascript
 
-Stages that rely on `_id do not behave as expected with this view because the documents no longer have an id` field. For example, a graph traversal stage like :pipeline:`$graphLookup uses id` internally to track visited documents and de-duplicate results.
+   db.createView(
+      "moviesView",
+      "movies",
+      [
+         { $project: { _id: 0, title: 1, cast: 1 } }
+      ]
+   )
 
-To use this view with stages that expect a stable identifier, create a second view that adds a unique `_id` field with :expression:`$createObjectId`:
+Stages that rely on ``_id`` do not behave as expected with this view because
+the documents no longer have an ``_id`` field. For example, a graph traversal
+stage like :pipeline:`$graphLookup` uses ``_id`` internally to track visited
+documents and de-duplicate results.
 
-```javascript
-db.createView(
-   "moviesViewWithId",
-   "moviesView",
-   [
+To use this view with stages that expect a stable identifier, create a second
+view that adds a unique ``_id`` field with :expression:`$createObjectId`:
+
+.. code-block:: javascript
+
+   db.createView(
+      "moviesViewWithId",
+      "moviesView",
+      [
+         {
+            $project: {
+               _id: { $createObjectId: {} },  // unique id
+               title: 1,
+               cast: 1
+            }
+         }
+      ]
+   )
+
+You can now run an aggregation that treats each document in ``moviesViewWithId``
+as a distinct node. For example, the following :pipeline:`$graphLookup` stage
+finds other movies that share cast members with each movie:
+
+.. code-block:: javascript
+
+   db.movies.aggregate( [
       {
-         $project: {
-            _id: { $createObjectId: {} },  // unique id
-            title: 1,
-            cast: 1
+         $graphLookup: {
+            from: "moviesViewWithId",
+            startWith: "$cast",
+            connectFromField: "cast",
+            connectToField: "cast",
+            as: "relatedMovies"
          }
       }
-   ]
-)
-```
+   ] )
 
-You can now run an aggregation that treats each document in `moviesViewWithId` as a distinct node. For example, the following :pipeline:`$graphLookup` stage finds other movies that share cast members with each movie:
-
-```javascript
-db.movies.aggregate( [
-   {
-      $graphLookup: {
-         from: "moviesViewWithId",
-         startWith: "$cast",
-         connectFromField: "cast",
-         connectToField: "cast",
-         as: "relatedMovies"
-      }
-   }
-] )
-```
-
-In this pipeline, :expression:`$createObjectId ensures that each document in the view has a unique ObjectId value in id`. Stages that depend on a stable identifier can then distinguish between documents correctly.
+In this pipeline, :expression:`$createObjectId` ensures that each document in
+the view has a unique ObjectId value in ``_id``. Stages that depend on a stable
+identifier can then distinguish between documents correctly.

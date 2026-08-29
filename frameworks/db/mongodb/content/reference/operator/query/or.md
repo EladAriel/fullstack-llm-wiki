@@ -1,84 +1,170 @@
 ---
 type: "Framework Learn Page"
-framework: "mongodb"
+framework: "MongoDB"
 source_repo: "https://github.com/mongodb/docs.git"
 source_branch: "main"
 source_path: "content/manual/manual/source/reference/operator/query/or.txt"
-source_commit: "ab9db26ed3d11618cdb61516d8180337d8e3f679"
-source_commit_short: "ab9db26e"
-source_commit_date: "2026-07-24T16:22:46-06:00"
-generated_at: "2026-07-25T11:51:15Z"
+source_commit: "b9f2bc487a2878b65e3c1f80024bebab76954f27"
+source_commit_short: "b9f2bc48"
+source_commit_date: "2026-08-28T17:09:45-05:00"
+generated_at: "2026-08-29T09:39:20.245079Z"
 ---
-
-==============================
-
 # $or (query predicate operator)
 
+.. default-domain:: mongodb
+
+**facet:** :name: programming_language
+   :values: shell
+
+**meta:** :description: Use the $or operator to perform a logical OR operation on an array of expressions and select all documents that satisfy at least one of the expressions.
+   
+**contents:** On this page
+   :local:
+   :backlinks: none
+   :depth: 1
+   :class: singlecol
+
+**query:** $or
+
+   :query:`$or` performs a logical ``OR`` operation on an array of one
+   or more expressions and selects documents that satisfy at least one
+   of the expressions.
+   
 ## Compatibility
 
-.. include:: /includes/fact-compatibility.rst
+.. |operator-method| replace:: ``$or``
+
+**include:** /includes/fact-compatibility.rst
 
 ## Syntax
 
 The :query:`$or` operator has the following syntax:
 
-```javascript
-{ $or: [ { <expression1> }, { <expression2> }, ... , { <expressionN> } ] }
-```
+.. code-block:: javascript
 
-.. include:: /includes/sample-data-usage.rst
+   { $or: [ { <expression1> }, { <expression2> }, ... , { <expressionN> } ] }
+
+**include:** /includes/sample-data-usage.rst
 
 Consider the following example:
 
-This query selects all documents in the `movies` collection that meet either of the following conditions:
+.. io-code-block::
+   :copyable: true
 
-- The `runtime` field value is greater than `1000`.
-- The `year` field value is earlier than `1910`.
+   .. input:: /code-examples/tested/command-line/mongosh/operators/or/or-movies.snippet.or-movies.js
+      :language: javascript
+      :category: usage example
+
+   .. output:: /code-examples/tested/command-line/mongosh/operators/or/or-movies-output.sh
+      :language: javascript
+
+This query selects all documents in the ``movies`` collection
+that meet either of the following conditions:
+
+- The ``runtime`` field value is greater than ``1000``.
+- The ``year`` field value is earlier than ``1910``.
+
 ## Behaviors
 
-### `$or` Clauses and Indexes
+.. _or-clauses-index:
 
-When evaluating the clauses in the :query:`$or` expression, MongoDB performs a collection scan or an index scan. If all clauses are supported by indexes, MongoDB performs index scans. To use indexes to evaluate an :query:`$or` expression, all the clauses in the :query:`$or` expression must be supported by indexes. Otherwise, MongoDB performs a collection scan.
+### ``$or`` Clauses and Indexes
 
-When using indexes with :query:`$or` queries, each clause of an :query:`$or` can use its own index. Consider this query:
+When evaluating the clauses in the :query:`$or` expression, MongoDB
+performs a collection scan or an index scan. If all clauses are
+supported by indexes, MongoDB performs index scans. To use
+indexes to evaluate an :query:`$or` expression, all the clauses in the
+:query:`$or` expression must be supported by indexes. Otherwise,
+MongoDB performs a collection scan.
 
-To support this query, create one index on `runtime` and another index on `year`, rather than a compound index:
+When using indexes with :query:`$or` queries, each clause of an
+:query:`$or` can use its own index. Consider this query:
 
-### `$or` and `text` Queries
+**literalinclude:** /code-examples/tested/command-line/mongosh/operators/or/or-index-query.snippet.or-index-query.js
+   :language: javascript
 
-If :query:`$or` includes a :query:`$text` query, all clauses in the :query:`$or` array must be supported by an index. This is because a `$text` query must use an index, and :query:`$or` can only use indexes if all its clauses are supported by indexes. If the `$text` query cannot use an index, the query returns an error.
+To support this query, create one index on ``runtime`` and
+another index on ``year``, rather than a compound index:
 
-.. include:: /includes/text-search-legacy-atlas-section.rst
+**literalinclude:** /code-examples/tested/command-line/mongosh/operators/or/or-index-create.snippet.or-index-create.js
+   :language: javascript
 
-### `$or` and Geospatial Queries
+.. _or-and-text-queries:
 
-`$or` supports `geospatial clauses <geospatial-query-operators>`. However, if you use a near clause (:query:`$near` or :query:`$nearSphere`), `$or` cannot contain any other clauses. Using `$or` with a single clause has the same effect as omitting the `$or` operator.
+### ``$or`` and ``text`` Queries
 
-The following query is valid because `$or` uses a non-near geospatial clause (`$geoIntersects`):
+If :query:`$or` includes a :query:`$text` query, all clauses in the
+:query:`$or` array must be supported by an index. This is because a
+``$text`` query *must* use an index, and :query:`$or` can only use
+indexes if all its clauses are supported by indexes. If the
+``$text`` query cannot use an index, the query returns an
+error.
 
-### `$or` and Sort Operations
+**include:** /includes/text-search-legacy-atlas-section.rst
 
-When executing :query:`$or` queries with a :method:`~cursor.sort()`, MongoDB can use indexes that support the :query:`$or` clauses.
+### ``$or`` and Geospatial Queries
 
-### `$or` and Partial Indexes
+``$or`` supports :ref:`geospatial clauses <geospatial-query-operators>`.
+However, if you use a near clause (:query:`$near` or
+:query:`$nearSphere`), ``$or`` cannot contain any other clauses. Using
+``$or`` with a single clause has the same effect as omitting the ``$or``
+operator.
 
-You can create `partial indexes <index-type-partial>` with :query:`$or`. Use the `partialFilterExpression` of the `db.collection.createIndex() <method-createIndex>` method to create a partial index.
+The following query is valid because ``$or`` uses a non-near
+geospatial clause (``$geoIntersects``):
 
-### `$or` Compared to `$in`
+.. io-code-block::
+   :copyable: true
 
-If you use :query:`$or` with `<expressions>` that are equality checks for the value of the same field, use :query:`$in` instead of :query:`$or`.
+   .. input:: /code-examples/tested/command-line/mongosh/operators/or/or-theaters-geointersects.snippet.or-theaters-geointersects.js
+      :language: javascript
+      :category: usage example
 
-This query selects documents in the `movies` collection where `year` is `1903` or `1909`:
+   .. output:: /code-examples/tested/command-line/mongosh/operators/or/or-theaters-geointersects-output.sh
+      :language: javascript
 
-### Nested `$or` Clauses
+
+### ``$or`` and Sort Operations
+
+When executing :query:`$or` queries with a :method:`~cursor.sort()`,
+MongoDB can use indexes that support the :query:`$or` clauses.
+
+### ``$or`` and Partial Indexes
+You can create :ref:`partial indexes <index-type-partial>` with :query:`$or`. 
+Use the ``partialFilterExpression`` of the :ref:`db.collection.createIndex() <method-createIndex>`
+method to create a partial index. 
+
+### ``$or`` Compared to ``$in``
+
+If you use :query:`$or` with ``<expressions>`` that are equality checks
+for the value of the same field, use :query:`$in` instead of
+:query:`$or`.
+
+This query selects documents in the ``movies`` collection where
+``year`` is ``1903`` or ``1909``:
+
+.. io-code-block::
+   :copyable: true
+
+   .. input:: /code-examples/tested/command-line/mongosh/operators/or/or-equivalent-in.snippet.or-equivalent-in.js
+      :language: javascript
+      :category: usage example
+
+   .. output:: /code-examples/tested/command-line/mongosh/operators/or/or-equivalent-in-output.sh
+      :language: javascript
+
+### Nested ``$or`` Clauses
 
 You can nest :query:`$or` operations.
 
-> **Seealso:** - :query:`$and`
-- :method:`~db.collection.find()`
-- :method:`~cursor.sort()`
-- :query:`$in`
+**seealso:** - :query:`$and`
+   - :method:`~db.collection.find()`
+   - :method:`~cursor.sort()`
+   - :query:`$in`
 
 ### Error Handling
 
-.. include:: /includes/and-or-behavior.rst
+.. |and-or| replace:: ``$or``
+.. |true-false| replace:: ``true``
+
+**include:** /includes/and-or-behavior.rst

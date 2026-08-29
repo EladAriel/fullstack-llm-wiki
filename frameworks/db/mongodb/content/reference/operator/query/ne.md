@@ -1,76 +1,161 @@
 ---
 type: "Framework Learn Page"
-framework: "mongodb"
+framework: "MongoDB"
 source_repo: "https://github.com/mongodb/docs.git"
 source_branch: "main"
 source_path: "content/manual/manual/source/reference/operator/query/ne.txt"
-source_commit: "ab9db26ed3d11618cdb61516d8180337d8e3f679"
-source_commit_short: "ab9db26e"
-source_commit_date: "2026-07-24T16:22:46-06:00"
-generated_at: "2026-07-25T11:51:15Z"
+source_commit: "b9f2bc487a2878b65e3c1f80024bebab76954f27"
+source_commit_short: "b9f2bc48"
+source_commit_date: "2026-08-28T17:09:45-05:00"
+generated_at: "2026-08-29T09:39:20.252614Z"
 ---
-
-==============================
-
 # $ne (query predicate operator)
+
+.. default-domain:: mongodb
+
+**facet:** :name: programming_language
+   :values: shell
+
+**meta:** :description: Use the $ne query predicate operator to select documents where the field value is not equal to (≠) the specified value, including those that lack the field.
+
+**contents:** On this page
+   :local:
+   :backlinks: none
+   :depth: 2
+   :class: singlecol
 
 ## Definition
 
+**query:** $ne
+
+   ``$ne`` selects documents where the value of the field is not equal
+   to the specified value. This includes documents that do not contain
+   the field.
+
+   .. include:: /includes/fact-comparison-order.rst
+
 ## Compatibility
 
-.. include:: /includes/fact-compatibility.rst
+.. |operator-method| replace:: ``$ne``
+
+**include:** /includes/fact-compatibility.rst
 
 ## Syntax
 
-The `$ne` operator has the following form:
+The ``$ne`` operator has the following form:
 
-```javascript
-{ field: { $ne: value } }
-```
+.. code-block:: javascript
 
-> **Note:** If the value of `$ne` is null, see `non-equality-filter`.
+   { field: { $ne: value } }
+
+**note:** If the value of ``$ne`` is null, see :ref:`non-equality-filter`.
 
 ## Examples
 
-.. include:: /includes/sample-data-usage.rst
+**include:** /includes/sample-data-usage.rst
 
 ### Match Document Fields That Are Not Equal
 
-The following example returns movies where `runtime` is greater than `1000` minutes and `rated` is not equal to `"G"`. Because `$ne` also matches documents that don't contain the `rated` field, the query returns movies even when the rating data is unavailable:
+The following example returns movies where ``runtime`` is greater
+than ``1000`` minutes and ``rated`` is not equal to ``"G"``.
+Because ``$ne`` also matches documents that don't contain the
+``rated`` field, the query returns movies even when the rating data
+is unavailable:
+
+.. io-code-block::
+   :copyable: true
+
+   .. input:: /code-examples/tested/command-line/mongosh/query/operators/ne/ne-find.snippet.ne-find.js
+      :language: javascript
+      :category: usage example
+
+   .. output:: /code-examples/tested/command-line/mongosh/query/operators/ne/ne-find-output.sh
+      :language: javascript
+      :visible: false
 
 ### Update Based on Not Equal Embedded Document Fields
 
-The following example sets the `highestRated` field based on a `$ne` comparison on a field in an embedded document. The :method:`~db.collection.updateMany()` operation searches for an embedded document, `imdb`, with a subfield named `rating`. It uses :update:`$set` to update the `highestRated` field to `false` in each document where the value of `rating` is not equal to `9.3` or where the `rating` subfield does not exist:
+The following example sets the ``highestRated`` field based on a
+``$ne`` comparison on a field in an embedded document. The
+:method:`~db.collection.updateMany()` operation searches for an
+embedded document, ``imdb``, with a subfield named ``rating``. It
+uses :update:`$set` to update the ``highestRated`` field to ``false``
+in each document where the value of ``rating`` is not equal to ``9.3``
+or where the ``rating`` subfield does not exist:
+
+.. io-code-block::
+   :copyable: true
+
+   .. input:: /code-examples/tested/command-line/mongosh/query/operators/ne/ne-update.snippet.ne-update.js
+      :language: javascript
+      :category: usage example
+
+   .. output:: /code-examples/tested/command-line/mongosh/query/operators/ne/ne-update-output.sh
+      :language: javascript
+      :visible: false
 
 The SQL equivalent to this query is:
 
-```sql
-UPDATE movies SET highestRated = false WHERE imdb_rating != 9.3
-```
+.. code-block:: sql
+   :copyable: false
 
-.. include:: /includes/extracts/ne_operators_selectivity.rst
+   UPDATE movies SET highestRated = false WHERE imdb_rating != 9.3
+
+**include:** /includes/extracts/ne_operators_selectivity.rst
 
 ### Arrays
 
-When comparing arrays, `$ne` behaves differently depending on whether you pass a scalar or an array as the comparison value.
+When comparing arrays, ``$ne`` behaves differently depending on
+whether you pass a scalar or an array as the comparison value.
 
-- **Scalar comparison**: `$ne` matches documents where the
-scalar value is not present as an element in the array, including documents that don't have the field.
+- **Scalar comparison**: ``$ne`` matches documents where the
+  scalar value is not present as an element in the array,
+  including documents that don't have the field.
+- **Exact array comparison**: ``$ne`` matches documents where the
+  field array is not identical to the specified array, including
+  documents with a different element order, a different number of
+  elements, or a missing field.
 
-- **Exact array comparison**: `$ne` matches documents where the
-field array is not identical to the specified array, including documents with a different element order, a different number of elements, or a missing field.
+The following examples return movies with a runtime over 1000
+minutes to demonstrate each behavior.
 
-The following examples return movies with a runtime over 1000 minutes to demonstrate each behavior.
+### Use a Scalar Comparison
 
-Use a Scalar Comparison ```````````````````````
+The following example returns movies where ``runtime`` is greater
+than ``1000`` minutes and ``"Drama"`` is not an element of the
+``genres`` array:
 
-The following example returns movies where `runtime` is greater than `1000` minutes and `"Drama"` is not an element of the `genres` array:
+.. io-code-block::
+   :copyable: true
 
-Use an Exact Array Comparison `````````````````````````````
+   .. input:: /code-examples/tested/command-line/mongosh/query/operators/ne/ne-find-array-scalar.snippet.ne-find-array-scalar.js
+      :language: javascript
+      :category: usage example
 
-The following example returns movies where `runtime` is greater than `1000` minutes and the `genres` array is not exactly equal to `[ "Drama" ]`. Unlike the scalar comparison, `Centennial` (with `genres: [ "Action", "Adventure", "Drama" ]`) matches because that array is not identical to `[ "Drama" ]`:
+   .. output:: /code-examples/tested/command-line/mongosh/query/operators/ne/ne-find-array-scalar-output.sh
+      :language: javascript
+      :visible: false
+
+### Use an Exact Array Comparison
+
+The following example returns movies where ``runtime`` is greater
+than ``1000`` minutes and the ``genres`` array is not exactly equal
+to ``[ "Drama" ]``. Unlike the scalar comparison, ``Centennial``
+(with ``genres: [ "Action", "Adventure", "Drama" ]``) matches
+because that array is not identical to ``[ "Drama" ]``:
+
+.. io-code-block::
+   :copyable: true
+
+   .. input:: /code-examples/tested/command-line/mongosh/query/operators/ne/ne-find-array-exact.snippet.ne-find-array-exact.js
+      :language: javascript
+      :category: usage example
+
+   .. output:: /code-examples/tested/command-line/mongosh/query/operators/ne/ne-find-array-exact-output.sh
+      :language: javascript
+      :visible: false
 
 ## Learn More
 
-- `sql-to-mongodb-mapping`
-- `read-operations-query-document`
+- :ref:`sql-to-mongodb-mapping`
+- :ref:`read-operations-query-document`

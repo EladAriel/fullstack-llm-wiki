@@ -1,61 +1,85 @@
 ---
 type: "Framework Learn Page"
-framework: "mongodb"
+framework: "MongoDB"
 source_repo: "https://github.com/mongodb/docs.git"
 source_branch: "main"
 source_path: "content/manual/manual/source/reference/command/isdbgrid.txt"
-source_commit: "ab9db26ed3d11618cdb61516d8180337d8e3f679"
-source_commit_short: "ab9db26e"
-source_commit_date: "2026-07-24T16:22:46-06:00"
-generated_at: "2026-07-25T11:51:15Z"
+source_commit: "b9f2bc487a2878b65e3c1f80024bebab76954f27"
+source_commit_short: "b9f2bc48"
+source_commit_date: "2026-08-28T17:09:45-05:00"
+generated_at: "2026-08-29T09:39:20.018943Z"
 ---
-
-===========================
-
 # isdbgrid (database command)
+
+**meta:** :description: Verify if a process is a `mongos` using the `isdbgrid` command, which returns a specific response when connected to a `mongos`.
+
+.. default-domain:: mongodb
+
+**contents:** On this page
+   :local:
+   :backlinks: none
+   :depth: 1
+   :class: singlecol
 
 ## Definition
 
+**dbcommand:** isdbgrid
+
+   This command verifies that a process is a :binary:`~bin.mongos`.
+
+   If you issue the :dbcommand:`isdbgrid` command when connected to a
+   :binary:`~bin.mongos`, the response document includes the ``isdbgrid``
+   field set to ``1``. 
+
 ## Compatibility
 
-This command is available in deployments hosted in the following environments:
+This command is available in deployments hosted in the following environments: 
 
-.. include:: /includes/fact-environments-atlas-only.rst
+**include:** /includes/fact-environments-atlas-only.rst
 
-.. include:: /includes/fact-environments-atlas-support-all.rst
+**include:** /includes/fact-environments-atlas-support-all.rst
 
-.. include:: /includes/fact-environments-onprem-only.rst
+**include:** /includes/fact-environments-onprem-only.rst
 
 ## Syntax
 
 The command has the following syntax:
 
-```javascript
-db.runCommand(
-   {
-     isdbgrid: 1
-   }
-)
-```
+.. code-block:: javascript
+
+   db.runCommand(
+      {
+        isdbgrid: 1
+      }
+   )
+
 
 ## Output
 
 The returned document is similar to the following:
 
-```javascript
-{ "isdbgrid" : 1, "hostname" : "app.example.net", "ok" : 1 }
-```
+.. code-block:: javascript
 
-If you issue the :dbcommand:`isdbgrid` command when connected to a :binary:`~bin.mongod`, MongoDB returns an error document. The :dbcommand:`isdbgrid` command is not available to :binary:`~bin.mongod`. The error document, however, also includes a line that reads `"isdbgrid" : 1`, just as in the document returned for a :binary:`~bin.mongos`. The error document is similar to the following:
+   { "isdbgrid" : 1, "hostname" : "app.example.net", "ok" : 1 }
 
-```javascript
-{
-   "errmsg" : "no such cmd: isdbgrid",
-   "bad cmd" : {
-         "isdbgrid" : 1
-   },
-   "ok" : 0
-}
-```
+If you issue the :dbcommand:`isdbgrid` command when connected to a
+:binary:`~bin.mongod`, MongoDB returns an error document. The
+:dbcommand:`isdbgrid` command is not available to :binary:`~bin.mongod`.
+The error document, however, also includes a line that reads
+``"isdbgrid" : 1``, just as in the document returned for a
+:binary:`~bin.mongos`. The error document is similar to the following:
 
-You can instead use the :dbcommand:`hello` command to determine connection to a :binary:`~bin.mongos`. When connected to a :binary:`~bin.mongos`, the :dbcommand:`hello` command returns a document that contains the string `isdbgrid` in the `msg` field.
+.. code-block:: javascript
+
+   {
+      "errmsg" : "no such cmd: isdbgrid",
+      "bad cmd" : {
+            "isdbgrid" : 1
+      },
+      "ok" : 0
+   }
+ 
+You can instead use the :dbcommand:`hello` command to determine
+connection to a :binary:`~bin.mongos`. When connected to a
+:binary:`~bin.mongos`, the :dbcommand:`hello` command returns a document that
+contains the string ``isdbgrid`` in the ``msg`` field.

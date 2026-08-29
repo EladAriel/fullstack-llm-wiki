@@ -1,55 +1,62 @@
 ---
 type: "Framework Learn Page"
-framework: "mongodb"
+framework: "MongoDB"
 source_repo: "https://github.com/mongodb/docs.git"
 source_branch: "main"
 source_path: "content/manual/manual/source/contents.txt"
-source_commit: "ab9db26ed3d11618cdb61516d8180337d8e3f679"
-source_commit_short: "ab9db26e"
-source_commit_date: "2026-07-24T16:22:46-06:00"
-generated_at: "2026-07-25T11:51:15Z"
+source_commit: "b9f2bc487a2878b65e3c1f80024bebab76954f27"
+source_commit_short: "b9f2bc48"
+source_commit_date: "2026-08-28T17:09:45-05:00"
+generated_at: "2026-08-29T09:39:19.466917Z"
 ---
-
-=======================
-
 # MongoDB Manual Contents
 
-See `/about` for more information about the MongoDB Documentation project, this Manual and additional editions of this text.
+**meta:** :description: Explore topics like CRUD operations, replication, sharding, and security in the MongoDB Manual.
 
-- `/introduction`
-- `/crud`
-- `/aggregation`
-- `/indexes`
-- `/core/timeseries-collections`
-- `/changeStreams`
-- `/core/transactions`
-- `/data-modeling`
-- `/replication`
-- `/sharding`
-- `/storage`
-- `/administration`
-- `/security`
-- `/self-managed-deployments`
-- `/reference`
-- `/release-notes`
-- `/support`
-## Contents
+See :doc:`/about` for more information about the MongoDB Documentation
+project, this Manual and additional editions of this text.
 
-- Introduction </introduction>
-- Sample Data </sample-data>
-- CRUD Operations</crud>
-- Aggregation Operations </aggregation>
-- Indexes </indexes>
-- Time Series </core/timeseries-collections>
-- Change Streams </changeStreams>
-- Transactions </core/transactions>
-- Data Modeling </data-modeling>
-- Replication </replication>
-- Sharding </sharding>
-- Storage </storage>
-- Administration </administration>
-- Security </security>
-- Self-Managed Deployments </self-managed-deployments>
-- Reference </reference>
-- Release Notes </release-notes>
-- Technical Support </support>
+.. COMMENT to DOCS team
+.. For now, adding the list since in order to hide the toctree
+.. But not actually sure that we shouldn't just include the toctree in the index.txt page and get rid of this page wholesale
+
+- :doc:`/introduction`
+- :doc:`/crud`
+- :doc:`/aggregation`
+- :doc:`/indexes`
+- :doc:`/core/timeseries-collections`
+- :doc:`/changeStreams`
+- :doc:`/core/transactions`
+- :doc:`/data-modeling`
+- :doc:`/replication`
+- :doc:`/sharding`
+- :doc:`/storage`
+- :doc:`/administration`
+- :doc:`/security`
+- :doc:`/self-managed-deployments`
+- :doc:`/reference`
+- :doc:`/release-notes`
+- :doc:`/support`
+   
+
+**toctree:** :maxdepth: 1
+   :hidden:
+
+   Introduction </introduction>
+   Sample Data </sample-data>
+   CRUD Operations</crud>
+   Aggregation Operations </aggregation>
+   Indexes </indexes>
+   Time Series </core/timeseries-collections>
+   Change Streams </changeStreams>
+   Transactions </core/transactions>
+   Data Modeling </data-modeling>
+   Replication </replication>
+   Sharding </sharding>
+   Storage </storage>
+   Administration </administration>
+   Security </security>
+   Self-Managed Deployments </self-managed-deployments>
+   Reference </reference>
+   Release Notes </release-notes>
+   Technical Support </support>

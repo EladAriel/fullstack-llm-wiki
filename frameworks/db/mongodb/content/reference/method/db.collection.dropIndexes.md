@@ -1,67 +1,169 @@
 ---
 type: "Framework Learn Page"
-framework: "mongodb"
+framework: "MongoDB"
 source_repo: "https://github.com/mongodb/docs.git"
 source_branch: "main"
 source_path: "content/manual/manual/source/reference/method/db.collection.dropIndexes.txt"
-source_commit: "ab9db26ed3d11618cdb61516d8180337d8e3f679"
-source_commit_short: "ab9db26e"
-source_commit_date: "2026-07-24T16:22:46-06:00"
-generated_at: "2026-07-25T11:51:15Z"
+source_commit: "b9f2bc487a2878b65e3c1f80024bebab76954f27"
+source_commit_short: "b9f2bc48"
+source_commit_date: "2026-08-28T17:09:45-05:00"
+generated_at: "2026-08-29T09:39:19.973340Z"
 ---
-
-============================================
-
 # db.collection.dropIndexes() (mongosh method)
 
-.. include:: /includes/wayfinding/mongosh-method-dropIndexes.rst
+**meta:** :description: Use `db.collection.dropIndexes()` to remove specified indexes from a collection, excluding the `_id` index and the last shard key index.
+
+.. default-domain:: mongodb
+
+**contents:** On this page
+   :local:
+   :backlinks: none
+   :depth: 1
+   :class: singlecol
+
+**include:** /includes/wayfinding/mongosh-method-dropIndexes.rst
 
 ## Definition
 
+**method:** db.collection.dropIndexes()
+
+
+   .. |dbcommand| replace:: :dbcommand:`dropIndexes` command
+
+
+   Drops the specified index or indexes (except the index on the
+   ``_id`` field and the last remaining shard key index) from a 
+   collection.
+
+   You can use the method to:
+
+   - Drop all but the ``_id`` index from a collection.
+
+     .. code-block:: javascript
+
+        db.collection.dropIndexes()
+
+   - Drop a specified index from a collection. To specify the index,
+     you can pass the method either:
+   
+     - The index specification document (unless the index is a
+       :ref:`text <index-type-text>` index in which case, use the
+       index name to drop):
+
+       .. code-block:: javascript
+    
+          db.collection.dropIndexes( { a: 1, b: 1 } )
+
+     - The index name:
+
+       .. code-block:: javascript
+
+          db.collection.dropIndexes( "a_1_b_1" )
+
+       .. tip::
+
+          To get the names of the indexes, use the
+          :method:`db.collection.getIndexes()` method.
+
+   - Drop specified indexes from a collection. To specify multiple indexes to 
+     drop, pass the method an array of index names:
+
+     .. code-block:: javascript
+
+        db.collection.dropIndexes( [ "a_1_b_1", "a_1", "a_1__id_-1" ] )
+
+     If the array of index
+     names includes a non-existent index, the method errors without
+     dropping any of the specified indexes.
+
+     .. tip::
+
+        To get the names of the indexes, use the
+        :method:`db.collection.getIndexes()` method.
+
 ### Parameters
 
-The :method:`db.collection.dropIndexes()` method takes the following optional parameter:
+The :method:`db.collection.dropIndexes()` method takes the following
+optional parameter:
+
+.. list-table::
+   :header-rows: 1
+   :widths: 20 20 80
+
+   * - Parameter
+
+     - Type
+
+     - Description
+
+   * - ``indexes``
+
+     - string or document or array of strings
+
+     - Optional. Specifies the index or indexes to drop. 
+
+       **To drop all but the _id index from the collection**,
+       omit the parameter.
+
+       **To drop a single index**, specify either the index name, the
+       index specification document (unless the index is a
+       :ref:`text <index-type-text>` index), or an array of the
+       index name. To drop a :ref:`text <index-type-text>` index,
+       specify the index name or an array of the index name instead
+       of the index specification document.
+
+       **To drop multiple indexes**, specify an array of the index names.
 
 ## Compatibility
 
-This method is available in deployments hosted in the following environments:
+.. |command| replace:: method
 
-.. include:: /includes/fact-environments-atlas-only.rst
+This method is available in deployments hosted in the following environments: 
 
-.. include:: /includes/fact-environments-atlas-support-all.rst
+**include:** /includes/fact-environments-atlas-only.rst
 
-.. include:: /includes/fact-environments-onprem-only.rst
+**include:** /includes/fact-environments-atlas-support-all.rst
 
+**include:** /includes/fact-environments-onprem-only.rst
+
+          
 ## Behavior
 
-.. include:: /includes/fact-drop-indexes-6.0.rst
+.. |drop-index| replace:: :method:`db.collection.dropIndexes()`
 
-.. include:: /includes/fact-drop-index-5.2.rst
+**include:** /includes/fact-drop-indexes-6.0.rst
+
+**include:** /includes/fact-drop-index-5.2.rst
 
 ### Kill related queries only
 
-.. include:: /includes/extracts/fact-method-dropIndexes-query-behavior.rst
+**include:** /includes/extracts/fact-method-dropIndexes-query-behavior.rst
 
 ### Resource Locking
 
-.. include:: /includes/extracts/dropIndexes-method-resource-lock.rst
+**include:** /includes/extracts/dropIndexes-method-resource-lock.rst
 
 ### Index Names
 
-If the method is passed an array of index names that includes a non-existent index, the method errors without dropping any of the specified indexes.
+If the method is passed an array of index names that includes a
+non-existent index, the method errors without dropping any of the
+specified indexes.
 
-### `_id` Index
+### ``_id`` Index
 
-You cannot drop the default index on the `_id` field.
+You cannot drop the default index on the ``_id`` field.
 
 ### text Indexes
 
-To drop a `text <index-type-text>` index, specify the index name instead of the index specification document.
+To drop a :ref:`text <index-type-text>` index, specify the index name
+instead of the index specification document.
+
+.. _dropIndexes-method-index-builds:
 
 ### Stop In-Progress Index Builds
 
-.. include:: /includes/fact-stop-in-progress-index-builds.rst
+**include:** /includes/fact-stop-in-progress-index-builds.rst
 
 ### Hidden Indexes
 
-.. include:: /includes/fact-hidden-indexes.rst
+**include:** /includes/fact-hidden-indexes.rst

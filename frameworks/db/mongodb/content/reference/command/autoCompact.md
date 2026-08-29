@@ -1,97 +1,158 @@
 ---
 type: "Framework Learn Page"
-framework: "mongodb"
+framework: "MongoDB"
 source_repo: "https://github.com/mongodb/docs.git"
 source_branch: "main"
 source_path: "content/manual/manual/source/reference/command/autoCompact.txt"
-source_commit: "ab9db26ed3d11618cdb61516d8180337d8e3f679"
-source_commit_short: "ab9db26e"
-source_commit_date: "2026-07-24T16:22:46-06:00"
-generated_at: "2026-07-25T11:51:15Z"
+source_commit: "b9f2bc487a2878b65e3c1f80024bebab76954f27"
+source_commit_short: "b9f2bc48"
+source_commit_date: "2026-08-28T17:09:45-05:00"
+generated_at: "2026-08-29T09:39:20.092429Z"
 ---
-
-==============================
-
 # autoCompact (database command)
 
+.. default-domain:: mongodb
+
+**contents:** On this page
+   :local:
+   :backlinks: none
+   :depth: 1
+   :class: singlecol
+
 ## Definition
+
+**dbcommand:** autoCompact
+
+   .. versionadded:: 8.0
+
+   Enables or disables background :ref:`compaction <compact>`. 
+   When enabled, ``autoCompact`` periodically iterates through all available 
+   files and continuously runs compaction if there is enough free storage space 
+   available. 
+
+   Before you enable ``autoCompact``, run the :pipeline:`$collStats` 
+   aggregation stage with the ``storageStats: {}`` option to see if you have 
+   enough available storage space for compaction to proceed. If the amount of 
+   available space returned by ``freeStorageSize`` is less than 
+   ``freeSpaceTargetMB``, background compaction has no effect.
 
 ## Syntax
 
 The command has the following syntax:
 
-```javascript
-db.runCommand(
-   { 
-     autoCompact: <boolean>, 
-     freeSpaceTargetMB: <int>, // Optional 
-     runOnce: <boolean>, // Optional
-   }
-)
-```
+.. code-block:: javascript
+
+   db.runCommand(
+      { 
+        autoCompact: <boolean>, 
+        freeSpaceTargetMB: <int>, // Optional 
+        runOnce: <boolean>, // Optional
+      }
+   )
 
 ## Compatibility
 
-This command is available in deployments hosted in the following environments:
+This command is available in deployments hosted in the following environments: 
 
-.. include:: /includes/fact-environments-atlas-only.rst
+**include:** /includes/fact-environments-atlas-only.rst
 
-.. include:: /includes/fact-environments-atlas-support-no-free.rst
+**include:** /includes/fact-environments-atlas-support-no-free.rst
 
-.. include:: /includes/fact-environments-onprem-only.rst
+**include:** /includes/fact-environments-onprem-only.rst
 
 ## Command Fields
 
 The command can take the following optional fields:
 
+.. list-table::
+   :header-rows: 1
+   :widths: 20 20 80
+
+   * - Field
+     - Type
+     - Description
+
+   * - ``freeSpaceTargetMB`` 
+     - Integer 
+     - .. versionadded: 7.3
+
+       .. include:: /includes/fact-freeSpaceTargetMB.rst
+
+       *Default:* 20
+
+   * - ``runOnce``
+     - boolean
+     - Optional. If ``runOnce`` is set to ``true``, background compaction runs 
+       only once through every collection on the node.
+
+       If ``runOnce`` is set to ``false``, background compaction runs 
+       continuously on all collections in the database. If a collection fails to
+       compact while ``runOnce`` is ``false``, MongoDB temporarily skips that 
+       collection and continues compacting the remaining collections. MongoDB 
+       attempts to compact the failed collection again after approximately one 
+       hour. 
+
+
+.. _autocompact-authentication:
+
 ## Required Privileges
 
-For clusters enforcing `authentication <authentication>`:
+For clusters enforcing :ref:`authentication <authentication>`:
 
-- **{+atlas+}:** Users must have the :atlasrole:`autoCompact` built-in role.
-- **Self-managed deployments:** Users must have the :authaction:`compact` privilege
-action on the cluster. The :authrole:`hostManager` role provides the required privileges for running `autoCompact`.
+-   **{+atlas+}:** Users must have the :atlasrole:`autoCompact` built-in role.
+-   **Self-managed deployments:** Users must have the :authaction:`compact` privilege 
+    action on the cluster. The :authrole:`hostManager` role provides the required 
+    privileges for running ``autoCompact``. 
+
+.. _autocompact-behavior:
 
 ## Behavior
 
 ### Blocking
 
-Background compaction triggered by `autoCompact` applies the same blocking behavior as the :dbcommand:`compact` command. Consequently, if you call `autoCompact` while background compaction is active, MongoDB returns an error.
+Background compaction triggered by ``autoCompact`` applies the same blocking
+behavior as the :dbcommand:`compact` command. Consequently, if you call
+``autoCompact`` while background compaction is active, MongoDB returns an
+error.
 
-If you need to restart `autoCompact` or run it again with different options, you must first stop the current background compaction operation:
+If you need to restart ``autoCompact`` or run it again with different options,
+you must first stop the current background compaction operation:
 
-```javascript
-db.runCommand( { autoCompact: false } )
-```
+.. code-block:: javascript
 
-Once the current background compaction is disabled, you can restart `autoCompact` with the new configuration.
+   db.runCommand( { autoCompact: false } )
+
+Once the current background compaction is disabled, you can restart ``autoCompact``
+with the new configuration.
+
 
 ### Excluded Collections
 
-If an `oplog` exists, MongoDB excludes it from background compaction.
+If an :term:`oplog` exists, MongoDB excludes it from background compaction.
 
 ### Performance Considerations
 
-We recommend running `autoCompact` during periods of low traffic.
+We recommend running ``autoCompact`` during periods of low traffic. 
 
-.. include:: /includes/compaction-checkpoints.rst
+**include:** /includes/compaction-checkpoints.rst
 
 ### Replica Sets
 
-You can run background compaction on collections and indexes that are stored in a replica set. However, note the following considerations:
+You can run background compaction on collections and indexes that are 
+stored in a replica set. However, note the following considerations:  
 
-- The primary node does not replicate the `autoCompact` command to the
-secondary nodes.
-
-- A secondary node can replicate data while background compaction is
-running.
-
+- The primary node does not replicate the ``autoCompact`` command to the
+  secondary nodes.
+- A secondary node can replicate data while background compaction is 
+  running.
 - Reads and writes are permitted while background compaction is running.
+
 ### Sharded Clusters
 
-`autoCompact` only applies to :binary:`~bin.mongod` instances. In a sharded environment, run `autoCompact` on each shard separately.
+``autoCompact`` only applies to :binary:`~bin.mongod` instances. In a
+sharded environment, run ``autoCompact`` on each shard separately.
 
-You cannot run `autoCompact` against a :binary:`~bin.mongos` instance.
+You cannot run ``autoCompact`` against a :binary:`~bin.mongos` instance.
 
 ## Learn More
 

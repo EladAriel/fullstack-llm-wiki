@@ -1,59 +1,107 @@
 ---
 type: "Framework Learn Page"
-framework: "mongodb"
+framework: "MongoDB"
 source_repo: "https://github.com/mongodb/docs.git"
 source_branch: "main"
 source_path: "content/manual/manual/source/reference/method/ClientEncryption.decrypt.txt"
-source_commit: "ab9db26ed3d11618cdb61516d8180337d8e3f679"
-source_commit_short: "ab9db26e"
-source_commit_date: "2026-07-24T16:22:46-06:00"
-generated_at: "2026-07-25T11:51:15Z"
+source_commit: "b9f2bc487a2878b65e3c1f80024bebab76954f27"
+source_commit_short: "b9f2bc48"
+source_commit_date: "2026-08-28T17:09:45-05:00"
+generated_at: "2026-08-29T09:39:19.954212Z"
 ---
-
-===========================================
-
 # ClientEncryption.decrypt() (mongosh method)
+
+**meta:** :description: Decrypt encrypted values using `ClientEncryption.decrypt()` when connected to a database with access to the Key Management Service and key vault.
+
+.. default-domain:: mongodb
+
+**contents:** On this page
+   :local:
+   :backlinks: none
+   :depth: 1
+   :class: singlecol
+
+**method:** ClientEncryption.decrypt(encryptedValue)
+
+   :method:`ClientEncryption.decrypt` decrypts the ``encryptionValue`` *if*
+   the current database connection was configured with access to the Key
+   Management Service (KMS) and key vault used to encrypt ``encryptionValue``.
+
+   :returns: The decrypted value.
+
 
 ## Compatibility
 
-This command is available in deployments hosted in the following environments:
+This command is available in deployments hosted in the following
+environments: 
 
-.. include:: /includes/fact-environments-atlas-only.rst
+**include:** /includes/fact-environments-atlas-only.rst
 
-.. include:: /includes/fact-environments-onprem-only.rst
+**include:** /includes/fact-environments-onprem-only.rst
+
 
 ## Syntax
 
-`ClientEncryption.decrypt` has the following syntax:
+``ClientEncryption.decrypt`` has the following syntax:
 
-```javascript
-clientEncryption = db.getMongo().getClientEncryption()
+.. code-block:: javascript
 
-clientEncryption.decrypt(encryptedValue)
-```
+   clientEncryption = db.getMongo().getClientEncryption()
 
-The `encryptedValue` must be a :bsontype:`binary data <Binary>` object with [subtype 6](https://github.com/mongodb/specifications/blob/master/source/client-side-encryption/subtype6.rst) created using client-side field level encryption.
+   clientEncryption.decrypt(encryptedValue)
+
+The ``encryptedValue`` *must* be a :bsontype:`binary data <Binary>` object 
+with `subtype 6 <https://github.com/mongodb/specifications/blob/master/source/client-side-encryption/subtype6.rst>`_
+created using client-side field level encryption.
+
 
 ## Behavior
 
-Read operations issued from a database connection :method:`configured <Mongo()>` with access to the correct Key Management Service (KMS) and Key Vault can automatically decrypt field values encrypted using :method:`ClientEncryption.encrypt()`. Clients only need to use :method:`~ClientEncryption.decrypt()` to decrypt :bsontype:`Binary` subtype 6 values not stored within a document field.
+Read operations issued from a database connection :method:`configured <Mongo()>`
+with access to the correct Key Management Service (KMS) and Key Vault can
+automatically decrypt field values encrypted using
+:method:`ClientEncryption.encrypt()`. Clients only need to use
+:method:`~ClientEncryption.decrypt()` to decrypt :bsontype:`Binary` subtype 6 
+values not stored within a document field.
 
 ### Enable Client-Side Field Level Encryption on Database Connection
 
-.. include:: /includes/extracts/csfle-requires-enabling-encryption.rst
+**include:** /includes/extracts/csfle-requires-enabling-encryption.rst
 
 ## Example
 
-The following example uses a locally managed KMS for the client-side field level encryption configuration.
+The following example uses a locally managed KMS for the client-side
+field level encryption configuration.
+
+**procedure:** :style: normal
+
+   .. step:: Create Your Encrypted Connection
+
+      .. include:: /includes/csfle-connection-boilerplate-example-2.rst
+
+   .. step:: Decrypt Your Data
+
+      Retrieve the :method:`ClientEncryption <getClientEncryption()>` object
+      and use the :method:`ClientEncryption.decrypt()` method to decrypt
+      a value encrypted by :method:`ClientEncryption.encrypt()`.
+
+      .. code-block:: javascript
+
+         clientEncryption = encryptedClient.getClientEncryption();
+
+         clientEncryption.decrypt(BinData(6,"AmTi2H3xaEk8u9+jlFNaLLkC3Q/+kmwDbbWrq+h9nuv9W+u7A5a0UnpULBNZH+Q21fAztPpU09wpKPrju9dKfpN1Afpj1/ZhFcH6LYZOWSBBOAuUNjPLxMNSYOOuITuuYWo="))
 
 ### Example Results
 
-If successful, :method:`~ClientEncryption.decrypt()` returns the decrypted value:
+If successful, :method:`~ClientEncryption.decrypt()` returns the
+decrypted value:
 
-```javascript
-"123-45-6789" 
-```
+.. code-block:: javascript
+   :copyable: false
+
+   "123-45-6789" 
 
 ## Learn More
 
-For complete documentation on initiating MongoDB connections with client-side field level encryption enabled, see :method:`Mongo()`.
+For complete documentation on initiating MongoDB connections with
+client-side field level encryption enabled, see :method:`Mongo()`.

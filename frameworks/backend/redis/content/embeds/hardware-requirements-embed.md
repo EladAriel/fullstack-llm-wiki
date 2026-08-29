@@ -1,14 +1,15 @@
 ---
 type: "Framework Learn Page"
-framework: "redis"
+framework: "Redis"
 source_repo: "https://github.com/redis/docs.git"
 source_branch: "main"
 source_path: "content/embeds/hardware-requirements-embed.md"
-source_commit: "9d30f68c3dad1a6b3b7d30fe604b911348ce8152"
-source_commit_short: "9d30f68c"
-source_commit_date: "2026-07-24T10:52:10-07:00"
-generated_at: "2026-07-25T11:51:22Z"
+source_commit: "f8693349287b0efbef3c865b6f6a2aceca88594d"
+source_commit_short: "f869334"
+source_commit_date: "2026-08-28T10:01:19-05:00"
+generated_at: "2026-08-29T09:38:55.096479Z"
 ---
+# Hardware Requirements Embed
 
 The hardware requirements for Redis Software are different for development and production environments.
 
@@ -53,7 +54,8 @@ We recommend these hardware requirements for production systems or for developme
 | Ephemeral storage | Used for storing [replication files (RDB format) and cluster log files]({{< relref "/operate/rs/installing-upgrading/install/plan-deployment/persistent-ephemeral-storage" >}}). | RAM x 2 | >= RAM x 4 |
 | Persistent storage<sup>[4](#table-note-4)</sup> | Used for storing [snapshot (RDB format) and AOF files]({{< relref "/operate/rs/installing-upgrading/install/plan-deployment/persistent-ephemeral-storage" >}}) over a persistent storage media, such as AWS Elastic Block Storage (EBS) or Azure Data Disk. | RAM x 3 | In-memory >= RAM x 4 (except for [extreme 'write' scenarios]({{< relref "/operate/rs/clusters/optimize/disk-sizing-heavy-write-scenarios" >}}))<br /><br /> [Redis Flex and Auto Tiering]({{< relref "/operate/rs/databases/flash/" >}}) >= (RAM + Flash) x 4. |
 | Network<sup>[5](#table-note-5)</sup> | We recommend using multiple NICs per node where each NIC is >1Gbps, but Redis Software can also run over a single 1Gbps interface network used for processing application requests, inter-cluster communication, and storage access. | 1G | >=10G |
-| Local disk for [Redis Flex and Auto Tiering]({{< relref "/operate/rs/databases/flash/" >}}) | used to to extend databases DRAM capacity with solid state drives (SSDs). Flash memory must be locally attached. [Read more]({{< relref "/operate/rs/databases/flash/" >}}) | (RAM+Flash) x 1.6 | (RAM+Flash) x 2.5 |
+| Local disk for [Auto Tiering]({{< relref "/operate/rs/databases/flash/" >}}) | Used to extend an Auto Tiering database's DRAM capacity with solid state drives (SSDs). Flash memory must be locally attached. [Read more]({{< relref "/operate/rs/databases/flash/" >}}) | (RAM+Flash) x 1.6 | (RAM+Flash) x 2.5 |
+| Local disk for [Flex]({{< relref "/operate/rs/flex/" >}})<sup>[6](#table-note-6)</sup> | Used to extend a Flex database's DRAM capacity with solid state drives (SSDs). Flash memory must be locally attached. [Read more]({{< relref "/operate/rs/flex/" >}}) | (Total memory limit of all Flex databases on the node) x 3 | (Total memory limit of all Flex databases on the node) x 3 |
 
 
 Additional considerations:
@@ -93,4 +95,8 @@ Additional considerations:
 5. <a name="table-note-5"></a>Network:
 
     - Only static IP addresses are supported to ensure nodes remain part of the cluster after a reboot.
+
+6. <a name="table-note-6"></a>Local disk for Flex:
+
+    - Because you can increase a database's memory limit after creation, size the local disk for the expected peak memory limit.
 

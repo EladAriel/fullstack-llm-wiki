@@ -1,14 +1,15 @@
 ---
 type: "Framework Learn Page"
-framework: "redis"
+framework: "Redis"
 source_repo: "https://github.com/redis/docs.git"
 source_branch: "main"
 source_path: "content/operate/rs/7.8/references/rest-api/objects/cluster/_index.md"
-source_commit: "9d30f68c3dad1a6b3b7d30fe604b911348ce8152"
-source_commit_short: "9d30f68c"
-source_commit_date: "2026-07-24T10:52:10-07:00"
-generated_at: "2026-07-25T11:51:22Z"
+source_commit: "f8693349287b0efbef3c865b6f6a2aceca88594d"
+source_commit_short: "f869334"
+source_commit_date: "2026-08-28T10:01:19-05:00"
+generated_at: "2026-08-29T09:38:55.504267Z"
 ---
+# _Index
 
 ---
 Title: Cluster object
@@ -71,7 +72,7 @@ An API object that represents the cluster.
 | proxy_certificate | string | Cluster's proxy certificate |
 | <span class="break-all">proxy_max_ccs_disconnection_time</span> | integer | Cluster-wide proxy timeout policy between proxy and CCS |
 | rack_aware | boolean | Cluster operates in a rack-aware mode (read-only) |
-| reserved_ports | array of strings | List of reserved ports and/or port ranges to avoid using for database endpoints (for example `"reserved_ports": ["11000", "13000-13010"]`) |
+| reserved_ports | array of strings | Ports and port ranges that the cluster does not use for database endpoints or internal shard traffic (for example `"reserved_ports": ["11000", "13000-13010", "20048"]`) |
 | s3_ca_cert | string | Filepath to the PEM-encoded CA certificate to use for validating TLS connections to the S3 server |
 | s3_url | string | Specifies the URL for S3 export and import |
 | sentinel_cipher_suites | array | Specifies the list of enabled ciphers for the sentinel service. The supported ciphers are those implemented by the [cipher_suites.go](<https://golang.org/src/crypto/tls/cipher_suites.go>) package. |

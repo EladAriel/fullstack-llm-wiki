@@ -1,50 +1,106 @@
 ---
 type: "Framework Learn Page"
-framework: "mongodb"
+framework: "MongoDB"
 source_repo: "https://github.com/mongodb/docs.git"
 source_branch: "main"
 source_path: "content/manual/manual/source/core/sharding-change-shard-key-value.txt"
-source_commit: "ab9db26ed3d11618cdb61516d8180337d8e3f679"
-source_commit_short: "ab9db26e"
-source_commit_date: "2026-07-24T16:22:46-06:00"
-generated_at: "2026-07-25T11:51:15Z"
+source_commit: "b9f2bc487a2878b65e3c1f80024bebab76954f27"
+source_commit_short: "b9f2bc48"
+source_commit_date: "2026-08-28T17:09:45-05:00"
+generated_at: "2026-08-29T09:39:19.538607Z"
 ---
-
-===================================
+.. _update-shard-key:
 
 # Change a Document's Shard Key Value
 
-You can update a document's shard key value unless the shard key field is the immutable `_id` field.
+**meta:** :description: Update a document's shard key value using specific commands, ensuring operations are performed on `mongos` and include the full shard key in the query filter.
 
-> **Important:** - You **must** be on a :binary:`~bin.mongos`. Do **not** issue the
-  operation directly on the shard.
-- You **must** run either in a :doc:`transaction
-  </core/transactions>` or as a :doc:`retryable write
-  </core/retryable-writes>`.
-- You **must** include an equality condition on the full shard
-  key in the query filter. For example, consider a `messages`
-  collection that uses `{ activityid: 1, userid : 1 }` as the
-  shard key. To update the shard key value for a document, you must
-  include `activityid: <value>, userid: <value>` in the query
-  filter. You can include additional fields in the query as
-  appropriate.
-See also the specific write command/methods for additional
-operation-specific requirements when run against a sharded
-collection.
+.. default-domain:: mongodb
+
+**contents:** On this page
+   :local:
+   :backlinks: none
+   :depth: 2
+   :class: singlecol
+
+
+You can update a document's shard key value unless the shard key field is the 
+immutable ``_id`` field.
+
+**important:** When updating the shard key value
+
+   - You **must** be on a :binary:`~bin.mongos`. Do **not** issue the
+     operation directly on the shard.
+
+   - You **must** run either in a :doc:`transaction
+     </core/transactions>` or as a :doc:`retryable write
+     </core/retryable-writes>`.
+
+   - You **must** include an equality condition on the full shard
+     key in the query filter. For example, consider a ``messages``
+     collection that uses ``{ activityid: 1, userid : 1 }`` as the
+     shard key. To update the shard key value for a document, you must
+     include ``activityid: <value>, userid: <value>`` in the query
+     filter. You can include additional fields in the query as
+     appropriate.
+
+   See also the specific write command/methods for additional
+   operation-specific requirements when run against a sharded
+   collection.
 
 To update a shard key value, use the following operations:
 
-.. include:: /includes/shard-key-modification-warning.rst
+.. list-table::
+   :header-rows: 1
+   :widths: 40 60
+
+   * - Command
+     - Method
+
+   * - :ref:`update <command-update-shard-key-modification>` with ``multi: false``
+     - | :ref:`db.collection.replaceOne() <replaceOne-shard-key-modification>`
+       | :ref:`db.collection.updateOne() <updateOne-shard-key-modification>`
+
+       To set to a non-``null`` value, the update :red:`must` be
+       performed either inside a transaction or as a retryable write.
+
+   * - :ref:`findAndModify <cmd-findAndModify-sharded-collection>`
+     - | :ref:`db.collection.findOneAndReplace() <findOneAndReplace-shard-key-modification>`
+       | :ref:`db.collection.findOneAndUpdate() <findOneAndUpdate-shard-key-modification>`
+       | :ref:`db.collection.findAndModify() <method-findAndModify-sharded-collection>`
+
+       To set to a non-``null`` value, the update :red:`must` be
+       performed either inside a transaction or as a retryable write.
+
+   * -
+     - | :method:`db.collection.bulkWrite()`
+       | :method:`Bulk.find.updateOne()`
+
+       If the shard key modification results in moving the document to
+       another shard, you cannot specify more than one shard key
+       modification in the bulk operation; the batch size has to be 1.
+
+       If the shard key modification does not result in moving the
+       document to another shard, you can specify multiple shard
+       key modification in the bulk operation.
+
+       To set to a non-``null`` value, the operation :red:`must` be
+       performed either inside a transaction or as a retryable write.
+
+**include:** /includes/shard-key-modification-warning.rst
 
 ## Example
 
-Consider a `sales` collection which is sharded on the `location field. The collection contains a document with the id` `12345` and the `location` `""`. To update the field value for this document, you can run the following command:
+Consider a ``sales`` collection which is sharded on the ``location``
+field. The collection contains a document with the ``_id``
+``12345`` and the ``location`` ``""``. To update the field value for
+this document, you can run the following command:
 
-```javascript
-db.sales.updateOne(
-  { _id: 12345, location: "" },
-  { $set: { location: "New York"} }
-)
-```
+.. code-block:: javascript
 
-> **Seealso:** `shard-key-missing-set`
+   db.sales.updateOne(
+     { _id: 12345, location: "" },
+     { $set: { location: "New York"} }
+   )
+
+**seealso:** :ref:`shard-key-missing-set`

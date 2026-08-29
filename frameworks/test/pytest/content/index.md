@@ -1,13 +1,7 @@
 ---
 type: "Framework Learn Directory Index"
 framework: "pytest"
-directory: "content"
-source_repo: "https://github.com/pytest-dev/pytest"
-source_branch: "main"
-source_commit: "344c23787cdb3431dcc441b8b63ee9950f04b921"
-source_commit_short: "344c2378"
-source_commit_date: "2026-07-24T17:37:16+02:00"
-generated_at: "2026-07-25T11:50:13Z"
+generated_at: "2026-08-29T09:40:11.289267Z"
 ---
 # Content
 
@@ -21,18 +15,8 @@ This directory contains pytest learning pages related to content.
 
 - Wiki Home: [Root Index](../index.md)
 
-## Child Directories
-
-- [Announce](announce/index.md) - pages related to announce
-- [Example](example/index.md) - pages related to example
-- [Explanation](explanation/index.md) - pages related to explanation
-- [How To](how-to/index.md) - pages related to how to
-- [Proposals](proposals/index.md) - pages related to proposals
-- [Reference](reference/index.md) - pages related to reference
-
 ## Pages in This Directory
 
-- [Original Source Index](_source_index.md)
 - [Adopt](adopt.md)
 - [Backwards Compatibility](backwards-compatibility.md)
 - [Builtin](builtin.md)
@@ -41,8 +25,8 @@ This directory contains pytest learning pages related to content.
 - [Contents](contents.md)
 - [Contributing](contributing.md)
 - [Deprecations](deprecations.md)
-- [Development Guide](development_guide.md)
-- [Funcarg Compare](funcarg_compare.md)
+- [Development_Guide](development_guide.md)
+- [Funcarg_Compare](funcarg_compare.md)
 - [Funcargs](funcargs.md)
 - [Getting Started](getting-started.md)
 - [Historical Notes](historical-notes.md)
@@ -55,10 +39,11 @@ This directory contains pytest learning pages related to content.
 - [Tidelift](tidelift.md)
 - [Yieldfixture](yieldfixture.md)
 
-## IDE LLM Guidance
+## Subdirectories
 
-When answering implementation questions related to this directory:
-
-1. Prefer the most specific page listed above.
-2. If the topic is broad, read the child directory index first.
-3. Use source metadata from each page when giving answers.
+- [Announce](announce/index.md)
+- [Example](example/index.md)
+- [Explanation](explanation/index.md)
+- [How To](how-to/index.md)
+- [Proposals](proposals/index.md)
+- [Reference](reference/index.md)

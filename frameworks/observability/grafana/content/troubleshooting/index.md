@@ -1,7 +1,7 @@
 ---
 type: "Framework Learn Directory Index"
 framework: "Grafana"
-generated_at: "2026-07-25T19:08:09.110381Z"
+generated_at: "2026-08-29T09:39:37.577686Z"
 ---
 # Troubleshooting
 
@@ -18,3 +18,8 @@ This directory contains Grafana learning pages related to troubleshooting.
 ## Pages in This Directory
 
 - [_Index](_index.md)
+
+## Subdirectories
+
+- [Har Captures](har-captures/index.md)
+- [Send Panel To Grafana Support](send-panel-to-grafana-support/index.md)

@@ -1,56 +1,94 @@
 ---
 type: "Framework Learn Page"
-framework: "mongodb"
+framework: "MongoDB"
 source_repo: "https://github.com/mongodb/docs.git"
 source_branch: "main"
 source_path: "content/manual/manual/source/reference/program.txt"
-source_commit: "ab9db26ed3d11618cdb61516d8180337d8e3f679"
-source_commit_short: "ab9db26e"
-source_commit_date: "2026-07-24T16:22:46-06:00"
-generated_at: "2026-07-25T11:51:15Z"
+source_commit: "b9f2bc487a2878b65e3c1f80024bebab76954f27"
+source_commit_short: "b9f2bc48"
+source_commit_date: "2026-08-28T17:09:45-05:00"
+generated_at: "2026-08-29T09:39:19.714650Z"
 ---
-
-==========================
+.. _mongodb-package-components:
 
 # MongoDB Package Components
 
+**meta:** :description: Explore the core components of the MongoDB package, including `mongod`, `mongos`, and `mongosh`, along with security tools and Compass installation.
+
+.. default-domain:: mongodb
+
+**contents:** On this page
+   :local:
+   :backlinks: none
+   :depth: 1
+   :class: singlecol
+
 ## Core Processes
 
-The core components in the MongoDB package are:
+The core components in the MongoDB package are: 
 
-## Contents
+.. list-table::
 
-- mongod </reference/program/mongod>
-- mongos </reference/program/mongos>
+   * - :binary:`~bin.mongod`
+  
+     - the core database process
+  
+   * - :binary:`~bin.mongos`
+
+     - the controller and query router for :term:`sharded clusters
+       <sharded cluster>`
+
+   * - :binary:`~bin.mongosh`
+
+     - the interactive shell
+ 
+**toctree:** :maxdepth: 1
+   :hidden:
+
+   mongod </reference/program/mongod>
+   mongos </reference/program/mongos>
 
 ## Windows Services
 
-The :binary:`mongod.exe` and :binary:`mongos.exe` binaries configure MongoDB as a Windows Service. They provide a superset of the :binary:`~bin.mongod` and :binary:`~bin.mongos` options.
+The :binary:`mongod.exe` and :binary:`mongos.exe` binaries configure
+MongoDB as a Windows Service. They provide a superset of the
+:binary:`~bin.mongod` and :binary:`~bin.mongos` options.
 
-- `/reference/program/mongod.exe`
-- `/reference/program/mongos.exe`
-## Contents
+- :doc:`/reference/program/mongod.exe`
+- :doc:`/reference/program/mongos.exe`
 
-- mongod.exe </reference/program/mongod.exe>
-- mongos.exe </reference/program/mongos.exe>
+**toctree:** :maxdepth: 1
+   :hidden:
+
+   mongod.exe </reference/program/mongod.exe>
+   mongos.exe </reference/program/mongos.exe>
 
 ## Security Tools
 
-:binary:`~bin.mongoldap` validates a system's LDAP configuration, and :binary:`~bin.mongokerberos` validates a system's Kerberos configuration. Both tools test that authentication succeeds for a specified username.
+:binary:`~bin.mongoldap` validates a system's LDAP configuration, and
+:binary:`~bin.mongokerberos` validates a system's Kerberos
+configuration. Both tools test that authentication succeeds for a
+specified username.
 
-## Contents
+**toctree:** :maxdepth: 1
+   :hidden:
 
-- mongokerberos </reference/program/mongokerberos>
-- mongoldap </reference/program/mongoldap>
+   mongokerberos </reference/program/mongokerberos>
+   mongoldap </reference/program/mongoldap>
+
 
 ## MongoDB Compass
 
-MongoDB is packaged with an `install_compass` script, which is a platform-specific installer for `MongoDB Compass Community Edition <compass-index>`.
+MongoDB is packaged with an ``install_compass`` script, which
+is a platform-specific installer for
+:ref:`MongoDB Compass Community Edition <compass-index>`.
 
-## Contents
+**toctree:** :maxdepth: 1
+   :hidden:
 
-- install_compass </reference/program/install_compass>
+   install_compass </reference/program/install_compass>
 
-## Contents
+**toctree:** :maxdepth: 1
+   :hidden:
 
-- Database Tools <https://www.mongodb.com/docs/database-tools/>
+   Database Tools <https://www.mongodb.com/docs/database-tools/>

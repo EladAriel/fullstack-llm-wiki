@@ -1,67 +1,145 @@
 ---
 type: "Framework Learn Page"
-framework: "mongodb"
+framework: "MongoDB"
 source_repo: "https://github.com/mongodb/docs.git"
 source_branch: "main"
 source_path: "content/manual/manual/source/data-modeling/schema-design-process/create-indexes.txt"
-source_commit: "ab9db26ed3d11618cdb61516d8180337d8e3f679"
-source_commit_short: "ab9db26e"
-source_commit_date: "2026-07-24T16:22:46-06:00"
-generated_at: "2026-07-25T11:51:15Z"
+source_commit: "b9f2bc487a2878b65e3c1f80024bebab76954f27"
+source_commit_short: "b9f2bc48"
+source_commit_date: "2026-08-28T17:09:45-05:00"
+generated_at: "2026-08-29T09:39:20.294424Z"
 ---
-
-======================================
+.. _create-indexes-to-support-queries:
 
 # Create Indexes to Support Your Queries
 
-An index covers a query when the index contains all of the fields scanned by the query. A covered query scans the index and not the collection, which improves query performance.
+**contents:** On this page
+   :local:
+   :backlinks: none
+   :depth: 1
+   :class: singlecol
 
-Indexes can also partially support queries if a subset of the fields queried are indexed.
+**facet:** :name: genre
+   :values: tutorial
+
+An index covers a query when the index contains all of the fields
+scanned by the query. A covered query scans the index and not the
+collection, which improves query performance.
+
+Indexes can also partially support queries if a subset of the fields
+queried are indexed.
 
 ## About this Task
 
-A single collection can have a maximum of 64 indexes. However, too many indexes can degrade performance before that limit is reached. For collections with a high write-to-read ratio, indexes can degrade performance because each insert must also update any indexes.
+A single collection can have a maximum of 64 indexes. However, too many
+indexes can degrade performance before that limit is reached. For
+collections with a high write-to-read ratio, indexes can degrade
+performance because each insert must also update any indexes.
 
 ## Steps
 
-Repeat this procedure periodically to ensure that your indexes support your current workload.
+**procedure:** :style: normal
+
+   .. step:: Identify common queries
+
+      To identify common query patterns in your application, use the
+      :pipeline:`$queryStats` aggregation stage. ``$queryStats`` reports
+      metrics for :term:`query shapes <query shape>`, which group
+      queries based on shared fields.
+
+   .. step:: Create indexes to support common queries
+
+      After you know which fields your application frequently queries,
+      you can create indexes to support queries on those fields. For
+      more information, see :ref:`schema-design-indexes-examples`.
+
+   .. step:: Analyze index use
+
+      After your application begins using indexes, you can analyze your
+      indexes' effectiveness. To see index statistics and usage, you
+      can:
+      
+      - Use the :pipeline:`$indexStats` aggregation stage.
+      - For MongoDB Atlas deployments, view :atlas:`Indexes
+        </atlas-ui/indexes/#std-label-atlas-ui-view-indexes>` in the
+        Atlas UI.
+
+      Consider deleting unused indexes to improve application
+      performance. For more information, see
+      :ref:`unnecessary-indexes-antipattern`.
+
+Repeat this procedure periodically to ensure that your indexes support
+your current workload.
+
+.. _schema-design-indexes-examples:
 
 ## Examples
 
-.. include:: /includes/sample-data-usage.rst
+**include:** /includes/sample-data-usage.rst
 
-.. include:: /includes/sample-data-additional-fields-note.rst
+**include:** /includes/sample-data-additional-fields-note.rst
 
 ### Create a Single-Key Index
 
-If your application only queries on a single key in a given collection, then you need to create a single-key index for that collection. For example, you can create an index on `title` in the `movies` collection:
+If your application only queries on a single key in a given collection,
+then you need to create a single-key index for that collection. For
+example, you can create an index on ``title`` in the ``movies``
+collection:
+
+**literalinclude:** /code-examples/tested/command-line/mongosh/indexes/simple/create-simple-index/create-index.snippet.create-simple-index-movies.js
+   :language: javascript
+   :category: usage example
 
 This index supports this query:
 
+**literalinclude:** /code-examples/tested/command-line/mongosh/indexes/simple/find-simple-index/find.snippet.find-simple-index-movies.js
+   :language: javascript
+   :category: usage example
+
+.. _compound-key-indexes:
+
 ### Create a Compound Index
 
-If your application performs queries on both a single key and multiple keys, a `compound index <index-type-compound>` is more efficient than a single-key index. For example, you can create an index on the `year`, `runtime`, and `title` fields:
+If your application performs queries on both a single key and multiple
+keys, a :ref:`compound index <index-type-compound>` is more efficient
+than a single-key index. For example, you can create an index on the
+``year``, ``runtime``, and ``title`` fields:
 
-Index Prefixes ``````````````
+**literalinclude:** /code-examples/tested/command-line/mongosh/indexes/compound/create-compound-index/create-index.snippet.create-compound-index-movies.js
+   :language: javascript
+   :category: usage example  
 
-A compound index supports queries on index prefixes, which are the beginning subsets of indexed fields. For example, the preceding index supports this query:
+### Index Prefixes
 
-For more information and performance considerations on index prefixes, see `compound-index-prefix`.
+A compound index supports queries on index prefixes, which are the
+beginning subsets of indexed fields. For example, the preceding index
+supports this query:
 
-### Create Indexes to Support `$text` Queries
+**literalinclude:** /code-examples/tested/command-line/mongosh/indexes/compound/find-compound-index-year-runtime/find.snippet.find-compound-index-title.js
+   :language: javascript
+   :category: usage example  
 
-.. include:: /includes/indexes/text-search-indexes-overview.rst
+For more information and performance considerations on index prefixes,
+see :ref:`compound-index-prefix`.
+
+### Create Indexes to Support ``$text`` Queries
+
+**include:** /includes/indexes/text-search-indexes-overview.rst
 
 ### Create Vector Search Indexes
 
-Vector Search Indexes support queries on vector embeddings. To create Vector Search Indexes, see :atlas:`Index Fields for Vector Search </atlas-vector-search/vector-search-type/>`.
+Vector Search Indexes support queries on vector embeddings. To create
+Vector Search Indexes, see :atlas:`Index Fields for Vector Search
+</atlas-vector-search/vector-search-type/>`. 
 
 ### Index Use and Collation
 
-.. include:: /includes/extracts/collation-index-use.rst
+**include:** /includes/extracts/collation-index-use.rst
 
 ## Learn More
 
-- `esr-indexing-guideline`
-- `collation`
-- `read-operations-indexing`
+- :ref:`esr-indexing-guideline`
+
+- :ref:`collation`
+
+- :ref:`read-operations-indexing`

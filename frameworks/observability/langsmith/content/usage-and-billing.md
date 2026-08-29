@@ -4,10 +4,10 @@ framework: "LangSmith"
 source_repo: "https://github.com/langchain-ai/docs.git"
 source_branch: "main"
 source_path: "src/langsmith/usage-and-billing.mdx"
-source_commit: "2aae1dfc98ee953a9a5185fb6fcdd9efb3f4d878"
-source_commit_short: "2aae1df"
-source_commit_date: "2026-07-25T00:27:23+00:00"
-generated_at: "2026-07-25T19:08:33.414113Z"
+source_commit: "a174f9cf7c91ee5eb14ee2382eb48bfe6e4956e9"
+source_commit_short: "a174f9c"
+source_commit_date: "2026-08-28T17:04:12-07:00"
+generated_at: "2026-08-29T09:39:50.666377Z"
 ---
 # Usage And Billing
 
@@ -64,8 +64,8 @@ Retention behavior by action:
 
 * **Feedback via API or SDK**: Feedback is added to any run on the trace (or any trace in the thread) through an API or SDK call that explicitly passes `extend_trace_retention=true` (`extendTraceRetention: true` in TypeScript). For more information, see [Attach user feedback](/langsmith/attach-user-feedback). The LangSmith UI sends feedback and notes without extending retention.
 * **Online evaluators**: An online evaluator scores the trace and its retention setting is enabled. Both trace-level and thread-level evaluators can opt out of this upgrade.
-* **Automation rules**: An [automation rule](/langsmith/rules#create-a-rule) with retention extension enabled matches any run within a trace.
-* **Manual annotation queue adds** (no upgrade): Manually adding runs to an [annotation queue](/langsmith/annotation-queues#assign-runs-to-a-single-run-queue) does not upgrade retention by default.
+* **Automation rules**: An [automation rule](/langsmith/rules#create-a-rule) with retention extension enabled matches any run within a trace. Matching a single run upgrades the entire trace, not just that run. A rule whose [item type](/langsmith/rules#set-the-item-type-to-runs-or-threads) is **Threads** upgrades every trace in the matched thread, not only the most recent one.
+* **Manual annotation queue adds** (no upgrade): Manually adding runs or threads to an [annotation queue](/langsmith/annotation-queues#assign-runs-and-threads-to-a-single-run-queue) does not upgrade retention by default.
 
 This change applies to new actions only. Traces that were already upgraded by a previous action keep their extended retention.
 
@@ -231,7 +231,7 @@ The extended data retention traces limit has side effects. If the limit is alrea
 1. run automation rules that extend trace retention
 2. run evaluators that extend trace retention
 
-Actions that do not change trace retention are not counted against the extended-retention trace limit. You can still submit feedback in the LangSmith UI, add runs to annotation queues, and run automation rules or evaluators with retention extension disabled when the limit is reached.
+Actions that do not change trace retention are not counted against the extended-retention trace limit. You can still submit feedback in the LangSmith UI, add runs or threads to annotation queues, and run automation rules or evaluators with retention extension disabled when the limit is reached.
 
 ### Updating usage limits
 

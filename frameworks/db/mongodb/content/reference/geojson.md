@@ -1,57 +1,77 @@
 ---
 type: "Framework Learn Page"
-framework: "mongodb"
+framework: "MongoDB"
 source_repo: "https://github.com/mongodb/docs.git"
 source_branch: "main"
 source_path: "content/manual/manual/source/reference/geojson.txt"
-source_commit: "ab9db26ed3d11618cdb61516d8180337d8e3f679"
-source_commit_short: "ab9db26e"
-source_commit_date: "2026-07-24T16:22:46-06:00"
-generated_at: "2026-07-25T11:51:15Z"
+source_commit: "b9f2bc487a2878b65e3c1f80024bebab76954f27"
+source_commit_short: "b9f2bc48"
+source_commit_date: "2026-08-28T17:09:45-05:00"
+generated_at: "2026-08-29T09:39:19.662884Z"
 ---
-
-===============
+.. _geospatial-indexes-store-geojson:
 
 # GeoJSON Objects
+
+**contents:** On this page
+   :local:
+   :backlinks: none
+   :depth: 1
+   :class: twocols
 
 ## Overview
 
 MongoDB supports the GeoJSON object types listed on this page.
 
-.. include:: /includes/extracts/geojson-specification-general.rst
+**include:** /includes/extracts/geojson-specification-general.rst
 
-## `Point`
+.. _geojson-point:
 
-The following example specifies a GeoJSON [Point](https://tools.ietf.org/html/rfc7946#section-3.1.2):
+## ``Point``
 
-```javascript
-{ type: "Point", coordinates: [ 40, 5 ] }
-```
+The following example specifies a GeoJSON `Point
+<https://tools.ietf.org/html/rfc7946#section-3.1.2>`_:
 
-## `LineString`
+.. code-block:: javascript
 
-The following example specifies a GeoJSON [LineString](https://tools.ietf.org/html/rfc7946#section-3.1.4):
+   { type: "Point", coordinates: [ 40, 5 ] }
 
-```javascript
-{ type: "LineString", coordinates: [ [ 40, 5 ], [ 41, 6 ] ] }
-```
+.. _geojson-linestring:
 
-## `Polygon`
+## ``LineString``
 
-[Polygons](https://tools.ietf.org/html/rfc7946#section-3.1.6) consist of an array of GeoJSON `LinearRing` coordinate arrays. A `LinearRing` is a closed `LineString` with at least four coordinate pairs. The first and last coordinates must be identical.
+The following example specifies a GeoJSON `LineString
+<https://tools.ietf.org/html/rfc7946#section-3.1.4>`_:
 
-Lines between two points on a curved surface, or geodesics, can differ from lines between the same points on a flat surface. Check coordinates carefully to avoid shared-edge errors, overlaps, or other intersections.
+.. code-block:: javascript
+
+   { type: "LineString", coordinates: [ [ 40, 5 ], [ 41, 6 ] ] }
+
+.. _geojson-polygon:
+
+## ``Polygon``
+
+`Polygons <https://tools.ietf.org/html/rfc7946#section-3.1.6>`_ consist of
+an array of GeoJSON ``LinearRing`` coordinate arrays. A ``LinearRing``
+is a closed ``LineString`` with at least four coordinate pairs. The
+first and last coordinates must be identical.
+
+Lines between two points on a curved surface, or geodesics, can differ
+from lines between the same points on a flat surface. Check coordinates
+carefully to avoid shared-edge errors, overlaps, or other intersections.
 
 ### Polygons with a Single Ring
 
-The following example specifies a GeoJSON `Polygon` with an exterior ring and no interior rings (or holes). The first and last coordinates must match in order to close the polygon:
+The following example specifies a GeoJSON ``Polygon`` with an exterior
+ring and no interior rings (or holes). The first and last coordinates
+must match in order to close the polygon:
 
-```javascript
-{
-  type: "Polygon",
-  coordinates: [ [ [ 0 , 0 ] , [ 3 , 6 ] , [ 6 , 1 ] , [ 0 , 0  ] ] ]
-}
-```
+.. code-block:: javascript
+
+   {
+     type: "Polygon",
+     coordinates: [ [ [ 0 , 0 ] , [ 3 , 6 ] , [ 6 , 1 ] , [ 0 , 0  ] ] ]
+   }
 
 For Polygons with a single ring, the ring cannot self-intersect.
 
@@ -60,105 +80,121 @@ For Polygons with a single ring, the ring cannot self-intersect.
 For Polygons with multiple rings:
 
 - The first described ring must be the exterior ring.
+
 - The exterior ring cannot self-intersect.
+
 - Any interior ring must be entirely contained by the outer ring.
+
 - Interior rings cannot intersect or overlap each other. Interior
-rings cannot share an edge.
+  rings cannot share an edge.
 
 The following example represents a GeoJSON polygon with an interior ring:
 
-```javascript
-{
-  type : "Polygon",
-  coordinates : [
-     [ [ 0 , 0 ] , [ 3 , 6 ] , [ 6 , 1 ] , [ 0 , 0 ] ],
-     [ [ 2 , 2 ] , [ 3 , 3 ] , [ 4 , 2 ] , [ 2 , 2 ] ]
-  ]
-}
-```
+.. code-block:: javascript
 
-.. include:: /images/index-2dsphere-polygon-with-ring.rst
+   {
+     type : "Polygon",
+     coordinates : [
+        [ [ 0 , 0 ] , [ 3 , 6 ] , [ 6 , 1 ] , [ 0 , 0 ] ],
+        [ [ 2 , 2 ] , [ 3 , 3 ] , [ 4 , 2 ] , [ 2 , 2 ] ]
+     ]
+   }
 
-## `MultiPoint`
+**include:** /images/index-2dsphere-polygon-with-ring.rst
 
-Requires `2dsphere-v2`.
+.. _geojson-multipoint:
 
-GeoJSON [MultiPoint](https://tools.ietf.org/html/rfc7946#section-3.1.3) embedded documents encode a list of points.
+## ``MultiPoint``
 
-```javascript
-{
-  type: "MultiPoint",
-  coordinates: [
-     [ -73.9580, 40.8003 ],
-     [ -73.9498, 40.7968 ],
-     [ -73.9737, 40.7648 ],
-     [ -73.9814, 40.7681 ]
-  ]
-}
-```
+Requires :ref:`2dsphere-v2`.
 
-## `MultiLineString`
+GeoJSON `MultiPoint <https://tools.ietf.org/html/rfc7946#section-3.1.3>`_
+embedded documents encode a list of points.
 
-Requires `2dsphere-v2`.
+.. code-block:: javascript
 
-The following example specifies a GeoJSON [MultiLineString](https://tools.ietf.org/html/rfc7946#section-3.1.5):
+   {
+     type: "MultiPoint",
+     coordinates: [
+        [ -73.9580, 40.8003 ],
+        [ -73.9498, 40.7968 ],
+        [ -73.9737, 40.7648 ],
+        [ -73.9814, 40.7681 ]
+     ]
+   }
 
-```javascript
-{
- type: "MultiLineString",
- coordinates: [
-    [ [ -73.96943, 40.78519 ], [ -73.96082, 40.78095 ] ],
-    [ [ -73.96415, 40.79229 ], [ -73.95544, 40.78854 ] ],
-    [ [ -73.97162, 40.78205 ], [ -73.96374, 40.77715 ] ],
-    [ [ -73.97880, 40.77247 ], [ -73.97036, 40.76811 ] ]
- ]
-}
-```
+.. _geojson-multilinestring:
 
-## `MultiPolygon`
+## ``MultiLineString``
 
-Requires `2dsphere-v2`.
+Requires :ref:`2dsphere-v2`.
 
-The following example specifies a GeoJSON [MultiPolygon](https://tools.ietf.org/html/rfc7946#section-3.1.7):
+The following example specifies a GeoJSON `MultiLineString
+<https://tools.ietf.org/html/rfc7946#section-3.1.5>`_:
 
-```javascript
-{
-  type: "MultiPolygon",
-  coordinates: [
-     [ [ [ -73.958, 40.8003 ], [ -73.9498, 40.7968 ], [ -73.9737, 40.7648 ], [ -73.9814, 40.7681 ], [ -73.958, 40.8003 ] ] ],
-     [ [ [ -73.958, 40.8003 ], [ -73.9498, 40.7968 ], [ -73.9737, 40.7648 ], [ -73.958, 40.8003 ] ] ]
-  ]
-}
-```
+.. code-block:: javascript
 
-## `GeometryCollection`
+  {
+    type: "MultiLineString",
+    coordinates: [
+       [ [ -73.96943, 40.78519 ], [ -73.96082, 40.78095 ] ],
+       [ [ -73.96415, 40.79229 ], [ -73.95544, 40.78854 ] ],
+       [ [ -73.97162, 40.78205 ], [ -73.96374, 40.77715 ] ],
+       [ [ -73.97880, 40.77247 ], [ -73.97036, 40.76811 ] ]
+    ]
+  }
 
-Requires `2dsphere-v2`.
+.. _geojson-multipolygon:
 
-The following example stores coordinates of GeoJSON type [GeometryCollection](https://tools.ietf.org/html/rfc7946#section-3.1.8):
+## ``MultiPolygon``
 
-```javascript
-{
-  type: "GeometryCollection",
-  geometries: [
-     {
-       type: "MultiPoint",
-       coordinates: [
-          [ -73.9580, 40.8003 ],
-          [ -73.9498, 40.7968 ],
-          [ -73.9737, 40.7648 ],
-          [ -73.9814, 40.7681 ]
-       ]
-     },
-     {
-       type: "MultiLineString",
-       coordinates: [
-          [ [ -73.96943, 40.78519 ], [ -73.96082, 40.78095 ] ],
-          [ [ -73.96415, 40.79229 ], [ -73.95544, 40.78854 ] ],
-          [ [ -73.97162, 40.78205 ], [ -73.96374, 40.77715 ] ],
-          [ [ -73.97880, 40.77247 ], [ -73.97036, 40.76811 ] ]
-       ]
-     }
-  ]
-}
-```
+Requires :ref:`2dsphere-v2`.
+
+The following example specifies a GeoJSON `MultiPolygon
+<https://tools.ietf.org/html/rfc7946#section-3.1.7>`_:
+
+.. code-block:: javascript
+
+   {
+     type: "MultiPolygon",
+     coordinates: [
+        [ [ [ -73.958, 40.8003 ], [ -73.9498, 40.7968 ], [ -73.9737, 40.7648 ], [ -73.9814, 40.7681 ], [ -73.958, 40.8003 ] ] ],
+        [ [ [ -73.958, 40.8003 ], [ -73.9498, 40.7968 ], [ -73.9737, 40.7648 ], [ -73.958, 40.8003 ] ] ]
+     ]
+   }
+
+.. _geojson-geometrycollection:
+
+## ``GeometryCollection``
+
+Requires :ref:`2dsphere-v2`.
+
+The following example stores coordinates of GeoJSON type
+`GeometryCollection
+<https://tools.ietf.org/html/rfc7946#section-3.1.8>`_:
+
+.. code-block:: javascript
+
+   {
+     type: "GeometryCollection",
+     geometries: [
+        {
+          type: "MultiPoint",
+          coordinates: [
+             [ -73.9580, 40.8003 ],
+             [ -73.9498, 40.7968 ],
+             [ -73.9737, 40.7648 ],
+             [ -73.9814, 40.7681 ]
+          ]
+        },
+        {
+          type: "MultiLineString",
+          coordinates: [
+             [ [ -73.96943, 40.78519 ], [ -73.96082, 40.78095 ] ],
+             [ [ -73.96415, 40.79229 ], [ -73.95544, 40.78854 ] ],
+             [ [ -73.97162, 40.78205 ], [ -73.96374, 40.77715 ] ],
+             [ [ -73.97880, 40.77247 ], [ -73.97036, 40.76811 ] ]
+          ]
+        }
+     ]
+   }

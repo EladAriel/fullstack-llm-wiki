@@ -1,14 +1,15 @@
 ---
 type: "Framework Learn Page"
-framework: "redis"
+framework: "Redis"
 source_repo: "https://github.com/redis/docs.git"
 source_branch: "main"
 source_path: "content/operate/oss_and_stack/management/security/acl.md"
-source_commit: "9d30f68c3dad1a6b3b7d30fe604b911348ce8152"
-source_commit_short: "9d30f68c"
-source_commit_date: "2026-07-24T10:52:10-07:00"
-generated_at: "2026-07-25T11:51:22Z"
+source_commit: "f8693349287b0efbef3c865b6f6a2aceca88594d"
+source_commit_short: "f869334"
+source_commit_date: "2026-08-28T10:01:19-05:00"
+generated_at: "2026-08-29T09:38:55.241030Z"
 ---
+# Acl
 
 ---
 aliases:
@@ -63,7 +64,7 @@ accomplish by implementing this layer of protection. Normally there are
 two main goals that are well served by ACLs:
 
 1. You want to improve security by restricting the access to commands and keys, so that untrusted clients have no access and trusted clients have just the minimum access level to the database in order to perform the work needed. For instance, certain clients may just be able to execute read only commands.
-2. You want to improve operational safety, so that processes or humans accessing Redis are not allowed to damage the data or the configuration due to software errors or manual mistakes. For instance, there is no reason for a worker that fetches delayed jobs from Redis to be able to call the [`FLUSHALL`](/commands/flushall) command.
+2. You want to improve operational safety, so that processes or humans accessing Redis are not allowed to damage the data or the configuration because of software errors or manual mistakes. For example, a worker that fetches delayed jobs from Redis does not need permission to call [`FLUSHALL`]({{< relref "/commands/flushall" >}}), [`FLUSHDB`]({{< relref "/commands/flushdb" >}}), or [`SWAPDB`]({{< relref "/commands/swapdb" >}}).
 
 Another typical usage of ACLs is related to managed Redis instances. Redis is
 often provided as a managed service both by internal company teams that handle
@@ -495,6 +496,16 @@ For example, consider the following two commands:
 * `LPOP key2`: modifies "key2" but also returns data from it, the left most item in the list, so the command requires both read and write permission on "key2" to execute.
 
 If an application needs to make sure no data is accessed from a key, including side channels, it's recommended to not provide any access to the key.
+
+{{< note >}}
+Key patterns only restrict commands that operate on specific keys named in the command's arguments. Commands that operate on an entire database or the whole keyspace, and therefore take no key arguments, are not limited by key patterns. Such commands are governed only by command and [category](#command-categories) rules.
+{{< /note >}}
+
+This includes commands that can destroy or replace data beyond a user's key patterns, such as [`FLUSHALL`]({{< relref "/commands/flushall" >}}), [`FLUSHDB`]({{< relref "/commands/flushdb" >}}), and [`SWAPDB`]({{< relref "/commands/swapdb" >}}).
+
+For example, a user defined with `~tenant1:* +@all` can still run `FLUSHALL` to delete every key in the database, even though its key pattern only matches `tenant1:*`. To prevent this, remove those commands explicitly:
+
+    > ACL SETUSER tenant1 on >strong-password ~tenant1:* +@all -flushall -flushdb -swapdb
 
 ## How passwords are stored internally
 

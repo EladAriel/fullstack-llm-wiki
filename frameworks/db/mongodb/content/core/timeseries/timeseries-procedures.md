@@ -1,20 +1,158 @@
 ---
 type: "Framework Learn Page"
-framework: "mongodb"
+framework: "MongoDB"
 source_repo: "https://github.com/mongodb/docs.git"
 source_branch: "main"
 source_path: "content/manual/manual/source/core/timeseries/timeseries-procedures.txt"
-source_commit: "ab9db26ed3d11618cdb61516d8180337d8e3f679"
-source_commit_short: "ab9db26e"
-source_commit_date: "2026-07-24T16:22:46-06:00"
-generated_at: "2026-07-25T11:51:15Z"
+source_commit: "b9f2bc487a2878b65e3c1f80024bebab76954f27"
+source_commit_short: "b9f2bc48"
+source_commit_date: "2026-08-28T17:09:45-05:00"
+generated_at: "2026-08-29T09:39:19.794164Z"
 ---
+**meta:** :keywords: time series, IOT, code example, node.js
+   :description: Learn how to create and query a time series collection in MongoDB, including setting fields, inserting data, and running aggregation pipelines.
 
-=========================================
+**facet:** :name: genre
+   :values: tutorial
+
+**facet:** :name: programming_language
+   :values: javascript/typescript
+
+.. _timeseries-create-query-procedures:
 
 # Create and Query a Time Series Collection
 
-This page shows how to create and query a time series collection. The code examples provided create and work with sample weather data that contains time, temperature, and sensor information.
+**contents:** On this page
+   :local:
+   :backlinks: none
+   :depth: 2
+   :class: singlecol
 
-> **Important:** You can only create time series collections on a system with
-`featureCompatibilityVersion <view-fcv>` set to 5.0 or greater.
+This page shows how to create and query a time series collection. The code
+examples provided create and work with sample weather data that contains
+time, temperature, and sensor information.
+
+**important:** Feature Compatibility Version Requirement
+
+   You can only create time series collections on a system with
+   :ref:`featureCompatibilityVersion <view-fcv>` set to 5.0 or greater.
+
+.. composable-tutorial::
+   :options: interface, language
+   :defaults: mongosh, None
+
+   .. _manual-timeseries-collection-create:
+
+## Create a Time Series Collection
+
+   .. selected-content::
+      :selections: driver, csharp
+
+      .. include:: /includes/ts-create-collection-csharp.rst
+
+   .. selected-content::
+      :selections: driver, java-sync
+
+      .. include:: /includes/ts-create-collection-java.rst
+
+   .. selected-content::
+      :selections: driver, nodejs
+
+      .. include:: /includes/ts-create-collection-node.rst
+
+   .. selected-content::
+      :selections: driver, python
+
+      .. include:: /includes/ts-create-collection-python.rst
+
+   .. selected-content::
+      :selections: mongosh, None
+
+      .. include:: /includes/ts-create-collection-mongosh.rst
+
+   .. _time-series-fields:
+
+   .. include:: /includes/ts-field-reference.rst
+
+## Insert Measurements into a Time Series Collection
+
+   .. selected-content::
+      :selections: driver, csharp
+
+      .. include:: /includes/ts-insert-measurements-csharp.rst
+
+   .. selected-content::
+      :selections: driver, java-sync
+
+      .. include:: /includes/ts-insert-measurements-java.rst
+
+   .. selected-content::
+      :selections: driver, nodejs
+
+      .. include:: /includes/ts-insert-measurements-node.rst
+
+   .. selected-content::
+      :selections: driver, python
+
+      .. include:: /includes/ts-insert-measurements-python.rst
+
+   .. selected-content::
+      :selections: mongosh, None
+
+      .. include:: /includes/ts-insert-measurements-mongosh.rst
+
+   .. _timeseries-query-example:
+
+## Query a Time Series Collection
+
+   .. selected-content::
+      :selections: driver, csharp
+
+      .. include:: /includes/ts-query-collection-csharp.rst
+
+   .. selected-content::
+      :selections: driver, java-sync
+
+      .. include:: /includes/ts-query-collection-java.rst
+
+   .. selected-content::
+      :selections: driver, nodejs
+
+      .. include:: /includes/ts-query-collection-node.rst
+
+   .. selected-content::
+      :selections: driver, python
+
+      .. include:: /includes/ts-query-collection-python.rst
+
+   .. selected-content::
+      :selections: mongosh, None
+
+      .. include:: /includes/ts-query-collection-mongosh.rst
+
+## Run Aggregations on a Time Series Collection
+
+   .. selected-content::
+      :selections: driver, csharp
+
+      .. include:: /includes/ts-run-aggregations-csharp.rst
+
+   .. selected-content::
+      :selections: driver, java-sync
+
+      .. include:: /includes/ts-run-aggregations-java.rst
+
+   .. selected-content::
+      :selections: driver, nodejs
+
+      .. include:: /includes/ts-run-aggregations-node.rst
+
+   .. selected-content::
+      :selections: driver, python
+
+      .. include:: /includes/ts-run-aggregations-python.rst
+
+   .. selected-content::
+      :selections: mongosh, None
+
+      .. include:: /includes/ts-run-aggregations-mongosh.rst

@@ -1,204 +1,379 @@
 ---
 type: "Framework Learn Page"
-framework: "mongodb"
+framework: "MongoDB"
 source_repo: "https://github.com/mongodb/docs.git"
 source_branch: "main"
 source_path: "content/manual/manual/source/reference/bson-types.txt"
-source_commit: "ab9db26ed3d11618cdb61516d8180337d8e3f679"
-source_commit_short: "ab9db26e"
-source_commit_date: "2026-07-24T16:22:46-06:00"
-generated_at: "2026-07-25T11:51:15Z"
+source_commit: "b9f2bc487a2878b65e3c1f80024bebab76954f27"
+source_commit_short: "b9f2bc48"
+source_commit_date: "2026-08-28T17:09:45-05:00"
+generated_at: "2026-08-29T09:39:19.679040Z"
 ---
-
-==========
+.. _bson-types:
 
 # BSON Types
 
-`BSON` is a binary serialization format used to store documents and make remote procedure calls in MongoDB. The BSON specification is located at [bsonspec.org](http://bsonspec.org/).
+.. default-domain:: mongodb
 
-Each BSON type has both integer and string identifiers as listed in the following table:
+**facet:** :name: programming_language 
+   :values: shell
 
-.. include:: /includes/fact-bson-types.rst
+**meta:** :description: MongoDB uses BSON (Binary JSON) to store documents and make remote procedure calls. Learn about BSON types, ObjectId, dates, timestamps, and decimal precision.
+
+**contents:** On this page
+   :local:
+   :backlinks: none
+   :depth: 1
+   :class: singlecol
+
+:term:`BSON` is a binary serialization format used to store documents
+and make remote procedure calls in MongoDB. The BSON specification is
+located at `bsonspec.org <http://bsonspec.org/>`_.
+
+Each BSON type has both integer and string identifiers as listed in the
+following table:
+
+**include:** /includes/fact-bson-types.rst
 
 - The :query:`$type` operator supports using these values to query
-fields by their BSON type. :query:`$type` also supports the `number` alias, which matches the integer, decimal, double, and long BSON types.
+  fields by their BSON type. :query:`$type` also supports the 
+  ``number`` alias, which matches the integer, decimal, double, and
+  long BSON types.
 
 - The :expression:`$type` aggregation operator returns the BSON type of
-its argument.
-
+  its argument.
+  
 - The :expression:`$isNumber` aggregation operator
-returns `true` if its argument is a BSON integer, decimal, double, or long.
+  returns ``true`` if its argument is a BSON integer, decimal, double,
+  or long.
 
-To determine a field's type, see `check-types-in-shell`.
+To determine a field's type, see :ref:`check-types-in-shell`.
 
-If you convert BSON to JSON, see the `Extended JSON <mongodb-extended-json-v2>` reference.
+If you convert BSON to JSON, see
+the :ref:`Extended JSON <mongodb-extended-json-v2>` reference.
 
-The following sections describe special considerations for particular BSON types.
+The following sections describe special considerations for particular
+BSON types.
+
+.. _document-bson-type-binary-data:
 
 ## Binary Data
 
-A BSON binary `binData` value is a byte array. A `binData` value has a subtype that indicates how to interpret the binary data. The following table shows the subtypes:
+A BSON binary ``binData`` value is a byte array. A ``binData`` value
+has a subtype that indicates how to interpret the binary data. The
+following table shows the subtypes:
 
-.. include:: /includes/binary-subtypes.rst
+**include:** /includes/binary-subtypes.rst
+
+.. _document-bson-type-object-id:
+.. _objectid:
 
 ## ObjectId
 
-ObjectIds are small, likely unique, fast to generate, and ordered. ObjectId values are 12 bytes in length, consisting of:
+ObjectIds are small, likely unique, fast to generate, and ordered.
+ObjectId values are 12 bytes in length, consisting of:
 
-.. include:: /includes/fact-ObjectId-construct.rst
+**include:** /includes/fact-ObjectId-construct.rst
 
-.. include:: /includes/fact-id-field.rst
+**include:** /includes/fact-id-field.rst
 
-MongoDB clients should add an `_id field with a unique ObjectId. Using ObjectIds for the id` field provides the following additional benefits:
+MongoDB clients should add an ``_id`` field with a unique ObjectId.
+Using ObjectIds for the ``_id`` field provides the following additional
+benefits:
 
-- You can access `ObjectId` creation time in :binary:`~bin.mongosh`
-using the :method:`ObjectId.getTimestamp()` method.
+- You can access ``ObjectId`` creation time in :binary:`~bin.mongosh` 
+  using the :method:`ObjectId.getTimestamp()` method.
 
-- ObjectIds are approximately ordered by creation time, but are not
-perfectly ordered. Sorting a collection on an `_id` field containing `ObjectId` values is roughly equivalent to sorting by creation time.
+- ObjectIds are approximately ordered by creation time, but are not 
+  perfectly ordered. Sorting a collection on an ``_id`` field 
+  containing ``ObjectId`` values is roughly equivalent to sorting by 
+  creation time. 
 
-> **Important:**   .. include:: /includes/fact-ObjectId-timestamp-order.rst
+  .. important::
 
-Use the :method:`ObjectId()` methods to set and retrieve ObjectId values.
+     .. include:: /includes/fact-ObjectId-timestamp-order.rst
 
-.. include:: /includes/reference/fact-objectid-and-mongosh.rst
+Use the :method:`ObjectId()` methods to set and retrieve ObjectId
+values.
+
+**include:** /includes/reference/fact-objectid-and-mongosh.rst
+
+
+.. _document-bson-type-string:
 
 ## String
 
-BSON strings are UTF-8. In general, drivers for each programming language convert from the language's string format to UTF-8 when serializing and deserializing BSON. This makes it possible to store most international characters in BSON strings with ease. [#sort-string-internationalization]_ In addition, MongoDB :query:`$regex` queries support UTF-8 in the regex string.
+BSON strings are UTF-8. In general, drivers for each programming
+language convert from the language's string format to UTF-8 when
+serializing and deserializing BSON. This makes it possible to store
+most international characters in BSON strings with ease.
+[#sort-string-internationalization]_ In addition, MongoDB
+:query:`$regex` queries support UTF-8 in the regex string.
 
-character sets, using :method:`sort() <cursor.sort()>` on strings is reasonably correct. However, because internally :method:`sort() <cursor.sort()>` uses the C++ `strcmp` api, the sort order may handle some characters incorrectly.
+.. [#sort-string-internationalization] Given strings using UTF-8
+   character sets, using :method:`sort() <cursor.sort()>` on strings
+   is reasonably correct. However, because internally
+   :method:`sort() <cursor.sort()>` uses the C++ ``strcmp`` api, the
+   sort order may handle some characters incorrectly.
+
+.. _document-bson-type-timestamp:
 
 ## Timestamps
 
-BSON has a special timestamp type for internal MongoDB use and is **not** associated with the regular `document-bson-type-date` type. This internal timestamp type is a 64 bit value where:
+BSON has a special timestamp type for *internal* MongoDB use and is
+**not** associated with the regular :ref:`document-bson-type-date`
+type. This internal timestamp type is a 64 bit value where:
 
-- the most significant 32 bits are a `time_t` value (seconds since
-the Unix epoch)
+- the most significant 32 bits are a ``time_t`` value (seconds since
+  the Unix epoch)
 
-- the least significant 32 bits are an incrementing `ordinal` for
-operations within a given second.
+- the least significant 32 bits are an incrementing ``ordinal`` for
+  operations within a given second.
 
-While the BSON format is little-endian, and therefore stores the least significant bits first, the :binary:`~bin.mongod` instance always compares the `time_t` value before the `ordinal` value on all platforms, regardless of endianness.
+While the BSON format is little-endian, and therefore stores the least
+significant bits first, the :binary:`~bin.mongod` instance
+always compares the ``time_t`` value before
+the ``ordinal`` value on all platforms, regardless of
+endianness.
 
-In replication, the `oplog` has a `ts` field. The values in this field reflect the operation time, which uses a BSON timestamp value.
+In replication, the :term:`oplog` has a ``ts`` field. The values in
+this field reflect the operation time, which uses a BSON timestamp
+value.
 
-Within a single :binary:`~bin.mongod` instance, timestamp values in the `oplog` are always unique.
+Within a single :binary:`~bin.mongod` instance, timestamp values in the
+:term:`oplog` are always unique.
 
-> **Note:** The BSON timestamp type is for internal MongoDB use. For most
-cases, in application development, use the BSON date type. See
-`document-bson-type-date` for more information.
+**note:** The BSON timestamp type is for *internal* MongoDB use. For most
+   cases, in application development, use the BSON date type. See
+   :ref:`document-bson-type-date` for more information.
+
+.. _document-bson-type-date:
 
 ## Date
 
-BSON Date is a 64-bit integer that represents the number of milliseconds since the Unix epoch (Jan 1, 1970). This results in a representable date range of about 290 million years into the past and future.
+BSON Date is a 64-bit integer that represents the number of
+milliseconds since the Unix epoch (Jan 1, 1970). This results in a
+representable date range of about 290 million years into the past and
+future.
 
-The [official BSON specification](http://bsonspec.org/#/specification) refers to the BSON Date type as the UTC datetime.
+The `official BSON specification <http://bsonspec.org/#/specification>`_
+refers to the BSON Date type as the *UTC datetime*.
 
-BSON Date type is signed. [#unsigned-date]_ Negative values represent dates before 1970.
+BSON Date type is signed. [#unsigned-date]_ Negative values represent
+dates before 1970.
 
-To construct a `Date` in :binary:`~bin.mongosh`, you can use the `new Date()` or `ISODate()` constructor.
+To construct a ``Date`` in :binary:`~bin.mongosh`, you can use the 
+``new Date()`` or ``ISODate()`` constructor. 
 
 ### Construct a Date With the New Date() Constructor
 
-To construct a `Date` with the `new Date()` constructor, run the following command:
+To construct a ``Date`` with the ``new Date()`` constructor, run the following 
+command: 
 
-```javascript
-var mydate1 = new Date()
-```
+.. code-block:: javascript
+   :copyable: true
 
-The `mydate1` variable outputs a date and time wrapped as an ISODate:
+   var mydate1 = new Date()
+   
+The ``mydate1`` variable outputs a date and time wrapped as an ISODate: 
 
+.. io-code-block:: 
+
+   .. input:: 
+      :language: javascript
+      
+      mydate1
+      
+   .. output:: 
+      :language: javascript 
+      
+      ISODate("2020-05-11T20:14:14.796Z")
+   
 ### Construct a Date With the ISODate() Constructor
 
-To construct a `Date` using the `ISODate()` constructor, run the following command:
+To construct a ``Date`` using the ``ISODate()`` constructor, run the following 
+command:
 
-```javascript
-var mydate2 = ISODate()
-```
+.. code-block:: javascript
+   :copyable: true
 
-The `mydate2` variable stores a date and time wrapped as an ISODate:
+   var mydate2 = ISODate()
+
+The ``mydate2`` variable stores a date and time wrapped as an ISODate: 
+
+.. io-code-block:: 
+
+   .. input:: 
+      :language: javascript 
+      
+      mydate2
+      
+   .. output:: 
+      :language: javascript 
+      
+      ISODate("2020-05-11T20:14:14.796Z")
 
 ### Convert a Date to a String
 
-To print the `Date` in a `string` format, use the `toString()` method:
+To print the ``Date`` in a ``string`` format, use the ``toString()`` method:
+
+.. io-code-block::
+   :copyable: true
+
+   .. input::
+      :language: javascript
+
+      mydate1.toString()
+
+   .. output:: 
+      :language: javascript 
+
+      Mon May 11 2020 13:14:14 GMT-0700 (Pacific Daylight Time)
 
 ### Return the Month Portion of a Date
 
-You can also return the month portion of the `Date` value. Months are zero-indexed, so that January is month `0`.
+You can also return the month portion of the ``Date`` value. Months are 
+zero-indexed, so that January is month ``0``. 
 
-incorrectly interpreted as unsigned integers, which affected sorts, range queries, and indexes on `Date` fields. Because indexes are not recreated when upgrading, please re-index if you created an index on `Date` values with an earlier version, and dates before 1970 are relevant to your application.
+.. io-code-block::
+   :copyable: true
 
-## `decimal128` BSON Data Type
+   .. input:: 
+      :language: javascript
 
-`decimal128` is a 128-bit decimal representation for storing very large or very precise numbers, whenever rounding decimals is important. It was created in August 2009 as part of the [IEEE 754-2008](https://en.wikipedia.org/wiki/IEEE_754-2008_revision)_ revision of floating points. When you need high precision when working with BSON data types, you should use `decimal128`.
+      mydate1.getMonth()
 
-`decimal128` supports 34 decimal digits of precision, or [significand](https://en.wikipedia.org/wiki/Significand)_ with an exponent range of -6143 to +6144. The significand is not normalized in the `decimal128` standard, allowing for multiple possible representations: `10 x 10^-1 = 1 x 10^0 = .1 x 10^1 = .01 x 10^2`, etc. Having the ability to store maximum and minimum values in the order of `10^6144` and `10^-6143`, respectively, allows for a lot of precision.
+   .. output:: 
+      :language: javascript
 
-### Use `decimal128` With the `Decimal128()` Constructor
+      4
 
-In MongoDB, you can store data in `decimal128` format using the `Decimal128()` constructor. If you pass in the decimal value as a string, MongoDB stores the value in the database as follows:
+.. [#unsigned-date] Before version 2.0, ``Date`` values were
+   incorrectly interpreted as *unsigned* integers, which affected
+   sorts, range queries, and indexes on ``Date`` fields. Because
+   indexes are not recreated when upgrading, please re-index if you
+   created an index on ``Date`` values with an earlier version, and
+   dates before 1970 are relevant to your application.
 
-```javascript
-Decimal128("9823.1297")
-```
+## ``decimal128`` BSON Data Type
 
-You can also pass in the decimal value as a `double`:
+``decimal128`` is a 128-bit decimal representation for storing very 
+large or very precise numbers, whenever rounding decimals is important. 
+It was created in August 2009 as part of the 
+`IEEE 754-2008 <https://en.wikipedia.org/wiki/IEEE_754-2008_revision>`__ 
+revision of floating points. When you need high precision when 
+working with BSON data types, you should use ``decimal128``.
 
-```javascript
-Decimal128.fromStringWithRounding("1234.99999999999")
-```
+``decimal128`` supports 34 decimal digits of precision, or 
+`significand <https://en.wikipedia.org/wiki/Significand>`__ with
+an exponent range of -6143 to +6144. The significand is not normalized
+in the ``decimal128`` standard, allowing for multiple possible representations: 
+``10 x 10^-1 = 1 x 10^0 = .1 x 10^1 = .01 x 10^2``, etc. Having the 
+ability to store maximum and minimum values in the order of ``10^6144`` 
+and ``10^-6143``, respectively, allows for a lot of precision.
 
-You should also consider the usage and support your programming language has for `decimal128`. The following languages don’t natively support this feature and require a plugin or additional package to get the functionality:
+### Use ``decimal128`` With the ``Decimal128()`` Constructor
 
-- **Python:** The [decimal.Decimal](https://docs.python.org/3/library/decimal.html)_
-module can be used for floating-point arithmetic.
+In MongoDB, you can store data in ``decimal128`` format using the
+``Decimal128()`` constructor. If you pass in the decimal value 
+as a string, MongoDB stores the value in the database as follows:
 
-- **Java:** The [Java BigDecimal](https://docs.oracle.com/javase/1.5.0/docs/api/java/math/BigDecimal.html)_
-class provides support for `decimal128` numbers.
+.. code-block:: javascript
+   :copyable: true 
 
-- **Node.js:**  There are several packages that provide support,
-such as [js-big-decimal](https://www.npmjs.com/package/js-big-decimal)_ or [node.js bigdecimal](https://www.npmjs.com/package/bigdecimal)_ available on [npm](https://www.npmjs.com/)_.
+   Decimal128("9823.1297")
+
+You can also pass in the decimal value as a ``double``:
+
+.. code-block:: javascript
+   :copyable: true 
+
+   Decimal128.fromStringWithRounding("1234.99999999999")
+
+You should also consider the usage and support your programming 
+language has for ``decimal128``. The following languages don’t 
+natively support this feature and require a plugin 
+or additional package to get the functionality:
+
+- **Python:** The `decimal.Decimal <https://docs.python.org/3/library/decimal.html>`__ 
+  module can be used for floating-point arithmetic.
+- **Java:** The `Java BigDecimal <https://docs.oracle.com/javase/1.5.0/docs/api/java/math/BigDecimal.html>`__ 
+  class provides support for ``decimal128`` numbers.
+- **Node.js:**  There are several packages that provide support, 
+  such as `js-big-decimal <https://www.npmjs.com/package/js-big-decimal>`__ 
+  or `node.js bigdecimal <https://www.npmjs.com/package/bigdecimal>`__
+  available on `npm <https://www.npmjs.com/>`__.
 
 ### Use Cases
 
-When you perfom mathematical calculations programmatically, you can sometimes receive unexpected results. The following example in Node.js yields incorrect results:
+When you perfom mathematical calculations programmatically, you can sometimes 
+receive unexpected results. The following example in Node.js yields incorrect results:
 
-```javascript
-> 0.1
-0.1
-> 0.2
-0.2
-> 0.1 * 0.2
-0.020000000000000004
-> 0.1 + 0.1
-0.010000000000000002
-```
+.. code-block:: javascript
 
-Similarly, the following example in Java produces incorrect output:
+   > 0.1
+   0.1
+   > 0.2
+   0.2
+   > 0.1 * 0.2
+   0.020000000000000004
+   > 0.1 + 0.1
+   0.010000000000000002
 
-The same computations in Python, Ruby, Rust, and other languages produce the same results. This happens because binary floating-point numbers do not represent base 10 values well.
+Similarly, the following example in Java produces incorrect output: 
 
-For example, the `0.1` used in the above examples is represented in binary as `0.0001100110011001101`. In most cases, this does not cause any significant issues. However, in applications such as finance or banking where precision is important, use `decimal128` as your data type.
+.. io-code-block:: 
+   :copyable: true 
+
+   .. input:: 
+      :language: java 
+      :linenos: 
+
+      class Main {
+         public static void main(String[] args) {
+            System.out.println("0.1 * 0.2:");
+            System.out.println(0.1 * 0.2);
+         }
+      }
+
+   .. output::
+      :language: javascript
+      :linenos: 
+
+      0.1 * 0.2:
+      0.020000000000000004
+
+The same computations in Python, Ruby, Rust, and other languages
+produce the same results. This happens because binary floating-point 
+numbers do not represent base 10 values well. 
+
+For example, the ``0.1`` used in the above examples is represented
+in binary as ``0.0001100110011001101``. In most cases, this does
+not cause any significant issues. However, in applications 
+such as finance or banking where precision is important, 
+use ``decimal128`` as your data type.
 
 ## BSON with MongoDB Drivers
 
-To see how specific drivers handle BSON, refer to the documentation for your driver:
+To see how specific drivers handle BSON, refer to the documentation for your
+driver:
 
-- [C: BSON](https://www.mongodb.com/docs/languages/c/c-driver/data-formats/bson/)_
-- [C++: Working with BSON](https://www.mongodb.com/docs/languages/cpp/cpp-driver/current/data-formats/working-with-bson/)_
-- `C#: BSON Operations <csharp-bson>`
-- `Go: Work with BSON <golang-bson>`
+- `C: BSON <https://www.mongodb.com/docs/languages/c/c-driver/data-formats/bson/>`__
+- `C++: Working with BSON <https://www.mongodb.com/docs/languages/cpp/cpp-driver/current/data-formats/working-with-bson/>`__
+- :ref:`C#: BSON Operations <csharp-bson>`
+- :ref:`Go: Work with BSON <golang-bson>`
 - :driver:`Java Sync: Document Data Format: BSON </java/sync/data-formats/document-data-format-bson/>`
 - :driver:`Kotlin: Document Data Format: BSON </kotlin/coroutine/data-formats/document-data-format-bson/>`
-- `PHP: Custom Data Types <php-custom-types>`
-- `Node.js: Work with BSON Data <node-bson>`
-- `PyMongo: BSON <pymongo-bson>`
-- [Ruby: BSON Data Format](http://www.mongodb.com/docs/ruby-driver/data-formats/bson/)_
+- :ref:`PHP: Custom Data Types <php-custom-types>`
+- :ref:`Node.js: Work with BSON Data <node-bson>`
+- :ref:`PyMongo: BSON <pymongo-bson>`
+- `Ruby: BSON Data Format <http://www.mongodb.com/docs/ruby-driver/data-formats/bson/>`__
 - :driver:`Rust: How Do I Convert Between BSON and Rust Types </rust/faq/#how-do-i-convert-between-bson-and-rust-types->`
-## Contents
 
-- Comparison and Sort Order </reference/bson-type-comparison-order>
-- Migrate Undefined Data and Queries </reference/bson-types/migrate-undefined>
-- Extended JSON (v2) </reference/mongodb-extended-json>
-- Extended JSON (v1) </reference/mongodb-extended-json-v1>
+**toctree:** :titlesonly:
+   :hidden:
+
+   Comparison and Sort Order </reference/bson-type-comparison-order>
+   Migrate Undefined Data and Queries </reference/bson-types/migrate-undefined>
+   Extended JSON (v2) </reference/mongodb-extended-json>
+   Extended JSON (v1) </reference/mongodb-extended-json-v1>

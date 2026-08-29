@@ -1,32 +1,94 @@
 ---
 type: "Framework Learn Page"
-framework: "postgres"
+framework: "PostgreSQL"
 source_repo: "https://github.com/postgres/postgres.git"
 source_branch: "master"
 source_path: "doc/src/sgml/keywords.sgml"
-source_commit: "38afc3dcb25c45b744d4025029ce0a6c90b7059f"
-source_commit_short: "38afc3dc"
-source_commit_date: "2026-07-25T19:08:27+09:00"
-generated_at: "2026-07-25T11:50:59Z"
+source_commit: "6c5f1d6074208146930b67c2054509c3e82f6f7f"
+source_commit_short: "6c5f1d6"
+source_commit_date: "2026-08-28T23:24:47+02:00"
+generated_at: "2026-08-29T09:39:24.400939Z"
 ---
+# SQL Key Words
 
-## SQL Key Words
+ 
+  key word
+  list of
+ 
 
-key word
-list of
+ 
+   lists all tokens that are key words
+  in the SQL standard and in PostgreSQL
+  &version;.  Background information can be found in .
+  (For space reasons, only the latest two versions of the SQL standard, and
+  SQL-92 for historical comparison, are included.  The differences between
+  those and the other intermediate standard versions are small.)
+ 
 
-`keywords-table` lists all tokens that are key words in the SQL standard and in PostgreSQL version. Background information can be found in `sql-syntax-identifiers`. (For space reasons, only the latest two versions of the SQL standard, and SQL-92 for historical comparison, are included. The differences between those and the other intermediate standard versions are small.)
+ 
+  SQL distinguishes between reserved and
+  non-reserved key words.  According to the standard,
+  reserved key words
+  are the only real key words; they are never allowed as identifiers.
+  Non-reserved key words only have a special meaning in particular
+  contexts and can be used as identifiers in other contexts.  Most
+  non-reserved key words are actually the names of built-in tables
+  and functions specified by SQL.  The concept of non-reserved key
+  words essentially only exists to declare that some predefined meaning
+  is attached to a word in some contexts.
+ 
 
-SQL distinguishes between reserved and non-reserved key words. According to the standard, reserved key words are the only real key words; they are never allowed as identifiers. Non-reserved key words only have a special meaning in particular contexts and can be used as identifiers in other contexts. Most non-reserved key words are actually the names of built-in tables and functions specified by SQL. The concept of non-reserved key words essentially only exists to declare that some predefined meaning is attached to a word in some contexts.
+ 
+  In the PostgreSQL parser, life is a bit
+  more complicated. There are several different classes of tokens
+  ranging from those that can never be used as an identifier to those
+  that have absolutely no special status in the parser, but are considered
+  ordinary identifiers.  (The latter is usually the case for
+  functions specified by SQL.)  Even reserved key words are not
+  completely reserved in PostgreSQL, but
+  can be used as column labels (for example, SELECT 55 AS
+  CHECK, even though CHECK is a reserved key
+  word).
+ 
 
-In the PostgreSQL parser, life is a bit more complicated. There are several different classes of tokens ranging from those that can never be used as an identifier to those that have absolutely no special status in the parser, but are considered ordinary identifiers. (The latter is usually the case for functions specified by SQL.) Even reserved key words are not completely reserved in PostgreSQL, but can be used as column labels (for example, `SELECT 55 AS CHECK`, even though CHECK is a reserved key word).
+ 
+  In  in the column for
+  PostgreSQL we classify as
+  non-reserved those key words that are explicitly
+  known to the parser but are allowed as column or table names.
+  Some key words that are otherwise
+  non-reserved cannot be used as function or data type names and are
+  marked accordingly.  (Most of these words represent built-in
+  functions or data types with special syntax.  The function or type
+  is still available but it cannot be redefined by the user.)  Labeled
+  reserved are those tokens that are not allowed as
+  column or table names.  Some reserved key words are
+  allowable as names for functions or data types; this is also shown in the
+  table.  If not so marked, a reserved key word is only allowed as a
+  column label.
+  A blank entry in this column means that the word is treated as an
+  ordinary identifier by PostgreSQL.
+ 
 
-In `keywords-table` in the column for PostgreSQL we classify as non-reserved those key words that are explicitly known to the parser but are allowed as column or table names. Some key words that are otherwise non-reserved cannot be used as function or data type names and are marked accordingly. (Most of these words represent built-in functions or data types with special syntax. The function or type is still available but it cannot be redefined by the user.) Labeled reserved are those tokens that are not allowed as column or table names. Some reserved key words are allowable as names for functions or data types; this is also shown in the table. If not so marked, a reserved key word is only allowed as a column label. A blank entry in this column means that the word is treated as an ordinary identifier by PostgreSQL.
+ 
+  Furthermore, while most key words can be used as bare
+  column labels without writing AS before them (as
+  described in ), there are a few
+  that require a leading AS to avoid ambiguity.  These
+  are marked in the table as requires AS.
+ 
 
-Furthermore, while most key words can be used as bare column labels without writing `AS` before them (as described in `queries-column-labels`), there are a few that require a leading `AS` to avoid ambiguity. These are marked in the table as requires `AS`.
+ 
+  As a general rule, if you get spurious parser errors for commands
+  that use any of the listed key words as an identifier, you should
+  try quoting the identifier to see if the problem goes away.
+ 
 
-As a general rule, if you get spurious parser errors for commands that use any of the listed key words as an identifier, you should try quoting the identifier to see if the problem goes away.
+ 
+  It is important to understand before studying  that the fact that a key word is not
+  reserved in PostgreSQL does not mean that
+  the feature related to the word is not implemented.  Conversely, the
+  presence of a key word does not indicate the existence of a feature.
+ 
 
-It is important to understand before studying `keywords-table` that the fact that a key word is not reserved in PostgreSQL does not mean that the feature related to the word is not implemented. Conversely, the presence of a key word does not indicate the existence of a feature.
-
-keywords-table
+ &keywords-table;

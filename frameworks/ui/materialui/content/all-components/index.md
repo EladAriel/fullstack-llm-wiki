@@ -1,7 +1,7 @@
 ---
 type: "Framework Learn Directory Index"
 framework: "Material UI"
-generated_at: "2026-07-25T13:39:41.059903Z"
+generated_at: "2026-08-29T09:40:18.314098Z"
 ---
 # All-Components
 

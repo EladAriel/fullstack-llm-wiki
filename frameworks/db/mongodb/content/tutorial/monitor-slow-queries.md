@@ -1,38 +1,140 @@
 ---
 type: "Framework Learn Page"
-framework: "mongodb"
+framework: "MongoDB"
 source_repo: "https://github.com/mongodb/docs.git"
 source_branch: "main"
 source_path: "content/manual/manual/source/tutorial/monitor-slow-queries.txt"
-source_commit: "ab9db26ed3d11618cdb61516d8180337d8e3f679"
-source_commit_short: "ab9db26e"
-source_commit_date: "2026-07-24T16:22:46-06:00"
-generated_at: "2026-07-25T11:51:15Z"
+source_commit: "b9f2bc487a2878b65e3c1f80024bebab76954f27"
+source_commit_short: "b9f2bc48"
+source_commit_date: "2026-08-28T17:09:45-05:00"
+generated_at: "2026-08-29T09:39:19.569450Z"
 ---
+**meta:** :description: Identify and troubleshoot slow queries using the database profiler and query analysis tools.
 
-====================
+.. _manual-monitor-slow-queries:
 
 # Monitor Slow Queries
 
-The :pipeline:`$currentOp` aggregation stage provides information on all operations currently running on MongoDB. If your application is experiencing performance issues, you can build an aggregation pipeline around this stage to monitor for slow queries and similar issues.
+**contents:** On this page
+   :local:
+   :backlinks: none
+   :depth: 1
+   :class: singlecol
+
+The :pipeline:`$currentOp` aggregation stage provides
+information on all operations currently running on MongoDB. If
+your application is experiencing performance issues, you can
+build an aggregation pipeline around this stage to monitor for
+slow queries and similar issues.
 
 ## About This Task
 
 ### Database Profilers
 
-This task uses :pipeline:`$currentOp` to identify slow queries currently running on your application. To find all slow queries within a specified period, consider using a profiler.
+This task uses :pipeline:`$currentOp` to identify slow queries
+currently running on your application. To find all slow queries
+within a specified period, consider using a profiler.
 
-.. include:: /includes/fact-profiler-use
+**include:** /includes/fact-profiler-use
 
 ### Explain Queries
 
-This task identifies queries with performance issues. If you already know which queries have performance issues, see `manual-explain-slow-queries` to troubleshoot them.
+This task identifies queries with performance issues. If you
+already know which queries have performance issues, see
+:ref:`manual-explain-slow-queries` to troubleshoot them.
 
 ## Steps
 
+**procedure:** :style: normal
+
+   .. step:: Retrieve current operations.
+
+      Use the :pipeline:`$currentOp` aggregation stage to
+      retrieve current operations from MongoDB:
+
+      .. io-code-block:: 
+
+         .. input::
+            :language: javascript
+
+            db.getSiblingDB("admin").aggregate( [
+               { $currentOp: { allUsers: true } },
+               { $match: { secs_running: { $gt: 2 } } },
+               { $sort: { secs_running: 1 } }
+            ] )
+
+         .. output::
+            :language: javascript
+
+            [
+               {
+                  "opid": "12345",
+                  "secs_running": 5,
+                  "active": true,
+                  "ns": "sample_mflix.movies",
+                  "command": {
+                     "find": "movies",
+                     "filter": { "title": { "$regex": "The" } }
+                  },
+                  "planSummary": "COLLSCAN",
+                  "locks": { ... },
+                  "client": "203.0.113.25:43210"
+               }
+            ]
+
+      This aggregation pipeline retrieves all current operations
+      in the cluster. The :pipeline:`$match` aggregation stage
+      then filters the operations to those that have been
+      running for more than two seconds. This allows you to
+      filter queries that run within a specified period. Adjust
+      the value to match your application and database needs.
+
+      The :pipeline:`$sort` stage sorts the results in
+      ascending operation time order.
+
+   .. step:: Check for activity.
+
+      View the :data:`currentOp.active` field. If ``currentOp.active`` is
+      ``true``, MongoDB indicates that the operation is currently
+      running.
+
+      To stop a long running operation, use the
+      :method:`db.killOp` method to stop the given
+      :data:`~currentOp.opid`.
+
+   .. step:: Check for locks.
+
+      View the :data:`currentOp.waitingForLock` field. If ``currentOp.waitingForLock`` is
+      ``true``, another operation running on the server or cluster is blocking the query.
+      
+
+      To stop a blocked operation, use the :method:`db.killOp`
+      method to stop the given :data:`~currentOp.opid`.
+
+   .. step:: Check the plan summary.
+
+      Check the value in the :data:`currentOp.planSummary`
+      field.
+
+      ``IXSCAN``
+         Indicates the query performed an index scan.
+
+      ``COLLSCAN``
+         Indicates the query performed a full collection scan.
+         To correct this, :ref:`manual-create-an-index`.
+
+   .. step:: Explain the query.
+
+      If the :pipeline:`$currentOp` aggregation stage returns a
+      query that requires further investigation, use the
+      :method:`~db.collection.explain` method to analyze the
+      query plan and execution statistics.
+
+      For details, see :ref:`manual-explain-slow-queries`.
+
 ## Learn More
 
-- `query-performance`
-- `profiler`
-- `manual-find-slow-queries-with-database-profiler`
-- `manual-explain-slow-queries`
+- :ref:`query-performance`
+- :ref:`profiler`
+- :ref:`manual-find-slow-queries-with-database-profiler` 
+- :ref:`manual-explain-slow-queries`

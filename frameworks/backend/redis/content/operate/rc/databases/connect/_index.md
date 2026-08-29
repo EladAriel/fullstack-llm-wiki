@@ -1,14 +1,15 @@
 ---
 type: "Framework Learn Page"
-framework: "redis"
+framework: "Redis"
 source_repo: "https://github.com/redis/docs.git"
 source_branch: "main"
 source_path: "content/operate/rc/databases/connect/_index.md"
-source_commit: "9d30f68c3dad1a6b3b7d30fe604b911348ce8152"
-source_commit_short: "9d30f68c"
-source_commit_date: "2026-07-24T10:52:10-07:00"
-generated_at: "2026-07-25T11:51:22Z"
+source_commit: "f8693349287b0efbef3c865b6f6a2aceca88594d"
+source_commit_short: "f869334"
+source_commit_date: "2026-08-28T10:01:19-05:00"
+generated_at: "2026-08-29T09:38:55.296608Z"
 ---
+# _Index
 
 ---
 Title: Connect to a Redis Cloud database
@@ -150,6 +151,8 @@ We recommend using the [dynamic endpoints](#static-and-dynamic-endpoints) for yo
 The [`redis-cli`]({{< relref "/develop/tools/cli" >}}) utility is installed when you install Redis.  It provides a command-line interface that lets you work with your database using core [Redis commands]({{< relref "/commands" >}}).
 
 To run `redis-cli`, [install Redis]({{< relref "/operate/oss_and_stack/install/install-stack/" >}}) on your machine. After it's installed, copy the `redis-cli` command under **Redis CLI** in the connection wizard and enter it into your terminal. If the username and password are not already filled in, replace `<username>` and `<password>` with your username and password.
+
+If you only need the Redis CLI (`redis-cli`) and not the full Redis Open Source distribution, you can [install the standalone `redis-cli` binary]({{< relref "/operate/oss_and_stack/install/install-stack/install-redis-cli" >}}) on Linux or macOS.
 
 See [Redis CLI]({{< relref "/develop/tools/cli" >}}) to learn how to use `redis-cli`.
 

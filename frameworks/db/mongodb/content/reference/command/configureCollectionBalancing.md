@@ -1,150 +1,227 @@
 ---
 type: "Framework Learn Page"
-framework: "mongodb"
+framework: "MongoDB"
 source_repo: "https://github.com/mongodb/docs.git"
 source_branch: "main"
 source_path: "content/manual/manual/source/reference/command/configureCollectionBalancing.txt"
-source_commit: "ab9db26ed3d11618cdb61516d8180337d8e3f679"
-source_commit_short: "ab9db26e"
-source_commit_date: "2026-07-24T16:22:46-06:00"
-generated_at: "2026-07-25T11:51:15Z"
+source_commit: "b9f2bc487a2878b65e3c1f80024bebab76954f27"
+source_commit_short: "b9f2bc48"
+source_commit_date: "2026-08-28T17:09:45-05:00"
+generated_at: "2026-08-29T09:39:20.050706Z"
 ---
-
-===============================================
-
 # configureCollectionBalancing (database command)
+
+**contents:** On this page
+   :local:
+   :backlinks: none
+   :depth: 1
+   :class: singlecol
+
+**meta:** :description: configureCollectionBalancing
+   :keywords: configureCollectionBalancing
 
 ## Definition
 
+**dbcommand:** configureCollectionBalancing
+
+   .. versionadded:: 5.3
+
+   Configures balancer settings for a sharded collection, such as
+   setting the chunk size for and defragmenting the collection.
+
 ## Compatibility
 
-This command is available in deployments hosted in the following environments:
+This command is available in deployments hosted in the following environments: 
 
-.. include:: /includes/fact-environments-atlas-only.rst
+**include:** /includes/fact-environments-atlas-only.rst
 
-.. include:: /includes/fact-environments-atlas-support-all.rst
+**include:** /includes/fact-environments-atlas-support-all.rst
 
-.. include:: /includes/fact-environments-onprem-only.rst
+**include:** /includes/fact-environments-onprem-only.rst
 
 ## Syntax
 
 The command has the following syntax:
 
-```javascript
-db.adminCommand( 
-   {
-     configureCollectionBalancing: "<db>.<collection>",
-     chunkSize: <num>,
-     defragmentCollection: <bool>,
-     enableAutoMerger: <bool>,
-     enableBalancing: <bool>
-   } 
-)
-```
+.. code-block:: javascript
+
+   db.adminCommand( 
+      {
+        configureCollectionBalancing: "<db>.<collection>",
+        chunkSize: <num>,
+        defragmentCollection: <bool>,
+        enableAutoMerger: <bool>,
+        enableBalancing: <bool>
+      } 
+   )
 
 ### Command Fields
 
 :dbcommand:`configureCollectionBalancing` has the following fields:
 
-For more information, see `Data Partitioning with Chunks <sharding-data-partitioning>`.
+.. list-table::
+   :header-rows: 1
+   :widths: 20 20 20 40 
+ 
+   * - Field
+     - Type
+     - Necessity
+     - Description
+   * - ``configureCollectionBalancing``
+     - string
+     - Required
+     - The name of the database and sharded collection to configure.
+   * - ``chunkSize``
+     - integer
+     - Optional
+     - Sets the chunk size in MiB for the collection. The
+       recommended size is 256, 512, or larger. For details on default
+       behavior, see :ref:`chunksize-not-specified`.
+   * - ``defragmentCollection``
+     - boolean
+     - Optional
+     - Causes the balancer to defragment the collection.
+       Defaults to ``false``.
+   * - ``enableAutoMerger``
+     - boolean
+     - Optional
+     - Sets whether the :ref:`{+auto-merge-upper+} 
+       <automerger-concept>` takes this collection into account. 
+       Defaults to ``true``.
+   * - ``enableBalancing``
+     - boolean
+     - Optional
+     - Sets whether the balancer operates on the collection.
+       When set to ``false``, the balancer is disabled for the
+       collection.
 
-To configure the chunk defragmentation throttling time parameter, see :parameter:`chunkDefragmentationThrottlingMS`.
+       .. versionadded:: 8.1
+ 
 
-To learn about defragmenting sharded collections, see `defragment-sharded-collections`.
+For more information, see :ref:`Data Partitioning with Chunks
+<sharding-data-partitioning>`.
+
+To configure the chunk defragmentation throttling time parameter, see
+:parameter:`chunkDefragmentationThrottlingMS`.
+
+To learn about defragmenting sharded collections, see
+:ref:`defragment-sharded-collections`.
 
 ## Behavior
 
+.. _chunksize-not-specified:
+
 ### Default Behavior When chunkSize Is Not Specified
 
-If you do not specify `chunkSize` for a collection and no custom size has been set previously, the global default `chunkSize` is used for balancing.
+If you do not specify ``chunkSize`` for a collection and no custom size 
+has been set previously, the global default ``chunkSize`` is 
+used for balancing.
 
 ### Specifying chunkSize: 0
 
-If you use :dbcommand:`configureCollectionBalancing` with `chunkSize: 0`, the per-collection `chunkSize` is reset and the global default `chunkSize` is used for balancing.
+If you use :dbcommand:`configureCollectionBalancing` with
+``chunkSize: 0``, the per-collection ``chunkSize`` is reset and the 
+global default ``chunkSize`` is used for balancing.
 
-For more information on configuring default `chunkSize`, see `tutorial-modifying-range-size`.
+For more information on configuring default ``chunkSize``,
+see :ref:`tutorial-modifying-range-size`.
 
 ### Default Behavior When enableAutoMerger Is Not Specified
 
-If you do not specify `enableAutoMerger` for a collection and no custom {+auto-merge-action+} behavior has been previously set, it defaults to `true` and will be taken into account by the {+auto-merge-upper+}.
+If you do not specify ``enableAutoMerger`` for a collection and no 
+custom {+auto-merge-action+} behavior has been previously set, it 
+defaults to ``true`` and will be taken into account by the 
+{+auto-merge-upper+}.
 
 ### Parameter Validation
 
-Starting in 8.2, MongoDB validates the spelling of parameters that you pass to `configureCollectionBalancing`. If you misspell a parameter, `configureCollectionBalancing` fails to execute and returns an error.
+Starting in 8.2, MongoDB validates the spelling of parameters that you pass to
+``configureCollectionBalancing``. If you misspell a parameter,
+``configureCollectionBalancing`` fails to execute and returns an error. 
 
 ## Examples
 
 ### Configure Chunk Size
 
-To change the chunk size for a sharded collection, use the `chunkSize` option:
+To change the chunk size for a sharded collection, use
+the ``chunkSize`` option:
 
-```javascript
-db.adminCommand( {
-   configureCollectionBalancing: "test.students",
-   chunkSize: 256
-} )
-```
+.. code-block:: javascript
+
+   db.adminCommand( {
+      configureCollectionBalancing: "test.students",
+      chunkSize: 256
+   } )
 
 Use this command to change the chunk size for the given collection.
 
-> **Warning:** By default, MongoDB cannot move a chunk if the number of documents in
-the chunk is greater than 2 times the result of dividing the
-configured chunk size by the average document size.
-To find the average document size, see the `avgObjSize` field in the
-output of the :method:`db.collection.stats()` method.
+**warning:** By default, MongoDB cannot move a chunk if the number of documents in
+   the chunk is greater than 2 times the result of dividing the
+   configured chunk size by the average document size.
 
-For more information, see `Range Size <sharding-range-size>`.
+   To find the average document size, see the ``avgObjSize`` field in the
+   output of the :method:`db.collection.stats()` method.
+
+For more information, see :ref:`Range Size <sharding-range-size>`.
 
 ### Defragment Collections
 
-> **Warning:** We do not recommend using `defragmentCollection` to defragment sharded
-collections for MongoDB 6.0.0 to 6.0.3 and MongoDB 6.1.0 to 6.1.1, as the
-defragmentation process on these releases can make databases and collections
-unavailable for extended periods of time.
+**warning:** We do not recommend using ``defragmentCollection`` to defragment sharded
+   collections for MongoDB 6.0.0 to 6.0.3 and MongoDB 6.1.0 to 6.1.1, as the
+   defragmentation process on these releases can make databases and collections
+   unavailable for extended periods of time.
 
-To tell the balancer to defragment a sharded collection, use the `defragmentCollection` option:
+To tell the balancer to defragment a sharded collection, use the
+``defragmentCollection`` option:
 
-```javascript
-db.adminCommand( {
-   configureCollectionBalancing: "test.students",
-   defragmentCollection: true
-} )
-```
+.. code-block:: javascript
 
-Use this command to have the balancer defragment a sharded collection. To monitor the chunk defragmentation process, use the :dbcommand:`balancerCollectionStatus` command.
+   db.adminCommand( {
+      configureCollectionBalancing: "test.students",
+      defragmentCollection: true
+   } )
 
-To learn more about defragmenting sharded collections, see `defragment-sharded-collections`.
+Use this command to have the balancer defragment a sharded collection.
+To monitor the chunk defragmentation process, use the
+:dbcommand:`balancerCollectionStatus` command.
+
+To learn more about defragmenting sharded collections, see
+:ref:`defragment-sharded-collections`.
 
 ### Reconfigure and Defragment Collections
 
-To defragment a sharded collection while updating the chunk size, use the `defragmentCollection` option and the `chunkSize` option together:
+To defragment a sharded collection while updating the chunk size, use
+the ``defragmentCollection`` option and the ``chunkSize`` option
+together:
 
-```javascript
-db.adminCommand( {
-   configureCollectionBalancing: "test.students",
-   chunkSize: 512,
-   defragmentCollection: true
-} )
-```
+.. code-block:: javascript
+
+   db.adminCommand( {
+      configureCollectionBalancing: "test.students",
+      chunkSize: 512,
+      defragmentCollection: true
+   } )
 
 ### Disable the {+auto-merge-upper+} on a Collection
 
-To explicitly disable the {+auto-merge-upper+} on a collection, set the `enableAutoMerger` option to `false`:
+To explicitly disable the {+auto-merge-upper+} on a collection,
+set the ``enableAutoMerger`` option to ``false``:
 
-```javascript
-db.adminCommand( {
-   configureCollectionBalancing: "test.students",
-   enableAutoMerger: false
-} )
-```
+.. code-block:: javascript
+
+   db.adminCommand( {
+      configureCollectionBalancing: "test.students",
+      enableAutoMerger: false
+   } )
 
 ### Disable Balancing on a Collection
 
-To explicitly disable the balancer on a collection, set the `enableBalancing` option to `false`:
+To explicitly disable the balancer on a collection, set the
+``enableBalancing`` option to ``false``:
 
-```javascript
-db.adminCommand( {
-   configureCollectionBalancing: "test.students",
-   enableBalancing: false
-} )
-```
+.. code-block:: javascript
+
+   db.adminCommand( {
+      configureCollectionBalancing: "test.students",
+      enableBalancing: false
+   } )

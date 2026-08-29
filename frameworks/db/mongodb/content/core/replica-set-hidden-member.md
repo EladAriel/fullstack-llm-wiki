@@ -1,46 +1,85 @@
 ---
 type: "Framework Learn Page"
-framework: "mongodb"
+framework: "MongoDB"
 source_repo: "https://github.com/mongodb/docs.git"
 source_branch: "main"
 source_path: "content/manual/manual/source/core/replica-set-hidden-member.txt"
-source_commit: "ab9db26ed3d11618cdb61516d8180337d8e3f679"
-source_commit_short: "ab9db26e"
-source_commit_date: "2026-07-24T16:22:46-06:00"
-generated_at: "2026-07-25T11:51:15Z"
+source_commit: "b9f2bc487a2878b65e3c1f80024bebab76954f27"
+source_commit_short: "b9f2bc48"
+source_commit_date: "2026-08-28T17:09:45-05:00"
+generated_at: "2026-08-29T09:39:19.559862Z"
 ---
-
-==========================
+.. _replica-set-hidden-configuration:
+.. _replica-set-hidden-members:
 
 # Hidden Replica Set Members
 
-A hidden member maintains a copy of the `primary's <primary>` data set but is **invisible** to client applications. Hidden members are good for workloads with different usage patterns from the other members in the `replica set`. Hidden members must always be `priority 0 members <replica-set-secondary-only-members>` and so **cannot become primary**. The :method:`db.hello()` method does not display hidden members. Hidden members, however, **may vote** in `elections <replica-set-elections>`.
+**meta:** :description: Understand the role and behavior of hidden replica set members, which maintain data copies without being visible to client applications.
+
+.. default-domain:: mongodb
+
+**contents:** On this page
+   :local:
+   :backlinks: none
+   :depth: 1
+   :class: singlecol
+
+A hidden member maintains a copy of the :term:`primary's <primary>`
+data set but is **invisible** to client applications. Hidden members
+are good for workloads with different usage patterns from the other
+members in the :term:`replica set`. Hidden members must always be
+:ref:`priority 0 members <replica-set-secondary-only-members>` and
+so **cannot become primary**. The :method:`db.hello()` method does not
+display hidden members. Hidden members, however, **may vote** in
+:ref:`elections <replica-set-elections>`.
+
 
 ## Behavior
 
 ### Read Operations
 
-You can only read from a hidden member if you directly connect to the node. If you connect to a cluster without directly connecting to the hidden node, you cannot run queries on the hidden node. As a result, these members receive no traffic other than basic replication. Use hidden members for dedicated tasks such as reporting and backups.
+You can only read from a hidden member if you directly connect to the
+node. If you connect to a cluster without directly connecting to the hidden 
+node, you cannot run queries on the hidden node. As a result, these
+members receive no traffic other than basic replication. Use hidden
+members for dedicated tasks such as reporting and
+backups.
 
-.. include:: /includes/important-delayed-replica-set-members.rst
+**include:** /includes/important-delayed-replica-set-members.rst
 
-In sharded clusters, you cannot access hidden nodes through :binary:`~bin.mongos`. Directly connecting to these nodes to read data can result in data inconsistency or loss. Instead, to achieve workload isolation, use `tag-based read preferences <replica-set-read-preference-tag-sets>`.
+In sharded clusters, you cannot access hidden nodes through
+:binary:`~bin.mongos`. Directly connecting to these nodes to read data
+can result in data inconsistency or loss. Instead, to achieve workload
+isolation, use
+:ref:`tag-based read preferences <replica-set-read-preference-tag-sets>`.
 
-> **Note:** .. include:: /includes/fact-cannot-connect-directly-to-shards.rst
-   :start-after: start-note
-   :end-before: end-short-note
+**note:** .. include:: /includes/fact-cannot-connect-directly-to-shards.rst
+      :start-after: start-note
+      :end-before: end-short-note
 
 ### Voting
 
-Hidden members may vote in replica set elections. If you stop a voting hidden member, ensure that the set has an active majority or the `primary` will step down.
+Hidden members *may* vote in replica set elections. If you stop a
+voting hidden member, ensure that the set has an active majority or the
+:term:`primary` will step down. 
 
 For the purposes of backups,
 
 - .. include:: /includes/extracts/wt-fsync-lock-compatibility.rst
+
 ### Write Concern
 
-Hidden replica set members can acknowledge write operations issued with :writeconcern:`w: \<number\> <\<number\>>`. For write operations issued with :writeconcern:`w : "majority" <"majority">`, however, hidden members must also be voting members (i.e. :rsconf:`members[n].votes` greater than `0`) to acknowledge the `"majority"` write operation. Non-voting replica set members (i.e. :rsconf:`members[n].votes` is `0`) cannot contribute to acknowledging write operations with `majority` write concern.
+Hidden replica set members can acknowledge write operations issued
+with :writeconcern:`w: \<number\> <\<number\>>`. For write operations
+issued with :writeconcern:`w : "majority" <"majority">`, however,
+hidden members must also be voting members (i.e. :rsconf:`members[n].votes`
+greater than ``0``) to acknowledge the ``"majority"`` write operation.
+Non-voting replica set members (i.e. :rsconf:`members[n].votes` 
+is ``0``) cannot contribute to acknowledging write operations with 
+``majority`` write concern.
 
 ## Further Reading
 
-For more information about backing up MongoDB databases, see `/core/backups`. To configure a hidden member, see `/tutorial/configure-a-hidden-replica-set-member`.
+For more information about backing up MongoDB databases,
+see :doc:`/core/backups`. To configure a hidden member, see
+:doc:`/tutorial/configure-a-hidden-replica-set-member`.

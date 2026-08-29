@@ -4,10 +4,10 @@ framework: "LangSmith"
 source_repo: "https://github.com/langchain-ai/docs.git"
 source_branch: "main"
 source_path: "src/langsmith/cicd-pipeline-example.mdx"
-source_commit: "2aae1dfc98ee953a9a5185fb6fcdd9efb3f4d878"
-source_commit_short: "2aae1df"
-source_commit_date: "2026-07-25T00:27:23+00:00"
-generated_at: "2026-07-25T19:08:33.402165Z"
+source_commit: "a174f9cf7c91ee5eb14ee2382eb48bfe6e4956e9"
+source_commit_short: "a174f9c"
+source_commit_date: "2026-08-28T17:04:12-07:00"
+generated_at: "2026-08-29T09:39:50.656082Z"
 ---
 ---
 title: Implement a CI/CD pipeline using LangSmith Deployment and Evaluation
@@ -351,7 +351,7 @@ For LangSmith API operations (traces, evaluations, datasets):
 For self-hosted LangSmith instances, use `http(s)://<langsmith-url>/api` where `<langsmith-url>` is your self-hosted instance URL.
 
 <Note>
-If you're setting the endpoint in the `LANGSMITH_ENDPOINT` environment variable, you need to add `/v1` at the end (e.g., `https://api.smith.langchain.com/v1` or `http(s)://<langsmith-url>/api/v1` if self-hosted).
+If you're setting the endpoint in the `LANGSMITH_ENDPOINT` environment variable, use the full API URL without a trailing slash (e.g., `https://api.smith.langchain.com` or `http(s)://<langsmith-url>/api` if self-hosted). A trailing slash can cause authentication errors with some endpoints.
 </Note>
 
 #### LangSmith Deployment API (Deployments)

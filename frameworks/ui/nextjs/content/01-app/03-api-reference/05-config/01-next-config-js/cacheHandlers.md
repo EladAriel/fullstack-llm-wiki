@@ -1,14 +1,15 @@
 ---
 type: "Framework Learn Page"
-framework: "nextjs"
+framework: "Next.js"
 source_repo: "https://github.com/vercel/next.js/"
 source_branch: "canary"
 source_path: "docs/01-app/03-api-reference/05-config/01-next-config-js/cacheHandlers.mdx"
-source_commit: "dcf242a17b5d4622bbd9624db531a9d84177619f"
-source_commit_short: "dcf242a1"
-source_commit_date: "2026-07-25T10:16:19+02:00"
-generated_at: "2026-07-25T11:50:53Z"
+source_commit: "33a5d542e519fe4e05c8c8c2c2845da9f741699b"
+source_commit_short: "33a5d542"
+source_commit_date: "2026-08-29T00:04:45-07:00"
+generated_at: "2026-08-29T09:40:24.306210Z"
 ---
+# Cachehandlers
 
 ---
 title: cacheHandlers
@@ -83,7 +84,11 @@ Note that `'use cache: private'` does not use cache handlers and cannot be custo
 
 ## API Reference
 
-A cache handler must implement the [`CacheHandler`](https://github.com/vercel/next.js/blob/canary/packages/next/src/server/lib/cache-handlers/types.ts) interface with the following methods:
+A cache handler must implement the `CacheHandler` interface with the following methods. The `CacheHandler` and `CacheEntry` types are exported from `next/cache`:
+
+```ts
+import type { CacheHandler, CacheEntry } from 'next/cache'
+```
 
 ### `get()`
 
@@ -239,7 +244,7 @@ const cacheHandler = {
 
 ## CacheEntry Type
 
-The [`CacheEntry`](https://github.com/vercel/next.js/blob/canary/packages/next/src/server/lib/cache-handlers/types.ts) object has the following structure:
+The `CacheEntry` object (exported from `next/cache`) has the following structure:
 
 ```ts
 interface CacheEntry {
@@ -483,7 +488,7 @@ For a full explanation of the tag architecture (including soft tags and multi-in
 
 ## Soft Tags
 
-Soft tags are implicit tags that Next.js automatically generates based on the route path. For example, the route `/blog/hello` generates soft tags for `/`, `/blog`, `/blog/hello`, and their corresponding layout entries. These tags are prefixed internally with `_N_T_`.
+Soft tags are implicit tags that Next.js automatically generates based on the route path. Every segment in the path gets a layout tag, plus the leaf route itself. For example, the route `/blog/hello` generates soft tags for `/layout`, `/blog/layout`, `/blog/hello/layout`, and `/blog/hello`. These tags are prefixed internally with `_N_T_`.
 
 Soft tags enable [`revalidatePath()`](/docs/app/api-reference/functions/revalidatePath) to work through the same tag-based cache system. When `revalidatePath('/blog/hello')` is called, it invalidates all cache entries associated with that path's soft tags.
 

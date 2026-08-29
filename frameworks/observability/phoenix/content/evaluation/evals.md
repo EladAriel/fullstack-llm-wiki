@@ -4,10 +4,10 @@ framework: "Arize Phoenix"
 source_repo: "https://github.com/Arize-ai/phoenix.git"
 source_branch: "main"
 source_path: "docs/phoenix/evaluation/evals.mdx"
-source_commit: "69b3ab92c37ff65812feaa2dbf0b1c0ad5ae55fe"
-source_commit_short: "69b3ab9"
-source_commit_date: "2026-07-25T11:48:12-06:00"
-generated_at: "2026-07-25T19:08:24.829043Z"
+source_commit: "c48e50e9906fcc56c1c103ebd93ef3c95ed6b6e7"
+source_commit_short: "c48e50e"
+source_commit_date: "2026-08-29T01:45:20-06:00"
+generated_at: "2026-08-29T09:39:58.799740Z"
 ---
 ---
 title: "Quickstart: Evals"
@@ -99,7 +99,7 @@ results_df = await async_evaluate_dataframe(
 
 * **`evaluate_dataframe` / `async_evaluate_dataframe`** — Runs a list of evaluators over every row of a DataFrame and returns a new DataFrame with score columns. Use the async variant for concurrent evaluation with a configurable `concurrency` parameter.
 
-* **Built-in evaluators** — `phoenix.evals.metrics` provides ready-to-use evaluators like `FaithfulnessEvaluator`, `CorrectnessEvaluator`, `DocumentRelevanceEvaluator`, `ConcisenessEvaluator`, and more. Each takes an `LLM` instance and returns `Score` objects with a label, numeric score, and explanation.
+* **Built-in evaluators** — `phoenix.evals.metrics` provides ready-to-use evaluators like `FaithfulnessEvaluator`, `CorrectnessEvaluator`, `RetrievalRelevanceEvaluator`, `ConcisenessEvaluator`, and more. Each takes an `LLM` instance and returns `Score` objects with a label, numeric score, and explanation.
 
 ## Analyze Your Evaluations
 

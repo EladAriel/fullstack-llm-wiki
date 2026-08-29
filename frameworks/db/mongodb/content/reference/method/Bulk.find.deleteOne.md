@@ -1,63 +1,80 @@
 ---
 type: "Framework Learn Page"
-framework: "mongodb"
+framework: "MongoDB"
 source_repo: "https://github.com/mongodb/docs.git"
 source_branch: "main"
 source_path: "content/manual/manual/source/reference/method/Bulk.find.deleteOne.txt"
-source_commit: "ab9db26ed3d11618cdb61516d8180337d8e3f679"
-source_commit_short: "ab9db26e"
-source_commit_date: "2026-07-24T16:22:46-06:00"
-generated_at: "2026-07-25T11:51:15Z"
+source_commit: "b9f2bc487a2878b65e3c1f80024bebab76954f27"
+source_commit_short: "b9f2bc48"
+source_commit_date: "2026-08-28T17:09:45-05:00"
+generated_at: "2026-08-29T09:39:20.000794Z"
 ---
-
-======================================
-
 # Bulk.find.deleteOne() (mongosh method)
 
+**meta:** :description: Add a single document removal operation to a bulk list using `Bulk.find.deleteOne()`, which deletes the first matching document.
+
+.. default-domain:: mongodb
+
+**contents:** On this page
+   :local:
+   :backlinks: none
+   :depth: 1
+   :class: singlecol
+
 ## Definition
+
+**method:** Bulk.find.deleteOne()
+
+   Adds a single document remove operation to a bulk operations list.
+   Use the :method:`Bulk.find()` method to specify the condition that
+   determines which document to remove. 
+   
+   ``Bulk.find.deleteOne()`` only deletes the first matching document.
+   To remove multiple documents, see :method:`Bulk.find.delete()`.
 
 ## Syntax
 
 The command has the following syntax:
 
-```javascript
-Bulk.find( <filter document> ).deleteOne()
-```
+.. code-block:: javascript
 
-For details on the `find()` method see: :method:`Bulk.find()`
+   Bulk.find( <filter document> ).deleteOne()
+
+For details on the ``find()`` method see: :method:`Bulk.find()`
 
 ## Compatibility
 
-This command is available in deployments hosted in the following environments:
+This command is available in deployments hosted in the following
+environments: 
 
-.. include:: /includes/fact-environments-atlas-only.rst
+**include:** /includes/fact-environments-atlas-only.rst
 
-.. include:: /includes/fact-environments-atlas-support-all.rst
+**include:** /includes/fact-environments-atlas-support-all.rst
 
 ## Example
 
-Create the `music` collection:
+Create the ``music`` collection:
 
-```javascript
-db.music.insertMany( [
-   { artist: "DOA", genre: "punk" },
-   { artist: "Rick Astley", genre: "pop" },
-   { artist: "Black Flag", genre: "punk" },
-   { artist: "Justin Bieber", genre: "pop" }
-] )
-```
+.. code-block:: javascript
+
+   db.music.insertMany( [
+      { artist: "DOA", genre: "punk" },
+      { artist: "Rick Astley", genre: "pop" },
+      { artist: "Black Flag", genre: "punk" },
+      { artist: "Justin Bieber", genre: "pop" }
+   ] )
 
 The following example:
 
 - Initializes a :method:`Bulk()` operations builder.
-- Searches for the genre `pop`.
-- Deletes `Rick Astley`, the first matching pop artist, from the
-collection.
+- Searches for the genre ``pop``.
+- Deletes ``Rick Astley``, the first matching pop artist, from the
+  collection. 
 
-```javascript
-var bulk = db.music.initializeOrderedBulkOp();
-bulk.find( { "genre": "pop" } ).deleteOne();
-bulk.execute()
-```
+.. code-block:: javascript
 
-To delete all `"pop"` music, use :method:`Bulk.find.delete()` instead.
+   var bulk = db.music.initializeOrderedBulkOp();
+   bulk.find( { "genre": "pop" } ).deleteOne();
+   bulk.execute()
+
+To delete all ``"pop"`` music, use :method:`Bulk.find.delete()` instead.

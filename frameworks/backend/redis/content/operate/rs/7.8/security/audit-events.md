@@ -1,14 +1,15 @@
 ---
 type: "Framework Learn Page"
-framework: "redis"
+framework: "Redis"
 source_repo: "https://github.com/redis/docs.git"
 source_branch: "main"
 source_path: "content/operate/rs/7.8/security/audit-events.md"
-source_commit: "9d30f68c3dad1a6b3b7d30fe604b911348ce8152"
-source_commit_short: "9d30f68c"
-source_commit_date: "2026-07-24T10:52:10-07:00"
-generated_at: "2026-07-25T11:51:22Z"
+source_commit: "f8693349287b0efbef3c865b6f6a2aceca88594d"
+source_commit_short: "f869334"
+source_commit_date: "2026-08-28T10:01:19-05:00"
+generated_at: "2026-08-29T09:38:55.435962Z"
 ---
+# Audit Events
 
 ---
 alwaysopen: false
@@ -37,7 +38,7 @@ Example external listeners include:
 
 - [`ncat`](https://nmap.org/ncat/): useful for debugging but not suitable for production environments.
 
-- Imperva Sonar: a third-party service available for purchase separately from Redis Enterprise Software. See [Redis Onboarding Steps](https://docs.imperva.com/bundle/onboarding-databases-to-sonar-reference-guide/page/Redis-Onboarding-Steps_48368215.html) for more information.
+- Imperva Sonar: a third-party service available for purchase separately from Redis Enterprise Software. See [Redis Onboarding Steps](https://docs-cybersec.thalesgroup.com/bundle/onboarding-databases-to-sonar-reference-guide/page/Redis-Enterprise-Software-Onboarding-Steps_48368215.html) for more information.
 
 For development and testing environments, notifications can be saved to a local file; however, this is neither supported nor intended for production environments.
 

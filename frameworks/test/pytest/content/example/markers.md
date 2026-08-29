@@ -4,651 +4,746 @@ framework: "pytest"
 source_repo: "https://github.com/pytest-dev/pytest"
 source_branch: "main"
 source_path: "doc/en/example/markers.rst"
-source_commit: "344c23787cdb3431dcc441b8b63ee9950f04b921"
-source_commit_short: "344c2378"
-source_commit_date: "2026-07-24T17:37:16+02:00"
-generated_at: "2026-07-25T11:50:13Z"
+source_commit: "fdba12e1708313f56e9cf713d260c029764ca2b7"
+source_commit_short: "fdba12e"
+source_commit_date: "2026-08-27T21:55:50+02:00"
+generated_at: "2026-08-29T09:40:11.281650Z"
 ---
+.. _`mark examples`:
 
 # Working with custom markers
 
-Here are some examples using the `mark` mechanism.
+Here are some examples using the :ref:`mark` mechanism.
+
+.. _`mark run`:
 
 ## Marking test functions and selecting them for a run
 
 You can "mark" a test function with custom metadata like this:
 
-```python
- # content of test_server.py
+.. code-block:: python
 
- import pytest
+    # content of test_server.py
 
- @pytest.mark.webtest
- def test_send_http():
-     pass  # perform some webtest test for your app
+    import pytest
 
- @pytest.mark.device(serial="123")
- def test_something_quick():
-     pass
 
- @pytest.mark.device(serial="abc")
- def test_another():
-     pass
+    @pytest.mark.webtest
+    def test_send_http():
+        pass  # perform some webtest test for your app
 
- class TestClass:
-     def test_method(self):
-         pass
-```
 
-You can then restrict a test run to only run tests marked with `webtest`:
+    @pytest.mark.device(serial="123")
+    def test_something_quick():
+        pass
 
-```pytest
- $ pytest -v -m webtest
- =========================== test session starts ============================
- platform linux -- Python 3.x.y, pytest-9.x.y, pluggy-1.x.y -- $PYTHON_PREFIX/bin/python
- cachedir: .pytest_cache
- rootdir: /home/sweet/project
- collecting ... collected 4 items / 3 deselected / 1 selected
 
- test_server.py::test_send_http PASSED                                [100%]
+    @pytest.mark.device(serial="abc")
+    def test_another():
+        pass
 
- ===================== 1 passed, 3 deselected in 0.12s ======================
-```
+
+    class TestClass:
+        def test_method(self):
+            pass
+
+
+
+You can then restrict a test run to only run tests marked with ``webtest``:
+
+.. code-block:: pytest
+
+    $ pytest -v -m webtest
+    =========================== test session starts ============================
+    platform linux -- Python 3.x.y, pytest-9.x.y, pluggy-1.x.y -- $PYTHON_PREFIX/bin/python
+    cachedir: .pytest_cache
+    rootdir: /home/sweet/project
+    collecting ... collected 4 items / 3 deselected / 1 selected
+
+    test_server.py::test_send_http PASSED                                [100%]
+
+    ===================== 1 passed, 3 deselected in 0.12s ======================
 
 Or the inverse, running all tests except the webtest ones:
 
-```pytest
- $ pytest -v -m "not webtest"
- =========================== test session starts ============================
- platform linux -- Python 3.x.y, pytest-9.x.y, pluggy-1.x.y -- $PYTHON_PREFIX/bin/python
- cachedir: .pytest_cache
- rootdir: /home/sweet/project
- collecting ... collected 4 items / 1 deselected / 3 selected
+.. code-block:: pytest
 
- test_server.py::test_something_quick PASSED                          [ 33%]
- test_server.py::test_another PASSED                                  [ 66%]
- test_server.py::TestClass::test_method PASSED                        [100%]
+    $ pytest -v -m "not webtest"
+    =========================== test session starts ============================
+    platform linux -- Python 3.x.y, pytest-9.x.y, pluggy-1.x.y -- $PYTHON_PREFIX/bin/python
+    cachedir: .pytest_cache
+    rootdir: /home/sweet/project
+    collecting ... collected 4 items / 1 deselected / 3 selected
 
- ===================== 3 passed, 1 deselected in 0.12s ======================
-```
+    test_server.py::test_something_quick PASSED                          [ 33%]
+    test_server.py::test_another PASSED                                  [ 66%]
+    test_server.py::TestClass::test_method PASSED                        [100%]
 
-Additionally, you can restrict a test run to only run tests matching one or multiple marker keyword arguments, e.g. to run only tests marked with `device` and the specific `serial="123"`:
+    ===================== 3 passed, 1 deselected in 0.12s ======================
 
-```pytest
- $ pytest -v -m "device(serial='123')"
- =========================== test session starts ============================
- platform linux -- Python 3.x.y, pytest-9.x.y, pluggy-1.x.y -- $PYTHON_PREFIX/bin/python
- cachedir: .pytest_cache
- rootdir: /home/sweet/project
- collecting ... collected 4 items / 3 deselected / 1 selected
+.. _`marker_keyword_expression_example`:
 
- test_server.py::test_something_quick PASSED                          [100%]
+Additionally, you can restrict a test run to only run tests matching one or multiple marker
+keyword arguments, e.g. to run only tests marked with ``device`` and the specific ``serial="123"``:
 
- ===================== 1 passed, 3 deselected in 0.12s ======================
-```
+.. code-block:: pytest
 
-> **Note:**
+    $ pytest -v -m "device(serial='123')"
+    =========================== test session starts ============================
+    platform linux -- Python 3.x.y, pytest-9.x.y, pluggy-1.x.y -- $PYTHON_PREFIX/bin/python
+    cachedir: .pytest_cache
+    rootdir: /home/sweet/project
+    collecting ... collected 4 items / 3 deselected / 1 selected
 
-> **Note:**
+    test_server.py::test_something_quick PASSED                          [100%]
+
+    ===================== 1 passed, 3 deselected in 0.12s ======================
+
+**note:** Only keyword argument matching is supported in marker expressions.
+
+**note:** Only :class:`int`, (unescaped) :class:`str`, :class:`bool` & :data:`None` values are supported in marker expressions.
 
 ## Selecting tests based on their node ID
 
-You can provide one or more `node IDs <node-id>` as positional arguments to select only specified tests. This makes it easy to select tests based on their module, class, method, or function name:
+You can provide one or more :ref:`node IDs <node-id>` as positional
+arguments to select only specified tests. This makes it easy to select
+tests based on their module, class, method, or function name:
 
-```pytest
- $ pytest -v test_server.py::TestClass::test_method
- =========================== test session starts ============================
- platform linux -- Python 3.x.y, pytest-9.x.y, pluggy-1.x.y -- $PYTHON_PREFIX/bin/python
- cachedir: .pytest_cache
- rootdir: /home/sweet/project
- collecting ... collected 1 item
+.. code-block:: pytest
 
- test_server.py::TestClass::test_method PASSED                        [100%]
+    $ pytest -v test_server.py::TestClass::test_method
+    =========================== test session starts ============================
+    platform linux -- Python 3.x.y, pytest-9.x.y, pluggy-1.x.y -- $PYTHON_PREFIX/bin/python
+    cachedir: .pytest_cache
+    rootdir: /home/sweet/project
+    collecting ... collected 1 item
 
- ============================ 1 passed in 0.12s =============================
-```
+    test_server.py::TestClass::test_method PASSED                        [100%]
+
+    ============================ 1 passed in 0.12s =============================
 
 You can also select on the class:
 
-```pytest
- $ pytest -v test_server.py::TestClass
- =========================== test session starts ============================
- platform linux -- Python 3.x.y, pytest-9.x.y, pluggy-1.x.y -- $PYTHON_PREFIX/bin/python
- cachedir: .pytest_cache
- rootdir: /home/sweet/project
- collecting ... collected 1 item
+.. code-block:: pytest
 
- test_server.py::TestClass::test_method PASSED                        [100%]
+    $ pytest -v test_server.py::TestClass
+    =========================== test session starts ============================
+    platform linux -- Python 3.x.y, pytest-9.x.y, pluggy-1.x.y -- $PYTHON_PREFIX/bin/python
+    cachedir: .pytest_cache
+    rootdir: /home/sweet/project
+    collecting ... collected 1 item
 
- ============================ 1 passed in 0.12s =============================
-```
+    test_server.py::TestClass::test_method PASSED                        [100%]
+
+    ============================ 1 passed in 0.12s =============================
 
 Or select multiple nodes:
 
-```pytest
- $ pytest -v test_server.py::TestClass test_server.py::test_send_http
- =========================== test session starts ============================
- platform linux -- Python 3.x.y, pytest-9.x.y, pluggy-1.x.y -- $PYTHON_PREFIX/bin/python
- cachedir: .pytest_cache
- rootdir: /home/sweet/project
- collecting ... collected 2 items
+.. code-block:: pytest
 
- test_server.py::TestClass::test_method PASSED                        [ 50%]
- test_server.py::test_send_http PASSED                                [100%]
+    $ pytest -v test_server.py::TestClass test_server.py::test_send_http
+    =========================== test session starts ============================
+    platform linux -- Python 3.x.y, pytest-9.x.y, pluggy-1.x.y -- $PYTHON_PREFIX/bin/python
+    cachedir: .pytest_cache
+    rootdir: /home/sweet/project
+    collecting ... collected 2 items
 
- ============================ 2 passed in 0.12s =============================
-```
+    test_server.py::TestClass::test_method PASSED                        [ 50%]
+    test_server.py::test_send_http PASSED                                [100%]
 
-> **Note:**  Node IDs are of the form `module.py::class::method` or
- `module.py::function`.  Node IDs control which tests are
- collected, so `module.py::class` will select all test methods
- on the class.  Nodes are also created for each parameter of a
- parametrized fixture or test, so selecting a parametrized test
- must include the parameter value, e.g.
- `module.py::function[param]`.
- Node IDs for failing tests are displayed in the test summary info
- when running pytest with the `-rf` option.  You can also
- construct Node IDs from the output of `pytest --collect-only`.
+    ============================ 2 passed in 0.12s =============================
 
-## Using `-k expr` to select tests based on their name
+.. _node-id:
 
-.. versionadded:: 2.0/2.3.4
+**note:** Node IDs are of the form ``module.py::class::method`` or
+    ``module.py::function``.  Node IDs control which tests are
+    collected, so ``module.py::class`` will select all test methods
+    on the class.  Nodes are also created for each parameter of a
+    parametrized fixture or test, so selecting a parametrized test
+    must include the parameter value, e.g.
+    ``module.py::function[param]``.
 
-You can use the :option:`-k` command line option to specify an expression which implements a substring match on the test names instead of the exact match on markers that :option:`-m` provides.  This makes it easy to select tests based on their names:
+    Node IDs for failing tests are displayed in the test summary info
+    when running pytest with the ``-rf`` option.  You can also
+    construct Node IDs from the output of ``pytest --collect-only``.
 
-.. versionchanged:: 5.4
+## Using ``-k expr`` to select tests based on their name
+
+**versionadded:** 2.0/2.3.4
+
+You can use the :option:`-k` command line option to specify an expression
+which implements a substring match on the test names instead of the
+exact match on markers that :option:`-m` provides.  This makes it easy to
+select tests based on their names:
+
+**versionchanged:** 5.4
 
 The expression matching is now case-insensitive.
 
-```pytest
- $ pytest -v -k http  # running with the above defined example module
- =========================== test session starts ============================
- platform linux -- Python 3.x.y, pytest-9.x.y, pluggy-1.x.y -- $PYTHON_PREFIX/bin/python
- cachedir: .pytest_cache
- rootdir: /home/sweet/project
- collecting ... collected 4 items / 3 deselected / 1 selected
+.. code-block:: pytest
 
- test_server.py::test_send_http PASSED                                [100%]
+    $ pytest -v -k http  # running with the above defined example module
+    =========================== test session starts ============================
+    platform linux -- Python 3.x.y, pytest-9.x.y, pluggy-1.x.y -- $PYTHON_PREFIX/bin/python
+    cachedir: .pytest_cache
+    rootdir: /home/sweet/project
+    collecting ... collected 4 items / 3 deselected / 1 selected
 
- ===================== 1 passed, 3 deselected in 0.12s ======================
-```
+    test_server.py::test_send_http PASSED                                [100%]
+
+    ===================== 1 passed, 3 deselected in 0.12s ======================
 
 And you can also run all tests except the ones that match the keyword:
 
-```pytest
- $ pytest -k "not send_http" -v
- =========================== test session starts ============================
- platform linux -- Python 3.x.y, pytest-9.x.y, pluggy-1.x.y -- $PYTHON_PREFIX/bin/python
- cachedir: .pytest_cache
- rootdir: /home/sweet/project
- collecting ... collected 4 items / 1 deselected / 3 selected
+.. code-block:: pytest
 
- test_server.py::test_something_quick PASSED                          [ 33%]
- test_server.py::test_another PASSED                                  [ 66%]
- test_server.py::TestClass::test_method PASSED                        [100%]
+    $ pytest -k "not send_http" -v
+    =========================== test session starts ============================
+    platform linux -- Python 3.x.y, pytest-9.x.y, pluggy-1.x.y -- $PYTHON_PREFIX/bin/python
+    cachedir: .pytest_cache
+    rootdir: /home/sweet/project
+    collecting ... collected 4 items / 1 deselected / 3 selected
 
- ===================== 3 passed, 1 deselected in 0.12s ======================
-```
+    test_server.py::test_something_quick PASSED                          [ 33%]
+    test_server.py::test_another PASSED                                  [ 66%]
+    test_server.py::TestClass::test_method PASSED                        [100%]
+
+    ===================== 3 passed, 1 deselected in 0.12s ======================
 
 Or to select "http" and "quick" tests:
 
-```pytest
- $ pytest -k "http or quick" -v
- =========================== test session starts ============================
- platform linux -- Python 3.x.y, pytest-9.x.y, pluggy-1.x.y -- $PYTHON_PREFIX/bin/python
- cachedir: .pytest_cache
- rootdir: /home/sweet/project
- collecting ... collected 4 items / 2 deselected / 2 selected
+.. code-block:: pytest
 
- test_server.py::test_send_http PASSED                                [ 50%]
- test_server.py::test_something_quick PASSED                          [100%]
+    $ pytest -k "http or quick" -v
+    =========================== test session starts ============================
+    platform linux -- Python 3.x.y, pytest-9.x.y, pluggy-1.x.y -- $PYTHON_PREFIX/bin/python
+    cachedir: .pytest_cache
+    rootdir: /home/sweet/project
+    collecting ... collected 4 items / 2 deselected / 2 selected
 
- ===================== 2 passed, 2 deselected in 0.12s ======================
-```
+    test_server.py::test_send_http PASSED                                [ 50%]
+    test_server.py::test_something_quick PASSED                          [100%]
 
-You can use `and`, `or`, `not` and parentheses.
+    ===================== 2 passed, 2 deselected in 0.12s ======================
 
-In addition to the test's name, :option:`-k` also matches the names of the test's parents (usually, the name of the file and class it's in), attributes set on the test function, markers applied to it or its parents and any `extra keywords <_pytest.nodes.Node.extra_keyword_matches>` explicitly added to it or its parents.
+You can use ``and``, ``or``, ``not`` and parentheses.
+
+
+In addition to the test's name, :option:`-k` also matches the names of the test's parents (usually, the name of the file and class it's in),
+attributes set on the test function, markers applied to it or its parents and any :attr:`extra keywords <_pytest.nodes.Node.extra_keyword_matches>`
+explicitly added to it or its parents.
+
 
 ## Registering markers
 
+
+
+.. ini-syntax for custom markers:
+
 Registering markers for your test suite is simple:
 
-```toml
- # content of pytest.toml
- [pytest]
- markers = ["webtest: mark a test as a webtest.", "slow: mark test as slow."]
-```
+.. code-block:: toml
+
+    # content of pytest.toml
+    [pytest]
+    markers = ["webtest: mark a test as a webtest.", "slow: mark test as slow."]
 
 Multiple custom markers can be registered, by defining each one in its own line, as shown in above example.
 
-You can ask which markers exist for your test suite - the list includes our just defined `webtest` and `slow` markers:
+You can ask which markers exist for your test suite - the list includes our just defined ``webtest`` and ``slow`` markers:
 
-```pytest
- $ pytest --markers
- @pytest.mark.webtest: mark a test as a webtest.
+.. code-block:: pytest
 
- @pytest.mark.slow: mark test as slow.
+    $ pytest --markers
+    @pytest.mark.webtest: mark a test as a webtest.
 
- @pytest.mark.filterwarnings(warning): add a warning filter to the given test. see https://docs.pytest.org/en/stable/how-to/capture-warnings.html#pytest-mark-filterwarnings
+    @pytest.mark.slow: mark test as slow.
 
- @pytest.mark.skip(reason=None): skip the given test function with an optional reason. Example: skip(reason="no way of currently testing this") skips the test.
+    @pytest.mark.filterwarnings(warning): add a warning filter to the given test. see https://docs.pytest.org/en/stable/how-to/capture-warnings.html#pytest-mark-filterwarnings
 
- @pytest.mark.skipif(condition, ..., *, reason=...): skip the given test function if any of the conditions evaluate to True. Example: skipif(sys.platform == 'win32') skips the test if we are on the win32 platform. See https://docs.pytest.org/en/stable/reference/reference.html#pytest-mark-skipif
+    @pytest.mark.skip(reason=None): skip the given test function with an optional reason. Example: skip(reason="no way of currently testing this") skips the test.
 
- @pytest.mark.xfail(condition, ..., *, reason=..., run=True, raises=None, strict=strict_xfail): mark the test function as an expected failure if any of the conditions evaluate to True. Optionally specify a reason for better reporting and run=False if you don't even want to execute the test function. If only specific exception(s) are expected, you can list them in raises, and if the test fails in other ways, it will be reported as a true failure. See https://docs.pytest.org/en/stable/reference/reference.html#pytest-mark-xfail
+    @pytest.mark.skipif(condition, ..., *, reason=...): skip the given test function if any of the conditions evaluate to True. Example: skipif(sys.platform == 'win32') skips the test if we are on the win32 platform. See https://docs.pytest.org/en/stable/reference/reference.html#pytest-mark-skipif
 
- @pytest.mark.parametrize(argnames, argvalues): call a test function multiple times passing in different arguments in turn. argvalues generally needs to be a list of values if argnames specifies only one name or a list of tuples of values if argnames specifies multiple names. Example: @parametrize('arg1', [1,2]) would lead to two calls of the decorated test function, one with arg1=1 and another with arg1=2.see https://docs.pytest.org/en/stable/how-to/parametrize.html for more info and examples.
+    @pytest.mark.xfail(condition, ..., *, reason=..., run=True, raises=None, strict=strict_xfail): mark the test function as an expected failure if any of the conditions evaluate to True. Optionally specify a reason for better reporting and run=False if you don't even want to execute the test function. If only specific exception(s) are expected, you can list them in raises, and if the test fails in other ways, it will be reported as a true failure. See https://docs.pytest.org/en/stable/reference/reference.html#pytest-mark-xfail
 
- @pytest.mark.usefixtures(fixturename1, fixturename2, ...): mark tests as needing all of the specified fixtures. see https://docs.pytest.org/en/stable/explanation/fixtures.html#usefixtures
+    @pytest.mark.parametrize(argnames, argvalues): call a test function multiple times passing in different arguments in turn. argvalues generally needs to be a list of values if argnames specifies only one name or a list of tuples of values if argnames specifies multiple names. Example: @parametrize('arg1', [1,2]) would lead to two calls of the decorated test function, one with arg1=1 and another with arg1=2.see https://docs.pytest.org/en/stable/how-to/parametrize.html for more info and examples.
 
- @pytest.mark.tryfirst: mark a hook implementation function such that the plugin machinery will try to call it first/as early as possible. DEPRECATED, use @pytest.hookimpl(tryfirst=True) instead.
+    @pytest.mark.usefixtures(fixturename1, fixturename2, ...): mark tests as needing all of the specified fixtures. see https://docs.pytest.org/en/stable/explanation/fixtures.html#usefixtures
 
- @pytest.mark.trylast: mark a hook implementation function such that the plugin machinery will try to call it last/as late as possible. DEPRECATED, use @pytest.hookimpl(trylast=True) instead.
-```
+    @pytest.mark.tryfirst: mark a hook implementation function such that the plugin machinery will try to call it first/as early as possible. DEPRECATED, use @pytest.hookimpl(tryfirst=True) instead.
 
-For an example on how to add and work with markers from a plugin, see `adding a custom marker from a plugin`.
+    @pytest.mark.trylast: mark a hook implementation function such that the plugin machinery will try to call it last/as late as possible. DEPRECATED, use @pytest.hookimpl(trylast=True) instead.
 
-> **Note:**  It is recommended to explicitly register markers so that:
- * There is one place in your test suite defining your markers
- * Asking for existing markers via `pytest --markers` gives good output
- * Typos in function markers are treated as an error if you use the :confval:`strict_markers` configuration option.
+
+For an example on how to add and work with markers from a plugin, see
+:ref:`adding a custom marker from a plugin`.
+
+**note:** It is recommended to explicitly register markers so that:
+
+    * There is one place in your test suite defining your markers
+
+    * Asking for existing markers via ``pytest --markers`` gives good output
+
+    * Typos in function markers are treated as an error if you use the :confval:`strict_markers` configuration option.
+
+.. _`scoped-marking`:
 
 ## Marking whole classes or modules
 
-You may use `pytest.mark` decorators with classes to apply markers to all of its test methods:
+You may use ``pytest.mark`` decorators with classes to apply markers to all of
+its test methods:
 
-```python
- # content of test_mark_classlevel.py
- import pytest
+.. code-block:: python
 
- @pytest.mark.webtest
- class TestClass:
-     def test_startup(self):
-         pass
+    # content of test_mark_classlevel.py
+    import pytest
 
-     def test_startup_and_more(self):
-         pass
-```
 
-This is equivalent to directly applying the decorator to the two test functions.
+    @pytest.mark.webtest
+    class TestClass:
+        def test_startup(self):
+            pass
 
-To apply marks at the module level, use the :globalvar:`pytestmark` global variable:
+        def test_startup_and_more(self):
+            pass
 
-```
-import pytest
-pytestmark = pytest.mark.webtest
-```
+This is equivalent to directly applying the decorator to the
+two test functions.
 
-or multiple markers:
+To apply marks at the module level, use the :globalvar:`pytestmark` global variable::
 
-```
-pytestmark = [pytest.mark.webtest, pytest.mark.slowtest]
-```
+    import pytest
+    pytestmark = pytest.mark.webtest
 
-Due to legacy reasons, before class decorators were introduced, it is possible to set the :globalvar:`pytestmark` attribute on a test class like this:
+or multiple markers::
 
-```python
- import pytest
+    pytestmark = [pytest.mark.webtest, pytest.mark.slowtest]
 
- class TestClass:
-     pytestmark = pytest.mark.webtest
-```
+
+Due to legacy reasons, before class decorators were introduced, it is possible to set the
+:globalvar:`pytestmark` attribute on a test class like this:
+
+.. code-block:: python
+
+    import pytest
+
+
+    class TestClass:
+        pytestmark = pytest.mark.webtest
+
+.. _`marking individual tests when using parametrize`:
 
 ## Marking individual tests when using parametrize
 
-When using parametrize, applying a mark will make it apply to each individual test. However it is also possible to apply a marker to an individual test instance:
+When using parametrize, applying a mark will make it apply
+to each individual test. However it is also possible to
+apply a marker to an individual test instance:
 
-```python
- import pytest
+.. code-block:: python
 
- @pytest.mark.foo
- @pytest.mark.parametrize(
-     ("n", "expected"), [(1, 2), pytest.param(1, 3, marks=pytest.mark.bar), (2, 3)]
- )
- def test_increment(n, expected):
-     assert n + 1 == expected
-```
+    import pytest
 
-In this example the mark "foo" will apply to each of the three tests, whereas the "bar" mark is only applied to the second test. Skip and xfail marks can also be applied in this way, see `skip/xfail with parametrize`.
+
+    @pytest.mark.foo
+    @pytest.mark.parametrize(
+        ("n", "expected"), [(1, 2), pytest.param(1, 3, marks=pytest.mark.bar), (2, 3)]
+    )
+    def test_increment(n, expected):
+        assert n + 1 == expected
+
+In this example the mark "foo" will apply to each of the three
+tests, whereas the "bar" mark is only applied to the second test.
+Skip and xfail marks can also be applied in this way, see :ref:`skip/xfail with parametrize`.
+
+.. _`adding a custom marker from a plugin`:
 
 ## Custom marker and command line option to control test runs
 
-Plugins can provide custom markers and implement specific behaviour based on it. This is a self-contained example which adds a command line option and a parametrized test function marker to run tests specified via named environments:
+.. regendoc:wipe
 
-```python
- # content of conftest.py
+Plugins can provide custom markers and implement specific behaviour
+based on it. This is a self-contained example which adds a command
+line option and a parametrized test function marker to run tests
+specified via named environments:
 
- import pytest
+.. code-block:: python
 
- def pytest_addoption(parser):
-     parser.addoption(
-         "-E",
-         action="store",
-         metavar="NAME",
-         help="only run tests matching the environment NAME.",
-     )
+    # content of conftest.py
 
- def pytest_configure(config):
-     # register an additional marker
-     config.addinivalue_line(
-         "markers", "env(name): mark test to run only on named environment"
-     )
+    import pytest
 
- def pytest_runtest_setup(item):
-     envnames = [mark.args[0] for mark in item.iter_markers(name="env")]
-     if envnames:
-         if item.config.getoption("-E") not in envnames:
-             pytest.skip(f"test requires env in {envnames!r}")
-```
+
+    def pytest_addoption(parser):
+        parser.addoption(
+            "-E",
+            action="store",
+            metavar="NAME",
+            help="only run tests matching the environment NAME.",
+        )
+
+
+    def pytest_configure(config):
+        # register an additional marker
+        config.addinivalue_line(
+            "markers", "env(name): mark test to run only on named environment"
+        )
+
+
+    def pytest_runtest_setup(item):
+        envnames = [mark.args[0] for mark in item.iter_markers(name="env")]
+        if envnames:
+            if item.config.getoption("-E") not in envnames:
+                pytest.skip(f"test requires env in {envnames!r}")
 
 A test file using this local plugin:
 
-```python
- # content of test_someenv.py
+.. code-block:: python
 
- import pytest
+    # content of test_someenv.py
 
- @pytest.mark.env("stage1")
- def test_basic_db_operation():
-     pass
-```
+    import pytest
 
-and an example invocation specifying a different environment than what the test needs:
 
-```pytest
- $ pytest -E stage2
- =========================== test session starts ============================
- platform linux -- Python 3.x.y, pytest-9.x.y, pluggy-1.x.y
- rootdir: /home/sweet/project
- collected 1 item
+    @pytest.mark.env("stage1")
+    def test_basic_db_operation():
+        pass
 
- test_someenv.py s                                                    [100%]
+and an example invocation specifying a different environment than what
+the test needs:
 
- ============================ 1 skipped in 0.12s ============================
-```
+.. code-block:: pytest
+
+    $ pytest -E stage2
+    =========================== test session starts ============================
+    platform linux -- Python 3.x.y, pytest-9.x.y, pluggy-1.x.y
+    rootdir: /home/sweet/project
+    collected 1 item
+
+    test_someenv.py s                                                    [100%]
+
+    ============================ 1 skipped in 0.12s ============================
 
 and here is one that specifies exactly the environment needed:
 
-```pytest
- $ pytest -E stage1
- =========================== test session starts ============================
- platform linux -- Python 3.x.y, pytest-9.x.y, pluggy-1.x.y
- rootdir: /home/sweet/project
- collected 1 item
+.. code-block:: pytest
 
- test_someenv.py .                                                    [100%]
+    $ pytest -E stage1
+    =========================== test session starts ============================
+    platform linux -- Python 3.x.y, pytest-9.x.y, pluggy-1.x.y
+    rootdir: /home/sweet/project
+    collected 1 item
 
- ============================ 1 passed in 0.12s =============================
-```
+    test_someenv.py .                                                    [100%]
+
+    ============================ 1 passed in 0.12s =============================
 
 The :option:`--markers` option always gives you a list of available markers:
 
-```pytest
- $ pytest --markers
- @pytest.mark.env(name): mark test to run only on named environment
+.. code-block:: pytest
 
- @pytest.mark.filterwarnings(warning): add a warning filter to the given test. see https://docs.pytest.org/en/stable/how-to/capture-warnings.html#pytest-mark-filterwarnings
+    $ pytest --markers
+    @pytest.mark.env(name): mark test to run only on named environment
 
- @pytest.mark.skip(reason=None): skip the given test function with an optional reason. Example: skip(reason="no way of currently testing this") skips the test.
+    @pytest.mark.filterwarnings(warning): add a warning filter to the given test. see https://docs.pytest.org/en/stable/how-to/capture-warnings.html#pytest-mark-filterwarnings
 
- @pytest.mark.skipif(condition, ..., *, reason=...): skip the given test function if any of the conditions evaluate to True. Example: skipif(sys.platform == 'win32') skips the test if we are on the win32 platform. See https://docs.pytest.org/en/stable/reference/reference.html#pytest-mark-skipif
+    @pytest.mark.skip(reason=None): skip the given test function with an optional reason. Example: skip(reason="no way of currently testing this") skips the test.
 
- @pytest.mark.xfail(condition, ..., *, reason=..., run=True, raises=None, strict=strict_xfail): mark the test function as an expected failure if any of the conditions evaluate to True. Optionally specify a reason for better reporting and run=False if you don't even want to execute the test function. If only specific exception(s) are expected, you can list them in raises, and if the test fails in other ways, it will be reported as a true failure. See https://docs.pytest.org/en/stable/reference/reference.html#pytest-mark-xfail
+    @pytest.mark.skipif(condition, ..., *, reason=...): skip the given test function if any of the conditions evaluate to True. Example: skipif(sys.platform == 'win32') skips the test if we are on the win32 platform. See https://docs.pytest.org/en/stable/reference/reference.html#pytest-mark-skipif
 
- @pytest.mark.parametrize(argnames, argvalues): call a test function multiple times passing in different arguments in turn. argvalues generally needs to be a list of values if argnames specifies only one name or a list of tuples of values if argnames specifies multiple names. Example: @parametrize('arg1', [1,2]) would lead to two calls of the decorated test function, one with arg1=1 and another with arg1=2.see https://docs.pytest.org/en/stable/how-to/parametrize.html for more info and examples.
+    @pytest.mark.xfail(condition, ..., *, reason=..., run=True, raises=None, strict=strict_xfail): mark the test function as an expected failure if any of the conditions evaluate to True. Optionally specify a reason for better reporting and run=False if you don't even want to execute the test function. If only specific exception(s) are expected, you can list them in raises, and if the test fails in other ways, it will be reported as a true failure. See https://docs.pytest.org/en/stable/reference/reference.html#pytest-mark-xfail
 
- @pytest.mark.usefixtures(fixturename1, fixturename2, ...): mark tests as needing all of the specified fixtures. see https://docs.pytest.org/en/stable/explanation/fixtures.html#usefixtures
+    @pytest.mark.parametrize(argnames, argvalues): call a test function multiple times passing in different arguments in turn. argvalues generally needs to be a list of values if argnames specifies only one name or a list of tuples of values if argnames specifies multiple names. Example: @parametrize('arg1', [1,2]) would lead to two calls of the decorated test function, one with arg1=1 and another with arg1=2.see https://docs.pytest.org/en/stable/how-to/parametrize.html for more info and examples.
 
- @pytest.mark.tryfirst: mark a hook implementation function such that the plugin machinery will try to call it first/as early as possible. DEPRECATED, use @pytest.hookimpl(tryfirst=True) instead.
+    @pytest.mark.usefixtures(fixturename1, fixturename2, ...): mark tests as needing all of the specified fixtures. see https://docs.pytest.org/en/stable/explanation/fixtures.html#usefixtures
 
- @pytest.mark.trylast: mark a hook implementation function such that the plugin machinery will try to call it last/as late as possible. DEPRECATED, use @pytest.hookimpl(trylast=True) instead.
-```
+    @pytest.mark.tryfirst: mark a hook implementation function such that the plugin machinery will try to call it first/as early as possible. DEPRECATED, use @pytest.hookimpl(tryfirst=True) instead.
+
+    @pytest.mark.trylast: mark a hook implementation function such that the plugin machinery will try to call it last/as late as possible. DEPRECATED, use @pytest.hookimpl(trylast=True) instead.
+
+
+.. _`passing callables to custom markers`:
 
 ## Passing a callable to custom markers
 
+.. regendoc:wipe
+
 Below is the config file that will be used in the next examples:
 
-```python
- # content of conftest.py
- import sys
+.. code-block:: python
 
- def pytest_runtest_setup(item):
-     for marker in item.iter_markers(name="my_marker"):
-         print(marker)
-         sys.stdout.flush()
-```
+    # content of conftest.py
+    import sys
 
-A custom marker can have its argument set, i.e. `args` and `kwargs` properties, defined by either invoking it as a callable or using `pytest.mark.MARKER_NAME.with_args`. These two methods achieve the same effect most of the time.
 
-However, if there is a callable as the single positional argument with no keyword arguments, using the `pytest.mark.MARKER_NAME(c)` will not pass `c` as a positional argument but decorate `c` with the custom marker (see `MarkDecorator <mark>`). Fortunately, `pytest.mark.MARKER_NAME.with_args` comes to the rescue:
+    def pytest_runtest_setup(item):
+        for marker in item.iter_markers(name="my_marker"):
+            print(marker)
+            sys.stdout.flush()
 
-```python
- # content of test_custom_marker.py
- import pytest
+A custom marker can have its argument set, i.e. ``args`` and ``kwargs`` properties, defined by either invoking it as a callable or using ``pytest.mark.MARKER_NAME.with_args``. These two methods achieve the same effect most of the time.
 
- def hello_world(*args, **kwargs):
-     return "Hello World"
+However, if there is a callable as the single positional argument with no keyword arguments, using the ``pytest.mark.MARKER_NAME(c)`` will not pass ``c`` as a positional argument but decorate ``c`` with the custom marker (see :ref:`MarkDecorator <mark>`). Fortunately, ``pytest.mark.MARKER_NAME.with_args`` comes to the rescue:
 
- @pytest.mark.my_marker.with_args(hello_world)
- def test_with_args():
-     pass
-```
+.. code-block:: python
+
+    # content of test_custom_marker.py
+    import pytest
+
+
+    def hello_world(*args, **kwargs):
+        return "Hello World"
+
+
+    @pytest.mark.my_marker.with_args(hello_world)
+    def test_with_args():
+        pass
 
 The output is as follows:
 
-```pytest
- $ pytest -q -s
- Mark(name='my_marker', args=(<function hello_world at 0xdeadbeef0001>,), kwargs={})
- .
- 1 passed in 0.12s
-```
+.. code-block:: pytest
 
-We can see that the custom marker has its argument set extended with the function `hello_world. This is the key difference between creating a custom marker as a callable, which invokes _call__` behind the scenes, and using `with_args`.
+    $ pytest -q -s
+    Mark(name='my_marker', args=(<function hello_world at 0xdeadbeef0001>,), kwargs={})
+    .
+    1 passed in 0.12s
+
+We can see that the custom marker has its argument set extended with the function ``hello_world``. This is the key difference between creating a custom marker as a callable, which invokes ``__call__`` behind the scenes, and using ``with_args``.
+
 
 ## Reading markers which were set from multiple places
 
-If you are heavily using markers in your test suite you may encounter the case where a marker is applied several times to a test function.  From plugin code you can read over all such settings.  Example:
+.. versionadded: 2.2.2
 
-```python
- # content of test_mark_three_times.py
- import pytest
+.. regendoc:wipe
 
- pytestmark = pytest.mark.glob("module", x=1)
+If you are heavily using markers in your test suite you may encounter the case where a marker is applied several times to a test function.  From plugin
+code you can read over all such settings.  Example:
 
- @pytest.mark.glob("class", x=2)
- class TestClass:
-     @pytest.mark.glob("function", x=3)
-     def test_something(self):
-         pass
-```
+.. code-block:: python
 
-Here we have the marker "glob" applied three times to the same test function.  From a conftest file we can read it like this:
+    # content of test_mark_three_times.py
+    import pytest
 
-```python
- # content of conftest.py
- import sys
+    pytestmark = pytest.mark.glob("module", x=1)
 
- def pytest_runtest_setup(item):
-     for mark in item.iter_markers(name="glob"):
-         print(f"glob args={mark.args} kwargs={mark.kwargs}")
-         sys.stdout.flush()
-```
+
+    @pytest.mark.glob("class", x=2)
+    class TestClass:
+        @pytest.mark.glob("function", x=3)
+        def test_something(self):
+            pass
+
+Here we have the marker "glob" applied three times to the same
+test function.  From a conftest file we can read it like this:
+
+.. code-block:: python
+
+    # content of conftest.py
+    import sys
+
+
+    def pytest_runtest_setup(item):
+        for mark in item.iter_markers(name="glob"):
+            print(f"glob args={mark.args} kwargs={mark.kwargs}")
+            sys.stdout.flush()
 
 Let's run this without capturing output and see what we get:
 
-```pytest
- $ pytest -q -s
- glob args=('function',) kwargs={'x': 3}
- glob args=('class',) kwargs={'x': 2}
- glob args=('module',) kwargs={'x': 1}
- .
- 1 passed in 0.12s
-```
+.. code-block:: pytest
+
+    $ pytest -q -s
+    glob args=('function',) kwargs={'x': 3}
+    glob args=('class',) kwargs={'x': 2}
+    glob args=('module',) kwargs={'x': 1}
+    .
+    1 passed in 0.12s
 
 ## Marking platform specific tests with pytest
 
-Consider you have a test suite which marks tests for particular platforms, namely `pytest.mark.darwin`, `pytest.mark.win32` etc. and you also have tests that run on all platforms and have no specific marker.  If you now want to have a way to only run the tests for your particular platform, you could use the following plugin:
+.. regendoc:wipe
 
-```python
- # content of conftest.py
- #
- import sys
+Consider you have a test suite which marks tests for particular platforms,
+namely ``pytest.mark.darwin``, ``pytest.mark.win32`` etc. and you
+also have tests that run on all platforms and have no specific
+marker.  If you now want to have a way to only run the tests
+for your particular platform, you could use the following plugin:
 
- import pytest
+.. code-block:: python
 
- ALL = set("darwin linux win32".split())
+    # content of conftest.py
+    import sys
 
- def pytest_runtest_setup(item):
-     supported_platforms = ALL.intersection(mark.name for mark in item.iter_markers())
-     plat = sys.platform
-     if supported_platforms and plat not in supported_platforms:
-         pytest.skip(f"cannot run on platform {plat}")
-```
+    import pytest
 
-then tests will be skipped if they were specified for a different platform. Let's do a little test file to show how this looks like:
+    ALL = set("darwin linux win32".split())
 
-```python
- # content of test_plat.py
 
- import pytest
+    def pytest_runtest_setup(item):
+        supported_platforms = ALL.intersection(mark.name for mark in item.iter_markers())
+        plat = sys.platform
+        if supported_platforms and plat not in supported_platforms:
+            pytest.skip(f"cannot run on platform {plat}")
 
- @pytest.mark.darwin
- def test_if_apple_is_evil():
-     pass
+then tests will be skipped if they were specified for a different platform.
+Let's do a little test file to show how this looks like:
 
- @pytest.mark.linux
- def test_if_linux_works():
-     pass
+.. code-block:: python
 
- @pytest.mark.win32
- def test_if_win32_crashes():
-     pass
+    # content of test_plat.py
 
- def test_runs_everywhere():
-     pass
-```
+    import pytest
+
+
+    @pytest.mark.darwin
+    def test_if_apple_is_evil():
+        pass
+
+
+    @pytest.mark.linux
+    def test_if_linux_works():
+        pass
+
+
+    @pytest.mark.win32
+    def test_if_win32_crashes():
+        pass
+
+
+    def test_runs_everywhere():
+        pass
 
 then you will see two tests skipped and two executed tests as expected:
 
-```pytest
- $ pytest -rs # this option reports skip reasons
- =========================== test session starts ============================
- platform linux -- Python 3.x.y, pytest-9.x.y, pluggy-1.x.y
- rootdir: /home/sweet/project
- collected 4 items
+.. code-block:: pytest
 
- test_plat.py s.s.                                                    [100%]
+    $ pytest -rs # this option reports skip reasons
+    =========================== test session starts ============================
+    platform linux -- Python 3.x.y, pytest-9.x.y, pluggy-1.x.y
+    rootdir: /home/sweet/project
+    collected 4 items
 
- ========================= short test summary info ==========================
- SKIPPED [2] conftest.py:13: cannot run on platform linux
- ======================= 2 passed, 2 skipped in 0.12s =======================
-```
+    test_plat.py s.s.                                                    [100%]
+
+    ========================= short test summary info ==========================
+    SKIPPED [2] conftest.py:13: cannot run on platform linux
+    ======================= 2 passed, 2 skipped in 0.12s =======================
 
 Note that if you specify a platform via the marker-command line option like this:
 
-```pytest
- $ pytest -m linux
- =========================== test session starts ============================
- platform linux -- Python 3.x.y, pytest-9.x.y, pluggy-1.x.y
- rootdir: /home/sweet/project
- collected 4 items / 3 deselected / 1 selected
+.. code-block:: pytest
 
- test_plat.py .                                                       [100%]
+    $ pytest -m linux
+    =========================== test session starts ============================
+    platform linux -- Python 3.x.y, pytest-9.x.y, pluggy-1.x.y
+    rootdir: /home/sweet/project
+    collected 4 items / 3 deselected / 1 selected
 
- ===================== 1 passed, 3 deselected in 0.12s ======================
-```
+    test_plat.py .                                                       [100%]
+
+    ===================== 1 passed, 3 deselected in 0.12s ======================
 
 then the unmarked-tests will not be run.  It is thus a way to restrict the run to the specific tests.
 
 ## Automatically adding markers based on test names
 
-If you have a test suite where test function names indicate a certain type of test, you can implement a hook that automatically defines markers so that you can use the :option:`-m` option with it. Let's look at this test module:
+.. regendoc:wipe
 
-```python
- # content of test_module.py
+If you have a test suite where test function names indicate a certain
+type of test, you can implement a hook that automatically defines
+markers so that you can use the :option:`-m` option with it. Let's look
+at this test module:
 
- def test_interface_simple():
-     assert 0
+.. code-block:: python
 
- def test_interface_complex():
-     assert 0
+    # content of test_module.py
 
- def test_event_simple():
-     assert 0
 
- def test_something_else():
-     assert 0
-```
+    def test_interface_simple():
+        assert 0
 
-We want to dynamically define two markers and can do it in a `conftest.py` plugin:
 
-```python
- # content of conftest.py
+    def test_interface_complex():
+        assert 0
 
- import pytest
 
- def pytest_collection_modifyitems(items):
-     for item in items:
-         if "interface" in item.nodeid:
-             item.add_marker(pytest.mark.interface)
-         elif "event" in item.nodeid:
-             item.add_marker(pytest.mark.event)
-```
+    def test_event_simple():
+        assert 0
 
-We can now use the `-m option` to select one set:
 
-```pytest
- $ pytest -m interface --tb=short
- =========================== test session starts ============================
- platform linux -- Python 3.x.y, pytest-9.x.y, pluggy-1.x.y
- rootdir: /home/sweet/project
- collected 4 items / 2 deselected / 2 selected
+    def test_something_else():
+        assert 0
 
- test_module.py FF                                                    [100%]
+We want to dynamically define two markers and can do it in a
+``conftest.py`` plugin:
 
- ================================= FAILURES =================================
- __________________________ test_interface_simple ___________________________
- test_module.py:4: in test_interface_simple
-     assert 0
- E   assert 0
- __________________________ test_interface_complex __________________________
- test_module.py:8: in test_interface_complex
-     assert 0
- E   assert 0
- ========================= short test summary info ==========================
- FAILED test_module.py::test_interface_simple - assert 0
- FAILED test_module.py::test_interface_complex - assert 0
- ===================== 2 failed, 2 deselected in 0.12s ======================
-```
+.. code-block:: python
+
+    # content of conftest.py
+
+    import pytest
+
+
+    def pytest_collection_modifyitems(items):
+        for item in items:
+            if "interface" in item.nodeid:
+                item.add_marker(pytest.mark.interface)
+            elif "event" in item.nodeid:
+                item.add_marker(pytest.mark.event)
+
+We can now use the ``-m option`` to select one set:
+
+.. code-block:: pytest
+
+    $ pytest -m interface --tb=short
+    =========================== test session starts ============================
+    platform linux -- Python 3.x.y, pytest-9.x.y, pluggy-1.x.y
+    rootdir: /home/sweet/project
+    collected 4 items / 2 deselected / 2 selected
+
+    test_module.py FF                                                    [100%]
+
+    ================================= FAILURES =================================
+    __________________________ test_interface_simple ___________________________
+    test_module.py:4: in test_interface_simple
+        assert 0
+    E   assert 0
+    __________________________ test_interface_complex __________________________
+    test_module.py:8: in test_interface_complex
+        assert 0
+    E   assert 0
+    ========================= short test summary info ==========================
+    FAILED test_module.py::test_interface_simple - assert 0
+    FAILED test_module.py::test_interface_complex - assert 0
+    ===================== 2 failed, 2 deselected in 0.12s ======================
 
 or to select both "event" and "interface" tests:
 
-```pytest
- $ pytest -m "interface or event" --tb=short
- =========================== test session starts ============================
- platform linux -- Python 3.x.y, pytest-9.x.y, pluggy-1.x.y
- rootdir: /home/sweet/project
- collected 4 items / 1 deselected / 3 selected
+.. code-block:: pytest
 
- test_module.py FFF                                                   [100%]
+    $ pytest -m "interface or event" --tb=short
+    =========================== test session starts ============================
+    platform linux -- Python 3.x.y, pytest-9.x.y, pluggy-1.x.y
+    rootdir: /home/sweet/project
+    collected 4 items / 1 deselected / 3 selected
 
- ================================= FAILURES =================================
- __________________________ test_interface_simple ___________________________
- test_module.py:4: in test_interface_simple
-     assert 0
- E   assert 0
- __________________________ test_interface_complex __________________________
- test_module.py:8: in test_interface_complex
-     assert 0
- E   assert 0
- ____________________________ test_event_simple _____________________________
- test_module.py:12: in test_event_simple
-     assert 0
- E   assert 0
- ========================= short test summary info ==========================
- FAILED test_module.py::test_interface_simple - assert 0
- FAILED test_module.py::test_interface_complex - assert 0
- FAILED test_module.py::test_event_simple - assert 0
- ===================== 3 failed, 1 deselected in 0.12s ======================
-```
+    test_module.py FFF                                                   [100%]
+
+    ================================= FAILURES =================================
+    __________________________ test_interface_simple ___________________________
+    test_module.py:4: in test_interface_simple
+        assert 0
+    E   assert 0
+    __________________________ test_interface_complex __________________________
+    test_module.py:8: in test_interface_complex
+        assert 0
+    E   assert 0
+    ____________________________ test_event_simple _____________________________
+    test_module.py:12: in test_event_simple
+        assert 0
+    E   assert 0
+    ========================= short test summary info ==========================
+    FAILED test_module.py::test_interface_simple - assert 0
+    FAILED test_module.py::test_interface_complex - assert 0
+    FAILED test_module.py::test_event_simple - assert 0
+    ===================== 3 failed, 1 deselected in 0.12s ======================

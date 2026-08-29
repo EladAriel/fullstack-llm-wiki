@@ -1,64 +1,107 @@
 ---
 type: "Framework Learn Page"
-framework: "mongodb"
+framework: "MongoDB"
 source_repo: "https://github.com/mongodb/docs.git"
 source_branch: "main"
 source_path: "content/manual/manual/source/core/write-operations-atomicity.txt"
-source_commit: "ab9db26ed3d11618cdb61516d8180337d8e3f679"
-source_commit_short: "ab9db26e"
-source_commit_date: "2026-07-24T16:22:46-06:00"
-generated_at: "2026-07-25T11:51:15Z"
+source_commit: "b9f2bc487a2878b65e3c1f80024bebab76954f27"
+source_commit_short: "b9f2bc48"
+source_commit_date: "2026-08-28T17:09:45-05:00"
+generated_at: "2026-08-29T09:39:19.504833Z"
 ---
-
-==========================
+.. _transactions-write-atomicity:
 
 # Atomicity and Transactions
 
-In MongoDB, write operations are `atomic <atomic operation>` on the single-document level, even if modifying multiple values. For parallel updates, each command ensures the query condition still matches.
+**meta:** :description: Understand atomicity in MongoDB write operations. Manage
+      concurrent updates with transactions and unique indexes.
 
-To prevent conflicts during concurrent updates, include the expected current value in the update filter.
+.. default-domain:: mongodb
+
+**contents:** On this page
+   :local:
+   :backlinks: none
+   :depth: 1
+   :class: singlecol
+
+**facet:** :name: genre
+   :values: reference
+
+In MongoDB, write operations are :term:`atomic <atomic operation>` on
+the single-document level, even if modifying multiple values. For
+parallel updates, each command ensures the query condition still
+matches.
+
+To prevent conflicts during concurrent updates, include the expected
+current value in the update filter.
 
 ## Use Cases
 
-.. include:: /includes/sample-data-usage.rst
+**include:** /includes/sample-data-usage.rst
 
-The example operations each use the following document. Reset the database after running each code block and do not run the example operations sequentially.
+The example operations each use the following document. Reset the database after 
+running each code block and do not run the example operations sequentially. 
 
 Consider a collection with this document:
 
+**literalinclude:** /code-examples/tested/command-line/mongosh/crud-tutorials/atomicity/insert-document.snippet.insert-document.js
+   :language: javascript
+   :copyable: true
+   :category: usage example
+
 These update operations occur concurrently:
 
-One update sets `num_mflix_comments` to `90` or `100`. The second update then fails to match `{ num_mflix_comments: 80 }` and does not run.
-
-> **Warning:** Filtering on a field you do not update can cause unexpected results
-during concurrent updates. Consider these operations:
-.. literalinclude:: /code-examples/tested/command-line/mongosh/crud-tutorials/atomicity/update-overwrite-risk.snippet.update-overwrite-risk.js
+**literalinclude:** /code-examples/tested/command-line/mongosh/crud-tutorials/atomicity/update-filter-atomicity.snippet.update-filter-atomicity.js
    :language: javascript
-   :copyable: false
+   :copyable: true
    :category: usage example
-Both updates match `{ _id: 1 }`, so both run. The second update
-overwrites the first. The first client receives no warning that its
-update was lost.
 
-To avoid conflicts when filtering on non-updated fields, use :update:`$inc`.
+One update sets ``num_mflix_comments`` to ``90`` or ``100``. The
+second update then fails to match ``{ num_mflix_comments: 80 }`` and
+does not run.
+
+**warning:** Filtering on a field you do not update can cause unexpected results
+   during concurrent updates. Consider these operations:
+
+   .. literalinclude:: /code-examples/tested/command-line/mongosh/crud-tutorials/atomicity/update-overwrite-risk.snippet.update-overwrite-risk.js
+      :language: javascript
+      :copyable: false
+      :category: usage example
+
+   Both updates match ``{ _id: 1 }``, so both run. The second update
+   overwrites the first. The first client receives no warning that its
+   update was lost.
+
+To avoid conflicts when filtering on non-updated fields, use
+:update:`$inc`.
 
 For example, consider the following concurrent update operations:
 
-Both updates match `{ _id: 1 }`. Because they increment rather than set the value, they do not overwrite each other. The final `num_mflix_comments` is `110`.
+**literalinclude:** /code-examples/tested/command-line/mongosh/crud-tutorials/atomicity/update-inc-atomicity.snippet.update-inc-atomicity.js
+   :language: javascript
+   :copyable: true
+   :category: usage example
 
-> **Tip:** To enforce uniqueness, create a :ref:`unique index
-<index-type-unique>`. This prevents duplicate data in inserts and
-updates. You can also create unique indexes on multiple fields. See
-`index-unique-create`.
+Both updates match ``{ _id: 1 }``. Because they increment rather than
+set the value, they do not overwrite each other. The final
+``num_mflix_comments`` is ``110``.
+
+**tip:** Store Unique Values
+
+   To enforce uniqueness, create a :ref:`unique index
+   <index-type-unique>`. This prevents duplicate data in inserts and
+   updates. You can also create unique indexes on multiple fields. See
+   :ref:`index-unique-create`.
 
 ## Details
 
-This section describes additional details for multi-document transactions.
+This section describes additional details for multi-document
+transactions.
 
-.. include:: /includes/extracts/concurrent-operations-multi-document-writes.rst
+**include:** /includes/extracts/concurrent-operations-multi-document-writes.rst
 
-.. include:: /includes/extracts/transactions-usage.rst
+**include:** /includes/extracts/transactions-usage.rst
 
 ## Learn More
 
-`/core/read-isolation-consistency-recency`
+:doc:`/core/read-isolation-consistency-recency`

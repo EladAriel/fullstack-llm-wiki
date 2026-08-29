@@ -1,89 +1,119 @@
 ---
 type: "Framework Learn Page"
-framework: "mongodb"
+framework: "MongoDB"
 source_repo: "https://github.com/mongodb/docs.git"
 source_branch: "main"
 source_path: "content/manual/manual/source/reference/method/db.collection.latencyStats.txt"
-source_commit: "ab9db26ed3d11618cdb61516d8180337d8e3f679"
-source_commit_short: "ab9db26e"
-source_commit_date: "2026-07-24T16:22:46-06:00"
-generated_at: "2026-07-25T11:51:15Z"
+source_commit: "b9f2bc487a2878b65e3c1f80024bebab76954f27"
+source_commit_short: "b9f2bc48"
+source_commit_date: "2026-08-28T17:09:45-05:00"
+generated_at: "2026-08-29T09:39:19.893359Z"
 ---
-
-=============================================
-
 # db.collection.latencyStats() (mongosh method)
 
-.. include:: /includes/fact-mongosh-shell-method-alt
+**meta:** :description: Retrieve latency statistics for a collection using `db.collection.latencyStats()`, with optional histograms for detailed latency ranges.
+
+.. default-domain:: mongodb
+
+**contents:** On this page
+   :local:
+   :backlinks: none
+   :depth: 1
+   :class: singlecol
+
+
+**include:** /includes/fact-mongosh-shell-method-alt
 
 ## Definition
 
-> **Seealso:** :pipeline:`$collStats`
+**method:** db.collection.latencyStats(options)
+
+   .. |dbcommand| replace:: ``latencyStats`` field returned by the
+      :dbcommand:`collStats` command
+   
+   :method:`db.collection.latencyStats()` returns latency
+   statistics for a given collection. It is a wrapper around
+   :pipeline:`$collStats`.
+
+   This method has the form:
+
+   .. code-block:: javascript
+
+      db.collection.latencyStats( { histograms: <boolean> } )
+
+   The ``histograms`` argument is an optional boolean. If
+   ``histograms: true`` then :method:`~db.collection.latencyStats()` adds
+   latency histograms to the return document.
+
+**seealso:** :pipeline:`$collStats`
 
 ## Compatibility
 
 This method is available in deployments hosted in the following environments:
 
-.. include:: /includes/fact-environments-atlas-only.rst
+**include:** /includes/fact-environments-atlas-only.rst
 
-.. include:: /includes/fact-environments-atlas-support-all.rst
+**include:** /includes/fact-environments-atlas-support-all.rst
 
-.. include:: /includes/fact-environments-onprem-only.rst
+**include:** /includes/fact-environments-onprem-only.rst
 
 ## Output
 
-:method:`~db.collection.latencyStats()` returns a document containing a field `latencyStats`, containing the following fields:
+:method:`~db.collection.latencyStats()` returns a document containing
+a field ``latencyStats``, containing the following fields:
 
-.. include:: /includes/fact-latencystats-reference.rst
+**include:** /includes/fact-latencystats-reference.rst
 
 ## Examples
 
-You can run :method:`~db.collection.latencyStats()` in :binary:`~bin.mongosh` as follows:
+You can run :method:`~db.collection.latencyStats()` in
+:binary:`~bin.mongosh` as follows:
 
-```javascript
-db.data.latencyStats( { histograms: true } ).pretty()
-```
+.. code-block:: javascript
 
-:method:`~db.collection.latencyStats()` returns a document such as the following:
+   db.data.latencyStats( { histograms: true } ).pretty()
 
-```javascript
-{
-  "ns" : "test.data",
-  "localTime" : ISODate("2016-11-01T21:56:28.962Z"),
-  "latencyStats" : {
-    "reads" : {
-      "histogram" : [
-        {
-          "micros" : Long(16),
-          "count" : Long(6)
-        },
-        {
-          "micros" : Long(512),
-          "count" : Long(1)
-        }
-      ],
-      "latency" : Long(747),
-      "ops" : Long(7)
-    },
-    "writes" : {
-      "histogram" : [
-        {
-          "micros" : Long(64),
-          "count" : Long(1)
-        },
-        {
-          "micros" : Long(24576),
-          "count" : Long(1)
-        }
-      ],
-      "latency" : Long(26845),
-      "ops" : Long(2)
-    },
-    "commands" : {
-      "histogram" : [ ],
-      "latency" : Long(0),
-      "ops" : Long(0)
-    }
-  }
-}
-```
+:method:`~db.collection.latencyStats()` returns a document such as
+the following:
+
+.. code-block:: javascript
+
+   {
+     "ns" : "test.data",
+     "localTime" : ISODate("2016-11-01T21:56:28.962Z"),
+     "latencyStats" : {
+       "reads" : {
+         "histogram" : [
+           {
+             "micros" : Long(16),
+             "count" : Long(6)
+           },
+           {
+             "micros" : Long(512),
+             "count" : Long(1)
+           }
+         ],
+         "latency" : Long(747),
+         "ops" : Long(7)
+       },
+       "writes" : {
+         "histogram" : [
+           {
+             "micros" : Long(64),
+             "count" : Long(1)
+           },
+           {
+             "micros" : Long(24576),
+             "count" : Long(1)
+           }
+         ],
+         "latency" : Long(26845),
+         "ops" : Long(2)
+       },
+       "commands" : {
+         "histogram" : [ ],
+         "latency" : Long(0),
+         "ops" : Long(0)
+       }
+     }
+   }

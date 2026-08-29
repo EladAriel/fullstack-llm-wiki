@@ -4,12 +4,11 @@ framework: "Model Context Protocol"
 source_repo: "https://github.com/modelcontextprotocol/modelcontextprotocol"
 source_branch: "main"
 source_path: "docs/extensions/overview.mdx"
-source_commit: "7634684382c3d14cf7e9f14073fe40a2d8ace3fa"
-source_commit_short: "76346843"
-source_commit_date: "2026-07-23T16:49:30-07:00"
-generated_at: "2026-07-25T11:50:39Z"
+source_commit: "ca4ab3027f7c844cd3039c956438d72e8253f7f5"
+source_commit_short: "ca4ab30"
+source_commit_date: "2026-08-28T21:24:44-07:00"
+generated_at: "2026-08-29T09:38:48.009325Z"
 ---
-
 ---
 title: Extensions Overview
 description: Optional extensions to the Model Context Protocol
@@ -125,32 +124,35 @@ A **breaking change** is any modification that would cause existing implementati
 
 ## Negotiation
 
-Clients and servers advertise their support for extensions in the `extensions` field within their respective capabilities during the [initialization handshake](/specification/latest/basic/lifecycle).
+Clients and servers advertise their support for extensions in the `extensions` field within their respective capability declarations.
 
 ### Client Capabilities
 
-Clients advertise extension support in the `initialize` request:
+Clients advertise extension support in `_meta["io.modelcontextprotocol/clientCapabilities"]` within each request:
 
 ```json
 {
   "jsonrpc": "2.0",
   "id": 1,
-  "method": "initialize",
+  "method": "tools/call",
   "params": {
-    "protocolVersion": "2025-06-18",
-    "capabilities": {
-      "roots": {
-        "listChanged": true
-      },
-      "extensions": {
-        "io.modelcontextprotocol/ui": {
-          "mimeTypes": ["text/html;profile=mcp-app"]
-        }
-      }
+    "name": "get_weather",
+    "arguments": {
+      "location": "New York"
     },
-    "clientInfo": {
-      "name": "ExampleClient",
-      "version": "1.0.0"
+    "_meta": {
+      "io.modelcontextprotocol/protocolVersion": "2026-07-28",
+      "io.modelcontextprotocol/clientCapabilities": {
+        "extensions": {
+          "io.modelcontextprotocol/ui": {
+            "mimeTypes": ["text/html;profile=mcp-app"]
+          }
+        }
+      },
+      "io.modelcontextprotocol/clientInfo": {
+        "name": "ExampleClient",
+        "version": "1.0.0"
+      }
     }
   }
 }
@@ -158,24 +160,29 @@ Clients advertise extension support in the `initialize` request:
 
 ### Server Capabilities
 
-Servers advertise extension support in the `initialize` response:
+Servers advertise extension support in the `server/discover` response:
 
 ```json
 {
   "jsonrpc": "2.0",
   "id": 1,
   "result": {
-    "protocolVersion": "2025-06-18",
+    "resultType": "complete",
+    "supportedVersions": ["2026-07-28"],
     "capabilities": {
       "tools": {},
       "extensions": {
         "io.modelcontextprotocol/ui": {}
       }
     },
-    "serverInfo": {
-      "name": "ExampleServer",
-      "version": "1.0.0"
-    }
+    "_meta": {
+      "io.modelcontextprotocol/serverInfo": {
+        "name": "ExampleServer",
+        "version": "1.0.0"
+      }
+    },
+    "ttlMs": 3600000,
+    "cacheScope": "public"
   }
 }
 ```

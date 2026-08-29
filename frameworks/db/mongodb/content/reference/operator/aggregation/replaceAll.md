@@ -1,128 +1,300 @@
 ---
 type: "Framework Learn Page"
-framework: "mongodb"
+framework: "MongoDB"
 source_repo: "https://github.com/mongodb/docs.git"
 source_branch: "main"
 source_path: "content/manual/manual/source/reference/operator/aggregation/replaceAll.txt"
-source_commit: "ab9db26ed3d11618cdb61516d8180337d8e3f679"
-source_commit_short: "ab9db26e"
-source_commit_date: "2026-07-24T16:22:46-06:00"
-generated_at: "2026-07-25T11:51:15Z"
+source_commit: "b9f2bc487a2878b65e3c1f80024bebab76954f27"
+source_commit_short: "b9f2bc48"
+source_commit_date: "2026-08-28T17:09:45-05:00"
+generated_at: "2026-08-29T09:39:20.156256Z"
 ---
-
-==================================
-
 # $replaceAll  (expression operator)
 
+**meta:** :description: Replace all instances of a search string in an input string with a replacement string using the `$replaceAll` operator in MongoDB aggregation.
+
+.. default-domain:: mongodb
+
+**contents:** On this page
+   :local:
+   :backlinks: none
+   :depth: 1
+   :class: singlecol
+   
 ## Definition
+
+**expression:** $replaceAll
+
+   Replaces all instances of a search string or regex pattern in an
+   input string with a replacement string.
+
+   :expression:`$replaceAll` is both case-sensitive and
+   diacritic-sensitive, and ignores any collation present on a
+   collection.
 
 ## Syntax
 
-The :expression:`$replaceAll` operator has the following `operator expression syntax <agg-quick-ref-operator-expressions>`:
+The :expression:`$replaceAll` operator has the following
+:ref:`operator expression syntax <agg-quick-ref-operator-expressions>`:
 
-```javascript
-{ $replaceAll: { input: <expression>, find: <expression>, replacement: <expression> } }
-```
+.. code-block:: javascript
+
+   { $replaceAll: { input: <expression>, find: <expression>, replacement: <expression> } }
 
 ### Operator Fields
 
+.. list-table::
+   :header-rows: 1
+   :widths: 20 80
+
+   * - Field
+     - Description
+
+   * - :ref:`input <replaceAll-input>`
+
+     - .. _replaceAll-input:
+
+       The string on which you wish to apply the
+       :ref:`find<replaceAll-find>`. Can be any valid
+       :ref:`expression<aggregation-expressions>` that resolves to a
+       string or a ``null``. If ``input`` refers to a field that is
+       missing, ``$replaceAll`` returns ``null``.
+
+   * - :ref:`find <replaceAll-find>`
+
+     - .. _replaceAll-find:
+
+       The string to search for within the given
+       :ref:`input <replaceAll-input>`. Can be any valid
+       :ref:`expression<aggregation-expressions>` that resolves to a
+       string, a regex, or a ``null``. If ``find`` refers to a field
+       that is missing, ``$replaceAll`` returns ``null``.
+
+   * - :ref:`replacement <replaceAll-replacement>`
+
+     - .. _replaceAll-replacement:
+
+       The string to use to replace all matched instances of
+       :ref:`find<replaceAll-find>` in :ref:`input <replaceAll-input>`.
+       Can be any valid :ref:`expression<aggregation-expressions>` that
+       resolves to a string or a ``null``.
+
 ## Behavior
 
-The `input <replaceAll-input>`, `find <replaceAll-find>`, and `replacement <replaceAll-replacement>` expressions must evaluate to a string or a `null` (or regex for `find <replaceAll-find>`), or :expression:`$replaceAll` fails with an error.
+The :ref:`input <replaceAll-input>`, :ref:`find <replaceAll-find>`, and
+:ref:`replacement <replaceAll-replacement>` expressions must evaluate to
+a string or a ``null`` (or regex for :ref:`find <replaceAll-find>`), or
+:expression:`$replaceAll` fails with an error.
 
-### `$replaceAll` and Null Values
+.. _replaceall-and-null-values:
 
-If `input <replaceAll-input>` or `find <replaceAll-find>` refer to a field that is missing, they return `null`.
+### ``$replaceAll`` and Null Values
 
-If any one of `input <replaceAll-input>`, `find <replaceAll-find>`, or `replacement <replaceAll-replacement>` evaluates to a `null`, the entire :expression:`$replaceAll` expression evaluates to `null`:
+If :ref:`input <replaceAll-input>` or :ref:`find <replaceAll-find>`
+refer to a field that is missing, they return ``null``.
+
+If *any one* of :ref:`input <replaceAll-input>`,
+:ref:`find <replaceAll-find>`, or
+:ref:`replacement <replaceAll-replacement>` evaluates to a ``null``, the
+entire :expression:`$replaceAll` expression evaluates to ``null``:
+
+.. list-table::
+   :header-rows: 1
+   :class: border-table
+   :widths: 90 10
+
+   * - Example
+     - Result
+
+   * - ``{ $replaceAll: { input: null, find: "abc", replacement: "ABC" } }``
+     - ``null``
+
+   * - ``{ $replaceAll: { input: "abc", find: null, replacement: "ABC" } }``
+     - ``null``
+
+   * - ``{ $replaceAll: { input: "abc", find: "abc", replacement: null } }``
+     - ``null``
+
+.. _replaceall-and-collation:
 
 ### $replaceAll and Collation
 
-.. include:: /includes/collation-replace-example.rst
+.. |replace-operator| replace:: ``$replaceAll``
 
-The following `$replaceAll` operation tries to find and replace all instances of "Cafe" in the `name` field:
+**include:** /includes/collation-replace-example.rst
 
-Because :expression:`$replaceAll` ignores the collation configured for this collection, the operation only matches the instance of "Cafe" in document `2`:
+The following ``$replaceAll`` operation tries to find and replace all
+instances of "Cafe" in the ``name`` field:
 
-```javascript
-{ _id: 1, name: "cafe", resultObject: "cafe" }
-{ _id: 2, name: "Cafe", resultObject: "CAFE" }
-{ _id: 3, name: "café", resultObject: "café" }
-```
+.. io-code-block::
+   :copyable: true
 
-Operators that respect collation, such as :pipeline:`$match`, would match all three documents when performing a string comparison against "Cafe" due to this collection's collation strength of `1`.
+   .. input::
+      :language: javascript
 
-### `$replaceAll` and Unicode Normalization
+      db.restaurants.aggregate( [
+      {
+         $addFields:
+            {
+               resultObject: {
+                  $replaceOne: {
+                     input: "$name",
+                     find: "Cafe",
+                     replacement: "CAFE"
+                  }
+               }
+            }
+      }
+      ] )
+   
+   .. output::
+      :language: javascript
+      :emphasize-lines: 2
 
-The :expression:`$replaceAll` aggregation expression does not perform any unicode normalization. This means that string matching for all `$replaceAll` expressions will consider the number of code points used to represent a character in unicode when attempting a match.
+      { "_id" : 1, "name" : "cafe", "resultObject" : "cafe" }
+      { "_id" : 2, "name" : "Cafe", "resultObject" : "CAFE" }
+      { "_id" : 3, "name" : "café", "resultObject" : "café" }
 
-For example, the character `é` can be represented in unicode using either one code point or two:
+Because :expression:`$replaceAll` ignores the collation configured for
+this collection, the operation only matches the instance of "Cafe" in
+document ``2``:
 
-Using :expression:`$replaceAll` with a `find <replaceAll-find>` string where the character `é` is represented in unicode with one code point will not match any instance of `é` that uses two code points in the `input <replaceAll-input>` string.
+.. code-block:: javascript
+   :emphasize-lines: 2
+   :copyable: false
 
-The following table shows whether a match occurs for a `find <replaceAll-find>` string of "café" when compared to `input <replaceAll-input>` strings where `é` is represented by either one code point or two. The `find <replaceAll-find>` string in this example uses one code point to represent the `é` character:
+   { _id: 1, name: "cafe", resultObject: "cafe" }
+   { _id: 2, name: "Cafe", resultObject: "CAFE" }
+   { _id: 3, name: "café", resultObject: "café" }
 
-Because :expression:`$replaceAll` does not perform any unicode normalization, only the first string comparison matches, where both the `find <replaceAll-find>` and `input <replaceAll-input>` strings use one code point to represent `é`.
+Operators that respect collation, such as :pipeline:`$match`, would
+match all three documents when performing a string comparison against
+"Cafe" due to this collection's collation strength of ``1``.
+
+.. _replaceall-and-unicode-normalization:
+
+### ``$replaceAll`` and Unicode Normalization
+
+The :expression:`$replaceAll` aggregation expression does not perform
+any unicode normalization. This means that string matching for all
+``$replaceAll`` expressions will consider the number of code points used
+to represent a character in unicode when attempting a match.
+
+For example, the character ``é`` can be represented in unicode using
+either one code point or two:
+
+.. list-table::
+   :header-rows: 1
+   :widths: 25 25 50
+
+   * - Unicode
+     - Displays as
+     - Code points
+
+   * - ``\xe9``
+     - ``é``
+     - 1 ( ``\xe9`` )
+
+   * - ``e\u0301``
+     - ``é``
+     - 2 ( ``e`` + ``\u0301`` )
+
+Using :expression:`$replaceAll` with a :ref:`find <replaceAll-find>`
+string where the character ``é`` is represented in unicode with one code
+point will not match any instance of ``é`` that uses two code points in
+the :ref:`input <replaceAll-input>` string.
+
+The following table shows whether a match occurs for a
+:ref:`find <replaceAll-find>` string of "café" when compared to
+:ref:`input <replaceAll-input>` strings where ``é`` is represented
+by either one code point or two. The :ref:`find <replaceAll-find>`
+string in this example uses one code point to represent the ``é``
+character:
+
+.. list-table::
+   :header-rows: 1
+   :widths: 85 15
+
+   * - Example
+     - Match
+
+   * - ``{ $replaceAll: { input: "caf\xe9", find: "café", replacement: "CAFE" } }``
+     - yes
+
+   * - ``{ $replaceAll: { input: "cafe\u0301", find: "café", replacement: "CAFE" } }``
+     - no
+
+Because :expression:`$replaceAll` does not perform any unicode
+normalization, only the first string comparison matches, where both the
+:ref:`find <replaceAll-find>` and :ref:`input <replaceAll-input>`
+strings use one code point to represent ``é``.
 
 ## Examples
 
-Create an `inventory` collection with the following documents:
+Create an ``inventory`` collection with the following documents:
 
-```javascript
-db.inventory.insertMany( [
-   { _id: 1, item: "blue paint" },
-   { _id: 2, item: "blue and green paint" },
-   { _id: 3, item: "blue paint with blue paintbrush" },
-   { _id: 4, item: "blue paint with green paintbrush" },
-] )
-```
+.. code-block:: javascript
+
+   db.inventory.insertMany( [
+      { _id: 1, item: "blue paint" },
+      { _id: 2, item: "blue and green paint" },
+      { _id: 3, item: "blue paint with blue paintbrush" },
+      { _id: 4, item: "blue paint with green paintbrush" },
+   ] )
 
 ### Replace Using a String
 
-The following example replaces each instance of "blue paint" in the `item` field with "red paint":
+The following example replaces each instance of "blue paint" in the
+``item`` field with "red paint":
 
-```javascript
-db.inventory.aggregate([
-   {
-     $project:
+.. code-block:: javascript
+
+   db.inventory.aggregate([
       {
-         item: { $replaceAll: { input: "$item", find: "blue paint", replacement: "red paint" } }
+        $project:
+         {
+            item: { $replaceAll: { input: "$item", find: "blue paint", replacement: "red paint" } }
+         }
       }
-   }
-])
-```
+   ])
 
 The operation returns the following results:
 
-```javascript
-{ _id: 1, item: "red paint" }
-{ _id: 2, item: "blue and green paint" }
-{ _id: 3, item: "red paint with red paintbrush" }
-{ _id: 4, item: "red paint with green paintbrush" }
-```
+.. code-block:: javascript
+   :copyable: false
+
+   { _id: 1, item: "red paint" }
+   { _id: 2, item: "blue and green paint" }
+   { _id: 3, item: "red paint with red paintbrush" }
+   { _id: 4, item: "red paint with green paintbrush" }
 
 ### Replace Using Regex
 
-The following example uses a regex pattern `\\bblue paint\\b` to replace each instance matching "blue paint" as a whole phrase in the `item` field with "red paint":
+The following example uses a regex pattern ``\\bblue paint\\b`` to
+replace each instance matching "blue paint" as a whole phrase in the
+``item`` field with "red paint":
 
-```javascript
-db.inventory.aggregate([  
-   {  
-     $project:
+.. code-block:: javascript
+
+   db.inventory.aggregate([  
       {  
-         item: { $replaceAll: { input: "$item", find: \\bblue paint\\b, replacement: "red paint" } }  
+        $project:
+         {  
+            item: { $replaceAll: { input: "$item", find: \\bblue paint\\b, replacement: "red paint" } }  
+         }  
       }  
-   }  
-])
-```
+   ])
 
 The operation returns the following results:
 
-```javascript
-{ _id: 1, item: "red paint" }
-{ _id: 2, item: "blue and green paint" }
-{ _id: 3, item: "red paint with blue paintbrush" }
-{ _id: 4, item: "red paint with green paintbrush" }
-```
+.. code-block:: javascript
+   :copyable: false
 
-In this case, "blue paint" is replaced only when it appears as a whole phrase, due to the use of regex word boundaries (`\b`), and not when it is a substring within a larger word.
+   { _id: 1, item: "red paint" }
+   { _id: 2, item: "blue and green paint" }
+   { _id: 3, item: "red paint with blue paintbrush" }
+   { _id: 4, item: "red paint with green paintbrush" }
+
+In this case, "blue paint" is replaced only when it appears as a whole
+phrase, due to the use of regex word boundaries (``\b``), and not when
+it is a substring within a larger word.

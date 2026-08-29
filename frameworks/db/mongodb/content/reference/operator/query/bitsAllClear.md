@@ -1,88 +1,109 @@
 ---
 type: "Framework Learn Page"
-framework: "mongodb"
+framework: "MongoDB"
 source_repo: "https://github.com/mongodb/docs.git"
 source_branch: "main"
 source_path: "content/manual/manual/source/reference/operator/query/bitsAllClear.txt"
-source_commit: "ab9db26ed3d11618cdb61516d8180337d8e3f679"
-source_commit_short: "ab9db26e"
-source_commit_date: "2026-07-24T16:22:46-06:00"
-generated_at: "2026-07-25T11:51:15Z"
+source_commit: "b9f2bc487a2878b65e3c1f80024bebab76954f27"
+source_commit_short: "b9f2bc48"
+source_commit_date: "2026-08-28T17:09:45-05:00"
+generated_at: "2026-08-29T09:39:20.250170Z"
 ---
-
-========================================
-
 # $bitsAllClear (query predicate operator)
+
+**meta:** :description: Use `$bitsAllClear` to match documents where specified bit positions in a field are clear, supporting numeric and `BinData` bitmasks.
+
+.. default-domain:: mongodb
+
+**contents:** On this page
+   :local:
+   :backlinks: none
+   :depth: 1
+   :class: singlecol
+
+**query:** $bitsAllClear
+
+   :query:`$bitsAllClear` matches documents where *all* of the bit positions
+   given by the query are clear (i.e. ``0``) in ``field``.
+
+   .. include:: /includes/extracts/fact-query-bitsallclear-description.rst
 
 ## Behavior
 
-.. include:: /includes/fact-bindata-endian.rst
+**include:** /includes/fact-bindata-endian.rst
 
 ### Indexes
 
-.. include:: /includes/extracts/fact-query-bitwise-indexes-bitsAllClear.rst
+**include:** /includes/extracts/fact-query-bitwise-indexes-bitsAllClear.rst
 
 ### Floating Point Values
 
-.. include:: /includes/extracts/fact-query-bitsallclear-floating-point.rst
+**include:** /includes/extracts/fact-query-bitsallclear-floating-point.rst
 
 ### Sign Extension
 
-.. include:: /includes/extracts/fact-query-bitsallclear-sign-extension.rst
+**include:** /includes/extracts/fact-query-bitsallclear-sign-extension.rst
 
 ## Examples
 
-.. include:: /includes/extracts/fact-query-bitwise-example-collection.rst
+**include:** /includes/extracts/fact-query-bitwise-example-collection.rst
 
 ### Bit Position Array
 
-The following query uses the :query:`$bitsAllClear` operator to test whether field `a` has bits clear at position `1` and position `5`, where the least significant bit is position `0`.
+The following query uses the :query:`$bitsAllClear` operator to test
+whether field ``a`` has bits clear at position ``1`` and position
+``5``, where the least significant bit is position ``0``.
 
-```javascript
-db.collection.find( { a: { $bitsAllClear: [ 1, 5 ] } } )
-```
+.. code-block:: javascript
+
+   db.collection.find( { a: { $bitsAllClear: [ 1, 5 ] } } )
 
 The query matches the following documents:
 
-```javascript
-{ "_id" : 2, "a" : 20, "binaryValueofA" : "00010100" }
-{ "_id" : 3, "a" : 20, "binaryValueofA" : "00010100" }
-```
+.. code-block:: javascript
+
+   { "_id" : 2, "a" : 20, "binaryValueofA" : "00010100" }
+   { "_id" : 3, "a" : 20, "binaryValueofA" : "00010100" }
+
 
 ### Integer Bitmask
 
-The following query uses the :query:`$bitsAllClear` operator to test whether field `a` has bits clear at positions `0`, `1`, and `5` (the binary representation of the bitmask `35` is `00100011`).
+The following query uses the :query:`$bitsAllClear` operator to test
+whether field ``a`` has bits clear at positions ``0``, ``1``, and ``5``
+(the binary representation of the bitmask ``35`` is ``00100011``).
 
-```javascript
-db.collection.find( { a: { $bitsAllClear: 35 } } )
-```
+.. code-block:: javascript
+
+   db.collection.find( { a: { $bitsAllClear: 35 } } )
 
 The query matches the following documents:
 
-```javascript
-{ "_id" : 2, "a" : 20, "binaryValueofA" : "00010100" }
-{ "_id" : 3, "a" : 20, "binaryValueofA" : "00010100" }
-```
+.. code-block:: javascript
+
+   { "_id" : 2, "a" : 20, "binaryValueofA" : "00010100" }
+   { "_id" : 3, "a" : 20, "binaryValueofA" : "00010100" }
 
 ### BinData Bitmask
 
 The following query uses the :query:`$bitsAllClear` operator:
 
-```javascript
-db.collection.find( { a: { $bitsAllClear: BinData(0, "IA==") } } )
-```
+.. code-block:: javascript
+
+   db.collection.find( { a: { $bitsAllClear: BinData(0, "IA==") } } )
 
 The query:
 
-- Specifies `0` as the first value for :bsontype:`BinData
-<data_binary>`, which indicates `IA==` should be interpreted as binary. The base-64 value `IA==` in binary is `00100000`, which has `1` in position 5.
+- Specifies ``0`` as the first value for :bsontype:`BinData
+  <data_binary>`, which indicates ``IA==`` should be interpreted as
+  binary. The base-64 value ``IA==`` in binary is ``00100000``, which
+  has ``1`` in position 5.
 
-- Uses :query:`$bitsAllClear` to return documents where the `a` field
-has a clear bit `0` in position 5 of the binary value.
+- Uses :query:`$bitsAllClear` to return documents where the ``a`` field
+  has a clear bit ``0`` in position 5 of the binary value.
 
 The query returns the following documents:
 
-```javascript
-{ "_id" : 2, "a" : 20, "binaryValueofA" : "00010100" }
-{ "_id" : 3, "a" : 20, "binaryValueofA" : "00010100" }
-```
+.. code-block:: javascript
+
+   { "_id" : 2, "a" : 20, "binaryValueofA" : "00010100" }
+   { "_id" : 3, "a" : 20, "binaryValueofA" : "00010100" }

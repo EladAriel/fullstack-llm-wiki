@@ -1,73 +1,105 @@
 ---
 type: "Framework Learn Page"
-framework: "mongodb"
+framework: "MongoDB"
 source_repo: "https://github.com/mongodb/docs.git"
 source_branch: "main"
 source_path: "content/manual/manual/source/tutorial/terminate-running-operations.txt"
-source_commit: "ab9db26ed3d11618cdb61516d8180337d8e3f679"
-source_commit_short: "ab9db26e"
-source_commit_date: "2026-07-24T16:22:46-06:00"
-generated_at: "2026-07-25T11:51:15Z"
+source_commit: "b9f2bc487a2878b65e3c1f80024bebab76954f27"
+source_commit_short: "b9f2bc48"
+source_commit_date: "2026-08-28T17:09:45-05:00"
+generated_at: "2026-08-29T09:39:19.628698Z"
 ---
-
-============================
+.. _terminate-running-ops:
 
 # Terminate Running Operations
 
+**meta:** :description: Learn how to terminate running operations in MongoDB using `maxTimeMS()` and `db.killOp()` methods.
+
+.. default-domain:: mongodb
+
+**contents:** On this page
+   :local:
+   :backlinks: none
+   :depth: 1
+   :class: singlecol
+
 ## Overview
 
-MongoDB provides two facilitates to terminate running operations: :method:`~cursor.maxTimeMS()` and :method:`db.killOp()`. Use these operations as needed to control the behavior of operations in a MongoDB deployment.
+MongoDB provides two facilitates to terminate running operations:
+:method:`~cursor.maxTimeMS()` and :method:`db.killOp()`. Use these
+operations as needed to control the behavior of operations in a
+MongoDB deployment.
 
 ## Available Procedures
 
-### `maxTimeMS`
+.. _max-time-ms:
 
-The :method:`~cursor.maxTimeMS()` method sets a time limit for an operation. When the operation reaches the specified time limit, MongoDB interrupts the operation at the next `interrupt point`.
+### ``maxTimeMS``
 
-Terminate a Query `````````````````
+The :method:`~cursor.maxTimeMS()` method sets a time limit for an
+operation. When the operation reaches the specified time limit,
+MongoDB interrupts the operation at the next :term:`interrupt point`.
 
-From :binary:`~bin.mongosh`, use the following method to set a time limit of 30 milliseconds for this query:
+### Terminate a Query
 
-```javascript
-db.location.find( { "town": { "$regex": "(Pine Lumber)",
-                              "$options": 'i' } } ).maxTimeMS(30)
-```
+From :binary:`~bin.mongosh`, use the following method to set a
+time limit of 30 milliseconds for this query:
 
-Terminate a Command ```````````````````
+.. code-block:: javascript
 
-Consider a potentially long running operation using :dbcommand:`distinct` to return each distinct `collection` field that has a `city` key:
+   db.location.find( { "town": { "$regex": "(Pine Lumber)",
+                                 "$options": 'i' } } ).maxTimeMS(30)
 
-```javascript
-db.runCommand( { distinct: "collection",
-                 key: "city" } )
-```
+.. _terminate-long-running-commands:
 
-You can add the `maxTimeMS`  field to the command document to set a time limit of 45 milliseconds for the operation:
+### Terminate a Command
 
-```javascript
-db.runCommand( { distinct: "collection",
-                 key: "city",
-                 maxTimeMS: 45 } )
-```
+Consider a potentially long running operation using
+:dbcommand:`distinct` to return each distinct ``collection`` field that
+has a ``city`` key:
 
-Operations that reach `maxTimeMS` will return a `MaxTimeMSExpired` error.
+.. code-block:: javascript
 
-### `killOp`
+   db.runCommand( { distinct: "collection",
+                    key: "city" } )
 
-The :method:`db.killOp()` method interrupts a running operation at the next `interrupt point`. :method:`db.killOp()` identifies the target operation by operation ID.
+You can add the ``maxTimeMS``  field to the command document to set a
+time limit of 45 milliseconds for the operation:
 
-```javascript
-db.killOp(<opId>)
-```
+.. code-block:: javascript
 
-.. include:: /includes/extracts/warning-terminating-ops-method.rst
+   db.runCommand( { distinct: "collection",
+                    key: "city",
+                    maxTimeMS: 45 } )
 
-Sharded Cluster ````````````````
+Operations that reach ``maxTimeMS`` will return a ``MaxTimeMSExpired``
+error.
 
-The :dbcommand:`killOp` command can be run on a :binary:`~bin.mongos` and can kill queries (i.e. read operations) that span shards in a cluster. The :dbcommand:`killOp` command from the :binary:`~bin.mongos` does not propagate to the shards when the operation to be killed is a write operation.
+### ``killOp``
+
+The :method:`db.killOp()` method interrupts a running operation at
+the next :term:`interrupt point`. :method:`db.killOp()` identifies
+the target operation by operation ID.
+
+.. code-block:: javascript
+
+   db.killOp(<opId>)
+
+**include:** /includes/extracts/warning-terminating-ops-method.rst
+
+### Sharded Cluster
+
+The :dbcommand:`killOp` command can be run on a :binary:`~bin.mongos` and can 
+kill queries (i.e. read operations) that span shards in a cluster. The 
+:dbcommand:`killOp` command from the :binary:`~bin.mongos` does not propagate to 
+the shards when the operation to be killed is a write operation.
 
 For more information on killing operations on a sharded cluster, see:
 
-- `kill-read-ops-sharded-cluster`
-- `kill-write-ops-sharded-cluster`
-For information on how to list sharding operations that are active on a :binary:`~bin.mongos`, see the `localOps` parameter in :pipeline:`$currentOp`.
+- :ref:`kill-read-ops-sharded-cluster`
+
+- :ref:`kill-write-ops-sharded-cluster`
+
+For information on how to list sharding operations that are active on a
+:binary:`~bin.mongos`, see the ``localOps`` parameter in
+:pipeline:`$currentOp`.

@@ -1,43 +1,109 @@
 ---
 type: "Framework Learn Page"
-framework: "mongodb"
+framework: "MongoDB"
 source_repo: "https://github.com/mongodb/docs.git"
 source_branch: "main"
 source_path: "content/manual/manual/source/reference/method/sh.moveRange.txt"
-source_commit: "ab9db26ed3d11618cdb61516d8180337d8e3f679"
-source_commit_short: "ab9db26e"
-source_commit_date: "2026-07-24T16:22:46-06:00"
-generated_at: "2026-07-25T11:51:15Z"
+source_commit: "b9f2bc487a2878b65e3c1f80024bebab76954f27"
+source_commit_short: "b9f2bc48"
+source_commit_date: "2026-08-28T17:09:45-05:00"
+generated_at: "2026-08-29T09:39:19.991617Z"
 ---
-
-===============================
+.. _sh-moveRange:
 
 # sh.moveRange() (mongosh method)
 
+**contents:** On this page
+   :local:
+   :backlinks: none
+   :depth: 1
+   :class: singlecol
+
 ## Definition
+
+**method:** sh.moveRange(namespace, toShard, min, max)
+
+   .. versionadded:: 6.0
+
+   Moves :term:`ranges <range>` between :term:`shards <shard>`.
+
+   .. |dbcommand| replace:: :dbcommand:`moveRange` command
+   .. include:: /includes/fact-mongosh-shell-method-alt.rst
 
 ## Compatibility
 
-This command is available in deployments hosted in the following environments:
+This command is available in deployments hosted in the following environments: 
 
-.. include:: /includes/fact-environments-atlas-only.rst
+**include:** /includes/fact-environments-atlas-only.rst
 
-.. include:: /includes/fact-environments-atlas-support-all.rst
+**include:** /includes/fact-environments-atlas-support-all.rst
 
-.. include:: /includes/fact-environments-onprem-only.rst
+**include:** /includes/fact-environments-onprem-only.rst
 
 ## Syntax
 
-```none
-sh.moveRange(namespace, toShard, min, max)
-```
+.. code-block:: none
 
-The `sh.moveRange()` method takes the following parameters:
+   sh.moveRange(namespace, toShard, min, max)
+
+The ``sh.moveRange()`` method takes the following parameters:
+
+.. list-table::
+   :header-rows: 1
+
+   * - Parameter
+     - Type
+     - Description
+
+   * - ``namespace``
+     - string
+     - Sets the database and collection of the range to move.
+
+   * - ``toShard``
+     - string
+     - Sets the ID of the shard to receive the range.
+
+   * - ``min``
+     - document
+     - Minimum key of the range to move.
+
+   * - ``max``
+     - document
+     - Maximum key of the range to move.
 
 ## Example
 
 The following example uses a collection with:
 
-- Shard key `postal`, representing a postal code.
-- A range with the boundaries `70007` and `70124`.
-To move the postal range to `shard02`, run the following method:
+- Shard key ``postal``, representing a postal code. 
+
+- A range with the boundaries ``70007`` and ``70124``.
+
+To move the postal range to ``shard02``, run the following
+method:
+
+.. io-code-block:: 
+
+   .. input::
+      :language: javascript
+
+      sh.moveRange(
+         "contacts.addresses", "shard02", 
+         { postal: 70007 },
+         { postal: 70124 }
+      )
+
+   .. output::
+      :language: javascript
+
+      {
+        ok: 1,
+        '$clusterTime': {
+          clusterTime: Timestamp({ t: 1742507819, i: 42 }),
+          signature: {
+            hash: Binary.createFromBase64('AAAAAAAAAAAAAAAAAAAAAAAAAAA=', 0),
+            keyId: Long('0')
+          }
+        },
+        operationTime: Timestamp({ t: 1742507819, i: 42 })
+      }

@@ -4,12 +4,11 @@ framework: "LangChain"
 source_repo: "https://github.com/langchain-ai/docs"
 source_branch: "main"
 source_path: "src/oss/langchain/models.mdx"
-source_commit: "2aae1dfc98ee953a9a5185fb6fcdd9efb3f4d878"
-source_commit_short: "2aae1dfc"
-source_commit_date: "2026-07-25T00:27:23Z"
-generated_at: "2026-07-25T11:51:05Z"
+source_commit: "a174f9cf7c91ee5eb14ee2382eb48bfe6e4956e9"
+source_commit_short: "a174f9c"
+source_commit_date: "2026-08-28T17:04:12-07:00"
+generated_at: "2026-08-29T09:38:24.248444Z"
 ---
-
 ---
 title: Models
 ---
@@ -139,6 +138,8 @@ A chat model takes parameters that can be used to configure its behavior. The fu
 :::js
 <ParamField body="maxRetries" type="number" default="6">
     The maximum number of attempts the system will make to resend a request if it fails due to issues like network timeouts or rate limits. Retries use exponential backoff with jitter. Network errors, rate limits (429), and server errors (5xx) are retried automatically. Client errors such as 401 (unauthorized) or 404 are not retried. For long-running [agent](/oss/deepagents/overview) tasks on unreliable networks, consider increasing this to 10–15.
+
+    On providers that support it, [model retry middleware](/oss/langchain/middleware/built-in#model-retry) takes over retries for the calls it wraps, and this value does not apply to them.
 </ParamField>
 :::
 
@@ -178,7 +179,7 @@ You can adjust `max_retries` and `timeout` when creating a model, then pass that
 from langchain.chat_models import init_chat_model
 
 model = init_chat_model(
-    "google_genai:gemini-3.5-flash",
+    "google_genai:gemini-3.6-flash",
     max_retries=10,  # Increase for unreliable networks (default: 6)
     timeout=120,  # Seconds; increase for slow connections
 )
@@ -192,7 +193,7 @@ You can adjust `maxRetries` and `timeout` when creating a model, then pass that 
 import { ChatAnthropic } from "@langchain/anthropic";
 
 const model = new ChatAnthropic({
-  model: "google_genai:gemini-3.5-flash",
+  model: "google_genai:gemini-3.6-flash",
   maxRetries: 10, // Increase for unreliable networks (default: 6)
   timeout: 120_000, // Milliseconds; increase for slow connections
 });
@@ -294,7 +295,7 @@ console.log(response);  // AIMessage("J'adore créer des applications.")
 :::
 
 <Info>
-    If the return type of your invocation is a string, ensure that you are using a chat model as opposed to a LLM. Legacy, text-completion LLMs return strings directly. LangChain chat models are prefixed with "Chat", e.g., @[`ChatOpenAI`](/oss/integrations/chat/openai).
+    If the return type of your invocation is a string, ensure that you are using a chat model as opposed to an LLM. Legacy, text-completion LLMs return strings directly. LangChain chat models are prefixed with "Chat", e.g., @[`ChatOpenAI`](/oss/integrations/chat/openai).
 </Info>
 
 ### Stream
@@ -840,7 +841,7 @@ Below, we show some common ways you can use tool calling.
         console.log(response.tool_calls)
         // [
         //   { name: 'get_weather', args: { location: 'Boston' }, id: 'call_1' },
-        //   { name: 'get_time', args: { location: 'Tokyo' }, id: 'call_2' }
+        //   { name: 'get_weather', args: { location: 'Tokyo' }, id: 'call_2' }
         // ]
 
 
@@ -1350,10 +1351,15 @@ Model profile data allow applications to work around model capabilities dynamica
     1. (If needed) update the source data at [models.dev](https://models.dev/) through a pull request to its [repository on GitHub](https://github.com/sst/models.dev).
     2. (If needed) update additional fields and overrides in `langchain_<package>/data/profile_augmentations.toml` through a pull request to the LangChain [integration package](/oss/integrations/providers/overview)`.
     3. Use the [`langchain-model-profiles`](https://pypi.org/project/langchain-model-profiles/) CLI tool to pull the latest data from [models.dev](https://models.dev/), merge in the augmentations and update the profile data:
+    <CodeGroup>
+        ```bash pip
+        pip install -U langchain-model-profiles
+        ```
 
-    ```bash
-    pip install langchain-model-profiles
-    ```
+        ```bash uv
+        uv add langchain-model-profiles
+        ```
+    </CodeGroup>
 
     ```bash
     langchain-profiles refresh --provider <provider> --data-dir <data_dir>
@@ -1513,6 +1519,33 @@ Many models are capable of performing multi-step reasoning to arrive at a conclu
 
 Depending on the model, you can sometimes specify the level of effort it should put into reasoning. Similarly, you can request that the model turn off reasoning entirely. This may take the form of categorical "tiers" of reasoning (e.g., `'low'` or `'high'`) or integer token budgets.
 
+:::python
+<Note>
+    `reasoning_effort` as a standard parameter requires `langchain-core>=1.5.2`, plus the corresponding partner package version: `langchain-anthropic>=1.5.3`, `langchain-openai>=1.4.1`, `langchain-fireworks>=1.5.2`, `langchain-xai>=1.3.0`, `langchain-google-genai>=4.3.1`, or `langchain-aws>=1.6.5`.
+</Note>
+
+@[`ChatOpenAI`], @[`ChatAnthropic`], @[`ChatFireworks`], @[`ChatXAI`], @[`ChatGoogleGenerativeAI`], and [`ChatBedrockConverse`](https://reference.langchain.com/python/langchain-aws/chat_models/bedrock_converse/ChatBedrockConverse) support a standard `reasoning_effort` parameter. Like `temperature`, it can be set at model construction or per invocation, and each provider translates it into its own API format:
+
+```python
+from langchain_anthropic import ChatAnthropic
+
+model = ChatAnthropic(model="claude-sonnet-4-6")
+response = model.invoke(
+    "Why do parrots have colorful feathers?",
+    reasoning_effort="high",
+)
+```
+
+Supported effort levels and the provider's documented default vary by model. Check a model's [profile](#model-profiles) for the levels it supports and its default:
+
+```python
+model.profile["reasoning_effort_levels"]  # e.g. ['low', 'medium', 'high']
+model.profile["reasoning_effort_default"]  # e.g. 'high'
+```
+
+Some providers also accept a native alias for `reasoning_effort` (for example, `ChatAnthropic` accepts `effort` and `ChatGoogleGenerativeAI` accepts `thinking_level`). See the [chat model integrations](/oss/integrations/chat) page for provider-specific detail.
+:::
+
 For details, see the [integrations page](/oss/integrations/providers/overview) or [reference](https://reference.langchain.com/python/integrations/) for your respective chat model.
 
 
@@ -1612,6 +1645,38 @@ This represents a single conversational turn; there are no associated [ToolMessa
 See the [integration page](/oss/integrations/chat) for your given provider for available tools and usage details.
 
 :::python
+### Model exceptions
+
+Major integration packages raise standard exception types from `langchain_core.exceptions` for common model failures such as authentication errors, rate limits, and timeouts. These exceptions inherit from both the LangChain base type and the provider SDK's own exception type, so you can catch either one:
+
+```python
+from langchain.chat_models import init_chat_model
+from langchain_core.exceptions import ModelTimeoutError
+
+model = init_chat_model("openai:gpt-5.6-luna", timeout=0.0001)
+
+try:
+    response = model.invoke("Hello")
+except ModelTimeoutError:
+    print("caught")
+```
+
+Each type carries an `is_retryable` attribute that [retry middleware](/oss/langchain/middleware/built-in#model-retry) respects by default.
+
+<Accordion title="Exception types">
+- @[`ModelAuthenticationError`] — missing, invalid, or expired API key (not retryable)
+- @[`ModelPermissionDeniedError`] — credentials lack permission (not retryable)
+- @[`ModelInvalidRequestError`] — provider rejects the request (not retryable)
+- @[`ModelNotFoundError`] — requested model not found (not retryable)
+- @[`ModelRateLimitError`] — provider rate limit exceeded (retryable)
+- @[`ModelAPIError`] — provider server failure (retryable)
+- @[`ModelConnectionError`] — provider cannot be reached (retryable)
+- @[`ModelTimeoutError`] — request times out (retryable)
+- @[`ContextOverflowError`] — input exceeds the model context limit (not retryable)
+</Accordion>
+:::
+
+:::python
 ### Rate limiting
 
 Many chat model providers impose a limit on the number of invocations that can be made in a given time period. If you hit a rate limit, you will typically receive a rate limit error response from the provider, and will need to wait before making more requests.
@@ -1619,10 +1684,10 @@ Many chat model providers impose a limit on the number of invocations that can b
 To help manage rate limits, chat model integrations accept a `rate_limiter` parameter that can be provided during initialization to control the rate at which requests are made.
 
 <Accordion title="Initialize and use a rate limiter" icon="gauge">
-    LangChain in comes with (an optional) built-in @[`InMemoryRateLimiter`]. This limiter is thread safe and can be shared by multiple threads in the same process.
+    LangChain comes with (an optional) built-in @[`InMemoryRateLimiter`]. This limiter is thread safe and can be shared by multiple threads in the same process.
 
     ```python Define a rate limiter
-    from langchain_core.rate_limiters import InMemoryRateLimiter
+    from langchain.rate_limiters import InMemoryRateLimiter
 
     rate_limiter = InMemoryRateLimiter(
         requests_per_second=0.1,  # 1 request every 10s

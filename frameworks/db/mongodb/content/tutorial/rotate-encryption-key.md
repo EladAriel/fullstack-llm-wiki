@@ -1,128 +1,179 @@
 ---
 type: "Framework Learn Page"
-framework: "mongodb"
+framework: "MongoDB"
 source_repo: "https://github.com/mongodb/docs.git"
 source_branch: "main"
 source_path: "content/manual/manual/source/tutorial/rotate-encryption-key.txt"
-source_commit: "ab9db26ed3d11618cdb61516d8180337d8e3f679"
-source_commit_short: "ab9db26e"
-source_commit_date: "2026-07-24T16:22:46-06:00"
-generated_at: "2026-07-25T11:51:15Z"
+source_commit: "b9f2bc487a2878b65e3c1f80024bebab76954f27"
+source_commit_short: "b9f2bc48"
+source_commit_date: "2026-08-28T17:09:45-05:00"
+generated_at: "2026-08-29T09:39:19.605879Z"
 ---
-
-======================
+.. _rotate-encryption-keys:
 
 # Rotate Encryption Keys
 
-Most regulatory requirements mandate that a managed key used to decrypt sensitive data must be rotated out and replaced with a new key once a year.
+**facet:** :name: genre
+   :values: tutorial
 
-> **Note:** To roll over database keys configured with AES256-GCM cipher after a
-filesystem restore, see :option:`--eseDatabaseKeyRollover <mongod
---eseDatabaseKeyRollover>` instead.
+**meta:** :keywords: key management interoperability protocol, customer master key, key management, mongosh, mongod, security
+   :description: Rotate encryption keys in MongoDB using KMIP server or by replacing replica set members with new keys.
 
-MongoDB provides two options for key rotation. You can rotate out the binary with a new instance that uses a new key. Or, if you are using a KMIP server for key management, you can rotate the `Customer Master Key`.
 
-.. include:: /includes/admonition-local-key-mgmt-rotation.rst
+**contents:** On this page
+   :local:
+   :backlinks: none
+   :depth: 1
+   :class: singlecol
+
+.. dismissible-skills-card::
+   :skill: Encryption At Rest Operations
+   :url: https://learn.mongodb.com/skills?openTab=security
+
+Most regulatory requirements mandate that a managed key used to decrypt
+sensitive data must be rotated out and replaced with a new key once a
+year.
+
+**note:** Disambiguation
+
+   To roll over database keys configured with AES256-GCM cipher after a
+   filesystem restore, see :option:`--eseDatabaseKeyRollover <mongod
+   --eseDatabaseKeyRollover>` instead.
+
+MongoDB provides two options for key rotation. You can rotate out the
+binary with a new instance that uses a new key. Or, if you are using a
+KMIP server for key management, you can rotate the :term:`Customer Master Key`.
+
+.. |local key management| replace:: :ref:`local key management <encrypt-local-key-mgmt>`
+
+**include:** /includes/admonition-local-key-mgmt-rotation.rst
 
 ## Rotate a Replica Set Member
 
-> **Note:** To prevent changing the write quorum, never rotate more than one
-replica set member at a time.
+**note:** To prevent changing the write quorum, never rotate more than one
+   replica set member at a time.
 
 For a replica set, to rotate out a member:
 
-#. Start a new :binary:`~bin.mongod` instance, configured to use a new key. Include the :option:`--replSet <mongod --replSet>` option with the name of the replica set as well as any other options specific to your configuration, such as :option:`--dbpath <mongod --dbpath>` and :option:`--bind_ip <mongod --bind_ip>`.
+#. Start a new :binary:`~bin.mongod` instance, configured to use a new key.
+   Include the :option:`--replSet <mongod --replSet>` option with the name of the replica set as
+   well as any other options specific to your configuration, such as
+   :option:`--dbpath <mongod --dbpath>` and :option:`--bind_ip <mongod --bind_ip>`.
 
-```bash
-   mongod --replSet myReplSet --enableEncryption \
-   --kmipServerName <KMIP Server HostName> \
-   --kmipServerCAFile ca.pem --kmipClientCertificateFile client.pem
-```
+   .. code-block:: bash
+
+      mongod --replSet myReplSet --enableEncryption \
+      --kmipServerName <KMIP Server HostName> \
+      --kmipServerCAFile ca.pem --kmipClientCertificateFile client.pem
 
 #. Connect :binary:`~bin.mongosh` to the replica set's primary.
 
 #. Add the instance to the replica set:
 
-```javascript
-   rs.add( { host: <host:port> } )
+   .. code-block:: javascript
 
-.. warning::
+      rs.add( { host: <host:port> } )
 
-   .. include:: /includes/tip-repl-set-add-members.rst
+   .. warning::
 
-During the initial sync process, the re-encryption of the data with
-an entirely new set of database keys as well as a new system key
-occurs.
-```
+      .. include:: /includes/tip-repl-set-add-members.rst
 
-#. Remove the old node from the replica set and delete all its data. For instructions, see `/tutorial/remove-replica-set-member`
+   During the initial sync process, the re-encryption of the data with
+   an entirely new set of database keys as well as a new system key
+   occurs.
+
+#. Remove the old node from the replica set and delete all its data.
+   For instructions, see :doc:`/tutorial/remove-replica-set-member`
+
+.. _kmip-master-key-rotation:
 
 ## KMIP Master Key Rotation
 
-If you are using a KMIP server for key management, you can rotate the `Customer Master Key`, the only externally managed key. With the new master key, the internal keystore will be re-encrypted but the database keys will be otherwise left unchanged. This obviates the need to re-encrypt the entire data set.
+If you are using a KMIP server for key management, you can rotate
+the :term:`Customer Master Key`, the only externally managed key. With the new
+master key, the internal keystore will be re-encrypted but the
+database keys will be otherwise left unchanged. This obviates the need
+to re-encrypt the entire data set.
 
-#. Rotate the master key for the `secondary <replica-set-secondary-members>` members of the replica set one at a time.
+#. Rotate the master key for the :ref:`secondary
+   <replica-set-secondary-members>` members of the replica set one at a
+   time.
 
-a. Restart the secondary, including the :option:`--kmipRotateMasterKey <mongod --kmipRotateMasterKey>` option. Include any other options specific to your configuration, such as :option:`--bind_ip <mongod --bind_ip>`. If the member already includes the :option:`--kmipKeyIdentifier <mongod --kmipKeyIdentifier>` option, either update the :option:`--kmipKeyIdentifier <mongod --kmipKeyIdentifier>` option with the new key to use or omit to request a new key from the KMIP server:
+   a. Restart the secondary, including the
+      :option:`--kmipRotateMasterKey <mongod --kmipRotateMasterKey>` option. Include any other
+      options specific to your configuration, such as :option:`--bind_ip <mongod --bind_ip>`. If
+      the member already includes the :option:`--kmipKeyIdentifier <mongod --kmipKeyIdentifier>`
+      option, either update the :option:`--kmipKeyIdentifier <mongod --kmipKeyIdentifier>` option
+      with the new key to use or omit to request a new key from the
+      KMIP server:
 
-```bash
-      mongod --enableEncryption --kmipRotateMasterKey \
-        --kmipServerName <KMIP Server HostName> \
-        --kmipServerCAFile ca.pem --kmipClientCertificateFile client.pem
+      .. code-block:: bash
 
-   If using a configuration file, include the
-   :setting:`security.kmip.rotateMasterKey`.
+         mongod --enableEncryption --kmipRotateMasterKey \
+           --kmipServerName <KMIP Server HostName> \
+           --kmipServerCAFile ca.pem --kmipClientCertificateFile client.pem
 
-#. Upon successful completion of the master key rotation and
-   re-encryption of the database keystore, the :binary:`~bin.mongod`
-   will exit.
+      If using a configuration file, include the
+      :setting:`security.kmip.rotateMasterKey`.
 
-#. Restart the secondary without the :option:`--kmipRotateMasterKey <mongod --kmipRotateMasterKey>`
-   parameter. Include any other options specific to your
-   configuration, such as ``--bind_ip``.
+   #. Upon successful completion of the master key rotation and
+      re-encryption of the database keystore, the :binary:`~bin.mongod`
+      will exit.
 
-   .. code-block:: bash
+   #. Restart the secondary without the :option:`--kmipRotateMasterKey <mongod --kmipRotateMasterKey>`
+      parameter. Include any other options specific to your
+      configuration, such as ``--bind_ip``.
 
-      mongod --enableEncryption --kmipServerName <KMIP Server HostName> \
-        --kmipServerCAFile ca.pem --kmipClientCertificateFile client.pem
+      .. code-block:: bash
 
-   If using a configuration file, remove the
-   :setting:`security.kmip.rotateMasterKey` setting.
-```
+         mongod --enableEncryption --kmipServerName <KMIP Server HostName> \
+           --kmipServerCAFile ca.pem --kmipClientCertificateFile client.pem
+
+      If using a configuration file, remove the
+      :setting:`security.kmip.rotateMasterKey` setting.
 
 #. Step down the replica set primary.
 
-Connect :binary:`~bin.mongosh` to the primary and use :method:`rs.stepDown()` to step down the primary and force an election of a new primary:
+   Connect :binary:`~bin.mongosh` to the primary and use
+   :method:`rs.stepDown()` to step down the primary and force an
+   election of a new primary:
 
-```javascript
-   rs.stepDown()
-```
+   .. code-block:: javascript
 
-#. When :method:`rs.status()` shows that the primary has stepped down and another member has assumed `PRIMARY` state, rotate the master key for the stepped down member:
+      rs.stepDown()
 
-a. Restart the stepped-down member, including the :option:`--kmipRotateMasterKey <mongod --kmipRotateMasterKey>` option. Include any other options specific to your configuration, such as `--bind_ip`. If the member already includes the :option:`--kmipKeyIdentifier <mongod --kmipKeyIdentifier>` option, either update the :option:`--kmipKeyIdentifier  <mongod --kmipKeyIdentifier>` option with the new key to use or omit.
+#. When :method:`rs.status()`
+   shows that the primary has stepped down and another member
+   has assumed ``PRIMARY`` state, rotate the master key for the stepped down member:
 
-```bash
-      mongod --enableEncryption --kmipRotateMasterKey \
-        --kmipServerName <KMIP Server HostName> \
-        --kmipServerCAFile ca.pem --kmipClientCertificateFile client.pem
+   a. Restart the stepped-down member, including the
+      :option:`--kmipRotateMasterKey <mongod --kmipRotateMasterKey>` option. Include any other
+      options specific to your configuration, such as ``--bind_ip``. If the member already
+      includes the :option:`--kmipKeyIdentifier <mongod --kmipKeyIdentifier>` option, either update
+      the :option:`--kmipKeyIdentifier  <mongod --kmipKeyIdentifier>` option with the new key to use
+      or omit.
 
-   If using a configuration file, include the
-   :setting:`security.kmip.rotateMasterKey`.
+      .. code-block:: bash
 
-#. Upon successful completion of the master key rotation and
-   re-encryption of the database keystore, the :binary:`~bin.mongod`
-   will exit.
+         mongod --enableEncryption --kmipRotateMasterKey \
+           --kmipServerName <KMIP Server HostName> \
+           --kmipServerCAFile ca.pem --kmipClientCertificateFile client.pem
 
-#. Restart the stepped-down member without the
-   :option:`--kmipRotateMasterKey <mongod --kmipRotateMasterKey>` option. Include any other options
-   specific to your configuration, such as ``--bind_ip``.
+      If using a configuration file, include the
+      :setting:`security.kmip.rotateMasterKey`.
 
-   .. code-block:: bash
+   #. Upon successful completion of the master key rotation and
+      re-encryption of the database keystore, the :binary:`~bin.mongod`
+      will exit.
 
-      mongod --enableEncryption --kmipServerName <KMIP Server HostName> \
-        --kmipServerCAFile ca.pem --kmipClientCertificateFile client.pem
+   #. Restart the stepped-down member without the
+      :option:`--kmipRotateMasterKey <mongod --kmipRotateMasterKey>` option. Include any other options
+      specific to your configuration, such as ``--bind_ip``.
 
-   If using a configuration file, remove the
-   :setting:`security.kmip.rotateMasterKey` setting.
-```
+      .. code-block:: bash
+
+         mongod --enableEncryption --kmipServerName <KMIP Server HostName> \
+           --kmipServerCAFile ca.pem --kmipClientCertificateFile client.pem
+
+      If using a configuration file, remove the
+      :setting:`security.kmip.rotateMasterKey` setting.

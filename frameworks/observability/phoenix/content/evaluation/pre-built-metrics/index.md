@@ -1,7 +1,7 @@
 ---
 type: "Framework Learn Directory Index"
 framework: "Arize Phoenix"
-generated_at: "2026-07-25T19:08:24.991485Z"
+generated_at: "2026-08-29T09:39:58.968182Z"
 ---
 # Pre-Built-Metrics
 
@@ -19,17 +19,14 @@ This directory contains Arize Phoenix learning pages related to pre-built-metric
 
 - [Conciseness](conciseness.md)
 - [Correctness](correctness.md)
-- [Document Relevance](document-relevance.md)
 - [Exact Match](exact-match.md)
 - [Faithfulness](faithfulness.md)
+- [Hallucination](hallucination.md)
 - [Matches Regex](matches-regex.md)
+- [Pii Detection](pii-detection.md)
 - [Precision Recall Fscore](precision-recall-fscore.md)
-- [Q And A On Retrieved Data](q-and-a-on-retrieved-data.md)
 - [Refusal](refusal.md)
-- [Retrieval Rag Relevance](retrieval-rag-relevance.md)
-- [Sql Generation Eval](sql-generation-eval.md)
-- [Summarization Eval](summarization-eval.md)
-- [Tool Calling Eval](tool-calling-eval.md)
+- [Retrieval Relevance](retrieval-relevance.md)
 - [Tool Invocation](tool-invocation.md)
 - [Tool Response Handling](tool-response-handling.md)
 - [Tool Selection](tool-selection.md)

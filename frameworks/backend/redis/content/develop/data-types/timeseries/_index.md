@@ -1,15 +1,14 @@
 ---
 type: "Framework Learn Page"
-framework: "redis"
+framework: "Redis"
 source_repo: "https://github.com/redis/docs.git"
 source_branch: "main"
 source_path: "content/develop/data-types/timeseries/_index.md"
-source_commit: "9d30f68c3dad1a6b3b7d30fe604b911348ce8152"
-source_commit_short: "9d30f68c"
-source_commit_date: "2026-07-24T10:52:10-07:00"
-generated_at: "2026-07-25T11:51:22Z"
+source_commit: "f8693349287b0efbef3c865b6f6a2aceca88594d"
+source_commit_short: "f869334"
+source_commit_date: "2026-08-28T10:01:19-05:00"
+generated_at: "2026-08-29T09:38:56.090813Z"
 ---
-
 ---
 aliases:
 - /develop/data-types/timeseries/quickstart
@@ -84,7 +83,7 @@ TSDB-TYPE
  1) totalSamples
  2) (integer) 0
  3) memoryUsage
- 4) (integer) 4424
+ 4) (integer) 4504
  5) firstTimestamp
  6) (integer) 0
  7) lastTimestamp
@@ -126,7 +125,7 @@ the data does not expire.
  1) totalSamples
  2) (integer) 1
  3) memoryUsage
- 4) (integer) 4424
+ 4) (integer) 4504
  5) firstTimestamp
  6) (integer) 1
  7) lastTimestamp
@@ -165,7 +164,7 @@ for queries and aggregations.
  1) totalSamples
  2) (integer) 1
  3) memoryUsage
- 4) (integer) 4568
+ 4) (integer) 5472
  5) firstTimestamp
  6) (integer) 1
  7) lastTimestamp
@@ -776,7 +775,7 @@ OK
  1) totalSamples
  2) (integer) 0
  3) memoryUsage
- 4) (integer) 4520
+ 4) (integer) 4592
  5) firstTimestamp
  6) (integer) 0
  7) lastTimestamp
@@ -863,7 +862,7 @@ If you want to delete a single timestamp, use it as both the start and end of th
  1) totalSamples
  2) (integer) 2
  3) memoryUsage
- 4) (integer) 4424
+ 4) (integer) 4504
  5) firstTimestamp
  6) (integer) 1
  7) lastTimestamp
@@ -894,7 +893,7 @@ If you want to delete a single timestamp, use it as both the start and end of th
  1) totalSamples
  2) (integer) 3
  3) memoryUsage
- 4) (integer) 4424
+ 4) (integer) 4504
  5) firstTimestamp
  6) (integer) 1
  7) lastTimestamp
@@ -925,7 +924,7 @@ If you want to delete a single timestamp, use it as both the start and end of th
  1) totalSamples
  2) (integer) 1
  3) memoryUsage
- 4) (integer) 4424
+ 4) (integer) 4504
  5) firstTimestamp
  6) (integer) 3
  7) lastTimestamp
@@ -956,7 +955,7 @@ If you want to delete a single timestamp, use it as both the start and end of th
  1) totalSamples
  2) (integer) 0
  3) memoryUsage
- 4) (integer) 4424
+ 4) (integer) 4504
  5) firstTimestamp
  6) (integer) 0
  7) lastTimestamp

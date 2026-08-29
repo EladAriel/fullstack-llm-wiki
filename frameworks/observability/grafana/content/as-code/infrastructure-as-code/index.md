@@ -1,7 +1,7 @@
 ---
 type: "Framework Learn Directory Index"
 framework: "Grafana"
-generated_at: "2026-07-25T19:08:09.122031Z"
+generated_at: "2026-08-29T09:39:37.589934Z"
 ---
 # Infrastructure-As-Code
 
@@ -18,3 +18,10 @@ This directory contains Grafana learning pages related to infrastructure-as-code
 ## Pages in This Directory
 
 - [_Index](_index.md)
+
+## Subdirectories
+
+- [Ansible](ansible/index.md)
+- [Grafana Operator](grafana-operator/index.md)
+- [Grizzly](grizzly/index.md)
+- [Terraform](terraform/index.md)

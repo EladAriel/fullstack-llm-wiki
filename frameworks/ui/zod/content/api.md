@@ -1,14 +1,15 @@
 ---
 type: "Framework Learn Page"
-framework: "zod"
+framework: "Zod"
 source_repo: "https://github.com/colinhacks/zod"
 source_branch: "main"
 source_path: "packages/docs/content/api.mdx"
-source_commit: "912f0f51b0ced654d0069741e7160834dca742ee"
-source_commit_short: "912f0f51"
-source_commit_date: "2026-06-10T10:17:29-07:00"
-generated_at: "2026-06-21T11:57:59Z"
+source_commit: "e6b6ab347675cd2bd54b1bdbed16f98c59be82a9"
+source_commit_short: "e6b6ab3"
+source_commit_date: "2026-08-28T17:35:38-07:00"
+generated_at: "2026-08-29T09:40:34.219715Z"
 ---
+# Api
 
 ---
 title: Defining schemas
@@ -206,6 +207,7 @@ Zod provides a handful of built-in string validation and transform APIs. To perf
 z.string().max(5);
 z.string().min(5);
 z.string().length(5);
+z.string().nonempty(); // alias for .min(1)
 z.string().regex(/^[a-z]+$/);
 z.string().startsWith("aaa");
 z.string().endsWith("zzz");
@@ -219,6 +221,7 @@ z.string().lowercase();
 z.string().check(z.maxLength(5));
 z.string().check(z.minLength(5));
 z.string().check(z.length(5));
+z.string().check(z.minLength(1)); // alias for .nonempty()
 z.string().check(z.regex(/^[a-z]+$/));
 z.string().check(z.startsWith("aaa"));
 z.string().check(z.endsWith("zzz"));
@@ -228,6 +231,14 @@ z.string().check(z.lowercase());
 ```
 </Tab>
 </Tabs>
+
+Length is measured in Unicode code points, not UTF-16 code units. Emoji outside the Basic Multilingual Plane count as one, and combining marks and ZWJ sequences count as several.
+
+```ts
+z.string().length(1).parse("😀"); // one code point, two UTF-16 units
+z.string().length(2).parse("e\u0301"); // "é" — an e plus a combining acute
+z.string().length(3).parse("🧑‍🍼"); // person + ZWJ + baby bottle
+```
 
 To perform some simple string transforms:
 
@@ -275,6 +286,7 @@ z.ipv6();
 z.mac();
 z.cidrv4();        // ipv4 CIDR block
 z.cidrv6();        // ipv6 CIDR block
+z.creditCard();    // credit card number (Luhn checksum)
 z.hash("sha256");  // or "sha1", "sha384", "sha512", "md5"
 z.iso.date();
 z.iso.time();
@@ -379,10 +391,13 @@ schema.parse("http://example.com"); // ❌
 ```
 
 <Callout>
-  **Web URLs** — In many cases, you'll want to validate Web URLs specifically. Here's the recommended schema for doing so:
+  **Web URLs** — In many cases, you'll want to validate Web URLs specifically. Use `z.httpUrl()`:
 
   ```ts
-  const httpUrl = z.url({
+  z.httpUrl();
+
+  // equivalent to
+  z.url({
     protocol: /^https?$/,
     hostname: z.regexes.domain
   });
@@ -391,7 +406,7 @@ schema.parse("http://example.com"); // ❌
   This restricts the protocol to `http`/`https` and ensures the hostname is a valid domain name with the `z.regexes.domain` regular expression:
 
   ```ts
-  /^([a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?\.)+[a-zA-Z]{2,}$/
+  /^(?=.{1,253}$)([a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?\.)+[a-zA-Z]{2,63}$/
   ```
 </Callout>
 
@@ -419,7 +434,7 @@ This schema validates strings with a leading `+`, a non-zero country code, and 7
 
 As you may have noticed, Zod string includes a few date/time related validations. These validations are regular expression based, so they are not as strict as a full date/time library. However, they are very convenient for validating user input.
 
-The `z.iso.datetime()` method enforces ISO 8601; by default, no timezone offsets are allowed:
+The `z.iso.datetime()` method accepts a strict subset of ISO 8601; by default, no timezone offsets are allowed:
 
 ```ts
 const datetime = z.iso.datetime();
@@ -453,13 +468,15 @@ To allow unqualified (timezone-less) datetimes:
 const schema = z.iso.datetime({ local: true });
 schema.parse("2020-01-01T06:15:01"); // ✅
 schema.parse("2020-01-01T06:15"); // ✅ seconds optional
+schema.parse("2020-01-01T06:15:00Z"); // ✅
+schema.parse("2020-01-01T06:15Z"); // ❌ (a `Z` requires seconds)
 ```
 
-To constrain the allowable time `precision`. By default, seconds are optional and arbitrary sub-second precision is allowed.
+To constrain the allowable time `precision`. By default, seconds are required and sub-second precision is arbitrary. RFC 3339 mandates the seconds wherever a `Z` or an offset is present, so only the unqualified form `local` adds may omit them.
 
 ```ts
 const a = z.iso.datetime();
-a.parse("2020-01-01T06:15Z"); // ✅
+a.parse("2020-01-01T06:15Z"); // ❌ (seconds required)
 a.parse("2020-01-01T06:15:00Z"); // ✅
 a.parse("2020-01-01T06:15:00.123Z"); // ✅
 
@@ -477,6 +494,15 @@ const d = z.iso.datetime({ precision: 3 }); // millisecond precision only
 d.parse("2020-01-01T06:15Z"); // ❌
 d.parse("2020-01-01T06:15:00Z"); // ❌
 d.parse("2020-01-01T06:15:00.123Z"); // ✅
+```
+
+To accept minute precision alongside the rest, union the two — no single `precision` covers both.
+
+```ts
+const mixed = z.union([z.iso.datetime(), z.iso.datetime({ precision: -1 })]);
+mixed.parse("2020-01-01T06:15Z"); // ✅
+mixed.parse("2020-01-01T06:15:00.123Z"); // ✅
+mixed.parse("2020-01-01T06:15"); // ❌ (still qualified-only)
 ```
 
 ### ISO dates
@@ -556,6 +582,21 @@ mac.parse("00:1A:2b:3C:4d:5E");  // ❌ no mixed case
 // custom delimiter
 const dashMac = z.mac({ delimiter: "-" });
 dashMac.parse("00-1A-2B-3C-4D-5E"); // ✅
+```
+
+### Credit card numbers
+
+Validate a card number: 12 to 19 digits with a valid [Luhn](https://en.wikipedia.org/wiki/Luhn_algorithm) checksum. The issuer is not identified, so cards from any scheme are accepted.
+
+```ts
+const card = z.creditCard();
+card.parse("4111111111111111");     // ✅
+card.parse("4111 1111 1111 1111");  // ✅ single spaces
+card.parse("4111-1111-1111-1111");  // ✅ single hyphens
+card.parse("4111  1111 1111 1111"); // ❌ no repeated separators
+card.parse(" 4111111111111111");    // ❌ no surrounding whitespace
+card.parse("4111.1111.1111.1111");  // ❌ spaces and hyphens only
+card.parse("4111111111111112");     // ❌ failed checksum
 ```
 
 ### JWTs
@@ -1016,6 +1057,32 @@ optionalYoda.def.innerType; // ZodMiniLiteral<"yoda">
 </Tab>
 </Tabs>
 
+## Exact optionals
+
+To allow an absent key without allowing an explicit `undefined`, per TypeScript's [`exactOptionalPropertyTypes`](https://www.typescriptlang.org/tsconfig/#exactOptionalPropertyTypes):
+
+<Tabs groupId="lib" items={["Zod", "Zod Mini"]}>
+<Tab value="Zod">
+```ts
+z.exactOptional(z.string()); // or z.string().exactOptional()
+```
+</Tab>
+<Tab value="Zod Mini">
+```ts
+z.exactOptional(z.string());
+```
+</Tab>
+</Tabs>
+
+```ts
+const User = z.object({ name: z.string().exactOptional() });
+// { name?: string }
+
+User.parse({}); // ✅
+User.parse({ name: "yoda" }); // ✅
+User.parse({ name: undefined }); // ❌
+```
+
 ## Nullables
 
 To make a schema *nullable* (that is, to allow `null` inputs).
@@ -1075,6 +1142,14 @@ Zod aims to mirror TypeScript's type system one-to-one. As such, Zod provides AP
 // allows any values
 z.any(); // inferred type: `any`
 z.unknown(); // inferred type: `unknown`
+```
+
+As object properties, their keys are required, matching `{ a: any }` in TypeScript.
+
+```ts
+z.object({ a: z.any() }).parse({}); // ❌
+z.object({ a: z.any() }).parse({ a: undefined }); // ✅
+z.object({ a: z.any().optional() }).parse({}); // ✅
 ```
 
 ## Never
@@ -1222,13 +1297,13 @@ To create a `ZodEnum` schema from the keys of an object schema:
 <Tab value="Zod">
 ```ts
 const keySchema = Dog.keyof();
-// => ZodEnum<["name", "age"]>
+// => ZodEnum<{ name: "name"; age: "age" }>
 ```
 </Tab>
 <Tab value="Zod Mini">
 ```ts
 const keySchema = z.keyof(Dog);
-// => ZodEnum<["name", "age"]>
+// => ZodEnum<{ name: "name"; age: "age" }>
 ```
 </Tab>
 </Tabs>
@@ -1418,6 +1493,40 @@ const RecipeOptionalIngredients = z.partial(Recipe, {
 </Tab>
 </Tabs>
 
+### `.exactPartial()`
+
+Identical to `.partial()`, but wraps each field in [`exactOptional()`](#exact-optionals) instead of `optional()`:
+
+<Tabs groupId="lib" items={["Zod", "Zod Mini"]}>
+<Tab value="Zod">
+```ts zod
+const PartialRecipe = Recipe.exactPartial();
+// { title?: string; description?: string | undefined; ingredients?: string[] }
+```
+</Tab>
+<Tab value="Zod Mini">
+```ts
+const PartialRecipe = z.exactPartial(Recipe);
+// { title?: string; description?: string | undefined; ingredients?: string[] }
+```
+</Tab>
+</Tabs>
+
+### `z.deepPartial()` [#deep-partial]
+
+Where `.partial()` only touches the top-level shape, `z.deepPartial()` recurses to every object in the tree — through arrays, tuples, unions, records, and wrappers.
+
+```ts
+const Post = z.object({
+  title: z.string(),
+  author: z.object({ name: z.string(), email: z.string() }),
+});
+
+z.deepPartial(Post).parse({ author: {} }); // ✅
+```
+
+The source schema is never modified, and the result is still a `ZodObject`, so `.shape` and `.extend()` keep working. A [discriminated union](#discriminated-unions) degrades to a plain `z.union()`, since an optional discriminator defeats the discriminated lookup. Like `.partial()`, it throws on an object carrying its own [refinement](#refinements).
+
 ### `.required()`
 
 Zod provides an API for making some or all properties *required*, inspired by TypeScript's [`Required`](https://www.typescriptlang.org/docs/handbook/utility-types.html#requiredtype) utility type.
@@ -1474,9 +1583,34 @@ type Category = z.infer<typeof Category>;
 // { name: string; subcategories: Category[] }
 ```
 
-<Callout type="warn"> 
-  Though recursive schemas are supported, passing cyclical data into Zod will cause an infinite loop.
-</Callout>
+Cyclical inputs work out of the box with Zod. For bundle size reasons, Zod Mini requires you to register a memoizer explicitly (see code example).
+
+<Tabs groupId="lib" items={["Zod", "Zod Mini"]}>
+<Tab value="Zod">
+```ts
+const input: any = { name: "root", subcategories: [] };
+input.subcategories.push(input);
+
+const result = Category.parse(input);
+result.subcategories[0] === result; // true
+
+// the output graph mirrors the input graph
+result.subcategories[0].subcategories[0] === result; // true
+```
+</Tab>
+<Tab value="Zod Mini">
+```ts
+// Zod Mini requires a memoizer, registered before schemas are defined
+z.config({ memoizer: z.memoizer() });
+
+const input: any = { name: "root", subcategories: [] };
+input.subcategories.push(input);
+
+const result = Category.parse(input);
+result.subcategories[0] === result; // true
+```
+</Tab>
+</Tabs>
 
 You can also represent *mutually recursive types*:
 
@@ -1638,6 +1772,7 @@ Zod implements a number of array-specific validations:
 <Tabs groupId="lib" items={["Zod", "Zod Mini"]}>
 <Tab value="Zod">
 ```ts
+z.array(z.string()).nonempty(); // must contain at least 1 item
 z.array(z.string()).min(5); // must contain 5 or more items
 z.array(z.string()).max(5); // must contain 5 or fewer items
 z.array(z.string()).length(5); // must contain 5 items exactly
@@ -1645,6 +1780,7 @@ z.array(z.string()).length(5); // must contain 5 items exactly
 </Tab>
 <Tab value="Zod Mini">
 ```ts
+z.array(z.string()).check(z.minLength(1)); // alias for .nonempty()
 z.array(z.string()).check(z.minLength(5)); // must contain 5 or more items
 z.array(z.string()).check(z.maxLength(5)); // must contain 5 or fewer items
 z.array(z.string()).check(z.length(5)); // must contain 5 items exactly
@@ -1675,6 +1811,29 @@ To add a variadic ("rest") argument:
 const variadicTuple = z.tuple([z.string()], z.number());
 // => [string, ...number[]];
 ```
+
+To make every element optional:
+
+<Tabs groupId="lib" items={["Zod", "Zod Mini"]}>
+<Tab value="Zod">
+```ts zod
+const PartialTuple = z.tuple([z.string(), z.number()]).partial();
+// => [(string | undefined)?, (number | undefined)?]
+
+z.tuple([z.string()], z.number()).partial();
+// => [(string | undefined)?, ...number[]]
+```
+</Tab>
+<Tab value="Zod Mini">
+```ts
+const PartialTuple = z.partial(z.tuple([z.string(), z.number()]));
+// => [(string | undefined)?, (number | undefined)?]
+
+z.partial(z.tuple([z.string()], z.number()));
+// => [(string | undefined)?, ...number[]]
+```
+</Tab>
+</Tabs>
 
 ## Unions
 
@@ -1751,11 +1910,22 @@ const payment = z.xor([
 payment.parse({ type: "card", cardNumber: "1234" }); // ✅ passes
 ```
 
-If the input could match multiple options, `z.xor()` will fail:
+If the input could match multiple options, `z.xor()` will fail. The resulting issue has `inclusive: false` and a `matches` array listing the indices of the options that matched:
 
 ```ts
 const overlapping = z.xor([z.string(), z.any()]);
 overlapping.parse("hello"); // ❌ fails (matches both string and any)
+// ZodError: Invalid input: more than one option matched
+```
+
+Object options overlap more often than you'd expect, since `z.object()` strips unknown keys instead of rejecting them. Below, an input with both keys matches *both* options — the first strips `version`, the second keeps it. Use `z.strictObject()` (or `.strict()`) on the narrower option to make the branches mutually exclusive:
+
+```ts
+const name = z.object({ name: z.string() });
+const version = name.extend({ version: z.string() });
+
+z.xor([name, version]).parse({ name: "zod", version: "4" });           // ❌ fails (matches both)
+z.xor([name.strict(), version]).parse({ name: "zod", version: "4" });  // ✅ passes
 ```
 
 
@@ -1899,6 +2069,15 @@ intKeys.parse({
 });
 ```
 
+A value schema that can stand in for an absent key — `.default()`, `.prefault()`, `.optional()` — makes that key optional on the input side, the same as it does inside `z.object()`:
+
+```ts
+const Person = z.record(z.enum(["id", "name"]), z.string().default(""));
+
+type Input = z.input<typeof Person>; // { id?: string; name?: string }
+type Output = z.output<typeof Person>; // { id: string; name: string }
+```
+
 ### `z.partialRecord`
 
 
@@ -1956,6 +2135,27 @@ myMap.set("two", 2);
 StringNumberMap.parse(myMap);
 ```
 
+Map schemas can be further constrained with the following utility methods.
+
+<Tabs groupId="lib" items={["Zod", "Zod Mini"]}>
+<Tab value="Zod">
+```ts
+z.map(z.string(), z.number()).nonempty(); // must contain at least 1 item
+z.map(z.string(), z.number()).min(5); // must contain 5 or more items
+z.map(z.string(), z.number()).max(5); // must contain 5 or fewer items
+z.map(z.string(), z.number()).size(5); // must contain 5 items exactly
+```
+</Tab>
+<Tab value='Zod Mini'>
+```ts
+z.map(z.string(), z.number()).check(z.minSize(1)); // alias for .nonempty()
+z.map(z.string(), z.number()).check(z.minSize(5)); // must contain 5 or more items
+z.map(z.string(), z.number()).check(z.maxSize(5)); // must contain 5 or fewer items
+z.map(z.string(), z.number()).check(z.size(5)); // must contain 5 items exactly
+```
+</Tab>
+</Tabs>
+
 ## Sets
 
 ```ts
@@ -1973,6 +2173,7 @@ Set schemas can be further constrained with the following utility methods.
 <Tabs groupId="lib" items={["Zod", "Zod Mini"]}>
 <Tab value="Zod">
 ```ts
+z.set(z.string()).nonempty(); // must contain at least 1 item
 z.set(z.string()).min(5); // must contain 5 or more items
 z.set(z.string()).max(5); // must contain 5 or fewer items
 z.set(z.string()).size(5); // must contain 5 items exactly
@@ -1980,6 +2181,7 @@ z.set(z.string()).size(5); // must contain 5 items exactly
 </Tab>
 <Tab value='Zod Mini'>
 ```ts
+z.set(z.string()).check(z.minSize(1)); // alias for .nonempty()
 z.set(z.string()).check(z.minSize(5)); // must contain 5 or more items
 z.set(z.string()).check(z.maxSize(5)); // must contain 5 or fewer items
 z.set(z.string()).check(z.size(5)); // must contain 5 items exactly
@@ -2065,6 +2267,14 @@ TestSchema.parse(new Test()); // ✅
 TestSchema.parse("whatever"); // ❌
 ```
 
+This works with built-in classes too.
+
+```ts
+z.instanceof(RegExp);
+z.instanceof(URL);
+z.instanceof(Error);
+```
+
 ### Property
 
 To validate a particular property of a class instance against a Zod schema:
@@ -2087,6 +2297,20 @@ const blobSchema = z.string().check(
 
 blobSchema.parse("hello there!"); // ✅
 blobSchema.parse("hello."); // ❌
+```
+
+Use `z.properties()` to declare several property checks from an object literal. It returns an array to spread into `.check()`.
+
+```ts
+const httpsUrl = z.instanceof(URL).check(
+  ...z.properties({
+    protocol: z.literal("https:" as string),
+    hostname: z.string().regex(z.regexes.domain),
+  })
+);
+
+httpsUrl.parse(new URL("https://example.com")); // ✅
+httpsUrl.parse(new URL("http://localhost")); // ❌ protocol
 ```
 
 ## Refinements
@@ -2135,6 +2359,29 @@ const myString = z.string().refine((val) => val.length > 8, {
 const myString = z.string().check(
   z.refine((val) => val.length > 8, { error: "Too short!" })
 );
+```
+</Tab>
+</Tabs>
+
+The `error` option also accepts a function that receives the issue:
+
+<Tabs groupId="lib" items={["Zod", "Zod Mini"]}>
+<Tab value="Zod">
+```ts
+const myString = z.string().refine((val) => val.length > 8, {
+  error: (iss) => `Too short: "${iss.input}"`
+});
+
+myString.parse("OH NO"); // ❌ Too short: "OH NO"
+```
+</Tab>
+<Tab value="Zod Mini">
+```ts
+const myString = z.string().check(
+  z.refine((val) => val.length > 8, { error: (iss) => `Too short: "${iss.input}"` })
+);
+
+z.parse(myString, "OH NO"); // ❌ Too short: "OH NO"
 ```
 </Tab>
 </Tabs>
@@ -2628,6 +2875,20 @@ z.parse(stringToLength, "hello"); // => 5
 </Tab>
 </Tabs>
 
+### `z.input()` and `z.output()` [#input-output]
+
+Runtime counterparts to the type-level `z.input<T>` / `z.output<T>`: they replace every pipe in a schema with its input or output side. Useful for reaching [codecs](/codecs) nested inside objects, records, or maps, where `.in` / `.out` can't.
+
+```ts
+const Event = z.object({ name: z.string(), at: stringToDate });
+
+z.input(Event).parse({ name: "launch", at: "2024-01-01T00:00:00Z" }); // ✅
+z.output(Event).parse({ name: "launch", at: new Date() });            // ✅
+```
+
+Only codecs have two real sides. `z.output()` on a one-way [transform](#transforms) returns the transform, which validates nothing; `z.input()` on a `z.preprocess()` returns the schema the preprocessor feeds.
+
+A wrapper's stored value survives only on the side it belongs to, so with a codec underneath, `z.input()` drops a `.default()` or `.catch()` and `z.output()` drops a `.prefault()`.
 
 ## Transforms
 
@@ -2855,7 +3116,7 @@ schema.parse(undefined); // => 0
 Sometimes, it's useful to define a *prefault* ("pre-parse default") value. If the input is `undefined`, the prefault value will be parsed instead. The parsing process is *not* short circuited. As such, the prefault value must be assignable to the *input type* of the schema.
 
 ```ts
-z.string().transform(val => val.length).prefault("tuna");
+const schema = z.string().transform(val => val.length).prefault("tuna");
 schema.parse(undefined); // => 4
 ```
 
@@ -3184,3 +3445,16 @@ z.parse(schema, null); // => null
 ```
 </Tab>
 </Tabs>
+
+Additional arguments are passed through to the function:
+
+```ts
+function withDefault<T extends z.ZodType>(schema: T, value: z.output<T>) {
+  return schema.nullish().transform((val) => val ?? value);
+}
+
+const schema = z.string().apply(withDefault, "anonymous");
+
+schema.parse(undefined); // => "anonymous"
+schema.parse("sandwich"); // => "sandwich"
+```

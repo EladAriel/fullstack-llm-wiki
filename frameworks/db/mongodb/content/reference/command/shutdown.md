@@ -1,88 +1,162 @@
 ---
 type: "Framework Learn Page"
-framework: "mongodb"
+framework: "MongoDB"
 source_repo: "https://github.com/mongodb/docs.git"
 source_branch: "main"
 source_path: "content/manual/manual/source/reference/command/shutdown.txt"
-source_commit: "ab9db26ed3d11618cdb61516d8180337d8e3f679"
-source_commit_short: "ab9db26e"
-source_commit_date: "2026-07-24T16:22:46-06:00"
-generated_at: "2026-07-25T11:51:15Z"
+source_commit: "b9f2bc487a2878b65e3c1f80024bebab76954f27"
+source_commit_short: "b9f2bc48"
+source_commit_date: "2026-08-28T17:09:45-05:00"
+generated_at: "2026-08-29T09:39:20.043822Z"
 ---
-
-===========================
-
 # shutdown (database command)
 
-.. versionchanged:: 5.0
+**meta:** :description: Terminate MongoDB processes using the `shutdown` command, which cleans up resources and requires execution against the admin database.
+
+.. default-domain:: mongodb
+
+**contents:** On this page
+   :local:
+   :backlinks: none
+   :depth: 1
+   :class: singlecol
+
+**versionchanged:** 5.0
+
+**dbcommand:** shutdown
+
+   The :dbcommand:`shutdown` command cleans up all database resources
+   and then terminates the process.  You must issue
+   the :dbcommand:`shutdown` command against the :term:`admin database`.
 
 ## Compatibility
 
-This command is available in deployments hosted in the following environments:
+This command is available in deployments hosted in the following environments: 
 
-.. include:: /includes/fact-environments-onprem-only.rst
+**include:** /includes/fact-environments-onprem-only.rst
 
-.. include:: /includes/fact-environments-no-atlas-support.rst
+**include:** /includes/fact-environments-no-atlas-support.rst
 
 ## Syntax
 
 The command has the following syntax:
 
-```javascript
-db.adminCommand(
-   { 
-     shutdown: 1,
-     force: <boolean>
-     timeoutSecs: <int>,
-     comment: <any>
-   }
-)
-```
+.. code-block:: javascript
+
+   db.adminCommand(
+      { 
+        shutdown: 1,
+        force: <boolean>
+        timeoutSecs: <int>,
+        comment: <any>
+      }
+   )
 
 ## Command Fields
 
 The command takes these fields:
 
-> **Seealso:** :method:`db.shutdownServer()`
+.. list-table::
+   :header-rows: 1
+   :widths: 20 80
+ 
+   * - Field
+     - Description
+ 
+   * - :ref:`shutdown <shutdown-cmd-shutdown>`
+ 
+     - .. _shutdown-cmd-shutdown:
+       
+       Specify ``1``.
+ 
+   * - :ref:`force <shutdown-cmd-force>`
+     - .. _shutdown-cmd-force:
+     
+       Optional. Specify ``true`` to force the :binary:`~bin.mongod`
+       or :binary:`~bin.mongos` to shut down. Force shutdown
+       interrupts any ongoing operations on the :binary:`~bin.mongod`
+       or :binary:`~bin.mongos` and may result in unexpected
+       behavior.
+
+       You can pause and resume in-progress index builds using 
+       ``force``. See :ref:`cmd-shutdown-replica-set` for more 
+       information.
+ 
+   * - :ref:`timeoutSecs <shutdown-cmd-timeoutSecs>`
+     - .. _shutdown-cmd-timeoutSecs:
+     
+       Optional.
+       
+       .. _shutdown-cmd-quiesce-period:
+ 
+       .. |force| replace:: :ref:`force <shutdown-cmd-force>`
+       .. |timeout| replace:: :ref:`timeoutSecs <shutdown-cmd-timeoutSecs>`
+ 
+       .. include:: /includes/quiesce-period.rst
+ 
+   * - ``comment``
+     - .. include:: /includes/extracts/comment-content.rst
+
+**seealso:** :method:`db.shutdownServer()`
+
 
 ## Behavior
 
-For a :binary:`~bin.mongod` started with `authentication`, you must run :dbcommand:`shutdown` over an authenticated connection. See `cmd-shutdown-access-control` for more information.
+For a :binary:`~bin.mongod` started *with* :ref:`authentication`, 
+you must run :dbcommand:`shutdown` over an authenticated connection. 
+See :ref:`cmd-shutdown-access-control` for more information.
 
-For a :binary:`~bin.mongod` started without `authentication`, you must run :dbcommand:`shutdown` from a client connected to the localhost interface. For example, run :binary:`~bin.mongosh` with the :option:`--host "127.0.0.1" <mongosh --host>` option on the same host machine as the :binary:`~bin.mongod`.
+For a :binary:`~bin.mongod` started *without* :ref:`authentication`,
+you must run :dbcommand:`shutdown` from a client connected to the 
+localhost interface. For example, run :binary:`~bin.mongosh` with 
+the :option:`--host "127.0.0.1" <mongosh --host>` option on the
+same host machine as the :binary:`~bin.mongod`.
 
-### `shutdown` on Replica Set Members
+.. _cmd-shutdown-replica-set:
 
-:dbcommand:`shutdown` fails if the replica set member is running certain operations such as `index builds <index-operations-replicated-build>`. You can specify `force: true <shutdown-cmd-force>` to force the member to save index build progress to disk. The :binary:`~bin.mongod` recovers the index build when it restarts and continues from the saved checkpoint.
+### ``shutdown`` on Replica Set Members
 
-Shutting Down the Replica Set Primary, Secondary, or `mongos` ```````````````````````````````````````````````````````````````
+:dbcommand:`shutdown` fails if the replica set member is running
+certain operations such as :ref:`index builds
+<index-operations-replicated-build>`. You can specify 
+:ref:`force: true <shutdown-cmd-force>` to force the member 
+to save index build progress to disk. The :binary:`~bin.mongod` 
+recovers the index build when it restarts and continues from the 
+saved checkpoint.
 
-.. include:: /includes/quiesce-period.rst
+### Shutting Down the Replica Set Primary, Secondary, or ``mongos``
 
-> **Warning:** Force shutdown of the primary can result in the
-`rollback <replica-set-rollback>` of any writes not
-yet replicated to a secondary.
+**include:** /includes/quiesce-period.rst
+
+**warning:** Force shutdown of the primary can result in the 
+   :ref:`rollback <replica-set-rollback>` of any writes not 
+   yet replicated to a secondary. 
+
+.. _cmd-shutdown-access-control:
 
 ## Access Control
 
-To run :dbcommand:`shutdown` on a :binary:`~bin.mongod` enforcing `authentication`, the authenticated user must have the :authaction:`shutdown` privilege. For example, a user with the built-in role :authrole:`hostManager` has the appropriate permissions.
+To run :dbcommand:`shutdown` on a :binary:`~bin.mongod` enforcing 
+:ref:`authentication`, the authenticated user *must* have the 
+:authaction:`shutdown` privilege. For example, a user with the 
+built-in role :authrole:`hostManager` has the appropriate permissions.
 
 ## Examples
 
-### Shut down a `mongod`
+### Shut down a ``mongod``
 
-```javascript
-db.adminCommand({ "shutdown" : 1 })
-```
+.. code-block:: javascript
 
-### Force Shut Down a `mongod`
+   db.adminCommand({ "shutdown" : 1 })
 
-```javascript
-db.adminCommand({ "shutdown" : 1, "force" : true })
-```
+### Force Shut Down a ``mongod``
 
-### Shut Down a Primary `mongod` With Longer Timeout
+.. code-block:: javascript
 
-```javascript
-db.adminCommand({ "shutdown" : 1, timeoutSecs: 60 })
-```
+   db.adminCommand({ "shutdown" : 1, "force" : true })
+
+### Shut Down a Primary ``mongod`` With Longer Timeout
+
+.. code-block:: javascript
+
+   db.adminCommand({ "shutdown" : 1, timeoutSecs: 60 })

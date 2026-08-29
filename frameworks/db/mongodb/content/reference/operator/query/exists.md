@@ -1,94 +1,193 @@
 ---
 type: "Framework Learn Page"
-framework: "mongodb"
+framework: "MongoDB"
 source_repo: "https://github.com/mongodb/docs.git"
 source_branch: "main"
 source_path: "content/manual/manual/source/reference/operator/query/exists.txt"
-source_commit: "ab9db26ed3d11618cdb61516d8180337d8e3f679"
-source_commit_short: "ab9db26e"
-source_commit_date: "2026-07-24T16:22:46-06:00"
-generated_at: "2026-07-25T11:51:15Z"
+source_commit: "b9f2bc487a2878b65e3c1f80024bebab76954f27"
+source_commit_short: "b9f2bc48"
+source_commit_date: "2026-08-28T17:09:45-05:00"
+generated_at: "2026-08-29T09:39:20.241539Z"
 ---
-
-==================================
-
 # $exists (query predicate operator)
+
+.. default-domain:: mongodb
+
+**meta:** :description: Use the $exists operator to match documents with or without a specified field, including those with null values.
+
+**contents:** On this page
+   :local:
+   :backlinks: none
+   :depth: 2
+   :class: singlecol
 
 ## Definition
 
+**query:** $exists
+
+   The :query:`$exists` operator matches documents that
+   contain or do not contain a specified field, including documents 
+   where the field value is ``null``.
+
+   .. note:: 
+
+      MongoDB ``$exists`` does **not** correspond to SQL operator
+      ``exists``. For SQL ``exists``, see :query:`$in`. 
+      
+      For {+fts+} ``exists``, see :ref:`exists-ref` 
+      in the Atlas documentation.
+
 ## Compatibility
 
-.. include:: /includes/fact-compatibility.rst
+.. |operator-method| replace:: ``$exists``
 
-.. include:: /includes/reference/exist-op-support-expressions.rst
+**include:** /includes/fact-compatibility.rst
+
+**include:** /includes/reference/exist-op-support-expressions.rst
 
 ## Syntax
 
 To specify an :query:`$exists` expression, use the following prototype:
 
-```javascript
-{ field: { $exists: <boolean> } }
-```
+.. code-block:: javascript
+   
+   { field: { $exists: <boolean> } }
 
-When `<boolean>` is true, :query:`$exists` matches the documents that contain the field, including documents where the field value is `null`. If `<boolean>` is false, the query returns only the documents that do not contain the field.
+When ``<boolean>`` is true, :query:`$exists` matches the documents that
+contain the field, including documents where the field value is
+``null``. If ``<boolean>`` is false, the query returns only the
+documents that do not contain the field.
 
 ## Query Data on Atlas by Using {+fts+}
 
-.. include:: /includes/fact-atlas-search-operator.rst
+.. |search-operator| replace:: :ref:`exists-ref`
+.. |manual-operator| replace:: :query:`$exists`
+
+**include:** /includes/fact-atlas-search-operator.rst
 
 ## Examples
 
-.. include:: /includes/sample-data-usage.rst
+**include:** /includes/sample-data-usage.rst
 
 ### Exists and Not Equal To
 
 Consider the following example:
 
-This query selects 5 documents in the `movies` collection where the `rated` field exists and its value does not equal `"R"` or `"PG-13"`.
+**literalinclude:** /code-examples/tested/command-line/mongosh/aggregation/expressions/exists/exists-and-not-equal.snippet.exists-and-not-equal.js
+   :language: javascript
+   :category: usage example
+
+This query selects 5 documents in the ``movies`` collection
+where the ``rated`` field exists *and* its value does not equal ``"R"`` or
+``"PG-13"``.
 
 ### Null Values
 
-The `movies` collection in the `sample_mflix` database contains documents where some fields are present and others are missing. For example, the `rated` field exists in 11,455 documents and is absent from the remaining 9,894 documents.
+The ``movies`` collection in the ``sample_mflix`` database contains
+documents where some fields are present and others are missing. For
+example, the ``rated`` field exists in 11,455 documents and is absent
+from the remaining 9,894 documents.
 
-#### `$exists: true`
+## ``$exists: true``
 
-The following query specifies the query predicate `rated: { $exists: true }`:
+The following query specifies the query predicate ``rated: { $exists: true }``:
 
-The results consist of three documents that contain the field `rated`:
 
-#### `$exists: false`
-
-The following query specifies the query predicate `rated: { $exists: false }`:
-
-The results consist of three documents that do not contain the field `rated`:
-
-### Use a Sparse Index to Improve `$exists` Performance
-
-The following table compares `$exists` query performance using sparse and non-sparse indexes:
-
-Queries that use `{ $exists: true }` on fields that use a non-sparse index or that use `{ $exists: true }` on fields that are not indexed examine all documents in a collection. To improve performance, create a `sparse index <index-type-sparse>` on the `field` as shown in the following scenario:
-
-#. The `movies` collection contains documents where the `metacritic` field is present in some documents and absent from others. Of the 21,349 documents, 6,964 have the `metacritic` field and 14,385 do not.
-
-#. Create a `sparse index <index-type-sparse>` on the `metacritic` field:
-
-#. The following example counts the documents where the `metacritic` field has a value (including null) and uses the `sparse index <index-type-sparse>`:
-
-> **Tip:** If you only need documents where the `field` has a non-null value,
-you:
-- Can use `$ne: null` instead of `$exists: true`.
-- Do not need a `sparse index <index-type-sparse>` on the
-  `field`.
-For example, using the `movies` collection:
-.. literalinclude:: /code-examples/tested/command-line/mongosh/aggregation/expressions/exists/metracritic-2.snippet.ne-null.js
+**literalinclude:** /code-examples/tested/command-line/mongosh/aggregation/expressions/exists/null-values.snippet.exists-with-null.js
    :language: javascript
    :category: usage example
-The example returns 6964. Documents that are missing the
-`metacritic` value or have a null `metacritic` value are not
-counted.
+
+The results consist of three documents that contain the field ``rated``:
+
+**literalinclude:** /code-examples/tested/command-line/mongosh/aggregation/expressions/exists/null-values-output.sh
+   :language: javascript
+   :category: example return object
+
+
+## ``$exists: false``
+
+The following query specifies the query predicate ``rated: { $exists: false }``:
+
+**literalinclude:** /code-examples/tested/command-line/mongosh/aggregation/expressions/exists/false.snippet.exists-false.js
+   :language: javascript
+   :category: usage example
+
+The results consist of three documents that do not contain the field
+``rated``:
+
+**literalinclude:** /code-examples/tested/command-line/mongosh/aggregation/expressions/exists/false-output.sh
+   :language: javascript
+   :category: example return object
+
+### Use a Sparse Index to Improve ``$exists`` Performance
+
+The following table compares ``$exists`` query performance using sparse
+and non-sparse indexes:
+
+.. list-table::
+   :widths: 20,30,30
+   :header-rows: 1
+
+   * - ``$exists`` Query
+     - Using a Sparse Index
+     - Using a Non-Sparse Index
+   * - ``{ $exists: true }``
+     - Most efficient. MongoDB can make an exact match and does not
+       require a ``FETCH``.
+     - More efficient than queries without an index, but still requires 
+       a ``FETCH``.
+   * - ``{ $exists: false }``
+     - Cannot use the index and requires a ``COLLSCAN``.
+     - Requires a ``FETCH``.
+
+Queries that use ``{ $exists: true }`` on fields that use a non-sparse 
+index or that use ``{ $exists: true }`` on fields that are not indexed
+examine all documents in a collection. To improve performance, create 
+a :ref:`sparse index <index-type-sparse>` on the ``field`` as shown in 
+the following scenario:
+
+#. The ``movies`` collection contains documents where the
+   ``metacritic`` field is present in some documents and absent from
+   others. Of the 21,349 documents, 6,964 have the ``metacritic``
+   field and 14,385 do not.
+
+#. Create a :ref:`sparse index <index-type-sparse>` on the
+   ``metacritic`` field:
+
+   .. literalinclude:: /code-examples/tested/command-line/mongosh/aggregation/expressions/exists/create-index.snippet.create-sparse-index.js
+      :language: javascript
+      :category: usage example
+
+#. The following example counts the documents where the ``metacritic``
+   field has a value (including null) and uses the :ref:`sparse index
+   <index-type-sparse>`:
+
+   .. literalinclude:: /code-examples/tested/command-line/mongosh/aggregation/expressions/exists/metacritic.snippet.exists-true.js
+      :language: javascript
+      :category: usage example
+
+   The example returns 6964. The operation does not count the documents that are
+   missing the ``metacritic`` field.
+
+**tip:** If you only need documents where the ``field`` has a non-null value,
+   you:
+   
+   - Can use ``$ne: null`` instead of ``$exists: true``.
+   - Do not need a :ref:`sparse index <index-type-sparse>` on the
+     ``field``.
+   
+   For example, using the ``movies`` collection:
+
+   .. literalinclude:: /code-examples/tested/command-line/mongosh/aggregation/expressions/exists/metracritic-2.snippet.ne-null.js
+      :language: javascript
+      :category: usage example
+
+   The example returns 6964. Documents that are missing the
+   ``metacritic`` value or have a null ``metacritic`` value are not
+   counted.
 
 ## Learn More
 
-- `faq-developers-query-for-nulls`
+- :ref:`faq-developers-query-for-nulls`
 - :query:`$nin`
 - :query:`$in`

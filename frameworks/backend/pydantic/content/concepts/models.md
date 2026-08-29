@@ -1,15 +1,14 @@
 ---
 type: "Framework Learn Page"
-framework: "pydantic"
+framework: "Pydantic"
 source_repo: "https://github.com/pydantic/pydantic"
 source_branch: "main"
 source_path: "docs/concepts/models.md"
-source_commit: "a2a6577d4c329dd574a45dbb01a8feaa16b1ad3d"
-source_commit_short: "a2a6577d"
-source_commit_date: "2026-07-23T15:38:17Z"
-generated_at: "2026-07-25T11:50:12Z"
+source_commit: "4bc21c0fa28323c0f3e0be93c9ad114b705029c6"
+source_commit_short: "4bc21c0"
+source_commit_date: "2026-08-29T11:30:40+02:00"
+generated_at: "2026-08-29T09:38:50.586791Z"
 ---
-
 ??? api "API Documentation"
     [`pydantic.main.BaseModel`][pydantic.main.BaseModel]<br>
 
@@ -569,12 +568,10 @@ except ValidationError as e:
     """
 ```
 
-!!! tip "Logfire integration"
-    In an example like this one, the offending `data` is right there in the code. In a running application
-    it usually isn't. The exception says which fields failed, but the input that produced it is whatever a
-    user, API, or job happened to send at the time. If you need to see that input as well,
-    [Logfire can record failed validations](../errors/troubleshooting.md) together with the data that
-    caused them.
+In an example like this one, the offending `data` is right there in the code. A
+[`ValidationError`][pydantic_core.ValidationError] includes the value rejected at each failing
+location, but in a running application you may also need those details in their request or job
+context. [Logfire records failed validations](../errors/troubleshooting.md) with both.
 
 ## Arbitrary class instances
 

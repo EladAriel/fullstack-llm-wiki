@@ -1,21 +1,65 @@
 ---
 type: "Framework Learn Page"
-framework: "mongodb"
+framework: "MongoDB"
 source_repo: "https://github.com/mongodb/docs.git"
 source_branch: "main"
 source_path: "content/manual/manual/source/core/timeseries/timeseries-secondary-index.txt"
-source_commit: "ab9db26ed3d11618cdb61516d8180337d8e3f679"
-source_commit_short: "ab9db26e"
-source_commit_date: "2026-07-24T16:22:46-06:00"
-generated_at: "2026-07-25T11:51:15Z"
+source_commit: "b9f2bc487a2878b65e3c1f80024bebab76954f27"
+source_commit_short: "b9f2bc48"
+source_commit_date: "2026-08-28T17:09:45-05:00"
+generated_at: "2026-08-29T09:39:19.791815Z"
 ---
-
-================================================
+.. _timeseries-add-secondary-index:
 
 # Add Secondary Indexes to Time Series Collections
 
-To improve query performance for `time series collections <time series collection>`, add one or more `secondary indexes <secondary index>` to support common time series query patterns. Starting in MongoDB 6.3, MongoDB automatically creates a `compound index <index-type-compound>` on the `metaField` and `timeField` fields for new collections.
+.. default-domain:: mongodb
 
-> **Note:** Not all index types are supported. For a list of unsupported index
-types, see :ref:`Limitations for Secondary Indexes on Time Series
-Collections <timeseries-limitations-secondary-indexes>`.
+**contents:** On this page
+   :local:
+   :backlinks: none
+   :depth: 2
+   :class: singlecol
+
+**meta:** :keywords: IOT
+   :description: Improve query performance for time series collections by adding secondary indexes, including compound indexes on `metaField` and `timeField`.
+
+To improve query performance for :term:`time series collections <time
+series collection>`, add one or more :term:`secondary indexes <secondary
+index>` to support common time series query patterns. Starting in
+MongoDB 6.3, MongoDB automatically creates a :ref:`compound index
+<index-type-compound>` on the ``metaField`` and ``timeField`` fields for
+new collections.
+
+**note:** Not all index types are supported. For a list of unsupported index
+   types, see :ref:`Limitations for Secondary Indexes on Time Series
+   Collections <timeseries-limitations-secondary-indexes>`.
+
+.. composable-tutorial::
+   :options: interface, language
+   :defaults: mongosh, None
+
+   .. selected-content::
+      :selections: driver, csharp
+
+      .. include:: /includes/time-series/timeseries-secondary-index-csharp.rst
+
+   .. selected-content::
+      :selections: driver, java-sync
+
+      .. include:: /includes/time-series/timeseries-secondary-index-java.rst
+
+   .. selected-content::
+      :selections: mongosh, None
+
+      .. include:: /includes/time-series/timeseries-secondary-index-mongosh.rst
+
+   .. selected-content::
+      :selections: driver, nodejs
+
+      .. include:: /includes/time-series/timeseries-secondary-index-nodejs.rst
+
+   .. selected-content::
+      :selections: driver, python
+
+      .. include:: /includes/time-series/timeseries-secondary-index-python.rst

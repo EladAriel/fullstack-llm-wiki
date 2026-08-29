@@ -1,15 +1,14 @@
 ---
 type: "Framework Learn Page"
-framework: "pydantic"
+framework: "Pydantic"
 source_repo: "https://github.com/pydantic/pydantic"
 source_branch: "main"
 source_path: "docs/concepts/unions.md"
-source_commit: "a2a6577d4c329dd574a45dbb01a8feaa16b1ad3d"
-source_commit_short: "a2a6577d"
-source_commit_date: "2026-07-23T15:38:17Z"
-generated_at: "2026-07-25T11:50:12Z"
+source_commit: "4bc21c0fa28323c0f3e0be93c9ad114b705029c6"
+source_commit_short: "4bc21c0"
+source_commit_date: "2026-08-29T11:30:40+02:00"
+generated_at: "2026-08-29T09:38:50.588215Z"
 ---
-
 Unions are fundamentally different to all other types Pydantic validates - instead of requiring all fields/items/values to be valid, unions require only one member to be valid.
 
 This leads to some nuance around how to validate unions:
@@ -485,6 +484,11 @@ This is especially noticeable when dealing with recursive models, where reasons 
 recursion.
 Discriminated unions help to simplify error messages in this case, as validation errors are only produced for
 the case with a matching discriminator value.
+
+Making sense of a union failure means working out which member *should* have matched. A
+[`ValidationError`][pydantic_core.ValidationError] includes each member's errors and rejected values;
+when the failure happens in a deployed service, [Logfire retains those details with the surrounding
+trace](../errors/troubleshooting.md), so you can make that comparison after the fact.
 
 You can also customize the error type, message, and context for a `Discriminator` by passing
 these specifications as parameters to the `Discriminator` constructor, as seen in the example below.

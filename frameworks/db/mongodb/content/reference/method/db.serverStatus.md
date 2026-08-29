@@ -1,96 +1,131 @@
 ---
 type: "Framework Learn Page"
-framework: "mongodb"
+framework: "MongoDB"
 source_repo: "https://github.com/mongodb/docs.git"
 source_branch: "main"
 source_path: "content/manual/manual/source/reference/method/db.serverStatus.txt"
-source_commit: "ab9db26ed3d11618cdb61516d8180337d8e3f679"
-source_commit_short: "ab9db26e"
-source_commit_date: "2026-07-24T16:22:46-06:00"
-generated_at: "2026-07-25T11:51:15Z"
+source_commit: "b9f2bc487a2878b65e3c1f80024bebab76954f27"
+source_commit_short: "b9f2bc48"
+source_commit_date: "2026-08-28T17:09:45-05:00"
+generated_at: "2026-08-29T09:39:19.895173Z"
 ---
-
-==================================
-
 # db.serverStatus() (mongosh method)
+
+**meta:** :description: Retrieve an overview of the database process's state using `db.serverStatus()`, with options to customize the output.
+
+.. default-domain:: mongodb
+
+**contents:** On this page
+   :local:
+   :backlinks: none
+   :depth: 1
+   :class: singlecol
+
+**method:** db.serverStatus()
+
+   Returns a :term:`document` that provides an overview of the
+   database process's state.
+
+   This command provides a wrapper around the database command
+   :dbcommand:`serverStatus`.
+
 
 ## Compatibility
 
-This method is available in deployments hosted in the following environments:
+This method is available in deployments hosted in the following environments: 
 
-.. include:: /includes/fact-environments-atlas-only.rst
+**include:** /includes/fact-environments-atlas-only.rst
 
-.. include:: /includes/fact-environments-atlas-support-no-free.rst
+**include:** /includes/fact-environments-atlas-support-no-free.rst
 
-.. include:: /includes/fact-environments-onprem-only.rst
+**include:** /includes/fact-environments-onprem-only.rst
 
 ## Behavior
 
-.. include:: /includes/extracts/serverStatus-method-projection.rst
+**include:** /includes/extracts/serverStatus-method-projection.rst
 
-For example, the following operation suppresses the `repl`, `metrics` and `locks` information in the output.
+For example, the following operation suppresses the ``repl``,
+``metrics`` and ``locks`` information in the output.
 
-```javascript
-db.serverStatus( { repl: 0,  metrics: 0, locks: 0 } )
-```
+.. code-block:: javascript
 
-The following example includes all `server-status-repl` information in the output:
+   db.serverStatus( { repl: 0,  metrics: 0, locks: 0 } )
 
-```javascript
-db.serverStatus( { repl: 1 } )
-```
+The following example includes all :ref:`server-status-repl`
+information in the output:
+
+.. code-block:: javascript
+
+   db.serverStatus( { repl: 1 } )
 
 ### Exclude All Optional Fields
 
-.. include:: /includes/fact-serverstatus-excl-fields-w-none.rst
+.. |serverstatus| replace:: ``db.serverStatus()``
+**include:** /includes/fact-serverstatus-excl-fields-w-none.rst
 
-This example uses `none` to initially exclude all optional fields from the output, then includes the  `locks` document.
+This example uses ``none`` to initially exclude all optional 
+fields from the output, then includes the  ``locks`` document.
 
-```javascript
-db.serverStatus({ none: 1, locks: 1 })
-```
+.. code-block:: javascript
+   
+   db.serverStatus({ none: 1, locks: 1 })
 
 ### Initialization
 
-The statistics reported by :method:`db.serverStatus()` are reset when the :binary:`~bin.mongod` server is restarted. The :method:`db.serverStatus()` command does not report some statistics until they have been initialized by server events.
+The statistics reported by :method:`db.serverStatus()` are reset when
+the :binary:`~bin.mongod` server is restarted. The :method:`db.serverStatus()`
+command does not report some statistics until they have been
+initialized by server events.
 
-For example, after restarting the :binary:`~bin.mongod` server, :method:`db.serverStatus()` won't return any values for `findAndModify`.
+For example, after restarting the :binary:`~bin.mongod` server, 
+:method:`db.serverStatus()` won't return any values for ``findAndModify``.
 
-```javascript
-db.serverStatus().metrics.commands.findAndModify
-// No results returned
-```
-
-After you run an update query, subsequent calls to :method:`db.serverStatus()` display the expected metrics.
-
-```javascript
-{
-   "arrayFilters" : Long(0),
-   "failed" : Long(0),
-   "pipeline" : Long(0),
-   "total" : Long(1)
-}
-```
-
-> **Note:** The `db.serverStatus()` method returns an error if a specific
-object is queried before the counters have begun to increment.
-If there haven't been any document updates yet:
 .. code-block:: javascript
-   db.serverStatus().metrics.commands.update.pipeline
-Returns:
+
+   db.serverStatus().metrics.commands.findAndModify
+   // No results returned
+
+After you run an update query, subsequent calls to 
+:method:`db.serverStatus()` display the expected metrics. 
+
 .. code-block:: javascript
    :copyable: false
-   TypeError: db.serverStatus(...).metrics.commands.update is undefined :
-   @(shell):1:1
 
-### Include `mirroredReads`
+   {
+      "arrayFilters" : Long(0),
+      "failed" : Long(0),
+      "pipeline" : Long(0),
+      "total" : Long(1)
+   }
 
-By default, the :serverstatus:`mirroredReads` information is not included in the output. To return :serverstatus:`mirroredReads` information, you must explicitly specify the inclusion:
+**note:** The ``db.serverStatus()`` method returns an error if a specific
+   object is queried before the counters have begun to increment. 
 
-```javascript
-db.serverStatus( { mirroredReads: 1 } )
-```
+   If there haven't been any document updates yet:
+
+   .. code-block:: javascript
+
+      db.serverStatus().metrics.commands.update.pipeline
+   
+   Returns: 
+
+   .. code-block:: javascript
+      :copyable: false
+      
+      TypeError: db.serverStatus(...).metrics.commands.update is undefined :
+      @(shell):1:1
+
+### Include ``mirroredReads``
+
+By default, the :serverstatus:`mirroredReads` information is not included in 
+the output. To return :serverstatus:`mirroredReads` information, you must 
+explicitly specify the inclusion:
+
+.. code-block:: javascript
+
+   db.serverStatus( { mirroredReads: 1 } )
 
 ## Output
 
-See `serverStatus Output <server-status-output>` for complete documentation of the output of this function.
+See :ref:`serverStatus Output <server-status-output>` for complete
+documentation of the output of this function.

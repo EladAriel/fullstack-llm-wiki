@@ -1,7 +1,7 @@
 ---
 type: "Framework Learn Directory Index"
 framework: "Sentry Python"
-generated_at: "2026-07-25T19:08:13.552764Z"
+generated_at: "2026-08-29T09:40:09.077516Z"
 ---
 # Custom-Instrumentation
 
@@ -17,7 +17,6 @@ This directory contains Sentry Python learning pages related to custom-instrumen
 
 ## Pages in This Directory
 
-- [Ai Agents Module](ai-agents-module.md)
 - [Caches Module](caches-module.md)
 - [Mcp Module](mcp-module.md)
 - [Queues Module](queues-module.md)

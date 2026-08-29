@@ -1,357 +1,388 @@
 ---
 type: "Framework Learn Page"
-framework: "mongodb"
+framework: "MongoDB"
 source_repo: "https://github.com/mongodb/docs.git"
 source_branch: "main"
 source_path: "content/manual/manual/source/reference/operator/aggregation/topN.txt"
-source_commit: "ab9db26ed3d11618cdb61516d8180337d8e3f679"
-source_commit_short: "ab9db26e"
-source_commit_date: "2026-07-24T16:22:46-06:00"
-generated_at: "2026-07-25T11:51:15Z"
+source_commit: "b9f2bc487a2878b65e3c1f80024bebab76954f27"
+source_commit_short: "b9f2bc48"
+source_commit_date: "2026-08-28T17:09:45-05:00"
+generated_at: "2026-08-29T09:39:20.182359Z"
 ---
-
-============================
+.. _topN_accumulator_operator:
 
 # $topN (accumulator operator)
 
+**meta:** :description: Use `$topN` to aggregate the top elements within a group based on a specified sort order in MongoDB.
+
+.. default-domain:: mongodb
+
+**contents:** On this page
+  :local:
+  :backlinks: none
+  :depth: 1
+  :class: singlecol
+
 ## Definition
 
-> **Note:** This page describes the `$topN` accumulator operator. For the `$topN`
-expression operator, see `$topN (expression operator) <topN_expression_operator>`.
+**group:** $topN
+
+   .. versionadded:: 5.2
+
+   Returns an aggregation of the top ``n`` elements within a group,
+   according to the specified sort order. If the group contains 
+   fewer than ``n`` elements, ``$topN`` returns all elements in the group.
+
+**note:** Disambiguation
+
+   This page describes the ``$topN`` accumulator operator. For the ``$topN``
+   expression operator, see :ref:`$topN (expression operator) <topN_expression_operator>`. 
 
 ## Syntax
 
-```none
-{
-   $topN:
-      {
-         n: <expression>,
-         sortBy: { <field1>: <sort order>, <field2>: <sort order> ... },
-         output: <expression>
-      }
-}
-```
+.. code-block:: none
+   :copyable: false
 
-- `n` limits the number of results per group and has to be a positive
-integral expression that is either a constant or depends on the `_id` value for :pipeline:`$group`.
+   {
+      $topN:
+         {
+            n: <expression>,
+            sortBy: { <field1>: <sort order>, <field2>: <sort order> ... },
+            output: <expression>
+         }
+   }
 
-- sortBy specifies the order of results, with syntax similar to
-:pipeline:`$sort`.
-
-- `output` represents the output for each element in the group and can
-be any expression.
+- ``n`` limits the number of results per group and has to be a positive
+  integral expression that is either a constant or depends on the ``_id``
+  value for :pipeline:`$group`.
+- sortBy specifies the order of results, with syntax similar to 
+  :pipeline:`$sort`.
+- ``output`` represents the output for each element in the group and can 
+  be any expression.
 
 ## Behavior
 
 ### Null and Missing Values
 
-- `$topN` does not filter out null values.
-- `$topN` converts missing values to null which are preserved in
-the output.
+- ``$topN`` does not filter out null values.
+- ``$topN`` converts missing values to null which are preserved in
+  the output.
 
-```javascript
-db.aggregate( [
-   {
-      $documents: [
-         { playerId: "PlayerA", gameId: "G1", score: 1 },
-         { playerId: "PlayerB", gameId: "G1", score: 2 },
-         { playerId: "PlayerC", gameId: "G1", score: 3 },
-         { playerId: "PlayerD", gameId: "G1"},
-         { playerId: "PlayerE", gameId: "G1", score: null }
-      ]
-   },
-   {
-      $group:
-      {  
-         _id: "$gameId",
-         playerId:
-            { 
-               $topN:
-                  {    
-                     output: [ "$playerId", "$score" ],
-                     sortBy: { "score": 1 },
-                     n: 3
-                  }
-            }
+.. code-block:: javascript
+   :emphasize-lines: 7,8
+
+   db.aggregate( [
+      {
+         $documents: [
+            { playerId: "PlayerA", gameId: "G1", score: 1 },
+            { playerId: "PlayerB", gameId: "G1", score: 2 },
+            { playerId: "PlayerC", gameId: "G1", score: 3 },
+            { playerId: "PlayerD", gameId: "G1"},
+            { playerId: "PlayerE", gameId: "G1", score: null }
+         ]
+      },
+      {
+         $group:
+         {  
+            _id: "$gameId",
+            playerId:
+               { 
+                  $topN:
+                     {    
+                        output: [ "$playerId", "$score" ],
+                        sortBy: { "score": 1 },
+                        n: 3
+                     }
+               }
+         }
       }
-   }
-] )
-```
+   ] )
 
 In this example:
 
 - :pipeline:`$documents` creates the literal documents that contain
-player scores.
+  player scores.
+- :pipeline:`$group` groups the documents by ``gameId``. This
+  example has only one ``gameId``, ``G1``.
+- ``PlayerD`` has a missing score and ``PlayerE`` has a
+  null ``score``. These values are both considered as null.
+- The ``playerId`` and ``score`` fields are specified as 
+  ``output : ["$playerId"," $score"]`` and returned as array values. 
+- Because of the ``sortBy: { "score" : 1 }``, the null values are sorted
+  to the front of the returned ``playerId`` array.
 
-- :pipeline:`$group` groups the documents by `gameId`. This
-example has only one `gameId`, `G1`.
+.. code-block:: javascript
+   :copyable: false
 
-- `PlayerD` has a missing score and `PlayerE` has a
-null `score`. These values are both considered as null.
-
-- The `playerId` and `score` fields are specified as
-`output : ["$playerId"," $score"]` and returned as array values.
-
-- Because of the `sortBy: { "score" : 1 }`, the null values are sorted
-to the front of the returned `playerId` array.
-
-```javascript
-[
-   {
-      _id: 'G1',
-      playerId: [ [ 'PlayerD', null ], [ 'PlayerE', null ], [ 'PlayerA', 1 ] ]
-   }
-]
-```
+   [
+      {
+         _id: 'G1',
+         playerId: [ [ 'PlayerD', null ], [ 'PlayerE', null ], [ 'PlayerA', 1 ] ]
+      }
+   ]
 
 ### BSON Data Type Sort Ordering
 
-When sorting different types, the order of `BSON data types <bson_sort_order>` is used to determine ordering. As an example, consider a collection whose values consist of strings and numbers.
+When sorting different types, the order of :ref:`BSON data types 
+<bson_sort_order>` is used to determine ordering. As an example, 
+consider a collection whose values consist of strings and numbers.
 
 - In an ascending sort, string values are sorted after numeric values.
 - In a descending sort, string values are sorted before numeric values.
-```javascript
-db.aggregate( [
-   {
-      $documents: [
-         { playerId: "PlayerA", gameId: "G1", score: 1 },
-         { playerId: "PlayerB", gameId: "G1", score: "2" },
-         { playerId: "PlayerC", gameId: "G1", score: "" }
-      ]
-   },
-   {
-      $group:
-         {
-            _id: "$gameId",
-            playerId: {
-               $topN:
-               {
-                  output: ["$playerId","$score"],
-                  sortBy: {"score": -1},
-                  n: 3
+
+.. code-block:: javascript
+   :emphasize-lines: 5,6
+
+   db.aggregate( [
+      {
+         $documents: [
+            { playerId: "PlayerA", gameId: "G1", score: 1 },
+            { playerId: "PlayerB", gameId: "G1", score: "2" },
+            { playerId: "PlayerC", gameId: "G1", score: "" }
+         ]
+      },
+      {
+         $group:
+            {
+               _id: "$gameId",
+               playerId: {
+                  $topN:
+                  {
+                     output: ["$playerId","$score"],
+                     sortBy: {"score": -1},
+                     n: 3
+                  }
                }
             }
-         }
-   }
-] )
-```
+      }
+   ] )
 
 In this example:
 
-- `PlayerA` has an integer score.
-- `PlayerB` has a string `"2"` score.
-- `PlayerC` has an empty string score.
-Because the sort is in descending `{ "score" : -1 }`, the string literal values are sorted before `PlayerA`'s numeric score:
+- ``PlayerA`` has an integer score.
+- ``PlayerB`` has a string ``"2"`` score. 
+- ``PlayerC`` has an empty string score.
 
-```javascript
-[
-   {
-      _id: "G1",
-      playerId: [ [ "PlayerB", "2" ], [ "PlayerC", "" ], [ "PlayerA", 1 ] ]
-   }
-]
-```
+Because the sort is in descending ``{ "score" : -1 }``, the string
+literal values are sorted before ``PlayerA``'s numeric score:
+
+.. code-block:: javascript
+   :copyable: false
+
+   [
+      {
+         _id: "G1",
+         playerId: [ [ "PlayerB", "2" ], [ "PlayerC", "" ], [ "PlayerA", 1 ] ]
+      }
+   ]
 
 ## Restrictions
 
 ### Window Function and Aggregation Expression Support
 
-`$topN` is not supported as a `aggregation expression <aggregation-expressions>`.
+``$topN`` is not supported as a 
+:ref:`aggregation expression <aggregation-expressions>`.
 
-`$topN` is supported as a :pipeline:`window operator <$setWindowFields>`.
+``$topN`` is supported as a 
+:pipeline:`window operator <$setWindowFields>`.
 
 ### Memory Limit Considerations
 
-Groups within the `$topN` aggregation pipeline are subject to the `100 MB limit <agg-memory-restrictions>` pipeline limit. If this limit is exceeded for an individual group, the aggregation fails with an error.
+Groups within the ``$topN`` aggregation pipeline are subject to the
+:ref:`100 MB limit <agg-memory-restrictions>` pipeline limit. If this
+limit is exceeded for an individual group, the aggregation fails
+with an error.
 
 ## Examples
 
-Consider a `gamescores` collection with the following documents:
+Consider a ``gamescores`` collection with the following documents:
 
-```javascript
-db.gamescores.insertMany([
-   { playerId: "PlayerA", gameId: "G1", score: 31 },
-   { playerId: "PlayerB", gameId: "G1", score: 33 },
-   { playerId: "PlayerC", gameId: "G1", score: 99 },
-   { playerId: "PlayerD", gameId: "G1", score: 1 },
-   { playerId: "PlayerA", gameId: "G2", score: 10 },
-   { playerId: "PlayerB", gameId: "G2", score: 14 },
-   { playerId: "PlayerC", gameId: "G2", score: 66 },
-   { playerId: "PlayerD", gameId: "G2", score: 80 }
-])
-```
+.. code-block:: javascript
 
-### Find the Three Highest `Scores`
+   db.gamescores.insertMany([
+      { playerId: "PlayerA", gameId: "G1", score: 31 },
+      { playerId: "PlayerB", gameId: "G1", score: 33 },
+      { playerId: "PlayerC", gameId: "G1", score: 99 },
+      { playerId: "PlayerD", gameId: "G1", score: 1 },
+      { playerId: "PlayerA", gameId: "G2", score: 10 },
+      { playerId: "PlayerB", gameId: "G2", score: 14 },
+      { playerId: "PlayerC", gameId: "G2", score: 66 },
+      { playerId: "PlayerD", gameId: "G2", score: 80 }
+   ])
 
-You can use the `$topN` accumulator to find the highest scoring players in a single game.
+### Find the Three Highest ``Scores``
 
-```javascript
-db.gamescores.aggregate( [
-   {
-      $match : { gameId : "G1" }
-   },
-   {
-      $group:
-         {
-            _id: "$gameId",
-            playerId:
-               {
-                  $topN:
+You can use the ``$topN`` accumulator to find the highest scoring
+players in a single game.
+
+.. code-block:: javascript
+
+   db.gamescores.aggregate( [
+      {
+         $match : { gameId : "G1" }
+      },
+      {
+         $group:
+            {
+               _id: "$gameId",
+               playerId:
                   {
-                     output: ["$playerId", "$score"],
-                     sortBy: { "score": -1 },
-                     n:3
+                     $topN:
+                     {
+                        output: ["$playerId", "$score"],
+                        sortBy: { "score": -1 },
+                        n:3
+                     }
                   }
-               }
-         }
-   }
-] )
-```
+            }
+      }
+   ] )
 
 The example pipeline:
 
-- Uses :pipeline:`$match` to filter the results on a single `gameId`.
-In this case, `G1`.
-
-- Uses :pipeline:`$group` to group the results by `gameId`. In this
-case, `G1`.
-
-- Uses sort by `{ "score": -1 }` to sort the results in descending
-order.
-
-- Specifies the fields that are output from `$topN` with
-`output : ["$playerId"," $score"]`.
-
-- Uses `$topN` to return the top three documents
-with the highest `score` for the `G1` game with `n : 3`.
+- Uses :pipeline:`$match` to filter the results on a single ``gameId``. 
+  In this case, ``G1``.
+- Uses :pipeline:`$group` to group the results by ``gameId``. In this 
+  case, ``G1``.
+- Uses sort by ``{ "score": -1 }`` to sort the results in descending
+  order.
+- Specifies the fields that are output from ``$topN`` with
+  ``output : ["$playerId"," $score"]``.
+- Uses ``$topN`` to return the top three documents
+  with the highest ``score`` for the ``G1`` game with ``n : 3``.
 
 The operation returns the following results:
 
-```javascript
-[
-   {
-      _id: 'G1',
-      playerId: [ [ 'PlayerC', 99 ], [ 'PlayerB', 33 ], [ 'PlayerA', 31 ] ]
-   }
-]
-```
+.. code-block:: javascript
+   :copyable: false
+
+   [
+      {
+         _id: 'G1',
+         playerId: [ [ 'PlayerC', 99 ], [ 'PlayerB', 33 ], [ 'PlayerA', 31 ] ]
+      }
+   ]
 
 The SQL equivalent to this query is:
 
-```sql
-SELECT T3.GAMEID,T3.PLAYERID,T3.SCORE
-FROM GAMESCORES AS GS
-JOIN (SELECT TOP 3
-         GAMEID,PLAYERID,SCORE
-         FROM GAMESCORES
-         WHERE GAMEID = 'G1'
-         ORDER BY SCORE DESC) AS T3
-            ON GS.GAMEID = T3.GAMEID
-GROUP BY T3.GAMEID,T3.PLAYERID,T3.SCORE
-   ORDER BY T3.SCORE DESC
-```
+.. code-block:: sql
+   :copyable: false
+
+   SELECT T3.GAMEID,T3.PLAYERID,T3.SCORE
+   FROM GAMESCORES AS GS
+   JOIN (SELECT TOP 3
+            GAMEID,PLAYERID,SCORE
+            FROM GAMESCORES
+            WHERE GAMEID = 'G1'
+            ORDER BY SCORE DESC) AS T3
+               ON GS.GAMEID = T3.GAMEID
+   GROUP BY T3.GAMEID,T3.PLAYERID,T3.SCORE
+      ORDER BY T3.SCORE DESC
 
 ### Finding the Three Highest Score Documents Across Multiple Games
 
-You can use the `$topN` accumulator to find the highest scoring players in each game.
+You can use the ``$topN`` accumulator to find the highest scoring
+players in each game.
 
-```javascript
-db.gamescores.aggregate( [
-      {
-         $group:
-         { _id: "$gameId", playerId:
-            {
-               $topN:
-                  {
-                     output: [ "$playerId","$score" ],
-                     sortBy: { "score": -1 },
-                     n: 3
-                  }
+.. code-block:: javascript
+
+   db.gamescores.aggregate( [
+         {
+            $group:
+            { _id: "$gameId", playerId:
+               {
+                  $topN:
+                     {
+                        output: [ "$playerId","$score" ],
+                        sortBy: { "score": -1 },
+                        n: 3
+                     }
+               }
             }
          }
-      }
-] )
-```
+   ] )
 
 The example pipeline:
 
-- Uses `$group` to group the results by `gameId`.
-- Specifies the fields that are output from `$topN` with
-`output : ["$playerId", "$score"]`.
-
-- Uses sort by `{ "score": -1 }` to sort the results in descending
-order.
-
-- Uses `$topN` to return the top three documents
-with the highest `score` for each game with `n: 3`.
+- Uses ``$group`` to group the results by ``gameId``.
+- Specifies the fields that are output from ``$topN`` with
+  ``output : ["$playerId", "$score"]``.
+- Uses sort by ``{ "score": -1 }`` to sort the results in descending
+  order.
+- Uses ``$topN`` to return the top three documents
+  with the highest ``score`` for each game with ``n: 3``.
 
 The operation returns the following results:
 
-```javascript
-[
-   {
-      _id: 'G1',
-      playerId: [ [ 'PlayerC', 99 ], [ 'PlayerB', 33 ], [ 'PlayerA', 31 ] ]
-   },
-   {
-      _id: 'G2',
-      playerId: [ [ 'PlayerD', 80 ], [ 'PlayerC', 66 ], [ 'PlayerB', 14 ] ]
-   }
-]
-```
+.. code-block:: javascript
+   :copyable: false
+
+   [
+      {
+         _id: 'G1',
+         playerId: [ [ 'PlayerC', 99 ], [ 'PlayerB', 33 ], [ 'PlayerA', 31 ] ]
+      },
+      {
+         _id: 'G2',
+         playerId: [ [ 'PlayerD', 80 ], [ 'PlayerC', 66 ], [ 'PlayerB', 14 ] ]
+      }
+   ]
 
 The SQL equivalent to this query is:
 
-```sql
-SELECT PLAYERID,GAMEID,SCORE
-FROM(
-   SELECT ROW_NUMBER() OVER (PARTITION BY GAMEID ORDER BY SCORE DESC) AS GAMERANK,
-   GAMEID,PLAYERID,SCORE
-   FROM GAMESCORES
-) AS T
-WHERE GAMERANK <= 3
-ORDER BY GAMEID
-```
+.. code-block:: sql
+   :copyable: false
 
-### Computing `n` Based on the Group Key for `$group`
+   SELECT PLAYERID,GAMEID,SCORE
+   FROM(
+      SELECT ROW_NUMBER() OVER (PARTITION BY GAMEID ORDER BY SCORE DESC) AS GAMERANK,
+      GAMEID,PLAYERID,SCORE
+      FROM GAMESCORES
+   ) AS T
+   WHERE GAMERANK <= 3
+   ORDER BY GAMEID
 
-You can also assign the value of `n` dynamically. In this example, the :expression:`$cond` expression is used on the `gameId` field.
+### Computing ``n`` Based on the Group Key for ``$group``
 
-```javascript
-db.gamescores.aggregate([
-   {
-      $group:
+You can also assign the value of ``n`` dynamically. In this example,
+the :expression:`$cond` expression is used on the ``gameId`` field.
+
+.. code-block:: javascript
+   :emphasize-lines: 11
+
+   db.gamescores.aggregate([
       {
-         _id: {"gameId": "$gameId"},
-         gamescores:
-            {
-               $topN:
-                  {
-                     output: "$score",
-                     n: { $cond: { if: {$eq: ["$gameId","G2"] }, then: 1, else: 3 } },
-                     sortBy: { "score": -1 }
-                  }
-            }
+         $group:
+         {
+            _id: {"gameId": "$gameId"},
+            gamescores:
+               {
+                  $topN:
+                     {
+                        output: "$score",
+                        n: { $cond: { if: {$eq: ["$gameId","G2"] }, then: 1, else: 3 } },
+                        sortBy: { "score": -1 }
+                     }
+               }
+         }
       }
-   }
-] )
-```
+   ] )
 
 The example pipeline:
 
-- Uses `$group` to group the results by `gameId`.
-- Specifies the fields that are output from `$topN` with
-`output : "$score"`.
-
-- If the `gameId` is `G2` then `n` is 1, otherwise `n` is 3.
-- Uses sort by `{ "score": -1 }` to sort the results in descending
-order.
+- Uses ``$group`` to group the results by ``gameId``.
+- Specifies the fields that are output from ``$topN`` with
+  ``output : "$score"``.
+- If the ``gameId`` is ``G2`` then ``n`` is 1, otherwise ``n`` is 3.
+- Uses sort by ``{ "score": -1 }`` to sort the results in descending
+  order.
 
 The operation returns the following results:
 
-```javascript
-[
-   { _id: { gameId: 'G1' }, gamescores: [ 99, 33, 31 ] },
-   { _id: { gameId: 'G2' }, gamescores: [ 80 ] }
-]
-```
+.. code-block:: javascript
+   :copyable: false
+
+   [
+      { _id: { gameId: 'G1' }, gamescores: [ 99, 33, 31 ] },
+      { _id: { gameId: 'G2' }, gamescores: [ 80 ] }
+   ]

@@ -1,418 +1,678 @@
 ---
 type: "Framework Learn Page"
-framework: "sqlalchemy"
+framework: "SQLAlchemy"
 source_repo: "https://github.com/sqlalchemy/sqlalchemy"
 source_branch: "main"
 source_path: "doc/build/dialects/postgresql.rst"
-source_commit: "aa1a5575358d3aa14953b04dced02f4763fed2e7"
-source_commit_short: "aa1a5575"
-source_commit_date: "2026-07-23T18:02:59Z"
-generated_at: "2026-07-25T11:50:45Z"
+source_commit: "85cafd1a131fa8afeeeab23151940480b3fb0042"
+source_commit_short: "85cafd1"
+source_commit_date: "2026-08-28T20:17:49+00:00"
+generated_at: "2026-08-29T09:39:27.548531Z"
 ---
+.. _postgresql_toplevel:
 
 # PostgreSQL
 
+**automodule:** sqlalchemy.dialects.postgresql.base
+
 ## ARRAY Types
 
-The PostgreSQL dialect supports arrays, both as multidimensional column types as well as array literals:
+The PostgreSQL dialect supports arrays, both as multidimensional column types
+as well as array literals:
 
-- `_postgresql.ARRAY` - ARRAY datatype
-- `_postgresql.array` - array literal
-- `_postgresql.array_agg` - ARRAY_AGG SQL function
-- `_functions.FunctionElement.aggregate_order_by` - dialect-agnostic ORDER BY
-for aggregate functions
+* :class:`_postgresql.ARRAY` - ARRAY datatype
 
-- `_postgresql.aggregate_order_by` - legacy helper specific to PostgreSQL
+* :class:`_postgresql.array` - array literal
+
+* :func:`_postgresql.array_agg` - ARRAY_AGG SQL function
+
+* :meth:`_functions.FunctionElement.aggregate_order_by` - dialect-agnostic ORDER BY
+  for aggregate functions
+
+* :class:`_postgresql.aggregate_order_by` - legacy helper specific to PostgreSQL
+
 ## BIT type
 
-PostgreSQL's BIT type is a so-called "bit string" that stores a string of ones and zeroes.   SQLAlchemy provides the `_postgresql.BIT type to represent columns and expressions of this type, as well as the postgresql.BitString` value type which is a richly featured `str subclass that works with postgresql.BIT`.
+PostgreSQL's BIT type is a so-called "bit string" that stores a string of
+ones and zeroes.   SQLAlchemy provides the :class:`_postgresql.BIT` type
+to represent columns and expressions of this type, as well as the
+:class:`_postgresql.BitString` value type which is a richly featured ``str``
+subclass that works with :class:`_postgresql.BIT`.
 
-- `_postgresql.BIT` - the PostgreSQL BIT type
-- `_postgresql.BitString` - Rich-featured `str` subclass returned
-and accepted for columns and expressions that use `_postgresql.BIT`.
+* :class:`_postgresql.BIT` - the PostgreSQL BIT type
 
-.. versionchanged:: 2.1  `_postgresql.BIT` now works with the newly
+* :class:`_postgresql.BitString` - Rich-featured ``str`` subclass returned
+  and accepted for columns and expressions that use :class:`_postgresql.BIT`.
+
+**versionchanged:** 2.1  :class:`_postgresql.BIT` now works with the newly
+   added :class:`_postgresql.BitString` value type.
+
+.. _postgresql_json_types:
 
 ## JSON Types
 
-The PostgreSQL dialect supports both JSON and JSONB datatypes, including psycopg2's native support and support for all of PostgreSQL's special operators:
+The PostgreSQL dialect supports both JSON and JSONB datatypes, including
+psycopg2's native support and support for all of PostgreSQL's special
+operators:
 
-- `_postgresql.JSON`
-- `_postgresql.JSONB`
-- `_postgresql.JSONPATH`
+* :class:`_postgresql.JSON`
+
+* :class:`_postgresql.JSONB`
+
+* :class:`_postgresql.JSONPATH`
+
 ## HSTORE Type
 
 The PostgreSQL HSTORE type as well as hstore literals are supported:
 
-- `_postgresql.HSTORE` - HSTORE datatype
-- `_postgresql.hstore` - hstore literal
+* :class:`_postgresql.HSTORE` - HSTORE datatype
+
+* :class:`_postgresql.hstore` - hstore literal
+
 ## ENUM Types
 
-PostgreSQL has an independently creatable TYPE structure which is used to implement an enumerated type.   This approach introduces significant complexity on the SQLAlchemy side in terms of when this type should be CREATED and DROPPED.   The type object is also an independently reflectable entity.   The following sections should be consulted:
+PostgreSQL has an independently creatable TYPE structure which is used
+to implement an enumerated type.   This approach introduces significant
+complexity on the SQLAlchemy side in terms of when this type should be
+CREATED and DROPPED.   The type object is also an independently reflectable
+entity.   The following sections should be consulted:
 
-- `_postgresql.ENUM` - DDL and typing support for ENUM.
-- `.PGInspector.get_enums` - retrieve a listing of current ENUM types
-- `.postgresql.ENUM.create` , `.postgresql.ENUM.drop` - individual
-CREATE and DROP commands for ENUM.
+* :class:`_postgresql.ENUM` - DDL and typing support for ENUM.
 
-#### Using ENUM with ARRAY
+* :meth:`.PGInspector.get_enums` - retrieve a listing of current ENUM types
 
-The combination of ENUM and ARRAY is not directly supported by backend DBAPIs at this time.   Prior to SQLAlchemy 1.3.17, a special workaround was needed in order to allow this combination to work, described below.
+* :meth:`.postgresql.ENUM.create` , :meth:`.postgresql.ENUM.drop` - individual
+  CREATE and DROP commands for ENUM.
 
-```python
- from sqlalchemy import TypeDecorator
- from sqlalchemy.dialects.postgresql import ARRAY
+.. _postgresql_array_of_enum:
 
- class ArrayOfEnum(TypeDecorator):
-     impl = ARRAY
+## Using ENUM with ARRAY
 
-     def bind_expression(self, bindvalue):
-         return sa.cast(bindvalue, self)
+The combination of ENUM and ARRAY is not directly supported by backend
+DBAPIs at this time.   Prior to SQLAlchemy 1.3.17, a special workaround
+was needed in order to allow this combination to work, described below.
 
-     def result_processor(self, dialect, coltype):
-         super_rp = super(ArrayOfEnum, self).result_processor(dialect, coltype)
+**sourcecode:** python
 
-         def handle_raw_string(value):
-             inner = re.match(r"^{(.*)}$", value).group(1)
-             return inner.split(",") if inner else []
+    from sqlalchemy import TypeDecorator
+    from sqlalchemy.dialects.postgresql import ARRAY
 
-         def process(value):
-             if value is None:
-                 return None
-             return super_rp(handle_raw_string(value))
 
-         return process
-```
+    class ArrayOfEnum(TypeDecorator):
+        impl = ARRAY
 
-E.g.:
+        def bind_expression(self, bindvalue):
+            return sa.cast(bindvalue, self)
 
-```
-Table(
-    "mydata",
-    metadata,
-    Column("id", Integer, primary_key=True),
-    Column("data", ArrayOfEnum(ENUM("a", "b", "c", name="myenum"))),
-)
-```
+        def result_processor(self, dialect, coltype):
+            super_rp = super(ArrayOfEnum, self).result_processor(dialect, coltype)
 
-This type is not included as a built-in type as it would be incompatible with a DBAPI that suddenly decides to support ARRAY of ENUM directly in a new version.
+            def handle_raw_string(value):
+                inner = re.match(r"^{(.*)}$", value).group(1)
+                return inner.split(",") if inner else []
 
-#### Using JSON/JSONB with ARRAY
+            def process(value):
+                if value is None:
+                    return None
+                return super_rp(handle_raw_string(value))
 
-Similar to using ENUM, prior to SQLAlchemy 1.3.17, for an ARRAY of JSON/JSONB we need to render the appropriate CAST.   Current psycopg2 drivers accommodate the result set correctly without any special steps.
+            return process
 
-```python
- class CastingArray(ARRAY):
-     def bind_expression(self, bindvalue):
-         return sa.cast(bindvalue, self)
-```
+E.g.::
 
-E.g.:
+    Table(
+        "mydata",
+        metadata,
+        Column("id", Integer, primary_key=True),
+        Column("data", ArrayOfEnum(ENUM("a", "b", "c", name="myenum"))),
+    )
 
-```
-Table(
-    "mydata",
-    metadata,
-    Column("id", Integer, primary_key=True),
-    Column("data", CastingArray(JSONB)),
-)
-```
+This type is not included as a built-in type as it would be incompatible
+with a DBAPI that suddenly decides to support ARRAY of ENUM directly in
+a new version.
+
+.. _postgresql_array_of_json:
+
+## Using JSON/JSONB with ARRAY
+
+Similar to using ENUM, prior to SQLAlchemy 1.3.17, for an ARRAY of JSON/JSONB
+we need to render the appropriate CAST.   Current psycopg2 drivers accommodate
+the result set correctly without any special steps.
+
+**sourcecode:** python
+
+    class CastingArray(ARRAY):
+        def bind_expression(self, bindvalue):
+            return sa.cast(bindvalue, self)
+
+E.g.::
+
+    Table(
+        "mydata",
+        metadata,
+        Column("id", Integer, primary_key=True),
+        Column("data", CastingArray(JSONB)),
+    )
+
+.. _postgresql_ranges:
 
 ## Range and Multirange Types
 
-PostgreSQL range and multirange types are supported for the psycopg, pg8000 and asyncpg dialects; the psycopg2 dialect supports the range types only.
+PostgreSQL range and multirange types are supported for the
+psycopg, pg8000 and asyncpg dialects; the psycopg2 dialect supports the
+range types only.
 
-.. versionadded:: 2.0.17 Added range and multirange support for the pg8000
+**versionadded:** 2.0.17 Added range and multirange support for the pg8000
+   dialect.  pg8000 1.29.8 or greater is required.
 
-Data values being passed to the database may be passed as string values or by using the `_postgresql.Range` data object.
+Data values being passed to the database may be passed as string
+values or by using the :class:`_postgresql.Range` data object.
 
-.. versionadded:: 2.0  Added the backend-agnostic `_postgresql.Range`
+**versionadded:** 2.0  Added the backend-agnostic :class:`_postgresql.Range`
+   object used to indicate ranges.  The ``psycopg2``-specific range classes
+   are no longer exposed and are only used internally by that particular
+   dialect.
 
-E.g. an example of a fully typed model using the `_postgresql.TSRANGE` datatype:
+E.g. an example of a fully typed model using the
+:class:`_postgresql.TSRANGE` datatype::
 
-```
-from datetime import datetime
+    from datetime import datetime
 
-from sqlalchemy.dialects.postgresql import Range
-from sqlalchemy.dialects.postgresql import TSRANGE
-from sqlalchemy.orm import DeclarativeBase
-from sqlalchemy.orm import Mapped
-from sqlalchemy.orm import mapped_column
+    from sqlalchemy.dialects.postgresql import Range
+    from sqlalchemy.dialects.postgresql import TSRANGE
+    from sqlalchemy.orm import DeclarativeBase
+    from sqlalchemy.orm import Mapped
+    from sqlalchemy.orm import mapped_column
 
-class Base(DeclarativeBase):
-    pass
 
-class RoomBooking(Base):
-    __tablename__ = "room_booking"
+    class Base(DeclarativeBase):
+        pass
 
-    id: Mapped[int] = mapped_column(primary_key=True)
-    room: Mapped[str]
-    during: Mapped[Range[datetime]] = mapped_column(TSRANGE)
-```
 
-To represent data for the `during column above, the postgresql.Range` type is a simple dataclass that will represent the bounds of the range. Below illustrates an INSERT of a row into the above `room_booking` table:
+    class RoomBooking(Base):
+        __tablename__ = "room_booking"
 
-```
-from sqlalchemy import create_engine
-from sqlalchemy.orm import Session
+        id: Mapped[int] = mapped_column(primary_key=True)
+        room: Mapped[str]
+        during: Mapped[Range[datetime]] = mapped_column(TSRANGE)
 
-engine = create_engine("postgresql+psycopg://scott:tiger@pg14/dbname")
+To represent data for the ``during`` column above, the :class:`_postgresql.Range`
+type is a simple dataclass that will represent the bounds of the range.
+Below illustrates an INSERT of a row into the above ``room_booking`` table::
 
-Base.metadata.create_all(engine)
+    from sqlalchemy import create_engine
+    from sqlalchemy.orm import Session
 
-with Session(engine) as session:
-    booking = RoomBooking(
-        room="101", during=Range(datetime(2013, 3, 23), datetime(2013, 3, 25))
-    )
-    session.add(booking)
-    session.commit()
-```
+    engine = create_engine("postgresql+psycopg://scott:tiger@pg14/dbname")
 
-Selecting from any range column will also return `_postgresql.Range` objects as indicated:
+    Base.metadata.create_all(engine)
 
-```
-from sqlalchemy import select
+    with Session(engine) as session:
+        booking = RoomBooking(
+            room="101", during=Range(datetime(2013, 3, 23), datetime(2013, 3, 25))
+        )
+        session.add(booking)
+        session.commit()
 
-with Session(engine) as session:
-    for row in session.execute(select(RoomBooking.during)):
-        print(row)
-```
+Selecting from any range column will also return :class:`_postgresql.Range`
+objects as indicated::
+
+    from sqlalchemy import select
+
+    with Session(engine) as session:
+        for row in session.execute(select(RoomBooking.during)):
+            print(row)
 
 The available range datatypes are as follows:
 
-- `_postgresql.INT4RANGE`
-- `_postgresql.INT8RANGE`
-- `_postgresql.NUMRANGE`
-- `_postgresql.DATERANGE`
-- `_postgresql.TSRANGE`
-- `_postgresql.TSTZRANGE`
-#### Multiranges
+* :class:`_postgresql.INT4RANGE`
+* :class:`_postgresql.INT8RANGE`
+* :class:`_postgresql.NUMRANGE`
+* :class:`_postgresql.DATERANGE`
+* :class:`_postgresql.TSRANGE`
+* :class:`_postgresql.TSTZRANGE`
 
-Multiranges are supported by PostgreSQL 14 and above.  SQLAlchemy's multirange datatypes deal in lists of `_postgresql.Range` types.
+**autoclass:** sqlalchemy.dialects.postgresql.Range
+    :members:
 
-Multiranges are supported on the psycopg, asyncpg, and pg8000 dialects **only**.  The psycopg2 dialect, which is SQLAlchemy's default `postgresql` dialect, **does not** support multirange datatypes.
+## Multiranges
 
-.. versionadded:: 2.0 Added support for MULTIRANGE datatypes.
+Multiranges are supported by PostgreSQL 14 and above.  SQLAlchemy's
+multirange datatypes deal in lists of :class:`_postgresql.Range` types.
 
-.. versionadded:: 2.0.17 Added multirange support for the pg8000 dialect.
+Multiranges are supported on the psycopg, asyncpg, and pg8000 dialects
+**only**.  The psycopg2 dialect, which is SQLAlchemy's default ``postgresql``
+dialect, **does not** support multirange datatypes.
 
-.. versionadded:: 2.0.26 `_postgresql.MultiRange` sequence added.
+**versionadded:** 2.0 Added support for MULTIRANGE datatypes.
+   SQLAlchemy represents a multirange value as a list of
+   :class:`_postgresql.Range` objects.
 
-The example below illustrates use of the `_postgresql.TSMULTIRANGE` datatype:
+**versionadded:** 2.0.17 Added multirange support for the pg8000 dialect.
+   pg8000 1.29.8 or greater is required.
 
-```
-from datetime import datetime
-from typing import List
+**versionadded:** 2.0.26 :class:`_postgresql.MultiRange` sequence added.
 
-from sqlalchemy.dialects.postgresql import Range
-from sqlalchemy.dialects.postgresql import TSMULTIRANGE
-from sqlalchemy.orm import DeclarativeBase
-from sqlalchemy.orm import Mapped
-from sqlalchemy.orm import mapped_column
+The example below illustrates use of the :class:`_postgresql.TSMULTIRANGE`
+datatype::
 
-class Base(DeclarativeBase):
-    pass
+    from datetime import datetime
+    from typing import List
 
-class EventCalendar(Base):
-    __tablename__ = "event_calendar"
+    from sqlalchemy.dialects.postgresql import Range
+    from sqlalchemy.dialects.postgresql import TSMULTIRANGE
+    from sqlalchemy.orm import DeclarativeBase
+    from sqlalchemy.orm import Mapped
+    from sqlalchemy.orm import mapped_column
 
-    id: Mapped[int] = mapped_column(primary_key=True)
-    event_name: Mapped[str]
-    added: Mapped[datetime]
-    in_session_periods: Mapped[List[Range[datetime]]] = mapped_column(TSMULTIRANGE)
-```
 
-Illustrating insertion and selecting of a record:
+    class Base(DeclarativeBase):
+        pass
 
-```
-from sqlalchemy import create_engine
-from sqlalchemy import select
-from sqlalchemy.orm import Session
 
-engine = create_engine("postgresql+psycopg://scott:tiger@pg14/test")
+    class EventCalendar(Base):
+        __tablename__ = "event_calendar"
 
-Base.metadata.create_all(engine)
+        id: Mapped[int] = mapped_column(primary_key=True)
+        event_name: Mapped[str]
+        added: Mapped[datetime]
+        in_session_periods: Mapped[List[Range[datetime]]] = mapped_column(TSMULTIRANGE)
 
-with Session(engine) as session:
-    calendar = EventCalendar(
-        event_name="SQLAlchemy Tutorial Sessions",
-        in_session_periods=[
-            Range(datetime(2013, 3, 23), datetime(2013, 3, 25)),
-            Range(datetime(2013, 4, 12), datetime(2013, 4, 15)),
-            Range(datetime(2013, 5, 9), datetime(2013, 5, 12)),
-        ],
-    )
-    session.add(calendar)
-    session.commit()
+Illustrating insertion and selecting of a record::
 
-    for multirange in session.scalars(select(EventCalendar.in_session_periods)):
-        for range_ in multirange:
-            print(f"Start: {range_.lower}  End: {range_.upper}")
-```
+    from sqlalchemy import create_engine
+    from sqlalchemy import select
+    from sqlalchemy.orm import Session
 
-> **Note:** as handled by the ORM will not automatically detect in-place changes to
-a particular list value; to update list values with the ORM, either re-assign
-a new list to the attribute, or use the `.MutableList`
-type modifier.  See the section `mutable_toplevel` for background.
+    engine = create_engine("postgresql+psycopg://scott:tiger@pg14/test")
 
-##### Use of a MultiRange sequence to infer the multirange type
+    Base.metadata.create_all(engine)
 
-When using a multirange as a literal without specifying the type the utility `_postgresql.MultiRange` sequence can be used:
+    with Session(engine) as session:
+        calendar = EventCalendar(
+            event_name="SQLAlchemy Tutorial Sessions",
+            in_session_periods=[
+                Range(datetime(2013, 3, 23), datetime(2013, 3, 25)),
+                Range(datetime(2013, 4, 12), datetime(2013, 4, 15)),
+                Range(datetime(2013, 5, 9), datetime(2013, 5, 12)),
+            ],
+        )
+        session.add(calendar)
+        session.commit()
 
-```
-from sqlalchemy import literal
-from sqlalchemy.dialects.postgresql import MultiRange
+        for multirange in session.scalars(select(EventCalendar.in_session_periods)):
+            for range_ in multirange:
+                print(f"Start: {range_.lower}  End: {range_.upper}")
 
-with Session(engine) as session:
-    stmt = select(EventCalendar).where(
-        EventCalendar.added.op("<@")(
-            MultiRange(
-                [
-                    Range(datetime(2023, 1, 1), datetime(2013, 3, 31)),
-                    Range(datetime(2023, 7, 1), datetime(2013, 9, 30)),
-                ]
+**note:** In the above example, the list of :class:`_postgresql.Range` types
+   as handled by the ORM will not automatically detect in-place changes to
+   a particular list value; to update list values with the ORM, either re-assign
+   a new list to the attribute, or use the :class:`.MutableList`
+   type modifier.  See the section :ref:`mutable_toplevel` for background.
+
+.. _postgresql_multirange_list_use:
+
+### Use of a MultiRange sequence to infer the multirange type
+
+When using a multirange as a literal without specifying the type
+the utility :class:`_postgresql.MultiRange` sequence can be used::
+
+    from sqlalchemy import literal
+    from sqlalchemy.dialects.postgresql import MultiRange
+
+    with Session(engine) as session:
+        stmt = select(EventCalendar).where(
+            EventCalendar.added.op("<@")(
+                MultiRange(
+                    [
+                        Range(datetime(2023, 1, 1), datetime(2013, 3, 31)),
+                        Range(datetime(2023, 7, 1), datetime(2013, 9, 30)),
+                    ]
+                )
             )
         )
-    )
-    in_range = session.execute(stmt).all()
+        in_range = session.execute(stmt).all()
 
-with engine.connect() as conn:
-    row = conn.scalar(select(literal(MultiRange([Range(2, 4)]))))
-    print(f"{row.lower} -> {row.upper}")
-```
+    with engine.connect() as conn:
+        row = conn.scalar(select(literal(MultiRange([Range(2, 4)]))))
+        print(f"{row.lower} -> {row.upper}")
 
-Using a simple `list instead of postgresql.MultiRange` would require manually setting the type of the literal value to the appropriate multirange type.
+Using a simple ``list`` instead of :class:`_postgresql.MultiRange` would require
+manually setting the type of the literal value to the appropriate multirange type.
 
-.. versionadded:: 2.0.26 `_postgresql.MultiRange` sequence added.
+**versionadded:** 2.0.26 :class:`_postgresql.MultiRange` sequence added.
 
 The available multirange datatypes are as follows:
 
-- `_postgresql.INT4MULTIRANGE`
-- `_postgresql.INT8MULTIRANGE`
-- `_postgresql.NUMMULTIRANGE`
-- `_postgresql.DATEMULTIRANGE`
-- `_postgresql.TSMULTIRANGE`
-- `_postgresql.TSTZMULTIRANGE`
+* :class:`_postgresql.INT4MULTIRANGE`
+* :class:`_postgresql.INT8MULTIRANGE`
+* :class:`_postgresql.NUMMULTIRANGE`
+* :class:`_postgresql.DATEMULTIRANGE`
+* :class:`_postgresql.TSMULTIRANGE`
+* :class:`_postgresql.TSTZMULTIRANGE`
+
+.. _postgresql_network_datatypes:
+
 ## Network Data Types
 
-The included networking datatypes are `_postgresql.INET, postgresql.CIDR, postgresql.MACADDR`.
+The included networking datatypes are :class:`_postgresql.INET`,
+:class:`_postgresql.CIDR`, :class:`_postgresql.MACADDR`.
 
-For `_postgresql.INET and postgresql.CIDR` datatypes, conditional support is available for these datatypes to send and retrieve Python `ipaddress` objects including `ipaddress.IPv4Network`, `ipaddress.IPv6Network`, `ipaddress.IPv4Address`, `ipaddress.IPv6Address`.  This support is currently **the default behavior of the DBAPI itself, and varies per DBAPI.  SQLAlchemy does not yet implement its own network address conversion logic**.
+For :class:`_postgresql.INET` and :class:`_postgresql.CIDR` datatypes,
+conditional support is available for these datatypes to send and retrieve
+Python ``ipaddress`` objects including ``ipaddress.IPv4Network``,
+``ipaddress.IPv6Network``, ``ipaddress.IPv4Address``,
+``ipaddress.IPv6Address``.  This support is currently **the default behavior of
+the DBAPI itself, and varies per DBAPI.  SQLAlchemy does not yet implement its
+own network address conversion logic**.
 
-- The `postgresql_psycopg` and `postgresql_asyncpg` support these
-datatypes fully; objects from the `ipaddress` family are returned in rows by default.
+* The :ref:`postgresql_psycopg` and :ref:`postgresql_asyncpg` support these
+  datatypes fully; objects from the ``ipaddress`` family are returned in rows
+  by default.
+* The :ref:`postgresql_psycopg2` dialect only sends and receives strings.
+* The :ref:`postgresql_pg8000` dialect supports ``ipaddress.IPv4Address`` and
+  ``ipaddress.IPv6Address`` objects for the :class:`_postgresql.INET` datatype,
+  but uses strings for :class:`_postgresql.CIDR` types.
 
-- The `postgresql_psycopg2` dialect only sends and receives strings.
-- The `postgresql_pg8000` dialect supports `ipaddress.IPv4Address` and
-`ipaddress.IPv6Address objects for the postgresql.INET datatype, but uses strings for postgresql.CIDR` types.
+To **normalize all the above DBAPIs to only return strings**, use the
+``native_inet_types`` parameter, passing a value of ``False``::
 
-To **normalize all the above DBAPIs to only return strings**, use the `native_inet_types` parameter, passing a value of `False`:
+    e = create_engine(
+        "postgresql+psycopg://scott:tiger@host/dbname", native_inet_types=False
+    )
 
-```
-e = create_engine(
-    "postgresql+psycopg://scott:tiger@host/dbname", native_inet_types=False
-)
-```
+With the above parameter, the ``psycopg``, ``asyncpg`` and ``pg8000`` dialects
+will disable the DBAPI's adaptation of these types and will return only strings,
+matching the behavior of the older ``psycopg2`` dialect.
 
-With the above parameter, the `psycopg`, `asyncpg` and `pg8000` dialects will disable the DBAPI's adaptation of these types and will return only strings, matching the behavior of the older `psycopg2` dialect.
+The parameter may also be set to ``True``, where it will have the effect of
+raising ``NotImplementedError`` for those backends that don't support, or
+don't yet fully support, conversion of rows to Python ``ipaddress`` datatypes
+(currently psycopg2 and pg8000).
 
-The parameter may also be set to `True`, where it will have the effect of raising `NotImplementedError` for those backends that don't support, or don't yet fully support, conversion of rows to Python `ipaddress` datatypes (currently psycopg2 and pg8000).
-
-.. versionadded:: 2.0.18 - added the `native_inet_types` parameter.
+**versionadded:** 2.0.18 - added the ``native_inet_types`` parameter.
 
 ## PostgreSQL Data Types
 
-As with all SQLAlchemy dialects, all UPPERCASE types that are known to be valid with PostgreSQL are importable from the top level dialect, whether they originate from `sqlalchemy.types` or from the local dialect:
+As with all SQLAlchemy dialects, all UPPERCASE types that are known to be
+valid with PostgreSQL are importable from the top level dialect, whether
+they originate from :mod:`sqlalchemy.types` or from the local dialect::
 
-```
-from sqlalchemy.dialects.postgresql import (
-    ARRAY,
-    BIGINT,
-    BIT,
-    BOOLEAN,
-    BYTEA,
-    CHAR,
-    CIDR,
-    CITEXT,
-    DATE,
-    DATEMULTIRANGE,
-    DATERANGE,
-    DOMAIN,
-    DOUBLE_PRECISION,
-    ENUM,
-    FLOAT,
-    HSTORE,
-    INET,
-    INT4MULTIRANGE,
-    INT4RANGE,
-    INT8MULTIRANGE,
-    INT8RANGE,
-    INTEGER,
-    INTERVAL,
-    JSON,
-    JSONB,
-    JSONPATH,
-    MACADDR,
-    MACADDR8,
-    MONEY,
-    NUMERIC,
-    NUMMULTIRANGE,
-    NUMRANGE,
-    OID,
-    REAL,
-    REGCLASS,
-    REGCONFIG,
-    SMALLINT,
-    TEXT,
-    TIME,
-    TIMESTAMP,
-    TSMULTIRANGE,
-    TSQUERY,
-    TSRANGE,
-    TSTZMULTIRANGE,
-    TSTZRANGE,
-    TSVECTOR,
-    UUID,
-    VARCHAR,
-)
-```
+    from sqlalchemy.dialects.postgresql import (
+        ARRAY,
+        BIGINT,
+        BIT,
+        BOOLEAN,
+        BYTEA,
+        CHAR,
+        CIDR,
+        CITEXT,
+        DATE,
+        DATEMULTIRANGE,
+        DATERANGE,
+        DOMAIN,
+        DOUBLE_PRECISION,
+        ENUM,
+        FLOAT,
+        HSTORE,
+        INET,
+        INT4MULTIRANGE,
+        INT4RANGE,
+        INT8MULTIRANGE,
+        INT8RANGE,
+        INTEGER,
+        INTERVAL,
+        JSON,
+        JSONB,
+        JSONPATH,
+        MACADDR,
+        MACADDR8,
+        MONEY,
+        NUMERIC,
+        NUMMULTIRANGE,
+        NUMRANGE,
+        OID,
+        REAL,
+        REGCLASS,
+        REGCONFIG,
+        SMALLINT,
+        TEXT,
+        TIME,
+        TIMESTAMP,
+        TSMULTIRANGE,
+        TSQUERY,
+        TSRANGE,
+        TSTZMULTIRANGE,
+        TSTZRANGE,
+        TSVECTOR,
+        UUID,
+        VARCHAR,
+    )
 
-Types which are specific to PostgreSQL, or have PostgreSQL-specific construction arguments, are as follows:
+Types which are specific to PostgreSQL, or have PostgreSQL-specific
+construction arguments, are as follows:
 
-in the dialect module, just imported from sqltypes.  this avoids warnings in the sphinx build
+.. note: where :noindex: is used, indicates a type that is not redefined
+   in the dialect module, just imported from sqltypes.  this avoids warnings
+   in the sphinx build
+
+**currentmodule:** sqlalchemy.dialects.postgresql
+
+**autoclass:** sqlalchemy.dialects.postgresql.AbstractRange
+    :members: comparator_factory
+
+**autoclass:** sqlalchemy.dialects.postgresql.AbstractSingleRange
+
+**autoclass:** sqlalchemy.dialects.postgresql.AbstractMultiRange
+
+
+**autoclass:** ARRAY
+    :members: __init__, Comparator
+    :member-order: bysource
+
+**autoclass:** BIT
+
+**autoclass:** BitString
+    :members:
+
+**autoclass:** BYTEA
+    :members: __init__
+
+**autoclass:** CIDR
+
+**autoclass:** CITEXT
+
+**autoclass:** DOMAIN
+    :members: __init__, create, drop
+
+**autoclass:** DOUBLE_PRECISION
+    :members: __init__
+    :noindex:
+
+
+**autoclass:** ENUM
+    :members: __init__, create, drop
+
+
+**autoclass:** HSTORE
+    :members:
+
+
+**autoclass:** INET
+
+**autoclass:** INTERVAL
+    :members: __init__
+
+**autoclass:** JSON
+    :members:
+
+**autoclass:** JSONB
+    :members:
+
+**autoclass:** JSONPATH
+
+**autoclass:** MACADDR
+
+**autoclass:** MACADDR8
+
+**autoclass:** MONEY
+
+**autoclass:** OID
+
+**autoclass:** REAL
+    :members: __init__
+    :noindex:
+
+
+**autoclass:** REGCONFIG
+
+**autoclass:** REGCLASS
+
+**autoclass:** TIMESTAMP
+    :members: __init__
+
+**autoclass:** TIME
+    :members: __init__
+
+**autoclass:** TSQUERY
+
+**autoclass:** TSVECTOR
+
+**autoclass:** UUID
+    :members: __init__
+    :noindex:
+
+
+**autoclass:** INT4RANGE
+
+
+**autoclass:** INT8RANGE
+
+
+**autoclass:** NUMRANGE
+
+
+**autoclass:** DATERANGE
+
+
+**autoclass:** TSRANGE
+
+
+**autoclass:** TSTZRANGE
+
+
+**autoclass:** INT4MULTIRANGE
+
+
+**autoclass:** INT8MULTIRANGE
+
+
+**autoclass:** NUMMULTIRANGE
+
+
+**autoclass:** DATEMULTIRANGE
+
+
+**autoclass:** TSMULTIRANGE
+
+
+**autoclass:** TSTZMULTIRANGE
+
+
+**autoclass:** MultiRange
+
 
 ## PostgreSQL SQL Elements and Functions
 
+**autoclass:** aggregate_order_by
+
+**autoclass:** array
+
+**autofunction:** array_agg
+
+**autofunction:** Any
+
+**autofunction:** All
+
+**autoclass:** hstore
+    :members:
+
+**autoclass:** to_tsvector
+
+**autoclass:** to_tsquery
+
+**autoclass:** plainto_tsquery
+
+**autoclass:** phraseto_tsquery
+
+**autoclass:** websearch_to_tsquery
+
+**autoclass:** ts_headline
+
+**autofunction:** distinct_on
+
 ## PostgreSQL Constraint Types
 
-SQLAlchemy supports PostgreSQL EXCLUDE constraints via the `ExcludeConstraint` class:
+SQLAlchemy supports PostgreSQL EXCLUDE constraints via the
+:class:`ExcludeConstraint` class:
 
-For example:
+**autoclass:** ExcludeConstraint
+   :members: __init__
 
-```
-from sqlalchemy.dialects.postgresql import ExcludeConstraint, TSRANGE
+For example::
 
-class RoomBooking(Base):
-    __tablename__ = "room_booking"
+    from sqlalchemy.dialects.postgresql import ExcludeConstraint, TSRANGE
 
-    room = Column(Integer(), primary_key=True)
-    during = Column(TSRANGE())
 
-    __table_args__ = (ExcludeConstraint(("room", "="), ("during", "&&")),)
-```
+    class RoomBooking(Base):
+        __tablename__ = "room_booking"
+
+        room = Column(Integer(), primary_key=True)
+        during = Column(TSRANGE())
+
+        __table_args__ = (ExcludeConstraint(("room", "="), ("during", "&&")),)
 
 ## PostgreSQL DML Constructs
 
+**autofunction:** sqlalchemy.dialects.postgresql.insert
+
+**autoclass:** sqlalchemy.dialects.postgresql.Insert
+  :members:
+
+.. _postgresql_psycopg:
+
 ## psycopg
 
-.. versionchanged:: 2.1
+**versionchanged:** 2.1
+    ``psycopg`` (psycopg 3) is now the default PostgreSQL dialect when no
+    specific dialect is specified in the URL (e.g. ``postgresql://...``).
+
+**automodule:** sqlalchemy.dialects.postgresql.psycopg
+
+.. _postgresql_psycopg2:
 
 ## psycopg2
 
-.. versionchanged:: 2.1
+**versionchanged:** 2.1
+    ``psycopg2`` is no longer the default PostgreSQL dialect. To explicitly
+    use ``psycopg2``, specify ``postgresql+psycopg2://...`` in the URL.
+
+**automodule:** sqlalchemy.dialects.postgresql.psycopg2
+
+.. _postgresql_pg8000:
 
 ## pg8000
 
+**automodule:** sqlalchemy.dialects.postgresql.pg8000
+
+.. _dialect-postgresql-asyncpg:
+
+.. _postgresql_asyncpg:
+
 ## asyncpg
 
+**automodule:** sqlalchemy.dialects.postgresql.asyncpg
+
 ## psycopg2cffi
+
+**automodule:** sqlalchemy.dialects.postgresql.psycopg2cffi

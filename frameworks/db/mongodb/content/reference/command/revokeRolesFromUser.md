@@ -1,94 +1,139 @@
 ---
 type: "Framework Learn Page"
-framework: "mongodb"
+framework: "MongoDB"
 source_repo: "https://github.com/mongodb/docs.git"
 source_branch: "main"
 source_path: "content/manual/manual/source/reference/command/revokeRolesFromUser.txt"
-source_commit: "ab9db26ed3d11618cdb61516d8180337d8e3f679"
-source_commit_short: "ab9db26e"
-source_commit_date: "2026-07-24T16:22:46-06:00"
-generated_at: "2026-07-25T11:51:15Z"
+source_commit: "b9f2bc487a2878b65e3c1f80024bebab76954f27"
+source_commit_short: "b9f2bc48"
+source_commit_date: "2026-08-28T17:09:45-05:00"
+generated_at: "2026-08-29T09:39:20.079518Z"
 ---
-
-======================================
-
 # revokeRolesFromUser (database command)
+
+**meta:** :description: Remove roles from a user in MongoDB using the `revokeRolesFromUser` command, specifying roles and optional write concern.
+
+.. default-domain:: mongodb
+
+**contents:** On this page
+   :local:
+   :backlinks: none
+   :depth: 1
+   :class: singlecol
 
 ## Definition
 
+**dbcommand:** revokeRolesFromUser
+
+   Removes one or more roles from a user on the database where the
+   roles exist. 
+
+   .. |method| replace:: :method:`db.revokeRolesFromUser` helper method
+   .. include:: /includes/fact-dbcommand-tip
+
 ## Compatibility
 
-This command is available in deployments hosted in the following environments:
+This command is available in deployments hosted in the following environments: 
 
-.. include:: /includes/fact-environments-onprem-only.rst
+**include:** /includes/fact-environments-onprem-only.rst
 
-.. include:: /includes/fact-environments-no-atlas-support.rst
-
+**include:** /includes/fact-environments-no-atlas-support.rst
+                
 ## Syntax
 
 The command has the following syntax:
 
-```javascript
-db.runCommand(
-   { 
-     revokeRolesFromUser: "<user>",
-     roles: [
-       { role: "<role>", db: "<database>" } | "<role>",
-       ...
-     ],
-     writeConcern: { <write concern> },
-     comment: <any>
-   }
-)
-```
+.. code-block:: javascript
+
+   db.runCommand(
+      { 
+        revokeRolesFromUser: "<user>",
+        roles: [
+          { role: "<role>", db: "<database>" } | "<role>",
+          ...
+        ],
+        writeConcern: { <write concern> },
+        comment: <any>
+      }
+   )
 
 ## Command Fields
 
 The command takes the following fields:
 
-.. include:: /includes/fact-roles-array-contents.rst
+.. list-table::
+   :header-rows: 1
+   :widths: 20 20 80
+ 
+   * - Field
+     - Type
+     - Description
+
+   * - ``revokeRolesFromUser``
+     - string
+     - The user to remove roles from.
+
+   * - ``roles``
+     - array
+     - The roles to remove from the user.
+
+   * - ``writeConcern``
+     - document
+     - .. include:: /includes/fact-write-concern-spec-link.rst
+
+   * - ``comment``
+     - any
+     - .. include:: /includes/extracts/comment-content.rst
+
+.. |local-cmd-name| replace:: :dbcommand:`revokeRolesFromUser`
+**include:** /includes/fact-roles-array-contents.rst
 
 ## Required Access
 
-.. include:: /includes/access-revoke-roles.rst
+**include:** /includes/access-revoke-roles.rst
 
 ## Example
 
-The `accountUser01` user in the `products` database has the following roles:
+The ``accountUser01`` user in the ``products`` database has the following
+roles:
 
-```javascript
-"roles" : [
-    { "role" : "assetsReader",
-      "db" : "assets"
-    },
-    { "role" : "read",
-      "db" : "stock"
-    },
-    { "role" : "readWrite",
-      "db" : "products"
-    }
-]
-```
+.. code-block:: javascript
 
-The following :dbcommand:`revokeRolesFromUser` command removes the two of the user's roles: the :authrole:`read` role on the `stock` database and the :authrole:`readWrite` role on the `products` database, which is also the database on which the command runs:
+   "roles" : [
+       { "role" : "assetsReader",
+         "db" : "assets"
+       },
+       { "role" : "read",
+         "db" : "stock"
+       },
+       { "role" : "readWrite",
+         "db" : "products"
+       }
+   ]
 
-```javascript
-use products
-db.runCommand( { revokeRolesFromUser: "accountUser01",
-                 roles: [
-                          { role: "read", db: "stock" },
-                          "readWrite"
-                 ],
-                 writeConcern: { w: "majority" }
-             } )
-```
+The following :dbcommand:`revokeRolesFromUser` command removes the two of
+the user's roles: the :authrole:`read` role on the ``stock`` database and
+the :authrole:`readWrite` role on the ``products`` database, which is also
+the database on which the command runs:
 
-The user `accountUser01` in the `products` database now has only one remaining role:
+.. code-block:: javascript
 
-```javascript
-"roles" : [
-    { "role" : "assetsReader",
-      "db" : "assets"
-    }
-]
-```
+   use products
+   db.runCommand( { revokeRolesFromUser: "accountUser01",
+                    roles: [
+                             { role: "read", db: "stock" },
+                             "readWrite"
+                    ],
+                    writeConcern: { w: "majority" }
+                } )
+
+The user ``accountUser01`` in the ``products`` database now has only one
+remaining role:
+
+.. code-block:: javascript
+
+   "roles" : [
+       { "role" : "assetsReader",
+         "db" : "assets"
+       }
+   ]

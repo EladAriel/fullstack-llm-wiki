@@ -1,7 +1,7 @@
 ---
 type: "Framework Learn Directory Index"
 framework: "Helicone"
-generated_at: "2026-07-25T19:08:22.290938Z"
+generated_at: "2026-08-29T09:39:42.367611Z"
 ---
 # Advanced-Usage
 
@@ -32,3 +32,8 @@ This directory contains Helicone learning pages related to advanced-usage.
 - [Scores](scores.md)
 - [Token Limit Exception Handlers](token-limit-exception-handlers.md)
 - [User Metrics](user-metrics.md)
+
+## Subdirectories
+
+- [Evaluation](evaluation/index.md)
+- [Prompts](prompts/index.md)

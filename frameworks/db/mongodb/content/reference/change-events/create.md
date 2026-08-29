@@ -1,40 +1,125 @@
 ---
 type: "Framework Learn Page"
-framework: "mongodb"
+framework: "MongoDB"
 source_repo: "https://github.com/mongodb/docs.git"
 source_branch: "main"
 source_path: "content/manual/manual/source/reference/change-events/create.txt"
-source_commit: "ab9db26ed3d11618cdb61516d8180337d8e3f679"
-source_commit_short: "ab9db26e"
-source_commit_date: "2026-07-24T16:22:46-06:00"
-generated_at: "2026-07-25T11:51:15Z"
+source_commit: "b9f2bc487a2878b65e3c1f80024bebab76954f27"
+source_commit_short: "b9f2bc48"
+source_commit_date: "2026-08-28T17:09:45-05:00"
+generated_at: "2026-08-29T09:39:19.878198Z"
 ---
-
-============
+.. _change-event-create:
 
 # create Event
 
+**meta:** :description: Understand the `create` event in MongoDB change streams, which occurs when a collection is created with the showExpandedEvents option enabled.
+
+.. default-domain:: mongodb
+
+**contents:** On this page
+   :local:
+   :backlinks: none
+   :depth: 2
+   :class: singlecol
+
+.. |idref| replace:: ce-create
+
 ## Summary
+
+**data:** create
+
+   .. versionadded:: 6.0
+
+   A ``create`` event occurs when a collection is created on a watched
+   database and the change stream has the :ref:`showExpandedEvents
+   <change-streams-expanded-events>` option set to ``true``.
+
 
 ## Description
 
+.. list-table::
+   :header-rows: 1
+   :widths: 20 20 60
+
+   * - Field
+     - Type
+     - Description
+
+   * - ``_id``
+     - Document
+     - .. include:: /includes/change-stream/id
+
+   * - ``clusterTime``
+     - Timestamp
+     - .. include:: /includes/change-stream/clusterTime
+
+   * - ``collectionUUID``
+     - UUID
+     - .. include:: /includes/change-stream/collectionUUID-views
+
+   * - ``lsid``
+     - document
+     - .. include:: /includes/change-stream/lsid
+
+   * - ``ns``
+     - document
+     - .. include:: /includes/change-stream/ns
+
+   * - ``ns.coll``
+     - string
+     - .. include:: /includes/change-stream/ns.coll
+
+   * - ``ns.db``
+     - string
+     - .. include:: /includes/change-stream/ns.db
+
+   * - ``nsType``
+     - string
+     - .. include:: /includes/change-stream/nsType
+
+   * - ``operationDescription``
+     - document
+     - .. include:: /includes/change-stream/operationDescription
+
+   * - | ``operationDescription.``
+       | ``idIndex``
+     - document
+     - .. include:: /includes/change-stream/od-idIndex
+
+   * - ``operationType``
+     - string
+     - .. include:: /includes/change-stream/operationType
+
+       Returns a value of ``create`` for these change events.
+
+   * - ``txnNumber``
+     - NumberLong
+     - .. include:: /includes/change-stream/txnNumber
+
+   * - ``wallTime``
+     - :term:`ISODate`
+     - .. include:: /includes/change-stream/wallTime
+
+
 ## Example
-
-The following example shows a `create` event:
-
-```json
-{
-   "_id": { <ResumeToken> },
-   "operationType": "create",
-   "clusterTime": Timestamp({ t: 1654894547, i: 24 }),
-   "collectionUUID": UUID("98046a1a-b649-4e5b-9c75-67594221ce19"),
-   "wallTime": ISODate("2022-06-10T20:55:47.947Z"),
-   "ns": {
-      "db": "test",
-      "coll": "names"
-   },
-   "operationDescription": {
-      "idIndex": { "v": 2, "key": { _id: 1 }, "name": "_id_" }
+   
+The following example shows a ``create`` event:
+   
+.. code-block:: json
+   :copyable: false
+   
+   {
+      "_id": { <ResumeToken> },
+      "operationType": "create",
+      "clusterTime": Timestamp({ t: 1654894547, i: 24 }),
+      "collectionUUID": UUID("98046a1a-b649-4e5b-9c75-67594221ce19"),
+      "wallTime": ISODate("2022-06-10T20:55:47.947Z"),
+      "ns": {
+         "db": "test",
+         "coll": "names"
+      },
+      "operationDescription": {
+         "idIndex": { "v": 2, "key": { _id: 1 }, "name": "_id_" }
+      }
    }
-}
-```

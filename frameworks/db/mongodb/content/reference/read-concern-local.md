@@ -1,41 +1,87 @@
 ---
 type: "Framework Learn Page"
-framework: "mongodb"
+framework: "MongoDB"
 source_repo: "https://github.com/mongodb/docs.git"
 source_branch: "main"
 source_path: "content/manual/manual/source/reference/read-concern-local.txt"
-source_commit: "ab9db26ed3d11618cdb61516d8180337d8e3f679"
-source_commit_short: "ab9db26e"
-source_commit_date: "2026-07-24T16:22:46-06:00"
-generated_at: "2026-07-25T11:51:15Z"
+source_commit: "b9f2bc487a2878b65e3c1f80024bebab76954f27"
+source_commit_short: "b9f2bc48"
+source_commit_date: "2026-08-28T17:09:45-05:00"
+generated_at: "2026-08-29T09:39:19.718362Z"
 ---
+.. default-domain:: mongodb
 
-========================
+**class:** hidden
 
-# Read Concern `"local"`
+   .. readconcern:: "local"
 
-A query with read concern `"local"` returns data from the instance with no guarantee that the data has been written to a majority of the replica set members (i.e. may be rolled back).
+# Read Concern ``"local"``
 
-Read concern `"local"` is the default for read operations against the primary and secondaries.
+**meta:** :description: Use read concern "local" with a query to return data from the instance.  ``"local"`` is the default for read operations against the primary.
+   :keywords: read isolation, multi-document transactions
 
-.. include:: /includes/fact-readConcern-most-recent-data-in-node.rst
+
+A query with read concern ``"local"`` returns data from the instance
+with no guarantee that the data has been written to a majority of the
+replica set members (i.e. may be rolled back).
+
+Read concern ``"local"`` is the default for read operations against the
+primary and secondaries.
+
+**include:** /includes/fact-readConcern-most-recent-data-in-node.rst
 
 ## Availability
 
-Read concern :readconcern:`"local"` is available for use with or without causally consistent sessions and transactions.
+Read concern :readconcern:`"local"` is available for use with or without
+causally consistent sessions and transactions.
+
+.. _readconcern-local-txn:
 
 ## Read Concern local and Transactions
 
-You set the read concern at the transaction level, not at the individual operation level. To set the read concern for transactions, see `transactions-read-concern`.
+You set the read concern at the transaction level, not at the
+individual operation level. To set the read concern for transactions,
+see :ref:`transactions-read-concern`.
 
-.. include:: /includes/extracts/transactions-create-collections-read-concern.rst
+**include:** /includes/extracts/transactions-create-collections-read-concern.rst
 
-.. include:: /includes/transactions/read-isolation-levels.rst
+**include:** /includes/transactions/read-isolation-levels.rst
 
 ## Example
 
-.. include:: /includes/fact-read-concern-write-timeline.rst
+**include:** /includes/fact-read-concern-write-timeline.rst
 
-Then, the following tables summarizes the state of the data that a read operation with :readconcern:`"local"` read concern would see at time `T`.
+Then, the following tables summarizes the state of the data that a read
+operation with :readconcern:`"local"` read concern would see at
+time ``T``.
 
-.. figure:: /images/read-concern-write-timeline.svg
+**figure:** /images/read-concern-write-timeline.svg
+   :alt: Timeline of a write operation to a three member replica set.
+   :figwidth: 330px
+
+.. list-table::
+   :header-rows: 1
+
+   * - Read Target
+     - Time ``T``
+     - State of Data
+
+   * - Primary
+     - After t\ :sub:`0`
+     - Data reflects Write\ :sub:`0`.
+
+   * - Secondary\ :sub:`1`
+     - Before t\ :sub:`1`
+     - Data reflects Write\ :sub:`prev`
+
+   * - Secondary\ :sub:`1`
+     - After t\ :sub:`1`
+     - Data reflects Write\ :sub:`0`
+
+   * - Secondary\ :sub:`2`
+     - Before t\ :sub:`2`
+     - Data reflects Write\ :sub:`prev`
+
+   * - Secondary\ :sub:`2`
+     - After t\ :sub:`2`
+     - Data reflects Write\ :sub:`0`

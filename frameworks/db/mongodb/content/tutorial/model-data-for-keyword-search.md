@@ -1,49 +1,111 @@
 ---
 type: "Framework Learn Page"
-framework: "mongodb"
+framework: "MongoDB"
 source_repo: "https://github.com/mongodb/docs.git"
 source_branch: "main"
 source_path: "content/manual/manual/source/tutorial/model-data-for-keyword-search.txt"
-source_commit: "ab9db26ed3d11618cdb61516d8180337d8e3f679"
-source_commit_short: "ab9db26e"
-source_commit_date: "2026-07-24T16:22:46-06:00"
-generated_at: "2026-07-25T11:51:15Z"
+source_commit: "b9f2bc487a2878b65e3c1f80024bebab76954f27"
+source_commit_short: "b9f2bc48"
+source_commit_date: "2026-08-28T17:09:45-05:00"
+generated_at: "2026-08-29T09:39:19.602690Z"
 ---
-
-====================================
+.. _data-model-example-keyword-search:
 
 # Model Data to Support Keyword Search
 
-> **Note:** Keyword search is not the same as text search or full text
-search, and does not provide stemming or other text-processing
-features. See the `limit-keyword-indexes` section for more
-information.
-In 2.4, MongoDB provides a text search feature. See
-`<index-type-text>` for more information.
+**meta:** :description: Model data for keyword search by storing keywords in an array and using multi-key indexes for efficient querying.
 
-If your application needs to perform queries on the content of a field that holds text you can perform exact matches on the text or use :query:`$regex` to use regular expression pattern matches. However, for many operations on text, these methods do not satisfy application requirements.
+.. default-domain:: mongodb
 
-This pattern describes one method for supporting keyword search using MongoDB to support application search functionality, that uses keywords stored in an array in the same document as the text field. Combined with a `multi-key index <index-type-multikey>`, this pattern can support application's keyword search operations.
+**contents:** On this page
+   :local:
+   :backlinks: none
+   :depth: 1
+   :class: singlecol
+
+**note:** Keyword search is *not* the same as text search or full text
+   search, and does not provide stemming or other text-processing
+   features. See the :ref:`limit-keyword-indexes` section for more
+   information.
+
+   In 2.4, MongoDB provides a text search feature. See
+   :ref:`<index-type-text>` for more information.
+
+If your application needs to perform queries on the content of a field
+that holds text you can perform exact matches on the text or use
+:query:`$regex` to use regular expression pattern matches. However,
+for many operations on text, these methods do not satisfy application
+requirements.
+
+This pattern describes one method for supporting keyword search using
+MongoDB to support application search functionality, that uses
+keywords stored in an array in the same document as the text
+field. Combined with a :ref:`multi-key index <index-type-multikey>`,
+this pattern can support application's keyword search operations.
 
 ## Pattern
 
-To add structures to your document to support keyword-based queries, create an array field in your documents and add the keywords as strings in the array. You can then create a `multi-key index <index-type-multi-key>` on the array and create queries that select values from the array.
+To add structures to your document to support keyword-based queries,
+create an array field in your documents and add the keywords as
+strings in the array. You can then create a :ref:`multi-key index
+<index-type-multi-key>` on the array and create queries that select
+values from the array.
 
-> **Note:** several hundreds or thousands of keywords will incur greater
-indexing costs on insertion.
+**example:** Given a collection of library volumes that you want to provide
+   topic-based search. For each volume, you add the array ``topics``,
+   and you add as many keywords as needed for a given volume.
+
+   For the ``Moby-Dick`` volume you might have the following document:
+
+   .. code-block:: javascript
+
+      { title : "Moby-Dick" ,
+        author : "Herman Melville" ,
+        published : 1851 ,
+        ISBN : 0451526996 ,
+        topics : [ "whaling" , "allegory" , "revenge" , "American" ,
+          "novel" , "nautical" , "voyage" , "Cape Cod" ]
+      }
+
+   You then create a multi-key index on the ``topics`` array:
+
+   .. code-block:: javascript
+
+      db.volumes.createIndex( { topics: 1 } )
+
+   The multi-key index creates separate index entries for each keyword in
+   the ``topics`` array. For example the index contains one entry for
+   ``whaling`` and another for ``allegory``.
+
+   You then query based on the keywords. For example:
+
+   .. code-block:: javascript
+
+      db.volumes.findOne( { topics : "voyage" }, { title: 1 } )
+
+**note:** An array with a large number of elements, such as one with
+   several hundreds or thousands of keywords will incur greater
+   indexing costs on insertion.
+
+.. _limit-keyword-indexes:
 
 ## Limitations of Keyword Indexes
 
-MongoDB can support keyword searches using specific data models and `multi-key indexes <index-type-multikey>`; however, these keyword indexes are not sufficient or comparable to full-text products in the following respects:
+MongoDB can support keyword searches using specific data models and
+:ref:`multi-key indexes <index-type-multikey>`; however, these keyword
+indexes are not sufficient or comparable to full-text products in the
+following respects:
 
-- Stemming. Keyword queries in MongoDB can not parse keywords for
-root or related words.
+- *Stemming*. Keyword queries in MongoDB can not parse keywords for
+  root or related words.
 
-- Synonyms. Keyword-based search features must provide support for
-synonym or related queries in the application layer.
+- *Synonyms*. Keyword-based search features must provide support for
+  synonym or related queries in the application layer.
 
-- Ranking. The keyword look ups described in this document do not
-provide a way to weight results.
+- *Ranking*. The keyword look ups described in this document do not
+  provide a way to weight results.
 
-- Asynchronous Indexing. MongoDB builds indexes synchronously, which
-means that the indexes used for keyword indexes are always current and can operate in real-time. However, asynchronous bulk indexes may be more efficient for some kinds of content and workloads.
+- *Asynchronous Indexing*. MongoDB builds indexes synchronously, which
+  means that the indexes used for keyword indexes are always current
+  and can operate in real-time. However, asynchronous bulk indexes
+  may be more efficient for some kinds of content and workloads.

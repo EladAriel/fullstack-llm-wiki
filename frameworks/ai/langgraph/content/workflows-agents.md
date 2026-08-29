@@ -4,12 +4,11 @@ framework: "LangGraph"
 source_repo: "https://github.com/langchain-ai/docs"
 source_branch: "main"
 source_path: "src/oss/langgraph/workflows-agents.mdx"
-source_commit: "2aae1dfc98ee953a9a5185fb6fcdd9efb3f4d878"
-source_commit_short: "2aae1dfc"
-source_commit_date: "2026-07-25T00:27:23Z"
-generated_at: "2026-07-25T11:51:08Z"
+source_commit: "a174f9cf7c91ee5eb14ee2382eb48bfe6e4956e9"
+source_commit_short: "a174f9c"
+source_commit_date: "2026-08-28T17:04:12-07:00"
+generated_at: "2026-08-29T09:38:45.961618Z"
 ---
-
 ---
 title: Workflows and agents
 sidebarTitle: Workflows + agents
@@ -348,7 +347,7 @@ const generateJoke: GraphNode<typeof State> = async (state) => {
 };
 
 // Gate function to check if the joke has a punchline
-const checkPunchline: ConditionalEdgeRouter<typeof State, "improveJoke"> = (state) => {
+const checkPunchline: ConditionalEdgeRouter<{ InputSchema: typeof State; Nodes: "improveJoke" }> = (state) => {
   // Simple check - does the joke contain "?" or "!"
   if (state.joke?.includes("?") || state.joke?.includes("!")) {
     return "Pass";
@@ -982,7 +981,7 @@ const llmCallRouter: GraphNode<typeof State> = async (state) => {
 };
 
 // Conditional edge function to route to the appropriate node
-const routeDecision: ConditionalEdgeRouter<typeof State, "llmCall1" | "llmCall2" | "llmCall3"> = (state) => {
+const routeDecision: ConditionalEdgeRouter<{ InputSchema: typeof State; Nodes: "llmCall1" | "llmCall2" | "llmCall3" }> = (state) => {
   // Return the node name you want to visit next
   if (state.decision === "story") {
     return "llmCall1";
@@ -1489,7 +1488,7 @@ const synthesizer: GraphNode<typeof State> = async (state) => {
 };
 
 // Conditional edge function to create llm_call workers that each write a section of the report
-const assignWorkers: ConditionalEdgeRouter<typeof State, "llmCall"> = (state) => {
+const assignWorkers: ConditionalEdgeRouter<{ InputSchema: typeof State; Nodes: "llmCall" }> = (state) => {
   // Kick off section writing in parallel via Send() API
   return state.sections.map((section) =>
     new Send("llmCall", { section })
@@ -1714,7 +1713,7 @@ const llmCallEvaluator: GraphNode<typeof State> = async (state) => {
 };
 
 // Conditional edge function to route back to joke generator or end based upon feedback from the evaluator
-const routeJoke: ConditionalEdgeRouter<typeof State, "llmCallGenerator"> = (state) => {
+const routeJoke: ConditionalEdgeRouter<{ InputSchema: typeof State; Nodes: "llmCallGenerator" }> = (state) => {
   // Route back to joke generator or end based upon feedback from the evaluator
   if (state.funnyOrNot === "funny") {
     return "Accepted";
@@ -2089,7 +2088,7 @@ const llmCall: GraphNode<typeof State> = async (state) => {
 const toolNode = new ToolNode(tools);
 
 // Conditional edge function to route to the tool node or end
-const shouldContinue: ConditionalEdgeRouter<typeof State, "toolNode"> = (state) => {
+const shouldContinue: ConditionalEdgeRouter<{ InputSchema: typeof State; Nodes: "toolNode" }> = (state) => {
   const messages = state.messages;
   const lastMessage = messages.at(-1);
 

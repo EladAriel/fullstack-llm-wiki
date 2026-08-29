@@ -1,14 +1,15 @@
 ---
 type: "Framework Learn Page"
-framework: "redis"
+framework: "Redis"
 source_repo: "https://github.com/redis/docs.git"
 source_branch: "main"
 source_path: "content/operate/kubernetes/recommendations/node-resources.md"
-source_commit: "9d30f68c3dad1a6b3b7d30fe604b911348ce8152"
-source_commit_short: "9d30f68c"
-source_commit_date: "2026-07-24T10:52:10-07:00"
-generated_at: "2026-07-25T11:51:22Z"
+source_commit: "f8693349287b0efbef3c865b6f6a2aceca88594d"
+source_commit_short: "f869334"
+source_commit_date: "2026-08-28T10:01:19-05:00"
+generated_at: "2026-08-29T09:38:55.120062Z"
 ---
+# Node Resources
 
 ---
 Title: Manage node resources
@@ -54,7 +55,7 @@ For more information about monitoring node conditions, see [Node conditions](htt
 
 Kubernetes uses the `ResourceQuota` object to limit resource consumption per namespace. This lets you limit the number of objects created by a namespace or the amount of compute resources consumed by a namespace. 
 
-The resource settings for Redis Enterprise for Kubernetes are defined in the `operator.yaml` and the [`RedisEnterpriseCluster`](https://github.com/RedisLabs/redis-enterprise-k8s-docs/blob/master/redis_enterprise_cluster_api.md#redisenterpriseclusterspec) custom resource.
+The resource settings for Redis Enterprise for Kubernetes are defined in the `operator.yaml` and the [`RedisEnterpriseCluster`]({{< relref "/operate/kubernetes/reference/api/redis_enterprise_cluster_api#spec" >}}) custom resource.
 
 The following settings are the minimum workloads for the operator to function.
 

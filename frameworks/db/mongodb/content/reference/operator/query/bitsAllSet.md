@@ -1,78 +1,99 @@
 ---
 type: "Framework Learn Page"
-framework: "mongodb"
+framework: "MongoDB"
 source_repo: "https://github.com/mongodb/docs.git"
 source_branch: "main"
 source_path: "content/manual/manual/source/reference/operator/query/bitsAllSet.txt"
-source_commit: "ab9db26ed3d11618cdb61516d8180337d8e3f679"
-source_commit_short: "ab9db26e"
-source_commit_date: "2026-07-24T16:22:46-06:00"
-generated_at: "2026-07-25T11:51:15Z"
+source_commit: "b9f2bc487a2878b65e3c1f80024bebab76954f27"
+source_commit_short: "b9f2bc48"
+source_commit_date: "2026-08-28T17:09:45-05:00"
+generated_at: "2026-08-29T09:39:20.251895Z"
 ---
-
-======================================
-
 # $bitsAllSet (query predicate operator)
+
+**meta:** :description: Use `$bitsAllSet` to match documents where specified bit positions in a field are set to 1, using numeric or `BinData` bitmasks.
+
+.. default-domain:: mongodb
+
+**contents:** On this page
+   :local:
+   :backlinks: none
+   :depth: 1
+   :class: singlecol
+
+**query:** $bitsAllSet
+
+   :query:`$bitsAllSet` matches documents where *all* of the bit positions
+   given by the query are set (i.e. ``1``) in ``field``.
+
+   .. include:: /includes/extracts/fact-query-bitsallset-description.rst
 
 ## Behavior
 
-.. include:: /includes/fact-bindata-endian.rst
+**include:** /includes/fact-bindata-endian.rst
 
 ### Indexes
 
-.. include:: /includes/extracts/fact-query-bitwise-indexes-bitsAllSet.rst
+**include:** /includes/extracts/fact-query-bitwise-indexes-bitsAllSet.rst
 
 ### Floating Point Values
 
-.. include:: /includes/extracts/fact-query-bitsallset-floating-point.rst
+**include:** /includes/extracts/fact-query-bitsallset-floating-point.rst
 
 ### Sign Extension
 
-.. include:: /includes/extracts/fact-query-bitsallset-sign-extension.rst
+**include:** /includes/extracts/fact-query-bitsallset-sign-extension.rst
 
 ## Examples
 
-.. include:: /includes/extracts/fact-query-bitwise-example-collection.rst
+**include:** /includes/extracts/fact-query-bitwise-example-collection.rst
 
 ### Bit Position Array
 
-The following query uses the :query:`$bitsAllSet` operator to test whether field `a` has bits set at position `1` and position `5`, where the least significant bit is position `0`.
+The following query uses the :query:`$bitsAllSet` operator to test
+whether field ``a`` has bits set at position ``1`` and position
+``5``, where the least significant bit is position ``0``.
 
-```javascript
-db.collection.find( { a: { $bitsAllSet: [ 1, 5 ] } } )
-```
+.. code-block:: javascript
+
+   db.collection.find( { a: { $bitsAllSet: [ 1, 5 ] } } )
 
 The query matches the following documents:
 
-```javascript
-{ "_id" : 1, "a" : 54, "binaryValueofA" : "00110110" }
-{ "_id" : 4, "a" : BinData(0,"Zg=="), "binaryValueofA" : "01100110" }
-```
+.. code-block:: javascript
+
+   { "_id" : 1, "a" : 54, "binaryValueofA" : "00110110" }
+   { "_id" : 4, "a" : BinData(0,"Zg=="), "binaryValueofA" : "01100110" }
+
 
 ### Integer Bitmask
 
-The following query uses the :query:`$bitsAllSet` operator to test whether field `a` has bits set at positions `1`, `4`, and `5` (the binary representation of the bitmask `50` is `00110010`).
+The following query uses the :query:`$bitsAllSet` operator to test
+whether field ``a`` has bits set at positions ``1``, ``4``, and ``5``
+(the binary representation of the bitmask ``50`` is ``00110010``).
 
-```javascript
-db.collection.find( { a: { $bitsAllSet: 50 } } )
-```
+.. code-block:: javascript
+
+   db.collection.find( { a: { $bitsAllSet: 50 } } )
 
 The query matches the following document:
 
-```javascript
-{ "_id" : 1, "a" : 54, "binaryValueofA" : "00110110" }
-```
+.. code-block:: javascript
+
+   { "_id" : 1, "a" : 54, "binaryValueofA" : "00110110" }
 
 ### BinData Bitmask
 
-The following query uses the :query:`$bitsAllSet` operator to test whether field `a` has bits set at positions `4` and `5` (the binary representation of `BinData(0, "MA==")` is `00110000`).
+The following query uses the :query:`$bitsAllSet` operator to test
+whether field ``a`` has bits set at positions ``4`` and ``5``
+(the binary representation of ``BinData(0, "MA==")`` is ``00110000``).
 
-```javascript
-db.collection.find( { a: { $bitsAllSet: BinData(0, "MA==") } } )
-```
+.. code-block:: javascript
+
+   db.collection.find( { a: { $bitsAllSet: BinData(0, "MA==") } } )
 
 The query matches the following document:
 
-```javascript
-{ _id: 1, a: 54, binaryValueofA: "00110110" }
-```
+.. code-block:: javascript
+
+   { _id: 1, a: 54, binaryValueofA: "00110110" }

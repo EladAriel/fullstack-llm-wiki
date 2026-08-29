@@ -1,33 +1,25 @@
 ---
 type: "Framework Learn Directory Index"
-framework: "redis"
-directory: "content/develop/ai/featureform"
-source_repo: "https://github.com/redis/docs.git"
-source_branch: "main"
-source_commit: "9d30f68c3dad1a6b3b7d30fe604b911348ce8152"
-source_commit_short: "9d30f68c"
-source_commit_date: "2026-07-24T10:52:10-07:00"
-generated_at: "2026-07-25T11:51:22Z"
+framework: "Redis"
+generated_at: "2026-08-29T09:38:56.444674Z"
 ---
 # Featureform
 
-This directory contains redis learning pages related to featureform.
+This directory contains Redis learning pages related to featureform.
 
 ## Breadcrumbs
 
-[Wiki Home](../../../../index.md) -> [Content](../../../index.md) -> [Develop](../../index.md) -> [Ai](../index.md) -> [Featureform](index.md)
+[Wiki Home](../index.md) -> [Content](index.md)
 
 ## Navigation
 
-- Parent: [Parent Index](../index.md)
-
-## Child Directories
-
-- None
+- Wiki Home: [Root Index](../index.md)
 
 ## Pages in This Directory
 
-- [Index](_index.md)
+- [Agents](AGENTS.md)
+- [Claude](CLAUDE.md)
+- [_Index](_index.md)
 - [Concepts](concepts.md)
 - [Define And Deploy Features](define-and-deploy-features.md)
 - [Manage Workspace](manage-workspace.md)
@@ -35,14 +27,9 @@ This directory contains redis learning pages related to featureform.
 - [Query Data](query-data.md)
 - [Quickstart](quickstart.md)
 - [Reference](reference.md)
-- [Register Providers](register-providers.md)
 - [Serve Features](serve-features.md)
 - [Update Features](update-features.md)
 
-## IDE LLM Guidance
+## Subdirectories
 
-When answering implementation questions related to this directory:
-
-1. Prefer the most specific page listed above.
-2. If the topic is broad, read the child directory index first.
-3. Use source metadata from each page when giving answers.
+- [Register Providers](register-providers/index.md)

@@ -4,10 +4,10 @@ framework: "Grafana"
 source_repo: "https://github.com/grafana/grafana.git"
 source_branch: "main"
 source_path: "docs/sources/alerting/configure-notifications/_index.md"
-source_commit: "d18e58d33aa8741f08fbab4aa73bdaf1f04e3be5"
-source_commit_short: "d18e58d3"
-source_commit_date: "2026-07-25T13:50:43+02:00"
-generated_at: "2026-07-25T19:08:08.944978Z"
+source_commit: "5e3a02f81d2aadf4bf24fe49ed97d872556f5bf9"
+source_commit_short: "5e3a02f8"
+source_commit_date: "2026-08-29T10:58:19+09:00"
+generated_at: "2026-08-29T09:39:37.469508Z"
 ---
 ---
 canonical: https://grafana.com/docs/grafana/latest/alerting/configure-notifications
@@ -60,6 +60,11 @@ refs:
       destination: /docs/grafana/<GRAFANA_VERSION>/alerting/configure-notifications/inhibition-rules/
     - pattern: /docs/grafana-cloud/
       destination: /docs/grafana-cloud/alerting-and-irm/alerting/configure-notifications/inhibition-rules/
+  view-notification-history:
+    - pattern: /docs/grafana/
+      destination: /docs/grafana/<GRAFANA_VERSION>/alerting/monitor-status/view-notification-history/
+    - pattern: /docs/grafana-cloud/
+      destination: /docs/grafana-cloud/alerting-and-irm/alerting/monitor-status/view-notification-history/
 ---
 
 # Configure notifications
@@ -82,6 +87,8 @@ The topics in this section include step-by-step instructions for:
 - [Templating notifications](ref:configure-templates) to customize notification messages.
 - [Configuring silences](ref:configure-silences) or [mute timings](ref:configure-mute-timings) to stop notifications.
 - [Configuring inhibition rules](ref:configure-inhibition-rules) to suppress notifications for dependent alerts when a root-cause alert is already firing.
+
+After you configure notifications, you can refer to [View notification history](ref:view-notification-history) to confirm delivery and troubleshoot failed notifications.
 
 ## Alertmanager architecture
 

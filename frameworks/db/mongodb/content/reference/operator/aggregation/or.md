@@ -1,65 +1,117 @@
 ---
 type: "Framework Learn Page"
-framework: "mongodb"
+framework: "MongoDB"
 source_repo: "https://github.com/mongodb/docs.git"
 source_branch: "main"
 source_path: "content/manual/manual/source/reference/operator/aggregation/or.txt"
-source_commit: "ab9db26ed3d11618cdb61516d8180337d8e3f679"
-source_commit_short: "ab9db26e"
-source_commit_date: "2026-07-24T16:22:46-06:00"
-generated_at: "2026-07-25T11:51:15Z"
+source_commit: "b9f2bc487a2878b65e3c1f80024bebab76954f27"
+source_commit_short: "b9f2bc48"
+source_commit_date: "2026-08-28T17:09:45-05:00"
+generated_at: "2026-08-29T09:39:20.155083Z"
 ---
-
-=========================
+.. _or-aggregation-operator:
 
 # $or (expression operator)
 
+**meta:** :description: Evaluate expressions using the `$or` operator in MongoDB aggregation to return `true` if any condition is met, handling errors and optimizing queries.
+
+.. default-domain:: mongodb
+
+**contents:** On this page
+   :local:
+   :backlinks: none
+   :depth: 1
+   :class: singlecol
+
 ## Definition
+
+**expression:** $or
+
+   Evaluates one or more expressions and returns ``true`` if *any* of
+   the expressions are ``true``. Otherwise, :expression:`$or` returns
+   ``false``.
+
+   :expression:`$or` has the following syntax:
+
+   .. code-block:: javascript
+
+      { $or: [ <expression1>, <expression2>, ... ] }
+
+   For more information on expressions, see
+   :ref:`aggregation-expressions`.
 
 ## Behavior
 
-.. include:: /includes/extracts/fact-agg-boolean-or.rst
+**include:** /includes/extracts/fact-agg-boolean-or.rst
+
+.. list-table::
+   :header-rows: 1
+   :widths: 70 30
+
+   * - Example
+
+     - Result
+
+   * - ``{ $or: [ true, false ] }``
+
+     - ``true``
+
+   * - ``{ $or: [ [ false ], false ] }``
+
+     - ``true``
+
+   * - ``{ $or: [ null, 0, undefined ] }``
+
+     - ``false``
+
+   * - ``{ $or: [ ] }``
+
+     - ``false``
 
 ## Error Handling
 
-.. include:: /includes/and-or-behavior.rst
+.. |and-or| replace:: ``$or``
+.. |true-false| replace:: ``true``
+
+**include:** /includes/and-or-behavior.rst
 
 ## Example
 
-Consider an `inventory` collection with the following documents:
+Consider an ``inventory`` collection with the following documents:
 
-```javascript
-db.inventory.insertMany( [
-   { _id: 1, item: "abc1", description: "product 1", qty: 300 },
-   { _id: 2, item: "abc2", description: "product 2", qty: 200 },
-   { _id: 3, item: "xyz1", description: "product 3", qty: 250 },
-   { _id: 4, item: "VWZ1", description: "product 4", qty: 300 },
-   { _id: 5, item: "VWZ2", description: "product 5", qty: 180 }
-] )
-```
+.. code-block:: javascript
 
-The following operation uses the :expression:`$or` operator to determine if `qty` is greater than 250 or less than `200`:
+   db.inventory.insertMany( [
+      { _id: 1, item: "abc1", description: "product 1", qty: 300 },
+      { _id: 2, item: "abc2", description: "product 2", qty: 200 },
+      { _id: 3, item: "xyz1", description: "product 3", qty: 250 },
+      { _id: 4, item: "VWZ1", description: "product 4", qty: 300 },
+      { _id: 5, item: "VWZ2", description: "product 5", qty: 180 }
+   ] )
 
-```javascript
-db.inventory.aggregate(
-   [
-     {
-       $project:
-          {
-            item: 1,
-            result: { $or: [ { $gt: [ "$qty", 250 ] }, { $lt: [ "$qty", 200 ] } ] }
-          }
-     }
-   ]
-)
-```
+The following operation uses the :expression:`$or` operator to
+determine if ``qty`` is greater than 250 *or* less than ``200``:
+
+.. code-block:: javascript
+
+   db.inventory.aggregate(
+      [
+        {
+          $project:
+             {
+               item: 1,
+               result: { $or: [ { $gt: [ "$qty", 250 ] }, { $lt: [ "$qty", 200 ] } ] }
+             }
+        }
+      ]
+   )
 
 The operation returns the following results:
 
-```javascript
-{ _id: 1, item: "abc1", result: true }
-{ _id: 2, item: "abc2", result: false }
-{ _id: 3, item: "xyz1", result: false }
-{ _id: 4, item: "VWZ1", result: true }
-{ _id: 5, item: "VWZ2", result: true }
-```
+.. code-block:: javascript
+
+   { _id: 1, item: "abc1", result: true }
+   { _id: 2, item: "abc2", result: false }
+   { _id: 3, item: "xyz1", result: false }
+   { _id: 4, item: "VWZ1", result: true }
+   { _id: 5, item: "VWZ2", result: true }

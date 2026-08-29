@@ -4,10 +4,10 @@ framework: "Grafana"
 source_repo: "https://github.com/grafana/grafana.git"
 source_branch: "main"
 source_path: "docs/sources/datasources/jaeger/_index.md"
-source_commit: "d18e58d33aa8741f08fbab4aa73bdaf1f04e3be5"
-source_commit_short: "d18e58d3"
-source_commit_date: "2026-07-25T13:50:43+02:00"
-generated_at: "2026-07-25T19:08:08.965479Z"
+source_commit: "5e3a02f81d2aadf4bf24fe49ed97d872556f5bf9"
+source_commit_short: "5e3a02f8"
+source_commit_date: "2026-08-29T10:58:19+09:00"
+generated_at: "2026-08-29T09:39:37.502229Z"
 ---
 ---
 aliases:
@@ -27,12 +27,14 @@ labels:
 menuTitle: Jaeger
 title: Jaeger data source
 weight: 800
-review_date: 2026-03-03
+review_date: 2026-08-11
 ---
 
 # Jaeger data source
 
-Grafana ships with built-in support for [Jaeger](https://www.jaegertracing.io/), an open source, end-to-end distributed tracing system. Use the Jaeger data source to query and visualize traces, explore service dependencies, and correlate traces with logs and metrics.
+[Jaeger](https://www.jaegertracing.io/) is an open source, end-to-end distributed tracing system. Use the Jaeger data source to query and visualize traces, explore service dependencies, and correlate traces with logs and metrics.
+
+Grafana ships with the Jaeger data source preinstalled in both Grafana OSS and Enterprise, so there's nothing to install. It's packaged as a standalone plugin that updates independently of Grafana releases. For more information, refer to [Plugin updates](#plugin-updates).
 
 ## Supported features
 
@@ -51,6 +53,30 @@ The following documents help you set up and use the Jaeger data source:
 - [Configure the Jaeger data source](https://grafana.com/docs/grafana/<GRAFANA_VERSION>/datasources/jaeger/configure/)
 - [Jaeger query editor](https://grafana.com/docs/grafana/<GRAFANA_VERSION>/datasources/jaeger/query-editor/)
 - [Troubleshoot Jaeger data source issues](https://grafana.com/docs/grafana/<GRAFANA_VERSION>/datasources/jaeger/troubleshooting/)
+
+## Plugin updates
+
+Starting with Grafana v13.2, the Jaeger data source is a standalone plugin, preinstalled in both Grafana OSS and Enterprise. This lets the data source receive updates independently of Grafana releases. Grafana automatically checks the plugin catalog and installs the latest version on each server restart.
+
+To adjust this behavior:
+
+- **Opt out of auto-updates:** Set `preinstall_auto_update` to `false` in your [configuration file](https://grafana.com/docs/grafana/<GRAFANA_VERSION>/setup-grafana/configure-grafana/).
+- **Update manually:** Update at any time from the **Administration > Plugins** page without restarting Grafana.
+
+The standalone plugin requires Grafana 12.3.0 or later. The Jaeger data source bundled with Grafana 12.2 and earlier continues to work as before. These versions are unaffected by the change.
+
+If you run Grafana 12.3.x through 13.1.x, you can install the standalone plugin from the plugin catalog to get the latest features before you upgrade to Grafana 13.2. To use the standalone plugin with these versions, add the following to your [configuration file](https://grafana.com/docs/grafana/<GRAFANA_VERSION>/setup-grafana/configure-grafana/):
+
+```ini
+[plugin.jaeger]
+as_external = true
+
+[plugins]
+; Install the latest version on startup:
+preinstall_sync = jaeger
+; Or install a specific version:
+; preinstall_sync = jaeger@<version>
+```
 
 ## Additional features
 

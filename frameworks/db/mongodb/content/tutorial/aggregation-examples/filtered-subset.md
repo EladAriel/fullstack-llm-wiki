@@ -1,31 +1,234 @@
 ---
 type: "Framework Learn Page"
-framework: "mongodb"
+framework: "MongoDB"
 source_repo: "https://github.com/mongodb/docs.git"
 source_branch: "main"
 source_path: "content/manual/manual/source/tutorial/aggregation-examples/filtered-subset.txt"
-source_commit: "ab9db26ed3d11618cdb61516d8180337d8e3f679"
-source_commit_short: "ab9db26e"
-source_commit_date: "2026-07-24T16:22:46-06:00"
-generated_at: "2026-07-25T11:51:15Z"
+source_commit: "b9f2bc487a2878b65e3c1f80024bebab76954f27"
+source_commit_short: "b9f2bc48"
+source_commit_date: "2026-08-28T17:09:45-05:00"
+generated_at: "2026-08-29T09:39:19.851340Z"
 ---
-
-===========
+.. _agg-example-filter-data:
 
 # Filter Data
 
-This tutorial illustrates how to construct an aggregation pipeline, perform the aggregation on a collection, and display the results using the language of your choice.
+**facet:** :name: genre
+   :values: tutorial
+
+**meta:** :keywords: code example
+
+**contents:** On this page
+   :local:
+   :backlinks: none
+   :depth: 1
+   :class: singlecol
+
+This tutorial illustrates how to construct an aggregation pipeline,
+perform the aggregation on a collection, and display the results using
+the language of your choice.
 
 ## About This Task
 
-The aggregation pipeline in this tutorial performs the following operations:
+The aggregation pipeline in this tutorial performs the following
+operations:
 
 - Matches a subset of documents by a field value
 - Formats result documents
+
 ## Before You Begin
 
-.. include:: /includes/language-or-shell-selector-instructions.rst
+**include:** /includes/language-or-shell-selector-instructions.rst
+
+.. tabs-selector:: drivers
+
+.. tabs-drivers::
+
+   .. tab::
+      :tabid: shell
+
+      .. include:: /includes/aggregation/aggregation-examples/filtered-subset/mongosh-filtered-subset.rst
+         :start-after: start-prep-steps
+         :end-before: end-prep-steps
+
+   .. tab::
+      :tabid: python
+         
+      .. include:: /includes/aggregation/aggregation-examples/filtered-subset/python-filtered-subset.rst
+         :start-after: start-prep-steps
+         :end-before: end-prep-steps
+
+   .. tab::
+      :tabid: java-sync
+
+      .. include:: /includes/aggregation/aggregation-examples/filtered-subset/java-sync-filtered-subset.rst
+         :start-after: start-prep-steps
+         :end-before: end-prep-steps
+
+   .. tab::
+      :tabid: kotlin-coroutine
+
+      .. include:: /includes/aggregation/aggregation-examples/filtered-subset/kotlin-filtered-subset.rst
+         :start-after: start-prep-steps
+         :end-before: end-prep-steps
+
+   .. tab::
+      :tabid: scala
+
+      .. include:: /includes/aggregation/aggregation-examples/filtered-subset/scala-filtered-subset.rst
+         :start-after: start-prep-steps
+         :end-before: end-prep-steps
+
+   .. tab:: 
+      :tabid: csharp
+      
+      .. include:: /includes/aggregation/aggregation-examples/filtered-subset/csharp-filtered-subset.rst
+         :start-after: start-prep-steps
+         :end-before: end-prep-steps
+
+   .. tab::
+      :tabid: c
+      
+      .. include:: /includes/aggregation/aggregation-examples/filtered-subset/c-filtered-subset.rst
+         :start-after: start-prep-steps
+         :end-before: end-prep-steps
+
+   .. tab::
+      :tabid: cpp
+      
+      .. include:: /includes/aggregation/aggregation-examples/filtered-subset/cpp-filtered-subset.rst
+         :start-after: start-prep-steps
+         :end-before: end-prep-steps
+
+   .. tab::
+      :tabid: nodejs
+
+      .. include:: /includes/aggregation/aggregation-examples/filtered-subset/nodejs-filtered-subset.rst
+         :start-after: start-prep-steps
+         :end-before: end-prep-steps
+
+   .. tab::
+      :tabid: php
+
+      .. include:: /includes/aggregation/aggregation-examples/filtered-subset/php-filtered-subset.rst
+         :start-after: start-prep-steps
+         :end-before: end-prep-steps
+
+   .. tab::
+      :tabid: ruby
+
+      .. include:: /includes/aggregation/aggregation-examples/filtered-subset/ruby-filtered-subset.rst
+         :start-after: start-prep-steps
+         :end-before: end-prep-steps
+
+   .. tab::
+      :tabid: go
+
+      .. include:: /includes/aggregation/aggregation-examples/filtered-subset/golang-filtered-subset.rst
+         :start-after: start-prep-steps
+         :end-before: end-prep-steps
+
+   .. tab::
+      :tabid: rust
+
+      .. include:: /includes/aggregation/aggregation-examples/filtered-subset/rust-filtered-subset.rst
+         :start-after: start-prep-steps
+         :end-before: end-prep-steps
 
 ## Steps
 
-The following steps demonstrate how to create and run an aggregation pipeline to filter for a specific subset of documents.
+The following steps demonstrate how to create and run an aggregation
+pipeline to filter for a specific subset of documents.
+
+.. tabs-drivers::
+
+   .. tab::
+      :tabid: shell
+
+      .. include:: /includes/aggregation/aggregation-examples/filtered-subset/mongosh-filtered-subset.rst
+         :start-after: start-tutorial
+         :end-before: end-tutorial
+
+   .. tab::
+      :tabid: python
+         
+      .. include:: /includes/aggregation/aggregation-examples/filtered-subset/python-filtered-subset.rst
+         :start-after: start-tutorial
+         :end-before: end-tutorial
+
+   .. tab::
+      :tabid: java-sync
+      
+      .. include:: /includes/aggregation/aggregation-examples/filtered-subset/java-sync-filtered-subset.rst
+         :start-after: start-tutorial
+         :end-before: end-tutorial
+
+   .. tab::
+      :tabid: kotlin-coroutine
+
+      .. include:: /includes/aggregation/aggregation-examples/filtered-subset/kotlin-filtered-subset.rst
+         :start-after: start-tutorial
+         :end-before: end-tutorial
+
+   .. tab::
+      :tabid: scala
+
+      .. include:: /includes/aggregation/aggregation-examples/filtered-subset/scala-filtered-subset.rst
+         :start-after: start-tutorial
+         :end-before: end-tutorial
+
+   .. tab:: 
+      :tabid: csharp
+      
+      .. include:: /includes/aggregation/aggregation-examples/filtered-subset/csharp-filtered-subset.rst
+         :start-after: start-tutorial
+         :end-before: end-tutorial
+
+   .. tab::
+      :tabid: c
+      
+      .. include:: /includes/aggregation/aggregation-examples/filtered-subset/c-filtered-subset.rst
+         :start-after: start-tutorial
+         :end-before: end-tutorial
+
+   .. tab::
+      :tabid: cpp
+      
+      .. include:: /includes/aggregation/aggregation-examples/filtered-subset/cpp-filtered-subset.rst
+         :start-after: start-tutorial
+         :end-before: end-tutorial
+
+   .. tab::
+      :tabid: nodejs
+
+      .. include:: /includes/aggregation/aggregation-examples/filtered-subset/nodejs-filtered-subset.rst
+         :start-after: start-tutorial
+         :end-before: end-tutorial
+
+   .. tab::
+      :tabid: php
+
+      .. include:: /includes/aggregation/aggregation-examples/filtered-subset/php-filtered-subset.rst
+         :start-after: start-tutorial
+         :end-before: end-tutorial
+
+   .. tab::
+      :tabid: ruby
+
+      .. include:: /includes/aggregation/aggregation-examples/filtered-subset/ruby-filtered-subset.rst
+         :start-after: start-tutorial
+         :end-before: end-tutorial
+
+   .. tab::
+      :tabid: go
+
+      .. include:: /includes/aggregation/aggregation-examples/filtered-subset/golang-filtered-subset.rst
+         :start-after: start-tutorial
+         :end-before: end-tutorial
+
+   .. tab::
+      :tabid: rust
+
+      .. include:: /includes/aggregation/aggregation-examples/filtered-subset/rust-filtered-subset.rst
+         :start-after: start-tutorial
+         :end-before: end-tutorial

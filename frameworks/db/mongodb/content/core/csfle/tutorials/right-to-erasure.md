@@ -1,258 +1,364 @@
 ---
 type: "Framework Learn Page"
-framework: "mongodb"
+framework: "MongoDB"
 source_repo: "https://github.com/mongodb/docs.git"
 source_branch: "main"
 source_path: "content/manual/manual/source/core/csfle/tutorials/right-to-erasure.txt"
-source_commit: "ab9db26ed3d11618cdb61516d8180337d8e3f679"
-source_commit_short: "ab9db26e"
-source_commit_date: "2026-07-24T16:22:46-06:00"
-generated_at: "2026-07-25T11:51:15Z"
+source_commit: "b9f2bc487a2878b65e3c1f80024bebab76954f27"
+source_commit_short: "b9f2bc48"
+source_commit_date: "2026-08-28T17:09:45-05:00"
+generated_at: "2026-08-29T09:39:19.815336Z"
 ---
+**facet:** :name: genre
+   :values: tutorial
 
-===============================================================================
+**facet:** :name: programming_language
+   :values: python
+
+**meta:** :keywords: client-side field level encryption, encryption, gdpr
+
+.. _csfle-right-to-erasure:
+.. _csfle-gdpr:
 
 # Implementing Right to Erasure with {+csfle-abbrev+}
 
-The Crypto Shredding sample app demonstrates how you can make use of MongoDB's `{+csfle+} ({+csfle-abbrev+}) <manual-csfle-feature>` to strengthen procedures for removing sensitive data.
+.. default-domain:: mongodb
+
+**contents:** On this page
+   :local:
+   :backlinks: none
+   :depth: 2
+   :class: singlecol
+
+The Crypto Shredding sample app demonstrates how you can make use of MongoDB's
+:ref:`{+csfle+} ({+csfle-abbrev+}) <manual-csfle-feature>` to strengthen
+procedures for removing sensitive data.
 
 ## About the Sample Application
 
-The right to erasure, also known as the right to be forgotten, is a right granted to individuals under laws and regulations such as GDPR. This means that companies storing an individual's personal data must be able to delete it on request. Because data can be spread across several systems, it can be technically challenging for these companies to identify and remove it from all places. Even when properly executed, there is the risk that deleted data can be restored from backups in the future, potentially creating legal and financial risks.
+The right to erasure, also known as the right to be forgotten, is a right
+granted to individuals under laws and regulations such as GDPR. This means that
+companies storing an individual's personal data must be able to delete it on
+request. Because data can be spread across several systems, it can be 
+technically challenging for these companies to identify and remove it from all
+places. Even when properly executed, there is the risk that deleted data can be
+restored from backups in the future, potentially creating legal and financial 
+risks.
 
-> **Warning:**  MongoDB provides no guarantees that the solution and techniques described
- in this article fulfill all regulatory requirements around the right to
- erasure. Your organization must determine appropriate, sufficient measures
- to comply with regulatory requirements such as GDPR.
+**warning:** MongoDB provides no guarantees that the solution and techniques described
+    in this article fulfill all regulatory requirements around the right to
+    erasure. Your organization must determine appropriate, sufficient measures
+    to comply with regulatory requirements such as GDPR.
 
-The Crypto Shredding sample application demonstrates one way to implement a right to erasure. The demo application is a Python (Flask) Web application with a front end for adding users, logging in, and entering data. It also includes an "Admin" page to showcase crypto shredding functionality.
+The Crypto Shredding sample application demonstrates one way to implement a
+right to erasure. The demo application is a Python (Flask) Web application with
+a front end for adding users, logging in, and entering data. It also includes
+an "Admin" page to showcase crypto shredding functionality. 
 
-You can install and run the application by following the instructions in the [GitHub repository](https://github.com/mongodb-developer/mongodb-flask-cryptoshredding-example)_.
+You can install and run the application by following the instructions in the
+`GitHub repository <https://github.com/mongodb-developer/mongodb-flask-cryptoshredding-example>`__.
 
 ## What is Crypto-Shredding?
 
-Crypto-shredding, also called cryptographic erasure, is a data destruction technique where, instead of destroying encrypted data, you destroy the encryption keys necessary to decrypt it. This makes the data indecipherable.
+Crypto-shredding, also called cryptographic erasure, is a data destruction
+technique where, instead of destroying encrypted data, you destroy the
+encryption keys necessary to decrypt it. This makes the data indecipherable.
 
-For example, imagine you are storing data for multiple users. You start by giving each user their own unique {+dek-long+} (DEK), and mapping it to that customer.
+For example, imagine you are storing data for multiple users. You start by
+giving each user their own unique {+dek-long+} (DEK), and mapping it to that
+customer. 
 
-In the diagram, "User A" and "User B" each have their own unique DEK in the key store. Each key is used to encrypt or decrypt data for its respective user:
+In the diagram, "User A" and "User B" each have their own unique DEK in the key
+store. Each key is used to encrypt or decrypt data for its respective
+user:
 
-.. image:: /images/devcenter_csfle_gdpr_deks.png
+**image:** /images/devcenter_csfle_gdpr_deks.png
+   :alt: A Data Encryption Key store with two users
 
-Let's assume that you want to remove all data for User B. If you remove User B's DEK, you can no longer decrypt their data. Everything in the datastore becomes indecipherable ciphertext. User A's data is unaffected, since their DEK still exists:
+Let's assume that you want to remove all data for User B. If you remove User
+B's DEK, you can no longer decrypt their data. Everything in the datastore 
+becomes indecipherable ciphertext. User A's data is unaffected, since their 
+DEK still exists:
 
-.. image:: /images/devcenter_csfle_gdpr_delete_user.png
+**image:** /images/devcenter_csfle_gdpr_delete_user.png
+   :alt: Deleting User B's data encryption key
 
 ## What is {+csfle-abbrev+}?
 
-With `{+csfle-abbrev+} <manual-csfle-feature>`, applications can encrypt sensitive fields in documents prior to transmitting data to the server. Even when data is being used by the database in memory, it is never in plain text. The database stores and transmits encrypted data that is only deciphered by the client.
+With :ref:`{+csfle-abbrev+} <manual-csfle-feature>`, applications can encrypt
+sensitive fields in documents prior to transmitting data to the server. Even
+when data is being used by the database in memory, it is never in plain text.
+The database stores and transmits encrypted data that is only deciphered by the client.
 
-{+csfle-abbrev+} uses `envelope encryption`, which is the practice of encrypting plaintext data with a data key, that is itself encrypted by a top level envelope key (also known as a "{+cmk-long+}", or CMK).
+{+csfle-abbrev+} uses :term:`envelope encryption`, which is the practice of
+encrypting plaintext data with a data key, that is itself encrypted by
+a top level envelope key (also known as a "{+cmk-long+}", or CMK).
 
-.. image:: /images/devcenter_csfle_gdpr_dek_diagram.webp
+**image:** /images/devcenter_csfle_gdpr_dek_diagram.webp
+   :alt: Envelope encryption diagram
 
 ### Encryption Key Management
 
-CMKs are usually managed by a Key Management Service (KMS). {+csfle-abbrev+} `supports multiple KMSs <qe-fundamentals-kms-providers>`, including Amazon Web Services (AWS), Azure Key Vault, Google Cloud Platform (GCP), and keystores that support the KMIP standard, such as Hashicorp Keyvault. The sample app uses Amazon Web Services as the KMS.
+CMKs are usually managed by a Key Management Service (KMS).
+{+csfle-abbrev+} :ref:`supports multiple KMSs <qe-fundamentals-kms-providers>`,
+including Amazon Web Services (AWS), Azure Key Vault, Google Cloud Platform
+(GCP), and keystores that support the KMIP standard, such as Hashicorp
+Keyvault. The sample app uses Amazon Web Services as the KMS.
 
 ### Automatic and {+manual-enc-title+}
 
-{+csfle-abbrev+} can be used in `automatic <csfle-fundamentals-automatic-encryption>` or `explicit <csfle-fundamentals-manual-encryption>` mode, or a combination of both. The sample app uses {+manual-enc+}.
+{+csfle-abbrev+} can be used in :ref:`automatic
+<csfle-fundamentals-automatic-encryption>` or :ref:`explicit <csfle-fundamentals-manual-encryption>` mode, or a
+combination of both. The sample app uses {+manual-enc+}.
 
 - With automatic encryption, you perform encrypted read and
-write operations based on a defined `encryption schema <csfle-fundamentals-create-schema>`, so you don't need application code to specify how to encrypt or decrypt fields.
+  write operations based on a defined :ref:`encryption schema 
+  <csfle-fundamentals-create-schema>`, so you don't need application code to 
+  specify how to encrypt or decrypt fields.
 
 - With {+manual-enc+}, you use the MongoDB driver's encryption library to
-manually encrypt or decrypt fields in your application.
+  manually encrypt or decrypt fields in your application.
+
 
 ## Sample App Walkthrough
 
-The sample app uses {+csfle-abbrev+} with {+manual-enc+}, and Amazon Web Services as the KMS:
+The sample app uses {+csfle-abbrev+} with {+manual-enc+}, and Amazon Web 
+Services as the KMS:
 
-.. image:: /images/devcenter_csfle_gdpr_crypto_shredding_example.png
+**image:** /images/devcenter_csfle_gdpr_crypto_shredding_example.png
+   :alt: An example of the crypto shredding UI
 
 ### Adding Users
 
-The app instantiates the `ClientEncryption` class by initializing an `app.mongodb_encryption_client` object. This encryption client is responsible for generating DEKs, and then encrypting them using a CMK from the AWS KMS.
+The app instantiates the ``ClientEncryption`` class by initializing an
+``app.mongodb_encryption_client`` object. This encryption client is responsible
+for generating DEKs, and then encrypting them using a CMK from the AWS KMS.
 
-When a user signs up, the application generates a unique DEK for them using the `create_data_key` method, then returns the `data_key_id`:
+When a user signs up, the application generates a unique DEK for them using the
+``create_data_key`` method, then returns the ``data_key_id``:
 
-```python
-# flaskapp/db_queries.py
+.. code-block:: python
+   :copyable: true
 
-@aws_credential_handler
-def create_key(userId):
-   data_key_id = \app.mongodb_encryption_client.create_data_key
-      (kms_provider, master_key, key_alt_names=[userId])
-   return data_key_id
-```
+   # flaskapp/db_queries.py
+
+   @aws_credential_handler
+   def create_key(userId):
+      data_key_id = \app.mongodb_encryption_client.create_data_key
+         (kms_provider, master_key, key_alt_names=[userId])
+      return data_key_id
 
 The app then uses this method when saving user information:
 
-```python
-# flaskapp/user.py
+.. code-block:: python
+   :copyable: true
 
-def save(self):
-   dek_id = db_queries.create_key(self.username)
-   result = app.mongodb[db_name].user.insert_one(
-      {
-         "username": self.username,
-         "password_hash": self.password_hash,
-         "dek_id": dek_id,
-         "createdAt": datetime.now(),
-      }
-   )
-   if result:
-      self.id = result.inserted_id
-      return True
-   else:
-      return False
-```
+   # flaskapp/user.py
+
+   def save(self):
+      dek_id = db_queries.create_key(self.username)
+      result = app.mongodb[db_name].user.insert_one(
+         {
+            "username": self.username,
+            "password_hash": self.password_hash,
+            "dek_id": dek_id,
+            "createdAt": datetime.now(),
+         }
+      )
+      if result:
+         self.id = result.inserted_id
+         return True
+      else:
+         return False
 
 ### Adding and Encrypting Data
 
-Once registered, a user can log in and enter data as key-value pairs via an input form:
+Once registered, a user can log in and enter data as key-value pairs via an 
+input form:
 
-.. image:: /images/devcenter_csfle_gdpr_data_input_form.png
+**image:** /images/devcenter_csfle_gdpr_data_input_form.png
+   :alt: A sample UI for adding data
 
-The database stores this data in a MongoDB collection named “data,” where each document includes the username and the key-value pair:
+The database stores this data in a MongoDB collection named “data,”
+where each document includes the username and the key-value pair:
 
-```json
-{
-   "name": "shoe size",
-   "value": "10",
-   "username": "tom"
-}
-```
+.. code-block:: json
+   :copyable: true
 
-The sample app encrypts the `value` and `username` fields, but not the `name`. The app encrypts fields with the user's DEK and a specified encryption algorithm:
+   {
+      "name": "shoe size",
+      "value": "10",
+      "username": "tom"
+   }
 
-```python
-# flaskapp/db_queries.py
+The sample app encrypts the ``value`` and ``username`` fields, but not
+the ``name``. The app encrypts fields with the user's DEK and a specified
+encryption algorithm:
 
-# Fields to encrypt, and the algorithm to encrypt them with
-ENCRYPTED_FIELDS = {
-   # Deterministic encryption for username, because we need to search on it
-   "username": Algorithm.AEAD_AES_256_CBC_HMAC_SHA_512_Deterministic,
-   # Random encryption for value, as we don't need to search on it
-   "value": Algorithm.AEAD_AES_256_CBC_HMAC_SHA_512_Random,
-}
-```
+.. code-block:: python
+   :copyable: true
 
-The `insert_data` function takes an unencrypted document and loops over the `ENCRYPTED_FIELDS` to encrypt them:
+   # flaskapp/db_queries.py
 
-```python
-# flaskapp/db_queries.py
+   # Fields to encrypt, and the algorithm to encrypt them with
+   ENCRYPTED_FIELDS = {
+      # Deterministic encryption for username, because we need to search on it
+      "username": Algorithm.AEAD_AES_256_CBC_HMAC_SHA_512_Deterministic,
+      # Random encryption for value, as we don't need to search on it
+      "value": Algorithm.AEAD_AES_256_CBC_HMAC_SHA_512_Random,
+   }
 
-def insert_data(document):
-   document["username"] = current_user.username
-   # Loop over the field names (and associated algorithm) we want to encrypt
-   for field, algo in ENCRYPTED_FIELDS.items():
-      # if the field exists in the document, encrypt it
-      if document.get(field):
-         document[field] = encrypt_field(document[field], algo)
-   # Insert document (now with encrypted fields) to the data collection
-   app.data_collection.insert_one(document)
-```
+The ``insert_data`` function takes an unencrypted document and loops over the
+``ENCRYPTED_FIELDS`` to encrypt them:
 
-If the specified field exists in the document, the function calls `encrypt_field` to encrypt it using the specified algorithm:
+.. code-block:: python
+   :copyable: true
 
-```python
-# flaskapp/db_queries.py
+   # flaskapp/db_queries.py
 
-# Encrypt a single field with the given algorithm
-@aws_credential_handler
-def encrypt_field(field, algorithm):
-   try:
-      field = app.mongodb_encryption_client.encrypt(
-         field,
-         algorithm,
-         key_alt_name=current_user.username,
-      )
-      return field
-   except pymongo.errors.EncryptionError as ex:
-      # Catch this error in case the DEK doesn't exist. Log a warning and 
-      # re-raise the exception
-      if "not all keys requested were satisfied" in ex._message:
-         app.logger.warn(
-            f"Encryption failed: could not find data encryption key for user: {current_user.username}"
+   def insert_data(document):
+      document["username"] = current_user.username
+      # Loop over the field names (and associated algorithm) we want to encrypt
+      for field, algo in ENCRYPTED_FIELDS.items():
+         # if the field exists in the document, encrypt it
+         if document.get(field):
+            document[field] = encrypt_field(document[field], algo)
+      # Insert document (now with encrypted fields) to the data collection
+      app.data_collection.insert_one(document)
+
+If the specified field exists in the document, the function calls 
+``encrypt_field`` to encrypt it using the specified algorithm:
+
+.. code-block:: python
+   :copyable: true
+
+   # flaskapp/db_queries.py
+
+   # Encrypt a single field with the given algorithm
+   @aws_credential_handler
+   def encrypt_field(field, algorithm):
+      try:
+         field = app.mongodb_encryption_client.encrypt(
+            field,
+            algorithm,
+            key_alt_name=current_user.username,
          )
-      raise ex
-```
+         return field
+      except pymongo.errors.EncryptionError as ex:
+         # Catch this error in case the DEK doesn't exist. Log a warning and 
+         # re-raise the exception
+         if "not all keys requested were satisfied" in ex._message:
+            app.logger.warn(
+               f"Encryption failed: could not find data encryption key for user: {current_user.username}"
+            )
+         raise ex
 
 After adding data, you can see it in the Web app:
 
-.. image:: /images/devcenter_csfle_gdpr_demo_data_entered.png
+**image:** /images/devcenter_csfle_gdpr_demo_data_entered.png
+   :alt: Sample data in the UI
 
 ### Deleting an Encryption Key
 
-Now let's see what happens when you delete the DEK. The sample app does this from an admin page, which should be restricted to only those individuals with authorization to manage keys:
+Now let's see what happens when you delete the DEK. The sample app does this
+from an admin page, which should be restricted to only those individuals with
+authorization to manage keys:
 
-.. image:: /images/devcenter_csfle_gdpr_demo_admin_page.png
+**image:** /images/devcenter_csfle_gdpr_demo_admin_page.png
+   :alt: The sample app admin page
 
-The "Delete data encryption key" option removes the DEK, but leaves the user's encrypted data in place. After that, the application can no longer decrypt the data. Trying to retrieve the data for the logged in user throws an error:
+The "Delete data encryption key" option removes the DEK, but leaves the user's
+encrypted data in place. After that, the application can no longer decrypt the
+data. Trying to retrieve the data for the logged in user throws an error:
 
-.. image:: /images/devcenter_csfle_gdpr_demo_error_message.png
+**image:** /images/devcenter_csfle_gdpr_demo_error_message.png
+   :alt: An error message when trying to retrieve encrypted data without a key
 
-> **Note:** After deleting the DEK, the application may still be able to decrypt and
-show data until its cache expires, up to 60 seconds later.
+**note:** After deleting the DEK, the application may still be able to decrypt and 
+   show data until its cache expires, up to 60 seconds later.
 
-But what is actually left in the database? You can review the information by returning to the Admin page and clicking :guilabel:`Fetch data for all users`. This view doesn't throw an exception if the application can't decrypt the data. Instead, it shows exactly what is stored in the database.
+But what is actually left in the database? You can review the information by
+returning to the Admin page and clicking :guilabel:`Fetch data for all
+users`. This view doesn't throw an exception if the application can't decrypt
+the data. Instead, it shows exactly what is stored in the database. 
 
-Even though you haven't actually deleted the user's data, because the data encryption key no longer exists, the application can only show the ciphertext for the encrypted fields "username" and "value".
+Even though you haven't actually deleted the user's data, because the data
+encryption key no longer exists, the application can only show the ciphertext
+for the encrypted fields "username" and "value".
 
-.. image:: /images/devcenter_csfle_gdpr_raw_ciphertext.png
+**image:** /images/devcenter_csfle_gdpr_raw_ciphertext.png
+   :alt: Raw ciphertext from the demo app database
 
-Here is the code used to fetch this data. It uses similar logic to the `encrypt` method shown earlier. The application runs a `find` operation without any filters to retrieve all data, then loops over the `ENCRYPTED_FIELDS` dictionary to decrypt fields:
+Here is the code used to fetch this data. It uses similar logic to the
+``encrypt`` method shown earlier. The application runs a ``find`` operation
+without any filters to retrieve all data, then loops over the
+``ENCRYPTED_FIELDS`` dictionary to decrypt fields:
 
-```python
-# flaskapp/db_queries.py
+.. code-block:: python
+   :copyable: true
 
-def fetch_all_data_unencrypted(decrypt=False):
-   results = list(app.data_collection.find())
+   # flaskapp/db_queries.py
 
-   if decrypt:
-      for field in ENCRYPTED_FIELDS.keys():
-         for result in results:
-            if result.get(field):
-               result[field], result["encryption_succeeded"] = decrypt_field(result[field])
-   return results
-```
+   def fetch_all_data_unencrypted(decrypt=False):
+      results = list(app.data_collection.find())
 
-The `decrypt_field` function is called for each field to be decrypted, but in this case the application catches the error if it can't successfully decrypt it due to a missing DEK:
+      if decrypt:
+         for field in ENCRYPTED_FIELDS.keys():
+            for result in results:
+               if result.get(field):
+                  result[field], result["encryption_succeeded"] = decrypt_field(result[field])
+      return results
 
-```python
-# flaskapp/db_queries.py
+The ``decrypt_field`` function is called for each field to be decrypted, but in
+this case the application catches the error if it can't successfully decrypt
+it due to a missing DEK:
 
-# Try to decrypt a field, returning a tuple of (value, status). This will be
-either (decrypted_value, True), or (raw_cipher_text, False) if we 
-couldn't decrypt
-def decrypt_field(field):
-   try:
-      # We don't need to pass the DEK or algorithm to decrypt a field
-      field = app.mongodb_encryption_client.decrypt(field)
-      return field, True
-   # Catch this error in case the DEK doesn't exist.
-   except pymongo.errors.EncryptionError as ex:
-      if "not all keys requested were satisfied" in ex._message:
-         app.logger.warn(
-            "Decryption failed: could not find data encryption key to decrypt the record."
-         )
-         # If we can't decrypt due to missing DEK, return the "raw" value.
-         return field, False
-      raise ex
-```
+.. code-block:: python
+   :copyable: true
 
-You can also use the mongosh shell to check directly in the database, to prove that there's nothing readable:
+   # flaskapp/db_queries.py
 
-.. image:: /images/devcenter_csfle_gdpr_mongosh.png
+   # Try to decrypt a field, returning a tuple of (value, status). This will be
+   either (decrypted_value, True), or (raw_cipher_text, False) if we 
+   couldn't decrypt
+   def decrypt_field(field):
+      try:
+         # We don't need to pass the DEK or algorithm to decrypt a field
+         field = app.mongodb_encryption_client.decrypt(field)
+         return field, True
+      # Catch this error in case the DEK doesn't exist.
+      except pymongo.errors.EncryptionError as ex:
+         if "not all keys requested were satisfied" in ex._message:
+            app.logger.warn(
+               "Decryption failed: could not find data encryption key to decrypt the record."
+            )
+            # If we can't decrypt due to missing DEK, return the "raw" value.
+            return field, False
+         raise ex
 
-At this point, the user's encrypted data is still present. Someone could gain access to it by restoring their encryption key, such as from a database backup.
+You can also use the mongosh shell to check directly in the database, to
+prove that there's nothing readable:
 
-To prevent this, the sample application uses two separate database clusters: one for storing data, and one for storing DEKs (the "key vault"). Using separate clusters decouples the restoration of backups for application data and the key vault. Restoring the data cluster from a backup doesn't restore any DEKs that were deleted from the key vault cluster.
+**image:** /images/devcenter_csfle_gdpr_mongosh.png
+   :alt: mongosh shell output when querying the database
+
+At this point, the user's encrypted data is still present. Someone could gain
+access to it by restoring their encryption key, such as from a database backup.
+
+To prevent this, the sample application uses two separate database clusters:
+one for storing data, and one for storing DEKs (the "key vault"). Using
+separate clusters decouples the restoration of backups for application data and
+the key vault. Restoring the data cluster from a backup doesn't restore any
+DEKs that were deleted from the key vault cluster.
 
 ## Conclusion
 
-{+csfle+} can simplify the task of "forgetting" certain data. By deleting data keys, you can effectively forget data that exists across different databases, collections, backups, and logs.
+{+csfle+} can simplify the task of "forgetting" certain data. By deleting data
+keys, you can effectively forget data that exists across different databases, 
+collections, backups, and logs. 
 
-In a production application, you might also delete the encrypted data itself, on top of removing the encryption key. This "defense in depth" approach helps ensure that data is really gone. Implementing crypto shredding on top of data deletion minimizes the impact if a delete operation fails, or doesn't include data that should have been wiped.
+In a production application, you might also delete the encrypted data itself,
+on top of removing the encryption key. This "defense in depth" approach helps
+ensure that data is really gone. Implementing crypto shredding on top of data
+deletion minimizes the impact if a delete operation fails, or doesn't include
+data that should have been wiped.

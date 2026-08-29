@@ -1,13 +1,7 @@
 ---
 type: "Framework Learn Directory Index"
 framework: "LangChain"
-directory: "content/frontend"
-source_repo: "https://github.com/langchain-ai/docs"
-source_branch: "main"
-source_commit: "2aae1dfc98ee953a9a5185fb6fcdd9efb3f4d878"
-source_commit_short: "2aae1dfc"
-source_commit_date: "2026-07-25T00:27:23Z"
-generated_at: "2026-07-25T11:51:05Z"
+generated_at: "2026-08-29T09:38:24.266407Z"
 ---
 # Frontend
 
@@ -15,35 +9,30 @@ This directory contains LangChain learning pages related to frontend.
 
 ## Breadcrumbs
 
-[Wiki Home](../../index.md) -> [Content](../index.md) -> [Frontend](index.md)
+[Wiki Home](../index.md) -> [Content](index.md)
 
 ## Navigation
 
-- Parent: [Parent Index](../index.md)
-
-## Child Directories
-
-- [Integrations](integrations/index.md) - pages related to integrations
+- Wiki Home: [Root Index](../index.md)
 
 ## Pages in This Directory
 
 - [Branching Chat](branching-chat.md)
-- [Generative Ui](generative-ui.md)
+- [Controlled Generative Ui](controlled-generative-ui.md)
+- [Declarative Generative Ui](declarative-generative-ui.md)
+- [Generative Ui Overview](generative-ui-overview.md)
 - [Headless Tools](headless-tools.md)
 - [Human In The Loop](human-in-the-loop.md)
 - [Join Rejoin](join-rejoin.md)
 - [Markdown Messages](markdown-messages.md)
 - [Message Queues](message-queues.md)
+- [Open Ended Generative Ui](open-ended-generative-ui.md)
 - [Overview](overview.md)
 - [Reasoning Tokens](reasoning-tokens.md)
 - [Structured Output](structured-output.md)
 - [Time Travel](time-travel.md)
 - [Tool Calling](tool-calling.md)
 
-## IDE LLM Guidance
+## Subdirectories
 
-When answering implementation questions related to this directory:
-
-1. Prefer the most specific page listed above.
-2. If the topic is broad, read the child directory index first.
-3. Use source metadata from each page when giving answers.
+- [Integrations](integrations/index.md)

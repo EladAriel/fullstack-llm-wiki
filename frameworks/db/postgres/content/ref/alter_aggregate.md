@@ -1,25 +1,34 @@
 ---
 type: "Framework Learn Page"
-framework: "postgres"
+framework: "PostgreSQL"
 source_repo: "https://github.com/postgres/postgres.git"
 source_branch: "master"
 source_path: "doc/src/sgml/ref/alter_aggregate.sgml"
-source_commit: "38afc3dcb25c45b744d4025029ce0a6c90b7059f"
-source_commit_short: "38afc3dc"
-source_commit_date: "2026-07-25T19:08:27+09:00"
-generated_at: "2026-07-25T11:50:59Z"
+source_commit: "6c5f1d6074208146930b67c2054509c3e82f6f7f"
+source_commit_short: "6c5f1d6"
+source_commit_date: "2026-08-28T23:24:47+02:00"
+generated_at: "2026-08-29T09:39:24.543573Z"
 ---
-
 ALTER AGGREGATE
+ 
 
-ALTER AGGREGATE
-7
-SQL - Language Statements
+ 
+  
+# ALTER AGGREGATE
 
-ALTER AGGREGATE
-change the definition of an aggregate function
+  7
+  SQL - Language Statements
+ 
 
-```
+ 
+  
+# ALTER AGGREGATE
+
+  change the definition of an aggregate function
+ 
+
+ 
+
 ALTER AGGREGATE name ( aggregate_signature ) RENAME TO new_name
 ALTER AGGREGATE name ( aggregate_signature )
                 OWNER TO { new_owner | CURRENT_ROLE | CURRENT_USER | SESSION_USER }
@@ -30,56 +39,205 @@ where aggregate_signature is:
 * |
 [ argmode ] [ argname ] argtype [ , ... ] |
 [ [ argmode ] [ argname ] argtype [ , ... ] ] ORDER BY [ argmode ] [ argname ] argtype [ , ... ]
+
+ 
+
+ 
+  
+# Description
+
+  
+   ALTER AGGREGATE changes the definition of an
+   aggregate function.
+  
+
+  
+   You must own the aggregate function to use ALTER AGGREGATE.
+   To change the schema of an aggregate function, you must also have
+   CREATE privilege on the new schema.
+   To alter the owner, you must be able to SET ROLE to the
+   new owning role, and that role must have CREATE
+   privilege on the aggregate function's schema.
+   (These restrictions enforce that altering
+   the owner doesn't do anything you couldn't do by dropping and recreating
+   the aggregate function.  However, a superuser can alter ownership of any
+   aggregate function anyway.)
+  
+
+ 
+
+ 
+  
+# Parameters
+
+  
+   
+    name
+    
+     
+      The name (optionally schema-qualified) of an existing aggregate function.
+     
+
+    
+   
+
+   
+    argmode
+
+    
+     
+      The mode of an argument: IN or VARIADIC.
+      If omitted, the default is IN.
+     
+
+    
+   
+
+   
+    argname
+
+    
+     
+      The name of an argument.
+      Note that ALTER AGGREGATE does not actually pay
+      any attention to argument names, since only the argument data
+      types are needed to determine the aggregate function's identity.
+     
+
+    
+   
+
+   
+    argtype
+    
+     
+      An input data type on which the aggregate function operates.
+      To reference a zero-argument aggregate function, write *
+      in place of the list of argument specifications.
+      To reference an ordered-set aggregate function, write
+      ORDER BY between the direct and aggregated argument
+      specifications.
+     
+
+    
+   
+
+   
+    new_name
+    
+     
+      The new name of the aggregate function.
+     
+
+    
+   
+
+   
+    new_owner
+    
+     
+      The new owner of the aggregate function.
+     
+
+    
+   
+
+   
+    new_schema
+    
+     
+      The new schema for the aggregate function.
+     
+
+    
+   
+  
+ 
+
+ 
+  
+# Notes
+
+   
+    The recommended syntax for referencing an ordered-set aggregate
+    is to write ORDER BY between the direct and aggregated
+    argument specifications, in the same style as in
+    CREATE AGGREGATE.  However, it will also work to
+    omit ORDER BY and just run the direct and aggregated
+    argument specifications into a single list.  In this abbreviated form,
+    if VARIADIC "any" was used in both the direct and
+    aggregated argument lists, write VARIADIC "any" only once.
+   
+
+   
+    ALTER AGGREGATE deals only with generic properties of
+    an aggregate, such as its name.  To change the aggregate-specific
+    properties of an aggregate such as its support functions, replace its
+    definition entirely with CREATE OR REPLACE AGGREGATE.
+   
+
+ 
+
+ 
+  
+# Examples
+
+  
+   To rename the aggregate function myavg for type
+   integer to my_average:
+
 ```
 
-## Description
-
-`ALTER AGGREGATE` changes the definition of an aggregate function.
-
-You must own the aggregate function to use `ALTER AGGREGATE`. To change the schema of an aggregate function, you must also have `CREATE` privilege on the new schema. To alter the owner, you must be able to `SET ROLE` to the new owning role, and that role must have `CREATE` privilege on the aggregate function's schema. (These restrictions enforce that altering the owner doesn't do anything you couldn't do by dropping and recreating the aggregate function. However, a superuser can alter ownership of any aggregate function anyway.)
-
-## Parameters
-
-- The name (optionally schema-qualified) of an existing aggregate function.
-- The mode of an argument: `IN` or `VARIADIC`. If omitted, the default is `IN`.
-- The name of an argument. Note that `ALTER AGGREGATE` does not actually pay any attention to argument names, since only the argument data types are needed to determine the aggregate function's identity.
-- An input data type on which the aggregate function operates. To reference a zero-argument aggregate function, write `*` in place of the list of argument specifications. To reference an ordered-set aggregate function, write `ORDER BY` between the direct and aggregated argument specifications.
-- The new name of the aggregate function.
-- The new owner of the aggregate function.
-- The new schema for the aggregate function.
-
-## Notes
-
-The recommended syntax for referencing an ordered-set aggregate is to write `ORDER BY` between the direct and aggregated argument specifications, in the same style as in CREATE AGGREGATE. However, it will also work to omit `ORDER BY` and just run the direct and aggregated argument specifications into a single list. In this abbreviated form, if `VARIADIC "any"` was used in both the direct and aggregated argument lists, write `VARIADIC "any"` only once.
-
-## Examples
-
-To rename the aggregate function `myavg` for type `integer` to `my_average`:
-
-```
 ALTER AGGREGATE myavg(integer) RENAME TO my_average;
-```
-
-To change the owner of the aggregate function `myavg` for type `integer` to `joe`:
 
 ```
+
+  
+
+  
+   To change the owner of the aggregate function myavg for type
+   integer to joe:
+
+```
+
 ALTER AGGREGATE myavg(integer) OWNER TO joe;
-```
-
-To move the ordered-set aggregate `mypercentile` with direct argument of type `float8` and aggregated argument of type `integer` into schema `myschema`:
 
 ```
+
+  
+
+  
+   To move the ordered-set aggregate mypercentile with
+   direct argument of type float8 and aggregated argument
+   of type integer into schema myschema:
+
+```
+
 ALTER AGGREGATE mypercentile(float8 ORDER BY integer) SET SCHEMA myschema;
-```
-
-This will work too:
 
 ```
+
+   This will work too:
+
+```
+
 ALTER AGGREGATE mypercentile(float8, integer) SET SCHEMA myschema;
+
 ```
 
-## Compatibility
+ 
 
-There is no `ALTER AGGREGATE` statement in the SQL standard.
+ 
+  
+# Compatibility
 
-## See Also
+  
+   There is no ALTER AGGREGATE statement in the SQL
+   standard.
+  
+
+ 
+
+ 
+  
+# See Also

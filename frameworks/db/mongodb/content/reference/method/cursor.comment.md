@@ -1,123 +1,179 @@
 ---
 type: "Framework Learn Page"
-framework: "mongodb"
+framework: "MongoDB"
 source_repo: "https://github.com/mongodb/docs.git"
 source_branch: "main"
 source_path: "content/manual/manual/source/reference/method/cursor.comment.txt"
-source_commit: "ab9db26ed3d11618cdb61516d8180337d8e3f679"
-source_commit_short: "ab9db26e"
-source_commit_date: "2026-07-24T16:22:46-06:00"
-generated_at: "2026-07-25T11:51:15Z"
+source_commit: "b9f2bc487a2878b65e3c1f80024bebab76954f27"
+source_commit_short: "b9f2bc48"
+source_commit_date: "2026-08-28T17:09:45-05:00"
+generated_at: "2026-08-29T09:39:19.900651Z"
 ---
-
-=================================
-
 # cursor.comment() (mongosh method)
+
+**meta:** :description: Add a comment to a MongoDB query using `cursor.comment()` to help track queries in diagnostic outputs like `system.profile` and `QUERY` logs.
+
+.. default-domain:: mongodb
+
+**contents:** On this page
+   :local:
+   :backlinks: none
+   :depth: 1
+   :class: singlecol
 
 ## Definition
 
+**method:** cursor.comment()
+
+
+   .. include:: /includes/fact-mongosh-shell-method.rst
+
+   Adds a ``comment`` field to the query.
+
+   :method:`cursor.comment()` has the following syntax:
+
+   .. code-block:: javascript
+
+      cursor.comment( <string> )
+
+   :method:`~cursor.comment()` has the following parameter:
+
+
+   .. list-table::
+      :header-rows: 1
+      :widths: 20 20 80
+   
+      * - Parameter
+   
+        - Type
+   
+        - Description
+   
+      * - ``comment``
+   
+        - string
+   
+        - The comment to apply to the query.
+          
+          
 ## Compatibility
 
-This method is available in deployments hosted in the following environments:
+This method is available in deployments hosted in the following environments: 
 
-.. include:: /includes/fact-environments-atlas-only.rst
+**include:** /includes/fact-environments-atlas-only.rst
 
-.. include:: /includes/fact-environments-atlas-support-all.rst
+**include:** /includes/fact-environments-atlas-support-all.rst
 
-.. include:: /includes/fact-environments-onprem-only.rst
+**include:** /includes/fact-environments-onprem-only.rst   
+
 
 ## Behavior
 
-:method:`~cursor.comment()` associates a comment string with the find operation. This can make it easier to track a particular query in the following diagnostic outputs:
+:method:`~cursor.comment()` associates a comment string with the
+find operation. This can make it easier to track a particular query in the
+following diagnostic outputs:
 
-- The `system.profile <<database>.system.profile>`
-- The `QUERY` `log <log-messages-ref>` component
+- The :data:`system.profile <<database>.system.profile>`
+- The :data:`QUERY` :ref:`log <log-messages-ref>` component
 - :method:`db.currentOp()`
-See `configure log verbosity <log-messages-configure-verbosity>` for the :binary:`~bin.mongod` log, the `Database Profiler tutorial <database-profiler>`, or the :method:`db.currentOp()` command.
+
+See :ref:`configure log verbosity <log-messages-configure-verbosity>` for the
+:binary:`~bin.mongod` log, the
+:ref:`Database Profiler tutorial <database-profiler>`, or
+the :method:`db.currentOp()` command.
 
 ## Example
 
-The following operation attaches a comment to a query on the `restaurants` collection:
+The following operation attaches a comment to a query on the ``restaurants``
+collection:
 
-```javascript
-db.restaurants.find(
-   { "borough" : "Manhattan" }
-).comment( "Find all Manhattan restaurants" )
-```
+.. code-block:: javascript
+
+   db.restaurants.find(
+      { "borough" : "Manhattan" }
+   ).comment( "Find all Manhattan restaurants" )
 
 ## Output Examples
 
-### `system.profile <<database>.system.profile>`
+### :data:`system.profile <<database>.system.profile>`
 
-The following is an excerpt from the `system.profile <<database>.system.profile>`:
+The following is an excerpt from the
+:data:`system.profile <<database>.system.profile>`:
 
-```javascript
-{
-   "op" : "query",
-   "ns" : "guidebook.restaurant",
-   "query" : {
-      "find" : "restaurant",
-      "filter" : {
-         "borough" : "Manhattan"
+.. code-block:: javascript
+   :emphasize-lines: 9
+
+   {
+      "op" : "query",
+      "ns" : "guidebook.restaurant",
+      "query" : {
+         "find" : "restaurant",
+         "filter" : {
+            "borough" : "Manhattan"
+         },
+         "comment" : "Find all Manhattan restaurants"
       },
-      "comment" : "Find all Manhattan restaurants"
-   },
-   ...
-}
-```
-
-### :binary:`~bin.mongod` `log <log-messages-ref>`
-
-The following is an excerpt from the :binary:`~bin.mongod` log. It has been formatted for readability.
-
-> **Important:** The verbosity level for `QUERY` must be greater than `0`.
-See `log-messages-configure-verbosity`
-
-```javascript
-2015-11-23T13:09:16.202-05:00 I COMMAND  [conn1]
-   command guidebook.restaurant command: find {
-      find: "restaurant",
-      filter: { "borough" : "Manhattan" },
-      comment: "Find all Manhattan restaurants"
+      ...
    }
-   ...
-```
+
+
+### :binary:`~bin.mongod` :ref:`log <log-messages-ref>`
+
+The following is an excerpt from the :binary:`~bin.mongod` log. It has been
+formatted for readability.
+
+**important:** The verbosity level for :data:`QUERY` must be greater than ``0``.
+   See :ref:`log-messages-configure-verbosity`
+
+.. code-block:: javascript
+   :emphasize-lines: 5
+
+   2015-11-23T13:09:16.202-05:00 I COMMAND  [conn1]
+      command guidebook.restaurant command: find {
+         find: "restaurant",
+         filter: { "borough" : "Manhattan" },
+         comment: "Find all Manhattan restaurants"
+      }
+      ...
+
 
 ### :method:`db.currentOp()`
 
-Suppose the following operation is currently running on a :binary:`~bin.mongod` instance:
+Suppose the following operation is currently running on a :binary:`~bin.mongod`
+instance:
 
-```javascript
-db.restaurants.find(
-   { "borough" : "Manhattan" }
-).comment("Find all Manhattan restaurants")
-```
+.. code-block:: javascript
+
+   db.restaurants.find(
+      { "borough" : "Manhattan" }
+   ).comment("Find all Manhattan restaurants")
 
 Running the :method:`db.currentOp()` command returns the following:
 
-```javascript
-{
-   "inprog" : [
-      {
-         "host" : "198.51.100.1:27017",
-         "desc" : "conn3",
-         "connectionId" : 3,
-         ...
+.. code-block:: javascript
+   :emphasize-lines: 17
 
-         "op" : "query",
-         "ns" : "test.$cmd",
-         "command" : {
-            "find" : "restaurants",
-            "filter" : {
-               "borough" : "Manhattan"
+   {
+      "inprog" : [
+         {
+            "host" : "198.51.100.1:27017",
+            "desc" : "conn3",
+            "connectionId" : 3,
+            ...
+
+            "op" : "query",
+            "ns" : "test.$cmd",
+            "command" : {
+               "find" : "restaurants",
+               "filter" : {
+                  "borough" : "Manhattan"
+               },
+               "comment" : "Find all Manhattan restaurants",
+               "$db" : "test"
             },
-            "comment" : "Find all Manhattan restaurants",
-            "$db" : "test"
-         },
-         "numYields" : 0,
-         ...
-      }
-   ],
-   "ok" : 1
-}
-```
+            "numYields" : 0,
+            ...
+         }
+      ],
+      "ok" : 1
+   }

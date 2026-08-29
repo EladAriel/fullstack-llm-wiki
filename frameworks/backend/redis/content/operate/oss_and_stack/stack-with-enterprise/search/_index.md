@@ -1,14 +1,15 @@
 ---
 type: "Framework Learn Page"
-framework: "redis"
+framework: "Redis"
 source_repo: "https://github.com/redis/docs.git"
 source_branch: "main"
 source_path: "content/operate/oss_and_stack/stack-with-enterprise/search/_index.md"
-source_commit: "9d30f68c3dad1a6b3b7d30fe604b911348ce8152"
-source_commit_short: "9d30f68c"
-source_commit_date: "2026-07-24T10:52:10-07:00"
-generated_at: "2026-07-25T11:51:22Z"
+source_commit: "f8693349287b0efbef3c865b6f6a2aceca88594d"
+source_commit_short: "f869334"
+source_commit_date: "2026-08-28T10:01:19-05:00"
+generated_at: "2026-08-29T09:38:55.253949Z"
 ---
+# _Index
 
 ---
 aliases:
@@ -55,7 +56,7 @@ You can run [`HGETALL`]({{< relref "/commands/hgetall" >}}) to retrieve the enti
 
 You can index, search, and query JSON documents stored in your database.
 
-For more information about how to search and query JSON documents, see the [quick start]({{< relref "/develop/get-started/document-database" >}}).
+For more information about how to search and query JSON documents, see the [quick start]({{< relref "/develop/get-started/search-tutorial" >}}).
 
 ## Search features
 
@@ -83,7 +84,7 @@ Because the index on the new shard is created synchronously though, it's expecte
 ## More info
 
 - [Getting Started with RediSearch 2.0](https://redis.com/blog/getting-started-with-redisearch-2-0/)
-- [Redis Search quick start]({{< relref "/develop/get-started/document-database" >}})
+- [Redis Search quick start]({{< relref "/develop/get-started/search-tutorial" >}})
 - [Redis Search configuration]({{< relref "/operate/oss_and_stack/stack-with-enterprise/search/config" >}})
 - [Redis Search commands]({{< relref "/operate/oss_and_stack/stack-with-enterprise/search/commands" >}})
 - [Redis Search references]({{< relref "/develop/ai/search-and-query/advanced-concepts/" >}})

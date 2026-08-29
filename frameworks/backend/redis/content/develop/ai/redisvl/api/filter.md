@@ -1,14 +1,15 @@
 ---
 type: "Framework Learn Page"
-framework: "redis"
+framework: "Redis"
 source_repo: "https://github.com/redis/docs.git"
 source_branch: "main"
 source_path: "content/develop/ai/redisvl/api/filter.md"
-source_commit: "9d30f68c3dad1a6b3b7d30fe604b911348ce8152"
-source_commit_short: "9d30f68c"
-source_commit_date: "2026-07-24T10:52:10-07:00"
-generated_at: "2026-07-25T11:51:22Z"
+source_commit: "f8693349287b0efbef3c865b6f6a2aceca88594d"
+source_commit_short: "f869334"
+source_commit_date: "2026-08-28T10:01:19-05:00"
+generated_at: "2026-08-29T09:38:55.839657Z"
 ---
+# Filter
 
 ---
 linkTitle: Filter
@@ -400,3 +401,122 @@ Create a GeoRadius specification (GeoSpec)
   * **unit** (*str* *,* *optional*) – The unit of the radius. Defaults to "km".
 * **Raises:**
   **ValueError** – If the unit is not one of "m", "km", "mi", or "ft".
+
+## Timestamp
+
+### `class Timestamp(field)`
+
+A timestamp filter for querying date/time fields in Redis.
+
+This filter can handle various date and time formats, including:
+- datetime objects (with or without timezone)
+- date objects
+- ISO-8601 formatted strings
+- Unix timestamps (as integers or floats)
+
+All timestamps are converted to Unix timestamps in UTC for consistency.
+Bare date values and date-only ISO strings are anchored to the UTC calendar
+day, not the host’s local day, and naive datetimes are read as UTC.
+
+* **Parameters:**
+  **field** (*str*)
+
+#### `__eq__(other)`
+
+Filter for timestamps equal to the specified value.
+For date objects (without time), this matches the entire UTC calendar
+day, from 00:00:00 to 23:59:59.999999 UTC.
+
+* **Parameters:**
+  **other** (*datetime* *|* *date* *|* *str* *|* *int* *|* *float*) – A datetime, date, ISO string, or Unix timestamp
+* **Returns:**
+  The filter object for method chaining
+* **Return type:**
+  self
+
+#### `__ge__(other)`
+
+Filter for timestamps greater than or equal to the specified value.
+
+For a bare date (or date-only ISO string), this means from the *start* of
+that UTC day, so the day itself is included.
+
+* **Parameters:**
+  **other** – A datetime, date, ISO string, or Unix timestamp
+* **Returns:**
+  The filter object for method chaining
+* **Return type:**
+  self
+
+#### `__gt__(other)`
+
+Filter for timestamps greater than the specified value.
+
+For a bare date (or date-only ISO string), this means after the *end* of
+that UTC day, so the day itself is excluded.
+
+* **Parameters:**
+  **other** – A datetime, date, ISO string, or Unix timestamp
+* **Returns:**
+  The filter object for method chaining
+* **Return type:**
+  self
+
+#### `__le__(other)`
+
+Filter for timestamps less than or equal to the specified value.
+
+For a bare date (or date-only ISO string), this means through the *end* of
+that UTC day, so the day itself is included.
+
+* **Parameters:**
+  **other** – A datetime, date, ISO string, or Unix timestamp
+* **Returns:**
+  The filter object for method chaining
+* **Return type:**
+  self
+
+#### `__lt__(other)`
+
+Filter for timestamps less than the specified value.
+
+For a bare date (or date-only ISO string), this means before the *start*
+of that UTC day, so the day itself is excluded.
+
+* **Parameters:**
+  **other** – A datetime, date, ISO string, or Unix timestamp
+* **Returns:**
+  The filter object for method chaining
+* **Return type:**
+  self
+
+#### `__ne__(other)`
+
+Filter for timestamps not equal to the specified value.
+For date objects (without time), this excludes the entire UTC calendar
+day, from 00:00:00 to 23:59:59.999999 UTC.
+
+* **Parameters:**
+  **other** (*datetime* *|* *date* *|* *str* *|* *int* *|* *float*) – A datetime, date, ISO string, or Unix timestamp
+* **Returns:**
+  The filter object for method chaining
+* **Return type:**
+  self
+
+#### `between(start, end, inclusive='both')`
+
+Filter for timestamps between start and end (inclusive).
+
+Bare dates (and date-only ISO strings) span whole UTC calendar days:
+start anchors to 00:00:00 of its day and end to 23:59:59.999999 of its
+day, so both endpoint days are covered in full.
+
+* **Parameters:**
+  * **start** – A datetime, date, ISO string, or Unix timestamp
+  * **end** – A datetime, date, ISO string, or Unix timestamp
+  * **inclusive** (*str*) – Which endpoints to include – "both" (default), "left",
+    "right", or "neither".
+* **Returns:**
+  The filter object for method chaining
+* **Return type:**
+  self

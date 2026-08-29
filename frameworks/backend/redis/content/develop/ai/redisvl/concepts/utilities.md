@@ -1,14 +1,15 @@
 ---
 type: "Framework Learn Page"
-framework: "redis"
+framework: "Redis"
 source_repo: "https://github.com/redis/docs.git"
 source_branch: "main"
 source_path: "content/develop/ai/redisvl/concepts/utilities.md"
-source_commit: "9d30f68c3dad1a6b3b7d30fe604b911348ce8152"
-source_commit_short: "9d30f68c"
-source_commit_date: "2026-07-24T10:52:10-07:00"
-generated_at: "2026-07-25T11:51:22Z"
+source_commit: "f8693349287b0efbef3c865b6f6a2aceca88594d"
+source_commit_short: "f869334"
+source_commit_date: "2026-08-28T10:01:19-05:00"
+generated_at: "2026-08-29T09:38:55.845608Z"
 ---
+# Utilities
 
 ---
 linkTitle: Utilities
@@ -46,7 +47,7 @@ Vectorizers handle batching internally, breaking large batches into provider-app
 
 ### Supported Providers
 
-RedisVL includes vectorizers for OpenAI, Azure OpenAI, Cohere, HuggingFace (local), Mistral, Google Vertex AI, AWS Bedrock, VoyageAI, and others. See the [Vectorizers]({{< relref "../api/vectorizer" >}}) for the complete list. You can also create custom vectorizers that wrap any embedding function.
+RedisVL includes vectorizers for OpenAI, Azure OpenAI, Cohere, HuggingFace (local), Mistral, Google (via `google-genai`, covering both Vertex AI and the Gemini Developer API), AWS Bedrock, VoyageAI, and others. See the [Vectorizers]({{< relref "../api/vectorizer" >}}) for the complete list. You can also create custom vectorizers that wrap any embedding function.
 
 ## Rerankers
 

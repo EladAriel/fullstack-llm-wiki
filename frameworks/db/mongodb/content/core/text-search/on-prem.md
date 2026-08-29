@@ -1,103 +1,129 @@
 ---
 type: "Framework Learn Page"
-framework: "mongodb"
+framework: "MongoDB"
 source_repo: "https://github.com/mongodb/docs.git"
 source_branch: "main"
 source_path: "content/manual/manual/source/core/text-search/on-prem.txt"
-source_commit: "ab9db26ed3d11618cdb61516d8180337d8e3f679"
-source_commit_short: "ab9db26e"
-source_commit_date: "2026-07-24T16:22:46-06:00"
-generated_at: "2026-07-25T11:51:15Z"
+source_commit: "b9f2bc487a2878b65e3c1f80024bebab76954f27"
+source_commit_short: "b9f2bc48"
+source_commit_date: "2026-08-28T17:09:45-05:00"
+generated_at: "2026-08-29T09:39:19.789334Z"
 ---
-
-=============
+.. _perform-text-search-onprem:
+.. _text-search-on-premises:
+.. _text-search-on-prem:
 
 # $text Queries
 
-.. include:: /includes/extracts/fact-text-search-legacy-atlas.rst
+**facet:** :name: genre
+   :values: tutorial
 
-.. include:: /includes/fact-text-index.rst
+**meta:** :description: Explore capabilities for $text queries using text indexes to query string content.
+   :keywords: on-prem
 
-See the `<index-type-text>` section for a full reference on text indexes, including behavior, tokenization, and properties.
+**contents:** On this page
+   :local:
+   :backlinks: none
+   :depth: 1
+   :class: singlecol
+
+**include:** /includes/extracts/fact-text-search-legacy-atlas.rst
+
+**include:** /includes/fact-text-index.rst
+
+See the :ref:`<index-type-text>` section for a full reference on text
+indexes, including behavior, tokenization, and properties.
+
+.. _text-index-eg:
 
 ## Examples
 
-This example demonstrates how to build a text index and use it to find coffee shops, given only text fields.
+This example demonstrates how to build a text index and use it to find
+coffee shops, given only text fields.
 
 ### Create a Collection
 
-Create a collection `stores` with the following documents:
+Create a collection ``stores`` with the following documents:
 
-```javascript
-db.stores.insertMany(
-   [
-     { _id: 1, name: "Java Hut", description: "Coffee and cakes" },
-     { _id: 2, name: "Burger Buns", description: "Gourmet hamburgers" },
-     { _id: 3, name: "Coffee Shop", description: "Just coffee" },
-     { _id: 4, name: "Clothes Clothes Clothes", description: "Discount clothing" },
-     { _id: 5, name: "Java Shopping", description: "Indonesian goods" },
-     { _id: 6, name: "NYC_Coffee Shop", description: "local NYC coffee" }
-   ]
-)
-```
+.. code-block:: javascript
+
+   db.stores.insertMany(
+      [
+        { _id: 1, name: "Java Hut", description: "Coffee and cakes" },
+        { _id: 2, name: "Burger Buns", description: "Gourmet hamburgers" },
+        { _id: 3, name: "Coffee Shop", description: "Just coffee" },
+        { _id: 4, name: "Clothes Clothes Clothes", description: "Discount clothing" },
+        { _id: 5, name: "Java Shopping", description: "Indonesian goods" },
+        { _id: 6, name: "NYC_Coffee Shop", description: "local NYC coffee" }
+      ]
+   )
 
 ### Create a Text Index
 
-.. include:: /includes/fact-create-text-index.rst
+**include:** /includes/fact-create-text-index.rst
 
 ### Search for an Exact String
 
-You can search for exact multi-word strings by wrapping them in double-quotes. `$text` queries only match documents that include the whole string.
+You can search for exact multi-word strings by wrapping them in double-quotes.
+``$text`` queries only match documents that include the whole string.
 
-For example, the following query finds all documents that contain the string "coffee shop":
+For example, the following query finds all documents that contain the string
+"coffee shop":
 
-```javascript
-db.stores.find( { $text: { $search: "\"coffee shop\"" } } )
-```
+.. code-block:: javascript
+
+   db.stores.find( { $text: { $search: "\"coffee shop\"" } } )
 
 This query returns the following documents:
 
-```javascript
-[
-   { _id: 3, name: 'Coffee Shop', description: 'Just coffee' },
-   { _id: 6, name: 'NYC_Coffee Shop', description: 'local NYC coffee' }
-]
-```
+.. code-block:: javascript
 
-Unless specified, exact string search is not case sensitive or diacritic sensitive. For example, the following query returns the same results as the previous query:
+   [
+      { _id: 3, name: 'Coffee Shop', description: 'Just coffee' },
+      { _id: 6, name: 'NYC_Coffee Shop', description: 'local NYC coffee' }
+   ]
 
-```javascript
-db.stores.find( { $text: { $search: "\"COFFEé SHOP\"" } } )
-```
+Unless specified, exact string search is not case sensitive or diacritic
+sensitive. For example, the following query returns the same
+results as the previous query:
 
-Exact string search does not handle stemming or stop words.
+.. code-block:: javascript
+
+   db.stores.find( { $text: { $search: "\"COFFEé SHOP\"" } } )
+
+Exact string search does not handle stemming or stop words. 
 
 ### Exclude a Term
 
-To exclude a word, you can prepend a "`-`" character. For example, to find all stores containing "java" or "shop" but not "coffee", use the following:
+To exclude a word, you can prepend a "``-``" character. For example, to
+find all stores containing "java" or "shop" but not "coffee", use the
+following:
 
-```javascript
-db.stores.find( { $text: { $search: "java shop -coffee" } } )
-```
+.. code-block:: javascript
+
+   db.stores.find( { $text: { $search: "java shop -coffee" } } )
 
 ### Sort the Results
 
-MongoDB returns its results in unsorted order by default. However, `$text` queries compute a relevance score for each document that specifies how well a document matches the query.
+MongoDB returns its results in unsorted order by default. However,
+``$text`` queries compute a relevance score for each document
+that specifies how well a document matches the query.
 
-To sort the results in order of relevance score, you must explicitly project the :expression:`$meta` `textScore` field and sort on it:
+To sort the results in order of relevance score, you must explicitly
+project the :expression:`$meta` ``textScore`` field and sort on it:
 
-```javascript
-db.stores.find(
-   { $text: { $search: "java coffee shop" } },
-   { score: { $meta: "textScore" } }
-).sort( { score: { $meta: "textScore" } } )
-```
+.. code-block:: javascript
 
-`$text` is also available in the aggregation pipeline.
+   db.stores.find(
+      { $text: { $search: "java coffee shop" } },
+      { score: { $meta: "textScore" } }
+   ).sort( { score: { $meta: "textScore" } } )
 
-## Contents
+``$text`` is also available in the aggregation pipeline.
 
-- $text Query Operators </core/text-search-operators>
-- Aggregation Pipeline </tutorial/text-search-in-aggregation>
-- Languages </reference/text-search-languages>
-- Text Indexes </core/indexes/index-types/index-text>
+**toctree:** :titlesonly:
+
+   $text Query Operators </core/text-search-operators>
+   Aggregation Pipeline </tutorial/text-search-in-aggregation>
+   Languages </reference/text-search-languages>
+   Text Indexes </core/indexes/index-types/index-text>

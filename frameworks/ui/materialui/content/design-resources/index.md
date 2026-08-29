@@ -1,7 +1,7 @@
 ---
 type: "Framework Learn Directory Index"
 framework: "Material UI"
-generated_at: "2026-07-25T13:39:41.060666Z"
+generated_at: "2026-08-29T09:40:18.313997Z"
 ---
 # Design-Resources
 
@@ -17,3 +17,8 @@ This directory contains Material UI learning pages related to design-resources.
 
 ## Pages in This Directory
 
+
+## Subdirectories
+
+- [Material Ui For Figma](material-ui-for-figma/index.md)
+- [Material Ui Sync](material-ui-sync/index.md)

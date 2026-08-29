@@ -1,49 +1,31 @@
 ---
 type: "Framework Learn Directory Index"
-framework: "redis"
-directory: "content/operate/rs/7.22/references/rest-api/requests/bdbs/actions"
-source_repo: "https://github.com/redis/docs.git"
-source_branch: "main"
-source_commit: "9d30f68c3dad1a6b3b7d30fe604b911348ce8152"
-source_commit_short: "9d30f68c"
-source_commit_date: "2026-07-24T10:52:10-07:00"
-generated_at: "2026-07-25T11:51:22Z"
+framework: "Redis"
+generated_at: "2026-08-29T09:38:56.392839Z"
 ---
 # Actions
 
-This directory contains redis learning pages related to actions.
+This directory contains Redis learning pages related to actions.
 
 ## Breadcrumbs
 
-[Wiki Home](../../../../../../../../../index.md) -> [Content](../../../../../../../../index.md) -> [Operate](../../../../../../../index.md) -> [Rs](../../../../../../index.md) -> [7.22](../../../../../index.md) -> [References](../../../../index.md) -> [Rest Api](../../../index.md) -> [Requests](../../index.md) -> [Bdbs](../index.md) -> [Actions](index.md)
+[Wiki Home](../index.md) -> [Content](index.md)
 
 ## Navigation
 
-- Parent: [Parent Index](../index.md)
-
-## Child Directories
-
-- None
+- Wiki Home: [Root Index](../index.md)
 
 ## Pages in This Directory
 
-- [Index](_index.md)
-- [Backup Reset Status](backup_reset_status.md)
+- [_Index](_index.md)
+- [Backup_Reset_Status](backup_reset_status.md)
 - [Export](export.md)
-- [Export Reset Status](export_reset_status.md)
+- [Export_Reset_Status](export_reset_status.md)
 - [Import](import.md)
-- [Import Reset Status](import_reset_status.md)
-- [Optimize Shards Placement](optimize_shards_placement.md)
+- [Import_Reset_Status](import_reset_status.md)
+- [Optimize_Shards_Placement](optimize_shards_placement.md)
 - [Rebalance](rebalance.md)
 - [Recover](recover.md)
-- [Resume Traffic](resume_traffic.md)
+- [Resume_Traffic](resume_traffic.md)
 - [Revamp](revamp.md)
-- [Stop Traffic](stop_traffic.md)
-
-## IDE LLM Guidance
-
-When answering implementation questions related to this directory:
-
-1. Prefer the most specific page listed above.
-2. If the topic is broad, read the child directory index first.
-3. Use source metadata from each page when giving answers.
+- [Stop_Traffic](stop_traffic.md)

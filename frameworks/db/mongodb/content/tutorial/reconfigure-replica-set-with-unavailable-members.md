@@ -1,69 +1,105 @@
 ---
 type: "Framework Learn Page"
-framework: "mongodb"
+framework: "MongoDB"
 source_repo: "https://github.com/mongodb/docs.git"
 source_branch: "main"
 source_path: "content/manual/manual/source/tutorial/reconfigure-replica-set-with-unavailable-members.txt"
-source_commit: "ab9db26ed3d11618cdb61516d8180337d8e3f679"
-source_commit_short: "ab9db26e"
-source_commit_date: "2026-07-24T16:22:46-06:00"
-generated_at: "2026-07-25T11:51:15Z"
+source_commit: "b9f2bc487a2878b65e3c1f80024bebab76954f27"
+source_commit_short: "b9f2bc48"
+source_commit_date: "2026-08-28T17:09:45-05:00"
+generated_at: "2026-08-29T09:39:19.621883Z"
 ---
-
-============================================================
+.. _reconfigure-replica-set-with-unavailable-members:
 
 # Reconfigure Self-Managed Replica Set for Unavailable Members
 
-To reconfigure a `replica set` when a **majority** of members are available, use the :method:`rs.reconfig()` operation on the current `primary`, following the example in the `Replica Set Reconfiguration Procedure <replica-set-reconfiguration-usage>`.
+**meta:** :keywords: on-prem
+   :description: Reconfigure a replica set with unavailable members using the `force` option in `rs.reconfig()` to recover from catastrophic interruptions.
 
-This document provides steps for re-configuring a replica set when only a **minority** of members are accessible.
+.. default-domain:: mongodb
 
-You may need to use the procedure, for example, in a geographically distributed replica set, where no local group of members can reach a majority. See `replica-set-elections` for more information on this situation.
+**contents:** On this page
+   :local:
+   :backlinks: none
+   :depth: 1
+   :class: singlecol
+
+To reconfigure a :term:`replica set` when a **majority** of
+members are available, use the :method:`rs.reconfig()`
+operation on
+the current :term:`primary`, following the example in the
+:ref:`Replica Set Reconfiguration Procedure
+<replica-set-reconfiguration-usage>`.
+
+This document provides steps for re-configuring a
+replica set when *only* a **minority** of members are accessible.
+
+You may need to use the procedure, for example, in a
+geographically distributed replica set, where *no* local group of
+members can reach a majority. See :ref:`replica-set-elections` for more
+information on this situation.
+
+
+.. _replica-set-force-reconfiguration:
 
 ## Reconfigure by Forcing the Reconfiguration
 
-This procedure lets you recover while a majority of `replica set` members are down or unreachable. You connect to any surviving member and use the `force` option to the :method:`rs.reconfig()`  method.
+This procedure lets you recover while a majority of :term:`replica set`
+members are down or unreachable. You connect to any surviving member and
+use the ``force`` option to the :method:`rs.reconfig()`  method.
 
-The `force` option forces a new configuration onto the member. Use this procedure only to recover from catastrophic interruptions. Do not use `force` every time you reconfigure. Also, do not use the `force` option in any automatic scripts and do not use `force` when there is still a `primary`.
+The ``force`` option forces a new configuration onto the member. Use this procedure only to
+recover from catastrophic interruptions. Do not use ``force`` every
+time you reconfigure. Also, do not use the ``force`` option in any automatic
+scripts and do not use ``force`` when there is still a :term:`primary`.
 
-> **Warning:** .. include:: /includes/force-reconfiguration-warning.rst
+**warning:** .. include:: /includes/force-reconfiguration-warning.rst
 
 To force reconfiguration:
 
 1. Back up a surviving member.
-#. Connect to a surviving member and save the current configuration. Consider the following example commands for saving the configuration:
 
-```javascript
-   cfg = rs.conf()
+#. Connect to a surviving member and save the current configuration.
+   Consider the following example commands for saving the configuration:
 
-   printjson(cfg)
-```
+   .. code-block:: javascript
 
-#. On the same member, remove the down and unreachable members of the replica set from the :rsconf:`members` array by setting the array equal to the surviving members alone. Consider the following example, which uses the `cfg` variable created in the previous step:
+      cfg = rs.conf()
 
-```javascript
-   cfg.members = [cfg.members[0] , cfg.members[4] , cfg.members[7]]
-```
+      printjson(cfg)
 
-#. On the same member, reconfigure the set by using the :method:`rs.reconfig()` command with the `force` option set to `true`:
+#. On the same member, remove the down and unreachable members of the
+   replica set from the :rsconf:`members` array by
+   setting the array equal to the surviving members alone. Consider the
+   following example, which uses the ``cfg`` variable created in the
+   previous step:
 
-```javascript
-   rs.reconfig(cfg, {force : true})
+   .. code-block:: javascript
 
-This operation forces the secondary to use the new configuration. The
-configuration is then propagated to all the surviving members listed
-in the ``members`` array. The replica set then elects a new primary.
+      cfg.members = [cfg.members[0] , cfg.members[4] , cfg.members[7]]
 
-.. note::
+#. On the same member, reconfigure the set by using the
+   :method:`rs.reconfig()` command with the ``force`` option set to
+   ``true``:
 
-   When you use ``force : true``, the version number in the replica
-   set configuration increases significantly, by tens or hundreds
-   of thousands. This is normal and designed to prevent set version
-   collisions if you accidentally force re-configurations on both
-   sides of a network partition and then the network partitioning
-   ends.
-```
+   .. code-block:: javascript
 
-#. If the failure or partition was only temporary, shut down or decommission the removed members as soon as possible.
+      rs.reconfig(cfg, {force : true})
 
-> **Seealso:** `/tutorial/resync-replica-set-member`
+   This operation forces the secondary to use the new configuration. The
+   configuration is then propagated to all the surviving members listed
+   in the ``members`` array. The replica set then elects a new primary.
+
+   .. note::
+
+      When you use ``force : true``, the version number in the replica
+      set configuration increases significantly, by tens or hundreds
+      of thousands. This is normal and designed to prevent set version
+      collisions if you accidentally force re-configurations on both
+      sides of a network partition and then the network partitioning
+      ends.
+
+#. If the failure or partition was only temporary, shut down or
+   decommission the removed members as soon as possible.
+
+**seealso:** :doc:`/tutorial/resync-replica-set-member`

@@ -4,11 +4,12 @@ framework: "Model Context Protocol"
 source_repo: "https://github.com/modelcontextprotocol/modelcontextprotocol"
 source_branch: "main"
 source_path: "docs/specification/draft/basic/patterns/subscriptions.mdx"
-source_commit: "7634684382c3d14cf7e9f14073fe40a2d8ace3fa"
-source_commit_short: "76346843"
-source_commit_date: "2026-07-23T16:49:30-07:00"
-generated_at: "2026-07-25T11:50:39Z"
+source_commit: "ca4ab3027f7c844cd3039c956438d72e8253f7f5"
+source_commit_short: "ca4ab30"
+source_commit_date: "2026-08-28T21:24:44-07:00"
+generated_at: "2026-08-29T09:38:48.103230Z"
 ---
+# Subscriptions
 
 ---
 title: Subscriptions
@@ -131,8 +132,8 @@ A subscription ends when:
 
 - The **client** cancels it — close the SSE stream (HTTP) or send
   `notifications/cancelled` referencing the `subscriptions/listen` request ID (stdio).
-- The **server** tears it down (e.g., during shutdown) — it **SHOULD** send the
-  empty `subscriptions/listen` response to signal a graceful end (see
+- The **server** tears it down (e.g., during shutdown) — it **SHOULD** send a
+  successful `subscriptions/listen` response to signal a graceful end (see
   [Graceful Closure](#graceful-closure)), then close the stream.
 - The underlying transport closes (HTTP timeout, TCP disconnect, stdio process
   exit).
@@ -141,10 +142,11 @@ A subscription ends when:
 
 When the server ends a subscription on its own initiative (for example, during
 shutdown), it **SHOULD** respond to the original `subscriptions/listen` request
-with an empty result before closing the stream. This is the JSON-RPC response to
-the long-lived request, correlated by its `id`, and signals that the subscription
-ended gracefully — as opposed to an abrupt transport drop, which carries no
-response.
+with a completion result before closing the stream. The result carries no
+method-specific data beyond the standard result fields and subscription
+metadata. This is the JSON-RPC response to the long-lived request, correlated by
+its `id`, and signals that the subscription ended gracefully — as opposed to an
+abrupt transport drop, which carries no response.
 
 ```json
 {

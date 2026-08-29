@@ -1,0 +1,73 @@
+---
+type: "Framework Learn Page"
+framework: "LangSmith"
+source_repo: "https://github.com/langchain-ai/docs.git"
+source_branch: "main"
+source_path: "src/langsmith/managed-deep-agents-project-structure.mdx"
+source_commit: "a174f9cf7c91ee5eb14ee2382eb48bfe6e4956e9"
+source_commit_short: "a174f9c"
+source_commit_date: "2026-08-28T17:04:12-07:00"
+generated_at: "2026-08-29T09:39:50.611209Z"
+---
+# Managed Deep Agents Project Structure
+
+---
+title: Managed Deep Agents project structure
+sidebarTitle: Project structure
+description: Understand the files and directories in a Managed Deep Agents project.
+---
+
+import ManagedDeepAgentsPublicBetaNote from '/snippets/langsmith/managed-deep-agents-public-beta-note.mdx';
+import ManagedDeepAgentsProjectLayout from '/snippets/langsmith/managed-deep-agents-project-layout.mdx';
+
+A Managed Deep Agents project has a required agent entry and optional files that enable managed capabilities.
+
+:::python
+It is a regular Python project.
+:::
+
+:::js
+It is a regular TypeScript project.
+:::
+
+<ManagedDeepAgentsPublicBetaNote />
+
+## Project layout
+
+<ManagedDeepAgentsProjectLayout />
+
+:::python
+The only required file is `agent.py` at the project root. It must export a named `agent` created with `define_deep_agent`.
+:::
+
+:::js
+The only required file is `agent.ts` or `agent.tsx` at the project root. It must export a named `agent` created with `defineDeepAgent`.
+:::
+
+Use only one agent entry in a project. See [Agent definition](/langsmith/managed-deep-agents-agent-definition).
+
+## How Managed Deep Agents treats project files
+
+:::python
+- **Managed context**: `instructions.md` defines the system prompt. Each directory under `skills/` contains task-specific instructions. Managed Deep Agents syncs both to Context Hub.
+- **Application code**: Files under `tools/` and `middleware/` are ordinary project modules. Import them from the agent entry. Other local modules work the same way.
+- **Managed configuration**: Root `identity.py` and `memory.py`, direct children of `channels/`, `connectors/`, and `schedules/`, and `sandbox/__init__.py` enable their corresponding capabilities. MCP connector modules export a module-level `connector`.
+- **Dependencies and secrets**: Declare dependencies in `pyproject.toml`. Managed Deep Agents loads `.env` locally and forwards eligible values as deployment secrets, but never includes `.env` files in the build archive.
+- **Evals**: Managed Deep Agents evals are Harbor evals. Run `mda evals init -i` and develop tasks with a coding agent and the `eval-engineering` skill. Generated runtime files stay under `.mda/evals/` and are not included in the deployed agent build.
+:::
+
+:::js
+- **Managed context**: `instructions.md` defines the system prompt. Each directory under `skills/` contains task-specific instructions. Managed Deep Agents syncs both to Context Hub.
+- **Application code**: Files under `tools/` and `middleware/` are ordinary project modules. Import them from the agent entry. Other local modules work the same way.
+- **Managed configuration**: Root `identity.ts` and `memory.ts`, direct children of `channels/`, `connectors/`, and `schedules/`, and `sandbox/index.ts` enable their corresponding capabilities. MCP connector modules export a named `connector`.
+- **Dependencies and secrets**: Declare dependencies in `package.json`. Managed Deep Agents loads `.env` locally and forwards eligible values as deployment secrets, but never includes `.env` files in the build archive.
+- **Evals**: Managed Deep Agents evals are Harbor evals. Run `mda evals init -i` and develop tasks with a coding agent and the `eval-engineering` skill. Generated runtime files stay under `.mda/evals/` and are not included in the deployed agent build.
+:::
+
+:::python
+The layout above shows the common `.py` names.
+:::
+
+:::js
+The layout above shows the common `.ts` names. TypeScript managed declarations also accept the supported `.tsx`, `.mts`, or `.cts` variants.
+:::

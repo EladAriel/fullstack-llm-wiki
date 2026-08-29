@@ -4,10 +4,10 @@ framework: "OpenTelemetry JS"
 source_repo: "https://github.com/open-telemetry/opentelemetry.io.git"
 source_branch: "main"
 source_path: "content/en/docs/languages/js/propagation.md"
-source_commit: "8fd99e125e5510385b18b541d97c283e28f76ef2"
-source_commit_short: "8fd99e1"
-source_commit_date: "2026-07-25T10:22:15-04:00"
-generated_at: "2026-07-25T19:07:58.990906Z"
+source_commit: "669d1a40e56ed2dd914d48340b31e16a83610d40"
+source_commit_short: "669d1a4"
+source_commit_date: "2026-08-29T01:16:15+00:00"
+generated_at: "2026-08-29T09:39:53.274770Z"
 ---
 # Propagation
 

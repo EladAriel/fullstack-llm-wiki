@@ -1,42 +1,73 @@
 ---
 type: "Framework Learn Page"
-framework: "mongodb"
+framework: "MongoDB"
 source_repo: "https://github.com/mongodb/docs.git"
 source_branch: "main"
 source_path: "content/manual/manual/source/core/collection-level-access-control.txt"
-source_commit: "ab9db26ed3d11618cdb61516d8180337d8e3f679"
-source_commit_short: "ab9db26e"
-source_commit_date: "2026-07-24T16:22:46-06:00"
-generated_at: "2026-07-25T11:51:15Z"
+source_commit: "b9f2bc487a2878b65e3c1f80024bebab76954f27"
+source_commit_short: "b9f2bc48"
+source_commit_date: "2026-08-28T17:09:45-05:00"
+generated_at: "2026-08-29T09:39:19.545939Z"
 ---
-
-===========================================================
+.. _collection-level-access:
 
 # Collection-Level Access Control in Self-Managed Deployments
 
-Collection-level access control allows administrators to grant users privileges that are scoped to specific collections.
+.. default-domain:: mongodb
 
-Administrators can implement collection-level access control through `user-defined roles <user-defined-roles>`. By creating a role with `privileges <privileges>` that are scoped to a specific collection in a particular database, administrators can provision users with roles that grant privileges on a collection level.
+**facet:** :name: genre
+   :values: reference
+
+**meta:** :keywords: privilege, RBAC, access, on-prem
+   :description: Control user access to data at the collection level. Grant privileges scoped to specific collections using user-defined roles in self-managed MongoDB.
+
+**contents:** On this page
+   :local:
+   :backlinks: none
+   :depth: 1
+   :class: singlecol
+
+Collection-level access control allows administrators to grant users
+privileges that are scoped to specific collections.
+
+Administrators can implement collection-level access control through
+:ref:`user-defined roles <user-defined-roles>`. By creating a role with
+:ref:`privileges <privileges>` that are scoped to a specific collection
+in a particular database, administrators can provision users with roles
+that grant privileges on a collection level.
 
 ## Privileges and Scope
 
-A privilege consists of `actions <security-user-actions>` and the `resources <resource-document>` upon which the actions are permissible; i.e. the resources define the scope of the actions for that privilege.
+A privilege consists of :ref:`actions <security-user-actions>`
+and the :ref:`resources <resource-document>` upon which the
+actions are permissible; i.e. the resources define the scope of the
+actions for that privilege. 
 
-By specifying both the database and the collection in the `resource document <resource-specific-db-collection>` for a privilege, administrator can limit the privilege actions just to a specific collection in a specific database. Each privilege action in a role can be scoped to a different collection.
+By specifying both the database and the collection in the
+:ref:`resource document <resource-specific-db-collection>` for a
+privilege, administrator can limit the privilege actions just to a
+specific collection in a specific database. Each privilege action in a
+role can be scoped to a different collection.
 
 For example, a user defined role can contain the following privileges:
 
-```javascript
-privileges: [
-  { resource: { db: "products", collection: "inventory" }, actions: [ "find", "update", "insert" ] },
-  { resource: { db: "products", collection: "orders" },  actions: [ "find" ] }
-]
-```
+.. code-block:: javascript
 
-The first privilege scopes its actions to the `inventory` collection of the `products` database. The second privilege scopes its actions to the `orders` collection of the `products` database.
+   privileges: [
+     { resource: { db: "products", collection: "inventory" }, actions: [ "find", "update", "insert" ] },
+     { resource: { db: "products", collection: "orders" },  actions: [ "find" ] }
+   ]
 
-As a best practice, avoid assigning `createCollection` privileges to users who don't have read privileges on the collection.
+The first privilege scopes its actions to the ``inventory`` collection
+of the ``products`` database. The second privilege scopes its actions
+to the ``orders`` collection of the ``products`` database.
+
+As a best practice, avoid assigning ``createCollection`` privileges to users
+who don't have read privileges on the collection.
+
 
 ## Additional Information
 
-For more information on user-defined roles and MongoDB authorization model, see `/core/authorization`. For a tutorial on creating user-defined roles, see `/tutorial/manage-users-and-roles`.
+For more information on user-defined roles and MongoDB authorization
+model, see :doc:`/core/authorization`. For a tutorial on creating
+user-defined roles, see :doc:`/tutorial/manage-users-and-roles`.

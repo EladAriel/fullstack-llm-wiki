@@ -1,55 +1,74 @@
 ---
 type: "Framework Learn Page"
-framework: "mongodb"
+framework: "MongoDB"
 source_repo: "https://github.com/mongodb/docs.git"
 source_branch: "main"
 source_path: "content/manual/manual/source/troubleshooting/server-selection-timeout.txt"
-source_commit: "ab9db26ed3d11618cdb61516d8180337d8e3f679"
-source_commit_short: "ab9db26e"
-source_commit_date: "2026-07-24T16:22:46-06:00"
-generated_at: "2026-07-25T11:51:15Z"
+source_commit: "b9f2bc487a2878b65e3c1f80024bebab76954f27"
+source_commit_short: "b9f2bc48"
+source_commit_date: "2026-08-28T17:09:45-05:00"
+generated_at: "2026-08-29T09:39:19.561578Z"
 ---
-
-=====================================
+.. _manual-troubleshooting-server-selection-timeout:
 
 # Troubleshoot Server Selection Timeout
 
-Applications might encounter server selection timeout errors when attempting to connect to a MongoDB deployment. This error indicates that the client driver cannot select a suitable server within the configured timeout period.
+**meta:** :description: Learn to diagnose and resolve server selection timeout errors in MongoDB applications caused by network issues, IP access restrictions, DNS failures, or TLS misconfiguration.
 
-Server selection timeouts commonly occur due to network connectivity issues, IP access restrictions, DNS SRV resolution failures, or TLS configuration issues.
+**contents:** On this page
+	:local:
+	:backlinks: none
+	:depth: 1
+	:class: singlecol
 
-This page describes common causes of server selection timeouts and provides steps to diagnose and resolve them. If the issue persists after completing the steps below, contact `technical-support`.
+Applications might encounter server selection timeout errors when 
+attempting to connect to a MongoDB deployment. This error indicates that the client driver 
+cannot select a suitable server within the configured timeout period.
+
+Server selection timeouts commonly occur due to network connectivity 
+issues, IP access restrictions, DNS SRV resolution failures, or TLS configuration issues.
+
+This page describes common causes of server selection timeouts and provides 
+steps to diagnose and resolve them. If the issue persists after completing the 
+steps below, contact :ref:`technical-support`.
 
 ## Prerequisite Checks
 
-To verify that your application is encountering a server selection timeout, review the client error message. Common examples include:
+To verify that your application is encountering a server selection timeout, 
+review the client error message. Common examples include:
 
-- `MongoTimeoutError: Server selection timed out after 30000 ms`
-- `MongoServerSelectionError: connection timed out`
-- `MongoServerSelectionError: getaddrinfo ENOTFOUND`
+- ``MongoTimeoutError: Server selection timed out after 30000 ms``		
+- ``MongoServerSelectionError: connection timed out``
+- ``MongoServerSelectionError: getaddrinfo ENOTFOUND``
 - ``No suitable servers found (`serverSelectionTryOnce` set): [Failed to resolve '<my-database-host>]``
+
 ### Check Deployment Availability
 
-- On Atlas deployments, confirm that the cluster state is `Active` in the Atlas UI's Clusters page
-with the green dot status indicator.
-
-- On self-managed deployments, verify that the `mongod` process is
-running and listening on the expected port.
+- On Atlas deployments, confirm that the cluster state is ``Active`` in the Atlas UI's Clusters page 
+  with the green dot status indicator.
+- On self-managed deployments, verify that the ``mongod`` process is 
+  running and listening on the expected port.
 
 ### Check Log Messages
 
-Enable `log messages <log-messages-ref>` in your server or driver to confirm that the client is repeatedly attempting server discovery until the timeout expires.
+Enable :ref:`log messages <log-messages-ref>` in your server or driver to confirm that the 
+client is repeatedly attempting server discovery until the timeout expires.
 
-Client Logs ```````````
+### Client Logs
 
-Client logs may show repeated attempts to discover cluster topology, followed by a timeout. Messages may reference:
+Client logs may show repeated attempts to discover cluster 
+topology, followed by a timeout. Messages may reference:
 
 - DNS resolution failures.
 - TLS handshake errors.
 - Connection attempts that do not complete.
-Server Logs (Self-Managed) ``````````````````````````
 
-If the server logs show no incoming connection attempts when you run the  :dbcommand:`getLog` command or on your configured `log destination <log-message-destinations>`, this typically indicates a network connectivity issue.
+### Server Logs (Self-Managed)
+
+If the server logs show no incoming connection attempts when you run
+the  :dbcommand:`getLog` command or on your configured :ref:`log destination
+<log-message-destinations>`, this typically indicates a network connectivity issue.
+
 
 ## Common Issues and Resolutions
 
@@ -61,78 +80,98 @@ If the client cannot establish a TCP connection to any host in the deployment, s
 
 To restore connectivity:
 
-1. Verify that outbound traffic from the client host is allowed on
-TCP port `27017` (or the configured custom port). #. Check firewall rules, security groups, and network ACLs for restrictions. #. Ensure that no VPN, proxy, or local firewall is intercepting the connection. #. Retry the connection after making changes.
+1. Verify that outbound traffic from the client host is allowed on 
+   TCP port ``27017`` (or the configured custom port).
+#. Check firewall rules, security groups, and network 
+   ACLs for restrictions.
+#. Ensure that no VPN, proxy, or local firewall is 
+   intercepting the connection.
+#. Retry the connection after making changes.
 
 ### Client IP Address Not Allowed (Atlas)
 
 If the cluster is available but receives no incoming connections:
 
 1. In the Atlas UI, navigate to Network Access.
-#. Verify that the client's public IP address is included in the IP access list #. If needed for testing, temporarily allow access from `0.0.0.0/0`. #. Save the changes and wait for the configuration to apply. #. Retry the connection.
-
-For more information about IP access lists, see `access-list`.
+#. Verify that the client's public IP address is included in the IP access list
+#. If needed for testing, temporarily allow access from ``0.0.0.0/0``.
+#. Save the changes and wait for the configuration to apply.
+#. Retry the connection.
+   
+For more information about IP access lists, see :ref:`access-list`.
 
 ### DNS SRV Resolution Failure
 
-If the client reports errors such as `ENOTFOUND` or fails during SRV (Service) lookup, the environment may be unable to resolve DNS SRV records.
+If the client reports errors such as ``ENOTFOUND`` or fails during SRV (Service) lookup, 
+the environment may be unable to resolve DNS SRV records.
 
-Verify DNS SRV Resolution `````````````````````````
+### Verify DNS SRV Resolution
 
 Follow these steps from the client host:
 
 1. Identify the hostname from the connection string:
-```bash
-mongodb+srv://<cluster-name>.mongodb.net
-```
+   
+   .. code-block:: bash
+	:copyable: true
+	
+	mongodb+srv://<cluster-name>.mongodb.net
 
 #. Run a DNS SRV lookup:
 
-```bash
-nslookup -type=SRV _mongodb._tcp.<cluster-name>.mongodb.net
-```
+   .. code-block:: bash
+	:copyable: true
+	
+	nslookup -type=SRV _mongodb._tcp.<cluster-name>.mongodb.net
 
-#. Verify that the command returns one or more SRV records pointing to MongoDB hosts. #. If no records are returned:
+#. Verify that the command returns one or more SRV records pointing to MongoDB hosts.
+#. If no records are returned:
 
-- Confirm that the hostname is correct.
-- Check whether your DNS provider supports SRV records.
-- Verify that outbound DNS queries are not blocked.
-Work Around SRV Limitations ```````````````````````````
+   - Confirm that the hostname is correct.
+   - Check whether your DNS provider supports SRV records.
+   - Verify that outbound DNS queries are not blocked.
 
-If SRV records cannot be resolved, you need to retrieve the standard connection string (non-SRV) from the deployment update the application to use:
+### Work Around SRV Limitations
 
-```bash
-mongodb://host1,host2,host3/?replicaSet=<name>
-```
+If SRV records cannot be resolved, you need to retrieve the standard connection string (non-SRV) from the 
+deployment update the application to use:
+   
+.. code-block:: bash
+	:copyable: true
+	
+	mongodb://host1,host2,host3/?replicaSet=<name>
 
 Retry the connection.
 
-To learn more about connection strings, visit `mongodb-uri`.
+To learn more about connection strings, visit :ref:`mongodb-uri`.
 
 ### TLS Configuration Issues
 
-If the error output references TLS or SSL handshake failures, you can take the following steps to resolve common TLS configuration issues:
+If the error output references TLS or SSL handshake failures, you can take 
+the following steps to resolve common TLS configuration issues:
 
 - Verify that the client driver supports TLS 1.2 or later.
 - Ensure that system root certificates are up to date.
 - For self-managed deployments:
-- Confirm that the certificate hostname matches the connection string.
-- Verify that the full certificate chain is available.
+
+  - Confirm that the certificate hostname matches the connection string.
+  - Verify that the full certificate chain is available.
+
 After you complete these steps, retry the connection.
 
-To learn more about TLS/SSL and learn how to configure your TLS/SSL connections, see `transport-encryption`.
+To learn more about TLS/SSL and learn how to configure 
+your TLS/SSL connections, see :ref:`transport-encryption`.
 
 ## Verify Resolution
-
 After resolving the underlying issue:
 
 - The client establishes a connection without timing out.
 - Application logs indicate successful server selection.
 - Atlas metrics (if applicable) show active connections.
 - Server logs record incoming client connections.
+
 ## Diagnostics to Collect for More Support
 
-If the issue persists, collect the following before contacting `technical-support`.:
+If the issue persists, collect the following before contacting :ref:`technical-support`.:
 
 - Complete client error messages and stack traces
 - MongoDB connection string (credentials removed)
@@ -141,12 +180,14 @@ If the issue persists, collect the following before contacting `technical-suppor
 - DNS SRV lookup output
 - Network connectivity test results
 - Relevant MongoDB logs
+
 ## Related Issues
 
-- `manual-troubleshooting-replica-set-no-primary`
-- `manual-troubleshooting-connection-storms`
+- :ref:`manual-troubleshooting-replica-set-no-primary`
+- :ref:`manual-troubleshooting-connection-storms`
+
 ## Learn More
 
-- `find-connection-string`
-- `atlas-troubleshoot-connections`
-- `sharding-high-availability`
+- :ref:`find-connection-string`
+- :ref:`atlas-troubleshoot-connections`
+- :ref:`sharding-high-availability`

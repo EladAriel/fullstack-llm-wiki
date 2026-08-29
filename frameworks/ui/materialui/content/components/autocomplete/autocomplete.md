@@ -4,10 +4,10 @@ framework: "Material UI"
 source_repo: "https://github.com/mui/material-ui.git"
 source_branch: "master"
 source_path: "docs/data/material/components/autocomplete/autocomplete.md"
-source_commit: "4d5fe7254baa7e97e38b516f37c7af13128468b7"
-source_commit_short: "4d5fe725"
-source_commit_date: "2026-07-24T12:25:49+03:00"
-generated_at: "2026-07-25T13:39:40.946792Z"
+source_commit: "fc3a3a0a8b7c8f20274eca4758ea07a33e25c1b4"
+source_commit_short: "fc3a3a0a"
+source_commit_date: "2026-08-28T09:03:39+07:00"
+generated_at: "2026-08-29T09:40:18.240715Z"
 ---
 ---
 productId: material-ui
@@ -299,9 +299,38 @@ Fancy smaller inputs? Use the `size` prop.
 
 ### Custom input
 
-The `renderInput` prop allows you to customize the rendered input.
-The first argument of this render prop contains props that you need to forward.
-Pay specific attention to the `ref` and `inputProps` keys.
+The `renderInput` prop allows you to customize the rendered input. Its argument contains props that must be forwarded.
+Pay particular attention to `params.slotProps.input` (including its `ref`) and `params.slotProps.htmlInput`.
+
+Autocomplete renders selected values through `params.slotProps.input.startAdornment`. When adding a custom start
+adornment, preserve the provided adornment:
+
+```tsx
+const getInputSlotProps = (params) => ({
+  ...params.slotProps.input,
+  startAdornment: (
+    <>
+      {customStartAdornment}
+      {params.slotProps.input.startAdornment}
+    </>
+  ),
+});
+
+<Autocomplete
+  options={options}
+  renderInput={(params) => (
+    <TextField
+      {...params}
+      slotProps={{
+        ...params.slotProps,
+        input: getInputSlotProps(params),
+      }}
+    />
+  )}
+/>;
+```
+
+Likewise, preserve `params.slotProps.input.endAdornment` when customizing it. It contains Autocomplete's built-in controls.
 
 :::warning
 If you're using a custom input component inside the Autocomplete, make sure that you forward the ref to the underlying DOM element.
@@ -443,11 +472,6 @@ In the event you want the avoid autofill, you can try the following:
   ```
 
 Read [the guide on MDN](https://developer.mozilla.org/en-US/docs/Web/Security/Practical_implementation_guides/Turning_off_form_autocompletion) for more details.
-
-### iOS VoiceOver
-
-VoiceOver on iOS Safari doesn't support the `aria-owns` attribute very well.
-You can work around the issue with the `disablePortal` prop.
 
 ### ListboxComponent
 

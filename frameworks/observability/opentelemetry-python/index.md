@@ -1,6 +1,6 @@
-# opentelemetry-python Learn Wiki
+# OpenTelemetry Python Learn Wiki
 
-This is a local LLM-friendly wiki generated from the official opentelemetry-python documentation.
+This is a local LLM-friendly wiki generated from the official OpenTelemetry Python documentation.
 
 ## Status
 
@@ -8,9 +8,10 @@ This is a local LLM-friendly wiki generated from the official opentelemetry-pyth
 - Source repo: `https://github.com/open-telemetry/opentelemetry.io.git`
 - Source branch: `main`
 - Source docs path: `content/en/docs/languages/python`
-- Source commit: `8fd99e1`
-- Source commit date: `2026-07-25T10:22:15-04:00`
-- Wiki generated at: `2026-07-25T19:07:56.595557Z`
+- Source commit: `669d1a4`
+- Source commit date: `2026-08-29T01:16:15+00:00`
+- Wiki generated at: `2026-08-29T09:39:55.752964Z`
+- Page count: `13`
 
 ## How the IDE LLM should use this wiki
 

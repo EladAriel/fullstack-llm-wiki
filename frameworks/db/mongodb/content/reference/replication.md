@@ -1,40 +1,179 @@
 ---
 type: "Framework Learn Page"
-framework: "mongodb"
+framework: "MongoDB"
 source_repo: "https://github.com/mongodb/docs.git"
 source_branch: "main"
 source_path: "content/manual/manual/source/reference/replication.txt"
-source_commit: "ab9db26ed3d11618cdb61516d8180337d8e3f679"
-source_commit_short: "ab9db26e"
-source_commit_date: "2026-07-24T16:22:46-06:00"
-generated_at: "2026-07-25T11:51:15Z"
+source_commit: "b9f2bc487a2878b65e3c1f80024bebab76954f27"
+source_commit_short: "b9f2bc48"
+source_commit_date: "2026-08-28T17:09:45-05:00"
+generated_at: "2026-08-29T09:39:19.721085Z"
 ---
-
-==================================
+.. _replication-toc:
 
 # Self-Managed Replication Reference
 
-## Replication Methods in `mongosh`
+**meta:** :description: Explore replication methods and database commands for managing replica sets in MongoDB, including configuration and status retrieval.
+
+.. default-domain:: mongodb
+
+**contents:** On this page
+   :local:
+   :backlinks: none
+   :depth: 1
+   :class: singlecol
+
+## Replication Methods in ``mongosh``
+
+.. list-table::
+   :widths: 30,70
+   :header-rows: 1
+
+   * - Name
+
+     - Description
+
+   * - :method:`rs.add()`
+
+     - Adds a member to a replica set.
+
+   * - :method:`rs.addArb()`
+
+     - Adds an :term:`arbiter` to a replica set.
+
+   * - :method:`rs.conf()`
+
+     - Returns the replica set configuration document.
+
+   * - :method:`rs.freeze()`
+
+     - Prevents the current member from seeking election as primary for a period of time.
+
+   * - :method:`rs.help()`
+
+     - Returns basic help text for :term:`replica set` functions.
+
+   * - :method:`rs.initiate()`
+
+     - Initializes a new replica set.
+
+   * - :method:`rs.printReplicationInfo()`
+
+     - Prints a formatted report of the replica set status from the
+       perspective of the primary.
+
+   * - :method:`rs.printSecondaryReplicationInfo()`
+
+     - Prints a formatted report of the replica set status from the
+       perspective of the secondaries.
+
+   * - :method:`rs.reconfig()`
+
+     - Re-configures a replica set by applying a new replica set configuration object.
+
+   * - :method:`rs.remove()`
+
+     - Remove a member from a replica set.
+
+   * - :method:`rs.status()`
+
+     - Returns a document with information about the state of the replica set.
+
+   * - :method:`rs.stepDown()`
+
+     - Causes the current :term:`primary` to become a secondary which forces an :term:`election`.
+
+   * - :method:`rs.syncFrom()`
+
+     - Sets the member that this replica set member will sync from, overriding the default sync target selection logic.
+
 
 ## Replication Database Commands
 
+.. list-table::
+   :widths: 30,70
+   :header-rows: 1
+
+   * - Name
+
+     - Description
+
+   * - :dbcommand:`applyOps`
+
+     - Internal command that applies :term:`oplog` entries to the current data set.
+
+   * - :dbcommand:`hello`
+
+     - Displays information about this member's role in the replica set,
+       including whether it is the primary.
+
+   * - :dbcommand:`replSetAbortPrimaryCatchUp`
+
+     - Forces the elected :term:`primary` to abort sync (catch up) then complete the transition to primary.
+
+   * - :dbcommand:`replSetFreeze`
+
+     - Prevents the current member from seeking election as :term:`primary` for a period of time.
+
+   * - :dbcommand:`replSetGetConfig`
+
+     - Returns the replica set's configuration object.
+
+   * - :dbcommand:`replSetGetStatus`
+
+     - Returns a document that reports on the status of the replica set.
+
+   * - :dbcommand:`replSetInitiate`
+
+     - Initializes a new replica set.
+
+   * - :dbcommand:`replSetMaintenance`
+
+     - Enables or disables a maintenance mode, which puts a :term:`secondary` node in a ``RECOVERING`` state.
+
+   * - :dbcommand:`replSetReconfig`
+
+     - Applies a new configuration to an existing replica set.
+
+   * - :dbcommand:`replSetResizeOplog`
+
+     - Dynamically resizes the oplog for a replica set member.  Available for WiredTiger storage engine only.
+
+   * - :dbcommand:`replSetStepDown`
+
+     - Forces the current :term:`primary` to *step down* and become a :term:`secondary`, forcing an election.
+
+   * - :dbcommand:`replSetSyncFrom`
+
+     - Explicitly override the default logic for selecting a member to replicate from.
+
+
 ## Replica Set Reference Documentation
 
-`/reference/replica-configuration` Complete documentation of the `replica set` configuration object returned by :method:`rs.conf()`.
+:doc:`/reference/replica-configuration`
+   Complete documentation of the :term:`replica set` configuration
+   object returned by :method:`rs.conf()`.
 
-`/reference/replica-set-protocol-versions` Reference on the replica set protocol version.
+:doc:`/reference/replica-set-protocol-versions`
+   Reference on the replica set protocol version.
 
-`/tutorial/troubleshoot-replica-sets` Replica set trouble shooting guide.
+:doc:`/tutorial/troubleshoot-replica-sets`
+   Replica set trouble shooting guide.
 
-`/reference/local-database` Complete documentation of the content of the `local` database that :binary:`~bin.mongod` instances use to support replication.
+:doc:`/reference/local-database`
+   Complete documentation of the content of the ``local`` database
+   that :binary:`~bin.mongod` instances use to support replication.
 
-`/reference/replica-states` Reference for the replica set member states.
+:doc:`/reference/replica-states`
+   Reference for the replica set member states.
 
-## Contents
 
-- Configuration </reference/replica-configuration>
-- Protocol Version </reference/replica-set-protocol-versions>
-- Member States </reference/replica-states>
-- Frequent Elections </troubleshooting/frequent-elections>
-- No Replica Set Primary </troubleshooting/replica-set-no-primary>
-- Replication Lag </troubleshooting/replication-lag>
+**toctree:** :titlesonly: 
+   :hidden: 
+
+   Configuration </reference/replica-configuration>
+   Protocol Version </reference/replica-set-protocol-versions>
+   Member States </reference/replica-states>
+   Frequent Elections </troubleshooting/frequent-elections>
+   No Replica Set Primary </troubleshooting/replica-set-no-primary>
+   Replication Lag </troubleshooting/replication-lag>

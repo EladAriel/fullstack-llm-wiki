@@ -1,21 +1,20 @@
 ---
 type: "Framework Learn Page"
-framework: "tanstack"
+framework: "TanStack"
 source_repo: "https://github.com/tanstack/query"
 source_branch: "main"
 source_path: "docs/framework/preact/reference/functions/mutationOptions.md"
-source_commit: "fd50fa14d283c7d6664a796f758498d1ad5bfce7"
-source_commit_short: "fd50fa14"
-source_commit_date: "2026-07-24T22:22:47+10:00"
-generated_at: "2026-07-25T11:50:41Z"
+source_commit: "2969edf32f7e0c48e2a108d84712d6e01edfde21"
+source_commit_short: "2969edf"
+source_commit_date: "2026-08-28T01:03:02+09:00"
+generated_at: "2026-08-29T09:40:33.372197Z"
 ---
+# Mutationoptions
 
 ---
 id: mutationOptions
 title: mutationOptions
 ---
-
-# Function: mutationOptions()
 
 ## Call Signature
 
@@ -23,7 +22,11 @@ title: mutationOptions
 function mutationOptions<TData, TError, TVariables, TOnMutateResult>(options): WithRequired<UseMutationOptions<TData, TError, TVariables, TOnMutateResult>, "mutationKey">;
 ```
 
-Defined in: [preact-query/src/mutationOptions.ts:4](https://github.com/theVedanta/query/blob/main/packages/preact-query/src/mutationOptions.ts#L4)
+Defined in: [preact-query/src/mutationOptions.ts:49](https://github.com/TanStack/query/blob/main/packages/preact-query/src/mutationOptions.ts#L49)
+
+You can generally pass everything to `mutationOptions` that you can also pass to `useMutation`. A
+`mutationKey` is required on this overload so the mutation can be looked up later, e.g. with
+`useMutationState`.
 
 ### Type Parameters
 
@@ -49,9 +52,52 @@ Defined in: [preact-query/src/mutationOptions.ts:4](https://github.com/theVedant
 
 `WithRequired`\<[`UseMutationOptions`](../interfaces/UseMutationOptions.md)\<`TData`, `TError`, `TVariables`, `TOnMutateResult`\>, `"mutationKey"`\>
 
+The mutation options to use, identical to what you'd pass to `useMutation`, with a
+required `mutationKey`.
+
 ### Returns
 
 `WithRequired`\<[`UseMutationOptions`](../interfaces/UseMutationOptions.md)\<`TData`, `TError`, `TVariables`, `TOnMutateResult`\>, `"mutationKey"`\>
+
+The same options object, unchanged.
+
+### See
+
+[useMutation](useMutation.md) to run the mutation these options describe.
+
+### Examples
+
+```tsx
+import { mutationOptions, useMutation } from '@tanstack/preact-query'
+
+export const createPostOptions = mutationOptions({
+  mutationKey: ['posts', 'create'],
+  mutationFn: createPost,
+})
+
+function CreatePost() {
+  const mutation = useMutation(createPostOptions)
+  return <button onClick={() => mutation.mutate({ title: 'Hello' })}>Create</button>
+}
+```
+
+Looking the mutation up elsewhere via its `mutationKey`, e.g. for a global "saving…" indicator:
+```tsx
+import { mutationOptions, useMutationState } from '@tanstack/preact-query'
+
+const createPostOptions = mutationOptions({
+  mutationKey: ['posts', 'create'],
+  mutationFn: createPost,
+})
+
+function SavingIndicator() {
+  const isCreatingPost = useMutationState({
+    filters: { mutationKey: createPostOptions.mutationKey, status: 'pending' },
+  }).length > 0
+
+  return isCreatingPost ? <span>Saving…</span> : null
+}
+```
 
 ## Call Signature
 
@@ -59,7 +105,11 @@ Defined in: [preact-query/src/mutationOptions.ts:4](https://github.com/theVedant
 function mutationOptions<TData, TError, TVariables, TOnMutateResult>(options): Omit<UseMutationOptions<TData, TError, TVariables, TOnMutateResult>, "mutationKey">;
 ```
 
-Defined in: [preact-query/src/mutationOptions.ts:18](https://github.com/theVedanta/query/blob/main/packages/preact-query/src/mutationOptions.ts#L18)
+Defined in: [preact-query/src/mutationOptions.ts:87](https://github.com/TanStack/query/blob/main/packages/preact-query/src/mutationOptions.ts#L87)
+
+You can generally pass everything to `mutationOptions` that you can also pass to `useMutation`. No
+`mutationKey` is required on this overload — use this when you don't need to look the mutation up later
+(e.g. with `useMutationState`).
 
 ### Type Parameters
 
@@ -85,6 +135,30 @@ Defined in: [preact-query/src/mutationOptions.ts:18](https://github.com/theVedan
 
 `Omit`\<[`UseMutationOptions`](../interfaces/UseMutationOptions.md)\<`TData`, `TError`, `TVariables`, `TOnMutateResult`\>, `"mutationKey"`\>
 
+The mutation options to use, identical to what you'd pass to `useMutation`, without a
+`mutationKey`.
+
 ### Returns
 
 `Omit`\<[`UseMutationOptions`](../interfaces/UseMutationOptions.md)\<`TData`, `TError`, `TVariables`, `TOnMutateResult`\>, `"mutationKey"`\>
+
+The same options object, unchanged.
+
+### See
+
+[useMutation](useMutation.md) to run the mutation these options describe.
+
+### Example
+
+```tsx
+import { mutationOptions, useMutation } from '@tanstack/preact-query'
+
+export const createPostOptions = mutationOptions({
+  mutationFn: createPost,
+})
+
+function CreatePost() {
+  const mutation = useMutation(createPostOptions)
+  return <button onClick={() => mutation.mutate({ title: 'Hello' })}>Create</button>
+}
+```

@@ -1,78 +1,122 @@
 ---
 type: "Framework Learn Page"
-framework: "mongodb"
+framework: "MongoDB"
 source_repo: "https://github.com/mongodb/docs.git"
 source_branch: "main"
 source_path: "content/manual/manual/source/core/sharding-shard-key.txt"
-source_commit: "ab9db26ed3d11618cdb61516d8180337d8e3f679"
-source_commit_short: "ab9db26e"
-source_commit_date: "2026-07-24T16:22:46-06:00"
-generated_at: "2026-07-25T11:51:15Z"
+source_commit: "b9f2bc487a2878b65e3c1f80024bebab76954f27"
+source_commit_short: "b9f2bc48"
+source_commit_date: "2026-08-28T17:09:45-05:00"
+generated_at: "2026-08-29T09:39:19.505181Z"
 ---
-
-==========
+.. _sharding-shard-key:
+.. _shard-key:
+.. _sharding-internals-shard-keys:
 
 # Shard Keys
 
-The shard key is either a single indexed `field` or multiple fields covered by a `compound index` that determines the distribution of the collection's `documents <document>` among the cluster's `shards <shard>`. For details, see `<sharding-shard-key-indexes>`.
+**meta:** :description: Understand how shard keys determine document distribution in MongoDB clusters and the importance of shard key indexes for sharded collections.
 
-MongoDB divides the span of shard key values (or hashed shard key values) into non-overlapping ranges. Each range is associated with a `chunk`, and MongoDB attempts to distribute chunks evenly among the shards in the cluster.
+.. default-domain:: mongodb
 
-.. include:: /images/sharding-range-based.rst
+**contents:** On this page
+   :local:
+   :backlinks: none
+   :depth: 1
+   :class: singlecol
+
+.. dismissible-skills-card::
+   :skill: Sharding Strategies
+   :url: https://learn.mongodb.com/skills?openTab=sharding
+
+The shard key is either a single indexed :term:`field` or multiple
+fields covered by a :term:`compound index` that determines the
+distribution of the collection's :term:`documents <document>` among the
+cluster's :term:`shards <shard>`. For details, see 
+:ref:`<sharding-shard-key-indexes>`.
+
+MongoDB divides the span of shard key values (or hashed shard key
+values) into non-overlapping ranges. Each range is associated with a
+:term:`chunk`, and MongoDB attempts to distribute chunks evenly among
+the shards in the cluster.
+
+**include:** /images/sharding-range-based.rst
+
+.. _shard-a-collection:
+.. _sharding-shard-key-creation:
 
 ## Shard a Collection
 
-.. include:: /includes/sharding/shard-a-collection.rst
+**include:** /includes/sharding/shard-a-collection.rst
+
+.. _choose-a-shard-key:
 
 ## Choose a Shard Key
 
-The choice of shard key affects the creation and `distribution of data <sharding-balancing>` across the available `shards <shard>`. The ideal shard key allows MongoDB to distribute documents evenly throughout the cluster while also facilitating common query patterns.
+The choice of shard key affects the creation and :ref:`distribution of
+data <sharding-balancing>` across the available :term:`shards
+<shard>`. The ideal shard key allows MongoDB to distribute documents
+evenly throughout the cluster while also facilitating common query
+patterns.
 
-For details, see the `Choose a Shard Key <sharding-internals-choose-shard-key>` page.
+For details, see the :ref:`Choose a Shard Key 
+<sharding-internals-choose-shard-key>` page.
 
 ## Change a Shard Key
 
 You can change a shard key in two ways:
 
-- You can `refine a shard key <shard-key-refine>` by adding fields to your existing key.
-- You can change a shard key entirely and `reshard a collection <sharding-resharding>`
-with the new key.
+- You can :ref:`refine a shard key <shard-key-refine>` by adding fields to your existing key.
+- You can change a shard key entirely and :ref:`reshard a collection <sharding-resharding>`
+  with the new key.
 
-For details, see the `Change a Shard Key <change-a-shard-key>` page.
+For details, see the :ref:`Change a Shard Key 
+<change-a-shard-key>` page.
 
 ## Change Shard Key Field Value for a Document
 
-You can change the value for the shard key field in any document in your collection unless the shard key field is the `_id` field. This can affect which shard the document lives on.
+You can change the value for the shard key field in any
+document in your collection unless the shard key field is
+the ``_id`` field. This can affect which shard the document
+lives on.
 
-For details, see `<update-shard-key>`.
+For details, see :ref:`<update-shard-key>`.
+
+.. _shard-key-missing:
 
 ## Set Missing Shard Key Fields
 
-Documents in your collection can be missing fields that your shard key specifies. By default, documents that are missing fields specified by your shard key live in the same chunk range as shard keys with null values.
+Documents in your collection can be missing fields that your shard
+key specifies. By default, documents that are missing fields specified
+by your shard key live in the same chunk range as shard keys with
+null values.
 
-For details, see `<shard-key-missing-set>`.
+For details, see :ref:`<shard-key-missing-set>`.
 
 ## Display a Shard Key
 
-Use :method:`db.printShardingStatus()` to display the shard key used for your collection.
+Use :method:`db.printShardingStatus()` to display the shard key used
+for your collection.
 
-For details, see `<sharding-display-shard-key>`.
+For details, see :ref:`<sharding-display-shard-key>`.
 
 ## Troubleshoot
 
 Common issues caused by a suboptimal shard key are:
 
-- Jumbo chunks
+- Jumbo chunks 
 - Uneven load distribution
 - Decreased query performance
-For details, see `Troubleshoot Shard Keys <shardkey-troubleshoot-shard-keys>`.
 
-## Contents
+For details, see :ref:`Troubleshoot Shard Keys 
+<shardkey-troubleshoot-shard-keys>`.
 
-- Shard Key Indexes </core/sharding-shard-key-indexes.txt>
-- Choose Shard Key </core/sharding-choose-a-shard-key.txt>
-- Change Shard Key </core/sharding-change-a-shard-key.txt>
-- Change Shard Key Value </core/sharding-change-shard-key-value.txt>
-- Set Missing Key Fields </core/sharding-set-missing-shard-key-fields.txt>
-- Display a Shard Key </core/sharding-find-shard-key.txt>
-- Troubleshoot </core/sharding-troubleshooting-shard-keys.txt>
+**toctree:** :titlesonly:
+
+   Shard Key Indexes </core/sharding-shard-key-indexes.txt>
+   Choose Shard Key </core/sharding-choose-a-shard-key.txt>
+   Change Shard Key </core/sharding-change-a-shard-key.txt>
+   Change Shard Key Value </core/sharding-change-shard-key-value.txt>
+   Set Missing Key Fields </core/sharding-set-missing-shard-key-fields.txt>
+   Display a Shard Key </core/sharding-find-shard-key.txt>
+   Troubleshoot </core/sharding-troubleshooting-shard-keys.txt>

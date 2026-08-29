@@ -1,117 +1,147 @@
 ---
 type: "Framework Learn Page"
-framework: "mongodb"
+framework: "MongoDB"
 source_repo: "https://github.com/mongodb/docs.git"
 source_branch: "main"
 source_path: "content/manual/manual/source/tutorial/model-referenced-one-to-many-relationships-between-documents.txt"
-source_commit: "ab9db26ed3d11618cdb61516d8180337d8e3f679"
-source_commit_short: "ab9db26e"
-source_commit_date: "2026-07-24T16:22:46-06:00"
-generated_at: "2026-07-25T11:51:15Z"
+source_commit: "b9f2bc487a2878b65e3c1f80024bebab76954f27"
+source_commit_short: "b9f2bc48"
+source_commit_date: "2026-08-28T17:09:45-05:00"
+generated_at: "2026-08-29T09:39:19.584901Z"
 ---
-
-========================================================
+.. _data-modeling-publisher-and-books:
 
 # Model One-to-Many Relationships with Document References
 
+.. default-domain:: mongodb
+
+**facet:** :name: programming_language
+   :values: shell
+
+**meta:** :description: Model one-to-many relationships between MongoDB documents using references. Avoid repeating data by storing related information in separate collections.
+
+**contents:** On this page
+   :local:
+   :backlinks: none
+   :depth: 1
+   :class: singlecol
+
 ## Overview
 
-This page describes a data model that uses `references <data-modeling-referencing>` between documents for one-to-many relationships.
+This page describes a data model that uses :ref:`references
+<data-modeling-referencing>` between documents for one-to-many
+relationships.
 
 ## Pattern
 
-The following example maps publisher and book relationships. It illustrates the advantage of referencing over embedding to avoid repeating the publisher information.
+The following example maps publisher and book relationships. It
+illustrates the advantage of referencing over embedding to avoid
+repeating the publisher information.
 
-Embedding the publisher document inside the book document repeats the publisher data, as shown in the following example:
+Embedding the publisher document inside the book document repeats the
+publisher data, as shown in the following example:
 
-```javascript
-{
-   title: "MongoDB: The Definitive Guide",
-   author: [ "Kristina Chodorow", "Mike Dirolf" ],
-   published_date: ISODate("2010-09-24"),
-   pages: 216,
-   language: "English",
-   publisher: {
-              name: "O'Reilly Media",
-              founded: 1980,
-              location: "CA"
-            }
-}
+.. code-block:: javascript
+   :emphasize-lines: 7-11,20-24
 
-{
-   title: "50 Tips and Tricks for MongoDB Developer",
-   author: "Kristina Chodorow",
-   published_date: ISODate("2011-05-06"),
-   pages: 68,
-   language: "English",
-   publisher: {
-              name: "O'Reilly Media",
-              founded: 1980,
-              location: "CA"
-            }
-}
-```
+   {
+      title: "MongoDB: The Definitive Guide",
+      author: [ "Kristina Chodorow", "Mike Dirolf" ],
+      published_date: ISODate("2010-09-24"),
+      pages: 216,
+      language: "English",
+      publisher: {
+                 name: "O'Reilly Media",
+                 founded: 1980,
+                 location: "CA"
+               }
+   }
 
-To avoid repeated publisher data, use references and keep the publisher information in a separate collection from the book collection.
+   {
+      title: "50 Tips and Tricks for MongoDB Developer",
+      author: "Kristina Chodorow",
+      published_date: ISODate("2011-05-06"),
+      pages: 68,
+      language: "English",
+      publisher: {
+                 name: "O'Reilly Media",
+                 founded: 1980,
+                 location: "CA"
+               }
+   }
 
-The growth of the relationships determines where to store the reference. If the number of books per publisher is small with limited growth, store the book reference inside the publisher document. If the number of books per publisher is unbounded, this data model creates mutable, growing arrays, as in the following example:
+To avoid repeated publisher data, use *references* and keep the
+publisher information in a separate collection from the book
+collection.
 
-```javascript
-{
-   name: "O'Reilly Media",
-   founded: 1980,
-   location: "CA",
-   books: [123456789, 234567890, ...]
-}
+The growth of the relationships determines where to store the
+reference. If the number of books per publisher is small with limited
+growth, store the book reference inside the publisher document.
+If the number of books per publisher is unbounded, this data model
+creates mutable, growing arrays, as in the following example:
 
-{
-    _id: 123456789,
-    title: "MongoDB: The Definitive Guide",
-    author: [ "Kristina Chodorow", "Mike Dirolf" ],
-    published_date: ISODate("2010-09-24"),
-    pages: 216,
-    language: "English"
-}
+.. code-block:: javascript
+   :emphasize-lines: 5
 
-{
-   _id: 234567890,
-   title: "50 Tips and Tricks for MongoDB Developer",
-   author: "Kristina Chodorow",
-   published_date: ISODate("2011-05-06"),
-   pages: 68,
-   language: "English"
-}
-```
+   {
+      name: "O'Reilly Media",
+      founded: 1980,
+      location: "CA",
+      books: [123456789, 234567890, ...]
+   }
 
-To avoid mutable, growing arrays, store the publisher reference inside the book document:
+   {
+       _id: 123456789,
+       title: "MongoDB: The Definitive Guide",
+       author: [ "Kristina Chodorow", "Mike Dirolf" ],
+       published_date: ISODate("2010-09-24"),
+       pages: 216,
+       language: "English"
+   }
 
-```javascript
-{
-   _id: "oreilly",
-   name: "O'Reilly Media",
-   founded: 1980,
-   location: "CA"
-}
+   {
+      _id: 234567890,
+      title: "50 Tips and Tricks for MongoDB Developer",
+      author: "Kristina Chodorow",
+      published_date: ISODate("2011-05-06"),
+      pages: 68,
+      language: "English"
+   }
 
-{
-   _id: 123456789,
-   title: "MongoDB: The Definitive Guide",
-   author: [ "Kristina Chodorow", "Mike Dirolf" ],
-   published_date: ISODate("2010-09-24"),
-   pages: 216,
-   language: "English",
-   publisher_id: "oreilly"
-}
+To avoid mutable, growing arrays, store the publisher reference inside
+the book document:
 
-{
-   _id: 234567890,
-   title: "50 Tips and Tricks for MongoDB Developer",
-   author: "Kristina Chodorow",
-   published_date: ISODate("2011-05-06"),
-   pages: 68,
-   language: "English",
-   publisher_id: "oreilly"
-}
-```
+.. code-block:: javascript
+   :emphasize-lines: 15, 25
 
-and possibly bucket example that is separate from the pre-allocation example link above in the Document Growth section
+   {
+      _id: "oreilly",
+      name: "O'Reilly Media",
+      founded: 1980,
+      location: "CA"
+   }
+
+   {
+      _id: 123456789,
+      title: "MongoDB: The Definitive Guide",
+      author: [ "Kristina Chodorow", "Mike Dirolf" ],
+      published_date: ISODate("2010-09-24"),
+      pages: 216,
+      language: "English",
+      publisher_id: "oreilly"
+   }
+
+   {
+      _id: 234567890,
+      title: "50 Tips and Tricks for MongoDB Developer",
+      author: "Kristina Chodorow",
+      published_date: ISODate("2011-05-06"),
+      pages: 68,
+      language: "English",
+      publisher_id: "oreilly"
+   }
+
+.. Reworked the Queue slide from the presentation to Atomic Operation
+.. TODO later, include a separate queue example for maybe checkout requests,
+   and possibly bucket example that is separate from the pre-allocation
+   example link above in the Document Growth section

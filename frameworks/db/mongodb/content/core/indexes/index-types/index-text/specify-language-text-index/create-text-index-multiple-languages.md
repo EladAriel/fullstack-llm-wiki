@@ -1,152 +1,178 @@
 ---
 type: "Framework Learn Page"
-framework: "mongodb"
+framework: "MongoDB"
 source_repo: "https://github.com/mongodb/docs.git"
 source_branch: "main"
 source_path: "content/manual/manual/source/core/indexes/index-types/index-text/specify-language-text-index/create-text-index-multiple-languages.txt"
-source_commit: "ab9db26ed3d11618cdb61516d8180337d8e3f679"
-source_commit_short: "ab9db26e"
-source_commit_date: "2026-07-24T16:22:46-06:00"
-generated_at: "2026-07-25T11:51:15Z"
+source_commit: "b9f2bc487a2878b65e3c1f80024bebab76954f27"
+source_commit_short: "b9f2bc48"
+source_commit_date: "2026-08-28T17:09:45-05:00"
+generated_at: "2026-08-29T09:39:19.842534Z"
 ---
-
-==============================================================
+.. _multiple-language-text-index:
 
 # Create a Multi-Language Text Index on Self-Managed Deployments
 
-> **Note:** :atlas:`{+fts+} </atlas-search/>` offers advanced full-text
-search capabilities, including `multi analyzers <ref-multi-analyzers>`.
-We recommend using `{+fts+} indexes <fts-manage-indexes>` instead of
-text indexes.
+.. default-domain:: mongodb
 
-You can create a text index to improve the performance of text queries run on a collection containing documents or embedded documents with text in multiple languages.
+**meta:** :keywords: on-prem
+                    
+**contents:** On this page
+   :local:
+   :backlinks: none
+   :depth: 2
+   :class: singlecol
 
-If a collection contains documents or embedded documents that are in multiple different languages, include a field named `language` and specify the language for those documents as the field value. To see the languages available for text indexing, see `text-search-languages`.
+**note:** :atlas:`{+fts+} </atlas-search/>` offers advanced full-text 
+   search capabilities, including :ref:`multi analyzers <ref-multi-analyzers>`. 
+   We recommend using :ref:`{+fts+} indexes <fts-manage-indexes>` instead of 
+   text indexes.
 
-Your insert operation should resemble this example to support text indexing for multiple languages:
+You can create a text index to improve the performance of text 
+queries run on a collection containing documents or embedded documents with 
+text in multiple languages. 
 
-```javascript
-db.<collection>.insertOne( 
-   { 
-      <field>: <value>,
-      language: <language> 
-   } 
-)
-```
+If a collection contains documents or embedded documents that are in multiple 
+different languages, include a field named ``language`` and specify the 
+language for those documents as the field value. To see the languages available
+for text indexing, see :ref:`text-search-languages`.
+
+Your insert operation should resemble this example to support text indexing 
+for multiple languages: 
+
+.. code-block:: javascript 
+
+   db.<collection>.insertOne( 
+      { 
+         <field>: <value>,
+         language: <language> 
+      } 
+   )
 
 ## Before You Begin
 
-Create a `quotes` collection that contains multi-language documents that include the `language` field:
+Create a ``quotes`` collection that contains multi-language documents
+that include the ``language`` field:
 
-```javascript
-db.quotes.insertMany( [
-   {
-      _id: 1,
-      language: "portuguese",
-      original: "A sorte protege os audazes.",
-      translation:
-        [
-           {
-              language: "english",
-              quote: "Fortune favors the bold."
-           },
-           {
-              language: "spanish",
-              quote: "La suerte protege a los audaces."
-           }
-       ]
-   },
-   {
-      _id: 2,
-      language: "spanish",
-      original: "Nada hay más surrealista que la realidad.",
-      translation:
-         [
-           {
-             language: "english",
-             quote: "There is nothing more surreal than reality."
-           },
-           {
-             language: "french",
-             quote: "Il n'y a rien de plus surréaliste que la réalité."
-           }
-         ]
-   },
-   {
-      _id: 3,
-      original: "Is this a dagger which I see before me?",
-      translation:
+.. code-block:: javascript
+
+   db.quotes.insertMany( [
       {
+         _id: 1,
+         language: "portuguese",
+         original: "A sorte protege os audazes.",
+         translation:
+           [
+              {
+                 language: "english",
+                 quote: "Fortune favors the bold."
+              },
+              {
+                 language: "spanish",
+                 quote: "La suerte protege a los audaces."
+              }
+          ]
+      },
+      {
+         _id: 2,
          language: "spanish",
-         quote: "Es este un puñal que veo delante de mí."
-      }
-   } 
-] )
-```
+         original: "Nada hay más surrealista que la realidad.",
+         translation:
+            [
+              {
+                language: "english",
+                quote: "There is nothing more surreal than reality."
+              },
+              {
+                language: "french",
+                quote: "Il n'y a rien de plus surréaliste que la réalité."
+              }
+            ]
+      },
+      {
+         _id: 3,
+         original: "Is this a dagger which I see before me?",
+         translation:
+         {
+            language: "spanish",
+            quote: "Es este un puñal que veo delante de mí."
+         }
+      } 
+   ] )
 
 ## Procedure
 
-The following operation creates a text index on the `original` and `translation.quote` fields:
+The following operation creates a text index on the ``original`` and 
+``translation.quote`` fields: 
 
-```javascript
-db.quotes.createIndex({ original: "text", "translation.quote": "text", "default_language" : "fr" })
-```
+.. code-block:: javascript
 
-> **Note:** English is the default language for indexes. If you do not specify the
-`default_language <createIndexes-default-language>`, your query must
-specify the language with the `$language <language-field>` parameter.
-For more information, refer to `<specify-default-text-index-language>`.
+   db.quotes.createIndex({ original: "text", "translation.quote": "text", "default_language" : "fr" })
+
+**note:** English is the default language for indexes. If you do not specify the 
+   :ref:`default_language <createIndexes-default-language>`, your query must 
+   specify the language with the :ref:`$language <language-field>` parameter. 
+   For more information, refer to :ref:`<specify-default-text-index-language>`.
+
 
 ## Results
 
-The resulting index supports `$text` queries for the documents and embedded documents containing the `original` and `translation.quote` fields. The text index follows different suffix stemming rules, and ignores stop words specific to each language, based on the value in the `language` field.
+The resulting index supports ``$text`` queries for the documents and 
+embedded documents containing the ``original`` and ``translation.quote`` fields. 
+The text index follows different suffix stemming rules, and ignores stop words 
+specific to each language, based on the value in the ``language`` field.
 
-For example, the following query searches for the `french` word `réalité`.
+For example, the following query searches for the ``french`` word 
+``réalité``.
 
-```javascript
-db.quotes.find(
-   { $text: 
-      { $search: "réalité" }
-   }
-)
-```
+.. code-block:: javascript
 
-Output:
+   db.quotes.find(
+      { $text: 
+         { $search: "réalité" }
+      }
+   )
 
-```javascript
-[
-   {
-      _id: 2,
-      language: 'spanish',
-      original: 'Nada hay más surrealista que la realidad.',
-      translation: [
-         {
-            language: 'english',
-            quote: 'There is nothing more surreal than reality.'
-         },
-         {
-            language: 'french',
-            quote: "Il n'y a rien de plus surréaliste que la réalité."
-         }
-      ]
-   }
-]
-```
+Output: 
 
-For embedded documents that do not contain the `language` field,
+.. code-block:: javascript
+   :copyable: false
 
-- If the enclosing document contains the `language` field, then the index uses
-the document's language for the embedded documents.
+   [
+      {
+         _id: 2,
+         language: 'spanish',
+         original: 'Nada hay más surrealista que la realidad.',
+         translation: [
+            {
+               language: 'english',
+               quote: 'There is nothing more surreal than reality.'
+            },
+            {
+               language: 'french',
+               quote: "Il n'y a rien de plus surréaliste que la réalité."
+            }
+         ]
+      }
+   ]
+
+For embedded documents that do not contain the ``language`` field, 
+
+- If the enclosing document contains the ``language`` field, then the index uses 
+  the document's language for the embedded documents. 
 
 - Otherwise, the index uses the default language for the embedded documents.
-For documents that do not contain the `language` field, the index uses the default language, which is English.
+
+For documents that do not contain the ``language`` field, the index uses the 
+default language, which is English. 
+
 
 ## Learn More
 
-- To specify the text index language in a field other than `language`,
-see `text-index-specify-language-in-field`.
+- To specify the text index language in a field other than ``language``,
+  see :ref:`text-index-specify-language-in-field`.
 
-- To learn how to specify the default language for a text index, see
-`specify-default-text-index-language`.
+- To learn how to specify the default language for a text index, see 
+  :ref:`specify-default-text-index-language`.
 
-- To learn about other text index properties, see `text-index-properties`.
+- To learn about other text index properties, see :ref:`text-index-properties`.

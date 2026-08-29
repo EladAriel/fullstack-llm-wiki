@@ -4,10 +4,10 @@ framework: "Prometheus"
 source_repo: "https://github.com/prometheus/docs.git"
 source_branch: "main"
 source_path: "docs/instrumenting/exporters.md"
-source_commit: "9d9e0343a9e6d138204cfe316a125a860a271849"
-source_commit_short: "9d9e034"
-source_commit_date: "2026-07-21T23:07:09+02:00"
-generated_at: "2026-07-25T19:07:59.761623Z"
+source_commit: "9ece2ea6375353799f014055bc577d795214aec0"
+source_commit_short: "9ece2ea"
+source_commit_date: "2026-08-27T10:23:11+02:00"
+generated_at: "2026-08-29T09:39:59.848280Z"
 ---
 # Exporters
 
@@ -86,6 +86,7 @@ wide variety of JVM-based applications, for example [Kafka](http://kafka.apache.
    * [InfiniBand exporter](https://github.com/treydock/infiniband_exporter)
    * [IPMI exporter](https://github.com/soundcloud/ipmi_exporter)
    * [knxd exporter](https://github.com/RichiH/knxd_exporter)
+   * [Meinberg LANTIME OS exporter](https://github.com/raphaelthomas/meinberg_ltos_exporter)
    * [Modbus exporter](https://github.com/RichiH/modbus_exporter)
    * [Netgear Cable Modem Exporter](https://github.com/ickymettle/netgear_cm_exporter)
    * [Netgear Router exporter](https://github.com/DRuggeri/netgear_exporter)
@@ -287,6 +288,7 @@ wide variety of JVM-based applications, for example [Kafka](http://kafka.apache.
    * [Scraparr](https://github.com/thecfu/scraparr)
    * [Script exporter](https://github.com/adhocteam/script_exporter)
    * [Shield exporter](https://github.com/cloudfoundry-community/shield_exporter)
+   * [Slurm exporter](https://github.com/sckyzo/slurm_exporter)
    * [Smokeping prober](https://github.com/SuperQ/smokeping_prober)
    * [SMTP/Maildir MDA blackbox prober](https://github.com/cherti/mailexporter)
    * [SoftEther exporter](https://github.com/dalance/softether_exporter)
@@ -313,11 +315,13 @@ Some third-party software exposes metrics in the Prometheus format, so no
 separate exporters are needed:
 
    * [Ansible Automation Platform Automation Controller (AWX)](https://docs.ansible.com/automation-controller/latest/html/administration/metrics.html)
+   * [Apache APISIX](https://apisix.apache.org/docs/apisix/plugins/prometheus/)
    * [App Connect Enterprise](https://github.com/ot4i/ace-docker)
    * [Ballerina](https://ballerina.io/)
    * [BFE](https://github.com/baidu/bfe)
    * [Caddy](https://caddyserver.com/docs/metrics) (**direct**)
    * [Ceph](https://docs.ceph.com/en/latest/mgr/prometheus/)
+   * [ClickHouse](https://clickhouse.com/docs/concepts/features/interfaces/prometheus)
    * [CockroachDB](https://www.cockroachlabs.com/docs/stable/monitoring-and-alerting.html#prometheus-endpoint)
    * [Collectd](https://collectd.org/wiki/index.php/Plugin:Write_Prometheus)
    * [Concourse](https://concourse-ci.org/)

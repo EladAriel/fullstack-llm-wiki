@@ -1,6 +1,6 @@
-# materialui Learn Wiki
+# Material UI Learn Wiki
 
-This is a local LLM-friendly wiki generated from the official materialui documentation.
+This is a local LLM-friendly wiki generated from the official Material UI documentation.
 
 ## Status
 
@@ -8,9 +8,10 @@ This is a local LLM-friendly wiki generated from the official materialui documen
 - Source repo: `https://github.com/mui/material-ui.git`
 - Source branch: `master`
 - Source docs path: `docs/data/material`
-- Source commit: `4d5fe725`
-- Source commit date: `2026-07-24T12:25:49+03:00`
-- Wiki generated at: `2026-07-25T13:39:41.052118Z`
+- Source commit: `fc3a3a0a`
+- Source commit date: `2026-08-28T09:03:39+07:00`
+- Wiki generated at: `2026-08-29T09:40:18.326686Z`
+- Page count: `152`
 
 ## How the IDE LLM should use this wiki
 
@@ -29,3 +30,13 @@ This is a local LLM-friendly wiki generated from the official materialui documen
 ## Top-Level Wiki Areas
 
 - [Content Index](content/index.md)
+- [All Components](content/all-components/index.md)
+- [Components](content/components/index.md)
+- [Customization](content/customization/index.md)
+- [Design Resources](content/design-resources/index.md)
+- [Discover More](content/discover-more/index.md)
+- [Experimental Api](content/experimental-api/index.md)
+- [Getting Started](content/getting-started/index.md)
+- [Guides](content/guides/index.md)
+- [Integrations](content/integrations/index.md)
+- [Migration](content/migration/index.md)

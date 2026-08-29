@@ -4,12 +4,11 @@ framework: "Langfuse"
 source_repo: "https://github.com/langfuse/langfuse-docs"
 source_branch: "main"
 source_path: "content/docs/evaluation/overview.mdx"
-source_commit: "fcd1eca34a924867563c3c4e801254c4e66c0021"
-source_commit_short: "fcd1eca3"
-source_commit_date: "2026-07-25T00:45:45Z"
-generated_at: "2026-07-25T11:51:12Z"
+source_commit: "ba26344559edee69ba55c5d3aa80e632f56c1626"
+source_commit_short: "ba26344"
+source_commit_date: "2026-08-29T02:57:18+00:00"
+generated_at: "2026-08-29T09:38:37.748212Z"
 ---
-
 ---
 title: Overview
 seoTitle: "Evaluation of LLM Applications"
@@ -30,9 +29,9 @@ Evaluation runs across most of the [AI engineering loop](/academy/ai-engineering
 
 <LoopDiagram />
 
-<Callout type="info" emoji="🎥">
+<Callout type="info" emoji="🚀">
 
-[**Watch this walkthrough**](/watch-demo?tab=evaluation) of Langfuse Evaluation and how to use it to improve your LLM application.
+Want to see it in action? [**Create a free account**](/cloud) and explore Langfuse Evaluation in the [interactive example project](/docs/demo).
 
 </Callout>
 
@@ -47,7 +46,6 @@ Once you have that context, use the table below to find the right feature page:
 | Review and rate traces manually                     | [Annotation Queues](/docs/evaluation/evaluation-methods/annotation-queues), [Scores via UI](/docs/evaluation/evaluation-methods/scores-via-ui) |
 | Collect feedback from your end users                | [User Feedback](/docs/observability/features/user-feedback)                                                                                    |
 | Leave open-ended notes on traces                    | [Text scores](/docs/evaluation/scores/overview#score-types), [Annotation Queues](/docs/evaluation/evaluation-methods/annotation-queues)        |
-| Track recurring failure categories                  | [Score configs](/faq/all/manage-score-configs), [scores](/docs/evaluation/scores/overview#score-types)                                         |
 | Build a reusable set of test cases                  | [Datasets](/docs/evaluation/experiments/datasets)                                                                                              |
 | Compare prompt, model, or code changes side by side | [Experiments via UI](/docs/evaluation/experiments/experiments-via-ui), [Experiments via SDK](/docs/evaluation/experiments/experiments-via-sdk) |
 | Block deploys on regressions                        | [CI/CD experiments](/docs/evaluation/experiments/experiments-ci-cd)                                                                            |

@@ -1,43 +1,63 @@
 ---
 type: "Framework Learn Page"
-framework: "mongodb"
+framework: "MongoDB"
 source_repo: "https://github.com/mongodb/docs.git"
 source_branch: "main"
 source_path: "content/manual/manual/source/tutorial/configure-replica-set-secondary-sync-target.txt"
-source_commit: "ab9db26ed3d11618cdb61516d8180337d8e3f679"
-source_commit_short: "ab9db26e"
-source_commit_date: "2026-07-24T16:22:46-06:00"
-generated_at: "2026-07-25T11:51:15Z"
+source_commit: "b9f2bc487a2878b65e3c1f80024bebab76954f27"
+source_commit_short: "b9f2bc48"
+source_commit_date: "2026-08-28T17:09:45-05:00"
+generated_at: "2026-08-29T09:39:19.569744Z"
 ---
-
-================================================
-
 # Configure a Self-Managed Secondary's Sync Target
+
+**meta:** :keywords: on-prem
+   :description: Configure a secondary's sync target in a replica set using `replSetSyncFrom` or `rs.syncFrom()` for custom replication topology.
+
+.. default-domain:: mongodb
+
+**contents:** On this page
+   :local:
+   :backlinks: none
+   :depth: 1
+   :class: singlecol
 
 ## Overview
 
-Secondaries capture data from the primary member to maintain an up to date copy of the sets' data. However, by default secondaries may automatically change their sync targets to secondary members based on changes in the ping time between members and the state of other members' replication. See `/core/replica-set-sync` and `chained-replication` for more information.
+Secondaries capture data from the primary member to maintain an up to date
+copy of the sets' data. However, by default secondaries may automatically
+change their sync targets to secondary members based on changes in the
+ping time between members and the state of other members' replication. See
+:doc:`/core/replica-set-sync` and
+:ref:`chained-replication` for more information.
 
-For some deployments, implementing a custom replication sync topology may be more effective than the default sync target selection logic. MongoDB provides the ability to specify a host to use as a sync target.
+For some deployments, implementing a custom replication sync topology may
+be more effective than the default sync target selection logic. MongoDB
+provides the ability to specify a host to use as a sync target.
 
-To temporarily override the default sync target selection logic, you may manually configure a `secondary` member's sync target to temporarily pull `oplog` entries. The following provide access to this functionality:
+To temporarily override the default sync target selection logic, you
+may manually configure a :term:`secondary` member's sync target to
+temporarily pull :term:`oplog` entries. The following provide access to
+this functionality:
 
 - :dbcommand:`replSetSyncFrom` command, or
+
 - :method:`rs.syncFrom()` helper in :binary:`~bin.mongosh`
+
 ## Considerations
 
-.. include:: /includes/extracts/rsSyncFrom-behavior-both.rst
+**include:** /includes/extracts/rsSyncFrom-behavior-both.rst
 
 ## Procedure
 
 To use the :dbcommand:`replSetSyncFrom` command in :binary:`~bin.mongosh`:
 
-```javascript
-db.adminCommand( { replSetSyncFrom: "hostname<:port>" } );
-```
+.. code-block:: javascript
+
+   db.adminCommand( { replSetSyncFrom: "hostname<:port>" } );
 
 To use the :method:`rs.syncFrom()` helper in :binary:`~bin.mongosh`:
 
-```javascript
-rs.syncFrom("hostname<:port>");
-```
+.. code-block:: javascript
+
+   rs.syncFrom("hostname<:port>");

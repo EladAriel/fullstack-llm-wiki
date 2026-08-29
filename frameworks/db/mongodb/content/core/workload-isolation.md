@@ -1,54 +1,86 @@
 ---
 type: "Framework Learn Page"
-framework: "mongodb"
+framework: "MongoDB"
 source_repo: "https://github.com/mongodb/docs.git"
 source_branch: "main"
 source_path: "content/manual/manual/source/core/workload-isolation.txt"
-source_commit: "ab9db26ed3d11618cdb61516d8180337d8e3f679"
-source_commit_short: "ab9db26e"
-source_commit_date: "2026-07-24T16:22:46-06:00"
-generated_at: "2026-07-25T11:51:15Z"
+source_commit: "b9f2bc487a2878b65e3c1f80024bebab76954f27"
+source_commit_short: "b9f2bc48"
+source_commit_date: "2026-08-28T17:09:45-05:00"
+generated_at: "2026-08-29T09:39:19.527314Z"
 ---
-
-=========================================
+.. _workload-isolation:
 
 # Workload Isolation in MongoDB Deployments
 
+**meta:** :description: Explore how to isolate workloads in MongoDB deployments using features like read preferences, write concerns, replica set tags, and zones in sharded clusters.
+
+.. default-domain:: mongodb
+
+**contents:** On this page
+   :local:
+   :backlinks: none
+   :depth: 1
+   :class: singlecol
+
 ## Operational Overview
 
-MongoDB includes a number of features that allow database administrators and developers to isolate workload by functional or geographical groupings.
+MongoDB includes a number of features that allow database
+administrators and developers to isolate workload by functional or
+geographical groupings.
 
-This capability provides "data center awareness," which allows applications to target MongoDB deployments with consideration of the physical location of the :binary:`~bin.mongod` instances. MongoDB supports segmentation of operations across different dimensions, which may include multiple data centers and geographical regions in multi-data center deployments, racks, networks, or power circuits in single data center deployments.
+This capability provides "data center awareness," which allows
+applications to target MongoDB deployments with consideration of the
+physical location of the :binary:`~bin.mongod` instances. MongoDB supports
+segmentation of operations across different dimensions, which may
+include multiple data centers and geographical regions in multi-data
+center deployments, racks, networks, or power circuits in single
+data center deployments.
 
-MongoDB also supports workload isolation based on functional or operational parameters, to ensure that certain :binary:`~bin.mongod` instances are only used for reporting workloads or that certain high-frequency portions of a sharded collection only exist on specific shards.
+MongoDB also supports workload isolation based on
+functional or operational parameters, to ensure that certain
+:binary:`~bin.mongod` instances are only used for reporting workloads or
+that certain high-frequency portions of a sharded collection only
+exist on specific shards.
 
 Specifically, with MongoDB, you can:
 
 - ensure write operations propagate to specific members of a replica
-set, or to specific members of replica sets.
+  set, or to specific members of replica sets.
 
 - ensure that specific members of a replica set respond to queries.
-- ensure that specific ranges of your `shard key` balance onto and
-reside on specific `shards <shard>`.
+
+- ensure that specific ranges of your :term:`shard key` balance onto and
+  reside on specific :term:`shards <shard>`.
 
 - combine the above features in a single distributed deployment, on a
-per-operation (for read and write operations) and collection (for chunk distribution in sharded clusters distribution) basis.
+  per-operation (for read and write operations) and collection (for
+  chunk distribution in sharded clusters distribution) basis.
 
-For full documentation of these features, see the following documentation in the MongoDB Manual:
+For full documentation of these features, see the following
+documentation in the MongoDB Manual:
 
-- `Read Preferences <read-preference>`, which controls how drivers
-help applications target read operations to members of a replica set.
+- :ref:`Read Preferences <read-preference>`, which controls how drivers
+  help applications target read operations to members of a replica set.
 
-- `Write Concerns <write-concern>`, which controls
-how MongoDB ensures that write operations propagate to members of a replica set.
+- :ref:`Write Concerns <write-concern>`, which controls
+  how MongoDB ensures that write operations propagate to members of a
+  replica set.
 
-- `Replica Set Tags <replica-set-configuration-tag-sets>`, which
-control how applications create and interact with custom groupings of replica set members to create custom application-specific read preferences and write concerns.
+- :ref:`Replica Set Tags <replica-set-configuration-tag-sets>`, which
+  control how applications create and interact with custom groupings
+  of replica set members to create custom application-specific read
+  preferences and write concerns.
+  
+- :ref:`Zones <zone-sharding>` in sharded clusters, which allows MongoDB
+  administrators to create :term:`zones <zone>` that represent a group of 
+  shards and associate one or more ranges of :term:`shard key` values to
+  these zones. You can associate each zone with one or more shards in the 
+  cluster. A shard can associate with any number of zones. In a balanced 
+  cluster, MongoDB directs reads and writes covered by a zone only to the 
+  shards inside the zone.
 
-- `Zones <zone-sharding>` in sharded clusters, which allows MongoDB
-administrators to create `zones <zone>` that represent a group of shards and associate one or more ranges of `shard key` values to these zones. You can associate each zone with one or more shards in the cluster. A shard can associate with any number of zones. In a balanced cluster, MongoDB directs reads and writes covered by a zone only to the shards inside the zone.
-
-> **Seealso:** Before adding workload isolation features to your application
-and MongoDB deployment, become familiar with all documentation of
-`replication <replication>`, and :ref:`sharding
-<sharding-background>`.
+**seealso:** Before adding workload isolation features to your application
+   and MongoDB deployment, become familiar with all documentation of
+   :ref:`replication <replication>`, and :ref:`sharding 
+   <sharding-background>`.

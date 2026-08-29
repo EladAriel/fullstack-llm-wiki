@@ -1,93 +1,263 @@
 ---
 type: "Framework Learn Page"
-framework: "postgres"
+framework: "PostgreSQL"
 source_repo: "https://github.com/postgres/postgres.git"
 source_branch: "master"
 source_path: "doc/src/sgml/event-trigger.sgml"
-source_commit: "38afc3dcb25c45b744d4025029ce0a6c90b7059f"
-source_commit_short: "38afc3dc"
-source_commit_date: "2026-07-25T19:08:27+09:00"
-generated_at: "2026-07-25T11:50:59Z"
+source_commit: "6c5f1d6074208146930b67c2054509c3e82f6f7f"
+source_commit_short: "6c5f1d6"
+source_commit_date: "2026-08-28T23:24:47+02:00"
+generated_at: "2026-08-29T09:39:24.329555Z"
 ---
+# Event Triggers
 
-## Event Triggers
+  
+   event trigger
+  
 
-event trigger
+  
+   To supplement the trigger mechanism discussed in ,
+   PostgreSQL also provides event triggers.  Unlike regular
+   triggers, which are attached to a single table and capture only DML events,
+   event triggers are global to a particular database and are capable of
+   capturing DDL events.
+  
 
-To supplement the trigger mechanism discussed in `triggers`, PostgreSQL also provides event triggers. Unlike regular triggers, which are attached to a single table and capture only DML events, event triggers are global to a particular database and are capable of capturing DDL events.
+  
+   Like regular triggers, event triggers can be written in any procedural
+   language that includes event trigger support, or in C, but not in plain
+   SQL.
+  
 
-Like regular triggers, event triggers can be written in any procedural language that includes event trigger support, or in C, but not in plain SQL.
+  
+   Overview of Event Trigger Behavior
 
-## Overview of Event Trigger Behavior
+   
+     An event trigger fires whenever the event with which it is associated
+     occurs in the database in which it is defined. Currently, the
+     supported events are
+     login,
+     ddl_command_start,
+     ddl_command_end,
+     table_rewrite
+     and sql_drop.
+     Support for additional events may be added in future releases.
+   
 
-An event trigger fires whenever the event with which it is associated occurs in the database in which it is defined. Currently, the supported events are `login`, `ddl_command_start`, `ddl_command_end`, `table_rewrite` and `sql_drop`. Support for additional events may be added in future releases.
+   
+    login
 
-## login
+   
+     The login event occurs when an authenticated user logs
+     into the system. Any bug in a trigger procedure for this event may
+     prevent successful login to the system. Such bugs may be worked around by
+     setting  to false
+     either in a connection string or configuration file. Alternatively, you can
+     restart the system in single-user mode (as event triggers are
+     disabled in this mode). See the  reference
+     page for details about using single-user mode.
+     The login event will also fire on standby servers.
+     To prevent servers from becoming inaccessible, such triggers must avoid
+     writing anything to the database when running on a standby.
+     Also, it's recommended to avoid long-running queries in
+     login event triggers.  Note that, for instance,
+     canceling a connection in psql will not cancel
+     the in-progress login trigger.
+   
 
-The `login` event occurs when an authenticated user logs into the system. Any bug in a trigger procedure for this event may prevent successful login to the system. Such bugs may be worked around by setting `guc-event-triggers` to `false` either in a connection string or configuration file. Alternatively, you can restart the system in single-user mode (as event triggers are disabled in this mode). See the `app-postgres` reference page for details about using single-user mode. The `login` event will also fire on standby servers. To prevent servers from becoming inaccessible, such triggers must avoid writing anything to the database when running on a standby. Also, it's recommended to avoid long-running queries in `login` event triggers. Note that, for instance, canceling a connection in `psql` will not cancel the in-progress `login` trigger.
+   
+     For an example on how to use the login event trigger,
+     see .
+   
+   
 
-For an example on how to use the `login` event trigger, see `event-trigger-database-login-example`.
+   
+    ddl_command_start
 
-## ddl_command_start
+   
+     The ddl_command_start event occurs just before the
+     execution of a DDL command.  DDL commands in this context are:
+     
+      CREATE
+      ALTER
+      DROP
+      COMMENT
+      GRANT
+      IMPORT FOREIGN SCHEMA
+      REINDEX
+      REFRESH MATERIALIZED VIEW
+      REVOKE
+      SECURITY LABEL
+     
+     ddl_command_start also occurs just before the
+     execution of a SELECT INTO command, since this is
+     equivalent to CREATE TABLE AS.
+   
 
-The `ddl_command_start` event occurs just before the execution of a DDL command. DDL commands in this context are: - `CREATE` - `ALTER` - `DROP` - `COMMENT` - `GRANT` - `IMPORT FOREIGN SCHEMA` - `REINDEX` - `REFRESH MATERIALIZED VIEW` - `REVOKE` - `SECURITY LABEL` `ddl_command_start` also occurs just before the execution of a `SELECT INTO` command, since this is equivalent to `CREATE TABLE AS`.
+   
+     As an exception, this event does not occur for DDL commands targeting
+     shared objects:
+     
+      databases
+      roles (role definitions and role memberships)
+      tablespaces
+      parameter privileges
+      ALTER SYSTEM
+     
+     This event also does not occur for commands targeting event triggers
+     themselves.
+   
 
-As an exception, this event does not occur for DDL commands targeting shared objects: - databases - roles (role definitions and role memberships) - tablespaces - parameter privileges - `ALTER SYSTEM` This event also does not occur for commands targeting event triggers themselves.
+   
+     No check whether the affected object exists or doesn't exist is performed
+     before the event trigger fires.
+   
+   
 
-No check whether the affected object exists or doesn't exist is performed before the event trigger fires.
+   
+    ddl_command_end
 
-## ddl_command_end
+   
+    The ddl_command_end event occurs just after the execution of
+    the same set of commands as ddl_command_start.  To
+    obtain more details on the DDL
+    operations that took place, use the set-returning function
+    pg_event_trigger_ddl_commands() from the
+    ddl_command_end event trigger code (see
+    ).  Note that the trigger fires
+    after the actions have taken place (but before the transaction commits),
+    and thus the system catalogs can be read as already changed.
+   
+   
 
-The `ddl_command_end` event occurs just after the execution of the same set of commands as `ddl_command_start`. To obtain more details on the DDL operations that took place, use the set-returning function `pg_event_trigger_ddl_commands()` from the `ddl_command_end` event trigger code (see `functions-event-triggers`). Note that the trigger fires after the actions have taken place (but before the transaction commits), and thus the system catalogs can be read as already changed.
+   
+    sql_drop
 
-## sql_drop
+   
+    The sql_drop event occurs just before the
+    ddl_command_end event trigger for any operation that drops
+    database objects.  Note that besides the obvious DROP
+    commands, some ALTER commands can also trigger an
+    sql_drop event.
+   
 
-The `sql_drop` event occurs just before the `ddl_command_end` event trigger for any operation that drops database objects. Note that besides the obvious `DROP` commands, some `ALTER` commands can also trigger an `sql_drop` event.
+   
+    To list the objects that have been dropped, use the
+    set-returning function pg_event_trigger_dropped_objects() from the
+    sql_drop event trigger code (see
+    ). Note that
+    the trigger is executed after the objects have been deleted from the
+    system catalogs, so it's not possible to look them up anymore.
+   
+   
 
-To list the objects that have been dropped, use the set-returning function `pg_event_trigger_dropped_objects()` from the `sql_drop` event trigger code (see `functions-event-triggers`). Note that the trigger is executed after the objects have been deleted from the system catalogs, so it's not possible to look them up anymore.
+   
+    table_rewrite
 
-## table_rewrite
+   
+    The table_rewrite event occurs just before a table is
+    rewritten by some actions of the commands ALTER TABLE and
+    ALTER TYPE.  While other
+    control statements are available to rewrite a table,
+    like CLUSTER and VACUUM,
+    the table_rewrite event is not triggered by them.
+    To find the OID of the table that was rewritten, use the function
+    pg_event_trigger_table_rewrite_oid(), to discover the
+    reason(s) for the rewrite, use the function
+    pg_event_trigger_table_rewrite_reason() (see ).
+   
+   
 
-The `table_rewrite` event occurs just before a table is rewritten by some actions of the commands `ALTER TABLE` and `ALTER TYPE`. While other control statements are available to rewrite a table, like `CLUSTER` and `VACUUM`, the `table_rewrite` event is not triggered by them. To find the OID of the table that was rewritten, use the function `pg_event_trigger_table_rewrite_oid()`, to discover the reason(s) for the rewrite, use the function `pg_event_trigger_table_rewrite_reason()` (see `functions-event-triggers`).
+   
+    Event Triggers in Aborted Transactions
 
-## Event Triggers in Aborted Transactions
+   
+     Event triggers (like other functions) cannot be executed in an aborted
+     transaction.  Thus, if a DDL command fails with an error, any associated
+     ddl_command_end triggers will not be executed.  Conversely,
+     if a ddl_command_start trigger fails with an error, no
+     further event triggers will fire, and no attempt will be made to execute
+     the command itself.  Similarly, if a ddl_command_end trigger
+     fails with an error, the effects of the DDL statement will be rolled
+     back, just as they would be in any other case where the containing
+     transaction aborts.
+   
+   
 
-Event triggers (like other functions) cannot be executed in an aborted transaction. Thus, if a DDL command fails with an error, any associated `ddl_command_end` triggers will not be executed. Conversely, if a `ddl_command_start` trigger fails with an error, no further event triggers will fire, and no attempt will be made to execute the command itself. Similarly, if a `ddl_command_end` trigger fails with an error, the effects of the DDL statement will be rolled back, just as they would be in any other case where the containing transaction aborts.
+   
+    Creating Event Triggers
 
-## Creating Event Triggers
+   
+     Event triggers are created using the command .
+     In order to create an event trigger, you must first create a function with
+     the special return type event_trigger.  This function
+     need not (and may not) return a value; the return type serves merely as
+     a signal that the function is to be invoked as an event trigger.
+   
 
-Event triggers are created using the command `sql-createeventtrigger`. In order to create an event trigger, you must first create a function with the special return type `event_trigger`. This function need not (and may not) return a value; the return type serves merely as a signal that the function is to be invoked as an event trigger.
+   
+     If more than one event trigger is defined for a particular event, they will
+     fire in alphabetical order by trigger name.
+   
 
-If more than one event trigger is defined for a particular event, they will fire in alphabetical order by trigger name.
+   
+     A trigger definition can also specify a WHEN
+     condition so that, for example, a ddl_command_start
+     trigger can be fired only for particular commands which the user wishes
+     to intercept. A common use of such triggers is to restrict the range of
+     DDL operations which users may perform.
+   
+   
+  
 
-A trigger definition can also specify a `WHEN` condition so that, for example, a `ddl_command_start` trigger can be fired only for particular commands which the user wishes to intercept. A common use of such triggers is to restrict the range of DDL operations which users may perform.
+  
+   Writing Event Trigger Functions in C
 
-## Writing Event Trigger Functions in C
+   
+    event trigger
+    in C
+   
 
-event trigger
-in C
+   
+    This section describes the low-level details of the interface to an
+    event trigger function. This information is only needed when writing
+    event trigger functions in C. If you are using a higher-level language
+    then these details are handled for you. In most cases you should
+    consider using a procedural language before writing your event triggers
+    in C. The documentation of each procedural language explains how to
+    write an event trigger in that language.
+   
 
-This section describes the low-level details of the interface to an event trigger function. This information is only needed when writing event trigger functions in C. If you are using a higher-level language then these details are handled for you. In most cases you should consider using a procedural language before writing your event triggers in C. The documentation of each procedural language explains how to write an event trigger in that language.
+   
+    Event trigger functions must use the version 1 function
+    manager interface.
+   
 
-Event trigger functions must use the version 1 function manager interface.
+   
+    When a function is called by the event trigger manager, it is not passed
+    any normal arguments, but it is passed a context pointer
+    pointing to a EventTriggerData structure. C functions can
+    check whether they were called from the event trigger manager or not by
+    executing the macro:
 
-When a function is called by the event trigger manager, it is not passed any normal arguments, but it is passed a context pointer pointing to a `EventTriggerData` structure. C functions can check whether they were called from the event trigger manager or not by executing the macro:
-
-```
 CALLED_AS_EVENT_TRIGGER(fcinfo)
-```
 
-which expands to:
+    which expands to:
 
-```
 ((fcinfo)->context != NULL && IsA((fcinfo)->context, EventTriggerData))
-```
 
-If this returns true, then it is safe to cast `fcinfo->context` to type `EventTriggerData *` and make use of the pointed-to `EventTriggerData` structure. The function must not alter the `EventTriggerData` structure or any of the data it points to.
+    If this returns true, then it is safe to cast
+    fcinfo->context to type EventTriggerData
+    * and make use of the pointed-to
+    EventTriggerData structure.  The function must
+    not alter the EventTriggerData
+    structure or any of the data it points to.
+   
 
-`struct EventTriggerData` is defined in `commands/event_trigger.h`:
+   
+    struct EventTriggerData is defined in
+    commands/event_trigger.h:
 
-```
 typedef struct EventTriggerData
 {
     NodeTag     type;
@@ -95,39 +265,83 @@ typedef struct EventTriggerData
     Node       *parsetree;  /* parse tree */
     CommandTag  tag;        /* command tag */
 } EventTriggerData;
-```
 
-where the members are defined as follows: - Always `T_EventTriggerData`. - Describes the event for which the function is called, one of `"login"`, `"ddl_command_start"`, `"ddl_command_end"`, `"sql_drop"`, `"table_rewrite"`. See `event-trigger-definition` for the meaning of these events. - A pointer to the parse tree of the command. Check the PostgreSQL source code for details. The parse tree structure is subject to change without notice. - The command tag associated with the event for which the event trigger is run, for example `"CREATE FUNCTION"`.
+    where the members are defined as follows:
 
-An event trigger function must return a `NULL` pointer (not an SQL null value, that is, do not set `isNull` true).
+    
+     
+      type
+      
+       
+        Always T_EventTriggerData.
+       
+      
+     
 
-## A Complete Event Trigger Example
+     
+      event
+      
+       
+        Describes the event for which the function is called, one of
+        "login", "ddl_command_start",
+        "ddl_command_end", "sql_drop",
+        "table_rewrite".
+        See  for the meaning of these
+        events.
+       
+      
+     
 
-Here is a very simple example of an event trigger function written in C. (Examples of triggers written in procedural languages can be found in the documentation of the procedural languages.)
+     
+      parsetree
+      
+       
+        A pointer to the parse tree of the command.  Check the PostgreSQL
+        source code for details.  The parse tree structure is subject to change
+        without notice.
+       
+      
+     
 
-The function `noddl` raises an exception each time it is called. The event trigger definition associated the function with the `ddl_command_start` event. The effect is that all DDL commands (with the exceptions mentioned in `event-trigger-definition`) are prevented from running.
+     
+      tag
+      
+       
+        The command tag associated with the event for which the event trigger
+        is run, for example "CREATE FUNCTION".
+       
+      
+     
+    
+   
 
-This is the source code of the trigger function:
+   
+    An event trigger function must return a NULL pointer
+    (not an SQL null value, that is, do not
+    set isNull true).
+   
+  
 
-```
-#include "postgres.h"
+  
+   A Complete Event Trigger Example
 
-#include "commands/event_trigger.h"
-#include "fmgr.h"
+   
+    Here is a very simple example of an event trigger function written in C.
+    (Examples of triggers written in procedural languages can be found in
+    the documentation of the procedural languages.)
+   
 
-PG_MODULE_MAGIC;
+   
+    The function noddl raises an exception each time it is called.
+    The event trigger definition associated the function with
+    the ddl_command_start event.  The effect is that all DDL
+    commands (with the exceptions mentioned
+    in ) are prevented from running.
+   
 
-PG_FUNCTION_INFO_V1(noddl);
-
-Datum
-noddl(PG_FUNCTION_ARGS)
-{
-    EventTriggerData *trigdata;
-
-    if (!CALLED_AS_EVENT_TRIGGER(fcinfo))  /* internal error */
-        elog(ERROR, "not fired by event trigger manager");
-
-    trigdata = (EventTriggerData *) fcinfo->context;
+   
+    This is the source code of the trigger function:
+context;
 
     ereport(ERROR,
             (errcode(ERRCODE_INSUFFICIENT_PRIVILEGE),
@@ -136,21 +350,24 @@ noddl(PG_FUNCTION_ARGS)
 
     PG_RETURN_NULL();
 }
-```
+]]>
+   
 
-After you have compiled the source code (see `dfunc`), declare the function and the triggers:
+   
+    After you have compiled the source code (see ),
+    declare the function and the triggers:
 
-```
 CREATE FUNCTION noddl() RETURNS event_trigger
     AS 'noddl' LANGUAGE C;
 
 CREATE EVENT TRIGGER noddl ON ddl_command_start
     EXECUTE FUNCTION noddl();
-```
 
-Now you can test the operation of the trigger:
+   
 
-```
+   
+    Now you can test the operation of the trigger:
+
 =# \dy
                      List of event triggers
  Name  |       Event       | Owner | Enabled | Function | Tags
@@ -160,27 +377,37 @@ Now you can test the operation of the trigger:
 
 =# CREATE TABLE foo(id serial);
 ERROR:  command "CREATE TABLE" denied
-```
 
-In this situation, in order to be able to run some DDL commands when you need to do so, you have to either drop the event trigger or disable it. It can be convenient to disable the trigger for only the duration of a transaction:
+   
 
-```
+   
+    In this situation, in order to be able to run some DDL commands when you
+    need to do so, you have to either drop the event trigger or disable it.  It
+    can be convenient to disable the trigger for only the duration of a
+    transaction:
+
 BEGIN;
 ALTER EVENT TRIGGER noddl DISABLE;
 CREATE TABLE foo (id serial);
 ALTER EVENT TRIGGER noddl ENABLE;
 COMMIT;
-```
 
-(Recall that DDL commands on event triggers themselves are not affected by event triggers.)
+    (Recall that DDL commands on event triggers themselves are not affected by
+    event triggers.)
+   
+  
 
-## A Table Rewrite Event Trigger Example
+  
+   A Table Rewrite Event Trigger Example
 
-Thanks to the `table_rewrite` event, it is possible to implement a table rewriting policy only allowing the rewrite in maintenance windows.
+   
+    Thanks to the table_rewrite event, it is possible to implement
+    a table rewriting policy only allowing the rewrite in maintenance windows.
+   
 
-Here's an example implementing such a policy.
+   
+    Here's an example implementing such a policy.
 
-```
 CREATE OR REPLACE FUNCTION no_rewrite()
  RETURNS event_trigger
  LANGUAGE plpgsql AS
@@ -220,15 +447,26 @@ $$;
 CREATE EVENT TRIGGER no_rewrite_allowed
                   ON table_rewrite
    EXECUTE FUNCTION no_rewrite();
-```
 
-## A Database Login Event Trigger Example
+   
+ 
 
-The event trigger on the `login` event can be useful for logging user logins, for verifying the connection and assigning roles according to current circumstances, or for session data initialization. It is very important that any event trigger using the `login` event checks whether or not the database is in recovery before performing any writes. Writing to a standby server will make it inaccessible.
+  
+    A Database Login Event Trigger Example
 
-The following example demonstrates these options.
+    
+      The event trigger on the login event can be
+      useful for logging user logins, for verifying the connection and
+      assigning roles according to current circumstances, or for session
+      data initialization. It is very important that any event trigger using
+      the login event checks whether or not the database is
+      in recovery before performing any writes. Writing to a standby server
+      will make it inaccessible.
+    
 
-```
+    
+      The following example demonstrates these options.
+
 -- create test tables and roles
 CREATE TABLE user_login_log (
   "user" text,
@@ -284,4 +522,3 @@ CREATE EVENT TRIGGER init_session
   ON login
   EXECUTE FUNCTION init_session();
 ALTER EVENT TRIGGER init_session ENABLE ALWAYS;
-```

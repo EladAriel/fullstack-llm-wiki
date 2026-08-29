@@ -4,10 +4,10 @@ framework: "Arize Phoenix"
 source_repo: "https://github.com/Arize-ai/phoenix.git"
 source_branch: "main"
 source_path: "docs/phoenix/cookbook/prompt-engineering/llm-as-a-judge-prompt-optimization.mdx"
-source_commit: "69b3ab92c37ff65812feaa2dbf0b1c0ad5ae55fe"
-source_commit_short: "69b3ab9"
-source_commit_date: "2026-07-25T11:48:12-06:00"
-generated_at: "2026-07-25T19:08:24.873484Z"
+source_commit: "c48e50e9906fcc56c1c103ebd93ef3c95ed6b6e7"
+source_commit_short: "c48e50e"
+source_commit_date: "2026-08-29T01:45:20-06:00"
+generated_at: "2026-08-29T09:39:58.878943Z"
 ---
 ---
 title: "LLM-as-a-Judge Prompt Optimization"
@@ -58,7 +58,7 @@ if not os.environ.get("OPENAI_API_KEY"):
 
 ## Load Dataset into Phoenix
 
-Phoenix offers many [pre-built evaluation templates](/docs/phoenix/evaluation/running-pre-tested-evals) for LLM as a Judge, but often, you may need to build a custom evaluator for specific use cases.
+Phoenix offers many [pre-built evaluation templates](/docs/phoenix/evaluation/pre-built-metrics) for LLM as a Judge, but often, you may need to build a custom evaluator for specific use cases.
 
 In this tutorial, we will focus on creating an LLM as a Judge prompt designed to assess empathy and emotional intelligence in chatbot responses. This is especially useful for use cases like mental health chatbots or customer support interactions.
 

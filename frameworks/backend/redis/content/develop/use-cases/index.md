@@ -1,50 +1,36 @@
 ---
 type: "Framework Learn Directory Index"
-framework: "redis"
-directory: "content/develop/use-cases"
-source_repo: "https://github.com/redis/docs.git"
-source_branch: "main"
-source_commit: "9d30f68c3dad1a6b3b7d30fe604b911348ce8152"
-source_commit_short: "9d30f68c"
-source_commit_date: "2026-07-24T10:52:10-07:00"
-generated_at: "2026-07-25T11:51:22Z"
+framework: "Redis"
+generated_at: "2026-08-29T09:38:56.332251Z"
 ---
-# Use Cases
+# Use-Cases
 
-This directory contains redis learning pages related to use cases.
+This directory contains Redis learning pages related to use-cases.
 
 ## Breadcrumbs
 
-[Wiki Home](../../../index.md) -> [Content](../../index.md) -> [Develop](../index.md) -> [Use Cases](index.md)
+[Wiki Home](../index.md) -> [Content](index.md)
 
 ## Navigation
 
-- Parent: [Parent Index](../index.md)
-
-## Child Directories
-
-- [Agent Memory](agent-memory/index.md) - pages related to agent memory
-- [Cache Aside](cache-aside/index.md) - pages related to cache aside
-- [Feature Store](feature-store/index.md) - pages related to feature store
-- [Job Queue](job-queue/index.md) - pages related to job queue
-- [Leaderboard](leaderboard/index.md) - pages related to leaderboard
-- [Prefetch Cache](prefetch-cache/index.md) - pages related to prefetch cache
-- [Pub Sub](pub-sub/index.md) - pages related to pub sub
-- [Rate Limiter](rate-limiter/index.md) - pages related to rate limiter
-- [Recommendation Engine](recommendation-engine/index.md) - pages related to recommendation engine
-- [Semantic Cache](semantic-cache/index.md) - pages related to semantic cache
-- [Session Store](session-store/index.md) - pages related to session store
-- [Streaming](streaming/index.md) - pages related to streaming
-- [Time Series Dashboard](time-series-dashboard/index.md) - pages related to time series dashboard
+- Wiki Home: [Root Index](../index.md)
 
 ## Pages in This Directory
 
-- [Index](_index.md)
+- [_Index](_index.md)
 
-## IDE LLM Guidance
+## Subdirectories
 
-When answering implementation questions related to this directory:
-
-1. Prefer the most specific page listed above.
-2. If the topic is broad, read the child directory index first.
-3. Use source metadata from each page when giving answers.
+- [Agent Memory](agent-memory/index.md)
+- [Cache Aside](cache-aside/index.md)
+- [Feature Store](feature-store/index.md)
+- [Job Queue](job-queue/index.md)
+- [Leaderboard](leaderboard/index.md)
+- [Prefetch Cache](prefetch-cache/index.md)
+- [Pub Sub](pub-sub/index.md)
+- [Rate Limiter](rate-limiter/index.md)
+- [Recommendation Engine](recommendation-engine/index.md)
+- [Semantic Cache](semantic-cache/index.md)
+- [Session Store](session-store/index.md)
+- [Streaming](streaming/index.md)
+- [Time Series Dashboard](time-series-dashboard/index.md)

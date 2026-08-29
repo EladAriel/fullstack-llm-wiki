@@ -4,12 +4,11 @@ framework: "Langfuse"
 source_repo: "https://github.com/langfuse/langfuse-docs"
 source_branch: "main"
 source_path: "content/docs/administration/rbac.mdx"
-source_commit: "fcd1eca34a924867563c3c4e801254c4e66c0021"
-source_commit_short: "fcd1eca3"
-source_commit_date: "2026-07-25T00:45:45Z"
-generated_at: "2026-07-25T11:51:12Z"
+source_commit: "ba26344559edee69ba55c5d3aa80e632f56c1626"
+source_commit_short: "ba26344"
+source_commit_date: "2026-08-29T02:57:18+00:00"
+generated_at: "2026-08-29T09:38:37.748574Z"
 ---
-
 ---
 title: Access Control (RBAC)
 description: Langfuse offers extensive RBAC capabilities to manage project sharing and permissions across different organizations and projects.
@@ -134,6 +133,7 @@ export function RolePermissionTable({ roleScopes }) {
             "scores:CUD",
             "scoreConfigs:CUD",
             "scoreConfigs:read",
+            "datasets:read",
             "datasets:CUD",
             "prompts:CUD",
             "prompts:read",
@@ -154,6 +154,7 @@ export function RolePermissionTable({ roleScopes }) {
             "llmSchemas:read",
             "llmTools:CUD",
             "llmTools:read",
+            "playground:execute",
             "batchExports:create",
             "batchExports:read",
             "comments:CUD",
@@ -171,6 +172,8 @@ export function RolePermissionTable({ roleScopes }) {
             "TableViewPresets:read",
             "automations:CUD",
             "automations:read",
+            "alerts:read",
+            "alerts:CUD",
           ],
           ADMIN: [
             "project:read",
@@ -187,6 +190,7 @@ export function RolePermissionTable({ roleScopes }) {
             "scores:CUD",
             "scoreConfigs:CUD",
             "scoreConfigs:read",
+            "datasets:read",
             "datasets:CUD",
             "prompts:CUD",
             "prompts:read",
@@ -207,6 +211,7 @@ export function RolePermissionTable({ roleScopes }) {
             "llmSchemas:read",
             "llmTools:CUD",
             "llmTools:read",
+            "playground:execute",
             "batchExports:create",
             "batchExports:read",
             "comments:CUD",
@@ -224,6 +229,8 @@ export function RolePermissionTable({ roleScopes }) {
             "TableViewPresets:read",
             "automations:CUD",
             "automations:read",
+            "alerts:read",
+            "alerts:CUD",
           ],
           MEMBER: [
             "project:read",
@@ -235,6 +242,7 @@ export function RolePermissionTable({ roleScopes }) {
             "scores:CUD",
             "scoreConfigs:CUD",
             "scoreConfigs:read",
+            "datasets:read",
             "datasets:CUD",
             "prompts:CUD",
             "prompts:read",
@@ -247,7 +255,10 @@ export function RolePermissionTable({ roleScopes }) {
             "evalDefaultModel:CUD",
             "llmApiKeys:read",
             "llmSchemas:read",
+            "llmSchemas:CUD",
+            "llmTools:CUD",
             "llmTools:read",
+            "playground:execute",
             "batchExports:create",
             "batchExports:read",
             "comments:CUD",
@@ -262,6 +273,8 @@ export function RolePermissionTable({ roleScopes }) {
             "TableViewPresets:CUD",
             "TableViewPresets:read",
             "automations:read",
+            "alerts:read",
+            "alerts:CUD",
           ],
           VIEWER: [
             "project:read",
@@ -271,6 +284,7 @@ export function RolePermissionTable({ roleScopes }) {
             "evalJob:read",
             "evalJobExecution:read",
             "evalDefaultModel:read",
+            "datasets:read",
             "llmApiKeys:read",
             "llmSchemas:read",
             "llmTools:read",
@@ -280,6 +294,7 @@ export function RolePermissionTable({ roleScopes }) {
             "dashboards:read",
             "TableViewPresets:read",
             "automations:read",
+            "alerts:read",
           ],
           NONE: [],
         }}

@@ -1,45 +1,30 @@
 ---
 type: "Framework Learn Directory Index"
-framework: "nextjs"
-directory: "content/02-pages/04-api-reference"
-source_repo: "https://github.com/vercel/next.js/"
-source_branch: "canary"
-source_commit: "dcf242a17b5d4622bbd9624db531a9d84177619f"
-source_commit_short: "dcf242a1"
-source_commit_date: "2026-07-25T10:16:19+02:00"
-generated_at: "2026-07-25T11:50:53Z"
+framework: "Next.js"
+generated_at: "2026-08-29T09:40:24.347279Z"
 ---
-# 04 Api Reference
+# 04-Api-Reference
 
-This directory contains nextjs learning pages related to 04 api reference.
+This directory contains Next.js learning pages related to 04-api-reference.
 
 ## Breadcrumbs
 
-[Wiki Home](../../../index.md) -> [Content](../../index.md) -> [02 Pages](../index.md) -> [04 Api Reference](index.md)
+[Wiki Home](../index.md) -> [Content](index.md)
 
 ## Navigation
 
-- Parent: [Parent Index](../index.md)
-
-## Child Directories
-
-- [01 Components](01-components/index.md) - pages related to 01 components
-- [02 File Conventions](02-file-conventions/index.md) - pages related to 02 file conventions
-- [03 Functions](03-functions/index.md) - pages related to 03 functions
-- [04 Config](04-config/index.md) - pages related to 04 config
-- [05 Cli](05-cli/index.md) - pages related to 05 cli
-- [06 Adapters](06-adapters/index.md) - pages related to 06 adapters
+- Wiki Home: [Root Index](../index.md)
 
 ## Pages in This Directory
 
 - [06 Edge](06-edge.md)
 - [08 Turbopack](08-turbopack.md)
-- [Original Source Index](_source_index.md)
 
-## IDE LLM Guidance
+## Subdirectories
 
-When answering implementation questions related to this directory:
-
-1. Prefer the most specific page listed above.
-2. If the topic is broad, read the child directory index first.
-3. Use source metadata from each page when giving answers.
+- [01 Components](01-components/index.md)
+- [02 File Conventions](02-file-conventions/index.md)
+- [03 Functions](03-functions/index.md)
+- [04 Config](04-config/index.md)
+- [05 Cli](05-cli/index.md)
+- [06 Adapters](06-adapters/index.md)

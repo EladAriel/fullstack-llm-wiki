@@ -1,14 +1,15 @@
 ---
 type: "Framework Learn Page"
-framework: "redis"
+framework: "Redis"
 source_repo: "https://github.com/redis/docs.git"
 source_branch: "main"
 source_path: "content/develop/get-started/data-store.md"
-source_commit: "9d30f68c3dad1a6b3b7d30fe604b911348ce8152"
-source_commit_short: "9d30f68c"
-source_commit_date: "2026-07-24T10:52:10-07:00"
-generated_at: "2026-07-25T11:51:22Z"
+source_commit: "f8693349287b0efbef3c865b6f6a2aceca88594d"
+source_commit_short: "f869334"
+source_commit_date: "2026-08-28T10:01:19-05:00"
+generated_at: "2026-08-29T09:38:55.797299Z"
 ---
+# Data Store
 
 ---
 categories:
@@ -44,7 +45,8 @@ The easiest way to get started with Redis is to use Redis Cloud:
 
 1. Create a [free account](https://redis.com/try-free?utm_source=redisio&utm_medium=referral&utm_campaign=2023-09-try_free&utm_content=cu-redis_cloud_users).
 
-    <img src="../img/free-cloud-db.png" width="500px">
+    {{< image filename="/images/dev/free-cloud-db.png" >}}
+
 2. Follow the instructions to create a free database.
 
 You can alternatively follow the [installation guides]({{< relref "/operate/oss_and_stack/install/install-stack/" >}}) to install Redis on your local machine.
@@ -108,8 +110,8 @@ SCAN 0 MATCH "bike:*" COUNT 100
 
 You can address more use cases with Redis by reading these additional quick start guides:
 
-* [Redis as a document database]({{< relref "/develop/get-started/document-database" >}})
-* [Redis as a vector database]({{< relref "/develop/get-started/vector-database" >}})
+* [Redis as a document database]({{< relref "/develop/get-started/search-tutorial" >}})
+* [Redis as a vector database]({{< relref "/develop/get-started/search-tutorial/vector-search" >}})
 
 ## Continue learning with Redis University
 

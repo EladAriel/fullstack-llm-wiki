@@ -1,91 +1,118 @@
 ---
 type: "Framework Learn Page"
-framework: "mongodb"
+framework: "MongoDB"
 source_repo: "https://github.com/mongodb/docs.git"
 source_branch: "main"
 source_path: "content/manual/manual/source/core/indexes/index-types/index-single/create-single-field-index.txt"
-source_commit: "ab9db26ed3d11618cdb61516d8180337d8e3f679"
-source_commit_short: "ab9db26e"
-source_commit_date: "2026-07-24T16:22:46-06:00"
-generated_at: "2026-07-25T11:51:15Z"
+source_commit: "b9f2bc487a2878b65e3c1f80024bebab76954f27"
+source_commit_short: "b9f2bc48"
+source_commit_date: "2026-08-28T17:09:45-05:00"
+generated_at: "2026-08-29T09:39:19.835849Z"
 ---
-
-=================================
+.. _index-create-single-field:
 
 # Create an Index on a Single Field
 
-You can create an index on a single field to improve performance for queries on that field.
+**meta:** :description: Improve query performance by creating a single-field index using the `createIndex()` method in MongoDB.
 
-To create a single-field index, use the :method:`db.collection.createIndex()` method:
+.. default-domain:: mongodb
 
-.. include:: /includes/indexes/code-examples/create-single-field-index.rst
+**contents:** On this page
+   :local:
+   :backlinks: none
+   :depth: 2
+   :class: singlecol
+
+You can create an index on a single field to improve performance for
+queries on that field. 
+
+To create a single-field index, use the
+:method:`db.collection.createIndex()` method:
+
+**include:** /includes/indexes/code-examples/create-single-field-index.rst
 
 ## Before You Begin
 
-Create a `students` collection that contains the following documents:
+Create a ``students`` collection that contains the following documents:
 
-```javascript
-db.students.insertMany( [
-   {
-      "name": "Alice",
-      "gpa": 3.6,
-      "location": { city: "Sacramento", state: "California" }
-   },
-   {
-      "name": "Bob",
-      "gpa": 3.2,
-      "location": { city: "Albany", state: "New York" }
-   }
-] )
-```
+.. code-block:: javascript
+
+   db.students.insertMany( [
+      {
+         "name": "Alice",
+         "gpa": 3.6,
+         "location": { city: "Sacramento", state: "California" }
+      },
+      {
+         "name": "Bob",
+         "gpa": 3.2,
+         "location": { city: "Albany", state: "New York" }
+      }
+   ] )
 
 ## Procedures
 
 The following examples show you how to:
 
-- `index-create-ascending-single-field`
-- `index-embedded-fields`
+- :ref:`index-create-ascending-single-field`
+
+- :ref:`index-embedded-fields`
+
+.. _index-create-ascending-single-field:
+
 ### Create an Index on a Single Field
 
-Consider a school administrator who frequently looks up students by their :abbr:`GPA (Grade Point Average)`. You can create an index on the `gpa` field to improve performance for those queries:
+Consider a school administrator who frequently looks up students by
+their :abbr:`GPA (Grade Point Average)`. You can create an index on the
+``gpa`` field to improve performance for those queries:
 
-```javascript
-db.students.createIndex( { gpa: 1 } )
-```
+.. code-block:: javascript
 
-Results ```````
+   db.students.createIndex( { gpa: 1 } )
 
-The index supports queries that select on the field `gpa`, such as the following:
+### Results
 
-```javascript
-db.students.find( { gpa: 3.6 } )
+The index supports queries that select on the field ``gpa``, such as the
+following:
 
-db.students.find( { gpa: { $lt: 3.4 } } )
-```
+.. code-block:: javascript
+
+   db.students.find( { gpa: 3.6 } )
+
+   db.students.find( { gpa: { $lt: 3.4 } } )
+
+.. _index-embedded-fields:
 
 ### Create an Index on an Embedded Field
 
-You can create indexes on fields within embedded documents. Indexes on embedded fields can fulfill queries that use `dot notation`.
+You can create indexes on fields within embedded documents. Indexes on
+embedded fields can fulfill queries that use :term:`dot notation`.
 
-The `location` field is an embedded document that contains the embedded fields `city` and `state`. Create an index on the `location.state` field:
+The ``location`` field is an embedded document that contains the
+embedded fields ``city`` and ``state``. Create an index on the
+``location.state`` field:
 
-```javascript
-db.students.createIndex( { "location.state": 1 } )
-```
+.. code-block:: javascript
 
-Results ```````
+   db.students.createIndex( { "location.state": 1 } )
 
-The index supports queries on the field `location.state`, such as the following:
+### Results
 
-```javascript
-db.students.find( { "location.state": "California" } )
+The index supports queries on the field ``location.state``, such as the
+following:
 
-db.students.find( { "location.city": "Albany", "location.state": "New York" } )
-```
+.. code-block:: javascript
+
+   db.students.find( { "location.state": "California" } )
+
+   db.students.find( { "location.city": "Albany", "location.state": "New York" } )
 
 ## Learn More
 
-- `index-embedded-documents`
-- `index-create-multikey-embedded`
-- `Check if a query uses an index <index-measure-index-use>`
-- `Learn about other types of index types <index-types>`
+- :ref:`index-embedded-documents`
+
+- :ref:`index-create-multikey-embedded`
+
+- :ref:`Check if a query uses an index <index-measure-index-use>`
+
+- :ref:`Learn about other types of index types <index-types>`

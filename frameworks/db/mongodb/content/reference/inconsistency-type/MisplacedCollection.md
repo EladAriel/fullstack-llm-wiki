@@ -1,56 +1,111 @@
 ---
 type: "Framework Learn Page"
-framework: "mongodb"
+framework: "MongoDB"
 source_repo: "https://github.com/mongodb/docs.git"
 source_branch: "main"
 source_path: "content/manual/manual/source/reference/inconsistency-type/MisplacedCollection.txt"
-source_commit: "ab9db26ed3d11618cdb61516d8180337d8e3f679"
-source_commit_short: "ab9db26e"
-source_commit_date: "2026-07-24T16:22:46-06:00"
-generated_at: "2026-07-25T11:51:15Z"
+source_commit: "b9f2bc487a2878b65e3c1f80024bebab76954f27"
+source_commit_short: "b9f2bc48"
+source_commit_date: "2026-08-28T17:09:45-05:00"
+generated_at: "2026-08-29T09:39:19.858417Z"
 ---
+# MisplacedCollection
 
-################### MisplacedCollection ###################
+**meta:** :description: Identify and resolve misplaced collections in a sharded cluster using the `MisplacedCollection` inconsistency type.
+
+**contents:** On this page
+   :local:
+   :backlinks: none
+   :depth: 1
+   :class: singlecol
 
 # Description
 
+**data:** MisplacedCollection
+
+   .. include:: /includes/inconsistency-type/MisplacedCollection
+
+
 # Format
 
-```json
-{
-   type: "MisplacedCollection",
-   description: "<string>",
-   details: {
-      namespace: "<string>",
-      shard: "<string>",
-      localUUID: UUID("<uuid>")
-   }
-}
-```
+.. code-block:: json
 
-`MisplacedCollection` inconsistency documents contain the following fields:
+   {
+      type: "MisplacedCollection",
+      description: "<string>",
+      details: {
+         namespace: "<string>",
+         shard: "<string>",
+         localUUID: UUID("<uuid>")
+      }
+   }
+
+``MisplacedCollection`` inconsistency documents contain the following fields:
+
+.. |incon-type| replace:: ``MisplacedCollection``
+
+.. list-table::
+   :widths: 30 25 45
+   :header-rows: 1
+
+   * - Field
+     - Type
+     - Description
+
+
+   * - ``type``
+     - string
+     - .. include:: /includes/inconsistency-type/type
+
+
+   * - ``description``
+     - string
+     - .. include:: /includes/inconsistency-type/descr
+
+
+   * - ``details``
+     - document
+     - .. include:: /includes/inconsistency-type/details
+
+
+   * - ``details.namespace``
+     - string
+     - .. include:: /includes/inconsistency-type/details.namespace
+
+
+   * - ``details.shard``
+     - string
+     - .. include:: /includes/inconsistency-type/details.shard
+
+
+   * - ``details.localUUID``
+     - UUID
+     - The local UUID of the misplaced collection. 
+     
 
 # Example
 
-.. include:: /includes/inconsistency-type/example
+**include:** /includes/inconsistency-type/example
 
-```json
-{
-   cursor: {
-      id: Long("0"),
-      ns: "test.$cmd.aggregate",
-      firstBatch: [
-         {
-            type: "MisplacedCollection",
-            description: "Found unsharded collection without the appropriate metadata on a shard different from the database primary shard",
-            details: {
-               namespace: "test.authors",
-               shard: "shard02",
-               localUUID: new UUID("1ad56770-61e2-48e9-83c6-8ecefe73cfc4")
+.. code-block:: json
+   :emphasize-lines: 6-14
+   :copyable: false
+
+   {
+      cursor: {
+         id: Long("0"),
+         ns: "test.$cmd.aggregate",
+         firstBatch: [
+            {
+               type: "MisplacedCollection",
+               description: "Found unsharded collection without the appropriate metadata on a shard different from the database primary shard",
+               details: {
+                  namespace: "test.authors",
+                  shard: "shard02",
+                  localUUID: new UUID("1ad56770-61e2-48e9-83c6-8ecefe73cfc4")
+               }
             }
-         }
-      ],
-   },
-   ok: 1
-}
-```
+         ],
+      },
+      ok: 1
+   }

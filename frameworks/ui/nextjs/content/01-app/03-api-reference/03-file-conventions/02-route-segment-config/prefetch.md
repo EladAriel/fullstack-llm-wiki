@@ -1,14 +1,15 @@
 ---
 type: "Framework Learn Page"
-framework: "nextjs"
+framework: "Next.js"
 source_repo: "https://github.com/vercel/next.js/"
 source_branch: "canary"
 source_path: "docs/01-app/03-api-reference/03-file-conventions/02-route-segment-config/prefetch.mdx"
-source_commit: "dcf242a17b5d4622bbd9624db531a9d84177619f"
-source_commit_short: "dcf242a1"
-source_commit_date: "2026-07-25T10:16:19+02:00"
-generated_at: "2026-07-25T11:50:53Z"
+source_commit: "33a5d542e519fe4e05c8c8c2c2845da9f741699b"
+source_commit_short: "33a5d542"
+source_commit_date: "2026-08-29T00:04:45-07:00"
+generated_at: "2026-08-29T09:40:24.297598Z"
 ---
+# Prefetch
 
 ---
 title: prefetch
@@ -27,10 +28,10 @@ The `prefetch` route segment config controls how a segment is prefetched during 
 >
 > - The `prefetch` export only works when [`cacheComponents`](/docs/app/api-reference/config/next-config-js/cacheComponents) is enabled.
 > - `prefetch` cannot be used when the segment is a Client Component.
-> - The meaningful values to set are `'allow-runtime'`, `'partial'`, and `'force-disabled'`. `'auto'` is the default and is equivalent to omitting the export; don't write `prefetch = 'auto'` explicitly.
+> - The meaningful values to set are `'partial'` and `'force-disabled'`. `'auto'` is the default and is equivalent to omitting the export; don't write `prefetch = 'auto'` explicitly.
 
 ```tsx filename="layout.tsx | page.tsx" switcher
-export const prefetch = 'allow-runtime'
+export const prefetch = 'partial'
 
 export default function Page() {
   return <div>...</div>
@@ -38,7 +39,7 @@ export default function Page() {
 ```
 
 ```jsx filename="layout.js | page.js" switcher
-export const prefetch = 'allow-runtime'
+export const prefetch = 'partial'
 
 export default function Page() {
   return <div>...</div>
@@ -47,21 +48,15 @@ export default function Page() {
 
 ## Options
 
-### `'allow-runtime'`
-
-Allows Next.js to prefetch this segment at runtime. Setting this option lets the server render a fresh response that resolves per-link runtime data: `params`, `searchParams`, and the full URL. Cookies and headers don't need `'allow-runtime'`. The framework already includes them in the [App Shell](/docs/app/glossary#app-shell) when the route reads them. Use this for personalized content when the latency and cost of runtime prefetching are appropriate for the segment.
-
-> **Good to know**: When Next.js runtime-prefetches a segment, all downstream segments are included in the same runtime prefetch request. Segments deeper in the tree that are configured with `'force-disabled'` will still be prefetched as part of the runtime response.
-
-```tsx filename="page.tsx"
-export const prefetch = 'allow-runtime'
-```
-
 ### `'partial'`
 
 Opts the segment into [Partial Prefetching](/docs/app/guides/adopting-partial-prefetching) without enabling the global [`partialPrefetching`](/docs/app/api-reference/config/next-config-js/partialPrefetching) flag. A `<Link>` pointing at a segment with `prefetch = 'partial'` loads the per-route [App Shell](/docs/app/glossary#app-shell) instead of the legacy full prefetch. Set this on the destination, not the link.
 
+For links that opt into a wider prefetch with [`<Link prefetch={true}>`](/docs/app/api-reference/components/link#prefetch), Next.js uses per-link prefetching. The server renders a fresh response that resolves URL data (`params`, `searchParams`, and the full URL). On pages where all the content is statically renderable, Next.js serves prefetches from the static cache. If a page accesses non-static data, it's prefetched at runtime.
+
 Use this for incremental adoption when you can't enable `partialPrefetching` for the entire app at once. Once every route in scope has `prefetch = 'partial'`, enable the global flag and remove the per-route exports.
+
+> **Good to know**: When Next.js performs a per-link prefetch for a segment, all downstream segments are included in the same request. Segments deeper in the tree that are configured with `'force-disabled'` will still be prefetched as part of the response.
 
 ```tsx filename="page.tsx"
 export const prefetch = 'partial'
@@ -79,20 +74,19 @@ A prefetch starts with a `<Link>` that expresses intent (should this destination
 
 A destination can't know which links target it, so the segment config caps what any `<Link prefetch={true}>` pulls:
 
-- [`'allow-runtime'`](#allow-runtime): App Shell plus per-link runtime data (`params`, `searchParams`, the full URL).
-- [`'partial'`](#partial): App Shell only.
+- [`'partial'`](#partial): App Shell for default links; a `<Link prefetch={true}>` additionally resolves URL data (`params`, `searchParams`, and the full URL) and the cached content behind it.
 - [`'force-disabled'`](#force-disabled): skip segment data entirely.
 
 `<Link prefetch={false}>` skips prefetching at the link level regardless of how the destination is configured.
 
-> **Good to know**: A prefetch may be served from a CDN cache, reuse a cached App Shell, or run a fresh server render. Wider prefetches lean toward fresh server work and cost more server CPU per page view.
+> **Good to know**: On pages where all the content is statically renderable, Next.js serves prefetches from the static cache (or a CDN). If a page accesses non-static data like cookies or headers, it's prefetched at runtime with a fresh server render, which costs server CPU per page view.
 
 ## TypeScript
 
 ```tsx
-type Prefetch = 'auto' | 'allow-runtime' | 'partial' | 'force-disabled'
+type Prefetch = 'auto' | 'partial' | 'force-disabled'
 
-export const prefetch: Prefetch = 'allow-runtime'
+export const prefetch: Prefetch = 'partial'
 ```
 
 ## Version History

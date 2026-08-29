@@ -1,56 +1,151 @@
 ---
 type: "Framework Learn Page"
-framework: "mongodb"
+framework: "MongoDB"
 source_repo: "https://github.com/mongodb/docs.git"
 source_branch: "main"
 source_path: "content/manual/manual/source/reference/operator/aggregation/isoWeekYear.txt"
-source_commit: "ab9db26ed3d11618cdb61516d8180337d8e3f679"
-source_commit_short: "ab9db26e"
-source_commit_date: "2026-07-24T16:22:46-06:00"
-generated_at: "2026-07-25T11:51:15Z"
+source_commit: "b9f2bc487a2878b65e3c1f80024bebab76954f27"
+source_commit_short: "b9f2bc48"
+source_commit_date: "2026-08-28T17:09:45-05:00"
+generated_at: "2026-08-29T09:39:20.234610Z"
 ---
-
-==================================
-
 # $isoWeekYear (expression operator)
+
+**meta:** :description: Use `$isoWeekYear` to return the ISO 8601 year number for a given date, with optional timezone specification.
+
+.. default-domain:: mongodb
+
+**contents:** On this page
+   :local:
+   :backlinks: none
+   :depth: 1
+   :class: singlecol
 
 ## Definition
 
+**expression:** $isoWeekYear
+
+   Returns the year number in ISO 8601 format. The year starts
+   with the Monday of week 1 and ends with the Sunday of the
+   last week.
+
+   The :expression:`$isoWeekYear` expression has the following
+   :ref:`operator expression syntax <aggregation-expressions>`:
+
+   .. code-block:: javascript
+
+      { $isoWeekYear: <dateExpression> }
+
+   .. include:: /includes/fact-iso-date-objects.rst
+
 ## Behavior
 
-> **Note:**
+.. list-table::
+   :header-rows: 1
+   :widths: 90 10
+   :class: border-table
+
+   * - Example
+     - Result
+
+   * - .. code-block:: javascript
+          :copyable: false
+
+          { $isoWeekYear: new Date("2015-05-26") }
+
+     - 2015
+
+   * - .. code-block:: javascript
+          :copyable: false
+
+          { $isoWeekYear: { date: new Date("Jan 7, 2003") } }
+
+     - 2003
+
+   * - .. code-block:: javascript
+          :copyable: false
+
+          { $isoWeekYear: ISODate("2017-01-02T00:00:00Z") }
+
+     - 2017
+
+   * - .. code-block:: javascript
+          :copyable: false
+
+          { $isoWeekYear: {
+              date: ISODate("2017-01-02T00:00:00Z"),
+              timezone: "-0500"
+          } }
+
+     - 2016
+
+   * - .. code-block:: javascript
+          :copyable: false
+
+          { $isoWeekYear: {
+              date: new Date("April 08, 2024"),
+              timezone: "America/Chicago"
+          } }
+
+     - 2024
+
+   * - .. code-block:: javascript
+          :copyable: false
+
+          { $isoWeekYear: "March 28, 1976" }
+
+     - ``error``
+
+   * - .. code-block:: javascript
+          :copyable: false
+
+          { $isoWeekYear: Date("2016-01-01") }
+
+     - ``error``
+
+   * - .. code-block:: javascript
+          :copyable: false
+
+          { $isoWeekYear: "2009-04-09" }
+
+     - ``error``
+
+**note:** ``$isoWeekYear`` cannot take a string as an argument.
 
 ## Example
 
-A collection called `anniversaries` contains the following documents:
+A collection called ``anniversaries`` contains the following documents:
 
-```javascript
-{ "_id" : 1, "date" : ISODate("2016-01-01T00:00:00Z") }
-{ "_id" : 2, "date" : ISODate("2016-01-04T00:00:00Z") }
-{ "_id" : 3, "date" : ISODate("2015-01-01T00:00:00Z") }
-{ "_id" : 4, "date" : ISODate("2014-04-21T00:00:00Z") }
-```
 
-The following operation returns the year number in ISO 8601 format for each `date` field.
+.. code-block:: javascript
 
-```javascript
-db.anniversaries.aggregate( [
-  {
-    $project: {
-      yearNumber: { $isoWeekYear: "$date" }
-    }
-  }
-] )
-```
+   { "_id" : 1, "date" : ISODate("2016-01-01T00:00:00Z") }
+   { "_id" : 2, "date" : ISODate("2016-01-04T00:00:00Z") }
+   { "_id" : 3, "date" : ISODate("2015-01-01T00:00:00Z") }
+   { "_id" : 4, "date" : ISODate("2014-04-21T00:00:00Z") }
+
+The following operation returns the year number in ISO 8601
+format for each ``date`` field.
+
+
+.. code-block:: javascript
+
+   db.anniversaries.aggregate( [
+     {
+       $project: {
+         yearNumber: { $isoWeekYear: "$date" }
+       }
+     }
+   ] )
 
 The operation returns the following results:
 
-```javascript
-{ "_id" : 1, "yearNumber" : 2015 }
-{ "_id" : 2, "yearNumber" : 2016 }
-{ "_id" : 3, "yearNumber" : 2015 }
-{ "_id" : 4, "yearNumber" : 2014 }
-```
+.. code-block:: javascript
 
-> **Seealso:** - `/reference/operator/aggregation/isoDayOfWeek`
-- `/reference/operator/aggregation/isoWeek`
+   { "_id" : 1, "yearNumber" : 2015 }
+   { "_id" : 2, "yearNumber" : 2016 }
+   { "_id" : 3, "yearNumber" : 2015 }
+   { "_id" : 4, "yearNumber" : 2014 }
+
+**seealso:** - :doc:`/reference/operator/aggregation/isoDayOfWeek`
+   - :doc:`/reference/operator/aggregation/isoWeek`

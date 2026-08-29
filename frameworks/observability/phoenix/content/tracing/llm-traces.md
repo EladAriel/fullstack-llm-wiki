@@ -4,10 +4,10 @@ framework: "Arize Phoenix"
 source_repo: "https://github.com/Arize-ai/phoenix.git"
 source_branch: "main"
 source_path: "docs/phoenix/tracing/llm-traces.mdx"
-source_commit: "69b3ab92c37ff65812feaa2dbf0b1c0ad5ae55fe"
-source_commit_short: "69b3ab9"
-source_commit_date: "2026-07-25T11:48:12-06:00"
-generated_at: "2026-07-25T19:08:24.828599Z"
+source_commit: "c48e50e9906fcc56c1c103ebd93ef3c95ed6b6e7"
+source_commit_short: "c48e50e"
+source_commit_date: "2026-08-29T01:45:20-06:00"
+generated_at: "2026-08-29T09:39:58.799989Z"
 ---
 # Llm Traces
 
@@ -17,7 +17,11 @@ description: Tracing the execution of LLM applications using Telemetry
 sidebarTitle: "Overview"
 ---
 
+import AgentAssistedOnboardingPrereq from "../../snippets/agent-assisted-onboarding-prereq.mdx";
+
 Phoenix traces AI applications, via OpenTelemetry and has first-class integrations with LlamaIndex, LangChain, OpenAI, and others.
+
+<AgentAssistedOnboardingPrereq />
 
 LLM tracing records the paths taken by requests as they propagate through multiple steps or components of an LLM application. For example, when a user interacts with an LLM application, tracing can capture the sequence of operations, such as document retrieval, embedding generation, language model invocation, and response generation to provide a detailed timeline of the request's execution.
 

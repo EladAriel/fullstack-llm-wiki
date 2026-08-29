@@ -4,10 +4,10 @@ framework: "Arize Phoenix"
 source_repo: "https://github.com/Arize-ai/phoenix.git"
 source_branch: "main"
 source_path: "docs/phoenix/sdk-api-reference/typescript/arizeai-phoenix-client.mdx"
-source_commit: "69b3ab92c37ff65812feaa2dbf0b1c0ad5ae55fe"
-source_commit_short: "69b3ab9"
-source_commit_date: "2026-07-25T11:48:12-06:00"
-generated_at: "2026-07-25T19:08:24.944972Z"
+source_commit: "c48e50e9906fcc56c1c103ebd93ef3c95ed6b6e7"
+source_commit_short: "c48e50e"
+source_commit_date: "2026-08-29T01:45:20-06:00"
+generated_at: "2026-08-29T09:39:58.810426Z"
 ---
 # Arizeai Phoenix Client
 
@@ -51,6 +51,19 @@ node_modules/@arizeai/phoenix-client/src/
 ```
 
 That gives the agent version-matched prose plus the exact implementation and type definitions that shipped with your project.
+
+## Agent session capability checks
+
+The client exports a capability requirement for each PXI [agent session](/docs/phoenix/pxi#conversations) REST route, so a program can confirm a Phoenix server is new enough before calling one. There are eight — `AGENT_SESSION_CREATE`, `AGENT_SESSION_LIST`, `AGENT_SESSION_GET`, `AGENT_SESSION_PATCH`, `AGENT_SESSION_MESSAGES`, `AGENT_SESSION_TOOL_OUTPUTS`, `AGENT_SESSION_COMPACT`, and `AGENT_SESSION_CHAT` — and each requires Phoenix 20.0.0 or newer. Pass one to `ensureServerCapability`, which throws a clear upgrade error against an older server:
+
+```ts
+import { createClient, ensureServerCapability, AGENT_SESSION_CHAT } from "@arizeai/phoenix-client";
+
+const client = createClient(); // reads PHOENIX_ENDPOINT / PHOENIX_API_KEY
+await ensureServerCapability({ client, requirement: AGENT_SESSION_CHAT });
+```
+
+This is the same check the `pxi` terminal client runs at startup before it opens a session.
 
 ## API Reference
 

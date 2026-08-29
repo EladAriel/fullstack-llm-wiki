@@ -1,69 +1,189 @@
 ---
 type: "Framework Learn Page"
-framework: "mongodb"
+framework: "MongoDB"
 source_repo: "https://github.com/mongodb/docs.git"
 source_branch: "main"
 source_path: "content/manual/manual/source/core/indexes/create-index.txt"
-source_commit: "ab9db26ed3d11618cdb61516d8180337d8e3f679"
-source_commit_short: "ab9db26e"
-source_commit_date: "2026-07-24T16:22:46-06:00"
-generated_at: "2026-07-25T11:51:15Z"
+source_commit: "b9f2bc487a2878b65e3c1f80024bebab76954f27"
+source_commit_short: "b9f2bc48"
+source_commit_date: "2026-08-28T17:09:45-05:00"
+generated_at: "2026-08-29T09:39:19.806271Z"
 ---
+**meta:** :keywords: code example, node.js, compass
+   :description: Create indexes in MongoDB to enhance query performance using the `createIndex()` method in various drivers and MongoDB Shell.
 
-===============
+.. _manual-create-an-index:
 
 # Create an Index
 
-If your application repeatedly runs queries on the same fields, create an index on those fields to improve performance.
+**contents:** On this page
+   :local:
+   :backlinks: none
+   :depth: 1
+   :class: singlecol
 
-To create an index, use the :method:`~db.collection.createIndex()` shell method or equivalent method for your driver. This page shows examples for the MongoDB Shell and drivers.
+**facet:** :name: genre
+   :values: tutorial
+
+If your application repeatedly runs queries on the same fields, create
+an index on those fields to improve performance.
+
+To create an index, use the :method:`~db.collection.createIndex()` shell
+method or equivalent method for your driver. This page shows examples
+for the MongoDB Shell and drivers.
 
 ## About this Task
 
-When you run a create index command in the MongoDB Shell or a driver, MongoDB only creates the index if an index of the same specification does not exist.
+When you run a create index command in the MongoDB Shell or a driver,
+MongoDB only creates the index if an index of the same specification
+does not exist.
 
-Although indexes improve query performance, adding an index has negative performance impact for write operations. For collections with a high write-to-read ratio, indexes are expensive because each insert and update must also update any indexes.
+Although indexes improve query performance, adding an index has negative
+performance impact for write operations. For collections with a high
+write-to-read ratio, indexes are expensive because each insert and
+update must also update any indexes.
 
-> **Warning:** .. include:: /includes/queryable-encryption/qe-index-performance-warning.rst
+**warning:** .. include:: /includes/queryable-encryption/qe-index-performance-warning.rst
 
 ## Procedure
 
-----------
 
-|arrow| To set the language of the examples on this page, use the **Select your language** drop-down menu in the right navigation pane.
+.. |arrow| unicode:: U+27A4
 
-----------
+|arrow| To set the language of the examples on this page, use the
+**Select your language** drop-down menu in the right navigation pane.
 
-.. include:: /includes/driver-examples/driver-procedure-indexes-1.rst
+
+.. tabs-selector:: drivers
+
+**include:** /includes/driver-examples/driver-procedure-indexes-1.rst
 
 ## Example
 
-.. include:: /includes/driver-examples/driver-example-indexes-1.rst
+**include:** /includes/driver-examples/driver-example-indexes-1.rst
 
 ## Results
 
 Use :binary:`mongosh` to monitor index creation.
 
-To see what indexes exist on your collection, including indexes that are currently being built, run the :method:`db.collection.getIndexes()` method:
+To see what indexes exist on your collection, including indexes that
+are currently being built, run the
+:method:`db.collection.getIndexes()` method:
 
-To check whether your index is building, use :pipeline:`$currentOp` with :method:`db.aggregate()` on the `admin` database.
+.. io-code-block::
+   :copyable: true
 
-The following aggregation pipeline uses the :pipeline:`$match` stage to show an active operation building a descending index on the `name` field:
+   .. input::
+      :language: javascript
 
-MongoDB marks index builds in various stages, including waiting on commit quorum, as an idle connection by setting the `active` field to `false`. The `idleConnections: true` setting includes these idle connections in the `$currentOp` output.
+      db.collection.getIndexes()
 
-To view information on existing indexes using a driver, refer to your :driver:`driver's documentation </>`.
+   .. output::
+      :language: javascript
+      :visible: false
+
+      [
+         { v: 2, key: { _id: 1 }, name: '_id_' },
+         { v: 2, key: { name: -1 }, name: 'name_-1' }
+      ]    
+
+To check whether your index is building, use :pipeline:`$currentOp`
+with :method:`db.aggregate()` on the ``admin`` database.
+
+The following aggregation pipeline uses the :pipeline:`$match` stage
+to show an active operation building a descending index on the
+``name`` field:
+
+.. io-code-block::
+   :copyable: true
+
+   .. input:: 
+      :language: javascript
+   
+      db.getSiblingDB("admin").aggregate( [
+         { $currentOp : { idleConnections: true } },
+         { $match : {"command.createIndexes": { $exists: true } } }
+      ] )
+      
+   .. output:: 
+      :language: javascript 
+      :visible: false
+      :emphasize-lines: 12, 26-39
+
+      [
+         {
+            type: 'op',
+            host: 'mongodb.example.net:27017',
+            desc: 'conn584',
+            connectionId: 584,
+            client: '104.30.134.189:12077',
+            appName: 'mongosh 2.3.4',
+            clientMetadata: { 
+               ... 
+            },
+            active: true,
+            currentOpTime: '2024-12-05T16:13:35.571+00:00',
+            effectiveUsers: [ { user: jane-doe, db: 'admin' } ],
+            isFromUserConnection: true,
+            threaded: true,
+            opid: ...,
+            lsid: { 
+               ... 
+            },
+            secs_running: Long('3'),
+            microsecs_running: Long('3920881'),
+            op: 'command',
+            ns: 'example_db.collection',
+            redacted: false,
+            command: {
+               createIndexes: 'collection',
+               indexes: [ { name: 'name_-1', key: { name: -1 } } ],
+               apiVersion: '1',
+               lsid: { id: UUID('570931be-c692-4963-b9e2-1e279efd9702') },
+               '$clusterTime': {
+               clusterTime: Timestamp({ t: 1733415063, i: 32 }),
+               signature: {
+                  hash: Binary.createFromBase64('z0zaUHJ5SfhNQyvQLhocsKRFNbo=', 0),
+                  keyId: Long('7444956895695077380')
+               }
+               },
+               '$db': 'example_db'
+            },
+            numYields: 0,
+            queues: {
+               ...
+            },
+            currentQueue: null,
+            locks: {},
+            waitingForLock: false,
+            lockStats: { ... },
+            waitingForFlowControl: false,
+            flowControlStats: { acquireCount: Long('3') }
+         }, ...
+      ]
+
+MongoDB marks index builds in various stages, including waiting on
+commit quorum, as an idle connection by setting the ``active`` field
+to ``false``. The ``idleConnections: true`` setting includes these
+idle connections in the ``$currentOp`` output.
+
+To view information on existing indexes using a driver, refer to your
+:driver:`driver's documentation </>`.
 
 ## Learn More
 
 - To learn how to create indexes in |compass|, see :ref:`Manage Indexes
-<compass-indexes>` in the Compass documentation.
+  <compass-indexes>` in the Compass documentation.
 
 - To see how often your indexes are used, see
-`index-measure-index-use`.
+  :ref:`index-measure-index-use`.
 
-- To learn how to specify the name of your index, see `specify-index-name`.
-- To learn how MongoDB builds indexes, see `index-build-process`.
-## Contents
+- To learn how to specify the name of your index, see :ref:`specify-index-name`.
 
-- Specify a Name </core/indexes/create-index/specify-index-name>
+- To learn how MongoDB builds indexes, see :ref:`index-build-process`.
+
+
+**toctree:** :titlesonly:
+   :hidden:
+
+   Specify a Name </core/indexes/create-index/specify-index-name>

@@ -1,38 +1,57 @@
 ---
 type: "Framework Learn Page"
-framework: "sqlalchemy"
+framework: "SQLAlchemy"
 source_repo: "https://github.com/sqlalchemy/sqlalchemy"
 source_branch: "main"
 source_path: "doc/build/core/inspection.rst"
-source_commit: "aa1a5575358d3aa14953b04dced02f4763fed2e7"
-source_commit_short: "aa1a5575"
-source_commit_date: "2026-07-23T18:02:59Z"
-generated_at: "2026-07-25T11:50:45Z"
+source_commit: "85cafd1a131fa8afeeeab23151940480b3fb0042"
+source_commit_short: "85cafd1"
+source_commit_date: "2026-08-28T20:17:49+00:00"
+generated_at: "2026-08-29T09:39:27.514330Z"
 ---
+.. _core_inspection_toplevel:
+.. _inspection_toplevel:
 
 # Runtime Inspection API
+
+**automodule:** sqlalchemy.inspection
+
+**autofunction:** sqlalchemy.inspect
+
 
 ## Available Inspection Targets
 
 Below is a listing of many of the most common inspection targets.
 
-- `.Connectable (i.e. engine.Engine`,
-`_engine.Connection) - returns an reflection.Inspector` object.
+* :class:`.Connectable` (i.e. :class:`_engine.Engine`,
+  :class:`_engine.Connection`) - returns an :class:`_reflection.Inspector` object.
+* :class:`_expression.ClauseElement` - all SQL expression components, including
+  :class:`_schema.Table`, :class:`_schema.Column`, serve as their own inspection objects,
+  meaning any of these objects passed to :func:`_sa.inspect` return themselves.
+* ``object`` - an object given will be checked by the ORM for a mapping -
+  if so, an :class:`.InstanceState` is returned representing the mapped
+  state of the object.  The :class:`.InstanceState` also provides access
+  to per attribute state via the :class:`.AttributeState` interface as well
+  as the per-flush "history" of any attribute via the :class:`.History`
+  object.
 
-- `_expression.ClauseElement` - all SQL expression components, including
-`_schema.Table, schema.Column, serve as their own inspection objects, meaning any of these objects passed to sa.inspect` return themselves.
+  .. seealso::
 
-- `object` - an object given will be checked by the ORM for a mapping -
-if so, an `.InstanceState` is returned representing the mapped state of the object.  The `.InstanceState` also provides access to per attribute state via the `.AttributeState` interface as well as the per-flush "history" of any attribute via the `.History` object.
+      :ref:`orm_mapper_inspection_instancestate`
 
-> **Seealso:**    `orm_mapper_inspection_instancestate`
+* ``type`` (i.e. a class) - a class given will be checked by the ORM for a
+  mapping - if so, a :class:`_orm.Mapper` for that class is returned.
 
-- `type` (i.e. a class) - a class given will be checked by the ORM for a
-mapping - if so, a `_orm.Mapper` for that class is returned.
+  .. seealso::
 
-> **Seealso:**    `orm_mapper_inspection_mapper`
+      :ref:`orm_mapper_inspection_mapper`
 
-- mapped attribute - passing a mapped attribute to `_sa.inspect`, such
-as `inspect(MyClass.some_attribute)`, returns a `.QueryableAttribute` object, which is the `descriptor` associated with a mapped class. This descriptor refers to a `.MapperProperty`, which is usually an instance of `.ColumnProperty` or `.RelationshipProperty`, via its `.QueryableAttribute.property` attribute.
+* mapped attribute - passing a mapped attribute to :func:`_sa.inspect`, such
+  as ``inspect(MyClass.some_attribute)``, returns a :class:`.QueryableAttribute`
+  object, which is the :term:`descriptor` associated with a mapped class.
+  This descriptor refers to a :class:`.MapperProperty`, which is usually
+  an instance of :class:`.ColumnProperty`
+  or :class:`.RelationshipProperty`, via its :attr:`.QueryableAttribute.property`
+  attribute.
+* :class:`.AliasedClass` - returns an :class:`.AliasedInsp` object.
 
-- `.AliasedClass` - returns an `.AliasedInsp` object.

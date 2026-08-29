@@ -1,47 +1,95 @@
 ---
 type: "Framework Learn Page"
-framework: "mongodb"
+framework: "MongoDB"
 source_repo: "https://github.com/mongodb/docs.git"
 source_branch: "main"
 source_path: "content/manual/manual/source/core/defragment-sharded-collections/stop-defragmenting-sharded-collection.txt"
-source_commit: "ab9db26ed3d11618cdb61516d8180337d8e3f679"
-source_commit_short: "ab9db26e"
-source_commit_date: "2026-07-24T16:22:46-06:00"
-generated_at: "2026-07-25T11:51:15Z"
+source_commit: "b9f2bc487a2878b65e3c1f80024bebab76954f27"
+source_commit_short: "b9f2bc48"
+source_commit_date: "2026-08-28T17:09:45-05:00"
+generated_at: "2026-08-29T09:39:19.800171Z"
 ---
-
-========================================
+.. _stop-defragmenting-sharded-collection:
 
 # Stop Defragmenting a Sharded Collection
 
-Typically, you should use a `shard balancing window <sharding-schedule-balancing-window>` to specify when the balancer runs instead of manually starting and stopping defragmentation.
+.. default-domain:: mongodb
 
-To manually stop defragmenting a sharded collection, use the :dbcommand:`configureCollectionBalancing` command with the `defragmentCollection` option set to `false`.
+**contents:** On this page
+   :local:
+   :backlinks: none
+   :depth: 1
+   :class: singlecol
+
+Typically, you should use a :ref:`shard balancing window
+<sharding-schedule-balancing-window>` to specify when the balancer runs
+instead of manually starting and stopping defragmentation.
+
+To manually stop defragmenting a sharded collection, use the
+:dbcommand:`configureCollectionBalancing` command with the
+``defragmentCollection`` option set to ``false``.
 
 ## About this Task
 
-.. include:: /includes/defragment-sharded-collections-example.rst
+**include:** /includes/defragment-sharded-collections-example.rst
 
-If you stop defragmenting a collection before defragmentation is complete, the collection is in a partially defragmented state and operates as usual. To resume defragmentation, restart the process.
+If you stop defragmenting a collection before defragmentation is
+complete, the collection is in a partially defragmented state and
+operates as usual. To resume defragmentation, restart the process.
 
 ## Before you Begin
 
 - Start defragmenting a sharded collection. For details, see
-`start-defragmenting-sharded-collection`.
-
+  :ref:`start-defragmenting-sharded-collection`.
 - Connect to :binary:`~bin.mongos`.
+
 ## Procedure
+
+**procedure:** :style: normal
+
+   .. step:: Stop defragmenting the collection
+
+      Run:
+
+      .. code-block:: javascript
+
+         db.adminCommand(
+            {
+               configureCollectionBalancing: "test.ordersShardedCollection",
+               defragmentCollection: false
+            }
+         )
+
+   .. step:: Ensure defragmentation stopped
+
+      When defragmentation stops, the command output returns ``ok: 1``:
+
+      .. code-block:: javascript
+         :copyable: false
+         :emphasize-lines: 2
+
+         {
+            ok: 1,
+            '$clusterTime': {
+               clusterTime: Timestamp({ t: 1678834337, i: 1 }),
+               signature: {
+                  hash: Binary(Buffer.from("0000000000000000000000000000000000000000", "hex"), 0),
+                  keyId: Long("0")
+               }
+            },
+            operationTime: Timestamp({ t: 1678834337, i: 1 })
+         }
 
 ## Next Steps
 
-You can start defragmentation again at any time. For details, see `start-defragmenting-sharded-collection`.
+You can start defragmentation again at any time. For details, see
+:ref:`start-defragmenting-sharded-collection`.
 
 ## Learn More
 
 - :ref:`Start defragmenting a sharded collection
-<start-defragmenting-sharded-collection>`
-
+  <start-defragmenting-sharded-collection>`
 - :ref:`Monitor defragmentation of a sharded collection
-<monitor-defragmentation-sharded-collection>`
+  <monitor-defragmentation-sharded-collection>`
 
-.. include:: /includes/defragment-sharded-collections-learn-more.rst
+**include:** /includes/defragment-sharded-collections-learn-more.rst

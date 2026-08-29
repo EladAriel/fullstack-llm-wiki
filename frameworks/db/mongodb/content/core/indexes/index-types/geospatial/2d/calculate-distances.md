@@ -1,119 +1,153 @@
 ---
 type: "Framework Learn Page"
-framework: "mongodb"
+framework: "MongoDB"
 source_repo: "https://github.com/mongodb/docs.git"
 source_branch: "main"
 source_path: "content/manual/manual/source/core/indexes/index-types/geospatial/2d/calculate-distances.txt"
-source_commit: "ab9db26ed3d11618cdb61516d8180337d8e3f679"
-source_commit_short: "ab9db26e"
-source_commit_date: "2026-07-24T16:22:46-06:00"
-generated_at: "2026-07-25T11:51:15Z"
+source_commit: "b9f2bc487a2878b65e3c1f80024bebab76954f27"
+source_commit_short: "b9f2bc48"
+source_commit_date: "2026-08-28T17:09:45-05:00"
+generated_at: "2026-08-29T09:39:19.844398Z"
 ---
-
-===================================================
+.. _calculate-distance-spherical-geometry:
 
 # Convert Distance to Radians for Spherical Operators
 
-2d indexes support certain query operators that calculate distances using spherical geometry. Spherical query operators use radians for distance. To use spherical query operators with a 2d index, you must convert distances to radians.
+**meta:** :description: Convert distances to radians for spherical queries using 2d indexes, with examples for miles and kilometers.
+
+.. default-domain:: mongodb
+
+**contents:** On this page
+   :local:
+   :backlinks: none
+   :depth: 2
+   :class: singlecol
+
+2d indexes support certain query operators that calculate distances
+using spherical geometry. Spherical query operators use radians for
+distance. To use spherical query operators with a 2d index, you must
+convert distances to radians.
 
 2d indexes support the following spherical query operators:
 
 - :query:`$centerSphere`
-- :pipeline:`$geoNear` pipeline stage with the `spherical: true`
-option
+
+- :pipeline:`$geoNear` pipeline stage with the ``spherical: true``
+  option
 
 - :query:`$near`
+
 - :query:`$nearSphere`
+
 ## About this Task
 
-Using a 2d index for queries on spherical data can return incorrect results or an error. For example, 2d indexes don't support spherical queries that wrap around the poles.
+Using a 2d index for queries on spherical data can return incorrect
+results or an error. For example, 2d indexes don't support spherical
+queries that wrap around the poles.
 
-If your data is stored as longitude and latitude and you often run queries on spherical surfaces, use a `2dsphere index <2dsphere-index>` instead of a 2d index.
+If your data is stored as longitude and latitude and you often run
+queries on spherical surfaces, use a :ref:`2dsphere index
+<2dsphere-index>` instead of a 2d index.
 
-.. include:: /includes/indexes/geojson-lat-long.rst
+**include:** /includes/indexes/geojson-lat-long.rst
 
 ## Procedure
 
-To convert distance to radians, divide the distance by the radius of the sphere (for example, the Earth) in the same units as the distance measurement.
+To convert distance to radians, divide the distance by the radius of the
+sphere (for example, the Earth) in the same units as the distance
+measurement.
 
-The equatorial radius of Earth is approximately 3,963.2 miles or 6,378.1 kilometers.
+The equatorial radius of Earth is approximately 3,963.2 miles or 6,378.1
+kilometers.
 
 ## Examples
 
-The following examples use the :query:`$centerSphere` operator to perform queries. The `$centerSphere` operator uses radians to calculate distance.
+The following examples use the :query:`$centerSphere` operator to
+perform queries. The ``$centerSphere`` operator uses radians to
+calculate distance.
 
-.. include:: /includes/indexes/2d-sample-docs.rst
+**include:** /includes/indexes/2d-sample-docs.rst
 
 ### Convert Miles to Radians
 
-The following query returns documents where the `address` field is within a circle with center point `[ -72, 44 ]` and a radius of 200 miles:
+The following query returns documents where the ``address`` field is
+within a circle with center point ``[ -72, 44 ]`` and a radius of 200
+miles:
 
-```javascript
-db.contacts.find(
-   {
-      address:
-         {
-            $geoWithin:
-               {
-                  $centerSphere:
-                     [
-                        [ -72, 44 ] ,
-                        200 / 3963.2
-                     ]
-               }
-         }
-   }
-)
-```
+.. code-block:: javascript
+   :emphasize-lines: 10
+
+   db.contacts.find(
+      {
+         address:
+            {
+               $geoWithin:
+                  {
+                     $centerSphere:
+                        [
+                           [ -72, 44 ] ,
+                           200 / 3963.2
+                        ]
+                  }
+            }
+      }
+   )
 
 Output:
 
-```javascript
-[
-  {
-    _id: ObjectId("647e565c6cdaf4dc323ec92d"),
-    name: 'Georgine Lestaw',
-    phone: '714-555-0107',
-    address: [ -74, 44.74 ]
-  }
-]
-```
+.. code-block:: javascript
+   :copyable: false
 
-In the preceding query, to convert 200 miles to radians, the specified miles were divided by 3963.2.
+   [
+     {
+       _id: ObjectId("647e565c6cdaf4dc323ec92d"),
+       name: 'Georgine Lestaw',
+       phone: '714-555-0107',
+       address: [ -74, 44.74 ]
+     }
+   ]
+
+In the preceding query, to convert 200 miles to radians, the specified
+miles were divided by 3963.2.
 
 ### Convert Kilometers to Radians
 
-The following query returns documents where the `address` field is within a circle with center point `[ 55, 42 ]` and a radius of 500 kilometers:
+The following query returns documents where the ``address`` field is
+within a circle with center point ``[ 55, 42 ]`` and a radius of 500
+kilometers:
 
-```javascript
-db.contacts.find(
-   {
-      address:
-         {
-            $geoWithin:
-               {
-                  $centerSphere:
-                     [
-                        [ 55, 42 ] ,
-                        500 / 6378.1
-                     ]
-               }
-         }
-   }
-)
-```
+.. code-block:: javascript
+   :emphasize-lines: 10
+
+   db.contacts.find(
+      {
+         address:
+            {
+               $geoWithin:
+                  {
+                     $centerSphere:
+                        [
+                           [ 55, 42 ] ,
+                           500 / 6378.1
+                        ]
+                  }
+            }
+      }
+   )
 
 Output:
 
-```javascript
-[
-  {
-    _id: ObjectId("647e565c6cdaf4dc323ec92c"),
-    name: 'Evander Otylia',
-    phone: '202-555-0193',
-    address: [ 55.5, 42.3 ]
-  }
-]
-```
+.. code-block:: javascript
+   :copyable: false
 
-In the preceding query, to convert 500 kilometers to radians, the specified kilometers were divided by 6378.1.
+   [
+     {
+       _id: ObjectId("647e565c6cdaf4dc323ec92c"),
+       name: 'Evander Otylia',
+       phone: '202-555-0193',
+       address: [ 55.5, 42.3 ]
+     }
+   ]
+
+In the preceding query, to convert 500 kilometers to radians, the
+specified kilometers were divided by 6378.1.

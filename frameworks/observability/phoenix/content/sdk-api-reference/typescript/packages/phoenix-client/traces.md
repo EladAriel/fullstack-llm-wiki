@@ -4,19 +4,19 @@ framework: "Arize Phoenix"
 source_repo: "https://github.com/Arize-ai/phoenix.git"
 source_branch: "main"
 source_path: "docs/phoenix/sdk-api-reference/typescript/packages/phoenix-client/traces.mdx"
-source_commit: "69b3ab92c37ff65812feaa2dbf0b1c0ad5ae55fe"
-source_commit_short: "69b3ab9"
-source_commit_date: "2026-07-25T11:48:12-06:00"
-generated_at: "2026-07-25T19:08:24.950337Z"
+source_commit: "c48e50e9906fcc56c1c103ebd93ef3c95ed6b6e7"
+source_commit_short: "c48e50e"
+source_commit_date: "2026-08-29T01:45:20-06:00"
+generated_at: "2026-08-29T09:39:58.813782Z"
 ---
 # Traces
 
 ---
 title: "Traces"
-description: "Retrieve traces and annotate them with @arizeai/phoenix-client"
+description: "Retrieve, move, and annotate traces with @arizeai/phoenix-client"
 ---
 
-The traces module provides trace retrieval and trace-level annotation functions.
+The traces module provides trace retrieval, project transfer, and trace-level annotation functions.
 
 <section className="hidden" data-agent-context="relevant-source-files" aria-label="Relevant source files">
   <h2>Relevant Source Files</h2>
@@ -30,6 +30,9 @@ The traces module provides trace retrieval and trace-level annotation functions.
     </li>
     <li>
       <code>src/traces/logTraceAnnotations.ts</code> for batched annotation writes
+    </li>
+    <li>
+      <code>src/traces/transferTraces.ts</code> for moving traces between projects
     </li>
     <li>
       <code>src/traces/types.ts</code> for the <code>TraceAnnotation</code> type
@@ -77,6 +80,28 @@ console.log(result.nextCursor);
 - Use the returned `nextCursor` to continue pagination
 - Set `includeSpans` when you need a trace-centric fetch that also contains span details
 - `project` accepts `{ project }`, `{ projectId }`, or `{ projectName }`
+
+## Move Traces To Another Project
+
+Use `transferTraces` to move one or more traces from their current project to a destination project. This operation **moves rather than copies** the traces: after a successful transfer, they no longer appear in the source project.
+
+All traces in one call must currently belong to the same source project. Each trace identifier can be either an OpenTelemetry trace ID or a Phoenix trace GlobalID, and the destination can be either a project name or project GlobalID.
+
+```ts
+import { transferTraces } from "@arizeai/phoenix-client/traces";
+
+const result = await transferTraces({
+  traceIdentifiers: ["8f3a...", "VHJhY2U6Mg=="],
+  destinationProjectIdentifier: "production",
+});
+
+console.log(`Moved ${result.transferredTraceCount} traces`);
+console.log(`Destination project: ${result.destinationProjectId}`);
+```
+
+The result contains the number of distinct traces moved and the resolved GlobalID of the destination project. Phoenix rejects an empty list, trace or project identifiers that do not resolve, and requests that combine traces from multiple source projects.
+
+`transferTraces` requires Phoenix server 20.4.0 or newer.
 
 ## Annotate a Single Trace
 
@@ -141,6 +166,7 @@ for (const r of results) {
     <li><code>src/traces/getTraces.ts</code></li>
     <li><code>src/traces/addTraceAnnotation.ts</code></li>
     <li><code>src/traces/logTraceAnnotations.ts</code></li>
+    <li><code>src/traces/transferTraces.ts</code></li>
     <li><code>src/traces/types.ts</code></li>
     <li><code>src/types/projects.ts</code></li>
   </ul>

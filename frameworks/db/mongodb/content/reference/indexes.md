@@ -1,21 +1,152 @@
 ---
 type: "Framework Learn Page"
-framework: "mongodb"
+framework: "MongoDB"
 source_repo: "https://github.com/mongodb/docs.git"
 source_branch: "main"
 source_path: "content/manual/manual/source/reference/indexes.txt"
-source_commit: "ab9db26ed3d11618cdb61516d8180337d8e3f679"
-source_commit_short: "ab9db26e"
-source_commit_date: "2026-07-24T16:22:46-06:00"
-generated_at: "2026-07-25T11:51:15Z"
+source_commit: "b9f2bc487a2878b65e3c1f80024bebab76954f27"
+source_commit_short: "b9f2bc48"
+source_commit_date: "2026-08-28T17:09:45-05:00"
+generated_at: "2026-08-29T09:39:19.702505Z"
 ---
-
-==================
-
 # Indexing Reference
 
-## Indexing Methods in `mongosh`
+**meta:** :description: Explore various indexing methods and commands in MongoDB, including creating, dropping, and rebuilding indexes, as well as geospatial query selectors.
+
+.. default-domain:: mongodb
+
+**contents:** On this page
+   :local:
+   :backlinks: none
+   :depth: 1
+   :class: singlecol
+
+## Indexing Methods in ``mongosh``
+
+.. list-table::
+   :widths: 30,70
+   :header-rows: 1
+
+   * - Name
+
+     - Description
+
+   * - :method:`db.collection.createIndex()`
+
+     - Builds an index on a collection.
+
+   * - :method:`db.collection.dropIndex()`
+
+     - Removes a specified index on a collection.
+
+   * - :method:`db.collection.dropIndexes()`
+
+     - Removes all indexes on a collection.
+
+   * - :method:`db.collection.getIndexes()`
+
+     - Returns an array of documents that describe the existing indexes on a collection.
+
+   * - :method:`db.collection.reIndex()`
+
+     - Rebuilds all existing indexes on a collection.
+
+   * - :method:`db.collection.totalIndexSize()`
+
+     - Reports the total size used by the indexes on a collection. Provides a wrapper around the :data:`~collStats.totalIndexSize` field of the :dbcommand:`collStats` output.
+
+   * - :method:`cursor.explain()`
+
+     - Reports on the query execution plan for a cursor.
+
+   * - :method:`cursor.hint()`
+
+     - Forces MongoDB to use a specific index for a query.
+
+   * - :method:`cursor.max()`
+
+     - Specifies an exclusive upper index bound for a cursor. For use with :method:`cursor.hint()`
+
+   * - :method:`cursor.min()`
+
+     - Specifies an inclusive lower index bound for a cursor. For use with :method:`cursor.hint()`
+
 
 ## Indexing Database Commands
 
+.. list-table::
+   :widths: 30,70
+   :header-rows: 1
+
+   * - Name
+
+     - Description
+
+   * - :dbcommand:`createIndexes`
+
+     - Builds one or more indexes for a collection.
+
+   * - :dbcommand:`dropIndexes`
+
+     - Removes indexes from a collection.
+
+   * - :dbcommand:`compact`
+
+     - Defragments a collection and rebuilds the indexes.
+
+   * - :dbcommand:`reIndex`
+
+     - Rebuilds all indexes on a collection.
+
+   * - :dbcommand:`validate`
+
+     - Internal command that scans for a collection's data and indexes for correctness.
+
+   * - :dbcommand:`setIndexCommitQuorum`
+
+     - Changes the minimum number of data-bearing members (i.e commit
+       quorum), including the primary, that must vote to commit an
+       in-progress :ref:`index build
+       <index-operations-replicated-build>` before the primary marks
+       those indexes as ready.
+
+
 ## Geospatial Query Selectors
+
+.. list-table::
+   :widths: 30,70
+   :header-rows: 1
+
+   * - Name
+
+     - Description
+
+   * - :query:`$geoWithin`
+
+     - Selects geometries within a bounding :ref:`GeoJSON geometry
+       <geospatial-indexes-store-geojson>`. The :ref:`2dsphere 
+       <2dsphere-index>` and :ref:`2d <2d-index>` indexes support
+       :query:`$geoWithin`.
+   
+
+   * - :query:`$geoIntersects`
+
+     - Selects geometries that intersect with a :term:`GeoJSON` geometry.
+       The :ref:`2dsphere <2dsphere-index>` index supports
+       :query:`$geoIntersects`.
+   
+
+   * - :query:`$near`
+
+     - Returns geospatial objects in proximity to a point.
+       Requires a geospatial index.  The :ref:`2dsphere 
+       <2dsphere-index>` and :ref:`2d <2d-index>` indexes support
+       :query:`$near`.
+   
+
+   * - :query:`$nearSphere`
+
+     - Returns geospatial objects in proximity to a point on a sphere.
+       Requires a geospatial index.  The :ref:`2dsphere
+       <2dsphere-index>` and :ref:`2d <2d-index>` indexes support
+       :query:`$nearSphere`.

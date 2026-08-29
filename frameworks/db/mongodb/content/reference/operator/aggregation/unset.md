@@ -1,65 +1,180 @@
 ---
 type: "Framework Learn Page"
-framework: "mongodb"
+framework: "MongoDB"
 source_repo: "https://github.com/mongodb/docs.git"
 source_branch: "main"
 source_path: "content/manual/manual/source/reference/operator/aggregation/unset.txt"
-source_commit: "ab9db26ed3d11618cdb61516d8180337d8e3f679"
-source_commit_short: "ab9db26e"
-source_commit_date: "2026-07-24T16:22:46-06:00"
-generated_at: "2026-07-25T11:51:15Z"
+source_commit: "b9f2bc487a2878b65e3c1f80024bebab76954f27"
+source_commit_short: "b9f2bc48"
+source_commit_date: "2026-08-28T17:09:45-05:00"
+generated_at: "2026-08-29T09:39:20.187989Z"
 ---
-
-==========================
-
 # $unset (aggregation stage)
+
+**meta:** :description: Remove fields from documents using the `$unset` aggregation stage, which can exclude single or multiple fields, including embedded fields.
+
+.. default-domain:: mongodb
+
+**contents:** On this page
+   :local:
+   :backlinks: none
+   :depth: 1
+   :class: singlecol
 
 ## Definition
 
-> **Note:** The following page refers to the aggregation stage
-:pipeline:`$unset`. For the update operator :update:`$unset`, see
-:update:`$unset`.
+**note:** Disambiguation
+
+   The following page refers to the aggregation stage
+   :pipeline:`$unset`. For the update operator :update:`$unset`, see
+   :update:`$unset`.
+
+**pipeline:** $unset
+
+   Removes/excludes fields from documents.
 
 ## Syntax
 
 The :pipeline:`$unset` stage has the following syntax:
 
 - To remove a single field, the :pipeline:`$unset` takes a string that
-specifies the field to remove:
+  specifies the field to remove:
 
-```javascript
-  { $unset: "<field>" }
-```
+  .. code-block:: javascript
+
+     { $unset: "<field>" }
 
 - To remove multiple fields, the :pipeline:`$unset` takes an array of
-fields to remove.
+  fields to remove.
 
-```javascript
- { $unset: [ "<field1>", "<field2>", ... ] }
-```
+  .. code-block:: javascript
+
+    { $unset: [ "<field1>", "<field2>", ... ] }
 
 ## Considerations
 
-### `$unset` and `$project`
+### ``$unset`` and ``$project``
 
-The :pipeline:`$unset` is an alias for the :pipeline:`$project` stage that removes/excludes fields:
+The :pipeline:`$unset` is an alias for the :pipeline:`$project`
+stage that removes/excludes fields:
 
-```javascript
-{ $project: { "<field1>": 0, "<field2>": 0, ... } }
-```
+.. code-block:: javascript
+
+   { $project: { "<field1>": 0, "<field2>": 0, ... } }
 
 ### Embedded Fields
 
-To remove/exclude a field or fields within an embedded document, you can use the `dot notation`, as in:
+To remove/exclude a field or fields within an embedded document, you
+can use the :term:`dot notation`, as in:
 
-```javascript
-{ $unset: "<field.nestedfield>" }
-```
+.. code-block:: javascript
+
+   { $unset: "<field.nestedfield>" }
 
 or
 
-```javascript
-{ $unset: [ "<field1.nestedfield>", ...] }
-```
+.. code-block:: javascript
+
+   { $unset: [ "<field1.nestedfield>", ...] }
+
 
 ## Examples
+
+.. tabs-drivers::
+
+   .. tab::
+      :tabid: shell
+
+      Create a sample ``books`` collection with the following documents:
+
+      .. code-block:: javascript
+
+         db.books.insertMany([
+            { "_id" : 1, title: "Antelope Antics", isbn: "0001122223334", author: { last:"An", first: "Auntie" }, copies: [ { warehouse: "A", qty: 5 }, { warehouse: "B", qty: 15 } ] },
+            { "_id" : 2, title: "Bees Babble", isbn: "999999999333", author: { last:"Bumble", first: "Bee" }, copies: [ { warehouse: "A", qty: 2 }, { warehouse: "B", qty: 5 } ] }
+         ])
+
+### Remove a Single Field
+
+      The following example removes the top-level field ``copies``:
+
+      .. code-block:: javascript
+
+         db.books.aggregate([ { $unset: "copies" } ])
+
+      Alternatively, you can also use the following syntax:
+
+      .. code-block:: javascript
+
+         db.books.aggregate([ { $unset: [ "copies" ] } ])
+
+      Either operation returns the following documents:
+
+      .. code-block:: javascript
+
+         { "_id" : 1, "title" : "Antelope Antics", "isbn" : "0001122223334", "author" : { "last" : "An", "first" : "Auntie" } }
+         { "_id" : 2, "title" : "Bees Babble", "isbn" : "999999999333", "author" : { "last" : "Bumble", "first" : "Bee" } }
+
+### Remove Top-Level Fields
+
+      The following example removes the top-level fields ``isbn`` and
+      ``copies``:
+
+      .. code-block:: javascript
+
+         db.books.aggregate([
+            { $unset: [ "isbn", "copies" ] }
+         ])
+
+      The :pipeline:`$unset` operation outputs the following documents:
+
+      .. code-block:: javascript
+
+         { "_id" : 1, "title" : "Antelope Antics", "author" : { "last" : "An", "first" : "Auntie" } }
+         { "_id" : 2, "title" : "Bees Babble", "author" : { "last" : "Bumble", "first" : "Bee" } }
+
+
+### Remove Embedded Fields
+
+      The following example removes the top-level field ``isbn``, the
+      embedded field ``first`` (from the ``name`` document) and the embedded field
+      ``warehouse`` (from the elements in the ``copies`` array):
+
+      .. code-block:: javascript
+
+         db.books.aggregate([
+            { $unset: [ "isbn", "author.first", "copies.warehouse" ] }
+         ])
+
+      The :pipeline:`$unset` operation outputs the following documents:
+      
+      .. code-block:: javascript
+
+         { "_id" : 1, "title" : "Antelope Antics", "author" : { "last" : "An" }, "copies" : [ { "qty" : 5 }, { "qty" : 15 } ] }
+         { "_id" : 2, "title" : "Bees Babble", "author" : { "last" : "Bumble" }, "copies" : [ { "qty" : 2 }, { "qty" : 5 } ] }
+
+   .. tab::
+      :tabid: nodejs
+
+      .. include:: /includes/driver-examples/node/aggregation/sample-mflix.rst
+
+      .. include:: /includes/driver-examples/node/aggregation/stage-intro.rst
+
+         .. replacement:: stage-name
+
+            ``$unset``
+
+         .. replacement:: stage-specific-info
+
+         .. replacement:: method-description
+
+            excludes the ``tomatoes`` field and the ``imdb.votes`` embedded
+            field from return documents
+
+         .. replacement:: more-method-description
+
+      .. literalinclude:: /includes/driver-examples/node/aggregation/examples.js
+         :start-after: //start unset
+         :end-before: //end unset
+         :language: javascript
+         :dedent: 2

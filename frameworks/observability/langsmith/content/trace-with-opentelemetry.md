@@ -4,10 +4,10 @@ framework: "LangSmith"
 source_repo: "https://github.com/langchain-ai/docs.git"
 source_branch: "main"
 source_path: "src/langsmith/trace-with-opentelemetry.mdx"
-source_commit: "2aae1dfc98ee953a9a5185fb6fcdd9efb3f4d878"
-source_commit_short: "2aae1df"
-source_commit_date: "2026-07-25T00:27:23+00:00"
-generated_at: "2026-07-25T19:08:33.425978Z"
+source_commit: "a174f9cf7c91ee5eb14ee2382eb48bfe6e4956e9"
+source_commit_short: "a174f9c"
+source_commit_date: "2026-08-28T17:04:12-07:00"
+generated_at: "2026-08-29T09:39:50.683530Z"
 ---
 ---
 title: Trace with OpenTelemetry
@@ -238,7 +238,22 @@ By default, the LangSmith OpenTelemetry exporter will send data to the LangSmith
 OTEL_EXPORTER_OTLP_ENDPOINT: Override the endpoint URL
 OTEL_EXPORTER_OTLP_HEADERS: Add custom headers (LangSmith API keys and Project are added automatically)
 OTEL_SERVICE_NAME: Set a custom service name (defaults to "langsmith")
+OTEL_RESOURCE_ATTRIBUTES: Attach custom metadata fields at the process level (see below)
 ```
+
+### Add process-level resource attributes
+
+You can attach custom metadata to every trace emitted by a process using the standard OpenTelemetry `OTEL_RESOURCE_ATTRIBUTES` environment variable. Unlike span-level attributes (set per-span in code), resource attributes are set once at the process level and automatically propagated to all spans. This makes them ideal for any custom metadata you want to tag your traces with, such as a username, request ID, environment, or deployment version.
+
+The value is a comma-separated list of `key=value` pairs:
+
+```bash
+OTEL_RESOURCE_ATTRIBUTES="username=abc,id=1,environment=production"
+```
+
+You can use any custom keys you like, or follow the [OpenTelemetry resource semantic conventions](https://opentelemetry.io/docs/specs/semconv/resource/) for standard fields such as `deployment.environment`, `service.version`, and `cloud.region`.
+
+These attributes appear in LangSmith under the trace's metadata, which you can use to filter and group traces across your workspace.
 
 LangSmith uses the HTTP trace exporter by default. If you'd like to use your own tracing provider, you can either:
 

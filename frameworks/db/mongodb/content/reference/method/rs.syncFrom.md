@@ -1,37 +1,54 @@
 ---
 type: "Framework Learn Page"
-framework: "mongodb"
+framework: "MongoDB"
 source_repo: "https://github.com/mongodb/docs.git"
 source_branch: "main"
 source_path: "content/manual/manual/source/reference/method/rs.syncFrom.txt"
-source_commit: "ab9db26ed3d11618cdb61516d8180337d8e3f679"
-source_commit_short: "ab9db26e"
-source_commit_date: "2026-07-24T16:22:46-06:00"
-generated_at: "2026-07-25T11:51:15Z"
+source_commit: "b9f2bc487a2878b65e3c1f80024bebab76954f27"
+source_commit_short: "b9f2bc48"
+source_commit_date: "2026-08-28T17:09:45-05:00"
+generated_at: "2026-08-29T09:39:19.958097Z"
 ---
-
-==============================
-
 # rs.syncFrom() (mongosh method)
 
+**meta:** :description: Override the default sync target for a replica set member temporarily using `rs.syncFrom()`.
+
+.. default-domain:: mongodb
+
+**contents:** On this page
+   :local:
+   :backlinks: none
+   :depth: 1
+   :class: singlecol
+
 ## Definition
+
+**method:** rs.syncFrom()
+
+   Temporarily overrides the default sync target for the current member. 
+
+   .. |dbcommand| replace:: :dbcommand:`replSetFreeze` command
+   .. include:: /includes/fact-mongosh-shell-method-alt
+
+   Specify the name of the member you
+   want to replicate from in the form of ``[hostname]:[port]``.
 
 ## Compatibility
 
 This method is available in deployments hosted in the following environments:
 
-.. include:: /includes/fact-environments-onprem-only.rst
+**include:** /includes/fact-environments-onprem-only.rst
 
 ## Behavior
 
-.. include:: /includes/extracts/rsSyncFrom-behavior-command.rst
+**include:** /includes/extracts/rsSyncFrom-behavior-command.rst
 
 ## Example
 
 To use the :method:`rs.syncFrom()` helper in :binary:`~bin.mongosh`:
 
-```javascript
-rs.syncFrom("myHost:27017");
-```
+.. code-block:: javascript
 
-> **Seealso:** :dbcommand:`replSetSyncFrom`
+   rs.syncFrom("myHost:27017");
+
+**seealso:** :dbcommand:`replSetSyncFrom`

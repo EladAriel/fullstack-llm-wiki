@@ -1,14 +1,15 @@
 ---
 type: "Framework Learn Page"
-framework: "nextjs"
+framework: "Next.js"
 source_repo: "https://github.com/vercel/next.js/"
 source_branch: "canary"
 source_path: "docs/01-app/03-api-reference/03-file-conventions/parallel-routes.mdx"
-source_commit: "dcf242a17b5d4622bbd9624db531a9d84177619f"
-source_commit_short: "dcf242a1"
-source_commit_date: "2026-07-25T10:16:19+02:00"
-generated_at: "2026-07-25T11:50:53Z"
+source_commit: "33a5d542e519fe4e05c8c8c2c2845da9f741699b"
+source_commit_short: "33a5d542"
+source_commit_date: "2026-08-29T00:04:45-07:00"
+generated_at: "2026-08-29T09:40:24.286877Z"
 ---
+# Parallel Routes
 
 ---
 title: Parallel Routes
@@ -16,6 +17,7 @@ description: Simultaneously render one or more pages in the same view that can b
 related:
   links:
     - app/api-reference/file-conventions/default
+    - app/guides/authentication
 ---
 
 Parallel Routes allows you to simultaneously or conditionally render one or more pages within the same layout. They are useful for highly dynamic sections of an app, such as dashboards and feeds on social sites.
@@ -119,7 +121,7 @@ By default, Next.js keeps track of the active _state_ (or subpage) for each slot
 
 ### With `useSelectedLayoutSegment(s)`
 
-Both [`useSelectedLayoutSegment`](/docs/app/api-reference/functions/use-selected-layout-segment) and [`useSelectedLayoutSegments`](/docs/app/api-reference/functions/use-selected-layout-segments) accept a `parallelRoutesKey` parameter, which allows you to read the active route segment within a slot.
+Both [`useSelectedLayoutSegment`](/docs/app/api-reference/functions/use-selected-layout-segment) and [`useSelectedLayoutSegments`](/docs/app/api-reference/functions/use-selected-layout-segments) accept a `parallelRouteKey` parameter, which allows you to read the active route segment within a slot.
 
 ```tsx filename="app/layout.tsx" switcher
 'use client'
@@ -178,6 +180,26 @@ import { checkUserRole } from '@/lib/auth'
 export default function Layout({ user, admin }) {
   const role = checkUserRole()
   return role === 'admin' ? admin : user
+}
+```
+
+Both slots render on the server, regardless of which one the layout returns. The conditional decides what the user sees, not what runs: `@admin/page.js` executes its data fetches for every user, and its output is included in the response sent to the browser. Authorize inside each slot's page, or in your [Data Access Layer](/docs/app/guides/authentication#creating-a-data-access-layer-dal):
+
+```tsx filename="app/dashboard/@admin/page.tsx" switcher
+import { getAdminStats } from '@/lib/dal'
+
+export default async function AdminPage() {
+  const stats = await getAdminStats()
+  return <Stats stats={stats} />
+}
+```
+
+```jsx filename="app/dashboard/@admin/page.js" switcher
+import { getAdminStats } from '@/lib/dal'
+
+export default async function AdminPage() {
+  const stats = await getAdminStats()
+  return <Stats stats={stats} />
 }
 ```
 

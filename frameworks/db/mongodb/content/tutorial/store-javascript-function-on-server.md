@@ -1,41 +1,158 @@
 ---
 type: "Framework Learn Page"
-framework: "mongodb"
+framework: "MongoDB"
 source_repo: "https://github.com/mongodb/docs.git"
 source_branch: "main"
 source_path: "content/manual/manual/source/tutorial/store-javascript-function-on-server.txt"
-source_commit: "ab9db26ed3d11618cdb61516d8180337d8e3f679"
-source_commit_short: "ab9db26e"
-source_commit_date: "2026-07-24T16:22:46-06:00"
-generated_at: "2026-07-25T11:51:15Z"
+source_commit: "b9f2bc487a2878b65e3c1f80024bebab76954f27"
+source_commit_short: "b9f2bc48"
+source_commit_date: "2026-08-28T17:09:45-05:00"
+generated_at: "2026-08-29T09:39:19.567060Z"
 ---
-
 :orphan:
-
-=========================================
 
 # Store a JavaScript Function on the Server
 
-> **Important:** Starting in MongoDB 8.0, server side JavaScript is deprecated.
-`system.js` functionality may not work with all features.
+**meta:** :description: Learn how to store and execute JavaScript functions on the server using the `system.js` collection, noting its deprecated status in MongoDB 8.0.
 
-There is a special system collection named `system.js` that can store JavaScript functions for reuse.
+**contents:** On this page
+   :local:
+   :backlinks: none
+   :depth: 1
+   :class: singlecol
+
+**important:** Starting in MongoDB 8.0, server side JavaScript is deprecated. 
+   ``system.js`` functionality may not work with all features.
+
+There is a special system collection named ``system.js`` that can 
+store JavaScript functions for reuse.
 
 ## Before you Begin
 
-This task uses the legacy :binary:`~bin.mongo` shell to load server side functions from the `system.js` collection. This version of the shell is no longer supported. For an alternative solution in the MongoDB Shell, see `mdb-shell-write-scripts`.
+This task uses the legacy :binary:`~bin.mongo` shell to load server side 
+functions from the ``system.js`` collection. This version of the shell
+is no longer supported. For an alternative solution in the MongoDB 
+Shell, see :ref:`mdb-shell-write-scripts`.
 
 ## About this Task
 
-Consider the follow recommendations when using `system.js`:
+Consider the follow recommendations when using ``system.js``:
 
 - Do not store application logic in the database.
-- There are performance limitations to running JavaScript inside of
-MongoDB.
-
-- Application code is most effective when it shares version
-control with the application.
+- There are performance limitations to running JavaScript inside of 
+  MongoDB. 
+- Application code is most effective when it shares version 
+  control with the application.
 
 ## Steps
 
-To store a function, insert the function into the `system.js` collection, as in these examples:
+To store a function, insert the function into the ``system.js`` 
+collection, as in these examples:
+
+**procedure:** .. step:: Create a test collection
+
+      .. code-block:: javascript
+
+         db.test_numbers.insertMany([
+            { value: 1 },
+            { value: 2 },
+            { value: 3 },
+            { value: 4 },
+            { value: 5 },
+            { value: 6 }
+         ])
+
+   .. step:: Store JavaScript functions in the database
+
+      To store JavaScript functions in the database, insert a document
+      with these fields:
+
+      - The ``_id`` field holds the name of the function and is unique 
+        per database.
+
+      - The ``value`` field holds the function definition.
+
+      The following example creates an ``echo`` 
+      function in the ``system.js`` collection:
+
+      .. code-block:: javascript
+
+         db.system.js.insertOne(
+            {
+               _id: "echo",
+               value : function(x) { return x; }
+            }
+         )
+
+      The following example creates an ``isEven`` function 
+      in the ``system.js`` collection:
+
+      .. code-block:: javascript
+
+         db.system.js.insertOne(
+            {
+               _id: "isEven",
+               value: function (num) {
+                  return num % 2 === 0;
+               }
+            }
+         )
+
+      These functions, saved as :ref:`BSON type <bson-types>`, are available 
+      for use from any JavaScript context, such as :dbcommand:`mapReduce` and 
+      :query:`$where`.
+
+      .. note::
+         
+         Functions saved as the deprecated BSON type :ref:`JavaScript (with
+         scope) <bson-types>`, cannot be used by
+         :dbcommand:`mapReduce` and :query:`$where`.
+
+   .. step:: Load the stored JavaScript functions into the shell
+
+         .. code-block:: javascript
+
+            db.loadServerScripts()
+
+   .. step:: Run the stored JavaScript functions
+
+         a. The following code example runs the ``echo`` function
+            stored in ``system.js``:
+
+            .. io-code-block::
+               :copyable: true
+
+               .. input::
+                  :language: javascript
+                  
+                  echo("test")
+
+               .. output::
+                  :language: javascript
+                  :visible: false
+
+                  test
+
+         #. The following code example runs the ``isEven``
+            function stored in ``system.js`` in the ``$where`` 
+            operator on the ``test_numbers`` collection:
+
+            .. io-code-block::
+               :copyable: true
+
+               .. input::
+                  :language: javascript
+                  
+                  db.test_numbers.find({
+                     $where: function () {
+                        return isEven(this.value);
+                     }
+                  })
+
+               .. output::
+                  :language: javascript
+                  :visible: false
+
+                  { "_id" : ObjectId("668d7be41b55bec1bf191499"), "value" : 2 }
+                  { "_id" : ObjectId("668d7be41b55bec1bf19149b"), "value" : 4 }
+                  { "_id" : ObjectId("668d7be41b55bec1bf19149d"), "value" : 6 }  

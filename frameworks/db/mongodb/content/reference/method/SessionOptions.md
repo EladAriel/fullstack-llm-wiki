@@ -1,27 +1,111 @@
 ---
 type: "Framework Learn Page"
-framework: "mongodb"
+framework: "MongoDB"
 source_repo: "https://github.com/mongodb/docs.git"
 source_branch: "main"
 source_path: "content/manual/manual/source/reference/method/SessionOptions.txt"
-source_commit: "ab9db26ed3d11618cdb61516d8180337d8e3f679"
-source_commit_short: "ab9db26e"
-source_commit_date: "2026-07-24T16:22:46-06:00"
-generated_at: "2026-07-25T11:51:15Z"
+source_commit: "b9f2bc487a2878b65e3c1f80024bebab76954f27"
+source_commit_short: "b9f2bc48"
+source_commit_date: "2026-08-28T17:09:45-05:00"
+generated_at: "2026-08-29T09:39:19.883489Z"
 ---
-
-==============
-
 # SessionOptions
+
+**meta:** :description: Explore session options in `mongosh`, including causal consistency, read/write concerns, and retry writes settings.
+
+.. default-domain:: mongodb
+
+**contents:** On this page
+   :local:
+   :backlinks: none
+   :depth: 1
+   :class: singlecol
 
 ## Definition
 
-Verify which options are enabled for the session by running `Session.getOptions()`.
+**method:** SessionOptions
+
+   The options for a :method:`session <Mongo.startSession()>` in
+   :binary:`~bin.mongosh`. To access the :method:`SessionOptions`
+   object, use the :method:`Session.getOptions()` method.
+
+   The session options available are:
+
+   .. list-table::
+      :header-rows: 1
+      :widths: 20 80
+
+      * - Option
+        - Description
+
+      * - ``causalConsistency``
+
+        - Boolean. Enables or disables :ref:`causal consistency
+          <causal-consistency>` for the session.
+
+          You can explicitly set the option when you start a session
+          manually:
+          
+          - ``Session = db.getMongo().startSession( { causalConsistency: true } )``
+
+      * - ``readConcern``
+
+        - Document. Specifies the :ref:`read concern <read-concern>`.
+
+          In :binary:`~bin.mongosh`, you can set the option when
+          you run :method:`Mongo.startSession()`. You can also access
+          the ``readConcern`` option via the following methods:
+
+          - ``Session.getOptions().getReadConcern()``
+
+          - ``Session.getOptions().setReadConcern(<document>)``
+
+      * - ``readPreference``
+
+        - Document. Specifies the :ref:`read preference <read-preference>`.
+
+          In :binary:`~bin.mongosh`, you can set the option
+          when you run :method:`Mongo.startSession()`. You can also
+          access the ``readPreference`` option via the following
+          methods:
+
+          - ``Session.getOptions().getReadPreference()``
+
+          - ``Session.getOptions().setReadPreference({ mode: <string>, tags: <array>})``
+
+      * - ``retryWrites``
+
+        - Boolean. Enables or disables the ability to retry writes upon
+          encountering transient network errors, such as during
+          failovers.
+
+          To enable retry writes, start :binary:`~bin.mongosh`
+          with the :option:`--retryWrites <mongosh --retryWrites>` option.
+
+          You can view whether ``retryWrites`` is enabled for a session
+          via the following method:
+
+          - ``Session.getOptions().shouldRetryWrites()``
+
+      * - ``writeConcern``
+
+        - Document. Specifies the :ref:`write concern <write-concern>`.
+
+          In :binary:`~bin.mongosh`, you can set the options
+          when you run :method:`Mongo.startSession()`. You can also
+          access the ``writeConcern`` option via the following methods:
+
+          - ``Session.getOptions().getWriteConcern()``
+
+          - ``Session.getOptions().setWriteConcern(<document>)``
+
+Verify which options are enabled for the session by running
+``Session.getOptions()``.
 
 ## Compatibility
 
-This method is available in deployments hosted in the following environments:
+This method is available in deployments hosted in the following environments: 
 
-.. include:: /includes/fact-environments-atlas-only.rst
+**include:** /includes/fact-environments-atlas-only.rst
 
-.. include:: /includes/fact-environments-onprem-only.rst
+**include:** /includes/fact-environments-onprem-only.rst

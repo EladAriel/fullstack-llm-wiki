@@ -1,67 +1,89 @@
 ---
 type: "Framework Learn Page"
-framework: "mongodb"
+framework: "MongoDB"
 source_repo: "https://github.com/mongodb/docs.git"
 source_branch: "main"
 source_path: "content/manual/manual/source/text-search.txt"
-source_commit: "ab9db26ed3d11618cdb61516d8180337d8e3f679"
-source_commit_short: "ab9db26e"
-source_commit_date: "2026-07-24T16:22:46-06:00"
-generated_at: "2026-07-25T11:51:15Z"
+source_commit: "b9f2bc487a2878b65e3c1f80024bebab76954f27"
+source_commit_short: "b9f2bc48"
+source_commit_date: "2026-08-28T17:09:45-05:00"
+generated_at: "2026-08-29T09:39:19.479000Z"
 ---
-
-===========
+.. _text-search:
 
 # Text Search
 
-MongoDB provides text search capabilities for both :atlas:`MongoDB Atlas </>` and self-managed deployments.
+.. default-domain:: mongodb
 
-> **Note:** :pipeline:`$search`, :pipeline:`$searchMeta`, and :expression:`$vectorSearch`
-are now available in self-managed deployments. We recommend using these
-aggregation stages instead of the :query:`$text` operator, as they offer an
-improved full-text-query solution.
+**facet:** :name: genre
+   :values: reference
+
+**meta:** :description: MongoDB offers robust text search capabilities for hosted deployments, include fine-grained indexing and a rich query language.
+
+**contents:** On this page
+   :local:
+   :backlinks: none
+   :depth: 1
+   :class: singlecol
+
+MongoDB provides text search capabilities for both :atlas:`MongoDB Atlas </>` 
+and self-managed deployments.
+
+**note:** :pipeline:`$search`, :pipeline:`$searchMeta`, and :expression:`$vectorSearch`
+   are now available in self-managed deployments. We recommend using these 
+   aggregation stages instead of the :query:`$text` operator, as they offer an 
+   improved full-text-query solution.
 
 ## {+fts+}
 
-To perform text search, use :atlas:`{+fts+}  </atlas-search>`. {+fts+} supports fine-grained text indexing and a rich query language for fast, relevant search results.
+To perform text search, use :atlas:`{+fts+}  </atlas-search>`. {+fts+} supports
+fine-grained text indexing and a rich query language for fast, relevant
+search results.
 
-To learn more and get started with {+fts+}, see:
+To learn more and get started with {+fts+}, see: 
 
-- :atlas:`{+fts+} Aggregation Pipeline Stages
-</reference/atlas-search/query-syntax/>`
+- :atlas:`{+fts+} Aggregation Pipeline Stages 
+  </reference/atlas-search/query-syntax/>`
+- :atlas:`Defining {+fts+} Indexes 
+  </reference/atlas-search/index-definitions/>`
+- :atlas:`Running {+fts+} Queries 
+  </reference/atlas-search/searching/>`
 
-- :atlas:`Defining {+fts+} Indexes
-</reference/atlas-search/index-definitions/>`
-
-- :atlas:`Running {+fts+} Queries
-</reference/atlas-search/searching/>`
-
-.. include:: /includes/fact-atlas-search-languages.rst
+**include:** /includes/fact-atlas-search-languages.rst
 
 ## {+avs+}
 
-To perform vector search on your data hosted on MongoDB, use :atlas:`{+avs+} </atlas-vector-search/vector-search-overview/>`. {+avs+} extends your text search capabilities to include semantic, hybrid, and generative search.
+To perform vector search on your data hosted on MongoDB, use
+:atlas:`{+avs+}
+</atlas-vector-search/vector-search-overview/>`. {+avs+}
+extends your text search capabilities to include semantic, hybrid, and
+generative search.
 
 To learn more and get started with {+avs+}, see:
 
 - :atlas:`{+avs+} Quick Start
-</atlas-vector-search/tutorials/vector-search-quick-start/>`
+  </atlas-vector-search/tutorials/vector-search-quick-start/>`
+- :atlas:`Run Vector Search Queries 
+  </atlas-vector-search/vector-search-stage>`
 
-- :atlas:`Run Vector Search Queries
-</atlas-vector-search/vector-search-stage>`
+.. _text-query:
 
-## Queries with the `$text` Operator
+## Queries with the ``$text`` Operator
 
-MongoDB also provides the :query:`$text` operator. However, we recommend using the :pipeline:`$search` aggregation stage as it offers advanced full-text search options, including:
+MongoDB also provides the :query:`$text` operator. However, we recommend using 
+the :pipeline:`$search` aggregation stage as it offers advanced full-text search 
+options, including: 
 
-- Fuzzy matching and autocomplete.
+- Fuzzy matching and autocomplete. 
 - Relevance scoring.
-- Support for search using synonyms and facets.
-- Search term highlighting.
+- Support for search using synonyms and facets. 
+- Search term highlighting. 
 - More language analyzers.
-To learn more about `$text` queries, see `text-search-on-prem`.
+ 
+To learn more about ``$text`` queries, see :ref:`text-search-on-prem`.
 
-## Contents
-
-- {+fts+} <https://www.mongodb.com/docs/atlas/atlas-search/>
-- {+avs+} <https://www.mongodb.com/docs/atlas/atlas-vector-search/vector-search-overview/>
+**toctree:** :titlesonly:
+   :hidden:
+   
+   {+fts+} <https://www.mongodb.com/docs/atlas/atlas-search/>
+   {+avs+} <https://www.mongodb.com/docs/atlas/atlas-vector-search/vector-search-overview/>

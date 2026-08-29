@@ -1,49 +1,78 @@
 ---
 type: "Framework Learn Page"
-framework: "mongodb"
+framework: "MongoDB"
 source_repo: "https://github.com/mongodb/docs.git"
 source_branch: "main"
 source_path: "content/manual/manual/source/reference/operator/aggregation/divide.txt"
-source_commit: "ab9db26ed3d11618cdb61516d8180337d8e3f679"
-source_commit_short: "ab9db26e"
-source_commit_date: "2026-07-24T16:22:46-06:00"
-generated_at: "2026-07-25T11:51:15Z"
+source_commit: "b9f2bc487a2878b65e3c1f80024bebab76954f27"
+source_commit_short: "b9f2bc48"
+source_commit_date: "2026-08-28T17:09:45-05:00"
+generated_at: "2026-08-29T09:39:20.221692Z"
 ---
-
-=============================
-
 # $divide (expression operator)
+
+**meta:** :description: Use the `$divide` operator in MongoDB to divide one number by another within an aggregation pipeline, returning the result as a double or decimal.
+
+.. default-domain:: mongodb
+
+**contents:** On this page
+   :local:
+   :backlinks: none
+   :depth: 1
+   :class: singlecol
 
 ## Definition
 
+**expression:** $divide
+
+   Divides one number by another and returns the result. Pass the
+   arguments to :expression:`$divide` in an array.
+
+   The :expression:`$divide` expression has the following syntax:
+
+   .. code-block:: javascript
+
+      { $divide: [ <expression1>, <expression2> ] }
+
+   The first argument is the dividend, and the second argument is the
+   divisor; i.e. the first argument is divided by the second argument.
+
+   The arguments can be any valid :ref:`expression
+   <aggregation-expressions>` as long as they resolve to numbers. For
+   more information on expressions, see :ref:`aggregation-expressions`.
+
 ## Behavior
 
-.. include:: /includes/agg-expression-double-unless-decimal-behavior.rst
+**include:** /includes/agg-expression-double-unless-decimal-behavior.rst
 
 ## Examples
 
-Consider a `conferencePlanning` collection with the following documents:
+Consider a ``conferencePlanning`` collection with the following documents:
 
-```javascript
-db.conferencePlanning.insertMany( [
-   { "_id" : 1, "city" : "New York", "hours" : 80, "tasks" : 7 },
-   { "_id" : 2, "city" : "Singapore", "hours" : 40, "tasks" : 4 }
-] )
-```
+.. code-block:: javascript
 
-The following aggregation uses the :expression:`$divide` expression to divide the `hours` field by a literal `8` to compute the number of work days:
+   db.conferencePlanning.insertMany( [
+      { "_id" : 1, "city" : "New York", "hours" : 80, "tasks" : 7 },
+      { "_id" : 2, "city" : "Singapore", "hours" : 40, "tasks" : 4 }
+   ] )
 
-```javascript
-db.planning.aggregate(
-   [
-     { $project: { city: 1, workdays: { $divide: [ "$hours", 8 ] } } }
-   ]
-)
-```
+
+The following aggregation uses the :expression:`$divide` expression to
+divide the ``hours`` field by a literal ``8`` to compute the number of
+work days:
+
+.. code-block:: javascript
+
+   db.planning.aggregate(
+      [
+        { $project: { city: 1, workdays: { $divide: [ "$hours", 8 ] } } }
+      ]
+   )
 
 The operation returns the following results:
 
-```javascript
-{ "_id" : 1, "city" : "New York", "workdays" : 10 }
-{ "_id" : 2, "city" : "Singapore", "workdays" : 5 }
-```
+.. code-block:: javascript
+   :copyable: false
+
+   { "_id" : 1, "city" : "New York", "workdays" : 10 }
+   { "_id" : 2, "city" : "Singapore", "workdays" : 5 }

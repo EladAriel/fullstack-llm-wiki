@@ -1,68 +1,182 @@
 ---
 type: "Framework Learn Page"
-framework: "mongodb"
+framework: "MongoDB"
 source_repo: "https://github.com/mongodb/docs.git"
 source_branch: "main"
 source_path: "content/manual/manual/source/reference/method/ClientEncryption.createEncryptedCollection.txt"
-source_commit: "ab9db26ed3d11618cdb61516d8180337d8e3f679"
-source_commit_short: "ab9db26e"
-source_commit_date: "2026-07-24T16:22:46-06:00"
-generated_at: "2026-07-25T11:51:15Z"
+source_commit: "b9f2bc487a2878b65e3c1f80024bebab76954f27"
+source_commit_short: "b9f2bc48"
+source_commit_date: "2026-08-28T17:09:45-05:00"
+generated_at: "2026-08-29T09:39:19.888604Z"
 ---
-
-=============================================================
-
 # ClientEncryption.createEncryptedCollection() (mongosh method)
 
-.. versionadded:: 7.0
+**meta:** :description: Create an encrypted collection in MongoDB using `ClientEncryption.createEncryptedCollection` with specified database, collection name, and encryption options.
 
-> **Tip:** In :binary:`mongosh`, you can use the helper
-:method:`db.createEncryptedCollection()`, which runs in the context
-of the current database and automatically generates data keys when
-`keyId` values are not specified.
+.. default-domain:: mongodb
+
+**contents:** On this page
+   :local:
+   :backlinks: none
+   :depth: 1
+   :class: singlecol
+
+**versionadded:** 7.0
+
+**method:** ClientEncryption.createEncryptedCollection(dbName, collName, clientEncOpts)
+
+   ``ClientEncryption.createEncryptedCollection`` creates an 
+   encrypted collection specified by ``collName`` on the database 
+   specified by ``dbName``.
+
+**tip:** In :binary:`mongosh`, you can use the helper
+   :method:`db.createEncryptedCollection()`, which runs in the context
+   of the current database and automatically generates data keys when
+   ``keyId`` values are not specified.
 
 ## Compatibility
 
-This command is available in deployments hosted in the following environments:
+This command is available in deployments hosted in the following
+environments: 
 
-.. include:: /includes/fact-environments-atlas-only.rst
+**include:** /includes/fact-environments-atlas-only.rst
 
-.. include:: /includes/fact-environments-onprem-only.rst
+**include:** /includes/fact-environments-onprem-only.rst
+
 
 ## Syntax
 
-`ClientEncryption.createEncryptedCollection` has the following syntax:
+``ClientEncryption.createEncryptedCollection`` has the 
+following syntax:
 
-```javascript
-clientEncryption = db.getMongo().getClientEncryption()
+.. code-block:: javascript
 
-clientEncryption.createEncryptedCollection(
-  dbName,
-  collName,
-  {
-    provider: kmsProviderName,
-    createCollectionOptions: encryptedFieldsMap,
-    masterKey: customerMasterKeyCredentials
-  }
-)
-```
+   clientEncryption = db.getMongo().getClientEncryption()
+
+   clientEncryption.createEncryptedCollection(
+     dbName,
+     collName,
+     {
+       provider: kmsProviderName,
+       createCollectionOptions: encryptedFieldsMap,
+       masterKey: customerMasterKeyCredentials
+     }
+   )
+
 
 ## Command Fields
 
-`createEncryptedCollection` takes these fields:
+``createEncryptedCollection`` takes these fields:
+
+.. list-table::
+  :header-rows: 1
+  :widths: 20 20 20 80
+
+  * - Field
+    - Type
+    - Necessity
+    - Description
+
+  * - ``dbName``
+    - string
+    - Required
+    - Name of the database to encrypt.
+
+  * - ``collName``
+    - string
+    - Required
+    - Name of the collection to encrypt.
+
+  * - ``clientEncOpts``
+    - document
+    - Required
+    - Options to configure the encrypted collection.
+
+  * - ``clientEncOpts.provider``
+    - string
+    - Required
+    - KMS you are using to store your {+cmk-long+}.
+
+  * - ``clientEncOpts.createCollectionOptions``
+    - document
+    - Required
+    - Fields to encrypt. See :ref:`qe-specify-fields-for-encryption`
+      for details on how to configure the ``encryptedFieldsMap`` object.
+
+  * - ``clientEncOpts.masterKey``
+    - document
+    - Optional
+    - Specifies the credentials and key identification fields needed to
+      access the master key when the KMS Provider is AWS, GCP, or
+      Azure. Optional when the KMS Provider is ``local``.
 
 ## Behavior
 
-.. include:: /includes/create-an-encrypted-db-conn.rst
+**include:** /includes/create-an-encrypted-db-conn.rst 
 
 ## Example
 
-The following example uses a locally managed KMS for the Queryable Encryption configuration.
+The following example uses a locally managed KMS for the 
+Queryable Encryption configuration.
+
+**procedure:** :style: normal
+
+   .. step:: Create Your Encrypted Connection
+
+      .. include:: /includes/csfle-connection-boilerplate-example-2.rst
+
+   .. step:: Specify which Fields to Encrypt
+
+      Create an ``encryptedFieldsMaps`` to specify which fields to encrypt:
+
+      .. code-block:: javascript
+
+         const encryptedFieldsMap = {
+           encryptedFields: {
+             fields: [
+               {
+                 path: "secretField",
+                 bsonType: "string",
+                 queries: { queryType: "equality" },
+               },
+             ],
+           },
+         };
+
+   .. step:: Create Your Encrypted Collection
+
+      Create an encrypted ``enc.users`` collection:
+
+      .. code-block:: javascript
+
+         clientEncryption = encryptedClient.getClientEncryption();
+
+         let result = clientEncryption.createEncryptedCollection(
+           "enc", 
+           "users",
+           {
+             provider: "local",
+             createCollectionOptions: encryptedFieldsMap,
+             masterKey: {} // masterKey is optional when provider is local
+           }
+         )
+
+   .. step:: Check Your Result Object
+
+      ``createEncryptedCollection`` returns a large result object with many 
+      fields. Check the value of ``result.collection`` to confirm the 
+      collection was created in the desired location.
+
+      .. code-block:: javascript
+         :copyable: false
+
+         enc> result.collection
+         enc.users
 
 ## Learn More
 
 - For complete documentation on initiating MongoDB connections with
-client-side field level encryption enabled, see :method:`Mongo()`.
+  client-side field level encryption enabled, see :method:`Mongo()`.
 
-- For a complete example of how to create and query an encrypted
-collection, see `qe-quick-start`.
+- For a complete example of how to create and query an encrypted 
+  collection, see :ref:`qe-quick-start`. 

@@ -1,22 +1,20 @@
 ---
 type: "Framework Learn Page"
-framework: "tanstack"
+framework: "TanStack"
 source_repo: "https://github.com/tanstack/query"
 source_branch: "main"
 source_path: "docs/framework/svelte/reference/index.md"
-source_commit: "fd50fa14d283c7d6664a796f758498d1ad5bfce7"
-source_commit_short: "fd50fa14"
-source_commit_date: "2026-07-24T22:22:47+10:00"
-generated_at: "2026-07-25T11:50:41Z"
-generated_filename: "_source_index.md"
+source_commit: "2969edf32f7e0c48e2a108d84712d6e01edfde21"
+source_commit_short: "2969edf"
+source_commit_date: "2026-08-28T01:03:02+09:00"
+generated_at: "2026-08-29T09:40:33.399096Z"
 ---
+# Index
 
 ---
 id: "@tanstack/svelte-query"
 title: "@tanstack/svelte-query"
 ---
-
-# @tanstack/svelte-query
 
 ## Type Aliases
 
@@ -37,6 +35,7 @@ title: "@tanstack/svelte-query"
 - [DefinedInitialDataOptions](type-aliases/DefinedInitialDataOptions.md)
 - [HydrationBoundary](type-aliases/HydrationBoundary.md)
 - [MutationStateOptions](type-aliases/MutationStateOptions.md)
+- [MutationTypeFromResult](type-aliases/MutationTypeFromResult.md)
 - [QueriesOptions](type-aliases/QueriesOptions.md)
 - [QueriesResults](type-aliases/QueriesResults.md)
 - [QueryClientProviderProps](type-aliases/QueryClientProviderProps.md)
@@ -55,6 +54,7 @@ title: "@tanstack/svelte-query"
 - [getIsRestoringContext](functions/getIsRestoringContext.md)
 - [getQueryClientContext](functions/getQueryClientContext.md)
 - [infiniteQueryOptions](functions/infiniteQueryOptions.md)
+- [mutationOptions](functions/mutationOptions.md)
 - [queryOptions](functions/queryOptions.md)
 - [setIsRestoringContext](functions/setIsRestoringContext.md)
 - [setQueryClientContext](functions/setQueryClientContext.md)

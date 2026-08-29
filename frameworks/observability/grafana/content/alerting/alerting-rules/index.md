@@ -1,7 +1,7 @@
 ---
 type: "Framework Learn Directory Index"
 framework: "Grafana"
-generated_at: "2026-07-25T19:08:09.115722Z"
+generated_at: "2026-08-29T09:39:37.585136Z"
 ---
 # Alerting-Rules
 
@@ -22,3 +22,8 @@ This directory contains Grafana learning pages related to alerting-rules.
 - [Create Data Source Managed Rule](create-data-source-managed-rule.md)
 - [Create Grafana Managed Rule](create-grafana-managed-rule.md)
 - [Link Alert Rules To Panels](link-alert-rules-to-panels.md)
+
+## Subdirectories
+
+- [Create Recording Rules](create-recording-rules/index.md)
+- [Templates](templates/index.md)

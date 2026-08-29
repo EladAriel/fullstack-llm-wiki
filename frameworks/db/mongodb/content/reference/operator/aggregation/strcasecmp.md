@@ -1,59 +1,91 @@
 ---
 type: "Framework Learn Page"
-framework: "mongodb"
+framework: "MongoDB"
 source_repo: "https://github.com/mongodb/docs.git"
 source_branch: "main"
 source_path: "content/manual/manual/source/reference/operator/aggregation/strcasecmp.txt"
-source_commit: "ab9db26ed3d11618cdb61516d8180337d8e3f679"
-source_commit_short: "ab9db26e"
-source_commit_date: "2026-07-24T16:22:46-06:00"
-generated_at: "2026-07-25T11:51:15Z"
+source_commit: "b9f2bc487a2878b65e3c1f80024bebab76954f27"
+source_commit_short: "b9f2bc48"
+source_commit_date: "2026-08-28T17:09:45-05:00"
+generated_at: "2026-08-29T09:39:20.212501Z"
 ---
-
-=================================
-
 # $strcasecmp (expression operator)
+
+**meta:** :description: Perform case-insensitive string comparisons using the `$strcasecmp` operator in MongoDB aggregation.
+
+.. default-domain:: mongodb
+
+**contents:** On this page
+   :local:
+   :backlinks: none
+   :depth: 1
+   :class: singlecol
 
 ## Definition
 
+**expression:** $strcasecmp
+
+   Performs case-insensitive comparison of two strings. Returns
+
+   - 1 if first string is "greater than" the second string.
+
+   - 0 if the two strings are equal.
+
+   - -1 if the first string is "less than" the second string.
+
+   :expression:`$strcasecmp` has the following syntax:
+
+   .. code-block:: javascript
+
+      { $strcasecmp: [ <expression1>, <expression2> ] }
+
+   The arguments can be any valid :ref:`expression
+   <aggregation-expressions>` as long as they resolve to strings. For
+   more information on expressions, see :ref:`aggregation-expressions`.
+
 ## Behavior
 
-.. include:: /includes/intro-aggregation-string.rst
+.. |exp-has| replace:: :expression:`$strcasecmp` only has
+
+**include:** /includes/intro-aggregation-string.rst
 
 For a case sensitive comparison, see :expression:`$cmp`.
 
 ## Example
 
-Consider a `inventory` collection with the following documents:
+Consider a ``inventory`` collection with the following documents:
 
-```javascript
-db.inventory.insertMany( [
-   { _id: 1, item: "ABC1", quarter: "13Q1", description: "product 1" },
-   { _id: 2, item: "ABC2", quarter: "13Q4", description: "product 2" },
-   { _id: 3, item: "XYZ1", quarter: "14Q2", description: null } 
-] )
-```
+.. code-block:: javascript
 
-The following operation uses the :expression:`$strcasecmp` operator to perform case-insensitive comparison of the `quarter` field value to the string `"13q4"`:
+   db.inventory.insertMany( [
+      { _id: 1, item: "ABC1", quarter: "13Q1", description: "product 1" },
+      { _id: 2, item: "ABC2", quarter: "13Q4", description: "product 2" },
+      { _id: 3, item: "XYZ1", quarter: "14Q2", description: null } 
+   ] )
 
-```javascript
-db.inventory.aggregate(
-   [
-     {
-       $project:
-          {
-            item: 1,
-            comparisonResult: { $strcasecmp: [ "$quarter", "13q4" ] }
-          }
-      }
-   ]
-)
-```
+The following operation uses the :expression:`$strcasecmp` operator to
+perform case-insensitive comparison of the ``quarter`` field value to
+the string ``"13q4"``:
+
+.. code-block:: javascript
+
+   db.inventory.aggregate(
+      [
+        {
+          $project:
+             {
+               item: 1,
+               comparisonResult: { $strcasecmp: [ "$quarter", "13q4" ] }
+             }
+         }
+      ]
+   )
 
 The operation returns the following results:
 
-```javascript
-{ _id: 1, item: "ABC1", comparisonResult: -1 }
-{ _id: 2, item: "ABC2", comparisonResult: 0 }
-{ _id: 3, item: "XYZ1", comparisonResult: 1 }
-```
+.. code-block:: javascript
+   :copyable: false
+
+   { _id: 1, item: "ABC1", comparisonResult: -1 }
+   { _id: 2, item: "ABC2", comparisonResult: 0 }
+   { _id: 3, item: "XYZ1", comparisonResult: 1 }

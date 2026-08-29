@@ -4,10 +4,10 @@ framework: "Grafana"
 source_repo: "https://github.com/grafana/grafana.git"
 source_branch: "main"
 source_path: "docs/sources/alerting/alerting-rules/create-grafana-managed-rule.md"
-source_commit: "d18e58d33aa8741f08fbab4aa73bdaf1f04e3be5"
-source_commit_short: "d18e58d3"
-source_commit_date: "2026-07-25T13:50:43+02:00"
-generated_at: "2026-07-25T19:08:08.945627Z"
+source_commit: "5e3a02f81d2aadf4bf24fe49ed97d872556f5bf9"
+source_commit_short: "5e3a02f8"
+source_commit_date: "2026-08-29T10:58:19+09:00"
+generated_at: "2026-08-29T09:39:37.463782Z"
 ---
 ---
 aliases:
@@ -217,6 +217,8 @@ If you prefer to always use advanced configuration, you can disable the **Defaul
 ## Define query and condition
 
 Define a query to get the data you want to measure and a condition that needs to be met before an alert rule fires.
+
+Depending on the data source, the query editor offers a **Builder** and a **Code** option. **Builder** helps you construct a query with a visual interface. The **Builder** option is useful if you have limited experience with the query language, while **Code** lets you write the query directly for more control. Switch between them using the **Builder** and **Code** tabs on the query editor toolbar.
 
 The **Default** option allows to configure one query and one alert condition. The **Advanced** option allows multiple queries and expressions for more complex rule definitions.
 

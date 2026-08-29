@@ -1,57 +1,166 @@
 ---
 type: "Framework Learn Page"
-framework: "mongodb"
+framework: "MongoDB"
 source_repo: "https://github.com/mongodb/docs.git"
 source_branch: "main"
 source_path: "content/manual/manual/source/tutorial/create-chunks-in-sharded-cluster.txt"
-source_commit: "ab9db26ed3d11618cdb61516d8180337d8e3f679"
-source_commit_short: "ab9db26e"
-source_commit_date: "2026-07-24T16:22:46-06:00"
-generated_at: "2026-07-25T11:51:15Z"
+source_commit: "b9f2bc487a2878b65e3c1f80024bebab76954f27"
+source_commit_short: "b9f2bc48"
+source_commit_date: "2026-08-28T17:09:45-05:00"
+generated_at: "2026-08-29T09:39:19.642815Z"
 ---
-
-==================================
+.. _create-chunks-in-a-sharded-cluster:
+.. _create-ranges-in-a-sharded-cluster:
 
 # Create Ranges in a Sharded Cluster
 
-In most situations a `sharded cluster` will create, split, and distribute ranges automatically without user intervention. However, in some cases, MongoDB cannot create enough ranges or distribute data fast enough to support the required throughput.
+**meta:** :description: Optimize data ingestion in a sharded cluster by pre-splitting and distributing ranges using `moveRange` for improved throughput.
 
-For example, if you want to ingest a large volume of data into a cluster where you have inserts distributed across shards, pre-splitting the ranges of an empty sharded collection can improve throughput.
+.. default-domain:: mongodb
 
-> **Note:** Starting in MongoDB 6.0, the balancer does not distribute empty
-ranges. To pre-split the collection, use :dbcommand:`moveRange` to
-distribute the empty ranges across the shards in the cluster.
-`moveRange` automatically splits the range to be moved, meaning
-`moveRange` performs both splitting and moving. You don't need to
-manually split the range with :dbcommand:`split`.
+**contents:** On this page
+   :local:
+   :backlinks: none
+   :depth: 1
+   :class: singlecol
 
-Alternatively, by defining the `zones and zone ranges </core/zone-sharding>` before sharding an empty or a non-existing collection, the shard collection operation creates ranges for the defined zone ranges as well as any additional ranges to cover the entire range of the shard key values and performs an initial range distribution based on the zone ranges. For more information, see `initial-ranges-empty-collection`.
+In most situations a :term:`sharded cluster` will create, split, and
+distribute ranges automatically without user intervention. However, in
+some cases, MongoDB cannot create enough ranges or distribute data fast
+enough to support the required throughput.
 
-> **Warning:** Only pre-split ranges for an empty collection. Manually splitting
-ranges for a populated collection can lead to unpredictable range
-ranges and sizes as well as inefficient or ineffective balancing
-behavior.
+For example, if you want to ingest a large volume of data into a cluster
+where you have inserts distributed across shards, pre-splitting the
+ranges of an empty sharded collection can improve throughput.
+
+**note:** Starting in MongoDB 6.0, the balancer does not distribute empty
+   ranges. To pre-split the collection, use :dbcommand:`moveRange` to
+   distribute the empty ranges across the shards in the cluster.
+   ``moveRange`` automatically splits the range to be moved, meaning
+   ``moveRange`` performs both splitting and moving. You don't need to
+   manually split the range with :dbcommand:`split`.
+
+Alternatively, by defining the :doc:`zones
+and zone ranges </core/zone-sharding>` *before* sharding an empty or a
+non-existing collection, the shard collection operation creates ranges
+for the defined zone ranges as well as any additional ranges to cover
+the entire range of the shard key values and performs an initial range
+distribution based on the zone ranges. For more information, see
+:ref:`initial-ranges-empty-collection`.
+
+**warning:** Only pre-split ranges for an empty collection. Manually splitting
+   ranges for a populated collection can lead to unpredictable range
+   ranges and sizes as well as inefficient or ineffective balancing
+   behavior.
 
 ## Steps
 
-The following example shows how to manually generate and distribute ranges. The example uses a collection in the `sample.documents` namespace and shards that collection on the `email` field.
+The following example shows how to manually generate and distribute
+ranges. The example uses a collection in the ``sample.documents``
+namespace and shards that collection on the ``email`` field.
+
+**procedure:** :style: normal
+
+   .. step:: Define shard key ranges
+
+      Create a function to define shard key ranges. This example creates
+      ranges based on possible email addresses because ``email`` will be
+      used as the shard key.
+
+      .. code-block:: javascript
+
+         // Generate two character prefix email ranges.
+         function getRanges(shards) {
+            let ranges = [];
+
+            // The total number of prefix possibilities is 26 * 26 (aa to zz).
+            // We calculate the number of combinations to add in a range.
+            const totalCombinationsPerShard = 26 * 26 / shards.length;
+            let minKey = {
+               email: MinKey
+            };
+            let maxKey = {
+               email: MinKey
+            };
+
+            for(let i = 1; i <= shards.length; ++i) {
+               // 97 is lower case 'a' in ASCII.
+               let prefix = 97 + ((totalCombinationsPerShard*i)/26);
+               let suffix = 97 + ((totalCombinationsPerShard*i)%26);
+               let initialChars = String.fromCharCode(prefix) + String.fromCharCode(suffix);
+               
+               minKey = maxKey;
+               maxKey = {
+                  email: i !== shards.length ? initialChars : MaxKey
+               };
+
+               ranges.push({
+                  min: minKey,
+                  max: maxKey
+               });
+            }
+
+            return ranges;
+         }
+
+   .. step:: Shard the collection
+
+      To shard the ``sample.documents`` collection, run this command:
+
+      .. code-block:: javascript
+
+         db.adminCommand( {
+            shardCollection: 'sample.documents',
+            key: {
+               email: 1
+            }
+         } );
+
+      .. note::
+
+         Because the collection is empty, the ``shardCollection``
+         command automatically creates an index on the ``email`` field
+         to support the shard key.
+
+   .. step:: Allocate shards to defined ranges
+
+      To allocate the shards to the ranges defined in step 1, run the
+      following command:
+
+      .. code-block:: javascript
+
+         const shards = db.adminCommand({
+            listShards: 1
+         }).shards;
+
+         let ranges = getRanges(shards);
+
+         for (let i = 0; i < ranges.length; ++i) {
+            db.adminCommand({
+               moveRange: 'sample.documents',
+               min: ranges[i].min,
+               max: ranges[i].max,
+               toShard: shards[i]._id
+            });
+         }
 
 ## Results
 
-The `moveRange` command distributes the empty ranges across the shards in the cluster. The cluster is now optimized for bulk inserts.
+The ``moveRange`` command distributes the empty ranges across the shards
+in the cluster. The cluster is now optimized for bulk inserts.
 
 ## Next Steps
 
-To further improve performance, create additional indexes to support your application's common queries.
+To further improve performance, create additional indexes to support
+your application's common queries.
 
 ## Learn More
 
-- `bulk-write-sharded-collection`
+- :ref:`bulk-write-sharded-collection`
 - :method:`sh.balancerCollectionStatus()`
 - Initial ranges created and distributed by the sharding command,
-see `initial-ranges-empty-collection`.
-
+  see :ref:`initial-ranges-empty-collection`.
 - Balancer and automatic distribution of ranges across shards,
-see `sharding-balancing-internals` and `sharding-range-migration`.
-
-- Manually migrate ranges, see `<migrate-chunks-sharded-cluster>`.
+  see :ref:`sharding-balancing-internals` and
+  :ref:`sharding-range-migration`.
+- Manually migrate ranges, see :ref:`<migrate-chunks-sharded-cluster>`.

@@ -1,56 +1,373 @@
 ---
 type: "Framework Learn Page"
-framework: "mongodb"
+framework: "MongoDB"
 source_repo: "https://github.com/mongodb/docs.git"
 source_branch: "main"
 source_path: "content/manual/manual/source/core/queryable-encryption/install-library.txt"
-source_commit: "ab9db26ed3d11618cdb61516d8180337d8e3f679"
-source_commit_short: "ab9db26e"
-source_commit_date: "2026-07-24T16:22:46-06:00"
-generated_at: "2026-07-25T11:51:15Z"
+source_commit: "b9f2bc487a2878b65e3c1f80024bebab76954f27"
+source_commit_short: "b9f2bc48"
+source_commit_date: "2026-08-28T17:09:45-05:00"
+generated_at: "2026-08-29T09:39:19.778352Z"
 ---
+**facet:** :name: programming_language
+   :values: csharp, go, java, javascript/typescript, python
 
-================================================
+**meta:** :keywords: code example, node.js, compass
+
+.. _qe-csfle-install-library:
 
 # Install and Configure a Query Analysis Component
 
-MongoDB uses the {+shared-library+} (recommended) or the `mongocryptd` executable process to translate queries into encrypted queries, and to encrypt or decrypt data.
+**contents:** On this page
+   :local:
+   :backlinks: none
+   :depth: 1
+   :class: singlecol
+
+MongoDB uses the {+shared-library+} (recommended) or the ``mongocryptd`` executable
+process to translate queries into encrypted queries, and to encrypt or decrypt data.
 
 ## Before You Start
 
-Follow the preceding tasks to `install a {+qe+} compatible driver and dependencies <qe-install>` before continuing.
+Follow the preceding tasks to :ref:`install a {+qe+} compatible driver
+and dependencies <qe-install>` before continuing.
 
 ## Choose a Query Analysis Component
 
+.. _qe-reference-shared-library:
+
 ### {+shared-library+}
 
-The {+shared-library+} is a **dynamic library** that enables your client application to perform automatic encryption. A dynamic library is a set of functionality accessed by an application at runtime rather than compile time. The {+shared-library+} performs the following tasks:
+The {+shared-library+} is a **dynamic library** that enables your client
+application to perform automatic encryption. A dynamic library is a set
+of functionality accessed by an application at runtime rather than
+compile time. The {+shared-library+} performs the following tasks:
 
-- Reads the `{+enc-schema+} <qe-encryption-schema>` to determine which fields to encrypt or decrypt
+- Reads the :ref:`{+enc-schema+} <qe-encryption-schema>` to determine which fields to encrypt or decrypt
 - Prevents your application from executing unsupported operations on
-encrypted fields
+  encrypted fields
 
-The {+shared-library+} does not do any of the following:
+The {+shared-library+} *does not* do any of the following:
 
 - Perform data encryption or decryption
 - Access the encryption key material
 - Listen for data over the network
-The {+shared-library+} is a preferred alternative to `mongocryptd` and doesn't require you to start another process to perform automatic encryption.
+
+The {+shared-library+} is a preferred alternative to ``mongocryptd`` and doesn't require you to start another process to perform automatic encryption.
+
+.. _qe-reference-mongocryptd:
+.. _qe-mongocryptd:
 
 ### mongocryptd
 
-> **Important:** If you are starting a new project, use the {+shared-library+}. The
-{+shared-library+} replaces `mongocryptd` and does not require
-you to start a new process.
+**important:** Use the {+shared-library+}
 
-`mongocryptd` is installed with [MongoDB Enterprise Server]({+enterprise-download-link+})_.
+   If you are starting a new project, use the {+shared-library+}. The
+   {+shared-library+} replaces ``mongocryptd`` and does not require 
+   you to start a new process.
 
-When you create a MongoDB client with {+in-use-encryption+}, the `mongocryptd` process starts automatically by default.
+``mongocryptd`` is installed with `MongoDB Enterprise
+Server <{+enterprise-download-link+}>`__.
 
-.. include:: /includes/queryable-encryption/qe-facts-mongocryptd-process.rst
+When you create a MongoDB client with {+in-use-encryption+}, the 
+``mongocryptd`` process starts automatically by default.
+
+**include:** /includes/queryable-encryption/qe-facts-mongocryptd-process.rst
 
 ## Procedure
 
+.. composable-tutorial::
+   :options: encryption-component, language-mongocryptd-only
+   :defaults: crypt_shared, None
+
+   .. selected-content::
+      :selections: crypt_shared, None
+
+      .. _qe-csfle-shared-library-download:
+      
+      To download the {+shared-library+} from the `MongoDB Download
+      Center <https://www.mongodb.com/try/download/enterprise>`__, 
+      select the version and platform, then the library.
+
+      .. tip::
+
+         To view an expanded list of available releases and packages, see
+         `MongoDB Enterprise Downloads <https://www.mongodb.com/download-center/enterprise/releases>`__.
+
+      .. procedure::
+         :style: normal
+
+         .. step::
+            
+            In the :guilabel:`Version` dropdown, select ``{+shared-library-version-drop-down+}``.
+            
+         .. step::
+            
+            In the :guilabel:`Platform` dropdown, select your platform.
+
+         .. step::
+
+            In the :guilabel:`Package` dropdown, select ``crypt_shared``.
+
+         .. step::
+            
+            Click :guilabel:`Download`.
+      
+      .. _qe-csfle-configure-shared-library:
+      
+      To configure how your driver searches for the {+shared-library+},
+      use the following parameters:
+
+      .. list-table::
+         :header-rows: 1
+         :stub-columns: 1
+         :widths: 30 70
+
+         * - Name
+           - Description
+
+         * - cryptSharedLibPath
+           - Specifies the absolute path to the {+shared-library+}
+             package, {+shared-library-package+}. For example:
+
+             - **Linux:** ``/usr/local/lib/mongo_crypt_v1.so``
+             - **macOS:** ``/usr/local/lib/mongo_crypt_v1.dylib``
+             - **Windows:** ``C:\path\to\bin\mongo_crypt_v1.dll``
+
+             *Default*: ``undefined``
+
+         * - cryptSharedLibRequired
+           - Specifies if the driver must use the {+shared-library+}. If
+             ``true``, the driver returns an error if the
+             {+shared-library+} is unavailable. If ``false``, the driver
+             performs the following sequence of actions:
+            
+             #. Attempts to use the {+shared-library+}.
+             #. If the {+shared-library+} is unavailable, the driver
+                attempts to start and connect to ``mongocryptd``.
+
+             *Default*: ``false``
+
+      To view an example demonstrating how to configure these
+      parameters, see the :ref:`Quick Start <qe-quick-start>`.
+
+   .. selected-content::
+      :selections: mongocryptd, nodejs
+
+      .. procedure::
+         :style: normal
+
+         .. step::
+
+            Install ``mongocryptd``:
+
+            .. include:: /includes/queryable-encryption/qe-csfle-install-mongocryptd.rst
+
+         .. step::
+
+            Configure ``mongocryptd``:
+
+            .. include:: /includes/queryable-encryption/qe-csfle-configure-mongocryptd.rst
+
+### Examples
+
+      The following code-snippet sets the listening port configuration
+      of ``mongocryptd``:
+
+      .. code-block:: javascript
+
+          autoEncryption: {
+            ...
+            extraOptions: {
+              mongocryptdSpawnArgs: ["--port", "30000"],
+              mongocryptdURI: 'mongodb://localhost:30000',
+            }
+      
+      .. note::
+
+        In the NodeJS driver, the ``mongocryptdURI`` must match the listening port.
+
+      The following code-snippet sets the default timeout configuration
+      of ``mongocryptd``:
+
+      .. code-block:: javascript
+
+         autoEncryption: {
+            ...
+            extraOptions: {
+            mongocryptdSpawnArgs: ["--idleShutdownTimeoutSecs", "75"]
+            }
+
+   .. selected-content::
+      :selections: mongocryptd, java-sync
+
+      .. procedure::
+         :style: normal
+
+         .. step::
+
+            Install ``mongocryptd``:
+
+            .. include:: /includes/queryable-encryption/qe-csfle-install-mongocryptd.rst
+
+         .. step::
+
+            Configure ``mongocryptd``:
+
+            .. include:: /includes/queryable-encryption/qe-csfle-configure-mongocryptd.rst
+
+### Examples
+
+      The following code-snippet sets the listening port configuration
+      of ``mongocryptd``:
+
+      .. code-block:: java
+
+          List<String> spawnArgs = new ArrayList<String>();
+          spawnArgs.add("--port=30000");
+
+          Map<String, Object> extraOpts = new HashMap<String, Object>();
+          extraOpts.put("mongocryptdSpawnArgs", spawnArgs);
+
+          AutoEncryptionSettings autoEncryptionSettings = AutoEncryptionSettings.builder()
+              ...
+              .extraOptions(extraOpts);
+
+      The following code-snippet sets the default timeout configuration
+      of ``mongocryptd``:
+
+      .. code-block:: java
+
+          List<String> spawnArgs = new ArrayList<String>();
+          spawnArgs.add("--idleShutdownTimeoutSecs")
+              .add("60");
+
+          Map<String, Object> extraOpts = new HashMap<String, Object>();
+          extraOpts.put("mongocryptdSpawnArgs", spawnArgs);
+
+          AutoEncryptionSettings autoEncryptionSettings = AutoEncryptionSettings.builder()
+              ...
+              .extraOptions(extraOpts);
+
+   .. selected-content::
+      :selections: mongocryptd, python
+
+      .. procedure::
+         :style: normal
+
+         .. step::
+
+            Install ``mongocryptd``:
+
+            .. include:: /includes/queryable-encryption/qe-csfle-install-mongocryptd.rst
+
+         .. step::
+
+            Configure ``mongocryptd``:
+
+            .. include:: /includes/queryable-encryption/qe-csfle-configure-mongocryptd.rst
+
+### Examples
+
+      The following code-snippet sets the listening port configuration
+      of ``mongocryptd``:
+
+      .. code-block:: python
+
+          auto_encryption_opts = AutoEncryptionOpts(mongocryptd_spawn_args=['--port=30000'])
+
+      The following code-snippet sets the default timeout configuration
+      of ``mongocryptd``:
+
+      .. code-block:: python
+
+          auto_encryption_opts = AutoEncryptionOpts(mongocryptd_spawn_args=['--idleShutdownTimeoutSecs=75'])
+
+   .. selected-content::
+      :selections: mongocryptd, csharp
+
+      .. procedure::
+         :style: normal
+
+         .. step::
+
+            Install ``mongocryptd``:
+
+            .. include:: /includes/queryable-encryption/qe-csfle-install-mongocryptd.rst
+
+         .. step::
+
+            Configure ``mongocryptd``:
+
+            .. include:: /includes/queryable-encryption/qe-csfle-configure-mongocryptd.rst
+
+### Examples
+
+      The following code-snippet sets the listening port configuration
+      of ``mongocryptd``:
+
+      .. code-block:: csharp
+
+          var extraOptions = new Dictionary<string, object>()
+          {
+              { "mongocryptdSpawnArgs", new [] { "--port=30000" } },
+          };
+          autoEncryptionOptions.With(extraOptions: extraOptions);
+
+      The following code-snippet sets the default timeout configuration
+      of ``mongocryptd``:
+
+      .. code-block:: csharp
+
+          var extraOptions = new Dictionary<string, object>()
+          {
+              { "idleShutdownTimeoutSecs", 60 },
+          };
+          autoEncryptionOptions.With(extraOptions: extraOptions);
+
+   .. selected-content::
+      :selections: mongocryptd, go
+
+      .. procedure::
+         :style: normal
+
+         .. step::
+
+            Install ``mongocryptd``:
+
+            .. include:: /includes/queryable-encryption/qe-csfle-install-mongocryptd.rst
+
+         .. step::
+
+            Configure ``mongocryptd``:
+
+            .. include:: /includes/queryable-encryption/qe-csfle-configure-mongocryptd.rst
+
+### Examples
+
+      The following code-snippet sets the listening port configuration
+      of ``mongocryptd``:
+
+      .. code-block:: go
+
+          extraOptions := map[string]interface{}{
+              "mongocryptdSpawnArgs": []string{
+                  "--port=30000",
+              },
+          }
+
+      The following code-snippet sets the default timeout configuration
+      of ``mongocryptd``:
+
+      .. code-block:: go
+
+          extraOptions := map[string]interface{}{
+              "mongocryptdSpawnArgs": []string{
+                  "--idleShutdownTimeoutSecs=75",
+              },
+          }
+
 ## Next Steps
 
-After installing a query analysis component, `create a {+cmk-long+} <qe-create-cmk>` in your {+kms-long+} of choice.
+After installing a query analysis component, :ref:`create a {+cmk-long+} <qe-create-cmk>`
+in your {+kms-long+} of choice.

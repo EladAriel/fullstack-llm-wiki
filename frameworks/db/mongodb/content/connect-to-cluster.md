@@ -1,61 +1,81 @@
 ---
 type: "Framework Learn Page"
-framework: "mongodb"
+framework: "MongoDB"
 source_repo: "https://github.com/mongodb/docs.git"
 source_branch: "main"
 source_path: "content/manual/manual/source/connect-to-cluster.txt"
-source_commit: "ab9db26ed3d11618cdb61516d8180337d8e3f679"
-source_commit_short: "ab9db26e"
-source_commit_date: "2026-07-24T16:22:46-06:00"
-generated_at: "2026-07-25T11:51:15Z"
+source_commit: "b9f2bc487a2878b65e3c1f80024bebab76954f27"
+source_commit_short: "b9f2bc48"
+source_commit_date: "2026-08-28T17:09:45-05:00"
+generated_at: "2026-08-29T09:39:19.480332Z"
 ---
-
 :orphan:
 
-======================
+.. _connect-to-database-deployment:
 
 # Connect to a Cluster
 
-Learn how to connect to MongoDB clusters whether they are hosted on {+atlas+} or self-managed.
+**meta:** :description: Connect to MongoDB clusters hosted on Atlas or self-managed deployments.
+   :keywords: connect, connection string, atlas, self-hosted, deployment
+
+**facet:** :name: genre
+   :values: tutorial
+
+**contents:** On this page
+   :local:
+   :backlinks: none
+   :depth: 1
+   :class: singlecol
+
+Learn how to connect to MongoDB clusters whether they are hosted on
+{+atlas+} or self-managed.
+
+.. _connection-string-formats:
 
 ## Connection String Formats
 
-To connect to your deployment, you need a connection string. The connection string format depends on whether you connect to a replica set, sharded cluster, or standalone deployment.
+To connect to your deployment, you need a connection string. The
+connection string format depends on whether you connect to a replica
+set, sharded cluster, or standalone deployment.
 
 **Replica Set:**
 
-```bash
-mongodb+srv://myDatabaseUser:D1fficultP%40ssw0rd@mongodb0.example.com/?authSource=admin&replicaSet=myRepl
-```
+.. code-block:: bash
+
+   mongodb+srv://myDatabaseUser:D1fficultP%40ssw0rd@mongodb0.example.com/?authSource=admin&replicaSet=myRepl
 
 **Sharded Cluster:**
 
-```bash
-mongodb+srv://myDatabaseUser:D1fficultP%40ssw0rd@mongos0.example.com/?authSource=admin
-```
+.. code-block:: bash
+
+   mongodb+srv://myDatabaseUser:D1fficultP%40ssw0rd@mongos0.example.com/?authSource=admin
 
 **Standalone:**
 
-```bash
-mongodb+srv://myDatabaseUser:D1fficultP%40ssw0rd@mongodb0.example.com/?authSource=admin
-```
+.. code-block:: bash
 
-.. include:: /includes/fact-pct-encode-uri.rst
+   mongodb+srv://myDatabaseUser:D1fficultP%40ssw0rd@mongodb0.example.com/?authSource=admin
 
-For detailed information about connection string formats and options, see `find-connection-string`.
+**include:** /includes/fact-pct-encode-uri.rst
+
+For detailed information about connection string formats and options,
+see :ref:`find-connection-string`.
 
 ## Get Your Connection String
 
-How you obtain your connection string depends on whether your deployment is hosted on {+atlas+} or self-managed.
+How you obtain your connection string depends on whether your
+deployment is hosted on {+atlas+} or self-managed.
 
 ### {+atlas+} Deployments
 
-To connect to a cluster hosted on {+atlas+}, see `atlas-connect-to-deployment`, which covers how to:
+To connect to a cluster hosted on {+atlas+}, see
+:ref:`atlas-connect-to-deployment`, which covers how to:
 
 - Get your connection string via the {+atlas-cli+} or {+atlas-ui+}.
 - Configure your IP access list.
 - Create database users.
-- Use various connection methods including drivers, Compass, `mongosh`, and more.
+- Use various connection methods including drivers, Compass, ``mongosh``, and more.
+
 ### Self-Managed Deployments
 
 Before you connect to a self-managed deployment:
@@ -63,21 +83,26 @@ Before you connect to a self-managed deployment:
 - Ensure your MongoDB deployment is running and accessible.
 - Create a database user with the appropriate privileges.
 - Verify network connectivity between your client and the MongoDB deployment.
-To construct your connection string, use the appropriate `connection string format <connection-string-formats>` for your deployment topology.
+
+To construct your connection string, use the appropriate
+:ref:`connection string format <connection-string-formats>` for your
+deployment topology.
 
 ### Connection Methods
 
-After you have your connection string, you can connect using the following methods:
+After you have your connection string, you can connect using the following
+methods:
 
-- `connect-via-driver` - MongoDB drivers for various programming languages
-- `atlas-connect-via-compass` - MongoDB Compass GUI
-- `connect-mongo-shell` - `mongosh`
-- `mongodb-for-vscode` - MongoDB for VS Code
-- `bi-connection` - MongoDB BI Connector
-- `Command Line Tools <command-line-tools>` - mongodump, mongorestore, and other tools
+- :ref:`connect-via-driver` - MongoDB drivers for various programming languages
+- :ref:`atlas-connect-via-compass` - MongoDB Compass GUI
+- :ref:`connect-mongo-shell` - ``mongosh``
+- :ref:`mongodb-for-vscode` - MongoDB for VS Code
+- :ref:`bi-connection` - MongoDB BI Connector
+- :ref:`Command Line Tools <command-line-tools>` - mongodump, mongorestore, and other tools
+
 ## Learn More
 
-- `Connection String Formats <find-connection-string>`
-- `Connection String Options <connections-connection-options>`
-- `test-failover`
-- `connection-limits`
+- :ref:`Connection String Formats <find-connection-string>`
+- :ref:`Connection String Options <connections-connection-options>`
+- :ref:`test-failover`
+- :ref:`connection-limits`

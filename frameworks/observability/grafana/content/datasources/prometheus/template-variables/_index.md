@@ -4,10 +4,10 @@ framework: "Grafana"
 source_repo: "https://github.com/grafana/grafana.git"
 source_branch: "main"
 source_path: "docs/sources/datasources/prometheus/template-variables/_index.md"
-source_commit: "d18e58d33aa8741f08fbab4aa73bdaf1f04e3be5"
-source_commit_short: "d18e58d3"
-source_commit_date: "2026-07-25T13:50:43+02:00"
-generated_at: "2026-07-25T19:08:08.987136Z"
+source_commit: "5e3a02f81d2aadf4bf24fe49ed97d872556f5bf9"
+source_commit_short: "5e3a02f8"
+source_commit_date: "2026-08-29T10:58:19+09:00"
+generated_at: "2026-08-29T09:39:37.521198Z"
 ---
 ---
 aliases:
@@ -28,7 +28,7 @@ labels:
 menuTitle: Template variables
 title: Prometheus template variables
 weight: 400
-review_date: 2026-05-07
+review_date: 2026-08-04
 ---
 
 # Prometheus template variables
@@ -50,11 +50,11 @@ Query variables query Prometheus to populate dropdown values. When creating a qu
 | **Series query**  | `metric`, `label`, or both              | Returns time series matching the specified metric and/or label selectors.       | Metric: `http_requests_total`, Label: `job="api"`                                       |
 | **Classic query** | query string                            | _Deprecated._ Legacy syntax using functions like `label_values(metric, label)`. | `label_values(http_requests_total, job)`                                                |
 
-For details on metric names, label names, and label values, refer to the [Prometheus data model](http://prometheus.io/docs/concepts/data_model/#metric-names-and-labels).
+For details on metric names, label names, and label values, refer to the [Prometheus data model](https://prometheus.io/docs/concepts/data_model/#metric-names-and-labels).
 
 ### Query type examples
 
-**Label values — Populate a dropdown with all jobs:**
+**Label values (populate a drop-down with all jobs):**
 
 1. Create a new variable with **Type: Query**.
 1. Select your Prometheus data source.
@@ -64,15 +64,15 @@ For details on metric names, label names, and label values, refer to the [Promet
 
 The variable dropdown now shows all unique `job` label values.
 
-**Label values — Filtered by metric:**
+**Label values (filtered by metric):**
 
 Set **Label** to `instance` and **Metric** to `node_cpu_seconds_total` to show only instances that report CPU metrics.
 
-**Metrics — Find available metrics by pattern:**
+**Metrics (find available metrics by pattern):**
 
 Set **Query type** to `Metrics` and enter `http_.*_total` in the **Metric** field to populate the dropdown with all HTTP counter metrics.
 
-**Query result — Dynamic top-N filtering:**
+**Query result (dynamic top-N filtering):**
 
 Set **Query type** to `Query result` and enter:
 
@@ -89,17 +89,17 @@ Set **Refresh** to `On time range change` so the top 5 instances update as you c
 | Option          | Description                                                                                                                                                                                                      |
 | --------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
 | **Data source** | The Prometheus data source to query.                                                                                                                                                                             |
-| **Regex**       | Optional regular expression to extract a portion of the returned values. Use capture groups — for example, `/.*instance="([^"]+)".*/` extracts the instance label value from a series string.                    |
+| **Regex**       | Optional regular expression to extract a portion of the returned values. Use capture groups. For example, `/.*instance="([^"]+)".*/` extracts the instance label value from a series string.                     |
 | **Sort**        | Sort order for dropdown values: `Disabled`, `Alphabetical (asc)`, `Alphabetical (desc)`, `Numerical (asc)`, `Numerical (desc)`, `Alphabetical (case-insensitive, asc)`, `Alphabetical (case-insensitive, desc)`. |
 | **Refresh**     | When to update values: `On dashboard load` or `On time range change`. Use `On time range change` for variables that depend on `$__range`.                                                                        |
 
 ### Selection options
 
-- **Multi-value** — Allows selecting multiple values at once. Grafana joins them with a pipe (`|`) for regular expression matching.
-- **Include All option** — Adds an "All" option that selects every value. Combined with multi-value, this generates a regular expression like `value1|value2|value3`.
+- **Multi-value:** Allows selecting multiple values at once. Grafana joins them with a pipe (`|`) for regular expression matching.
+- **Include All option:** Adds an "All" option that selects every value. Combined with multi-value, this generates a regular expression like `value1|value2|value3`.
 
 {{< admonition type="note" >}}
-When **Multi-value** or **Include All** is enabled, use `=~` (regular expression match) instead of `=` (exact match) in your queries, since the variable value becomes a regex pattern.
+When **Multi-value** or **Include All** is enabled, use `=~` (regular expression match) instead of `=` (exact match) in your queries, since the variable value becomes a regular expression pattern.
 {{< /admonition >}}
 
 **Example with multi-value:**
@@ -190,7 +190,7 @@ For `$__rate_interval` to produce reliable results, the scrape interval must mat
 
 - **Recording rules with fixed intervals:** If you use `$__rate_interval` in a recording rule query, the interval depends on the evaluation context. For recording rules, use a fixed interval (for example, `[5m]`) rather than `$__rate_interval`.
 
-For troubleshooting `$__rate_interval` issues, refer to [`$__rate_interval` returns no data or incorrect values](https://grafana.com/docs/grafana/<GRAFANA_VERSION>/datasources/prometheus/troubleshooting/#rate_interval-returns-no-data-or-incorrect-values).
+For troubleshooting `$__rate_interval` issues, refer to [Rate interval returns no data or incorrect values](https://grafana.com/docs/grafana/<GRAFANA_VERSION>/datasources/prometheus/troubleshooting/#rate_interval-returns-no-data-or-incorrect-values).
 
 For additional background, refer to [$\_\_rate_interval for Prometheus rate queries that just work](https://grafana.com/blog/2020/09/28/new-in-grafana-7.2-__rate_interval-for-prometheus-rate-queries-that-just-work/).
 
@@ -210,7 +210,13 @@ If **Multi-value** or **Include All** is enabled, the variable value becomes a r
 
 ## Filters variable
 
-Prometheus supports the [Filters](https://grafana.com/docs/grafana/<GRAFANA_VERSION>/dashboards/variables/add-template-variables/#add-ad-hoc-filters) variable type (formerly called "ad hoc filters"), which lets dashboard viewers dynamically add label filters without editing queries.
+<!-- vale Grafana.WordList = NO -->
+<!-- vale Grafana.Spelling = NO -->
+
+Prometheus supports the [Filters](https://grafana.com/docs/grafana/<GRAFANA_VERSION>/visualizations/dashboards/build-dashboards/filter-group-by/) variable type (formerly called "ad hoc filters"), which lets dashboard viewers dynamically add label filters without editing queries.
+
+<!-- vale Grafana.Spelling = YES -->
+<!-- vale Grafana.WordList = YES -->
 
 {{< admonition type="note" >}}
 The **Filter and Group by** feature extends the Filters variable by adding grouping support for Prometheus and Loki data sources. For more information, refer to [Filter and Group by](https://grafana.com/docs/grafana/<GRAFANA_VERSION>/visualizations/dashboards/build-dashboards/filter-group-by/).
@@ -232,6 +238,6 @@ Filters are applied to all queries using the selected data source. You cannot se
 
 ## Related resources
 
-- [Query editor](https://grafana.com/docs/grafana/<GRAFANA_VERSION>/datasources/prometheus/query-editor/) — Use variables in PromQL queries.
-- [Annotations](https://grafana.com/docs/grafana/<GRAFANA_VERSION>/datasources/prometheus/annotations/) — Use template variables in annotation queries.
-- [Troubleshooting](https://grafana.com/docs/grafana/<GRAFANA_VERSION>/datasources/prometheus/troubleshooting/) — Resolve variable-related query issues.
+- [Query editor](https://grafana.com/docs/grafana/<GRAFANA_VERSION>/datasources/prometheus/query-editor/): Use variables in PromQL queries.
+- [Annotations](https://grafana.com/docs/grafana/<GRAFANA_VERSION>/datasources/prometheus/annotations/): Use template variables in annotation queries.
+- [Troubleshooting](https://grafana.com/docs/grafana/<GRAFANA_VERSION>/datasources/prometheus/troubleshooting/): Resolve variable-related query issues.

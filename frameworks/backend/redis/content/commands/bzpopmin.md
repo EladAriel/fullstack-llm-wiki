@@ -1,14 +1,15 @@
 ---
 type: "Framework Learn Page"
-framework: "redis"
+framework: "Redis"
 source_repo: "https://github.com/redis/docs.git"
 source_branch: "main"
 source_path: "content/commands/bzpopmin.md"
-source_commit: "9d30f68c3dad1a6b3b7d30fe604b911348ce8152"
-source_commit_short: "9d30f68c"
-source_commit_date: "2026-07-24T10:52:10-07:00"
-generated_at: "2026-07-25T11:51:22Z"
+source_commit: "f8693349287b0efbef3c865b6f6a2aceca88594d"
+source_commit_short: "f869334"
+source_commit_date: "2026-08-28T10:01:19-05:00"
+generated_at: "2026-08-29T09:38:55.066140Z"
 ---
+# Bzpopmin
 
 ---
 acl_categories:
@@ -87,11 +88,9 @@ non-empty, with the given keys being checked in the order that they are given.
 The `timeout` argument is interpreted as a double value specifying the maximum
 number of seconds to block. A timeout of zero can be used to block indefinitely.
 
-See the [BLPOP documentation][cl] for the exact semantics, since `BZPOPMIN` is
+See the [BLPOP documentation]({{< relref "/commands/blpop" >}}) for the exact semantics, since `BZPOPMIN` is
 identical to [`BLPOP`]({{< relref "/commands/blpop" >}}) with the only difference being the data structure being
 popped from.
-
-[cl]: /commands/blpop
 
 ## Required arguments
 

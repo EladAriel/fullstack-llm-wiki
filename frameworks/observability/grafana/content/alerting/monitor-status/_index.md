@@ -4,10 +4,10 @@ framework: "Grafana"
 source_repo: "https://github.com/grafana/grafana.git"
 source_branch: "main"
 source_path: "docs/sources/alerting/monitor-status/_index.md"
-source_commit: "d18e58d33aa8741f08fbab4aa73bdaf1f04e3be5"
-source_commit_short: "d18e58d3"
-source_commit_date: "2026-07-25T13:50:43+02:00"
-generated_at: "2026-07-25T19:08:08.943031Z"
+source_commit: "5e3a02f81d2aadf4bf24fe49ed97d872556f5bf9"
+source_commit_short: "5e3a02f8"
+source_commit_date: "2026-08-29T10:58:19+09:00"
+generated_at: "2026-08-29T09:39:37.465196Z"
 ---
 ---
 aliases:
@@ -42,7 +42,9 @@ refs:
 
 Alerts and alert notifications should provide key information to help alert responders and incident participants understand what happened in their system and how to respond.
 
-Grafana Alerting offers the ability to monitor your alerts and manage your alerting setup. You can get an overview of your alerts, track the history of alert states, and monitor notification statuses. These can help you start investigating alert issues within Grafana and improve the reliability of your alerting implementation.
+Grafana Alerting offers the ability to monitor your alerts and manage your alerting setup. You can get an overview of your alerts, track the history of alert states, and review notifications that were already sent. These can help you start investigating alert issues within Grafana and improve the reliability of your alerting implementation.
+
+The **History** page includes separate tabs for alert state changes and sent notifications.
 
 {{< figure src="/media/docs/alerting/alert-history-page.png" max-width="750px" alt="History page in Grafana Alerting" >}}
 

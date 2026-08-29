@@ -1,55 +1,137 @@
 ---
 type: "Framework Learn Page"
-framework: "postgres"
+framework: "PostgreSQL"
 source_repo: "https://github.com/postgres/postgres.git"
 source_branch: "master"
 source_path: "doc/src/sgml/ref/create_tsconfig.sgml"
-source_commit: "38afc3dcb25c45b744d4025029ce0a6c90b7059f"
-source_commit_short: "38afc3dc"
-source_commit_date: "2026-07-25T19:08:27+09:00"
-generated_at: "2026-07-25T11:50:59Z"
+source_commit: "6c5f1d6074208146930b67c2054509c3e82f6f7f"
+source_commit_short: "6c5f1d6"
+source_commit_date: "2026-08-28T23:24:47+02:00"
+generated_at: "2026-08-29T09:39:24.542543Z"
 ---
-
 CREATE TEXT SEARCH CONFIGURATION
+ 
 
-CREATE TEXT SEARCH CONFIGURATION
-7
-SQL - Language Statements
+ 
+  
+# CREATE TEXT SEARCH CONFIGURATION
 
-CREATE TEXT SEARCH CONFIGURATION
-define a new text search configuration
+  7
+  SQL - Language Statements
+ 
 
-```
+ 
+  
+# CREATE TEXT SEARCH CONFIGURATION
+
+  define a new text search configuration
+ 
+
+ 
+
 CREATE TEXT SEARCH CONFIGURATION name (
     PARSER = parser_name |
     COPY = source_config
 )
-```
 
-## Description
+ 
 
-`CREATE TEXT SEARCH CONFIGURATION` creates a new text search configuration. A text search configuration specifies a text search parser that can divide a string into tokens, plus dictionaries that can be used to determine which tokens are of interest for searching.
+ 
+  
+# Description
 
-If only the parser is specified, then the new text search configuration initially has no mappings from token types to dictionaries, and therefore will ignore all words. Subsequent `ALTER TEXT SEARCH CONFIGURATION` commands must be used to create mappings to make the configuration useful. Alternatively, an existing text search configuration can be copied.
+  
+   CREATE TEXT SEARCH CONFIGURATION creates a new text
+   search configuration.  A text search configuration specifies a text
+   search parser that can divide a string into tokens, plus dictionaries
+   that can be used to determine which tokens are of interest for searching.
+  
 
-If a schema name is given then the text search configuration is created in the specified schema. Otherwise it is created in the current schema.
+  
+   If only the parser is specified, then the new text search configuration
+   initially has no mappings from token types to dictionaries, and therefore
+   will ignore all words.  Subsequent ALTER TEXT SEARCH
+   CONFIGURATION commands must be used to create mappings to
+   make the configuration useful.  Alternatively, an existing text search
+   configuration can be copied.
+  
 
-The user who defines a text search configuration becomes its owner.
+  
+   If a schema name is given then the text search configuration is created in
+   the specified schema.  Otherwise it is created in the current schema.
+  
 
-Refer to `textsearch` for further information.
+  
+   The user who defines a text search configuration becomes its owner.
+  
 
-## Parameters
+  
+   Refer to  for further information.
+  
 
-- The name of the text search configuration to be created. The name can be schema-qualified.
-- The name of the text search parser to use for this configuration.
-- The name of an existing text search configuration to copy.
+ 
 
-## Notes
+ 
+  
+# Parameters
 
-The `PARSER` and `COPY` options are mutually exclusive, because when an existing configuration is copied, its parser selection is copied too.
+  
+   
+    name
+    
+     
+      The name of the text search configuration to be created.  The name can be
+      schema-qualified.
+     
 
-## Compatibility
+    
+   
 
-There is no `CREATE TEXT SEARCH CONFIGURATION` statement in the SQL standard.
+   
+    parser_name
+    
+     
+      The name of the text search parser to use for this configuration.
+     
 
-## See Also
+    
+   
+
+   
+    source_config
+    
+     
+      The name of an existing text search configuration to copy.
+     
+
+    
+   
+  
+ 
+
+ 
+  
+# Notes
+
+  
+   The PARSER and COPY options are mutually
+   exclusive, because when an existing configuration is copied, its
+   parser selection is copied too.
+  
+
+ 
+
+ 
+  
+# Compatibility
+
+  
+   There is no CREATE TEXT SEARCH CONFIGURATION statement
+   in the SQL standard.
+  
+
+ 
+
+ 
+  
+# See Also

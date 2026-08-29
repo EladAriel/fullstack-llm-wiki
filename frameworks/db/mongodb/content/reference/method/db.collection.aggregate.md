@@ -1,72 +1,151 @@
 ---
 type: "Framework Learn Page"
-framework: "mongodb"
+framework: "MongoDB"
 source_repo: "https://github.com/mongodb/docs.git"
 source_branch: "main"
 source_path: "content/manual/manual/source/reference/method/db.collection.aggregate.txt"
-source_commit: "ab9db26ed3d11618cdb61516d8180337d8e3f679"
-source_commit_short: "ab9db26e"
-source_commit_date: "2026-07-24T16:22:46-06:00"
-generated_at: "2026-07-25T11:51:15Z"
+source_commit: "b9f2bc487a2878b65e3c1f80024bebab76954f27"
+source_commit_short: "b9f2bc48"
+source_commit_date: "2026-08-28T17:09:45-05:00"
+generated_at: "2026-08-29T09:39:19.997884Z"
 ---
-
-==========================================
-
 # db.collection.aggregate() (mongosh method)
 
-.. include:: /includes/wayfinding/mongosh-method-aggregate.rst
+.. default-domain:: mongodb
+
+**meta:** :description: Use the db.collection.aggregate() method to calculate aggregate values for data in a collection or view, process documents, and return computed results.
+   
+**facet:** :name: programming_language 
+   :values: shell
+
+**contents:** On this page
+   :local:
+   :backlinks: none
+   :depth: 1
+   :class: singlecol
+
+**include:** /includes/wayfinding/mongosh-method-aggregate.rst
 
 ## Definition
 
+**method:** db.collection.aggregate(pipeline, options)
+   
+   Calculates aggregate values for the data in a collection or a :ref:`view <views-landing-page>`.
+
+   :returns:
+
+      - A :ref:`cursor<cursors>` for the documents produced by the final stage of
+        the aggregation pipeline.
+
+      - If the pipeline includes the ``explain`` option, the query returns 
+        a document that provides details on the processing of the 
+        aggregation operation.
+
+      - If the pipeline includes the :pipeline:`$out` or
+        :pipeline:`$merge` operators, the query returns an empty cursor.
+
 ## Compatibility
 
-.. include:: /includes/fact-compatibility.rst
+.. |operator-method| replace:: ``db.collection.aggregate()``
+
+**include:** /includes/fact-compatibility.rst
 
 ## Syntax
 
-`db.collection.aggregate()` has the following form:
+``db.collection.aggregate()`` has the following form:
 
-```javascript
-db.collection.aggregate( <pipeline>, <options> )
-```
+.. code-block:: javascript
+
+   db.collection.aggregate( <pipeline>, <options> )
 
 ### Parameters
 
-`db.collection.aggregate()` takes the following parameters:
+``db.collection.aggregate()`` takes the following parameters:
+
+.. list-table::
+   :header-rows: 1
+   :widths: 20 20 80
+
+   * - Parameter
+     - Type
+     - Description
+
+   * - ``pipeline``
+     - array
+     - A sequence of data aggregation operations or stages. See the
+       :ref:`aggregation pipeline operators <aggregation-pipeline>` 
+       for details.
+        
+       The method can still accept the pipeline stages as separate
+       arguments instead of as elements in an array; however, if you do
+       not specify the ``pipeline`` as an array, you cannot specify the
+       ``options`` parameter.
+   
+   * - ``options``
+     - document
+     - Optional. Additional options that ``aggregate()`` passes
+       to the :dbcommand:`aggregate` command. Available only if you
+       specify the ``pipeline`` as an array. To see available options,
+       see `AggregateOptions <https://mongodb.github.io/node-mongodb-native/Next/interfaces/AggregateOptions.html>`__. 
 
 ## Behavior
 
 ### Error Handling
 
-.. include:: /includes/fact-agg-helper-exception.rst
+**include:** /includes/fact-agg-helper-exception.rst
 
 ### Cursor Behavior
 
-In :binary:`~bin.mongosh`, if the `aggregate()` cursor is not assigned to a variable using the `var` keyword, :binary:`~bin.mongosh` automatically iterates the cursor up to 20 times. See `/tutorial/iterate-a-cursor` for handling cursors in :binary:`~bin.mongosh`.
+In :binary:`~bin.mongosh`, if the ``aggregate()`` cursor is not
+assigned to a variable using the ``var`` keyword,
+:binary:`~bin.mongosh` automatically iterates the cursor up to
+20 times. See
+:doc:`/tutorial/iterate-a-cursor` for handling cursors in
+:binary:`~bin.mongosh`.
 
-Cursors returned from aggregation only supports cursor methods that operate on evaluated cursors (i.e. cursors whose first batch has been retrieved), such as the following methods:
+Cursors returned from aggregation only supports cursor methods that
+operate on evaluated cursors (i.e. cursors whose first batch has been
+retrieved), such as the following methods:
+
+**hlist:** :columns: 2
+
+   * :method:`cursor.hasNext()`
+   * :method:`cursor.next()`
+   * :method:`cursor.toArray()`
+   * :method:`cursor.forEach()`
+   * :method:`cursor.map()`
+   * :method:`cursor.objsLeftInBatch()`
+   * :method:`cursor.itcount()`
+   * :method:`cursor.pretty()`
 
 For more information, see:
 
-- `aggregation-pipeline`
-- `/reference/aggregation`
-- `/core/aggregation-pipeline-limits`
+- :ref:`aggregation-pipeline`
+- :doc:`/reference/aggregation`
+- :doc:`/core/aggregation-pipeline-limits`
 - :dbcommand:`aggregate`
+
 ### Sessions
 
-For cursors created inside a session, you cannot call :dbcommand:`getMore` outside the session.
+For cursors created inside a session, you cannot call
+:dbcommand:`getMore` outside the session.
 
-Similarly, for cursors created outside of a session, you cannot call :dbcommand:`getMore` inside a session.
+Similarly, for cursors created outside of a session, you cannot call
+:dbcommand:`getMore` inside a session.
 
-Session Idle Timeout ````````````````````
+### Session Idle Timeout
 
-.. include:: /includes/extracts/sessions-cursor-timeout.rst
+**include:** /includes/extracts/sessions-cursor-timeout.rst
 
-For operations that return a cursor, if the cursor may be idle for longer than 30 minutes, issue the operation within an explicit session using :method:`Mongo.startSession()` and periodically refresh the session using the :dbcommand:`refreshSessions` command. See :limit:`Session Idle Timeout` for more information.
+For operations that return a cursor, if the cursor may be idle for
+longer than 30 minutes, issue the operation within an explicit session
+using :method:`Mongo.startSession()` and periodically refresh the
+session using the :dbcommand:`refreshSessions` command. See
+:limit:`Session Idle Timeout` for more information.
 
 ### Transactions
 
-.. include:: /includes/extracts/transactions-supported-operation.rst
+**include:** /includes/extracts/transactions-supported-operation.rst
 
 However, the following stages are not allowed within transactions:
 
@@ -78,151 +157,209 @@ However, the following stages are not allowed within transactions:
 - :pipeline:`$out`
 - :pipeline:`$merge`
 - :pipeline:`$planCacheStats`
-You also cannot specify the `explain` option.
 
-.. include:: /includes/extracts/transactions-operations-getMore.rst
+You also cannot specify the ``explain`` option.
 
-.. include:: /includes/extracts/transactions-usage.rst
+**include:** /includes/extracts/transactions-operations-getMore.rst
+
+**include:** /includes/extracts/transactions-usage.rst
+
+.. |operation| replace:: ``aggregate()``
 
 ### Client Disconnection
 
-For `aggregate()` operations that do not include the :pipeline:`$out` or :pipeline:`$merge` stages:
+For ``aggregate()`` operations that do not include the
+:pipeline:`$out` or :pipeline:`$merge` stages:
 
-.. include:: /includes/extracts/4.2-changes-disconnect.rst
+**include:** /includes/extracts/4.2-changes-disconnect.rst
 
 ### Query Settings
 
-.. include:: /includes/persistent-query-settings-info-for-queries.rst
+**include:** /includes/persistent-query-settings-info-for-queries.rst
 
 ## Examples
 
-.. include:: /includes/sample-data-usage.rst
+**include:** /includes/sample-data-usage.rst
 
-.. include:: /includes/sample-data-additional-fields-note.rst
+**include:** /includes/sample-data-additional-fields-note.rst
 
-.. include:: /includes/agg-sample-documents.rst
+**include:** /includes/agg-sample-documents.rst
 
 ### Group by and Calculate a Sum
 
 The following aggregation operation:
 
 - Selects movies with an IMDB rating greater than 8.5
-- Groups the matching movies by the `year` field
-- Calculates the `averageRating` for each `year` from the average of the
-`imdb.rating` field
+- Groups the matching movies by the ``year`` field
+- Calculates the ``averageRating`` for each ``year`` from the average of the
+  ``imdb.rating`` field
+- Sorts the results by the ``averageRating`` field in descending order
 
-- Sorts the results by the `averageRating` field in descending order
+**literalinclude:** /code-examples/tested/command-line/mongosh/aggregation/pipelines/match-group-sort-limit/run-pipeline.snippet.match-group-sort-limit.js
+   :language: javascript
+   :category: usage example
+
 The operation returns a cursor with the following documents:
 
-.. include:: /includes/note-mongo-shell-automatically-iterates-cursor.rst
+**literalinclude:** /code-examples/tested/command-line/mongosh/aggregation/pipelines/match-group-sort-limit/output.sh
+   :language: json
+   :copyable: false
+
+**include:** /includes/note-mongo-shell-automatically-iterates-cursor.rst
+
+.. _example-aggregate-method-explain-option:
 
 ### Return Information on Aggregation Pipeline Operation
 
-The following example uses :method:`db.collection.explain()` to view detailed information regarding the execution plan of the aggregation pipeline.
+The following example uses :method:`db.collection.explain()` to view
+detailed information regarding the execution plan of the aggregation
+pipeline.
 
-The operation returns a document that details the processing of the aggregation pipeline. For example, the document may show, among other details, which index, if any, the operation used. [#agg-index-filters]_ If the `movies` collection is a sharded collection, the document also shows the division of labor between the shards and the merge operation, and for targeted queries, the targeted shards.
+**literalinclude:** /code-examples/tested/command-line/mongosh/aggregation/pipelines/explain/run-pipeline.snippet.agg-explain.js
+   :language: javascript
+   :category: usage example
 
-> **Note:** not machines, and the output format is subject to change between
-releases.
+The operation returns a document that details the processing of the
+aggregation pipeline. For example, the document may show, among other
+details, which index, if any, the operation used. [#agg-index-filters]_
+If the ``movies`` collection is a sharded collection, the document
+also shows the division of labor between the shards and the merge
+operation, and for targeted queries, the targeted shards.
 
-You can view more verbose explain output by passing the `executionStats` or `allPlansExecution` explain modes to the :method:`db.collection.explain()` method.
+**note:** The intended readers of the ``explain`` output document are humans, and
+   not machines, and the output format is subject to change between
+   releases.
 
-used. See `index-filters` for details.
+You can view more verbose explain output by passing the
+``executionStats`` or ``allPlansExecution`` explain modes to the
+:method:`db.collection.explain()` method.
 
-### Interaction with `allowDiskUseByDefault`
+.. [#agg-index-filters] :ref:`index-filters` can affect the choice of index
+   used. See :ref:`index-filters` for details.
 
-.. include:: /includes/fact-allowDiskUseByDefault.rst
+.. _example-aggregate-method-external-sort:
 
-.. include:: /includes/extracts/4.2-changes-usedDisk.rst
+### Interaction with ``allowDiskUseByDefault``
 
-For more information, see `agg-pipeline-limits`.
+**include:** /includes/fact-allowDiskUseByDefault.rst
+
+**include:** /includes/extracts/4.2-changes-usedDisk.rst
+
+For more information, see :ref:`agg-pipeline-limits`.
+
+.. _example-aggregate-method-initial-batch-size:
 
 ### Specify an Initial Batch Size
 
-To specify an initial batch size for the cursor, use the following syntax for the `cursor` option:
+To specify an initial batch size for the cursor, use the following
+syntax for the ``cursor`` option:
 
-```javascript
-cursor: { batchSize: <int> }
-```
+.. code-block:: javascript
 
-For example, the following aggregation operation specifies the initial batch size of `0` for the cursor:
+   cursor: { batchSize: <int> }
 
-.. include:: /includes/batch-size-aggregate.rst
+For example, the following aggregation operation specifies the
+*initial* batch size of ``0`` for the cursor:
 
-.. include:: /includes/note-mongo-shell-automatically-iterates-cursor.rst
+**literalinclude:** /code-examples/tested/command-line/mongosh/aggregation/pipelines/batch-size/run-pipeline.snippet.agg-batch-size.js
+   :language: javascript
+   :category: usage example
+
+**include:** /includes/batch-size-aggregate.rst
+
+**include:** /includes/note-mongo-shell-automatically-iterates-cursor.rst
 
 ### Specify a Collation
 
-.. include:: /includes/extracts/collation-description.rst
+**include:** /includes/extracts/collation-description.rst
 
-.. include:: /includes/collation-agg-example.rst
+**include:** /includes/collation-agg-example.rst
 
-> **Note:** .. include:: /includes/extracts/views-collation-agg.rst
+**note:** .. include:: /includes/extracts/views-collation-agg.rst
 
-For descriptions on the collation fields, see `collation-document-fields`.
+For descriptions on the collation fields, see
+:ref:`collation-document-fields`.
 
 ### Hint an Index
 
-.. include:: /includes/hint-index-agg-example.rst
+**include:** /includes/hint-index-agg-example.rst
 
-### Override `readConcern`
+### Override ``readConcern``
 
-.. include:: /includes/override-readconcern-agg.rst
+**include:** /includes/override-readconcern-agg.rst
 
 ### Specify a Comment
 
-The `movies` collection in the `sample_mflix` sample dataset contains documents similar to this one:
+The ``movies`` collection in the ``sample_mflix`` sample dataset contains 
+documents similar to this one:
 
-```javascript
-{ 
-   title: 'Forrest Gump', 
-   year: 1994, 
-   genres: [ 'Drama', 'Romance' ], 
-   runtime: 142,
-   imdb: { rating: 8.8, votes: 1087227, id: 109830 },
-   directors: [ 'Robert Zemeckis' ],
-   cast: [ 'Tom Hanks', 'Rebecca Williams', 'Sally Field', 'Michael Conner Humphreys' ],
-}
-```
+.. code-block:: javascript
+   :copyable: false
 
-The following aggregation operation finds movies created in 1994 and includes the `comment` option to provide tracking information in the `logs`, the `db.system.profile` collection, and `db.currentOp`.
+   { 
+      title: 'Forrest Gump', 
+      year: 1994, 
+      genres: [ 'Drama', 'Romance' ], 
+      runtime: 142,
+      imdb: { rating: 8.8, votes: 1087227, id: 109830 },
+      directors: [ 'Robert Zemeckis' ],
+      cast: [ 'Tom Hanks', 'Rebecca Williams', 'Sally Field', 'Michael Conner Humphreys' ],
+   }
 
-On a system with profiling enabled, you can then query the `system.profile` collection to see all recent similar aggregations, as shown below:
+The following aggregation operation finds movies created in 1994 and includes
+the ``comment`` option to provide tracking information in the ``logs``,
+the ``db.system.profile`` collection, and ``db.currentOp``.
 
-```javascript
-db.system.profile.find( { "command.aggregate": "movies", "command.comment" : "match_three_movies_from_1994" } ).sort( { ts : -1 } ).pretty()
-```
+**literalinclude:** /code-examples/tested/command-line/mongosh/aggregation/pipelines/comment/run-pipeline.snippet.comment-agg.js
+   :language: javascript
+   :category: usage example
+
+On a system with profiling enabled, you can then query the ``system.profile``
+collection to see all recent similar aggregations, as shown below:
+
+.. code-block:: javascript
+
+   db.system.profile.find( { "command.aggregate": "movies", "command.comment" : "match_three_movies_from_1994" } ).sort( { ts : -1 } ).pretty()
 
 This will return a set of profiler results in the following format:
 
-```javascript
-{
-  "op" : "command",
-  "ns" : "video.movies",
-  "command" : {
-    "aggregate" : "movies",
-    "pipeline" : [
-      {
-        "$match" : {
-          "year" : 1994
-        }
-      },
-      { "$limit": 3 }
-    ],
-    "comment" : "match_three_movies_from_1994",
-    "cursor" : {
+.. code-block:: javascript
 
-    },
-    "$db" : "video"
-  },
-  ...
-}
-```
+   {
+     "op" : "command",
+     "ns" : "video.movies",
+     "command" : {
+       "aggregate" : "movies",
+       "pipeline" : [
+         {
+           "$match" : {
+             "year" : 1994
+           }
+         },
+         { "$limit": 3 }
+       ],
+       "comment" : "match_three_movies_from_1994",
+       "cursor" : {
 
-An application can encode any arbitrary information in the comment in order to more easily trace or identify specific operations through the system. For instance, an application might attach a string comment incorporating its process ID, thread ID, client hostname, and the user who issued the command.
+       },
+       "$db" : "video"
+     },
+     ...
+   }
 
-### Use Variables in `let`
+An application can encode any arbitrary information in the comment in order
+to more easily trace or identify specific operations through the system.
+For instance, an application might attach a string comment incorporating its
+process ID, thread ID, client hostname, and the user who issued the command.
 
-.. include:: /includes/let-variables-match-note.rst
+.. _db.collection.aggregate-let-example:
 
-.. include:: /includes/let-variables-example.rst
+### Use Variables in ``let``
+
+**include:** /includes/let-variables-match-note.rst
+
+**include:** /includes/let-variables-example.rst
+
+**literalinclude:** /code-examples/tested/command-line/mongosh/aggregation/pipelines/let-agg-method/run-pipeline.snippet.let-agg-method.js
+   :language: javascript
+   :category: usage example

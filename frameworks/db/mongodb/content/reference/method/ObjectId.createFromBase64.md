@@ -1,67 +1,105 @@
 ---
 type: "Framework Learn Page"
-framework: "mongodb"
+framework: "MongoDB"
 source_repo: "https://github.com/mongodb/docs.git"
 source_branch: "main"
 source_path: "content/manual/manual/source/reference/method/ObjectId.createFromBase64.txt"
-source_commit: "ab9db26ed3d11618cdb61516d8180337d8e3f679"
-source_commit_short: "ab9db26e"
-source_commit_date: "2026-07-24T16:22:46-06:00"
-generated_at: "2026-07-25T11:51:15Z"
+source_commit: "b9f2bc487a2878b65e3c1f80024bebab76954f27"
+source_commit_short: "b9f2bc48"
+source_commit_date: "2026-08-28T17:09:45-05:00"
+generated_at: "2026-08-29T09:39:19.954522Z"
 ---
-
-============================================
+.. _ObjectId.createFromBase64:
 
 # ObjectId.createFromBase64() (mongosh method)
 
+**meta:** :description: Create an ObjectId from a base64 string using `ObjectId.createFromBase64()` in MongoDB.
+
+.. default-domain:: mongodb
+
+**contents:** On this page
+   :local:
+   :backlinks: none
+   :depth: 1
+   :class: singlecol
+
 ## Definition
 
-Creates an `ObjectId` from a base64 value.
+Creates an :term:`ObjectId` from a base64 value.
 
 ## Compatibility
 
-This method is available in deployments hosted in the following environments:
+This method is available in deployments hosted in the following environments: 
 
-.. include:: /includes/fact-environments-atlas-only.rst
+**include:** /includes/fact-environments-atlas-only.rst
 
-.. include:: /includes/fact-environments-onprem-only.rst
+**include:** /includes/fact-environments-onprem-only.rst
 
 ## Syntax
+
+**method:** ObjectId.createFromBase64( <base64String> [ , <subType> ]  )
 
 ### Method Fields
 
 The method accepts the following fields:
 
+.. list-table::
+   :header-rows: 1
+   :widths: 20 20 80
+
+   * - Field
+     - Type
+     - Description
+
+   * - ``base64String``
+     - String
+     - Specifies a 16 character base64 value. For example,
+       ``"SGVsbG8gV29ybGQh"``.
+
+   * - ``subType``
+     - Integer
+     - Optional. Specifies a binary subtype.
+
+       .. include:: /includes/binary-sub-types.rst
+
 ## Examples
 
-The following examples show how to add an object identifier to a document using `ObjectId.createFromBase64()` and how the object identifier appears in the output when retrieved.
+The following examples show how to add an object identifier to a
+document using ``ObjectId.createFromBase64()`` and how the object
+identifier appears in the output when retrieved.
 
 ### Create Collection Containing Document with Base64 Number
 
-The following example creates a collection named `objectIdentifierValuesFromBase64`:
+The following example creates a collection named
+``objectIdentifierValuesFromBase64``:
 
-```javascript
-db.objectIdentifierValuesFromBase64.insertOne( {
-   _id: 0,
-   objectIdentifierValue: ObjectId.createFromBase64( "SGVsbG8gV29ybGQh" )
-} )
-```
+.. code-block:: javascript
+   :emphasize-lines: 3
 
-The `objectIdentifierValue` field contains the object identifier created from the base64 string specified in `ObjectId.createFromBase64()`.
+   db.objectIdentifierValuesFromBase64.insertOne( {
+      _id: 0,
+      objectIdentifierValue: ObjectId.createFromBase64( "SGVsbG8gV29ybGQh" )
+   } )
+
+The ``objectIdentifierValue`` field contains the object identifier
+created from the base64 string specified in
+``ObjectId.createFromBase64()``.
 
 ### Retrieve Document from Collection with Object Identifier
 
 The following example retrieves the document:
 
-```javascript
-db.objectIdentifierValuesFromBase64.findOne( { _id: 0 } )
-```
+.. code-block:: javascript
+
+   db.objectIdentifierValuesFromBase64.findOne( { _id: 0 } )
 
 Example output:
 
-```javascript
-{
-   _id: 0,
-   objectIdentifierValue: ObjectId("48656c6c6f20576f726c6421")
-}
-```
+.. code-block:: javascript
+   :copyable: false
+   :emphasize-lines: 3
+
+   {
+      _id: 0,
+      objectIdentifierValue: ObjectId("48656c6c6f20576f726c6421")
+   }

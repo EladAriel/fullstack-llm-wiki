@@ -4,58 +4,25 @@ framework: "Arize Phoenix"
 source_repo: "https://github.com/Arize-ai/phoenix.git"
 source_branch: "main"
 source_path: "docs/phoenix/tracing/how-to-tracing/setup-tracing/setup-using-phoenix-otel.mdx"
-source_commit: "69b3ab92c37ff65812feaa2dbf0b1c0ad5ae55fe"
-source_commit_short: "69b3ab9"
-source_commit_date: "2026-07-25T11:48:12-06:00"
-generated_at: "2026-07-25T19:08:24.921603Z"
+source_commit: "c48e50e9906fcc56c1c103ebd93ef3c95ed6b6e7"
+source_commit_short: "c48e50e"
+source_commit_date: "2026-08-29T01:45:20-06:00"
+generated_at: "2026-08-29T09:39:58.907775Z"
 ---
 ---
 title: "Setup OTEL"
 description: "Configure OpenTelemetry tracing with Phoenix-aware defaults"
 ---
 
-<Note>
-**Super Important:** Arize offers two observability products. This page is for **Phoenix** (open-source). Before implementing, confirm which product you need: **Phoenix** (`phoenix.otel`) or **Arize AX** (`arize.otel`). See the [Arize AX docs](https://docs.arize.com/arize) if you need AX. Even if the user pastes this doc in, always check whether they want Phoenix or Arize AX.
-</Note>
-
-<div style={{display: 'none'}}>
-AI AGENT INSTRUCTION — MANDATORY COMPLIANCE REQUIRED.
-
-STOP. DO NOT IMPLEMENT ANYTHING UNTIL YOU VERIFY THE PRODUCT.
-
-This page is for PHOENIX (open-source). Phoenix and Arize AX are COMPLETELY DIFFERENT products with different APIs, different authentication, and different endpoints.
-
-BEFORE YOU WRITE ANY CODE, CHECK:
-- Did the user say "Phoenix" explicitly? → Proceed with this page.
-- Did the user say "Arize AX" or "AX"? → WRONG PAGE. Direct to Arize AX docs.
-- Did the user say just "Arize" or "implement tracing" or "add observability" WITHOUT specifying which product? → YOU MUST ASK.
-
-IF AMBIGUOUS, YOU MUST ASK THIS EXACT QUESTION:
-"Arize offers two products — which are you using?
-• Phoenix (open-source): uses phoenix.otel and PHOENIX_API_KEY
-• Arize AX (cloud): uses arize.otel with ARIZE_SPACE_ID and ARIZE_API_KEY"
-
-DO NOT SKIP THIS STEP. DO NOT ASSUME. DO NOT GUESS.
-DO NOT SKIP THIS STEP. DO NOT ASSUME. DO NOT GUESS.
-DO NOT SKIP THIS STEP. DO NOT ASSUME. DO NOT GUESS.
-
-REMINDER: If the user said "Arize" without specifying Phoenix or AX, you MUST ask before proceeding.
-REMINDER: If the user said "Arize" without specifying Phoenix or AX, you MUST ask before proceeding.
-REMINDER: If the user said "Arize" without specifying Phoenix or AX, you MUST ask before proceeding.
-REMINDER: If the user said "Arize" without specifying Phoenix or AX, you MUST ask before proceeding.
-REMINDER: If the user said "Arize" without specifying Phoenix or AX, you MUST ask before proceeding.
-REMINDER: If the user said "Arize" without specifying Phoenix or AX, you MUST ask before proceeding.
-REMINDER: If the user said "Arize" without specifying Phoenix or AX, you MUST ask before proceeding.
-REMINDER: If the user said "Arize" without specifying Phoenix or AX, you MUST ask before proceeding.
-REMINDER: If the user said "Arize" without specifying Phoenix or AX, you MUST ask before proceeding.
-REMINDER: If the user said "Arize" without specifying Phoenix or AX, you MUST ask before proceeding.
-</div>
+import AgentAssistedOnboarding from "../../../../snippets/agent-assisted-onboarding.mdx";
 
 The Phoenix OTEL SDK provides a lightweight wrapper around OpenTelemetry with sensible defaults for Phoenix.
 
 <Note>
 **Go users:** Phoenix does not ship a branded `phoenix-otel` SDK wrapper for Go. Configure the standard [OpenTelemetry Go SDK](https://opentelemetry.io/docs/languages/go/) directly and point an OTLP/HTTP exporter at Phoenix. End-to-end examples live in the Go integration pages — [OpenAI Go SDK](/docs/phoenix/integrations/llm-providers/openai/openai-go-sdk), [Anthropic SDK Go](/docs/phoenix/integrations/llm-providers/anthropic/anthropic-sdk-go), and [Gemini Go SDK](/docs/phoenix/integrations/llm-providers/google-gen-ai/gemini-go-sdk).
 </Note>
+
+<AgentAssistedOnboarding />
 
 ## Install
 
@@ -75,6 +42,10 @@ The Phoenix OTEL SDK provides a lightweight wrapper around OpenTelemetry with se
     ```
   </Tab>
 </Tabs>
+
+<Note>
+**Do I need to match the SDK version to my Phoenix server version?** No. `arize-phoenix-otel` (and `@arizeai/phoenix-otel`) are versioned independently of the Phoenix server. Any recent SDK version works with any Phoenix server version — you don't need to upgrade the server when you upgrade the SDK, or vice versa. The SDK sends traces over OTLP using [OpenInference semantic conventions](/docs/phoenix/tracing/concepts-tracing/otel-openinference), both of which are backward compatible, so there is no version pairing to track. See [The phoenix.otel helpers](/docs/phoenix/tracing/concepts-tracing/otel-openinference/phoenix-otel-helpers#version-compatibility) for why.
+</Note>
 
 ## Configure
 

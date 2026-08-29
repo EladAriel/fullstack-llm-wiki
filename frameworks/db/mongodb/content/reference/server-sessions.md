@@ -1,43 +1,62 @@
 ---
 type: "Framework Learn Page"
-framework: "mongodb"
+framework: "MongoDB"
 source_repo: "https://github.com/mongodb/docs.git"
 source_branch: "main"
 source_path: "content/manual/manual/source/reference/server-sessions.txt"
-source_commit: "ab9db26ed3d11618cdb61516d8180337d8e3f679"
-source_commit_short: "ab9db26e"
-source_commit_date: "2026-07-24T16:22:46-06:00"
-generated_at: "2026-07-25T11:51:15Z"
+source_commit: "b9f2bc487a2878b65e3c1f80024bebab76954f27"
+source_commit_short: "b9f2bc48"
+source_commit_date: "2026-08-28T17:09:45-05:00"
+generated_at: "2026-08-29T09:39:19.697344Z"
 ---
-
-===============
+.. _server-sessions:
 
 # Server Sessions
 
+**meta:** :description: Understand how server sessions in MongoDB support Causal Consistency and retryable writes, and learn about session management commands and access control.
+
+.. default-domain:: mongodb
+
+**contents:** On this page
+   :local:
+   :backlinks: none
+   :depth: 1
+   :class: singlecol
+
 ## Overview
 
-MongoDB's server sessions, or logical sessions, are the underlying framework used by client sessions to support `causal-consistency` and `retryable writes <retryable-writes>`.
+MongoDB's server sessions, or logical sessions, are the underlying
+framework used by client sessions to support :ref:`causal-consistency` and 
+:ref:`retryable writes <retryable-writes>`.
 
-> **Important:** Applications use client sessions to interface with server sessions.
+**important:** Applications use client sessions to interface with server sessions.
 
-Server sessions are available for replica sets and sharded clusters only.
+Server sessions are available for replica sets and sharded clusters only. 
 
 ## Command Options
 
-.. include:: /includes/extracts/sessions-options.rst
+**include:** /includes/extracts/sessions-options.rst
 
 ## Sessions Commands
 
-.. include:: /includes/extracts/sessions-commands.rst
+**include:** /includes/extracts/sessions-commands.rst
 
 ## Sessions and Access Control
 
-If the deployment enforces authentication/authorization, the user must be authenticated to start a session, and only that user can use the session.
+If the deployment enforces authentication/authorization, the user must
+be authenticated to start a session, and only that user can use the
+session.
 
-.. include:: /includes/extracts/sessions-external-username-limit.rst
+**include:** /includes/extracts/sessions-external-username-limit.rst
 
-If the deployment does not enforce authentication/authorization, a created session has no owner and can be used by any user on any connection. If a user authenticates and creates a session for a deployment that does not enforce authentication/authorization, that user owns the session. However, any user on any connection may use the session.
+If the deployment does not enforce authentication/authorization, a
+created session has no owner and can be used by any user on any
+connection. If a user authenticates and creates a session for a
+deployment that does not enforce authentication/authorization, that user
+owns the session. However, any user on any connection may use the
+session.
 
-If the deployment transitions to authentication without any downtime, any sessions without an owner cannot be used.
+If the deployment transitions to authentication without any downtime, any
+sessions without an owner cannot be used.
 
-> **Seealso:** :parameter:`maxSessions`
+**seealso:** :parameter:`maxSessions`

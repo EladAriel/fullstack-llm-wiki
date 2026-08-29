@@ -4,12 +4,11 @@ framework: "Langfuse"
 source_repo: "https://github.com/langfuse/langfuse-docs"
 source_branch: "main"
 source_path: "content/docs/observability/features/sessions.mdx"
-source_commit: "fcd1eca34a924867563c3c4e801254c4e66c0021"
-source_commit_short: "fcd1eca3"
-source_commit_date: "2026-07-25T00:45:45Z"
-generated_at: "2026-07-25T11:51:12Z"
+source_commit: "ba26344559edee69ba55c5d3aa80e632f56c1626"
+source_commit_short: "ba26344"
+source_commit_date: "2026-08-29T02:57:18+00:00"
+generated_at: "2026-08-29T09:38:37.752376Z"
 ---
-
 ---
 title: Sessions
 description: Track LLM chat conversations or threads across multiple observations and traces into a single session. Replay the entire interaction to debug or analyze the conversation.
@@ -20,14 +19,24 @@ import { PropagationRestrictionsCallout } from "@/components/PropagationRestrict
 
 # Sessions
 
-Many interactions with LLM applications span multiple traces and observations. `Sessions` in Langfuse are a special way to group these observations across traces together and see a simple **session replay** of the entire interaction. Get started by propagating the `sessionId` attribute across observations.
+Many interactions with LLM applications span multiple [traces](/docs/observability/data-model#observations-traces-and-sessions). `Sessions` in Langfuse allow you to group traces together and see a simple **session replay** of the entire interaction.
 
-```mermaid
-graph LR
-    A(Session) -->|1:n, sessionId| B(Trace)
-```
+Try this feature using the public [example project](/docs/demo).
 
-Propagate a `sessionId` across observations that span multiple traces. The `sessionId` can be any US-ASCII character string less than 200 characters that you use to identify the session. All observations with the same `sessionId` will be grouped together including their enclosing traces. If a session ID exceeds 200 characters, it will be dropped.
+_Example session spanning multiple traces_
+
+<Frame fullWidth>![Session view](/images/docs/session.png)</Frame>
+
+In the session view you can:
+
+- Replay the entire interaction to debug or analyze the conversation
+- Publish a session to share with others as a public link ([example](https://cloud.langfuse.com/project/clkpwwm0m000gmm094odg11gi/sessions/lf.docs.conversation.TL4KDlo))
+- Bookmark a session to easily find it later
+- Annotate sessions by adding `scores` via the Langfuse UI to record human-in-the-loop evaluations
+
+## Set up sessions [#set-up-sessions]
+
+Get started by propagating the `sessionId` attribute across observations. The `sessionId` can be any US-ASCII character string less than 200 characters that you use to identify the session. All observations with the same `sessionId` will be grouped together including their enclosing traces. If a session ID exceeds 200 characters, it will be dropped.
 
 <LangTabs items={["Python SDK", "JS/TS SDK", "OpenAI (Python)", "Langchain (Python)", "Langchain (JS/TS)", "Flowise"]}>
 
@@ -200,19 +209,8 @@ The [Flowise Integration](/docs/flowise) automatically maps the Flowise chatId t
 
 <PropagationRestrictionsCallout attributes={["sessionId"]} />
 
-## Example
-
-Try this feature using the public [example project](/docs/demo).
-
-_Example session spanning multiple traces_
-
-<Frame fullWidth>![Session view](/images/docs/session.png)</Frame>
-
 ## Other features
 
-- Publish a session to share with others as a public link ([example](https://cloud.langfuse.com/project/clkpwwm0m000gmm094odg11gi/sessions/lf.docs.conversation.TL4KDlo))
-- Bookmark a session to easily find it later
-- Annotate sessions by adding `scores` via the Langfuse UI to record human-in-the-loop evaluations
 - Add `session-level` scores programmatically via SDK or API, for example from [user feedback forms](/docs/observability/features/user-feedback), moderation checks, or conversation-level QA pipelines. See [Scores via API/SDK](/docs/evaluation/evaluation-methods/scores-via-sdk).
 - How to [evaluate sessions](/resources/engineering/evaluating-sessions-conversations) in Langfuse?
 

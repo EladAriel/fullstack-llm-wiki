@@ -1,82 +1,158 @@
 ---
 type: "Framework Learn Page"
-framework: "mongodb"
+framework: "MongoDB"
 source_repo: "https://github.com/mongodb/docs.git"
 source_branch: "main"
 source_path: "content/manual/manual/source/reference/operator/aggregation/toBool.txt"
-source_commit: "ab9db26ed3d11618cdb61516d8180337d8e3f679"
-source_commit_short: "ab9db26e"
-source_commit_date: "2026-07-24T16:22:46-06:00"
-generated_at: "2026-07-25T11:51:15Z"
+source_commit: "b9f2bc487a2878b65e3c1f80024bebab76954f27"
+source_commit_short: "b9f2bc48"
+source_commit_date: "2026-08-28T17:09:45-05:00"
+generated_at: "2026-08-29T09:39:20.116978Z"
 ---
-
-=============================
-
 # $toBool (expression operator)
+
+.. default-domain:: mongodb
+
+**contents:** On this page
+   :local:
+   :backlinks: none
+   :depth: 1
+   :class: singlecol
+
+
+**meta:** :description: Learn how to convert a value to a boolean.
+   :keywords: type conversion
+
 
 ## Definition
 
+**expression:** $toBool
+
+   Converts a value to a boolean.
+
+   :expression:`$toBool` has the following syntax:
+
+   .. code-block:: javascript
+
+      {
+         $toBool: <expression>
+      }
+
+   The :expression:`$toBool` takes any valid :ref:`expression
+   <aggregation-expressions>`.
+
+   The :expression:`$toBool` is a shorthand for the following
+   :expression:`$convert` expression:
+
+   .. code-block:: javascript
+
+      { $convert: { input: <expression>, to: "bool" } }
+
+   .. seealso::
+
+      :expression:`$convert`
+
+
 ## Behavior
 
-The following table lists the input types that can be converted to a boolean:
+The following table lists the input types that can be converted to a
+boolean:
 
-.. include:: /includes/aggregation/convert-to-bool-table.rst
+.. |null-description| replace:: Returns null
+
+**include:** /includes/aggregation/convert-to-bool-table.rst
 
 The following table lists some conversion to boolean examples:
 
+.. list-table::
+   :header-rows: 1
+   :widths: 80 20
+
+   * - Example
+     - Results
+
+   * - ``{$toBool: false}``
+     - false
+
+   * - ``{$toBool: 1.99999}``
+     - true
+
+   * - ``{$toBool: Decimal128("5")}``
+     - true
+
+   * - ``{$toBool: Decimal128("0")}``
+     - false
+
+   * - ``{$toBool: 100}``
+     - true
+
+   * - ``{$toBool: ISODate("2018-03-26T04:38:28.044Z")}``
+     - true
+
+   * - ``{$toBool: "false"}``
+     - true
+
+   * - ``{$toBool: ""}``
+     - true
+
+   * - ``{$toBool: null}``
+     - null
+
 ## Example
 
-Create a collection `orders` with the following documents:
+Create a collection ``orders`` with the following documents:
 
-```javascript
-db.orders.insertMany( [
-   { _id: 1, item: "apple",  qty: 5, shipped: true },
-   { _id: 2, item: "pie",  qty: 10, shipped: 0  },
-   { _id: 3, item: "ice cream", shipped: 1 },
-   { _id: 4, item: "almonds", qty: 2, shipped: "true" },
-   { _id: 5, item: "pecans", shipped: "false" },  // Note: All strings convert to true
-   { _id: 6, item: "nougat", shipped: ""  }       // Note: All strings convert to true
-] )
-```
+.. code-block:: javascript
 
-The following aggregation operation on the `orders` collection converts the `shipped` to a boolean value before finding the unshipped orders:
+   db.orders.insertMany( [
+      { _id: 1, item: "apple",  qty: 5, shipped: true },
+      { _id: 2, item: "pie",  qty: 10, shipped: 0  },
+      { _id: 3, item: "ice cream", shipped: 1 },
+      { _id: 4, item: "almonds", qty: 2, shipped: "true" },
+      { _id: 5, item: "pecans", shipped: "false" },  // Note: All strings convert to true
+      { _id: 6, item: "nougat", shipped: ""  }       // Note: All strings convert to true
+   ] )
 
-```javascript
-// Define stage to add convertedShippedFlag field with the converted shipped value
-// Because all strings convert to true, include specific handling for "false" and "" 
+The following aggregation operation on the ``orders`` collection
+converts the ``shipped`` to a boolean value before finding the
+unshipped orders:
 
-shippedConversionStage = {
-   $addFields: {
-      convertedShippedFlag: { 
-         $switch: { 
-            branches: [
-              { case: { $eq: [ "$shipped", "false" ] }, then: false } , 
-              { case: { $eq: [ "$shipped", "" ] }, then: false }
-            ],
-            default: { $toBool: "$shipped" }
-        }
+.. code-block:: javascript
+
+   // Define stage to add convertedShippedFlag field with the converted shipped value
+   // Because all strings convert to true, include specific handling for "false" and "" 
+
+   shippedConversionStage = {
+      $addFields: {
+         convertedShippedFlag: { 
+            $switch: { 
+               branches: [
+                 { case: { $eq: [ "$shipped", "false" ] }, then: false } , 
+                 { case: { $eq: [ "$shipped", "" ] }, then: false }
+               ],
+               default: { $toBool: "$shipped" }
+           }
+         }
       }
-   }
-};
+   };
 
-// Define stage to filter documents and pass only the unshipped orders
+   // Define stage to filter documents and pass only the unshipped orders
 
-unshippedMatchStage = {
-   $match: { "convertedShippedFlag": false }
-};
+   unshippedMatchStage = {
+      $match: { "convertedShippedFlag": false }
+   };
 
-db.orders.aggregate( [
-  shippedConversionStage,
-  unshippedMatchStage
-] )
-```
+   db.orders.aggregate( [
+     shippedConversionStage,
+     unshippedMatchStage
+   ] )
 
 The operation returns the following document:
 
-```javascript
-{ "_id" : 2, "item" : "pie", "qty" : 10, "shipped" : 0, "convertedShippedFlag" : false }
-{ "_id" : 5, "item" : "pecans", "shipped" : "false", "convertedShippedFlag" : false }
-{ "_id" : 6, "item" : "nougat", "shipped" : "", "convertedShippedFlag" : false }
-```
+.. code-block:: javascript
 
-.. include:: /includes/note-conversion-error-use-convert.rst
+   { "_id" : 2, "item" : "pie", "qty" : 10, "shipped" : 0, "convertedShippedFlag" : false }
+   { "_id" : 5, "item" : "pecans", "shipped" : "false", "convertedShippedFlag" : false }
+   { "_id" : 6, "item" : "nougat", "shipped" : "", "convertedShippedFlag" : false }
+
+**include:** /includes/note-conversion-error-use-convert.rst

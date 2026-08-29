@@ -1,27 +1,28 @@
 ---
 type: "Framework Learn Page"
-framework: "tanstack"
+framework: "TanStack"
 source_repo: "https://github.com/tanstack/query"
 source_branch: "main"
 source_path: "docs/framework/preact/reference/type-aliases/QueryClientProviderProps.md"
-source_commit: "fd50fa14d283c7d6664a796f758498d1ad5bfce7"
-source_commit_short: "fd50fa14"
-source_commit_date: "2026-07-24T22:22:47+10:00"
-generated_at: "2026-07-25T11:50:41Z"
+source_commit: "2969edf32f7e0c48e2a108d84712d6e01edfde21"
+source_commit_short: "2969edf"
+source_commit_date: "2026-08-28T01:03:02+09:00"
+generated_at: "2026-08-29T09:40:33.380972Z"
 ---
+# Queryclientproviderprops
 
 ---
 id: QueryClientProviderProps
 title: QueryClientProviderProps
 ---
 
-# Type Alias: QueryClientProviderProps
-
 ```ts
 type QueryClientProviderProps = object;
 ```
 
-Defined in: [preact-query/src/QueryClientProvider.tsx:23](https://github.com/theVedanta/query/blob/main/packages/preact-query/src/QueryClientProvider.tsx#L23)
+Defined in: [preact-query/src/QueryClientProvider.tsx:38](https://github.com/TanStack/query/blob/main/packages/preact-query/src/QueryClientProvider.tsx#L38)
+
+The props accepted by `QueryClientProvider`.
 
 ## Properties
 
@@ -31,7 +32,9 @@ Defined in: [preact-query/src/QueryClientProvider.tsx:23](https://github.com/the
 optional children: ComponentChildren;
 ```
 
-Defined in: [preact-query/src/QueryClientProvider.tsx:25](https://github.com/theVedanta/query/blob/main/packages/preact-query/src/QueryClientProvider.tsx#L25)
+Defined in: [preact-query/src/QueryClientProvider.tsx:48](https://github.com/TanStack/query/blob/main/packages/preact-query/src/QueryClientProvider.tsx#L48)
+
+The components that get access to the provided `QueryClient`.
 
 ***
 
@@ -41,4 +44,8 @@ Defined in: [preact-query/src/QueryClientProvider.tsx:25](https://github.com/the
 client: QueryClient;
 ```
 
-Defined in: [preact-query/src/QueryClientProvider.tsx:24](https://github.com/theVedanta/query/blob/main/packages/preact-query/src/QueryClientProvider.tsx#L24)
+Defined in: [preact-query/src/QueryClientProvider.tsx:44](https://github.com/TanStack/query/blob/main/packages/preact-query/src/QueryClientProvider.tsx#L44)
+
+**Required**
+
+The `QueryClient` instance to provide.

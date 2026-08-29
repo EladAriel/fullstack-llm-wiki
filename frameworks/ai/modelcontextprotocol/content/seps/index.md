@@ -1,13 +1,7 @@
 ---
 type: "Framework Learn Directory Index"
 framework: "Model Context Protocol"
-directory: "content/seps"
-source_repo: "https://github.com/modelcontextprotocol/modelcontextprotocol"
-source_branch: "main"
-source_commit: "7634684382c3d14cf7e9f14073fe40a2d8ace3fa"
-source_commit_short: "76346843"
-source_commit_date: "2026-07-23T16:49:30-07:00"
-generated_at: "2026-07-25T11:50:39Z"
+generated_at: "2026-08-29T09:38:48.111672Z"
 ---
 # Seps
 
@@ -15,19 +9,15 @@ This directory contains Model Context Protocol learning pages related to seps.
 
 ## Breadcrumbs
 
-[Wiki Home](../../index.md) -> [Content](../index.md) -> [Seps](index.md)
+[Wiki Home](../index.md) -> [Content](index.md)
 
 ## Navigation
 
-- Parent: [Parent Index](../index.md)
-
-## Child Directories
-
-- None
+- Wiki Home: [Root Index](../index.md)
 
 ## Pages in This Directory
 
-- [1024 Mcp Client Security Requirements For Local Server](1024-mcp-client-security-requirements-for-local-server-.md)
+- [1024 Mcp Client Security Requirements For Local Server ](1024-mcp-client-security-requirements-for-local-server-.md)
 - [1034  Support Default Values For All Primitive Types In](1034--support-default-values-for-all-primitive-types-in.md)
 - [1036 Url Mode Elicitation For Secure Out Of Band Intera](1036-url-mode-elicitation-for-secure-out-of-band-intera.md)
 - [1046 Support Oauth Client Credentials Flow In Authoriza](1046-support-oauth-client-credentials-flow-in-authoriza.md)
@@ -68,12 +58,3 @@ This directory contains Model Context Protocol learning pages related to seps.
 - [990 Enable Enterprise Idp Policy Controls During Mcp O](990-enable-enterprise-idp-policy-controls-during-mcp-o.md)
 - [991 Enable Url Based Client Registration Using Oauth C](991-enable-url-based-client-registration-using-oauth-c.md)
 - [994 Shared Communication Practicesguidelines](994-shared-communication-practicesguidelines.md)
-- [Original Source Index](_source_index.md)
-
-## IDE LLM Guidance
-
-When answering implementation questions related to this directory:
-
-1. Prefer the most specific page listed above.
-2. If the topic is broad, read the child directory index first.
-3. Use source metadata from each page when giving answers.

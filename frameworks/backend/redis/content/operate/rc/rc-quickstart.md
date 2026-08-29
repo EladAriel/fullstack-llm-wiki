@@ -1,14 +1,15 @@
 ---
 type: "Framework Learn Page"
-framework: "redis"
+framework: "Redis"
 source_repo: "https://github.com/redis/docs.git"
 source_branch: "main"
 source_path: "content/operate/rc/rc-quickstart.md"
-source_commit: "9d30f68c3dad1a6b3b7d30fe604b911348ce8152"
-source_commit_short: "9d30f68c"
-source_commit_date: "2026-07-24T10:52:10-07:00"
-generated_at: "2026-07-25T11:51:22Z"
+source_commit: "f8693349287b0efbef3c865b6f6a2aceca88594d"
+source_commit_short: "f869334"
+source_commit_date: "2026-08-28T10:01:19-05:00"
+generated_at: "2026-08-29T09:38:55.110745Z"
 ---
+# Rc Quickstart
 
 ---
 Title: Redis Cloud quick start
@@ -171,8 +172,8 @@ See [Clients]({{< relref "/develop/clients" >}}) to learn how to connect with th
 
 See the following guides to get started with different Redis use cases:
 - [Data structure store]({{< relref "/develop/get-started/data-store" >}})
-- [Document database]({{< relref "/develop/get-started/document-database" >}})
-- [Vector database]({{< relref "/develop/get-started/vector-database" >}})
+- [Document database]({{< relref "/develop/get-started/search-tutorial" >}})
+- [Vector database]({{< relref "/develop/get-started/search-tutorial/vector-search" >}})
 - [RAG with Redis]({{< relref "/develop/get-started/rag" >}})
 - [Redis for AI]({{< relref "/develop/ai" >}})
 
@@ -181,6 +182,8 @@ See the following guides to get started with different Redis use cases:
 The [`redis-cli`]({{< relref "/develop/tools/cli" >}}) utility is installed when you install Redis.  It provides a command-line interface that lets you work with your database using core [Redis commands]({{< relref "/commands" >}}).
 
 To run `redis-cli`, [install Redis]({{< relref "/operate/oss_and_stack/install/install-stack/" >}}) on your machine.
+
+If you only need the Redis CLI (`redis-cli`) and not the full Redis Open Source distribution, you can [install the standalone `redis-cli` binary]({{< relref "/operate/oss_and_stack/install/install-stack/install-redis-cli" >}}) on Linux or macOS.
 
 See [Redis CLI]({{< relref "/develop/tools/cli" >}}) to learn how to use `redis-cli`.
 

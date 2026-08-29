@@ -4,10 +4,10 @@ framework: "LangSmith"
 source_repo: "https://github.com/langchain-ai/docs.git"
 source_branch: "main"
 source_path: "src/langsmith/self-host-terraform-aws-deploy.mdx"
-source_commit: "2aae1dfc98ee953a9a5185fb6fcdd9efb3f4d878"
-source_commit_short: "2aae1df"
-source_commit_date: "2026-07-25T00:27:23+00:00"
-generated_at: "2026-07-25T19:08:33.365807Z"
+source_commit: "a174f9cf7c91ee5eb14ee2382eb48bfe6e4956e9"
+source_commit_short: "a174f9c"
+source_commit_date: "2026-08-28T17:04:12-07:00"
+generated_at: "2026-08-29T09:39:50.627490Z"
 ---
 ---
 title: Deploy LangSmith on AWS with Terraform
@@ -137,7 +137,7 @@ aws ec2 describe-availability-zones --query 'AvailabilityZones[].ZoneName' --out
 
 Two non-AWS items must be ready before `terraform apply`:
 
-- **LangSmith license key.** [Contact sales](https://www.langchain.com/contact-sales) to request one. The key is stored in AWS SSM Parameter Store by the setup script, not in `tfvars`.
+- **LangSmith license key.** [Contact our sales team](https://www.langchain.com/contact-sales) to request one. The key is stored in AWS SSM Parameter Store by the setup script, not in `tfvars`.
 - **Domain or subdomain** that resolves to the AWS account, plus an ACM certificate covering it (or `letsencrypt` / `none` for the `tls_certificate_source` variable).
 
 ### Cluster sizing reference
@@ -289,7 +289,7 @@ The script manages the following SSM parameters:
 | `redis-auth-token` | Auto-generated (`openssl rand -hex 32`) | ElastiCache requires hex |
 | `langsmith-api-key-salt` | Auto-generated (`openssl rand -base64 32`) | Never rotate, breaks all API keys |
 | `langsmith-jwt-secret` | Auto-generated (`openssl rand -base64 32`) | Never rotate, invalidates all sessions |
-| `langsmith-license-key` | Prompt | From your LangChain account team |
+| `langsmith-license-key` | Prompt | From [our sales team](https://www.langchain.com/contact-sales) |
 | `langsmith-admin-password` | Prompt | Must contain a symbol |
 | `deployments-encryption-key` | Auto-generated Fernet key | LangSmith Deployment add-on |
 | `agent-builder-encryption-key` | Auto-generated Fernet key | Agent Builder add-on (reused by Fleet) |

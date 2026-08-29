@@ -1,117 +1,157 @@
 ---
 type: "Framework Learn Page"
-framework: "mongodb"
+framework: "MongoDB"
 source_repo: "https://github.com/mongodb/docs.git"
 source_branch: "main"
 source_path: "content/manual/manual/source/core/indexes/index-types/geospatial/restrictions.txt"
-source_commit: "ab9db26ed3d11618cdb61516d8180337d8e3f679"
-source_commit_short: "ab9db26e"
-source_commit_date: "2026-07-24T16:22:46-06:00"
-generated_at: "2026-07-25T11:51:15Z"
+source_commit: "b9f2bc487a2878b65e3c1f80024bebab76954f27"
+source_commit_short: "b9f2bc48"
+source_commit_date: "2026-08-28T17:09:45-05:00"
+generated_at: "2026-08-29T09:39:19.838692Z"
 ---
-
-=============================
+.. _geospatial-restrictions:
 
 # Geospatial Index Restrictions
 
-`2d <2d-index>` and `2dsphere <2dsphere-index>` indexes are geospatial indexes. Geospatial indexes have these restrictions:
+**meta:** :description: Understand the restrictions of geospatial indexes, including collation, shard keys, and supported data types.
+
+.. default-domain:: mongodb
+
+**contents:** On this page
+   :local:
+   :backlinks: none
+   :depth: 2
+   :class: singlecol
+
+:ref:`2d <2d-index>` and :ref:`2dsphere <2dsphere-index>` indexes are
+geospatial indexes. Geospatial indexes have these restrictions:
 
 ## Collation Option
 
-2d indexes do not support the `collation <collation>` option, only binary comparison. Binary comparison compares the numeric Unicode value of each character in each string, and does not account for letter case or accent marks.
+2d indexes do not support the :ref:`collation <collation>` option, only
+binary comparison. Binary comparison compares the numeric Unicode value
+of each character in each string, and does not account for letter case
+or accent marks.
 
-To create a 2d index on a collection that has a non-simple collation, you must explicitly specify `{ collation: { locale: "simple" } }` when you create the index.
+To create a 2d index on a collection that has a non-simple
+collation, you must explicitly specify ``{ collation: { locale: "simple"
+} }`` when you create the index.
 
-For example, consider a collection named `collationTest` with a collation of `{ locale: "en" }`:
+For example, consider a collection named ``collationTest`` with a
+collation of ``{ locale: "en" }``:
 
-```js
-db.createCollection(
-   "collationTest",
-   {
-      collation: { locale: "en" }
-   }
-)
-```
+.. code-block:: js
 
-To create a 2d index on the `collationTest` collection, you must specify `{ collation: { locale: "simple" } }`. This command creates a 2d index on the `loc` field:
+   db.createCollection(
+      "collationTest",
+      {
+         collation: { locale: "en" }
+      }
+   )
 
-```js
-db.collationTest.createIndex(
-   {
-      loc: "2d"
-   },
-   {
-      collation: { locale: "simple" }
-   }
-)
-```
+To create a 2d index on the ``collationTest`` collection, you must
+specify ``{ collation: { locale: "simple" } }``. This command creates a
+2d index on the ``loc`` field:
+
+.. code-block:: js
+
+   db.collationTest.createIndex(
+      {
+         loc: "2d"
+      },
+      {
+         collation: { locale: "simple" }
+      }
+   )
 
 ## Covered Queries
 
-Geospatial indexes cannot `cover a query <covered-queries>`.
+Geospatial indexes cannot :ref:`cover a query <covered-queries>`.
 
 ## Shard Key
 
-You cannot use a geospatial index as a `shard key <shard-key>`. However, you can create a geospatial index on a sharded collection by using a different field as the shard key.
+You cannot use a geospatial index as a :ref:`shard key <shard-key>`.
+However, you can create a geospatial index on a sharded collection by
+using a different field as the shard key.
 
-## Multiple Geospatial Indexes with `$geoNear`
+## Multiple Geospatial Indexes with ``$geoNear``
 
-If your collection has multiple geospatial indexes, when you run the :pipeline:`$geoNear` pipeline stage, you must specify the `$geoNear` `key` option. The `key` option specifies which index to use to support the query.
+If your collection has multiple geospatial indexes, when you run the
+:pipeline:`$geoNear` pipeline stage, you must specify the ``$geoNear``
+``key`` option. The ``key`` option specifies which index to use to
+support the query.
 
 ## Supported Data Types
 
-A field indexed with a 2dsphere index must contain geometry data. Geometry data can either be:
+A field indexed with a 2dsphere index must contain geometry data.
+Geometry data can either be:
 
-- `GeoJSON data <geospatial-indexes-store-geojson>`
-- `Legacy coordinate pairs <geospatial-legacy>`
+- :ref:`GeoJSON data <geospatial-indexes-store-geojson>`
+
+- :ref:`Legacy coordinate pairs <geospatial-legacy>`
+
 You cannot:
 
 - Insert a document with non-geometry data into a field that is indexed
-with a 2dsphere index.
+  with a 2dsphere index.
 
 - Build a 2dsphere index on a field that contains non-geometry data.
+
 ## Number of Index Keys
 
-When you create a 2dsphere index, :binary:`mongod` maps `GeoJSON shapes <geospatial-indexes-store-geojson>` to an internal representation. The resulting internal representation may be a large array of values.
+When you create a 2dsphere index, :binary:`mongod` maps
+:ref:`GeoJSON shapes <geospatial-indexes-store-geojson>` to an internal
+representation. The resulting internal representation may be a large
+array of values.
 
-The :parameter:`indexMaxNumGeneratedKeysPerDocument` setting limits the maximum number of keys generated for a single document to prevent out of memory errors. If an operation requires more keys than the `indexMaxNumGeneratedKeysPerDocument` parameter specifies, the operation fails.
+The :parameter:`indexMaxNumGeneratedKeysPerDocument` setting limits the
+maximum number of keys generated for a single document to prevent out of
+memory errors. If an operation requires more keys than the
+``indexMaxNumGeneratedKeysPerDocument`` parameter specifies, the
+operation fails.
 
-By default, the server allows up to `100,000` index keys per document. To allow more index keys, raise the :parameter:`indexMaxNumGeneratedKeysPerDocument` value.
+By default, the server allows up to ``100,000`` index keys per document.
+To allow more index keys, raise the
+:parameter:`indexMaxNumGeneratedKeysPerDocument` value.
 
 ## Exact Matches on a Flat Surface
 
-A 2d index cannot improve performance for exact matches on a coordinate pair.
+A 2d index cannot improve performance for exact matches on a coordinate
+pair.
 
-For example, consider a `contacts` collection with these documents:
+For example, consider a ``contacts`` collection with these documents:
 
-```javascript
-db.contacts.insertMany( [
-   {
-      name: "Evander Otylia",
-      phone: "202-555-0193",
-      address: [ 55.5, 42.3 ]
-   },
-   {
-      name: "Georgine Lestaw",
-      phone: "714-555-0107",
-      address: [ -74, 44.74 ]
-   }
-] )
-```
+.. code-block:: javascript
 
-A 2d index on the `address` field **does not** improve performance for the following query:
+   db.contacts.insertMany( [
+      {
+         name: "Evander Otylia",
+         phone: "202-555-0193",
+         address: [ 55.5, 42.3 ]
+      },
+      {
+         name: "Georgine Lestaw",
+         phone: "714-555-0107",
+         address: [ -74, 44.74 ]
+      }
+   ] )
 
-```javascript
-db.contacts.find( { address: [ 55.5, 42.3 ] } )
-```
+A 2d index on the ``address`` field **does not** improve performance for
+the following query:
 
-To improve performance for this query, create either an ascending or descending index on the `address` field:
+.. code-block:: javascript
 
-```javascript
-db.contacts.createIndex( { address: 1 } )
-```
+   db.contacts.find( { address: [ 55.5, 42.3 ] } )
+
+To improve performance for this query, create either an ascending or
+descending index on the ``address`` field:
+
+.. code-block:: javascript
+
+   db.contacts.createIndex( { address: 1 } )
 
 ## Learn More
 
-- `2d-index-internals`
-- `index-properties`
+- :ref:`2d-index-internals`
+
+- :ref:`index-properties`

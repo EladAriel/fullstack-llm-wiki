@@ -1,125 +1,163 @@
 ---
 type: "Framework Learn Page"
-framework: "mongodb"
+framework: "MongoDB"
 source_repo: "https://github.com/mongodb/docs.git"
 source_branch: "main"
 source_path: "content/manual/manual/source/reference/command/analyzeShardKey.txt"
-source_commit: "ab9db26ed3d11618cdb61516d8180337d8e3f679"
-source_commit_short: "ab9db26e"
-source_commit_date: "2026-07-24T16:22:46-06:00"
-generated_at: "2026-07-25T11:51:15Z"
+source_commit: "b9f2bc487a2878b65e3c1f80024bebab76954f27"
+source_commit_short: "b9f2bc48"
+source_commit_date: "2026-08-28T17:09:45-05:00"
+generated_at: "2026-08-29T09:39:20.060050Z"
 ---
-
-==================================
-
 # analyzeShardKey (database command)
+
+**meta:** :description: Evaluate shard keys for collections using the `analyzeShardKey` command to calculate metrics based on sampled queries.
+
+.. default-domain:: mongodb
+
+**contents:** On this page
+   :local:
+   :backlinks: none
+   :depth: 1
+   :class: singlecol
 
 ## Definition
 
+**dbcommand:** analyzeShardKey
+
+   .. versionadded:: 7.0
+
+   Calculates metrics for evaluating a shard key for an unsharded or 
+   sharded collection. Metrics are based on sampled queries. You
+   can use :dbcommand:`configureQueryAnalyzer` to configure query
+   sampling on a collection.
+
 ## Compatibility
 
-This command is available in deployments hosted in the following environments:
+This command is available in deployments hosted in the following environments: 
 
-.. include:: /includes/fact-environments-atlas-only.rst
+**include:** /includes/fact-environments-atlas-only.rst
 
-.. include:: /includes/fact-environments-atlas-support-all.rst
+**include:** /includes/fact-environments-atlas-support-all.rst
 
-.. include:: /includes/fact-environments-onprem-only.rst
+**include:** /includes/fact-environments-onprem-only.rst
 
 ## Syntax
 
-`analyzeShardKey` has this syntax:
+``analyzeShardKey`` has this syntax:
 
-```javascript
-db.collection.analyzeShardKey(
-   <shardKey>,
-   {
-     keyCharacteristics: <bool>,
-     readWriteDistribution: <bool>,
-     sampleRate: <double>,
-     sampleSize: <int>
-   }
- )
-```
+.. code-block:: javascript
+   
+   db.collection.analyzeShardKey(
+      <shardKey>,
+      {
+        keyCharacteristics: <bool>,
+        readWriteDistribution: <bool>,
+        sampleRate: <double>,
+        sampleSize: <int>
+      }
+    )
+
 
 ## Command Fields
 
-.. include:: /includes/analyzeShardKey-command-fields.rst
+**include:** /includes/analyzeShardKey-command-fields.rst
+ 
+.. _ask-behavior:
 
 ## Behavior
 
-.. include:: /includes/analyzeShardKey-behavior-intro.rst
+.. |analyzeShardKey| replace:: ``analyzeShardKey``
+**include:** /includes/analyzeShardKey-behavior-intro.rst
 
 ### Metrics About Shard Key Characteristics
 
-.. include:: /includes/shard-key-characteristics-metrics.rst
+.. |suppindx|  replace:: :ref:`supporting index <supporting-indexes-ref>`
+.. |kc-output| replace:: :ref:`keyCharacteristics <key-characteristics-output>`
+.. |rw-output| replace:: :ref:`readWriteDistribution <read-write-distribution-output>`
+
+**include:** /includes/shard-key-characteristics-metrics.rst
 
 ### Metrics About the Read and Write Distribution
 
-.. include:: /includes/shard-key-read-write-distribution.rst
+**include:** /includes/shard-key-read-write-distribution.rst
 
 ### Non-Blocking Behavior
 
-.. include:: /includes/analyzeShardKey-non-blocking.rst
+**include:** /includes/analyzeShardKey-non-blocking.rst
 
 ### Query Sampling
 
-.. include:: /includes/analyzeShardKey-query-sampling.rst
+**include:** /includes/analyzeShardKey-query-sampling.rst
+
+.. _supporting-indexes-ref:
 
 ### Supporting Indexes
 
-.. include:: /includes/analyzeShardKey-supporting-indexes.rst
+**include:** /includes/analyzeShardKey-supporting-indexes.rst
 
 ### Read Preference
 
-.. include:: /includes/analyzeShardKey-read-pref.rst
+**include:** /includes/analyzeShardKey-read-pref.rst
 
 ### Limitations
 
-.. include:: /includes/analyzeShardKey-limitations.rst
+**include:** /includes/analyzeShardKey-limitations.rst
+
+.. _ask-access-control:
 
 ## Access Control
 
 |analyzeShardKey| requires one of these roles:
 
-- :authaction:`enableSharding` privilege action against the collection
-being analyzed.
-
+- :authaction:`enableSharding` privilege action against the collection 
+  being analyzed.
 - :authrole:`clusterManager` role against the cluster.
+
+.. _ask-output:
+
 ## Output
 
-.. include:: /includes/analyzeShardKey-output.rst
+**include:** /includes/analyzeShardKey-output.rst
+
+.. _key-characteristics-output:
 
 ### keyCharacteristics
 
-.. include:: /includes/analyzeShardKey-keyCharacteristics.rst
+**include:** /includes/analyzeShardKey-keyCharacteristics.rst
+
+.. _read-write-distribution-output: 
 
 ### readWriteDistribution
 
-.. include:: /includes/analyzeShardKey-readWriteDistribution-structure.rst
+**include:** /includes/analyzeShardKey-readWriteDistribution-structure.rst
 
-readDistribution Fields ```````````````````````
+### readDistribution Fields
 
-.. include:: /includes/analyzeShardKey-readWriteDistribution-read.rst
+**include:** /includes/analyzeShardKey-readWriteDistribution-read.rst
 
-writeDistribution Fields ````````````````````````
+### writeDistribution Fields
 
-.. include:: /includes/analyzeShardKey-readWriteDistribution-write.rst
+**include:** /includes/analyzeShardKey-readWriteDistribution-write.rst
+
+.. _ask-examples:
 
 ## Examples
 
-.. include:: /includes/analyzeShardKey-example-intro.rst
+.. |analyzeShardKey| replace:: ``analyzeShardKey`` command
 
-> **Note:** Before you run `analyzeShardKey` commands, read the
-`supporting-indexes-ref` section earlier on this page. If you
-require supporting indexes for the shard key you are analyzing, use
-the :method:`db.collection.createIndex()` method to create the
-indexes.
+**include:** /includes/analyzeShardKey-example-intro.rst
 
-.. include:: /includes/analyzeShardKey-examples.rst
+**note:** Before you run ``analyzeShardKey`` commands, read the
+   :ref:`supporting-indexes-ref` section earlier on this page. If you
+   require supporting indexes for the shard key you are analyzing, use
+   the :method:`db.collection.createIndex()` method to create the
+   indexes.
+
+**include:** /includes/analyzeShardKey-examples.rst
 
 ## Learn More
 
-- `sharding-reference`
+- :ref:`sharding-reference`
 - :method:`sh.shardCollection()`
 - :dbcommand:`refineCollectionShardKey`

@@ -1,52 +1,59 @@
 ---
 type: "Framework Learn Page"
-framework: "mongodb"
+framework: "MongoDB"
 source_repo: "https://github.com/mongodb/docs.git"
 source_branch: "main"
 source_path: "content/manual/manual/source/core/views/specify-collation.txt"
-source_commit: "ab9db26ed3d11618cdb61516d8180337d8e3f679"
-source_commit_short: "ab9db26e"
-source_commit_date: "2026-07-24T16:22:46-06:00"
-generated_at: "2026-07-25T11:51:15Z"
+source_commit: "b9f2bc487a2878b65e3c1f80024bebab76954f27"
+source_commit_short: "b9f2bc48"
+source_commit_date: "2026-08-28T17:09:45-05:00"
+generated_at: "2026-08-29T09:39:19.800482Z"
 ---
-
-====================================
+.. _manual-views-collation:
+.. _create-view-w-collation:
 
 # Create a View with Default Collation
 
-`Collation <manual-collation>` allows you to specify language-specific rules for string comparison, such as rules for letter-case and accent marks.
+**meta:** :description: Specify default collation for views to apply language-specific string comparison rules, affecting operations like counting documents.
+
+:ref:`Collation <manual-collation>` allows you to specify
+language-specific rules for string comparison, such as rules for
+letter-case and accent marks.
 
 This page explains how to specify a default collation for a view.
 
 ## Example
 
-Create a `places` collection with the following documents:
+Create a ``places`` collection with the following documents:
 
-```javascript
-db.places.insertMany([
-   { _id: 1, category: "café" },
-   { _id: 2, category: "cafe" },
-   { _id: 3, category: "cafE" }
-])
-```
+.. code-block:: javascript
 
-The following operation creates a view, specifying collation at the view level:
+   db.places.insertMany([
+      { _id: 1, category: "café" },
+      { _id: 2, category: "cafe" },
+      { _id: 3, category: "cafE" }
+   ])
 
-```javascript
-db.createView(
-   "placesView", 
-   "places",
-   [ { $project: { category: 1 } } ],
-   { collation: { locale: "fr", strength: 1 } } 
-)
-```
+The following operation creates a view, specifying collation at the view
+level:
+
+.. code-block:: javascript
+
+   db.createView(
+      "placesView", 
+      "places",
+      [ { $project: { category: 1 } } ],
+      { collation: { locale: "fr", strength: 1 } } 
+   )
 
 The following operation uses the view's collation:
 
-```javascript
-db.placesView.countDocuments( { category: "cafe" } )
-```
+.. code-block:: javascript
 
-The operation returns `3`.
+   db.placesView.countDocuments( { category: "cafe" } )
 
-> **Note:** .. include:: /includes/extracts/views-collation-behavior.rst
+The operation returns ``3``.
+
+**note:** Collation Behavior
+
+   .. include:: /includes/extracts/views-collation-behavior.rst

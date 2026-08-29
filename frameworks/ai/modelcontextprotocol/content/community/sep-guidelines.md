@@ -4,11 +4,12 @@ framework: "Model Context Protocol"
 source_repo: "https://github.com/modelcontextprotocol/modelcontextprotocol"
 source_branch: "main"
 source_path: "docs/community/sep-guidelines.mdx"
-source_commit: "7634684382c3d14cf7e9f14073fe40a2d8ace3fa"
-source_commit_short: "76346843"
-source_commit_date: "2026-07-23T16:49:30-07:00"
-generated_at: "2026-07-25T11:50:39Z"
+source_commit: "ca4ab3027f7c844cd3039c956438d72e8253f7f5"
+source_commit_short: "ca4ab30"
+source_commit_date: "2026-08-28T21:24:44-07:00"
+generated_at: "2026-08-29T09:38:48.011755Z"
 ---
+# Sep Guidelines
 
 ---
 title: SEP Guidelines
@@ -110,7 +111,7 @@ flowchart TD
 
 8. **Resolution**: The SEP may be `accepted`, `rejected`, or returned for revision. The sponsor updates the status.
 
-9. **Finalization**: Once accepted, the reference implementation must be completed. For Standards Track SEPs with observable protocol behavior, a [conformance test](#conformance-test-requirement) must also be merged. When complete and incorporated into the specification, the sponsor updates the status to `final`.
+9. **Finalization**: Once accepted, the reference implementation must be completed. For Standards Track SEPs with observable protocol behavior, a [conformance test](#conformance-test-requirement) must also be merged. The author adds the specification changes (schema changes, specification text, and a changelog entry) to the SEP's pull request. SDK implementations are not required for a SEP to become `final`. When this work is complete, the sponsor updates the status to `final` and the SEP's PR can be merged.
 
 ### SEP Statuses
 
@@ -225,7 +226,7 @@ For a SEP to be accepted it must meet these criteria:
 - Clear benefit to the MCP ecosystem
 - Community support and consensus
 
-Once a SEP has been accepted, the reference implementation must be completed. When complete and incorporated into the main repository, the status changes to "Final".
+Once a SEP has been accepted, the author adds the specification changes (schema changes, specification text, and a changelog entry) to the SEP's pull request. The reference implementation must be completed, along with any required [conformance test](#conformance-test-requirement). SDK implementations are not required. When this work is complete, the status changes to "Final" and the PR can be merged.
 
 ## Conformance Test Requirement
 
@@ -263,7 +264,9 @@ Rejection is not permanent. You can:
 
 ## Reporting SEP Bugs or Updates
 
-For SEPs not yet reaching `final` state, comment directly on the SEP's pull request. Once a SEP is finalized and merged, submit updates by creating a new pull request that modifies the SEP file.
+For SEPs not yet reaching `final` state, comment directly on the SEP's pull request.
+
+Final SEPs are preserved as historical records of the design as accepted. They are not updated after finalization. If the specification changes after a SEP reaches Final status, the current specification is authoritative. Each Final SEP page displays a notice to this effect.
 
 ## Transferring SEP Ownership
 

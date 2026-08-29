@@ -4,19 +4,23 @@ framework: "LangSmith"
 source_repo: "https://github.com/langchain-ai/docs.git"
 source_branch: "main"
 source_path: "src/langsmith/manage-with-terraform.mdx"
-source_commit: "2aae1dfc98ee953a9a5185fb6fcdd9efb3f4d878"
-source_commit_short: "2aae1df"
-source_commit_date: "2026-07-25T00:27:23+00:00"
-generated_at: "2026-07-25T19:08:33.409836Z"
+source_commit: "a174f9cf7c91ee5eb14ee2382eb48bfe6e4956e9"
+source_commit_short: "a174f9c"
+source_commit_date: "2026-08-28T17:04:12-07:00"
+generated_at: "2026-08-29T09:39:50.670474Z"
 ---
 ---
 title: Manage LangSmith with Terraform
 sidebarTitle: Terraform provider
 icon: "brand-terraform"
-description: Use the official LangSmith Terraform provider to manage workspaces, roles, members, evaluators, run rules, and alert rules as code.
+description: Use the official LangSmith Terraform provider to manage workspaces, access controls, resource tags, evaluators, run rules, and alert rules as code.
 ---
 
-The official [LangSmith Terraform provider](https://registry.terraform.io/providers/langchain-ai/langsmith/latest) lets you manage LangSmith organization and workspace resources as code—workspaces, custom roles, organization and workspace members, evaluators, run rules, and alert rules. It's the infrastructure-as-code counterpart to [managing your organization using the API](/langsmith/manage-organization-by-api).
+The official [LangSmith Terraform provider](https://registry.terraform.io/providers/langchain-ai/langsmith/latest) lets you manage LangSmith organization and workspace resources as code: workspaces, custom roles, organization and workspace members, resource tags, access policies, evaluators, run rules, and alert rules. It is the infrastructure-as-code counterpart to [managing your organization using the API](/langsmith/manage-organization-by-api).
+
+<Note>
+Managing resource tags and access policies requires LangSmith Terraform provider v0.0.6 or later.
+</Note>
 
 <Check>
 Before diving in, it might be helpful to read:
@@ -34,7 +38,7 @@ terraform {
   required_providers {
     langsmith = {
       source  = "langchain-ai/langsmith"
-      version = "~> 0.0.2"
+      version = "~> 0.0.6"
     }
   }
 }
@@ -62,7 +66,7 @@ The provider resolves credentials the same way as the LangSmith SDK and CLI. Pre
 Create an API key or [service key](/langsmith/administration-overview#service-keys) in your LangSmith settings. See [Authentication methods](/langsmith/authentication-methods) for the available key types.
 
 <Warning>
-Organization-scoped operations—creating workspaces and inviting organization members—require an **organization-scoped service key with Organization Admin permissions**. Set `workspace_id` (or `LANGSMITH_WORKSPACE_ID`) to target workspace-scoped resources such as workspace memberships, evaluators, and run rules.
+Organization-scoped operations, like creating workspaces, inviting organization members, and managing access policies, require an **organization-scoped service key with Organization Admin permissions**. Set `workspace_id` (or `LANGSMITH_WORKSPACE_ID`) to target workspace-scoped resources such as workspace memberships, resource tags, evaluators, and run rules.
 </Warning>
 
 ## Examples
@@ -108,6 +112,55 @@ resource "langsmith_workspace_role" "issues_agent" {
   display_name = "Issues Agent"
   description  = data.langsmith_workspace_role.admin.description
   permissions  = data.langsmith_workspace_role.admin.permissions
+}
+```
+
+### Manage resource tags and access policies
+
+Use [resource tags](/langsmith/set-up-resource-tags) to organize workspace resources and apply [attribute-based access control (ABAC)](/langsmith/abac). The `langsmith_tag` convenience resource owns one tag key and one value. Use the independent `langsmith_tag_key` and `langsmith_tag_value` resources when keys or values are shared across configurations.
+
+The following configuration creates an `Environment=production` tag, applies it to a tracing project, and limits a workspace role to production projects:
+
+```hcl
+resource "langsmith_tag" "production" {
+  key               = "Environment"
+  value             = "production"
+  key_description   = "Deployment environment"
+  value_description = "Production workloads"
+}
+
+resource "langsmith_tagging" "production_project" {
+  tag_value_id  = langsmith_tag.production.tag_value_id
+  resource_type = "project"
+  resource_id   = "00000000-0000-0000-0000-000000000000" # tracing project ID
+}
+
+resource "langsmith_workspace_role" "production_reader" {
+  display_name = "Production Reader"
+  description  = "Can read production projects"
+  permissions  = ["projects:read"]
+}
+
+resource "langsmith_access_policy" "production_readers" {
+  name        = "Production readers"
+  description = "Read access to production projects"
+  effect      = "allow"
+
+  condition_groups = [{
+    permission    = "projects:read"
+    resource_type = "project"
+    conditions = [{
+      attribute_name  = "resource_tag_key"
+      attribute_key   = "Environment"
+      operator        = "equals"
+      attribute_value = "production"
+    }]
+  }]
+}
+
+resource "langsmith_access_policy_attachment" "production_reader" {
+  role_id          = langsmith_workspace_role.production_reader.id
+  access_policy_id = langsmith_access_policy.production_readers.id
 }
 ```
 

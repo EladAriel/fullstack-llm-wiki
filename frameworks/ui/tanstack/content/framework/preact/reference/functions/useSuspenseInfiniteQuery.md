@@ -1,27 +1,31 @@
 ---
 type: "Framework Learn Page"
-framework: "tanstack"
+framework: "TanStack"
 source_repo: "https://github.com/tanstack/query"
 source_branch: "main"
 source_path: "docs/framework/preact/reference/functions/useSuspenseInfiniteQuery.md"
-source_commit: "fd50fa14d283c7d6664a796f758498d1ad5bfce7"
-source_commit_short: "fd50fa14"
-source_commit_date: "2026-07-24T22:22:47+10:00"
-generated_at: "2026-07-25T11:50:41Z"
+source_commit: "2969edf32f7e0c48e2a108d84712d6e01edfde21"
+source_commit_short: "2969edf"
+source_commit_date: "2026-08-28T01:03:02+09:00"
+generated_at: "2026-08-29T09:40:33.375542Z"
 ---
+# Usesuspenseinfinitequery
 
 ---
 id: useSuspenseInfiniteQuery
 title: useSuspenseInfiniteQuery
 ---
 
-# Function: useSuspenseInfiniteQuery()
-
 ```ts
 function useSuspenseInfiniteQuery<TQueryFnData, TError, TData, TQueryKey, TPageParam>(options, queryClient?): UseSuspenseInfiniteQueryResult<TData, TError>;
 ```
 
-Defined in: [preact-query/src/useSuspenseInfiniteQuery.ts:17](https://github.com/theVedanta/query/blob/main/packages/preact-query/src/useSuspenseInfiniteQuery.ts#L17)
+Defined in: [preact-query/src/useSuspenseInfiniteQuery.ts:74](https://github.com/TanStack/query/blob/main/packages/preact-query/src/useSuspenseInfiniteQuery.ts#L74)
+
+The options for `useSuspenseInfiniteQuery` are the same as for `useInfiniteQuery`, except for `throwOnError`,
+`enabled`, and `placeholderData`.
+
+Caveat: cancellation does not work.
 
 ## Type Parameters
 
@@ -51,10 +55,63 @@ Defined in: [preact-query/src/useSuspenseInfiniteQuery.ts:17](https://github.com
 
 [`UseSuspenseInfiniteQueryOptions`](../interfaces/UseSuspenseInfiniteQueryOptions.md)\<`TQueryFnData`, `TError`, `TData`, `TQueryKey`, `TPageParam`\>
 
+The [UseSuspenseInfiniteQueryOptions](../interfaces/UseSuspenseInfiniteQueryOptions.md) to use — the same options as `useInfiniteQuery`, minus the ones listed above.
+
 ### queryClient?
 
 `QueryClient`
 
+Use this to use a custom `QueryClient`. Otherwise, the one from the nearest context will
+be used.
+
 ## Returns
 
 [`UseSuspenseInfiniteQueryResult`](../type-aliases/UseSuspenseInfiniteQueryResult.md)\<`TData`, `TError`\>
+
+The same object as `useInfiniteQuery`, except that `data` is guaranteed to be defined,
+`isPlaceholderData` is missing, and `status` is either `success` or `error` (with the derived flags set
+accordingly).
+
+## Example
+
+```tsx
+import { Suspense } from 'preact/compat'
+import { useSuspenseInfiniteQuery } from '@tanstack/preact-query'
+
+function Projects() {
+  // `data` is guaranteed to be defined here — no `isPending` check needed.
+  const { data, fetchNextPage, hasNextPage, isFetching, isFetchingNextPage } =
+    useSuspenseInfiniteQuery({
+      queryKey: ['projects'],
+      queryFn: ({ pageParam }) => fetchProjects(pageParam),
+      initialPageParam: 0,
+      getNextPageParam: (lastPage) => lastPage.nextId,
+    })
+
+  return (
+    <div>
+      {data.pages.map((page) =>
+        page.projects.map((project) => <p key={project.id}>{project.name}</p>),
+      )}
+      <button
+        onClick={() => fetchNextPage()}
+        disabled={!hasNextPage || isFetching}
+      >
+        {isFetchingNextPage
+          ? 'Loading more...'
+          : hasNextPage
+            ? 'Load More'
+            : 'Nothing more to load'}
+      </button>
+    </div>
+  )
+}
+
+function App() {
+  return (
+    <Suspense fallback={<h1>Loading projects...</h1>}>
+      <Projects />
+    </Suspense>
+  )
+}
+```

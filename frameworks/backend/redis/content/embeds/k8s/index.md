@@ -1,51 +1,41 @@
 ---
 type: "Framework Learn Directory Index"
-framework: "redis"
-directory: "content/embeds/k8s"
-source_repo: "https://github.com/redis/docs.git"
-source_branch: "main"
-source_commit: "9d30f68c3dad1a6b3b7d30fe604b911348ce8152"
-source_commit_short: "9d30f68c"
-source_commit_date: "2026-07-24T10:52:10-07:00"
-generated_at: "2026-07-25T11:51:22Z"
+framework: "Redis"
+generated_at: "2026-08-29T09:38:56.330486Z"
 ---
 # K8S
 
-This directory contains redis learning pages related to k8s.
+This directory contains Redis learning pages related to k8s.
 
 ## Breadcrumbs
 
-[Wiki Home](../../../index.md) -> [Content](../../index.md) -> [Embeds](../index.md) -> [K8S](index.md)
+[Wiki Home](../index.md) -> [Content](index.md)
 
 ## Navigation
 
-- Parent: [Parent Index](../index.md)
-
-## Child Directories
-
-- None
+- Wiki Home: [Root Index](../index.md)
 
 ## Pages in This Directory
 
 - [Admission Service](admission-service.md)
-- [Admission Webhook](admission_webhook.md)
-- [Log Collector Role All Mode](log_collector_role_all_mode.md)
-- [Log Collector Role Restricted Mode](log_collector_role_restricted_mode.md)
-- [Multi Ns Operator Cluster Role](multi-ns_operator_cluster_role.md)
-- [Multi Ns Operator Cluster Role Binding](multi-ns_operator_cluster_role_binding.md)
-- [Multi Ns Role](multi-ns_role.md)
-- [Multi Ns Role Binding](multi-ns_role_binding.md)
+- [Admission_Webhook](admission_webhook.md)
+- [Log_Collector_Role_All_Mode](log_collector_role_all_mode.md)
+- [Log_Collector_Role_Restricted_Mode](log_collector_role_restricted_mode.md)
+- [Multi Ns_Operator_Cluster_Role](multi-ns_operator_cluster_role.md)
+- [Multi Ns_Operator_Cluster_Role_Binding](multi-ns_operator_cluster_role_binding.md)
+- [Multi Ns_Role](multi-ns_role.md)
+- [Multi Ns_Role_Binding](multi-ns_role_binding.md)
 - [Ns Illinois](ns-illinois.md)
 - [Ns Virginia](ns-virginia.md)
-- [Openshift Admission Service](openshift_admission-service.md)
-- [Openshift Rec](openshift_rec.md)
-- [Openshift Role](openshift_role.md)
-- [Openshift Role Binding](openshift_role_binding.md)
-- [Openshift Scc](openshift_scc.md)
-- [Openshift Service Account](openshift_service_account.md)
-- [Rack Aware Cluster Role](rack_aware_cluster_role.md)
-- [Rack Aware Cluster Role Binding](rack_aware_cluster_role_binding.md)
-- [Rack Aware Rec](rack_aware_rec.md)
+- [Openshift_Admission Service](openshift_admission-service.md)
+- [Openshift_Rec](openshift_rec.md)
+- [Openshift_Role](openshift_role.md)
+- [Openshift_Role_Binding](openshift_role_binding.md)
+- [Openshift_Scc](openshift_scc.md)
+- [Openshift_Service_Account](openshift_service_account.md)
+- [Rack_Aware_Cluster_Role](rack_aware_cluster_role.md)
+- [Rack_Aware_Cluster_Role_Binding](rack_aware_cluster_role_binding.md)
+- [Rack_Aware_Rec](rack_aware_rec.md)
 - [Reaadb Boeing](reaadb-boeing.md)
 - [Reaadb](reaadb.md)
 - [Rec Arlington](rec-arlington.md)
@@ -56,13 +46,5 @@ This directory contains redis learning pages related to k8s.
 - [Rerc Raegan](rerc-raegan.md)
 - [Rerc](rerc.md)
 - [Role](role.md)
-- [Role Binding](role_binding.md)
-- [Service Account](service_account.md)
-
-## IDE LLM Guidance
-
-When answering implementation questions related to this directory:
-
-1. Prefer the most specific page listed above.
-2. If the topic is broad, read the child directory index first.
-3. Use source metadata from each page when giving answers.
+- [Role_Binding](role_binding.md)
+- [Service_Account](service_account.md)

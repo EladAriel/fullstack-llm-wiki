@@ -1,14 +1,15 @@
 ---
 type: "Framework Learn Page"
-framework: "redis"
+framework: "Redis"
 source_repo: "https://github.com/redis/docs.git"
 source_branch: "main"
 source_path: "content/operate/oss_and_stack/stack-with-enterprise/timeseries/commands.md"
-source_commit: "9d30f68c3dad1a6b3b7d30fe604b911348ce8152"
-source_commit_short: "9d30f68c"
-source_commit_date: "2026-07-24T10:52:10-07:00"
-generated_at: "2026-07-25T11:51:22Z"
+source_commit: "f8693349287b0efbef3c865b6f6a2aceca88594d"
+source_commit_short: "f869334"
+source_commit_date: "2026-08-28T10:01:19-05:00"
+generated_at: "2026-08-29T09:38:55.252757Z"
 ---
+# Commands
 
 ---
 Title: Time series commands
@@ -42,6 +43,10 @@ The following table lists time series commands. See the command links for more i
 | [TS.MGET]({{< relref "commands/ts.mget" >}}) | <span title="Supported">&#x2705; Supported</span><br /><span><br /></span> | <span title="Supported">&#x2705; Flexible & Annual</span><br /><span title="Supported">&#x2705; Free & Fixed</nobr></span> | Returns multiple samples with [labels]({{< relref "develop/data-types/timeseries#create-a-time-series" >}}) that match the filter. |
 | [TS.MRANGE]({{< relref "commands/ts.mrange" >}}) | <span title="Supported">&#x2705; Supported</span><br /><span><br /></span> | <span title="Supported">&#x2705; Flexible & Annual</span><br /><span title="Supported">&#x2705; Free & Fixed</nobr></span> | For multiple time series, runs a query against samples within a range of timestamps, from earliest to latest. Supports [filtering]({{< relref "/develop/data-types/timeseries#query-data-points" >}}) and [aggregation]({{< relref "/develop/data-types/timeseries#aggregation" >}}). |
 | [TS.MREVRANGE]({{< relref "commands/ts.mrevrange" >}}) | <span title="Supported">&#x2705; Supported</span><br /><span><br /></span> | <span title="Supported">&#x2705; Flexible & Annual</span><br /><span title="Supported">&#x2705; Free & Fixed</nobr></span> | For multiple time series, runs a query against samples within a range of timestamps in reverse order, from latest to earliest. Supports [filtering]({{< relref "/develop/data-types/timeseries#query-data-points" >}}) and [aggregation]({{< relref "/develop/data-types/timeseries#aggregation" >}}). |
+| [TS.NRANGE]({{< relref "commands/ts.nrange" >}}) | <span title="Not supported">&#x274c; Not supported</span><br /><span><br /></span> | <span title="Not supported">&#x274c; Flexible & Annual</span><br /><span title="Not supported">&#x274c; Free & Fixed</nobr></span> | Query a range across multiple time series in forward direction, returning the results grouped by timestamp. |
+| [TS.NREVRANGE]({{< relref "commands/ts.nrevrange" >}}) | <span title="Not supported">&#x274c; Not supported</span><br /><span><br /></span> | <span title="Not supported">&#x274c; Flexible & Annual</span><br /><span title="Not supported">&#x274c; Free & Fixed</nobr></span> | Query a range across multiple time series in reverse direction, returning the results grouped by timestamp. |
 | [TS.QUERYINDEX]({{< relref "commands/ts.queryindex" >}}) | <span title="Supported">&#x2705; Supported</span><br /><span><br /></span> | <span title="Supported">&#x2705; Flexible & Annual</span><br /><span title="Supported">&#x2705; Free & Fixed</nobr></span> | Returns the keys of all time series with [labels]({{< relref "/develop/data-types/timeseries#create-a-time-series" >}}) that match the given filters. |
+| [TS.QUERYLABELS]({{< relref "commands/ts.querylabels" >}}) | <span title="Not supported">&#x274c; Not supported</span><br /><span><br /></span> | <span title="Not supported">&#x274c; Flexible & Annual</span><br /><span title="Not supported">&#x274c; Free & Fixed</nobr></span> | Returns all label names, or all values of a given label, for time series matching a filter list, or all series. |
+| [TS.READ]({{< relref "commands/ts.read" >}}) | <span title="Not supported">&#x274c; Not supported</span><br /><span><br /></span> | <span title="Not supported">&#x274c; Flexible & Annual</span><br /><span title="Not supported">&#x274c; Free & Fixed</nobr></span> | Read a batch of time series samples at or after a given timestamp, returning up to `max_count` of the oldest qualifying samples ordered by increasing timestamp. By default `TS.READ` returns immediately with whatever is available; add the optional `BLOCK` keyword to wait until at least `min_count` samples exist or `milliseconds` elapse, whichever occurs first. |
 | [TS.RANGE]({{< relref "commands/ts.range" >}}) | <span title="Supported">&#x2705; Supported</span><br /><span><br /></span> | <span title="Supported">&#x2705; Flexible & Annual</span><br /><span title="Supported">&#x2705; Free & Fixed</nobr></span> | From the start of a single time series, runs a query against samples within a range of timestamps. Supports [filtering]({{< relref "/develop/data-types/timeseries#query-data-points" >}}) and [aggregation]({{< relref "/develop/data-types/timeseries#aggregation" >}}). |
 | [TS.REVRANGE]({{< relref "commands/ts.revrange" >}}) | <span title="Supported">&#x2705; Supported</span><br /><span><br /></span> | <span title="Supported">&#x2705; Flexible & Annual</span><br /><span title="Supported">&#x2705; Free & Fixed</nobr></span> | From the end of a single time series, runs a query against samples within a range of timestamps in reverse order. Supports [filtering]({{< relref "/develop/data-types/timeseries#query-data-points" >}}) and [aggregation]({{< relref "/develop/data-types/timeseries#aggregation" >}}). |

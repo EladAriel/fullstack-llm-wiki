@@ -1,107 +1,281 @@
 ---
 type: "Framework Learn Page"
-framework: "mongodb"
+framework: "MongoDB"
 source_repo: "https://github.com/mongodb/docs.git"
 source_branch: "main"
 source_path: "content/manual/manual/source/tutorial/manage-indexes.txt"
-source_commit: "ab9db26ed3d11618cdb61516d8180337d8e3f679"
-source_commit_short: "ab9db26e"
-source_commit_date: "2026-07-24T16:22:46-06:00"
-generated_at: "2026-07-25T11:51:15Z"
+source_commit: "b9f2bc487a2878b65e3c1f80024bebab76954f27"
+source_commit_short: "b9f2bc48"
+source_commit_date: "2026-08-28T17:09:45-05:00"
+generated_at: "2026-08-29T09:39:19.595824Z"
 ---
+**meta:** :keywords: code example, node.js, compass
+   :description: Learn how to manage existing indexes in MongoDB, including viewing, removing, and modifying indexes, and handling index inconsistencies across shards.
 
-==============
+.. _manage-indexes:
 
 # Manage Indexes
 
-This page shows how to manage existing indexes. For instructions on creating indexes, refer to the specific index type pages.
+.. default-domain:: mongodb
+
+**contents:** On this page
+   :local:
+   :backlinks: none
+   :depth: 1
+   :class: singlecol
+
+This page shows how to manage existing indexes. For instructions on
+creating indexes, refer to the specific index type pages.
+
 
 ## View Existing Indexes
 
-.. include:: /includes/driver-view-existing-indexes-tabs.rst
+**include:** /includes/driver-view-existing-indexes-tabs.rst
+
+.. |things| replace:: collections and indexes
+.. |method| replace:: :method:`db.getCollectionNames()` and :method:`db.collection.getIndexes()`
+
 
 ## Remove Indexes
 
-> **Tip:** If you drop an index that is actively used in production, your
-application may incur a performance degradation. Before you drop an
-index, you can evaluate the potential impact of the drop by
-`hiding the index <hide-existing-index>`.
-Hidden indexes are not used to support queries. If you hide an index
-and observe substantial negative performance impact, consider keeping
-and unhiding the index so queries can resume using it.
+**tip:** Hide an Index Before Dropping It
 
-To learn how to remove an existing index, see `drop-an-index`.
+   If you drop an index that is actively used in production, your
+   application may incur a performance degradation. Before you drop an
+   index, you can evaluate the potential impact of the drop by
+   :ref:`hiding the index <hide-existing-index>`.
+   
+   Hidden indexes are not used to support queries. If you hide an index
+   and observe substantial negative performance impact, consider keeping
+   and unhiding the index so queries can resume using it.
+
+To learn how to remove an existing index, see :ref:`drop-an-index`.
 
 To learn how to remove an index in |compass|, see :compass:`Manage Indexes in Compass </indexes>`.
 
+.. .. include:: /includes/driver-remove-indexes-tabs.rst
+
+.. _manage-indexes-modify:
+
 ## Modify an Index
 
-.. include:: /includes/driver-examples/driver-example-modify-index-tabs.rst
+**include:** /includes/driver-examples/driver-example-modify-index-tabs.rst
 
 ### Minimize Performance Impact With a Temporary Index
 
-If you drop an index that is actively used in production, your application may incur a performance degradation. To ensure queries can still use an index during modification, you can create a temporary, redundant index that contains the same fields as the modified index.
+If you drop an index that is actively used in production, your
+application may incur a performance degradation. To ensure queries can
+still use an index during modification, you can create a temporary,
+redundant index that contains the same fields as the modified index.
 
-Example ```````
+### Example
 
-This example creates a new index and modifies that index to make it `unique <index-type-unique>`.
+This example creates a new index and modifies that index to make it
+:ref:`unique <index-type-unique>`.
+
+**procedure:** :style: normal
+
+   .. step:: Create a ``siteAnalytics`` collection with an index on the ``url`` field
+
+      Run this command:
+
+      .. code-block:: javascript
+
+         db.siteAnalytics.createIndex( { "url": 1 } )
+
+      The command returns the name of the index:
+
+      .. code-block:: javascript
+         :copyable: false
+
+         url_1
+
+   .. step:: Create a temporary index that contains the ``url`` field
+
+      Run this command:
+
+      .. code-block:: javascript
+
+         db.siteAnalytics.createIndex( { "url": 1, "dummyField": 1 } )
+
+      The command returns the name of the index:
+
+      .. code-block:: javascript
+         :copyable: false
+
+         url_1_dummyField_1
+
+      This temporary index lets you safely drop the original ``{ "url":
+      1 }`` index without impacting performance.
+
+   .. step:: Drop the original index
+
+      Run this command:
+
+      .. code-block:: javascript
+
+         db.siteAnalytics.dropIndex( { "url_1" } )
+
+      The command returns:
+
+      .. code-block:: javascript
+         :copyable: false
+
+         { nIndexesWas: 3, ok: 1 } 
+
+   .. step:: Recreate the ``{ "url": 1 }`` index with the ``unique`` property
+
+       Run this command:
+
+       .. code-block:: javascript
+
+         db.siteAnalytics.createIndex( { "url": 1 }, { "unique": true } )
+         
+       The command returns the name of the index:
+
+       .. code-block:: javascript
+          :copyable: false
+
+          url_1
+         
+       The ``url_1`` index is recreated and you can drop the temporary
+       index without impacting performance. Queries on the ``url`` field
+       can use the new unique index.
+
+   .. step:: Drop the temporary index
+
+      Run this command:
+
+      .. code-block:: javascript
+
+         db.siteAnalytics.dropIndex( { "url_1_dummyField_1" } )
+
+      The command returns:
+
+      .. code-block:: javascript
+         :copyable: false
+
+         { nIndexesWas: 3, ok: 1 } 
+
+   .. step:: Confirm that the index was updated
+
+      To view the indexes on the ``siteAnalytics`` collection, run this
+      command:
+
+      .. code-block:: javascript
+
+         db.siteAnalytics.getIndexes()
+
+      The command returns these indexes, indicating that the ``url_1``
+      index is now unique:
+
+      .. code-block:: javascript
+         :copyable: false
+
+         [
+           { v: 2, key: { _id: 1 }, name: '_id_' },
+           { v: 2, key: { url: 1 }, name: 'url_1', unique: true }
+         ]       
+
+.. _manage-indexes-find-inconsistent-indexes:
 
 ## Find Inconsistent Indexes Across Shards
 
-A sharded collection has an inconsistent index if the collection does not have the exact same indexes (including the index options) on each shard that contains chunks for the collection. Although inconsistent indexes should not occur during normal operations, inconsistent indexes can occur, such as:
+A sharded collection has an inconsistent index if the collection does
+not have the exact same indexes (including the index options) on each
+shard that contains chunks for the collection. Although inconsistent
+indexes should not occur during normal operations, inconsistent indexes
+can occur, such as:
 
-- When a user is creating an index with a `unique` key constraint and
-one shard contains a chunk with duplicate documents. In such cases, the create index operation may succeed on the shards without duplicates but not on the shard with duplicates.
-
+- When a user is creating an index with a ``unique`` key constraint and
+  one shard contains a chunk with duplicate documents. In such cases,
+  the create index operation may succeed on the shards without
+  duplicates but not on the shard with duplicates.
+  
 - When a user is creating an index across the shards in a :doc:`rolling
-manner (i.e. manually building the index one by one across the shards) </tutorial/build-indexes-on-sharded-clusters>` but either fails to build the index for an associated shard or incorrectly builds an index with different specification.
+  manner (i.e. manually building the index one by one across the
+  shards) </tutorial/build-indexes-on-sharded-clusters>` but either
+  fails to build the index for an associated shard or incorrectly
+  builds an index with different specification.
 
-The `config server <sharding-config-server>` primary, by default, checks for index inconsistencies across the shards for sharded collections, and the command :dbcommand:`serverStatus`, when run on the config server primary, returns the field :serverstatus:`shardedIndexConsistency` field to report on the number of sharded collections with index inconsistencies.
+The :ref:`config server <sharding-config-server>` primary, by default, checks 
+for index inconsistencies across the shards for sharded collections, and
+the command :dbcommand:`serverStatus`, when run on the config server
+primary, returns the field :serverstatus:`shardedIndexConsistency`
+field to report on the number of sharded collections with index
+inconsistencies.
 
-If :serverstatus:`shardedIndexConsistency` reports any index inconsistencies, you can run the :dbcommand:`checkMetadataConsistency` command with `checkIndexes: true` for your sharded collections to find the inconsistencies.
+If :serverstatus:`shardedIndexConsistency` reports any index
+inconsistencies, you can run the :dbcommand:`checkMetadataConsistency`
+command with ``checkIndexes: true`` for your sharded collections to 
+find the inconsistencies.
 
-#. Run the `checkMetadataConsistency` command:
+#. Run the ``checkMetadataConsistency`` command:
 
-```javascript
-   db.runCommand( {
-      checkMetadataConsistency: 1,
-      checkIndexes: true
-   } )
-```
+   .. code-block:: javascript
 
-#. If the collection has inconsistent indexes, the `checkMetadataConsistency` command returns details regarding the inconsistent indexes similar to the following:
+      db.runCommand( {
+         checkMetadataConsistency: 1,
+         checkIndexes: true
+      } )
 
-.. include:: /includes/checkMetadataConsistency-check-indexes-output.rst
+#. If the collection has inconsistent indexes, the ``checkMetadataConsistency`` 
+   command returns details regarding the inconsistent indexes similar to the
+   following:
 
-To resolve the inconsistency where an index is missing  from the collection on a particular shard(s), You can either:
+   .. include:: /includes/checkMetadataConsistency-check-indexes-output.rst
 
-- Issue an index build :method:`db.collection.createIndex()` from a
-:binary:`~bin.mongos` instance. The operation only builds the collection's index on the shard(s) missing the index.
+   The output indicates two inconsistencies for the sharded
+   collection ``test.reviews``:
 
-\-OR-
+   #. An index named ``reviewDt_1`` has inconsistent properties across
+      the collection's shards, specifically, the ``expireAfterSeconds``
+      properties differ.
 
-- Perform a :doc:`rolling index build
-</tutorial/build-indexes-on-sharded-clusters>` for the collection on the affected shard(s).
+   #. An index named ``page_1_score_1`` is missing from the collection
+      on ``shard02``.
 
-> **Note:**      Rolling indexes may negatively impact your deployment. For
-     information on when to use this index build, see
-     `rolling-index-build`.
+To resolve the inconsistency where an index is missing  from the collection on a particular shard(s),
+   You can either:
 
-.. include:: /includes/warning-simultaneous-index-builds.rst
+   - Issue an index build :method:`db.collection.createIndex()` from a
+     :binary:`~bin.mongos` instance. The operation only builds the
+     collection's index on the shard(s) missing the index.
 
-To resolve where the index properties differ across the shards, Drop the incorrect index from the collection on the affected shard(s) and rebuild the index. To rebuild the index, you can either:
+     \-OR-
 
-- Issue an index build :method:`db.collection.createIndex()` from a
-:binary:`~bin.mongos` instance. The operation only builds the collection's index on the shard(s) missing the index.
+   - Perform a :doc:`rolling index build
+     </tutorial/build-indexes-on-sharded-clusters>` for the collection
+     on the affected shard(s).
 
-\-OR-
+     .. note::
 
-- Perform a :doc:`rolling index build
-</tutorial/build-indexes-on-sharded-clusters>` for the collection on the affected shard.
+        Rolling indexes may negatively impact your deployment. For
+        information on when to use this index build, see
+        :ref:`rolling-index-build`.
 
-> **Note:**      Rolling indexes may negatively impact your deployment. For
-     information on when to use this index build, see
-     `rolling-index-build`.
-Alternatively, if the inconsistency is the `expireAfterSeconds` property,
-you can run the :dbcommand:`collMod` command to update the number of
-seconds instead of dropping and rebuilding the index.
+**include:** /includes/warning-simultaneous-index-builds.rst
+
+To resolve where the index properties differ across the shards, 
+   Drop the incorrect index from the collection on the affected
+   shard(s) and rebuild the index. To rebuild the index, you can either:
+
+   - Issue an index build :method:`db.collection.createIndex()` from a
+     :binary:`~bin.mongos` instance. The operation only builds the
+     collection's index on the shard(s) missing the index.
+
+     \-OR-
+
+   - Perform a :doc:`rolling index build
+     </tutorial/build-indexes-on-sharded-clusters>` for the collection
+     on the affected shard.
+
+     .. note::
+
+        Rolling indexes may negatively impact your deployment. For
+        information on when to use this index build, see
+        :ref:`rolling-index-build`. 
+
+   Alternatively, if the inconsistency is the ``expireAfterSeconds`` property,
+   you can run the :dbcommand:`collMod` command to update the number of
+   seconds instead of dropping and rebuilding the index.

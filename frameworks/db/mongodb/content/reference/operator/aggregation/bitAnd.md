@@ -1,108 +1,126 @@
 ---
 type: "Framework Learn Page"
-framework: "mongodb"
+framework: "MongoDB"
 source_repo: "https://github.com/mongodb/docs.git"
 source_branch: "main"
 source_path: "content/manual/manual/source/reference/operator/aggregation/bitAnd.txt"
-source_commit: "ab9db26ed3d11618cdb61516d8180337d8e3f679"
-source_commit_short: "ab9db26e"
-source_commit_date: "2026-07-24T16:22:46-06:00"
-generated_at: "2026-07-25T11:51:15Z"
+source_commit: "b9f2bc487a2878b65e3c1f80024bebab76954f27"
+source_commit_short: "b9f2bc48"
+source_commit_date: "2026-08-28T17:09:45-05:00"
+generated_at: "2026-08-29T09:39:20.218421Z"
 ---
-
-=============================
-
 # $bitAnd (expression operator)
+
+**meta:** :description: Perform bitwise `and` operations on arrays of integers or longs using the `$bitAnd` aggregation operator in MongoDB.
+
+.. default-domain:: mongodb
+
+**contents:** On this page
+  :local:
+  :backlinks: none
+  :depth: 1
+  :class: singlecol
 
 ## Definition
 
-.. versionadded:: 6.3
+**versionadded:** 6.3
+
+**expression:** $bitAnd 
+
+    Returns the result of a bitwise ``and`` operation on an array of ``int`` or 
+    ``long`` values. 
 
 ## Syntax
 
-The :expression:`$bitAnd` operator has the following syntax:
+The :expression:`$bitAnd` operator has the following syntax: 
 
-```javascript
-   { $bitAnd: [ <expression1>, <expression2>, ... ] }
-```
+.. code-block:: javascript
+
+      { $bitAnd: [ <expression1>, <expression2>, ... ] }
 
 ## Behavior
 
-.. include:: /includes/fact-bitwise-integer-long-results.rst
+**include:** /includes/fact-bitwise-integer-long-results.rst
 
-.. include:: /includes/fact-mongosh-integer-long-constructors.rst
+**include:** /includes/fact-mongosh-integer-long-constructors.rst
 
-.. include:: /includes/fact-bitwise-type-error.rst
+**include:** /includes/fact-bitwise-type-error.rst
 
-If the argument is an empty array, the operation returns `Int32(-1)`.
+If the argument is an empty array, the operation returns ``Int32(-1)``.
 
-If any of the operands equate to `null`, the operation returns `null`.
+If any of the operands equate to ``null``, the operation returns ``null``. 
 
 ## Examples
 
-The examples on this page use the `switches` collection, which contains the following documents:
+The examples on this page use the ``switches`` collection, which contains the 
+following documents: 
 
-```javascript
- db.switches.insertMany( [
-     { _id: 0, a: Int32(0), b: Int32(127) },
-     { _id: 1, a: Int32(2), b: Int32(3) },
-     { _id: 2, a: Int32(3), b: Int32(5) }
- ] )
-```
+.. code-block:: javascript 
 
-### Bitwise `AND` with Two Integers
+    db.switches.insertMany( [
+        { _id: 0, a: Int32(0), b: Int32(127) },
+        { _id: 1, a: Int32(2), b: Int32(3) },
+        { _id: 2, a: Int32(3), b: Int32(5) }
+    ] )
 
-The following aggregation uses the :expression:`$bitAnd` operator in the :pipeline:`$project` stage:
+### Bitwise ``AND`` with Two Integers
 
-```javascript
- db.switches.aggregate( [
-   { 
-     $project: { 
-       result: { 
-         $bitAnd: [ "$a", "$b" ]
-       }
-     }
-   }
- ])
-```
+The following aggregation uses the :expression:`$bitAnd` operator in the 
+:pipeline:`$project` stage:
 
-The operation returns the following results:
+.. code-block:: javascript 
 
-```javascript
- [
-   { _id: 0, result: 0 }
-   { _id: 1, result: 2 }
-   { _id: 2, result: 1 }
- ]
-```
-
-### Bitwise `AND` with a Long and Integer
-
-The following aggregation uses the :expression:`$bitAnd` operator in the :pipeline:`$project` stage:
-
-```javascript
- db.switches.aggregate( [
-   { 
-     $project: { 
-       result: { 
-         $bitAnd: [ "$a", Long("63") ]
-       }
-     }
-   }
- ])
-```
+    db.switches.aggregate( [
+      { 
+        $project: { 
+          result: { 
+            $bitAnd: [ "$a", "$b" ]
+          }
+        }
+      }
+    ])
 
 The operation returns the following results:
 
-```javascript
- [
-   { _id: 0, result: Long("0") }
-   { _id: 1, result: Long("2") }
-   { _id: 2, result: Long("3") }
- ]
-```
+.. code-block:: javascript 
+  :copyable: false
+
+    [
+      { _id: 0, result: 0 }
+      { _id: 1, result: 2 }
+      { _id: 2, result: 1 }
+    ]
+
+### Bitwise ``AND`` with a Long and Integer
+
+The following aggregation uses the :expression:`$bitAnd` operator in the 
+:pipeline:`$project` stage:
+
+.. code-block:: javascript 
+
+    db.switches.aggregate( [
+      { 
+        $project: { 
+          result: { 
+            $bitAnd: [ "$a", Long("63") ]
+          }
+        }
+      }
+    ])
+
+The operation returns the following results:
+
+.. code-block:: javascript 
+  :copyable: false
+    
+    [
+      { _id: 0, result: Long("0") }
+      { _id: 1, result: Long("2") }
+      { _id: 2, result: Long("3") }
+    ]
 
 ## Learn More
 
-- `aggregation-pipeline-operators`
-- `update-bit`
+- :ref:`aggregation-pipeline-operators`
+
+- :ref:`update-bit`

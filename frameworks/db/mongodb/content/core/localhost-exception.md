@@ -1,73 +1,91 @@
 ---
 type: "Framework Learn Page"
-framework: "mongodb"
+framework: "MongoDB"
 source_repo: "https://github.com/mongodb/docs.git"
 source_branch: "main"
 source_path: "content/manual/manual/source/core/localhost-exception.txt"
-source_commit: "ab9db26ed3d11618cdb61516d8180337d8e3f679"
-source_commit_short: "ab9db26e"
-source_commit_date: "2026-07-24T16:22:46-06:00"
-generated_at: "2026-07-25T11:51:15Z"
+source_commit: "b9f2bc487a2878b65e3c1f80024bebab76954f27"
+source_commit_short: "b9f2bc48"
+source_commit_date: "2026-08-28T17:09:45-05:00"
+generated_at: "2026-08-29T09:39:19.512617Z"
 ---
-
-===============================================
+.. _localhost-exception:
 
 # Localhost Exception in Self-Managed Deployments
 
-> **Important:** On a :binary:`~bin.mongod` instance, the localhost exception only
-applies when there are **no users or roles** created in the MongoDB
-instance.
+.. default-domain:: mongodb
 
-The localhost exception allows you to create the first user or role in the system after enabling access control. You can also use it to initiate a replica set.
+**meta:** :keywords: on-prem
+   :description: Enable access control and create the first user or role using the localhost exception in MongoDB deployments.
+
+**contents:** On this page
+   :local:
+   :backlinks: none
+   :depth: 2
+   :class: singlecol
+
+**important:** On a :binary:`~bin.mongod` instance, the localhost exception only
+   applies when there are **no users or roles** created in the MongoDB
+   instance.
+
+The localhost exception allows you to create the first user or role in the
+system after enabling access control. You can also use it to initiate a replica set.
 
 ## Initiating a Replica Set
 
-You can use the localhost exception to initiate a replica set, following the steps in `server-replica-set-deploy`. You must wait until the replica set elects a primary before you can add the first user.
+You can use the localhost exception to initiate a replica set, following
+the steps in :ref:`server-replica-set-deploy`. You must wait until the replica
+set elects a primary before you can add the first user.
 
 ## Creating the First User or Role
 
-> **Warning:** Connections using the localhost exception have access to create
-only the **first user OR role**. Only create a role first if you are
-authorizing users with LDAP. See :ref:`LDAP Authorization
-<security-ldap-external>` for more information.
+**warning:** Connections using the localhost exception have access to create
+   *only* the **first user OR role**. Only create a role first if you are
+   authorizing users with LDAP. See :ref:`LDAP Authorization
+   <security-ldap-external>` for more information.
 
-After you enable access control, connect to the localhost interface and `create the first user <create-user-admin>` in the `admin` database. The first user must have privileges to create other users. The :authrole:`userAdmin` or :authrole:`userAdminAnyDatabase` role both confer the privilege to create other users.
+After you enable access control, connect to the localhost interface and
+:ref:`create the first user <create-user-admin>` in the ``admin`` database. 
+The first user must have privileges to create other users. The
+:authrole:`userAdmin` or :authrole:`userAdminAnyDatabase` role both confer the
+privilege to create other users.
 
 ### Localhost Exception for Sharded Clusters
 
-> **Important:** - On a :binary:`~bin.mongos`, the localhost exception only applies
-  when there are no `sharded cluster users <sharding-localhost>`
-  or roles created.
-- In a sharded cluster, the localhost exception applies to each shard
-  individually as well as to the cluster as a whole.
+**important:** - On a :binary:`~bin.mongos`, the localhost exception only applies
+     when there are no :ref:`sharded cluster users <sharding-localhost>`
+     or roles created.
+   - In a sharded cluster, the localhost exception applies to each shard
+     individually as well as to the cluster as a whole.
 
-Once you create a sharded cluster and add a `user administrator <create-user-admin>` through the :binary:`~bin.mongos` instance, you **must** still prevent unauthorized access to the individual shards. To prevent unauthorized access to individual shards, follow one of the following steps for each shard in your cluster:
+Once you create a sharded cluster and add a :ref:`user administrator
+<create-user-admin>` through the :binary:`~bin.mongos` instance, you
+**must** still prevent unauthorized access to the individual shards. To
+prevent unauthorized access to individual shards, follow one of the
+following steps for each shard in your cluster:
 
-- `Create a user administrator <create-user-admin>` on the shard's
-primary.
-
+- :ref:`Create a user administrator <create-user-admin>` on the shard's
+  primary.
 - Disable the localhost exception at startup. To disable the localhost
-exception, set the :parameter:`enableLocalhostAuthBypass` parameter to `0`.
+  exception, set the :parameter:`enableLocalhostAuthBypass` parameter to
+  ``0``.
+
 
 ## All Localhost Exception Permissions
 
 While the localhost exception applies, you can:
 
 - Run the :dbcommand:`createUser` command or :method:`db.createUser()` method.
-This ends the localhost exception.
-
+  This ends the localhost exception.
 - Run the :dbcommand:`createRole` command or :method:`db.createRole()` method.
-This ends the localhost exception.
-
-- Use the :authaction:`grantRole` action to grant a role to a user on an
-external authentication system, such as LDAP.
-
+  This ends the localhost exception.
+- Use the :authaction:`grantRole` action to grant a role to a user on an 
+  external authentication system, such as LDAP.
 - Run :dbcommand:`replSetInitiate` to initiate a new replica set
-- Run :dbcommand:`replSetGetStatus` to get the status of the current member's
-replica set
-
-- Run :dbcommand:`replSetReconfig` on the primary member to modify replica set
-configuration.
-
+- Run :dbcommand:`replSetGetStatus` to get the status of the current member's 
+  replica set
+- Run :dbcommand:`replSetReconfig` on the primary member to modify replica set 
+  configuration.
 - On a :binary:`~bin.mongos` instance, if the cluster is hosted on
-`localhost`, you can run :dbcommand:`addShard` to add a shard to the cluster.
+  ``localhost``, you can run :dbcommand:`addShard` to add a shard to the
+  cluster.

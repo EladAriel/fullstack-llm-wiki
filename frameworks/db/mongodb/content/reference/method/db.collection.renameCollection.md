@@ -1,80 +1,140 @@
 ---
 type: "Framework Learn Page"
-framework: "mongodb"
+framework: "MongoDB"
 source_repo: "https://github.com/mongodb/docs.git"
 source_branch: "main"
 source_path: "content/manual/manual/source/reference/method/db.collection.renameCollection.txt"
-source_commit: "ab9db26ed3d11618cdb61516d8180337d8e3f679"
-source_commit_short: "ab9db26e"
-source_commit_date: "2026-07-24T16:22:46-06:00"
-generated_at: "2026-07-25T11:51:15Z"
+source_commit: "b9f2bc487a2878b65e3c1f80024bebab76954f27"
+source_commit_short: "b9f2bc48"
+source_commit_date: "2026-08-28T17:09:45-05:00"
+generated_at: "2026-08-29T09:39:19.891139Z"
 ---
-
-=================================================
-
 # db.collection.renameCollection() (mongosh method)
 
-.. include:: includes/wayfinding/mongosh-method-renameCollection.rst
+**meta:** :description: Rename a collection using `db.collection.renameCollection()` with options to drop the target collection if it exists.
+
+.. default-domain:: mongodb
+
+**contents:** On this page
+   :local:
+   :backlinks: none
+   :depth: 1
+   :class: singlecol
+
+**include:** includes/wayfinding/mongosh-method-renameCollection.rst
 
 ## Definition
 
+**method:** db.collection.renameCollection(target, dropTarget)
+
+
+   .. |dbcommand| replace:: :dbcommand:`renameCollection` command
+
+
+   Renames a collection. Provides a wrapper for the
+   :dbcommand:`renameCollection` :term:`database command`.
+
 ### Parameters
+
+.. list-table::
+   :header-rows: 1
+   :widths: 20 20 80
+   
+   * - Parameter
+   
+     - Type
+   
+     - Description
+   
+   * - ``target``
+   
+     - string
+   
+     - The new name of the collection. Enclose the string in quotes.
+       See :ref:`restrictions-on-db-names`.
+
+   * - ``dropTarget``
+   
+     - boolean
+   
+     - Optional. If ``true``, :binary:`~bin.mongod` drops the
+       ``target`` of :dbcommand:`renameCollection` prior to renaming
+       the collection. The default value is ``false``.
+
 
 ## Compatibility
 
-This method is available in deployments hosted in the following environments:
+.. |command| replace:: method
 
-.. include:: /includes/fact-environments-atlas-only.rst
+This method is available in deployments hosted in the following environments: 
 
-.. include:: /includes/fact-environments-atlas-support-all.rst
+**include:** /includes/fact-environments-atlas-only.rst
 
-.. include:: /includes/fact-environments-onprem-only.rst
+**include:** /includes/fact-environments-atlas-support-all.rst
+
+**include:** /includes/fact-environments-onprem-only.rst
 
 ### Stable API Support
 
-.. include:: /includes/renameCollection-stable-api-compatibility.rst
+.. |stable-api-command| replace:: ``renameCollection``
+
+**include:** /includes/renameCollection-stable-api-compatibility.rst
 
 ## Behavior
 
-The `db.collection.renameCollection()` method operates within a collection by changing the metadata associated with a given collection.
+The ``db.collection.renameCollection()`` method operates within a
+collection by changing the metadata associated with a given collection.
 
-Refer to the documentation :dbcommand:`renameCollection` for additional warnings and messages.
+Refer to the documentation :dbcommand:`renameCollection` for additional
+warnings and messages.
 
-.. include:: /includes/warning-renamecollection-cursors-changestreams.rst
+**include:** /includes/warning-renamecollection-cursors-changestreams.rst
 
 - The method has the following limitations:
-- `db.collection.renameCollection()` cannot move a collection
-between databases. Use :dbcommand:`renameCollection` for these rename operations.
 
-- .. include:: /includes/extracts/views-unsupported-rename.rst
-- `db.collection.renameCollection()` is not supported on
-`time series collections <time series collection>`.
+  - ``db.collection.renameCollection()`` cannot move a collection
+    between databases. Use :dbcommand:`renameCollection` for these
+    rename operations.
 
-- You cannot rename a collection to itself. If you try to rename a
-collection to itself an `IllegalOperation` error is thrown.
+  - .. include:: /includes/extracts/views-unsupported-rename.rst
+
+  - ``db.collection.renameCollection()`` is not supported on
+    :term:`time series collections <time series collection>`.
+
+  - You cannot rename a collection to itself. If you try to rename a
+    collection to itself an ``IllegalOperation`` error is thrown.
 
 ### Resource Locking in Sharded Clusters
 
-.. versionchanged:: 5.0
+**versionchanged:** 5.0
 
-.. include:: /includes/rename-collection-in-shard.rst
+**include:** /includes/rename-collection-in-shard.rst
 
-For more information on locking in MongoDB, see `/faq/concurrency`.
+For more information on locking in MongoDB, see :doc:`/faq/concurrency`.
 
 ### Resource Locking in Replica Sets
 
-:method:`~db.collection.renameCollection()` obtains an exclusive lock on the source and target collections for the duration of the operation. All subsequent operations on the collections must wait until :method:`~db.collection.renameCollection()` completes.
+:method:`~db.collection.renameCollection()` obtains an exclusive lock on
+the source and target collections for the duration of the operation. All
+subsequent operations on the collections must wait until
+:method:`~db.collection.renameCollection()` completes. 
 
-### Interaction with `mongodump`
+### Interaction with ``mongodump``
 
-A :binary:`~bin.mongodump` started with :option:`--oplog <mongodump.--oplog>` fails if a client issues `db.collection.renameCollection()` during the dump process. See :option:`mongodump.--oplog` for more information.
+A :binary:`~bin.mongodump` started with 
+:option:`--oplog <mongodump.--oplog>` fails if a client issues
+``db.collection.renameCollection()`` during the dump process. See
+:option:`mongodump.--oplog` for more information.
 
 ## Example
 
-Call the `db.collection.renameCollection()` method on a collection object. For example:
+Call the ``db.collection.renameCollection()`` method on a
+collection object. For example:
 
-```javascript
-db.rrecord.renameCollection("record")
-```
+.. code-block:: javascript
 
-This operation will rename the `rrecord` collection to `record`. If the target name (i.e. `record`) is the name of an existing collection, then the operation will fail.
+   db.rrecord.renameCollection("record")
+
+This operation will rename the ``rrecord`` collection to ``record``. If
+the target name (i.e. ``record``) is the name of an existing collection,
+then the operation will fail.

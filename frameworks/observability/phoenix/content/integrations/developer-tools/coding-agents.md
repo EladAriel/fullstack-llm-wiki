@@ -4,17 +4,17 @@ framework: "Arize Phoenix"
 source_repo: "https://github.com/Arize-ai/phoenix.git"
 source_branch: "main"
 source_path: "docs/phoenix/integrations/developer-tools/coding-agents.mdx"
-source_commit: "69b3ab92c37ff65812feaa2dbf0b1c0ad5ae55fe"
-source_commit_short: "69b3ab9"
-source_commit_date: "2026-07-25T11:48:12-06:00"
-generated_at: "2026-07-25T19:08:24.840645Z"
+source_commit: "c48e50e9906fcc56c1c103ebd93ef3c95ed6b6e7"
+source_commit_short: "c48e50e"
+source_commit_date: "2026-08-29T01:45:20-06:00"
+generated_at: "2026-08-29T09:39:58.926210Z"
 ---
 ---
 title: "Coding Agents"
 description: Integrate Phoenix with AI coding assistants using CLI, MCP, and skills in a single workflow guide.
 ---
 
-Use this guide to connect coding agents (Claude Code, Cursor, VS Code, Windsurf, and others) to Phoenix for debugging, observability, and evaluation workflows.
+Use this guide to connect coding agents (Claude Code, Cursor, VS Code, Windsurf, and others) to Phoenix for debugging, observability, and evaluation workflows. If you haven't instrumented your app yet, start with [Agent-Assisted Setup](/docs/phoenix/agent-assisted-setup).
 
 <Note>
 This page sets up your coding agent to **operate on Phoenix** — reading traces, experiments, and datasets via the CLI, MCP, and skills. To instead **trace your sessions with a coding agent** (turns, tool calls, and token costs), see [Coding Agents](/docs/phoenix/integrations/coding-agents/claude-code).
@@ -41,7 +41,7 @@ Most users should set up all three:
 Set environment variables to connect to your Phoenix instance:
 
 ```bash
-export PHOENIX_HOST=http://localhost:6006    # Your Phoenix endpoint
+export PHOENIX_ENDPOINT=http://localhost:6006    # Your Phoenix endpoint
 export PHOENIX_PROJECT=my-project            # Project name
 export PHOENIX_API_KEY=your-api-key          # API key (if auth enabled)
 ```

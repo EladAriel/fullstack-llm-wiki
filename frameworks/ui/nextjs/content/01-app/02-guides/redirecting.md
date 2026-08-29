@@ -1,14 +1,15 @@
 ---
 type: "Framework Learn Page"
-framework: "nextjs"
+framework: "Next.js"
 source_repo: "https://github.com/vercel/next.js/"
 source_branch: "canary"
 source_path: "docs/01-app/02-guides/redirecting.mdx"
-source_commit: "dcf242a17b5d4622bbd9624db531a9d84177619f"
-source_commit_short: "dcf242a1"
-source_commit_date: "2026-07-25T10:16:19+02:00"
-generated_at: "2026-07-25T11:50:53Z"
+source_commit: "33a5d542e519fe4e05c8c8c2c2845da9f741699b"
+source_commit_short: "33a5d542"
+source_commit_date: "2026-08-29T00:04:45-07:00"
+generated_at: "2026-08-29T09:40:24.274690Z"
 ---
+# Redirecting
 
 ---
 title: How to handle redirects in Next.js
@@ -92,7 +93,7 @@ export async function createPost(id) {
 
 > **Good to know**:
 >
-> - `redirect` returns a 307 (Temporary Redirect) status code by default. When used in a Server Action, it returns a 303 (See Other), which is commonly used for redirecting to a success page as a result of a POST request.
+> - In a Server Action, `redirect` performs a client-side navigation when JavaScript is available. Without JavaScript, the form submission uses a 303 (See Other). In other contexts, `redirect` uses a 307 (Temporary Redirect).
 > - `redirect` throws an error so it should be called **outside** the `try` block when using `try/catch` statements.
 > - `redirect` can be called in Client Components during the rendering process but not in event handlers. You can use the [`useRouter` hook](#userouter-hook) instead.
 > - `redirect` also accepts absolute URLs and can be used to redirect to external links.
@@ -144,7 +145,7 @@ export async function updateUsername(username, formData) {
 
 > **Good to know**:
 >
-> - `permanentRedirect` returns a 308 (permanent redirect) status code by default.
+> - In a Server Action, `permanentRedirect` performs a client-side navigation when JavaScript is available. Without JavaScript, the form submission uses a 303 (See Other). In other contexts, `permanentRedirect` uses a 308 (Permanent Redirect).
 > - `permanentRedirect` also accepts absolute URLs and can be used to redirect to external links.
 > - If you'd like to redirect before the render process, use [`next.config.js`](#redirects-in-nextconfigjs) or [Proxy](#nextresponseredirect-in-proxy).
 
@@ -388,11 +389,11 @@ Consider the following data structure:
 }
 ```
 
-In [Proxy](/docs/app/api-reference/file-conventions/proxy), you can read from a database such as Vercel's [Edge Config](https://vercel.com/docs/edge-config/get-started) or [Redis](https://vercel.com/docs/redis), and redirect the user based on the incoming request:
+In [Proxy](/docs/app/api-reference/file-conventions/proxy), you can read from a database such as Vercel's [Global Config](https://vercel.com/docs/global-config/get-started) or [Redis](https://vercel.com/docs/redis), and redirect the user based on the incoming request:
 
 ```ts filename="proxy.ts" switcher
 import { NextResponse, NextRequest } from 'next/server'
-import { get } from '@vercel/edge-config'
+import { get } from '@vercel/global-config'
 
 type RedirectEntry = {
   destination: string
@@ -416,7 +417,7 @@ export async function proxy(request: NextRequest) {
 
 ```js filename="proxy.js" switcher
 import { NextResponse } from 'next/server'
-import { get } from '@vercel/edge-config'
+import { get } from '@vercel/global-config'
 
 export async function proxy(request) {
   const pathname = request.nextUrl.pathname

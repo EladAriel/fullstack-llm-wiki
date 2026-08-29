@@ -4,12 +4,11 @@ framework: "LangChain"
 source_repo: "https://github.com/langchain-ai/docs"
 source_branch: "main"
 source_path: "src/oss/langchain/multi-agent/handoffs.mdx"
-source_commit: "2aae1dfc98ee953a9a5185fb6fcdd9efb3f4d878"
-source_commit_short: "2aae1dfc"
-source_commit_date: "2026-07-25T00:27:23Z"
-generated_at: "2026-07-25T11:51:05Z"
+source_commit: "a174f9cf7c91ee5eb14ee2382eb48bfe6e4956e9"
+source_commit_short: "a174f9c"
+source_commit_date: "2026-08-28T17:04:12-07:00"
+generated_at: "2026-08-29T09:38:24.258592Z"
 ---
-
 ---
 title: Handoffs
 ---
@@ -490,13 +489,13 @@ def transfer_to_support(
 
 # 3. Create agents with handoff tools
 sales_agent = create_agent(
-    model="google_genai:gemini-3.5-flash",
+    model="google_genai:gemini-3.6-flash",
     tools=[transfer_to_support],
     system_prompt="You are a sales agent. Help with sales inquiries. If asked about technical issues or support, transfer to the support agent.",
 )
 
 support_agent = create_agent(
-    model="google_genai:gemini-3.5-flash",
+    model="google_genai:gemini-3.6-flash",
     tools=[transfer_to_sales],
     system_prompt="You are a support agent. Help with technical issues. If asked about pricing or purchasing, transfer to the sales agent.",
 )
@@ -648,14 +647,14 @@ const transferToSupport = tool(
 
 // 3. Create agents with handoff tools
 const salesAgent = createAgent({
-  model: "google_genai:gemini-3.5-flash",
+  model: "google_genai:gemini-3.6-flash",
   tools: [transferToSupport],
   systemPrompt:
     "You are a sales agent. Help with sales inquiries. If asked about technical issues or support, transfer to the support agent.",
 });
 
 const supportAgent = createAgent({
-  model: "google_genai:gemini-3.5-flash",
+  model: "google_genai:gemini-3.6-flash",
   tools: [transferToSales],
   systemPrompt:
     "You are a support agent. Help with technical issues. If asked about pricing or purchasing, transfer to the sales agent.",
@@ -673,10 +672,7 @@ const callSupportAgent: GraphNode<typeof MultiAgentState.State> = async (state) 
 };
 
 // 5. Create router that checks if we should end or continue
-const routeAfterAgent: ConditionalEdgeRouter<
-  typeof MultiAgentState.State,
-  "sales_agent" | "support_agent"
-> = (state) => {
+const routeAfterAgent: ConditionalEdgeRouter<{ InputSchema: typeof MultiAgentState.State; Nodes: "sales_agent" | "support_agent" }> = (state) => {
   const messages = state.messages ?? [];
 
   // Check the last message - if it's an AIMessage without tool calls, we're done
@@ -692,10 +688,7 @@ const routeAfterAgent: ConditionalEdgeRouter<
   return active as "sales_agent" | "support_agent";
 };
 
-const routeInitial: ConditionalEdgeRouter<
-  typeof MultiAgentState.State,
-  "sales_agent" | "support_agent"
-> = (state) => {
+const routeInitial: ConditionalEdgeRouter<{ InputSchema: typeof MultiAgentState.State; Nodes: "sales_agent" | "support_agent" }> = (state) => {
   // Route to the active agent based on state, default to sales agent
   return (state.activeAgent ?? "sales_agent") as
     | "sales_agent"

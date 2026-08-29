@@ -1,64 +1,94 @@
 ---
 type: "Framework Learn Page"
-framework: "mongodb"
+framework: "MongoDB"
 source_repo: "https://github.com/mongodb/docs.git"
 source_branch: "main"
 source_path: "content/manual/manual/source/tutorial/use-database-commands.txt"
-source_commit: "ab9db26ed3d11618cdb61516d8180337d8e3f679"
-source_commit_short: "ab9db26e"
-source_commit_date: "2026-07-24T16:22:46-06:00"
-generated_at: "2026-07-25T11:51:15Z"
+source_commit: "b9f2bc487a2878b65e3c1f80024bebab76954f27"
+source_commit_short: "b9f2bc48"
+source_commit_date: "2026-08-28T17:09:45-05:00"
+generated_at: "2026-08-29T09:39:19.610065Z"
 ---
-
 :orphan:
-
-=====================
 
 # Use Database Commands
 
-The MongoDB command interface provides access to all `non CRUD <CRUD>` database operations. Fetching server statistics, initializing a replica set, and running an aggregation pipeline or map-reduce job are all accomplished with commands.
+**meta:** :description: Access non-CRUD operations in MongoDB using database commands, including server statistics and replica set initialization.
 
-See `/reference/command` for list of all commands sorted by function.
+.. default-domain:: mongodb
+
+**contents:** On this page
+   :local:
+   :backlinks: none
+   :depth: 1
+   :class: singlecol
+
+The MongoDB command interface provides access to all :term:`non CRUD
+<CRUD>` database operations. Fetching server statistics, initializing a
+replica set, and running an aggregation pipeline or map-reduce job are
+all accomplished with commands.
+
+See :doc:`/reference/command` for list of all commands sorted by
+function.
 
 ## Database Command Form
 
-You specify a command first by constructing a standard `BSON` document whose first key is the name of the command. For example, specify the :dbcommand:`hello` command using the following `BSON` document:
+You specify a command first by constructing a standard :term:`BSON`
+document whose first key is the name of the command. For example,
+specify the :dbcommand:`hello` command using the following
+:term:`BSON` document:
 
-```javascript
-{ hello: 1 }
-```
+.. code-block:: javascript
+
+   { hello: 1 }
+
+.. _issue-commands:
 
 ## Issue Commands
 
-:binary:`~bin.mongosh` provides a helper method for running commands called :method:`db.runCommand()`. The following operation in :binary:`~bin.mongosh` runs the previous command:
+:binary:`~bin.mongosh` provides a helper method for running
+commands called :method:`db.runCommand()`. The following operation in
+:binary:`~bin.mongosh` runs the previous command:
 
-```javascript
-db.runCommand( { hello: 1 } )
-```
+.. code-block:: javascript
 
-Many :driver:`Drivers </>` provide an equivalent for the :method:`db.runCommand()` method. Internally, running commands with :method:`db.runCommand()` is equivalent to a special query against the `$cmd` collection.
+   db.runCommand( { hello: 1 } )
 
-Many common commands have their own shell helpers or wrappers in :binary:`~bin.mongosh` and drivers, such as the :method:`db.hello()` method in :binary:`~bin.mongosh`.
+Many :driver:`Drivers </>` provide an equivalent for
+the :method:`db.runCommand()` method. Internally, running commands
+with :method:`db.runCommand()` is equivalent to a special query
+against the :term:`$cmd` collection.
 
-You can use the `maxTimeMS` option to specify a time limit for the execution of a command, see `terminate-long-running-commands` for more information on operation termination.
+Many common commands have their own shell helpers or wrappers in
+:binary:`~bin.mongosh` and drivers, such as the
+:method:`db.hello()` method in :binary:`~bin.mongosh`.
 
-## `admin` Database Commands
+You can use the ``maxTimeMS`` option to specify a time limit for the
+execution of a command, see :ref:`terminate-long-running-commands` for
+more information on operation termination.
 
-You must run some commands on the `admin database`. Normally, these operations resemble the following:
+.. _admin-command:
 
-```javascript
-use admin
-db.runCommand( {buildInfo: 1} )
-```
+## ``admin`` Database Commands
 
-However, there's also a command helper that automatically runs the command in the context of the `admin` database:
+You must run some commands on the :term:`admin database`. Normally,
+these operations resemble the following:
 
-```javascript
-db.adminCommand( {buildInfo: 1} )
-```
+.. code-block:: javascript
+
+   use admin
+   db.runCommand( {buildInfo: 1} )
+
+However, there's also a command helper that automatically runs the
+command in the context of the ``admin`` database:
+
+.. code-block:: javascript
+
+   db.adminCommand( {buildInfo: 1} )
 
 ## Command Responses
 
-For all commands, MongoDB returns a response document that contains the following fields:
+For all commands, MongoDB returns a response document that contains the
+following fields:
 
-.. include:: /includes/fact-runCommand-results.rst
+**include:** /includes/fact-runCommand-results.rst

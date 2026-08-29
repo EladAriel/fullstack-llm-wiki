@@ -1,44 +1,114 @@
 ---
 type: "Framework Learn Page"
-framework: "mongodb"
+framework: "MongoDB"
 source_repo: "https://github.com/mongodb/docs.git"
 source_branch: "main"
 source_path: "content/manual/manual/source/reference/method/cursor.addOption.txt"
-source_commit: "ab9db26ed3d11618cdb61516d8180337d8e3f679"
-source_commit_short: "ab9db26e"
-source_commit_date: "2026-07-24T16:22:46-06:00"
-generated_at: "2026-07-25T11:51:15Z"
+source_commit: "b9f2bc487a2878b65e3c1f80024bebab76954f27"
+source_commit_short: "b9f2bc48"
+source_commit_date: "2026-08-28T17:09:45-05:00"
+generated_at: "2026-08-29T09:39:19.906655Z"
 ---
-
-===================================
-
 # cursor.addOption() (mongosh method)
+
+**meta:** :description: Modify query behavior using `cursor.addOption()` with flags like `tailable` and `awaitData` for MongoDB cursors.
+
+.. default-domain:: mongodb
+
+**contents:** On this page
+   :local:
+   :backlinks: none
+   :depth: 1
+   :class: singlecol
 
 ## Definition
 
+**method:** cursor.addOption(flag)
+
+   .. include:: /includes/fact-mongosh-shell-method.rst
+
+   .. note:: Deprecated since v3.2
+
+      Starting in v3.2, the ``cursor.addOption()`` operator is
+      deprecated in :binary:`~bin.mongo`. Use available :ref:`cursor
+      methods <doc-cursor-methods>` instead.
+
+   Used to change query behavior by setting the flags listed below.
+
+   The ``cursor.addOption()`` method has the following parameter:
+
+   .. list-table::
+      :header-rows: 1
+      :widths: 20 20 80
+   
+      * - Parameter
+        - Type
+        - Description
+      * - ``flag``
+        - flag
+        - For :binary:`~bin.mongosh`, you can use the cursor flags
+          listed below. For the driver-specific list, see your
+          :driver:`driver documentation </>`.
+
 ## Compatibility
 
-This method is available in deployments hosted in the following environments:
+This method is available in deployments hosted in the following environments: 
 
-.. include:: /includes/fact-environments-atlas-only.rst
+**include:** /includes/fact-environments-atlas-only.rst
 
-.. include:: /includes/fact-environments-atlas-support-limited-all.rst
+**include:** /includes/fact-environments-atlas-support-limited-all.rst
 
-.. include:: /includes/fact-environments-onprem-only.rst
+**include:** /includes/fact-environments-onprem-only.rst
+
+.. _cursor-flags:
 
 ## Flags
 
-:binary:`~bin.mongosh` provides several additional cursor flags to modify the behavior of the cursor.
+:binary:`~bin.mongosh` provides several additional cursor flags to
+modify the behavior of the cursor.
+
+.. list-table::
+   :header-rows: 1
+   :widths: 30 70
+
+   * - Flag
+     - Description
+   * - .. data:: DBQuery.Option.tailable
+     - Sets the cursor not to close once the last data is
+       received, allowing the query to continue returning data added
+       after the initial results were exhausted.
+   * - .. data:: DBQuery.Option.slaveOk
+     - Allows querying of a replica secondary.
+   * - .. data:: DBQuery.Option.noTimeout
+     - Prevents the server from timing out idle cursors.
+   * - .. data:: DBQuery.Option.awaitData
+     - For use with :data:`DBQuery.Option.tailable`. 
+       Sets the cursor to block the query thread when no data is
+       available and await data for a set time instead of immediately
+       returning no data. The cursor returns no data only if the 
+       timeout expires.
+   * - .. data:: DBQuery.Option.exhaust
+     - Sets the cursor to return all data returned by the
+       query at once rather than splitting the results into batches.
+   * - .. data:: DBQuery.Option.partial
+     - Sets the cursor to return partial data from a query against a
+       sharded cluster in which some shards do not respond rather than
+       throwing an error.
 
 ## Example
 
-The following example adds the `DBQuery.Option.tailable` flag and the `DBQuery.Option.awaitData` flag to ensure that the query returns a `tailable cursor <tailable-cursors-landing-page>`. The sequence creates a cursor. After returning the full result set, it waits for the default interval of 1000 milliseconds so that it can capture and return additional data added during the query:
+The following example adds the ``DBQuery.Option.tailable`` flag and the
+``DBQuery.Option.awaitData`` flag to ensure that the query returns a
+:ref:`tailable cursor <tailable-cursors-landing-page>`. The sequence
+creates a cursor. After returning the full result set, it waits for the
+default interval of 1000 milliseconds so that it can capture
+and return additional data added during the query:
 
-```javascript
-var t = db.myCappedCollection;
-var cursor = t.find().addOption(DBQuery.Option.tailable).
-                      addOption(DBQuery.Option.awaitData)
-```
+.. code-block:: javascript
 
-> **Warning:** Adding incorrect wire protocol flags can cause problems and/or
-extra server load.
+   var t = db.myCappedCollection;
+   var cursor = t.find().addOption(DBQuery.Option.tailable).
+                         addOption(DBQuery.Option.awaitData)
+
+**warning:** Adding incorrect wire protocol flags can cause problems and/or
+   extra server load.

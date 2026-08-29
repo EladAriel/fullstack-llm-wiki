@@ -4,10 +4,10 @@ framework: "Arize Phoenix"
 source_repo: "https://github.com/Arize-ai/phoenix.git"
 source_branch: "main"
 source_path: "docs/phoenix/evaluation/integrations/pytest.mdx"
-source_commit: "69b3ab92c37ff65812feaa2dbf0b1c0ad5ae55fe"
-source_commit_short: "69b3ab9"
-source_commit_date: "2026-07-25T11:48:12-06:00"
-generated_at: "2026-07-25T19:08:24.926710Z"
+source_commit: "c48e50e9906fcc56c1c103ebd93ef3c95ed6b6e7"
+source_commit_short: "c48e50e"
+source_commit_date: "2026-08-29T01:45:20-06:00"
+generated_at: "2026-08-29T09:39:58.893375Z"
 ---
 ---
 title: "pytest"
@@ -110,7 +110,7 @@ def test_answers(question, expected):
 Run it with your Phoenix connection set:
 
 ```bash
-export PHOENIX_COLLECTOR_ENDPOINT=https://your-phoenix-host
+export PHOENIX_ENDPOINT=https://your-phoenix-host
 export PHOENIX_API_KEY=your-api-key        # if required
 pytest tests/evals/test_qa.py
 ```
@@ -247,7 +247,7 @@ Hoisted evaluators are invoked using the same adapter as `run_experiment`, so an
 | `trace_id` | The test run's trace id |
 
 <Tip>
-Any evaluator from [`arize-phoenix-evals`](/docs/phoenix/evaluation/pre-built-metrics) works here — `FaithfulnessEvaluator`, `DocumentRelevanceEvaluator`, QA correctness, toxicity, and more — as does any plain function you'd pass to `run_experiment`. Write a custom evaluator once and use it from both.
+Any evaluator from [`arize-phoenix-evals`](/docs/phoenix/evaluation/pre-built-metrics) works here — `FaithfulnessEvaluator`, `RetrievalRelevanceEvaluator`, QA correctness, toxicity, and more — as does any plain function you'd pass to `run_experiment`. Write a custom evaluator once and use it from both.
 </Tip>
 
 ## LLM-as-a-judge: scoring quality signals
@@ -337,7 +337,7 @@ The plugin is configured entirely through environment variables, so the same sui
 | `PHOENIX_TEST_TRACKING` | `true` | Master switch. Set to `0` or `false` to run offline — tests execute but nothing is sent to Phoenix. |
 | `PHOENIX_TEST_REPETITIONS` | `1` | Default repetitions per marked test. |
 | `PHOENIX_TEST_DATASET` | _(file path)_ | Override the dataset name for all collected tests. |
-| `PHOENIX_COLLECTOR_ENDPOINT` | — | Your Phoenix server URL. |
+| `PHOENIX_ENDPOINT` | — | Your Phoenix server URL. |
 | `PHOENIX_API_KEY` | — | Bearer token for Phoenix. |
 | `PHOENIX_CLIENT_HEADERS` | — | Optional JSON headers forwarded to the Phoenix client. |
 
@@ -427,7 +427,7 @@ jobs:
       - run: pip install "arize-phoenix-client[pytest,evals]" pytest
       - name: Run eval suite
         env:
-          PHOENIX_COLLECTOR_ENDPOINT: ${{ secrets.PHOENIX_COLLECTOR_ENDPOINT }}
+          PHOENIX_ENDPOINT: ${{ secrets.PHOENIX_ENDPOINT }}
           PHOENIX_API_KEY: ${{ secrets.PHOENIX_API_KEY }}
         run: pytest tests/evals/
 ```

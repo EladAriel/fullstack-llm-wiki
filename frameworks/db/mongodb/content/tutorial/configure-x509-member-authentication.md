@@ -1,75 +1,205 @@
 ---
 type: "Framework Learn Page"
-framework: "mongodb"
+framework: "MongoDB"
 source_repo: "https://github.com/mongodb/docs.git"
 source_branch: "main"
 source_path: "content/manual/manual/source/tutorial/configure-x509-member-authentication.txt"
-source_commit: "ab9db26ed3d11618cdb61516d8180337d8e3f679"
-source_commit_short: "ab9db26e"
-source_commit_date: "2026-07-24T16:22:46-06:00"
-generated_at: "2026-07-25T11:51:15Z"
+source_commit: "b9f2bc487a2878b65e3c1f80024bebab76954f27"
+source_commit_short: "b9f2bc48"
+source_commit_date: "2026-08-28T17:09:45-05:00"
+generated_at: "2026-08-29T09:39:19.586491Z"
 ---
-
-============================================================
+.. _x509-internal-authentication:
 
 # Verify Cluster Membership with X.509 on Self-Managed MongoDB
 
-MongoDB supports X.509 certificate authentication for use with a secure `TLS/SSL connection <configure-mongod-mongos-for-tls-ssl>`. Sharded cluster members and replica set members can use X.509 certificates to verify their membership to the cluster or the replica set instead of using `keyfiles <internal-auth-keyfile>`. The membership authentication is an internal process.
+**meta:** :keywords: on-prem
+   :description: Configure X.509 certificates for secure membership authentication in self-managed MongoDB deployments using TLS/SSL.
 
-> **Note:** .. include:: /includes/fact-tls-1.0.rst
+.. default-domain:: mongodb
 
-Enabling internal authentication also enables `/core/authorization`. Clients must authenticate as a user in order to connect and perform operations in the deployment.
+**contents:** On this page
+   :local:
+   :backlinks: none
+   :depth: 1
+   :class: singlecol
 
-- See the `/tutorial/manage-users-and-roles` tutorial for
-instructions on adding users to the deployment.
+MongoDB supports X.509 certificate authentication for use with a secure
+:ref:`TLS/SSL connection <configure-mongod-mongos-for-tls-ssl>`. Sharded cluster
+members and replica set members can use X.509 certificates to verify
+their membership to the cluster or the replica set instead of using
+:ref:`keyfiles <internal-auth-keyfile>`. The membership authentication is
+an internal process.
 
-- See the `/tutorial/configure-x509-client-authentication` tutorial
-for instructions on using X.509 certificates for user authentication.
+**note:** .. include:: /includes/fact-tls-1.0.rst
 
-> **Important:** .. include:: /includes/extracts/security-prereq-configure-x509-member-authentication.rst
+.. |binary| replace:: MongoDB
+
+Enabling internal authentication also enables 
+:doc:`/core/authorization`. Clients must authenticate as a user in order to 
+connect and perform operations in the deployment.
+
+* See the :doc:`/tutorial/manage-users-and-roles` tutorial for 
+  instructions on adding users to the deployment.
+
+* See the :doc:`/tutorial/configure-x509-client-authentication` tutorial 
+  for instructions on using X.509 certificates for user authentication.
+
+.. _`default distribution of MongoDB`: http://mongodb.com/downloads
+.. _`MongoDB Enterprise`: http://www.mongodb.com/products/mongodb-enterprise-advanced
+
+**important:** .. include:: /includes/extracts/security-prereq-configure-x509-member-authentication.rst
+
+.. _x509-member-certificate:
 
 ## Member X.509 Certificate
 
-> **Note:** You must have valid X.509 certificates.
-.. include:: /includes/extracts/ssl-facts-x509-invalid-certificate.rst
+**note:** You must have valid X.509 certificates.
+
+   .. include:: /includes/extracts/ssl-facts-x509-invalid-certificate.rst
 
 ### Certificate Requirements
 
-.. include:: /includes/extracts/x509-certificate-member.rst
+**include:** /includes/extracts/x509-certificate-member.rst
 
 ## Configure Replica Set/Sharded Cluster
 
-Outside of rolling upgrade procedures, every component of a `replica set` or `sharded cluster` should use the same `--clusterAuthMode` setting to ensure it can securely connect to all other components in the deployment.
+Outside of rolling upgrade procedures, every component of a :term:`replica
+set` or :term:`sharded cluster` should use the same
+``--clusterAuthMode`` setting to ensure it can securely connect to all
+other components in the deployment.
 
-For `replica set` deployments, this includes all :binary:`~bin.mongod` members of the replica set.
+For :term:`replica set` deployments, this includes all :binary:`~bin.mongod` 
+members of the replica set.
 
-For `sharded cluster` deployments, this includes all :binary:`~bin.mongod` or :binary:`~bin.mongos` instances.
+For :term:`sharded cluster` deployments, this includes all :binary:`~bin.mongod` 
+or :binary:`~bin.mongos` instances. 
 
-> **Note:** .. include:: /includes/extracts/default-bind-ip-security.rst
+**note:** .. include:: /includes/extracts/default-bind-ip-security.rst
 
-### Use Command-line Options (`tls`)
+.. _configure-member-tls:
 
-> **Note:** The procedures in this section use the `tls` settings/option. For
-procedures using the deprecated `ssl` aliases, see
-`configure-member-ssl`.
-The `tls` settings/options provide **identical** functionality
-as the `ssl` options since MongoDB has always supported TLS 1.0
-and later.
+### Use Command-line Options (``tls``)
 
-For more information, see `/tutorial/configure-ssl`.
+**note:** The procedures in this section use the ``tls`` settings/option. For
+   procedures using the deprecated ``ssl`` aliases, see
+   :ref:`configure-member-ssl`.
+   
+   The ``tls`` settings/options provide **identical** functionality
+   as the ``ssl`` options since MongoDB has always supported TLS 1.0
+   and later.
+   
+   
+**tabs:** tabs:
+   
+      - id: "commandline"
+        name: "TLS (Command-Line Options)"
+        content: |
 
-### Use Command-line Options (`ssl`)
+           .. code-block:: bash
 
-> **Note:** The procedures in this section use the deprecated `ssl` settings/option.
-For procedures that use `tls` aliases, see `configure-member-tls`.
-The `tls` settings/options provide **identical** functionality
-as the `ssl` options since MongoDB has always supported TLS 1.0
-and later.
+              mongod --replSet <name> --tlsMode requireTLS --clusterAuthMode x509 --tlsClusterFile <path to membership certificate and key PEM file> --tlsCertificateKeyFile <path to TLS/SSL certificate and key file> --tlsCAFile <path to root CA file> --bind_ip localhost,<hostname(s)|ip address(es)>
 
-For more information, see `/tutorial/configure-ssl`.
+           .. important::
+
+              .. include:: /includes/extracts/ssl-facts-x509-ca-file.rst
+
+           Include any additional options, TLS/SSL or otherwise, that
+           are required for your specific configuration. For 
+
+
+      - id: "config"
+        name: "TLS (Configuration File)"
+        content: |
+
+           .. code-block:: yaml
+
+              security:
+                 clusterAuthMode: x509
+              net:
+                 tls:
+                    mode: requireTLS
+                    certificateKeyFile: <path to its TLS/SSL certificate and key file>
+                    CAFile: <path to root CA PEM file to verify received certificate>
+                    clusterFile: <path to its certificate key file for membership authentication>
+                 bindIp: localhost,<hostname(s)|ip address(es)>
+
+           .. important::
+
+              .. include:: /includes/extracts/ssl-facts-x509-ca-file.rst
+
+           Include any additional options, TLS/SSL or otherwise, that
+           are required for your specific configuration.
+
+
+
+For more information, see :doc:`/tutorial/configure-ssl`.
+
+.. _configure-member-ssl:
+
+### Use Command-line Options (``ssl``)
+
+**note:** The procedures in this section use the deprecated ``ssl`` settings/option.
+   For procedures that use ``tls`` aliases, see :ref:`configure-member-tls`.
+   
+   The ``tls`` settings/options provide **identical** functionality
+   as the ``ssl`` options since MongoDB has always supported TLS 1.0
+   and later.
+
+**tabs:** tabs:
+   
+      - id: "commandline"
+        name: "SSL (Command-Line Options)"
+        content: |
+
+            To specify the X.509 certificate for internal cluster member
+            authentication, append the additional TLS/SSL options
+            ``--clusterAuthMode`` and ``--sslClusterFile``, as in the
+            following example for a member of a replica set:
+
+            .. code-block:: bash
+
+               mongod --replSet <name> --sslMode requireSSL --clusterAuthMode x509 --sslClusterFile <path to membership certificate and key PEM file> --sslPEMKeyFile <path to TLS/SSL certificate and key PEM file> --sslCAFile <path to root CA PEM file> --bind_ip localhost,<hostname(s)|ip address(es)>
+
+            .. important::
+
+               .. include:: /includes/extracts/ssl-facts-x509-ca-file.rst
+
+            Include any additional options, TLS/SSL or otherwise, that
+            are required for your specific configuration.
+
+      - id: "config"
+        name: "SSL (Configuration File)"
+        content: |
+
+            .. code-block:: yaml
+            
+               security:
+                  clusterAuthMode: x509
+               net:
+                  ssl:
+                     mode: requireSSL
+                     PEMKeyFile: <path to TLS/SSL certificate and key PEM file>
+                     CAFile: <path to root CA PEM file>
+                     clusterFile: <path to X.509 membership certificate and key PEM file>
+                  bindIp: localhost,<hostname(s)|ip address(es)>
+
+            .. important::
+
+               .. include:: /includes/extracts/ssl-facts-x509-ca-file.rst
+
+
+            Include any additional options, TLS/SSL or otherwise, that
+            are required for your specific configuration.
+
+For more information, see :doc:`/tutorial/configure-ssl`.
 
 ## Additional Information
 
-To upgrade from keyfile internal authentication to X.509 internal authentication, see `/tutorial/upgrade-keyfile-to-x509`.
+To upgrade from keyfile internal authentication to X.509 internal
+authentication, see
+:doc:`/tutorial/upgrade-keyfile-to-x509`.
 
-To perform a rolling update of the certificates to new certificates with different `DN`, see `/tutorial/rotate-x509-membership-certificates`.
+To perform a rolling update of the certificates to new certificates
+with different ``DN``, see
+:doc:`/tutorial/rotate-x509-membership-certificates`.

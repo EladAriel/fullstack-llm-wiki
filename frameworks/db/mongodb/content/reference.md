@@ -1,74 +1,107 @@
 ---
 type: "Framework Learn Page"
-framework: "mongodb"
+framework: "MongoDB"
 source_repo: "https://github.com/mongodb/docs.git"
 source_branch: "main"
 source_path: "content/manual/manual/source/reference.txt"
-source_commit: "ab9db26ed3d11618cdb61516d8180337d8e3f679"
-source_commit_short: "ab9db26e"
-source_commit_date: "2026-07-24T16:22:46-06:00"
-generated_at: "2026-07-25T11:51:15Z"
+source_commit: "b9f2bc487a2878b65e3c1f80024bebab76954f27"
+source_commit_short: "b9f2bc48"
+source_commit_date: "2026-08-28T17:09:45-05:00"
+generated_at: "2026-08-29T09:39:19.468424Z"
 ---
-
-================
+.. _reference-landing:
 
 # Manual Reference
 
-`collation` Description of collation fields and supported languages and associated locales for collation.
+**meta:** :description: Explore MongoDB reference materials including commands, connection strings, error codes, and glossary terms.
 
-`mongodb-uri` The complete specification of the MongoDB connection string format that the drivers use to describe connections to MongoDB deployments.
+.. default-domain:: mongodb
 
-`database-commands` Documentation of all MongoDB `database commands <database command>` operations, syntax, and use.
+**contents:** On this page
+   :local:
+   :backlinks: none
+   :depth: 1
+   :class: singlecol
 
-`default-mongodb-port` List of default ports used by MongoDB.
+:ref:`collation`
+   Description of collation fields and supported languages and
+   associated locales for collation.
 
-`default-mongodb-read-write-concerns` List of default read and write concerns.
+:ref:`mongodb-uri`
+   The complete specification of the MongoDB connection string format
+   that the drivers use to describe connections to MongoDB
+   deployments.
 
-`server-error-codes` Details the error codes that MongoDB returns.
+:ref:`database-commands`
+   Documentation of all MongoDB :term:`database commands <database
+   command>` operations, syntax, and use.
 
-`glossary` A glossary of common terms and concepts specific to MongoDB.
+:ref:`default-mongodb-port`
+   List of default ports used by MongoDB.
 
-`log-messages-ref` Describes the components of log messages.
+:ref:`default-mongodb-read-write-concerns`
+   List of default read and write concerns.
 
-`server-limits-thresholds` A list of important limits and thresholds imposed by MongoDB.
+:ref:`server-error-codes`
+   Details the error codes that MongoDB returns.
 
-`mongodb-wire-protocol` Description of the MongoDB Wire Protocol.
+:ref:`glossary`
+   A glossary of common terms and concepts specific to MongoDB.
 
-`js-administrative-methods` Documentation of JavaScript methods and helpers in :binary:`~bin.mongosh`.
+:ref:`log-messages-ref`
+   Describes the components of log messages.
 
-`mql-reference` Documentation for the MongoDB Query Language, including find queries, aggregation pipelines, and write operations.
+:ref:`server-limits-thresholds`
+   A list of important limits and thresholds imposed by MongoDB.
 
-`server-sessions` Describes server sessions.
+:ref:`mongodb-wire-protocol`
+   Description of the MongoDB Wire Protocol.
 
-`sbe-landing` Describes the {+sbe+}.
+:ref:`js-administrative-methods`
+   Documentation of JavaScript methods and helpers in
+   :binary:`~bin.mongosh`.
 
-`stable-api` Describes the Stable API.
+:ref:`mql-reference`
+   Documentation for the MongoDB Query Language, including find queries,
+   aggregation pipelines, and write operations.
 
-`metadata-system-collections` Describes the collections that MongoDB reserves for internal use.
+:ref:`server-sessions`
+   Describes server sessions.
 
-> **Seealso:** The following pages contain additional reference material:
-- `data-modeling-patterns`
-- `sharding-reference`
-- `replication-toc`
-- `security-reference`
+:ref:`sbe-landing`
+   Describes the {+sbe+}.
 
-## Contents
+:ref:`stable-api`
+   Describes the Stable API.
 
-- Collation </reference/collation>
-- Connection Strings </reference/connection-string>
-- Database Commands </reference/command>
-- DDL Operations </reference/ddl-operations>
-- Default Port </reference/default-mongodb-port>
-- Read & Write Concerns </reference/mongodb-defaults>
-- Error Codes </reference/error-codes>
-- Glossary </reference/glossary>
-- Log Messages </reference/log-messages>
-- Limits & Thresholds </reference/limits>
-- MongoDB Database Tools <https://www.mongodb.com/docs/database-tools/>
-- Wire Protocol </reference/mongodb-wire-protocol>
-- mongosh Methods </reference/method>
-- Query Language </reference/mql>
-- Server Sessions </reference/server-sessions>
-- Slot-Based Query Execution Engine </reference/sbe>
-- Stable API </reference/stable-api>
-- System Collections </reference/system-collections>
+:ref:`metadata-system-collections`
+   Describes the collections that MongoDB reserves for internal use.
+   
+**seealso:** The following pages contain additional reference material:
+
+   - :ref:`data-modeling-patterns`
+   - :ref:`sharding-reference`
+   - :ref:`replication-toc`
+   - :ref:`security-reference`
+
+**toctree:** :titlesonly: 
+   :hidden: 
+
+   Collation </reference/collation>
+   Connection Strings </reference/connection-string>
+   Database Commands </reference/command>
+   DDL Operations </reference/ddl-operations>
+   Default Port </reference/default-mongodb-port>
+   Read & Write Concerns </reference/mongodb-defaults>
+   Error Codes </reference/error-codes>
+   Glossary </reference/glossary>
+   Log Messages </reference/log-messages>
+   Limits & Thresholds </reference/limits>
+   MongoDB Database Tools <https://www.mongodb.com/docs/database-tools/>
+   Wire Protocol </reference/mongodb-wire-protocol>
+   mongosh Methods </reference/method>
+   Query Language </reference/mql>
+   Server Sessions </reference/server-sessions>
+   Slot-Based Query Execution Engine </reference/sbe>
+   Stable API </reference/stable-api>
+   System Collections </reference/system-collections>

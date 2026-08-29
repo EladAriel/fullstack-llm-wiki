@@ -1,74 +1,343 @@
 ---
 type: "Framework Learn Page"
-framework: "mongodb"
+framework: "MongoDB"
 source_repo: "https://github.com/mongodb/docs.git"
 source_branch: "main"
 source_path: "content/manual/manual/source/reference/operator/aggregation/changeStreamSplitLargeEvent.txt"
-source_commit: "ab9db26ed3d11618cdb61516d8180337d8e3f679"
-source_commit_short: "ab9db26e"
-source_commit_date: "2026-07-24T16:22:46-06:00"
-generated_at: "2026-07-25T11:51:15Z"
+source_commit: "b9f2bc487a2878b65e3c1f80024bebab76954f27"
+source_commit_short: "b9f2bc48"
+source_commit_date: "2026-08-28T17:09:45-05:00"
+generated_at: "2026-08-29T09:39:20.184189Z"
 ---
-
-================================================
-
 # $changeStreamSplitLargeEvent (aggregation stage)
+
+**meta:** :description: Use `$changeStreamSplitLargeEvent` to split large change stream events exceeding 16 MB into smaller fragments for efficient processing in MongoDB change streams.
+
+**contents:** On this page
+   :local:
+   :backlinks: none
+   :depth: 1
+   :class: singlecol
 
 ## Definition
 
-New in MongoDB 7.0 (and 6.0.9).
+**pipeline:** $changeStreamSplitLargeEvent
 
-If a `change stream <changeStreams>` has large events that exceed 16 MB, a `BSONObjectTooLarge` exception is returned. Starting in MongoDB 7.0 (and 6.0.9), you can use a `$changeStreamSplitLargeEvent` stage to split the events into smaller fragments.
+*New in MongoDB 7.0 (and 6.0.9).*
 
-You should only use `$changeStreamSplitLargeEvent` when strictly necessary. For example, if your application requires full document pre- or post-images, and generates large events that exceed 16 MB, use `$changeStreamSplitLargeEvent`.
+If a :ref:`change stream <changeStreams>` has large events that exceed
+16 MB, a ``BSONObjectTooLarge`` exception is returned. Starting in
+MongoDB 7.0 (and 6.0.9), you can use a ``$changeStreamSplitLargeEvent``
+stage to split the events into smaller fragments.
 
-Before you decide to use `$changeStreamSplitLargeEvent`, you should first try to reduce the change event size. For example:
+You should only use ``$changeStreamSplitLargeEvent`` when strictly
+necessary. For example, if your application requires full document pre-
+or post-images, and generates large events that exceed 16 MB, use
+``$changeStreamSplitLargeEvent``.
+
+Before you decide to use ``$changeStreamSplitLargeEvent``, you should
+first try to reduce the change event size. For example:
 
 - Don't request document pre- or post-images unless your application
-requires them. This generates `fullDocument` and `fullDocumentBeforeChange` fields in more cases, which are typically the largest objects in a change event.
+  requires them. This generates ``fullDocument`` and
+  ``fullDocumentBeforeChange`` fields in more cases, which are typically
+  the largest objects in a change event.
 
 - Use a :pipeline:`$project` stage to include only the fields necessary
-for your application. This reduces the change event size and avoids the additional time to split large events into fragments. This allows more change events to be returned in each batch.
+  for your application. This reduces the change event size and avoids
+  the additional time to split large events into fragments. This allows
+  more change events to be returned in each batch.
 
-You can only have one `$changeStreamSplitLargeEvent` stage in your pipeline, and it must be the last stage. You can only use `$changeStreamSplitLargeEvent` in a `$changeStream` pipeline.
+You can only have one ``$changeStreamSplitLargeEvent`` stage in
+your pipeline, and it must be the last stage. You can only use
+``$changeStreamSplitLargeEvent`` in a ``$changeStream`` pipeline.
 
-`$changeStreamSplitLargeEvent` syntax:
+``$changeStreamSplitLargeEvent`` syntax:
 
-```javascript
-{
-  $changeStreamSplitLargeEvent: {}
-}
-```
+.. code-block:: javascript
+
+   {
+     $changeStreamSplitLargeEvent: {}
+   }
 
 ## Behavior
 
-`$changeStreamSplitLargeEvent` splits events that exceed 16 MB into fragments and returns the fragments sequentially using the change stream cursor.
+``$changeStreamSplitLargeEvent`` splits events that exceed 16 MB
+into fragments and returns the fragments sequentially using the change
+stream cursor.
 
-The fragments are split so that the maximum number of fields are returned in the first fragment. This ensures the event context is returned as quickly as possible.
+The fragments are split so that the maximum number of fields are
+returned in the first fragment. This ensures the event context is
+returned as quickly as possible.
 
-When the change event is split, only the size of top-level fields are used. `$changeStreamSplitLargeEvent` does not recursively process or split subdocuments. For example, if you use a `$project` stage to create a change event with a single field that is 20 MB in size, the event is not split and the stage returns an error.
+When the change event is split, only the size of top-level fields are
+used. ``$changeStreamSplitLargeEvent`` does not recursively process or
+split subdocuments. For example, if you use a ``$project`` stage to
+create a change event with a single field that is 20 MB in size, the
+event is not split and the stage returns an error.
 
-Each fragment has a resume token. A stream that is resumed using a fragment's token will either:
+Each fragment has a resume token. A stream that is resumed using a
+fragment's token will either:
 
 - Begin a new stream from the subsequent fragment.
 - Start at the next event if resuming from the final fragment in the
-sequence.
+  sequence.
 
-Each fragment for an event includes a `splitEvent` document:
+Each fragment for an event includes a ``splitEvent`` document:
 
-```javascript
-splitEvent: {
-   fragment: <int>,
-   of: <int>
-}
-```
+.. code-block:: javascript
+
+   splitEvent: {
+      fragment: <int>,
+      of: <int>
+   }
 
 The following table describes the fields.
 
+.. list-table::
+   :header-rows: 1
+   :widths: 20 80
+
+   * - Field
+     - Description
+
+   * - ``fragment``
+     - Fragment index, starting at 1.
+
+   * - ``of``
+     - Total number of fragments for the event.
+
 ## Examples
+
+.. tabs-drivers::
+
+   .. tab::
+      :tabid: shell
+
+      The example scenario in this section shows the use of
+      ``$changeStreamSplitLargeEvent`` with a new collection named
+      ``myCollection``.
+
+      Create ``myCollection`` and insert one document with just under 16 MB of
+      data:
+
+      .. code-block:: javascript
+      
+         db.myCollection.insertOne(
+            { _id: 0, largeField: "a".repeat( 16 * 1024 * 1024 - 1024 ) }
+         )
+
+      ``largeField`` contains the repeated letter ``a``.
+
+      Enable :ref:`changeStreamPreAndPostImages
+      <collMod-change-stream-pre-and-post-images>` for ``myCollection``, which
+      allows a change stream to retrieve a document as it was before an update
+      (pre-image) and after an update (post-image):
+
+      .. code-block:: javascript
+      
+         db.runCommand( {
+            collMod: "myCollection",
+            changeStreamPreAndPostImages: { enabled: true }
+         } )
+
+      Create a change stream cursor to monitor changes to ``myCollection``
+      using :method:`db.collection.watch()`:
+
+      .. code-block:: javascript
+      
+         myChangeStreamCursor = db.myCollection.watch(
+            [ { $changeStreamSplitLargeEvent: {} } ],
+            { fullDocument: "required", fullDocumentBeforeChange: "required" }
+         )
+
+      For the change stream event:
+
+      - ``fullDocument: "required"`` includes the document post-image.
+      - ``fullDocumentBeforeChange: "required"`` includes the document
+        pre-image.
+
+      For details, see :pipeline:`$changeStream`.
+
+      Update the document in ``myCollection``, which also produces a change
+      stream event with the document pre- and post-images:
+
+      .. code-block:: javascript
+      
+         db.myCollection.updateOne(
+            { _id: 0 },
+            { $set: { largeField: "b".repeat( 16 * 1024 * 1024 - 1024 ) } }
+         )
+
+      ``largeField`` now contains the repeated letter ``b``.
+
+      Retrieve the fragments from ``myChangeStreamCursor`` using the
+      :method:`~cursor.next()` method and store the fragments in objects named
+      ``firstFragment``, ``secondFragment``, and ``thirdFragment``:
+
+      .. code-block:: javascript
+      
+         const firstFragment = myChangeStreamCursor.next()
+         const secondFragment = myChangeStreamCursor.next()
+         const thirdFragment = myChangeStreamCursor.next()
+
+      Show ``firstFragment.splitEvent``:
+
+      .. code-block:: javascript
+      
+         firstFragment.splitEvent
+
+      Output with the fragment details:
+
+      .. code-block:: javascript
+         :copyable: false
+
+         splitEvent: { fragment: 1, of: 3 }
+
+      Similarly, ``secondFragment.splitEvent`` and
+      ``thirdFragment.splitEvent`` return:
+
+      .. code-block:: javascript
+         :copyable: false
+
+         splitEvent: { fragment: 2, of: 3 }
+         splitEvent: { fragment: 3, of: 3 }
+
+      To examine the object keys for ``firstFragment``:
+
+      .. code-block:: javascript
+      
+         Object.keys( firstFragment )
+
+      Output:
+
+      .. code-block:: javascript
+         :copyable: false
+
+         [
+            '_id',
+            'splitEvent',
+            'wallTime',
+            'clusterTime',
+            'operationType',
+            'documentKey',
+            'ns',
+            'fullDocument'
+         ]
+
+      To examine the size in bytes for ``firstFragment.fullDocument``:
+
+      .. code-block:: javascript
+      
+         bsonsize( firstFragment.fullDocument )
+
+      Output:
+
+      .. code-block:: javascript
+         :copyable: false
+
+         16776223
+
+      ``secondFragment`` contains the ``fullDocumentBeforeChange`` pre-image,
+      which is approximately 16 MB in size. The following example shows the
+      object keys for ``secondFragment``:
+
+      .. code-block:: javascript
+      
+         Object.keys( secondFragment )
+
+      Output:
+
+      .. code-block:: javascript
+         :copyable: false
+
+         [ '_id', 'splitEvent', 'fullDocumentBeforeChange' ]
+
+      ``thirdFragment`` contains the ``updateDescription`` field, which is
+      approximately 16 MB in size. The following example shows the object keys
+      for ``thirdFragment``:
+
+      .. code-block:: javascript
+      
+         Object.keys( thirdFragment )
+
+      Output:
+
+      .. code-block:: javascript
+         :copyable: false
+
+         [ '_id', 'splitEvent', 'updateDescription' ]
+
+   .. tab::
+      :tabid: csharp
+
+      .. sharedinclude:: dbx/csharp/aggregation/rst-files/method-intro.rst
+
+         .. replacement:: stage-name
+
+            ``$changeStreamSplitLargeEvent``
+
+         .. replacement:: method-name-and-link
+
+            `ChangeStreamSplitLargeEvent() <{+csharp-api-docs+}/MongoDB.Driver/MongoDB.Driver.PipelineStageDefinitionBuilder.ChangeStreamSplitLargeEvent.html>`__
+
+         .. replacement:: stage-specific-info
+
+         .. replacement:: method-description
+
+            splits events exceeding 16 MB into fragments and returns them sequentially in
+            a change stream cursor. The ``splitEvent`` field in each fragment shows the
+            fragment index and total count.
+
+         .. replacement:: more-method-description
+
+      .. literalinclude:: /code-examples/tested/csharp/driver/Aggregation/Builders/ChangeStreamSplitLargeEvent.snippet.large-document-class.cs
+         :language: csharp
+
+      .. io-code-block::
+         :copyable: true
+
+         .. input:: /code-examples/tested/csharp/driver/Aggregation/Builders/ChangeStreamSplitLargeEvent.snippet.change-stream-split-large-event.cs
+            :language: csharp
+            :category: usage example
+
+         .. output:: /code-examples/tested/csharp/driver/Aggregation/Builders/ChangeStreamSplitLargeEventOutput.txt
+            :language: json
+
+   .. tab::
+      :tabid: nodejs
+
+      You can use both the ``watch()`` method and the ``aggregate()`` method to
+      execute a ``$changeStreamSplitLargeEvent`` operation.
+      ``$changeStreamSplitLargeEvent`` returns a ``ChangeStreamCursor`` when you
+      pass the aggregation pipeline to the `watch()
+      <{+node-api-docs+}/classes/Collection.html#watch>`__ method on a MongoDB
+      ``Collection`` object. ``$changeStreamSplitLargeEvent`` returns an
+      ``AggregationCursor`` when you pass the aggregation pipeline to the
+      `aggregate() <{+node-api-docs+}/classes/Collection.html#aggregate>`__
+      method.
+
+      .. important:: ``$changeStreamSplitLargeEvent`` Resumability
+
+         If you pass a change stream to the `aggregate()
+         <{+node-api-docs+}/classes/Collection.html#aggregate>`__ method, the
+         change stream can not resume. A change stream only resumes if you pass
+         it to the `watch() <{+node-api-docs+}/classes/Collection.html#watch>`__
+         method. To learn more about resumability, see :ref:`Resume a Change
+         Stream. <change-stream-resume>`
+         
+      The following example splits events exceeding 16 MB into fragments and
+      returns them sequentially in a ``ChangeStreamCursor``:
+
+      .. literalinclude:: /includes/driver-examples/node/aggregation/examples.js
+         :start-after: //start changeStreamSplitLargeEvent
+         :end-before: //end changeStreamSplitLargeEvent
+         :language: javascript
+         :dedent: 2
 
 ## Learn More
 
-For more information on change stream notifications, see `Change Events <change-events>`.
+For more information on change stream notifications, see :ref:`Change Events
+<change-events>`.
 
 To learn more about related pipeline stages, see the :pipeline:`$changeStream` guide.

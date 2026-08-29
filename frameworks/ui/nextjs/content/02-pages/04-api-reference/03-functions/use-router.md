@@ -1,14 +1,15 @@
 ---
 type: "Framework Learn Page"
-framework: "nextjs"
+framework: "Next.js"
 source_repo: "https://github.com/vercel/next.js/"
 source_branch: "canary"
 source_path: "docs/02-pages/04-api-reference/03-functions/use-router.mdx"
-source_commit: "dcf242a17b5d4622bbd9624db531a9d84177619f"
-source_commit_short: "dcf242a1"
-source_commit_date: "2026-07-25T10:16:19+02:00"
-generated_at: "2026-07-25T11:50:53Z"
+source_commit: "33a5d542e519fe4e05c8c8c2c2845da9f741699b"
+source_commit_short: "33a5d542"
+source_commit_date: "2026-08-29T00:04:45-07:00"
+generated_at: "2026-08-29T09:40:24.331487Z"
 ---
+# Use Router
 
 ---
 title: useRouter
@@ -206,6 +207,15 @@ export default function ReadMore({ post }) {
     </button>
   )
 }
+```
+
+If you omit `pathname`, the query is applied to the URL shown in the browser ([`asPath`](#router-object)) rather than to the current page's route (`pathname`). This keeps [rewrites](/docs/pages/api-reference/config/next-config-js/rewrites) intact: on a page served by a rewrite, a query-only navigation preserves the URL the visitor requested instead of revealing the rewrite destination.
+
+The two values also differ when you mask the URL yourself with the `as` parameter. Pass `pathname` explicitly in that case, otherwise the query is applied to the masked URL and can resolve to a different page:
+
+```jsx
+// On the `/` page, with the URL masked as `/p/1`
+router.push({ pathname: '/', query: { photoId: 2 } }, '/p/2', { shallow: true })
 ```
 
 ### router.replace

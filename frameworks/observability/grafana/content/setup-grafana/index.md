@@ -1,7 +1,7 @@
 ---
 type: "Framework Learn Directory Index"
 framework: "Grafana"
-generated_at: "2026-07-25T19:08:09.111230Z"
+generated_at: "2026-08-29T09:39:37.577279Z"
 ---
 # Setup-Grafana
 
@@ -25,3 +25,10 @@ This directory contains Grafana learning pages related to setup-grafana.
 - [Set Up Https](set-up-https.md)
 - [Sign In To Grafana](sign-in-to-grafana.md)
 - [Start Restart Grafana](start-restart-grafana.md)
+
+## Subdirectories
+
+- [Configure Access](configure-access/index.md)
+- [Configure Grafana](configure-grafana/index.md)
+- [Configure Security](configure-security/index.md)
+- [Installation](installation/index.md)

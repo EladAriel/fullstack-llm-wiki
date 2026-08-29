@@ -4,11 +4,12 @@ framework: "Model Context Protocol"
 source_repo: "https://github.com/modelcontextprotocol/modelcontextprotocol"
 source_branch: "main"
 source_path: "docs/specification/2025-11-25/basic/authorization.mdx"
-source_commit: "7634684382c3d14cf7e9f14073fe40a2d8ace3fa"
-source_commit_short: "76346843"
-source_commit_date: "2026-07-23T16:49:30-07:00"
-generated_at: "2026-07-25T11:50:39Z"
+source_commit: "ca4ab3027f7c844cd3039c956438d72e8253f7f5"
+source_commit_short: "ca4ab30"
+source_commit_date: "2026-08-28T21:24:44-07:00"
+generated_at: "2026-08-29T09:38:48.086182Z"
 ---
+# Authorization
 
 ---
 title: Authorization
@@ -655,7 +656,7 @@ Authorization servers fetching metadata documents **SHOULD** consider
 Client ID Metadata Documents cannot prevent `localhost` URL impersonation by themselves. An attacker can claim to be any client by:
 
 1. Providing the legitimate client's metadata URL as their `client_id`
-2. Binding to the any `localhost` port, and providing that address as the redirect_uri
+2. Binding to any `localhost` port, and providing that address as the redirect_uri
 3. Receiving the authorization code via the redirect when the user approves
 
 The server will see the legitimate client's metadata document and the user will see the legitimate client's name, making attack detection difficult.

@@ -1,7 +1,7 @@
 ---
 type: "Framework Learn Directory Index"
 framework: "OpenTelemetry JS"
-generated_at: "2026-07-25T19:07:58.994531Z"
+generated_at: "2026-08-29T09:39:53.279382Z"
 ---
 # Getting-Started
 

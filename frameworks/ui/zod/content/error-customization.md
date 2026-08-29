@@ -1,14 +1,15 @@
 ---
 type: "Framework Learn Page"
-framework: "zod"
+framework: "Zod"
 source_repo: "https://github.com/colinhacks/zod"
 source_branch: "main"
 source_path: "packages/docs/content/error-customization.mdx"
-source_commit: "912f0f51b0ced654d0069741e7160834dca742ee"
-source_commit_short: "912f0f51"
-source_commit_date: "2026-06-10T10:17:29-07:00"
-generated_at: "2026-06-21T11:57:59Z"
+source_commit: "e6b6ab347675cd2bd54b1bdbed16f98c59be82a9"
+source_commit_short: "e6b6ab3"
+source_commit_date: "2026-08-28T17:35:38-07:00"
+generated_at: "2026-08-29T09:40:34.219007Z"
 ---
+# Error Customization
 
 ---
 title: Customizing errors
@@ -169,9 +170,24 @@ z.string({
     iss.code; // the issue code
     iss.input; // the input data
     iss.inst; // the schema/check that originated this issue
+    iss.schema; // the schema that owns this issue
     iss.path; // the path of the error
   },
 });
+```
+
+Unlike `iss.inst`, `iss.schema` is always the schema, even when a check originated the issue. Use it to read the owning schema's [metadata](/metadata).
+
+```ts
+z.config({
+  customError: (iss) => {
+    const meta = iss.schema && z.globalRegistry.get(iss.schema);
+    return `${meta?.title ?? "Field"} is invalid.`;
+  },
+});
+
+z.string().min(5).meta({ title: "Password" }).safeParse("abc");
+// => "Password is invalid."
 ```
 
 Depending on the API you are using, there may be additional properties available. Use TypeScript's autocomplete to explore the available properties.
@@ -335,7 +351,7 @@ async function loadLocale(locale: string) {
 await loadLocale("fr");
 ```
 
-For convenience, all locales are exported as `z.locales` from `"zod"`. In some bundlers, this may not be tree-shakable.
+For convenience, all locales are exported as `z.locales` from `"zod"`. Rollup and Webpack tree-shake this down to the locales you actually use. esbuild can't ([evanw/esbuild#1420](https://github.com/evanw/esbuild/issues/1420)) — with `import { z } from "zod"` or `import z from "zod"` it bundles every locale, so prefer `import * as z from "zod"` there.
 
 <Tabs groupId="lib" items={["Zod", "Zod Mini"]}>
 <Tab value="Zod">
@@ -354,6 +370,13 @@ z.config(z.locales.en());
 </Tab>
 </Tabs>
 
+With your own translation function, the `error` param is called during `.parse()`, not when the schema is constructed — a schema defined once picks up the current language on every parse. To translate at render time, translate the issue itself: `code` is the key, and the issue's other properties are the interpolation values.
+
+```ts
+z.string().min(5, { error: (iss) => t("too_short", iss) }); // at parse time
+result.error?.issues.map((iss) => t(iss.code, iss)); // at render time
+```
+
 ### Locales
 
 The following locales are available:
@@ -362,10 +385,13 @@ The following locales are available:
 - `az` — Azerbaijani
 - `be` — Belarusian
 - `bg` — Bulgarian
+- `bn` — Bengali
 - `ca` — Catalan
+- `ckb` — Kurdish (Central)
 - `cs` — Czech
 - `da` — Danish
 - `de` — German
+- `el` — Greek
 - `en` — English
 - `eo` — Esperanto
 - `es` — Spanish
@@ -373,7 +399,10 @@ The following locales are available:
 - `fi` — Finnish
 - `fr` — French
 - `frCA` — Canadian French
+- `gu` — Gujarati
 - `he` — Hebrew
+- `hi` — Hindi
+- `hr` — Croatian
 - `hu` — Hungarian
 - `hy` — Armenian
 - `id` — Indonesian
@@ -382,22 +411,28 @@ The following locales are available:
 - `ja` — Japanese
 - `ka` — Georgian
 - `km` — Khmer
+- `kn` — Kannada
 - `ko` — Korean
 - `lt` — Lithuanian
 - `mk` — Macedonian
 - `ms` — Malay
+- `ne` — Nepali
 - `nl` — Dutch
+- `nn` — Norwegian Nynorsk
 - `no` — Norwegian
 - `ota` — Türkî
 - `ps` — Pashto
 - `pl` — Polish
 - `pt` — Portuguese
+- `ptBR` — Brazilian Portuguese
 - `ro` — Romanian
 - `ru` — Russian
+- `sk` — Slovak
 - `sl` — Slovenian
 - `sv` — Swedish
 - `ta` — Tamil
 - `th` — Thai
+- `tk` — Türkmen
 - `tr` — Türkçe
 - `uk` — Ukrainian
 - `ur` — Urdu
@@ -412,13 +447,20 @@ The following locales are available:
 
 Below is a quick reference for determining error precedence: if multiple error customizations have been defined, which one takes priority? From *highest to lowest* priority:
 
-1. **Schema-level error** — Any error message "hard coded" into a schema definition.
+1. **Check-level error** — An error defined on the individual check that failed.
 
   ```ts
-  z.string("Not a string!");
+  z.string().min(5, "Too short!");
   ```
 
-2. **Per-parse error** — A custom error map passed into the `.parse()` method.
+2. **Schema-level error** — Any error message "hard coded" into a schema definition. It covers issues raised by the schema's own checks, so it is the fallback when the check defines no error of its own.
+
+  ```ts
+  z.string("Invalid name").safeParse(12);          // => "Invalid name"
+  z.string("Invalid name").min(5).safeParse("ab"); // => "Invalid name"
+  ```
+
+3. **Per-parse error** — A custom error map passed into the `.parse()` method.
 
   ```ts
   z.string().parse(12, {
@@ -426,7 +468,7 @@ Below is a quick reference for determining error precedence: if multiple error c
   });
   ```
 
-3. **Global error map** — A custom error map passed into `z.config()`.
+4. **Global error map** — A custom error map passed into `z.config()`.
 
   ```ts
   z.config({
@@ -434,7 +476,7 @@ Below is a quick reference for determining error precedence: if multiple error c
   });
   ```
 
-4. **Locale error map** — A custom error map passed into `z.config()`.
+5. **Locale error map** — A custom error map passed into `z.config()`.
 
   ```ts
   z.config(z.locales.en());

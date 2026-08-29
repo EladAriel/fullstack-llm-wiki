@@ -1,14 +1,15 @@
 ---
 type: "Framework Learn Page"
-framework: "redis"
+framework: "Redis"
 source_repo: "https://github.com/redis/docs.git"
 source_branch: "main"
 source_path: "content/operate/rc/cloud-integrations/aws-marketplace/_index.md"
-source_commit: "9d30f68c3dad1a6b3b7d30fe604b911348ce8152"
-source_commit_short: "9d30f68c"
-source_commit_date: "2026-07-24T10:52:10-07:00"
-generated_at: "2026-07-25T11:51:22Z"
+source_commit: "f8693349287b0efbef3c865b6f6a2aceca88594d"
+source_commit_short: "f869334"
+source_commit_date: "2026-08-28T10:01:19-05:00"
+generated_at: "2026-08-29T09:38:55.298663Z"
 ---
+# _Index
 
 ---
 LinkTitle: AWS Marketplace
@@ -31,9 +32,9 @@ Here's how to subscribe to Redis Cloud with AWS Marketplace:
 
 1.  Sign in to the [AWS console](https://console.aws.amazon.com/).
 
-1.  Search AWS Marketplace for [Redis Cloud: Real-Time Cache, Vector Search & AI Agent Memory](https://aws.amazon.com/marketplace/pp/prodview-mwscixe4ujhkq) and subscribe to the listing.
+1.  Search AWS Marketplace for [Redis Cloud: Real-Time Data Layer for AI Apps & Agents](https://aws.amazon.com/marketplace/pp/prodview-mwscixe4ujhkq) and subscribe to the listing.
 
-    {{<image filename="images/rc/aws-marketplace-rc-flexible-plan.png" alt="The Redis Cloud listing on AWS Marketplace" >}}
+    {{<image filename="images/rc/aws-marketplace-rc-listing.png" alt="The Redis Cloud listing on AWS Marketplace" >}}
 
     Or, click on the URL provided by your Redis seller for a private offer for [Redis Cloud - Annual Commits](https://aws.amazon.com/marketplace/pp/prodview-e6y7ork67pjwg?sr=0-3&ref_=beagle&applicationId=AWSMPContessa) and accept the private offer.
 
@@ -69,7 +70,7 @@ If you are the owner of more than one Redis Cloud account and have already assoc
 
 ## Switch from Annual to Pay as You Go
 
-If you have an Annual private offer and want to switch to a Pay as You Go subscription, you can do so by subscribing to the [Redis Cloud Pay as you go with 14-day free trial](https://aws.amazon.com/marketplace/pp/prodview-mwscixe4ujhkq) listing. Both existing and future resources will continue to be billed under the Annual offer until it expires, after which they will be billed under the Pay as You Go offer.
+If you have an Annual private offer and want to switch to a Pay as You Go subscription, you can do so by subscribing to the [Redis Cloud: Real-Time Data Layer for AI Apps & Agents](https://aws.amazon.com/marketplace/pp/prodview-mwscixe4ujhkq) listing. Both existing and future resources will continue to be billed under the Annual offer until it expires, after which they will be billed under the Pay as You Go offer.
 
 ## Disconnect AWS Marketplace account
 

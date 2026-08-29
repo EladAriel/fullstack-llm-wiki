@@ -1,90 +1,116 @@
 ---
 type: "Framework Learn Page"
-framework: "mongodb"
+framework: "MongoDB"
 source_repo: "https://github.com/mongodb/docs.git"
 source_branch: "main"
 source_path: "content/manual/manual/source/reference/method/db.getLogComponents.txt"
-source_commit: "ab9db26ed3d11618cdb61516d8180337d8e3f679"
-source_commit_short: "ab9db26e"
-source_commit_date: "2026-07-24T16:22:46-06:00"
-generated_at: "2026-07-25T11:51:15Z"
+source_commit: "b9f2bc487a2878b65e3c1f80024bebab76954f27"
+source_commit_short: "b9f2bc48"
+source_commit_date: "2026-08-28T17:09:45-05:00"
+generated_at: "2026-08-29T09:39:19.942906Z"
 ---
-
-======================================
-
 # db.getLogComponents() (mongosh method)
+
+**meta:** :description: Retrieve the current verbosity settings for log message components in MongoDB using `db.getLogComponents()`.
+
+.. default-domain:: mongodb
+
+**contents:** On this page
+   :local:
+   :backlinks: none
+   :depth: 1
+   :class: singlecol
 
 ## Definition
 
+**method:** db.getLogComponents()
+
+   Returns the current verbosity settings. The verbosity settings
+   determine the amount of :doc:`/reference/log-messages` that MongoDB
+   produces for each :ref:`log message component
+   <log-message-components>`.
+
+   If a component inherits the verbosity level of its parent,
+   :method:`db.getLogComponents()` displays ``-1`` for the component's
+   verbosity.
+
 ## Compatibility
 
-This method is available in deployments hosted in the following environments:
+This method is available in deployments hosted in the following environments: 
 
-.. include:: /includes/fact-environments-atlas-only.rst
+**include:** /includes/fact-environments-atlas-only.rst
 
-.. include:: /includes/fact-environments-atlas-support-no-free.rst
+**include:** /includes/fact-environments-atlas-support-no-free.rst
 
-.. include:: /includes/fact-environments-onprem-only.rst
+**include:** /includes/fact-environments-onprem-only.rst
+
 
 ## Output
 
-The :method:`db.getLogComponents()` returns a document with the verbosity settings. For example:
+The :method:`db.getLogComponents()` returns a document with the
+verbosity settings. For example:
 
-```none
-{
-   "verbosity" : 0,
-   "accessControl" : {
-      "verbosity" : -1
-   },
-   "command" : {
-      "verbosity" : -1
-   },
-   "control" : {
-      "verbosity" : -1
-   },
-   "geo" : {
-      "verbosity" : -1
-   },
-   "index" : {
-      "verbosity" : -1
-   },
-   "network" : {
-      "verbosity" : -1
-   },
-   "query" : {
-      "verbosity" : 2
-   },
-   "replication" : {
-      "verbosity" : -1,
-      "election" : {
+.. code-block:: none
+
+   {
+      "verbosity" : 0,
+      "accessControl" : {
          "verbosity" : -1
       },
-      "heartbeats" : {
+      "command" : {
          "verbosity" : -1
       },
-      "initialSync" : {
+      "control" : {
          "verbosity" : -1
       },
-      "rollback" : {
+      "geo" : {
+         "verbosity" : -1
+      },
+      "index" : {
+         "verbosity" : -1
+      },
+      "network" : {
+         "verbosity" : -1
+      },
+      "query" : {
+         "verbosity" : 2
+      },
+      "replication" : {
+         "verbosity" : -1,
+         "election" : {
+            "verbosity" : -1
+         },
+         "heartbeats" : {
+            "verbosity" : -1
+         },
+         "initialSync" : {
+            "verbosity" : -1
+         },
+         "rollback" : {
+            "verbosity" : -1
+         }
+      },
+      "sharding" : {
+         "verbosity" : -1
+      },
+      "storage" : {
+         "verbosity" : 2,
+         "recovery" : {
+            "verbosity" : -1
+         },
+         "journal" : {
+            "verbosity" : -1
+         }
+      },
+      "write" : {
          "verbosity" : -1
       }
-   },
-   "sharding" : {
-      "verbosity" : -1
-   },
-   "storage" : {
-      "verbosity" : 2,
-      "recovery" : {
-         "verbosity" : -1
-      },
-      "journal" : {
-         "verbosity" : -1
-      }
-   },
-   "write" : {
-      "verbosity" : -1
    }
-}
-```
 
-To modify these settings, you can configure the :setting:`systemLog.verbosity` and `systemLog.component.<name>.verbosity` settings in the `configuration file <configuration-options>` or set the :parameter:`logComponentVerbosity` parameter using the :dbcommand:`setParameter` command or use the :method:`db.setLogLevel()` method. For examples, see `log-messages-configure-verbosity`.
+To modify these settings, you can configure the
+:setting:`systemLog.verbosity` and
+``systemLog.component.<name>.verbosity`` settings in the
+:ref:`configuration file <configuration-options>` or set the
+:parameter:`logComponentVerbosity` parameter using the
+:dbcommand:`setParameter` command or use the :method:`db.setLogLevel()`
+method. For examples, see :ref:`log-messages-configure-verbosity`.

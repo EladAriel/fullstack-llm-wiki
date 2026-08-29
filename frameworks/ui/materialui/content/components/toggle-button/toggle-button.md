@@ -4,10 +4,10 @@ framework: "Material UI"
 source_repo: "https://github.com/mui/material-ui.git"
 source_branch: "master"
 source_path: "docs/data/material/components/toggle-button/toggle-button.md"
-source_commit: "4d5fe7254baa7e97e38b516f37c7af13128468b7"
-source_commit_short: "4d5fe725"
-source_commit_date: "2026-07-24T12:25:49+03:00"
-generated_at: "2026-07-25T13:39:40.955349Z"
+source_commit: "fc3a3a0a8b7c8f20274eca4758ea07a33e25c1b4"
+source_commit_short: "fc3a3a0a"
+source_commit_date: "2026-08-28T09:03:39+07:00"
+generated_at: "2026-08-29T09:40:18.228871Z"
 ---
 ---
 productId: material-ui
@@ -112,4 +112,8 @@ The demos below show how to adjust spacing between toggle buttons in horizontal 
 
 ### Keyboard
 
-At present, toggle buttons are in DOM order. Navigate between them with the tab key. The button behavior follows standard keyboard semantics.
+The group uses a single tab stop.
+Use the left and right arrow keys to move focus in a horizontal group, or the up and down arrow keys in a vertical group.
+The <kbd>Home</kbd> and <kbd>End</kbd> keys move focus to the first and last enabled buttons.
+Focus movement wraps, skips disabled buttons, and does not change the selected value.
+Press <kbd>Space</kbd> or <kbd>Enter</kbd> to toggle the focused button.

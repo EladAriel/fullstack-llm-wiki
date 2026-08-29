@@ -1,83 +1,118 @@
 ---
 type: "Framework Learn Page"
-framework: "mongodb"
+framework: "MongoDB"
 source_repo: "https://github.com/mongodb/docs.git"
 source_branch: "main"
 source_path: "content/manual/manual/source/tutorial/measure-index-use.txt"
-source_commit: "ab9db26ed3d11618cdb61516d8180337d8e3f679"
-source_commit_short: "ab9db26e"
-source_commit_date: "2026-07-24T16:22:46-06:00"
-generated_at: "2026-07-25T11:51:15Z"
+source_commit: "b9f2bc487a2878b65e3c1f80024bebab76954f27"
+source_commit_short: "b9f2bc48"
+source_commit_date: "2026-08-28T17:09:45-05:00"
+generated_at: "2026-08-29T09:39:19.622755Z"
 ---
-
-=================
+.. _index-measure-index-use:
+.. _indexes-measuring-use:
 
 # Measure Index Use
 
-## Get Index Access Information with `$indexStats`
+**meta:** :description: Learn how to measure index use in MongoDB using `$indexStats`, `explain()`, and `hint()` methods for detailed query and index statistics.
 
-Use the :pipeline:`$indexStats` aggregation stage to get statistics regarding the use of each index for a collection. For example, the following aggregation operation returns statistics on the index use on the `orders` collection:
+.. default-domain:: mongodb
 
-```javascript
-db.orders.aggregate( [ { $indexStats: { } } ] )
-```
+**contents:** On this page
+   :local:
+   :backlinks: none
+   :depth: 1
+   :class: singlecol
 
-.. include:: /includes/indexes/index-usage-only-current-node.rst
+## Get Index Access Information with ``$indexStats``
 
-> **Seealso:** :pipeline:`$indexStats`
+Use the :pipeline:`$indexStats` aggregation stage to get statistics
+regarding the use of each index for a collection. For example, the
+following aggregation operation returns statistics on the index use on
+the ``orders`` collection:
 
-## Return Query Plan with `explain()`
+.. code-block:: javascript
 
-Use the :method:`db.collection.explain()` or the :method:`cursor.explain()` method in `executionStats <explain-method-executionStats>` mode to return statistics about the query process, including the index used, the number of documents scanned, and the time the query takes to process in milliseconds.
+   db.orders.aggregate( [ { $indexStats: { } } ] )
 
-Run :method:`db.collection.explain()` or the :method:`cursor.explain()` method in `allPlansExecution <explain-method-allPlansExecution>` mode to view partial execution statistics collected during plan selection.
+**include:** /includes/indexes/index-usage-only-current-node.rst
 
-> **Seealso:** `plan-cache-key`
+**seealso:** :pipeline:`$indexStats`
 
-## Control Index Use with `hint()`
+## Return Query Plan with ``explain()``
 
-To force MongoDB to use a particular index for a :method:`db.collection.find()` operation, specify the index with the :method:`~cursor.hint()` method. Append the :method:`~cursor.hint()` method to the :method:`~db.collection.find()` method. Consider the following example:
+Use the :method:`db.collection.explain()` or the
+:method:`cursor.explain()` method in :ref:`executionStats
+<explain-method-executionStats>` mode to return statistics about the
+query process, including the index used, the number of documents
+scanned, and the time the query takes to process in milliseconds.
 
-```javascript
-db.people.find(
-   { name: "John Doe", zipcode: { $gt: "63000" } }
-).hint( { zipcode: 1 } )
-```
+Run :method:`db.collection.explain()` or the :method:`cursor.explain()`
+method in :ref:`allPlansExecution <explain-method-allPlansExecution>`
+mode to view partial execution statistics collected during plan
+selection.
 
-To view the execution statistics for a specific index, append to the :method:`db.collection.find()` the :method:`~cursor.hint()` method followed by :method:`cursor.explain()`, e.g.:
+**seealso:** :ref:`plan-cache-key`
 
-```javascript
-db.people.find(
-   { name: "John Doe", zipcode: { $gt: "63000" } }
-).hint( { zipcode: 1 } ).explain("executionStats")
-```
+## Control Index Use with ``hint()``
 
-Or, append :method:`~cursor.hint()` method to :method:`db.collection.explain().find() <db.collection.explain()>`:
+To *force* MongoDB to use a particular index for a
+:method:`db.collection.find()` operation, specify the index with the
+:method:`~cursor.hint()` method. Append the :method:`~cursor.hint()`
+method to the :method:`~db.collection.find()` method. Consider the
+following example:
 
-```javascript
-db.people.explain("executionStats").find(
-   { name: "John Doe", zipcode: { $gt: "63000" } }
-).hint( { zipcode: 1 } )
-```
+.. code-block:: javascript
 
-Specify the `$natural` operator to the :method:`~cursor.hint()` method to prevent MongoDB from using any index:
+   db.people.find(
+      { name: "John Doe", zipcode: { $gt: "63000" } }
+   ).hint( { zipcode: 1 } )
 
-```javascript
-db.people.find(
-   { name: "John Doe", zipcode: { $gt: "63000" } }
-).hint( { $natural: 1 } )
-```
+To view the execution statistics for a specific index, append to the
+:method:`db.collection.find()` the :method:`~cursor.hint()` method
+followed by :method:`cursor.explain()`, e.g.:
+
+.. code-block:: javascript
+
+   db.people.find(
+      { name: "John Doe", zipcode: { $gt: "63000" } }
+   ).hint( { zipcode: 1 } ).explain("executionStats")
+
+Or, append :method:`~cursor.hint()` method to
+:method:`db.collection.explain().find() <db.collection.explain()>`:
+
+.. code-block:: javascript
+
+   db.people.explain("executionStats").find(
+      { name: "John Doe", zipcode: { $gt: "63000" } }
+   ).hint( { zipcode: 1 } )
+
+Specify the ``$natural`` operator to the :method:`~cursor.hint()`
+method to prevent MongoDB from using *any* index:
+
+.. code-block:: javascript
+
+   db.people.find(
+      { name: "John Doe", zipcode: { $gt: "63000" } }
+   ).hint( { $natural: 1 } )
 
 ## Index Metrics
 
-In addition to the :pipeline:`$indexStats` aggregation stage, MongoDB provides various index statistics that you may want to consider when analyzing index use for your database:
+In addition to the :pipeline:`$indexStats` aggregation stage, MongoDB
+provides various index statistics that you may want to consider when
+analyzing index use for your database:
 
 - In the output of :dbcommand:`serverStatus`:
-- :serverstatus:`metrics.queryExecutor.scanned`
-- :serverstatus:`metrics.operation.scanAndOrder`
+
+  - :serverstatus:`metrics.queryExecutor.scanned`
+  - :serverstatus:`metrics.operation.scanAndOrder`
+
 - In the output of :dbcommand:`collStats`:
-- `collStats.totalIndexSize`
-- `collStats.indexSizes`
+
+  - :data:`~collStats.totalIndexSize`
+  - :data:`~collStats.indexSizes`
+
 - In the output of :dbcommand:`dbStats`:
-- `dbStats.indexes`
-- `dbStats.indexSize`
+
+  - :data:`dbStats.indexes`
+  - :data:`dbStats.indexSize`

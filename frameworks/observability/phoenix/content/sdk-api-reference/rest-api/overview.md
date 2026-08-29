@@ -4,10 +4,10 @@ framework: "Arize Phoenix"
 source_repo: "https://github.com/Arize-ai/phoenix.git"
 source_branch: "main"
 source_path: "docs/phoenix/sdk-api-reference/rest-api/overview.mdx"
-source_commit: "69b3ab92c37ff65812feaa2dbf0b1c0ad5ae55fe"
-source_commit_short: "69b3ab9"
-source_commit_date: "2026-07-25T11:48:12-06:00"
-generated_at: "2026-07-25T19:08:24.945821Z"
+source_commit: "c48e50e9906fcc56c1c103ebd93ef3c95ed6b6e7"
+source_commit_short: "c48e50e"
+source_commit_date: "2026-08-29T01:45:20-06:00"
+generated_at: "2026-08-29T09:39:58.810671Z"
 ---
 # Overview
 
@@ -56,14 +56,14 @@ The example below lists projects and includes common pagination query params.
   <Tab title="cURL">
 ```bash
 curl --request GET \
-  --url "$PHOENIX_BASE_URL/v1/projects?limit=10" \
+  --url "$PHOENIX_ENDPOINT/v1/projects?limit=10" \
   --header "Authorization: Bearer $PHOENIX_API_KEY"
 ```
   </Tab>
 
   <Tab title="JavaScript" icon="js">
 ```javascript
-const baseUrl = process.env.PHOENIX_BASE_URL;
+const baseUrl = process.env.PHOENIX_ENDPOINT;
 const apiKey = process.env.PHOENIX_API_KEY;
 
 const response = await fetch(
@@ -85,7 +85,7 @@ console.log(body.data);
 import os
 import requests
 
-base_url = os.environ["PHOENIX_BASE_URL"]
+base_url = os.environ["PHOENIX_ENDPOINT"]
 api_key = os.environ.get("PHOENIX_API_KEY")
 headers = {"Authorization": f"Bearer {api_key}"} if api_key else {}
 
@@ -115,6 +115,27 @@ Most list endpoints return a shape like:
 ```
 
 When `next_cursor` is not `null`, pass it back as the `cursor` query param to fetch the next page.
+
+## Chat Completions Proxy
+
+`POST /v1/chat/completions` accepts the OpenAI wire format and proxies the call to the provider you name, resolving provider credentials on the server (secret store first, environment second) so callers never handle provider API keys.
+
+<Warning>
+Phoenix is not an AI gateway. The same server also takes on trace ingestion traffic, so routing production LLM calls through it competes with ingestion. Use this endpoint only to quickly try out different models in non-production environments.
+</Warning>
+
+Set `model` to `{provider}:{model_name}` for a built-in provider, or `custom:{provider_id}:{model_name}` for a custom provider you have stored. Pass `stream: true` for server-sent `chat.completion.chunk` events terminated by `data: [DONE]`. Tool calling is not supported.
+
+```bash
+curl --request POST \
+  --url "$PHOENIX_BASE_URL/v1/chat/completions" \
+  --header "Authorization: Bearer $PHOENIX_API_KEY" \
+  --header "Content-Type: application/json" \
+  --data '{
+    "model": "openai:gpt-4o",
+    "messages": [{"role": "user", "content": "Hello!"}]
+  }'
+```
 
 ## Where To Go Next
 

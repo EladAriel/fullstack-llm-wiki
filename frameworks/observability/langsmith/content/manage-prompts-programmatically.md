@@ -4,10 +4,10 @@ framework: "LangSmith"
 source_repo: "https://github.com/langchain-ai/docs.git"
 source_branch: "main"
 source_path: "src/langsmith/manage-prompts-programmatically.mdx"
-source_commit: "2aae1dfc98ee953a9a5185fb6fcdd9efb3f4d878"
-source_commit_short: "2aae1df"
-source_commit_date: "2026-07-25T00:27:23+00:00"
-generated_at: "2026-07-25T19:08:33.416559Z"
+source_commit: "a174f9cf7c91ee5eb14ee2382eb48bfe6e4956e9"
+source_commit_short: "a174f9c"
+source_commit_date: "2026-08-28T17:04:12-07:00"
+generated_at: "2026-08-29T09:39:50.667349Z"
 ---
 ---
 title: Manage prompts programmatically
@@ -368,6 +368,44 @@ For pulling prompts, if you are using Node.js or an environment that supports dy
 
 If you are in a non-Node environment, "includeModel" is not supported for non-OpenAI models and you should use the base `langchain/hub` entrypoint.
 </Note>
+
+## Use with the LangSmith gateway
+
+If your workspace uses the [LangSmith LLM Gateway](/langsmith/llm-gateway), you can route prompt model calls through it by setting an environment variable before pulling and invoking your prompt. No other code changes are required.
+
+```bash
+export LANGSMITH_GATEWAY="true"
+```
+
+This uses your existing `LANGSMITH_API_KEY` for authentication. To use a regional gateway instance instead of the default, set `LANGSMITH_GATEWAY` to the full gateway URL:
+
+```bash
+export LANGSMITH_GATEWAY="https://eu.gateway.smith.langchain.com"
+```
+
+<Note>
+If you need to use a different API key for gateway calls than your default `LANGSMITH_API_KEY`, set `LANGSMITH_GATEWAY_API_KEY` as an override. It must be a workspace-scoped key with the `gateway:invoke` permission.
+</Note>
+
+Once the environment variables are set, pull and invoke a prompt with a model as normal:
+
+```python Python
+from langsmith import Client
+
+client = Client()
+
+# Pull a prompt that includes a stored model configuration
+prompt_with_model = client.pull_prompt("my-prompt", include_model=True)
+
+# The model call is routed through the gateway automatically
+result = prompt_with_model.invoke({"topic": "cats"})
+```
+
+<Note>
+Gateway routing for LangChain chat models requires Python and a supported `langchain-*` integration package at the minimum version listed in the [gateway quickstart](/langsmith/llm-gateway-quickstart#using-langchain-and-deep-agents). If the integration package is below the minimum version, the call will bypass the gateway and go directly to the provider.
+</Note>
+
+For full configuration options, provider support, and regional endpoints, see the [LLM Gateway quickstart](/langsmith/llm-gateway-quickstart).
 
 ## Prompt caching
 

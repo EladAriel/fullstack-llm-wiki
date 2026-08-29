@@ -1,200 +1,243 @@
 ---
 type: "Framework Learn Page"
-framework: "mongodb"
+framework: "MongoDB"
 source_repo: "https://github.com/mongodb/docs.git"
 source_branch: "main"
 source_path: "content/manual/manual/source/reference/operator/aggregation/stdDevPop.txt"
-source_commit: "ab9db26ed3d11618cdb61516d8180337d8e3f679"
-source_commit_short: "ab9db26e"
-source_commit_date: "2026-07-24T16:22:46-06:00"
-generated_at: "2026-07-25T11:51:15Z"
+source_commit: "b9f2bc487a2878b65e3c1f80024bebab76954f27"
+source_commit_short: "b9f2bc48"
+source_commit_date: "2026-08-28T17:09:45-05:00"
+generated_at: "2026-08-29T09:39:20.233348Z"
 ---
-
-=================================
-
 # $stdDevPop (accumulator operator)
+
+**meta:** :description: Calculate the population standard deviation of input values using `$stdDevPop` in various aggregation stages, ignoring non-numeric values.
+
+.. default-domain:: mongodb
+
+**contents:** On this page
+   :local:
+   :backlinks: none
+   :depth: 1
+   :class: singlecol
 
 ## Definition
 
-.. versionchanged:: 5.0
+**group:** $stdDevPop
 
-Calculates the population standard deviation of the input values. Use if the values encompass the entire population of data you want to represent and do not wish to generalize about a larger population. :group:`$stdDevPop` ignores non-numeric values.
+**versionchanged:** 5.0
 
-If the values represent only a sample of a population of data from which to generalize about the population, use :group:`$stdDevSamp` instead.
+Calculates the population standard deviation of the input values.
+Use if the values encompass the entire population of data you want
+to represent and do not wish to generalize about a larger
+population. :group:`$stdDevPop` ignores non-numeric values.
 
-.. include:: /includes/extracts/fact-aggregation-accumulator-stdDevPop.rst
+If the values represent only a sample of a population of data from
+which to generalize about the population, use :group:`$stdDevSamp`
+instead.
+
+**include:** /includes/extracts/fact-aggregation-accumulator-stdDevPop.rst
 
 ## Syntax
 
-When used in the :pipeline:`$bucket`, :pipeline:`$bucketAuto`, :pipeline:`$group`, and :pipeline:`$setWindowFields` stages, :group:`$stdDevPop` has this syntax:
+When used in the :pipeline:`$bucket`, :pipeline:`$bucketAuto`,
+:pipeline:`$group`, and :pipeline:`$setWindowFields` stages,
+:group:`$stdDevPop` has this syntax:
 
-```none
-{ $stdDevPop: <expression> }
-```
+.. code-block:: none
+   :copyable: false
 
-When used in other supported stages, :group:`$stdDevPop` has one of two syntaxes:
+   { $stdDevPop: <expression> }
+   
+When used in other supported stages, :group:`$stdDevPop` has one of
+two syntaxes:
 
 - :group:`$stdDevPop` has one specified expression as its operand:
-```none
-  { $stdDevPop: <expression> }
-```
+
+  .. code-block:: none
+     :copyable: false
+
+     { $stdDevPop: <expression> }
 
 - :group:`$stdDevPop` has a list of specified expressions as its
-operand:
+  operand:
 
-```none
-  { $stdDevPop: [ <expression1>, <expression2> ... ]  }
-```
+  .. code-block:: none
+     :copyable: false
 
-The argument for :group:`$stdDevPop` can be any `expression <aggregation-expressions>` as long as it resolves to an array.
+     { $stdDevPop: [ <expression1>, <expression2> ... ]  }
 
-For more information on expressions, see `aggregation-expressions`.
+The argument for :group:`$stdDevPop` can be any :ref:`expression
+<aggregation-expressions>` as long as it resolves to an array.
+   
+For more information on expressions, see
+:ref:`aggregation-expressions`.
 
 ## Behavior
 
 ### Result Type
 
-`$stdDevPop` returns the population standard deviation of the input values as a :bsontype:`decimal <Decimal128>`.
+``$stdDevPop`` returns the population standard deviation of the 
+input values as a :bsontype:`double <Double>`.
 
 ### Non-numeric Values
 
-:group:`$stdDevPop` ignores non-numeric values. If all operands for a :group:`$stdDevPop` are non-numeric, :group:`$stdDevPop` returns `null`.
+:group:`$stdDevPop` ignores non-numeric values. If all operands for a
+:group:`$stdDevPop` are non-numeric, :group:`$stdDevPop` returns
+``null``.
 
 ### Single Value
 
-If the sample consists of a single numeric value, :group:`$stdDevPop` returns `0`.
+If the sample consists of a single numeric value, :group:`$stdDevPop`
+returns ``0``.
 
 ### Array Operand
 
-In the :pipeline:`$group` and :pipeline:`$setWindowFields` stages, if the expression resolves to an array, :group:`$stdDevPop` treats the operand as a non-numerical value and has no effect on the calculation.
+In the :pipeline:`$group` and :pipeline:`$setWindowFields` stages,
+if the expression resolves to an array, :group:`$stdDevPop` treats the
+operand as a non-numerical value and has no effect on the calculation.
 
-.. include:: /includes/extracts/fact-agg-accumulator-array-operand-in-project-stdDevPop.rst
+**include:** /includes/extracts/fact-agg-accumulator-array-operand-in-project-stdDevPop.rst
 
 ### Window Values
 
-.. include:: /includes/stdDev-behavior.rst
+**include:** /includes/stdDev-behavior.rst
 
 ## Examples
 
-### Use in `$group` Stage
+### Use in ``$group`` Stage
 
-Create a collection called `users` with the following documents:
+Create a collection called ``users`` with the following documents:
 
-```javascript
-db.users.insertMany( [
-   { _id : 1, name : "dave123", quiz : 1, score : 85 },
-   { _id : 2, name : "dave2", quiz : 1, score : 90 },
-   { _id : 3, name : "ahn", quiz : 1, score : 71 },
-   { _id : 4, name : "li", quiz : 2, score : 96 },
-   { _id : 5, name : "annT", quiz : 2, score : 77 },
-   { _id : 6, name : "ty", quiz : 2, score : 82 }
-] )
-```
+.. code-block:: javascript
 
-The following example calculates the standard deviation of each quiz:
-
-```javascript
-db.users.aggregate( [
-   { $group: { _id: "$quiz", stdDev: { $stdDevPop: "$score" } } }
-] )
-```
-
-The operation returns the following results:
-
-```javascript
-{ "_id" : 2, "stdDev" : 8.04155872120988 }
-{ "_id" : 1, "stdDev" : 8.04155872120988 }
-```
-
-### Use in `$project` Stage
-
-Create an example collection named `quizzes` with the following documents:
-
-```javascript
-db.quizzes.insertMany( [
-   {
-      _id : 1,
-      scores : [
-         { name : "dave123", score : 85 },
-         { name : "dave2", score : 90 },
-         { name : "ahn", score : 71 }
-      ]
-   },
-   {
-      _id : 2,
-      scores : [
-         { name : "li", quiz : 2, score : 96 },
-         { name : "annT", score : 77 },
-         { name : "ty", score : 82 }
-      ]
-   }
-] )
-```
+   db.users.insertMany( [
+      { _id : 1, name : "dave123", quiz : 1, score : 85 },
+      { _id : 2, name : "dave2", quiz : 1, score : 90 },
+      { _id : 3, name : "ahn", quiz : 1, score : 71 },
+      { _id : 4, name : "li", quiz : 2, score : 96 },
+      { _id : 5, name : "annT", quiz : 2, score : 77 },
+      { _id : 6, name : "ty", quiz : 2, score : 82 }
+   ] )
 
 The following example calculates the standard deviation of each quiz:
 
-```javascript
-db.quizzes.aggregate( [
-   { $project: { stdDev: { $stdDevPop: "$scores.score" } } }
-] )
-```
+.. code-block:: javascript
+
+   db.users.aggregate( [
+      { $group: { _id: "$quiz", stdDev: { $stdDevPop: "$score" } } }
+   ] )
 
 The operation returns the following results:
 
-```javascript
-{ _id : 1, stdDev : 8.04155872120988 }
-{ _id : 2, stdDev : 8.04155872120988 }
-```
+.. code-block:: javascript
+   :copyable: false
 
-### Use in `$setWindowFields` Stage
+   { "_id" : 2, "stdDev" : 8.04155872120988 }
+   { "_id" : 1, "stdDev" : 8.04155872120988 }
 
-.. versionadded:: 5.0
+### Use in ``$project`` Stage
 
-.. include:: /includes/setWindowFields-example-collection.rst
+Create an example collection named ``quizzes`` with the following
+documents:
 
-This example uses :group:`$stdDevPop` in the :pipeline:`$setWindowFields` stage to output the population standard deviation of the cake sales `quantity` for each `state`:
+.. code-block:: javascript
 
-```javascript
-db.cakeSales.aggregate( [
-   {
-      $setWindowFields: {
-         partitionBy: "$state",
-         sortBy: { orderDate: 1 },
-         output: {
-            stdDevPopQuantityForState: {
-               $stdDevPop: "$quantity",
-               window: {
-                  documents: [ "unbounded", "current" ]
-               }         
+   db.quizzes.insertMany( [
+      {
+         _id : 1,
+         scores : [
+            { name : "dave123", score : 85 },
+            { name : "dave2", score : 90 },
+            { name : "ahn", score : 71 }
+         ]
+      },
+      {
+         _id : 2,
+         scores : [
+            { name : "li", quiz : 2, score : 96 },
+            { name : "annT", score : 77 },
+            { name : "ty", score : 82 }
+         ]
+      }
+   ] )
+
+The following example calculates the standard deviation of each quiz:
+
+.. code-block:: javascript
+
+   db.quizzes.aggregate( [
+      { $project: { stdDev: { $stdDevPop: "$scores.score" } } }
+   ] )
+
+The operation returns the following results:
+
+.. code-block:: javascript
+   :copyable: false
+
+   { _id : 1, stdDev : 8.04155872120988 }
+   { _id : 2, stdDev : 8.04155872120988 }
+
+### Use in ``$setWindowFields`` Stage
+
+**versionadded:** 5.0
+
+**include:** /includes/setWindowFields-example-collection.rst
+
+This example uses :group:`$stdDevPop` in the
+:pipeline:`$setWindowFields` stage to output the population standard
+deviation of the cake sales ``quantity`` for each ``state``:
+
+.. code-block:: javascript
+
+   db.cakeSales.aggregate( [
+      {
+         $setWindowFields: {
+            partitionBy: "$state",
+            sortBy: { orderDate: 1 },
+            output: {
+               stdDevPopQuantityForState: {
+                  $stdDevPop: "$quantity",
+                  window: {
+                     documents: [ "unbounded", "current" ]
+                  }         
+               }
             }
          }
       }
-   }
-] )
-```
+   ] )
 
 In the example:
 
-.. include:: /includes/setWindowFields-partition-sort-date.rst
+**include:** /includes/setWindowFields-partition-sort-date.rst
 
-- `output` sets the `stdDevPopQuantityForState` field to the
-`quantity` population standard deviation value using :group:`$stdDevPop` that is run in a `documents <setWindowFields-documents>` window.
+- ``output`` sets the ``stdDevPopQuantityForState`` field to the
+  ``quantity`` population standard deviation value using
+  :group:`$stdDevPop` that is run in a :ref:`documents
+  <setWindowFields-documents>` window.
 
-The `window <setWindowFields-window>` contains documents between an `unbounded` lower limit and the `current` document in the output. This means :group:`$stdDevPop` returns the `quantity` population standard deviation value for the documents between the beginning of the partition and the current document.
+  The :ref:`window <setWindowFields-window>` contains documents between
+  an ``unbounded`` lower limit and the ``current`` document in the
+  output. This means :group:`$stdDevPop` returns the ``quantity``
+  population standard deviation value for the documents between the
+  beginning of the partition and the current document.
 
-In this example output, the `quantity` population standard deviation value for `CA` and `WA` is shown in the `stdDevPopQuantityForState` field:
+In this example output, the ``quantity`` population standard deviation
+value for ``CA`` and ``WA`` is shown in the
+``stdDevPopQuantityForState`` field:
 
-```javascript
-{ _id : 4, type : "strawberry", orderDate : ISODate("2019-05-18T16:09:01Z"),
-  state : "CA", price : 41, quantity : 162, stdDevPopQuantityForState : 0 }
-{ _id : 0, type : "chocolate", orderDate : ISODate("2020-05-18T14:10:30Z"),
-  state : "CA", price : 13, quantity : 120, stdDevPopQuantityForState : 21 }
-{ _id : 2, type : "vanilla", orderDate : ISODate("2021-01-11T06:31:15Z"),
-  state : "CA", price : 12, quantity : 145, stdDevPopQuantityForState : 17.249798710580816 }
-{ _id : 5, type : "strawberry", orderDate : ISODate("2019-01-08T06:12:03Z"),
-  state : "WA", price : 43, quantity : 134, stdDevPopQuantityForState : 0 }
-{ _id : 3, type : "vanilla", orderDate : ISODate("2020-02-08T13:13:23Z"),
-  state : "WA", price : 13, quantity : 104, stdDevPopQuantityForState : 15 }
-{ _id : 1, type : "chocolate", orderDate : ISODate("2021-03-20T11:30:05Z"),
-  state : "WA", price : 14, quantity : 140, stdDevPopQuantityForState : 15.748015748023622 }
-```
+.. code-block:: javascript
+   :copyable: false
+
+   { _id : 4, type : "strawberry", orderDate : ISODate("2019-05-18T16:09:01Z"),
+     state : "CA", price : 41, quantity : 162, stdDevPopQuantityForState : 0 }
+   { _id : 0, type : "chocolate", orderDate : ISODate("2020-05-18T14:10:30Z"),
+     state : "CA", price : 13, quantity : 120, stdDevPopQuantityForState : 21 }
+   { _id : 2, type : "vanilla", orderDate : ISODate("2021-01-11T06:31:15Z"),
+     state : "CA", price : 12, quantity : 145, stdDevPopQuantityForState : 17.249798710580816 }
+   { _id : 5, type : "strawberry", orderDate : ISODate("2019-01-08T06:12:03Z"),
+     state : "WA", price : 43, quantity : 134, stdDevPopQuantityForState : 0 }
+   { _id : 3, type : "vanilla", orderDate : ISODate("2020-02-08T13:13:23Z"),
+     state : "WA", price : 13, quantity : 104, stdDevPopQuantityForState : 15 }
+   { _id : 1, type : "chocolate", orderDate : ISODate("2021-03-20T11:30:05Z"),
+     state : "WA", price : 14, quantity : 140, stdDevPopQuantityForState : 15.748015748023622 }

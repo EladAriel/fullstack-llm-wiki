@@ -4,13 +4,13 @@ framework: "Arize Phoenix"
 source_repo: "https://github.com/Arize-ai/phoenix.git"
 source_branch: "main"
 source_path: "docs/phoenix/resources/phoenix-to-arize-ax-migration.mdx"
-source_commit: "69b3ab92c37ff65812feaa2dbf0b1c0ad5ae55fe"
-source_commit_short: "69b3ab9"
-source_commit_date: "2026-07-25T11:48:12-06:00"
-generated_at: "2026-07-25T19:08:24.826896Z"
+source_commit: "c48e50e9906fcc56c1c103ebd93ef3c95ed6b6e7"
+source_commit_short: "c48e50e"
+source_commit_date: "2026-08-29T01:45:20-06:00"
+generated_at: "2026-08-29T09:39:58.804954Z"
 ---
 ---
-title: "Phoenix to Arize AX Migration"
+title: "Migrating to Arize AX"
 description: Seamlessly migrate your data from Phoenix to Arize AX
 ---
 
@@ -46,7 +46,7 @@ If you are looking to migrate to Arize AX but want to preserve your data, this t
     PHOENIX_ENDPOINT="http://localhost:6006"
     PHOENIX_API_KEY=your-phoenix-api-key 
 
-    # Arize
+    # Arize AX
     ARIZE_API_KEY=your-arize-api-key
     ARIZE_SPACE_ID=your-arize-space-id
 
@@ -55,7 +55,7 @@ If you are looking to migrate to Arize AX but want to preserve your data, this t
     ```
 
     <Info>
-    You can find your Arize API key and Space ID in your Arize AX account settings.
+    You can find your Arize AX API key and Space ID in your Arize AX account settings.
 
     </Info>
   </Step>
@@ -72,7 +72,7 @@ If you are looking to migrate to Arize AX but want to preserve your data, this t
 
 * **Wait for traces to be indexed**: After importing traces, you must wait a few minutes for them to be loaded and indexed in Arize AX before sending annotation data. The import process will prompt you to verify traces are available before proceeding with annotations.
 
-* **31-day window**: Only annotations for traces from the past 31 days can be logged to Arize. If your traces are older than 31 days, their annotations will be skipped with a warning message.
+* **31-day window**: Only annotations for traces from the past 31 days can be logged to Arize AX. If your traces are older than 31 days, their annotations will be skipped with a warning message.
 
 ## Usage
 
@@ -87,7 +87,7 @@ python export_all_projects.py --de      # datasets and experiments
 python export_all_projects.py --traces   # traces with evaluations and annotations
 ```
 
-### Import to Arize
+### Import to Arize AX
 
 ```bash
 # Import everything
@@ -126,11 +126,11 @@ results/  # Overview of import and export jobs
 
 ### Import issues with traces
 
-The formatting of some span attributes may not be compatible between Arize and Phoenix. We tried to cover as many cases as possible, but there may be some missing ones. If you encounter errors:
+The formatting of some span attributes may not be compatible between Arize AX and Phoenix. We tried to cover as many cases as possible, but there may be some missing ones. If you encounter errors:
 
 1. Check the `results/` folder to see what errors have occured
 2. Fix them in the project's `traces.json` file
-3. Re-import the data to Arize
+3. Re-import the data to Arize AX
 
 ### Import issues with annotations
 

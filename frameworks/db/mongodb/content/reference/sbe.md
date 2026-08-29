@@ -1,63 +1,98 @@
 ---
 type: "Framework Learn Page"
-framework: "mongodb"
+framework: "MongoDB"
 source_repo: "https://github.com/mongodb/docs.git"
 source_branch: "main"
 source_path: "content/manual/manual/source/reference/sbe.txt"
-source_commit: "ab9db26ed3d11618cdb61516d8180337d8e3f679"
-source_commit_short: "ab9db26e"
-source_commit_date: "2026-07-24T16:22:46-06:00"
-generated_at: "2026-07-25T11:51:15Z"
+source_commit: "b9f2bc487a2878b65e3c1f80024bebab76954f27"
+source_commit_short: "b9f2bc48"
+source_commit_date: "2026-08-28T17:09:45-05:00"
+generated_at: "2026-08-29T09:39:19.663502Z"
 ---
-
-=================================
+.. _sbe-landing:
 
 # {+sbe-title+}
 
-.. versionadded:: 5.1
+**meta:** :description: Explore how MongoDB uses the slot-based query execution engine for improved performance in eligible queries starting from version 5.1.
 
-To find and return query results, MongoDB uses one of the following query engines:
+.. default-domain:: mongodb
+
+**contents:** On this page
+   :local:
+   :backlinks: none
+   :depth: 2
+   :class: singlecol
+
+**versionadded:** 5.1
+
+To find and return query results, MongoDB uses one of the following
+query engines:
 
 - The classic query engine
+
 - The {+sbe+}, which is available for some queries starting in MongoDB
-5.1.
+  5.1.
 
-The {+sbe+} uses a "slot-based" model to avoid materialization of intermediate results during query runtime, which allows for more efficient execution.
+The {+sbe+} uses a "slot-based" model to avoid materialization of
+intermediate results during query runtime, which allows for more
+efficient execution.
 
-MongoDB automatically selects the engine to execute the query. In MongoDB versions earlier than 8.0, you cannot manually specify an engine for a particular query. Starting in MongoDB 8.0, you can use query settings to specify an engine for queries. For details, see :dbcommand:`setQuerySettings`.
+MongoDB automatically selects the engine to execute the query. In
+MongoDB versions earlier than 8.0, you cannot manually specify an engine
+for a particular query. Starting in MongoDB 8.0, you can use
+query settings to specify an engine for queries. For details, see
+:dbcommand:`setQuerySettings`.
 
-MongoDB can use the {+sbe+} for a subset of queries provided certain conditions are met. In most cases, the {+sbe-short+} provides improved performance and lower CPU and memory costs compared to the classic query engine.
+MongoDB can use the {+sbe+} for a subset of queries provided certain
+conditions are met. In most cases, the {+sbe-short+} provides improved
+performance and lower CPU and memory costs compared to the classic query
+engine.
 
-MongoDB uses the classic engine for queries that are ineligible for the {+sbe+}.
+MongoDB uses the classic engine for queries that are ineligible for the
+{+sbe+}.
 
 ## Eligible Queries for the {+sbe-short-title+}
 
-MongoDB determines eligibility for using the {+sbe-short+} on a per-query basis, and considers support for each operator and expressions present in the query. For example, two common pipelines that use {+sbe-short+} are aggregations with :pipeline:`$group` or :pipeline:`$lookup` stages. However, support for the {+sbe-short+} is version specific and actively changing.
+MongoDB determines eligibility for using the {+sbe-short+} on a per-query basis, 
+and considers support for each operator and expressions present in the query. 
+For example, two common pipelines that use {+sbe-short+} are aggregations with 
+:pipeline:`$group` or :pipeline:`$lookup` stages. However, support for the 
+{+sbe-short+} is version specific and actively changing.
 
-To see whether your query used the {+sbe-short+}, refer to the `sbe-determine-query-engine` section.
+To see whether your query used the {+sbe-short+}, refer to the 
+:ref:`sbe-determine-query-engine` section.
 
-> **Important:** MongoDB automatically disables {+sbe-short+} on collections with an index
-with a hashed path `prefix <compound-index-prefix>` of a
-non-hashed path, where both paths are in the index.
+**important:** MongoDB automatically disables {+sbe-short+} on collections with an index 
+   with a hashed path :ref:`prefix <compound-index-prefix>` of a 
+   non-hashed path, where both paths are in the index.
 
 ### Block Processing
 
-.. include:: /includes/fact-block-processing.rst
+**include:** /includes/fact-block-processing.rst
 
-To learn more, see `Querying Time Series Data <timeseries-querying-block-processing>`.
+To learn more, see :ref:`Querying Time Series Data 
+<timeseries-querying-block-processing>`.
+
+.. _sbe-determine-query-engine:
 
 ## Determine which Query Engine was Used
 
-There are a few ways to determine whether the classic engine or the {+sbe-short+} was used to execute a query.
+There are a few ways to determine whether the classic engine or the
+{+sbe-short+} was used to execute a query.
 
 ### Check Query Explain Results
 
-The explain results for a query differ based on which query engine was used. For example, explain results for queries executed using the {+sbe-short+} include the `explain.queryPlanner.winningPlan.slotBasedPlan` field.
+The explain results for a query differ based on
+which query engine was used. For example, explain results for queries
+executed using the {+sbe-short+} include the 
+:data:`explain.queryPlanner.winningPlan.slotBasedPlan` field.
 
-For more information about the differences in explain results between query engines, see `explain-output-structure`.
+For more information about the differences in explain results between
+query engines, see :ref:`explain-output-structure`.
 
 ### Check Slow Query Logs
 
-.. include:: /includes/sbe/fact-slow-ops-logs.rst
+**include:** /includes/sbe/fact-slow-ops-logs.rst
 
-To see an example log message for a query that used the {+sbe-short+}, see `log-message-json-examples-slow-op`.
+To see an example log message for a query that used the {+sbe-short+},
+see :ref:`log-message-json-examples-slow-op`.

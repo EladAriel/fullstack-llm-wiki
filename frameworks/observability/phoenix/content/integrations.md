@@ -4,10 +4,10 @@ framework: "Arize Phoenix"
 source_repo: "https://github.com/Arize-ai/phoenix.git"
 source_branch: "main"
 source_path: "docs/phoenix/integrations.mdx"
-source_commit: "69b3ab92c37ff65812feaa2dbf0b1c0ad5ae55fe"
-source_commit_short: "69b3ab9"
-source_commit_date: "2026-07-25T11:48:12-06:00"
-generated_at: "2026-07-25T19:08:24.820856Z"
+source_commit: "c48e50e9906fcc56c1c103ebd93ef3c95ed6b6e7"
+source_commit_short: "c48e50e"
+source_commit_date: "2026-08-29T01:45:20-06:00"
+generated_at: "2026-08-29T09:39:58.795348Z"
 ---
 # Integrations
 
@@ -155,12 +155,15 @@ Phoenix provides native tracing support for all major LLM providers:
   <Card title="Anthropic" img="https://storage.googleapis.com/arize-phoenix-assets/assets/images/phoenix-docs-images/5d0ed01c-image.avif" href="/docs/phoenix/integrations/llm-providers/anthropic" />
   <Card title="Amazon Bedrock" img="https://storage.googleapis.com/arize-phoenix-assets/assets/images/phoenix-docs-images/db8ae712-image.avif" href="/docs/phoenix/integrations/llm-providers/amazon-bedrock" />
   <Card title="Google" img="https://storage.googleapis.com/arize-phoenix-assets/assets/images/phoenix-docs-images/7b413cbf-image.jpeg" href="/docs/phoenix/integrations/llm-providers/google-gen-ai" />
+  <Card title="Cohere" img="https://storage.googleapis.com/arize-phoenix-assets/assets/images/phoenix-docs-images/cohere-card.avif" href="/docs/phoenix/integrations/llm-providers/cohere" />
   <Card title="Groq" img="https://storage.googleapis.com/arize-phoenix-assets/assets/images/phoenix-docs-images/612c738c-image.avif" href="/docs/phoenix/integrations/llm-providers/groq" />
   <Card title="MistralAI" img="https://storage.googleapis.com/arize-phoenix-assets/assets/images/phoenix-docs-images/808d1f26-image.avif" href="/docs/phoenix/integrations/llm-providers/mistralai" />
   <Card title="VertexAI" img="https://storage.googleapis.com/arize-phoenix-assets/assets/images/phoenix-docs-images/9a7aa063-image.avif" href="/docs/phoenix/integrations/llm-providers/vertexai" />
   <Card title="LiteLLM" img="https://storage.googleapis.com/arize-phoenix-assets/assets/images/phoenix-docs-images/a22c16d3-image.avif" href="/docs/phoenix/integrations/llm-providers/litellm" />
   <Card title="OpenRouter" img="https://storage.googleapis.com/arize-assets/gitbook_openrouter.png" href="/docs/phoenix/integrations/llm-providers/openrouter" />
   <Card title="OrcaRouter" img="https://storage.googleapis.com/arize-phoenix-assets/assets/images/phoenix-docs-images/orcarouter-card.avif" href="/docs/phoenix/integrations/llm-providers/orcarouter" />
+  <Card title="Ollama" img="https://storage.googleapis.com/arize-phoenix-assets/assets/images/phoenix-docs-images/ollama.svg" href="/docs/phoenix/integrations/llm-providers/ollama" />
+  <Card title="Together AI" img="https://storage.googleapis.com/arize-phoenix-assets/assets/images/phoenix-docs-images/together-card.png" href="/docs/phoenix/integrations/llm-providers/together" />
 </CardGroup>
 
 ### Platforms

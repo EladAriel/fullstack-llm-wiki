@@ -1,36 +1,112 @@
 ---
 type: "Framework Learn Page"
-framework: "mongodb"
+framework: "MongoDB"
 source_repo: "https://github.com/mongodb/docs.git"
 source_branch: "main"
 source_path: "content/manual/manual/source/tutorial/view-sharded-cluster-configuration.txt"
-source_commit: "ab9db26ed3d11618cdb61516d8180337d8e3f679"
-source_commit_short: "ab9db26e"
-source_commit_date: "2026-07-24T16:22:46-06:00"
-generated_at: "2026-07-25T11:51:15Z"
+source_commit: "b9f2bc487a2878b65e3c1f80024bebab76954f27"
+source_commit_short: "b9f2bc48"
+source_commit_date: "2026-08-28T17:09:45-05:00"
+generated_at: "2026-08-29T09:39:19.575077Z"
 ---
-
-==========================
+.. _sharding-manage-shards:
 
 # View Cluster Configuration
 
+**meta:** :description: Discover how to view sharded cluster configurations, including listing databases, shards, and cluster details.
+
+.. default-domain:: mongodb
+
+**contents:** On this page
+   :local:
+   :backlinks: none
+   :depth: 1
+   :class: singlecol
+
+.. _sharding-procedure-list-databases:
+
 ## List Databases
 
-To list your databases, query the `databases` collection in the `config-database`. Connect :binary:`~bin.mongosh` to a :binary:`~bin.mongos` instance and run the following operation to get a full list of the databases in your cluster:
+To list your databases, query the
+``databases`` collection in the :ref:`config-database`.
+Connect :binary:`~bin.mongosh` to a
+:binary:`~bin.mongos` instance and run the following operation to get a
+full list of the databases in your cluster:
 
-```javascript
-use config
-db.databases.find()
-```
+.. code-block:: javascript
+
+   use config
+   db.databases.find()
+
+.. _sharding-procedure-list-shards:
 
 ## List Shards
 
-To list the current set of configured shards, use the :dbcommand:`listShards` command, as follows:
+To list the current set of configured shards, use the :dbcommand:`listShards`
+command, as follows:
 
-```javascript
-db.adminCommand( { listShards : 1 } )
-```
+.. code-block:: javascript
+
+   db.adminCommand( { listShards : 1 } )
+
+.. _sharding-procedure-view-clusters:
 
 ## View Cluster Details
 
-To view cluster details, issue :method:`db.printShardingStatus()` or :method:`sh.status()`. Both methods return the same output.
+To view cluster details, issue :method:`db.printShardingStatus()` or
+:method:`sh.status()`. Both methods return the same output.
+
+**example:** In the following example output from :method:`sh.status()`
+
+   - ``sharding version`` displays the version number of the shard
+     metadata.
+
+   - ``shards`` displays a list of the :binary:`~bin.mongod` instances
+     used as shards in the cluster.
+
+   - ``databases`` displays information about all databases in the cluster.
+
+   - The ``chunks`` information for the ``foo`` database displays how
+     many chunks are on each shard and displays the range of each chunk.
+
+   .. code-block:: javascript
+
+      --- Sharding Status ---
+        sharding version: { 
+          "_id" : 1,
+          "minCompatibleVersion" : 5,
+          "currentVersion" : 6,
+          "clusterId" : ObjectId("59a4443c3d38cd8a0b40316d")
+        }
+        shards:
+          {  "_id" : "shard0000",  "host" : "m0.example.net:27018" }
+          {  "_id" : "shard0001",  "host" : "m3.example2.net:27018" }
+          {  "_id" : "shard0002",  "host" : "m2.example.net:27018" }
+        active mongoses:
+          "3.4.7" : 1
+        autosplit:
+          Currently enabled: yes
+         balancer:
+          Currently enabled:  yes
+          Currently running:  no
+          Failed balancer rounds in last 5 attempts:  0
+          Migration Results for the last 24 hours: 
+             1 : Success
+        databases:
+          { "_id" : "foo", "primary" : "shard0000" }
+              foo.contacts
+                  shard key: { "zip" : 1 }
+                  unique: false
+                  balancing: true
+                  chunks:
+                      shard0001    2
+                      shard0002    3
+                      shard0000    2
+                  { "zip" : { "$minKey" : 1 } } -->> { "zip" : "56000" } on : shard0001 { "t" : 2, "i" : 0 }
+                  { "zip" : 56000 } -->> { "zip" : "56800" } on : shard0002 { "t" : 3, "i" : 4 }
+                  { "zip" : 56800 } -->> { "zip" : "57088" } on : shard0002 { "t" : 4, "i" : 2 }
+                  { "zip" : 57088 } -->> { "zip" : "57500" } on : shard0002 { "t" : 4, "i" : 3 }
+                  { "zip" : 57500 } -->> { "zip" : "58140" } on : shard0001 { "t" : 4, "i" : 0 }
+                  { "zip" : 58140 } -->> { "zip" : "59000" } on : shard0000 { "t" : 4, "i" : 1 }
+                  { "zip" : 59000 } -->> { "zip" : { "$maxKey" : 1 } } on : shard0000 { "t" : 3, "i" : 3 }
+          {  "_id" : "test", "primary" : "shard0000" }

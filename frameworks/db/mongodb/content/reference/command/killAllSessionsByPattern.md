@@ -1,67 +1,119 @@
 ---
 type: "Framework Learn Page"
-framework: "mongodb"
+framework: "MongoDB"
 source_repo: "https://github.com/mongodb/docs.git"
 source_branch: "main"
 source_path: "content/manual/manual/source/reference/command/killAllSessionsByPattern.txt"
-source_commit: "ab9db26ed3d11618cdb61516d8180337d8e3f679"
-source_commit_short: "ab9db26e"
-source_commit_date: "2026-07-24T16:22:46-06:00"
-generated_at: "2026-07-25T11:51:15Z"
+source_commit: "b9f2bc487a2878b65e3c1f80024bebab76954f27"
+source_commit_short: "b9f2bc48"
+source_commit_date: "2026-08-28T17:09:45-05:00"
+generated_at: "2026-08-29T09:39:20.045024Z"
 ---
-
-===========================================
-
 # killAllSessionsByPattern (database command)
 
+**meta:** :description: Terminate sessions in MongoDB that match specified patterns, with options for user, role, and session ID criteria.
+
+.. default-domain:: mongodb
+
+**contents:** On this page
+   :local:
+   :backlinks: none
+   :depth: 1
+   :class: singlecol
+
 ## Definition
+
+**dbcommand:** killAllSessionsByPattern
+
+   The :dbcommand:`killAllSessionsByPattern` command kills all sessions
+   that match any of the specified patterns. [#exception]_
 
 ## Syntax
 
 The command has the following syntax:
 
-```javascript
-db.runCommand( 
-   { 
-     killAllSessionsByPattern: [ <pattern>, ... ] 
-   } 
-)
-```
+.. code-block:: javascript
+
+   db.runCommand( 
+      { 
+        killAllSessionsByPattern: [ <pattern>, ... ] 
+      } 
+   )
+
 
 ## Compatibility
 
-This command is available in deployments hosted in the following environments:
+This command is available in deployments hosted in the following environments: 
 
-.. include:: /includes/fact-environments-atlas-only.rst
+**include:** /includes/fact-environments-atlas-only.rst
 
-.. include:: /includes/fact-environments-atlas-support-no-free.rst
+**include:** /includes/fact-environments-atlas-support-no-free.rst
 
-.. include:: /includes/fact-environments-onprem-only.rst
+**include:** /includes/fact-environments-onprem-only.rst
 
+   
 ## Command Fields
 
-The command takes an array of documents that specify the patterns to match:
+The command takes an array of documents that specify the patterns to
+match:
+
+.. list-table::
+   :header-rows: 1
+
+   * - Pattern
+     - Description
+
+   * - ``{ lsid: { id : <UUID> } }``
+     - Specify the UUID portion of the session ID to kill.
+
+   * - ``{ uid: <BinData> }``
+     - Specifies the hash of the owner of the sessions to kill.
+
+   * - ``{ users: [ { user: <user>, db: <dbname> }, ... ] }``
+     - Specifies the owners of the sessions to kill. Requires
+       additional privileges. See
+       :ref:`killAllSessionsByPattern-auth`.
+
+   * - ``{ roles: [ { role: <role>, db: <dbname> }, ... ] }``
+     - Specifies the roles assigned to the owners of the sessions to
+       kill. Requires additional privileges. See
+       :ref:`killAllSessionsByPattern-auth`.
 
 Specify an empty array to kill all sessions. [#exception]_
 
-To view existing sessions, see :pipeline:`$listSessions` operation or :pipeline:`$listLocalSessions`.
+.. |command| replace:: :dbcommand:`killAllSessionsByPattern`
 
-> **Seealso:** :dbcommand:`killAllSessions`
+To view existing sessions, see :pipeline:`$listSessions` operation or
+:pipeline:`$listLocalSessions`.
 
-The |command| operation ignores sessions that have `transactions <transactions>` in prepared state. See `killAllSessionsByPattern-behavior` for details.
+**seealso:** :dbcommand:`killAllSessions`
+
+.. [#exception]
+
+   The |command| operation ignores sessions that have
+   :ref:`transactions <transactions>` in prepared state.
+   See :ref:`killAllSessionsByPattern-behavior` for details.
+
+.. _killAllSessionsByPattern-behavior:
 
 ## Behavior
 
-.. include:: /includes/note-killSessions.rst
+**include:** /includes/note-killSessions.rst
+
+.. _killAllSessionsByPattern-auth:
 
 ## Access Control
 
-If the deployment enforces authentication/authorization, you must have the :authaction:`killAnySession` privilege action to run the :dbcommand:`killAllSessionsByPattern` command.
+If the deployment enforces authentication/authorization, you must have
+the :authaction:`killAnySession` privilege action to run the
+:dbcommand:`killAllSessionsByPattern` command.
 
-For patterns that include `users` or `roles`, you must also have privileges that grant :authaction:`impersonate` action on the cluster resource.
+For patterns that include ``users`` or ``roles``, you must also have
+privileges that grant :authaction:`impersonate` action on the cluster
+resource.
 
-> **Note:** Users can kill their own sessions even without the
-:authaction:`killAnySession` privilege action.
+**note:** Users can kill their own sessions even without the
+   :authaction:`killAnySession` privilege action.
 
 ## Examples
 
@@ -69,17 +121,18 @@ For patterns that include `users` or `roles`, you must also have privileges that
 
 The following operation kills all sessions:
 
-```javascript
-db.runCommand( { killAllSessionsByPattern: [ ] } )
-```
+.. code-block:: javascript
+
+   db.runCommand( { killAllSessionsByPattern: [ ] } )
 
 ### Kill All Sessions for Specific Users
 
-The following operation kills all sessions that have the specified `uid` and whose owner has the specified role:
+The following operation kills all sessions that have the specified
+``uid`` and whose owner has the specified role:
 
-```javascript
-db.runCommand( { killAllSessionsByPattern: [ 
-   { "uid" : BinData(0,"oBRA45vMY78p1tv6kChjQPTdYsnCHi/kA/fFMZTIV1o=") },
-   { roles: [ { role: "readWrite", db: "test" } ] }
-] } )
-```
+.. code-block:: javascript
+
+   db.runCommand( { killAllSessionsByPattern: [ 
+      { "uid" : BinData(0,"oBRA45vMY78p1tv6kChjQPTdYsnCHi/kA/fFMZTIV1o=") },
+      { roles: [ { role: "readWrite", db: "test" } ] }
+   ] } )

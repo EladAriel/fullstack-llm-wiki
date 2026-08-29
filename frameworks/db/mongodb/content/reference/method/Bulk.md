@@ -1,69 +1,160 @@
 ---
 type: "Framework Learn Page"
-framework: "mongodb"
+framework: "MongoDB"
 source_repo: "https://github.com/mongodb/docs.git"
 source_branch: "main"
 source_path: "content/manual/manual/source/reference/method/Bulk.txt"
-source_commit: "ab9db26ed3d11618cdb61516d8180337d8e3f679"
-source_commit_short: "ab9db26e"
-source_commit_date: "2026-07-24T16:22:46-06:00"
-generated_at: "2026-07-25T11:51:15Z"
+source_commit: "b9f2bc487a2878b65e3c1f80024bebab76954f27"
+source_commit_short: "b9f2bc48"
+source_commit_date: "2026-08-28T17:09:45-05:00"
+generated_at: "2026-08-29T09:39:19.982588Z"
 ---
-
-=======================
-
 # Bulk() (mongosh method)
 
-.. include:: /includes/fact-bulkwrite.rst
+**meta:** :description: Perform bulk write operations using the Bulk operations builder, supporting ordered and unordered execution in MongoDB.
+
+.. default-domain:: mongodb
+
+**contents:** On this page
+   :local:
+   :backlinks: none
+   :depth: 1
+   :class: singlecol
+
+**include:** /includes/fact-bulkwrite.rst
 
 ## Description
 
+**method:** Bulk()
+
+   Bulk operations builder used to construct a list of write operations
+   to perform in bulk for a single collection. To instantiate the
+   builder, use either the
+   :method:`db.collection.initializeOrderedBulkOp()` or the
+   :method:`db.collection.initializeUnorderedBulkOp()` method.
+
 ## Compatibility
 
-This command is available in deployments hosted in the following environments:
+This command is available in deployments hosted in the following
+environments: 
 
-.. include:: /includes/fact-environments-atlas-only.rst
+**include:** /includes/fact-environments-atlas-only.rst
 
-.. include:: /includes/fact-environments-atlas-support-all.rst
-
+**include:** /includes/fact-environments-atlas-support-all.rst
+  
 ## Ordered and Unordered Bulk Operations
 
-The builder can construct the list of operations as ordered or unordered.
+The builder can construct the list of operations as *ordered* or
+*unordered*.
 
 ### Ordered Operations
 
-With an ordered operations list, MongoDB executes the write operations in the list serially. If an error occurs during the processing of one of the write operations, MongoDB will return without processing any remaining write operations in the list.
+With an *ordered* operations list, MongoDB executes the write
+operations in the list serially. If an error occurs during the
+processing of one of the write operations, MongoDB will return without
+processing any remaining write operations in the list.
 
-Use :method:`db.collection.initializeOrderedBulkOp()` to create a builder for an ordered list of write commands.
+Use :method:`db.collection.initializeOrderedBulkOp()` to create a
+builder for an ordered list of write commands.
 
-.. include:: /includes/fact-bulk-operation-ordered-list.rst
+**include:** /includes/fact-bulk-operation-ordered-list.rst
 
-.. include:: /includes/fact-bulk-operation-batches.rst
+**include:** /includes/fact-bulk-operation-batches.rst
 
-.. include:: /includes/fact-bulk-operation-sharded-cluster.rst
+**include:** /includes/fact-bulk-operation-sharded-cluster.rst
 
 ### Unordered Operations
 
-With an unordered operations list, MongoDB can execute in parallel, as well as in a nondeterministic order, the write operations in the list. If an error occurs during the processing of one of the write operations, MongoDB will continue to process remaining write operations in the list.
+With an *unordered* operations list, MongoDB can execute in parallel,
+as well as in a nondeterministic order, the write operations in the
+list. If an error occurs during the processing of one of the write
+operations, MongoDB will continue to process remaining write operations
+in the list.
 
-Use :method:`db.collection.initializeUnorderedBulkOp()` to create a builder for an unordered list of write commands.
+Use :method:`db.collection.initializeUnorderedBulkOp()` to create a
+builder for an unordered list of write commands.
 
-.. include:: /includes/fact-bulk-operation-unordered-list.rst
+**include:** /includes/fact-bulk-operation-unordered-list.rst
 
-.. include:: /includes/fact-bulk-operation-batches.rst
+**include:** /includes/fact-bulk-operation-batches.rst
 
 ### Transactions
 
-.. include:: /includes/extracts/transactions-supported-operation.rst
+**include:** /includes/extracts/transactions-supported-operation.rst
 
 For :method:`Bulk.insert()` operations, the collection must already exist.
 
-For :method:`Bulk.find.upsert()`, if the operation results in an upsert, the collection must already exist.
+For :method:`Bulk.find.upsert()`, if the operation results in an
+upsert, the collection must already exist.
 
-.. include:: /includes/extracts/transactions-operations-write-concern.rst
+**include:** /includes/extracts/transactions-operations-write-concern.rst
 
-.. include:: /includes/extracts/transactions-usage.rst
+**include:** /includes/extracts/transactions-usage.rst
+
+.. |operation| replace:: :method:`Bulk()`
+ 
+.. _bulk-methods:
 
 ## Methods
 
 The :method:`Bulk()` builder has the following methods:
+
+.. list-table::
+   :widths: 30,70
+   :header-rows: 1
+
+   * - Name
+
+     - Description
+
+   * - :method:`Bulk.insert()`
+
+     - Adds an insert operation to a list of operations.
+
+   * - :method:`Bulk.find()`
+
+     - Specifies the query condition for an update or a remove operation.
+
+   * - :method:`Bulk.find.delete()`
+     - Adds a multiple document delete operation to a list of operations.
+
+   * - :method:`Bulk.find.deleteOne()`
+     - Adds a single document delete operation to a list of operations.
+
+   * - :method:`Bulk.find.remove()`
+     - An alias for ``Bulk.find.delete()``.
+
+   * - :method:`Bulk.find.removeOne()`
+     - An alias for ``Bulk.find.deleteOne()``.
+
+   * - :method:`Bulk.find.replaceOne()`
+
+     - Adds a single document replacement operation to a list of operations.
+
+   * - :method:`Bulk.find.updateOne()`
+
+     - Adds a single document update operation to a list of operations.
+
+   * - :method:`Bulk.find.update()`
+
+     - Adds a ``multi`` update operation to a list of operations.
+
+   * - :method:`Bulk.find.upsert()`
+
+     - Specifies ``upsert: true`` for an update operation.
+
+   * - :method:`Bulk.execute()`
+
+     - Executes a list of operations in bulk.
+
+   * - :method:`Bulk.getOperations()`
+
+     - Returns an array of write operations executed in the :method:`Bulk()` operations object.
+
+   * - :method:`Bulk.toJSON()`
+
+     - Returns a JSON document that contains the number of operations and batches in the :method:`Bulk()` operations object.
+
+   * - :method:`Bulk.toString()`
+
+     - Returns the :method:`Bulk.toJSON()` results as a string.

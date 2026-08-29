@@ -4,11 +4,12 @@ framework: "Model Context Protocol"
 source_repo: "https://github.com/modelcontextprotocol/modelcontextprotocol"
 source_branch: "main"
 source_path: "docs/seps/1865-mcp-apps-interactive-user-interfaces-for-mcp.mdx"
-source_commit: "7634684382c3d14cf7e9f14073fe40a2d8ace3fa"
-source_commit_short: "76346843"
-source_commit_date: "2026-07-23T16:49:30-07:00"
-generated_at: "2026-07-25T11:50:39Z"
+source_commit: "ca4ab3027f7c844cd3039c956438d72e8253f7f5"
+source_commit_short: "ca4ab30"
+source_commit_date: "2026-08-28T21:24:44-07:00"
+generated_at: "2026-08-29T09:38:48.023178Z"
 ---
+# 1865 Mcp Apps Interactive User Interfaces For Mcp
 
 ---
 title: "SEP-1865: MCP Apps - Interactive User Interfaces for MCP"
@@ -25,16 +26,24 @@ description: "MCP Apps - Interactive User Interfaces for MCP"
   </Badge>
 </div>
 
-| Field         | Value                                                                                                                                                                             |
-| ------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| **SEP**       | 1865                                                                                                                                                                              |
-| **Title**     | MCP Apps - Interactive User Interfaces for MCP                                                                                                                                    |
-| **Status**    | Final                                                                                                                                                                             |
-| **Type**      | Extensions Track                                                                                                                                                                  |
-| **Created**   | 2025-11-21                                                                                                                                                                        |
-| **Author(s)** | Ido Salomon ([@idosal](https://github.com/idosal)), Liad Yosef ([@liadyosef](https://github.com/liadyosef)), Olivier Chafik ([@olivierchafik](https://github.com/olivierchafik)), |
-| **Sponsor**   | None (seeking sponsor)                                                                                                                                                            |
-| **PR**        | [#1865](https://github.com/modelcontextprotocol/modelcontextprotocol/pull/1865)                                                                                                   |
+<Note>
+  This SEP has reached Final status and is preserved as a historical record of
+  the design as accepted. Changes made to the protocol after finalization are
+  not reflected here. Refer to the [current
+  specification](/specification/latest) and its changelog for authoritative
+  requirements.
+</Note>
+
+| Field         | Value                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                       |
+| ------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| **SEP**       | 1865                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                        |
+| **Title**     | MCP Apps - Interactive User Interfaces for MCP                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                              |
+| **Status**    | Final                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                       |
+| **Type**      | Extensions Track                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                            |
+| **Created**   | 2025-11-21                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                  |
+| **Author(s)** | Ido Salomon ([@idosal](https://github.com/idosal)), Liad Yosef ([@liadyosef](https://github.com/liadyosef)), Olivier Chafik ([@olivierchafik](https://github.com/olivierchafik)), Jerome Swannack ([@jeromeswannack](https://github.com/jeromeswannack)), Jonathan Hefner ([@jonathanhefner](https://github.com/jonathanhefner)), Anton Pidkuiko ([@antonpidkuiko](https://github.com/antonpidkuiko)), Nick Cooper ([@nickcooper](https://github.com/nickcooper)), Bryan Ashley ([@bryanashley](https://github.com/bryanashley)), Alexi Christakis ([@alexichristakis](https://github.com/alexichristakis)) |
+| **Sponsor**   | None (seeking sponsor)                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                      |
+| **PR**        | [#1865](https://github.com/modelcontextprotocol/modelcontextprotocol/pull/1865)                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                             |
 
 ---
 

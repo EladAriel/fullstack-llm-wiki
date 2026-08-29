@@ -1,14 +1,15 @@
 ---
 type: "Framework Learn Page"
-framework: "redis"
+framework: "Redis"
 source_repo: "https://github.com/redis/docs.git"
 source_branch: "main"
 source_path: "content/integrate/redis-data-integration/faq.md"
-source_commit: "9d30f68c3dad1a6b3b7d30fe604b911348ce8152"
-source_commit_short: "9d30f68c"
-source_commit_date: "2026-07-24T10:52:10-07:00"
-generated_at: "2026-07-25T11:51:22Z"
+source_commit: "f8693349287b0efbef3c865b6f6a2aceca88594d"
+source_commit_short: "f869334"
+source_commit_date: "2026-08-28T10:01:19-05:00"
+generated_at: "2026-08-29T09:38:56.160582Z"
 ---
+# Faq
 
 ---
 Title: FAQ
@@ -74,11 +75,21 @@ replica of an Active-Active replication setup or an Auto tiering database.
 
 ## Can I use Active-Active for the RDI database?
 
-Yes, starting with RDI 1.16.0, you can use Active-Active for the RDI database. This is useful if you
-want to create a disaster recovery setup for RDI using Google Cloud Storage (GCS) to provide a reliable lease mechanism for leader election.
-The configuration for the GCS is available only for [Helm based installations]({{< relref "/integrate/redis-data-integration/installation/install-k8s" >}}).
+Yes, starting with RDI 1.16.0, you can use Active-Active for the RDI database. This is
+supported whether or not you also run a disaster recovery (DR) setup for RDI.
 
-**Important:** You should only use this configuration when both sites use the same source configuration.
+If you have two RDI instances sharing a single RDI database then they will use that database for leader election, so
+they need no other lease mechanism. This is how high availability (HA) works for VM
+installations. See
+[Installing with High Availability]({{< relref "/integrate/redis-data-integration/installation/install-vm#installing-with-high-availability" >}}).
+
+In a DR setup, each site runs its own RDI instance against its local instance of the
+Active-Active RDI database, so leader election needs an external lease. Google Cloud Storage
+(GCS) is currently the only supported lease mechanism, and you can configure it only for
+[Helm based installations]({{< relref "/integrate/redis-data-integration/installation/install-k8s" >}}).
+
+**Important:** Use a DR setup only when both sites capture changes from the same source
+database server. Both RDI instances must point at that same server, not at a replica of it.
 
 ## Can I run multiple RDI installations in the same Kubernetes cluster?
 

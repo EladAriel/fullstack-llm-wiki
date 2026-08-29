@@ -1,97 +1,189 @@
 ---
 type: "Framework Learn Page"
-framework: "mongodb"
+framework: "MongoDB"
 source_repo: "https://github.com/mongodb/docs.git"
 source_branch: "main"
 source_path: "content/manual/manual/source/core/retryable-writes.txt"
-source_commit: "ab9db26ed3d11618cdb61516d8180337d8e3f679"
-source_commit_short: "ab9db26e"
-source_commit_date: "2026-07-24T16:22:46-06:00"
-generated_at: "2026-07-25T11:51:15Z"
+source_commit: "b9f2bc487a2878b65e3c1f80024bebab76954f27"
+source_commit_short: "b9f2bc48"
+source_commit_date: "2026-08-28T17:09:45-05:00"
+generated_at: "2026-08-29T09:39:19.530332Z"
 ---
-
-================
+.. _retryable-writes:
 
 # Retryable Writes
 
-Retryable writes let drivers retry specific write operations once after network errors or if they cannot find a healthy `primary` in the `replica set <replication>` or `sharded cluster <sharding-introduction>`.
+**meta:** :description: Enable automatic retries for specific write operations in
+      MongoDB. Handle persistent network errors and replica set issues with retryable
+      writes.
+
+.. default-domain:: mongodb
+
+**contents:** On this page
+   :local:
+   :backlinks: none
+   :depth: 1
+   :class: singlecol
+
+Retryable writes let drivers retry specific write operations once after
+network errors or if they cannot find a healthy :term:`primary` in the
+:ref:`replica set <replication>` or :ref:`sharded cluster
+<sharding-introduction>`.
 
 ## Compatibility
 
 Retryable writes require:
 
-Deployment Topologies A `replica set <replication>` or `sharded cluster <sharding-introduction>`. Not supported on `standalone instances <standalone>`.
+Deployment Topologies
+  A :ref:`replica set <replication>` or :ref:`sharded cluster
+  <sharding-introduction>`. Not supported on :term:`standalone
+  instances <standalone>`.
 
-Storage Engine A storage engine with document-level locking, such as `WiredTiger <storage-wiredtiger>` or `in-memory <storage-inmemory>`.
+Storage Engine
+  A storage engine with document-level locking, such as
+  :ref:`WiredTiger <storage-wiredtiger>` or :ref:`in-memory
+  <storage-inmemory>`.
 
-MongoDB Drivers Drivers compatible with MongoDB 3.6+.
+MongoDB Drivers
+  Drivers compatible with MongoDB 3.6+.
 
-.. include:: /includes/3.6-drivers.rst
+  .. include:: /includes/3.6-drivers.rst
 
-MongoDB Version MongoDB 3.6+ and `featureCompatibilityVersion` 3.6+ on all nodes. See :dbcommand:`setFeatureCompatibilityVersion`.
+MongoDB Version
+  MongoDB 3.6+ and ``featureCompatibilityVersion`` 3.6+ on all nodes.
+  See :dbcommand:`setFeatureCompatibilityVersion`.
 
-Write Acknowledgment Writes with `/reference/write-concern` `0` are not retryable.
+Write Acknowledgment
+  Writes with :doc:`/reference/write-concern` ``0`` are not retryable.
 
 ## Behaviors
 
 ### Retryable Writes and Multi-Document Transactions
 
-`Transaction commit and abort operations <transactions-retry>` are retryable. Drivers retry these operations once on error, even if :urioption:`retryWrites` is `false`.
+:ref:`Transaction commit and abort operations <transactions-retry>` are
+retryable. Drivers retry these operations once on error, even if
+:urioption:`retryWrites` is ``false``.
 
-Writes inside a transaction are not individually retryable, regardless of value of :urioption:`retryWrites`.
+Writes inside a transaction are not individually retryable, regardless
+of value of :urioption:`retryWrites`.
 
-For more information on transactions, see `/core/transactions`.
+For more information on transactions, see :doc:`/core/transactions`.
 
 ### Enabling Retryable Writes
 
 MongoDB Drivers
+  .. include:: /includes/extracts/4.2-changes-drivers-retryWrites-default.rst
 
-.. include:: /includes/extracts/4.2-changes-drivers-retryWrites-default.rst
+:binary:`~bin.mongosh`
+  :binary:`~bin.mongosh` enables retryable writes by default. To
+  disable, use :option:`--retryWrites=false <mongosh --retryWrites>`:
 
-:binary:`~bin.mongosh` :binary:`~bin.mongosh` enables retryable writes by default. To disable, use :option:`--retryWrites=false <mongosh --retryWrites>`:
+  .. code-block:: bash
 
-```bash
-  mongosh --retryWrites=false
-```
+     mongosh --retryWrites=false
+
+.. _retryable-write-ops:
 
 ### Retryable Write Operations
 
-MongoDB retries the following operations if they have acknowledged write concern (for example, `/reference/write-concern` cannot be :writeconcern:`{w: 0} <\<number\>>`):
+MongoDB retries the following operations if they have acknowledged write
+concern (for example, :doc:`/reference/write-concern` cannot be
+:writeconcern:`{w: 0} <\<number\>>`):
 
-> **Note:** Writes inside `transactions </core/transactions>` are not
-individually retryable.
+**note:** Writes inside :doc:`transactions </core/transactions>` are not
+   individually retryable.
+
+.. list-table::
+   :header-rows: 1
+
+   * - Methods
+     - Descriptions
+
+   * - | :method:`db.collection.insertOne()`
+       | :method:`db.collection.insertMany()`
+     - Inserts
+
+   * - | :method:`db.collection.updateOne()`
+       | :method:`db.collection.replaceOne()`
+     - Single-document updates
+
+   * - | :method:`db.collection.deleteOne()`
+       | :method:`db.collection.remove()` where ``justOne`` is ``true``
+     - Single-document deletes
+
+   * - | :method:`db.collection.findAndModify()`
+       | :method:`db.collection.findOneAndDelete()`
+       | :method:`db.collection.findOneAndReplace()`
+       | :method:`db.collection.findOneAndUpdate()`
+     - ``findAndModify`` operations (always single-document).
+
+   * - :method:`db.collection.bulkWrite()` with the following write
+       operations:
+
+       - :ref:`bulkwrite-write-operations-insertOne`
+       - :ref:`updateOne <bulkwrite-write-operations-updateOneMany>`
+       - :ref:`bulkwrite-write-operations-replaceOne`
+       - :ref:`deleteOne <bulkwrite-write-operations-deleteOneMany>`
+
+     - Bulk write operations that only consist of the single-document
+       write operations. A retryable bulk operation can include any
+       combination of the specified write operations but cannot include
+       any multi-document write operations, such as ``updateMany``.
+
+   * - :method:`Bulk <Bulk()>` operations for:
+
+       - :method:`Bulk.find.removeOne()`
+       - :method:`Bulk.find.replaceOne()`
+       - :method:`Bulk.find.updateOne()`
+
+     - Bulk write operations that only consist of the single-document
+       write operations. A retryable bulk operation can include any
+       combination of the specified write operations but cannot include
+       any multi-document write operations, such as ``update`` which
+       specifies ``true`` for the ``multi`` option.
 
 ### Persistent Network Errors
 
-By default, MongoDB retries writes **once**. One retry attempts to address transient network errors and `replica set elections <replica-set-elections>`, but not persistent network errors.
+By default, MongoDB retries writes **once**. One retry attempts to address
+transient network errors and
+:ref:`replica set elections <replica-set-elections>`, but not
+persistent network errors.
 
-If you set `timeoutMS`, MongoDB may retry writes multiple times. Retries continue until one of the following conditions is true:
+If you set ``timeoutMS``, MongoDB may retry writes multiple times. Retries
+continue until one of the following conditions is true:
 
 - The operation succeeds.
 - The operation fails with a non-retryable error.
 - The timeout expires.
+
 ### Failover Period
 
-Drivers wait :urioption:`serverSelectionTimeoutMS` to find a new primary before retrying. Retryable writes fail if failover takes longer than this timeout.
+Drivers wait :urioption:`serverSelectionTimeoutMS` to find a new
+primary before retrying. Retryable writes fail if failover takes longer
+than this timeout.
 
-> **Warning:** If a client is unresponsive for longer than
-:parameter:`localLogicalSessionTimeoutMinutes`, the write might
-retry and apply again when the client recovers.
+**warning:** If a client is unresponsive for longer than
+   :parameter:`localLogicalSessionTimeoutMinutes`, the write might
+   retry and apply again when the client recovers.
 
 ### Diagnostics
 
-:dbcommand:`serverStatus` includes retryable write statistics in the :serverstatus:`transactions` section.
+:dbcommand:`serverStatus` includes retryable write statistics in the
+:serverstatus:`transactions` section.
 
-### Retryable Writes Against `local` Database
+### Retryable Writes Against ``local`` Database
 
-Official drivers enable retryable writes by default. Writes to the `local` `database <replica-set-local-database>` fail unless you disable retryable writes.
+Official drivers enable retryable writes by default. Writes to the
+``local`` :ref:`database <replica-set-local-database>` fail unless you
+disable retryable writes.
 
-To disable, set :urioption:`retryWrites=false <retryWrites>` in the `connection string <mongodb-uri>`.
+To disable, set :urioption:`retryWrites=false <retryWrites>` in the
+:ref:`connection string <mongodb-uri>`.
 
 ### Error Handling
 
-.. include:: /includes/6.1-retry-writes-error-handling.rst
+**include:** /includes/6.1-retry-writes-error-handling.rst
 
 ## Learn More
 
-`retryable-reads`
+:ref:`retryable-reads`

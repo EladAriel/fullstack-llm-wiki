@@ -1,69 +1,88 @@
 ---
 type: "Framework Learn Page"
-framework: "mongodb"
+framework: "MongoDB"
 source_repo: "https://github.com/mongodb/docs.git"
 source_branch: "main"
 source_path: "content/manual/manual/source/reference/command/refreshSessions.txt"
-source_commit: "ab9db26ed3d11618cdb61516d8180337d8e3f679"
-source_commit_short: "ab9db26e"
-source_commit_date: "2026-07-24T16:22:46-06:00"
-generated_at: "2026-07-25T11:51:15Z"
+source_commit: "b9f2bc487a2878b65e3c1f80024bebab76954f27"
+source_commit_short: "b9f2bc48"
+source_commit_date: "2026-08-28T17:09:45-05:00"
+generated_at: "2026-08-29T09:39:20.085082Z"
 ---
-
-==================================
-
 # refreshSessions (database command)
+
+**meta:** :description: Use the `refreshSessions` command to update the last use time for specified sessions, extending their active state in MongoDB environments.
+
+.. default-domain:: mongodb
+
+**contents:** On this page
+   :local:
+   :backlinks: none
+   :depth: 1
+   :class: singlecol
 
 ## Definition
 
+**dbcommand:** refreshSessions
+
+   The :dbcommand:`refreshSessions` command updates the last use time
+   for the specified sessions, thereby extending the active state of
+   the sessions.
+
 ## Compatibility
 
-This command is available in deployments hosted in the following environments:
+This command is available in deployments hosted in the following environments: 
 
-.. include:: /includes/fact-environments-atlas-only.rst
+**include:** /includes/fact-environments-atlas-only.rst
 
-.. include:: /includes/fact-environments-atlas-support-all.rst
+**include:** /includes/fact-environments-atlas-support-all.rst
 
-.. include:: /includes/fact-environments-onprem-only.rst
+**include:** /includes/fact-environments-onprem-only.rst
 
 ## Syntax
 
 The command has the following syntax:
 
-```javascript
-db.runCommand(
-   { 
-     refreshSessions: [ 
-       { id : <UUID> }, ... 
-     ] 
-   } 
- )
-```
+.. code-block:: javascript
 
-.. include:: /includes/fact-dbcommand.rst
+   db.runCommand(
+      { 
+        refreshSessions: [ 
+          { id : <UUID> }, ... 
+        ] 
+      } 
+    )
 
-```javascript
-db.runCommand( 
-   { 
-     refreshSessions: [ 
-       { id : <UUID> }, ... 
-     ] 
-   } 
-)
-```
+**include:** /includes/fact-dbcommand.rst
+
+.. |command| replace:: :dbcommand:`refreshSessions`
+
+.. code-block:: javascript
+
+   db.runCommand( 
+      { 
+        refreshSessions: [ 
+          { id : <UUID> }, ... 
+        ] 
+      } 
+   )
 
 ## Behavior
 
 ### Session Identification
 
-MongoDB concatenates each of the specified UUIDs with the hash of the authenticated user credentials to identify the user's sessions to refresh. If the user has no session that match, the :dbcommand:`refreshSessions` has no effect.
+MongoDB concatenates each of the specified UUIDs with the hash of the
+authenticated user credentials to identify the user's sessions to refresh.
+If the user has no session that match, the :dbcommand:`refreshSessions`
+has no effect.
 
 ## Access Control
 
-If the deployment enforces authentication/authorization, you must be authenticated to run the :dbcommand:`refreshSessions` command.
+If the deployment enforces authentication/authorization, you must be
+authenticated to run the :dbcommand:`refreshSessions` command.
 
 A user can only refresh sessions belonging to the user.
 
-> **Seealso:** - :dbcommand:`startSession`
-- :pipeline:`$listLocalSessions`
--  :pipeline:`$listSessions`
+**seealso:** - :dbcommand:`startSession`
+   - :pipeline:`$listLocalSessions`
+   -  :pipeline:`$listSessions`

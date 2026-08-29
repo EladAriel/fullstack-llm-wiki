@@ -5,11 +5,10 @@ source_repo: "https://github.com/vibrantlabsai/ragas"
 source_branch: "main"
 source_path: "docs/howtos/migrations/migrate_from_v03_to_v04.md"
 source_commit: "298b68274234c060deacab3cf5fb52aa3a20e885"
-source_commit_short: "298b6827"
+source_commit_short: "298b682"
 source_commit_date: "2026-02-24T13:17:18+05:30"
-generated_at: "2026-06-23T13:55:50Z"
+generated_at: "2026-08-29T09:38:15.983858Z"
 ---
-
 # Migration from v0.3 to v0.4
 
 Ragas v0.4 introduces a fundamental shift towards an **experiment-based architecture**. This represents the most significant change since v0.2, moving from isolated metric evaluations to a cohesive experimentation framework where evaluation, analysis, and iteration are tightly integrated.

@@ -1,92 +1,389 @@
 ---
 type: "Framework Learn Page"
-framework: "mongodb"
+framework: "MongoDB"
 source_repo: "https://github.com/mongodb/docs.git"
 source_branch: "main"
 source_path: "content/manual/manual/source/tutorial/iterate-a-cursor.txt"
-source_commit: "ab9db26ed3d11618cdb61516d8180337d8e3f679"
-source_commit_short: "ab9db26e"
-source_commit_date: "2026-07-24T16:22:46-06:00"
-generated_at: "2026-07-25T11:51:15Z"
+source_commit: "b9f2bc487a2878b65e3c1f80024bebab76954f27"
+source_commit_short: "b9f2bc48"
+source_commit_date: "2026-08-28T17:09:45-05:00"
+generated_at: "2026-08-29T09:39:19.620365Z"
 ---
+.. _read-operations-cursors:
 
-===============================
+# Iterate a Cursor in ``mongosh``
 
-# Iterate a Cursor in `mongosh`
+**meta:** :description: Learn how to manually iterate over the return documents on a cursor in `mongosh`, using it to access the documents and manage cursor behaviors, such as timeout and batch size.
 
-This tutorial demonstrates how to access documents in a `cursor`.
+.. default-domain:: mongodb
+
+**contents:** On this page
+   :local:
+   :backlinks: none
+   :depth: 1
+   :class: singlecol
+
+This tutorial demonstrates how to access documents in a :term:`cursor`. 
 
 ## About This Task
 
-To access documents in a cursor, you can manually iterate the cursor or use the :method:`~cursor.toArray()` method.
+To access documents in a cursor, you can manually iterate the cursor or use
+the :method:`~cursor.toArray()` method.
 
-This tutorial overviews how to:
+This tutorial overviews how to: 
 
-- Save a cursor as a variable using the `let` keyword.
+- Save a cursor as a variable using the ``let`` keyword.
+
 - Use the :method:`next() <cursor.next()>`, :method:`hasNext()
-<cursor.hasNext()>`, and :method:`forEach() <cursor.forEach()>` methods to access documents in a cursor.
+  <cursor.hasNext()>`, and :method:`forEach() <cursor.forEach()>` methods to
+  access documents in a cursor.
 
 - Return and access the cursor documents as an array with the
-:method:`~cursor.toArray()` method.
+  :method:`~cursor.toArray()` method.
 
 ### Batch Sizes
 
-A cursor returns documents in batches. By default, mongosh displays 20 documents per cursor iteration. You can use `config.set("displayBatchSize") <mongosh-configure-api-params>` to change it, if this is too much or too little for your needs.
+A cursor returns documents in batches. By default, mongosh 
+displays 20 documents per cursor iteration. You can use
+:ref:`config.set("displayBatchSize")
+<mongosh-configure-api-params>` to change it, if this is too
+much or too little for your needs.
 
 ## Before You Begin
 
-- Install `mongosh <mdb-shell-install>`.
-- Connect to a `deployment <mdb-shell-connect>`.
+- Install :ref:`mongosh <mdb-shell-install>`.
+
+- Connect to a :ref:`deployment <mdb-shell-connect>`.
+
 ### Insert Documents Into a New Collection
 
-Use :binary:`~bin.mongosh` to insert documents into a new collection using the default `test` database:
+Use :binary:`~bin.mongosh` to insert documents into a new collection using the default
+``test`` database:
 
-```javascript
-db.users.insertMany( [ 
-   { _id: 0, type: "admin", email: "admin@example.com", name: "Admin User" }, 
-   { _id: 1, type: "user", email: "user1@example.com", name: "Test User 1" }, 
-   { _id: 2, type: "user", email: "user2@example.com", name: "Test User 2" }
-] )
-```
+.. code-block:: javascript
+
+   db.users.insertMany( [ 
+      { _id: 0, type: "admin", email: "admin@example.com", name: "Admin User" }, 
+      { _id: 1, type: "user", email: "user1@example.com", name: "Test User 1" }, 
+      { _id: 2, type: "user", email: "user2@example.com", name: "Test User 2" }
+   ] )
 
 ## Examples
 
-### Save a Cursor with `let`
+### Save a Cursor with ``let``
 
-In :binary:`~bin.mongosh`, the cursor does not automatically iterate when you assign it to a variable using the `let` keyword.
+In :binary:`~bin.mongosh`, the cursor does not automatically iterate when you
+assign it to a variable using the ``let`` keyword.
 
-```javascript
-let myCursor = db.users.find( { type: "user" } )
-```
+.. code-block:: javascript
 
-You can call the cursor variable in the shell to print matching documents.
+   let myCursor = db.users.find( { type: "user" } )
 
-If the returned cursor is not assigned to a variable using the `let` keyword, then the cursor is automatically iterated up to the batch size, printing the first batch of results.
+You can call the cursor variable in the shell to print matching
+documents.
+
+.. io-code-block::
+   :copyable: true
+
+   .. input::
+      :language: javascript
+
+      myCursor
+
+   .. output::
+      :language: shell
+      :visible: false
+
+      [
+         {
+            _id: 1,
+            type: 'user',
+            email: 'user1@example.com',
+            name: 'Test User 1'
+         },
+         {
+            _id: 2,
+            type: 'user',
+            email: 'user2@example.com',
+            name: 'Test User 2'
+         }
+      ]
+
+If the returned cursor is not assigned to a variable using the
+``let`` keyword, then the cursor is automatically iterated up to
+the batch size, printing the first batch of results.
+
+.. io-code-block::
+   :copyable: true
+
+   .. input::
+      :language: javascript
+
+      db.users.find( { type: "user" } )
+
+   .. output::
+      :language: shell
+      :visible: false
+
+      [
+         {
+            _id: 1,
+            type: 'user',
+            email: 'user1@example.com',
+            name: 'Test User 1'
+         },
+         {
+            _id: 2,
+            type: 'user',
+            email: 'user2@example.com',
+            name: 'Test User 2'
+         }
+      ]
 
 ### Access Documents in a Cursor with :method:`next() <cursor.next()>`
 
-You can also use the cursor method :method:`next() <cursor.next()>` to access the documents. :method:`next() <cursor.next()>` returns the document the cursor currently points and then moves the cursor forward to the next document.
+You can also use the cursor method :method:`next() <cursor.next()>` to access
+the documents. :method:`next() <cursor.next()>` returns the document the cursor
+currently points and then moves the cursor forward to the next document.
+
+.. io-code-block::
+   :copyable: true
+
+   .. input::
+      :language: javascript
+      :emphasize-lines: 3
+
+      let myCursor = db.users.find( { type: "user" } )
+
+      myCursor.next()
+
+   .. output::
+      :language: shell
+      :visible: false
+
+      {
+         _id: 1,
+         type: 'user',
+         email: 'user1@example.com',
+         name: 'Test User 1'
+      }
+
 
 ### Access Documents in a Cursor with :method:`hasNext() <cursor.hasNext()>`
 
-The cursor method :method:`hasNext() <cursor.hasNext()>` returns `true` or `false` to indicate if there are more documents to be returned from the cursor.
+The cursor method :method:`hasNext() <cursor.hasNext()>` returns ``true`` or
+``false`` to indicate if there are more documents to be returned from the cursor.
 
-You can use the :method:`hasNext() <cursor.hasNext()>` and :method:`next() <cursor.next()>` methods to print all remaining documents from the cursor using the `printjson()` helper.
+.. io-code-block::
+   :copyable: true
+
+   .. input::
+      :language: javascript
+      :emphasize-lines: 3
+
+      let myCursor = db.users.find( { type: "user" } )
+
+      myCursor.hasNext()
+
+   .. output::
+      :language: shell
+      :visible: false
+
+      true
+
+You can use the :method:`hasNext() <cursor.hasNext()>` and :method:`next()
+<cursor.next()>` methods to print all remaining documents from the cursor using
+the ``printjson()`` helper.
+
+.. io-code-block::
+   :copyable: true
+
+   .. input::
+      :language: javascript
+      :emphasize-lines: 3, 4, 5
+
+      let myCursor = db.users.find( { type: "user" } )
+
+      while ( myCursor.hasNext() ) { 
+         printjson( myCursor.next() )
+      }
+
+   .. output::
+      :language: shell
+      :visible: false
+
+      {
+         _id: 1,
+         type: 'user',
+         email: 'user1@example.com',
+         name: 'Test User 1'
+      }
+      {
+         _id: 2,
+         type: 'user',
+         email: 'user2@example.com',
+         name: 'Test User 2'
+      }
 
 ### Access Documents in a Cursor with :method:`forEach() <cursor.forEach()>`
 
-Similarly, you can use the cursor method :method:`forEach() <cursor.forEach()>` to apply a helper, such as `printjson()`, to each document in the cursor.
+Similarly, you can use the cursor method :method:`forEach() <cursor.forEach()>`
+to apply a helper, such as ``printjson()``, to each document in the cursor.
 
-Starting in :binary:`~bin.mongosh` 2.1.0, you can also use `for-of` loops to iterate the cursor. The following example returns the same results as the previous example.
+.. io-code-block::
+   :copyable: true
 
-See `JavaScript cursor methods <js-query-cursor-methods>` and your :driver:`driver </>` documentation for more information on cursor methods.
+   .. input::
+      :language: javascript
+      :emphasize-lines: 3
+
+      let myCursor = db.users.find( { type: "user" } )
+
+      myCursor.forEach( myDocument => printjson(myDocument) )
+
+   .. output::
+      :language: shell
+      :visible: false
+
+      {
+         _id: 1,
+         type: 'user',
+         email: 'user1@example.com',
+         name: 'Test User 1'
+      }
+      {
+         _id: 2,
+         type: 'user',
+         email: 'user2@example.com',
+         name: 'Test User 2'
+      }
+
+Starting in :binary:`~bin.mongosh` 2.1.0, you can also use ``for-of`` loops to
+iterate the cursor. The following example returns the same results as the
+previous example.
+
+.. io-code-block::
+   :copyable: true
+
+   .. input::
+      :language: javascript
+      :emphasize-lines: 3, 4, 5
+
+      let myCursor = db.users.find( { type: "user" } )
+
+      for ( let myDocument of myCursor ) {
+         printjson( myDocument )
+      }
+
+   .. output::
+      :language: shell
+      :visible: false
+
+      {
+         _id: 1,
+         type: 'user',
+         email: 'user1@example.com',
+         name: 'Test User 1'
+      }
+      {
+         _id: 2,
+         type: 'user',
+         email: 'user2@example.com',
+         name: 'Test User 2'
+      }
+
+See :ref:`JavaScript cursor methods <js-query-cursor-methods>` and your
+:driver:`driver </>` documentation for more information on cursor methods.
 
 ### Access Documents in a Cursor with :method:`toArray() <cursor.toArray()>`
 
-In :binary:`~bin.mongosh`, use the :method:`~cursor.toArray()` method to iterate the cursor and return the documents in an array.
+In :binary:`~bin.mongosh`, use the :method:`~cursor.toArray()` method to
+iterate the cursor and return the documents in an array.
+
+.. io-code-block::
+   :copyable: true
+
+   .. input::
+      :language: javascript
+      :emphasize-lines: 5
+
+      let myCursor = db.users.find( { type: "user" } )
+
+      let documentArray = myCursor.toArray()
+
+      documentArray
+
+   .. output::
+      :language: shell
+      :visible: false
+
+      [
+         {
+            _id: 1,
+            type: 'user',
+            email: 'user1@example.com',
+            name: 'Test User 1'
+         },
+         {
+            _id: 2,
+            type: 'user',
+            email: 'user2@example.com',
+            name: 'Test User 2'
+         }
+      ]
 
 You can access the resulting document array as a traditional array.
 
-The :method:`~cursor.toArray()` method loads all documents returned by the cursor into RAM and exhausts the cursor.
+.. io-code-block::
+   :copyable: true
 
-Some :driver:`Drivers </>` provide access to the documents by using an index on the cursor (i.e. `cursor[index]`). This is a shortcut for first calling the :method:`~cursor.toArray()` method and then using an index on the resulting array.
+   .. input::
+      :language: javascript
+      :emphasize-lines: 5
+
+      let myCursor = db.users.find( { type: "user" } )
+
+      let documentArray = myCursor.toArray()
+
+      documentArray[1]
+
+   .. output::
+      :language: shell
+      :visible: false
+
+      {
+         _id: 2,
+         type: 'user',
+         email: 'user2@example.com',
+         name: 'Test User 2'
+      }
+
+The :method:`~cursor.toArray()` method loads all documents returned by the
+cursor into RAM and exhausts the cursor.
+
+Some :driver:`Drivers </>` provide access to the documents by using an index on
+the cursor (i.e. ``cursor[index]``). This is a shortcut for first calling the
+:method:`~cursor.toArray()` method and then using an index on the resulting
+array.
+
+.. io-code-block::
+   :copyable: true
+
+   .. input::
+      :language: javascript
+      :emphasize-lines: 3
+
+      let myCursor = db.users.find( { type: "user" } )
+
+      myCursor.toArray() [1]
+
+   .. output::
+      :language: shell
+      :visible: false
+
+      {
+         _id: 2,
+         type: 'user',
+         email: 'user2@example.com',
+         name: 'Test User 2'
+      }

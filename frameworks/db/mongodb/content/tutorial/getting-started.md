@@ -1,28 +1,43 @@
 ---
 type: "Framework Learn Page"
-framework: "mongodb"
+framework: "MongoDB"
 source_repo: "https://github.com/mongodb/docs.git"
 source_branch: "main"
 source_path: "content/manual/manual/source/tutorial/getting-started.txt"
-source_commit: "ab9db26ed3d11618cdb61516d8180337d8e3f679"
-source_commit_short: "ab9db26e"
-source_commit_date: "2026-07-24T16:22:46-06:00"
-generated_at: "2026-07-25T11:51:15Z"
+source_commit: "b9f2bc487a2878b65e3c1f80024bebab76954f27"
+source_commit_short: "b9f2bc48"
+source_commit_date: "2026-08-28T17:09:45-05:00"
+generated_at: "2026-08-29T09:39:19.612020Z"
 ---
-
 :template: instruqt
 
-============================
+.. _getting-started:
 
 # Getting Started with MongoDB
 
-To get started and explore MongoDB, try the 5 minute interactive tutorial that connects you to a [MongoDB Atlas](https://www.mongodb.com/atlas/database)_ cluster and walks you through inserting, querying, and deleting data in MongoDB.
+.. default-domain:: mongodb
+
+**facet:** :name: programming_language
+   :values: shell
+
+**meta:** :keywords: sample dataset, lab
+   :description: Experience MongoDB in 5 minutes with an interactive tutorial on MongoDB Atlas. Learn how to insert, query, and delete data. No installation required.
+
+To get started and explore MongoDB, try the 5 minute interactive 
+tutorial that connects you to a `MongoDB Atlas <https://www.mongodb.com/atlas/database>`__
+cluster and walks you through inserting, querying, and
+deleting data in MongoDB. 
 
 ## Interactive Tutorial
 
-You do not need to install anything. Click the :guilabel:`Launch` button of the in-browser Integrated Development Environment to start the tutorial.
+You do not need to install anything. Click the :guilabel:`Launch` button 
+of the in-browser Integrated Development Environment to start the tutorial. 
 
-After completing the tutorial, see `unified-get-started` to deploy a free cluster without any installation overhead.
+**instruqt:** /mongodb-docs/tracks/getting-started-with-mongodb-v2?token=em_Yadrk-QVCMfR6Zh3
+   :title: Getting Started with MongoDB Lab
+
+After completing the tutorial, see :ref:`unified-get-started`
+to deploy a free cluster without any installation overhead.
 
 ## Next Steps
 
@@ -30,8 +45,97 @@ After completing the tutorial, see `unified-get-started` to deploy a free cluste
 
 To set up your own deployment:
 
+.. list-table::
+   :header-rows: 1
+   :widths: 35 65
+
+   * - Deployment
+
+     - Description
+
+   * - MongoDB Atlas Free Tier Cluster
+
+     - MongoDB Atlas is a fast, easy, and free way to get started with
+       MongoDB. To learn more, see the
+       :ref:`unified-get-started` tutorial.
+
+   * - Local MongoDB installation
+
+     - For more information on installing MongoDB locally, see
+       :ref:`Install MongoDB<tutorial-installation>`.
+
+.. _gs-additional-examples:
+
 ### Additional Examples
 
-For additional examples, including MongoDB driver specific examples (Python, Java, Node.js, etc.), see:
+For additional examples, including MongoDB driver specific examples
+(Python, Java, Node.js, etc.), see:
+
+.. list-table::
+   :stub-columns: 1
+   :widths: 45 55
+
+   * - Query document examples
+
+     - - :ref:`read-operations-queries`
+
+       - :ref:`read-operations-subdocuments`
+
+       - :ref:`read-operations-arrays`
+
+       - :ref:`array-match-embedded-documents`
+
+       - :ref:`projection`
+
+       - :ref:`faq-developers-query-for-nulls`
+
+   * - Update document examples
+
+     - - :ref:`write-op-update`
+
+   * - Delete document examples
+
+     - - :ref:`write-op-delete`
 
 ### Additional Topics
+
+.. list-table::
+   :header-rows: 1
+   :class: index-table
+
+   * - Introduction
+     - Developers
+     - Administrators
+     - Reference
+
+   * - :ref:`intro-to-mongodb`
+
+       :ref:`Installation Guides <tutorial-installation>`
+
+       :ref:`databases-and-collections`
+
+       :ref:`bson-document-format`
+
+     - :ref:`CRUD Operations <crud>`
+
+       :ref:`Aggregation <aggregation>`
+
+       :ref:`SQL to MongoDB <sql-to-mongodb-mapping>`
+
+       :ref:`indexes`
+
+     - :ref:`production-notes`
+
+       :ref:`Replica Sets <replication>`
+
+       :ref:`Sharded Clusters <sharding-background>`
+
+       :ref:`MongoDB Security <security>`
+
+     - :ref:`Shell Methods <js-administrative-methods>`
+
+       :ref:`Query Operators <operator-ref-landing>`
+
+       :ref:`Reference <reference-landing>`
+
+       :ref:`glossary`

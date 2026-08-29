@@ -1,83 +1,181 @@
 ---
 type: "Framework Learn Page"
-framework: "mongodb"
+framework: "MongoDB"
 source_repo: "https://github.com/mongodb/docs.git"
 source_branch: "main"
 source_path: "content/manual/manual/source/reference/operator/aggregation/toObject.txt"
-source_commit: "ab9db26ed3d11618cdb61516d8180337d8e3f679"
-source_commit_short: "ab9db26e"
-source_commit_date: "2026-07-24T16:22:46-06:00"
-generated_at: "2026-07-25T11:51:15Z"
+source_commit: "b9f2bc487a2878b65e3c1f80024bebab76954f27"
+source_commit_short: "b9f2bc48"
+source_commit_date: "2026-08-28T17:09:45-05:00"
+generated_at: "2026-08-29T09:39:20.121545Z"
 ---
-
-================================
-
 # $toObject (expression operator)
 
+.. default-domain:: mongodb
+
+**contents:** On this page
+   :local:
+   :backlinks: none
+   :depth: 1
+   :class: singlecol
+
+**meta:** :description: Learn how to convert a string to an object.
+   :keywords: type conversion
+
 ## Definition
+
+**expression:** $toObject
+
+   Converts a string to an object. If the value cannot be converted,
+   ``$toObject`` errors. If the value is ``null`` or missing, ``$toObject``
+   returns null.
+
+   ``$toObject`` has the following syntax:
+
+   .. code-block:: javascript
+
+      {
+         $toObject: <expression>
+      }
+
+   ``$toObject`` takes any valid :ref:`expression
+   <aggregation-expressions>`.
+
+   ``$toObject`` is a shorthand for the following
+   :expression:`$convert` expression:
+
+   .. code-block:: javascript
+
+      { $convert: { input: <expression>, to: "object" } }
 
 ## Behavior
 
 ### Input Type Expectations
 
-The following table describes the behavior of `$toObject` for different input types:
+The following table describes the behavior of ``$toObject`` for
+different input types:
 
-.. include:: /includes/table-toObject-input-types.rst
+**include:** /includes/table-toObject-input-types.rst
 
 ### Parsing Rules
 
-When converting a string to an object, `$toObject`:
+When converting a string to an object, ``$toObject``:
 
-- Requires valid `JSON` syntax. Comments and trailing commas are
-not allowed.
+- Requires valid :term:`JSON` syntax. Comments and trailing commas are
+  not allowed.
 
 - Requires the top-level value to be an object. If the string
-does not represent an object, `$toObject` errors.
+  does not represent an object, ``$toObject`` errors.
 
-- Does not interpret Extended JSON type wrappers such as `$oid`,
-`$date`, or `Timestamp(...)`. These remain strings or nested objects in the result.
+- Does not interpret Extended JSON type wrappers such as ``$oid``,
+  ``$date``, or ``Timestamp(...)``. These remain strings or nested
+  objects in the result.
 
 - Preserves the last value when the object contains duplicate field
-names. Earlier values for the same field are discarded.
+  names. Earlier values for the same field are discarded.
 
 ### Numeric Type Mapping
 
-`$toObject` converts numeric types based on their value and format:
+``$toObject`` converts numeric types based on their value and format:
 
-.. include:: /includes/fact-string-conversion-numeric-type-mapping.rst
+**include:** /includes/fact-string-conversion-numeric-type-mapping.rst
 
 ## Examples
 
-The following table shows examples of using `$toObject` to convert strings to objects:
+The following table shows examples of using ``$toObject`` to convert
+strings to objects:
+
+.. list-table::
+   :header-rows: 1
+   :widths: 70 30
+
+   * - Example
+     - Results
+
+   * - ``$toObject: "{\"a\": 1, \"b\": 2}"``
+     - { a: 1, b: 2 }
+
+   * - ``$toObject: "{}"``
+     - { }
+
+   * - ``$toObject: "[]"``
+     - Error:  Input doesn't match expected type 'object'
+
+   * - ``$toObject: "123"``
+     - Error: Input doesn't represent valid JSON: Unexpected standalone value
+
+   * - ``$toObject: "{\"nam\\u0000e\": \"foo\"}"``
+     - Error: Input doesn't represent valid JSON: Illegal embedded null byte
+
+   * - ``$toObject: "{\"name\": \"fo\\u0000o\"}"``
+     - { name: 'fo\x00o' }
+
+   * - ``$toObject: "{\"a\": 1, \"b\": 2, \"a\": 3}"``
+     - { a: 3, b: 2 }
+
+   * - ``$toObject: "{\"foo\": null}"``
+     - { foo: null }
+
+   * - ``$toObject: "{\"foo\": false}"``
+     - { foo: false }
+
+   * - ``$toObject: "{\"__proto__\": {\"foo\": null}}"``
+     - { ['__proto__']: { foo: null } }
+
+   * - ``$toObject: "{\"foo\": \"NaN\"}"``
+     - { foo: 'NaN' }
+
+   * - ``$toObject: "{\"foo\": 123}"``
+     - { foo: 123 }
+
+   * - ``$toObject: "{\"foo\": 4294967296}"``
+     - { foo: Long('4294967296') }
+
+   * - ``$toObject: "{\"foo\": 1.123123}"``
+     - { foo: 1.123123 }
+
+   * - ``$toObject: "{\"foo\": 1.2e+3}"``
+     - { foo: 1200 }
+
+   * - ``$toObject: "{\"largePos\": 18446744073709551615}"``
+     - { largePos: 18446744073709552000 }
+
+   * - ``$toObject: "{\"largeNeg\": -18446744073709551615}"``
+     - { largeNeg: -18446744073709552000 }
+
+   * - ``$toObject: null``
+     - null
 
 ### Convert String to Object
 
 Create a collection with strings stored in a field:
 
-```javascript
-db.jsonStrings.insertOne({
-  _id: 1,
-  config: '{"feature": true, "threshold": 10}'
-})
-```
+.. code-block:: javascript
 
-The following aggregation converts the string in `config` to an object:
+   db.jsonStrings.insertOne({
+     _id: 1,
+     config: '{"feature": true, "threshold": 10}'
+   })
 
-```javascript
-db.jsonStrings.aggregate([
-  {
-    $project: {
-      _id: 0,
-      parsedConfig: { $toObject: "$config" }
-    }
-  }
-])
-```
+The following aggregation converts the string in ``config`` to an
+object:
 
-This operation returns a document where `parsedConfig` is a nested document with a boolean and an integer value:
+.. code-block:: javascript
 
-```javascript
-{ parsedConfig: { feature: true, threshold: 10 } }
-```
+   db.jsonStrings.aggregate([
+     {
+       $project: {
+         _id: 0,
+         parsedConfig: { $toObject: "$config" }
+       }
+     }
+   ])
 
-.. include:: /includes/note-conversion-error-use-convert.rst
+This operation returns a document where ``parsedConfig`` is a nested
+document with a boolean and an integer value:
+
+.. code-block:: javascript
+
+   { parsedConfig: { feature: true, threshold: 10 } }
+
+**include:** /includes/note-conversion-error-use-convert.rst

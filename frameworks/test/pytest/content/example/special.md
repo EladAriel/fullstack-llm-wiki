@@ -4,82 +4,93 @@ framework: "pytest"
 source_repo: "https://github.com/pytest-dev/pytest"
 source_branch: "main"
 source_path: "doc/en/example/special.rst"
-source_commit: "344c23787cdb3431dcc441b8b63ee9950f04b921"
-source_commit_short: "344c2378"
-source_commit_date: "2026-07-24T17:37:16+02:00"
-generated_at: "2026-07-25T11:50:13Z"
+source_commit: "fdba12e1708313f56e9cf713d260c029764ca2b7"
+source_commit_short: "fdba12e"
+source_commit_date: "2026-08-27T21:55:50+02:00"
+generated_at: "2026-08-29T09:40:11.279914Z"
 ---
+# Special
 
 ## A session-fixture which can look at all collected tests
 
-A session-scoped fixture effectively has access to all collected test items.  Here is an example of a fixture function which walks all collected tests and looks if their test class defines a `callme` method and calls it:
+A session-scoped fixture effectively has access to all
+collected test items.  Here is an example of a fixture
+function which walks all collected tests and looks
+if their test class defines a ``callme`` method and
+calls it:
 
-```python
- # content of conftest.py
+.. code-block:: python
 
- import pytest
+    # content of conftest.py
 
- @pytest.fixture(scope="session", autouse=True)
- def callattr_ahead_of_alltests(request):
-     print("callattr_ahead_of_alltests called")
-     seen = {None}
-     session = request.node
-     for item in session.items:
-         cls = item.getparent(pytest.Class)
-         if cls not in seen:
-             if hasattr(cls.obj, "callme"):
-                 cls.obj.callme()
-             seen.add(cls)
-```
+    import pytest
 
-test classes may now define a `callme` method which will be called ahead of running any tests:
 
-```python
- # content of test_module.py
+    @pytest.fixture(scope="session", autouse=True)
+    def callattr_ahead_of_alltests(request):
+        print("callattr_ahead_of_alltests called")
+        seen = {None}
+        session = request.node
+        for item in session.items:
+            cls = item.getparent(pytest.Class)
+            if cls not in seen:
+                if hasattr(cls.obj, "callme"):
+                    cls.obj.callme()
+                seen.add(cls)
 
- class TestHello:
-     @classmethod
-     def callme(cls):
-         print("callme called!")
+test classes may now define a ``callme`` method which
+will be called ahead of running any tests:
 
-     def test_method1(self):
-         print("test_method1 called")
+.. code-block:: python
 
-     def test_method2(self):
-         print("test_method2 called")
+    # content of test_module.py
 
- class TestOther:
-     @classmethod
-     def callme(cls):
-         print("callme other called")
 
-     def test_other(self):
-         print("test other")
+    class TestHello:
+        @classmethod
+        def callme(cls):
+            print("callme called!")
 
- # works with unittest as well ...
- import unittest
+        def test_method1(self):
+            print("test_method1 called")
 
- class SomeTest(unittest.TestCase):
-     @classmethod
-     def callme(self):
-         print("SomeTest callme called")
+        def test_method2(self):
+            print("test_method2 called")
 
-     def test_unit1(self):
-         print("test_unit1 method called")
-```
+
+    class TestOther:
+        @classmethod
+        def callme(cls):
+            print("callme other called")
+
+        def test_other(self):
+            print("test other")
+
+
+    # works with unittest as well ...
+    import unittest
+
+
+    class SomeTest(unittest.TestCase):
+        @classmethod
+        def callme(self):
+            print("SomeTest callme called")
+
+        def test_unit1(self):
+            print("test_unit1 method called")
 
 If you run this without output capturing:
 
-```pytest
- $ pytest -q -s test_module.py
- callattr_ahead_of_alltests called
- callme called!
- callme other called
- SomeTest callme called
- test_method1 called
- .test_method2 called
- .test other
- .test_unit1 method called
- .
- 4 passed in 0.12s
-```
+.. code-block:: pytest
+
+    $ pytest -q -s test_module.py
+    callattr_ahead_of_alltests called
+    callme called!
+    callme other called
+    SomeTest callme called
+    test_method1 called
+    .test_method2 called
+    .test other
+    .test_unit1 method called
+    .
+    4 passed in 0.12s

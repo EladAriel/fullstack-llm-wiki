@@ -1,23 +1,22 @@
 ---
 type: "Framework Learn Page"
-framework: "tanstack"
+framework: "TanStack"
 source_repo: "https://github.com/tanstack/query"
 source_branch: "main"
 source_path: "docs/framework/angular/reference/interfaces/BaseQueryNarrowing.md"
-source_commit: "fd50fa14d283c7d6664a796f758498d1ad5bfce7"
-source_commit_short: "fd50fa14"
-source_commit_date: "2026-07-24T22:22:47+10:00"
-generated_at: "2026-07-25T11:50:41Z"
+source_commit: "2969edf32f7e0c48e2a108d84712d6e01edfde21"
+source_commit_short: "2969edf"
+source_commit_date: "2026-08-28T01:03:02+09:00"
+generated_at: "2026-08-29T09:40:33.428905Z"
 ---
+# Basequerynarrowing
 
 ---
 id: BaseQueryNarrowing
 title: BaseQueryNarrowing
 ---
 
-# Interface: BaseQueryNarrowing\<TData, TError\>
-
-Defined in: [types.ts:57](https://github.com/TanStack/query/blob/main/packages/angular-query-experimental/src/types.ts#L57)
+Defined in: [types.ts:51](https://github.com/TanStack/query/blob/main/packages/angular-query-experimental/src/types.ts#L51)
 
 ## Type Parameters
 
@@ -37,7 +36,7 @@ Defined in: [types.ts:57](https://github.com/TanStack/query/blob/main/packages/a
 isError: (this) => this is CreateBaseQueryResult<TData, TError, CreateStatusBasedQueryResult<"error", TData, TError>>;
 ```
 
-Defined in: [types.ts:65](https://github.com/TanStack/query/blob/main/packages/angular-query-experimental/src/types.ts#L65)
+Defined in: [types.ts:59](https://github.com/TanStack/query/blob/main/packages/angular-query-experimental/src/types.ts#L59)
 
 #### Parameters
 
@@ -57,7 +56,7 @@ Defined in: [types.ts:65](https://github.com/TanStack/query/blob/main/packages/a
 isPending: (this) => this is CreateBaseQueryResult<TData, TError, CreateStatusBasedQueryResult<"pending", TData, TError>>;
 ```
 
-Defined in: [types.ts:72](https://github.com/TanStack/query/blob/main/packages/angular-query-experimental/src/types.ts#L72)
+Defined in: [types.ts:66](https://github.com/TanStack/query/blob/main/packages/angular-query-experimental/src/types.ts#L66)
 
 #### Parameters
 
@@ -77,7 +76,7 @@ Defined in: [types.ts:72](https://github.com/TanStack/query/blob/main/packages/a
 isSuccess: (this) => this is CreateBaseQueryResult<TData, TError, CreateStatusBasedQueryResult<"success", TData, TError>>;
 ```
 
-Defined in: [types.ts:58](https://github.com/TanStack/query/blob/main/packages/angular-query-experimental/src/types.ts#L58)
+Defined in: [types.ts:52](https://github.com/TanStack/query/blob/main/packages/angular-query-experimental/src/types.ts#L52)
 
 #### Parameters
 

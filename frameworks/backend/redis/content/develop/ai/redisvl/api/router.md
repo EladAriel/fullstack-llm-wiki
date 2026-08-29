@@ -1,14 +1,15 @@
 ---
 type: "Framework Learn Page"
-framework: "redis"
+framework: "Redis"
 source_repo: "https://github.com/redis/docs.git"
 source_branch: "main"
 source_path: "content/develop/ai/redisvl/api/router.md"
-source_commit: "9d30f68c3dad1a6b3b7d30fe604b911348ce8152"
-source_commit_short: "9d30f68c"
-source_commit_date: "2026-07-24T10:52:10-07:00"
-generated_at: "2026-07-25T11:51:22Z"
+source_commit: "f8693349287b0efbef3c865b6f6a2aceca88594d"
+source_commit_short: "f869334"
+source_commit_date: "2026-08-28T10:01:19-05:00"
+generated_at: "2026-08-29T09:38:55.839223Z"
 ---
+# Router
 
 ---
 linkTitle: Semantic router
@@ -22,7 +23,7 @@ aliases:
 
 ## Semantic Router
 
-### `class SemanticRouter(name, routes, vectorizer=None, routing_config=None, redis_client=None, redis_url='redis://localhost:6379', overwrite=False, connection_kwargs={})`
+### `class SemanticRouter(name, routes, vectorizer=None, routing_config=None, redis_client=None, redis_url='redis://localhost:6379', overwrite=False, connection_kwargs={}, create_index=True)`
 
 Semantic Router for managing and querying route vectors.
 
@@ -38,10 +39,29 @@ Initialize the SemanticRouter.
   * **overwrite** (*bool* *,* *optional*) – Whether to overwrite existing index. Defaults to False.
   * **connection_kwargs** (*Dict* *[* *str* *,* *Any* *]*) – The connection arguments
     for the redis client. Defaults to empty {}.
+  * **create_index** (*bool* *,* *optional*) – Whether RedisVL creates and validates
+    the index. When False the constructor issues no index command at
+    all and writes nothing: the index must already exist, already
+    hold the reference vectors for `routes`, and already have its
+    stored config, since none of that is written or verified.
+    `routes` must match what is indexed, because each route’s
+    distance threshold is applied from this local list – and
+    [add_route](#add_route) rewrites the stored config from that same list,
+    so attaching with a partial set and then adding a route
+    truncates the config every other client reads. See
+    [`SemanticCache`]({{< relref "cache/#semanticcache" >}}) for a worked
+    example of the flag, and [Install RedisVL]({{< relref "../user_guide/installation" >}}) for the
+    ACL details. Defaults to True.
+* **Raises:**
+  **ValueError** – If both create_index is False and overwrite is True.
 
 #### `add_route(route)`
 
 Add a new route to the SemanticRouter.
+
+Note that this replaces the router’s stored config with this instance’s
+route list, so a router constructed with a subset of the indexed routes
+will drop the rest from the config that [from_existing](#from_existing) reads.
 
 Embeds the route’s references, writes them to the Redis index,
 appends the route to `self.routes`, and persists the updated router
@@ -127,6 +147,12 @@ router = SemanticRouter.from_dict(router_data)
 #### `classmethod from_existing(name, redis_client=None, redis_url='redis://localhost:6379', **kwargs)`
 
 Return SemanticRouter instance from existing index.
+
+Reads the stored route config with `JSON.GET`, so unlike
+`SearchIndex.from_existing()` this needs no `FT.INFO`. Pass
+`create_index=False` to keep it that way through construction, which
+makes this the way to attach to a router with a credential that cannot
+run index-metadata commands.
 
 * **Parameters:**
   * **name** (*str*)

@@ -4,44 +4,45 @@ framework: "pytest"
 source_repo: "https://github.com/pytest-dev/pytest"
 source_branch: "main"
 source_path: "doc/en/announce/release-2.0.3.rst"
-source_commit: "344c23787cdb3431dcc441b8b63ee9950f04b921"
-source_commit_short: "344c2378"
-source_commit_date: "2026-07-24T17:37:16+02:00"
-generated_at: "2026-07-25T11:50:13Z"
+source_commit: "fdba12e1708313f56e9cf713d260c029764ca2b7"
+source_commit_short: "fdba12e"
+source_commit_date: "2026-08-27T21:55:50+02:00"
+generated_at: "2026-08-29T09:40:11.184521Z"
 ---
-
 # py.test 2.0.3: bug fixes and speed ups
 
-Welcome to pytest-2.0.3, a maintenance and bug fix release of pytest, a mature testing tool for Python, supporting CPython 2.4-3.2, Jython and latest PyPy interpreters.  See the extensive docs with tested examples here:
+Welcome to pytest-2.0.3, a maintenance and bug fix release of pytest,
+a mature testing tool for Python, supporting CPython 2.4-3.2, Jython
+and latest PyPy interpreters.  See the extensive docs with tested examples here:
 
-http://pytest.org/
+    http://pytest.org/
 
-If you want to install or upgrade pytest, just type one of:
+If you want to install or upgrade pytest, just type one of::
 
-```
-pip install -U pytest # or
-easy_install -U pytest
-```
+    pip install -U pytest # or
+    easy_install -U pytest
 
-There also is a bugfix release 1.6 of pytest-xdist, the plugin that enables seamless distributed and "looponfail" testing for Python.
+There also is a bugfix release 1.6 of pytest-xdist, the plugin
+that enables seamless distributed and "looponfail" testing for Python.
 
-best, holger krekel
+best,
+holger krekel
 
 ## Changes between 2.0.2 and 2.0.3
 
 - fix issue38: nicer tracebacks on calls to hooks, particularly early
-configure/sessionstart ones
+  configure/sessionstart ones
 
 - fix missing skip reason/meta information in junitxml files, reported
-via http://lists.idyll.org/pipermail/testing-in-python/2011-March/003928.html
+  via http://lists.idyll.org/pipermail/testing-in-python/2011-March/003928.html
 
 - fix issue34: avoid collection failure with "test" prefixed classes
-deriving from object.
+  deriving from object.
 
 - don't require zlib (and other libs) for genscript plugin without
---genscript actually being used.
+  --genscript actually being used.
 
 - speed up skips (by not doing a full traceback representation
-internally)
+  internally)
 
 - fix issue37: avoid invalid characters in junitxml's output

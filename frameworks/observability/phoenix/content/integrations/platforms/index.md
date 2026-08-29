@@ -1,7 +1,7 @@
 ---
 type: "Framework Learn Directory Index"
 framework: "Arize Phoenix"
-generated_at: "2026-07-25T19:08:24.986683Z"
+generated_at: "2026-08-29T09:39:58.971391Z"
 ---
 # Platforms
 
@@ -21,3 +21,10 @@ This directory contains Arize Phoenix learning pages related to platforms.
 - [Flowise](flowise.md)
 - [Langflow](langflow.md)
 - [Prompt Flow](prompt-flow.md)
+
+## Subdirectories
+
+- [Dify](dify/index.md)
+- [Flowise](flowise/index.md)
+- [Langflow](langflow/index.md)
+- [Prompt Flow](prompt-flow/index.md)

@@ -1,47 +1,82 @@
 ---
 type: "Framework Learn Page"
-framework: "mongodb"
+framework: "MongoDB"
 source_repo: "https://github.com/mongodb/docs.git"
 source_branch: "main"
 source_path: "content/manual/manual/source/reference/command/replSetSyncFrom.txt"
-source_commit: "ab9db26ed3d11618cdb61516d8180337d8e3f679"
-source_commit_short: "ab9db26e"
-source_commit_date: "2026-07-24T16:22:46-06:00"
-generated_at: "2026-07-25T11:51:15Z"
+source_commit: "b9f2bc487a2878b65e3c1f80024bebab76954f27"
+source_commit_short: "b9f2bc48"
+source_commit_date: "2026-08-28T17:09:45-05:00"
+generated_at: "2026-08-29T09:39:20.013356Z"
 ---
-
-==================================
-
 # replSetSyncFrom (database command)
+
+**meta:** :description: Override the default sync target for a `mongod` instance temporarily using `replSetSyncFrom` to test replication patterns.
+
+.. default-domain:: mongodb
+
+**contents:** On this page
+   :local:
+   :backlinks: none
+   :depth: 1
+   :class: singlecol
 
 ## Description
 
+**dbcommand:** replSetSyncFrom
+
+   Temporarily overrides the default sync target for the current
+   :binary:`~bin.mongod`. This operation is useful for testing different
+   patterns and in situations where a set member is not replicating
+   from the desired host.
+
+   .. |method| replace:: :method:`rs.syncFrom` helper method
+   .. include:: /includes/fact-dbcommand-tip
+
+   Run :dbcommand:`replSetSyncFrom` in the ``admin`` database.
+
 ## Compatibility
 
-This command is available in deployments hosted in the following environments:
+This command is available in deployments hosted in the following environments: 
 
-.. include:: /includes/fact-environments-onprem-only.rst
+**include:** /includes/fact-environments-onprem-only.rst
 
-.. include:: /includes/fact-environments-no-atlas-support.rst
+**include:** /includes/fact-environments-no-atlas-support.rst
 
 ## Syntax
 
 The command has the following syntax:
 
-```javascript
-db.adminCommand( 
-   { 
-     replSetSyncFrom: "hostname<:port>" 
-   }
- )
-```
+.. code-block:: javascript
+
+   db.adminCommand( 
+      { 
+        replSetSyncFrom: "hostname<:port>" 
+      }
+    )
 
 ## Command Fields
 
 The command takes the following field:
 
+.. list-table::
+   :header-rows: 1
+   :widths: 20 20 80
+ 
+   * - Field
+     - Type
+     - Description
+ 
+   * - ``replSetSyncFrom``
+     - string
+     - The name and port number of the replica set member that this member
+       should replicate from. Use the ``[hostname]:[port]`` form.
+       
+       .. include:: /includes/fact-voting-node-sync-incompatibility.rst
+           
 ## Behavior
 
-.. include:: /includes/extracts/rsSyncFrom-behavior-command.rst
+**include:** /includes/extracts/rsSyncFrom-behavior-command.rst
 
-For more information the use of :dbcommand:`replSetSyncFrom`, see `/tutorial/configure-replica-set-secondary-sync-target`.
+For more information the use of :dbcommand:`replSetSyncFrom`, see
+:doc:`/tutorial/configure-replica-set-secondary-sync-target`.

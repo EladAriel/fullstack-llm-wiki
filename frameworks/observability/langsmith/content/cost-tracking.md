@@ -4,10 +4,10 @@ framework: "LangSmith"
 source_repo: "https://github.com/langchain-ai/docs.git"
 source_branch: "main"
 source_path: "src/langsmith/cost-tracking.mdx"
-source_commit: "2aae1dfc98ee953a9a5185fb6fcdd9efb3f4d878"
-source_commit_short: "2aae1df"
-source_commit_date: "2026-07-25T00:27:23+00:00"
-generated_at: "2026-07-25T19:08:33.352204Z"
+source_commit: "a174f9cf7c91ee5eb14ee2382eb48bfe6e4956e9"
+source_commit_short: "a174f9c"
+source_commit_date: "2026-08-28T17:04:12-07:00"
+generated_at: "2026-08-29T09:39:50.612284Z"
 ---
 ---
 title: Cost tracking
@@ -356,7 +356,7 @@ Skip this section if you are calling LLMs with [LangChain](/oss/langchain/overvi
 2. Specify model name. When using a custom model, the following fields need to be specified in a [run's metadata](/langsmith/add-metadata-tags) in order to associate token counts with costs. It's also helpful to provide these metadata fields to identify the model when viewing traces and when filtering.
 
     - `ls_provider`: The provider of the model, e.g., “openai”, “anthropic”
-    - `ls_model_name`: The name of the model, e.g., “gpt-5.4-mini”, “claude-3-opus-20240229”
+    - `ls_model_name`: The name of the model, e.g., “gpt-5.4-mini”, “claude-opus-4-8”
 
 3. Set model prices. LangSmith maps model names to per-token prices using its [model pricing table](https://smith.langchain.com/settings/workspaces/models) to compute costs from token counts.
 

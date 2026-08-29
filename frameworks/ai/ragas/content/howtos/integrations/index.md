@@ -1,13 +1,7 @@
 ---
 type: "Framework Learn Directory Index"
 framework: "Ragas"
-directory: "content/howtos/integrations"
-source_repo: "https://github.com/vibrantlabsai/ragas"
-source_branch: "main"
-source_commit: "298b68274234c060deacab3cf5fb52aa3a20e885"
-source_commit_short: "298b6827"
-source_commit_date: "2026-02-24T13:17:18+05:30"
-generated_at: "2026-06-23T13:55:50Z"
+generated_at: "2026-08-29T09:38:15.998597Z"
 ---
 # Integrations
 
@@ -15,50 +9,37 @@ This directory contains Ragas learning pages related to integrations.
 
 ## Breadcrumbs
 
-[Wiki Home](../../../index.md) -> [Content](../../index.md) -> [Howtos](../index.md) -> [Integrations](index.md)
+[Wiki Home](../index.md) -> [Content](index.md)
 
 ## Navigation
 
-- Parent: [Parent Index](../index.md)
-
-## Child Directories
-
-- None
+- Wiki Home: [Root Index](../index.md)
 
 ## Pages in This Directory
 
-- [Ag Ui](_ag_ui.md)
-- [Arize](_arize.md)
-- [Athina](_athina.md)
-- [Haystack](_haystack.md)
-- [Helicone](_helicone.md)
-- [Langchain](_langchain.md)
-- [Langfuse](_langfuse.md)
-- [Langgraph Agent Evaluation](_langgraph_agent_evaluation.md)
-- [Langsmith](_langsmith.md)
-- [Llamaindex](_llamaindex.md)
-- [Openlayer](_openlayer.md)
-- [Opik](_opik.md)
-- [Original Source Index](_source_index.md)
-- [Tonic Validate](_tonic-validate.md)
-- [Zeno](_zeno.md)
-- [Ag Ui](ag_ui.md)
-- [Amazon Bedrock](amazon_bedrock.md)
+- [_Ag_Ui](_ag_ui.md)
+- [_Arize](_arize.md)
+- [_Athina](_athina.md)
+- [_Haystack](_haystack.md)
+- [_Helicone](_helicone.md)
+- [_Langchain](_langchain.md)
+- [_Langfuse](_langfuse.md)
+- [_Langgraph_Agent_Evaluation](_langgraph_agent_evaluation.md)
+- [_Langsmith](_langsmith.md)
+- [_Llamaindex](_llamaindex.md)
+- [_Openlayer](_openlayer.md)
+- [_Opik](_opik.md)
+- [_Tonic Validate](_tonic-validate.md)
+- [_Zeno](_zeno.md)
+- [Ag_Ui](ag_ui.md)
+- [Amazon_Bedrock](amazon_bedrock.md)
 - [Gemini](gemini.md)
 - [Griptape](griptape.md)
 - [Haystack](haystack.md)
 - [Langchain](langchain.md)
 - [Langsmith](langsmith.md)
-- [Llama Stack](llama_stack.md)
-- [Llamaindex Agents](llamaindex_agents.md)
-- [Oci Genai](oci_genai.md)
+- [Llama_Stack](llama_stack.md)
+- [Llamaindex_Agents](llamaindex_agents.md)
+- [Oci_Genai](oci_genai.md)
 - [R2R](r2r.md)
-- [Swarm Agent Evaluation](swarm_agent_evaluation.md)
-
-## IDE LLM Guidance
-
-When answering implementation questions related to this directory:
-
-1. Prefer the most specific page listed above.
-2. If the topic is broad, read the child directory index first.
-3. Use source metadata from each page when giving answers.
+- [Swarm_Agent_Evaluation](swarm_agent_evaluation.md)

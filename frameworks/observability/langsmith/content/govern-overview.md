@@ -4,10 +4,10 @@ framework: "LangSmith"
 source_repo: "https://github.com/langchain-ai/docs.git"
 source_branch: "main"
 source_path: "src/langsmith/govern-overview.mdx"
-source_commit: "2aae1dfc98ee953a9a5185fb6fcdd9efb3f4d878"
-source_commit_short: "2aae1df"
-source_commit_date: "2026-07-25T00:27:23+00:00"
-generated_at: "2026-07-25T19:08:33.379681Z"
+source_commit: "a174f9cf7c91ee5eb14ee2382eb48bfe6e4956e9"
+source_commit_short: "a174f9c"
+source_commit_date: "2026-08-28T17:04:12-07:00"
+generated_at: "2026-08-29T09:39:50.657397Z"
 ---
 # Govern Overview
 
@@ -20,6 +20,8 @@ mode: "wide"
 ---
 
 Administer your LangSmith organization: manage users and access control, organize workspaces and applications, and configure policies and compliance.
+
+Governance also extends to what agents do at runtime: [spend and data-protection policies](/langsmith/llm-gateway-spend-policies) on model calls, [sandboxed execution](/langsmith/sandboxes) for agent code, and [human approval](/langsmith/add-human-in-the-loop) before sensitive actions.
 
 ## Explore
 

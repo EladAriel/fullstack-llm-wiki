@@ -1,24 +1,37 @@
 ---
 type: "Framework Learn Page"
-framework: "mongodb"
+framework: "MongoDB"
 source_repo: "https://github.com/mongodb/docs.git"
 source_branch: "main"
 source_path: "content/manual/manual/source/core/indexes/index-types/index-compound/create-compound-index.txt"
-source_commit: "ab9db26ed3d11618cdb61516d8180337d8e3f679"
-source_commit_short: "ab9db26e"
-source_commit_date: "2026-07-24T16:22:46-06:00"
-generated_at: "2026-07-25T11:51:15Z"
+source_commit: "b9f2bc487a2878b65e3c1f80024bebab76954f27"
+source_commit_short: "b9f2bc48"
+source_commit_date: "2026-08-28T17:09:45-05:00"
+generated_at: "2026-08-29T09:39:19.842019Z"
 ---
-
-=======================
+.. _index-create-compound:
 
 # Create a Compound Index
 
-**Compound indexes** are indexes that contain references to multiple fields. Compound indexes improve performance for queries on exactly the fields in the index or fields in the `index prefix <compound-index-prefix>`.
+**meta:** :description: Create a compound index in MongoDB to improve query performance by indexing multiple fields, using the `db.collection.createIndex()` method.
 
-To create a compound index, use the :method:`db.collection.createIndex()` method:
+.. default-domain:: mongodb
 
-.. include:: /includes/indexes/code-examples/create-compound-index.rst
+**contents:** On this page
+   :local:
+   :backlinks: none
+   :depth: 1
+   :class: singlecol
+
+**Compound indexes** are indexes that contain references to multiple
+fields. Compound indexes improve performance for queries on exactly the
+fields in the index or fields in the :ref:`index prefix
+<compound-index-prefix>`. 
+
+To create a compound index, use the
+:method:`db.collection.createIndex()` method:
+
+**include:** /includes/indexes/code-examples/create-compound-index.rst
 
 ## Restriction
 
@@ -26,68 +39,74 @@ You can specify up to 32 fields in a single compound index.
 
 ## Before You Begin
 
-Create a `students` collection that contains these documents:
+Create a ``students`` collection that contains these documents:
 
-```javascript
-db.students.insertMany([
-   {
-      "name": "Alice",
-      "gpa": 3.6,
-      "location": { city: "Sacramento", state: "California" }
-   },
-   {
-      "name": "Bob",
-      "gpa": 3.2,
-      "location": { city: "Albany", state: "New York" }
-   }
-])
-```
+.. code-block:: javascript
+
+   db.students.insertMany([
+      {
+         "name": "Alice",
+         "gpa": 3.6,
+         "location": { city: "Sacramento", state: "California" }
+      },
+      {
+         "name": "Bob",
+         "gpa": 3.2,
+         "location": { city: "Albany", state: "New York" }
+      }
+   ])
 
 ## Procedure
 
-The following operation creates a compound index containing the `name` and `gpa` fields:
+The following operation creates a compound index containing the ``name``
+and ``gpa`` fields:
 
-```javascript
-db.students.createIndex( {
-   name: 1, 
-   gpa: -1
-} )
-```
+.. code-block:: javascript
+
+   db.students.createIndex( {
+      name: 1, 
+      gpa: -1
+   } )
 
 In this example:
 
-- The index on `name` is ascending (`1`).
-- The index on `gpa` is descending (`-1`).
+- The index on ``name`` is ascending (``1``).
+- The index on ``gpa`` is descending (``-1``).
+
 ## Results
 
 The created index supports queries that select on:
 
-- Both `name` and `gpa` fields.
-- Only the `name` field, because `name` is a :ref:`prefix
-<compound-index-prefix>` of the compound index.
+- Both ``name`` and ``gpa`` fields.
+
+- Only the ``name`` field, because ``name`` is a :ref:`prefix
+  <compound-index-prefix>` of the compound index.
 
 For example, the index supports these queries:
 
-```javascript
-db.students.find( { name: "Alice", gpa: 3.6 } )
+.. code-block:: javascript
 
-db.students.find( { name: "Bob" } )
-```
+   db.students.find( { name: "Alice", gpa: 3.6 } )
 
-The index **does not** support queries on only the `gpa` field, because `gpa` is not part of the index prefix. For example, the index does not support this query:
+   db.students.find( { name: "Bob" } )
 
-```javascript
-db.students.find( { gpa: { $gt: 3.5 } } )
-```
+The index **does not** support queries on only the ``gpa`` field,
+because ``gpa`` is not part of the index prefix. For example, the index
+does not support this query:
+
+.. code-block:: javascript
+
+   db.students.find( { gpa: { $gt: 3.5 } } )
 
 ## Learn More
 
 - To learn how to create efficient compound indexes, see
-`esr-indexing-guideline`.
+  :ref:`esr-indexing-guideline`.
 
 - To learn how sort order (ascending or descending) impacts performance
-of compound indexes, see `sorting-with-indexes`.
+  of compound indexes, see :ref:`sorting-with-indexes`.
 
-- To learn about other index types, see `index-types`.
+- To learn about other index types, see :ref:`index-types`.
+
 - To learn what properties you can specify for indexes, see
-`index-properties`.
+  :ref:`index-properties`.

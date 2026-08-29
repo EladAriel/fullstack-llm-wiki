@@ -4,10 +4,10 @@ framework: "Arize Phoenix"
 source_repo: "https://github.com/Arize-ai/phoenix.git"
 source_branch: "main"
 source_path: "docs/phoenix/tracing/how-to-tracing/importing-and-exporting-traces/exporting-annotated-spans.mdx"
-source_commit: "69b3ab92c37ff65812feaa2dbf0b1c0ad5ae55fe"
-source_commit_short: "69b3ab9"
-source_commit_date: "2026-07-25T11:48:12-06:00"
-generated_at: "2026-07-25T19:08:24.920720Z"
+source_commit: "c48e50e9906fcc56c1c103ebd93ef3c95ed6b6e7"
+source_commit_short: "c48e50e"
+source_commit_date: "2026-08-29T01:45:20-06:00"
+generated_at: "2026-08-29T09:39:58.908435Z"
 ---
 ---
 title: "Exporting Annotated Spans"
@@ -58,6 +58,25 @@ from phoenix.client.types.spans import SpanQuery
 client = Client()
 query = SpanQuery().where("annotations['correctness'].score == 1")
 # query = SpanQuery().where("annotations['correctness'].label == 'correct'")
+
+spans = client.spans.get_spans_dataframe(
+    query=query,
+    project_identifier="default",  # you can also pass a project id
+)
+```
+
+To filter spans by **trace-level** annotations (annotations attached to the
+trace rather than an individual span), use `trace_annotations` in place of
+`annotations`. Spans are returned when the trace they belong to carries a
+matching annotation.
+
+```python
+from phoenix.client import Client
+from phoenix.client.types.spans import SpanQuery
+
+client = Client()
+query = SpanQuery().where("trace_annotations['quality'].score >= 0.5")
+# query = SpanQuery().where("trace_annotations['quality'].label == 'good'")
 
 spans = client.spans.get_spans_dataframe(
     query=query,

@@ -1,14 +1,15 @@
 ---
 type: "Framework Learn Page"
-framework: "redis"
+framework: "Redis"
 source_repo: "https://github.com/redis/docs.git"
 source_branch: "main"
 source_path: "content/operate/rs/7.22/references/rest-api/objects/crdb/database_config.md"
-source_commit: "9d30f68c3dad1a6b3b7d30fe604b911348ce8152"
-source_commit_short: "9d30f68c"
-source_commit_date: "2026-07-24T10:52:10-07:00"
-generated_at: "2026-07-25T11:51:22Z"
+source_commit: "f8693349287b0efbef3c865b6f6a2aceca88594d"
+source_commit_short: "f869334"
+source_commit_date: "2026-08-28T10:01:19-05:00"
+generated_at: "2026-08-29T09:38:55.406352Z"
 ---
+# Database_Config
 
 ---
 Title: CRDB database config object
@@ -48,6 +49,7 @@ An object that represents the database configuration. This configuration object 
 | port | integer | TCP port for database access |
 | proxy_policy | 'single'<br />'all-master-shards'<br />'all-nodes' | The policy used for proxy binding to the endpoint |
 | rack_aware | boolean (default: false) | Require the database to be always replicated across multiple racks |
+| redis_version | string | Version of the redis-server processes used to create the Active-Active database, for example `7.4`. Set this field in `default_db_config` so it applies to every instance. Do not set it in `db_config` at the instance level. |
 | replication | boolean (default: true) | Database replication |
 | sharding | boolean (default:&nbsp;false) | Cluster mode (server-side sharding). When true, shard hashing rules must be provided by either `oss_sharding` or `shard_key_regex` |
 | shard_key_regex | `[{ "regex": string }, ...]` | Custom keyname-based sharding rules (required if sharding is enabled)<br /><br />To use the default rules you should set the value to:<br />`[{"regex": ".*\\{(?<tag>.*)\\}.*"}, {"regex": "(?<tag>.*)"}]` |

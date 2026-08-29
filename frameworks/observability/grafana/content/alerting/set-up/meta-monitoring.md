@@ -4,10 +4,10 @@ framework: "Grafana"
 source_repo: "https://github.com/grafana/grafana.git"
 source_branch: "main"
 source_path: "docs/sources/alerting/set-up/meta-monitoring.md"
-source_commit: "d18e58d33aa8741f08fbab4aa73bdaf1f04e3be5"
-source_commit_short: "d18e58d3"
-source_commit_date: "2026-07-25T13:50:43+02:00"
-generated_at: "2026-07-25T19:08:08.946743Z"
+source_commit: "5e3a02f81d2aadf4bf24fe49ed97d872556f5bf9"
+source_commit_short: "5e3a02f8"
+source_commit_date: "2026-08-29T10:58:19+09:00"
+generated_at: "2026-08-29T09:39:37.462902Z"
 ---
 ---
 aliases:
@@ -177,6 +177,8 @@ In the **Logs** view, you can review details for individual alerts by selecting 
 - Additional available fields.
 
 Alternatively, you can access the [History page](/docs/grafana/<GRAFANA_VERSION>/alerting/monitor-status/view-alert-state-history/) in Grafana to visualize and filter state changes for individual alerts or all alerts.
+
+If you have enabled notification history, you can also refer to [View notification history](/docs/grafana/<GRAFANA_VERSION>/alerting/monitor-status/view-notification-history/) to review sent notifications and delivery outcomes in the **History** page **Notifications** tab.
 
 ## Metrics for Mimir-managed alerts
 

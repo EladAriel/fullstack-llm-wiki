@@ -1,57 +1,160 @@
 ---
 type: "Framework Learn Page"
-framework: "mongodb"
+framework: "MongoDB"
 source_repo: "https://github.com/mongodb/docs.git"
 source_branch: "main"
 source_path: "content/manual/manual/source/core/csfle/reference/decryption.txt"
-source_commit: "ab9db26ed3d11618cdb61516d8180337d8e3f679"
-source_commit_short: "ab9db26e"
-source_commit_date: "2026-07-24T16:22:46-06:00"
-generated_at: "2026-07-25T11:51:15Z"
+source_commit: "b9f2bc487a2878b65e3c1f80024bebab76954f27"
+source_commit_short: "b9f2bc48"
+source_commit_date: "2026-08-28T17:09:45-05:00"
+generated_at: "2026-08-29T09:39:19.810103Z"
 ---
-
-============================
+.. _csfle-reference-decryption:
+.. _csfle-reference-decryption-how-decryption-works:
+.. _field-level-encryption-automatic-decryption:
 
 # How CSFLE Decrypts Documents
 
-This page describes how {+csfle-abbrev+} uses metadata from your {+dek-long+} and {+cmk-long+} to decrypt data.
+**meta:** :description: Understand how CSFLE decrypts data using metadata from Data Encryption Keys and Customer Master Keys across various KMS providers.
+
+.. default-domain:: mongodb
+
+**contents:** On this page
+   :local:
+   :backlinks: none
+   :depth: 2
+   :class: singlecol
+
+This page describes how {+csfle-abbrev+} uses metadata from your
+{+dek-long+} and {+cmk-long+} to decrypt data.
+
+.. _csfle-reference-decryption-metadata:
 
 ## Metadata Used for Decryption
 
-When you encrypt data using {+csfle-abbrev+}, the data you encrypt is stored as a :bsontype:`BinData <Binary>` subtype 6 object that includes the following metadata:
+When you encrypt data using {+csfle-abbrev+}, the data you encrypt is
+stored as a :bsontype:`BinData <Binary>` subtype 6 object that includes
+the following metadata:
 
-- The `_id` of the {+dek-long+} used to encrypt the data
+- The ``_id`` of the {+dek-long+} used to encrypt the data
 - The encryption algorithm used to encrypt the data
-{+dek-long+}s contain metadata that describes what {+cmk-long+} was used to encrypt them.
 
-Drivers and :binary:`~bin.mongosh` use this metadata to attempt to automatically decrypt your data.
+{+dek-long+}s contain metadata that describes what {+cmk-long+} was used
+to encrypt them.
+
+Drivers and :binary:`~bin.mongosh` use this metadata to attempt
+to automatically decrypt your data.
 
 ## Automatic Decryption Process
 
-To automatically decrypt your data, your {+csfle-abbrev+}-enabled client performs the following procedure:
+To automatically decrypt your data, your {+csfle-abbrev+}-enabled client
+performs the following procedure:
 
-#. Check the `BinData` blob metadata of the field you intend to decrypt for the {+dek-long+} and encryption algorithm used to encrypt the value.
+#. Check the ``BinData`` blob metadata of the field you intend to
+   decrypt for the {+dek-long+} and encryption algorithm used to encrypt
+   the value.
 
-#. Check the {+key-vault-long+} configured in the current database connection for the specified {+dek-long+}. If the {+key-vault-long+} does not contain the specified key, automatic decryption fails and the driver returns an error.
+#. Check the {+key-vault-long+} configured in the current database
+   connection for the specified {+dek-long+}. If the {+key-vault-long+}
+   does not contain the specified key, automatic decryption fails and
+   the driver returns an error.
 
-#. Check the {+dek-long+} metadata for the {+cmk-long+} (CMK) used to encrypt the key material.
+#. Check the {+dek-long+} metadata for the {+cmk-long+}
+   (CMK) used to encrypt the key material.
 
 #. Decrypt the {+dek-long+}. This process varies by KMS provider:
 
-#. Decrypt the `BinData` value using the decrypted {+dek-long+} and appropriate algorithm.
+   .. tabs::
 
-Applications with access to the MongoDB server that do not also have access to the required CMK and {+dek-long+}s cannot decrypt the `BinData` values.
+      .. tab:: AWS
+         :tabid: aws
+
+         For the Amazon Web Services (AWS) KMS, send the {+dek-long+} to
+         your AWS KMS instance for decryption. If the CMK does not exist
+         *or* if the connection configuration does not grant access to
+         the CMK, decryption fails and the driver returns an error.
+
+         .. tip::
+
+            To learn how to use the Amazon Web Services KMS for
+            automatic encryption, see
+            :ref:`csfle-tutorial-automatic-aws`.
+
+      .. tab:: GCP
+         :tabid: gcp
+
+         For the Google Cloud Platform (GCP) KMS, send the {+dek-long+}
+         to your GCP KMS instance for decryption. If the CMK does not
+         exist *or* if the connection configuration does not grant
+         access to the CMK, decryption fails and the driver returns an
+         error.
+
+         .. tip::
+
+            To learn how to use the Google Cloud Platform KMS for automatic
+            encryption, see :ref:`csfle-tutorial-automatic-gcp`.
+
+      .. tab:: Azure
+         :tabid: azure
+
+         For the Azure Key Vault, send the {+dek-long+} to the your
+         Azure Key Vault instance for decryption. If the CMK does not exist
+         *or* if the connection configuration does not grant access to
+         the CMK, decryption fails and the driver returns an error.
+
+         .. tip::
+
+            To learn how to use the Azure Key Vault for automatic
+            encryption, see :ref:`csfle-tutorial-automatic-azure`.
+
+      .. tab:: KMIP
+         :tabid: kmip
+
+         For a KMIP-compliant KMS, retrieve the CMK from the KMS and
+         then use the CMK locally to decrypt the {+dek-long+}. If the
+         CMK does not exist *or* if the connection configuration does
+         not grant access to the CMK, decryption fails and the driver
+         returns an error.
+
+         .. tip::
+
+            To learn how to use a KMIP-compliant KMS for automatic
+            encryption, see :ref:`csfle-tutorial-automatic-kmip`.
+
+      .. tab:: Local Key Provider
+         :tabid: local
+
+         For a Local Key Provider, retrieve the CMK from your filesystem
+         and use it to decrypt the {+dek-long+}. If the local key specified in
+         the database configuration was not used to encrypt the
+         {+dek-long+}, decryption fails and the driver returns an
+         error.
+
+         .. include:: /includes/queryable-encryption/qe-warning-local-keys.rst
+
+#. Decrypt the ``BinData`` value using the decrypted
+   {+dek-long+} and appropriate algorithm.
+
+Applications with access to the MongoDB server that do not *also* have
+access to the required CMK and {+dek-long+}s cannot
+decrypt the ``BinData`` values.
 
 ## Automatically Encrypted Read Behavior
 
-For read operations, the driver encrypts field values in the query document using your encryption schema prior to issuing the read operation.
+For read operations, the driver encrypts field values in the query
+document using your encryption schema *prior* to issuing the read
+operation.
 
-Your client application then uses the `BinData` metadata to automatically decrypt the document you receive from MongoDB.
+Your client application then uses the ``BinData`` metadata to
+automatically decrypt the document you receive from MongoDB.
 
-To learn more about encryption schemas, see `csfle-fundamentals-create-schema`.
+To learn more about encryption schemas, see
+:ref:`csfle-fundamentals-create-schema`.
 
 ## Learn More
 
-To learn how to configure the database connection for {+csfle+}, see `csfle-reference-mongo-client`.
+To learn how to configure the database connection for {+csfle+}, see
+:ref:`csfle-reference-mongo-client`.
 
-To learn more about the relationship between {+dek-long+}s and {+cmk-long+}s, see `qe-reference-keys-key-vaults`.
+To learn more about the relationship between {+dek-long+}s and
+{+cmk-long+}s, see :ref:`qe-reference-keys-key-vaults`.

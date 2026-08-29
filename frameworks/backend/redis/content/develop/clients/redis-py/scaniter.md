@@ -1,15 +1,14 @@
 ---
 type: "Framework Learn Page"
-framework: "redis"
+framework: "Redis"
 source_repo: "https://github.com/redis/docs.git"
 source_branch: "main"
 source_path: "content/develop/clients/redis-py/scaniter.md"
-source_commit: "9d30f68c3dad1a6b3b7d30fe604b911348ce8152"
-source_commit_short: "9d30f68c"
-source_commit_date: "2026-07-24T10:52:10-07:00"
-generated_at: "2026-07-25T11:51:22Z"
+source_commit: "f8693349287b0efbef3c865b6f6a2aceca88594d"
+source_commit_short: "f869334"
+source_commit_date: "2026-08-28T10:01:19-05:00"
+generated_at: "2026-08-29T09:38:56.077831Z"
 ---
-
 ---
 categories:
 - docs
@@ -30,15 +29,15 @@ weight: 60
 Redis has a small family of related commands that retrieve
 keys and, in some cases, their associated values:
 
--   [`SCAN`]({{< relref "/commands/scan" >}}) retrieves keys
+-   [`SCAN`](/content/commands/scan.md) retrieves keys
     from the main Redis keyspace.
--   [`HSCAN`]({{< relref "/commands/hscan" >}}) retrieves keys and optionally,
+-   [`HSCAN`](/content/commands/hscan.md) retrieves keys and optionally,
     their values from a
-    [hash]({{< relref "/develop/data-types/hashes" >}}) object.
--   [`SSCAN`]({{< relref "/commands/sscan" >}}) retrieves keys from a
-    [set]({{< relref "/develop/data-types/sets" >}}) object.
--   [`ZSCAN`]({{< relref "/commands/zscan" >}}) retrieves keys and their score values from a
-    [sorted set]({{< relref "/develop/data-types/sorted-sets" >}}) object.
+    [hash](/content/develop/data-types/hashes.md) object.
+-   [`SSCAN`](/content/commands/sscan.md) retrieves keys from a
+    [set](/content/develop/data-types/sets.md) object.
+-   [`ZSCAN`](/content/commands/zscan.md) retrieves keys and their score values from a
+    [sorted set](/content/develop/data-types/sorted-sets.md) object.
 
 These commands can potentially return large numbers of results, so Redis
 provides a paging mechanism to access the results in small, separate batches.
@@ -55,7 +54,7 @@ Each of the commands has its own equivalent iterator. The following example show
 how to use a `SCAN` iterator on the Redis keyspace. Note that, as with the `SCAN`
 command, the results are not sorted into any particular order, . Also, you
 can pass `match`, `count`, and `_type` parameters to `scan_iter()` to constrain
-the set of keys it returns (see the [`SCAN`]({{< relref "/commands/scan" >}})
+the set of keys it returns (see the [`SCAN`](/content/commands/scan.md)
 command page for examples). 
 
 ```py

@@ -4,12 +4,14 @@ framework: "Grafana"
 source_repo: "https://github.com/grafana/grafana.git"
 source_branch: "main"
 source_path: "docs/sources/administration/migration-guide/manually-migrate-to-grafana-cloud.md"
-source_commit: "d18e58d33aa8741f08fbab4aa73bdaf1f04e3be5"
-source_commit_short: "d18e58d3"
-source_commit_date: "2026-07-25T13:50:43+02:00"
-generated_at: "2026-07-25T19:08:09.032764Z"
+source_commit: "5e3a02f81d2aadf4bf24fe49ed97d872556f5bf9"
+source_commit_short: "5e3a02f8"
+source_commit_date: "2026-08-29T10:58:19+09:00"
+generated_at: "2026-08-29T09:39:37.483111Z"
 ---
 ---
+aliases:
+  - /docs/grafana-cloud/security-and-account-management/migration-guide/manually-migrate-to-grafana-cloud/
 description: Migrate from Grafana OSS/Enterprise to Grafana Cloud manually
 keywords:
   - Grafana Cloud

@@ -4,11 +4,12 @@ framework: "Model Context Protocol"
 source_repo: "https://github.com/modelcontextprotocol/modelcontextprotocol"
 source_branch: "main"
 source_path: "docs/community/interest-groups/tool-annotations.mdx"
-source_commit: "7634684382c3d14cf7e9f14073fe40a2d8ace3fa"
-source_commit_short: "76346843"
-source_commit_date: "2026-07-23T16:49:30-07:00"
-generated_at: "2026-07-25T11:50:39Z"
+source_commit: "ca4ab3027f7c844cd3039c956438d72e8253f7f5"
+source_commit_short: "ca4ab30"
+source_commit_date: "2026-08-28T21:24:44-07:00"
+generated_at: "2026-08-29T09:38:48.027767Z"
 ---
+# Tool Annotations
 
 ---
 title: Tool Annotations Charter
@@ -54,16 +55,17 @@ The Tool Annotations Interest Group explores the role of tool annotations in ena
 
 ## Membership
 
-| Name                    | Organization | GitHub                                               | Discord | Level       |
-| ----------------------- | ------------ | ---------------------------------------------------- | ------- | ----------- |
-| Sam Morrow              | GitHub       | [@SamMorrowDrums](https://github.com/SamMorrowDrums) |         | Facilitator |
-| Robert Reichel          | OpenAI       | [@rreichel3](https://github.com/rreichel3)           |         | Facilitator |
-| Matt Carey              | Cloudflare   | [@mattzcarey](https://github.com/mattzcarey)         |         | Participant |
-| Kapil Sharma            | Microsoft    | [@kapil8811](https://github.com/kapil8811)           |         | Participant |
-| Connor Peet             | Microsoft    | [@connor4312](https://github.com/connor4312)         |         | Participant |
-| Ola Hungerford          | Nordstrom    | [@olaservo](https://github.com/olaservo)             |         | Participant |
-| Gökhan Arkan            | GitHub       | [@gokhanarkan](https://github.com/gokhanarkan)       |         | Participant |
-| Joanna Krzek-Lubowiecka | GitHub       | [@joannakl](https://github.com/joannakl)             |         | Participant |
+| Name                    | Organization | GitHub                                               | Discord  | Level       |
+| ----------------------- | ------------ | ---------------------------------------------------- | -------- | ----------- |
+| Sam Morrow              | GitHub       | [@SamMorrowDrums](https://github.com/SamMorrowDrums) |          | Facilitator |
+| Robert Reichel          | OpenAI       | [@rreichel3](https://github.com/rreichel3)           |          | Facilitator |
+| Matt Carey              | Cloudflare   | [@mattzcarey](https://github.com/mattzcarey)         |          | Participant |
+| Kapil Sharma            | Microsoft    | [@kapil8811](https://github.com/kapil8811)           |          | Participant |
+| Connor Peet             | Microsoft    | [@connor4312](https://github.com/connor4312)         |          | Participant |
+| Ola Hungerford          | Nordstrom    | [@olaservo](https://github.com/olaservo)             |          | Participant |
+| Gökhan Arkan            | GitHub       | [@gokhanarkan](https://github.com/gokhanarkan)       |          | Participant |
+| Joanna Krzek-Lubowiecka | GitHub       | [@joannakl](https://github.com/joannakl)             |          | Participant |
+| Maxi Boch               | Independent  | [@maxiboch](https://github.com/maxiboch)             | maxiboch | Participant |
 
 ## Operations
 

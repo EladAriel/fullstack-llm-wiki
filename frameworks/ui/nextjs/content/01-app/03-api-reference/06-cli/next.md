@@ -1,15 +1,14 @@
 ---
 type: "Framework Learn Page"
-framework: "nextjs"
+framework: "Next.js"
 source_repo: "https://github.com/vercel/next.js/"
 source_branch: "canary"
 source_path: "docs/01-app/03-api-reference/06-cli/next.mdx"
-source_commit: "dcf242a17b5d4622bbd9624db531a9d84177619f"
-source_commit_short: "dcf242a1"
-source_commit_date: "2026-07-25T10:16:19+02:00"
-generated_at: "2026-07-25T11:50:53Z"
+source_commit: "33a5d542e519fe4e05c8c8c2c2845da9f741699b"
+source_commit_short: "33a5d542"
+source_commit_date: "2026-08-29T00:04:45-07:00"
+generated_at: "2026-08-29T09:40:24.294727Z"
 ---
-
 ---
 title: next CLI
 description: Learn how to run and build your application with the Next.js CLI.
@@ -105,22 +104,20 @@ See the [Building guide](/docs/app/guides/building) to learn how to read the out
 
 The following options are available for the `next build` command:
 
-| Option                             | Description                                                                                                                                                                        |
-| ---------------------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| `-h, --help`                       | Show all available options.                                                                                                                                                        |
-| `[directory]`                      | A directory on which to build the application. If not provided, the current directory will be used.                                                                                |
-| `--turbopack`                      | Force enable [Turbopack](/docs/app/api-reference/turbopack) (enabled by default). Also available as `--turbo`.                                                                     |
-| `--webpack`                        | Build using Webpack.                                                                                                                                                               |
-| `-d` or `--debug`                  | Enables a more verbose build output. With this flag enabled additional build output like rewrites, redirects, and headers will be shown.                                           |
-|                                    |
-| `--profile`                        | Enables production [profiling for React](https://react.dev/reference/react/Profiler).                                                                                              |
-| `--no-lint`                        | Disables linting. _Note: linting will be removed from `next build` in Next 16. If you're using Next 15.5+ with a linter other than `eslint`, linting during build will not occur._ |
-| `--no-mangling`                    | Disables [mangling](https://en.wikipedia.org/wiki/Name_mangling). This may affect performance and should only be used for debugging purposes.                                      |
-| `--experimental-app-only`          | Builds only App Router routes.                                                                                                                                                     |
-| `--experimental-build-mode [mode]` | Uses an experimental build mode. (choices: "compile", "generate", default: "default")                                                                                              |
-| `--debug-prerender`                | Debug prerender errors in development.                                                                                                                                             |
-| `--debug-build-paths=<patterns>`   | Build only specific routes for debugging.                                                                                                                                          |
-| `--experimental-cpu-prof`          | Enables CPU profiling using V8's inspector. Profiles are saved to `.next-profiles/` on exit.                                                                                       |
+| Option                             | Description                                                                                                                                   |
+| ---------------------------------- | --------------------------------------------------------------------------------------------------------------------------------------------- |
+| `-h, --help`                       | Show all available options.                                                                                                                   |
+| `[directory]`                      | A directory on which to build the application. If not provided, the current directory will be used.                                           |
+| `--turbopack`                      | Force enable [Turbopack](/docs/app/api-reference/turbopack) (enabled by default). Also available as `--turbo`.                                |
+| `--webpack`                        | Build using Webpack.                                                                                                                          |
+| `-d` or `--debug`                  | Enables a more verbose build output. With this flag enabled additional build output like rewrites, redirects, and headers will be shown.      |
+| `--profile`                        | Enables production [profiling for React](https://react.dev/reference/react/Profiler).                                                         |
+| `--no-mangling`                    | Disables [mangling](https://en.wikipedia.org/wiki/Name_mangling). This may affect performance and should only be used for debugging purposes. |
+| `--experimental-app-only`          | Builds only App Router routes.                                                                                                                |
+| `--experimental-build-mode [mode]` | Uses an experimental build mode. (choices: "compile", "generate", default: "default")                                                         |
+| `--debug-prerender`                | Debug prerender errors in development.                                                                                                        |
+| `--debug-build-paths=<patterns>`   | Build only specific routes for debugging.                                                                                                     |
+| `--experimental-cpu-prof`          | Enables CPU profiling using V8's inspector. Profiles are saved to `.next-profiles/` on exit.                                                  |
 
 ### `next start` options
 
@@ -311,7 +308,7 @@ This helps surface more readable stack traces and code frames in the build outpu
 
 ### Building specific routes
 
-You can build only specific routes in the App and Pages Routers using the `--debug-build-paths` option. This is useful for faster debugging when working with large applications. The `--debug-build-paths` option accepts comma-separated file paths and supports glob patterns:
+You can build only specific routes in the App and Pages Routers using the `--debug-build-paths` option. This is useful for faster debugging when working with large applications. The `--debug-build-paths` option accepts comma-separated file paths, supports glob patterns, and excludes any path prefixed with `!`:
 
 ```bash filename="Terminal"
 # Build a specific route
@@ -326,7 +323,12 @@ next build --debug-build-paths="app/(marketing)/about/page.tsx"
 # Use glob patterns
 next build --debug-build-paths="app/**/page.tsx"
 next build --debug-build-paths="pages/*.tsx"
+
+# Exclude routes with a ! prefix
+next build --debug-build-paths="app/**/page.tsx,!app/admin/**"
 ```
+
+In projects that keep routes under `src/`, paths resolve with or without the `src/` prefix, so both `app/page.tsx` and `src/app/page.tsx` match the same route.
 
 ### Changing the default port
 

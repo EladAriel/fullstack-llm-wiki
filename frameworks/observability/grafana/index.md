@@ -1,6 +1,6 @@
-# grafana Learn Wiki
+# Grafana Learn Wiki
 
-This is a local LLM-friendly wiki generated from the official grafana documentation.
+This is a local LLM-friendly wiki generated from the official Grafana documentation.
 
 ## Status
 
@@ -8,9 +8,10 @@ This is a local LLM-friendly wiki generated from the official grafana documentat
 - Source repo: `https://github.com/grafana/grafana.git`
 - Source branch: `main`
 - Source docs path: `docs/sources`
-- Source commit: `d18e58d3`
-- Source commit date: `2026-07-25T13:50:43+02:00`
-- Wiki generated at: `2026-07-25T19:08:09.100134Z`
+- Source commit: `5e3a02f8`
+- Source commit date: `2026-08-29T10:58:19+09:00`
+- Wiki generated at: `2026-08-29T09:39:37.618674Z`
+- Page count: `638`
 
 ## How the IDE LLM should use this wiki
 
@@ -29,3 +30,16 @@ This is a local LLM-friendly wiki generated from the official grafana documentat
 ## Top-Level Wiki Areas
 
 - [Content Index](content/index.md)
+- [Administration](content/administration/index.md)
+- [Alerting](content/alerting/index.md)
+- [As Code](content/as-code/index.md)
+- [Breaking Changes](content/breaking-changes/index.md)
+- [Datasources](content/datasources/index.md)
+- [Developer Resources](content/developer-resources/index.md)
+- [Fundamentals](content/fundamentals/index.md)
+- [Introduction](content/introduction/index.md)
+- [Setup Grafana](content/setup-grafana/index.md)
+- [Troubleshooting](content/troubleshooting/index.md)
+- [Tutorials](content/tutorials/index.md)
+- [Upgrade Guide](content/upgrade-guide/index.md)
+- [Visualizations](content/visualizations/index.md)

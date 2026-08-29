@@ -1,66 +1,119 @@
 ---
 type: "Framework Learn Page"
-framework: "mongodb"
+framework: "MongoDB"
 source_repo: "https://github.com/mongodb/docs.git"
 source_branch: "main"
 source_path: "content/manual/manual/source/reference/method/sh.unshardCollection.txt"
-source_commit: "ab9db26ed3d11618cdb61516d8180337d8e3f679"
-source_commit_short: "ab9db26e"
-source_commit_date: "2026-07-24T16:22:46-06:00"
-generated_at: "2026-07-25T11:51:15Z"
+source_commit: "b9f2bc487a2878b65e3c1f80024bebab76954f27"
+source_commit_short: "b9f2bc48"
+source_commit_date: "2026-08-28T17:09:45-05:00"
+generated_at: "2026-08-29T09:39:19.909402Z"
 ---
-
-=====================================
-
 # sh.unshardCollection (mongosh method)
+
+.. default-domain:: mongodb
+
+**contents:** On this page
+   :local:
+   :backlinks: none
+   :depth: 1
+   :class: singlecol
 
 ## Definition
 
+**method:** sh.unshardCollection( namespace, shardID )
+
+   .. include:: /includes/method/sh.unshardCollection
+
+   .. |dbcommand| replace:: :dbcommand:`unshardCollection` command
+   .. include:: /includes/fact-mongosh-shell-method-alt
+
+   The ``sh.unshardCollection`` method requires you to specify the shard
+   to receive the collection data. With the :dbcommand:`unshardCollection`
+   command, if you don't specify the destination shard, the cluster automatically
+   selects the shard with the least data.
+
+   If the collection uses :ref:`zone sharding <zone-sharding>`,
+   you must first remove the range associations and shard from
+   the zone before you unshard the collection. For more
+   information, see :ref:`sh-unshard-remove-zone-ranges`.
+
+   .. include:: /includes/fact-unshardCollection-oplog
+
 ## Syntax
 
-`sh.unshardCollection` has the following syntax:
+``sh.unshardCollection`` has the following syntax:
 
-```text
-sh.unshardCollection( namespace, shardID )
-```
+.. code-block:: text
+
+   sh.unshardCollection( namespace, shardID )
 
 ### Parameters
 
+.. list-table::
+   :header-rows: 1
+   :widths: 20 20 80
+
+   * - Parameter
+     - Type
+     - Description
+
+   * - ``namespace``
+     - string
+     - Specifies the database and collection to unshard.
+
+   * - ``shardID``
+     - string
+     - Specifies the recipient shard ID. As MongoDB unshards the
+       collection, it moves the collection data from their
+       current shards to this specific shard.
+
 ## Compatibility
+
+.. |command| replace:: method
 
 This method is available in deployments hosted in the following environments:
 
-.. include:: /includes/fact-environments-onprem-only.rst
+.. |uc| replace:: ``sh.unshardCollection()``
 
-.. include:: /includes/fact-environments-atlas-only.rst
+**include:** /includes/fact-environments-onprem-only.rst
+
+**include:** /includes/fact-environments-atlas-only.rst
+
+
 
 ## Considerations
 
-.. include:: /includes/uc-considerations.rst
+**include:** /includes/uc-considerations.rst
 
 ## Requirements
 
-.. include:: /includes/uc-reqs
+**include:** /includes/uc-reqs
 
 ## Behavior
 
+.. _sh-unshard-remove-zone-ranges:
+
 ### Unshard Zones
 
-.. include:: /includes/fact-unshard-zones
+**include:** /includes/fact-unshard-zones
 
 ## Examples
 
 ### Unshard a Collection
 
-This example unshards a collection named `inventory` on the `app` database to the `shard02` shard.
+This example unshards a collection named ``inventory`` on the
+``app`` database to the ``shard02`` shard.
 
-```javascript
-sh.unshardCollection( "app.inventory", "shard02" )
-```
+.. code-block:: javascript
 
-.. include:: /includes/mc-sh-status.rst
+   sh.unshardCollection( "app.inventory", "shard02" )
+
+**include:** /includes/mc-sh-status.rst
+
+.. _unshard-method-zones:
 
 ## Learn More
 
 - :dbcommand:`unshardCollection`
-- `unshard-collection-task`
+- :ref:`unshard-collection-task`

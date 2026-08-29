@@ -1,38 +1,60 @@
 ---
 type: "Framework Learn Page"
-framework: "mongodb"
+framework: "MongoDB"
 source_repo: "https://github.com/mongodb/docs.git"
 source_branch: "main"
 source_path: "content/manual/manual/source/reference/operator/aggregation/limit.txt"
-source_commit: "ab9db26ed3d11618cdb61516d8180337d8e3f679"
-source_commit_short: "ab9db26e"
-source_commit_date: "2026-07-24T16:22:46-06:00"
-generated_at: "2026-07-25T11:51:15Z"
+source_commit: "b9f2bc487a2878b65e3c1f80024bebab76954f27"
+source_commit_short: "b9f2bc48"
+source_commit_date: "2026-08-28T17:09:45-05:00"
+generated_at: "2026-08-29T09:39:20.140869Z"
 ---
-
-==========================
-
 # $limit (aggregation stage)
+
+.. default-domain:: mongodb
+
+**facet:** :name: programming_language
+   :values: shell
+
+**meta:** :description: Learn about the $limit aggregation stage, which restricts the number of documents passed to the subsequent stage in the aggregation pipeline to a specified positive integer.
+
+**contents:** On this page
+   :local:
+   :backlinks: none
+   :depth: 1
+   :class: singlecol
+
+.. dismissible-skills-card::
+   :skill: Fundamentals of Data Transformation
+   :url: https://learn.mongodb.com/skills?openTab=aggregation
 
 ## Definition
 
+**pipeline:** $limit
+
+   Limits the number of documents passed to the next stage in the
+   :term:`pipeline`.
+
 ## Compatibility
 
-.. include:: /includes/fact-compatibility.rst
+.. |operator-method| replace:: ``$limit``
+
+**include:** /includes/fact-compatibility.rst
 
 ## Syntax
 
 The :pipeline:`$limit` stage has the following prototype form:
 
-```javascript
-{ $limit: <positive 64-bit integer> }
-```
+.. code-block:: javascript
 
-:pipeline:`$limit` takes a positive integer that specifies the maximum number of documents to pass along.
+   { $limit: <positive 64-bit integer> }
 
-> **Note:** The :pipeline:`$limit` pipeline aggregation has a 64-bit integer
-limit. MongoDB returns an invalid argument error when values exceed
-this limit.
+:pipeline:`$limit` takes a positive integer that specifies the
+maximum number of documents to pass along.
+
+**note:** The :pipeline:`$limit` pipeline aggregation has a 64-bit integer
+   limit. MongoDB returns an invalid argument error when values exceed
+   this limit.
 
 ## Behavior
 
@@ -42,33 +64,114 @@ If using the :pipeline:`$limit` stage with any of:
 
 - the :pipeline:`$sort` aggregation stage,
 - the :method:`~cursor.sort()` method, or
-- the `sort` field to the :dbcommand:`findAndModify` command or the
-:method:`~db.collection.findAndModify()` shell method,
+- the ``sort`` field to the :dbcommand:`findAndModify` command or the
+  :method:`~db.collection.findAndModify()` shell method,
 
-be sure to include at least one field in your sort that contains unique values, before passing results to the :pipeline:`$limit` stage.
+be sure to include at least one field in your sort that contains
+unique values, before passing results to the :pipeline:`$limit` stage.
 
-Sorting on fields that contain duplicate values may return an inconsistent sort order for those duplicate fields over multiple executions, especially when the collection is actively receiving writes.
+Sorting on fields that contain duplicate values may return an
+inconsistent sort order for those duplicate fields over multiple
+executions, especially when the collection is actively receiving writes.
 
-The easiest way to guarantee sort consistency is to include the `_id` field in your sort query.
+The easiest way to guarantee sort consistency is to include the
+``_id`` field in your sort query.
 
 See the following for more information on each:
 
 - :ref:`Consistent sorting with $sort (aggregation)
-<sort-aggregation-consistent-sorting>`
-
+  <sort-aggregation-consistent-sorting>`
 - :ref:`Consistent sorting with the sort() shell method
-<sort-cursor-consistent-sorting>`
-
+  <sort-cursor-consistent-sorting>`
 - :ref:`Consistent sorting with the findAndModify command
-<findandmodify-command-consistent-sorting>`
-
+  <findandmodify-command-consistent-sorting>`
 - :ref:`Consistent sorting with the findAndModify() shell method
-<findandmodify-method-consistent-sorting>`
+  <findandmodify-method-consistent-sorting>`
 
 ## Examples
 
-> **Note:** .. include:: /includes/fact-agg-sort-limit.rst
+.. tabs-drivers::
+
+   .. tab::
+      :tabid: shell
+
+      .. include:: /includes/sample-data-usage.rst
+
+      Consider the following example:
+
+      .. literalinclude:: /code-examples/tested/command-line/mongosh/aggregation/stages/limit/limit-movies.snippet.limit-movies.js
+         :language: javascript
+         :category: usage example
+
+      This operation returns only the first 5 documents passed to it
+      by the pipeline. :pipeline:`$limit` has no effect on the content
+      of the documents it passes.
+
+   .. tab::
+      :tabid: csharp
+
+      .. sharedinclude:: dbx/csharp/aggregation/rst-files/sample-data-mflix-intro.rst
+
+      The following ``Movie`` class models the documents in the
+      ``sample_mflix.movies`` collection:
+
+      .. literalinclude:: /code-examples/tested/csharp/driver/Aggregation/Builders/Movie.snippet.movie-class.cs
+         :language: csharp
+
+      .. sharedinclude:: dbx/csharp/aggregation/rst-files/method-intro.rst
+
+         .. replacement:: stage-name
+
+            ``$limit``
+
+         .. replacement:: method-name-and-link
+
+            `Limit() <{+csharp-api-docs+}/MongoDB.Driver/MongoDB.Driver.PipelineStageDefinitionBuilder.Limit.html>`__
+
+         .. replacement:: stage-specific-info
+
+         .. replacement:: method-description
+
+            sorts movies by title and limits the result to the
+            first ``5`` documents:
+
+         .. replacement:: more-method-description
+
+      .. io-code-block::
+         :copyable: true
+
+         .. input:: /code-examples/tested/csharp/driver/Aggregation/Builders/Limit.snippet.limit.cs
+            :language: csharp
+            :category: usage example
+
+         .. output:: /code-examples/tested/csharp/driver/Aggregation/Builders/OutputFiles/LimitOutput.txt
+            :language: json
+
+   .. tab::
+      :tabid: nodejs
+
+      .. include:: /includes/driver-examples/node/aggregation/stage-intro.rst
+
+         .. replacement:: stage-name
+
+            ``$limit`` 
+        
+         .. replacement:: stage-specific-info
+
+         .. replacement:: method-description
+
+            limits the number of returned documents to ``10``
+
+         .. replacement:: more-method-description
+
+      .. literalinclude:: /includes/driver-examples/node/aggregation/examples.js
+         :start-after: //start limit
+         :end-before: //end limit
+         :language: javascript
+         :dedent: 2
+
+**note:** .. include:: /includes/fact-agg-sort-limit.rst
 
 ## Learn More
 
-To learn how to use :pipeline:`$limit` in a full example, see the `agg-example-filter-data` tutorial.
+To learn how to use :pipeline:`$limit` in a full example, see the :ref:`agg-example-filter-data` tutorial. 

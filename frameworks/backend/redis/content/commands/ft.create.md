@@ -1,14 +1,15 @@
 ---
 type: "Framework Learn Page"
-framework: "redis"
+framework: "Redis"
 source_repo: "https://github.com/redis/docs.git"
 source_branch: "main"
 source_path: "content/commands/ft.create.md"
-source_commit: "9d30f68c3dad1a6b3b7d30fe604b911348ce8152"
-source_commit_short: "9d30f68c"
-source_commit_date: "2026-07-24T10:52:10-07:00"
-generated_at: "2026-07-25T11:51:22Z"
+source_commit: "f8693349287b0efbef3c865b6f6a2aceca88594d"
+source_commit_short: "f869334"
+source_commit_date: "2026-08-28T10:01:19-05:00"
+generated_at: "2026-08-29T09:38:55.047388Z"
 ---
+# Ft.Create
 
 ---
 acl_categories:
@@ -358,9 +359,9 @@ if set, indicates the default language for documents in the index. Default is En
 is a document attribute set as the document language.
 
 A stemmer is used for the supplied language during indexing. If an unsupported language is sent, the command returns an error. The supported
-languages are `arabic`, `armenian`, `basque`, `catalan`, `danish`, `dutch`, `english`, `finnish`, `french`, `german`, `greek`, `hindi`,
-`hungarian`, `indonesian`, `irish`, `italian`, `lithuanian`, `nepali`, `norwegian`, `portuguese`, `romanian`, `russian`, `serbian`,
-`spanish`, `swedish`, `tamil`, `turkish`, `yiddish`, and `chinese`.
+languages are `arabic`, `armenian`, `basque`, `catalan`, `chinese` (see below), `danish`, `dutch`, `english`, `finnish`, `french`, `german`, `greek`, `hindi`,
+`hungarian`, `indonesian`, `irish`, `italian`, `lithuanian`, `malay`, `nepali`, `norwegian`, `portuguese`, `romanian`, `russian`, `serbian`,
+`spanish`, `swedish`, `tagalog`, `tamil`, `turkish`, and `yiddish`.
 
 When adding Chinese language documents, set `LANGUAGE chinese` for the indexer to properly tokenize the terms. If you use the default language, then search terms are extracted based on punctuation characters and whitespace. The Chinese language tokenizer makes use of a segmentation algorithm (via [Friso](https://github.com/lionsoul2014/friso)), which segments text and checks it against a predefined dictionary. See [Stemming]({{< relref "/develop/ai/search-and-query/advanced-concepts/stemming" >}}) for more information.
 </details>

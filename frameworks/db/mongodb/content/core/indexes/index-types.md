@@ -1,89 +1,114 @@
 ---
 type: "Framework Learn Page"
-framework: "mongodb"
+framework: "MongoDB"
 source_repo: "https://github.com/mongodb/docs.git"
 source_branch: "main"
 source_path: "content/manual/manual/source/core/indexes/index-types.txt"
-source_commit: "ab9db26ed3d11618cdb61516d8180337d8e3f679"
-source_commit_short: "ab9db26e"
-source_commit_date: "2026-07-24T16:22:46-06:00"
-generated_at: "2026-07-25T11:51:15Z"
+source_commit: "b9f2bc487a2878b65e3c1f80024bebab76954f27"
+source_commit_short: "b9f2bc48"
+source_commit_date: "2026-08-28T17:09:45-05:00"
+generated_at: "2026-08-29T09:39:19.805496Z"
 ---
-
-===========
+.. _index-types:
 
 # Index Types
 
-This page describes the types of indexes you can create in MongoDB. Different index types support different types of data and queries.
+**meta:** :description: Explore different types of indexes in MongoDB, including single field, compound, multikey, geospatial, text, hashed, and clustered indexes.
+
+.. default-domain:: mongodb
+
+**contents:** On this page
+   :local:
+   :backlinks: none
+   :depth: 1
+   :class: singlecol
+
+This page describes the types of indexes you can create in MongoDB.
+Different index types support different types of data and queries.
+
+.. _index-intro-single-field:
 
 ## Single Field Index
 
-Single field indexes collect and sort data from a single field in each document in a collection.
+Single field indexes collect and sort data from a single field in each
+document in a collection.
 
-This image shows an index on a single field, `score`:
+This image shows an index on a single field, ``score``:
 
-.. include:: /images/index-ascending.rst
+**include:** /images/index-ascending.rst
 
-To learn more, see `indexes-single-field`.
+To learn more, see :ref:`indexes-single-field`.
 
 ## Compound Index
 
-.. include:: /includes/indexes/fact-compound-index-intro.rst
+**include:** /includes/indexes/fact-compound-index-intro.rst
 
-To learn more, see `index-type-compound`.
+To learn more, see :ref:`index-type-compound`.
 
 ## Multikey Index
 
 Multikey indexes collect and sort data stored in arrays.
 
-This image shows a multikey index on the `addr.zip` field:
+This image shows a multikey index on the ``addr.zip`` field:
 
-.. include:: /images/index-multikey.rst
+**include:** /images/index-multikey.rst
 
-To learn more, see `index-type-multikey`.
+To learn more, see :ref:`index-type-multikey`.
 
 ## Wildcard Index
 
-Wildcard indexes apply to collections with flexible schemas, where document field names may differ. Use wildcard indexes to support queries against arbitrary or unknown field names.
+Wildcard indexes apply to collections with flexible schemas,
+where document field names may differ. Use wildcard indexes to support
+queries against arbitrary or unknown field names.
 
-To learn more, see `wildcard-index-core`.
+To learn more, see :ref:`wildcard-index-core`.
 
 ## Geospatial Index
 
-Geospatial indexes improve performance for queries on geospatial coordinate data. To learn more, see `geospatial-index`.
+Geospatial indexes improve performance for queries on geospatial
+coordinate data. To learn more, see :ref:`geospatial-index`.
 
 ## Hashed Index
 
-Hashed indexes support `hashed sharding <sharding-hashed-sharding>`. Hashed indexes index the hash of a field's value.
+Hashed indexes support :ref:`hashed sharding
+<sharding-hashed-sharding>`. Hashed indexes index the hash of a field's value.
 
-To learn more, see `index-type-hashed`.
+To learn more, see :ref:`index-type-hashed`.
 
 ## Text Index
 
-Text indexes support `$text` queries on fields containing string content.
+Text indexes support ``$text`` queries on fields containing string content. 
 
-To learn more, see `index-type-text`.
+To learn more, see :ref:`index-type-text`.
 
-> **Note:** MongoDB also offers the following text search solutions:
-- :atlas:`{+fts+} </atlas-search/>` provides improved performance
-  and functionality compared to on-premises text search.
-- :atlas:`{+avs+} </atlas-vector-search/vector-search-overview/>`
-  provides vector search capabilities to perform semantic, hybrid, and generative
-  search.
+**note:** Use {+fts+} or {+avs+}
+
+   MongoDB also offers the following text search solutions:
+
+   - :atlas:`{+fts+} </atlas-search/>` provides improved performance
+     and functionality compared to on-premises text search.
+   - :atlas:`{+avs+} </atlas-vector-search/vector-search-overview/>` 
+     provides vector search capabilities to perform semantic, hybrid, and generative
+     search.
+
 
 ## Clustered Index
 
-Clustered indexes specify the order in which `clustered collections <clustered-collections>` store data. Collections created with a clustered index are called clustered collections.
+Clustered indexes specify the order in which :ref:`clustered collections
+<clustered-collections>` store data. Collections created with a
+clustered index are called clustered collections.
 
-To learn how to create a collection with a clustered index, see `clustered-collections-index-example`.
+To learn how to create a collection with a clustered index, see
+:ref:`clustered-collections-index-example`.
 
-## Contents
+**toctree:** :titlesonly:
+   :hidden:
 
-- Single Field </core/indexes/index-types/index-single>
-- Compound </core/indexes/index-types/index-compound>
-- Multikey </core/indexes/index-types/index-multikey>
-- Wildcard </core/indexes/index-types/index-wildcard>
-- Geospatial </core/indexes/index-types/index-geospatial>
-- Hashed </core/indexes/index-types/index-hashed>
-- Text </core/indexes/index-types/index-text>
-- Clustered </core/clustered-collections>
+   Single Field </core/indexes/index-types/index-single>
+   Compound </core/indexes/index-types/index-compound>
+   Multikey </core/indexes/index-types/index-multikey>
+   Wildcard </core/indexes/index-types/index-wildcard>
+   Geospatial </core/indexes/index-types/index-geospatial>
+   Hashed </core/indexes/index-types/index-hashed>
+   Text </core/indexes/index-types/index-text>
+   Clustered </core/clustered-collections>

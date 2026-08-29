@@ -1,14 +1,15 @@
 ---
 type: "Framework Learn Page"
-framework: "redis"
+framework: "Redis"
 source_repo: "https://github.com/redis/docs.git"
 source_branch: "main"
 source_path: "content/operate/oss_and_stack/install/version-mgmt.md"
-source_commit: "9d30f68c3dad1a6b3b7d30fe604b911348ce8152"
-source_commit_short: "9d30f68c"
-source_commit_date: "2026-07-24T10:52:10-07:00"
-generated_at: "2026-07-25T11:51:22Z"
+source_commit: "f8693349287b0efbef3c865b6f6a2aceca88594d"
+source_commit_short: "f869334"
+source_commit_date: "2026-08-28T10:01:19-05:00"
+generated_at: "2026-08-29T09:38:55.238650Z"
 ---
+# Version Mgmt
 
 ---
 Title: Redis Open Source version management
@@ -33,19 +34,27 @@ Redis uses a **MAJOR.MINOR.PATCH** versioning scheme:
 - **Minor versions**: New features and improvements within a major version (for example, 8.2 → 8.4 → 8.6 → 8.8).
 - **Patch versions**: Bug fixes and security updates (for example, 8.6.1 → 8.6.2).
 
+## Version release model
+
+Redis uses two release types within a major version:
+
+- **Standard releases** are the first release in a major version series (for example, 8.0) and intermediate minor releases (for example, 8.4, 8.6). These releases receive security updates and critical bug fixes for 6 months after the following minor version is released.
+- **Extended releases** are the second minor release in a major version series (for example, 8.2) and the final minor release in a series. These releases receive security updates and critical bug fixes for 5 years after their release date.
+
 ## Supported versions
 
 {{< note >}}
 **We strongly recommend using the latest available version** to benefit from the newest features, performance improvements, and security updates.
 {{< /note >}}
 
-| Version | Status | EOL Date |
-|---------|--------|----------|
-| **Redis 8.8** | GA | TBD |
-| **Redis 8.6** | GA | TBD |
-| **Redis 8.4** | GA | TBD |
-| **Redis 8.2** | GA | September 1, 2030 |
-| **Redis 8.0** | GA | December 1, 2026 |
-| **Redis 7.4** | GA | December 1, 2029 |
-| **Redis 7.2** | GA | December 1, 2029 |
-| **Redis 6.2** | GA | April 1, 2027 |
+| Version | Release type | Status | EOL Date |
+|---------|--------------|--------|----------|
+| **Redis 8.10** | Standard | GA | TBD |
+| **Redis 8.8**  | Standard | GA | TBD |
+| **Redis 8.6**  | Standard | GA | TBD |
+| **Redis 8.4**  | Standard | GA | TBD |
+| **Redis 8.2**  | Extended | GA | September 1, 2030 |
+| **Redis 8.0**  | Standard | GA | December 1, 2026 |
+| **Redis 7.4**  | Extended | GA | December 1, 2029 |
+| **Redis 7.2**  | Extended | GA | December 1, 2029 |
+| **Redis 6.2**  | Extended | GA | April 1, 2027 |

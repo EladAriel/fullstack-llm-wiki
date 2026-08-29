@@ -1,65 +1,195 @@
 ---
 type: "Framework Learn Page"
-framework: "postgres"
+framework: "PostgreSQL"
 source_repo: "https://github.com/postgres/postgres.git"
 source_branch: "master"
 source_path: "doc/src/sgml/ref/create_transform.sgml"
-source_commit: "38afc3dcb25c45b744d4025029ce0a6c90b7059f"
-source_commit_short: "38afc3dc"
-source_commit_date: "2026-07-25T19:08:27+09:00"
-generated_at: "2026-07-25T11:50:59Z"
+source_commit: "6c5f1d6074208146930b67c2054509c3e82f6f7f"
+source_commit_short: "6c5f1d6"
+source_commit_date: "2026-08-28T23:24:47+02:00"
+generated_at: "2026-08-29T09:39:24.594754Z"
 ---
-
 CREATE TRANSFORM
+ 
 
-CREATE TRANSFORM
-7
-SQL - Language Statements
+ 
+  
+# CREATE TRANSFORM
 
-CREATE TRANSFORM
-define a new transform
+  7
+  SQL - Language Statements
+ 
 
-```
+ 
+  
+# CREATE TRANSFORM
+
+  define a new transform
+ 
+
+ 
+
 CREATE [ OR REPLACE ] TRANSFORM FOR type_name LANGUAGE lang_name (
     FROM SQL WITH FUNCTION from_sql_function_name [ (argument_type [, ...]) ],
     TO SQL WITH FUNCTION to_sql_function_name [ (argument_type [, ...]) ]
 );
+
+ 
+
+ 
+  
+# Description
+
+  
+   CREATE TRANSFORM defines a new transform.
+   CREATE OR REPLACE TRANSFORM will either create a new
+   transform, or replace an existing definition.
+  
+
+  
+   A transform specifies how to adapt a data type to a procedural language.
+   For example, when writing a function in PL/Python using
+   the hstore type, PL/Python has no prior knowledge how to
+   present hstore values in the Python environment.  Language
+   implementations usually default to using the text representation, but that
+   is inconvenient when, for example, an associative array or a list would be
+   more appropriate.
+  
+
+  
+   A transform specifies two functions:
+   
+    
+     
+      A from SQL function that converts the type from the SQL
+      environment to the language.  This function will be invoked on the
+      arguments of a function written in the language.
+     
+
+    
+
+    
+     
+      A to SQL function that converts the type from the
+      language to the SQL environment.  This function will be invoked on the
+      return value of a function written in the language.
+     
+
+    
+   
+   It is not necessary to provide both of these functions.  If one is not
+   specified, the language-specific default behavior will be used if
+   necessary.  (To prevent a transformation in a certain direction from
+   happening at all, you could also write a transform function that always
+   errors out.)
+  
+
+  
+   To be able to create a transform, you must own and
+   have USAGE privilege on the type, have
+   USAGE privilege on the language, and own and
+   have EXECUTE privilege on the from-SQL and to-SQL
+   functions, if specified.
+  
+
+ 
+
+ 
+  
+# Parameters
+
+   
+    
+     type_name
+
+     
+      
+       The name of the data type of the transform.
+      
+
+     
+    
+
+    
+     lang_name
+
+     
+      
+       The name of the language of the transform.
+      
+
+     
+    
+
+    
+     from_sql_function_name[(argument_type [, ...])]
+
+     
+      
+       The name of the function for converting the type from the SQL
+       environment to the language.  It must take one argument of
+       type internal and return type internal.  The
+       actual argument will be of the type for the transform, and the function
+       should be coded as if it were.  (But it is not allowed to declare an
+       SQL-level function returning internal without at
+       least one argument of type internal.)  The actual return
+       value will be something specific to the language implementation.
+       If no argument list is specified, the function name must be unique in
+       its schema.
+      
+
+     
+    
+
+    
+     to_sql_function_name[(argument_type [, ...])]
+
+     
+      
+       The name of the function for converting the type from the language to
+       the SQL environment.  It must take one argument of type
+       internal and return the type that is the type for the
+       transform.  The actual argument value will be something specific to the
+       language implementation.
+       If no argument list is specified, the function name must be unique in
+       its schema.
+      
+
+     
+    
+   
+ 
+
+ 
+  
+# Notes
+
+  
+   Use DROP TRANSFORM to remove transforms.
+  
+
+ 
+
+ 
+  
+# Examples
+
+  
+   To create a transform for type hstore and language
+   plpython3u, first set up the type and the language:
+
 ```
 
-## Description
-
-`CREATE TRANSFORM` defines a new transform. `CREATE OR REPLACE TRANSFORM` will either create a new transform, or replace an existing definition.
-
-A transform specifies how to adapt a data type to a procedural language. For example, when writing a function in PL/Python using the `hstore` type, PL/Python has no prior knowledge how to present `hstore` values in the Python environment. Language implementations usually default to using the text representation, but that is inconvenient when, for example, an associative array or a list would be more appropriate.
-
-A transform specifies two functions: - A from SQL function that converts the type from the SQL environment to the language. This function will be invoked on the arguments of a function written in the language. - A to SQL function that converts the type from the language to the SQL environment. This function will be invoked on the return value of a function written in the language. It is not necessary to provide both of these functions. If one is not specified, the language-specific default behavior will be used if necessary. (To prevent a transformation in a certain direction from happening at all, you could also write a transform function that always errors out.)
-
-To be able to create a transform, you must own and have `USAGE` privilege on the type, have `USAGE` privilege on the language, and own and have `EXECUTE` privilege on the from-SQL and to-SQL functions, if specified.
-
-## Parameters
-
-- The name of the data type of the transform.
-- The name of the language of the transform.
-- The name of the function for converting the type from the SQL environment to the language. It must take one argument of type `internal` and return type `internal`. The actual argument will be of the type for the transform, and the function should be coded as if it were. (But it is not allowed to declare an SQL-level function returning `internal` without at least one argument of type `internal`.) The actual return value will be something specific to the language implementation. If no argument list is specified, the function name must be unique in its schema.
-- The name of the function for converting the type from the language to the SQL environment. It must take one argument of type `internal` and return the type that is the type for the transform. The actual argument value will be something specific to the language implementation. If no argument list is specified, the function name must be unique in its schema.
-
-## Notes
-
-Use DROP TRANSFORM to remove transforms.
-
-## Examples
-
-To create a transform for type `hstore` and language `plpython3u`, first set up the type and the language:
-
-```
 CREATE TYPE hstore ...;
 
 CREATE EXTENSION plpython3u;
-```
-
-Then create the necessary functions:
 
 ```
+
+   Then create the necessary functions:
+
+```
+
 CREATE FUNCTION hstore_to_plpython(val internal) RETURNS internal
 LANGUAGE C STRICT IMMUTABLE
 AS ...;
@@ -67,25 +197,49 @@ AS ...;
 CREATE FUNCTION plpython_to_hstore(val internal) RETURNS hstore
 LANGUAGE C STRICT IMMUTABLE
 AS ...;
-```
-
-And finally create the transform to connect them all together:
 
 ```
+
+   And finally create the transform to connect them all together:
+
+```
+
 CREATE TRANSFORM FOR hstore LANGUAGE plpython3u (
     FROM SQL WITH FUNCTION hstore_to_plpython(internal),
     TO SQL WITH FUNCTION plpython_to_hstore(internal)
 );
+
 ```
 
-In practice, these commands would be wrapped up in an extension.
+   In practice, these commands would be wrapped up in an extension.
+  
 
-The `contrib` section contains a number of extensions that provide transforms, which can serve as real-world examples.
+  
+   The contrib section contains a number of extensions
+   that provide transforms, which can serve as real-world examples.
+  
 
-## Compatibility
+ 
 
-This form of `CREATE TRANSFORM` is a PostgreSQL extension. There is a `CREATE TRANSFORM` command in the SQL standard, but it is for adapting data types to client languages. That usage is not supported by PostgreSQL.
+ 
+  
+# Compatibility
 
-## See Also
+  
+   This form of CREATE TRANSFORM is a
+   PostgreSQL extension.  There is a CREATE
+   TRANSFORM command in the SQL standard, but it
+   is for adapting data types to client languages.  That usage is not supported
+   by PostgreSQL.
+  
 
-`sql-createfunction`, `sql-createlanguage`, `sql-createtype`, `sql-droptransform`
+ 
+
+ 
+  
+# See Also
+
+  
+   ,
+   ,
+   ,

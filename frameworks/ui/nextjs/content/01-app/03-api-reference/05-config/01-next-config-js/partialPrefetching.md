@@ -1,14 +1,15 @@
 ---
 type: "Framework Learn Page"
-framework: "nextjs"
+framework: "Next.js"
 source_repo: "https://github.com/vercel/next.js/"
 source_branch: "canary"
 source_path: "docs/01-app/03-api-reference/05-config/01-next-config-js/partialPrefetching.mdx"
-source_commit: "dcf242a17b5d4622bbd9624db531a9d84177619f"
-source_commit_short: "dcf242a1"
-source_commit_date: "2026-07-25T10:16:19+02:00"
-generated_at: "2026-07-25T11:50:53Z"
+source_commit: "33a5d542e519fe4e05c8c8c2c2845da9f741699b"
+source_commit_short: "33a5d542"
+source_commit_date: "2026-08-29T00:04:45-07:00"
+generated_at: "2026-08-29T09:40:24.308051Z"
 ---
+# Partialprefetching
 
 ---
 title: partialPrefetching
@@ -20,10 +21,10 @@ related:
     - app/api-reference/config/next-config-js/cacheComponents
     - app/api-reference/file-conventions/route-segment-config/prefetch
     - app/api-reference/components/link
-    - app/guides/runtime-prefetching
+    - app/guides/optimizing-prefetching
 ---
 
-`partialPrefetching` enables Partial Prefetching at the app level. The framework prefetches the static parts of each route by default; opt individual routes into [runtime prefetching](/docs/app/guides/runtime-prefetching) to fetch more.
+`partialPrefetching` enables Partial Prefetching at the app level. The framework prefetches the static parts of each route by default; set `prefetch={true}` on individual links to use [per-link prefetching](/docs/app/guides/optimizing-prefetching) and fetch more.
 
 ## Usage
 
@@ -58,13 +59,13 @@ module.exports = {
 
 Before Partial Prefetching, Next.js prefetched per visible link: a page with N links to N routes produced ~N route prefetches as those links entered the viewport.
 
-With `partialPrefetching: true`, Next.js prefetches one reusable [App Shell](/docs/app/glossary#app-shell) per route instead. The shell carries the route's rendered output minus per-link data; specifics like params and search-bound data fill in after navigation. Shells are cached on the client, so a route is fetched once even if many links on the page point at it.
+With `partialPrefetching: true`, Next.js prefetches one reusable [App Shell](/docs/app/glossary#app-shell) per route instead. The App Shell contains rendered output that does not depend on a link's URL. URL-specific content, including content that depends on `params` or `searchParams`, resolves after navigation by default. App Shells are cached on the client, so links to the same route reuse one prefetch.
 
 The pattern is similar to per-route code splitting in single-page apps: one artifact per route, shared by every link that points to it.
 
 > **Good to know**: Routes that read `cookies()` or `headers()` produce an App Shell that includes session data. The framework auto-detects this and caches the shell per session on the client.
 
-A link can ask for more than the App Shell with [`<Link prefetch={true}>`](/docs/app/api-reference/components/link#prefetch). If the destination opts into [`prefetch = 'allow-runtime'`](/docs/app/api-reference/file-conventions/route-segment-config/prefetch#allow-runtime), the prefetch also resolves per-link runtime data like `params`, `searchParams`, and the full URL.
+A link can ask for more than the App Shell with [`<Link prefetch={true}>`](/docs/app/api-reference/components/link#prefetch). The prefetch also resolves URL data like `params`, `searchParams`, and the full URL, and the cached content behind it. See [Optimizing prefetching](/docs/app/guides/optimizing-prefetching).
 
 > **Good to know**: If you use `<Link prefetch={true}>` to a route that hasn't opted into Partial Prefetching, a dev console error suggests enabling `partialPrefetching` app-wide or `prefetch = 'partial'` on the segment. The [dev warning Insight](/docs/messages/instant-link-prefetch-partial) covers each fix in detail.
 

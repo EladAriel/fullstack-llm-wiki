@@ -1,51 +1,168 @@
 ---
 type: "Framework Learn Page"
-framework: "mongodb"
+framework: "MongoDB"
 source_repo: "https://github.com/mongodb/docs.git"
 source_branch: "main"
 source_path: "content/manual/manual/source/administration/install-community.txt"
-source_commit: "ab9db26ed3d11618cdb61516d8180337d8e3f679"
-source_commit_short: "ab9db26e"
-source_commit_date: "2026-07-24T16:22:46-06:00"
-generated_at: "2026-07-25T11:51:15Z"
+source_commit: "b9f2bc487a2878b65e3c1f80024bebab76954f27"
+source_commit_short: "b9f2bc48"
+source_commit_date: "2026-08-28T17:09:45-05:00"
+generated_at: "2026-08-29T09:39:19.761557Z"
 ---
-
-=================================
+.. _install-mdb-community-edition:
 
 # Install MongoDB Community Edition
 
-.. include:: /includes/minor-release.rst
+**meta:** :description: Install MongoDB Community Edition on Linux, macOS, Windows, or as a Docker container.
+   :robots: noindex, nosnippet
 
-Select your operating system to view installation instructions for MongoDB Community Edition.
+.. default-domain:: mongodb
 
-> **Note:** By default, MongoDB Community Edition does not include MongoDB Search. To use
-MongoDB Search with MongoDB Community, you must install MongoDB Search with
-`Docker <mongot-deployment-using-docker>` or :ref:`Linux
-<mongot-deployment-on-linux>` separately.
+**contents:** On this page
+   :local:
+   :backlinks: none
+   :depth: 1
+   :class: singlecol
+
+.. dismissible-skills-card::
+   :skill: MongoDB Architecture Essentials
+   :url: https://learn.mongodb.com/skills?openTab=architecture
+
+**include:** /includes/minor-release.rst
+
+Select your operating system to view installation instructions for
+MongoDB Community Edition. 
+
+**note:** By default, MongoDB Community Edition does not include MongoDB Search. To use
+   MongoDB Search with MongoDB Community, you must install MongoDB Search with
+   :ref:`Docker <mongot-deployment-using-docker>` or :ref:`Linux
+   <mongot-deployment-on-linux>` separately.
+
+.. _`MongoDB Download Center`: https://www.mongodb.com/try/download/community
+
+
+.. composable-tutorial::
+   :options: operating-system, linux-distribution, linux-package, macos-installation-method, windows-installation-method
+   :defaults: linux, red-hat, default, None, None
+
+   .. selected-content::
+      :selections: linux, red-hat, default, None, None
+
+      .. include::  /includes/installation/install-community-red-hat.rst
+
+      .. include:: /includes/installation/uninstall/uninstall-community-red-hat.rst
+
+   .. selected-content::
+      :selections: linux, red-hat, tarball, None, None
+
+      .. include:: /includes/installation/install-mongodb-on-red-hat-tarball.rst
+
+   .. selected-content::
+      :selections: linux, ubuntu, default, None, None
+
+      .. include:: /includes/installation/install-mongodb-on-ubuntu.rst
+
+      .. include:: /includes/installation/uninstall/uninstall-community-ubuntu.rst
+
+   .. selected-content::
+      :selections: linux, ubuntu, tarball, None, None
+
+      .. include:: /includes/installation/install-mongodb-on-ubuntu-tarball.rst
+
+   .. selected-content::
+      :selections: linux, debian, default, None, None
+
+      .. include:: /includes/installation/install-mongodb-on-debian.rst
+
+      .. include:: /includes/installation/uninstall/uninstall-community-debian.rst
+
+   .. selected-content::
+      :selections: linux, debian, tarball, None, None
+
+      .. include:: /includes/installation/install-mongodb-on-debian-tarball.rst
+
+   .. selected-content::
+      :selections: linux, suse, default, None, None
+
+      .. include:: /includes/installation/install-mongodb-on-suse.rst
+
+      .. include:: /includes/installation/uninstall/uninstall-community-suse.rst
+
+   .. selected-content::
+      :selections: linux, suse, tarball,  None, None
+
+      .. include:: /includes/installation/install-mongodb-on-suse-tarball.rst
+
+   .. selected-content::
+      :selections: linux, amazon, default, None, None
+
+      .. include:: /includes/installation/install-mongodb-on-amazon.rst
+
+      .. include:: /includes/installation/uninstall/uninstall-community-amazon.rst
+
+   .. selected-content::
+      :selections: linux, amazon, tarball, None, None
+
+      .. include:: /includes/installation/install-mongodb-on-amazon-tarball.rst
+
+   .. selected-content::
+      :selections: macos, None, None, homebrew, None
+
+      .. include:: /includes/installation/install-mongodb-on-os-x.rst
+
+   .. selected-content::
+      :selections: macos, None, None, tarball, None
+
+      .. include:: /includes/installation/install-mongodb-on-os-x-tarball.rst
+
+   .. selected-content::
+      :selections: windows, None, None, None, wizard
+
+      .. include:: /includes/installation/install-mongodb-on-windows.rst
+
+   .. selected-content::
+      :selections: windows, None, None, None, msiexec
+
+      .. include:: /includes/installation/install-mongodb-on-windows-unattended.rst
+
+   .. selected-content::
+      :selections: windows, None, None, None, zip
+
+      .. include:: /includes/installation/install-mongodb-on-windows-zip.rst
+
+   .. selected-content::
+      :selections: docker, None, None, None, None
+
+      .. include:: /includes/installation/install-mongodb-community-with-docker.rst
 
 ## Next Steps
 
 After you install MongoDB Community Edition, you can:
 
 - **Get started**: Work through an introductory tutorial. To
-learn more, see `getting-started`.
+  learn more, see :ref:`getting-started`.
 
 - **Deploy a replica set**: Set up replication for high
-availability. To learn how, see `server-replica-set-deploy`.
+  availability. To learn how, see
+  :ref:`server-replica-set-deploy`.
 
 - **Set up access control**: Secure your deployment with
-authentication. To learn how, see `enable-access-control`.
+  authentication. To learn how, see
+  :ref:`enable-access-control`.
 
 - **Review the security checklist**: Confirm your deployment
-follows security best practices. To learn more, see `security-checklist`.
+  follows security best practices. To learn more, see
+  :ref:`security-checklist`.
 
 ## Upgrade Community Edition to Enterprise Edition Tutorials
 
-> **Important:** .. include:: /includes/extracts/enterprise-upgrade-edition-only.rst
+**important:** .. include:: /includes/extracts/enterprise-upgrade-edition-only.rst
 
-- `upgrade_to_enterprise_standalone`
-- `upgrade_to_enterprise_rs`
-- `upgrade_to_enterprise_sharded_cluster`
-## Contents
+- :ref:`upgrade_to_enterprise_standalone`
+- :ref:`upgrade_to_enterprise_rs`
+- :ref:`upgrade_to_enterprise_sharded_cluster`
 
-- </reference/installation-ubuntu-community-troubleshooting>
+**toctree:** :titlesonly:
+   :hidden:
+
+   </reference/installation-ubuntu-community-troubleshooting>

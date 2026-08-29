@@ -1,36 +1,90 @@
 ---
 type: "Framework Learn Page"
-framework: "mongodb"
+framework: "MongoDB"
 source_repo: "https://github.com/mongodb/docs.git"
 source_branch: "main"
 source_path: "content/manual/manual/source/core/sharding-start-with-sharding.txt"
-source_commit: "ab9db26ed3d11618cdb61516d8180337d8e3f679"
-source_commit_short: "ab9db26e"
-source_commit_date: "2026-07-24T16:22:46-06:00"
-generated_at: "2026-07-25T11:51:15Z"
+source_commit: "b9f2bc487a2878b65e3c1f80024bebab76954f27"
+source_commit_short: "b9f2bc48"
+source_commit_date: "2026-08-28T17:09:45-05:00"
+generated_at: "2026-08-29T09:39:19.509194Z"
 ---
-
-===========================
+.. _sharding-start-with-sharding:
 
 # Start with Sharded Clusters
 
-We recommend starting with a single sharded cluster when you are building a new application regardless of your immediate need for multiple shards.
+**meta:** :keywords: on-prem
+
+.. default-domain:: mongodb
+
+**contents:** On this page
+   :local:
+   :backlinks: none
+   :depth: 1
+   :class: singlecol
+
+We recommend starting with a single sharded cluster when you are building 
+a new application regardless of your immediate need for multiple shards. 
 
 The following scenarios benefit from sharded cluster architecture:
+
+.. list-table::
+   :widths: 20 80
+   :header-rows: 1
+
+   * - Use Case
+     - Description
+
+   * - Cost Optimization
+     - Vertical scaling becomes increasingly expensive and less effective as 
+       hardware requirements grow. Horizontal scaling offers more predictable 
+       and cost-effective scaling as resource demands increase. 
+   
+   * - High Concurrent Collection Access
+     - Applications with multiple active collections where resource contention 
+       results in performance bottlenecks. Sharding distributes collections 
+       across dedicated hardware, preventing resource contention. 
+  
+   * - High-Throughput Workloads
+     - Applications with high read/write volumes benefit from distributing 
+       traffic across multiple machines, improving performance and reducing 
+       bottlenecks.
+
+   * - Large Data Sets
+     - If your data volumes grow rapidly or working sets exceed single-server 
+       memory capacity, horizontal scaling ensures sustainable performance by 
+       distributing data across multiple nodes.
+
+   * - Multi-Tenant Environments
+     - Applications serving multiple customers benefit from having dedicated 
+       shards per tenant, providing performance isolation and customized 
+       resource allocation. MongoDB's sharding features enable efficient 
+       multi-tenant architectures.
+
+   * - Global Deployments
+     - When your users are spread across different regions, distributing data 
+       across geographically positioned shards reduces latency and enhances 
+       the user experience.
 
 ## Details
 
 Starting with a sharded cluster is a proactive approach that offers:
 
-- Effortless Horizontal Scaling – You can easily add shards as your application
-grows, without the complexity of migrating from a replica set.
+- Effortless Horizontal Scaling – You can easily add shards as your application 
+  grows, without the complexity of migrating from a replica set.
 
-- Cost-Effective Infrastructure – MongoDB 8.0 introduces
-`config shards <config-shard-concept>`, allowing you to set up a sharded cluster on a single replica set infrastructure without dedicated config servers. In MongoDB Atlas, sharded clusters with up to 3 shards in version 8.0 use config shards by default.
+- Cost-Effective Infrastructure – MongoDB 8.0 introduces 
+  :ref:`config shards <config-shard-concept>`, allowing you to set up a sharded 
+  cluster on a single replica set infrastructure without dedicated config 
+  servers. In MongoDB Atlas, sharded clusters with up to 3 shards in version 
+  8.0 use config shards by default.
 
-Consider adding shards when your database reaches 60-70% of resource utilization (RAM, vCPUs, or storage) of a sizable machine. For example, in Atlas, consistent 60-70% resource utilization of an M60 machine with a 4 TB disk indicates an additional shard should be added.
+Consider adding shards when your database reaches 60-70% of resource 
+utilization (RAM, vCPUs, or storage) of a sizable machine. For example, in 
+Atlas, consistent 60-70% resource utilization of an M60 machine with a 4 TB 
+disk indicates an additional shard should be added.
 
 ## Learn More
 
-- `sharding-manage-unsharded-collections`
-- `sharding-distribute-collection-data`
+- :ref:`sharding-manage-unsharded-collections`
+- :ref:`sharding-distribute-collection-data`

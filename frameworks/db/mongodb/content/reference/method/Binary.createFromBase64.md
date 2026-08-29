@@ -1,18 +1,27 @@
 ---
 type: "Framework Learn Page"
-framework: "mongodb"
+framework: "MongoDB"
 source_repo: "https://github.com/mongodb/docs.git"
 source_branch: "main"
 source_path: "content/manual/manual/source/reference/method/Binary.createFromBase64.txt"
-source_commit: "ab9db26ed3d11618cdb61516d8180337d8e3f679"
-source_commit_short: "ab9db26e"
-source_commit_date: "2026-07-24T16:22:46-06:00"
-generated_at: "2026-07-25T11:51:15Z"
+source_commit: "b9f2bc487a2878b65e3c1f80024bebab76954f27"
+source_commit_short: "b9f2bc48"
+source_commit_date: "2026-08-28T17:09:45-05:00"
+generated_at: "2026-08-29T09:39:19.974958Z"
 ---
-
-==========================================
+.. _Binary.createFromBase64:
 
 # Binary.createFromBase64() (mongosh method)
+
+**meta:** :description: Create binary objects from base64 values using `Binary.createFromBase64()` in MongoDB.
+
+.. default-domain:: mongodb
+
+**contents:** On this page
+   :local:
+   :backlinks: none
+   :depth: 1
+   :class: singlecol
 
 ## Definition
 
@@ -20,53 +29,81 @@ Creates a binary object from a base64 value.
 
 ## Compatibility
 
-This method is available in deployments hosted in the following environments:
+This method is available in deployments hosted in the following environments: 
 
-.. include:: /includes/fact-environments-atlas-only.rst
+**include:** /includes/fact-environments-atlas-only.rst
 
-.. include:: /includes/fact-environments-onprem-only.rst
+**include:** /includes/fact-environments-onprem-only.rst
 
 ## Syntax
+
+**method:** Binary.createFromBase64( <base64String> [ , <subType> ] )
 
 ### Method Fields
 
 The method accepts the following fields:
 
+.. list-table::
+   :header-rows: 1
+   :widths: 20 20 80
+
+   * - Field
+     - Type
+     - Description
+
+   * - ``base64String``
+     - String
+     - Specifies a string that contains a base64 value. For example,
+       ``"SGVsbG8gV29ybGQhCg=="``.
+
+   * - ``subType``
+     - Integer
+     - Optional. Specifies a binary subtype.
+
+       .. include:: /includes/binary-sub-types.rst
+
 ## Examples
 
-The following examples show how to add a binary object to a document using `Binary.createFromBase64()` and how the binary object appears in the output when retrieved.
+The following examples show how to add a binary object to a document
+using ``Binary.createFromBase64()`` and how the binary object appears in
+the output when retrieved.
 
 ### Create Collection Containing Document with Binary Object
 
-The following example creates a collection named `binaryObjectsFromBase64`:
+The following example creates a collection named
+``binaryObjectsFromBase64``:
 
-```javascript
-db.binaryObjectsFromBase64.insertOne( {
-   _id: 0,
-   binaryObject: Binary.createFromBase64( "SGVsbG8gV29ybGQhCg==" )
-} )
-```
+.. code-block:: javascript
+   :emphasize-lines: 3
 
-The `binaryObject` field contains the binary object created from the string specified in `Binary.createFromBase64()`.
+   db.binaryObjectsFromBase64.insertOne( {
+      _id: 0,
+      binaryObject: Binary.createFromBase64( "SGVsbG8gV29ybGQhCg==" )
+   } )
+
+The ``binaryObject`` field contains the binary object created from the
+string specified in ``Binary.createFromBase64()``.
 
 ### Retrieve Document from Collection with Binary Object
 
 The following example retrieves the document:
 
-```javascript
-db.binaryObjectsFromBase64.findOne( { _id: 0 } )
-```
+.. code-block:: javascript
 
-> **Note:** Starting in :binary:`mongosh` 2.0.0, binary objects are shown
-as `Binary.createFromBase64( <base64String> )` values instead of
-`Binary( Buffer.from( <base64String> ) )` values. This only changes
-the display of binary values.
+   db.binaryObjectsFromBase64.findOne( { _id: 0 } )
 
-Example output, starting in `mongosh` 2.0.0:
+**note:** Starting in :binary:`mongosh` 2.0.0, binary objects are shown
+   as ``Binary.createFromBase64( <base64String> )`` values instead of
+   ``Binary( Buffer.from( <base64String> ) )`` values. This only changes
+   the display of binary values.
 
-```javascript
-{
-   _id: 0,
-   binaryObject: Binary.createFromBase64("SGVsbG8gV29ybGQhCg==")
-}
-```
+Example output, starting in ``mongosh`` 2.0.0:
+
+.. code-block:: javascript
+   :copyable: false
+   :emphasize-lines: 3
+
+   {
+      _id: 0,
+      binaryObject: Binary.createFromBase64("SGVsbG8gV29ybGQhCg==")
+   }

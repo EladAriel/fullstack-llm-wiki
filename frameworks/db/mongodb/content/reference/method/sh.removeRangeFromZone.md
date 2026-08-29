@@ -1,97 +1,185 @@
 ---
 type: "Framework Learn Page"
-framework: "mongodb"
+framework: "MongoDB"
 source_repo: "https://github.com/mongodb/docs.git"
 source_branch: "main"
 source_path: "content/manual/manual/source/reference/method/sh.removeRangeFromZone.txt"
-source_commit: "ab9db26ed3d11618cdb61516d8180337d8e3f679"
-source_commit_short: "ab9db26e"
-source_commit_date: "2026-07-24T16:22:46-06:00"
-generated_at: "2026-07-25T11:51:15Z"
+source_commit: "b9f2bc487a2878b65e3c1f80024bebab76954f27"
+source_commit_short: "b9f2bc48"
+source_commit_date: "2026-08-28T17:09:45-05:00"
+generated_at: "2026-08-29T09:39:19.934326Z"
 ---
-
-=========================================
-
 # sh.removeRangeFromZone() (mongosh method)
+
+**meta:** :description: Remove the association between a range of shard key values and a zone using `sh.removeRangeFromZone()`.
+
+.. default-domain:: mongodb
+
+**contents:** On this page
+   :local:
+   :backlinks: none
+   :depth: 1
+   :class: singlecol
 
 ## Definition
 
+**method:** sh.removeRangeFromZone(namespace, minimum, maximum)
+
+   Removes the association between a range of shard key values and a
+   :term:`zone`.
+
+   ``sh.removeRangeFromZone()`` takes the following fields:
+
+
+   .. list-table::
+      :header-rows: 1
+      :widths: 20 20 80
+   
+      * - Parameter
+   
+        - Type
+   
+        - Description
+   
+      * - ``namespace``
+   
+        - string
+   
+        - The :term:`namespace` of the sharded collection to associate with the zone.
+          
+          The collection must be sharded for the operation to succeed.
+          
+          
+   
+      * - ``minimum``
+   
+        - document
+   
+        - The inclusive lower bound of the range of :term:`shard key` values. 
+          
+          Specify each field of the shard key in the form of ``<fieldname> : <value>``.
+          The value must be of the same BSON type or types as the shard key.
+          
+          
+   
+      * - ``maximum``
+   
+        - document
+   
+        - The exclusive upper bound of the range of :term:`shard key` values. 
+          
+          Specify each field of the shard key in the form of ``<fieldname> : <value>``.
+          The value must be of the same BSON type or types as the shard key.
+
+
+   Use ``sh.removeRangeFromZone()`` to remove the association between
+   unused, out of date, or conflicting shard key ranges and a zone.
+
+   If no range matches the minimum and maximum bounds passed to
+   ``sh.removeRangeFromZone()``, nothing is removed.
+
+   Only run ``sh.removeRangeFromZone()`` when connected to a
+   :binary:`~bin.mongos` instance.
+
 ## Compatibility
 
-This method is available in deployments hosted in the following environments:
+This method is available in deployments hosted in the following environments: 
 
-.. include:: /includes/fact-environments-atlas-only.rst
+**include:** /includes/fact-environments-atlas-only.rst
 
-.. include:: /includes/fact-environments-atlas-support-no-free.rst
+**include:** /includes/fact-environments-atlas-support-no-free.rst
 
-.. include:: /includes/fact-environments-onprem-only.rst
+**include:** /includes/fact-environments-onprem-only.rst
 
 ## Behavior
 
-`sh.removeRangeFromZone()` doesn't remove the association between a zone and a shard. It also doesn't remove the zone itself.
+``sh.removeRangeFromZone()`` doesn't remove the association between
+a zone and a shard. It also doesn't remove the zone itself.
 
-See the `zone <zone-sharding>` manual page for more information on zones in sharded clusters.
+See the :ref:`zone <zone-sharding>` manual page for more information on zones
+in sharded clusters.
 
 ### Balancer
 
-Removing the association between a range and a zone removes the constraints keeping chunks covered by the range on the shards inside that zone. During the next balancer round, the balancer may migrate chunks that were previously covered by the zone.
+Removing the association between a range and a zone removes the constraints
+keeping chunks covered by the range on the shards inside that zone. During the
+next balancer round, the balancer may migrate chunks that were previously
+covered by the zone.
 
-See the documentation for the `sharded cluster balancer <sharding-balancing>` for more information on how migrations work in a sharded cluster.
+See the documentation for the :ref:`sharded cluster balancer
+<sharding-balancing>` for more information on how migrations work in a sharded
+cluster.
 
 ### Security
 
-For sharded clusters running with `authentication <authentication>`, you must authenticate as either:
+For sharded clusters running with :ref:`authentication <authentication>`, you
+must authenticate as either:
 
 - a user whose privileges include the specified actions on various
-collections in the `config` database:
+  collections in the ``config`` database:
 
-- :authaction:`find` on the `config.shards` collection
-- :authaction:`find`, :authaction:`update`, and :authaction:`remove`
-on the `config.tags` collection;
+  - :authaction:`find` on the ``config.shards`` collection
 
-or, alternatively
+  - :authaction:`find`, :authaction:`update`, and :authaction:`remove`
+    on the ``config.tags`` collection;
+    
+  or, alternatively
 
 - a user whose privileges include :authaction:`enableSharding` on the
-`cluster <resource-specific-collection>` resource.
+  :ref:`cluster <resource-specific-collection>` resource.
 
-The :authrole:`clusterAdmin` or :authrole:`clusterManager` built-in roles have the appropriate permissions for running `sh.removeRangeFromZone()`. See the documentation page for `Role-Based Access Control <authorization>` for more information.
+The :authrole:`clusterAdmin` or :authrole:`clusterManager` built-in roles have
+the appropriate permissions for running ``sh.removeRangeFromZone()``.
+See the documentation page for :ref:`Role-Based Access Control
+<authorization>` for more information.
 
 ## Example
 
-Given a sharded collection `exampledb.collection` with a shard key of `{ a : 1 }`, the following operation removes the range with a lower bound of `1` and an upper bound of `10`:
+Given a sharded collection ``exampledb.collection`` with a shard key of ``{ a
+: 1 }``, the following operation removes the range with a lower bound of ``1``
+and an upper bound of ``10``:
 
-```javascript
-sh.removeRangeFromZone( "exampledb.collection",
-                { a : 1 },
-                { a : 10 }
-              )
-```
+.. code-block:: javascript
 
-The `min` and `max` must match exactly the bounds of the target range. The following operation attempts to remove the previously created range, but specifies `{ a : 0 }` as the `min` bound:
+   sh.removeRangeFromZone( "exampledb.collection",
+                   { a : 1 },
+                   { a : 10 }
+                 )
 
-```javascript
-admin = db.getSiblingDB("admin")
-admin.runCommand(
-   {
-      updateZoneKeyRange : "exampledb.collection",
-      min : { a : 0 },
-      max : { a : 10 },
-      zone : null
-   }
-)
-```
+The ``min`` and ``max`` must match exactly the bounds of the target range.
+The following operation attempts to remove the previously created range, but
+specifies ``{ a : 0 }`` as the ``min`` bound:
 
-While the range of `{ a : 0 }` and `{ a : 10 }` encompasses the existing range, it is not an exact match and therefore `sh.removeRangeFromZone()` does not remove anything.
+.. code-block:: javascript
+
+   admin = db.getSiblingDB("admin")
+   admin.runCommand(
+      {
+         updateZoneKeyRange : "exampledb.collection",
+         min : { a : 0 },
+         max : { a : 10 },
+         zone : null
+      }
+   )
+
+While the range of ``{ a : 0 }`` and ``{ a : 10 }`` encompasses the existing
+range, it is not an exact match and therefore
+``sh.removeRangeFromZone()`` does not remove anything.
 
 ### Compound Shard Key
 
-Given a sharded collection `exampledb.collection` with a shard key of `{ a : 1, b : 1 }`, the following operation removes the range with a lower bound of `{ a : 1, b : 1}` and an upper bound of `{ a : 10, b : 10 }`:
+Given a sharded collection ``exampledb.collection`` with a shard key of 
+``{ a : 1, b : 1 }``, the following operation removes the range with a lower
+bound of ``{ a : 1, b : 1}`` and an upper bound of ``{ a : 10, b : 10 }``:
 
-```javascript
-sh.removeRangeFromZone( "exampledb.collection",
-                { a : 1, b : 1 },
-                { a : 10, b : 10 }
-              )
-```
+.. code-block:: javascript
 
-Given the previous example, if there was an existing range with a lower bound of `{ a : 1, b : 5 }` and an upper bound of `{ a : 10, b : 1 }`, the operation would not remove that range, as it is not an exact match of the minimum and maximum passed to `sh.removeRangeFromZone()`.
+   sh.removeRangeFromZone( "exampledb.collection",
+                   { a : 1, b : 1 },
+                   { a : 10, b : 10 }
+                 )
+                 
+Given the previous example, if there was an existing range with a lower bound
+of ``{ a : 1, b : 5 }`` and an upper bound of ``{ a : 10, b : 1 }``, the
+operation would *not* remove that range, as it is not an exact match of the
+minimum and maximum passed to ``sh.removeRangeFromZone()``.

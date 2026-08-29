@@ -1,14 +1,15 @@
 ---
 type: "Framework Learn Page"
-framework: "redis"
+framework: "Redis"
 source_repo: "https://github.com/redis/docs.git"
 source_branch: "main"
 source_path: "content/operate/rs/8.0/references/rest-api/objects/cluster/_index.md"
-source_commit: "9d30f68c3dad1a6b3b7d30fe604b911348ce8152"
-source_commit_short: "9d30f68c"
-source_commit_date: "2026-07-24T10:52:10-07:00"
-generated_at: "2026-07-25T11:51:22Z"
+source_commit: "f8693349287b0efbef3c865b6f6a2aceca88594d"
+source_commit_short: "f869334"
+source_commit_date: "2026-08-28T10:01:19-05:00"
+generated_at: "2026-08-29T09:38:55.696593Z"
 ---
+# _Index
 
 ---
 Title: Cluster object
@@ -87,7 +88,7 @@ An API object that represents the cluster.
 | proxy_certificate | string | Cluster's proxy certificate |
 | <span class="break-all">proxy_max_ccs_disconnection_time</span> | integer | Cluster-wide proxy timeout policy between proxy and CCS |
 | rack_aware | boolean | Cluster operates in a rack-aware mode (read-only) |
-| reserved_ports | array of strings | List of reserved ports and/or port ranges to avoid using for database endpoints (for example `"reserved_ports": ["11000", "13000-13010"]`) |
+| reserved_ports | array of strings | Ports and port ranges that the cluster does not use for database endpoints or internal shard traffic (for example `"reserved_ports": ["11000", "13000-13010", "20048"]`) |
 | <span class="break-all">replica_sconns_on_demand</span> | "enabled"<br />"disabled"<br />**"auto"** | Reduces DMC internode connections by at least 50%, conserving sockets, file descriptors, and `KEEPALIVE` traffic |
 | robust_crdt_syncer | boolean (default: false) | If `true`, enables the robust syncer for Active-Active databases |
 | s3_ca_cert | string | Filepath to the PEM-encoded CA certificate to use for validating TLS connections to the S3 server |

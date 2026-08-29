@@ -1,14 +1,15 @@
 ---
 type: "Framework Learn Page"
-framework: "redis"
+framework: "Redis"
 source_repo: "https://github.com/redis/docs.git"
 source_branch: "main"
 source_path: "content/develop/clients/client-side-caching.md"
-source_commit: "9d30f68c3dad1a6b3b7d30fe604b911348ce8152"
-source_commit_short: "9d30f68c"
-source_commit_date: "2026-07-24T10:52:10-07:00"
-generated_at: "2026-07-25T11:51:22Z"
+source_commit: "f8693349287b0efbef3c865b6f6a2aceca88594d"
+source_commit_short: "f869334"
+source_commit_date: "2026-08-28T10:01:19-05:00"
+generated_at: "2026-08-29T09:38:55.802269Z"
 ---
+# Client Side Caching
 
 ---
 aliases:
@@ -32,6 +33,7 @@ relatedPages:
 - /develop/clients/redis-py/connect#connect-using-client-side-caching
 - /develop/clients/nodejs/connect#connect-using-client-side-caching
 - /develop/clients/jedis/connect#connect-using-client-side-caching
+- /develop/clients/go/connect#connect-using-client-side-caching
 topics:
 - client-side-caching
 - performance
@@ -104,6 +106,7 @@ The following client libraries support CSC from the stated version onwards:
 | [`redis-py`]({{< relref "/develop/clients/redis-py/connect#connect-using-client-side-caching" >}}) | v5.1.0 |
 | [`Jedis`]({{< relref "/develop/clients/jedis/connect#connect-using-client-side-caching" >}}) | v5.2.0 |
 | [`node-redis`]({{< relref "/develop/clients/nodejs/connect#connect-using-client-side-caching" >}}) | v5.1.0 |
+| [`go-redis`]({{< relref "/develop/clients/go/connect#connect-using-client-side-caching" >}}) | v9.22.0 |
 
 Note that some other clients support the [`CLIENT TRACKING`]({{< relref "/commands/client-tracking" >}}) command to configure CSC on the server, but this does not mean they support the
 features required for CSC themselves.

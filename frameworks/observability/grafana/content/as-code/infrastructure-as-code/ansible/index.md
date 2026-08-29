@@ -1,7 +1,7 @@
 ---
 type: "Framework Learn Directory Index"
 framework: "Grafana"
-generated_at: "2026-07-25T19:08:09.147627Z"
+generated_at: "2026-08-29T09:39:37.616964Z"
 ---
 # Ansible
 
@@ -18,3 +18,7 @@ This directory contains Grafana learning pages related to ansible.
 ## Pages in This Directory
 
 - [_Index](_index.md)
+
+## Subdirectories
+
+- [Ansible Cloud Stack](ansible-cloud-stack/index.md)

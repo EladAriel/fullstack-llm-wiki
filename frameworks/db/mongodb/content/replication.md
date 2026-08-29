@@ -1,196 +1,352 @@
 ---
 type: "Framework Learn Page"
-framework: "mongodb"
+framework: "MongoDB"
 source_repo: "https://github.com/mongodb/docs.git"
 source_branch: "main"
 source_path: "content/manual/manual/source/replication.txt"
-source_commit: "ab9db26ed3d11618cdb61516d8180337d8e3f679"
-source_commit_short: "ab9db26e"
-source_commit_date: "2026-07-24T16:22:46-06:00"
-generated_at: "2026-07-25T11:51:15Z"
+source_commit: "b9f2bc487a2878b65e3c1f80024bebab76954f27"
+source_commit_short: "b9f2bc48"
+source_commit_date: "2026-08-28T17:09:45-05:00"
+generated_at: "2026-08-29T09:39:19.479659Z"
 ---
-
-===========
+.. _replication:
 
 # Replication
 
-A replica set in MongoDB is a group of :binary:`~bin.mongod` processes that maintain the same data set. Replica sets provide redundancy and `high availability`, and are the basis for all production deployments. This section introduces replication in MongoDB and the components and architecture of replica sets. The section also provides tutorials for common tasks related to replica sets.
+.. default-domain:: mongodb
+
+**facet:** :name: genre
+   :values: reference
+
+**meta:** :description: Replica sets in MongoDB provide redundancy and high availability for your data. Learn about replication architecture, automatic failover, and read scaling.
+
+**contents:** On this page
+   :local:
+   :backlinks: none
+   :depth: 1
+   :class: singlecol
+
+.. dismissible-skills-card::
+   :skill: Cluster Reliability  
+   :url: https://learn.mongodb.com/skills?openTab=performance+at+scale
+
+A *replica set* in MongoDB is a group of :binary:`~bin.mongod` processes
+that maintain the same data set. Replica sets provide redundancy and
+:term:`high availability`, and are the basis for all production 
+deployments. This section introduces replication in MongoDB and
+the components and architecture of replica sets. The section also 
+provides tutorials for common tasks related to replica sets.
+
+.. |page-topic| replace:: :atlas:`deploy a replica set in the UI </tutorial/create-new-cluster/>`
+
+.. cta-banner::
+   :url: https://www.mongodb.com/docs/atlas/tutorial/create-new-cluster/
+   :icon: Cloud
+
+   .. include:: /includes/fact-atlas-compatible.rst
 
 ## Redundancy and Data Availability
 
-Replication provides redundancy and `data availability <high availability>`, maintaining multiple copies of data across database servers to tolerate the loss of any single server.
+Replication provides redundancy and
+:term:`data availability <high availability>`,
+maintaining multiple copies of data across database servers
+to tolerate the loss of any single server.
 
-In some cases, replication can provide increased read capacity as clients can send read operations to different servers. Maintaining copies of data in different data centers can increase data locality and availability for distributed applications. You can also maintain additional copies for dedicated purposes, such as disaster recovery, reporting, or backup.
+In some cases, replication can provide increased read capacity as
+clients can send read operations to different servers. Maintaining
+copies of data in different data centers can increase data locality
+and availability for distributed applications. You can also maintain
+additional copies for dedicated purposes, such as disaster recovery,
+reporting, or backup.
+
+.. _replica-set:
 
 ## Replication in MongoDB
 
-A replica set is a group of :binary:`~bin.mongod` instances that maintain the same data set. A replica set contains several data bearing nodes and optionally one arbiter node. Of the data bearing nodes, one and only one member is deemed the primary node, while the other nodes are deemed secondary nodes.
+A replica set is a group of :binary:`~bin.mongod` instances that maintain
+the same data set. A replica set contains several data bearing nodes
+and optionally one arbiter node. Of the data bearing nodes, one and
+only one member is deemed the primary node, while the other nodes are
+deemed secondary nodes.
 
-.. include:: /includes/replica-set-nodes-cannot-be-shared.rst
+**include:** /includes/replica-set-nodes-cannot-be-shared.rst
 
-The `primary node <replica-set-primary>` receives all write operations. A replica set can have only one primary capable of confirming writes with :writeconcern:`{ w: "majority" } <"majority">` write concern, although in some circumstances, another mongod instance may transiently believe itself to also be primary. [#edge-cases-2-primaries]_ The primary records all changes to its data sets in its operation log, that is, the `oplog </core/replica-set-oplog>`. For more information on primary node operation, see `/core/replica-set-primary`.
+The :ref:`primary node <replica-set-primary>` receives all write
+operations. A replica set can have only one primary capable of
+confirming writes with :writeconcern:`{ w: "majority" } <"majority">`
+write concern, although in some circumstances, another mongod instance
+may transiently believe itself to also be primary.
+[#edge-cases-2-primaries]_ The primary records all changes to its data
+sets in its operation log, that is, the :doc:`oplog
+</core/replica-set-oplog>`. For more information on primary node
+operation, see :doc:`/core/replica-set-primary`.
 
-.. include:: /images/replica-set-read-write-operations-primary.rst
+**include:** /images/replica-set-read-write-operations-primary.rst
 
-The `secondaries <replica-set-secondary-members-ref>` replicate the primary's oplog and apply the operations to their data sets such that the secondaries' data sets reflect the primary's data set. If the primary is unavailable, an eligible secondary holds an election to select a new primary. For more information on secondary members, see `/core/replica-set-secondary`.
+The :ref:`secondaries <replica-set-secondary-members-ref>` replicate the
+primary's oplog and apply the operations to their data sets such that
+the secondaries' data sets reflect the primary's data set. If the
+primary is unavailable, an eligible secondary holds an election to
+select a new primary. For more information on secondary
+members, see :doc:`/core/replica-set-secondary`.
 
-.. include:: /images/replica-set-primary-with-two-secondaries.rst
+**include:** /images/replica-set-primary-with-two-secondaries.rst
 
-If cost constraints prevent adding another secondary, you may add a :binary:`~bin.mongod` instance to a replica set as an `arbiter <replica-set-arbiter-configuration>`. An arbiter participates in `elections <replica-set-elections>` but does not hold data (that is, does not provide data redundancy). For more information on arbiters, see `/core/replica-set-arbiter`.
+If cost constraints prevent adding another secondary, you may add a
+:binary:`~bin.mongod` instance to a replica set as an
+:ref:`arbiter <replica-set-arbiter-configuration>`. An arbiter participates in
+:ref:`elections <replica-set-elections>` but does not hold data (that is,
+does not provide data redundancy). For more information on arbiters,
+see :doc:`/core/replica-set-arbiter`.
 
-.. include:: /images/replica-set-primary-with-secondary-and-arbiter.rst
+**include:** /images/replica-set-primary-with-secondary-and-arbiter.rst
 
-An `arbiter <replica-set-arbiter-configuration>` is always an arbiter whereas a `primary <replica-set-primary>` may step down and become a `secondary <replica-set-secondary-members-ref>` and a secondary may become the primary during an election.
+An :ref:`arbiter <replica-set-arbiter-configuration>` is always an arbiter
+whereas a :ref:`primary <replica-set-primary>` may step down and
+become a :ref:`secondary <replica-set-secondary-members-ref>` and a
+secondary may become the primary during an election.
+
+.. _asynchronous-replication:
 
 ## Asynchronous Replication
 
-Secondaries replicate the primary's oplog and apply the operations to their data sets asynchronously. By having the secondaries' data sets reflect the primary's data set, the replica set can continue to function despite the failure of one or more members.
+Secondaries replicate the primary's oplog and apply the operations to
+their data sets asynchronously. By having the secondaries' data sets
+reflect the primary's data set, the replica set can continue to
+function despite the failure of one or more members.
 
-For more information on replication mechanics, see `replica-set-oplog` and `replica-set-sync`.
+For more information on replication mechanics, see
+:ref:`replica-set-oplog` and :ref:`replica-set-sync`.
+
 
 ### Slow Operations
 
-.. include:: /includes/extracts/4.2-changes-slow-oplog-log-message-footnote.rst
+**include:** /includes/extracts/4.2-changes-slow-oplog-log-message-footnote.rst
+
+.. _replication-flow-control:
 
 ### Replication Lag and Flow Control
 
-`Replication lag <replication lag>` is a delay between an operation on the `primary` and the application of that operation from the `oplog` to the `secondary`. Some small delay period may be acceptable, but significant problems emerge as replication lag grows, including building cache pressure on the primary.
+:term:`Replication lag <replication lag>` is a delay between an operation on the 
+:term:`primary` and the application of that operation from the :term:`oplog` to 
+the :term:`secondary`. Some small delay period may be
+acceptable, but significant problems emerge as replication lag grows,
+including building cache pressure on the primary.
 
-.. include:: /includes/extracts/4.2-changes-flow-control-general-desc.rst
+**include:** /includes/extracts/4.2-changes-flow-control-general-desc.rst
 
-.. include:: /includes/extracts/4.2-changes-flow-control-specific-desc.rst
+**include:** /includes/extracts/4.2-changes-flow-control-specific-desc.rst
+ 
+For more information, see :ref:`replica-set-replication-lag` and
+:ref:`flow-control`.
 
-For more information, see `replica-set-replication-lag` and `flow-control`.
+.. _replication-auto-failover:
 
 ## Automatic Failover
 
-When a primary does not communicate with the other members of the set for more than the configured :rsconf:`~settings.electionTimeoutMillis` period (10 seconds by default), an eligible secondary calls for an election to nominate itself as the new primary.
+When a primary does not communicate with the other members of the set
+for more than the configured :rsconf:`~settings.electionTimeoutMillis`
+period (10 seconds by default), an eligible secondary calls for an
+election to nominate itself as the new primary.
 
-.. include:: /images/replica-set-trigger-election.rst
+**include:** /images/replica-set-trigger-election.rst
 
-.. include:: /includes/fact-election-latency.rst
+**include:** /includes/fact-election-latency.rst
 
-Lowering the :rsconf:`~settings.electionTimeoutMillis` replication configuration option from the default `10000` (10 seconds) can result in faster detection of primary failure. However, the cluster may call elections more frequently due to factors such as temporary network latency even if the primary is otherwise healthy. This can result in increased `rollbacks <replica-set-rollback>` for `w : 1 <wc-w>` write operations.
+Lowering the :rsconf:`~settings.electionTimeoutMillis`
+replication configuration option from the default ``10000`` (10 seconds)
+can result in faster detection of primary failure. However,
+the cluster may call elections more frequently due to factors such as
+temporary network latency even if the primary is otherwise healthy.
+This can result in increased :ref:`rollbacks <replica-set-rollback>` for
+:ref:`w : 1 <wc-w>` write operations.
 
-.. include:: /includes/fact-retryable-writes-failover-election.rst
+**include:** /includes/fact-retryable-writes-failover-election.rst
 
-MongoDB provides `mirrored reads <mirrored-reads>` to pre-warm electable secondary members' cache with the most recently accessed data. Pre-warming the cache of a secondary can help restore performance more quickly after an election.
+MongoDB provides :ref:`mirrored reads <mirrored-reads>` to pre-warm electable 
+secondary members' cache with the most recently accessed data. Pre-warming the 
+cache of a secondary can help restore performance more quickly after an 
+election.
 
 To learn more about MongoDB's failover process, see:
 
-- `replica-set-elections`
-- `retryable-writes`
-- `replica-set-rollback`
+- :ref:`replica-set-elections`
+- :ref:`retryable-writes`
+- :ref:`replica-set-rollback`
+
+
 ## Read Operations
 
 ### Read Preference
 
-By default, clients read from the primary [#edge-cases-2-primaries]_; however, clients can specify a `read preference </core/read-preference>` to send read operations to secondaries.
+By default, clients read from the primary [#edge-cases-2-primaries]_;
+however, clients can specify a :doc:`read preference
+</core/read-preference>` to send read operations to secondaries.
 
-.. include:: /images/replica-set-read-preference-secondary.rst
+**include:** /images/replica-set-read-preference-secondary.rst
 
-`Asynchronous replication <asynchronous-replication>` to secondaries means that reads from secondaries may return data that does not reflect the state of the data on the primary.
+:ref:`Asynchronous replication <asynchronous-replication>` to
+secondaries means that reads from secondaries may return data that does
+not reflect the state of the data on the primary. 
 
-.. include:: /includes/extracts/transactions-read-pref.rst
+**include:** /includes/extracts/transactions-read-pref.rst
 
-For information on reading from replica sets, see `/core/read-preference`.
+For information on reading from replica sets, see
+:doc:`/core/read-preference`.
 
 ### Data Visibility
 
-.. include:: /includes/extracts/concurrent-operations-read-uncommitted.rst
+**include:** /includes/extracts/concurrent-operations-read-uncommitted.rst
 
-For more information on read isolations, consistency and recency for MongoDB, see `/core/read-isolation-consistency-recency`.
+For more information on read isolations, consistency and recency for
+MongoDB, see :doc:`/core/read-isolation-consistency-recency`.
+
+.. _mirrored-reads:
 
 ### Mirrored Reads
 
-Mirrored reads reduce the impact of primary elections by pre-warming the caches of :rsconf:`electable <members[n].priority>` secondary replica set members before a failover occurs. The primary mirrors a sample of the `supported operations <mirrored-reads-supported-operations>` it receives to electable secondaries.
+Mirrored reads reduce the impact of primary elections by pre-warming
+the caches of :rsconf:`electable <members[n].priority>` secondary
+replica set members before a failover occurs. The primary mirrors a
+sample of the :ref:`supported operations
+<mirrored-reads-supported-operations>` it receives to electable
+secondaries.
 
-The size of the subset of :rsconf:`electable <members[n].priority>` secondary replica set members that receive mirrored reads can be configured with the :parameter:`mirrorReads <mirrorReads>` parameter. See `Enable/Disable Support for Mirrored Reads <mirrored-reads-parameters>` for further details.
+The size of the subset of :rsconf:`electable <members[n].priority>`
+secondary replica set members that receive mirrored reads can be
+configured with the :parameter:`mirrorReads <mirrorReads>`
+parameter. See :ref:`Enable/Disable Support for Mirrored Reads
+<mirrored-reads-parameters>` for further details.
 
-> **Note:** Mirrored reads do not affect the primary's response to the client.
-The reads that the primary mirrors to secondaries are
-"fire-and-forget" operations. The primary doesn't await responses.
+**note:** Mirrored reads do not affect the primary's response to the client.
+   The reads that the primary mirrors to secondaries are
+   "fire-and-forget" operations. The primary doesn't await responses.
 
-Targeted Mirrored Reads ```````````````````````
+.. _targeted-mirrored-reads:
 
-.. include:: /includes/sharding/targeted-mirror-reads-overview.rst
+### Targeted Mirrored Reads
 
-Supported Operations ````````````````````
+**include:** /includes/sharding/targeted-mirror-reads-overview.rst
+
+.. _mirrored-reads-supported-operations:
+
+### Supported Operations
 
 Mirrored reads support the following operations:
 
 - :dbcommand:`count`
+
 - :dbcommand:`distinct`
+
 - :dbcommand:`find`
+
 - :dbcommand:`findAndModify` (Specifically, the filter is sent as a
-mirrored read)
+  mirrored read)
 
 - :dbcommand:`update` (Specifically, the filter is sent as a mirrored
-read)
+  read)
 
-Enable/Disable Support for Mirrored Reads `````````````````````````````````````````
+.. _mirrored-reads-parameters:
 
-Mirrored reads are enabled by default and use a default :parameter:`sampling rate <mirrorReads>` of `0.01`. To disable mirrored reads, set the :parameter:`mirrorReads` parameter to `{ samplingRate: 0.0 }`:
+### Enable/Disable Support for Mirrored Reads
 
-```javascript
-db.adminCommand( {
-  setParameter: 1,
-  mirrorReads: { samplingRate: 0.0 }
-} )
-```
+Mirrored reads are enabled by default and use a default 
+:parameter:`sampling rate <mirrorReads>` of ``0.01``. To disable
+mirrored reads, set the :parameter:`mirrorReads` parameter to ``{
+samplingRate: 0.0 }``:
 
-With a sampling rate greater than `0.0`, the primary mirrors `supported reads <mirrored-reads-supported-operations>` to a subset of :rsconf:`electable <members[n].priority>` secondaries. With a sampling rate of `0.01`, the primary mirrors one percent of the supported reads it receives to a selection of electable secondaries.
+.. code-block:: javascript
 
-For example, consider a replica set that consists of one primary and two electable secondaries. If the primary receives `1000` operations that can be mirrored and the sampling rate is `0.01`, the primary mirrors about `10` supported reads to a randomly chosen selection of electable secondaries.
+   db.adminCommand( {
+     setParameter: 1,
+     mirrorReads: { samplingRate: 0.0 }
+   } )
 
-Change the Sampling Rate for Mirrored Reads ```````````````````````````````````````````
+With a sampling rate greater than ``0.0``, the primary mirrors
+:ref:`supported reads <mirrored-reads-supported-operations>` to a subset
+of :rsconf:`electable <members[n].priority>` secondaries. With a sampling rate 
+of ``0.01``, the primary mirrors one percent of the supported reads it receives 
+to a selection of electable secondaries.
 
-To change the sampling rate for mirrored reads, set the :parameter:`mirrorReads` parameter to a number between `0.0` and `1.0`:
+For example, consider a replica set that consists of one primary and two
+electable secondaries. If the primary receives ``1000`` operations that
+can be mirrored and the sampling rate is ``0.01``, the primary mirrors
+about ``10`` supported reads to a randomly chosen selection of electable
+secondaries.
 
-- A sampling rate of `0.0` disables mirrored reads.
-- A sampling rate of a number between `0.0` and `1.0` results in
-the primary forwarding a random sample of the `supported reads <mirrored-reads-supported-operations>` at the specified sample rate to electable secondaries.
+### Change the Sampling Rate for Mirrored Reads
 
-- A sampling rate of `1.0` results in the primary forwarding all
-`supported reads <mirrored-reads-supported-operations>` to electable secondaries.
+To change the sampling rate for mirrored reads, set the
+:parameter:`mirrorReads` parameter to a number between ``0.0`` and
+``1.0``:
+
+- A sampling rate of ``0.0`` disables mirrored reads.
+- A sampling rate of a number between ``0.0`` and ``1.0`` results in
+  the primary forwarding a random sample of the :ref:`supported reads
+  <mirrored-reads-supported-operations>` at the specified sample rate to
+  electable secondaries.
+- A sampling rate of ``1.0`` results in the primary forwarding all
+  :ref:`supported reads <mirrored-reads-supported-operations>` to
+  electable secondaries.
 
 For details, see :parameter:`mirrorReads`.
 
-Mirrored Reads Metrics ``````````````````````
+### Mirrored Reads Metrics
 
-The :dbcommand:`serverStatus` command and the :method:`db.serverStatus()` shell method return :serverstatus:`mirroredReads` metrics if you specify the field in the operation:
+The :dbcommand:`serverStatus` command and the :method:`db.serverStatus()` 
+shell method return :serverstatus:`mirroredReads` metrics if you specify the 
+field in the operation:
 
-```javascript
-db.serverStatus( { mirroredReads: 1 } )
-```
+.. code-block:: javascript
+
+   db.serverStatus( { mirroredReads: 1 } )
 
 ## Transactions
 
-`Multi-document transactions <transactions>` are available for replica sets.
+:ref:`Multi-document transactions <transactions>` are available for 
+replica sets.
 
-.. include:: /includes/extracts/transactions-read-pref.rst
+**include:** /includes/extracts/transactions-read-pref.rst
 
-.. include:: /includes/extracts/transactions-committed-visibility.rst
+**include:** /includes/extracts/transactions-committed-visibility.rst
+
 
 ## Change Streams
 
-`Change streams <changeStreams>` are available for replica sets and sharded clusters. Change streams allow applications to access real-time data changes without the complexity and risk of tailing the oplog. Applications can use change streams to subscribe to all data changes on a collection or collections.
+:ref:`Change streams <changeStreams>` are
+available for replica sets and sharded clusters. Change streams allow
+applications to access real-time data changes without the complexity
+and risk of tailing the oplog. Applications can use change streams to
+subscribe to all data changes on a collection or collections.
+
 
 ## Additional Features
 
-Replica sets provide a number of options to support application needs. For example, you may deploy a replica set with `members in multiple data centers </core/replica-set-architecture-geographically-distributed>`, or control the outcome of elections by adjusting the :rsconf:`members[n].priority` of some members. Replica sets also support dedicated members for reporting, disaster recovery, or backup functions.
+Replica sets provide a number of options to support application
+needs. For example, you may deploy a replica set with :doc:`members in
+multiple data centers
+</core/replica-set-architecture-geographically-distributed>`, or
+control the outcome of elections by adjusting the
+:rsconf:`members[n].priority` of some
+members. Replica sets also support dedicated members for reporting,
+disaster recovery, or backup functions.
 
-See `replica-set-secondary-only-members`, `replica-set-hidden-members` and `replica-set-delayed-members` for more information.
+See :ref:`replica-set-secondary-only-members`,
+:ref:`replica-set-hidden-members` and
+:ref:`replica-set-delayed-members` for more information.
 
-.. include:: /includes/footnote-two-primaries-edge-cases.rst
+.. [#edge-cases-2-primaries]
 
-## Contents
+   .. include:: /includes/footnote-two-primaries-edge-cases.rst
 
-- Oplog </core/replica-set-oplog>
-- Data Synchronization </core/replica-set-sync>
-- Replica Set Members </core/replica-set-members>
-- Deployment Architectures </core/replica-set-architectures>
-- High Availability </core/replica-set-high-availability>
-- Read & Write Semantics </applications/replication>
-- Troubleshoot </tutorial/troubleshoot-replica-sets>
-- local Database </reference/local-database>
+**toctree:** :titlesonly:
+   :hidden:
+
+   Oplog </core/replica-set-oplog>
+   Data Synchronization </core/replica-set-sync>
+   Replica Set Members </core/replica-set-members>
+   Deployment Architectures </core/replica-set-architectures>
+   High Availability </core/replica-set-high-availability>
+   Read & Write Semantics </applications/replication>
+   Troubleshoot </tutorial/troubleshoot-replica-sets>
+   local Database </reference/local-database>

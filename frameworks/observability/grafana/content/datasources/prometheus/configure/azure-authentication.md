@@ -4,16 +4,16 @@ framework: "Grafana"
 source_repo: "https://github.com/grafana/grafana.git"
 source_branch: "main"
 source_path: "docs/sources/datasources/prometheus/configure/azure-authentication.md"
-source_commit: "d18e58d33aa8741f08fbab4aa73bdaf1f04e3be5"
-source_commit_short: "d18e58d3"
-source_commit_date: "2026-07-25T13:50:43+02:00"
-generated_at: "2026-07-25T19:08:08.987583Z"
+source_commit: "5e3a02f81d2aadf4bf24fe49ed97d872556f5bf9"
+source_commit_short: "5e3a02f8"
+source_commit_date: "2026-08-29T10:58:19+09:00"
+generated_at: "2026-08-29T09:39:37.522088Z"
 ---
 ---
 aliases:
   - ../data-sources/prometheus/
   - ../features/datasources/prometheus/
-description: Migrating from Prometheus Azure AD authentication to the Azure Monitor Managed Service for Prometheus data source
+description: Migrate from Prometheus Azure AD authentication to the Azure Monitor Managed Service for Prometheus data source
 keywords:
   - grafana
   - prometheus
@@ -30,7 +30,7 @@ labels:
 menuTitle: Azure authentication (deprecated)
 title: Migrate from Prometheus Azure AD to Azure Monitor Managed Service for Prometheus
 weight: 200
-review_date: 2026-05-07
+review_date: 2026-08-04
 ---
 
 # Migrate from Prometheus Azure AD to Azure Monitor Managed Service for Prometheus
@@ -60,9 +60,9 @@ To determine if your Prometheus data sources have been migrated:
 
 The banner displays one of the following messages:
 
-- **"Migration Notice"** — The data source has been migrated to the Azure Monitor Managed Service for Prometheus plugin.
-- **"Deprecation Notice"** — The data source hasn't been migrated yet.
-- **No banner** — No migration is needed (the data source doesn't use Azure AD authentication).
+- **"Migration Notice":** The data source has been migrated to the Azure Monitor Managed Service for Prometheus plugin.
+- **"Deprecation Notice":** The data source hasn't been migrated yet.
+- **No banner:** No migration is needed (the data source doesn't use Azure AD authentication).
 
 ## Configure the Azure Monitor Managed Service for Prometheus data source
 
@@ -124,6 +124,8 @@ Replace `<CLIENT_ID>`, `<TENANT_ID>`, and `<CLIENT_SECRET>` with your Azure cred
 
 ## Troubleshoot migration issues
 
+The following sections cover common issues you may encounter during or after the migration and how to resolve them.
+
 ### Azure Monitor Managed Service for Prometheus plugin not installed
 
 **Symptom:** Migration doesn't occur or the data source type is missing.
@@ -140,7 +142,7 @@ Replace `<CLIENT_ID>`, `<TENANT_ID>`, and `<CLIENT_SECRET>` with your Azure cred
 
 **Solution:**
 
-1. **Self-hosted Grafana:** Verify that `grafana-azureprometheus-datasource` is included in `forward_settings_to_plugins` under the `[azure]` heading in your `.ini` configuration file.
+1. **Self-managed Grafana:** Verify that `grafana-azureprometheus-datasource` is included in `forward_settings_to_plugins` under the `[azure]` heading in your `.ini` configuration file.
 1. **Grafana Cloud:** Contact [Grafana Support](https://grafana.com/profile/org#support).
 
 ### Rollback the migration
@@ -218,7 +220,7 @@ echo "$response_body" | jq -c '.[] | select(.jsonData["prometheus-type-migration
     read_only=$(echo "$data" | jq -r '.readOnly // false')
 
     if [[ "$read_only" == "true" ]]; then
-        log_message "$uid is readOnly — edit the type to 'prometheus' in the provisioning file instead."
+        log_message "$uid is readOnly; edit the type to 'prometheus' in the provisioning file instead."
         continue
     fi
 

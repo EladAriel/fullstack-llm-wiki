@@ -1,59 +1,107 @@
 ---
 type: "Framework Learn Page"
-framework: "mongodb"
+framework: "MongoDB"
 source_repo: "https://github.com/mongodb/docs.git"
 source_branch: "main"
 source_path: "content/manual/manual/source/reference/method/Mongo.getWriteConcern.txt"
-source_commit: "ab9db26ed3d11618cdb61516d8180337d8e3f679"
-source_commit_short: "ab9db26e"
-source_commit_date: "2026-07-24T16:22:46-06:00"
-generated_at: "2026-07-25T11:51:15Z"
+source_commit: "b9f2bc487a2878b65e3c1f80024bebab76954f27"
+source_commit_short: "b9f2bc48"
+source_commit_date: "2026-08-28T17:09:45-05:00"
+generated_at: "2026-08-29T09:39:19.976430Z"
 ---
-
-========================================
-
 # Mongo.getWriteConcern() (mongosh method)
+
+**meta:** :description: Retrieve the current write concern settings for a MongoDB connection using `Mongo.getWriteConcern()`.
+
+.. default-domain:: mongodb
+
+**contents:** On this page
+   :local:
+   :backlinks: none
+   :depth: 1
+   :class: singlecol
 
 ## Definition
 
+**method:** Mongo.getWriteConcern()
+
+   :returns: The current :term:`write concern` for the :method:`Mongo()
+             <db.getMongo()>` connection object.
+
+   See the :ref:`write-concern` for an introduction to write concerns
+   in MongoDB.
+
 ## Compatibility
 
-This method is available in deployments hosted in the following environments:
+This method is available in deployments hosted in the following environments: 
 
-.. include:: /includes/fact-environments-atlas-only.rst
+**include:** /includes/fact-environments-atlas-only.rst
 
-.. include:: /includes/fact-environments-onprem-only.rst
+**include:** /includes/fact-environments-onprem-only.rst
 
 ## Syntax
 
 The command takes the following form:
 
-```javascript
-db.getMongo().getWriteConcern()
-```
+.. code-block:: javascript
+
+   db.getMongo().getWriteConcern()
 
 This operation returns a document with the following values:
 
-```javascript
-{ w: <value>, wtimeout: <number>, j: <boolean> }
-```
+.. code-block:: javascript
+   :copyable: false
 
-The fields are:
+   { w: <value>, wtimeout: <number>, j: <boolean> }
+
+The fields are: 
+
+.. list-table::
+   :header-rows: 1
+
+   * - Field
+     - Description
+
+   * - ``w``
+     - The number of :binary:`~bin.mongod` or :binary:`~bin.mongod`
+       instances that must acknowledge a write. Possible values are:
+
+       - "majority". A majority of the target instances must
+         acknowledge the write.
+       - <number>. The specified number of target instances must
+         acknowledge the write.
+       - <custom write concern name>. A user defined write concern, the
+         tagged instances must acknowledge the write.
+
+       See :ref:`write concern specification <wc-w>` for details.
+
+   * -  ``j``
+     - A boolean value. ``j: true`` requests acknowledgment that the
+       write operation has been written to the :ref:`on-disk journal
+       <journaling-internals>`.
+     
+   * - ``wtimeout``
+     - The number of milliseconds to wait for acknowledgment of the
+       write concern. ``wtimeout`` is only applicable when ``w`` has a
+       value greater than ``1``.
 
 ## Example
 
 To return the current write concern, enter the following:
 
-```javascript
-db.getMongo().getWriteConcern()
-```
+.. code-block:: javascript
 
-When a write concern is specified using :method:`Mongo.setWriteConcern()`, the output of `Mongo.getWriteConcern()` is similar to:
+   db.getMongo().getWriteConcern()
 
-```javascript
-WriteConcern { w: 2, wtimeout: 1000, j: true }
-```
+When a write concern is specified using
+:method:`Mongo.setWriteConcern()`, the output of
+``Mongo.getWriteConcern()`` is similar to:
 
-The `Mongo.getWriteConcern()` command returns an empty line if no write concern has been specified.
+.. code-block:: javascript
 
-> **Seealso:** - :method:`~Mongo.setWriteConcern()`
+   WriteConcern { w: 2, wtimeout: 1000, j: true }
+
+The ``Mongo.getWriteConcern()`` command returns an empty line if no
+write concern has been specified. 
+
+**seealso:** - :method:`~Mongo.setWriteConcern()`

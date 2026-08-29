@@ -4,10 +4,10 @@ framework: "LangSmith"
 source_repo: "https://github.com/langchain-ai/docs.git"
 source_branch: "main"
 source_path: "src/langsmith/observability-llm-tutorial.mdx"
-source_commit: "2aae1dfc98ee953a9a5185fb6fcdd9efb3f4d878"
-source_commit_short: "2aae1df"
-source_commit_date: "2026-07-25T00:27:23+00:00"
-generated_at: "2026-07-25T19:08:33.394500Z"
+source_commit: "a174f9cf7c91ee5eb14ee2382eb48bfe6e4956e9"
+source_commit_short: "a174f9c"
+source_commit_date: "2026-08-28T17:04:12-07:00"
+generated_at: "2026-08-29T09:39:50.615240Z"
 ---
 # Observability Llm Tutorial
 
@@ -281,6 +281,8 @@ Linking [user feedback](/langsmith/attach-user-feedback) to specific traces lets
 <CodeGroup>
 
 ```python Python
+import os  # [!code highlight]
+
 from openai import OpenAI
 from langsmith import traceable, Client, uuid7  # [!code highlight]
 from langsmith.wrappers import wrap_openai
@@ -320,7 +322,12 @@ if __name__ == "__main__":
         langsmith_extra={"run_id": run_id},  # [!code highlight]
     )  # [!code highlight]
     ls_client = Client()  # [!code highlight]
-    ls_client.create_feedback(run_id, key="user-score", score=1.0)  # [!code highlight]
+    # Feedback requires the UUID of the tracing project that owns the run  # [!code highlight]
+    project_name = os.environ.get("LANGSMITH_PROJECT", "default")  # [!code highlight]
+    session_id = ls_client.create_project(project_name=project_name, upsert=True).id  # [!code highlight]
+    ls_client.create_feedback(  # [!code highlight]
+        run_id, key="user-score", score=1.0, session_id=session_id  # [!code highlight]
+    )  # [!code highlight]
 ```
 
 ```typescript TypeScript
@@ -342,9 +349,12 @@ function retriever(query: string): string[] {
 }
 
 let capturedRunId: string; // [!code highlight]
+let capturedProjectName: string; // [!code highlight]
 
 const supportBot = traceable(async function supportBot(question: string): Promise<string> {
-    capturedRunId = getCurrentRunTree().id; // [!code highlight]
+    const runTree = getCurrentRunTree(); // [!code highlight]
+    capturedRunId = runTree.id; // [!code highlight]
+    capturedProjectName = runTree.project_name; // [!code highlight]
     const context = retriever(question);
     const systemMessage =
         "You are a helpful customer support agent. " +
@@ -363,7 +373,17 @@ const supportBot = traceable(async function supportBot(question: string): Promis
 (async () => {
     await supportBot("How many users can I have on the Starter plan?"); // [!code highlight]
     const lsClient = new Client(); // [!code highlight]
-    await lsClient.createFeedback(capturedRunId, "user-score", { score: 1.0 }); // [!code highlight]
+    // Feedback requires the UUID of the tracing project that owns the run // [!code highlight]
+    const { id: sessionId } = await lsClient.createProject({ // [!code highlight]
+        projectName: capturedProjectName, // [!code highlight]
+        upsert: true, // [!code highlight]
+    }); // [!code highlight]
+    await lsClient.createFeedback({ // [!code highlight]
+        runId: capturedRunId, // [!code highlight]
+        sessionId, // [!code highlight]
+        key: "user-score", // [!code highlight]
+        score: 1.0, // [!code highlight]
+    }); // [!code highlight]
     await lsClient.flush(); // [!code highlight]
 })();
 ```
@@ -371,7 +391,7 @@ const supportBot = traceable(async function supportBot(question: string): Promis
 </CodeGroup>
 
 <Note>
-In production, these two pieces would live in separate locations: the `support_bot` call with `run_id` stays in your app, and `create_feedback` moves to whichever endpoint receives user feedback (for example, a `/feedback` API route). The `run_id` is passed from one to the other so the feedback can be linked to the correct trace.
+In production, these two pieces would live in separate locations: the `support_bot` call with `run_id` stays in your app, and `create_feedback` moves to whichever endpoint receives user feedback (for example, a `/feedback` API route). The `run_id` is passed from one to the other so the feedback can be linked to the correct trace. Because feedback also requires the project UUID, pass `session_id` alongside the `run_id`.
 </Note>
 
 The feedback appears in the **Feedback** tab when you inspect the run in the UI. You can then filter runs by feedback score using the filtering controls in the **Runs** table.

@@ -1,15 +1,14 @@
 ---
 type: "Framework Learn Page"
-framework: "pydantic"
+framework: "Pydantic"
 source_repo: "https://github.com/pydantic/pydantic"
 source_branch: "main"
 source_path: "docs/concepts/type_adapter.md"
-source_commit: "a2a6577d4c329dd574a45dbb01a8feaa16b1ad3d"
-source_commit_short: "a2a6577d"
-source_commit_date: "2026-07-23T15:38:17Z"
-generated_at: "2026-07-25T11:50:12Z"
+source_commit: "4bc21c0fa28323c0f3e0be93c9ad114b705029c6"
+source_commit_short: "4bc21c0"
+source_commit_date: "2026-08-29T11:30:40+02:00"
+generated_at: "2026-08-29T09:38:50.589187Z"
 ---
-
 You may have types that are not `BaseModel`s that you want to validate data against.
 Or you may want to validate a `list[SomeModel]`, or dump it to JSON.
 
@@ -98,14 +97,15 @@ print(items)
 [`TypeAdapter`][pydantic.type_adapter.TypeAdapter] is capable of parsing data into any of the types Pydantic can
 handle as fields of a [`BaseModel`][pydantic.main.BaseModel].
 
+Data parsed this way often comes from a source you don't control, like the API call in the example
+above, so validation can fail long after the code has shipped. A `TypeAdapter` raises the same
+structured errors as a model, so tooling that records validation failures in production, such as
+[Logfire](../integrations/logfire.md), captures these too.
+
 !!! info "Performance considerations"
     When creating an instance of [`TypeAdapter`][pydantic.type_adapter.TypeAdapter], the provided type must be analyzed and converted into a pydantic-core
     schema. This comes with some non-trivial overhead, so it is recommended to create a `TypeAdapter` for a given type
     just once and reuse it in loops or other performance-critical code.
-
-!!! tip "Logfire integration"
-    As with Pydantic models, the [Logfire integration](../integrations/logfire.md) records
-    validation errors for type adapters.
 
 ## Rebuilding a `TypeAdapter`'s schema
 

@@ -1,24 +1,34 @@
 ---
 type: "Framework Learn Page"
-framework: "postgres"
+framework: "PostgreSQL"
 source_repo: "https://github.com/postgres/postgres.git"
 source_branch: "master"
 source_path: "doc/src/sgml/custom-rmgr.sgml"
-source_commit: "38afc3dcb25c45b744d4025029ce0a6c90b7059f"
-source_commit_short: "38afc3dc"
-source_commit_date: "2026-07-25T19:08:27+09:00"
-generated_at: "2026-07-25T11:50:59Z"
+source_commit: "6c5f1d6074208146930b67c2054509c3e82f6f7f"
+source_commit_short: "6c5f1d6"
+source_commit_date: "2026-08-28T23:24:47+02:00"
+generated_at: "2026-08-29T09:39:24.424827Z"
 ---
+# Custom WAL Resource Managers
 
-## Custom WAL Resource Managers
+ 
+  This section explains the interface between the core
+  PostgreSQL system and custom WAL resource
+  managers, which enable extensions to integrate directly with the WAL.
+ 
+ 
+  An extension, especially a Table Access
+  Method or Index Access Method, may
+  need to use WAL for recovery, replication, and/or Logical Decoding.
+ 
+ 
+  To create a new custom WAL resource manager, first define an
+  RmgrData structure with implementations for the
+  resource manager methods. Refer to
+  src/backend/access/transam/README and
+  src/include/access/xlog_internal.h in the
+  PostgreSQL source.
 
-This section explains the interface between the core PostgreSQL system and custom WAL resource managers, which enable extensions to integrate directly with the WAL.
-
-An extension, especially a Table Access Method or Index Access Method, may need to use WAL for recovery, replication, and/or Logical Decoding.
-
-To create a new custom WAL resource manager, first define an `RmgrData` structure with implementations for the resource manager methods. Refer to `src/backend/access/transam/README` and `src/include/access/xlog_internal.h` in the PostgreSQL source.
-
-```
 /*
  * Method table for resource managers.
  *
@@ -48,13 +58,19 @@ typedef struct RmgrData
     void        (*rm_decode) (struct LogicalDecodingContext *ctx,
                               struct XLogRecordBuffer *buf);
 } RmgrData;
-```
 
-The `src/test/modules/test_custom_rmgrs` module contains a working example, which demonstrates usage of custom WAL resource managers.
+ 
 
-Then, register your new resource manager.
+  
+   The src/test/modules/test_custom_rmgrs module
+   contains a working example, which demonstrates usage of custom WAL
+   resource managers.
+  
 
-```
+ 
+  Then, register your new resource
+  manager.
+
 /*
  * Register a new custom WAL resource manager.
  *
@@ -65,10 +81,22 @@ Then, register your new resource manager.
  * reserving a new ID.
  */
 extern void RegisterCustomRmgr(RmgrId rmid, const RmgrData *rmgr);
-```
 
-`RegisterCustomRmgr` must be called from the extension module's _PG_init function. While developing a new extension, use `RM_EXPERIMENTAL_ID` for `rmid`. When you are ready to release the extension to users, reserve a new resource manager ID at the [Custom WAL Resource Manager](https://wiki.postgresql.org/wiki/CustomWALResourceManagers) page.
+  RegisterCustomRmgr must be called from the
+  extension module's _PG_init function.
+  While developing a new extension, use RM_EXPERIMENTAL_ID
+  for rmid. When you are ready to release the extension
+  to users, reserve a new resource manager ID at the Custom WAL
+  Resource Manager page.
+ 
 
-Place the extension module implementing the custom resource manager in `guc-shared-preload-libraries` so that it will be loaded early during PostgreSQL startup.
-
-The extension must remain in `shared_preload_libraries` as long as any custom WAL records may exist in the system. Otherwise PostgreSQL will not be able to apply or decode the custom WAL records, which may prevent the server from starting.
+ 
+  Place the extension module implementing the custom resource manager in  so that it will be loaded early
+  during PostgreSQL startup.
+ 
+ 
+   
+    The extension must remain in shared_preload_libraries
+    as long as any custom WAL records may exist in the system. Otherwise
+    PostgreSQL will not be able to apply or decode
+    the custom WAL records, which may prevent the server from starting.

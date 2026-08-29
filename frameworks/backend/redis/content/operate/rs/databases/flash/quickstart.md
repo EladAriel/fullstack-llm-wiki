@@ -1,14 +1,15 @@
 ---
 type: "Framework Learn Page"
-framework: "redis"
+framework: "Redis"
 source_repo: "https://github.com/redis/docs.git"
 source_branch: "main"
 source_path: "content/operate/rs/databases/flash/quickstart.md"
-source_commit: "9d30f68c3dad1a6b3b7d30fe604b911348ce8152"
-source_commit_short: "9d30f68c"
-source_commit_date: "2026-07-24T10:52:10-07:00"
-generated_at: "2026-07-25T11:51:22Z"
+source_commit: "f8693349287b0efbef3c865b6f6a2aceca88594d"
+source_commit_short: "f869334"
+source_commit_date: "2026-08-28T10:01:19-05:00"
+generated_at: "2026-08-29T09:38:55.426861Z"
 ---
+# Quickstart
 
 ---
 Title: Flex and Auto Tiering quick start
@@ -40,6 +41,16 @@ with a single node are:
 1. Set up a Redis Software cluster with Flex.
 1. Create a new database with Flex enabled.
 1. Connect to your new database.
+
+## Before deployment
+
+Before you set up a flash-enabled cluster and create a Flex or Auto Tiering database, consider the following:
+
+- Avoid a large number of keys or long key names. With Auto Tiering, all key names are stored in RAM regardless of whether their values are on flash. High key count alone can exhaust the RAM limit even when individual key names are short.
+
+- Avoid large collection types (hashes, sets, or lists with millions of elements) whose total serialized size approaches or exceeds the RAM limit. Unlike scalar values, large collections cannot be partially offloaded to flash and must fit in RAM when accessed.
+
+- Databases cannot store keys or values larger than 4GB in flash storage. Keys or values larger than 4GB are stored in RAM only. If oversized keys consume the shard's available RAM, the shard can return out-of-memory errors even when flash storage has free space remaining.
 
 ## Install Redis Software
 

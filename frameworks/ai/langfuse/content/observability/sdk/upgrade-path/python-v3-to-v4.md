@@ -4,12 +4,11 @@ framework: "Langfuse"
 source_repo: "https://github.com/langfuse/langfuse-docs"
 source_branch: "main"
 source_path: "content/docs/observability/sdk/upgrade-path/python-v3-to-v4.mdx"
-source_commit: "fcd1eca34a924867563c3c4e801254c4e66c0021"
-source_commit_short: "fcd1eca3"
-source_commit_date: "2026-07-25T00:45:45Z"
-generated_at: "2026-07-25T11:51:12Z"
+source_commit: "ba26344559edee69ba55c5d3aa80e632f56c1626"
+source_commit_short: "ba26344"
+source_commit_date: "2026-08-29T02:57:18+00:00"
+generated_at: "2026-08-29T09:38:37.756068Z"
 ---
-
 ---
 title: "Python v3 → v4"
 description: Migration guide for upgrading the Langfuse Python SDK from v3 to v4.
@@ -18,7 +17,7 @@ category: SDKs
 
 # Python v3 → v4
 
-The Python SDK v4 introduces the **[observation-centric data model](/docs/observability/data-model)**. In this model, correlating attributes (`user_id`, `session_id`, `metadata`, `tags`) propagate to every observation rather than living only on the trace. This enables single-table queries without expensive joins, significantly improving query performance at scale.
+The Python SDK v4 introduces the **[observations-first data model](/docs/observability/data-model)**. In this model, correlating attributes (`user_id`, `session_id`, `metadata`, `tags`) propagate to every observation rather than living only on the trace. This enables single-table queries without expensive joins, significantly improving query performance at scale.
 
 This changes how you set trace attributes: instead of imperatively updating the trace object with `update_current_trace()`, you use `propagate_attributes()` — a context manager that automatically applies attributes to the current and all child observations created within its scope.
 
@@ -220,8 +219,8 @@ aliases were removed.
 | `langfuse.api.score` (legacy v1)        | `langfuse.api.legacy.score_v1`        |
 | `langfuse.api.metrics` (legacy v1)      | `langfuse.api.legacy.metrics_v1`      |
 
-If you still need legacy v1 behavior, switch to the corresponding
-`langfuse.api.legacy.<resource>_v1` namespace.
+If your Python SDK v4 client must temporarily query a self-hosted Langfuse v3
+server, use the corresponding `langfuse.api.legacy.<resource>_v1` namespace.
 
 <Callout type="warning">
   The new default `langfuse.api.observations` and `langfuse.api.metrics`
@@ -230,6 +229,16 @@ If you still need legacy v1 behavior, switch to the corresponding
   self-hosted Langfuse v3, use `langfuse.api.legacy.observations_v1` and
   `langfuse.api.legacy.metrics_v1` instead. See the [self-hosted
   compatibility matrix](/self-hosting/upgrade/versioning#sdk-server).
+</Callout>
+
+<Callout type="info">
+  **Public API endpoint deprecations are separate from the v4 breaking
+  changes.** Some API methods remain callable in Python v4 but call server
+  endpoints that are deprecated for Langfuse v4. After upgrading, use the
+  [Python SDK method mappings in the deprecated API migration
+  guide](/faq/all/deprecated-api-migration#sdk-method-quick-reference) to audit
+  methods such as `langfuse.api.trace.list()`,
+  `langfuse.api.sessions.list()`, and `langfuse.api.scores.get_many()`.
 </Callout>
 
 ### `start_span()` / `start_generation()` → `start_observation()`

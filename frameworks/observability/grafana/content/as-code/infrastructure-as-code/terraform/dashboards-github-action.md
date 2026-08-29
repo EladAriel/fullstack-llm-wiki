@@ -4,10 +4,10 @@ framework: "Grafana"
 source_repo: "https://github.com/grafana/grafana.git"
 source_branch: "main"
 source_path: "docs/sources/as-code/infrastructure-as-code/terraform/dashboards-github-action.md"
-source_commit: "d18e58d33aa8741f08fbab4aa73bdaf1f04e3be5"
-source_commit_short: "d18e58d3"
-source_commit_date: "2026-07-25T13:50:43+02:00"
-generated_at: "2026-07-25T19:08:09.052503Z"
+source_commit: "5e3a02f81d2aadf4bf24fe49ed97d872556f5bf9"
+source_commit_short: "5e3a02f8"
+source_commit_date: "2026-08-29T10:58:19+09:00"
+generated_at: "2026-08-29T09:39:37.540114Z"
 ---
 ---
 keywords:
@@ -147,7 +147,7 @@ This GitHub workflow consists of the following steps:
 - `terraform fmt -check` is run as a bash command in the GitHub runner to check if the Terraform configuration files are properly formatted. If the Terraform configuration files are not properly formatted, the workflow will fail at this step.
 - `terraform plan` is run as a bash command in the GitHub runner to preview the changes that Terraform will make.
 - Using [mshick/add-pr-comment@v1](https://github.com/mshick/add-pr-comment) action, the preview from Terraform plan is posted as a comment on the pull request. This helps in reviewing the changes that Terraform will make before the pull request is merged.
-- `terraform appy -auto-approve` is run as a bash command in the GitHub runner to apply the Terraform configuration files. `-auto-approve` flag is added to the command to skip interactive approval of plan before applying and make the workflow automated.
+- `terraform apply -auto-approve` is run as a bash command in the GitHub runner to apply the Terraform configuration files. `-auto-approve` flag is added to the command to skip interactive approval of plan before applying and make the workflow automated.
   This step is run only when changes are committed to `main` branch. When a pull request is merged, the merge action creates a commit to the `main` branch which triggers the `terraform apply -auto-approve` step to execute.
 
 1. In your GitHub repository, create a folder named `.github` in the root directory .

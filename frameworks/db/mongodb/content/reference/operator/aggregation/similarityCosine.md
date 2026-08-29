@@ -1,90 +1,163 @@
 ---
 type: "Framework Learn Page"
-framework: "mongodb"
+framework: "MongoDB"
 source_repo: "https://github.com/mongodb/docs.git"
 source_branch: "main"
 source_path: "content/manual/manual/source/reference/operator/aggregation/similarityCosine.txt"
-source_commit: "ab9db26ed3d11618cdb61516d8180337d8e3f679"
-source_commit_short: "ab9db26e"
-source_commit_date: "2026-07-24T16:22:46-06:00"
-generated_at: "2026-07-25T11:51:15Z"
+source_commit: "b9f2bc487a2878b65e3c1f80024bebab76954f27"
+source_commit_short: "b9f2bc48"
+source_commit_date: "2026-08-28T17:09:45-05:00"
+generated_at: "2026-08-29T09:39:20.162146Z"
 ---
-
-=======================================
-
 # $similarityCosine (expression operator)
+
+**meta:** :description: Use $similarityCosine in MongoDB aggregation to compute the cosine similarity between two numeric vectors. Returns a raw score in [-1, 1] or a normalized score in [0, 1].
+
+.. default-domain:: mongodb
+
+**contents:** On this page
+   :local:
+   :backlinks: none
+   :depth: 1
+   :class: singlecol
 
 ## Definition
 
-.. versionadded:: 8.3
+**versionadded:** 8.3
+
+**expression:** $similarityCosine
+
+   Returns the cosine similarity between two numeric vectors
+   represented as arrays or ``binData`` values. Cosine similarity
+   measures the cosine of the angle between two vectors and indicates
+   how similar their directions are, independent of their magnitudes.
+
+   :expression:`$similarityCosine` has two syntax forms.
+
+   **Concise syntax** returns a raw cosine similarity score:
+
+   .. code-block:: javascript
+
+      { $similarityCosine: [ <vector1>, <vector2> ] }
+
+   **Full syntax** accepts an optional normalization parameter:
+
+   .. code-block:: javascript
+
+      {
+         $similarityCosine: {
+            vectors: [ <vector1>, <vector2> ],
+            score: <boolean>
+         }
+      }
+
+   When using the full syntax, :expression:`$similarityCosine`
+   accepts the following fields:
+
+   .. list-table::
+      :header-rows: 1
+      :widths: 20 15 10 55
+
+      * - Field
+        - Type
+        - Necessity
+        - Description
+
+      * - ``vectors``
+        - Array
+        - Required
+        - Array of exactly two expressions. Each expression must
+          resolve to an array of numeric values or a ``binData``
+          value. Both vectors must have equal length.
+
+      * - ``score``
+        - Boolean
+        - Optional
+        - When ``true``, returns a normalized score in the range
+          ``[0, 1]`` using the formula ``(1 + cosine) / 2``.
+          Defaults to ``false``.
+
+   For more information on expressions, see
+   :ref:`aggregation-expressions`.
 
 ## Behavior
 
-### `null` and Missing Values
+### ``null`` and Missing Values
 
-If either argument resolves to `null` or refers to a missing field, :expression:`$similarityCosine` returns `null`.
+If either argument resolves to ``null`` or refers to a missing
+field, :expression:`$similarityCosine` returns ``null``.
 
 ### Zero-Magnitude Vectors
 
-If either input vector has a magnitude of zero (that is, all elements are `0`), :expression:`$similarityCosine` returns `0`.
+If either input vector has a magnitude of zero (that is, all
+elements are ``0``), :expression:`$similarityCosine` returns ``0``.
 
 ### Return Value
 
-:expression:`$similarityCosine` returns a `double`. When `score` is `false` (the default), the result is the raw cosine similarity value in the range `[-1, 1]`:
+:expression:`$similarityCosine` returns a ``double``. When
+``score`` is ``false`` (the default), the result is the raw cosine
+similarity value in the range ``[-1, 1]``:
 
-- `1` indicates the vectors point in identical directions.
-- `0` indicates the vectors are orthogonal.
-- `-1` indicates the vectors point in opposite directions.
-When `score` is `true`, the result is normalized to the range `[0, 1]` using the formula `(1 + cosine) / 2`.
+- ``1`` indicates the vectors point in identical directions.
+- ``0`` indicates the vectors are orthogonal.
+- ``-1`` indicates the vectors point in opposite directions.
+
+When ``score`` is ``true``, the result is normalized to the range
+``[0, 1]`` using the formula ``(1 + cosine) / 2``.
 
 ### Errors
 
-:expression:`$similarityCosine` returns an error in the following cases:
+:expression:`$similarityCosine` returns an error in the following
+cases:
 
-- Either argument does not resolve to an array or `binData` value.
-- Input arrays or `binData` values have different lengths.
+- Either argument does not resolve to an array or ``binData`` value.
+- Input arrays or ``binData`` values have different lengths.
 - Either array contains non-numeric elements.
+
 ## Example
 
-The following example uses a `vectors` collection:
+The following example uses a ``vectors`` collection:
 
-```javascript
-db.vectors.insertMany( [
-   { _id: 1, a: [1, 2, 3], b: [1, 2, 3] },
-   { _id: 2, a: [1, 2, 3], b: [3, 2, 1] },
-   { _id: 3, a: [1, 2, 3], b: [4, 5, 6] }
-] )
-```
+.. code-block:: javascript
 
-The following aggregation pipeline computes the cosine similarity between the `a` and `b` fields for each document and returns both the raw score and the normalized score:
+   db.vectors.insertMany( [
+      { _id: 1, a: [1, 2, 3], b: [1, 2, 3] },
+      { _id: 2, a: [1, 2, 3], b: [3, 2, 1] },
+      { _id: 3, a: [1, 2, 3], b: [4, 5, 6] }
+   ] )
 
-```javascript
-db.vectors.aggregate( [
-   {
-      $project: {
-         raw: { $similarityCosine: [ "$a", "$b" ] },
-         normalized: {
-            $similarityCosine: {
-               vectors: [ "$a", "$b" ],
-               score: true
+The following aggregation pipeline computes the cosine similarity
+between the ``a`` and ``b`` fields for each document and returns
+both the raw score and the normalized score:
+
+.. code-block:: javascript
+
+   db.vectors.aggregate( [
+      {
+         $project: {
+            raw: { $similarityCosine: [ "$a", "$b" ] },
+            normalized: {
+               $similarityCosine: {
+                  vectors: [ "$a", "$b" ],
+                  score: true
+               }
             }
          }
       }
-   }
-] )
-```
+   ] )
 
 The operation returns the following results:
 
-```javascript
-{ _id: 1, raw: 1, normalized: 1 }
-{ _id: 2, raw: 0.7142857142857143,
-  normalized: 0.8571428571428571 }
-{ _id: 3, raw: 0.9746318461970762,
-  normalized: 0.9873159230985381 }
-```
+.. code-block:: javascript
+   :copyable: false
+
+   { _id: 1, raw: 1, normalized: 1 }
+   { _id: 2, raw: 0.7142857142857143,
+     normalized: 0.8571428571428571 }
+   { _id: 3, raw: 0.9746318461970762,
+     normalized: 0.9873159230985381 }
 
 ## Learn More
 
 - :pipeline:`$vectorSearch`
-- `aggregation-expressions`
+- :ref:`aggregation-expressions`

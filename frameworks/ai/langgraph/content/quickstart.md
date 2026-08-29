@@ -4,12 +4,11 @@ framework: "LangGraph"
 source_repo: "https://github.com/langchain-ai/docs"
 source_branch: "main"
 source_path: "src/oss/langgraph/quickstart.mdx"
-source_commit: "2aae1dfc98ee953a9a5185fb6fcdd9efb3f4d878"
-source_commit_short: "2aae1dfc"
-source_commit_date: "2026-07-25T00:27:23Z"
-generated_at: "2026-07-25T11:51:08Z"
+source_commit: "a174f9cf7c91ee5eb14ee2382eb48bfe6e4956e9"
+source_commit_short: "a174f9c"
+source_commit_date: "2026-08-28T17:04:12-07:00"
+generated_at: "2026-08-29T09:38:45.962207Z"
 ---
-
 ---
 title: Quickstart
 ---
@@ -30,7 +29,7 @@ This quickstart demonstrates how to build a calculator agent using the LangGraph
 For conceptual information, see [Graph API overview](/oss/langgraph/graph-api) and [Functional API overview](/oss/langgraph/functional-api).
 
 <Info>
-For this example, you will need to set up a [Claude (Anthropic)](https://www.anthropic.com/) account and get an API key. Then, set the `ANTHROPIC_API_KEY` environment variable in your terminal.
+For this example, you will need to set up a [Claude (Anthropic)](https://www.anthropic.com/) account and get an API key. Then, set the `ANTHROPIC_API_KEY` environment variable in your terminal. See [chat model integrations](/oss/integrations/chat) for all available providers. If you use [LangSmith Gateway](/langsmith/llm-gateway), you can [bring your own provider keys](/langsmith/llm-gateway-quickstart) or use [Gateway Credits](/langsmith/llm-gateway-credits) to access models without a provider key.
 </Info>
 
 <Tabs>
@@ -329,7 +328,7 @@ def should_continue(state: MessagesState) -> Literal["tool_node", END]:
 :::js
 
 ```typescript
-const shouldContinue: ConditionalEdgeRouter<typeof MessagesState, "toolNode"> = (state) => {
+const shouldContinue: ConditionalEdgeRouter<{ InputSchema: typeof MessagesState; Nodes: "toolNode" }> = (state) => {
   const lastMessage = state.messages.at(-1);
 
   // Check if it's an AIMessage before accessing tool_calls
@@ -690,7 +689,7 @@ const toolNode: GraphNode<typeof MessagesState> = async (state) => {
 // Step 5: Define logic to determine whether to end
 import { ConditionalEdgeRouter, END } from "@langchain/langgraph";
 
-const shouldContinue: ConditionalEdgeRouter<typeof MessagesState, "toolNode"> = (state) => {
+const shouldContinue: ConditionalEdgeRouter<{ InputSchema: typeof MessagesState; Nodes: "toolNode" }> = (state) => {
   const lastMessage = state.messages.at(-1);
 
   // Check if it's an AIMessage before accessing tool_calls

@@ -1,145 +1,193 @@
 ---
 type: "Framework Learn Page"
-framework: "mongodb"
+framework: "MongoDB"
 source_repo: "https://github.com/mongodb/docs.git"
 source_branch: "main"
 source_path: "content/manual/manual/source/reference/command/mergeChunks.txt"
-source_commit: "ab9db26ed3d11618cdb61516d8180337d8e3f679"
-source_commit_short: "ab9db26e"
-source_commit_date: "2026-07-24T16:22:46-06:00"
-generated_at: "2026-07-25T11:51:15Z"
+source_commit: "b9f2bc487a2878b65e3c1f80024bebab76954f27"
+source_commit_short: "b9f2bc48"
+source_commit_date: "2026-08-28T17:09:45-05:00"
+generated_at: "2026-08-29T09:39:20.088981Z"
 ---
-
-==============================
-
 # mergeChunks (database command)
+
+**meta:** :description: Combine contiguous chunk ranges on a shard into a single chunk using the `mergeChunks` command for sharded collections.
+
+.. default-domain:: mongodb
+
+**contents:** On this page
+   :local:
+   :backlinks: none
+   :depth: 1
+   :class: singlecol
 
 ## Definition
 
+**dbcommand:** mergeChunks
+
+   For a sharded collection, :dbcommand:`mergeChunks` combines
+   contiguous :term:`chunk` ranges on a shard into a single
+   chunk. Issue the :dbcommand:`mergeChunks` command on the ``admin`` database from a
+   :binary:`~bin.mongos` instance.
+
 ## Compatibility
 
-This command is available in deployments hosted in the following environments:
+This command is available in deployments hosted in the following environments: 
 
-.. include:: /includes/fact-environments-atlas-only.rst
+**include:** /includes/fact-environments-atlas-only.rst
 
-.. include:: /includes/fact-environments-onprem-only.rst
+**include:** /includes/fact-environments-onprem-only.rst
 
 ## Syntax
 
 The command has the following syntax:
 
-```javascript
-db.adminCommand( 
-   { 
-     mergeChunks: <namespace>,
-     bounds : [ 
-       { <shardKeyField>: <minFieldValue> },
-       { <shardKeyField>: <maxFieldValue> } 
-     ] 
-   } 
-)
-```
+.. code-block:: javascript
 
-For compound shard keys, you must include the full shard key in the `bounds` specification. For example, if the shard key is `{ x: 1, y: 1 }`, :dbcommand:`mergeChunks` has the following form:
+   db.adminCommand( 
+      { 
+        mergeChunks: <namespace>,
+        bounds : [ 
+          { <shardKeyField>: <minFieldValue> },
+          { <shardKeyField>: <maxFieldValue> } 
+        ] 
+      } 
+   )
 
-```javascript
-db.adminCommand( 
-   { 
-     mergeChunks: <namespace>,
-     bounds: [ 
-       { x: <minValue>, y: <minValue> },
-       { x: <maxValue>, y: <maxValue> } 
-     ] 
-   } 
- )
-```
+For compound shard keys, you must include the full shard key in the
+``bounds`` specification. For example, if the shard key is ``{ x: 1, y:
+1 }``, :dbcommand:`mergeChunks` has the following form:
+
+.. code-block:: javascript
+
+   db.adminCommand( 
+      { 
+        mergeChunks: <namespace>,
+        bounds: [ 
+          { x: <minValue>, y: <minValue> },
+          { x: <maxValue>, y: <maxValue> } 
+        ] 
+      } 
+    )
 
 ## Command Fields
 
 The command takes the following fields:
 
+.. list-table::
+   :header-rows: 1
+   :widths: 20 20 80
+
+   * - Field
+     - Type
+     - Description
+
+   * - ``mergeChunks``
+     - namespace
+     - The fully qualified :term:`namespace` of the :term:`collection`
+       where both :term:`chunks <chunk>` exist. Namespaces take form of
+       ``<database>.<collection>``.
+       
+   * - ``bounds``
+     - array
+     - An array that contains the minimum and maximum key values of the
+       new chunk.
+       
+
 ## Access Control
 
-On deployments running with :setting:`~security.authorization`, the built-in role :authrole:`clusterManager` provides the required privileges.
+On deployments running with :setting:`~security.authorization`, the
+built-in role :authrole:`clusterManager` provides the required
+privileges.
 
 ## Behavior
 
-> **Note:** Use the :dbcommand:`mergeChunks` only in special circumstances. For
-instance, when cleaning up your `sharded cluster` after removing
-many documents.
+**note:** Use the :dbcommand:`mergeChunks` only in special circumstances. For
+   instance, when cleaning up your :term:`sharded cluster` after removing
+   many documents.
 
-In order to successfully merge chunks, the following must be true:
+In order to successfully merge chunks, the following *must* be true:
 
-- In the `bounds` field, `<minkey>` and `<maxkey>` must correspond to
-the lower and upper bounds of the `chunks <chunk>` to merge.
+- In the ``bounds`` field, ``<minkey>`` and ``<maxkey>`` must correspond to
+  the lower and upper bounds of the :term:`chunks <chunk>` to merge.
 
 - The chunks must reside on the same shard.
+
 - The chunks must be contiguous.
-:dbcommand:`mergeChunks` returns an error if these conditions are not satisfied.
+
+:dbcommand:`mergeChunks` returns an error if these conditions are not
+satisfied.
 
 ## Return Messages
 
 On success, :dbcommand:`mergeChunks` returns this document:
 
-```javascript
-{
-  "ok" : 1,
-  "$clusterTime" : {
-     "clusterTime" : Timestamp(1510767081, 1),
-     "signature" : {
-         "hash" : BinData(0,"okKHD0QuzcpbVQg7mP2YFw6lM04="),
-         "keyId" : Long("6488693018630029321")
-      }
-  },
-  "operationTime" : Timestamp(1510767081, 1)
-}
-```
+.. code-block:: javascript
+
+   {
+     "ok" : 1,
+     "$clusterTime" : {
+        "clusterTime" : Timestamp(1510767081, 1),
+        "signature" : {
+            "hash" : BinData(0,"okKHD0QuzcpbVQg7mP2YFw6lM04="),
+            "keyId" : Long("6488693018630029321")
+         }
+     },
+     "operationTime" : Timestamp(1510767081, 1)
+   }
 
 ### Another Operation in Progress
 
-:dbcommand:`mergeChunks` returns the following error message if another metadata operation is in progress on the `config.chunks` collection:
+:dbcommand:`mergeChunks` returns the following error message if another
+metadata operation is in progress on the :data:`~config.chunks` collection:
 
-```none
-errmsg: "The collection's metadata lock is already taken."
-```
+.. code-block:: none
 
-If another process, such as balancer process, changes metadata while :dbcommand:`mergeChunks` is running, you may see this error. You can retry the :dbcommand:`mergeChunks` operation without side effects.
+   errmsg: "The collection's metadata lock is already taken."
+
+If another process, such as balancer process, changes metadata while
+:dbcommand:`mergeChunks` is running, you may see this error. You can
+retry the :dbcommand:`mergeChunks` operation without side effects.
 
 ### Chunks on Different Shards
 
-If the input `chunks <chunk>` are not on the same `shard`, :dbcommand:`mergeChunks` returns an error similar to the following:
+If the input :term:`chunks <chunk>` are not on the same :term:`shard`,
+:dbcommand:`mergeChunks` returns an error similar to the following:
 
-```javascript
-{
-  "ok" : 0,
-  "errmsg" : "could not merge chunks, collection test.users does not contain a chunk ending at { username: \"user63169\" }",
-  "$clusterTime" : {
-     "clusterTime" : Timestamp(1510767081, 1),
-     "signature" : {
-         "hash" : BinData(0,"okKHD0QuzcpbVQg7mP2YFw6lM04="),
-         "keyId" : Long("6488693018630029321")
-      }
-  },
-  "operationTime" : Timestamp(1510767081, 1)
-}
-```
+.. code-block:: javascript
+
+   {
+     "ok" : 0,
+     "errmsg" : "could not merge chunks, collection test.users does not contain a chunk ending at { username: \"user63169\" }",
+     "$clusterTime" : {
+        "clusterTime" : Timestamp(1510767081, 1),
+        "signature" : {
+            "hash" : BinData(0,"okKHD0QuzcpbVQg7mP2YFw6lM04="),
+            "keyId" : Long("6488693018630029321")
+         }
+     },
+     "operationTime" : Timestamp(1510767081, 1)
+   }
 
 ### Noncontiguous Chunks
 
-If the input `chunks <chunk>` are not contiguous, :dbcommand:`mergeChunks` returns an error similar to the following:
+If the input :term:`chunks <chunk>` are not contiguous,
+:dbcommand:`mergeChunks` returns an error similar to the following:
 
-```javascript
-{
-  "ok" : 0,
-  "errmsg" : "could not merge chunks, collection test.users has more than 2 chunks between [{ username: \"user29937\" }, { username: \"user49877\" })"
-  "$clusterTime" : {
-     "clusterTime" : Timestamp(1510767081, 1),
-     "signature" : {
-         "hash" : BinData(0,"okKHD0QuzcpbVQg7mP2YFw6lM04="),
-         "keyId" : Long("6488693018630029321")
-      }
-  },
-  "operationTime" : Timestamp(1510767081, 1)
+.. code-block:: javascript
 
-}
-```
+   {
+     "ok" : 0,
+     "errmsg" : "could not merge chunks, collection test.users has more than 2 chunks between [{ username: \"user29937\" }, { username: \"user49877\" })"
+     "$clusterTime" : {
+        "clusterTime" : Timestamp(1510767081, 1),
+        "signature" : {
+            "hash" : BinData(0,"okKHD0QuzcpbVQg7mP2YFw6lM04="),
+            "keyId" : Long("6488693018630029321")
+         }
+     },
+     "operationTime" : Timestamp(1510767081, 1)
+
+   }
+
+.. admin-only

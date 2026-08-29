@@ -4,10 +4,10 @@ framework: "Arize Phoenix"
 source_repo: "https://github.com/Arize-ai/phoenix.git"
 source_branch: "main"
 source_path: "docs/phoenix/tracing/concepts-tracing/how-tracing-works.mdx"
-source_commit: "69b3ab92c37ff65812feaa2dbf0b1c0ad5ae55fe"
-source_commit_short: "69b3ab9"
-source_commit_date: "2026-07-25T11:48:12-06:00"
-generated_at: "2026-07-25T19:08:24.916926Z"
+source_commit: "c48e50e9906fcc56c1c103ebd93ef3c95ed6b6e7"
+source_commit_short: "c48e50e"
+source_commit_date: "2026-08-29T01:45:20-06:00"
+generated_at: "2026-08-29T09:39:58.897994Z"
 ---
 # How Tracing Works
 
@@ -32,6 +32,6 @@ An exporter takes the spans created via **instrumentation** and exports them to 
 
 The Phoenix server is a collector and a UI that helps you troubleshoot your application in real time. When you run or run phoenix (e.x. **px.launch\_app()**, container), Phoenix starts receiving spans from any application(s) that is exporting spans to it.
 
-## OpenTelememetry Protocol
+## OpenTelemetry Protocol
 
-OpenTelemetetry Protocol (or OTLP for short) is the means by which traces arrive from your application to the Phoenix collector. Phoenix currently supports OTLP over HTTP.
+OpenTelemetry Protocol (or OTLP for short) is the means by which traces arrive from your application to the Phoenix collector. Phoenix currently supports OTLP over HTTP.

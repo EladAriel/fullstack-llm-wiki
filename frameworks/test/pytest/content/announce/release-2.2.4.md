@@ -4,44 +4,44 @@ framework: "pytest"
 source_repo: "https://github.com/pytest-dev/pytest"
 source_branch: "main"
 source_path: "doc/en/announce/release-2.2.4.rst"
-source_commit: "344c23787cdb3431dcc441b8b63ee9950f04b921"
-source_commit_short: "344c2378"
-source_commit_date: "2026-07-24T17:37:16+02:00"
-generated_at: "2026-07-25T11:50:13Z"
+source_commit: "fdba12e1708313f56e9cf713d260c029764ca2b7"
+source_commit_short: "fdba12e"
+source_commit_date: "2026-08-27T21:55:50+02:00"
+generated_at: "2026-08-29T09:40:11.204977Z"
 ---
-
 # pytest-2.2.4: bug fixes, better junitxml/unittest/python3 compat
 
-pytest-2.2.4 is a minor backward-compatible release of the versatile py.test testing tool.   It contains bug fixes and a few refinements to junitxml reporting, better unittest- and python3 compatibility.
+pytest-2.2.4 is a minor backward-compatible release of the versatile
+py.test testing tool.   It contains bug fixes and a few refinements
+to junitxml reporting, better unittest- and python3 compatibility.
 
 For general information see here:
 
-http://pytest.org/
+     http://pytest.org/
 
 To install or upgrade pytest:
 
-pip install -U pytest # or easy_install -U pytest
+    pip install -U pytest # or
+    easy_install -U pytest
 
-Special thanks for helping on this release to Ronny Pfannschmidt and Benjamin Peterson and the contributors of issues.
+Special thanks for helping on this release to Ronny Pfannschmidt
+and Benjamin Peterson and the contributors of issues.
 
-best, holger krekel
+best,
+holger krekel
 
 ## Changes between 2.2.3 and 2.2.4
 
 - fix error message for rewritten assertions involving the % operator
 - fix issue 126: correctly match all invalid xml characters for junitxml
-binary escape
-
+  binary escape
 - fix issue with unittest: now @unittest.expectedFailure markers should
-be processed correctly (you can also use @pytest.mark markers)
-
+  be processed correctly (you can also use @pytest.mark markers)
 - document integration with the extended distribute/setuptools test commands
 - fix issue 140: properly get the real functions
-of bound classmethods for setup/teardown_class
-
+  of bound classmethods for setup/teardown_class
 - fix issue #141: switch from the deceased paste.pocoo.org to bpaste.net
 - fix issue #143: call unconfigure/sessionfinish always when
-configure/sessionstart where called
-
+  configure/sessionstart where called
 - fix issue #144: better mangle test ids to junitxml classnames
 - upgrade distribute_setup.py to 0.6.27

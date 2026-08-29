@@ -1,85 +1,95 @@
 ---
 type: "Framework Learn Page"
-framework: "mongodb"
+framework: "MongoDB"
 source_repo: "https://github.com/mongodb/docs.git"
 source_branch: "main"
 source_path: "content/manual/manual/source/reference/operator/aggregation/toUUID.txt"
-source_commit: "ab9db26ed3d11618cdb61516d8180337d8e3f679"
-source_commit_short: "ab9db26e"
-source_commit_date: "2026-07-24T16:22:46-06:00"
-generated_at: "2026-07-25T11:51:15Z"
+source_commit: "b9f2bc487a2878b65e3c1f80024bebab76954f27"
+source_commit_short: "b9f2bc48"
+source_commit_date: "2026-08-28T17:09:45-05:00"
+generated_at: "2026-08-29T09:39:20.204429Z"
 ---
-
-==============================
-
 # $toUUID  (expression operator)
+
+**contents:** On this page
+   :local:
+   :backlinks: none
+   :depth: 1
+   :class: singlecol
 
 ## Definition
 
-.. versionadded:: 8.0
+**versionadded:** 8.0
+
+**expression:** $toUUID
+
+   Converts a string value to a :abbr:`UUID (Universally unique
+   identifier)`. If the input value is not a string, ``$toUUID`` errors.
 
 ## Syntax
 
-```javascript
-{
-   $toUUID: <expression>
-}
-```
+.. code-block:: javascript
 
-The `$toUUID` expression is shorthand for the following :expression:`$convert` expression:
-
-```javascript
-{
-   $convert: {
-      input: <expression>,
-      to: {
-         type: "binData",
-         subtype: 4 // UUID
-      },
-      format: "uuid"
+   {
+      $toUUID: <expression>
    }
-}
-```
+
+The ``$toUUID`` expression is shorthand for the following
+:expression:`$convert` expression:
+
+.. code-block:: javascript
+
+   {
+      $convert: {
+         input: <expression>,
+         to: {
+            type: "binData",
+            subtype: 4 // UUID
+         },
+         format: "uuid"
+      }
+   }
 
 ## Example
 
-Create a `products` collection with the following document:
+Create a ``products`` collection with the following document:
 
-```javascript
-db.products.insertOne(
-   {
-      name: "laptop",
-      price: 400,
-      UUID: "0e3b9063-8abd-4eb3-9f9f-f4c59fd30a60"
-   }
-)
-```
+.. code-block:: javascript
 
-In the example document, the `UUID` field is a string. To convert the `UUID` field to a UUID value, run the following `$toUUID` operation:
+   db.products.insertOne(
+      {
+         name: "laptop",
+         price: 400,
+         UUID: "0e3b9063-8abd-4eb3-9f9f-f4c59fd30a60"
+      }
+   )
 
-```javascript
-db.products.aggregate( [
-   {
-      $project: {
-         name: 1,
-         price: 1,
-         UUID: {
-            $toUUID: "$UUID"
+In the example document, the ``UUID`` field is a string. To convert the
+``UUID`` field to a UUID value, run the following ``$toUUID`` operation:
+
+.. code-block:: javascript
+
+   db.products.aggregate( [
+      {
+         $project: {
+            name: 1,
+            price: 1,
+            UUID: {
+               $toUUID: "$UUID"
+            }
          }
       }
-   }
-] )
-```
+   ] )
 
 Output:
 
-```javascript
-[
-   {
-      _id: ObjectId('669945ab610b080391a8e2f5'),
-      name: 'laptop',
-      price: 400,
-      UUID: UUID('0e3b9063-8abd-4eb3-9f9f-f4c59fd30a60')
-   }
-]
-```
+.. code-block:: javascript
+
+   [
+      {
+         _id: ObjectId('669945ab610b080391a8e2f5'),
+         name: 'laptop',
+         price: 400,
+         UUID: UUID('0e3b9063-8abd-4eb3-9f9f-f4c59fd30a60')
+      }
+   ]

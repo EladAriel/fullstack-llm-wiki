@@ -4,12 +4,11 @@ framework: "LangGraph"
 source_repo: "https://github.com/langchain-ai/docs"
 source_branch: "main"
 source_path: "src/oss/langgraph/graph-api.mdx"
-source_commit: "2aae1dfc98ee953a9a5185fb6fcdd9efb3f4d878"
-source_commit_short: "2aae1dfc"
-source_commit_date: "2026-07-25T00:27:23Z"
-generated_at: "2026-07-25T11:51:08Z"
+source_commit: "a174f9cf7c91ee5eb14ee2382eb48bfe6e4956e9"
+source_commit_short: "a174f9c"
+source_commit_date: "2026-08-28T17:04:12-07:00"
+generated_at: "2026-08-29T09:38:45.964573Z"
 ---
-
 ---
 title: Graph API overview
 sidebarTitle: Graph API
@@ -445,7 +444,7 @@ const fetchNode: GraphNode<typeof State> = async (state, config) => {
 };
 
 // Node with Command routing - specify valid destinations
-const routerNode: GraphNode<typeof State, "process" | "done"> = (state) => {
+const routerNode: GraphNode<{ InputSchema: typeof State; Nodes: "process" | "done" }> = (state) => {
   if (state.count >= 10) {
     return new Command({ goto: "done" });
   }
@@ -484,7 +483,7 @@ const State = new StateSchema({
 });
 
 // Router returns node name(s) or END
-const router: ConditionalEdgeRouter<typeof State, "process" | "summarize"> = (state) => {
+const router: ConditionalEdgeRouter<{ InputSchema: typeof State; Nodes: "process" | "summarize" }> = (state) => {
   if (!state.shouldContinue) {
     return END;
   }
@@ -1370,6 +1369,10 @@ LangGraph can easily handle migrations of graph definitions (nodes, edges, and s
 - For modifying state, we have full backwards and forwards compatibility for adding and removing keys
 - State keys that are renamed lose their saved state in existing threads
 - State keys whose types change in incompatible ways could currently cause issues in threads with state from before the change -- if this is a blocker please reach out and we can prioritize a solution.
+
+<Tip>
+For changes that are technically compatible but alter business logic, such as rewriting the tool set or restructuring conversation flow, see [Business compatibility](/oss/langgraph/backward-compatibility#business-compatibility). That page covers pinning a behavioral version in state so existing threads keep the old path while new threads pick up the latest version.
+</Tip>
 
 ## Runtime context
 

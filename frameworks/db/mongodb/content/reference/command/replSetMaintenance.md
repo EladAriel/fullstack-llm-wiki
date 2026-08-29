@@ -1,54 +1,81 @@
 ---
 type: "Framework Learn Page"
-framework: "mongodb"
+framework: "MongoDB"
 source_repo: "https://github.com/mongodb/docs.git"
 source_branch: "main"
 source_path: "content/manual/manual/source/reference/command/replSetMaintenance.txt"
-source_commit: "ab9db26ed3d11618cdb61516d8180337d8e3f679"
-source_commit_short: "ab9db26e"
-source_commit_date: "2026-07-24T16:22:46-06:00"
-generated_at: "2026-07-25T11:51:15Z"
+source_commit: "b9f2bc487a2878b65e3c1f80024bebab76954f27"
+source_commit_short: "b9f2bc48"
+source_commit_date: "2026-08-28T17:09:45-05:00"
+generated_at: "2026-08-29T09:39:20.058197Z"
 ---
-
-=====================================
-
 # replSetMaintenance (database command)
+
+**meta:** :description: Enable or disable maintenance mode for a secondary member of a replica set using the `replSetMaintenance` command.
+
+.. default-domain:: mongodb
+
+**contents:** On this page
+   :local:
+   :backlinks: none
+   :depth: 1
+   :class: singlecol
 
 ## Definition
 
+**dbcommand:** replSetMaintenance
+
+   The :dbcommand:`replSetMaintenance` admin command enables or disables the
+   maintenance mode for a :term:`secondary` member of a :term:`replica
+   set`.
+
 ## Compatibility
 
-This command is available in deployments hosted in the following environments:
+This command is available in deployments hosted in the following environments: 
 
-.. include:: /includes/fact-environments-onprem-only.rst
+**include:** /includes/fact-environments-onprem-only.rst
 
-.. include:: /includes/fact-environments-no-atlas-support.rst
+**include:** /includes/fact-environments-no-atlas-support.rst
 
 ## Syntax
 
 The command has the following syntax:
 
-```javascript
-db.runCommand(
-   { 
-     replSetMaintenance: <boolean> 
-   }
-)
-```
+.. code-block:: javascript
+
+   db.runCommand(
+      { 
+        replSetMaintenance: <boolean> 
+      }
+   )
 
 ## Behavior
 
-Consider the following behavior when running the :dbcommand:`replSetMaintenance` command:
+Consider the following behavior when running the
+:dbcommand:`replSetMaintenance` command:
 
 - You cannot run the command on the Primary.
-- You must run the command against the `admin` database.
-- When enabled `replSetMaintenance: true`, the member enters the
-`RECOVERING` state. While the secondary is `RECOVERING`:
 
-- The member is not accessible for read operations.
-- The member continues to sync its `oplog` from the Primary.
-- When a node receives a `replSetMaintenance: true` request, it
-adds a maintenance mode task to a queue of tasks. If the queue of tasks was empty and now is not, the node will transition to `RECOVERING` state and begin to reject read requests. When a node receives a `replSetMaintenance: false` request, it removes a maintenance mode task from the queue (even if that task was initiated by a different client). If the request empties the maintenance mode task queue, the node will return to `SECONDARY` state.
+- You must run the command against the ``admin`` database.
 
+- When enabled ``replSetMaintenance: true``, the member enters the
+  ``RECOVERING`` state. While the secondary is ``RECOVERING``:
+
+  - The member is not accessible for read operations.
+
+  - The member continues to sync its :term:`oplog` from the Primary.
+
+- When a node receives a ``replSetMaintenance: true`` request, it
+  adds a maintenance mode task to a queue of tasks. If the queue of
+  tasks was empty and now is not, the node will transition to
+  ``RECOVERING`` state and begin to reject read requests. When a node
+  receives a ``replSetMaintenance: false`` request, it removes a
+  maintenance mode task from the queue (even if that task was
+  initiated by a different client). If the request empties 
+  the maintenance mode task queue, the node will return to 
+  ``SECONDARY`` state.
+    
 - If you want to prevent a node from servicing reads, consider using
-`/core/replica-set-hidden-member` instead.
+  :doc:`/core/replica-set-hidden-member` instead.
+
+.. admin-only

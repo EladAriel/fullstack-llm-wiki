@@ -1,88 +1,159 @@
 ---
 type: "Framework Learn Page"
-framework: "mongodb"
+framework: "MongoDB"
 source_repo: "https://github.com/mongodb/docs.git"
 source_branch: "main"
 source_path: "content/manual/manual/source/reference/operator/aggregation/dateToString.txt"
-source_commit: "ab9db26ed3d11618cdb61516d8180337d8e3f679"
-source_commit_short: "ab9db26e"
-source_commit_date: "2026-07-24T16:22:46-06:00"
-generated_at: "2026-07-25T11:51:15Z"
+source_commit: "b9f2bc487a2878b65e3c1f80024bebab76954f27"
+source_commit_short: "b9f2bc48"
+source_commit_date: "2026-08-28T17:09:45-05:00"
+generated_at: "2026-08-29T09:39:20.133909Z"
 ---
-
-===================================
-
 # $dateToString (expression operator)
+
+.. default-domain:: mongodb
+
+**facet:** :name: programming_language
+   :values: shell
+
+**meta:** :description: Learn how to use an aggregation operator to convert a date object to a string.
+
+**contents:** On this page
+   :local:
+   :backlinks: none
+   :depth: 1
+   :class: singlecol
 
 ## Definition
 
-.. include:: /includes/fact-compatibility.rst
+**expression:** $dateToString
 
-The :expression:`$dateToString` expression has the following `operator expression syntax <aggregation-expressions>`:
+   Converts a date object to a string according to a user-specified
+   format.
 
-```javascript
-{ $dateToString: {
-    date: <dateExpression>,
-    format: <formatString>,
-    timezone: <tzExpression>,
-    onNull: <expression>
-} }
-```
+   The ``$dateToString`` expression has the following
+   :ref:`operator expression syntax <aggregation-expressions>`:
 
-> **Seealso:** - :expression:`$toString`
-- :expression:`$convert`
+.. |operator-method| replace:: ``$dateToString``
+
+**include:** /includes/fact-compatibility.rst
+
+   The ``$dateToString`` expression takes a document with the following fields:
+
+The :expression:`$dateToString` expression has the following
+:ref:`operator expression syntax <aggregation-expressions>`:
+
+.. code-block:: javascript
+
+   { $dateToString: {
+       date: <dateExpression>,
+       format: <formatString>,
+       timezone: <tzExpression>,
+       onNull: <expression>
+   } }
+
+.. list-table::
+   :header-rows: 1
+   :widths: 15 85
+
+   * - Field
+     - Description
+
+   * - ``date``
+
+     - The date to convert to string. ``<dateExpression>`` must be a
+       valid :ref:`expression <aggregation-expressions>` that
+       resolves to a :ref:`Date <document-bson-type-date>`, a
+       :ref:`Timestamp <document-bson-type-timestamp>`, or an
+       :ref:`ObjectID <document-bson-type-object-id>`.
+
+   * - ``format``
+
+     - Optional. The date format specification. ``<formatString>`` 
+       can be any string literal, containing zero or more format
+       specifiers. For a list of specifiers available, see
+       :ref:`format-specifiers`.
+
+       If unspecified and the ``timezone`` is specified and set to a
+       non UTC timezone, then ``$dateToString`` uses
+       ``"%Y-%m-%dT%H:%M:%S.%L"`` as the default format.
+
+       If unspecified and the ``timezone`` is unspecified or
+       explicitly specified as UTC, then ``$dateToString`` uses
+       ``"%Y-%m-%dT%H:%M:%S.%LZ"`` as the default format.
+
+   * - ``timezone``
+
+     - .. include:: /includes/fact-timezone-description.rst
+
+   * - ``onNull`` 
+
+     - Optional. The value to return if the ``date`` is null or missing.
+       The arguments can be any valid :ref:`expression
+       <aggregation-expressions>`.
+
+       If unspecified, :expression:`$dateToString` returns null if the
+       ``date`` is null or missing.
+
+
+**seealso:** - :expression:`$toString`
+   - :expression:`$convert`
+
+.. _format-specifiers:
 
 ## Format Specifiers
 
-.. include:: /includes/extracts/date-format-specifiers-dateToString.rst
+**include:** /includes/extracts/date-format-specifiers-dateToString.rst
 
 ## Example
 
-Consider a `sales` collection with the following document:
+Consider a ``sales`` collection with the following document:
 
-```javascript
-db.sales.insertOne(
- {
-  "_id" : 1,
-  "item" : "abc",
-  "price" : 10,
-  "quantity" : 2,
-  "date" : ISODate("2014-01-01T08:15:39.736Z")
- } 
-)
-```
+.. code-block:: javascript
+   :copyable: true
 
-The following aggregation uses `$dateToString` to return the `date` field as formatted strings:
+   db.sales.insertOne(
+    {
+     "_id" : 1,
+     "item" : "abc",
+     "price" : 10,
+     "quantity" : 2,
+     "date" : ISODate("2014-01-01T08:15:39.736Z")
+    } 
+  )
 
-```javascript
-db.sales.aggregate(
-   [
-     {
-       $project: {
-          yearMonthDayUTC: { $dateToString: { format: "%Y-%m-%d", date: "$date" } },
-          timewithOffsetNY: { $dateToString: { format: "%H:%M:%S:%L%z", date: "$date", timezone: "America/New_York"} },
-          timewithOffset430: { $dateToString: { format: "%H:%M:%S:%L%z", date: "$date", timezone: "+04:30" } },
-          minutesOffsetNY: { $dateToString: { format: "%Z", date: "$date", timezone: "America/New_York" } },
-          minutesOffset430: { $dateToString: { format: "%Z", date: "$date", timezone: "+04:30" } },
-          abbreviated_month: { $dateToString: {format: "%b", date: "$date", timezone: "+04:30" } },
-          full_month: { $dateToString: { format: "%B", date: "$date", timezone: "+04:30" } }
-       }
-     }
-   ]
-)
-```
+The following aggregation uses ``$dateToString`` to
+return the ``date`` field as formatted strings:
+
+.. code-block:: javascript
+
+   db.sales.aggregate(
+      [
+        {
+          $project: {
+             yearMonthDayUTC: { $dateToString: { format: "%Y-%m-%d", date: "$date" } },
+             timewithOffsetNY: { $dateToString: { format: "%H:%M:%S:%L%z", date: "$date", timezone: "America/New_York"} },
+             timewithOffset430: { $dateToString: { format: "%H:%M:%S:%L%z", date: "$date", timezone: "+04:30" } },
+             minutesOffsetNY: { $dateToString: { format: "%Z", date: "$date", timezone: "America/New_York" } },
+             minutesOffset430: { $dateToString: { format: "%Z", date: "$date", timezone: "+04:30" } },
+             abbreviated_month: { $dateToString: {format: "%b", date: "$date", timezone: "+04:30" } },
+             full_month: { $dateToString: { format: "%B", date: "$date", timezone: "+04:30" } }
+          }
+        }
+      ]
+   )
 
 The operation returns the following result:
 
-```javascript
-{
-   "_id" : 1,
-   "yearMonthDayUTC" : "2014-01-01",
-   "timewithOffsetNY" : "03:15:39:736-0500",
-   "timewithOffset430" : "12:45:39:736+0430",
-   "minutesOffsetNY" : "-300",
-   "minutesOffset430" : "270",
-   "abbreviated_month": "Jan",
-   "full_month": "January"
-}
-```
+.. code-block:: javascript
+
+   {
+      "_id" : 1,
+      "yearMonthDayUTC" : "2014-01-01",
+      "timewithOffsetNY" : "03:15:39:736-0500",
+      "timewithOffset430" : "12:45:39:736+0430",
+      "minutesOffsetNY" : "-300",
+      "minutesOffset430" : "270",
+      "abbreviated_month": "Jan",
+      "full_month": "January"
+   }

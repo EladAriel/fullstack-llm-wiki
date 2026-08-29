@@ -1,72 +1,118 @@
 ---
 type: "Framework Learn Page"
-framework: "mongodb"
+framework: "MongoDB"
 source_repo: "https://github.com/mongodb/docs.git"
 source_branch: "main"
 source_path: "content/manual/manual/source/reference/command/dropSearchIndex.txt"
-source_commit: "ab9db26ed3d11618cdb61516d8180337d8e3f679"
-source_commit_short: "ab9db26e"
-source_commit_date: "2026-07-24T16:22:46-06:00"
-generated_at: "2026-07-25T11:51:15Z"
+source_commit: "b9f2bc487a2878b65e3c1f80024bebab76954f27"
+source_commit_short: "b9f2bc48"
+source_commit_date: "2026-08-28T17:09:45-05:00"
+generated_at: "2026-08-29T09:39:20.085849Z"
 ---
-
-==================================
-
 # dropSearchIndex (database command)
+
+**meta:** :description: Delete an existing {+fts+} index using the `dropSearchIndex` command, specifying either the index ID or name.
+
+.. default-domain:: mongodb
+
+**contents:** On this page
+   :local:
+   :backlinks: none
+   :depth: 2
+   :class: singlecol
 
 ## Definition
 
-.. versionadded:: 7.0 (Also available starting in 6.0.7)
+**dbcommand:** dropSearchIndex
 
-.. include:: /includes/atlas-search-commands/command-descriptions/dropSearchIndex-description.rst
+**versionadded:** 7.0 (*Also available starting in 6.0.7*)
 
-The `mongosh` method :method:`db.collection.dropSearchIndex()` provides a wrapper around the `updateSearchIndex` database command.
+.. |fts-index| replace:: :atlas:`{+fts+} index </atlas-search/atlas-search-overview/#fts-indexes>`
 
-.. include:: /includes/atlas-search-commands/atlas-only-db-command.rst
+**include:** /includes/atlas-search-commands/command-descriptions/dropSearchIndex-description.rst
+
+
+The ``mongosh`` method :method:`db.collection.dropSearchIndex()`
+provides a wrapper around the ``updateSearchIndex`` database command.
+
+**include:** /includes/atlas-search-commands/atlas-only-db-command.rst
 
 ## Syntax
 
 Command syntax:
 
-```javascript
-db.runCommand(
-   {
-      dropSearchIndex: "<collection name>",
-      id: "<index Id>",
-      name: "<index name>"
-   }
-)
-```
+.. code-block:: javascript
+
+   db.runCommand(
+      {
+         dropSearchIndex: "<collection name>",
+         id: "<index Id>",
+         name: "<index name>"
+      }
+   )
 
 ## Command Fields
 
-The `dropSearchIndex` command takes the following fields:
+The ``dropSearchIndex`` command takes the following fields:
+
+.. list-table::
+   :header-rows: 1
+   :widths: 20 20 20 80
+
+   * - Field
+     - Type
+     - Necessity
+     - Description
+
+   * - ``dropSearchIndex``
+     - string
+     - Required
+     - Name of the collection that contains the index to delete.
+
+   * - ``id``
+     - string
+     - Conditional
+     - ``id`` of the index to delete.
+       
+       You must specify **either** the ``id`` or ``name`` field.
+
+   * - ``name``
+     - string
+     - Conditional
+     - Name of the index to delete.
+
+       You must specify **either** the ``id`` or ``name`` field.
 
 ## Behavior
 
-.. include:: /includes/atlas-search-commands/behavior/delete-behavior.rst
+.. |method-name| replace:: the ``dropSearchIndex`` command
+.. |method-name-title| replace:: The ``dropSearchIndex`` command
+
+**include:** /includes/atlas-search-commands/behavior/delete-behavior.rst
 
 ## Access Control
 
-.. include:: /includes/atlas-search-commands/access-control/drop-access-control.rst
+**include:** /includes/atlas-search-commands/access-control/drop-access-control.rst
 
 ## Output
 
-A successful `dropSearchIndex` command returns the following:
+A successful ``dropSearchIndex`` command returns the following:
 
-```javascript
-{
-   ok: 1
-}
-```
+.. code-block:: javascript
+   :copyable: false
+
+   {
+      ok: 1
+   }
 
 ## Example
 
-The following example deletes a search index named `searchIndex01` on the `contacts` collection:
+The following example deletes a search index named ``searchIndex01`` on
+the ``contacts`` collection:
 
-```javascript
-db.runCommand( {
-   dropSearchIndex: "contacts",
-   name: "searchIndex01"
-} )
-```
+.. code-block:: javascript
+
+   db.runCommand( {
+      dropSearchIndex: "contacts",
+      name: "searchIndex01"
+   } )

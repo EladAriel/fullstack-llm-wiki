@@ -1,40 +1,25 @@
 ---
 type: "Framework Learn Directory Index"
-framework: "shadcnui"
-directory: "content/components"
-source_repo: "https://github.com/shadcn-ui/ui"
-source_branch: "main"
-source_commit: "4baadbc6517070ae8f8feb2c97037adc2b305544"
-source_commit_short: "4baadbc6"
-source_commit_date: "2026-07-23T23:50:36+04:00"
-generated_at: "2026-07-25T11:50:48Z"
+framework: "shadcn/ui"
+generated_at: "2026-08-29T09:40:27.001426Z"
 ---
 # Components
 
-This directory contains shadcnui learning pages related to components.
+This directory contains shadcn/ui learning pages related to components.
 
 ## Breadcrumbs
 
-[Wiki Home](../../index.md) -> [Content](../index.md) -> [Components](index.md)
+[Wiki Home](../index.md) -> [Content](index.md)
 
 ## Navigation
 
-- Parent: [Parent Index](../index.md)
-
-## Child Directories
-
-- [Aria](aria/index.md) - pages related to aria
-- [Base](base/index.md) - pages related to base
-- [Radix](radix/index.md) - pages related to radix
+- Wiki Home: [Root Index](../index.md)
 
 ## Pages in This Directory
 
-- [Original Source Index](_source_index.md)
 
-## IDE LLM Guidance
+## Subdirectories
 
-When answering implementation questions related to this directory:
-
-1. Prefer the most specific page listed above.
-2. If the topic is broad, read the child directory index first.
-3. Use source metadata from each page when giving answers.
+- [Aria](aria/index.md)
+- [Base](base/index.md)
+- [Radix](radix/index.md)

@@ -1,7 +1,7 @@
 ---
 type: "Framework Learn Directory Index"
 framework: "Arize Phoenix"
-generated_at: "2026-07-25T19:08:24.991053Z"
+generated_at: "2026-08-29T09:39:58.968706Z"
 ---
 # Concepts-Tracing
 
@@ -22,3 +22,7 @@ This directory contains Arize Phoenix learning pages related to concepts-tracing
 - [How Tracing Works](how-tracing-works.md)
 - [Translating Conventions](translating-conventions.md)
 - [What Are Traces](what-are-traces.md)
+
+## Subdirectories
+
+- [Otel Openinference](otel-openinference/index.md)

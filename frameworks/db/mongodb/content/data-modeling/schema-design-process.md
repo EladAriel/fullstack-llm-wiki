@@ -1,32 +1,70 @@
 ---
 type: "Framework Learn Page"
-framework: "mongodb"
+framework: "MongoDB"
 source_repo: "https://github.com/mongodb/docs.git"
 source_branch: "main"
 source_path: "content/manual/manual/source/data-modeling/schema-design-process.txt"
-source_commit: "ab9db26ed3d11618cdb61516d8180337d8e3f679"
-source_commit_short: "ab9db26e"
-source_commit_date: "2026-07-24T16:22:46-06:00"
-generated_at: "2026-07-25T11:51:15Z"
+source_commit: "b9f2bc487a2878b65e3c1f80024bebab76954f27"
+source_commit_short: "b9f2bc48"
+source_commit_date: "2026-08-28T17:09:45-05:00"
+generated_at: "2026-08-29T09:39:19.770767Z"
 ---
-
-=====================
+.. _data-modeling-schema-design:
 
 # Designing Your Schema
 
-The schema design process helps you identify the data your application needs and organize it to optimize performance.
+**meta:** :description: Optimize your application's performance by following a schema design process that includes identifying workloads, mapping relationships, and creating indexes.
+
+.. default-domain:: mongodb
+
+**contents:** On this page
+   :local:
+   :backlinks: none
+   :depth: 2
+   :class: singlecol
+
+.. dismissible-skills-card::
+   :skill: Relational to Document Model
+   :url: https://learn.mongodb.com/skills?openTab=data%20modeling
+
+The schema design process helps you identify the data your 
+application needs and organize it to optimize performance.
 
 ## Use Cases
 
-.. include:: /includes/fact-plan-schema-early.rst
+**include:** /includes/fact-plan-schema-early.rst
 
 ## Tasks
 
 The schema design process consists of the following steps:
 
-## Contents
+**procedure:** :style: normal
 
-- Identify Workload </data-modeling/schema-design-process/identify-workload>
-- Map Relationships </data-modeling/schema-design-process/map-relationships>
-- Apply Patterns </data-modeling/schema-design-process/apply-patterns>
-- Create Indexes </data-modeling/schema-design-process/create-indexes>
+   .. step:: Identify your workload
+
+      Identify the operations that your application runs most
+      frequently. See :ref:`data-modeling-identify-workload`.
+
+   .. step:: Map relationships
+
+      Identify the relationships in your application's data and decide
+      whether to link or embed related data. See
+      :ref:`data-modeling-map-relationships`.
+
+   .. step:: Apply design patterns
+
+      Apply schema design patterns to optimize reads and writes. See
+      :ref:`data-modeling-apply-patterns`.
+
+   .. step:: Create indexes
+
+      Create indexes to support common query patterns. See
+      :ref:`create-indexes-to-support-queries`.
+
+**toctree:** :titlesonly: 
+   :hidden: 
+
+   Identify Workload </data-modeling/schema-design-process/identify-workload>
+   Map Relationships </data-modeling/schema-design-process/map-relationships>
+   Apply Patterns </data-modeling/schema-design-process/apply-patterns>
+   Create Indexes </data-modeling/schema-design-process/create-indexes>

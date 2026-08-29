@@ -1,14 +1,15 @@
 ---
 type: "Framework Learn Page"
-framework: "redis"
+framework: "Redis"
 source_repo: "https://github.com/redis/docs.git"
 source_branch: "main"
 source_path: "content/develop/reference/command-arguments.md"
-source_commit: "9d30f68c3dad1a6b3b7d30fe604b911348ce8152"
-source_commit_short: "9d30f68c"
-source_commit_date: "2026-07-24T10:52:10-07:00"
-generated_at: "2026-07-25T11:51:22Z"
+source_commit: "f8693349287b0efbef3c865b6f6a2aceca88594d"
+source_commit_short: "f869334"
+source_commit_date: "2026-08-28T10:01:19-05:00"
+generated_at: "2026-08-29T09:38:55.804694Z"
 ---
+# Command Arguments
 
 ---
 categories:
@@ -55,7 +56,7 @@ Every element in the _arguments_ array is a map with the following fields:
   - **block:** the argument is a container for nested arguments.
     This type enables grouping arguments and applying a property (such as _optional_) to all (see the [`XADD`]({{< relref "/commands/xadd" >}}) example below).
 * **key_spec_index:** this value is available for every argument of the _key_ type.
-  It is a 0-based index of the specification in the command's [key specifications][tr] that corresponds to the argument.
+  It is a 0-based index of the specification in the command's [key specifications]({{< relref "/develop/reference/key-specs.md" >}}) that corresponds to the argument.
 * **token**: a constant literal that precedes the argument (user input) itself.
 * **summary:** a short description of the argument.
 * **since:** the debut Redis version of the argument (or for module commands, the module version).
@@ -68,8 +69,6 @@ Every element in the _arguments_ array is a map with the following fields:
 * **value:** the argument's value.
   For arguments types other than _oneof_ and _block_, this is a string that describes the value in the command's syntax.
   For the _oneof_ and _block_ types, this is an array of nested arguments, each being a map as described in this section.
-
-[tr]: /develop/reference/key-specs.md
 
 ## Example
 

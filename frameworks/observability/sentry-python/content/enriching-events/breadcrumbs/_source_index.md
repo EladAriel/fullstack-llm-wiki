@@ -1,0 +1,53 @@
+---
+type: "Framework Learn Page"
+framework: "Sentry Python"
+source_repo: "https://github.com/getsentry/sentry-docs.git"
+source_branch: "master"
+source_path: "docs/platforms/python/enriching-events/breadcrumbs/index.mdx"
+source_commit: "8b4e4a23b18ee70f5fdb05bcda48869c10be2f60"
+source_commit_short: "8b4e4a2"
+source_commit_date: "2026-08-28T22:17:56+00:00"
+generated_at: "2026-08-29T09:40:09.043613Z"
+---
+# Index
+
+---
+title: Breadcrumbs
+description: "Learn more about what Sentry uses to create a trail of events (breadcrumbs) that happened prior to an issue."
+---
+
+<PlatformContent includePath="enriching-events/breadcrumbs-banner" />
+
+Sentry uses _breadcrumbs_ to create a trail of events that happened prior to an issue. These events are very similar to traditional logs, but can record more rich structured data.
+
+This page provides an overview of manual breadcrumb recording and customization. Learn more about the information that displays on the **Issue Details** page and how you can filter breadcrumbs to quickly resolve issues in [Using Breadcrumbs](/product/issues/issue-details/breadcrumbs).
+
+<Alert title="Learn about SDK usage">
+
+Developers who want to modify the breadcrumbs interface can learn more in our [developer documentation about the Breadcrumbs Interface](https://develop.sentry.dev/sdk/foundations/transport/event-payloads/breadcrumbs/).
+
+</Alert>
+
+## Manual Breadcrumbs
+
+You can manually add breadcrumbs whenever something interesting happens. For example, you might manually record a breadcrumb if the user authenticates or another state change occurs.
+
+Manually record a breadcrumb:
+
+<PlatformContent includePath="enriching-events/breadcrumbs/breadcrumbs-example" />
+
+The available breadcrumb keys are `type`, `category`, `message`, `level`, `timestamp` (which defaults to the system's wall-clock time), and `data`, which is the place to put any additional information you'd like the breadcrumb to include. Using keys other than these six won't cause an error, but will result in the data being dropped when the event is processed by Sentry.
+
+## Automatic Breadcrumbs
+
+<PlatformContent includePath="enriching-events/breadcrumbs/automatic-breadcrumbs" />
+
+## Customize Breadcrumbs
+
+SDKs allow you to customize breadcrumbs through the <PlatformIdentifier name="before-breadcrumb" /> hook.
+
+This hook is passed an already assembled breadcrumb and <PlatformLink to="/configuration/filtering/#using-hints">a `hint` object</PlatformLink> containing extra metadata. The function can modify the breadcrumb or decide to discard it entirely by returning `None`:
+
+<PlatformContent includePath="enriching-events/breadcrumbs/before-breadcrumb" />
+
+For information about what can be done with the hint, see <PlatformLink to="/configuration/filtering/#using-hints">Filtering Events</PlatformLink>.

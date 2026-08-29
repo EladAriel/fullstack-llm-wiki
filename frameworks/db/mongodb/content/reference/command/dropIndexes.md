@@ -1,111 +1,179 @@
 ---
 type: "Framework Learn Page"
-framework: "mongodb"
+framework: "MongoDB"
 source_repo: "https://github.com/mongodb/docs.git"
 source_branch: "main"
 source_path: "content/manual/manual/source/reference/command/dropIndexes.txt"
-source_commit: "ab9db26ed3d11618cdb61516d8180337d8e3f679"
-source_commit_short: "ab9db26e"
-source_commit_date: "2026-07-24T16:22:46-06:00"
-generated_at: "2026-07-25T11:51:15Z"
+source_commit: "b9f2bc487a2878b65e3c1f80024bebab76954f27"
+source_commit_short: "b9f2bc48"
+source_commit_date: "2026-08-28T17:09:45-05:00"
+generated_at: "2026-08-29T09:39:20.026522Z"
 ---
-
-==============================
-
 # dropIndexes (database command)
+
+**meta:** :description: Drop one or more indexes from a collection using the `dropIndexes` command, excluding `_id` and shard key indexes.
+
+.. default-domain:: mongodb
+
+**contents:** On this page
+   :local:
+   :backlinks: none
+   :depth: 1
+   :class: singlecol
 
 ## Definition
 
+**dbcommand:** dropIndexes
+
+   .. versionchanged:: 6.0
+   
+   The :dbcommand:`dropIndexes` command drops one or more indexes
+   (except the index on the ``_id`` field and the last remaining shard
+   key index, if one exists) from the specified collection.
+
+   .. |method| replace:: :method:`db.collection.dropIndex()` and
+      :method:`db.collection.dropIndexes()` helper methods.
+   .. include:: /includes/fact-dbcommand-tip
+
 ## Compatibility
 
-This command is available in deployments hosted in the following environments:
+This command is available in deployments hosted in the following environments: 
 
-.. include:: /includes/fact-environments-atlas-only.rst
+**include:** /includes/fact-environments-atlas-only.rst
 
-.. include:: /includes/fact-environments-atlas-support-all.rst
+**include:** /includes/fact-environments-atlas-support-all.rst
 
-.. include:: /includes/fact-environments-onprem-only.rst
+**include:** /includes/fact-environments-onprem-only.rst
 
 ## Syntax
 
 The command has the following syntax:
+   
+.. code-block:: javascript
 
-```javascript
-db.runCommand(
-   { 
-     dropIndexes: <string>, 
-     index: <string|document|arrayofstrings>, 
-     writeConcern: <document>, comment: <any> 
-   }
-)
-```
+   db.runCommand(
+      { 
+        dropIndexes: <string>, 
+        index: <string|document|arrayofstrings>, 
+        writeConcern: <document>, comment: <any> 
+      }
+   )
 
 ## Command Fields
 
 The command takes the following fields:
 
+.. list-table::
+   :header-rows: 1
+   :widths: 10 20 70
+ 
+   * - Field
+     - Type
+     - Description
+ 
+   * - dropIndexes
+     - String
+     - The name of the collection whose indexes to drop.
+ 
+   * - index
+     - string or document or array of strings
+     - The index or indexes to drop.
+ 
+       - To drop all indexes except the ``_id`` index and the last 
+         remaining shard key index from the collection if one 
+         exists, specify ``"*"``.
+ 
+       - To drop a single index, specify either the index name,
+         the index specification document (unless the index is a
+         :ref:`text <index-type-text>` index), or an array of the
+         index name. To drop a :ref:`text <index-type-text>` index,
+         specify the index names instead of the index specification
+         document. If this index is the last remaining shard key 
+         index, ``dropIndexes`` raises an error.
+ 
+       - To drop multiple indexes, specify an array of the index names.
+ 
+   * - writeConcern
+     - document
+     - Optional. A document expressing the :doc:`write concern
+       </reference/write-concern>` of the :dbcommand:`drop` command.
+       Omit to use the default write concern.
+ 
+   * - ``comment``
+     - any
+     - .. include:: /includes/extracts/comment-content.rst
+
 ## Behavior
 
-.. include:: /includes/fact-drop-indexes-6.0.rst
+.. |drop-index| replace:: :dbcommand:`dropIndexes`
 
-.. include:: /includes/fact-drop-index-5.2.rst
+**include:** /includes/fact-drop-indexes-6.0.rst
+
+**include:** /includes/fact-drop-index-5.2.rst
 
 ### Kill related queries only
 
-.. include:: /includes/extracts/fact-command-dropIndexes-query-behavior.rst
+**include:** /includes/extracts/fact-command-dropIndexes-query-behavior.rst
 
 ### Resource Locking
 
-.. include:: /includes/extracts/dropIndexes-resource-lock.rst
+**include:** /includes/extracts/dropIndexes-resource-lock.rst
 
 ### Index Names
 
-If the method is passed an array of index names that includes a non-existent index, the method errors without dropping any of the specified indexes.
+If the method is passed an array of index names that includes a
+non-existent index, the method errors without dropping any of the
+specified indexes.
 
-### `_id` Index
+### ``_id`` Index
 
-You cannot drop the default index on the `_id` field.
+You cannot drop the default index on the ``_id`` field.
 
 ### text Indexes
 
-To drop a `text <index-type-text>` index, specify the index name instead of the index specification document.
+To drop a :ref:`text <index-type-text>` index, specify the index name
+instead of the index specification document.
+
+.. _dropIndexes-cmd-index-builds:
 
 ### Stop In-Progress Index Builds
 
-.. include:: /includes/fact-stop-in-progress-index-builds.rst
+**include:** /includes/fact-stop-in-progress-index-builds.rst
 
 ### Hidden Indexes
 
-.. include:: /includes/fact-hidden-indexes.rst
+**include:** /includes/fact-hidden-indexes.rst
 
 ## Examples
 
-- To drop all non-`_id` indexes , specify `"*"` for the `index`.
-```javascript
-  db.runCommand( { dropIndexes: "collection", index: "*" } )
-```
+- To drop all non-``_id`` indexes , specify ``"*"`` for the ``index``.
+
+  .. code-block:: javascript
+
+     db.runCommand( { dropIndexes: "collection", index: "*" } )
 
 - To drop a single index, issue the command by specifying the name of
-the index you want to drop. For example, to drop the index named `age_1`, use the following command:
+  the index you want to drop. For example, to drop the index named
+  ``age_1``, use the following command:
 
-```javascript
-  db.runCommand( { dropIndexes: "collection", index: "age_1" })
+  .. code-block:: javascript
 
-:binary:`~bin.mongosh` provides the helper methods
-:method:`db.collection.dropIndex()` and
-:method:`db.collection.dropIndexes()`:
+     db.runCommand( { dropIndexes: "collection", index: "age_1" })
 
-.. code-block:: javascript
+  :binary:`~bin.mongosh` provides the helper methods
+  :method:`db.collection.dropIndex()` and
+  :method:`db.collection.dropIndexes()`:
 
-  db.collection.dropIndex("age_1");
-```
+  .. code-block:: javascript
+
+     db.collection.dropIndex("age_1");
 
 - To drop multiple indexes, issue the command by specifying an array of
-the index names:
+  the index names: 
 
-```javascript
-  db.runCommand( { dropIndexes: "collection", index: [ "age_1", "age_1_status_1" ] } )
-```
+  .. code-block:: javascript
 
-> **Seealso:** - :method:`db.collection.dropIndexes()`
-- :method:`db.collection.dropIndex()`
+     db.runCommand( { dropIndexes: "collection", index: [ "age_1", "age_1_status_1" ] } )
+
+**seealso:** - :method:`db.collection.dropIndexes()`
+   - :method:`db.collection.dropIndex()`

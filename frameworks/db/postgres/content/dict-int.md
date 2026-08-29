@@ -1,54 +1,98 @@
 ---
 type: "Framework Learn Page"
-framework: "postgres"
+framework: "PostgreSQL"
 source_repo: "https://github.com/postgres/postgres.git"
 source_branch: "master"
 source_path: "doc/src/sgml/dict-int.sgml"
-source_commit: "38afc3dcb25c45b744d4025029ce0a6c90b7059f"
-source_commit_short: "38afc3dc"
-source_commit_date: "2026-07-25T19:08:27+09:00"
-generated_at: "2026-07-25T11:50:59Z"
+source_commit: "6c5f1d6074208146930b67c2054509c3e82f6f7f"
+source_commit_short: "6c5f1d6"
+source_commit_date: "2026-08-28T23:24:47+02:00"
+generated_at: "2026-08-29T09:39:24.423244Z"
 ---
+# dict_int —
+   example full-text search dictionary for integers
 
-## dict_int -- example full-text search dictionary for integers
+ 
+  dict_int
+ 
 
-dict_int
+ 
+  dict_int is an example of an add-on dictionary template
+  for full-text search.  The motivation for this example dictionary is to
+  control the indexing of integers (signed and unsigned), allowing such
+  numbers to be indexed while preventing excessive growth in the number of
+  unique words, which greatly affects the performance of searching.
+ 
 
-`dict_int` is an example of an add-on dictionary template for full-text search. The motivation for this example dictionary is to control the indexing of integers (signed and unsigned), allowing such numbers to be indexed while preventing excessive growth in the number of unique words, which greatly affects the performance of searching.
+ 
+  This module is considered trusted, that is, it can be
+  installed by non-superusers who have CREATE privilege
+  on the current database.
+ 
 
-This module is considered trusted, that is, it can be installed by non-superusers who have `CREATE` privilege on the current database.
+ 
+  Configuration
 
-## Configuration
+  
+   The dictionary accepts three options:
+  
 
-The dictionary accepts three options:
+  
+   
+    
+     The maxlen parameter specifies the maximum number of
+     digits allowed in an integer word.  The default value is 6.
+    
+   
+   
+    
+     The rejectlong parameter specifies whether an overlength
+     integer should be truncated or ignored.  If rejectlong is
+     false (the default), the dictionary returns the first
+     maxlen digits of the integer. If rejectlong is
+     true, the dictionary treats an overlength integer as a stop
+     word, so that it will not be indexed.  Note that this also means that
+     such an integer cannot be searched for.
+    
+   
+   
+    
+     The absval parameter specifies whether leading
+     + or -
+     signs should be removed from integer words.  The default
+     is false.  When true, the sign is
+     removed before maxlen is applied.
+    
+   
+  
+ 
 
-- The `maxlen` parameter specifies the maximum number of digits allowed in an integer word. The default value is 6.
-- The `rejectlong` parameter specifies whether an overlength integer should be truncated or ignored. If `rejectlong` is `false` (the default), the dictionary returns the first `maxlen` digits of the integer. If `rejectlong` is `true`, the dictionary treats an overlength integer as a stop word, so that it will not be indexed. Note that this also means that such an integer cannot be searched for.
-- The `absval` parameter specifies whether leading `+` or `-` signs should be removed from integer words. The default is `false`. When `true`, the sign is removed before `maxlen` is applied.
+ 
+  Usage
 
-## Usage
+  
+   Installing the dict_int extension creates a text search
+   template intdict_template and a dictionary intdict
+   based on it, with the default parameters.  You can alter the
+   parameters, for example
 
-Installing the `dict_int` extension creates a text search template `intdict_template` and a dictionary `intdict` based on it, with the default parameters. You can alter the parameters, for example
-
-```
 mydb# ALTER TEXT SEARCH DICTIONARY intdict (MAXLEN = 4, REJECTLONG = true);
 ALTER TEXT SEARCH DICTIONARY
-```
 
-or create new dictionaries based on the template.
+   or create new dictionaries based on the template.
+  
 
-To test the dictionary, you can try
+  
+   To test the dictionary, you can try
 
-```
 mydb# SELECT ts_lexize('intdict', '12345678');
  ts_lexize
 -----------
  {123456}
-```
 
-but real-world usage will involve including it in a text search configuration as described in `textsearch`. That might look like this:
+   but real-world usage will involve including it in a text search
+   configuration as described in .
+   That might look like this:
 
-```
 ALTER TEXT SEARCH CONFIGURATION english
     ALTER MAPPING FOR int, uint WITH intdict;
-```

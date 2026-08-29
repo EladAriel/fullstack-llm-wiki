@@ -1,93 +1,190 @@
 ---
 type: "Framework Learn Page"
-framework: "mongodb"
+framework: "MongoDB"
 source_repo: "https://github.com/mongodb/docs.git"
 source_branch: "main"
 source_path: "content/manual/manual/source/reference/operator/aggregation/objectToArray.txt"
-source_commit: "ab9db26ed3d11618cdb61516d8180337d8e3f679"
-source_commit_short: "ab9db26e"
-source_commit_date: "2026-07-24T16:22:46-06:00"
-generated_at: "2026-07-25T11:51:15Z"
+source_commit: "b9f2bc487a2878b65e3c1f80024bebab76954f27"
+source_commit_short: "b9f2bc48"
+source_commit_date: "2026-08-28T17:09:45-05:00"
+generated_at: "2026-08-29T09:39:20.132407Z"
 ---
-
-====================================
-
 # $objectToArray (expression operator)
+
+**meta:** :description: Convert a document to an array using `$objectToArray` in MongoDB, transforming each field/value pair into a document with `k` and `v` fields.
+
+.. default-domain:: mongodb
+
+**contents:** On this page
+   :local:
+   :backlinks: none
+   :depth: 1
+   :class: singlecol
 
 ## Definition
 
+**expression:** $objectToArray
+
+   Converts a document to an array. The return array contains an
+   element for each field/value pair in the original document.
+   Each element in the return array is a document that contains two
+   fields ``k`` and ``v``:
+
+   - The ``k`` field contains the field name in the original document.
+
+   - The ``v`` field contains the value of the field in the original
+     document.
+
+   :expression:`$objectToArray` has the following syntax:
+
+   .. code-block:: javascript
+
+      { $objectToArray: <object> }
+
+   The ``<object>`` expression can be any valid :ref:`expression
+   <aggregation-expressions>` as long as it resolves to a document
+   object. :expression:`$objectToArray` applies to the top-level fields
+   of its argument. If the argument is a document that itself contains
+   embedded document fields, the :expression:`$objectToArray` does not
+   recursively apply to the embedded document fields.
+
+   For more information on expressions, see
+   :ref:`aggregation-expressions`.
+
 ## Behavior
 
-For more information on expressions, see `aggregation-expressions`.
+For more information on expressions, see :ref:`aggregation-expressions`.
+
+.. list-table::
+   :header-rows: 1
+   :widths: 65 35
+   :class: border-table
+
+   * - Example
+     - Results
+
+   * - .. code-block:: json
+          :copyable: false
+
+          { $objectToArray: { item: "foo", qty: 25 } }
+
+     - .. code-block:: json
+          :copyable: false
+
+          [
+             {
+                "k" : "item",
+                "v" : "foo"
+             },
+             {
+                "k" : "qty",
+                "v" : 25
+             }
+          ]
+
+
+   * - .. code-block:: json
+          :copyable: false
+
+          { $objectToArray: {
+              item: "foo",
+              qty: 25,
+              size: { len: 25, w: 10, uom: "cm" }
+           } }
+
+     - .. code-block:: json
+          :copyable: false
+
+          [
+             {
+                "k" : "item",
+                "v" : "foo"
+             },
+             {
+                "k" : "qty",
+                "v" : 25
+             },
+             {
+                "k" : "size",
+                "v" : {
+                   "len" : 25,
+                   "w" : 10,
+                   "uom" : "cm"
+                }
+             }
+          ]
 
 ## Examples
 
-### `$objectToArray` Example
+### ``$objectToArray`` Example
 
-Consider a `inventory` collection with the following documents:
+Consider a ``inventory`` collection with the following documents:
 
-```javascript
-db.inventory.insertMany( [
-   { _id: 1, item: "ABC1",  dimensions: { l: 25, w: 10, uom: "cm" } },
-   { _id: 2, item: "ABC2",  dimensions: { l: 50, w: 25, uom: "cm" } },
-   { _id: 3, item: "XYZ1",  dimensions: { l: 70, w: 75, uom: "cm" } }
-] )
-```
+.. code-block:: javascript
 
-The following aggregation pipeline operation use the :expression:`$objectToArray` to return the `dimensions` field as an array:
+   db.inventory.insertMany( [
+      { _id: 1, item: "ABC1",  dimensions: { l: 25, w: 10, uom: "cm" } },
+      { _id: 2, item: "ABC2",  dimensions: { l: 50, w: 25, uom: "cm" } },
+      { _id: 3, item: "XYZ1",  dimensions: { l: 70, w: 75, uom: "cm" } }
+   ] )
 
-```javascript
-db.inventory.aggregate(
-   [
-      {
-         $project: {
-            item: 1,
-            dimensions: { $objectToArray: "$dimensions" }
+The following aggregation pipeline operation use the
+:expression:`$objectToArray` to return the ``dimensions`` field as an array:
+
+.. code-block:: javascript
+
+   db.inventory.aggregate(
+      [
+         {
+            $project: {
+               item: 1,
+               dimensions: { $objectToArray: "$dimensions" }
+            }
          }
-      }
-   ]
-)
-```
+      ]
+   )
 
 The operation returns the following:
 
-```javascript
-{ _id: 1, item: "ABC1", dimensions: [ { "k" : "l", "v" : 25 }, { "k" : "w", "v" : 10 }, { "k" : "uom", "v" : "cm" } ] }
-{ _id: 2, item: "ABC2", dimensions: [ { "k" : "l", "v" : 50 }, { "k" : "w", "v" : 25 }, { "k" : "uom", "v" : "cm" } ] }
-{ _id: 3, item: "XYZ1", dimensions: [ { "k" : "l", "v" : 70 }, { "k" : "w", "v" : 75 }, { "k" : "uom", "v" : "cm" } ] }
-```
+.. code-block:: javascript
 
-### `$objectToArray` to Sum Nested Fields
+   { _id: 1, item: "ABC1", dimensions: [ { "k" : "l", "v" : 25 }, { "k" : "w", "v" : 10 }, { "k" : "uom", "v" : "cm" } ] }
+   { _id: 2, item: "ABC2", dimensions: [ { "k" : "l", "v" : 50 }, { "k" : "w", "v" : 25 }, { "k" : "uom", "v" : "cm" } ] }
+   { _id: 3, item: "XYZ1", dimensions: [ { "k" : "l", "v" : 70 }, { "k" : "w", "v" : 75 }, { "k" : "uom", "v" : "cm" } ] }
 
-Consider a `inventory` collection with the following documents:
+### ``$objectToArray`` to Sum Nested Fields
 
-```javascript
-db.inventory.insertMany( [ 
-   { _id: 1, item: "ABC1", instock: { warehouse1: 2500, warehouse2: 500 } }
-   { _id: 2, item: "ABC2", instock: { warehouse2: 500, warehouse3: 200} }
-] )
-```
+Consider a ``inventory`` collection with the following documents:
 
-The following aggregation pipeline operation uses the :expression:`$objectToArray` along with :pipeline:`$unwind` and :pipeline:`$group` to calculate the total items in stock per warehouse.
+.. code-block:: javascript
 
-```javascript
-db.inventory.aggregate([
-   { $project: { warehouses: { $objectToArray: "$instock" } } },
-   { $unwind: "$warehouses" },
-   { $group: { _id: "$warehouses.k", total: { $sum: "$warehouses.v" } } } 
-])
-```
+   db.inventory.insertMany( [ 
+      { _id: 1, item: "ABC1", instock: { warehouse1: 2500, warehouse2: 500 } }
+      { _id: 2, item: "ABC2", instock: { warehouse2: 500, warehouse3: 200} }
+   ] )
+
+The following aggregation pipeline operation uses the
+:expression:`$objectToArray` along with :pipeline:`$unwind` and
+:pipeline:`$group` to calculate the total items in stock per warehouse.
+
+.. code-block:: javascript
+
+   db.inventory.aggregate([
+      { $project: { warehouses: { $objectToArray: "$instock" } } },
+      { $unwind: "$warehouses" },
+      { $group: { _id: "$warehouses.k", total: { $sum: "$warehouses.v" } } } 
+   ])
 
 The operation returns the following:
 
-```javascript
-{ _id: "warehouse3", total: 200 }
-{ _id: "warehouse2", total: 1000 }
-{ _id: "warehouse1", total: 2500 }
-```
+.. code-block:: javascript
 
-### `$objectToArray` + `$arrayToObject` Example
+   { _id: "warehouse3", total: 200 }
+   { _id: "warehouse2", total: 1000 }
+   { _id: "warehouse1", total: 2500 }
 
-.. include:: /includes/example-objectToArray-arrayToObject.rst
+### ``$objectToArray`` + ``$arrayToObject`` Example
 
-> **Seealso:** :expression:`$arrayToObject`
+**include:** /includes/example-objectToArray-arrayToObject.rst
+
+**seealso:** :expression:`$arrayToObject`

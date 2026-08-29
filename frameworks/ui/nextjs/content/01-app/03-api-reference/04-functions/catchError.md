@@ -1,14 +1,15 @@
 ---
 type: "Framework Learn Page"
-framework: "nextjs"
+framework: "Next.js"
 source_repo: "https://github.com/vercel/next.js/"
 source_branch: "canary"
 source_path: "docs/01-app/03-api-reference/04-functions/catchError.mdx"
-source_commit: "dcf242a17b5d4622bbd9624db531a9d84177619f"
-source_commit_short: "dcf242a1"
-source_commit_date: "2026-07-25T10:16:19+02:00"
-generated_at: "2026-07-25T11:50:53Z"
+source_commit: "33a5d542e519fe4e05c8c8c2c2845da9f741699b"
+source_commit_short: "33a5d542"
+source_commit_date: "2026-08-29T00:04:45-07:00"
+generated_at: "2026-08-29T09:40:24.279639Z"
 ---
+# Catcherror
 
 ---
 title: catchError
@@ -19,6 +20,8 @@ related:
     - app/getting-started/error-handling
     - app/api-reference/file-conventions/error
 ---
+
+<AppOnly>
 
 The `catchError` function creates a component that wraps its children in an error boundary. It provides a programmatic alternative to the [`error.js`](/docs/app/api-reference/file-conventions/error) file convention, enabling component-level error recovery anywhere in your component tree.
 
@@ -66,6 +69,51 @@ function ErrorFallback(props, { error, retry }) {
 export default catchError(ErrorFallback)
 ```
 
+</AppOnly>
+
+<PagesOnly>
+
+The `catchError` function creates a component that wraps its children in an error boundary. It provides a programmatic alternative to writing a [custom React error boundary class](https://react.dev/reference/react/Component#catching-rendering-errors-with-an-error-boundary), enabling component-level error recovery anywhere in your component tree.
+
+Compared to a custom React error boundary, `catchError` is designed to work with Next.js out of the box:
+
+- **Built-in error recovery** — `reset()` re-renders the error boundary's children, letting users recover from errors without a full page reload.
+- **Client navigation handling** — The error state automatically clears when you do a client navigation to a different route.
+
+```tsx filename="components/custom-error-boundary.tsx" switcher
+import { catchError, type ErrorInfo } from 'next/error'
+
+function ErrorFallback(props: { title: string }, { error, reset }: ErrorInfo) {
+  return (
+    <div>
+      <h2>{props.title}</h2>
+      <p>{error.message}</p>
+      <button onClick={() => reset()}>Try again</button>
+    </div>
+  )
+}
+
+export default catchError(ErrorFallback)
+```
+
+```jsx filename="components/custom-error-boundary.js" switcher
+import { catchError } from 'next/error'
+
+function ErrorFallback(props, { error, reset }) {
+  return (
+    <div>
+      <h2>{props.title}</h2>
+      <p>{error.message}</p>
+      <button onClick={() => reset()}>Try again</button>
+    </div>
+  )
+}
+
+export default catchError(ErrorFallback)
+```
+
+</PagesOnly>
+
 ## Reference
 
 ### Parameters
@@ -83,6 +131,8 @@ A function that renders the error UI when an error is caught. It receives two ar
 - `props` — The props passed to the wrapper component (excluding `children`).
 - `errorInfo` — An object containing information about the error:
 
+<AppOnly>
+
 | Property | Type                                                                                        | Description                                                                                                                                     |
 | -------- | ------------------------------------------------------------------------------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------- |
 | `error`  | [`Error`](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Error) | The error instance that was caught.                                                                                                             |
@@ -90,6 +140,17 @@ A function that renders the error UI when an error is caught. It receives two ar
 | `reset`  | `() => void`                                                                                | Resets the error state and re-renders without re-fetching. Use [`retry()`](/docs/app/api-reference/file-conventions/error#retry) in most cases. |
 
 The `fallback` function must be a Client Component (or defined in a `'use client'` module).
+
+</AppOnly>
+
+<PagesOnly>
+
+| Property | Type                                                                                        | Description                                                          |
+| -------- | ------------------------------------------------------------------------------------------- | -------------------------------------------------------------------- |
+| `error`  | [`Error`](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Error) | The error instance that was caught.                                  |
+| `reset`  | `() => void`                                                                                | Resets the error state and re-renders the error boundary's children. |
+
+</PagesOnly>
 
 ### Returns
 
@@ -101,9 +162,11 @@ The `fallback` function must be a Client Component (or defined in a `'use client
 
 ## Examples
 
-### Client Component
+### Basic usage
 
 Define a fallback and use the returned component to wrap parts of your UI:
+
+<AppOnly>
 
 ```tsx filename="app/some-component.tsx" switcher
 import ErrorWrapper from '../custom-error-boundary'
@@ -121,7 +184,31 @@ export default function Component({ children }) {
 }
 ```
 
+</AppOnly>
+
+<PagesOnly>
+
+```tsx filename="components/some-component.tsx" switcher
+import ErrorWrapper from './custom-error-boundary'
+
+export default function Component({ children }: { children: React.ReactNode }) {
+  return <ErrorWrapper title="Dashboard Error">{children}</ErrorWrapper>
+}
+```
+
+```jsx filename="components/some-component.js" switcher
+import ErrorWrapper from './custom-error-boundary'
+
+export default function Component({ children }) {
+  return <ErrorWrapper title="Dashboard Error">{children}</ErrorWrapper>
+}
+```
+
+</PagesOnly>
+
 ### Recovering from errors
+
+<AppOnly>
 
 Use `retry()` to prompt the user to recover from the error. When called, the function re-fetches and re-renders the error boundary's children. If successful, the fallback is replaced with the re-rendered result.
 
@@ -162,6 +249,46 @@ function ErrorFallback(props, { error, retry, reset }) {
 
 export default catchError(ErrorFallback)
 ```
+
+</AppOnly>
+
+<PagesOnly>
+
+Use `reset()` to prompt the user to recover from the error. When called, the function clears the error state and re-renders the error boundary's children.
+
+```tsx filename="components/custom-error-boundary.tsx" switcher
+import { catchError, type ErrorInfo } from 'next/error'
+
+function ErrorFallback(props: {}, { error, reset }: ErrorInfo) {
+  return (
+    <div>
+      <p>{error.message}</p>
+      <button onClick={() => reset()}>Try again</button>
+    </div>
+  )
+}
+
+export default catchError(ErrorFallback)
+```
+
+```jsx filename="components/custom-error-boundary.js" switcher
+import { catchError } from 'next/error'
+
+function ErrorFallback(props, { error, reset }) {
+  return (
+    <div>
+      <p>{error.message}</p>
+      <button onClick={() => reset()}>Try again</button>
+    </div>
+  )
+}
+
+export default catchError(ErrorFallback)
+```
+
+</PagesOnly>
+
+<AppOnly>
 
 ### Server-rendered error fallback
 
@@ -227,6 +354,14 @@ export default function Component({ children }) {
 > - Unlike the `error.js` file convention which is scoped to route segments, `catchError` can be used to wrap any part of your component tree for component-level error recovery.
 > - Props passed to the wrapper component are forwarded to the fallback function, making it easy to create reusable error UIs with different configurations.
 > - You don't need to wrap `error.js` default exports with `catchError`. The [`error.js`](/docs/app/api-reference/file-conventions/error) file convention already renders inside a built-in error boundary provided by Next.js.
+
+</AppOnly>
+
+<PagesOnly>
+
+> **Good to know**: Props passed to the wrapper component are forwarded to the fallback function, making it easy to create reusable error UIs with different configurations.
+
+</PagesOnly>
 
 ## Version History
 

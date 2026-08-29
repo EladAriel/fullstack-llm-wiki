@@ -1,44 +1,85 @@
 ---
 type: "Framework Learn Page"
-framework: "mongodb"
+framework: "MongoDB"
 source_repo: "https://github.com/mongodb/docs.git"
 source_branch: "main"
 source_path: "content/manual/manual/source/reference/method/db.collection.unhideIndex.txt"
-source_commit: "ab9db26ed3d11618cdb61516d8180337d8e3f679"
-source_commit_short: "ab9db26e"
-source_commit_date: "2026-07-24T16:22:46-06:00"
-generated_at: "2026-07-25T11:51:15Z"
+source_commit: "b9f2bc487a2878b65e3c1f80024bebab76954f27"
+source_commit_short: "b9f2bc48"
+source_commit_date: "2026-08-28T17:09:45-05:00"
+generated_at: "2026-08-29T09:39:19.949587Z"
 ---
-
-============================================
-
 # db.collection.unhideIndex() (mongosh method)
 
-.. include:: /includes/fact-mongosh-shell-method-alt
+**meta:** :description: Unhide an existing index from the query planner using `db.collection.unhideIndex()` in MongoDB.
+
+.. default-domain:: mongodb
+
+**contents:** On this page
+   :local:
+   :backlinks: none
+   :depth: 1
+   :class: singlecol
+
+
+**include:** /includes/fact-mongosh-shell-method-alt
 
 ## Definition
+
+**method:** db.collection.unhideIndex()
+
+   .. |dbcommand| replace:: ``index.hidden`` collection option set using the
+      :dbcommand:`collMod` command
+
+   Unhides an existing index from the query planner. Once unhidden, the
+   indexes are immediately available for use.
 
 ## Compatibility
 
 This method is available in deployments hosted in the following environments:
 
-.. include:: /includes/fact-environments-atlas-only.rst
+**include:** /includes/fact-environments-atlas-only.rst
 
-.. include:: /includes/fact-environments-atlas-support-all.rst
+**include:** /includes/fact-environments-atlas-support-all.rst
 
-.. include:: /includes/fact-environments-onprem-only.rst
+**include:** /includes/fact-environments-onprem-only.rst
 
 ## Syntax
 
-```javascript
-db.collection.unhideIndex(<index>)
-```
+.. code-block:: javascript
+
+   db.collection.unhideIndex(<index>)
 
 ### Parameters
 
-The :method:`db.collection.unhideIndex()` method takes the following parameter:
+The :method:`db.collection.unhideIndex()` method takes the following
+parameter:
 
-The :method:`db.collection.unhideIndex()` is a :binary:`mongosh` shell wrapper for the :dbcommand:`collMod` command.
+.. list-table::
+   :header-rows: 1
+   :widths: 20 20 80
+
+   * - Parameter
+
+     - Type
+
+     - Description
+
+   * - ``index``
+
+     - string or document
+
+     - Specifies the index to unhide from the query planner. You can
+       specify the index either by the index name or by the index
+       specification document.
+
+       .. include:: /includes/find-index.rst
+       
+       To unhide a :ref:`text <index-type-text>` index, specify the
+       index name.
+
+The :method:`db.collection.unhideIndex()` is a :binary:`mongosh` shell
+wrapper for the :dbcommand:`collMod` command.
 
 ## Behavior
 
@@ -48,11 +89,13 @@ Unhiding a hidden index resets its :pipeline:`$indexStats`.
 
 ### No-op
 
-Unhiding an already unhidden index has no effect on the index. However, the operation will still generate an empty oplog entry.
+Unhiding an already unhidden index has no effect on the index. However,
+the operation will still generate an empty oplog entry.
 
 ## Required Access
 
-If the deployment enforces authentication/authorization, you must have the :authaction:`collMod` privilege in the collection's database.
+If the deployment enforces authentication/authorization, you must have
+the :authaction:`collMod` privilege in the collection's database.
 
 The built-in role :authrole:`dbAdmin` provides the required privileges.
 
@@ -60,78 +103,86 @@ The built-in role :authrole:`dbAdmin` provides the required privileges.
 
 The following example unhides an existing index.
 
-First, use :method:`db.collection.createIndex()` to create a hidden index:
+First, use :method:`db.collection.createIndex()` to create a hidden
+index:
 
-```javascript
-db.restaurants.createIndex( { borough: 1, ratings: 1 }, { hidden: true } );
-```
+.. code-block:: javascript
 
-To verify, run :method:`db.collection.getIndexes()` on the `restaurants` collection:
+   db.restaurants.createIndex( { borough: 1, ratings: 1 }, { hidden: true } );
 
-```javascript
-db.restaurants.getIndexes();
-```
+To verify, run :method:`db.collection.getIndexes()` on the
+``restaurants`` collection:
 
-The operation returns the following information:
+.. code-block:: javascript
 
-```javascript
-[
-   {
-      "v" : 2,
-      "key" : {
-         "_id" : 1
-      },
-      "name" : "_id_"
-   },
-   {
-      "v" : 2,
-      "key" : {
-         "borough" : 1,
-         "ratings" : 1
-      },
-      "name" : "borough_1_ratings_1",
-      "hidden" : true
-   }
-]
-```
-
-The index option `hidden` is only returned if the value is `true`.
-
-To unhide the index, you can specify either the index key specification document or the index name to the :method:`db.collection.unhideIndex()` method. The following specifies the index name:
-
-```javascript
-db.restaurants.unhideIndex( "borough_1_ratings_1" );  
-```
-
-To verify, run :method:`db.collection.getIndexes()` on the `restaurants` collection:
-
-```javascript
-db.restaurants.getIndexes()
-```
+   db.restaurants.getIndexes();
 
 The operation returns the following information:
 
-```javascript
-[
-   {
-      "v" : 2,
-      "key" : {
-         "_id" : 1
-      },
-      "name" : "_id_"
-   },
-   {
-      "v" : 2,
-      "key" : {
-         "borough" : 1,
-         "ratings" : 1
-      },
-      "name" : "borough_1_ratings_1"
-   }
-]
-```
+.. code-block:: javascript
+   :emphasize-lines: 6
 
-The index option `hidden` no longer appears as part of the `borough_1_ratings_1` index since the field is only returned if the value is `true`.
+   [
+      {
+         "v" : 2,
+         "key" : {
+            "_id" : 1
+         },
+         "name" : "_id_"
+      },
+      {
+         "v" : 2,
+         "key" : {
+            "borough" : 1,
+            "ratings" : 1
+         },
+         "name" : "borough_1_ratings_1",
+         "hidden" : true
+      }
+   ]
 
-> **Seealso:** - :method:`db.collection.hideIndex()`
-- `db.collection.createIndex() <method-createIndex-hidden>`
+The index option ``hidden`` is only returned if the value is ``true``.
+
+To unhide the index, you can specify either the index key specification
+document or the index name to the :method:`db.collection.unhideIndex()`
+method. The following specifies the index name:
+
+.. code-block:: javascript
+
+   db.restaurants.unhideIndex( "borough_1_ratings_1" );  
+
+To verify, run :method:`db.collection.getIndexes()` on the
+``restaurants`` collection:
+
+.. code-block:: javascript
+
+   db.restaurants.getIndexes()
+
+The operation returns the following information:
+
+.. code-block:: javascript
+
+   [
+      {
+         "v" : 2,
+         "key" : {
+            "_id" : 1
+         },
+         "name" : "_id_"
+      },
+      {
+         "v" : 2,
+         "key" : {
+            "borough" : 1,
+            "ratings" : 1
+         },
+         "name" : "borough_1_ratings_1"
+      }
+   ]
+
+The index option ``hidden`` no longer appears as part of the
+``borough_1_ratings_1`` index since the field is only returned if the
+value is ``true``.
+
+**seealso:** - :method:`db.collection.hideIndex()`
+   - :ref:`db.collection.createIndex() <method-createIndex-hidden>`

@@ -1,14 +1,15 @@
 ---
 type: "Framework Learn Page"
-framework: "nextjs"
+framework: "Next.js"
 source_repo: "https://github.com/vercel/next.js/"
 source_branch: "canary"
 source_path: "docs/01-app/02-guides/static-exports.mdx"
-source_commit: "dcf242a17b5d4622bbd9624db531a9d84177619f"
-source_commit_short: "dcf242a1"
-source_commit_date: "2026-07-25T10:16:19+02:00"
-generated_at: "2026-07-25T11:50:53Z"
+source_commit: "33a5d542e519fe4e05c8c8c2c2845da9f741699b"
+source_commit_short: "33a5d542"
+source_commit_date: "2026-08-29T00:04:45-07:00"
+generated_at: "2026-08-29T09:40:24.265177Z"
 ---
+# Static Exports
 
 ---
 title: How to create a static export of your Next.js application
@@ -244,15 +245,19 @@ export default function Page() {
 
 ### Route Handlers
 
-Route Handlers will render a static response when running `next build`. Only the `GET` HTTP verb is supported. This can be used to generate static HTML, JSON, TXT, or other files from cached or uncached data. For example:
+Route Handlers will render a static response when running `next build`. Only the `GET` HTTP verb is supported. This can be used to generate static HTML, JSON, TXT, or other files from cached or uncached data. To ensure Route Handlers are prerendered, you must explicitly mark the handler as static by adding `export const dynamic = 'force-static'` when a static export is enabled. For example:
 
 ```ts filename="app/data.json/route.ts" switcher
+export const dynamic = 'force-static'
+
 export async function GET() {
   return Response.json({ name: 'Lee' })
 }
 ```
 
 ```js filename="app/data.json/route.js" switcher
+export const dynamic = 'force-static'
+
 export async function GET() {
   return Response.json({ name: 'Lee' })
 }

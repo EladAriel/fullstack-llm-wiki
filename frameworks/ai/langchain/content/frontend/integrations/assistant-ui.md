@@ -4,11 +4,12 @@ framework: "LangChain"
 source_repo: "https://github.com/langchain-ai/docs"
 source_branch: "main"
 source_path: "src/oss/langchain/frontend/integrations/assistant-ui.mdx"
-source_commit: "2aae1dfc98ee953a9a5185fb6fcdd9efb3f4d878"
-source_commit_short: "2aae1dfc"
-source_commit_date: "2026-07-25T00:27:23Z"
-generated_at: "2026-07-25T11:51:05Z"
+source_commit: "a174f9cf7c91ee5eb14ee2382eb48bfe6e4956e9"
+source_commit_short: "a174f9c"
+source_commit_date: "2026-08-28T17:04:12-07:00"
+generated_at: "2026-08-29T09:38:24.264674Z"
 ---
+# Assistant Ui
 
 ---
 title: assistant-ui
@@ -27,9 +28,9 @@ import { ExampleEmbed } from "/snippets/example-embed.jsx"
 
 ## How it works
 
-1. **Stream with @[`useStream`]** — connect to your agent and get reactive messages, loading state, and submit/cancel callbacks
-2. **Adapt with `useExternalStoreRuntime`** — bridge `stream.messages` into assistant-ui's runtime format by converting `BaseMessage[]` to `ThreadMessageLike[]`
-3. **Provide the runtime** — wrap your UI in `AssistantRuntimeProvider` and render any assistant-ui thread component
+1. **Stream with @[`useStream`]**: connect to your agent and get reactive messages, loading state, and submit/cancel callbacks
+2. **Adapt with `useExternalStoreRuntime`**: bridge `stream.messages` into assistant-ui's runtime format by converting `BaseMessage[]` to `ThreadMessageLike[]`
+3. **Provide the runtime**: wrap your UI in `AssistantRuntimeProvider` and render any assistant-ui thread component
 
 ## Installation
 
@@ -149,9 +150,9 @@ export function toThreadMessages(messages: BaseMessage[]): ThreadMessageLike[] {
 }
 ```
 
-## Customising the thread UI
+## Customizing the thread UI
 
-`<Thread />` ships a complete default thread UI including message list, composer, and scroll management. Customise individual parts by overriding component slots:
+`<Thread />` ships a complete default thread UI including message list, composer, and scroll management. Customize individual parts by overriding component slots:
 
 ```tsx
 import { Thread, ThreadMessages, Composer } from "@assistant-ui/react";

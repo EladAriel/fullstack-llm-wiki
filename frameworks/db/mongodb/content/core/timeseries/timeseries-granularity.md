@@ -1,141 +1,188 @@
 ---
 type: "Framework Learn Page"
-framework: "mongodb"
+framework: "MongoDB"
 source_repo: "https://github.com/mongodb/docs.git"
 source_branch: "main"
 source_path: "content/manual/manual/source/core/timeseries/timeseries-granularity.txt"
-source_commit: "ab9db26ed3d11618cdb61516d8180337d8e3f679"
-source_commit_short: "ab9db26e"
-source_commit_date: "2026-07-24T16:22:46-06:00"
-generated_at: "2026-07-25T11:51:15Z"
+source_commit: "b9f2bc487a2878b65e3c1f80024bebab76954f27"
+source_commit_short: "b9f2bc48"
+source_commit_date: "2026-08-28T17:09:45-05:00"
+generated_at: "2026-08-29T09:39:19.793543Z"
 ---
+**meta:** :keywords: IOT, code example, node.js
+   :description: Set granularity for time series data in MongoDB to control data bucketing frequency, using custom parameters for precise bucket boundaries.
 
-====================================
+**facet:** :name: genre
+   :values: tutorial
+
+**facet:** :name: programming_language
+   :values: javascript/typescript
+
+.. _timeseries-granularity:
 
 # Set Granularity for Time Series Data
+   
+**contents:** On this page
+   :local:
+   :backlinks: none
+   :depth: 2
+   :class: singlecol
 
-When you create a time series collection, MongoDB automatically groups incoming time series data into buckets. By setting granularity, you control how frequently data is bucketed based on the ingestion rate of your data.
+When you create a time series collection, MongoDB automatically groups incoming
+time series data into buckets. By setting granularity, you control how
+frequently data is bucketed based on the ingestion rate of your data.
 
-Starting in MongoDB 6.3, you can use the custom bucketing parameters `bucketMaxSpanSeconds` and `bucketRoundingSeconds` to specify bucket boundaries and more accurately control how time series data is bucketed.
+Starting in MongoDB 6.3, you can use the custom bucketing parameters
+``bucketMaxSpanSeconds`` and ``bucketRoundingSeconds`` to specify bucket
+boundaries and more accurately control how time series data is bucketed.
 
-For more information on bucketing, see `timeseries-bucketing`.
+For more information on bucketing, see :ref:`timeseries-bucketing`.
 
-> **Note:** You must be running MongoDB 5.0.1 or later in order to change a
-time series collection's granularity after the collection has been
-created.
+**note:** You must be running MongoDB 5.0.1 or later in order to change a
+   time series collection's granularity after the collection has been
+   created.
 
 ### Retrieve the Current Bucketing Parameters
 
-To retrieve current collection values, use the :dbcommand:`listCollections` command:
+To retrieve current collection values, use the
+:dbcommand:`listCollections` command:
 
-```javascript
-db.runCommand( { listCollections: 1 } )
-```
+.. code-block:: javascript
 
-For time series collections, the output contains `granularity`, `bucketMaxSpanSeconds`, and `bucketRoundingSeconds` parameters, if present.
+   db.runCommand( { listCollections: 1 } )
 
-```javascript
-{
-   cursor: {
-      id: <number>,
-      ns: 'test.$cmd.listCollections',
-      firstBatch: [
-        {
-           name: <string>,
-           type: 'timeseries',
-           options: {
-              expireAfterSeconds: <number>,
-              timeseries: {
-                 timeField: <string>,
-                 metaField: <string>,
-                 granularity: <string>,
-                 bucketMaxSpanSeconds: <number>,
-                 bucketRoundingSeconds: <number>
-              }
+For time series collections, the output contains ``granularity``,
+``bucketMaxSpanSeconds``, and ``bucketRoundingSeconds`` parameters, if
+present.
+
+.. code-block:: javascript
+  :copyable: false
+
+  {
+      cursor: {
+         id: <number>,
+         ns: 'test.$cmd.listCollections',
+         firstBatch: [
+           {
+              name: <string>,
+              type: 'timeseries',
+              options: {
+                 expireAfterSeconds: <number>,
+                 timeseries: {
+                    timeField: <string>,
+                    metaField: <string>,
+                    granularity: <string>,
+                    bucketMaxSpanSeconds: <number>,
+                    bucketRoundingSeconds: <number>
+                 }
+              },
+              ...
            },
            ...
-        },
-        ...
-      ]
+         ]
+      }
    }
-}
-```
+
 
 ### Set the "granularity" Parameter
 
-The following example sets the `granularity` of a `weather24h` collection to `minutes`:
+The following example sets the ``granularity`` of a ``weather24h``
+collection to ``minutes``:
 
-```javascript
-db.createCollection(
-    "weather24h",
-    {
-       timeseries: {
-          timeField: "timestamp",
-          metaField: "metadata",
-          granularity: "minutes"
-       },
-       expireAfterSeconds: 86400
-    }
-)
-```
+.. code-block:: javascript
 
-> **Seealso:** :ref:`Timing of Automatic Removal
-<timeseries-collection-delete-operations-timing>`
+   db.createCollection(
+       "weather24h",
+       {
+          timeseries: {
+             timeField: "timestamp",
+             metaField: "metadata",
+             granularity: "minutes"
+          },
+          expireAfterSeconds: 86400
+       }
+   )
+
+**seealso:** :ref:`Timing of Automatic Removal
+   <timeseries-collection-delete-operations-timing>`
+
+.. _flexible-bucketing:
 
 ### Using Custom Bucketing Parameters
 
-In MongoDB 6.3 and later, instead of `granularity`, you can set bucket boundaries manually using the two custom bucketing parameters. Consider this approach if you expect to query data for fixed time intervals, such as every 4 hours starting at midnight. Ensuring buckets don't overlap between those periods optimizes for high query volume and :dbcommand:`insert` operations.
+In MongoDB 6.3 and later, instead of ``granularity``, you can set
+bucket boundaries manually using the two custom bucketing parameters.
+Consider this approach if you expect to query data for fixed time
+intervals, such as every 4 hours starting at midnight. Ensuring buckets
+don't overlap between those periods optimizes for high query volume and 
+:dbcommand:`insert` operations.
 
-To use custom bucketing parameters, set both parameters to the same value, and do not set `granularity`:
+To use custom bucketing parameters, set both parameters to the same 
+value, and do not set ``granularity``:
 
-- `bucketMaxSpanSeconds` sets the maximum time between timestamps
-in the same bucket. Possible values are 1-31536000.
+- ``bucketMaxSpanSeconds`` sets the maximum time between timestamps 
+  in the same bucket. Possible values are 1-31536000.
 
-- `bucketRoundingSeconds` sets the time interval that determines the
-starting timestamp for a new bucket. When a document requires a new bucket, MongoDB rounds down the document's timestamp value by this interval to set the minimum time for the bucket.
+- ``bucketRoundingSeconds`` sets the time interval that determines the 
+  starting timestamp for a new bucket. When a document requires a new
+  bucket, MongoDB rounds down the document's timestamp value by this
+  interval to set the minimum time for the bucket.
 
-For the weather station example, if you generate summary reports every 4 hours, you could adjust bucketing by setting the custom bucketing parameters to 14400 seconds instead of using a `granularity` of `"minutes"`:
+For the weather station example, if you generate summary reports every 
+4 hours, you could adjust bucketing by setting the custom bucketing 
+parameters to 14400 seconds instead of using a ``granularity`` 
+of ``"minutes"``:
 
-```javascript
-db.createCollection(
-   "weather24h", 
-   {
-      timeseries: {
-         timeField: "timestamp",
-         metaField: "metadata",
-         bucketMaxSpanSeconds: 14400,
-         bucketRoundingSeconds: 14400
-      }
-   }   
-)
-```
+.. code-block:: javascript
+      
+   db.createCollection(
+      "weather24h", 
+      {
+         timeseries: {
+            timeField: "timestamp",
+            metaField: "metadata",
+            bucketMaxSpanSeconds: 14400,
+            bucketRoundingSeconds: 14400
+         }
+      }   
+   )
 
-If a document with a time of `2023-03-27T16:24:35Z` does not fit an existing bucket, MongoDB creates a new bucket with a minimum time of `2023-03-27T16:00:00Z` and a maximum time of `2023-03-27T19:59:59Z`.
+If a document with a time of ``2023-03-27T16:24:35Z`` does not fit an
+existing bucket, MongoDB creates a new bucket with a minimum time of
+``2023-03-27T16:00:00Z`` and a maximum time of ``2023-03-27T19:59:59Z``.
+
+.. _change-granularity:
 
 ### Change Time Series Granularity
 
-You can increase `timeseries.granularity` from a shorter unit of time to a longer one using a :dbcommand:`collMod` command.
+You can increase ``timeseries.granularity`` from a shorter unit of time
+to a longer one using a :dbcommand:`collMod` command.
 
-```javascript
-db.runCommand( {
-   collMod: "weather24h",
-   timeseries: { granularity: "seconds" | "minutes" | "hours" }
-} )
-```
+.. code-block:: javascript
+   :copyable: false
 
-If you are using the custom bucketing parameters `bucketRoundingSeconds` and `bucketMaxSpanSeconds` instead of `granularity`, include both custom parameters in the `collMod` command and set them to the same value:
+   db.runCommand( {
+      collMod: "weather24h",
+      timeseries: { granularity: "seconds" | "minutes" | "hours" }
+   } )
 
-```javascript
-db.runCommand( {
-   collMod: "weather24h",
-   timeseries: { 
-      bucketRoundingSeconds: 86400,
-      bucketMaxSpanSeconds: 86400 
-   }
-} )
-```
+If you are using the custom bucketing parameters
+``bucketRoundingSeconds`` and ``bucketMaxSpanSeconds`` instead of
+``granularity``, include both custom parameters in the ``collMod``
+command and set them to the same value:
 
-You cannot decrease the granularity interval or the custom bucketing values.
+.. code-block:: javascript
 
-> **Note:** To modify the granularity of a **sharded** time series collection,
-you must be running MongoDB 6.0 or later.
+   db.runCommand( {
+      collMod: "weather24h",
+      timeseries: { 
+         bucketRoundingSeconds: 86400,
+         bucketMaxSpanSeconds: 86400 
+      }
+   } )
+
+You cannot decrease the granularity interval or the custom bucketing
+values.
+
+**note:** To modify the granularity of a **sharded** time series collection,
+   you must be running MongoDB 6.0 or later.

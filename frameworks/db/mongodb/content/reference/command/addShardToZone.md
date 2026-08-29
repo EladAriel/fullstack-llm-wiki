@@ -1,90 +1,155 @@
 ---
 type: "Framework Learn Page"
-framework: "mongodb"
+framework: "MongoDB"
 source_repo: "https://github.com/mongodb/docs.git"
 source_branch: "main"
 source_path: "content/manual/manual/source/reference/command/addShardToZone.txt"
-source_commit: "ab9db26ed3d11618cdb61516d8180337d8e3f679"
-source_commit_short: "ab9db26e"
-source_commit_date: "2026-07-24T16:22:46-06:00"
-generated_at: "2026-07-25T11:51:15Z"
+source_commit: "b9f2bc487a2878b65e3c1f80024bebab76954f27"
+source_commit_short: "b9f2bc48"
+source_commit_date: "2026-08-28T17:09:45-05:00"
+generated_at: "2026-08-29T09:39:20.082373Z"
 ---
-
-=================================
-
 # addShardToZone (database command)
+
+**meta:** :description: Associate a shard with a zone using the `addShardToZone` command, which is available in MongoDB Atlas, Enterprise, and Community environments.
+
+.. default-domain:: mongodb
+
+**contents:** On this page
+   :local:
+   :backlinks: none
+   :depth: 1
+   :class: singlecol
 
 ## Definition
 
-You can only run :dbcommand:`addShardToZone` on the `admin` database from a :binary:`~bin.mongos` instance.
+**dbcommand:** addShardToZone
+
+   Associates a shard with a :term:`zone`. MongoDB associates this shard with
+   the given zone. Chunks that are covered by the zone are assigned to shards
+   associated with the zone.
+
+   .. |method| replace:: :method:`sh.addShardToZone` helper method
+   .. include:: /includes/fact-dbcommand-tip
+
+   .. |command| replace:: ``addShardToZone``
+
+You can only run :dbcommand:`addShardToZone` on the ``admin`` database
+from a :binary:`~bin.mongos` instance.
 
 ## Compatibility
 
-This command is available in deployments hosted in the following environments:
+This command is available in deployments hosted in the following environments: 
 
-.. include:: /includes/fact-environments-atlas-only.rst
+**include:** /includes/fact-environments-atlas-only.rst
 
-.. include:: /includes/fact-environments-onprem-only.rst
+**include:** /includes/fact-environments-onprem-only.rst
+
 
 ## Syntax
-
+    
 The command has the following syntax:
 
-```javascript
-db.adminCommand(
-   {
-     addShardToZone: <string>,
-     zone: <string>
-   }
-)
-```
+.. code-block:: javascript
+
+   db.adminCommand(
+      {
+        addShardToZone: <string>,
+        zone: <string>
+      }
+   )
 
 ### Command Fields
 
 The command takes the following fields:
 
-:binary:`~bin.mongosh` provides the helper method :method:`sh.addShardToZone()`.
+.. list-table::
+   :header-rows: 1
+   :widths: 35 20 80
+
+   * - Field
+
+     - Type
+
+     - Description
+
+   * - :ref:`addShardtoZone <cmd-addShardToZone-shard>`
+
+     - string
+
+     - .. _cmd-addShardToZone-shard:
+     
+       The name of the shard to associate with the :ref:`zone <cmd-addShardToZone-zone>`.
+       
+       
+
+   * - :ref:`zone <cmd-addShardToZone-zone>`
+
+     - string
+
+     - .. _cmd-addShardToZone-zone:
+     
+       The name of the zone to associate with the :ref:`shard
+       <cmd-addShardToZone-shard>`.
+
+
+:binary:`~bin.mongosh` provides the helper method
+:method:`sh.addShardToZone()`.
 
 ## Behavior
 
-You can associate a zone with multiple shards, and a shard can associate with multiple zones.
+You can associate a zone with multiple shards, and a shard can associate with
+multiple zones.
 
-See the `zone <zone-sharding>` manual page for more information on zones in a sharded cluster.
+See the :ref:`zone <zone-sharding>` manual page for more information on zones
+in a sharded cluster.
 
 ### Ranges
 
-MongoDB effectively ignores zones that do not have at least one range of shard key values associated with it.
+MongoDB effectively ignores zones that do not have at least one range of
+shard key values associated with it. 
 
-To associate a range of shard key values with a zone, use the :dbcommand:`updateZoneKeyRange` database command, or the :method:`sh.updateZoneKeyRange()` shell helper.
+To associate a range of shard key values with a zone, use the
+:dbcommand:`updateZoneKeyRange` database command, or the
+:method:`sh.updateZoneKeyRange()` shell helper.
 
-.. include:: /includes/extracts/zoned-sharding-updateZoneKeyRange-change.rst
+**include:** /includes/extracts/zoned-sharding-updateZoneKeyRange-change.rst
 
-> **Tip:** .. include:: /includes/extracts/zoned-sharding-pre-define-zone.rst
+**tip:** .. include:: /includes/extracts/zoned-sharding-pre-define-zone.rst
 
 ## Security
 
-For sharded clusters that enforce `access control </tutorial/enable-authentication>`, you must authenticate as a user whose privileges include either:
+For sharded clusters that enforce :doc:`access control
+</tutorial/enable-authentication>`, you must authenticate as a user
+whose privileges include either:
 
-- :authaction:`update` on the `shards` collection in the `config`
-database; or, alternatively,
+- :authaction:`update` on the ``shards`` collection in the ``config``
+  database; or, alternatively,
 
 - :authaction:`enableSharding` on the :ref:`cluster
-<resource-specific-collection>` resource.
+  <resource-specific-collection>` resource.
 
-The :authrole:`clusterAdmin` or :authrole:`clusterManager` built-in roles have the appropriate permissions for issuing :dbcommand:`addShardToZone`. See the documentation page for `Role-Based Access Control <authorization>` for more information.
+The :authrole:`clusterAdmin` or :authrole:`clusterManager` built-in roles have
+the appropriate permissions for issuing :dbcommand:`addShardToZone`. See the
+documentation page for :ref:`Role-Based Access Control <authorization>` for
+more information.
 
 ## Example
 
-The following example associates `shard0000` with zone `JFK`:
+The following example associates ``shard0000`` with zone ``JFK``:
 
-```javascript
-db.adminCommand( { addShardToZone : "shard0000" , zone : "JFK" } )
-```
+.. code-block:: javascript
 
-A shard can associate with multiple zones. The following example associates `LGA` to `shard0000`:
+   db.adminCommand( { addShardToZone : "shard0000" , zone : "JFK" } )
 
-```javascript
-db.adminCommand( { addShardToZone : "shard0000" , zone : "LGA" } )
-```
 
-`shard0000` associates with both the `LGA` zone and the `JFK` zone. In a balanced cluster, MongoDB routes reads and writes covered by either zone to `shard0000`.
+A shard can associate with multiple zones. The following example associates
+``LGA`` to ``shard0000``:
+
+.. code-block:: javascript
+
+   db.adminCommand( { addShardToZone : "shard0000" , zone : "LGA" } )
+
+``shard0000`` associates with both the ``LGA`` zone and the ``JFK`` zone. In a
+balanced cluster, MongoDB routes reads and writes covered by either zone to
+``shard0000``.

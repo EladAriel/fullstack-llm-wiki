@@ -1,155 +1,250 @@
 ---
 type: "Framework Learn Page"
-framework: "mongodb"
+framework: "MongoDB"
 source_repo: "https://github.com/mongodb/docs.git"
 source_branch: "main"
 source_path: "content/manual/manual/source/reference/method/db.collection.insertOne.txt"
-source_commit: "ab9db26ed3d11618cdb61516d8180337d8e3f679"
-source_commit_short: "ab9db26e"
-source_commit_date: "2026-07-24T16:22:46-06:00"
-generated_at: "2026-07-25T11:51:15Z"
+source_commit: "b9f2bc487a2878b65e3c1f80024bebab76954f27"
+source_commit_short: "b9f2bc48"
+source_commit_date: "2026-08-28T17:09:45-05:00"
+generated_at: "2026-08-29T09:39:19.975775Z"
 ---
-
-==========================================
-
 # db.collection.insertOne() (mongosh method)
 
-.. include:: /includes/wayfinding/mongosh-method-insertOne.rst
+.. default-domain:: mongodb
+
+**meta:** :description: Insert a single document into a collection.
+
+**facet:** :name: programming_language 
+   :values: shell
+
+**contents:** On this page
+   :local:
+   :backlinks: none
+   :depth: 1
+   :class: singlecol
+
+**include:** /includes/wayfinding/mongosh-method-insertOne.rst
 
 ## Definition
 
+**method:** db.collection.insertOne()
+
+
+   .. |dbcommand| replace:: :dbcommand:`insert` command
+
+   Inserts a single document into a collection.
+
+   :returns:
+
+      A document containing:
+
+      - A boolean ``acknowledged`` as ``true`` if the operation ran with
+        :term:`write concern` or ``false`` if write concern was disabled.
+      - A field ``insertedId`` with the ``_id`` value of the
+        inserted document.
+
 ## Compatibility
+
+.. |operator-method| replace:: ``insertOne()``
 
 This method is available in deployments hosted in the following environments:
 
-.. include:: /includes/fact-environments-atlas-only.rst
+**include:** /includes/fact-environments-atlas-only.rst
 
-.. include:: /includes/fact-environments-atlas-support-all.rst
+**include:** /includes/fact-environments-atlas-support-all.rst
 
-.. include:: /includes/fact-environments-onprem-only.rst
+**include:** /includes/fact-environments-onprem-only.rst
 
 ## Syntax
 
-`db.collection.insertOne()` has the following form:
+``db.collection.insertOne()`` has the following
+form:
 
-```javascript
-db.collection.insertOne(
-    <document>,
-    {
-      writeConcern: <document>
-    }
-)
-```
+.. code-block:: javascript
+
+   db.collection.insertOne(
+       <document>,
+       {
+         writeConcern: <document>
+       }
+   )
 
 ### Parameters
 
-`insertOne()` takes the following parameters:
+``insertOne()`` takes the following
+parameters:
+
+.. list-table::
+   :header-rows: 1
+   :widths: 20 20 80
+
+   * - Parameter
+     - Type
+     - Description
+
+   * - ``document``
+     - document
+     - A document to insert into the collection. 
+
+   * - ``writeConcern``
+     - document
+     - Optional. A document expressing the :doc:`write concern
+       </reference/write-concern>`. Omit to use the default write concern.
+       
+       .. include:: /includes/extracts/transactions-operations-write-concern.rst
 
 ## Behaviors
 
-### Collection and `_id` Field Creation
+### Collection and ``_id`` Field Creation
 
-.. include:: /includes/insert-id-and-collection.rst
+.. |method| replace:: ``insertOne()``
+
+**include:** /includes/insert-id-and-collection.rst
 
 ### Explainability
 
-`insertOne()` is not compatible with :method:`db.collection.explain()`.
+``insertOne()`` is not compatible with
+:method:`db.collection.explain()`.
 
 ### Error Handling
 
-On error, `insertOne()` throws either a `writeError` or `writeConcernError` exception.
+On error, ``insertOne()`` throws either a ``writeError``
+or ``writeConcernError`` exception.
 
-Schema Validation Errors ````````````````````````
+### Schema Validation Errors
 
-If your collection uses `schema validation <schema-validation-overview>` and has `validationAction` set to `error`, inserting an invalid document throws a `MongoServerError` and `insertOne()` fails.
+If your collection uses :ref:`schema validation
+<schema-validation-overview>` and has ``validationAction`` set to 
+``error``, inserting an invalid document throws a 
+``MongoServerError`` and ``insertOne()`` fails.
+
 
 ### Transactions
 
-.. include:: /includes/extracts/transactions-supported-operation.rst
+**include:** /includes/extracts/transactions-supported-operation.rst
 
-.. include:: /includes/extracts/transactions-usage.rst
+**include:** /includes/extracts/transactions-usage.rst
 
-Collection Creation in Transactions ````````````````````````````````````
+### Collection Creation in Transactions
 
-.. include:: /includes/extracts/transactions-insert-implicit-collection-creation.rst
+**include:** /includes/extracts/transactions-insert-implicit-collection-creation.rst
 
-Write Concerns and Transactions ````````````````````````````````
+### Write Concerns and Transactions
 
-.. include:: /includes/extracts/transactions-operations-write-concern.rst
+**include:** /includes/extracts/transactions-operations-write-concern.rst
+
+.. |operation| replace:: ``insertOne()``
 
 ### Oplog Entries
 
-If an `insertOne()` operation successfully inserts a document, the operation adds an entry on the `oplog` (operations log). If the operation fails, the operation does not add an entry on the oplog.
+If an ``insertOne()`` operation successfully inserts a
+document, the operation adds an entry on the :term:`oplog` (operations
+log). If the operation fails, the operation does not add an entry on the
+oplog. 
+
+.. _insertOne-examples:
 
 ## Examples
 
-.. include:: /includes/sample-data-usage.rst
+**include:** /includes/sample-data-usage.rst
 
-### Insert a Document without Specifying an `_id` Field
+### Insert a Document without Specifying an ``_id`` Field
 
-The following example inserts a document without an `_id` field into the `movies` collection:
+The following example inserts a document without an ``_id`` field
+into the ``movies`` collection:
 
-Because the document does not include `_id`, :binary:`~bin.mongod creates and adds the id` field and assigns it a unique :method:`ObjectId` value.
+.. io-code-block::
+   :copyable: true
 
-.. include:: /includes/fact-object-id-may-differ.rst
+   .. input:: /code-examples/tested/command-line/mongosh/mongosh-commands/db.collection.insertOne/insert-one-without-id.snippet.insert-one-without-id.js
+      :language: javascript
+      :category: usage example
 
-### Insert a Document Specifying an `_id` Field
+   .. output:: /code-examples/tested/command-line/mongosh/mongosh-commands/db.collection.insertOne/insert-one-without-id-output.sh
+      :language: javascript
 
-When you specify `_id when inserting a document, the id` value must be unique within the collection. The following example inserts a document into the `movies collection and specifies id`:
+Because the document does not include ``_id``,
+:binary:`~bin.mongod` creates and adds the ``_id`` field and
+assigns it a unique :method:`ObjectId` value.
 
-Inserting a duplicate value for any key that is part of a `unique index, such as id, throws an exception. The following attempts to insert a document with a id` value that already exists:
+**include:** /includes/fact-object-id-may-differ.rst
 
-```javascript
-try {
-   db.movies.insertOne( { _id: 10, title: "Inception", year: 2010 } );
-} catch (e) {
-   print (e);
-}
-```
+### Insert a Document Specifying an ``_id`` Field
 
-Since `_id: 10` already exists, the following exception is thrown:
+When you specify ``_id`` when inserting a document, the ``_id`` value 
+must be unique within the collection. The following example inserts
+a document into the ``movies`` collection and specifies ``_id``:
 
-```javascript
-WriteError({
-   "index" : 0,
-   "code" : 11000,
-   "errmsg" : "E11000 duplicate key error collection: sample_mflix.movies index: _id_ dup key: { : 10.0 }",
-   "op" : {
-      "_id" : 10,
-      "title" : "Inception",
-      "year" : 2010
+.. io-code-block::
+   :copyable: true
+
+   .. input:: /code-examples/tested/command-line/mongosh/mongosh-commands/db.collection.insertOne/insert-one-with-id.snippet.insert-one-with-id.js
+      :language: javascript
+      :category: usage example
+
+   .. output:: /code-examples/tested/command-line/mongosh/mongosh-commands/db.collection.insertOne/insert-one-with-id-output.sh
+      :language: javascript
+
+Inserting a duplicate value for any key that is part of a :term:`unique
+index`, such as ``_id``, throws an exception. The following attempts to insert
+a document with a ``_id`` value that already exists:
+
+.. code-block:: javascript
+
+   try {
+      db.movies.insertOne( { _id: 10, title: "Inception", year: 2010 } );
+   } catch (e) {
+      print (e);
    }
-})
-```
+
+Since ``_id: 10`` already exists, the following exception is thrown:
+
+.. code-block:: javascript
+
+   WriteError({
+      "index" : 0,
+      "code" : 11000,
+      "errmsg" : "E11000 duplicate key error collection: sample_mflix.movies index: _id_ dup key: { : 10.0 }",
+      "op" : {
+         "_id" : 10,
+         "title" : "Inception",
+         "year" : 2010
+      }
+   })
+
+.. _insertOne-override-write-concern:
 
 ### Increase Write Concern
 
-Given a three member replica set, the following operation specifies a `w` of `majority`, `wtimeout` of `100`:
+Given a three member replica set, the following operation specifies a
+``w`` of ``majority``, ``wtimeout`` of ``100``:
 
-```javascript
-try {
-   db.movies.insertOne(
-       { title: "Arrival", year: 2016 },
-       { writeConcern: { w : "majority", wtimeout : 100 } }
-   );
-} catch (e) {
-   print (e);
-}
-```
+.. code-block:: javascript
 
-If the acknowledgment takes longer than the `wtimeout` limit, the following exception is thrown:
-
-```javascript
-WriteConcernError({
-   "code" : 64,
-   "errmsg" : "waiting for replication timed out",
-   "errInfo" : {
-     "wtimeout" : true,
-     "writeConcern" : { 
-       "w" : "majority",
-       "wtimeout" : 100,
-       "provenance" : "getLastErrorDefaults"
-     }
+   try {
+      db.movies.insertOne(
+          { title: "Arrival", year: 2016 },
+          { writeConcern: { w : "majority", wtimeout : 100 } }
+      );
+   } catch (e) {
+      print (e);
    }
-})
-```
+
+If the acknowledgment takes longer than the ``wtimeout`` limit, the following
+exception is thrown:
+
+.. code-block:: javascript
+
+   WriteConcernError({
+      "code" : 64,
+      "errmsg" : "waiting for replication timed out",
+      "errInfo" : {
+        "wtimeout" : true,
+        "writeConcern" : { 
+          "w" : "majority",
+          "wtimeout" : 100,
+          "provenance" : "getLastErrorDefaults"
+        }
+      }
+   })

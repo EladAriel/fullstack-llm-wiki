@@ -4,10 +4,10 @@ framework: "Arize Phoenix"
 source_repo: "https://github.com/Arize-ai/phoenix.git"
 source_branch: "main"
 source_path: "docs/phoenix/resources/frequently-asked-questions.mdx"
-source_commit: "69b3ab92c37ff65812feaa2dbf0b1c0ad5ae55fe"
-source_commit_short: "69b3ab9"
-source_commit_date: "2026-07-25T11:48:12-06:00"
-generated_at: "2026-07-25T19:08:24.827448Z"
+source_commit: "c48e50e9906fcc56c1c103ebd93ef3c95ed6b6e7"
+source_commit_short: "c48e50e"
+source_commit_date: "2026-08-29T01:45:20-06:00"
+generated_at: "2026-08-29T09:39:58.804246Z"
 ---
 # Frequently Asked Questions
 
@@ -21,7 +21,7 @@ sidebarTitle: "Overview"
 </Info>
 
 <CardGroup cols={2}>
-  <Card title="What is the difference between Phoenix and Arize?" href="/docs/phoenix/resources/frequently-asked-questions/what-is-the-difference-between-phoenix-and-arize" icon="circle-question" horizontal description="Product comparison overview"/>
+  <Card title="Arize Phoenix or Arize AX" href="/docs/phoenix/resources/frequently-asked-questions/what-is-the-difference-between-phoenix-and-arize" icon="circle-question" horizontal description="How the two platforms differ and how to choose"/>
   <Card title="What is my Phoenix Endpoint?" href="/docs/phoenix/resources/frequently-asked-questions/what-is-my-phoenix-endpoint" icon="circle-question" horizontal description="Endpoint discovery guidance"/>
   <Card title="Can I add other users to my Phoenix Instance?" href="/docs/phoenix/resources/frequently-asked-questions/can-i-add-other-users-to-my-phoenix-instance" icon="circle-question" horizontal description="User management guidance"/>
   <Card title="Can I use Azure OpenAI?" href="/docs/phoenix/resources/frequently-asked-questions/can-i-use-azure-openai" icon="circle-question" horizontal description="Azure OpenAI support"/>

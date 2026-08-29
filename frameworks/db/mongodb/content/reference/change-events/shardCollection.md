@@ -1,42 +1,129 @@
 ---
 type: "Framework Learn Page"
-framework: "mongodb"
+framework: "MongoDB"
 source_repo: "https://github.com/mongodb/docs.git"
 source_branch: "main"
 source_path: "content/manual/manual/source/reference/change-events/shardCollection.txt"
-source_commit: "ab9db26ed3d11618cdb61516d8180337d8e3f679"
-source_commit_short: "ab9db26e"
-source_commit_date: "2026-07-24T16:22:46-06:00"
-generated_at: "2026-07-25T11:51:15Z"
+source_commit: "b9f2bc487a2878b65e3c1f80024bebab76954f27"
+source_commit_short: "b9f2bc48"
+source_commit_date: "2026-08-28T17:09:45-05:00"
+generated_at: "2026-08-29T09:39:19.878512Z"
 ---
+.. _change-event-shardCollection:
 
-=========================
+# ``shardCollection`` Event
 
-# `shardCollection` Event
+**meta:** :description: Understand the `shardCollection` event in MongoDB, which occurs when a collection is sharded, including its fields and an example of the event structure.
+
+.. default-domain:: mongodb
+
+**contents:** On this page
+   :local:
+   :backlinks: none
+   :depth: 2
+   :class: singlecol
+
+.. |idref| replace:: ce-shardCollection
 
 ## Summary
 
+**data:** shardCollection
+
+   A ``shardCollection`` event occurs when a collection is sharded.
+
+
 ## Description
+
+.. list-table::
+   :header-rows: 1
+   :widths: 25 15 60
+
+   * - Field
+     - Type
+     - Description
+
+   * - ``_id``
+     - Document
+     - .. include:: /includes/change-stream/id
+
+   * - ``clusterTime``
+     - Timestamp
+     - .. include:: /includes/change-stream/clusterTime
+
+   * - ``collectionUUID``
+     - UUID
+     - .. include:: /includes/change-stream/collectionUUID
+
+   * - ``lsid``
+     - document
+     - .. include:: /includes/change-stream/lsid
+
+   * - ``ns``
+     - document
+     - .. include:: /includes/change-stream/ns
+
+   * - ``ns.coll``
+     - string
+     - .. include:: /includes/change-stream/ns.coll
+
+   * - ``ns.db``
+     - string
+     - .. include:: /includes/change-stream/ns.db
+
+   * - ``operationDescription``
+     - document
+     - .. include:: /includes/change-stream/operationDescription
+
+   * - | ``operationDescription.``
+       | ``presplitHashedZones``
+     - boolean
+     - .. include:: /includes/change-stream/od-presplitHashedZones
+
+   * - | ``operationDescription.``
+       | ``shardKey``
+     - document
+     - .. include:: /includes/change-stream/od-shardKey
+
+
+   * - | ``operationDescription.``
+       | ``unique``
+     - boolean
+     - .. include:: /includes/change-stream/od-unique
+
+   * - ``operationType``
+     - string
+     - .. include:: /includes/change-stream/operationType
+
+       Returns a value of ``shardCollection`` for these change events.
+
+   * - ``txnNumber``
+     - NumberLong
+     - .. include:: /includes/change-stream/txnNumber
+
+   * - ``wallTime``
+     - :term:`ISODate`
+     - .. include:: /includes/change-stream/wallTime
 
 ## Example
 
-The following example shows a `shardCollection` event:
+The following example shows a ``shardCollection`` event:
 
-```json
-{
-   "_id": { <ResumeToken> },
-   "operationType": "shardCollection",
-   "clusterTime": Timestamp({ t: 1654894852, i: 52 }),
-   "collectionUUID": UUID("98046a1a-b649-4e5b-9c75-67594221ce19"),
-   "wallTime": ISODate("2022-06-10T21:00:52.854Z"),
-   "ns": {
-      "db": "test",
-      "coll": "authors"
-   },
-   "operationDescription": {
-      "shardKey": { "age": "hashed" },
-      "unique": false,
-      "presplitHashedZones": false
+.. code-block:: json
+   :copyable: false
+
+   {
+      "_id": { <ResumeToken> },
+      "operationType": "shardCollection",
+      "clusterTime": Timestamp({ t: 1654894852, i: 52 }),
+      "collectionUUID": UUID("98046a1a-b649-4e5b-9c75-67594221ce19"),
+      "wallTime": ISODate("2022-06-10T21:00:52.854Z"),
+      "ns": {
+         "db": "test",
+         "coll": "authors"
+      },
+      "operationDescription": {
+         "shardKey": { "age": "hashed" },
+         "unique": false,
+         "presplitHashedZones": false
+      }
    }
-}
-```

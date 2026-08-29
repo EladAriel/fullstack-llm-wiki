@@ -1,36 +1,91 @@
 ---
 type: "Framework Learn Page"
-framework: "mongodb"
+framework: "MongoDB"
 source_repo: "https://github.com/mongodb/docs.git"
 source_branch: "main"
 source_path: "content/manual/manual/source/reference/method/ObjectId.txt"
-source_commit: "ab9db26ed3d11618cdb61516d8180337d8e3f679"
-source_commit_short: "ab9db26e"
-source_commit_date: "2026-07-24T16:22:46-06:00"
-generated_at: "2026-07-25T11:51:15Z"
+source_commit: "b9f2bc487a2878b65e3c1f80024bebab76954f27"
+source_commit_short: "b9f2bc48"
+source_commit_date: "2026-08-28T17:09:45-05:00"
+generated_at: "2026-08-29T09:39:19.906275Z"
 ---
-
-===========================
+.. _server-objectid:
 
 # ObjectId() (mongosh method)
 
+.. default-domain:: mongodb
+
+**meta:** :description: Create a new ObjectId.
+
+**facet:** :name: programming_language
+   :values: shell
+
+**contents:** On this page
+   :local:
+   :backlinks: none
+   :depth: 1
+   :class: singlecol
+
+.. _core-object-id-class:
+
 ## Description
+
+**method:** ObjectId(<value>)
+
+   .. include:: /includes/fact-mongosh-shell-method
+
+   Returns a new :ref:`objectid`. The 12-byte :ref:`objectid` consists
+   of:
+
+   .. include:: /includes/fact-ObjectId-construct.rst
 
 ## Compatibility
 
-.. include:: /includes/fact-compatibility.rst
+.. |operator-method| replace:: ``ObjectId()``
+
+**include:** /includes/fact-compatibility.rst
 
 ## Syntax
 
 :method:`ObjectId()` can accept one of the following inputs:
 
+
+.. list-table::
+   :header-rows: 1
+   :widths: 20 80
+
+   * - Input Type
+     - Description
+
+   * - ``hexadecimal``
+     - Optional. A 24 character hexadecimal string value for the new
+       ObjectId.
+
+   * - ``integer``
+     - Optional. The integer value, in seconds, is added to the
+       :wikipedia:`Unix epoch` to create the new timestamp. 
+
+
 ## Methods
 
 :method:`ObjectId()` has the following methods:
 
+.. list-table::
+   :header-rows: 1
+   :widths: 30 70
+
+   * - Methods
+     - Description
+
+   * - :method:`ObjectId.getTimestamp()`
+     - Returns the timestamp portion of the object as a Date.
+
+   * - :method:`ObjectId.toString()`
+     - Returns the ObjectId as a hexadecimal string.
+
 ## Behavior
 
-.. include:: /includes/reference/fact-objectid-and-mongosh.rst
+**include:** /includes/reference/fact-objectid-and-mongosh.rst
 
 ## Examples
 
@@ -38,61 +93,105 @@ generated_at: "2026-07-25T11:51:15Z"
 
 To generate a new ObjectId, use :method:`ObjectId()` with no argument:
 
-```javascript
-newObjectId = ObjectId()
-```
+.. code-block:: javascript
 
-In this example, the value of `newObjectId` is:
+   newObjectId = ObjectId()
 
-```javascript
-ObjectId("507f1f77bcf86cd799439011")
-```
+In this example, the value of ``newObjectId`` is:
+
+.. code-block:: javascript
+
+   ObjectId("507f1f77bcf86cd799439011")
 
 ### Return a Hexadecimal String
 
-To return the ObjectId as a hexadecimal string, use the `toString()` method.
+To return the ObjectId as a hexadecimal string, use the ``toString()``
+method.
 
-```javascript
-ObjectId("507f191e810c19729de860ea").toString()
-```
+.. code-block:: javascript
+
+   ObjectId("507f191e810c19729de860ea").toString()
 
 The method returns:
 
-```none
-507f191e810c19729de860ea
-```
+.. code-block:: none
+
+   507f191e810c19729de860ea
 
 ### Specify a Date
 
-You can use a custom `document-bson-type-date` to specify an ObjectId.
+You can use a custom :ref:`document-bson-type-date` to specify an ObjectId. 
+
+**procedure:** :style: normal
+
+   .. step:: Set a variable for your specified date
+
+      Internally, Date objects are stored as signed 
+      64-bit integer that represents the number of milliseconds since the 
+      :wikipedia:`Unix epoch`. To learn more, see :method:`Date()`.
+
+      .. code-block:: javascript
+         :copyable: true
+         
+         myDate = new Date( "2024-01-01" )
+
+   .. step:: Convert your Date object to seconds
+      
+      .. code-block:: javascript
+         :copyable: true
+         
+         timestamp = Math.floor( myDate / 1000 )
+
+   .. step:: Set your new ObjectId with ``timestamp`` as the argument 
+
+      You can verify the Date by using :method:`ObjectId.getTimestamp()`.
+
+      .. io-code-block::
+         :copyable: true
+         
+         .. input::
+            :language: javascript
+
+            newObjectId = ObjectId(timestamp) 
+            
+         .. output::
+            :language: javascript
+
+            ObjectId("6592008029c8c3e4dc76256c")
 
 ### Specify an Integer String
 
-If you want to adjust the ObjectId timestamp, use an integer to generate a new ObjectId.
+If you want to adjust the ObjectId timestamp, use an integer to generate
+a new ObjectId.
 
-```javascript
-newObjectId = ObjectId(32)
-```
+.. code-block:: javascript
+
+   newObjectId = ObjectId(32)
 
 The ObjectId value resembles:
 
-```javascript
-ObjectId("00000020f51bb4362eee2a4d")
-```
+.. code-block:: javascript
+
+   ObjectId("00000020f51bb4362eee2a4d")
 
 The example ObjectId consists of:
 
-- A four byte time stamp, `00000020`
-- A five byte random element, `f51bb4362e`
-- A three byte counter, `ee2a4d`
-The first four bytes of the ObjectId are the number of seconds since the :wikipedia:`Unix epoch`. In this example, the ObjectId timestamp is `00000020` which is `32` in hexadecimal.
+- A four byte time stamp, ``00000020``
+- A five byte random element, ``f51bb4362e``
+- A three byte counter, ``ee2a4d``
+
+The first four bytes of the ObjectId are the number of seconds since the
+:wikipedia:`Unix epoch`. In this example, the ObjectId timestamp is
+``00000020`` which is ``32`` in hexadecimal.
 
 ### Specify a Hexadecimal String
 
-If you want to use a hexadecimal string to specify an ObjectId, pass a unique, 24 character hexadecimal value when you call :method:`ObjectId()`:
+If you want to use a hexadecimal string to specify an ObjectId, pass a
+unique, 24 character hexadecimal value when you call
+:method:`ObjectId()`:
 
-```javascript
-newObjectId = ObjectId("507f191e810c19729de860ea")
-```
+.. code-block:: javascript
 
-> **Seealso:** `ObjectId BSON Type <objectid>`
+   newObjectId = ObjectId("507f191e810c19729de860ea")
+
+**seealso:** :ref:`ObjectId BSON Type <objectid>`

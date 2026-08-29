@@ -5,11 +5,10 @@ source_repo: "https://github.com/vibrantlabsai/ragas"
 source_branch: "main"
 source_path: "docs/howtos/customizations/testgenerator/_persona_generator.md"
 source_commit: "298b68274234c060deacab3cf5fb52aa3a20e885"
-source_commit_short: "298b6827"
+source_commit_short: "298b682"
 source_commit_date: "2026-02-24T13:17:18+05:30"
-generated_at: "2026-06-23T13:55:50Z"
+generated_at: "2026-08-29T09:38:15.984475Z"
 ---
-
 ## Persona's in Testset Generation
 
 You can add different persona's to the testset generation process by defining the [Persona][ragas.testset.persona.Persona] class with the name and role description of the different persona's that might be relevant to your use case, and you want to generate testset for.

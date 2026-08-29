@@ -4,10 +4,10 @@ framework: "LangSmith"
 source_repo: "https://github.com/langchain-ai/docs.git"
 source_branch: "main"
 source_path: "src/langsmith/data-export.mdx"
-source_commit: "2aae1dfc98ee953a9a5185fb6fcdd9efb3f4d878"
-source_commit_short: "2aae1df"
-source_commit_date: "2026-07-25T00:27:23+00:00"
-generated_at: "2026-07-25T19:08:33.401017Z"
+source_commit: "a174f9cf7c91ee5eb14ee2382eb48bfe6e4956e9"
+source_commit_short: "a174f9c"
+source_commit_date: "2026-08-28T17:04:12-07:00"
+generated_at: "2026-08-29T09:39:50.658011Z"
 ---
 # Data Export
 
@@ -20,7 +20,7 @@ description: Export LangSmith trace data to an S3-compatible bucket in Parquet f
 <Info>
 **Plan restrictions apply**
 
-Please note that the Data Export functionality is only supported for [LangSmith Plus or Enterprise tiers](https://www.langchain.com/pricing-langsmith).
+For customers who signed up after August 3, 2026, bulk export is only available on the [LangSmith Enterprise plan](https://www.langchain.com/pricing-langsmith). Customers who signed up on or before August 3, 2026, can use bulk export on Plus or Enterprise plans until February 1, 2027.
 </Info>
 
 LangSmith's bulk data export lets you export trace data from a specific project and date range to an S3-compatible bucket in [Parquet](https://parquet.apache.org/docs/overview/) format, matching the fields in the [Run data format](/langsmith/run-data-format). This is useful for offline analysis in tools like BigQuery, Snowflake, Redshift, or Jupyter Notebooks.
@@ -207,7 +207,9 @@ If a scheduled bulk export is created with `start_time=2025-07-16T00:00:00Z` and
 Requires LangSmith Helm version >= `0.12.11` (application version >= `0.12.42`). Supported in both one-time and scheduled exports.
 </Note>
 
-You can improve export speed and reduce file size by limiting which fields are included using the `export_fields` parameter. When omitted, all fields are included.
+You can improve export speed and reduce file size by limiting which fields are included using the `export_fields` parameter. If you omit `export_fields`, all fields except `feedbacks` are included.
+
+Feedback comments are opt-in. To include them, explicitly add `feedbacks` to `export_fields` along with the other relevant fields.
 
 ```bash
 curl --request POST \
@@ -284,6 +286,7 @@ By default, bulk exports include the following fields for each run:
 |-------|-------------|
 | `tags` | List of tags |
 | `feedback_stats` | Feedback statistics (JSON). Refer to the following note for aggregation limitations. |
+| `feedbacks` | Feedback comments and keys (JSON) |
 
 <Note>
 **`feedback_stats` aggregation limitation**

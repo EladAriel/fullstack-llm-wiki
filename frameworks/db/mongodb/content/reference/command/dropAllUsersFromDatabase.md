@@ -1,64 +1,107 @@
 ---
 type: "Framework Learn Page"
-framework: "mongodb"
+framework: "MongoDB"
 source_repo: "https://github.com/mongodb/docs.git"
 source_branch: "main"
 source_path: "content/manual/manual/source/reference/command/dropAllUsersFromDatabase.txt"
-source_commit: "ab9db26ed3d11618cdb61516d8180337d8e3f679"
-source_commit_short: "ab9db26e"
-source_commit_date: "2026-07-24T16:22:46-06:00"
-generated_at: "2026-07-25T11:51:15Z"
+source_commit: "b9f2bc487a2878b65e3c1f80024bebab76954f27"
+source_commit_short: "b9f2bc48"
+source_commit_date: "2026-08-28T17:09:45-05:00"
+generated_at: "2026-08-29T09:39:20.044675Z"
 ---
-
-===========================================
-
 # dropAllUsersFromDatabase (database command)
+
+**meta:** :description: Remove all users from a database using the `dropAllUsersFromDatabase` command, with optional write concern and comment fields.
+
+.. default-domain:: mongodb
+
+**contents:** On this page
+   :local:
+   :backlinks: none
+   :depth: 1
+   :class: singlecol
 
 ## Definition
 
+**dbcommand:** dropAllUsersFromDatabase
+
+   Removes all users from the database on which you run the
+   command.
+
+   .. |method| replace:: :method:`db.dropAllUsers` helper method
+   .. include:: /includes/fact-dbcommand-tip
+
+   .. warning::
+
+      The :dbcommand:`dropAllUsersFromDatabase` removes all users from the database.
+
 ## Compatibility
 
-This command is available in deployments hosted in the following environments:
+This command is available in deployments hosted in the following environments: 
 
-.. include:: /includes/fact-environments-atlas-only.rst
+**include:** /includes/fact-environments-atlas-only.rst
 
-.. include:: /includes/fact-environments-atlas-support-no-free.rst
+**include:** /includes/fact-environments-atlas-support-no-free.rst
 
-.. include:: /includes/fact-environments-onprem-only.rst
+**include:** /includes/fact-environments-onprem-only.rst
 
 ## Syntax
 
 The command has the following syntax:
 
-```javascript
-db.runCommand(
-  {   
-    dropAllUsersFromDatabase: 1,
-    writeConcern: { <write concern> },
-    comment: <any>
-  }
-)
-```
+.. code-block:: javascript
+
+  db.runCommand(
+     {   
+       dropAllUsersFromDatabase: 1,
+       writeConcern: { <write concern> },
+       comment: <any>
+     }
+  )
 
 ## Command Fields
 
 The command takes the following fields:
 
+.. list-table::
+   :header-rows: 1
+   :widths: 20 20 80
+ 
+   * - Field
+     - Type
+     - Description
+
+   * - ``dropAllUsersFromDatabase``
+     - integer
+     - Specify ``1`` to drop all the users from the current database.
+
+   * - ``writeConcern``
+     - document
+     - .. include:: /includes/fact-write-concern-spec-link.rst
+  
+   * - ``comment``
+     - any
+     - .. include:: /includes/extracts/comment-content.rst
+
 ## Required Access
 
-.. include:: /includes/access-drop-user.rst
+.. |local-cmd-name| replace:: :command:`dropAllUsersFromDatabase`
+
+**include:** /includes/access-drop-user.rst
 
 ## Example
 
-The following sequence of operations in :binary:`~bin.mongosh` drops every user from the `products` database:
+The following sequence of operations in :binary:`~bin.mongosh` drops
+every user from the ``products`` database:
 
-```javascript
-use products
-db.runCommand( { dropAllUsersFromDatabase: 1, writeConcern: { w: "majority" } } )
-```
+.. code-block:: javascript
 
-The `n` field in the results document shows the number of users removed:
+   use products
+   db.runCommand( { dropAllUsersFromDatabase: 1, writeConcern: { w: "majority" } } )
 
-```javascript
-{ "n" : 12, "ok" : 1 }
-```
+The ``n`` field in the results document shows the number of users
+removed:
+
+.. code-block:: javascript
+
+   { "n" : 12, "ok" : 1 }

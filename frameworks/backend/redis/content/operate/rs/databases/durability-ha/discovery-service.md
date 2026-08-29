@@ -1,14 +1,15 @@
 ---
 type: "Framework Learn Page"
-framework: "redis"
+framework: "Redis"
 source_repo: "https://github.com/redis/docs.git"
 source_branch: "main"
 source_path: "content/operate/rs/databases/durability-ha/discovery-service.md"
-source_commit: "9d30f68c3dad1a6b3b7d30fe604b911348ce8152"
-source_commit_short: "9d30f68c"
-source_commit_date: "2026-07-24T10:52:10-07:00"
-generated_at: "2026-07-25T11:51:22Z"
+source_commit: "f8693349287b0efbef3c865b6f6a2aceca88594d"
+source_commit_short: "f869334"
+source_commit_date: "2026-08-28T10:01:19-05:00"
+generated_at: "2026-08-29T09:38:55.425748Z"
 ---
+# Discovery Service
 
 ---
 Title: Discovery service
@@ -102,6 +103,28 @@ to derive which node in the cluster to communicate with.
 {{< note >}}
 To use Redis Sentinel, every database name must be unique across the cluster.
 {{< /note >}}
+
+## Supported Sentinel commands
+
+The Discovery Service implements only the subset of the [Redis Sentinel commands]({{< relref "/operate/oss_and_stack/management/sentinel#sentinel-commands" >}}) needed for endpoint discovery and high availability. Commands in the open source Sentinel API that are not listed below are not supported.
+
+| Command | Description |
+|---------|-------------|
+| `SENTINEL MASTER <name>` | Show the state and info of the specified primary. |
+| `SENTINEL MASTERS` | Show a list of monitored primaries and their state. |
+| `SENTINEL SLAVES <name>` | Show a list of replicas for this primary, and their state. |
+| `SENTINEL SENTINELS <name>` | Show a list of Sentinel instances for this primary, and their state. |
+| `SENTINEL GET-MASTER-ADDR-BY-NAME <name>` | Return the IP and port of the primary with that name. |
+| `PING` | Returns `PONG`. |
+| `HELLO` | Switch the connection's protocol (RESP2/RESP3). |
+| `SUBSCRIBE` | Subscribe to Sentinel Pub/Sub event channels. |
+| `UNSUBSCRIBE` | Unsubscribe from Sentinel Pub/Sub event channels. |
+
+### `SENTINEL SLAVES` vs. `SENTINEL REPLICAS`
+
+The Discovery Service supports `SENTINEL SLAVES` to list a primary's replicas. It does **not** support `SENTINEL REPLICAS`, the command that open source Redis introduced in Redis 5.0 as the preferred name (`SLAVES` is retained in open source only as a backward-compatible alias).
+
+This matters for client compatibility: a client that issues `SENTINEL REPLICAS` works against open source Redis Sentinel but returns an error against the Redis Software Discovery Service. If your client supports only `SENTINEL REPLICAS`, configure it to use `SENTINEL SLAVES`, or use a client that issues `SENTINEL SLAVES`, when connecting to the Discovery Service.
 
 ## Redis client support
 

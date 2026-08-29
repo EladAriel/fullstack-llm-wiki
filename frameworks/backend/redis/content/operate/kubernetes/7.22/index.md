@@ -1,49 +1,35 @@
 ---
 type: "Framework Learn Directory Index"
-framework: "redis"
-directory: "content/operate/kubernetes/7.22"
-source_repo: "https://github.com/redis/docs.git"
-source_branch: "main"
-source_commit: "9d30f68c3dad1a6b3b7d30fe604b911348ce8152"
-source_commit_short: "9d30f68c"
-source_commit_date: "2026-07-24T10:52:10-07:00"
-generated_at: "2026-07-25T11:51:22Z"
+framework: "Redis"
+generated_at: "2026-08-29T09:38:56.337779Z"
 ---
 # 7.22
 
-This directory contains redis learning pages related to 7.22.
+This directory contains Redis learning pages related to 7.22.
 
 ## Breadcrumbs
 
-[Wiki Home](../../../../index.md) -> [Content](../../../index.md) -> [Operate](../../index.md) -> [Kubernetes](../index.md) -> [7.22](index.md)
+[Wiki Home](../index.md) -> [Content](index.md)
 
 ## Navigation
 
-- Parent: [Parent Index](../index.md)
-
-## Child Directories
-
-- [Active Active](active-active/index.md) - pages related to active active
-- [Architecture](architecture/index.md) - pages related to architecture
-- [Deployment](deployment/index.md) - pages related to deployment
-- [Logs](logs/index.md) - pages related to logs
-- [Networking](networking/index.md) - pages related to networking
-- [Re Clusters](re-clusters/index.md) - pages related to re clusters
-- [Re Databases](re-databases/index.md) - pages related to re databases
-- [Recommendations](recommendations/index.md) - pages related to recommendations
-- [Reference](reference/index.md) - pages related to reference
-- [Security](security/index.md) - pages related to security
-- [Upgrade](upgrade/index.md) - pages related to upgrade
+- Wiki Home: [Root Index](../index.md)
 
 ## Pages in This Directory
 
-- [Index](_index.md)
+- [_Index](_index.md)
 - [Kubernetes Archive](kubernetes-archive.md)
 
-## IDE LLM Guidance
+## Subdirectories
 
-When answering implementation questions related to this directory:
-
-1. Prefer the most specific page listed above.
-2. If the topic is broad, read the child directory index first.
-3. Use source metadata from each page when giving answers.
+- [Active Active](active-active/index.md)
+- [Architecture](architecture/index.md)
+- [Deployment](deployment/index.md)
+- [Logs](logs/index.md)
+- [Networking](networking/index.md)
+- [Re Clusters](re-clusters/index.md)
+- [Re Databases](re-databases/index.md)
+- [Recommendations](recommendations/index.md)
+- [Reference](reference/index.md)
+- [Security](security/index.md)
+- [Upgrade](upgrade/index.md)

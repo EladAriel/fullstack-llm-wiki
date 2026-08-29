@@ -4,11 +4,12 @@ framework: "Model Context Protocol"
 source_repo: "https://github.com/modelcontextprotocol/modelcontextprotocol"
 source_branch: "main"
 source_path: "docs/specification/draft/basic/transports/streamable-http.mdx"
-source_commit: "7634684382c3d14cf7e9f14073fe40a2d8ace3fa"
-source_commit_short: "76346843"
-source_commit_date: "2026-07-23T16:49:30-07:00"
-generated_at: "2026-07-25T11:50:39Z"
+source_commit: "ca4ab3027f7c844cd3039c956438d72e8253f7f5"
+source_commit_short: "ca4ab30"
+source_commit_date: "2026-08-28T21:24:44-07:00"
+generated_at: "2026-08-29T09:38:48.102551Z"
 ---
+# Streamable Http
 
 ---
 title: Streamable HTTP
@@ -395,7 +396,8 @@ the header name `Mcp-Param-{name}`.
   the `inputSchema`
 - **MUST** only be applied to parameters with primitive types (integer,
   string, boolean). Parameters with type `number` are not permitted.
-  Integer values **MUST** be within the safe range for JavaScript
+  Integer values **MUST** be within the safe range for integers
+  represented using IEEE754 double-precision floating point numbers
   (−2<sup>53</sup>+1 to 2<sup>53</sup>−1)
 - **MUST** only be applied to properties that are _statically reachable_
   from the schema root: reachable via a chain consisting solely of

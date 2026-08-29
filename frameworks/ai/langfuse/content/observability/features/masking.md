@@ -4,12 +4,11 @@ framework: "Langfuse"
 source_repo: "https://github.com/langfuse/langfuse-docs"
 source_branch: "main"
 source_path: "content/docs/observability/features/masking.mdx"
-source_commit: "fcd1eca34a924867563c3c4e801254c4e66c0021"
-source_commit_short: "fcd1eca3"
-source_commit_date: "2026-07-25T00:45:45Z"
-generated_at: "2026-07-25T11:51:12Z"
+source_commit: "ba26344559edee69ba55c5d3aa80e632f56c1626"
+source_commit_short: "ba26344"
+source_commit_date: "2026-08-29T02:57:18+00:00"
+generated_at: "2026-08-29T09:38:37.752068Z"
 ---
-
 ---
 title: Masking
 description: Configure masking to redact sensitive information from Langfuse SDK data and OpenTelemetry span attributes before they are sent to Langfuse.
@@ -296,6 +295,23 @@ const handler = new CallbackHandler();
 
 </Tab>
 </LangTabs>
+
+## Masking with OpenTelemetry
+
+In a pure OpenTelemetry tracing setup, mask sensitive span attributes before they reach Langfuse. You can apply masking in two places:
+
+- **In the application:** Avoid recording sensitive attributes where possible. Otherwise, use a language-specific or custom span processor or export layer to transform them before OTLP export. Choose this approach when sensitive data must not leave the application.
+- **In an OpenTelemetry Collector:** Route traces through an optional Collector and use the attributes, redaction, or transform processors to mask attributes centrally. The filter processor drops entire spans, so use it only when you intentionally want to remove spans. This approach is useful for applying a consistent policy across multiple services.
+
+```mermaid
+flowchart LR
+  App["Application (OpenTelemetry SDK)"] -->|"OTLP traces"| Collector["OpenTelemetry Collector<br/>(masking processors)"]
+  Collector -->|"OTLP/HTTP"| Langfuse["Langfuse"]
+```
+
+Collector-side masking happens after telemetry leaves the application. Deploy the Collector within the appropriate trust boundary and secure the connection between the application and Collector.
+
+See OpenTelemetry's guide to [handling sensitive data](https://opentelemetry.io/docs/security/handling-sensitive-data/) for common Collector processor patterns, and the [Langfuse OpenTelemetry integration guide](/integrations/native/opentelemetry) for export setup.
 
 ## Related resources
 

@@ -1,14 +1,15 @@
 ---
 type: "Framework Learn Page"
-framework: "react"
+framework: "React"
 source_repo: "https://github.com/reactjs/react.dev"
 source_branch: "main"
 source_path: "src/content/reference/react-dom/server/resume.md"
-source_commit: "7b6c3ceb9dd97249e9dce4a8a94e61aed6424698"
-source_commit_short: "7b6c3ceb"
-source_commit_date: "2026-07-20T15:31:48+02:00"
-generated_at: "2026-07-25T11:50:43Z"
+source_commit: "7c36f7ac329fe3cf2e11222edce9a535158c2cab"
+source_commit_short: "7c36f7a"
+source_commit_date: "2026-08-24T10:33:57-07:00"
+generated_at: "2026-08-29T09:40:25.514757Z"
 ---
+# Resume
 
 ---
 title: resume
@@ -60,6 +61,7 @@ async function handler(request, writable) {
 * **optional** `options`: An object with streaming options.
   * **optional** `nonce`: A [`nonce`](http://developer.mozilla.org/en-US/docs/Web/HTML/Element/script#nonce) string to allow scripts for [`script-src` Content-Security-Policy](https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Content-Security-Policy/script-src).
   * **optional** `signal`: An [abort signal](https://developer.mozilla.org/en-US/docs/Web/API/AbortSignal) that lets you [abort server rendering](#aborting-server-rendering) and render the rest on the client.
+  * <CanaryBadge /> **optional** `onBrowserBailout`: A callback React calls when it recovers from [`browser()`](/reference/react-dom/browser) by leaving a Suspense fallback for the browser to replace. It receives an `Error` describing the browser-only render and an `errorInfo` object containing the `componentStack`. If a reason was passed to `browser`, it is available as `error.cause`. By default, React does nothing. [See how to report browser-only rendering.](/reference/react-dom/browser#reporting-browser-only-rendering-on-the-server)
   * **optional** `onError`: A callback that fires whenever there is a server error, whether [recoverable](/reference/react-dom/server/renderToReadableStream#recovering-from-errors-outside-the-shell) or [not.](/reference/react-dom/server/renderToReadableStream#recovering-from-errors-inside-the-shell) By default, this only calls `console.error`. If you override it to [log crash reports,](/reference/react-dom/server/renderToReadableStream#logging-crashes-on-the-server) make sure that you still call `console.error`.
 
 
@@ -213,10 +215,18 @@ main(document.getElementById("container"));
 export async function flushReadableStreamToFrame(readable, frame) {
   const document = frame.contentWindow.document;
   const decoder = new TextDecoder();
-  for await (const chunk of readable) {
-    const partialHTML = decoder.decode(chunk);
+  const reader = readable.getReader();
+
+  while (true) {
+    const {done, value} = await reader.read();
+    if (done) {
+      break;
+    }
+    const partialHTML = decoder.decode(value, {stream: true});
     document.write(partialHTML);
   }
+
+  document.write(decoder.decode());
 }
 
 // This doesn't need to be an error.

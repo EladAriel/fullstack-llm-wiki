@@ -1,49 +1,130 @@
 ---
 type: "Framework Learn Page"
-framework: "mongodb"
+framework: "MongoDB"
 source_repo: "https://github.com/mongodb/docs.git"
 source_branch: "main"
 source_path: "content/manual/manual/source/reference/change-events/delete.txt"
-source_commit: "ab9db26ed3d11618cdb61516d8180337d8e3f679"
-source_commit_short: "ab9db26e"
-source_commit_date: "2026-07-24T16:22:46-06:00"
-generated_at: "2026-07-25T11:51:15Z"
+source_commit: "b9f2bc487a2878b65e3c1f80024bebab76954f27"
+source_commit_short: "b9f2bc48"
+source_commit_date: "2026-08-28T17:09:45-05:00"
+generated_at: "2026-08-29T09:39:19.879253Z"
 ---
-
-============
+.. _change-events-delete:
 
 # delete Event
 
+**meta:** :description: Understand the structure and fields of a `delete` event in MongoDB change streams, including identifiers and timestamps.
+
+.. default-domain:: mongodb
+
+**contents:** On this page
+   :local:
+   :backlinks: none
+   :depth: 2
+   :class: singlecol
+
+.. |idref| replace:: ce-delete
+
 ## Synopsis
+
+**data:** delete
+
+   A ``delete`` event occurs when operations remove documents from a collection, 
+   such as when a user or application executes the :dbcommand:`delete` command.
 
 ## Description
 
+.. list-table::
+   :header-rows: 1
+   :widths: 20 20 60
+
+   * - Field
+     - Type
+     - Description
+
+   * - ``_id``
+     - Document
+     - .. include:: /includes/change-stream/id
+
+   * - ``clusterTime``
+     - Timestamp
+     - .. include:: /includes/change-stream/clusterTime
+
+   * - ``collectionUUID``
+     - UUID
+     - .. include:: /includes/change-stream/collectionUUID
+
+       .. include:: /includes/change-stream/change-event-UUID
+        
+   * - ``documentKey``
+     - document
+     - .. include:: /includes/change-stream/documentKey
+
+   * - ``lsid``
+     - document
+     - .. include:: /includes/change-stream/lsid
+
+   * - ``ns``
+     - document
+     - .. include:: /includes/change-stream/ns
+
+   * - ``ns.coll``
+     - string
+     - .. include:: /includes/change-stream/ns.coll
+
+   * - ``ns.db``
+     - string
+     - .. include:: /includes/change-stream/ns.db
+
+   * - ``operationDescription``
+     - document
+     - .. include:: /includes/change-stream/operationDescription
+
+   * - ``operationType``
+     - string
+     - .. include:: /includes/change-stream/operationType
+
+       Returns a value of ``delete`` for these change events.
+
+   * - ``txnNumber``
+     - NumberLong
+     - .. include:: /includes/change-stream/txnNumber
+
+   * - ``wallTime``
+     - :term:`ISODate`
+     - .. include:: /includes/change-stream/wallTime
+
 ## Behavior
 
-#### Document Pre- and Post-Images
+## Document Pre- and Post-Images
 
-.. include:: /includes/change-stream-pre-and-post-images-change-events.rst
+**include:** /includes/change-stream-pre-and-post-images-change-events.rst
 
-.. include:: /includes/change-stream-pre-and-post-images-additional-information.rst
+**include:** /includes/change-stream-pre-and-post-images-additional-information.rst
+
 
 ## Example
 
-The following example illustrates a `delete` event:
+The following example illustrates a ``delete`` event:
 
-```json
-{
-   "_id": { <Resume Token> },
-   "operationType": "delete",
-   "clusterTime": <Timestamp>,
-   "wallTime": <ISODate>,
-   "ns": {
-      "db": "engineering",
-      "coll": "users"
-   },
-   "documentKey": {
-      "_id": ObjectId("599af247bb69cd89961c986d")
+.. code-block:: json
+   :copyable: false
+
+   {
+      "_id": { <Resume Token> },
+      "operationType": "delete",
+      "clusterTime": <Timestamp>,
+      "wallTime": <ISODate>,
+      "ns": {
+         "db": "engineering",
+         "coll": "users"
+      },
+      "documentKey": {
+         "_id": ObjectId("599af247bb69cd89961c986d")
+      }
    }
-}
-```
 
-The `fullDocument` document is omitted as the document no longer exists at the time the change stream cursor sends the `delete` event to the client.
+The ``fullDocument`` document is omitted as the document no longer exists at the
+time the change stream cursor sends the ``delete`` event to the client.
+
+

@@ -1,34 +1,54 @@
 ---
 type: "Framework Learn Page"
-framework: "mongodb"
+framework: "MongoDB"
 source_repo: "https://github.com/mongodb/docs.git"
 source_branch: "main"
 source_path: "content/manual/manual/source/core/sharding-shard-key-indexes.txt"
-source_commit: "ab9db26ed3d11618cdb61516d8180337d8e3f679"
-source_commit_short: "ab9db26e"
-source_commit_date: "2026-07-24T16:22:46-06:00"
-generated_at: "2026-07-25T11:51:15Z"
+source_commit: "b9f2bc487a2878b65e3c1f80024bebab76954f27"
+source_commit_short: "b9f2bc48"
+source_commit_date: "2026-08-28T17:09:45-05:00"
+generated_at: "2026-08-29T09:39:19.537495Z"
 ---
-
-=================
+.. _sharding-internals-shard-key-indexes:
+.. _sharding-shard-key-indexes:
+.. _shard-key-indexes-page:
 
 # Shard Key Indexes
 
-Sharded collections require an index that supports the `shard key`. The index can be an index on the shard key or a `compound index` where the shard key is a `prefix <compound-index-prefix>` of the index.
+**meta:** :description: Learn how indexes are related to shard keys in MongoDB.
+
+**contents:** On this page
+   :local:
+   :backlinks: none
+   :depth: 2
+   :class: singlecol
+
+Sharded collections require an index that supports the :term:`shard key`. 
+The index can be an index on the shard key or a :term:`compound index` 
+where the shard key is a :ref:`prefix <compound-index-prefix>` of the index.
 
 - If the collection is empty, :method:`sh.shardCollection()` creates
-the index on the shard key if such an index does not already exists.
+  the index on the shard key if such an index does not already exists.
 
 - If the collection is not empty, you must create the index first
-before using :method:`sh.shardCollection()`.
+  before using :method:`sh.shardCollection()`.
 
 - If you reshard a collection using
-:method:`sh.reshardCollection()`, you do not need to create the index on the new shard key beforehand. The resharding operation builds the required indexes automatically. To learn more, see the `Reshard a Collection procedure <resharding_process>`.
+  :method:`sh.reshardCollection()`, you do not need to create the
+  index on the new shard key beforehand. The resharding operation
+  builds the required indexes automatically. To learn more, see the
+  :ref:`Reshard a Collection procedure <resharding_process>`.
 
-You cannot `drop <collection-drop-index>` or `hide <collection-hide-index>` an index if it is the only non-hidden index that supports the shard key.
+You cannot :ref:`drop <collection-drop-index>` or 
+:ref:`hide <collection-hide-index>` an index if it is the only 
+non-hidden index that supports the shard key.
 
-Starting in MongoDB 7.0.3, 6.0.12, and 5.0.22, you can drop the index for a `hashed shard key <sharding-hashed-sharding>`. For details, see `<drop-a-hashed-shard-key-index>`.
+Starting in MongoDB 7.0.3, 6.0.12, and 5.0.22, you can drop the index
+for a :ref:`hashed shard key <sharding-hashed-sharding>`. For details,
+see :ref:`<drop-a-hashed-shard-key-index>`.
+
+.. _sharding-shard-key-unique:
 
 ## Unique Indexes
 
-.. include:: /includes/sharding/shard-key-indexes-unique-indexes.rst
+**include:** /includes/sharding/shard-key-indexes-unique-indexes.rst

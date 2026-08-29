@@ -4,10 +4,10 @@ framework: "Arize Phoenix"
 source_repo: "https://github.com/Arize-ai/phoenix.git"
 source_branch: "main"
 source_path: "docs/phoenix/sdk-api-reference/python/arize-phoenix-client.mdx"
-source_commit: "69b3ab92c37ff65812feaa2dbf0b1c0ad5ae55fe"
-source_commit_short: "69b3ab9"
-source_commit_date: "2026-07-25T11:48:12-06:00"
-generated_at: "2026-07-25T19:08:24.946270Z"
+source_commit: "c48e50e9906fcc56c1c103ebd93ef3c95ed6b6e7"
+source_commit_short: "c48e50e"
+source_commit_date: "2026-08-29T01:45:20-06:00"
+generated_at: "2026-08-29T09:39:58.808908Z"
 ---
 ---
 title: "arize-phoenix-client"
@@ -48,19 +48,17 @@ Configure the Phoenix Client using environment variables for seamless use across
 
 ```bash
 # For local Phoenix server (default)
-export PHOENIX_BASE_URL="http://localhost:6006"
+export PHOENIX_ENDPOINT="http://localhost:6006"
 
-# Cloud Instance
-export PHOENIX_API_KEY="your-api-key"
-export PHOENIX_BASE_URL="https://your-phoenix.example.com"
-
-# For custom Phoenix instances with API key authentication
-export PHOENIX_BASE_URL="https://your-phoenix-instance.com"
+# A hosted or self-hosted instance with authentication
+export PHOENIX_ENDPOINT="https://phoenix.example.com"
 export PHOENIX_API_KEY="your-api-key"
 
 # Customize headers
 export PHOENIX_CLIENT_HEADERS="Authorization=Bearer your-api-key,custom-header=value"
 ```
+
+`PHOENIX_ENDPOINT` is a base URL and is the canonical setting for the client. If your app also exports traces, set `PHOENIX_COLLECTOR_ENDPOINT` for the OTel SDK — usually to the same value. When only `PHOENIX_COLLECTOR_ENDPOINT` is set, the client infers its base URL from it. See [Environments](/docs/phoenix/environments).
 
 ## Client Initialization
 

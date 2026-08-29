@@ -4,10 +4,10 @@ framework: "LangSmith"
 source_repo: "https://github.com/langchain-ai/docs.git"
 source_branch: "main"
 source_path: "src/langsmith/fleet/essentials.mdx"
-source_commit: "2aae1dfc98ee953a9a5185fb6fcdd9efb3f4d878"
-source_commit_short: "2aae1df"
-source_commit_date: "2026-07-25T00:27:23+00:00"
-generated_at: "2026-07-25T19:08:33.440440Z"
+source_commit: "a174f9cf7c91ee5eb14ee2382eb48bfe6e4956e9"
+source_commit_short: "a174f9c"
+source_commit_date: "2026-08-28T17:04:12-07:00"
+generated_at: "2026-08-29T09:39:50.697114Z"
 ---
 # Essentials
 
@@ -96,7 +96,7 @@ You can also update instructions by prompting the agent directly in the chat. Fo
 Fleet usage is measured in LangChain Compute Units (LCUs). LCU usage is based on the [model](#models) work your agent performs, including the selected tier and the amount of content it processes and generates.
 
 <Note>
-The new [model tiers](#models) and LCU pricing apply to new Fleet usage starting **July 15, 2026**. Organizations already using Fleet before that date keep their current setup and transition to the new model on **October 1, 2026**. If you use a custom model, contact your LangChain account team about your transition.
+The new [model tiers](#models) and LCU pricing apply to new Fleet usage starting **July 15, 2026**. Organizations already using Fleet before that date keep their current setup and transition to the new model on **October 1, 2026**. If you use a custom model, [contact our sales team](https://www.langchain.com/contact-sales) about your transition.
 </Note>
 
 Allowances are shared across your organization and reset monthly:
@@ -106,7 +106,7 @@ Allowances are shared across your organization and reset monthly:
 
 Runs vary in cost. A Fleet run can make multiple model calls, and tasks vary in length and complexity. A longer task, a larger amount of context, or a higher tier can consume more LCUs than a short task in the Fast tier.
 
-If your organization has grandfathered Plus seat or trace pricing, those rates do not change when Fleet moves to LCU pricing. Contact your account team to confirm your organization's pricing.
+If your organization has grandfathered Plus seat or trace pricing, those rates do not change when Fleet moves to LCU pricing. [Contact our sales team](https://www.langchain.com/contact-sales) to confirm your organization's pricing.
 
 ## Memory
 
@@ -130,7 +130,7 @@ For more information, see [How we built the memory system for Fleet (formerly kn
 Fleet manages models for you. It selects and maintains a strong model for each task, so you get good results without having to choose a provider, configure a model, or supply an API key. Usage is billed in [LangChain Compute Units (LCUs)](#langchain-compute-units-lcus).
 
 <Note>
-The new model tiers and [LCU](#langchain-compute-units-lcus) pricing apply to new Fleet usage starting **July 15, 2026**. Organizations already using Fleet before that date keep their current setup and transition to the new model on **October 1, 2026**. If you use a custom model, contact your LangChain account team about your transition.
+The new model tiers and [LCU](#langchain-compute-units-lcus) pricing apply to new Fleet usage starting **July 15, 2026**. Organizations already using Fleet before that date keep their current setup and transition to the new model on **October 1, 2026**. If you use a custom model, [contact our sales team](https://www.langchain.com/contact-sales) about your transition.
 </Note>
 
 Fleet provides three managed tiers. The model behind each tier may change over time as new models become available, so you can choose based on the work you need done instead of a specific provider or model.
@@ -143,7 +143,7 @@ Fleet provides three managed tiers. The model behind each tier may change over t
 
 ### Custom models
 
-Custom models are not available alongside Fast, Pro, and Max in the managed Fleet model picker. LangChain manages model-provider access for the managed tiers, so you do not need your own model-provider API key. If custom models are a requirement for an enterprise deployment, contact your LangChain account team or [reach out to sales](https://www.langchain.com/contact-sales).
+Custom models are not available alongside Fast, Pro, and Max in the managed Fleet model picker. LangChain manages model-provider access for the managed tiers, so you do not need your own model-provider API key. If custom models are a requirement for an enterprise deployment, [contact our sales team](https://www.langchain.com/contact-sales).
 
 ## Self-updates
 

@@ -1,14 +1,15 @@
 ---
 type: "Framework Learn Page"
-framework: "redis"
+framework: "Redis"
 source_repo: "https://github.com/redis/docs.git"
 source_branch: "main"
 source_path: "content/develop/ai/search-and-query/query/vector-search.md"
-source_commit: "9d30f68c3dad1a6b3b7d30fe604b911348ce8152"
-source_commit_short: "9d30f68c"
-source_commit_date: "2026-07-24T10:52:10-07:00"
-generated_at: "2026-07-25T11:51:22Z"
+source_commit: "f8693349287b0efbef3c865b6f6a2aceca88594d"
+source_commit_short: "f869334"
+source_commit_date: "2026-08-28T10:01:19-05:00"
+generated_at: "2026-08-29T09:38:55.831889Z"
 ---
+# Vector Search
 
 ---
 aliases:
@@ -29,9 +30,13 @@ title: Vector search
 weight: 5
 ---
 
-This article gives you a good overview of how to perform vector search queries with Redis Search, which is part of Redis Open Source. See the [Redis as a vector database quick start guide]({{< relref "/develop/get-started/vector-database" >}}) for more information about Redis as a vector database. You can also find more detailed information about all the parameters in the [vector reference documentation]({{< relref "/develop/ai/search-and-query/vectors" >}}).
+This article gives you a good overview of how to perform vector search queries with Redis Search, which is part of Redis Open Source. See the [Redis as a vector database quick start guide]({{< relref "/develop/get-started/search-tutorial/vector-search" >}}) for more information about Redis as a vector database. You can also find more detailed information about all the parameters in the [vector reference documentation]({{< relref "/develop/ai/search-and-query/vectors" >}}).
 
 A vector search query on a vector field allows you to find all vectors in a vector space that are close to a given vector. You can query for the k-nearest neighbors or vectors within a given radius.
+
+{{< tip >}}
+To generate a complete RAG agent that uses the vector search queries described here, open the [AI agent builder]({{< relref "/develop/ai/agent-builder" >}}) and choose the **Knowledge Assistant** template.
+{{< /tip >}}
 
 The examples in this article use a schema with the following fields:
 

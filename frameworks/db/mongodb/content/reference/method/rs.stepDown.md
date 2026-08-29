@@ -1,45 +1,108 @@
 ---
 type: "Framework Learn Page"
-framework: "mongodb"
+framework: "MongoDB"
 source_repo: "https://github.com/mongodb/docs.git"
 source_branch: "main"
 source_path: "content/manual/manual/source/reference/method/rs.stepDown.txt"
-source_commit: "ab9db26ed3d11618cdb61516d8180337d8e3f679"
-source_commit_short: "ab9db26e"
-source_commit_date: "2026-07-24T16:22:46-06:00"
-generated_at: "2026-07-25T11:51:15Z"
+source_commit: "b9f2bc487a2878b65e3c1f80024bebab76954f27"
+source_commit_short: "b9f2bc48"
+source_commit_date: "2026-08-28T17:09:45-05:00"
+generated_at: "2026-08-29T09:39:19.996296Z"
 ---
-
-==============================
-
 # rs.stepDown() (mongosh method)
 
+**meta:** :description: Use the rs.stepDown() mongosh method to instruct a replica set primary to step down to secondary, allowing an eligible secondary to be elected as primary.
+
+.. default-domain:: mongodb
+
+**contents:** On this page
+   :local:
+   :backlinks: none
+   :depth: 1
+   :class: singlecol
+
 ## Description
+
+**method:** rs.stepDown(stepDownSecs, secondaryCatchUpPeriodSecs)
+
+   .. |command-method| replace:: method
+   .. |stepdown-secs| replace:: ``stepDownSecs``
+   .. |behavior-ref| replace:: :ref:`rs.stepDown-behavior`
+
+   .. include:: /includes/stepdown-intro.rst
+
+   .. |dbcommand| replace:: :dbcommand:`replSetStepDown` command
+   .. include:: /includes/fact-mongosh-shell-method-alt
+   
+   The :method:`rs.stepDown()` method has the following parameters:
+
+
+   .. list-table::
+      :header-rows: 1
+      :widths: 20 20 80
+   
+      * - Parameter
+   
+        - Type
+   
+        - Description
+   
+      * - ``stepDownSecs``
+   
+        - number
+   
+        - The number of seconds to step down the primary, during which time the
+          stepdown member is ineligible for becoming primary. If you specify a
+          non-numeric value, the command uses ``60`` seconds.
+          
+          The stepdown period starts from the time that the
+          :binary:`~bin.mongod` receives the command. The stepdown period must
+          be greater than the ``secondaryCatchUpPeriodSecs``.
+          
+          
+   
+      * - ``secondaryCatchUpPeriodSecs``
+   
+        - number
+   
+        - Optional. The number of seconds that ``mongod`` will wait for an
+          electable secondary to catch up to the primary.
+          
+          When specified, ``secondaryCatchUpPeriodSecs`` 
+          overrides the default wait time of ``10`` seconds.
 
 ## Compatibility
 
 This method is available in deployments hosted in the following environments:
 
-.. include:: /includes/fact-environments-onprem-only.rst
+**include:** /includes/fact-environments-onprem-only.rst
+
+.. _rs.stepDown-behavior:
 
 ## Behavior
 
+.. |force-option| replace:: \ 
+
+.. |command-method-name| replace:: :method:`rs.stepDown()`
+
+
 ### Concurrent Operations
 
-.. include:: /includes/extracts/rs-stepdown-concurrent-ops.rst
+**include:** /includes/extracts/rs-stepdown-concurrent-ops.rst
 
 ### Availability of Eligible Secondaries
 
-.. include:: /includes/extracts/rs-stepdown-eligible-secondaries.rst
+**include:** /includes/extracts/rs-stepdown-eligible-secondaries.rst
+
 
 ### Client Connections
 
-.. include:: /includes/extracts/rs-stepdown-client-connections.rst
+**include:** /includes/extracts/rs-stepdown-client-connections.rst
 
 ### Writes During Stepdown
 
-.. include:: /includes/extracts/rs-stepdown-write-fail.rst
+**include:** /includes/extracts/rs-stepdown-write-fail.rst
 
 ### Election Handoff
 
-.. include:: /includes/extracts/rs-stepdown-election-handoff.rst
+**include:** /includes/extracts/rs-stepdown-election-handoff.rst

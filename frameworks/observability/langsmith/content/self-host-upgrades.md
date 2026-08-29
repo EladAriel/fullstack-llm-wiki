@@ -4,10 +4,10 @@ framework: "LangSmith"
 source_repo: "https://github.com/langchain-ai/docs.git"
 source_branch: "main"
 source_path: "src/langsmith/self-host-upgrades.mdx"
-source_commit: "2aae1dfc98ee953a9a5185fb6fcdd9efb3f4d878"
-source_commit_short: "2aae1df"
-source_commit_date: "2026-07-25T00:27:23+00:00"
-generated_at: "2026-07-25T19:08:33.353044Z"
+source_commit: "a174f9cf7c91ee5eb14ee2382eb48bfe6e4956e9"
+source_commit_short: "a174f9c"
+source_commit_date: "2026-08-28T17:04:12-07:00"
+generated_at: "2026-08-29T09:39:50.669584Z"
 ---
 # Self Host Upgrades
 
@@ -49,18 +49,20 @@ helm search repo langchain/langsmith --versions
 You should see output similar to this:
 
 ```bash
-langchain/langsmith     0.10.14         0.10.32         Helm chart to deploy the langsmith application ...
-langchain/langsmith     0.10.13         0.10.32         Helm chart to deploy the langsmith application ...
-langchain/langsmith     0.10.12         0.10.32         Helm chart to deploy the langsmith application ...
-langchain/langsmith     0.10.11         0.10.29         Helm chart to deploy the langsmith application ...
-langchain/langsmith     0.10.10         0.10.29         Helm chart to deploy the langsmith application ...
-langchain/langsmith     0.10.9          0.10.29         Helm chart to deploy the langsmith application ...
+NAME                             	CHART VERSION	APP VERSION	DESCRIPTION
+langchain/langsmith              	0.15.13      	0.15.18    	Helm chart to deploy the langsmith application ...
+langchain/langsmith              	0.15.12      	0.15.17    	Helm chart to deploy the langsmith application ...
+langchain/langsmith              	0.15.11      	0.15.16    	Helm chart to deploy the langsmith application ...
+langchain/langsmith              	0.15.10      	0.15.15    	Helm chart to deploy the langsmith application ...
+langchain/langsmith              	0.15.9       	0.15.13    	Helm chart to deploy the langsmith application ...
 ```
 
 Choose the version you want to upgrade to (generally the latest version is recommended) and note the version number:
 
 <Note>
 If your installation is more than one major version behind the latest chart, upgrade one major version at a time. Do not skip major versions. Repeat this upgrade procedure for each intervening major version before upgrading to the latest supported version.
+
+For example, to upgrade from `0.13.43` to `0.15.13`, first upgrade to `0.14.5`, then upgrade to `0.15.13`.
 </Note>
 
 ```bash

@@ -1,77 +1,170 @@
 ---
 type: "Framework Learn Page"
-framework: "mongodb"
+framework: "MongoDB"
 source_repo: "https://github.com/mongodb/docs.git"
 source_branch: "main"
 source_path: "content/manual/manual/source/reference/command/planCacheListFilters.txt"
-source_commit: "ab9db26ed3d11618cdb61516d8180337d8e3f679"
-source_commit_short: "ab9db26e"
-source_commit_date: "2026-07-24T16:22:46-06:00"
-generated_at: "2026-07-25T11:51:15Z"
+source_commit: "b9f2bc487a2878b65e3c1f80024bebab76954f27"
+source_commit_short: "b9f2bc48"
+source_commit_date: "2026-08-28T17:09:45-05:00"
+generated_at: "2026-08-29T09:39:20.024730Z"
 ---
-
-=======================================
-
 # planCacheListFilters (database command)
+
+**meta:** :description: List index filters for plan cache query shapes in a collection, noting that index filters are deprecated in MongoDB 8.0.
+
+.. default-domain:: mongodb
+
+**contents:** On this page
+   :local:
+   :backlinks: none
+   :depth: 1
+   :class: singlecol
 
 ## Definition
 
+**dbcommand:** planCacheListFilters
+
+   Lists the :ref:`index filters <index-filters>` associated with
+   :term:`plan cache query shapes <plan cache query shape>` for a collection.
+
+   :returns:
+
+      Document listing the index filters. See
+      :ref:`planCacheListFilters-output`.
+
 ### Query Settings
 
-.. include:: /includes/persistent-query-settings-avoid-index-filters-intro.rst
+**include:** /includes/persistent-query-settings-avoid-index-filters-intro.rst
 
 ## Compatibility
 
 This command is available in deployments hosted in the following environments:
 
-.. include:: /includes/fact-environments-atlas-only.rst
+**include:** /includes/fact-environments-atlas-only.rst
 
-.. include:: /includes/fact-environments-atlas-support-no-free.rst
+**include:** /includes/fact-environments-atlas-support-no-free.rst
 
-.. include:: /includes/fact-environments-onprem-only.rst
+**include:** /includes/fact-environments-onprem-only.rst
 
 ## Syntax
 
 The command has the following syntax:
 
-```javascript
-db.runCommand( 
-   { 
-     planCacheListFilters: <collection> 
-   } 
-)
-```
+.. code-block:: javascript
+
+   db.runCommand( 
+      { 
+        planCacheListFilters: <collection> 
+      } 
+   )
 
 ## Command Fields
 
 The command has the following fields:
 
+.. list-table::
+   :header-rows: 1
+   :widths: 20 20 80
+   
+   * - Field
+     - Type
+     - Description
+   
+   * - ``planCacheListFilters``
+     - string
+     - The name of the collection.
+
+   * - ``comment``
+     - any
+     - .. include:: /includes/extracts/comment-content.rst
+
 ## Required Access
 
-A user must have access that includes the :authaction:`planCacheIndexFilter` action.
+A user must have access that includes the
+:authaction:`planCacheIndexFilter` action.
+
+.. _planCacheListFilters-output:
 
 ## Output
 
-The :dbcommand:`planCacheListFilters` command returns the document with the following form:
+The :dbcommand:`planCacheListFilters` command returns the document with
+the following form:
 
-```none
-{
-   "filters" : [
-      {
-         "query" : <query>
-         "sort" : <sort>,
-         "projection" : <projection>,
-         "collation" : <collation>,
-         "indexes" : [
-            <index1>,
-            ...
-         ]
-      },
-      ...
-   ],
-   "ok" : 1
-}
-```
+.. code-block:: none
 
-> **Seealso:** - :dbcommand:`planCacheClearFilters`
-- :dbcommand:`planCacheSetFilter`
+   {
+      "filters" : [
+         {
+            "query" : <query>
+            "sort" : <sort>,
+            "projection" : <projection>,
+            "collation" : <collation>,
+            "indexes" : [
+               <index1>,
+               ...
+            ]
+         },
+         ...
+      ],
+      "ok" : 1
+   }
+
+**data:** planCacheListFilters.filters
+
+   The array of documents that contain the index filter information.
+
+   Each document contains the following fields:
+
+   .. data:: planCacheListFilters.filters.query
+
+      The query predicate associated with this filter. Although the
+      :data:`~planCacheListFilters.filters.query` shows the specific
+      values used to create the index filter, the values in the
+      predicate are insignificant; i.e. query predicates cover similar
+      queries that differ only in the values.
+
+      For instance, a :data:`~planCacheListFilters.filters.query`
+      predicate of ``{ "type": "electronics", "status" : "A" }`` covers
+      the following query predicates:
+
+      .. code-block:: javascript
+
+         { type: "food", status: "A" }
+         { type: "utensil", status: "D" }
+
+   .. data:: planCacheListFilters.filters.sort
+
+      The sort associated with this filter. Can be an empty document.
+
+   .. data:: planCacheListFilters.filters.projection
+
+      The projection associated with this filter. Can be an empty
+      document.
+
+   .. data:: planCacheListFilters.filters.collation
+
+      The :ref:`collation <collation>` associated with this filter. Can
+      be an empty document.
+
+   .. data:: planCacheListFilters.filters.indexes
+
+      The array of indexes for the plan cache query shape.
+
+      The plan cache query shape is the combination of these fields:
+
+      - :data:`~planCacheListFilters.filters.query`
+      - :data:`~planCacheListFilters.filters.sort`
+      - :data:`~planCacheListFilters.filters.projection`
+      - :data:`~planCacheListFilters.filters.collation`
+
+      To choose the best query plan, the query optimizer evaluates the
+      :data:`~planCacheListFilters.filters.indexes` *and* the collection
+      scan.
+
+**data:** planCacheListFilters.ok
+
+   The status of the command.
+
+**seealso:** - :dbcommand:`planCacheClearFilters`
+   - :dbcommand:`planCacheSetFilter`

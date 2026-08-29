@@ -4,10 +4,10 @@ framework: "Arize Phoenix"
 source_repo: "https://github.com/Arize-ai/phoenix.git"
 source_branch: "main"
 source_path: "docs/phoenix/datasets-and-experiments/how-to-experiments/eval-ci-with-pytest.mdx"
-source_commit: "69b3ab92c37ff65812feaa2dbf0b1c0ad5ae55fe"
-source_commit_short: "69b3ab9"
-source_commit_date: "2026-07-25T11:48:12-06:00"
-generated_at: "2026-07-25T19:08:24.875683Z"
+source_commit: "c48e50e9906fcc56c1c103ebd93ef3c95ed6b6e7"
+source_commit_short: "c48e50e"
+source_commit_date: "2026-08-29T01:45:20-06:00"
+generated_at: "2026-08-29T09:39:58.954286Z"
 ---
 # Eval Ci With Pytest
 
@@ -76,8 +76,8 @@ Connect to your Phoenix deployment with the standard client environment variable
 run the suite with pytest:
 
 ```bash
-export PHOENIX_COLLECTOR_ENDPOINT=...   # your Phoenix endpoint
-export PHOENIX_API_KEY=...              # if your deployment requires authentication
+export PHOENIX_ENDPOINT=...              # your Phoenix endpoint
+export PHOENIX_API_KEY=...               # if your deployment requires authentication
 pytest
 ```
 
@@ -246,7 +246,7 @@ enabling recording.
 | `PHOENIX_TEST_DATASET` | _(file path)_ | Names the dataset for every collected test, taking precedence over both `phoenix_dataset` and the marker's `dataset=`. When unset, each test falls back to its marker `dataset=` or, failing that, its file path. Combine it with pytest's own selection (`-m`, `-k`, or a path) to turn a subset of the suite into a named dataset per run, for example `PHOENIX_TEST_DATASET=smoke pytest -m smoke`. |
 
 The connection to Phoenix uses the standard client variables:
-`PHOENIX_COLLECTOR_ENDPOINT`, `PHOENIX_API_KEY`, and `PHOENIX_CLIENT_HEADERS`.
+`PHOENIX_ENDPOINT`, `PHOENIX_API_KEY`, and `PHOENIX_CLIENT_HEADERS`.
 
 To iterate locally without recording anything to Phoenix, disable tracking:
 
@@ -308,7 +308,7 @@ jobs:
       - run: pip install "arize-phoenix-client[pytest]" pytest
       - name: Run eval suite
         env:
-          PHOENIX_COLLECTOR_ENDPOINT: ${{ secrets.PHOENIX_COLLECTOR_ENDPOINT }}
+          PHOENIX_ENDPOINT: ${{ secrets.PHOENIX_ENDPOINT }}
           PHOENIX_API_KEY: ${{ secrets.PHOENIX_API_KEY }}
         run: pytest tests/evals
 ```

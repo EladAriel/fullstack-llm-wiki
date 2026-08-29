@@ -1,18 +1,27 @@
 ---
 type: "Framework Learn Page"
-framework: "mongodb"
+framework: "MongoDB"
 source_repo: "https://github.com/mongodb/docs.git"
 source_branch: "main"
 source_path: "content/manual/manual/source/reference/method/Binary.createFromHexString.txt"
-source_commit: "ab9db26ed3d11618cdb61516d8180337d8e3f679"
-source_commit_short: "ab9db26e"
-source_commit_date: "2026-07-24T16:22:46-06:00"
-generated_at: "2026-07-25T11:51:15Z"
+source_commit: "b9f2bc487a2878b65e3c1f80024bebab76954f27"
+source_commit_short: "b9f2bc48"
+source_commit_date: "2026-08-28T17:09:45-05:00"
+generated_at: "2026-08-29T09:39:19.952928Z"
 ---
-
-=============================================
+.. _Binary.createFromHexString:
 
 # Binary.createFromHexString() (mongosh method)
+
+**meta:** :description: Create a binary object from a hexadecimal string using `Binary.createFromHexString()` in MongoDB.
+
+.. default-domain:: mongodb
+
+**contents:** On this page
+   :local:
+   :backlinks: none
+   :depth: 1
+   :class: singlecol
 
 ## Definition
 
@@ -20,51 +29,61 @@ Creates a binary object from a hexadecimal value.
 
 ## Compatibility
 
-This method is available in deployments hosted in the following environments:
+This method is available in deployments hosted in the following environments: 
 
-.. include:: /includes/fact-environments-atlas-only.rst
+**include:** /includes/fact-environments-atlas-only.rst
 
-.. include:: /includes/fact-environments-onprem-only.rst
+**include:** /includes/fact-environments-onprem-only.rst
 
 ## Syntax
 
-The `hexadecimalString` field specifies a string that contains a hexadecimal value. For example, `"64c13ab08edf48a008793cac"`.
+**method:** Binary.createFromHexString( <hexadecimalString> )
+
+The ``hexadecimalString`` field specifies a string that contains a
+hexadecimal value. For example, ``"64c13ab08edf48a008793cac"``.
 
 ## Examples
 
-The following examples show how to add a binary object to a document using `Binary.createFromHexString()` and how the binary object appears in the output when retrieved.
+The following examples show how to add a binary object to a document
+using ``Binary.createFromHexString()`` and how the binary object appears
+in the output when retrieved.
 
 ### Create Collection Containing Document with Binary Object
 
-The following example creates a collection named `binaryObjectsFromHexString`:
+The following example creates a collection named
+``binaryObjectsFromHexString``:
 
-```javascript
-db.binaryObjectsFromHexString.insertOne( {
-   _id: 0,
-   binaryObject: Binary.createFromHexString( "64c13ab08edf48a008793cac" )
-} )
-```
+.. code-block:: javascript
+   :emphasize-lines: 3
 
-The `binaryObject` field contains the binary object created from the string specified in `Binary.createFromHexString()`.
+   db.binaryObjectsFromHexString.insertOne( {
+      _id: 0,
+      binaryObject: Binary.createFromHexString( "64c13ab08edf48a008793cac" )
+   } )
+
+The ``binaryObject`` field contains the binary object created from the
+string specified in ``Binary.createFromHexString()``.
 
 ### Retrieve Document from Collection with Binary Object
 
 The following example retrieves the document:
 
-```javascript
-db.binaryObjectsFromHexString.findOne( { _id: 0 } )
-```
+.. code-block:: javascript
 
-> **Note:** Starting in :binary:`mongosh` 2.0.0, binary values are shown as
-`Binary.createFromBase64( <base64String> )` values instead of
-`Binary( Buffer.from( <base64String> ) )` values. This only changes
-the display of binary values.
+   db.binaryObjectsFromHexString.findOne( { _id: 0 } )
+
+**note:** Starting in :binary:`mongosh` 2.0.0, binary values are shown as
+   ``Binary.createFromBase64( <base64String> )`` values instead of
+   ``Binary( Buffer.from( <base64String> ) )`` values. This only changes
+   the display of binary values.
 
 Example output, which shows the number in base64:
 
-```javascript
-{
-   _id: 0,
-   binaryObject: Binary.createFromBase64("ZME6sI7fSKAIeTys")
-}
-```
+.. code-block:: javascript
+   :copyable: false
+   :emphasize-lines: 3
+
+   {
+      _id: 0,
+      binaryObject: Binary.createFromBase64("ZME6sI7fSKAIeTys")
+   }

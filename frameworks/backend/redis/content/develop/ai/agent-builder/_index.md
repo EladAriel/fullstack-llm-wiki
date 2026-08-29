@@ -1,14 +1,15 @@
 ---
 type: "Framework Learn Page"
-framework: "redis"
+framework: "Redis"
 source_repo: "https://github.com/redis/docs.git"
 source_branch: "main"
 source_path: "content/develop/ai/agent-builder/_index.md"
-source_commit: "9d30f68c3dad1a6b3b7d30fe604b911348ce8152"
-source_commit_short: "9d30f68c"
-source_commit_date: "2026-07-24T10:52:10-07:00"
-generated_at: "2026-07-25T11:51:22Z"
+source_commit: "f8693349287b0efbef3c865b6f6a2aceca88594d"
+source_commit_short: "f869334"
+source_commit_date: "2026-08-28T10:01:19-05:00"
+generated_at: "2026-08-29T09:38:55.822659Z"
 ---
+# _Index
 
 ---
 Title: AI agent builder
@@ -24,7 +25,7 @@ weight: 50
 ---
 
 
-Agents use Redis for data storage, [vector search]({{< relref "/develop/get-started/vector-database" >}}), and [conversation memory]({{< relref "/develop/get-started/rag" >}}). The interactive builder generates code in your preferred programming language with your choice of model.
+Agents use Redis for data storage, [vector search]({{< relref "/develop/get-started/search-tutorial/vector-search" >}}), and [conversation memory]({{< relref "/develop/get-started/rag" >}}). The interactive builder generates code in your preferred programming language with your choice of model.
 
 ## Get started
 
@@ -42,11 +43,12 @@ Redis powers these capabilities with fast, reliable data storage and retrieval t
 
 ## What you can build
 
-Choose from three types of intelligent agents:
+Choose from four types of intelligent agents:
 
 - **Recommendation engines**: Personalized product and content recommendations
 - **Conversational assistants**: Chatbots with memory and context awareness
 - **Knowledge assistants**: RAG agents that ingest documents, answer questions with citations, and use semantic caching
+- **Redis Iris conversational assistants**: Conversational agents backed by managed [Redis Iris Agent Memory]({{< relref "/develop/ai/context-engine/agent-memory" >}}) — session and long-term memory with no vector index to build
 
 The agent builder will generate complete, working code examples for your chosen agent type.
 

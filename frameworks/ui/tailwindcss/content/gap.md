@@ -4,10 +4,10 @@ framework: "Tailwind CSS"
 source_repo: "https://github.com/tailwindlabs/tailwindcss.com.git"
 source_branch: "main"
 source_path: "src/docs/gap.mdx"
-source_commit: "1e700c43f5f270a1a55c4a33e71f01952f24b8c2"
-source_commit_short: "1e700c4"
-source_commit_date: "2026-07-16T19:14:03+02:00"
-generated_at: "2026-07-25T13:40:03.083976Z"
+source_commit: "bd868a314bd05ca78acd047e3da289274dd6ccd7"
+source_commit_short: "bd868a3"
+source_commit_date: "2026-08-11T20:09:16+02:00"
+generated_at: "2026-08-29T09:40:31.754507Z"
 ---
 # Gap
 
@@ -23,12 +23,15 @@ export const description = "Utilities for controlling gutters between grid and f
 <ApiTable
   rows={[
     ["gap-<number>", "gap: calc(var(--spacing) * <value>);"],
+    ["gap-px", "gap: 1px;"],
     ["gap-(<custom-property>)", "gap: var(<custom-property>);"],
     ["gap-[<value>]", "gap: <value>;"],
     ["gap-x-<number>", "column-gap: calc(var(--spacing) * <value>);"],
+    ["gap-x-px", "column-gap: 1px;"],
     ["gap-x-(<custom-property>)", "column-gap: var(<custom-property>);"],
     ["gap-x-[<value>]", "column-gap: <value>;"],
     ["gap-y-<number>", "row-gap: calc(var(--spacing) * <value>);"],
+    ["gap-y-px", "row-gap: 1px;"],
     ["gap-y-(<custom-property>)", "row-gap: var(<custom-property>);"],
     ["gap-y-[<value>]", "row-gap: <value>;"],
   ]}

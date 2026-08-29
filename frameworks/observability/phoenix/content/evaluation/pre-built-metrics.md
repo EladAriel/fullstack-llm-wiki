@@ -4,10 +4,10 @@ framework: "Arize Phoenix"
 source_repo: "https://github.com/Arize-ai/phoenix.git"
 source_branch: "main"
 source_path: "docs/phoenix/evaluation/pre-built-metrics.mdx"
-source_commit: "69b3ab92c37ff65812feaa2dbf0b1c0ad5ae55fe"
-source_commit_short: "69b3ab9"
-source_commit_date: "2026-07-25T11:48:12-06:00"
-generated_at: "2026-07-25T19:08:24.830086Z"
+source_commit: "c48e50e9906fcc56c1c103ebd93ef3c95ed6b6e7"
+source_commit_short: "c48e50e"
+source_commit_date: "2026-08-29T01:45:20-06:00"
+generated_at: "2026-08-29T09:39:58.798911Z"
 ---
 # Pre Built Metrics
 
@@ -29,14 +29,17 @@ LLM evaluators use a judge model to assess the quality of outputs. These are use
   <Card title="Faithfulness" icon="check-double" href="/docs/phoenix/evaluation/pre-built-metrics/faithfulness">
     Measures whether a response is faithful to (grounded in) the provided context. Detects hallucinations and unsupported claims.
   </Card>
+  <Card title="Hallucination" icon="ghost" href="/docs/phoenix/evaluation/pre-built-metrics/hallucination">
+    Detects claims in a response that are unsupported by, or contradict, the conversation. The conversation-level counterpart to Faithfulness.
+  </Card>
   <Card title="Conciseness" icon="compress" href="/docs/phoenix/evaluation/pre-built-metrics/conciseness">
     Evaluates whether a response is concise and free of unnecessary content like filler, hedging, and meta-commentary.
   </Card>
   <Card title="Correctness" icon="circle-check" href="/docs/phoenix/evaluation/pre-built-metrics/correctness">
     Evaluates the general correctness of an LLM response.
   </Card>
-  <Card title="Document Relevance" icon="file-magnifying-glass" href="/docs/phoenix/evaluation/pre-built-metrics/document-relevance">
-    Assesses whether retrieved documents are relevant to the input query. Useful for RAG evaluation.
+  <Card title="Retrieval Relevance" icon="magnifying-glass-arrow-right" href="/docs/phoenix/evaluation/pre-built-metrics/retrieval-relevance">
+    Assesses whether externally retrieved information is relevant to the request, from any source: RAG, tools, MCP, or web search.
   </Card>
   <Card title="Tool Selection" icon="toolbox" href="/docs/phoenix/evaluation/pre-built-metrics/tool-selection">
     Determines whether the correct tool was selected for a given context from the available options.
@@ -53,6 +56,12 @@ LLM evaluators use a judge model to assess the quality of outputs. These are use
   <Card title="User Friction" icon="comments" href="/docs/phoenix/evaluation/pre-built-metrics/user-friction">
     Detects corrections, retries, frustration, and challenges expressed in a user's follow-up message.
   </Card>
+  <Card title="PII Detection" icon="user-shield" href="/docs/phoenix/evaluation/pre-built-metrics/pii-detection">
+    Screens a conversation record for personally identifiable information.
+  </Card>
+  <Card title="Toxicity" icon="triangle-exclamation" href="/docs/phoenix/evaluation/pre-built-metrics/toxicity">
+    Detect hateful, demeaning, abusive, or threatening text in model outputs or user inputs.
+  </Card>
 </CardGroup>
 
 ## Code Evaluators
@@ -68,31 +77,6 @@ Code evaluators use deterministic logic for evaluation. These are faster, cheape
   </Card>
   <Card title="Precision / Recall / F-Score" icon="chart-simple" href="/docs/phoenix/evaluation/pre-built-metrics/precision-recall-fscore">
     Computes precision, recall, and F1 scores for comparing predicted vs actual values.
-  </Card>
-</CardGroup>
-
-## Legacy Evaluators
-
-Legacy evaluators are template-based evaluators from earlier versions of Phoenix. They remain available for backwards compatibility but we recommend using the modern evaluators above for new projects.
-
-<CardGroup cols={2}>
-  <Card title="Q&A Evaluation" icon="comments-question" href="/docs/phoenix/evaluation/pre-built-metrics/q-and-a-on-retrieved-data">
-    Evaluates Q&A correctness using legacy templates.
-  </Card>
-  <Card title="Retrieval / RAG Relevance" icon="magnifying-glass" href="/docs/phoenix/evaluation/pre-built-metrics/retrieval-rag-relevance">
-    Legacy document relevance evaluation for RAG systems.
-  </Card>
-  <Card title="Summarization" icon="file-lines" href="/docs/phoenix/evaluation/pre-built-metrics/summarization-eval">
-    Evaluates summary quality using legacy templates.
-  </Card>
-  <Card title="Toxicity" icon="triangle-exclamation" href="/docs/phoenix/evaluation/pre-built-metrics/toxicity">
-    Detect hateful, demeaning, abusive, or threatening text.
-  </Card>
-  <Card title="SQL Generation" icon="database" href="/docs/phoenix/evaluation/pre-built-metrics/sql-generation-eval">
-    Evaluates SQL query correctness using legacy templates.
-  </Card>
-  <Card title="Tool Calling (Legacy)" icon="gear" href="/docs/phoenix/evaluation/pre-built-metrics/tool-calling-eval">
-    Legacy tool calling evaluation. Consider using Tool Invocation and Tool Selection instead.
   </Card>
 </CardGroup>
 

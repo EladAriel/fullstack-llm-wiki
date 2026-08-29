@@ -1,14 +1,15 @@
 ---
 type: "Framework Learn Page"
-framework: "tanstack"
+framework: "TanStack"
 source_repo: "https://github.com/tanstack/query"
 source_branch: "main"
 source_path: "docs/framework/solid/typescript.md"
-source_commit: "fd50fa14d283c7d6664a796f758498d1ad5bfce7"
-source_commit_short: "fd50fa14"
-source_commit_date: "2026-07-24T22:22:47+10:00"
-generated_at: "2026-07-25T11:50:41Z"
+source_commit: "2969edf32f7e0c48e2a108d84712d6e01edfde21"
+source_commit_short: "2969edf"
+source_commit_date: "2026-08-28T01:03:02+09:00"
+generated_at: "2026-08-29T09:40:33.360290Z"
 ---
+# Typescript
 
 ---
 id: typescript
@@ -19,7 +20,7 @@ Solid Query is written in **TypeScript** to make sure the library and your proje
 
 Things to keep in mind:
 
-- TanStack Query follows [DefinitelyTyped's support window](https://github.com/DefinitelyTyped/DefinitelyTyped#support-window) and supports TypeScript versions released within the last 2 years. At the moment, that means TypeScript **5.4** and newer.
+- TanStack Query follows [DefinitelyTyped's support window](https://github.com/DefinitelyTyped/DefinitelyTyped#support-window) and supports TypeScript versions released within the last 2 years. At the moment, that means TypeScript **5.6** and newer.
 - Changes to types in this repository are considered **non-breaking** and are usually released as **patch** semver changes (otherwise every type enhancement would be a major version!).
 - It is **highly recommended that you lock your solid-query package version to a specific patch release and upgrade with the expectation that types may be fixed or upgraded between any release**
 - The non-type-related public API of Solid Query still follows semver very strictly.
@@ -185,7 +186,7 @@ declare module '@tanstack/solid-query' {
 
 ## Typing Query Options
 
-If you inline query options into `useQuery`, you'll get automatic type inference. However, you might want to extract the query options into a separate function to share them between `useQuery` and e.g. `prefetchQuery`. In that case, you'd lose type inference. To get it back, you can use `queryOptions` helper:
+If you inline query options into `useQuery`, you'll get automatic type inference. However, you might want to extract the query options into a separate function to share them between `useQuery` and e.g `query`. In that case, you'd lose type inference. To get it back, you can use `queryOptions` helper:
 
 ```ts
 import { queryOptions } from '@tanstack/solid-query'
@@ -199,7 +200,7 @@ function groupOptions() {
 }
 
 useQuery(groupOptions)
-queryClient.prefetchQuery(groupOptions())
+queryClient.query(groupOptions())
 ```
 
 Further, the `queryKey` returned from `queryOptions` knows about the `queryFn` associated with it, and we can leverage that type information to make functions like `queryClient.getQueryData` aware of those types as well:

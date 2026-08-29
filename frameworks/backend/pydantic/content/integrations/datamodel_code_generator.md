@@ -1,15 +1,14 @@
 ---
 type: "Framework Learn Page"
-framework: "pydantic"
+framework: "Pydantic"
 source_repo: "https://github.com/pydantic/pydantic"
 source_branch: "main"
 source_path: "docs/integrations/datamodel_code_generator.md"
-source_commit: "a2a6577d4c329dd574a45dbb01a8feaa16b1ad3d"
-source_commit_short: "a2a6577d"
-source_commit_date: "2026-07-23T15:38:17Z"
-generated_at: "2026-07-25T11:50:12Z"
+source_commit: "4bc21c0fa28323c0f3e0be93c9ad114b705029c6"
+source_commit_short: "4bc21c0"
+source_commit_date: "2026-08-29T11:30:40+02:00"
+generated_at: "2026-08-29T09:38:50.592295Z"
 ---
-
 # Code Generation with datamodel-code-generator
 
 The [datamodel-code-generator](https://github.com/koxudaxi/datamodel-code-generator/) project is a library and command-line utility to generate pydantic models from just about any data source, including:
@@ -117,3 +116,14 @@ class Person(BaseModel):
 
 More information can be found on the
 [official documentation](https://datamodel-code-generator.koxudaxi.dev/).
+
+## Catching drift from the source schema
+
+A model generated from an OpenAPI or JSON Schema document is a snapshot of that contract. When the
+upstream data stops matching it (a field changes type, a new required field appears), the mismatch
+surfaces as a [`ValidationError`][pydantic_core.ValidationError] at runtime, often the first sign the
+source has drifted from the schema you generated against.
+
+If you [record validations with Logfire](../errors/troubleshooting.md), those failures are stored with
+their structured errors and rejected values, so you can see *what* changed and *when* it started,
+useful when you don't own the schema and can't regenerate the models until you know what moved.

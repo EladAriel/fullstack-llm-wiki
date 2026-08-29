@@ -4,10 +4,10 @@ framework: "Prometheus"
 source_repo: "https://github.com/prometheus/docs.git"
 source_branch: "main"
 source_path: "docs/specs/om/open_metrics_spec_2_0.md"
-source_commit: "9d9e0343a9e6d138204cfe316a125a860a271849"
-source_commit_short: "9d9e034"
-source_commit_date: "2026-07-21T23:07:09+02:00"
-generated_at: "2026-07-25T19:07:59.768767Z"
+source_commit: "9ece2ea6375353799f014055bc577d795214aec0"
+source_commit_short: "9ece2ea"
+source_commit_date: "2026-08-27T10:23:11+02:00"
+generated_at: "2026-08-29T09:39:59.851361Z"
 ---
 ---
 title: OpenMetrics 2.0 [EXPERIMENTAL]
@@ -1298,7 +1298,9 @@ Labels of a Metric should be to the minimum needed to ensure uniqueness as every
 
 Experience has shown that downstream ingestors find it easier to work with separate total and failure MetricFamiles rather than using {result="success"} and {result="failure"} Labels within one MetricFamily. Also it is usually better to expose separate read & write and send & receive MetricFamiles as full duplex systems are common and downstream ingestors are more likely to care about those values separately than in aggregate.
 
-All of this is not as easy as it may sound. It's an area where experience and engineering trade-offs by domain-specific experts in both exposition and the exposed system are required to find a good balance. Metric and Label Name Characters
+All of this is not as easy as it may sound. It's an area where experience and engineering trade-offs by domain-specific experts in both exposition and the exposed system are required to find a good balance.
+
+### Metric and Label Name Characters
 
 OpenMetrics builds on the existing widely adopted Prometheus text exposition format and the ecosystem which formed around it. Backwards compatibility is a core design goal. Expanding or contracting the set of characters that are supported by the Prometheus text format would work against that goal. Breaking backwards compatibility would have wider implications than just the wire format. In particular, the query languages created or adopted to work with data transmitted within the Prometheus ecosystem rely on these precise character sets. Label values support full UTF-8, so the format can represent multi-lingual metrics.
 

@@ -1,111 +1,298 @@
 ---
 type: "Framework Learn Page"
-framework: "mongodb"
+framework: "MongoDB"
 source_repo: "https://github.com/mongodb/docs.git"
 source_branch: "main"
 source_path: "content/manual/manual/source/reference/operator/aggregation/dateFromParts.txt"
-source_commit: "ab9db26ed3d11618cdb61516d8180337d8e3f679"
-source_commit_short: "ab9db26e"
-source_commit_date: "2026-07-24T16:22:46-06:00"
-generated_at: "2026-07-25T11:51:15Z"
+source_commit: "b9f2bc487a2878b65e3c1f80024bebab76954f27"
+source_commit_short: "b9f2bc48"
+source_commit_date: "2026-08-28T17:09:45-05:00"
+generated_at: "2026-08-29T09:39:20.138672Z"
 ---
-
-====================================
-
 # $dateFromParts (expression operator)
+
+**meta:** :description: Construct a Date object using `$dateFromParts` by specifying year, month, day, and other date components.
+
+.. default-domain:: mongodb
+
+**contents:** On this page
+   :local:
+   :backlinks: none
+   :depth: 1
+   :class: singlecol
 
 ## Definition
 
-.. |outofrange| replace:
+**expression:** $dateFromParts
 
-```
-If the number specified is outside this range, :expression:`$dateFromParts` 
-incorporates the difference in the date calculation. 
-See :ref:`dateFromParts-values` for examples.
-```
+   Constructs and returns a Date object given the date's constituent
+   properties.
 
-.. |outofrange-4.4| replace:
+   The :expression:`$dateFromParts` expression has the following syntax:
 
-```
-If the number specified is outside this range,
-:expression:`$dateFromParts` errors. The lower bound for this value is ``1``.
-```
+   .. code-block:: javascript
+
+      {
+          $dateFromParts : {
+              'year': <year>, 'month': <month>, 'day': <day>,
+              'hour': <hour>, 'minute': <minute>, 'second': <second>,
+              'millisecond': <ms>, 'timezone': <tzExpression>
+          }
+      }
+
+   You can also specify your constituent date fields in
+   `ISO week date <https://en.wikipedia.org/wiki/ISO_week_date>`_
+   format using the following syntax:
+
+   .. code-block:: javascript
+
+      {
+          $dateFromParts : {
+              'isoWeekYear': <year>, 'isoWeek': <week>, 'isoDayOfWeek': <day>,
+              'hour': <hour>, 'minute': <minute>, 'second': <second>,
+              'millisecond': <ms>, 'timezone': <tzExpression>
+          }
+      }
+
+   The :expression:`$dateFromParts` takes a document with the following fields:
+
+   .. important::
+       You cannot combine the use of calendar dates and ISO week date
+       fields when constructing your :expression:`$dateFromParts` input
+       document.
+
+   .. list-table::
+      :header-rows: 1
+      :widths: 20 20 60
+
+      * - Field
+        - Required/Optional
+        - Description
+
+      * - ``year``
+        - Required if not using ``isoWeekYear``
+
+        - Calendar year. Can be any :ref:`expression
+          <aggregation-expressions>` that evaluates to a number.
+
+          Value range: ``1``-``9999``
+
+          |outofrange-4.4|
+
+      * - ``isoWeekYear``
+        - Required if not using ``year``
+        - ISO Week Date Year.  Can be any :ref:`expression
+          <aggregation-expressions>` that evaluates to a number.
+
+          Value range:  ``1``-``9999``
+
+          |outofrange-4.4|
+
+      * - ``month``
+        - Optional. Can only be used with ``year``.
+        - Month. Can be any :ref:`expression
+          <aggregation-expressions>` that evaluates to a number.
+
+          Defaults to ``1``.  
+
+          Value range: ``1``-``12``
+
+          |outofrange|
+
+      * - ``isoWeek``
+        - Optional. Can only be used with ``isoWeekYear``.
+
+        - Week of year. Can be any :ref:`expression
+          <aggregation-expressions>` that evaluates to a number.
+
+          Defaults to ``1``.
+
+          Value range: ``1``-``53``
+
+          |outofrange|
+
+      * - ``day``
+        - Optional. Can only be used with ``year``.
+        - Day of month.  Can be any :ref:`expression
+          <aggregation-expressions>` that evaluates to a number.
+
+          Defaults to ``1``.
+
+          Value range:  ``1``-``31``
+
+          |outofrange|
+
+      * - ``isoDayOfWeek``
+        - Optional. Can only be used with ``isoWeekYear``.
+        - Day of week (Monday ``1`` - Sunday ``7``).  Can be any :ref:`expression
+          <aggregation-expressions>` that evaluates to a number.
+
+          Defaults to ``1``.
+
+          Value range: ``1``-``7``
+
+          |outofrange|
+
+      * - ``hour``
+        - Optional
+        - Hour. Can be any :ref:`expression
+          <aggregation-expressions>` that evaluates to a number.
+
+          Defaults to ``0``.
+
+          Value range:  ``0``-``23``
+
+          |outofrange|
+
+      * - ``minute``
+        - Optional
+        - Minute. Can be any :ref:`expression
+          <aggregation-expressions>` that evaluates to a number.
+        
+          Defaults to ``0``.
+
+          Value range:  ``0``-``59``
+          |outofrange|
+
+      * - ``second``
+        - Optional
+        - Second. Can be any :ref:`expression
+          <aggregation-expressions>` that evaluates to a number.
+
+          Defaults to ``0``.
+
+          Value range: ``0``-``59``
+
+          |outofrange|
+
+      * - ``millisecond``
+        - Optional
+        - Millisecond. Can be any :ref:`expression
+          <aggregation-expressions>` that evaluates to a number.
+
+          Defaults to ``0``.
+
+          Value range:  ``0``-``999``
+
+          |outofrange|
+
+      * - ``timezone``
+        - Optional
+        - ``<timezone>`` can be any :ref:`expression
+          <aggregation-expressions>` that evaluates to a string whose
+          value is either:
+
+          - an `Olson Timezone Identifier
+            <https://en.wikipedia.org/wiki/List_of_tz_database_time_zones>`_,
+            such as ``"Europe/London"`` or ``"America/New_York"``, or
+
+          - a UTC offset in the form:
+
+            - ``+/-[hh]:[mm]``, e.g. ``"+04:45"``, or
+
+            - ``+/-[hh][mm]``, e.g. ``"-0530"``, or
+
+            - ``+/-[hh]``, e.g. ``"+03"``.
+
+          For more information on expressions, see
+          :ref:`aggregation-expressions`.
+
+.. |outofrange| replace::
+   If the number specified is outside this range, :expression:`$dateFromParts` 
+   incorporates the difference in the date calculation. 
+   See :ref:`dateFromParts-values` for examples.
+
+.. |outofrange-4.4| replace::
+   If the number specified is outside this range,
+   :expression:`$dateFromParts` errors. The lower bound for this value is ``1``.
 
 ## Behavior
 
+.. _dateFromParts-values:
+
 ### Value Range
 
-The supported value range for `year` and `isoWeekYear` is `1-9999`.
+The supported value range for ``year`` and ``isoWeekYear`` is ``1-9999``. 
 
-If the value specified for fields other than `year`, `isoWeekYear`, and `timezone` is outside the valid range, :expression:`$dateFromParts` carries or subtracts the difference from other date parts to calculate the date.
+If the value specified for fields other than ``year``, ``isoWeekYear``, 
+and ``timezone`` is outside the valid range, :expression:`$dateFromParts` 
+carries or subtracts the difference from other date parts to calculate 
+the date.
 
 ### Value is Greater than the Range
 
-Consider the following :expression:`$dateFromParts` expression where the `month` field value is `14`, which is 2 months greater than the maximum value of 12 months(or 1 year):
+Consider the following :expression:`$dateFromParts` expression where
+the ``month`` field value is ``14``, which is 2 months greater than the
+maximum value of 12 months(or 1 year):
 
-```javascript
-{ $dateFromParts: { 'year' : 2017, 'month' : 14, 'day': 1, 'hour' : 12  } }
-```
+.. code-block:: javascript
 
-The expression calculates the date by increasing the `year` by 1 and setting the `month` to 2 to return:
+   { $dateFromParts: { 'year' : 2017, 'month' : 14, 'day': 1, 'hour' : 12  } }
 
-```javascript
-ISODate("2018-02-01T12:00:00Z")
-```
+The expression calculates the date by increasing the ``year`` by 1
+and setting the ``month`` to 2 to return:
+
+.. code-block:: javascript
+
+   ISODate("2018-02-01T12:00:00Z")
 
 ### Value is Less than the Range
 
-Consider the following :expression:`$dateFromParts` expression where the `month` field value is `0`, which is 1 month less than the minimum value of 1 month:
+Consider the following :expression:`$dateFromParts` expression where
+the ``month`` field value is ``0``, which is 1 month less than the
+minimum value of 1 month:
 
-```javascript
-{ $dateFromParts: { 'year' : 2017, 'month' : 0, 'day': 1, 'hour' : 12  } }
-```
+.. code-block:: javascript
 
-The expression calculates the date by decreasing the `year` by 1 and setting the `month` to 12 to return:
+   { $dateFromParts: { 'year' : 2017, 'month' : 0, 'day': 1, 'hour' : 12  } }
 
-```javascript
-ISODate("2016-12-01T12:00:00Z")
-```
+The expression calculates the date by decreasing the ``year`` by 1
+and setting the ``month`` to 12 to return:
+
+.. code-block:: javascript
+
+   ISODate("2016-12-01T12:00:00Z")
 
 ### Time Zone
 
-.. include:: /includes/fact-olson-tz-behavior.rst
+**include:** /includes/fact-olson-tz-behavior.rst
 
 ## Example
 
-The following aggregation uses :expression:`$dateFromParts` to construct three date objects from the provided input fields:
+The following aggregation uses :expression:`$dateFromParts` to
+construct three date objects from the provided input fields:
 
-```javascript
-db.sales.aggregate([
-{
-   $project: {
-      date: {
-         $dateFromParts: {
-            'year' : 2017, 'month' : 2, 'day': 8, 'hour' : 12
-         }
-      },
-      date_iso: {
-         $dateFromParts: {
-            'isoWeekYear' : 2017, 'isoWeek' : 6, 'isoDayOfWeek' : 3, 'hour' : 12
-         }
-      },
-      date_timezone: {
-         $dateFromParts: {
-            'year' : 2016, 'month' : 12, 'day' : 31, 'hour' : 23,
-            'minute' : 46, 'second' : 12, 'timezone' : 'America/New_York'
+.. code-block:: javascript
+
+   db.sales.aggregate([
+   {
+      $project: {
+         date: {
+            $dateFromParts: {
+               'year' : 2017, 'month' : 2, 'day': 8, 'hour' : 12
+            }
+         },
+         date_iso: {
+            $dateFromParts: {
+               'isoWeekYear' : 2017, 'isoWeek' : 6, 'isoDayOfWeek' : 3, 'hour' : 12
+            }
+         },
+         date_timezone: {
+            $dateFromParts: {
+               'year' : 2016, 'month' : 12, 'day' : 31, 'hour' : 23,
+               'minute' : 46, 'second' : 12, 'timezone' : 'America/New_York'
+            }
          }
       }
-   }
-}])
-```
+   }])
 
 The operation returns the following result:
 
-```javascript
-{
-  "_id" : 1,
-  "date" : ISODate("2017-02-08T12:00:00Z"),
-  "date_iso" : ISODate("2017-02-08T12:00:00Z"),
-  "date_timezone" : ISODate("2017-01-01T04:46:12Z")
-}
-```
+.. code-block:: javascript
+
+   {
+     "_id" : 1,
+     "date" : ISODate("2017-02-08T12:00:00Z"),
+     "date_iso" : ISODate("2017-02-08T12:00:00Z"),
+     "date_timezone" : ISODate("2017-01-01T04:46:12Z")
+   }

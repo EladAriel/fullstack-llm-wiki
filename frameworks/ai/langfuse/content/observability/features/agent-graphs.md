@@ -4,12 +4,11 @@ framework: "Langfuse"
 source_repo: "https://github.com/langfuse/langfuse-docs"
 source_branch: "main"
 source_path: "content/docs/observability/features/agent-graphs.mdx"
-source_commit: "fcd1eca34a924867563c3c4e801254c4e66c0021"
-source_commit_short: "fcd1eca3"
-source_commit_date: "2026-07-25T00:45:45Z"
-generated_at: "2026-07-25T11:51:12Z"
+source_commit: "ba26344559edee69ba55c5d3aa80e632f56c1626"
+source_commit_short: "ba26344"
+source_commit_date: "2026-08-29T02:57:18+00:00"
+generated_at: "2026-08-29T09:38:37.754153Z"
 ---
-
 ---
 title: Agent Graphs
 description: Visualize and analyze complex agent workflows with Langfuse's agent graph view — as an aggregated overview or an expanded, as-it-ran DAG.
@@ -25,18 +24,12 @@ Agent graphs in Langfuse provide a visual representation of complex AI agent wor
 _Example trace with agent graph view ([public link](https://cloud.langfuse.com/project/cloramnkj0002jz088vzn1ja4/traces/8ed12d68-353f-464f-bc62-720984c3b6a0))_
 
 <Video
-  src="https://static.langfuse.com/docs-videos/graph-view-gif.mp4"
-  aspectRatio={1752 / 1080}
+  src="https://static.langfuse.com/changelog-videos/2026-07-13-graph-view-modes.mp4"
+  aspectRatio={16 / 9}
   gifStyle
 />
 
 ## Get Started
-
-<Callout type="info">
-
-The graph view is currently in beta, please feel free to share feedback.
-
-</Callout>
 
 There are two ways a graph appears for a trace:
 
@@ -44,7 +37,7 @@ There are two ways a graph appears for a trace:
 2. **From the LangGraph integration.** When you use the LangGraph integration, the graph shows automatically.
 
 **Observation Types**: See all available [Observation Types](/docs/observability/features/observation-types) and how to set them.
-**LangGraph**: See the [LangGraph integration guide](/guides/cookbook/integration_langgraph) for an end-to-end example on how to natively integrate LangGraph with Langfuse for LLM Agent tracing.
+**LangGraph**: See the [LangGraph integration guide](/integrations/frameworks/langgraph) for an end-to-end example on how to natively integrate LangGraph with Langfuse for LLM Agent tracing.
 
 ## View modes: Aggregated and Expanded
 

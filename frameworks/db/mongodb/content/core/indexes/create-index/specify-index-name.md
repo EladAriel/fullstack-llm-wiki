@@ -1,89 +1,130 @@
 ---
 type: "Framework Learn Page"
-framework: "mongodb"
+framework: "MongoDB"
 source_repo: "https://github.com/mongodb/docs.git"
 source_branch: "main"
 source_path: "content/manual/manual/source/core/indexes/create-index/specify-index-name.txt"
-source_commit: "ab9db26ed3d11618cdb61516d8180337d8e3f679"
-source_commit_short: "ab9db26e"
-source_commit_date: "2026-07-24T16:22:46-06:00"
-generated_at: "2026-07-25T11:51:15Z"
+source_commit: "b9f2bc487a2878b65e3c1f80024bebab76954f27"
+source_commit_short: "b9f2bc48"
+source_commit_date: "2026-08-28T17:09:45-05:00"
+generated_at: "2026-08-29T09:39:19.831699Z"
 ---
-
-=====================
+.. _specify-index-name:
 
 # Specify an Index Name
 
-When you create an index, you can give the index a custom name. Giving your index a name helps distinguish different indexes on your collection. For example, you can more easily identify the indexes used by a query in the query plan's `explain results <explain-results>` if your indexes have distinct names.
+**meta:** :description: Specify a custom name for an index to easily identify it in query plans and ensure uniqueness among indexes in a collection.
 
-To specify the index name, include the `name` option when you create the index:
+.. default-domain:: mongodb
 
-```javascript
-db.<collection>.createIndex( 
-   { <field>: <value> }, 
-   { name: "<indexName>" } 
-)
-```
+**contents:** On this page
+   :local:
+   :backlinks: none
+   :depth: 2
+   :class: singlecol
+
+When you create an index, you can give the index a custom name. Giving
+your index a name helps distinguish different indexes on your
+collection. For example, you can more easily identify the indexes used
+by a query in the query plan's :ref:`explain results <explain-results>`
+if your indexes have distinct names.
+
+To specify the index name, include the ``name`` option when you create
+the index:
+
+.. code-block:: javascript 
+
+   db.<collection>.createIndex( 
+      { <field>: <value> }, 
+      { name: "<indexName>" } 
+   )
 
 ## About this Task
 
 Before you specify an index name, consider the following:
 
-- Index names must be unique. Creating an index with
-the name of an existing index returns an error.
+- Index names must be unique. Creating an index with 
+  the name of an existing index returns an error.
 
 - You can't rename an existing index. Instead, you must :ref:`drop
-<drop-an-index>` and recreate the index with a new name.
+  <drop-an-index>` and recreate the index with a new name.
 
 ### Default Index Names
 
-If you don't specify a name during index creation, the system generates the name by concatenating each index key field and value with underscores. For example:
+If you don't specify a name during index creation, 
+the system generates the name by concatenating each index key 
+field and value with underscores. For example:
+
+.. list-table::
+   :header-rows: 1
+   :widths: 60 40
+
+   * - Index
+     - Default Name
+
+   * - ``{ score : 1 }``
+     - ``score_1``
+
+   * - ``{ content : "text", "description.tags": "text" }``
+     -  ``content_text_description.tags_text``
+
+   * - ``{ category : 1, locale : "2dsphere"}``
+     - ``category_1_locale_2dsphere``
+
+   * - ``{ "fieldA" : 1, "fieldB" : "hashed", "fieldC" : -1 }``
+     - ``fieldA_1_fieldB_hashed_fieldC_-1``
 
 ## Procedure
 
-A `blog` collection contains data about blog posts and user interactions.
+A ``blog`` collection contains data about blog posts and user
+interactions.
 
-Create a text index on the `content`, `users.comments`, and `users.profiles` fields. Set the index `name` to `InteractionsTextIndex`:
+Create a text index on the ``content``, ``users.comments``, and
+``users.profiles`` fields. Set the index ``name`` to
+``InteractionsTextIndex``:
 
-```javascript
-db.blog.createIndex(
-   {
-     content: "text",
-     "users.comments": "text",
-     "users.profiles": "text"
-   },
-   {
-     name: "InteractionsTextIndex"
-   }
-)
-```
+.. code-block:: javascript
 
+   db.blog.createIndex(
+      {
+        content: "text",
+        "users.comments": "text",
+        "users.profiles": "text"
+      },
+      {
+        name: "InteractionsTextIndex"
+      }
+   )
+ 
 ## Results
 
-After you create the index, you can use the :method:`db.collection.getIndexes()` method to get the index name:
+After you create the index, you can use the
+:method:`db.collection.getIndexes()` method to get the index name:
 
-```javascript
-db.blog.getIndexes()
-```
+.. code-block:: javascript
+
+   db.blog.getIndexes()
 
 Output:
 
-```javascript
-[
-  { v: 2, key: { _id: 1 }, name: '_id_' },
-  {
-    v: 2,
-    key: { _fts: 'text', _ftsx: 1 },
-    name: 'InteractionsTextIndex',
-    weights: { content: 1, 'users.comments': 1, 'users.profiles': 1 },
-    default_language: 'english',
-    language_override: 'language',
-    textIndexVersion: 3
-  }
-]
-```
+.. code-block:: javascript
+   :copyable: false
+   :emphasize-lines: 6
+   
+   [
+     { v: 2, key: { _id: 1 }, name: '_id_' },
+     {
+       v: 2,
+       key: { _fts: 'text', _ftsx: 1 },
+       name: 'InteractionsTextIndex',
+       weights: { content: 1, 'users.comments': 1, 'users.profiles': 1 },
+       default_language: 'english',
+       language_override: 'language',
+       textIndexVersion: 3
+     }
+   ]
 
 ## Learn More
 
-- To learn how to create an index, see `manual-create-an-index`.
-- For more information about index properties, see `index-properties`.
+- To learn how to create an index, see :ref:`manual-create-an-index`.
+- For more information about index properties, see :ref:`index-properties`.

@@ -1,14 +1,15 @@
 ---
 type: "Framework Learn Page"
-framework: "redis"
+framework: "Redis"
 source_repo: "https://github.com/redis/docs.git"
 source_branch: "main"
 source_path: "content/operate/rs/release-notes/rs-8-0-releases/_index.md"
-source_commit: "9d30f68c3dad1a6b3b7d30fe604b911348ce8152"
-source_commit_short: "9d30f68c"
-source_commit_date: "2026-07-24T10:52:10-07:00"
-generated_at: "2026-07-25T11:51:22Z"
+source_commit: "f8693349287b0efbef3c865b6f6a2aceca88594d"
+source_commit_short: "f869334"
+source_commit_date: "2026-08-28T10:01:19-05:00"
+generated_at: "2026-08-29T09:38:55.538889Z"
 ---
+# _Index
 
 ---
 Title: Redis Software release notes 8.0.x
@@ -125,9 +126,21 @@ The following changes affect behavior and validation in Redis Search:
 
 - Improved handling of expired records, memory constraints, and malformed fields.
 
-### OpenSSL version
+### OpenSSL version on RHEL 9
 
-Redis Software version 8.0.16 and later requires OpenSSL 3.3 or later.
+On RHEL 9, Redis Software versions 8.0.16 through 8.0.20-68 require OpenSSL 3.3 or later. Version 8.0.20-96 and later are built against an earlier OpenSSL version, so the requirement no longer applies. Other supported platforms are unaffected.
+
+The requirement exists because those versions are built against the OpenSSL 3.3 runtime included in recent RHEL 9 minor releases. Nodes on an earlier RHEL 9 minor release don't meet it. For example, RHEL 9.6 ships OpenSSL 3.2.2.
+
+The pre-upgrade checks don't detect an incompatible OpenSSL version, so an upgrade can pass validation and then fail partway through. This can leave the management services on the node in a failed state.
+
+Before you upgrade to a version between 8.0.16 and 8.0.20-68, check the OpenSSL version on each node:
+
+```sh
+openssl version
+```
+
+If the version is earlier than 3.3.0, either upgrade the `openssl` and `openssl-libs` packages first, or upgrade to Redis Software version 8.0.20-96 or later instead.
 
 ### Reserved ports
 
@@ -301,3 +314,7 @@ The following legacy UI features are not yet available in the new Cluster Manage
     Use [`crdb-cli crdb purge-instance`]({{< relref "/operate/rs/references/cli-utilities/crdb-cli/crdb/purge-instance" >}}) instead.
 
 - Search and export the log.
+
+#### SCAN results can be inconsistent during a rolling upgrade in OSS Cluster API mode
+
+During a rolling upgrade with Smart client handoffs (SCH) enabled, when some slot's shards have migrated to a different node but are still reachable from their original node, results of the `SCAN` command might be inconsistent: it might show some of the keys, it might show keys that are not reachable from that node, or it might show no keys. When the slot migration is done, this issue will fix itself.

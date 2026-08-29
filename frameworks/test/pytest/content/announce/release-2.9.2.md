@@ -4,53 +4,71 @@ framework: "pytest"
 source_repo: "https://github.com/pytest-dev/pytest"
 source_branch: "main"
 source_path: "doc/en/announce/release-2.9.2.rst"
-source_commit: "344c23787cdb3431dcc441b8b63ee9950f04b921"
-source_commit_short: "344c2378"
-source_commit_date: "2026-07-24T17:37:16+02:00"
-generated_at: "2026-07-25T11:50:13Z"
+source_commit: "fdba12e1708313f56e9cf713d260c029764ca2b7"
+source_commit_short: "fdba12e"
+source_commit_date: "2026-08-27T21:55:50+02:00"
+generated_at: "2026-08-29T09:40:11.190807Z"
 ---
-
 # pytest-2.9.2
 
-pytest is a mature Python testing tool with more than 1100 tests against itself, passing on many different interpreters and platforms.
+pytest is a mature Python testing tool with more than 1100 tests
+against itself, passing on many different interpreters and platforms.
 
 See below for the changes and see docs at:
 
-http://pytest.org
+    http://pytest.org
 
-As usual, you can upgrade from pypi via:
+As usual, you can upgrade from pypi via::
 
-```
-pip install -U pytest
-```
+    pip install -U pytest
 
 Thanks to all who contributed to this release, among them:
 
-Adam Chainz Benjamin Dopplinger Bruno Oliveira Freya Bruhin John Towler Martin Prusse Meng Jue MengJueM Omar Kohl Quentin Pradet Ronny Pfannschmidt Thomas Güttler TomV Tyler Goodlet
+      Adam Chainz
+      Benjamin Dopplinger
+      Bruno Oliveira
+      Freya Bruhin
+      John Towler
+      Martin Prusse
+      Meng Jue
+      MengJueM
+      Omar Kohl
+      Quentin Pradet
+      Ronny Pfannschmidt
+      Thomas Güttler
+      TomV
+      Tyler Goodlet
 
-Happy testing, The py.test Development Team
+
+Happy testing,
+The py.test Development Team
+
 
 ## 2.9.2 (compared to 2.9.1)
 
 **Bug Fixes**
 
-- fix :issue:`510`: skip tests where one parameterize dimension was empty
-thanks Alex Stapleton for the Report and :user:`RonnyPfannschmidt` for the PR
+* fix :issue:`510`: skip tests where one parameterize dimension was empty
+  thanks Alex Stapleton for the Report and :user:`RonnyPfannschmidt` for the PR
 
-- Fix Xfail does not work with condition keyword argument.
-Thanks :user:`astraw38` for reporting the issue (:issue:`1496`) and :user:`tomviner` for PR the (:pr:`1524`).
+* Fix Xfail does not work with condition keyword argument.
+  Thanks :user:`astraw38` for reporting the issue (:issue:`1496`) and :user:`tomviner`
+  for PR the (:pr:`1524`).
 
-- Fix win32 path issue when putting custom config file with absolute path
-in `pytest.main("-c your_absolute_path")`.
+* Fix win32 path issue when putting custom config file with absolute path
+  in ``pytest.main("-c your_absolute_path")``.
 
-- Fix maximum recursion depth detection when raised error class is not aware
-of unicode/encoded bytes. Thanks :user:`prusse-martin` for the PR (:pr:`1506`).
+* Fix maximum recursion depth detection when raised error class is not aware
+  of unicode/encoded bytes.
+  Thanks :user:`prusse-martin` for the PR (:pr:`1506`).
 
-- Fix `pytest.mark.skip` mark when used in strict mode.
-Thanks :user:`pquentin` for the PR and :user:`RonnyPfannschmidt` for showing how to fix the bug.
+* Fix ``pytest.mark.skip`` mark when used in strict mode.
+  Thanks :user:`pquentin` for the PR and :user:`RonnyPfannschmidt` for
+  showing how to fix the bug.
 
-- Minor improvements and fixes to the documentation.
-Thanks :user:`omarkohl` for the PR.
+* Minor improvements and fixes to the documentation.
+  Thanks :user:`omarkohl` for the PR.
 
-- Fix `--fixtures` to show all fixture definitions as opposed to just
-one per fixture name. Thanks to :user:`hackebrot` for the PR.
+* Fix ``--fixtures`` to show all fixture definitions as opposed to just
+  one per fixture name.
+  Thanks to :user:`hackebrot` for the PR.

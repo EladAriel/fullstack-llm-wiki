@@ -1,182 +1,279 @@
 ---
 type: "Framework Learn Page"
-framework: "mongodb"
+framework: "MongoDB"
 source_repo: "https://github.com/mongodb/docs.git"
 source_branch: "main"
 source_path: "content/manual/manual/source/reference/command/validateDBMetadata.txt"
-source_commit: "ab9db26ed3d11618cdb61516d8180337d8e3f679"
-source_commit_short: "ab9db26e"
-source_commit_date: "2026-07-24T16:22:46-06:00"
-generated_at: "2026-07-25T11:51:15Z"
+source_commit: "b9f2bc487a2878b65e3c1f80024bebab76954f27"
+source_commit_short: "b9f2bc48"
+source_commit_date: "2026-08-28T17:09:45-05:00"
+generated_at: "2026-08-29T09:39:20.063471Z"
 ---
-
-=====================================
-
 # validateDBMetadata (database command)
+
+**meta:** :description: Check the validity of database or collection metadata against a specific API version using `validateDBMetadata`, which reports but does not fix errors.
+
+.. default-domain:: mongodb
+
+**contents:** On this page
+   :local:
+   :backlinks: none
+   :depth: 1
+   :class: singlecol
 
 ## Definition
 
-.. versionadded:: 5.0
+**versionadded:** 5.0
+
+**dbcommand:** validateDBMetadata
+
+   The :dbcommand:`validateDBMetadata` command checks that the stored 
+   metadata of a database or a collection is valid within a particular 
+   API version.
+   
+   :dbcommand:`validateDBMetadata` reports errors, but does not have the
+   capability to fix errors.
 
 ## Compatibility
 
-This command is available in deployments hosted in the following environments:
+This command is available in deployments hosted in the following environments: 
 
-.. include:: /includes/fact-environments-atlas-only.rst
+**include:** /includes/fact-environments-atlas-only.rst
 
-.. include:: /includes/fact-environments-atlas-support-all.rst
+**include:** /includes/fact-environments-atlas-support-all.rst
 
-.. include:: /includes/fact-environments-onprem-only.rst
+**include:** /includes/fact-environments-onprem-only.rst
 
 ## Syntax
 
 The command has the following syntax:
 
-```javascript
-db.runCommand( 
-   { 
-     validateDBMetadata: 1,
-     apiParameters: {
-       version: <string>,
-       strict: <boolean>,
-       deprecationErrors: <boolean>
-      },
-     db: <string>,
-     collection: <string>,
-   } 
-)
-```
+.. code-block:: javascript
+
+   db.runCommand( 
+      { 
+        validateDBMetadata: 1,
+        apiParameters: {
+          version: <string>,
+          strict: <boolean>,
+          deprecationErrors: <boolean>
+         },
+        db: <string>,
+        collection: <string>,
+      } 
+   )
 
 ## Command Fields
 
 The command takes the following fields:
 
+.. list-table::
+   :header-rows: 1
+   :widths: 10 10 50
+
+   * - Field
+     - Type
+     - Description
+
+   * - :ref:`apiParameters <api-params-document>` 
+     - document
+     - .. _api-params-document:
+     
+       *All Fields are Required*.
+       
+       - ``version`` (*string*)
+ 
+         The API Version to validate against. For now, ``"1"`` is the 
+         only version.
+
+       - ``strict`` (*boolean*)
+         
+         If ``true``, :ref:`APIStrictError <api-strict-resp>` 
+         responses will be included in the output.
+
+       - ``deprecationErrors`` (*boolean*)
+         
+         If ``true``, :ref:`APIDeprecationError <api-deprecation-resp>` 
+         responses will be included in the output.
+
+   * - ``db``
+     - string
+     - *Optional*. The name of the database to validate. If no database
+       is specified, all databases will be validated.
+
+   * - ``collection``
+     - string
+     - *Optional*. The name of the collection or view to validate. If no 
+       collection or view is specified, all collections in the database  
+       specified by ``db`` will be validated. If no database is 
+       specified, all collections in all databases will be validated.
+
 ## Behavior
 
-- Validate all collections in all databases, reporting
-`APIStrictError <api-strict-resp>` and `APIVersionError <api-vers-resp>` error responses.
+- Validate all collections in all databases, reporting 
+  :ref:`APIStrictError <api-strict-resp>` 
+  and :ref:`APIVersionError <api-vers-resp>` error responses.
 
-```javascript
-  db.runCommand( { 
-    validateDBMetadata: 1, 
-    apiParameters: { 
-      version: "1", 
-      strict: true, 
-      deprecationErrors: true 
-    }, 
-  })
-```
+  .. code-block:: javascript
 
-- Validate all collections in `inventory`:
-```javascript
-  db.runCommand( { 
-    validateDBMetadata: 1, 
-    apiParameters: { 
-      version: "1", 
-      strict: true, 
-      deprecationErrors: true 
-    }, 
-    db: "inventory",
-  })
-```
+     db.runCommand( { 
+       validateDBMetadata: 1, 
+       apiParameters: { 
+         version: "1", 
+         strict: true, 
+         deprecationErrors: true 
+       }, 
+     })
 
-- Validate the `sales` collection in the `inventory` database:
-```javascript
-  db.runCommand( { 
-    validateDBMetadata: 1, 
-    apiParameters: { 
-      version: "1", 
-      strict: true, 
-      deprecationErrors: true 
-    }, 
-    db: "inventory",
-    collection: "sales",
-  })
-```
+- Validate all collections in ``inventory``: 
 
-- Validate any and all `sales` collections across all databases:
-```javascript
-  db.runCommand( { 
-    validateDBMetadata: 1, 
-    apiParameters: { 
-      version: "1", 
-      strict: true, 
-      deprecationErrors: true 
-    }, 
-    collection: "sales",
-  })
-```
+  .. code-block:: javascript
 
-> **Note:** Your user must have the :authaction:`validate` privilege action on
-all collections you want to validate.
+     db.runCommand( { 
+       validateDBMetadata: 1, 
+       apiParameters: { 
+         version: "1", 
+         strict: true, 
+         deprecationErrors: true 
+       }, 
+       db: "inventory",
+     })
+
+- Validate the ``sales`` collection in the ``inventory`` database:
+
+  .. code-block:: javascript
+
+     db.runCommand( { 
+       validateDBMetadata: 1, 
+       apiParameters: { 
+         version: "1", 
+         strict: true, 
+         deprecationErrors: true 
+       }, 
+       db: "inventory",
+       collection: "sales",
+     })
+
+- Validate any and all ``sales`` collections across all databases:
+
+  .. code-block:: javascript
+
+     db.runCommand( { 
+       validateDBMetadata: 1, 
+       apiParameters: { 
+         version: "1", 
+         strict: true, 
+         deprecationErrors: true 
+       }, 
+       collection: "sales",
+     })
+
+**note:** Your user must have the :authaction:`validate` privilege action on 
+   all collections you want to validate.
+
+.. _validateDBMetadata-output:
 
 ## Output
 
-```javascript
-{
-   apiVersionErrors: [
-     {
-       ns: <string>,
-       code: <int>,
-       codeName: <string>,
-       errmsg: <string>
-     }
-   ],
-   ok: <int>,
-   hasMoreErrors: <boolean>,
-}
-```
+.. code-block:: javascript
+
+   {
+      apiVersionErrors: [
+        {
+          ns: <string>,
+          code: <int>,
+          codeName: <string>,
+          errmsg: <string>
+        }
+      ],
+      ok: <int>,
+      hasMoreErrors: <boolean>,
+   }
+
+
+**data:** validateDBMetadata.apiVersionErrors
+
+   Array of documents describing API Version errors.
+
+**data:** validateDBMetadata.apiVersionErrors[n].ns
+
+   Namespace of the collection or view with error.
+
+**data:** validateDBMetadata.apiVersionErrors[n].code
+
+   Numeric error code.
+
+**data:** validateDBMetadata.apiVersionErrors[n].codeName
+   
+   Name of the error code.
+
+**data:** validateDBMetadata.apiVersionErrors[n].errmsg
+
+   String describing the error.
+
+**data:** validateDBMetadata.ok
+
+   If the command fails, ``ok`` is set to ``1``. Otherwise, ``ok`` is 
+   set to ``0``. :data:`validateDBMetadata.ok` may have a value of 
+   ``0`` and still report validation errors.
+   
+**data:** validateDBMetadata.hasMoreErrors
+
+   If ``true``, there are additional errors.
 
 ## Example
 
-Use the sample Query API code to create a `sales` collection in :binary:`~bin.mongosh`:
+Use the sample Query API code to create a ``sales``
+collection in :binary:`~bin.mongosh`: 
 
-```javascript
-db.sales.insertMany([
-    { "_id" : 1, "item" : "shoes", "price" : 10, "quantity" : 2, "date" : ISODate("2021-01-01T08:00:00Z") },
-    { "_id" : 2, "item" : "hat", "price" : 20, "quantity" : 1, "date" : ISODate("2021-02-03T09:00:00Z") },
-    { "_id" : 3, "item" : "gloves", "price" : 5, "quantity" : 5, "date" : ISODate("2021-02-03T09:05:00Z") },
-    { "_id" : 4, "item" : "pants", "price" : 10, "quantity" : 10, "date" : ISODate("2021-02-15T08:00:00Z") },
-    { "_id" : 5, "item" : "socks", "price" : 5, "quantity" : 10, "date" : ISODate("2021-02-15T09:05:00Z") },
-    { "_id" : 6, "item" : "shirt", "price" : 5, "quantity" : 5, "date" : ISODate("2021-02-15T12:05:10Z") },
-    { "_id" : 7, "item" : "belt", "price" : 5, "quantity" : 10, "date" : ISODate("2021-02-15T14:12:12Z") },
-    { "_id" : 8, "item" : "blouse", "price" : 10, "quantity" : 5, "date" : ISODate("2021-03-16T20:20:13Z") }
-])
-```
+.. code-block:: javascript
 
-Add a `text index <index-type-text>` on the `item` field.
+   db.sales.insertMany([
+       { "_id" : 1, "item" : "shoes", "price" : 10, "quantity" : 2, "date" : ISODate("2021-01-01T08:00:00Z") },
+       { "_id" : 2, "item" : "hat", "price" : 20, "quantity" : 1, "date" : ISODate("2021-02-03T09:00:00Z") },
+       { "_id" : 3, "item" : "gloves", "price" : 5, "quantity" : 5, "date" : ISODate("2021-02-03T09:05:00Z") },
+       { "_id" : 4, "item" : "pants", "price" : 10, "quantity" : 10, "date" : ISODate("2021-02-15T08:00:00Z") },
+       { "_id" : 5, "item" : "socks", "price" : 5, "quantity" : 10, "date" : ISODate("2021-02-15T09:05:00Z") },
+       { "_id" : 6, "item" : "shirt", "price" : 5, "quantity" : 5, "date" : ISODate("2021-02-15T12:05:10Z") },
+       { "_id" : 7, "item" : "belt", "price" : 5, "quantity" : 10, "date" : ISODate("2021-02-15T14:12:12Z") },
+       { "_id" : 8, "item" : "blouse", "price" : 10, "quantity" : 5, "date" : ISODate("2021-03-16T20:20:13Z") }
+   ])
+  
+Add a :ref:`text index <index-type-text>` on the ``item`` field.   
 
-```javascript
-db.sales.createIndex( { item: "text" } )
-```
+.. code-block:: javascript
 
-Validate the `sales` collection for strict compliance with API version 1 and include `deprecationErrors` in the output.
+   db.sales.createIndex( { item: "text" } )
 
-```javascript
-  db.runCommand( { 
-    validateDBMetadata: 1, 
-    apiParameters: { 
-      version: "1", 
-      strict: true, 
-      deprecationErrors: true 
-    }, 
-    collection: "sales",
-  })
-```
+Validate the ``sales`` collection for strict compliance with API 
+version 1 and include ``deprecationErrors`` in the output.
 
-:dbcommand:`validateDBMetadata` reports an `APIStrictError` on the `item_text` index.
+.. code-block:: javascript
 
-```javascript
-{
-   apiVersionErrors: [
-     {
-       ns: 'test.sales',
-       code: 323,
-       codeName: 'APIStrictError',
-       errmsg: 'The index with name item_text is not allowed in API version 1.'
-     }
-   ],
-   ok: 1,
-   hasMoreErrors: false,
-}
-```
+     db.runCommand( { 
+       validateDBMetadata: 1, 
+       apiParameters: { 
+         version: "1", 
+         strict: true, 
+         deprecationErrors: true 
+       }, 
+       collection: "sales",
+     })
+
+:dbcommand:`validateDBMetadata` reports an ``APIStrictError`` on the 
+``item_text`` index. 
+
+.. code-block:: javascript
+
+   {
+      apiVersionErrors: [
+        {
+          ns: 'test.sales',
+          code: 323,
+          codeName: 'APIStrictError',
+          errmsg: 'The index with name item_text is not allowed in API version 1.'
+        }
+      ],
+      ok: 1,
+      hasMoreErrors: false,
+   }

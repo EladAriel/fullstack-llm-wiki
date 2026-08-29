@@ -1,54 +1,161 @@
 ---
 type: "Framework Learn Page"
-framework: "postgres"
+framework: "PostgreSQL"
 source_repo: "https://github.com/postgres/postgres.git"
 source_branch: "master"
 source_path: "doc/src/sgml/ref/create_event_trigger.sgml"
-source_commit: "38afc3dcb25c45b744d4025029ce0a6c90b7059f"
-source_commit_short: "38afc3dc"
-source_commit_date: "2026-07-25T19:08:27+09:00"
-generated_at: "2026-07-25T11:50:59Z"
+source_commit: "6c5f1d6074208146930b67c2054509c3e82f6f7f"
+source_commit_short: "6c5f1d6"
+source_commit_date: "2026-08-28T23:24:47+02:00"
+generated_at: "2026-08-29T09:39:24.534681Z"
 ---
-
 CREATE EVENT TRIGGER
+ 
 
-CREATE EVENT TRIGGER
-7
-SQL - Language Statements
+ 
+  
+# CREATE EVENT TRIGGER
 
-CREATE EVENT TRIGGER
-define a new event trigger
+  7
+  SQL - Language Statements
+ 
 
-```
+ 
+  
+# CREATE EVENT TRIGGER
+
+  define a new event trigger
+ 
+
+ 
+
 CREATE EVENT TRIGGER name
     ON event
     [ WHEN filter_variable IN (filter_value [, ... ]) [ AND ... ] ]
     EXECUTE { FUNCTION | PROCEDURE } function_name()
+
+ 
+
+ 
+  
+# Description
+
+  
+   CREATE EVENT TRIGGER creates a new event trigger.
+   Whenever the designated event occurs and the WHEN condition
+   associated with the trigger, if any, is satisfied, the trigger function
+   will be executed.  For a general introduction to event triggers, see
+   .  The user who creates an event trigger
+   becomes its owner.
+  
+
+ 
+
+ 
+  
+# Parameters
+
+  
+   
+    name
+    
+     
+      The name to give the new trigger.  This name must be unique within
+      the database.
+     
+
+    
+   
+
+   
+    event
+    
+     
+      The name of the event that triggers a call to the given function.
+      See  for more information
+      on event names.
+     
+
+    
+   
+
+   
+    filter_variable
+    
+     
+      The name of a variable used to filter events.  This makes it possible
+      to restrict the firing of the trigger to a subset of the cases in which
+      it is supported.  Currently the only supported
+      filter_variable
+      is TAG.
+     
+
+    
+   
+
+   
+    filter_value
+    
+     
+      A list of values for the
+      associated filter_variable
+      for which the trigger should fire.  For TAG, this means a
+      list of command tags (e.g., 'DROP FUNCTION').
+     
+
+    
+   
+
+   
+    function_name
+    
+     
+      A user-supplied function that is declared as taking no argument and
+      returning type event_trigger.
+     
+
+     
+      In the syntax of CREATE EVENT TRIGGER, the keywords
+      FUNCTION and PROCEDURE are
+      equivalent, but the referenced function must in any case be a function,
+      not a procedure.  The use of the keyword PROCEDURE
+      here is historical and deprecated.
+     
+
+    
+   
+
+  
+ 
+
+ 
+  
+# Notes
+
+  
+   Only superusers can create event triggers.
+  
+
+  
+   Event triggers are disabled in single-user mode (see ) as well as when
+    is set to false.
+   If an erroneous event trigger disables the database so much that you can't
+   even drop the trigger, restart with 
+   set to false to temporarily disable event triggers, or
+   in single-user mode, and you'll be able to do that.
+  
+
+ 
+
+ 
+  
+# Examples
+
+  
+   Forbid the execution of any DDL command:
+
 ```
 
-## Description
-
-`CREATE EVENT TRIGGER` creates a new event trigger. Whenever the designated event occurs and the `WHEN` condition associated with the trigger, if any, is satisfied, the trigger function will be executed. For a general introduction to event triggers, see `event-triggers`. The user who creates an event trigger becomes its owner.
-
-## Parameters
-
-- The name to give the new trigger. This name must be unique within the database.
-- The name of the event that triggers a call to the given function. See `event-trigger-definition` for more information on event names.
-- The name of a variable used to filter events. This makes it possible to restrict the firing of the trigger to a subset of the cases in which it is supported. Currently the only supported `filter_variable` is `TAG`.
-- A list of values for the associated `filter_variable` for which the trigger should fire. For `TAG`, this means a list of command tags (e.g., `'DROP FUNCTION'`).
-- A user-supplied function that is declared as taking no argument and returning type `event_trigger`. In the syntax of `CREATE EVENT TRIGGER`, the keywords `FUNCTION` and `PROCEDURE` are equivalent, but the referenced function must in any case be a function, not a procedure. The use of the keyword `PROCEDURE` here is historical and deprecated.
-
-## Notes
-
-Only superusers can create event triggers.
-
-Event triggers are disabled in single-user mode (see `app-postgres`) as well as when `guc-event-triggers` is set to `false`. If an erroneous event trigger disables the database so much that you can't even drop the trigger, restart with `guc-event-triggers` set to `false` to temporarily disable event triggers, or in single-user mode, and you'll be able to do that.
-
-## Examples
-
-Forbid the execution of any DDL command:
-
-```
 CREATE OR REPLACE FUNCTION abort_any_command()
   RETURNS event_trigger
  LANGUAGE plpgsql
@@ -60,10 +167,22 @@ $$;
 
 CREATE EVENT TRIGGER abort_ddl ON ddl_command_start
    EXECUTE FUNCTION abort_any_command();
+
 ```
 
-## Compatibility
+ 
 
-There is no `CREATE EVENT TRIGGER` statement in the SQL standard.
+ 
+  
+# Compatibility
 
-## See Also
+  
+   There is no CREATE EVENT TRIGGER statement in the
+   SQL standard.
+  
+
+ 
+
+ 
+  
+# See Also

@@ -1,7 +1,7 @@
 ---
 type: "Framework Learn Directory Index"
 framework: "Grafana"
-generated_at: "2026-07-25T19:08:09.116818Z"
+generated_at: "2026-08-29T09:39:37.588624Z"
 ---
 # Jaeger
 
@@ -18,3 +18,9 @@ This directory contains Grafana learning pages related to jaeger.
 ## Pages in This Directory
 
 - [_Index](_index.md)
+
+## Subdirectories
+
+- [Configure](configure/index.md)
+- [Query Editor](query-editor/index.md)
+- [Troubleshooting](troubleshooting/index.md)

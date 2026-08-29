@@ -4,30 +4,33 @@ framework: "pytest"
 source_repo: "https://github.com/pytest-dev/pytest"
 source_branch: "main"
 source_path: "doc/en/announce/release-8.0.0.rst"
-source_commit: "344c23787cdb3431dcc441b8b63ee9950f04b921"
-source_commit_short: "344c2378"
-source_commit_date: "2026-07-24T17:37:16+02:00"
-generated_at: "2026-07-25T11:50:13Z"
+source_commit: "fdba12e1708313f56e9cf713d260c029764ca2b7"
+source_commit_short: "fdba12e"
+source_commit_date: "2026-08-27T21:55:50+02:00"
+generated_at: "2026-08-29T09:40:11.193953Z"
 ---
-
 # pytest-8.0.0
 
 The pytest team is proud to announce the 8.0.0 release!
 
-This release contains new features, improvements, bug fixes, and breaking changes, so users are encouraged to take a look at the CHANGELOG carefully:
+This release contains new features, improvements, bug fixes, and breaking changes, so users
+are encouraged to take a look at the CHANGELOG carefully:
 
-https://docs.pytest.org/en/stable/changelog.html
+    https://docs.pytest.org/en/stable/changelog.html
 
 For complete documentation, please visit:
 
-https://docs.pytest.org/en/stable/
+    https://docs.pytest.org/en/stable/
 
 As usual, you can upgrade from PyPI via:
 
-pip install -U pytest
+    pip install -U pytest
 
 Thanks to all of the contributors to this release:
 
-- Bruno Oliveira
-- Ran Benita
-Happy testing, The pytest Development Team
+* Bruno Oliveira
+* Ran Benita
+
+
+Happy testing,
+The pytest Development Team

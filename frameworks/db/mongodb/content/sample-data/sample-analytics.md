@@ -1,148 +1,230 @@
 ---
 type: "Framework Learn Page"
-framework: "mongodb"
+framework: "MongoDB"
 source_repo: "https://github.com/mongodb/docs.git"
 source_branch: "main"
 source_path: "content/manual/manual/source/sample-data/sample-analytics.txt"
-source_commit: "ab9db26ed3d11618cdb61516d8180337d8e3f679"
-source_commit_short: "ab9db26e"
-source_commit_date: "2026-07-24T16:22:46-06:00"
-generated_at: "2026-07-25T11:51:15Z"
+source_commit: "b9f2bc487a2878b65e3c1f80024bebab76954f27"
+source_commit_short: "b9f2bc48"
+source_commit_date: "2026-08-28T17:09:45-05:00"
+generated_at: "2026-08-29T09:39:19.730039Z"
 ---
-
-========================
+.. _sample-analytics:
 
 # Sample Analytics Dataset
 
-The `sample_analytics` database contains three collections for a typical financial services application. It has customers, accounts, and transactions. These are used as part of the exercises for the MongoDB Training on Data Analysis.
+**meta:** :description: Explore the `sample_analytics` database with collections for customers, accounts, and transactions used in MongoDB data analysis training.
 
-.. include:: /includes/search-shared/fact-how-to-load-sample-data.rst
+.. default-domain:: mongodb
+
+**contents:** On this page
+   :local:
+   :backlinks: none
+   :depth: 2
+   :class: singlecol
+
+The ``sample_analytics`` database contains three collections for a
+typical financial services application. It has customers, accounts, and
+transactions. These are used as part of the exercises for the MongoDB
+Training on Data Analysis.
+
+**include:** /includes/search-shared/fact-how-to-load-sample-data.rst
 
 ## Collections
 
-The `sample_analytics` database contains the following collections:
+The ``sample_analytics`` database contains the following collections:
 
-### `sample_analytics.accounts`
+.. list-table::
+   :widths: 30 70
+   :header-rows: 1
 
-This collection contains account details for `users <analytics-customers>`. Each document contains an account id, a limit and the products that a customer has purchased.
+   * - Collection Name
+     - Description
 
-Indexes ```````
+   * - :ref:`accounts <analytics-accounts>`
+     - Contains details on customer accounts.
 
-The `sample_analytics.accounts` collection contains the following indexes:
+   * - :ref:`customers <analytics-customers>`
+     - Contains details on customers.
 
-Sample Document ```````````````
+   * - :ref:`transactions <analytics-transactions>`
+     - Contains customer transactions.
 
-```json
-{
-  "account_id": 470650,
-  "limit": 10000,
-  "products": [
-    "CurrencyService",
-    "Commodity",
-    "InvestmentStock"
-  ]
-}
-```
+.. _analytics-accounts:
 
-### `sample_analytics.customers`
+### ``sample_analytics.accounts``
 
-This collection contains customer details, including what `accounts <analytics-accounts>` they hold. Each document contains a username, name, address, birth date, email address, a list of the accounts held, and details on the tiers and related benefits they are entitled to.
+This collection contains account details for :ref:`users
+<analytics-customers>`. Each document contains an account id, a limit
+and the products that a customer has purchased.
 
-Indexes ```````
+### Indexes
 
-The `sample_analytics.customers` collection contains the following indexes:
+The ``sample_analytics.accounts`` collection contains the following indexes:
 
-Sample Document ```````````````
+.. list-table::
+   :header-rows: 1
 
-```json
-{
- "username": "lejoshua",
- "name": "Michael Johnson",
- "address": "15989 Edward Inlet\nLake Maryton, NC 39545",
- "birthdate": {"$date": 54439275000},
- "email": "courtneypaul@example.com",
- "accounts": [
-   470650,
-   443178
- ],
- "tier_and_details": {
-   "b5f19cb532fa436a9be2cf1d7d1cac8a": {
-      "tier": "Silver",
-      "benefits": [
-        "dedicated account representative"
-      ],
-      "active": true,
-      "id": "b5f19cb532fa436a9be2cf1d7d1cac8a"
-      }
- }
-}
-```
+   * - Name
+     - Index
+     - Description
 
-### `sample_analytics.transactions`
+   * - ``_id_``
+     - ``{ "_id": 1 }``
+     - Primary key index on the ``_id`` field.
 
-This collection contains transactions details for `users <analytics-accounts>`. Each document contains an account id, a count of how many transactions are in this set, the start and end dates for transactions covered by this document, and a list of sub documents. Each sub document represents a single transaction and the related information for that transaction.
+### Sample Document
 
-Indexes ```````
+.. code-block:: json
+   :copyable: false
 
-The `sample_analytics.transactions` collection contains the following indexes:
+   {
+     "account_id": 470650,
+     "limit": 10000,
+     "products": [
+       "CurrencyService",
+       "Commodity",
+       "InvestmentStock"
+     ]
+   }
 
-Sample Document ```````````````
+.. _analytics-customers:
 
-```json
-{
-  "account_id": 794875,
-  "transaction_count": 6,
-  "bucket_start_date": {"$date": 693792000000},
-  "bucket_end_date": {"$date": 1473120000000},
-  "transactions": [
-    {
-      "date": {"$date": 1325030400000},
-      "amount": 1197,
-      "transaction_code": "buy",
-      "symbol": "nvda",
-      "price": "12.7330024299341033611199236474931240081787109375",
-      "total": "15241.40390863112172326054861"
-    },
-    {
-       "date": {"$date": 1465776000000},
-       "amount": 8797,
-       "transaction_code": "buy",
-       "symbol": "nvda",
-       "price": "46.53873172406391489630550495348870754241943359375",
-       "total": "409401.2229765902593427995271"
-    },
-    {
-       "date": {"$date": 1472601600000},
-       "amount": 6146,
-       "transaction_code": "sell",
-       "symbol": "ebay",
-       "price": "32.11600884852845894101847079582512378692626953125",
-       "total": "197384.9903830559086514995215"
-    },
-    {
-       "date": {"$date": 1101081600000},
-       "amount": 253,
-       "transaction_code": "buy",
-       "symbol": "amzn",
-       "price": "37.77441226157566944721111212857067584991455078125",
-       "total": "9556.926302178644370144411369"
-    },
-    {
-       "date": {"$date": 1022112000000},
-       "amount": 4521,
-       "transaction_code": "buy",
-       "symbol": "nvda",
-       "price": "10.763069758141103449133879621513187885284423828125",
-       "total": "48659.83837655592869353426977"
-    },
-    {
-       "date": {"$date": 936144000000},
-       "amount": 955,
-       "transaction_code": "buy",
-       "symbol": "csco",
-       "price": "27.992136535152877030441231909207999706268310546875",
-       "total": "26732.49039107099756407137647"
+### ``sample_analytics.customers``
+
+This collection contains customer details, including what :ref:`accounts <analytics-accounts>`
+they hold. Each document contains a username,
+name, address, birth date, email address, a list of the accounts held,
+and details on the tiers and related benefits they are entitled to.
+
+### Indexes
+
+The ``sample_analytics.customers`` collection contains the following
+indexes:
+
+.. list-table::
+   :header-rows: 1
+
+   * - Name
+     - Index
+     - Description
+
+   * - ``_id_``
+     - ``{ "_id": 1 }``
+     - Primary key index on the ``_id`` field.
+
+### Sample Document
+
+.. code-block:: json
+   :copyable: false
+
+   {
+    "username": "lejoshua",
+    "name": "Michael Johnson",
+    "address": "15989 Edward Inlet\nLake Maryton, NC 39545",
+    "birthdate": {"$date": 54439275000},
+    "email": "courtneypaul@example.com",
+    "accounts": [
+      470650,
+      443178
+    ],
+    "tier_and_details": {
+      "b5f19cb532fa436a9be2cf1d7d1cac8a": {
+         "tier": "Silver",
+         "benefits": [
+           "dedicated account representative"
+         ],
+         "active": true,
+         "id": "b5f19cb532fa436a9be2cf1d7d1cac8a"
+         }
     }
-  ]
-}
-```
+   }
+
+.. _analytics-transactions:
+
+### ``sample_analytics.transactions``
+
+This collection contains transactions details for
+:ref:`users <analytics-accounts>`. Each document contains an account id, a
+count of how many transactions are in this set, the start and end dates for
+transactions covered by this document, and a list of sub documents. Each sub
+document represents a single transaction and the related information for that
+transaction.
+
+### Indexes
+
+The ``sample_analytics.transactions`` collection contains the following
+indexes:
+
+.. list-table::
+   :header-rows: 1
+
+   * - Name
+     - Index
+     - Description
+
+   * - ``_id_``
+     - ``{ "_id": 1 }``
+     - Primary key index on the ``_id`` field.
+
+### Sample Document
+
+.. code-block:: json
+   :copyable: false
+
+   {
+     "account_id": 794875,
+     "transaction_count": 6,
+     "bucket_start_date": {"$date": 693792000000},
+     "bucket_end_date": {"$date": 1473120000000},
+     "transactions": [
+       {
+         "date": {"$date": 1325030400000},
+         "amount": 1197,
+         "transaction_code": "buy",
+         "symbol": "nvda",
+         "price": "12.7330024299341033611199236474931240081787109375",
+         "total": "15241.40390863112172326054861"
+       },
+       {
+          "date": {"$date": 1465776000000},
+          "amount": 8797,
+          "transaction_code": "buy",
+          "symbol": "nvda",
+          "price": "46.53873172406391489630550495348870754241943359375",
+          "total": "409401.2229765902593427995271"
+       },
+       {
+          "date": {"$date": 1472601600000},
+          "amount": 6146,
+          "transaction_code": "sell",
+          "symbol": "ebay",
+          "price": "32.11600884852845894101847079582512378692626953125",
+          "total": "197384.9903830559086514995215"
+       },
+       {
+          "date": {"$date": 1101081600000},
+          "amount": 253,
+          "transaction_code": "buy",
+          "symbol": "amzn",
+          "price": "37.77441226157566944721111212857067584991455078125",
+          "total": "9556.926302178644370144411369"
+       },
+       {
+          "date": {"$date": 1022112000000},
+          "amount": 4521,
+          "transaction_code": "buy",
+          "symbol": "nvda",
+          "price": "10.763069758141103449133879621513187885284423828125",
+          "total": "48659.83837655592869353426977"
+       },
+       {
+          "date": {"$date": 936144000000},
+          "amount": 955,
+          "transaction_code": "buy",
+          "symbol": "csco",
+          "price": "27.992136535152877030441231909207999706268310546875",
+          "total": "26732.49039107099756407137647"
+       }
+     ]
+   }

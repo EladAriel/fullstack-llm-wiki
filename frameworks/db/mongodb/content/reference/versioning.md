@@ -1,103 +1,147 @@
 ---
 type: "Framework Learn Page"
-framework: "mongodb"
+framework: "MongoDB"
 source_repo: "https://github.com/mongodb/docs.git"
 source_branch: "main"
 source_path: "content/manual/manual/source/reference/versioning.txt"
-source_commit: "ab9db26ed3d11618cdb61516d8180337d8e3f679"
-source_commit_short: "ab9db26e"
-source_commit_date: "2026-07-24T16:22:46-06:00"
-generated_at: "2026-07-25T11:51:15Z"
+source_commit: "b9f2bc487a2878b65e3c1f80024bebab76954f27"
+source_commit_short: "b9f2bc48"
+source_commit_date: "2026-08-28T17:09:45-05:00"
+generated_at: "2026-08-29T09:39:19.700714Z"
 ---
-
-==================
+.. _release-version-numbers:
 
 # MongoDB Versioning
 
-> **Important:** Always upgrade to the latest stable patch release of your release series.
+**meta:** :description: Understand MongoDB's versioning system, including Major, Minor, and Patch Releases, and how they apply to Atlas and on-premises deployment upgrade cadences.
 
-MongoDB versioning has the form `X.Y.Z` where `X.Y` refers to the release series and `Z` refers to the patch number.
+**contents:** On this page
+   :local:
+   :backlinks: none
+   :depth: 1
+   :class: singlecol
 
-Starting with MongoDB 8.2, MongoDB adopts a new versioning and release strategy to simplify upgrade paths and provide clearer versioning options. MongoDB is released as two different release series:
+**important:** Always upgrade to the latest stable patch release of your release series.
+
+MongoDB versioning has the form ``X.Y.Z`` where ``X.Y`` refers to the
+release series and ``Z`` refers to the patch number.
+
+Starting with MongoDB 8.2, MongoDB adopts a new versioning and release
+strategy to simplify upgrade paths and provide clearer versioning
+options. MongoDB is released as two different release series:
 
 - |lts| Releases
 - Minor Releases
+
 Choose a release series based on your lifecycle and upgrade preferences.
+
+.. _major-releases:
 
 ## |lts| Releases
 
-|lts| Releases are made available every two years and have a five-year lifecycle. |lts| Releases introduce new features and improvements and are supported for MongoDB Atlas and on-premises deployments.
+|lts| Releases are made available every two years and have a five-year
+lifecycle. |lts| Releases introduce new features and improvements and
+are supported for MongoDB Atlas and on-premises deployments.
 
-Example versions:
+*Example versions:*
 
-- `7.0`
-- `8.0`
-If you want a predictable support window and manual control over upgrades, choose a |lts| release.
+- ``7.0``
+- ``8.0``
+
+If you want a predictable support window and manual control over
+upgrades, choose a |lts| release.
+
+.. _rapid-releases:
+.. _minor-releases:
 
 ## Minor Releases
 
-Minor releases introduce incremental improvements and new features within a major version release cycle. They are as stable as major releases and suitable for production workloads.
+Minor releases introduce incremental improvements and new features
+within a major version release cycle. They are as stable as major
+releases and suitable for production workloads.
 
-Starting with MongoDB 8.2, minor releases are also available for on-premises deployments (Community and EA) for specific use cases, such as Search, Vector Search, and enhanced Queryable Encryption capabilities.
+Starting with MongoDB 8.2, minor releases are also available for
+on-premises deployments (Community and EA) for specific use cases,
+such as Search, Vector Search, and enhanced Queryable Encryption
+capabilities.
 
-.. include:: /includes/admonition-minor-release-features.rst
+**include:** /includes/admonition-minor-release-features.rst
 
-Example versions:
+*Example versions:*
 
-- `8.2`
-If you need early access to new features and can commit to more frequent upgrades, choose a minor release.
+- ``8.2``
 
-> **Note:** After a new minor release becomes available, MongoDB does not
-continue patching the previous minor release. To receive the latest
-security updates and bug fixes on the minor-release track, upgrade
-to the latest available patch release.
+If you need early access to new features and can commit to more
+frequent upgrades, choose a minor release.
+
+**note:** After a new minor release becomes available, MongoDB does not
+   continue patching the previous minor release. To receive the latest
+   security updates and bug fixes on the minor-release track, upgrade
+   to the latest available patch release.
 
 ## Upgrade Path
 
-.. include:: /includes/upgrade-path.rst
+**include:** /includes/upgrade-path.rst
 
 ## Release Options for MongoDB Atlas
 
-Starting with MongoDB 8.2, two release options are available for Atlas Dedicated clusters:
+Starting with MongoDB 8.2, two release options are available for
+Atlas Dedicated clusters:
 
 - |lts| Versions: You can choose to stay on a specific major version
-such as MongoDB 8.0. Clusters on major versions receive bug fixes and security patches. You must manually upgrade clusters before their End of Life (EOL). Otherwise, Atlas automatically upgrades clusters to the latest supported major version after EOL.
-
+  such as MongoDB 8.0. Clusters on major versions receive bug fixes
+  and security patches. You must manually upgrade clusters before
+  their End of Life (EOL). Otherwise, Atlas automatically upgrades
+  clusters to the latest supported major version after EOL.
 - Latest Version With Auto Upgrades: If you set your cluster to this
-release option, it receives automatic upgrades to the latest available MongoDB version and enables new features.
+  release option, it receives automatic upgrades to the latest available
+  MongoDB version and enables new features.
 
-To learn more about manually upgrading your Atlas cluster, see `Upgrade a Cluster to a New MongoDB Version <upgrade-major-MongoDB-version>`.
+  To learn more about manually upgrading your Atlas cluster,
+  see :ref:`Upgrade a Cluster to a New MongoDB Version <upgrade-major-MongoDB-version>`.
 
-.. include:: /includes/latest-release-reversion-restriction.rst
+  .. include:: /includes/latest-release-reversion-restriction.rst
 
-> **Note:** You cannot choose a release option for clusters on the Free and Flex
-tiers as these clusters are automatically upgraded.
+**note:** You cannot choose a release option for clusters on the Free and Flex
+   tiers as these clusters are automatically upgraded.
+
+.. _versions-patch-release:
 
 ## Patch Releases
 
-Patch Releases are made available as needed to both |lts| Releases and Minor Releases. Patch releases generally include bug fixes and minor improvements.
+Patch Releases are made available as needed to both |lts| Releases and
+Minor Releases. Patch releases generally include bug fixes and minor
+improvements.
 
-Example versions:
+*Example versions:*
 
-- `8.0.1` (a |lts| Release patch version)
-- `8.2.1` (a Minor Release patch version)
+- ``8.0.1`` (a |lts| Release patch version)
+- ``8.2.1`` (a Minor Release patch version)
+
 ## Release Candidate (RC) Releases
 
-In advance of new |lts| Releases and Minor Releases, Release Candidates are made available for early testing. A Release Candidate represents a version of the upcoming release that is stable enough to use for testing, but is not suitable for production deployment.
+In advance of new |lts| Releases and Minor Releases, Release
+Candidates are made available for early testing. A Release Candidate
+represents a version of the upcoming release that is stable enough to
+use for testing, but is not suitable for production deployment.
 
-Example versions:
+*Example versions:*
 
-- `6.0.0-rc0`
-- `6.0.0-rc1`
-- `6.1.2-rc5`
+- ``6.0.0-rc0``
+- ``6.0.0-rc1``
+- ``6.1.2-rc5``
+
 ## Driver Versions
 
-The version numbering system for MongoDB differs from the system used for the :ecosystem:`MongoDB drivers </drivers>`.
+The version numbering system for MongoDB differs from the system
+used for the :ecosystem:`MongoDB drivers </drivers>`.
 
-## MongoDB Shell (`mongosh`)
+## MongoDB Shell (``mongosh``)
 
-The :mongosh:`MongoDB Shell </>` (`mongosh`) is released separately from the MongoDB Server and uses its own version numbering system.
+The :mongosh:`MongoDB Shell </>` (``mongosh``) is released separately 
+from the MongoDB Server and uses its own version numbering system.
 
 ## Database Tools
 
-:dbtools:`MongoDB Database Tools </>` are released separately from the MongoDB Server and use their own version numbering system.
+:dbtools:`MongoDB Database Tools </>` are released separately
+from the MongoDB Server and use their own version numbering system.

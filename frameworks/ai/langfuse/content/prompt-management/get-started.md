@@ -4,12 +4,11 @@ framework: "Langfuse"
 source_repo: "https://github.com/langfuse/langfuse-docs"
 source_branch: "main"
 source_path: "content/docs/prompt-management/get-started.mdx"
-source_commit: "fcd1eca34a924867563c3c4e801254c4e66c0021"
-source_commit_short: "fcd1eca3"
-source_commit_date: "2026-07-25T00:45:45Z"
-generated_at: "2026-07-25T11:51:12Z"
+source_commit: "ba26344559edee69ba55c5d3aa80e632f56c1626"
+source_commit_short: "ba26344"
+source_commit_date: "2026-08-29T02:57:18+00:00"
+generated_at: "2026-08-29T09:38:37.750256Z"
 ---
-
 ---
 title: Get Started
 sidebarTitle: Get Started
@@ -137,6 +136,14 @@ This guide helps you get started with Langfuse Prompt Management manually.
 
 <PromptUse />
 
+<Callout type="info">
+
+Prompt Management is not on the critical path of your application. The SDKs [cache prompts client-side](/docs/prompt-management/features/caching), so after the first fetch they are served from memory with no extra latency. If Langfuse goes down, your application continues to use the cached prompt.
+
+If you need 100% availability even when a new instance starts with an empty cache, see [guaranteed availability](/docs/prompt-management/features/guaranteed-availability).
+
+</Callout>
+
 </Steps>
 
 ## Not seeing what you expected?
@@ -145,9 +152,10 @@ This guide helps you get started with Langfuse Prompt Management manually.
 
 ## Next steps
 
-Now that you've used your first prompt, there are a couple of things we recommend you do next to make the most of Langfuse Prompt Management:
+Now that you've used your first prompt, here are a few things we recommend next to make the most of Langfuse Prompt Management:
 
 - [Link prompts to traces](/docs/prompt-management/features/link-to-traces) to analyze performance by prompt version
+- [Improve prompts with experiments](/docs/evaluation/experiments/experiments-via-ui) to test prompt versions on a dataset
 - [Use version control and labels](/docs/prompt-management/features/prompt-version-control#protected-prompt-labels) to manage deployments across environments
 
 Looking for something specific? Take a look under _Features_ for guides on specific topics.

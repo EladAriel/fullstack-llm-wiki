@@ -1,14 +1,15 @@
 ---
 type: "Framework Learn Page"
-framework: "react"
+framework: "React"
 source_repo: "https://github.com/reactjs/react.dev"
 source_branch: "main"
 source_path: "src/content/reference/react/useLayoutEffect.md"
-source_commit: "7b6c3ceb9dd97249e9dce4a8a94e61aed6424698"
-source_commit_short: "7b6c3ceb"
-source_commit_date: "2026-07-20T15:31:48+02:00"
-generated_at: "2026-07-25T11:50:43Z"
+source_commit: "7c36f7ac329fe3cf2e11222edce9a535158c2cab"
+source_commit_short: "7c36f7a"
+source_commit_date: "2026-08-24T10:33:57-07:00"
+generated_at: "2026-08-29T09:40:25.501450Z"
 ---
+# Uselayouteffect
 
 ---
 title: useLayoutEffect
@@ -746,7 +747,9 @@ However, if you're running into this problem, you have a few different options:
 
 - Replace `useLayoutEffect` with [`useEffect`.](/reference/react/useEffect) This tells React that it's okay to display the initial render result without blocking the paint (because the original HTML will become visible before your Effect runs).
 
-- Alternatively, [mark your component as client-only.](/reference/react/Suspense#providing-a-fallback-for-server-errors-and-client-only-content) This tells React to replace its content up to the closest [`<Suspense>`](/reference/react/Suspense) boundary with a loading fallback (for example, a spinner or a glimmer) during server rendering.
+- <CanaryBadge /> Alternatively, call [`use(browser())`](/reference/react/use#use-browser) to mark the component as browser-only. React will replace its content up to the closest [`<Suspense>`](/reference/react/Suspense) boundary with a loading fallback (for example, a spinner or a glimmer) during server rendering.
+
+- Alternatively, [mark your component as client-only.](/reference/react/Suspense#providing-a-fallback-for-server-errors-and-client-only-content) This tells React to replace its content up to the closest `<Suspense>` boundary with a loading fallback during server rendering.
 
 - Alternatively, you can render a component with `useLayoutEffect` only after hydration. Keep a boolean `isMounted` state that's initialized to `false`, and set it to `true` inside a `useEffect` call. Your rendering logic can then be like `return isMounted ? <RealContent /> : <FallbackContent />`. On the server and during the hydration, the user will see `FallbackContent` which should not call `useLayoutEffect`. Then React will replace it with `RealContent` which runs on the client only and can include `useLayoutEffect` calls.
 

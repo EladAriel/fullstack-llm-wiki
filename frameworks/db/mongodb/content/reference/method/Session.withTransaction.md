@@ -1,109 +1,147 @@
 ---
 type: "Framework Learn Page"
-framework: "mongodb"
+framework: "MongoDB"
 source_repo: "https://github.com/mongodb/docs.git"
 source_branch: "main"
 source_path: "content/manual/manual/source/reference/method/Session.withTransaction.txt"
-source_commit: "ab9db26ed3d11618cdb61516d8180337d8e3f679"
-source_commit_short: "ab9db26e"
-source_commit_date: "2026-07-24T16:22:46-06:00"
-generated_at: "2026-07-25T11:51:15Z"
+source_commit: "b9f2bc487a2878b65e3c1f80024bebab76954f27"
+source_commit_short: "b9f2bc48"
+source_commit_date: "2026-08-28T17:09:45-05:00"
+generated_at: "2026-08-29T09:39:19.979811Z"
 ---
-
-==========================================
+.. _session-withTransaction:
 
 # Session.withTransaction() (mongosh method)
 
+**meta:** :description: Execute a lambda function within a transaction using `Session.withTransaction()`, with automatic retries for commit failures.
+
+.. default-domain:: mongodb
+
+**contents:** On this page
+   :local:
+   :backlinks: none
+   :depth: 1
+   :class: singlecol
+
 ## Definition
+
+**method:** Session.withTransaction( <function> [, <options> ] )
+
+   *New in mongosh v1.1.0*
+
+   Runs a specified lambda function within a transaction. If there is an
+   error, the method retries the:
+
+   - commit operation, if there is a failure to commit.
+   - entire transaction, if the error permits.
+
+   The :method:`Session.withTransaction()` method accepts the
+   `transaction options
+   <https://mongodb.github.io/node-mongodb-native/4.8/interfaces/TransactionOptions.html>`__.
+
+   :returns: The value produced by the callback function.
+   
+   .. |dbcommand| replace:: :dbcommand:`commitTransaction` command
+   .. include:: /includes/fact-mongosh-shell-method-alt
 
 ## Compatibility
 
+.. |command| replace:: method
+
 This method is available in deployments hosted in the following environments:
 
-.. include:: /includes/fact-environments-atlas-only.rst
+**include:** /includes/fact-environments-atlas-only.rst
 
-.. include:: /includes/fact-environments-atlas-support-all.rst
+**include:** /includes/fact-environments-atlas-support-all.rst
 
-.. include:: /includes/fact-environments-onprem-only.rst
+**include:** /includes/fact-environments-onprem-only.rst
 
 ## Behavior
 
-The Node.js driver has a version of `Session.withTransaction()` that is known as the [Callback API](https://www.mongodb.com/docs/drivers/node/current/fundamentals/transactions/#callback-api)_. The `Callback API` also accepts an callback, however the return type for the Node.js method must be a Promise. The `mongosh` `Session.withTransaction()` method does not require a Promise.
-
+The Node.js driver has a version of ``Session.withTransaction()`` that is
+known as the `Callback API
+<https://www.mongodb.com/docs/drivers/node/current/fundamentals/transactions/#callback-api>`__.
+The ``Callback API`` also accepts an callback, however the return type
+for the Node.js method must be a Promise. The ``mongosh``
+``Session.withTransaction()`` method does not require a Promise. 
 ## Example
 
-The following example creates the `balances` collection and uses a transaction to transfer money between two customers.
+The following example creates the ``balances`` collection and uses a
+transaction to transfer money between two customers. 
 
-Create the `balances` collection:
+Create the ``balances`` collection:
 
-```javascript
-use accounts
-db.balances.insertMany( [
-  { customer: "Pat", balance: Decimal128( "35.88" ) },
-  { customer: "Sasha", balance: Decimal128( "5.23" ) }
-] )
-```
+.. code-block:: javascript
+
+   use accounts
+   db.balances.insertMany( [
+     { customer: "Pat", balance: Decimal128( "35.88" ) },
+     { customer: "Sasha", balance: Decimal128( "5.23" ) }
+   ] )
+
 
 Initialize some variables that are used in the transaction:
 
-```javascript
-var fromAccount = "Pat"
-var toAccount = "Sasha"
-var transferAmount = 1
+.. code-block:: javascript
 
-var dbName = "accounts"
-var collectionName = "balances"
-```
+   var fromAccount = "Pat"
+   var toAccount = "Sasha"
+   var transferAmount = 1
+
+   var dbName = "accounts"
+   var collectionName = "balances"
 
 Start a session, then run a transaction to update the accounts:
 
-```javascript
-var session = db.getMongo().startSession( { readPreference: { mode: "primary" } } );
-session.withTransaction( async() => {  
+.. code-block:: javascript
 
-   const sessionCollection = session.getDatabase(dbName).getCollection(collectionName);
+   var session = db.getMongo().startSession( { readPreference: { mode: "primary" } } );
+   session.withTransaction( async() => {  
 
-   // Check needed values
-   var checkFromAccount = sessionCollection.findOne(
-      {
-         "customer": fromAccount,
-         "balance": { $gte: transferAmount }
-      }
-   )
-   if( checkFromAccount === null ){
-      throw new Error( "Problem with sender account" )
-   } 
+      const sessionCollection = session.getDatabase(dbName).getCollection(collectionName);
 
-   var checkToAccount = sessionCollection.findOne(
-      { "customer": toAccount }
-   )
-   if( checkToAccount === null ){
-      throw new Error( "Problem with receiver account" )
-   } 
+      // Check needed values
+      var checkFromAccount = sessionCollection.findOne(
+         {
+            "customer": fromAccount,
+            "balance": { $gte: transferAmount }
+         }
+      )
+      if( checkFromAccount === null ){
+         throw new Error( "Problem with sender account" )
+      } 
 
-   // Transfer the funds
-   sessionCollection.updateOne(
-      { "customer": toAccount },
-      { $inc: { "balance": transferAmount } }
-   )
-   sessionCollection.updateOne(
-      { "customer": fromAccount },
-      { $inc: { "balance": -1 * transferAmount } }
-   )
+      var checkToAccount = sessionCollection.findOne(
+         { "customer": toAccount }
+      )
+      if( checkToAccount === null ){
+         throw new Error( "Problem with receiver account" )
+      } 
 
- } )
-```
+      // Transfer the funds
+      sessionCollection.updateOne(
+         { "customer": toAccount },
+         { $inc: { "balance": transferAmount } }
+      )
+      sessionCollection.updateOne(
+         { "customer": fromAccount },
+         { $inc: { "balance": -1 * transferAmount } }
+      )
 
-The lambda function includes initial checks to validate the operation before updating the `balances` collection.
+    } )
+
+The lambda function includes initial checks to validate the operation
+before updating the ``balances`` collection.
 
 MongoDB automatically completes the transaction.
 
-- If both `updateOne()` operations succeed,
-`Session.withTransaction()` commits the transaction when the callback returns.
-
+- If both ``updateOne()`` operations succeed,
+  ``Session.withTransaction()`` commits the transaction when the callback
+  returns.
 - If an exception is thrown inside the callback,
-`Session.withTransaction()` ends the transaction and rolls back any uncommitted changes.
+  ``Session.withTransaction()`` ends the transaction and rolls back any
+  uncommitted changes.
 
-> **Note:** By default, MongoDB ends transactions that run for more than 60
-seconds. If you want to extend the default timeout to experiment with
-transactions in :binary:`mongosh`, see `transaction-limit`.
+**note:** By default, MongoDB ends transactions that run for more than 60
+   seconds. If you want to extend the default timeout to experiment with
+   transactions in :binary:`mongosh`, see :ref:`transaction-limit`.

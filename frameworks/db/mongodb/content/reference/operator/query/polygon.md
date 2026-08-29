@@ -1,39 +1,76 @@
 ---
 type: "Framework Learn Page"
-framework: "mongodb"
+framework: "MongoDB"
 source_repo: "https://github.com/mongodb/docs.git"
 source_branch: "main"
 source_path: "content/manual/manual/source/reference/operator/query/polygon.txt"
-source_commit: "ab9db26ed3d11618cdb61516d8180337d8e3f679"
-source_commit_short: "ab9db26e"
-source_commit_date: "2026-07-24T16:22:46-06:00"
-generated_at: "2026-07-25T11:51:15Z"
+source_commit: "b9f2bc487a2878b65e3c1f80024bebab76954f27"
+source_commit_short: "b9f2bc48"
+source_commit_date: "2026-08-28T17:09:45-05:00"
+generated_at: "2026-08-29T09:39:20.239624Z"
 ---
-
-===================================
-
 # $polygon (query predicate operator)
+
+**meta:** :description: Specify a polygon for geospatial queries using `$geoWithin` to find coordinate pairs within its bounds.
+
+.. default-domain:: mongodb
+
+**contents:** On this page
+   :local:
+   :backlinks: none
+   :depth: 1
+   :class: singlecol
 
 ## Definition
 
+**query:** $polygon
+
+   Specifies a polygon for a
+   :term:`geospatial` :query:`$geoWithin` query on legacy coordinate
+   pairs. The query returns pairs that are within the bounds of the
+   polygon. The operator does *not* query for GeoJSON objects.
+
+   To define the polygon, specify an array of coordinate points:
+
+   .. code-block:: javascript
+
+      {
+         <location field>: {
+            $geoWithin: {
+               $polygon: [ [ <x1> , <y1> ], [ <x2> , <y2> ], [ <x3> , <y3> ], ... ]
+            }
+         }
+      }
+
+   The last point is always implicitly connected to the first. You can
+   specify as many points, i.e. sides, as you like.
+
+   .. important::
+      If you use longitude and latitude, specify **longitude first**.
+
 ## Behavior
 
-The :query:`$polygon` operator calculates distances using flat (planar) geometry.
+The :query:`$polygon` operator calculates distances using flat (planar)
+geometry.
 
-.. include:: /includes/note-geospatial-index-must-exist.rst
+.. |operator| replace:: :query:`$polygon`
+**include:** /includes/note-geospatial-index-must-exist.rst
 
-Only the `2d <2d-index>` geospatial index supports the :query:`$polygon` operator.
+Only the :ref:`2d <2d-index>` geospatial index supports the
+:query:`$polygon` operator.
 
 ## Example
 
-The following query returns all documents that have coordinates that exist within the polygon defined by `[ 0 , 0 ]`, `[ 3 , 6 ]`, and `[ 6 , 0 ]`:
+The following query returns all documents that have coordinates that
+exist within the polygon defined by ``[ 0 , 0 ]``, ``[ 3 , 6 ]``, and
+``[ 6 , 0 ]``:
 
-```javascript
-db.places.find(
-  {
-     loc: {
-       $geoWithin: { $polygon: [ [ 0 , 0 ], [ 3 , 6 ], [ 6 , 0 ] ] }
+.. code-block:: javascript
+
+   db.places.find(
+     {
+        loc: {
+          $geoWithin: { $polygon: [ [ 0 , 0 ], [ 3 , 6 ], [ 6 , 0 ] ] }
+        }
      }
-  }
-)
-```
+   )

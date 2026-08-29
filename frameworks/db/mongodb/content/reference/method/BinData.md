@@ -1,90 +1,132 @@
 ---
 type: "Framework Learn Page"
-framework: "mongodb"
+framework: "MongoDB"
 source_repo: "https://github.com/mongodb/docs.git"
 source_branch: "main"
 source_path: "content/manual/manual/source/reference/method/BinData.txt"
-source_commit: "ab9db26ed3d11618cdb61516d8180337d8e3f679"
-source_commit_short: "ab9db26e"
-source_commit_date: "2026-07-24T16:22:46-06:00"
-generated_at: "2026-07-25T11:51:15Z"
+source_commit: "b9f2bc487a2878b65e3c1f80024bebab76954f27"
+source_commit_short: "b9f2bc48"
+source_commit_date: "2026-08-28T17:09:45-05:00"
+generated_at: "2026-08-29T09:39:19.915105Z"
 ---
-
-==========================
+.. _server-binData-method:
 
 # BinData() (mongosh method)
+
+**meta:** :description: Create binary data objects using the `BinData()` method, specifying subtypes and base64 encoded buffers.
+
+.. default-domain:: mongodb
+
+**contents:** On this page
+   :local:
+   :backlinks: none
+   :depth: 1
+   :class: singlecol
 
 ## Definition
 
 Creates a binary data object.
 
-`BinData` has the following syntax:
+``BinData`` has the following syntax:
+
+**method:** BinData(<sub_type>,<buffer>)
+
+   .. list-table::
+      :header-rows: 1
+      :widths: 20 20 60
+
+      * - Parameter
+
+        - Type
+
+        - Description
+
+      * - ``sub_type``
+
+        - integer
+
+        - The :ref:`binary subtype <binData-subtype>`
+
+      * - ``buffer``
+
+        - string
+
+        - The buffer object containing binary data. Must be a base 64
+          encoded string value.
+
+   :returns: A binary data object.
+
+.. _binData-subtype:
 
 ### Binary Subtypes
 
-Specify one of the following values for `sub_type`:
+Specify one of the following values for ``sub_type``:
 
-.. include:: /includes/binary-subtypes.rst
+**include:** /includes/binary-subtypes.rst
 
 ## Compatibility
 
-This method is available in deployments hosted in the following environments:
+This method is available in deployments hosted in the following environments: 
 
-.. include:: /includes/fact-environments-atlas-only.rst
+**include:** /includes/fact-environments-atlas-only.rst
 
-.. include:: /includes/fact-environments-onprem-only.rst
+**include:** /includes/fact-environments-onprem-only.rst
 
 ## Behavior
 
-.. include:: /includes/fact-bindata-endian.rst
+**include:** /includes/fact-bindata-endian.rst
 
 ## Examples
 
-### Insert a `BinData()` Object
+### Insert a ``BinData()`` Object
 
-Use the `BinData()` constructor to create the `bdata` variable.
+Use the ``BinData()`` constructor to create the ``bdata`` variable.
 
-```javascript
-var bdata = BinData(0, "gf1UcxdHTJ2HQ/EGQrO7mQ==")
-```
+.. code-block:: javascript
 
-Insert the object into the `testbin` collection.
+   var bdata = BinData(0, "gf1UcxdHTJ2HQ/EGQrO7mQ==")
 
-```javascript
-db.testbin.insertOne( { _id : 1, bin_data: bdata } )
-```
+Insert the object into the ``testbin`` collection.
 
-Query the `testbin` collection for the inserted document.
+.. code-block:: javascript
 
-```javascript
-db.testbin.find()
-```
+   db.testbin.insertOne( { _id : 1, bin_data: bdata } )
 
-You can see the binary `buffer` stored in the collection.
+Query the ``testbin`` collection for the inserted document.
 
-```javascript
-{
-  _id: 1,
-  bin_data: Binary(Buffer.from("81fd547317474c9d8743f10642b3bb99", "hex"), 0) 
-}
-```
+.. code-block:: javascript
 
-### Get the Length of `BinData()` Object
+   db.testbin.find()
 
-Use the `BinData()` constructor to create the `bdata` variable.
+You can see the binary ``buffer`` stored in the collection.
 
-```javascript
-var bdata = BinData(0, "gf1UcxdHTJ2HQ/EGQrO7mQ==")
-```
 
-Use `.length()` to return the bit length of the object.
+.. code-block:: javascript
+   :copyable: false
 
-```javascript
-bdata.length()
-```
+   {
+     _id: 1,
+     bin_data: Binary(Buffer.from("81fd547317474c9d8743f10642b3bb99", "hex"), 0) 
+   }
+
+### Get the Length of ``BinData()`` Object
+
+Use the ``BinData()`` constructor to create the ``bdata`` variable.
+
+.. code-block:: javascript
+
+   var bdata = BinData(0, "gf1UcxdHTJ2HQ/EGQrO7mQ==")
+
+Use ``.length()`` to return the bit length of the object.
+
+.. code-block:: javascript
+
+   bdata.length()
 
 The returned value is:
 
-```javascript
-16
-```
+
+.. code-block:: javascript
+   :copyable: false
+
+   16

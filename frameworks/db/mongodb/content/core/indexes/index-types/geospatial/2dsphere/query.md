@@ -1,28 +1,42 @@
 ---
 type: "Framework Learn Page"
-framework: "mongodb"
+framework: "MongoDB"
 source_repo: "https://github.com/mongodb/docs.git"
 source_branch: "main"
 source_path: "content/manual/manual/source/core/indexes/index-types/geospatial/2dsphere/query.txt"
-source_commit: "ab9db26ed3d11618cdb61516d8180337d8e3f679"
-source_commit_short: "ab9db26e"
-source_commit_date: "2026-07-24T16:22:46-06:00"
-generated_at: "2026-07-25T11:51:15Z"
+source_commit: "b9f2bc487a2878b65e3c1f80024bebab76954f27"
+source_commit_short: "b9f2bc48"
+source_commit_date: "2026-08-28T17:09:45-05:00"
+generated_at: "2026-08-29T09:39:19.843360Z"
 ---
-
-======================
+.. _2dsphere-index-query:
 
 # Query a 2dsphere Index
 
-2dsphere indexes let you query and perform calculations on location data on a sphere. For examples of queries using 2dsphere indexes, see:
+**meta:** :description: Explore how to query and perform calculations on location data using 2dsphere indexes in MongoDB.
+   :robots: noindex, nosnippet
 
-- `2dsphere-query-geojson-objects-polygon`
-- `2dsphere-query-geojson-proximity`
-- `2dsphere-query-intersection`
-- `2dsphere-query-points-within-circle-on-sphere`
-## Contents
+**contents:** On this page
+   :local:
+   :backlinks: none
+   :depth: 1
+   :class: singlecol
 
-- Polygons </core/indexes/index-types/geospatial/2dsphere/query/geojson-bound-by-polygon>
-- Spheres </core/indexes/index-types/geospatial/2dsphere/query/proximity-to-geojson>
-- Intersections </core/indexes/index-types/geospatial/2dsphere/query/intersections-of-geojson-objects>
-- Circle in a Sphere </core/indexes/index-types/geospatial/2dsphere/query/points-within-circle-on-sphere>
+2dsphere indexes let you query and perform calculations on location data
+on a sphere. For examples of queries using 2dsphere indexes, see:
+
+- :ref:`2dsphere-query-geojson-objects-polygon`
+
+- :ref:`2dsphere-query-geojson-proximity`
+
+- :ref:`2dsphere-query-intersection`
+
+- :ref:`2dsphere-query-points-within-circle-on-sphere`
+
+**toctree:** :titlesonly:
+   :hidden:
+
+   Polygons </core/indexes/index-types/geospatial/2dsphere/query/geojson-bound-by-polygon>
+   Spheres </core/indexes/index-types/geospatial/2dsphere/query/proximity-to-geojson>
+   Intersections </core/indexes/index-types/geospatial/2dsphere/query/intersections-of-geojson-objects>
+   Circle in a Sphere </core/indexes/index-types/geospatial/2dsphere/query/points-within-circle-on-sphere>

@@ -1,34 +1,62 @@
 ---
 type: "Framework Learn Page"
-framework: "sqlalchemy"
+framework: "SQLAlchemy"
 source_repo: "https://github.com/sqlalchemy/sqlalchemy"
 source_branch: "main"
 source_path: "doc/build/tutorial/data.rst"
-source_commit: "aa1a5575358d3aa14953b04dced02f4763fed2e7"
-source_commit_short: "aa1a5575"
-source_commit_date: "2026-07-23T18:02:59Z"
-generated_at: "2026-07-25T11:50:45Z"
+source_commit: "85cafd1a131fa8afeeeab23151940480b3fb0042"
+source_commit_short: "85cafd1"
+source_commit_date: "2026-08-28T20:17:49+00:00"
+generated_at: "2026-08-29T09:39:27.534982Z"
 ---
+**highlight:** pycon+sql
 
-.. include:: tutorial_nav_include.rst
+.. |prev| replace:: :doc:`metadata`
+.. |next| replace:: :doc:`data_insert`
+
+**include:** tutorial_nav_include.rst
+
+.. rst-class:: core-header, orm-addin
+
+.. _tutorial_working_with_data:
 
 # Working with Data
 
-In `tutorial_working_with_transactions`, we learned the basics of how to interact with the Python DBAPI and its transactional state.  Then, in `tutorial_working_with_metadata, we learned how to represent database tables, columns, and constraints within SQLAlchemy using the schema.MetaData` and related objects.  In this section we will combine both concepts above to create, select and manipulate data within a relational database.   Our interaction with the database is **always** in terms of a transaction, even if we've set our database driver to use `autocommit <dbapi_autocommit>` behind the scenes.
+In :ref:`tutorial_working_with_transactions`, we learned the basics of how to
+interact with the Python DBAPI and its transactional state.  Then, in
+:ref:`tutorial_working_with_metadata`, we learned how to represent database
+tables, columns, and constraints within SQLAlchemy using the
+:class:`_schema.MetaData` and related objects.  In this section we will combine
+both concepts above to create, select and manipulate data within a relational
+database.   Our interaction with the database is **always** in terms
+of a transaction, even if we've set our database driver to use :ref:`autocommit
+<dbapi_autocommit>` behind the scenes.
 
 The components of this section are as follows:
 
-- `tutorial_core_insert` - to get some data into the database, we introduce
-and demonstrate the Core `_sql.Insert` construct.   INSERTs from an ORM perspective are described in the next section `tutorial_orm_data_manipulation`.
+* :ref:`tutorial_core_insert` - to get some data into the database, we introduce
+  and demonstrate the Core :class:`_sql.Insert` construct.   INSERTs from an
+  ORM perspective are described in the next section
+  :ref:`tutorial_orm_data_manipulation`.
 
-- `tutorial_selecting_data` - this section will describe in detail
-the `_sql.Select construct, which is the most commonly used object in SQLAlchemy.  The sql.Select` construct emits SELECT statements for both Core and ORM centric applications and both use cases will be described here.   Additional ORM use cases are also noted in the later section `tutorial_select_relationships` as well as the `queryguide_toplevel`.
+* :ref:`tutorial_selecting_data` - this section will describe in detail
+  the :class:`_sql.Select` construct, which is the most commonly used object
+  in SQLAlchemy.  The :class:`_sql.Select` construct emits SELECT statements
+  for both Core and ORM centric applications and both use cases will be
+  described here.   Additional ORM use cases are also noted in the later
+  section :ref:`tutorial_select_relationships` as well as the
+  :ref:`queryguide_toplevel`.
 
-- `tutorial_core_update_delete` - Rounding out the INSERT and SELECTion
-of data, this section will describe from a Core perspective the use of the `_sql.Update and sql.Delete` constructs.  ORM-specific UPDATE and DELETE is similarly described in the `tutorial_orm_data_manipulation` section.
+* :ref:`tutorial_core_update_delete` - Rounding out the INSERT and SELECTion
+  of data, this section will describe from a Core perspective the use of the
+  :class:`_sql.Update` and :class:`_sql.Delete` constructs.  ORM-specific
+  UPDATE and DELETE is similarly described in the
+  :ref:`tutorial_orm_data_manipulation` section.
 
-## Contents
 
-- data_insert
-- data_select
-- data_update
+**toctree:** :hidden:
+    :maxdepth: 10
+
+    data_insert
+    data_select
+    data_update

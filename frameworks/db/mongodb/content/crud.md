@@ -1,98 +1,162 @@
 ---
 type: "Framework Learn Page"
-framework: "mongodb"
+framework: "MongoDB"
 source_repo: "https://github.com/mongodb/docs.git"
 source_branch: "main"
 source_path: "content/manual/manual/source/crud.txt"
-source_commit: "ab9db26ed3d11618cdb61516d8180337d8e3f679"
-source_commit_short: "ab9db26e"
-source_commit_date: "2026-07-24T16:22:46-06:00"
-generated_at: "2026-07-25T11:51:15Z"
+source_commit: "b9f2bc487a2878b65e3c1f80024bebab76954f27"
+source_commit_short: "b9f2bc48"
+source_commit_date: "2026-08-28T17:09:45-05:00"
+generated_at: "2026-08-29T09:39:19.468056Z"
 ---
-
-=======================
+.. _crud:
 
 # MongoDB CRUD Operations
 
-CRUD operations create, read, update, and delete `documents <bson-document-format>`.
+.. default-domain:: mongodb
 
-You can connect with driver methods and perform CRUD operations for deployments hosted in the following environments:
+**facet:** :name: genre
+   :values: reference
+
+**meta:** :description: Manage documents in collections by running create, read, update, and delete operations.
+   :keywords: atlas
+
+**contents:** On this page
+   :local:
+   :backlinks: none
+   :depth: 1
+   :class: singlecol
+
+.. dismissible-skills-card::
+   :skill: CRUD Operations
+   :url: https://learn.mongodb.com/skills?openTab=query
+
+CRUD operations *create*, *read*, *update*, and *delete*
+:ref:`documents <bson-document-format>`.
+
+You can connect with driver methods and perform CRUD operations
+for deployments hosted in the following environments:
+
+.. |page-topic| replace:: :atlas:`perform CRUD operations in the UI </atlas-ui/documents>`
+
+.. cta-banner::
+   :url: https://www.mongodb.com/docs/atlas/atlas-ui/documents
+   :icon: Cloud
+
+   .. include:: /includes/fact-atlas-compatible.rst
+
 
 ## Create Operations
 
-Create or insert operations add new `documents <bson-document-format>` to a `collection <collections>`. If the collection does not currently exist, insert operations will create the collection.
+Create or insert operations add new :ref:`documents
+<bson-document-format>` to a :ref:`collection <collections>`. If the
+collection does not currently exist, insert operations will create the
+collection.
 
-MongoDB provides the following methods to insert documents into a collection:
+MongoDB provides the following methods to insert documents into a
+collection:
 
-- :method:`db.collection.insertOne()`
-- :method:`db.collection.insertMany()`
-In MongoDB, insert operations target a single `collection`. All write operations in MongoDB are `atomic </core/write-operations-atomicity>` on the level of a single `document <bson-document-format>`.
+- :method:`db.collection.insertOne()` 
+- :method:`db.collection.insertMany()` 
 
-.. include:: /images/crud-annotated-mongodb-insertOne.rst
+In MongoDB, insert operations target a single :term:`collection`. All
+write operations in MongoDB are :doc:`atomic
+</core/write-operations-atomicity>` on the level of a single
+:ref:`document <bson-document-format>`.
 
-For examples, see `/tutorial/insert-documents`.
+**include:** /images/crud-annotated-mongodb-insertOne.rst
+
+For examples, see :doc:`/tutorial/insert-documents`.
+
+.. _crud-read-operations:
 
 ## Read Operations
 
-Read operations retrieve `documents <bson-document-format>` from a `collection <collections>`; i.e. query a collection for documents. MongoDB provides the following methods to read documents from a collection:
+Read operations retrieve :ref:`documents <bson-document-format>` from a
+:ref:`collection <collections>`; i.e. query a collection for
+documents. MongoDB provides the following methods to read documents from
+a collection:
 
 - :method:`db.collection.find()`
-You can specify `query filters or criteria <read-operations-query-argument>` that identify the documents to return.
 
-.. include:: /images/crud-annotated-mongodb-find.rst
+You can specify :ref:`query filters or criteria
+<read-operations-query-argument>` that identify the documents to return.
+
+**include:** /images/crud-annotated-mongodb-find.rst
 
 For examples, see:
 
-- `/tutorial/query-documents`
-- `/tutorial/query-embedded-documents`
-- `/tutorial/query-arrays`
-- `/tutorial/query-array-of-documents`
+- :doc:`/tutorial/query-documents`
+
+- :doc:`/tutorial/query-embedded-documents`
+
+- :doc:`/tutorial/query-arrays`
+
+- :doc:`/tutorial/query-array-of-documents`
+
 ## Update Operations
 
-Update operations modify existing `documents <bson-document-format>` in a `collection <collections>`. MongoDB provides the following methods to update documents of a collection:
+Update operations modify existing :ref:`documents
+<bson-document-format>` in a :ref:`collection <collections>`. MongoDB
+provides the following methods to update documents of a collection:
 
-- :method:`db.collection.updateOne()`
-- :method:`db.collection.updateMany()`
-- :method:`db.collection.replaceOne()`
-In MongoDB, update operations target a single collection. All write operations in MongoDB are `atomic </core/write-operations-atomicity>` on the level of a single document.
+- :method:`db.collection.updateOne()` 
 
-You can specify criteria, or filters, that identify the documents to update. These `filters <document-query-filter>` use the same syntax as read operations.
+- :method:`db.collection.updateMany()` 
 
-.. include:: /images/crud-annotated-mongodb-updateMany.rst
+- :method:`db.collection.replaceOne()` 
 
-For examples, see `/tutorial/update-documents`.
+In MongoDB, update operations target a single collection. All write
+operations in MongoDB are :doc:`atomic
+</core/write-operations-atomicity>` on the level of a single document.
+
+You can specify criteria, or filters, that identify the documents to
+update. These :ref:`filters <document-query-filter>` use the same
+syntax as read operations.
+
+**include:** /images/crud-annotated-mongodb-updateMany.rst
+
+For examples, see :doc:`/tutorial/update-documents`.
 
 ## Delete Operations
 
-Delete operations remove documents from a collection. MongoDB provides the following methods to delete documents of a collection:
+Delete operations remove documents from a collection. MongoDB provides
+the following methods to delete documents of a collection:
 
-- :method:`db.collection.deleteOne()`
+- :method:`db.collection.deleteOne()` 
 - :method:`db.collection.deleteMany()`
-In MongoDB, delete operations target a single `collection`. All write operations in MongoDB are `atomic </core/write-operations-atomicity>` on the level of a single document.
 
-You can specify criteria, or filters, that identify the documents to remove. These `filters <document-query-filter>` use the same syntax as read operations.
+In MongoDB, delete operations target a single :term:`collection`. All
+write operations in MongoDB are :doc:`atomic
+</core/write-operations-atomicity>` on the level of a single document.
 
-.. include:: /images/crud-annotated-mongodb-deleteMany.rst
+You can specify criteria, or filters, that identify the documents to
+remove. These :ref:`filters <document-query-filter>` use the same
+syntax as read operations.
 
-For examples, see `/tutorial/remove-documents`.
+**include:** /images/crud-annotated-mongodb-deleteMany.rst
+
+For examples, see :doc:`/tutorial/remove-documents`.
 
 ## Bulk Write
 
-MongoDB provides the ability to perform write operations in bulk. For details, see `/core/bulk-write-operations`.
+MongoDB provides the ability to perform write operations in bulk. For
+details, see :doc:`/core/bulk-write-operations`.
 
-## Contents
+**toctree:** :titlesonly:
+   :hidden:
 
-- Insert </tutorial/insert-documents>
-- Query </tutorial/query-documents>
-- Update </tutorial/update-documents>
-- Remove </tutorial/remove-documents>
-- Bulk Write </core/bulk-write-operations>
-- Retryable Writes </core/retryable-writes>
-- Retryable Reads </core/retryable-reads>
-- SQL to MongoDB </reference/sql-comparison>
-- Natural Language to MongoDB </natural-language-to-mongodb>
-- Text Search </text-search>
-- Geospatial Queries </geospatial-queries>
-- Read Concern </reference/read-concern>
-- Write Concern </reference/write-concern>
-- CRUD Concepts </core/crud>
+   Insert </tutorial/insert-documents>
+   Query </tutorial/query-documents>
+   Update </tutorial/update-documents>
+   Remove </tutorial/remove-documents>
+   Bulk Write </core/bulk-write-operations>
+   Retryable Writes </core/retryable-writes>
+   Retryable Reads </core/retryable-reads>
+   SQL to MongoDB </reference/sql-comparison>
+   Natural Language to MongoDB </natural-language-to-mongodb>
+   Text Search </text-search>
+   Geospatial Queries </geospatial-queries>
+   Read Concern </reference/read-concern>
+   Write Concern </reference/write-concern>
+   CRUD Concepts </core/crud>

@@ -1,58 +1,101 @@
 ---
 type: "Framework Learn Page"
-framework: "mongodb"
+framework: "MongoDB"
 source_repo: "https://github.com/mongodb/docs.git"
 source_branch: "main"
 source_path: "content/manual/manual/source/reference/inconsistency-type/TrackedUnshardedCollectionHasMultipleChunks.txt"
-source_commit: "ab9db26ed3d11618cdb61516d8180337d8e3f679"
-source_commit_short: "ab9db26e"
-source_commit_date: "2026-07-24T16:22:46-06:00"
-generated_at: "2026-07-25T11:51:15Z"
+source_commit: "b9f2bc487a2878b65e3c1f80024bebab76954f27"
+source_commit_short: "b9f2bc48"
+source_commit_date: "2026-08-28T17:09:45-05:00"
+generated_at: "2026-08-29T09:39:19.858709Z"
 ---
-
-===========================================
-
 # TrackedUnshardedCollectionHasMultipleChunks
+
+**contents:** On this page
+   :local:
+   :backlinks: none
+   :depth: 1
+   :class: singlecol
+
+.. |incon-type| replace:: ``TrackedUnshardedCollectionHasMultipleChunks``
 
 ## Description
 
+**data:** TrackedUnshardedCollectionHasMultipleChunks
+
+   .. include:: /includes/inconsistency-type/TrackedUnshardedCollectionHasMultipleChunks.rst
+
 ## Format
 
-```json
-{
-   type: "TrackedUnshardedCollectionHasMultipleChunks",
-   description: "<string>",
-   details: {
-      namespace: "<string>",
-      uuid: UUID("<uuid>"),
-      numChunks: <integer>
+.. code-block:: json
+
+   {
+      type: "TrackedUnshardedCollectionHasMultipleChunks",
+      description: "<string>",
+      details: {
+         namespace: "<string>",
+         uuid: UUID("<uuid>"),
+         numChunks: <integer>
+      }
    }
-}
-```
 
 |incon-type| inconsistency documents contain these fields:
 
+.. list-table::
+   :widths: 30 25 45
+   :header-rows: 1
+
+   * - Field
+     - Type
+     - Description
+
+   * - ``type``
+     - string
+     - .. include:: /includes/inconsistency-type/type.rst
+
+   * - ``description``
+     - string
+     - .. include:: /includes/inconsistency-type/descr.rst
+
+   * - ``details``
+     - document
+     - .. include:: /includes/inconsistency-type/details.rst
+
+   * - ``details.namespace``
+     - string
+     - .. include:: /includes/inconsistency-type/details.namespace.rst
+
+   * - ``details.uuid``
+     - UUID
+     - .. include:: /includes/inconsistency-type/details.uuid-tracked.rst
+
+   * - ``details.numChunks``
+     - integer
+     - .. include:: /includes/inconsistency-type/details.numChunks.rst
+
 ## Example
 
-.. include:: /includes/inconsistency-type/example.rst
+**include:** /includes/inconsistency-type/example.rst
 
-```json
-{
-   cursor: {
-      id: Long("0"),
-      ns: "test.$cmd.aggregate",
-      firstBatch: [
-         {
-            type: "TrackedUnshardedCollectionHasMultipleChunks",
-            description: "Found tracked unsharded collection with more than one chunks",
-            details: {
-               namespace: "test.authors",
-               uuid: UUID("0a5ed8eb-d769-456a-8c8b-c67ee99cfd8a"),
-               numChunks: 2
+.. code-block:: json
+   :emphasize-lines: 6-14
+   :copyable: false
+
+   {
+      cursor: {
+         id: Long("0"),
+         ns: "test.$cmd.aggregate",
+         firstBatch: [
+            {
+               type: "TrackedUnshardedCollectionHasMultipleChunks",
+               description: "Found tracked unsharded collection with more than one chunks",
+               details: {
+                  namespace: "test.authors",
+                  uuid: UUID("0a5ed8eb-d769-456a-8c8b-c67ee99cfd8a"),
+                  numChunks: 2
+               }
             }
-         }
-      ],
-   },
-   ok: 1
-}
-```
+         ],
+      },
+      ok: 1
+   }

@@ -1,57 +1,134 @@
 ---
 type: "Framework Learn Page"
-framework: "mongodb"
+framework: "MongoDB"
 source_repo: "https://github.com/mongodb/docs.git"
 source_branch: "main"
 source_path: "content/manual/manual/source/reference/operator/aggregation/range.txt"
-source_commit: "ab9db26ed3d11618cdb61516d8180337d8e3f679"
-source_commit_short: "ab9db26e"
-source_commit_date: "2026-07-24T16:22:46-06:00"
-generated_at: "2026-07-25T11:51:15Z"
+source_commit: "b9f2bc487a2878b65e3c1f80024bebab76954f27"
+source_commit_short: "b9f2bc48"
+source_commit_date: "2026-08-28T17:09:45-05:00"
+generated_at: "2026-08-29T09:39:20.228051Z"
 ---
-
-============================
+.. _range:
 
 # $range (expression operator)
 
+**meta:** :description: Explore how to use the `$range` operator in MongoDB to generate sequences of numbers for aggregation operations.
+
+.. default-domain:: mongodb
+
+**contents:** On this page
+   :local:
+   :backlinks: none
+   :depth: 1
+   :class: singlecol
+
 ## Definition
+
+**expression:** $range
+
+   Returns an array whose elements are a generated sequence of numbers.
+   :expression:`$range` generates the sequence from the specified
+   starting number by successively incrementing the starting number by
+   the specified step value up to but not including the end point.
+
+   :expression:`$range` has the following :ref:`operator
+   expression syntax <agg-quick-ref-operator-expressions>`:
+
+   .. code-block:: javascript
+
+      { $range: [ <start>, <end>, <non-zero step> ] }
+
+   .. list-table::
+      :header-rows: 1
+      :widths: 40 60
+
+      * - Operand
+        - Description
+
+      * - ``<start>``
+
+        - An integer that specifies the start of the sequence. Can be
+          any valid :ref:`expression <aggregation-expressions>`
+          that resolves to an integer.
+
+      * - ``<end>``
+
+        - An integer that specifies the exclusive upper limit of the
+          sequence. Can be any valid :ref:`expression
+          <aggregation-expressions>` that resolves to an integer.
+
+      * - ``<non-zero step>``
+
+        - Optional. An integer that specifies the increment value.
+          Can be any valid :ref:`expression <aggregation-expressions>`
+          that resolves to a non-zero integer. Defaults to 1.
 
 ## Behavior
 
-The `<start>` and `<end>` arguments are required and must be integers. The `<non-zero step>` argument is optional, and defaults to `1` if omitted.
+The ``<start>`` and ``<end>`` arguments are required and must be
+integers. The ``<non-zero step>`` argument is optional, and defaults
+to ``1`` if omitted.
+
+.. list-table::
+   :header-rows: 1
+   :widths: 70 30
+
+   * - Example
+     - Results
+
+
+   * - ``{ $range: [ 0, 10, 2 ] }``
+     - ``[ 0, 2, 4, 6, 8 ]``
+
+   * - ``{ $range: [ 10, 0, -2 ] }``
+     - ``[ 10, 8, 6, 4, 2 ]``
+
+   * - ``{ $range: [ 0, 10, -2 ] }``
+     - ``[ ]``
+
+   * - ``{ $range: [ 0, 5 ] }``
+     - ``[ 0, 1, 2, 3, 4 ]``
 
 ## Example
 
-The following example uses a collection called `distances` that lists cities along with their distance in miles from San Francisco.
+The following example uses a collection called ``distances``
+that lists cities along with their distance in miles from San
+Francisco.
 
-Documents in the `distances` collection:
+Documents in the ``distances`` collection:
 
-```javascript
-db.distances.insertMany([
-   { _id: 0, city: "San Jose", distance: 42 },
-   { _id: 1, city: "Sacramento", distance: 88 },
-   { _id: 2, city: "Reno", distance: 218 },
-   { _id: 3, city: "Los Angeles", distance: 383 }
-]);
-```
+.. code-block:: javascript
 
-A bicyclist is planning to ride from San Francisco to each city listed in the collection and wants to stop and rest every 25 miles. The following aggregation pipeline operation uses the `$range` operator to determine the stopping points for each trip.
+   db.distances.insertMany([
+      { _id: 0, city: "San Jose", distance: 42 },
+      { _id: 1, city: "Sacramento", distance: 88 },
+      { _id: 2, city: "Reno", distance: 218 },
+      { _id: 3, city: "Los Angeles", distance: 383 }
+   ]);
 
-```javascript
-db.distances.aggregate([{
-    $project: {
-        _id: 0,
-        city: 1,
-        "Rest stops": { $range: [ 0, "$distance", 25 ] }
-    }
-}])
-```
+A bicyclist is planning to ride from San
+Francisco to each city listed in the
+collection and wants to stop and rest every 25 miles.
+The following aggregation pipeline
+operation uses the ``$range`` operator to determine
+the stopping points for each trip.
+
+.. code-block:: javascript
+
+   db.distances.aggregate([{
+       $project: {
+           _id: 0,
+           city: 1,
+           "Rest stops": { $range: [ 0, "$distance", 25 ] }
+       }
+   }])
 
 The operation returns the following:
 
-```javascript
-{ "city" : "San Jose", "Rest stops" : [ 0, 25 ] }
-{ "city" : "Sacramento", "Rest stops" : [ 0, 25, 50, 75 ] }
-{ "city" : "Reno", "Rest stops" : [ 0, 25, 50, 75, 100, 125, 150, 175, 200 ] }
-{ "city" : "Los Angeles", "Rest stops" : [ 0, 25, 50, 75, 100, 125, 150, 175, 200, 225, 250, 275, 300, 325, 350, 375 ] }
-```
+.. code-block:: javascript
+
+  { "city" : "San Jose", "Rest stops" : [ 0, 25 ] }
+  { "city" : "Sacramento", "Rest stops" : [ 0, 25, 50, 75 ] }
+  { "city" : "Reno", "Rest stops" : [ 0, 25, 50, 75, 100, 125, 150, 175, 200 ] }
+  { "city" : "Los Angeles", "Rest stops" : [ 0, 25, 50, 75, 100, 125, 150, 175, 200, 225, 250, 275, 300, 325, 350, 375 ] }

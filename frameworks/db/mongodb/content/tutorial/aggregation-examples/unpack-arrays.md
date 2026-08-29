@@ -1,35 +1,238 @@
 ---
 type: "Framework Learn Page"
-framework: "mongodb"
+framework: "MongoDB"
 source_repo: "https://github.com/mongodb/docs.git"
 source_branch: "main"
 source_path: "content/manual/manual/source/tutorial/aggregation-examples/unpack-arrays.txt"
-source_commit: "ab9db26ed3d11618cdb61516d8180337d8e3f679"
-source_commit_short: "ab9db26e"
-source_commit_date: "2026-07-24T16:22:46-06:00"
-generated_at: "2026-07-25T11:51:15Z"
+source_commit: "b9f2bc487a2878b65e3c1f80024bebab76954f27"
+source_commit_short: "b9f2bc48"
+source_commit_date: "2026-08-28T17:09:45-05:00"
+generated_at: "2026-08-29T09:39:19.852128Z"
 ---
-
-============================
+.. _agg-example-unpack-arrays:
 
 # Unwind Arrays and Group Data
 
-This tutorial illustrates how to construct an aggregation pipeline, perform the aggregation on a collection, and display the results using the language of your choice.
+**facet:** :name: genre
+   :values: tutorial
+
+**meta:** :keywords: code example
+
+**contents:** On this page
+   :local:
+   :backlinks: none
+   :depth: 1
+   :class: singlecol
+
+This tutorial illustrates how to construct an aggregation pipeline,
+perform the aggregation on a collection, and display the results using
+the language of your choice.
+
+.. composable-tutorial::
+   :options: language-no-dependencies
+   :defaults: shell
 
 ## About This Task
 
-This tutorial demonstrates how to create insights from customer order data. The results show the list of products ordered that cost more than $15. Each document contains the number of units sold and the total sale value for each product.
+   This tutorial demonstrates how to create insights from customer order
+   data. The results show the list of products ordered that cost more than
+   $15. Each document contains the number of units sold and the total
+   sale value for each product.
 
-The aggregation pipeline performs the following operations:
+   The aggregation pipeline performs the following operations:
 
-- Unwinds an array field into separate documents
-- Matches a subset of documents by a field value
-- Groups documents by common field values
-- Adds computed fields to each result document
+   - Unwinds an array field into separate documents
+   - Matches a subset of documents by a field value
+   - Groups documents by common field values
+   - Adds computed fields to each result document
+
 ## Before You Begin
 
-.. include:: /includes/language-or-shell-selector-instructions.rst
+   .. selected-content::
+      :selections: shell
+
+      .. include:: /includes/aggregation/aggregation-examples/unpack-arrays/mongosh-unpack-arrays.rst
+         :start-after: start-prep-steps
+         :end-before: end-prep-steps
+
+   .. selected-content::
+      :selections: python
+
+      .. include:: /includes/aggregation/aggregation-examples/unpack-arrays/python-unpack-arrays.rst
+         :start-after: start-prep-steps
+         :end-before: end-prep-steps
+
+   .. selected-content::
+      :selections: java-sync
+
+      .. include:: /includes/aggregation/aggregation-examples/unpack-arrays/java-sync-unpack-arrays.rst
+         :start-after: start-prep-steps
+         :end-before: end-prep-steps
+
+   .. selected-content::
+      :selections: kotlin-coroutine
+
+      .. include:: /includes/aggregation/aggregation-examples/unpack-arrays/kotlin-unpack-arrays.rst
+         :start-after: start-prep-steps
+         :end-before: end-prep-steps
+
+   .. selected-content::
+      :selections: scala
+
+      .. include:: /includes/aggregation/aggregation-examples/unpack-arrays/scala-unpack-arrays.rst
+         :start-after: start-prep-steps
+         :end-before: end-prep-steps
+
+   .. selected-content::
+      :selections: csharp
+
+      .. include:: /includes/aggregation/aggregation-examples/unpack-arrays/csharp-unpack-arrays.rst
+         :start-after: start-prep-steps
+         :end-before: end-prep-steps
+
+   .. selected-content::
+      :selections: c
+
+      .. include:: /includes/aggregation/aggregation-examples/unpack-arrays/c-unpack-arrays.rst
+         :start-after: start-prep-steps
+         :end-before: end-prep-steps
+
+   .. selected-content::
+      :selections: cpp
+
+      .. include:: /includes/aggregation/aggregation-examples/unpack-arrays/cpp-unpack-arrays.rst
+         :start-after: start-prep-steps
+         :end-before: end-prep-steps
+
+   .. selected-content::
+      :selections: nodejs
+
+      .. include:: /includes/aggregation/aggregation-examples/unpack-arrays/nodejs-unpack-arrays.rst
+         :start-after: start-prep-steps
+         :end-before: end-prep-steps
+
+   .. selected-content::
+      :selections: php
+
+      .. include:: /includes/aggregation/aggregation-examples/unpack-arrays/php-unpack-arrays.rst
+         :start-after: start-prep-steps
+         :end-before: end-prep-steps
+
+   .. selected-content::
+      :selections: ruby
+
+      .. include:: /includes/aggregation/aggregation-examples/unpack-arrays/ruby-unpack-arrays.rst
+         :start-after: start-prep-steps
+         :end-before: end-prep-steps
+
+   .. selected-content::
+      :selections: go
+
+      .. include:: /includes/aggregation/aggregation-examples/unpack-arrays/golang-unpack-arrays.rst
+         :start-after: start-prep-steps
+         :end-before: end-prep-steps
+
+   .. selected-content::
+      :selections: rust
+
+      .. include:: /includes/aggregation/aggregation-examples/unpack-arrays/rust-unpack-arrays.rst
+         :start-after: start-prep-steps
+         :end-before: end-prep-steps
+
 
 ## Steps
 
-The following steps demonstrate how to create and run an aggregation pipeline to unpack array fields into separate documents and compute new values based on groups of common values.
+   The following steps demonstrate how to create and run an aggregation
+   pipeline to unpack array fields into separate documents and compute new
+   values based on groups of common values.
+
+   .. selected-content::
+      :selections: shell
+
+      .. include:: /includes/aggregation/aggregation-examples/unpack-arrays/mongosh-unpack-arrays.rst
+         :start-after: start-tutorial
+         :end-before: end-tutorial
+
+   .. selected-content::
+      :selections: python
+
+      .. include:: /includes/aggregation/aggregation-examples/unpack-arrays/python-unpack-arrays.rst
+         :start-after: start-tutorial
+         :end-before: end-tutorial
+
+   .. selected-content::
+      :selections: java-sync
+
+      .. include:: /includes/aggregation/aggregation-examples/unpack-arrays/java-sync-unpack-arrays.rst
+         :start-after: start-tutorial
+         :end-before: end-tutorial
+
+   .. selected-content::
+      :selections: kotlin-coroutine
+
+      .. include:: /includes/aggregation/aggregation-examples/unpack-arrays/kotlin-unpack-arrays.rst
+         :start-after: start-tutorial
+         :end-before: end-tutorial
+
+   .. selected-content::
+      :selections: scala
+
+      .. include:: /includes/aggregation/aggregation-examples/unpack-arrays/scala-unpack-arrays.rst
+         :start-after: start-tutorial
+         :end-before: end-tutorial
+
+   .. selected-content::
+      :selections: csharp
+
+      .. include:: /includes/aggregation/aggregation-examples/unpack-arrays/csharp-unpack-arrays.rst
+         :start-after: start-tutorial
+         :end-before: end-tutorial
+
+   .. selected-content::
+      :selections: c
+
+      .. include:: /includes/aggregation/aggregation-examples/unpack-arrays/c-unpack-arrays.rst
+         :start-after: start-tutorial
+         :end-before: end-tutorial
+
+   .. selected-content::
+      :selections: cpp
+
+      .. include:: /includes/aggregation/aggregation-examples/unpack-arrays/cpp-unpack-arrays.rst
+         :start-after: start-tutorial
+         :end-before: end-tutorial
+
+   .. selected-content::
+      :selections: nodejs
+
+      .. include:: /includes/aggregation/aggregation-examples/unpack-arrays/nodejs-unpack-arrays.rst
+         :start-after: start-tutorial
+         :end-before: end-tutorial
+
+   .. selected-content::
+      :selections: php
+
+      .. include:: /includes/aggregation/aggregation-examples/unpack-arrays/php-unpack-arrays.rst
+         :start-after: start-tutorial
+         :end-before: end-tutorial
+
+   .. selected-content::
+      :selections: ruby
+
+      .. include:: /includes/aggregation/aggregation-examples/unpack-arrays/ruby-unpack-arrays.rst
+         :start-after: start-tutorial
+         :end-before: end-tutorial
+
+   .. selected-content::
+      :selections: go
+
+      .. include:: /includes/aggregation/aggregation-examples/unpack-arrays/golang-unpack-arrays.rst
+         :start-after: start-tutorial
+         :end-before: end-tutorial
+
+   .. selected-content::
+      :selections: rust
+
+      .. include:: /includes/aggregation/aggregation-examples/unpack-arrays/rust-unpack-arrays.rst
+         :start-after: start-tutorial
+         :end-before: end-tutorial

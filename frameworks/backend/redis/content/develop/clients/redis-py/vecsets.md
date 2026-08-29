@@ -1,14 +1,15 @@
 ---
 type: "Framework Learn Page"
-framework: "redis"
+framework: "Redis"
 source_repo: "https://github.com/redis/docs.git"
 source_branch: "main"
 source_path: "content/develop/clients/redis-py/vecsets.md"
-source_commit: "9d30f68c3dad1a6b3b7d30fe604b911348ce8152"
-source_commit_short: "9d30f68c"
-source_commit_date: "2026-07-24T10:52:10-07:00"
-generated_at: "2026-07-25T11:51:22Z"
+source_commit: "f8693349287b0efbef3c865b6f6a2aceca88594d"
+source_commit_short: "f869334"
+source_commit_date: "2026-08-28T10:01:19-05:00"
+generated_at: "2026-08-29T09:38:56.076564Z"
 ---
+# Vecsets
 
 ---
 categories:
@@ -33,14 +34,14 @@ topics:
 - vectors
 ---
 
-A Redis [vector set]({{< relref "/develop/data-types/vector-sets" >}}) lets
+A Redis [vector set](/content/develop/data-types/vector-sets/_index.md) lets
 you store a set of unique keys, each with its own associated vector.
 You can then retrieve keys from the set according to the similarity between
 their stored vectors and a query vector that you specify.
 
 You can use vector sets to store any type of numeric vector but they are
 particularly optimized to work with text embedding vectors (see
-[Redis for AI]({{< relref "/develop/ai" >}}) to learn more about text
+[Redis for AI](/content/develop/ai/_index.md) to learn more about text
 embeddings). The example below shows how to use the
 [`sentence-transformers`](https://pypi.org/project/sentence-transformers/)
 library to generate vector embeddings and then
@@ -102,18 +103,18 @@ Use the
 method of `SentenceTransformer` to generate the
 embedding as an array of `float32` values. The `tobytes()` method converts
 the array to a byte string that you can pass to the
-[`vadd()`]({{< relref "/commands/vadd" >}}) command to set the embedding.
+[`vadd()`](/content/commands/vadd.md) command to set the embedding.
 Note that `vadd()` can also accept a list of `float` values to set the
 vector, but the byte string format is more compact and saves a little
 transmission time. If you later use
-[`vemb()`]({{< relref "/commands/vemb" >}}) to retrieve the embedding,
+[`vemb()`](/content/commands/vemb.md) to retrieve the embedding,
 it will return the vector as an array rather than the original byte
 string (note that this is different from the behavior of byte strings in
-[hash vector indexing]({{< relref "/develop/ai/search-and-query/vectors" >}})).
+[hash vector indexing](/content/develop/ai/search-and-query/vectors/_index.md)).
 
 The call to `vadd()` also adds the `born` and `died` values from the
 original dictionary as attribute data. You can access this during a query
-or by using the [`vgetattr()`]({{< relref "/commands/vgetattr" >}}) method.
+or by using the [`vgetattr()`](/content/commands/vgetattr.md) method.
 
 {{< clients-example set="home_vecsets" step="add_data" lang_filter="Python" description="Foundational: Add vector embeddings and attributes to a vector set using VADD command" difficulty="beginner" >}}
 {{< /clients-example >}}
@@ -123,7 +124,7 @@ or by using the [`vgetattr()`]({{< relref "/commands/vgetattr" >}}) method.
 You can now query the data in the set. The basic approach is to use the
 `encode()` method to generate another embedding vector for the query text.
 (This is the same method used to add the elements to the set.) Then, pass
-the query vector to [`vsim()`]({{< relref "/commands/vsim" >}}) to return elements
+the query vector to [`vsim()`](/content/commands/vsim.md) to return elements
 of the set, ranked in order of similarity to the query.
 
 Start with a simple query for "actors":
@@ -173,7 +174,7 @@ mathematicians. This seems reasonable given the connection between mathematics
 and science.
 
 You can also use
-[filter expressions]({{< relref "/develop/data-types/vector-sets/filtered-search" >}})
+[filter expressions](/content/develop/data-types/vector-sets/filtered-search.md)
 with `vsim()` to restrict the search further. For example,
 repeat the "science" query, but this time limit the results to people
 who died before the year 2000:
@@ -190,16 +191,16 @@ elements that have already been filtered out of the search.
 
 ## More information
 
-See the [vector sets]({{< relref "/develop/data-types/vector-sets" >}})
+See the [vector sets](/content/develop/data-types/vector-sets/_index.md)
 docs for more information and code examples. See the
-[Redis for AI]({{< relref "/develop/ai" >}}) section for more details
+[Redis for AI](/content/develop/ai/_index.md) section for more details
 about text embeddings and other AI techniques you can use with Redis.
 
 You may also be interested in
-[vector search]({{< relref "/develop/clients/redis-py/vecsearch" >}}).
+[vector search](/content/develop/clients/redis-py/vecsearch.md).
 This is a feature of
-[Redis Search]({{< relref "/develop/ai/search-and-query" >}})
+[Redis Search](/content/develop/ai/search-and-query/_index.md)
 that lets you retrieve
-[JSON]({{< relref "/develop/data-types/json" >}}) and
-[hash]({{< relref "/develop/data-types/hashes" >}}) documents based on
+[JSON](/content/develop/data-types/json/_index.md) and
+[hash](/content/develop/data-types/hashes.md) documents based on
 vector data stored in their fields.

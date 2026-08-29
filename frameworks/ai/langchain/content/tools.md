@@ -4,12 +4,11 @@ framework: "LangChain"
 source_repo: "https://github.com/langchain-ai/docs"
 source_branch: "main"
 source_path: "src/oss/langchain/tools.mdx"
-source_commit: "2aae1dfc98ee953a9a5185fb6fcdd9efb3f4d878"
-source_commit_short: "2aae1dfc"
-source_commit_date: "2026-07-25T00:27:23Z"
-generated_at: "2026-07-25T11:51:05Z"
+source_commit: "a174f9cf7c91ee5eb14ee2382eb48bfe6e4956e9"
+source_commit_short: "a174f9c"
+source_commit_date: "2026-08-28T17:04:12-07:00"
+generated_at: "2026-08-29T09:38:24.247729Z"
 ---
-
 ---
 title: Tools
 ---
@@ -22,6 +21,7 @@ import ToolReturnCommandPy from '/snippets/code-samples/tool-return-command-py.m
 import ToolReturnCommandJs from '/snippets/code-samples/tool-return-command-js.mdx';
 import ToolReturnDirectPy from '/snippets/code-samples/tool-return-direct-py.mdx';
 import ToolReturnDirectJs from '/snippets/code-samples/tool-return-direct-js.mdx';
+import ToolReturnDirectCommandPy from '/snippets/code-samples/tool-return-direct-command-py.mdx';
 import ToolUpdateStatePy from '/snippets/code-samples/tool-update-state-py.mdx';
 import ToolErrorHandlingPy from '/snippets/code-samples/tool-error-handling-py.mdx';
 import ToolErrorHandlingJs from '/snippets/code-samples/tool-error-handling-js.mdx';
@@ -258,13 +258,9 @@ graph LR
 
 State represents short-term memory that exists for the duration of a conversation. It includes the message history and any custom fields you define in your [graph state](/oss/langgraph/graph-api#state).
 
-<Info>
-    Add `runtime: ToolRuntime` to your tool signature to access state. This parameter is automatically injected and hidden from the LLM - it won't appear in the tool's schema.
-</Info>
-
 #### Access state
 
-Tools can access the current conversation state using `runtime.state`:
+Add `runtime: ToolRuntime` to your tool signature to access state. At call time, @[`ToolNode`] injects the value automatically; the parameter is not included in the tool schema sent to the model. Use `runtime.state` to read the current conversation state:
 
 ```python
 from langchain.tools import tool, ToolRuntime
@@ -339,7 +335,7 @@ The @[`BaseStore`] provides persistent storage that survives across conversation
 Access the store through `runtime.store`. The store uses a namespace/key pattern to organize data:
 
 <Tip>
-    For production deployments, use a persistent store implementation like @[`PostgresStore`] instead of `InMemoryStore`. See the [memory documentation](/oss/langgraph/add-memory) for setup details.
+    For production deployments, use a persistent store implementation like @[`PostgresStore`], `MongoDBStore`, or `RedisStore` instead of `InMemoryStore`. See the [memory documentation](/oss/langgraph/add-memory) for setup details.
 </Tip>
 
 ```python expandable
@@ -784,8 +780,16 @@ For block types and provider-specific requirements, see [Multimodal messages](/o
 #### Return a Command
 
 Return a @[`Command`] when the tool needs to update graph state (for example, setting user preferences or app state).
-You can return a `Command` with or without including a `ToolMessage`.
-If the model needs to see that the tool succeeded (for example, to confirm a preference change), include a `ToolMessage` in the update, using `runtime.tool_call_id` for the `tool_call_id` parameter.
+When the `Command` targets the current graph, include a `ToolMessage` in the update whose tool call ID matches the current tool call.
+Every tool call in the message history must have a corresponding `ToolMessage`.
+
+:::python
+Use `runtime.tool_call_id` for the `tool_call_id` parameter. `ToolNode` enforces this requirement: if the update has no `ToolMessage` matching the tool call, it raises a `ValueError`.
+:::
+
+:::js
+Use `runtime.toolCallId` for the `tool_call_id` parameter.
+:::
 
 :::python
 
@@ -827,17 +831,33 @@ Behavior:
 
 - The tool executes normally and its output is wrapped in a `ToolMessage`.
 - The agent stops looping and returns the tool's output as the final response, bypassing any additional model call.
-- If the model calls multiple tools in a single turn, `return_direct` takes effect only when **all** called tools have `return_direct=True`.
+- **Multiple parallel tool calls:** When the model calls several tools in one step, all of them execute first. After all tools finish, the agent routes to `END` only if **every** tool in that batch has `return_direct=True`. The final response includes the `ToolMessage` outputs of every tool that was called in that step.
 
 Use this when:
 
 - The tool's output is the complete, user-ready answer (for example, a lookup that returns a ready-to-display result).
 - You want to avoid an extra model call when no additional reasoning is needed.
-- You need deterministic, unmodified output — the model cannot rephrase, summarize, or act on the tool result.
+- You need deterministic, unmodified output: the model cannot rephrase, summarize, or act on the tool result.
 
 <Warning>
     Because the model does not process the tool's output, `return_direct=True` is not suitable for tools whose results require further reasoning, summarization, or chaining with other tool calls.
 </Warning>
+
+<Warning>
+    **Mixed parallel calls:** If the model calls a `return_direct=True` tool alongside tools that do not have `return_direct=True`, the agent does **not** exit after that step. It routes back to the model with every `ToolMessage` from the batch, so the model can reason over all results. `return_direct` only short-circuits the loop when every tool call in the step has `return_direct=True`.
+</Warning>
+
+:::python
+
+#### Return a Command with return_direct
+
+A tool with `return_direct=True` can also return a @[`Command`] to update graph state before the agent exits. Unlike a plain return value, a `Command` is not automatically converted into a `ToolMessage`. When the `Command` targets the current graph (`graph` is not set or is `None`), include a `ToolMessage` in `Command.update` matching the tool call's `tool_call_id`. Omitting it causes `ToolNode` to raise a `ValueError`, because every `AIMessage` tool call must have a corresponding `ToolMessage` in the message history.
+
+<ToolReturnDirectCommandPy />
+
+To write to a parent graph instead, set `graph=Command.PARENT`. In that case the `ToolMessage` requirement is lifted because execution leaves the current graph entirely.
+
+:::
 
 ### Error handling
 

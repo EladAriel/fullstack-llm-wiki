@@ -1,41 +1,62 @@
 ---
 type: "Framework Learn Page"
-framework: "mongodb"
+framework: "MongoDB"
 source_repo: "https://github.com/mongodb/docs.git"
 source_branch: "main"
 source_path: "content/manual/manual/source/about.txt"
-source_commit: "ab9db26ed3d11618cdb61516d8180337d8e3f679"
-source_commit_short: "ab9db26e"
-source_commit_date: "2026-07-24T16:22:46-06:00"
-generated_at: "2026-07-25T11:51:15Z"
+source_commit: "b9f2bc487a2878b65e3c1f80024bebab76954f27"
+source_commit_short: "b9f2bc48"
+source_commit_date: "2026-08-28T17:09:45-05:00"
+generated_at: "2026-08-29T09:39:19.466553Z"
 ---
-
 :orphan:
-
-===========================
 
 # About MongoDB Documentation
 
-The MongoDB documentation contains comprehensive documentation on MongoDB products. This page describes the documentation's licensing, structure, and versioning. It describes how to report issues, request changes, and make contributions.
+.. default-domain:: mongodb
+
+**contents:** On this page
+   :local:
+   :backlinks: none
+   :depth: 1
+   :class: singlecol
+
+The MongoDB documentation contains
+comprehensive documentation on MongoDB products. This page describes the
+documentation's licensing, structure, and versioning. It describes how to
+report issues, request changes, and make contributions.
 
 ## License
 
-MongoDB documentation is licensed under the [Creative Commons Attribution-NonCommercial-ShareAlike 3.0 United States License](http://creativecommons.org/licenses/by-nc-sa/3.0/us/)
+MongoDB documentation is licensed under the `Creative Commons
+Attribution-NonCommercial-ShareAlike 3.0 United States License
+<http://creativecommons.org/licenses/by-nc-sa/3.0/us/>`_
 
 |copy| MongoDB, Inc. 2008-|year|
 
 ## Database Man Pages
 
-In addition to the :manual:`MongoDB Manual </#>`, you can access the :manual:`MongoDB Man Pages </manpages.tar.gz>`, which are also distributed with the official MongoDB packages.
+In addition to the :manual:`MongoDB Manual </#>`, you can
+access the :manual:`MongoDB Man Pages </manpages.tar.gz>`, 
+which are also distributed with the official MongoDB packages.
 
 ## Products and Versions
 
-This version of the database manual reflects version {+version+} of MongoDB. The most up-to-date, current, and stable version of the manual is always available at "https://www.mongodb.com/docs/manual/".
+This version of the database manual reflects version {+version+} 
+of MongoDB. The most up-to-date, current, and stable version of the manual is
+always available at "https://www.mongodb.com/docs/manual/".
 
-For links to all MongoDB product documentation, see the [MongoDB documentation landing page](https://www.mongodb.com/docs).
+For links to all MongoDB product documentation,
+see the `MongoDB documentation landing page <https://www.mongodb.com/docs>`_.
+
+.. _meta-contributing:
 
 ## Contribute to the Documentation
 
-The entire documentation source for this manual is available in the [mongodb/docs repository](https://github.com/mongodb/docs), which is one of the [MongoDB documentation repositories on GitHub](http://github.com/mongodb).
+The entire documentation source for this manual is available in the
+`mongodb/docs repository <https://github.com/mongodb/docs>`_,
+which is one of the
+`MongoDB documentation repositories on GitHub <http://github.com/mongodb>`_.
 
-If you wish to contribute to the MongoDB documentation, you must complete the [MongoDB Contributor Agreement](http://www.mongodb.com/contributor).
+If you wish to contribute to the MongoDB documentation, you must complete
+the `MongoDB Contributor Agreement <http://www.mongodb.com/contributor>`_.

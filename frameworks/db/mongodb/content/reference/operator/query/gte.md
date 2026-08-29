@@ -1,46 +1,89 @@
 ---
 type: "Framework Learn Page"
-framework: "mongodb"
+framework: "MongoDB"
 source_repo: "https://github.com/mongodb/docs.git"
 source_branch: "main"
 source_path: "content/manual/manual/source/reference/operator/query/gte.txt"
-source_commit: "ab9db26ed3d11618cdb61516d8180337d8e3f679"
-source_commit_short: "ab9db26e"
-source_commit_date: "2026-07-24T16:22:46-06:00"
-generated_at: "2026-07-25T11:51:15Z"
+source_commit: "b9f2bc487a2878b65e3c1f80024bebab76954f27"
+source_commit_short: "b9f2bc48"
+source_commit_date: "2026-08-28T17:09:45-05:00"
+generated_at: "2026-08-29T09:39:20.252215Z"
 ---
-
-===============================
-
 # $gte (query predicate operator)
+
+.. default-domain:: mongodb
+   
+**facet:** :name: programming_language
+   :values: shell
+
+**meta:** :description: Use the The $gte operator to select documents where the value of the specified field is greater than or equal to a specified value.
+   
+**contents:** On this page
+   :local:
+   :backlinks: none
+   :depth: 1
+   :class: singlecol
 
 ## Definition
 
+**query:** $gte
+
+   ``$gte`` selects documents where the value of the specified
+   field is greater than or equal (``>=``) to the specified value.
+
+   .. include:: /includes/fact-type-bracketing.rst
+
 ## Compatibility
 
-.. include:: /includes/fact-compatibility.rst
+.. |operator-method| replace:: ``$gte``
+
+**include:** /includes/fact-compatibility.rst
 
 ## Syntax
 
-The `$gte` operator has the following form:
+The ``$gte`` operator has the following form:
 
-```javascript
-{ field: { $gte: value } }
-```
+.. code-block:: javascript
+
+   { field: { $gte: value } }
 
 ## Examples
 
-.. include:: /includes/sample-data-usage.rst
+**include:** /includes/sample-data-usage.rst
 
 ### Match Document Fields
 
-This example selects documents in the `movies` collection where `runtime` is greater than or equal to `720` minutes:
+This example selects documents in the ``movies`` collection where
+``runtime`` is greater than or equal to ``720`` minutes:
+
+.. io-code-block::
+   :copyable: true
+
+   .. input:: /code-examples/tested/command-line/mongosh/operators/gte/gte-find/gte-find.snippet.gte-find.js
+      :language: javascript
+      :category: usage example
+
+   .. output:: /code-examples/tested/command-line/mongosh/operators/gte/gte-find/output.sh
 
 ### Perform an Update Based on Embedded Document Fields
 
-This :method:`~db.collection.updateMany()` operation matches an embedded document named `imdb`, with a subfield named `rating`. It sets `{ highestRated: true }` in each document where `rating` is greater than or equal to `9.5`.
+This :method:`~db.collection.updateMany()` operation matches an embedded
+document named ``imdb``, with a subfield named ``rating``. It sets
+``{ highestRated: true }`` in each document where ``rating`` is greater than
+or equal to ``9.5``.
 
-To set the `higestRated` field in only the first document where `imdb.rating` is greater than `9.5`, use :method:`~db.collection.updateOne()`.
+.. io-code-block::
+   :copyable: true
+
+   .. input:: /code-examples/tested/command-line/mongosh/operators/gte/gte-update/gte-update.snippet.gte-update.js
+      :language: javascript
+      :category: usage example
+
+   .. output:: /code-examples/tested/command-line/mongosh/operators/gte/gte-update/output.sh
+
+To set the ``higestRated`` field in only the first document where
+``imdb.rating`` is greater than ``9.5``, use 
+:method:`~db.collection.updateOne()`.
 
 ## Learn More
 

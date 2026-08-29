@@ -5,11 +5,10 @@ source_repo: "https://github.com/vibrantlabsai/ragas"
 source_branch: "main"
 source_path: "docs/howtos/integrations/llamaindex_agents.md"
 source_commit: "298b68274234c060deacab3cf5fb52aa3a20e885"
-source_commit_short: "298b6827"
+source_commit_short: "298b682"
 source_commit_date: "2026-02-24T13:17:18+05:30"
-generated_at: "2026-06-23T13:55:50Z"
+generated_at: "2026-08-29T09:38:15.979155Z"
 ---
-
 # Evaluating LlamaIndex Agents
 
 Building agents that can intelligently use tools and make decisions is only half the journey; ensuring that these agents are accurate, reliable, and performant is what truly defines their success. [LlamaIndex](https://docs.llamaindex.ai/en/stable/understanding/agent/) provides various ways to create agents including [FunctionAgents](https://docs.llamaindex.ai/en/stable/module_guides/deploying/agents/), [CodeActAgents](https://docs.llamaindex.ai/en/stable/examples/agent/code_act_agent/), and [ReActAgents](https://docs.llamaindex.ai/en/stable/examples/agent/react_agent/). In this tutorial, we will explore how to evaluate these different agent types using both pre-built Ragas metrics and custom evaluation metrics.

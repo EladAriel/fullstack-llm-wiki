@@ -1,355 +1,639 @@
 ---
 type: "Framework Learn Page"
-framework: "mongodb"
+framework: "MongoDB"
 source_repo: "https://github.com/mongodb/docs.git"
 source_branch: "main"
 source_path: "content/manual/manual/source/reference/operator/aggregation/accumulator.txt"
-source_commit: "ab9db26ed3d11618cdb61516d8180337d8e3f679"
-source_commit_short: "ab9db26e"
-source_commit_date: "2026-07-24T16:22:46-06:00"
-generated_at: "2026-07-25T11:51:15Z"
+source_commit: "b9f2bc487a2878b65e3c1f80024bebab76954f27"
+source_commit_short: "b9f2bc48"
+source_commit_date: "2026-08-28T17:09:45-05:00"
+generated_at: "2026-08-29T09:39:20.201159Z"
 ---
-
-===================================
+.. _accumulator-aggregation-operator:
 
 # $accumulator (accumulator operator)
 
+**meta:** :description: Learn how to use the `$accumulator` operator in MongoDB to define custom aggregation behavior with JavaScript functions, including syntax and examples.
+
+.. default-domain:: mongodb
+
+**contents:** On this page
+   :local:
+   :backlinks: none
+   :depth: 1
+   :class: singlecol
+
 ## Definition
+
+**group:** $accumulator
+
+   .. important:: Server-side JavaScript Deprecated
+
+      .. include:: /includes/server-side-js-deprecated.rst
+
+   Defines a custom :ref:`accumulator operator
+   <agg-operators-group-accumulators>`. Accumulators are operators that
+   maintain their state (e.g. totals, maximums, minimums, and related
+   data) as documents progress through the pipeline. Use the
+   :group:`$accumulator` operator to execute your own JavaScript
+   functions to implement behavior not supported by the MongoDB Query
+   Language. See also :expression:`$function`.
+
+   :group:`$accumulator` is available in these stages:
+
+   - :pipeline:`$bucket`
+  
+   - :pipeline:`$bucketAuto`
+  
+   - :pipeline:`$group`
+
+   .. important::
+
+      Executing JavaScript inside of an aggregation operator may
+      decrease performance. Only use the :group:`$accumulator` operator
+      if the provided :ref:`pipeline operators
+      <aggregation-pipeline-operator-reference>` cannot fulfill your
+      application's needs.
 
 ## Syntax
 
 The :group:`$accumulator` operator has this syntax:
 
-```javascript
-{ 
-  $accumulator: {
-    init: <code>,
-    initArgs: <array expression>,        // Optional
-    accumulate: <code>,
-    accumulateArgs: <array expression>,
-    merge: <code>,
-    finalize: <code>,                    // Optional
-    lang: <string>
-  }
-}
-```
+.. code-block:: javascript
+
+   { 
+     $accumulator: {
+       init: <code>,
+       initArgs: <array expression>,        // Optional
+       accumulate: <code>,
+       accumulateArgs: <array expression>,
+       merge: <code>,
+       finalize: <code>,                    // Optional
+       lang: <string>
+     }
+   }
+
+.. list-table::
+   :header-rows: 1
+   :widths: 20 15 40
+
+   * - Field
+     - Type
+     - Description
+
+   * - :ref:`init <accumulator-init>`
+
+     - String or Code
+
+     - .. _accumulator-init:
+       
+       Function used to initialize the state. The ``init`` function
+       receives its arguments from the :ref:`initArgs
+       <accumulator-initArgs>` array expression. You can specify the
+       function definition as either BSON type Code or String.
+
+       The ``init`` function has the following form:
+
+       .. code-block:: javascript
+          :copyable: false
+
+          function (<initArg1>, <initArg2>, ...) {
+            ...
+            return <initialState>
+          }
+
+       Spilling to disk or running a query on a sharded cluster can cause the 
+       accumulator to be computed as a merge of multiple sub-accumulations, each 
+       of which begins by calling ``init()``. Ensure that your ``init()``, 
+       ``accumulate()``, and ``merge()`` functions are compatible with this 
+       execution model.
+
+   * - :ref:`initArgs <accumulator-initArgs>`
+
+     - Array
+
+     - .. _accumulator-initArgs:
+     
+       Optional. Arguments passed to the ``init`` function.
+
+       ``initArgs`` has the following form:
+
+       .. code-block:: javascript
+          :copyable: false
+
+          [ <initArg1>, <initArg2>, ... ]
+
+       :gold:`IMPORTANT:` When used in a :pipeline:`$bucketAuto` stage, 
+       ``initArgs`` cannot refer to the group key (i.e., you cannot use the 
+       ``$<fieldName>`` syntax). Instead, in a :pipeline:`$bucketAuto` stage, 
+       you can only specify constant values in ``initArgs``.
+
+   * - :ref:`accumulate <accumulator-accumulate>`
+
+     - String or Code
+
+     - .. _accumulator-accumulate:
+     
+       Function used to accumulate documents. The ``accumulate``
+       function receives its arguments from the current state and
+       :ref:`accumulateArgs <accumulator-accumulateArgs>` array
+       expression. The result of the ``accumulate`` function becomes
+       the new state. You can specify the function definition as
+       either BSON type Code or String.
+
+       The ``accumulate`` function has the following form:
+
+       .. code-block:: javascript
+          :copyable: false
+
+          function(state, <accumArg1>, <accumArg2>, ...) {
+            ... 
+            return <newState>
+          }
+
+   * - :ref:`accumulateArgs <accumulator-accumulateArgs>`
+
+     - Array
+
+     - .. _accumulator-accumulateArgs:
+     
+       Arguments passed to the ``accumulate`` function. You can use
+       ``accumulateArgs`` to specify what field value(s) to pass to
+       the ``accumulate`` function.
+
+       ``accumulateArgs`` has the following form:
+
+       .. code-block:: javascript
+          :copyable: false
+
+          [ <accumArg1>, <accumArg2>, ... ]
+
+   * - :ref:`merge <accumulator-merge>`
+
+     - String or Code
+
+     - .. _accumulator-merge:
+     
+       Function used to merge two internal states. ``merge`` must be
+       either a String or Code BSON type. ``merge`` returns the
+       combined result of the two merged states. For information on
+       when the merge function is called, see
+       :ref:`merge-multiple-states`.
+
+       The ``merge`` function has the following form:
+
+       .. code-block:: javascript
+          :copyable: false
+
+          function (<state1>, <state2>) {
+            <logic to merge state1 and state2>
+            return <newState>
+          }
+
+   * - :ref:`finalize <accumulator-finalize>`
+
+     - String or Code
+
+     - .. _accumulator-finalize:
+     
+       Optional. Function used to update the result of the accumulation.
+
+       The ``finalize`` function has the following form:
+
+       .. code-block:: javascript
+          :copyable: false
+
+          function (state) {
+            ...
+            return <finalState>
+          }
+
+   * - :ref:`lang <accumulator-lang>`
+
+     - String
+
+     - .. _accumulator-lang:
+
+       The language used in the :group:`$accumulator` code.
+
+       :gold:`IMPORTANT:` Currently, the only supported value for ``lang`` is 
+       ``js``.
 
 ## Behavior
 
-The following steps outline how the :group:`$accumulator` operator processes documents:
+The following steps outline how the :group:`$accumulator` operator
+processes documents:
 
 1. The operator begins at an initial state, defined by the
-`init <accumulator-init>` function.
+   :ref:`init <accumulator-init>` function. 
+   
+#. For each document, the operator updates
+   the state based on the :ref:`accumulate <accumulator-accumulate>`
+   function. The :ref:`accumulate <accumulator-accumulate>` function's
+   first argument is the current state, and additional arguments are be
+   specified in the :ref:`accumulateArgs <accumulator-accumulateArgs>`
+   array.
 
-#. For each document, the operator updates the state based on the `accumulate <accumulator-accumulate>` function. The `accumulate <accumulator-accumulate>` function's first argument is the current state, and additional arguments are be specified in the `accumulateArgs <accumulator-accumulateArgs>` array.
+#. When the operator needs to merge multiple intermediate states, it
+   executes the :ref:`merge <accumulator-merge>` function. For more
+   information on when the :ref:`merge <accumulator-merge>` function is
+   called, see :ref:`merge-multiple-states`.
+   
+#. If a :ref:`finalize <accumulator-finalize>` function has been
+   defined, once all documents have been processed and the state has
+   been updated accordingly, :ref:`finalize <accumulator-finalize>`
+   converts the state to a final output.
 
-#. When the operator needs to merge multiple intermediate states, it executes the `merge <accumulator-merge>` function. For more information on when the `merge <accumulator-merge>` function is called, see `merge-multiple-states`.
+.. _merge-multiple-states:
 
-#. If a `finalize <accumulator-finalize>` function has been defined, once all documents have been processed and the state has been updated accordingly, `finalize <accumulator-finalize>` converts the state to a final output.
+### Merge Two States with ``$merge``
 
-### Merge Two States with `$merge`
+As part of its internal operations, the :group:`$accumulator` operator
+may need to merge two separate, intermediate states. The :ref:`merge
+<accumulator-merge>` function specifies how the operator should merge
+two states.
 
-As part of its internal operations, the :group:`$accumulator` operator may need to merge two separate, intermediate states. The `merge <accumulator-merge>` function specifies how the operator should merge two states.
+The :ref:`merge <accumulator-merge>` function always merges two
+states at a time. In the event that more than two states must be merged,
+the resulting merge of two states is merged with a single state. This
+process repeats until all states are merged.
 
-The `merge <accumulator-merge>` function always merges two states at a time. In the event that more than two states must be merged, the resulting merge of two states is merged with a single state. This process repeats until all states are merged.
-
-For example, :group:`$accumulator` may need to combine two states in the following scenarios:
+For example, :group:`$accumulator` may need to combine two states in the
+following scenarios:
 
 - :group:`$accumulator` is run on a sharded cluster. The operator
-needs to merge the results from each shard to obtain the final result.
+  needs to merge the results from each shard to obtain the final
+  result.
 
 - A single :group:`$accumulator` operation exceeds its specified
-memory limit. If you specify the :method:`allowDiskUse <db.collection.aggregate()>` option, the operator stores the in-progress operation on disk and finishes the operation in memory. Once the operation finishes, the results from disk and memory are merged together using the `merge <accumulator-merge>` function.
+  memory limit. If you specify the :method:`allowDiskUse
+  <db.collection.aggregate()>` option, the operator stores the
+  in-progress operation on disk and finishes the operation in memory.
+  Once the operation finishes, the results from disk and memory are
+  merged together using the :ref:`merge <accumulator-merge>` function.
 
 ### Document Processing Order
 
-The order that MongoDB processes documents for the `init()`, `accumulate()`, and `merge()` functions can vary, and might differ from the order that those documents are specified to the `$accumulator` function.
+The order that MongoDB processes documents for the ``init()``,
+``accumulate()``, and ``merge()`` functions can vary, and might differ
+from the order that those documents are specified to the
+``$accumulator`` function.
 
-For example, consider a series of documents where the `_id` fields are the letters of the alphabet:
+For example, consider a series of documents where the ``_id`` fields are
+the letters of the alphabet:
 
-```javascript
-{ _id: 'a' },
-{ _id: 'b' },
-{ _id: 'c' }
-...
-{ _id: 'z' }
-```
+.. code-block:: javascript
+   :copyable: false
 
-Next, consider an aggregation pipeline that sorts the documents by the `_id` field and then uses an `$accumulator function to concatenate the id` field values:
+  { _id: 'a' },
+  { _id: 'b' },
+  { _id: 'c' }
+  ...
+  { _id: 'z' }
 
-```javascript
-[
-   {
-      $sort: { _id: 1 }
-   },
-   {
-      $group: {
-         _id: null,
-         alphabet: {
-            $accumulator: {
-               init: function() {
-                  return ""
-               },
-               accumulate: function(state, letter) {
-                  return(state + letter)
-               },
-               accumulateArgs: [ "$_id" ],
-               merge: function(state1, state2) {         
-                  return(state1 + state2)
-               },
-               lang: "js"
+Next, consider an aggregation pipeline that sorts the documents by the
+``_id`` field and then uses an ``$accumulator`` function to concatenate
+the ``_id`` field values:
+
+.. code-block:: javascript
+  
+   [
+      {
+         $sort: { _id: 1 }
+      },
+      {
+         $group: {
+            _id: null,
+            alphabet: {
+               $accumulator: {
+                  init: function() {
+                     return ""
+                  },
+                  accumulate: function(state, letter) {
+                     return(state + letter)
+                  },
+                  accumulateArgs: [ "$_id" ],
+                  merge: function(state1, state2) {         
+                     return(state1 + state2)
+                  },
+                  lang: "js"
+               }
             }
          }
       }
-   }
-]
-```
+   ]
 
-MongoDB does not guarantee that the documents are processed in the sorted order, meaning the `alphabet` field does not necessarily get set to `abc...z`.
+MongoDB does not guarantee that the documents are processed in the
+sorted order, meaning the ``alphabet`` field does not necessarily get
+set to ``abc...z``.
 
-Due to this behavior, ensure that your `$accumulator` function does not need to process and return documents in a specific order.
+Due to this behavior, ensure that your ``$accumulator`` function does
+not need to process and return documents in a specific order.
 
 ### Javascript Enabled
 
-To use :group:`$accumulator`, you must have server-side scripting enabled.
+To use :group:`$accumulator`, you must have server-side scripting
+enabled.
 
-If you do not use :group:`$accumulator` (or :expression:`$function`, :query:`$where`, or :dbcommand:`mapReduce`), disable server-side scripting:
+If you do not use :group:`$accumulator` (or :expression:`$function`,
+:query:`$where`, or :dbcommand:`mapReduce`), disable server-side
+scripting: 
 
 - For a :binary:`~bin.mongod` instance, see
-:setting:`security.javascriptEnabled` configuration option or :option:`--noscripting <mongod --noscripting>` command-line option.
+  :setting:`security.javascriptEnabled` configuration option or
+  :option:`--noscripting <mongod --noscripting>` command-line option.
 
 - For a :binary:`~bin.mongos` instance, see
-:setting:`security.javascriptEnabled` configuration option or the :option:`--noscripting <mongos --noscripting>` command-line option.
+  :setting:`security.javascriptEnabled` configuration option or the
+  :option:`--noscripting <mongos --noscripting>` command-line option.
+  
+  | In earlier versions, MongoDB does not allow JavaScript execution on
+    :binary:`~bin.mongos` instances.
 
-| In earlier versions, MongoDB does not allow JavaScript execution on :binary:`~bin.mongos` instances.
-
-See also `security-checklist-javascript`.
+See also :ref:`security-checklist-javascript`.
 
 ### Unsupported Array and String Functions
 
-.. include:: /includes/fact-6.0-js-engine-change.rst
+**include:** /includes/fact-6.0-js-engine-change.rst
 
 ## Examples
 
-### Use `$accumulator` to Implement the `$avg` Operator
+### Use ``$accumulator`` to Implement the ``$avg`` Operator
 
-> **Note:** This example walks through using the :group:`$accumulator` operator
-to implement the :group:`$avg` operator, which is already supported
-by MongoDB. The goal of this example is not to implement new
-functionality, but to illustrate the behavior and syntax of the
-:group:`$accumulator` operator with familiar logic.
+**note:** This example walks through using the :group:`$accumulator` operator
+   to implement the :group:`$avg` operator, which is already supported
+   by MongoDB. The goal of this example is not to implement new
+   functionality, but to illustrate the behavior and syntax of the
+   :group:`$accumulator` operator with familiar logic.
 
-In :binary:`~bin.mongosh`, create a sample collection named `books` with the following documents:
+In :binary:`~bin.mongosh`, create a sample collection named
+``books`` with the following documents:
 
-```javascript
-db.books.insertMany([
-  { _id: 8751, title: "The Banquet", author: "Dante", copies: 2 },
-  { _id: 8752, title: "Divine Comedy", author: "Dante", copies: 1 },
-  { _id: 8645, title: "Eclogues", author: "Dante", copies: 2 },
-  { _id: 7000, title: "The Odyssey", author: "Homer", copies: 10 },
-  { _id: 7020, title: "Iliad", author: "Homer", copies: 10 }
-])
-```
+.. code-block:: javascript
 
-The following operation :pipeline:`groups <$group>` the documents by `author`, and uses :group:`$accumulator` to compute the average number of copies across books for each author:
+   db.books.insertMany([
+     { _id: 8751, title: "The Banquet", author: "Dante", copies: 2 },
+     { _id: 8752, title: "Divine Comedy", author: "Dante", copies: 1 },
+     { _id: 8645, title: "Eclogues", author: "Dante", copies: 2 },
+     { _id: 7000, title: "The Odyssey", author: "Homer", copies: 10 },
+     { _id: 7020, title: "Iliad", author: "Homer", copies: 10 }
+   ])
 
-```javascript
-db.books.aggregate([
-{ 
-  $group : 
-  { 
-    _id : "$author", 
-    avgCopies: 
-    { 
-      $accumulator: 
-      {
-        init: function() {                        // Set the initial state
-          return { count: 0, sum: 0 } 
-        },
+The following operation :pipeline:`groups <$group>` the documents by
+``author``, and uses :group:`$accumulator` to compute the average
+number of copies across books for each author:
 
-        accumulate: function(state, numCopies) {  // Define how to update the state
-          return {
-            count: state.count + 1,
-            sum: state.sum + numCopies
-          } 
-        },
+.. code-block:: javascript
 
-        accumulateArgs: ["$copies"],              // Argument required by the accumulate function
+   db.books.aggregate([
+   { 
+     $group : 
+     { 
+       _id : "$author", 
+       avgCopies: 
+       { 
+         $accumulator: 
+         {
+           init: function() {                        // Set the initial state
+             return { count: 0, sum: 0 } 
+           },
 
-        merge: function(state1, state2) {         // When the operator performs a merge, 
-          return {                                // add the fields from the two states
-            count: state1.count + state2.count,
-            sum: state1.sum + state2.sum
-          } 
-        },
+           accumulate: function(state, numCopies) {  // Define how to update the state
+             return {
+               count: state.count + 1,
+               sum: state.sum + numCopies
+             } 
+           },
 
-        finalize: function(state) {               // After collecting the results from all documents,
-          return (state.sum / state.count)        // calculate the average
-        },
-        lang: "js"
-      }
-    }
-  }
-}
-])
-```
+           accumulateArgs: ["$copies"],              // Argument required by the accumulate function
 
-Result ``````
+           merge: function(state1, state2) {         // When the operator performs a merge, 
+             return {                                // add the fields from the two states
+               count: state1.count + state2.count,
+               sum: state1.sum + state2.sum
+             } 
+           },
+
+           finalize: function(state) {               // After collecting the results from all documents,
+             return (state.sum / state.count)        // calculate the average
+           },
+           lang: "js"
+         }
+       }
+     }
+   }
+   ])
+
+### Result
 
 This operation returns the following result:
 
-```javascript
-{ _id: "Dante", avgCopies: 1.6666666666666667 }
-{ _id: "Homer", avgCopies: 10 }
-```
+.. code-block:: javascript
+   :copyable: false
 
-Behavior ````````
+   { _id: "Dante", avgCopies: 1.6666666666666667 }
+   { _id: "Homer", avgCopies: 10 }
 
-The :group:`$accumulator` defines an initial state where `count` and `sum` are both set to `0`. For each document that the :group:`$accumulator` processes, it updates the state by:
+### Behavior
 
-- Incrementing the `count` by 1 and
-- Adding the values of the document's `copies` field to the `sum`.
-The `accumulate <accumulator-accumulate>` function can access the `copies` field because it is passed in the `accumulateArgs <accumulator-accumulateArgs>` field.
+The :group:`$accumulator` defines an initial state where ``count``
+and ``sum`` are both set to ``0``. For each document that the 
+:group:`$accumulator` processes, it updates the state by:
 
-With each document that is processed, the `accumulate <accumulator-accumulate>` function returns the updated state.
+- Incrementing the ``count`` by 1 and
 
-Once all documents have been processed, the `finalize <accumulator-finalize>` function divides the `sum` of the copies by the `count` of documents to obtain the average. This removes the need to keep a running computed average, since the `finalize <accumulator-finalize>` function receives the cumulative `sum` and `count` of all documents.
+- Adding the values of the document's ``copies`` field to the ``sum``.
+  The :ref:`accumulate <accumulator-accumulate>` function can access the
+  ``copies`` field because it is passed in the
+  :ref:`accumulateArgs <accumulator-accumulateArgs>` field.
 
-Comparison with `$avg` ````````````````````````
+With each document that is processed, the
+:ref:`accumulate <accumulator-accumulate>` function returns the updated
+state.
 
-This operation is equivalent to the following pipeline, which uses the :group:`$avg` operator:
+Once all documents have been processed, the
+:ref:`finalize <accumulator-finalize>` function divides the ``sum`` of
+the copies by the ``count`` of documents to obtain the average. This
+removes the need to keep a running computed average, since the
+:ref:`finalize <accumulator-finalize>` function receives the cumulative
+``sum`` and ``count`` of all documents.
 
-```javascript
-db.books.aggregate([
-{ 
-  $group : { 
-    _id : "$author", 
-    avgCopies: { $avg: "$copies" }
-  }
-}
-])
-```
+### Comparison with ``$avg``
 
-### Use `initArgs` to Vary the Initial State by Group
+This operation is equivalent to the following pipeline, which uses the
+:group:`$avg` operator:
 
-You can use the `initArgs <accumulator-initArgs>` option in to vary the initial state of :group:`$accumulator`. This can be useful if you want to, for example:
+.. code-block:: javascript
+
+   db.books.aggregate([
+   { 
+     $group : { 
+       _id : "$author", 
+       avgCopies: { $avg: "$copies" }
+     }
+   }
+   ])
+
+### Use ``initArgs`` to Vary the Initial State by Group
+
+You can use the :ref:`initArgs <accumulator-initArgs>` option in
+to vary the initial state of :group:`$accumulator`. This can be
+useful if you want to, for example:
 
 - Use the value of a field which is not in your state to affect your
-state, or
-
+  state, or 
+  
 - Set the initial state to a different value based on the group being
-processed.
+  processed.
 
-In :binary:`~bin.mongosh`, create a sample collection named `restaurants` with the following documents:
+In :binary:`~bin.mongosh`, create a sample collection named
+``restaurants`` with the following documents:
 
-```javascript
-db.restaurants.insertMany( [
-  { _id: 1, name: "Food Fury", city: "Bettles", cuisine: "American" },
-  { _id: 2, name: "Meal Macro", city: "Bettles", cuisine: "Chinese" },
-  { _id: 3, name: "Big Crisp", city: "Bettles", cuisine: "Latin" },
-  { _id: 4, name: "The Wrap", city: "Onida", cuisine: "American" },
-  { _id: 5, name: "Spice Attack", city: "Onida", cuisine: "Latin" },
-  { _id: 6, name: "Soup City", city: "Onida", cuisine: "Chinese" },
-  { _id: 7, name: "Crave", city: "Pyote", cuisine: "American" },
-  { _id: 8, name: "The Gala", city: "Pyote", cuisine: "Chinese" }
-] )
-```
+.. code-block:: javascript
 
-Suppose an application allows users to query this data to find restaurants. It may be useful to show more results for the city where the user lives. For this example, we assume that the user's city is called in a variable called `userProfileCity`.
+   db.restaurants.insertMany( [
+     { _id: 1, name: "Food Fury", city: "Bettles", cuisine: "American" },
+     { _id: 2, name: "Meal Macro", city: "Bettles", cuisine: "Chinese" },
+     { _id: 3, name: "Big Crisp", city: "Bettles", cuisine: "Latin" },
+     { _id: 4, name: "The Wrap", city: "Onida", cuisine: "American" },
+     { _id: 5, name: "Spice Attack", city: "Onida", cuisine: "Latin" },
+     { _id: 6, name: "Soup City", city: "Onida", cuisine: "Chinese" },
+     { _id: 7, name: "Crave", city: "Pyote", cuisine: "American" },
+     { _id: 8, name: "The Gala", city: "Pyote", cuisine: "Chinese" }
+   ] )
 
-The following aggregation pipeline :pipeline:`groups <$group>` the documents by `city`. The operation uses the :group:`$accumulator` to display a different number of results from each city depending on whether the restaurant's city matches the city in the user's profile:
+Suppose an application allows users to query this data to find
+restaurants. It may be useful to show more results for
+the city where the user lives. For this example, we assume that the
+user's city is called in a variable called ``userProfileCity``.
 
-> **Note:** To execute this example in :binary:`~bin.mongosh`, replace
-`<userProfileCity>` in the `initArgs <accumulator-initArgs>`
-with a string containing an actual city value, such as `Bettles`.
+The following aggregation pipeline :pipeline:`groups <$group>` the
+documents by ``city``. The operation uses the :group:`$accumulator`
+to display a different number of results from each city depending on
+whether the restaurant's city matches the city in the user's profile:
 
-```javascript
-db.restaurants.aggregate([
-{ 
-  $group : 
-  { 
-    _id : { city: "$city" }, 
-    restaurants: 
-    { 
-      $accumulator: 
-      {
-        init: function(city, userProfileCity) {        // Set the initial state
-          return {
-            max: city === userProfileCity ? 3 : 1,     // If the group matches the user's city, return 3 restaurants
-            restaurants: []                            // else, return 1 restaurant
-          } 
-        },
+**note:** To execute this example in :binary:`~bin.mongosh`, replace
+   ``<userProfileCity>`` in the :ref:`initArgs <accumulator-initArgs>`
+   with a string containing an actual city value, such as ``Bettles``.
 
-        initArgs: ["$city", <userProfileCity>],        // Argument to pass to the init function
+.. code-block:: javascript
+   :linenos:
+   :emphasize-lines: 12
 
-        accumulate: function(state, restaurantName) {  // Define how to update the state
-          if (state.restaurants.length < state.max) {
-            state.restaurants.push(restaurantName);
-          }
-          return state;
-        },
+   db.restaurants.aggregate([
+   { 
+     $group : 
+     { 
+       _id : { city: "$city" }, 
+       restaurants: 
+       { 
+         $accumulator: 
+         {
+           init: function(city, userProfileCity) {        // Set the initial state
+             return {
+               max: city === userProfileCity ? 3 : 1,     // If the group matches the user's city, return 3 restaurants
+               restaurants: []                            // else, return 1 restaurant
+             } 
+           },
+           
+           initArgs: ["$city", <userProfileCity>],        // Argument to pass to the init function
 
-        accumulateArgs: ["$name"],                     // Argument required by the accumulate function
+           accumulate: function(state, restaurantName) {  // Define how to update the state
+             if (state.restaurants.length < state.max) {
+               state.restaurants.push(restaurantName);
+             }
+             return state;
+           },
 
-        merge: function(state1, state2) {              
-          return {
-            max: state1.max,
-            restaurants: state1.restaurants.concat(state2.restaurants).slice(0, state1.max)
-          } 
-        },
+           accumulateArgs: ["$name"],                     // Argument required by the accumulate function
 
-        finalize: function(state) {                   // Adjust the state to only return field we need
-          return state.restaurants
-        }
+           merge: function(state1, state2) {              
+             return {
+               max: state1.max,
+               restaurants: state1.restaurants.concat(state2.restaurants).slice(0, state1.max)
+             } 
+           },
 
-        lang: "js"
-      }
-    }
-  }
-}
-])
-```
+           finalize: function(state) {                   // Adjust the state to only return field we need
+             return state.restaurants
+           }
 
-Results ```````
+           lang: "js"
+         }
+       }
+     }
+   }
+   ])
 
-If the value of `userProfileCity` is `Bettles`, this operation returns the following result:
+### Results
 
-```javascript
-{ _id: { city: "Bettles" }, restaurants: { restaurants: [ "Food Fury", "Meal Macro", "Big Crisp" ] } }
-{ _id: { city: "Onida" }, restaurants: { restaurants: [ "The Wrap" ] } }
-{ _id: { city: "Pyote" }, restaurants: { restaurants: [ "Crave" ] } }
-```
+If the value of ``userProfileCity`` is ``Bettles``, this operation
+returns the following result:
 
-If the value of `userProfileCity` is `Onida`, this operation returns the following result:
+.. code-block:: javascript
+   :copyable: false
 
-```javascript
-{ _id: { city: "Bettles" }, restaurants: { restaurants: [ "Food Fury" ] } }
-{ _id: { city: "Onida" }, restaurants: { restaurants: [ "The Wrap", "Spice Attack", "Soup City" ] } }
-{ _id: { city: "Pyote" }, restaurants: { restaurants: [ "Crave" ] } }
-```
+   { _id: { city: "Bettles" }, restaurants: { restaurants: [ "Food Fury", "Meal Macro", "Big Crisp" ] } }
+   { _id: { city: "Onida" }, restaurants: { restaurants: [ "The Wrap" ] } }
+   { _id: { city: "Pyote" }, restaurants: { restaurants: [ "Crave" ] } }
 
-If the value of `userProfileCity` is `Pyote`, this operation returns the following result:
+If the value of ``userProfileCity`` is ``Onida``, this operation
+returns the following result:
 
-```javascript
-{ _id: { city: "Bettles" }, restaurants: { restaurants: [ "Food Fury" ] } }
-{ _id: { city: "Onida" }, restaurants: { restaurants: [ "The Wrap" ] } }
-{ _id: { city: "Pyote" }, restaurants: { restaurants: [ "Crave", "The Gala" ] } }
-```
+.. code-block:: javascript
+   :copyable: false
 
-If the value of `userProfileCity` is any other value, this operation returns the following result:
+   { _id: { city: "Bettles" }, restaurants: { restaurants: [ "Food Fury" ] } }
+   { _id: { city: "Onida" }, restaurants: { restaurants: [ "The Wrap", "Spice Attack", "Soup City" ] } }
+   { _id: { city: "Pyote" }, restaurants: { restaurants: [ "Crave" ] } }
 
-```javascript
-{ _id: { city: "Bettles" }, restaurants: { restaurants: [ "Food Fury" ] } }
-{ _id: { city: "Onida" }, restaurants: { restaurants: [ "The Wrap" ] } }
-{ _id: { city: "Pyote" }, restaurants: { restaurants: [ "Crave" ] } }
-```
+If the value of ``userProfileCity`` is ``Pyote``, this operation
+returns the following result:
 
-Behavior ````````
+.. code-block:: javascript
+   :copyable: false
 
-The `init <accumulator-init>` function defines an initial state containing `max` and `restaurants` fields. The `max` field sets the maximum number of restaurants for that particular group. If the document's `city` field matches `userProfileCity, that group contains a maximum of 3 restaurants. Otherwise, if the document id` does not match `userProfileCity`, the group contains at most a single restaurant. The `init <accumulator-init>` function receives both the `city` `userProfileCity` arguments from the `initArgs <accumulator-initArgs>` array.
+   { _id: { city: "Bettles" }, restaurants: { restaurants: [ "Food Fury" ] } }
+   { _id: { city: "Onida" }, restaurants: { restaurants: [ "The Wrap" ] } }
+   { _id: { city: "Pyote" }, restaurants: { restaurants: [ "Crave", "The Gala" ] } }
 
-For each document that the :group:`$accumulator` processes, it pushes the `name` of the restaurant to the `restaurants` array, provided that name would not put the length of `restaurants` over the `max` value. With each document that is processed, the `accumulate <accumulator-accumulate>` function returns the updated state.
+If the value of ``userProfileCity`` is any other value, this operation
+returns the following result:
 
-The `merge <accumulator-merge>` function defines how to merge two states. The function concatenates the `restaurant` arrays from each state together, and the length of the resulting array is limited using the [slice()](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array/slice)_ method to ensure that it does not exceed the `max` value.
+.. code-block:: javascript
+   :copyable: false
 
-Once all documents have been processed, the `finalize <accumulator-finalize>` function modifies the resulting state to only return the names of the restaurants.  Without this function, the `max` field would also be included in the output, which does not fulfill any needs for the application.
+   { _id: { city: "Bettles" }, restaurants: { restaurants: [ "Food Fury" ] } }
+   { _id: { city: "Onida" }, restaurants: { restaurants: [ "The Wrap" ] } }
+   { _id: { city: "Pyote" }, restaurants: { restaurants: [ "Crave" ] } }
+
+### Behavior
+
+The :ref:`init <accumulator-init>` function defines an initial state
+containing ``max`` and ``restaurants`` fields. The ``max`` field sets
+the maximum number of restaurants for that particular group. If the
+document's ``city`` field matches ``userProfileCity``, that group
+contains a maximum of 3 restaurants. Otherwise, if the document ``_id``
+does not match ``userProfileCity``, the group contains at most a single
+restaurant. The :ref:`init <accumulator-init>` function receives both
+the ``city`` ``userProfileCity`` arguments from the :ref:`initArgs
+<accumulator-initArgs>` array.
+
+For each document that the :group:`$accumulator` processes, it pushes
+the ``name`` of the restaurant to the ``restaurants`` array, provided
+that name would not put the length of ``restaurants`` over the ``max``
+value. With each document that is processed, the :ref:`accumulate
+<accumulator-accumulate>` function returns the updated state.
+
+The :ref:`merge <accumulator-merge>` function defines how to merge two
+states. The function concatenates the ``restaurant`` arrays from each
+state together, and the length of the resulting array is limited using
+the `slice()
+<https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array/slice>`__
+method to ensure that it does not exceed the ``max`` value.
+
+Once all documents have been processed, the :ref:`finalize
+<accumulator-finalize>` function modifies the resulting state to only
+return the names of the restaurants.  Without this function, the ``max``
+field would also be included in the output, which does not fulfill any
+needs for the application. 

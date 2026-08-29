@@ -1,143 +1,225 @@
 ---
 type: "Framework Learn Page"
-framework: "mongodb"
+framework: "MongoDB"
 source_repo: "https://github.com/mongodb/docs.git"
 source_branch: "main"
 source_path: "content/manual/manual/source/reference/connection-string-formats.txt"
-source_commit: "ab9db26ed3d11618cdb61516d8180337d8e3f679"
-source_commit_short: "ab9db26e"
-source_commit_date: "2026-07-24T16:22:46-06:00"
-generated_at: "2026-07-25T11:51:15Z"
+source_commit: "b9f2bc487a2878b65e3c1f80024bebab76954f27"
+source_commit_short: "b9f2bc48"
+source_commit_date: "2026-08-28T17:09:45-05:00"
+generated_at: "2026-08-29T09:39:19.667960Z"
 ---
-
-=========================
+.. _connection-string-formats:
 
 # Connection String Formats
 
-You can specify the MongoDB connection string by using one of the following formats:
+**contents:** On this page
+   :local:
+   :backlinks: none
+   :depth: 1
+   :class: singlecol
 
-- `connections-dns-seedlist`: A connection string with a hostname
-that corresponds to a DNS SRV record. Your driver or :binary:`~bin.mongosh` queries the record to determine which hosts are running the :binary:`~bin.mongod` or :binary:`~bin.mongos` instances.
+You can specify the MongoDB connection string by using one
+of the following formats:
 
-- `connections-standard-connection-string-format`: A connection
-string that specifies all hosts that are running the :binary:`~bin.mongod` or :binary:`~bin.mongos` instances.
+- :ref:`connections-dns-seedlist`: A connection string with a hostname
+  that corresponds to a DNS SRV record. Your driver or
+  :binary:`~bin.mongosh` queries the record to determine which hosts
+  are running the :binary:`~bin.mongod` or :binary:`~bin.mongos`
+  instances.
 
-{+atlas+} clusters use SRV connection format unless you connect to an :atlas:`online archive </online-archive/manage-online-archive/>`.
+- :ref:`connections-standard-connection-string-format`: A connection
+  string that specifies all hosts that are running the 
+  :binary:`~bin.mongod` or :binary:`~bin.mongos` instances.
 
-To connect directly to a host and port specified in a connection string, set the :urioption:`directConnection` option to `true`. For full details about `directConnection` and the other connection string options, see `connections-connection-options`.
+{+atlas+} clusters use SRV connection format unless you connect to an
+:atlas:`online archive </online-archive/manage-online-archive/>`.
+
+To connect directly to a host and port specified in a connection string,
+set the :urioption:`directConnection` option to ``true``. For full
+details about ``directConnection`` and the other connection string
+options, see :ref:`connections-connection-options`. 
+
+.. _connections-dns-seedlist:
 
 ## SRV Connection Format
 
-MongoDB supports a :abbr:`DNS (Domain Name Service)`-constructed `seed list`. Using DNS to construct the available servers list allows more flexibility of deployment and the ability to change the servers in rotation without reconfiguring clients.
+MongoDB supports a
+:abbr:`DNS (Domain Name Service)`-constructed :term:`seed list`. Using 
+DNS to construct the available servers list allows more flexibility of
+deployment and the ability to change the servers in rotation without
+reconfiguring clients.
 
 The SRV URI connection scheme has the following form:
 
-```none
-mongodb+srv://[username:password@]host[/[defaultauthdb][?options]]
-```
+.. code-block:: none
 
-.. include:: /includes/list-table-connection-string-components.rst
+   mongodb+srv://[username:password@]host[/[defaultauthdb][?options]]
 
-To use the DNS seed list, use the `standard connection string <connections-standard-connection-string-format>` syntax with a prefix of `mongodb+srv` instead of the standard `mongodb`. The `+srv` indicates to the client that the hostname that follows corresponds to a DNS SRV record. The driver or :binary:`~bin.mongosh` queries the DNS for the record and uses the record to determine which hosts run the :binary:`~bin.mongod` or :binary:`~bin.mongos` instances.
+**include:** /includes/list-table-connection-string-components.rst
 
-> **Note:** The `+srv` connection string modifier automatically sets :urioption:`tls`,
-or the equivalent :urioption:`ssl` option, to `true`. To override this
-behavior, explicitly set :urioption:`tls` or :urioption:`ssl` to `false`
-in the connection query string.
+To use the DNS seed list, use the
+:ref:`standard connection string <connections-standard-connection-string-format>`
+syntax with a prefix of ``mongodb+srv`` instead of the standard ``mongodb``. The
+``+srv`` indicates to the client that the hostname that follows corresponds to a DNS
+SRV record. The driver or :binary:`~bin.mongosh` queries the DNS for the record and
+uses the record to determine which hosts run the :binary:`~bin.mongod` or
+:binary:`~bin.mongos` instances.
 
-When using the `+srv` format, you must specify the `hostname`, `domain`, and `top-level domain (TLD)` in the following format: `<hostname>.<domain>.<TLD>.` This table shows how the placeholders correspond to example values:
+**note:** The ``+srv`` connection string modifier automatically sets :urioption:`tls`, 
+   or the equivalent :urioption:`ssl` option, to ``true``. To override this
+   behavior, explicitly set :urioption:`tls` or :urioption:`ssl` to ``false``
+   in the connection query string.
 
-This example shows a DNS `seed list` connection string that correctly uses the `<hostname>.<domain>.<TLD>` format. It authenticates as user `myDatabaseUser` with the password `D1fficultP%40ssw0rd`:
+When using the ``+srv`` format, you must specify the ``hostname``, 
+``domain``, and ``top-level domain (TLD)`` in the following format: 
+``<hostname>.<domain>.<TLD>.`` This table shows how the placeholders
+correspond to example values:
 
-```none
-mongodb+srv://myDatabaseUser:D1fficultP%40ssw0rd@server.example.com/
-```
+.. list-table::
+   :header-rows: 1
+   :widths: 50 50 
+
+   * - Placeholder
+     - Example
+
+   * - ``<hostname>``
+     - ``server``
+
+   * - ``<domain>``
+     - ``example``
+
+   * - ``<TLD>``
+     - ``com``
+
+   * - ``<hostname>.<domain>.<TLD>``
+     - ``server.example.com``
+
+This example shows a DNS :term:`seed list` connection string that 
+correctly uses the ``<hostname>.<domain>.<TLD>`` format. It
+authenticates as user ``myDatabaseUser`` with the password
+``D1fficultP%40ssw0rd``:
+
+.. code-block:: none
+
+   mongodb+srv://myDatabaseUser:D1fficultP%40ssw0rd@server.example.com/
 
 The corresponding DNS configuration resembles:
 
-```none
-Record                            TTL   Class    Priority Weight Port  Target
-_mongodb._tcp.server.example.com. 86400 IN SRV   0        5      27317 mongodb1.example.com.
-_mongodb._tcp.server.example.com. 86400 IN SRV   0        5      27017 mongodb2.example.com.
-```
+.. code-block:: none
 
-Individual SRV records must be in `_mongodb._tcp.<hostname>.<domain>.<TLD>` format.
+   Record                            TTL   Class    Priority Weight Port  Target
+   _mongodb._tcp.server.example.com. 86400 IN SRV   0        5      27317 mongodb1.example.com.
+   _mongodb._tcp.server.example.com. 86400 IN SRV   0        5      27017 mongodb2.example.com.
 
-When a client connects to a member of the `seed list`, the client retrieves a list of replica set members it can connect to. Clients often use DNS aliases in their seed lists, which means the host may return a server list that differs from the original seed list. If this happens, clients use the hostnames provided by the replica set rather than the hostnames listed in the seed list to ensure that replica set members can be reached via the hostnames in the resulting replica set config.
+Individual SRV records must be in 
+``_mongodb._tcp.<hostname>.<domain>.<TLD>`` format.
 
-> **Important:** The hostnames returned in SRV records must share the same parent
-domain (in this example, `example.com`) as the given hostname. If
-the parent domains and hostname do not match, you can't connect.
+When a client connects to a member of the :term:`seed list`, the client 
+retrieves a list of replica set members it can connect to. Clients 
+often use DNS aliases in their seed lists, which means the host may
+return a server list that differs from the original seed list. If this
+happens, clients use the hostnames provided by the replica set 
+rather than the hostnames listed in the seed list to ensure that 
+replica set members can be reached via the hostnames in the resulting
+replica set config. 
 
-Like the standard connection string, the DNS seed list connection string supports specifying options as a query string. With a DNS seed list connection string, you can also specify the following options via a TXT record:
+**important:** The hostnames returned in SRV records must share the same parent
+   domain (in this example, ``example.com``) as the given hostname. If
+   the parent domains and hostname do not match, you can't connect. 
 
-- `replicaSet`
-- `authSource`
-You can only specify one TXT record per :binary:`~bin.mongod` instance. If multiple TXT records appear in the DNS or if the TXT record contains an option other than `replicaSet` or `authSource`, the client returns an error.
+Like the standard connection string, the DNS seed list connection string
+supports specifying options as a query string. With a DNS seed list
+connection string, you can also specify the following options via a TXT
+record:
 
-The TXT record for the `server.example.com` DNS entry resembles the following example:
+- ``replicaSet``
+- ``authSource``
 
-```none
-Record              TTL   Class    Text
-server.example.com. 86400 IN TXT   "replicaSet=mySet&authSource=authDB"
-```
+You can only specify one TXT record per :binary:`~bin.mongod` instance.
+If multiple TXT records appear in the DNS or if the TXT record contains
+an option other than ``replicaSet`` or ``authSource``, the client
+returns an error.
 
-Taken together, the DNS SRV records and the options specified in the TXT record resolve to the following standard format connection string:
+The TXT record for the ``server.example.com`` DNS entry resembles the
+following example:
 
-```none
-mongodb://myDatabaseUser:D1fficultP%40ssw0rd@mongodb1.example.com:27317,mongodb2.example.com:27017/?replicaSet=mySet&authSource=authDB
-```
+.. code-block:: none
 
-To override TXT record options, specify the option in the query string. The following example overrides the `authSource` option configured in the TXT record of the previous DNS entry:
+   Record              TTL   Class    Text
+   server.example.com. 86400 IN TXT   "replicaSet=mySet&authSource=authDB"
 
-```none
-mongodb+srv://myDatabaseUser:D1fficultP%40ssw0rd@server.example.com/?connectTimeoutMS=300000&authSource=aDifferentAuthDB
-```
+Taken together, the DNS SRV records and the options specified in the TXT
+record resolve to the following standard format connection string:
 
-Given the override for the `authSource`, the equivalent connection string in the standard format would resemble the following example:
+.. code-block:: none
 
-```none
-mongodb://myDatabaseUser:D1fficultP%40ssw0rd@mongodb1.example.com:27317,mongodb2.example.com:27017/?connectTimeoutMS=300000&replicaSet=mySet&authSource=aDifferentAuthDB
-```
+   mongodb://myDatabaseUser:D1fficultP%40ssw0rd@mongodb1.example.com:27317,mongodb2.example.com:27017/?replicaSet=mySet&authSource=authDB
 
-> **Note:** The `mongodb+srv` option fails if there is no available DNS
-with records that correspond to the hostname identified in the
-connection string. If you use the `+srv` connection string modifier,
-the :urioption:`tls` (or the equivalent :urioption:`ssl`) option is
-set to `true` for the connection. To override this
-behavior, explicitly set :urioption:`tls` or :urioption:`ssl` to `false`
-in the connection query string.
-To connect :binary:`~bin.mongosh` to a replica set using the DNS
-seed list format, see :ref:`mongosh Connection Options
-<example-connect-mongosh-using-srv>`.
+To override TXT record options, specify the option in the query string.
+The following example overrides the ``authSource`` option configured in
+the TXT record of the previous DNS entry:
+
+.. code-block:: none
+
+   mongodb+srv://myDatabaseUser:D1fficultP%40ssw0rd@server.example.com/?connectTimeoutMS=300000&authSource=aDifferentAuthDB
+
+Given the override for the ``authSource``, the equivalent connection
+string in the standard format would resemble the following example:
+
+.. code-block:: none
+
+   mongodb://myDatabaseUser:D1fficultP%40ssw0rd@mongodb1.example.com:27317,mongodb2.example.com:27017/?connectTimeoutMS=300000&replicaSet=mySet&authSource=aDifferentAuthDB
+
+**note:** The ``mongodb+srv`` option fails if there is no available DNS
+   with records that correspond to the hostname identified in the
+   connection string. If you use the ``+srv`` connection string modifier,
+   the :urioption:`tls` (or the equivalent :urioption:`ssl`) option is 
+   set to ``true`` for the connection. To override this
+   behavior, explicitly set :urioption:`tls` or :urioption:`ssl` to ``false``
+   in the connection query string.
+
+   To connect :binary:`~bin.mongosh` to a replica set using the DNS
+   seed list format, see :ref:`mongosh Connection Options
+   <example-connect-mongosh-using-srv>`.
+
+.. _connections-standard-connection-string-format:
 
 ## Standard Connection String Format
 
-This section describes the standard format of the MongoDB connection URI used to connect to a self-hosted MongoDB standalone deployment, replica set, or sharded cluster.
+This section describes the standard format of the MongoDB connection
+URI used to connect to a self-hosted MongoDB standalone deployment,
+replica set, or sharded cluster.
 
 The standard URI connection scheme has the form:
 
-```none
-mongodb://[username:password@]host1[:port1][,...hostN[:portN]][/[defaultauthdb][?options]]
-```
+.. code-block:: none
+
+   mongodb://[username:password@]host1[:port1][,...hostN[:portN]][/[defaultauthdb][?options]]
 
 ### Connection String Database Options
 
-You can specify an authentication database either in the :urioption:`authSource` connection option or in the `[/defaultauthdb]` field in the connection string. If you specify :urioption:`authSource`, the client uses that database to verify your identity and credentials. If you do not specify :urioption:`authSource`, the client uses `[/defaultauthdb]` as the authentication database. If both :urioption:`authSource` and `[/defaultauthdb]` are unspecified, the client authenticates against the `admin` database.
+You can specify an authentication database either in the :urioption:`authSource` connection option or 
+in the ``[/defaultauthdb]`` field in the connection string. If you specify :urioption:`authSource`,
+the client uses that database to verify your identity and credentials. If you do not specify
+:urioption:`authSource`, the client uses ``[/defaultauthdb]`` as the authentication database.
+If both :urioption:`authSource` and ``[/defaultauthdb]`` are unspecified, the client authenticates
+against the ``admin`` database.
 
-> **Note:** In :binary:`~bin.mongosh`, `[/defaultauthdb]` also sets the default database. If you do
-not specify a default database in the connection string, :binary:`~bin.mongosh` uses the
-`test` database as the default. Other MongoDB tools, such as the drivers, may handle this field
-differently. To learn about behavior for a specific driver, see :driver:`the drivers documentation </>`.
+**note:** In :binary:`~bin.mongosh`, ``[/defaultauthdb]`` also sets the default database. If you do
+   not specify a default database in the connection string, :binary:`~bin.mongosh` uses the 
+   ``test`` database as the default. Other MongoDB tools, such as the drivers, may handle this field
+   differently. To learn about behavior for a specific driver, see :driver:`the drivers documentation </>`.
 
-The following example connection string sets the default database to `myDefaultDB` and the authentication database to `admin`:
+The following example connection string sets the default database to
+``myDefaultDB`` and the authentication database to ``admin``:
 
-```bash
-mongodb://myDatabaseUser:D1fficultP%40ssw0rd@mongodb0.example.com:27017/myDefaultDB?authSource=admin
-```
+.. code-block:: bash
 
-.. include:: /includes/list-table-connection-string-components.rst
+   mongodb://myDatabaseUser:D1fficultP%40ssw0rd@mongodb0.example.com:27017/myDefaultDB?authSource=admin
+
+**include:** /includes/list-table-connection-string-components.rst
 
 ## Learn More
 
-For more connection string examples, see `find-connection-string`.
+For more connection string examples, see :ref:`find-connection-string`.

@@ -1,190 +1,238 @@
 ---
 type: "Framework Learn Page"
-framework: "mongodb"
+framework: "MongoDB"
 source_repo: "https://github.com/mongodb/docs.git"
 source_branch: "main"
 source_path: "content/manual/manual/source/tutorial/geospatial-tutorial.txt"
-source_commit: "ab9db26ed3d11618cdb61516d8180337d8e3f679"
-source_commit_short: "ab9db26e"
-source_commit_date: "2026-07-24T16:22:46-06:00"
-generated_at: "2026-07-25T11:51:15Z"
+source_commit: "b9f2bc487a2878b65e3c1f80024bebab76954f27"
+source_commit_short: "b9f2bc48"
+source_commit_date: "2026-08-28T17:09:45-05:00"
+generated_at: "2026-08-29T09:39:19.568733Z"
 ---
-
-========================================
+.. _geospatial-tutorial-restaurants:
 
 # Find Restaurants with Geospatial Queries
 
+**meta:** :description: Learn to execute geospatial queries in MongoDB to find restaurants using `$geoWithin`, `$geoIntersects`, and `$nearSphere` with a `2dsphere` index.
+
+.. default-domain:: mongodb
+
+**contents:** On this page
+   :local:
+   :backlinks: none
+   :depth: 1
+   :class: singlecol
+
 ## Overview
 
-MongoDB's `geospatial` indexing allows you to efficiently execute spatial queries on a collection that contains geospatial shapes and points. To showcase the capabilities of geospatial features and compare different approaches, this tutorial will guide you through the process of writing queries for a simple geospatial application.
+MongoDB's :term:`geospatial` indexing allows you to efficiently execute
+spatial queries on a collection that contains geospatial shapes and
+points. To showcase the capabilities of geospatial features and compare
+different approaches, this tutorial will guide you through the process
+of writing queries for a simple geospatial application.
 
-This tutorial will briefly introduce the concepts of geospatial indexes, and then demonstrate their use with :query:`$geoWithin`, :query:`$geoIntersects`, and :query:`$nearSphere`.
+This tutorial will briefly introduce the concepts of geospatial
+indexes, and then demonstrate their use with :query:`$geoWithin`,
+:query:`$geoIntersects`, and :query:`$nearSphere`.
 
-Suppose you are designing a mobile application to help users find restaurants in New York City. The application must:
+Suppose you are designing a mobile application to help users find
+restaurants in New York City. The application must:
 
 - Determine the user's current neighborhood using :query:`$geoIntersects`,
 - Show the number of restaurants in that neighborhood using
-:query:`$geoWithin`, and
-
+  :query:`$geoWithin`, and
 - Find restaurants within a specified distance of the user using
-:query:`$nearSphere`.
+  :query:`$nearSphere`.
 
-This tutorial will use a `2dsphere` index to query for this data on spherical geometry.
+This tutorial will use a ``2dsphere`` index to query for this data on spherical
+geometry.
 
-For more information on spherical and flat geometries, see `geospatial-geometry`.
+For more information on spherical and flat geometries, see
+:ref:`geospatial-geometry`.
 
 ## Distortion
 
-Spherical geometry will appear distorted when visualized on a map due to the nature of projecting a three dimensional sphere, such as the earth, onto a flat plane.
+Spherical geometry will appear distorted when visualized on a map due to
+the nature of projecting a three dimensional sphere, such as the earth,
+onto a flat plane.
 
-For example, take the specification of the spherical square defined by the longitude latitude points `(0,0)`, `(80,0)`, `(80,80)`, and `(0,80)`. The following figure depicts the area covered by this region:
+For example, take the specification of the spherical square defined by
+the longitude latitude points ``(0,0)``, ``(80,0)``, ``(80,80)``, and
+``(0,80)``. The following figure depicts the area covered by this region:
 
-.. include:: /images/geospatial-spherical-square.rst
+**include:** /images/geospatial-spherical-square.rst
 
 ## Searching for Restaurants
 
 ### Prerequisites
 
-Download the example datasets from <https://raw.githubusercontent.com/mongodb/docs-assets/geospatial/neighborhoods.json> and <https://raw.githubusercontent.com/mongodb/docs-assets/geospatial/restaurants.json>. These contain the collections `restaurants` and `neighborhoods` respectively.
+Download the example datasets from
+`<https://raw.githubusercontent.com/mongodb/docs-assets/geospatial/neighborhoods.json>`_ and
+`<https://raw.githubusercontent.com/mongodb/docs-assets/geospatial/restaurants.json>`_.
+These contain the collections ``restaurants`` and ``neighborhoods`` respectively.
 
 After downloading the datasets, import them into the database:
 
-```javascript
-mongoimport <path to restaurants.json> -c=restaurants
-mongoimport <path to neighborhoods.json> -c=neighborhoods
-```
+.. code-block:: javascript
 
-A geospatial index, and almost always improves performance of :query:`$geoWithin` and :query:`$geoIntersects` queries.
+   mongoimport <path to restaurants.json> -c=restaurants
+   mongoimport <path to neighborhoods.json> -c=neighborhoods
 
-Because this data is geographical, create a `2dsphere` index on each collection using :binary:`~bin.mongosh`:
+A geospatial index, and almost
+always improves performance of :query:`$geoWithin` and :query:`$geoIntersects`
+queries.
 
-```javascript
-db.restaurants.createIndex({ location: "2dsphere" })
-db.neighborhoods.createIndex({ geometry: "2dsphere" })
-```
+Because this data is geographical, create a ``2dsphere`` index on each
+collection using :binary:`~bin.mongosh`:
+
+.. code-block:: javascript
+
+   db.restaurants.createIndex({ location: "2dsphere" })
+   db.neighborhoods.createIndex({ geometry: "2dsphere" })
 
 ### Exploring the Data
 
-Inspect an entry in the newly-created `restaurants` collection in :binary:`~bin.mongosh`:
+Inspect an entry in the newly-created ``restaurants`` collection in
+:binary:`~bin.mongosh`:
 
-```javascript
-db.restaurants.findOne()
-```
+.. code-block:: javascript
+
+   db.restaurants.findOne()
 
 This query returns a document like the following:
 
-```javascript
-{
-   location: {
-      type: "Point",
-      coordinates: [-73.856077, 40.848447]
-   },
-   name: "Morris Park Bake Shop"
-}
-```
+.. code-block:: javascript
 
-This restaurant document corresponds to the location shown in the following figure:
+   {
+      location: {
+         type: "Point",
+         coordinates: [-73.856077, 40.848447]
+      },
+      name: "Morris Park Bake Shop"
+   }
 
-.. include:: /images/geospatial-single-point.rst
+This restaurant document corresponds to the location shown in the following
+figure:
 
-Because the tutorial uses a `2dsphere` index, the geometry data in the `location` field must follow the `GeoJSON format <geospatial-indexes-store-geojson>`.
+**include:** /images/geospatial-single-point.rst
 
-Now inspect an entry in the `neighborhoods` collection:
+Because the tutorial uses a ``2dsphere`` index, the geometry data in the
+``location`` field must follow the :ref:`GeoJSON format <geospatial-indexes-store-geojson>`.
 
-```javascript
-db.neighborhoods.findOne()
-```
+Now inspect an entry in the ``neighborhoods`` collection:
+
+.. code-block:: javascript
+
+   db.neighborhoods.findOne()
 
 This query will return a document like the following:
 
-```javascript
-{
-   geometry: {
-      type: "Polygon",
-      coordinates: [[
-         [ -73.99, 40.75 ],
-         ...
-         [ -73.98, 40.76 ],
-         [ -73.99, 40.75 ]
-      ]]
-    },
-    name: "Hell's Kitchen"
-}
-```
+.. code-block:: javascript
+
+   {
+      geometry: {
+         type: "Polygon",
+         coordinates: [[
+            [ -73.99, 40.75 ],
+            ...
+            [ -73.98, 40.76 ],
+            [ -73.99, 40.75 ]
+         ]]
+       },
+       name: "Hell's Kitchen"
+   }
 
 This geometry corresponds to the region depicted in the following figure:
 
-.. include:: /images/geospatial-polygon-hells-kitchen.rst
+**include:** /images/geospatial-polygon-hells-kitchen.rst
 
 ### Find the Current Neighborhood
 
-Assuming the user's mobile device can give a reasonably accurate location for the user, it is simple to find the user's current neighborhood with :query:`$geoIntersects`.
+Assuming the user's mobile device can give a reasonably accurate location for
+the user, it is simple to find the user's current neighborhood with
+:query:`$geoIntersects`.
 
-Suppose the user is located at -73.93414657 longitude and 40.82302903 latitude. To find the current neighborhood, you will specify a point using the special :query:`$geometry` field in `GeoJSON` format:
+Suppose the user is located at -73.93414657 longitude and 40.82302903 latitude.
+To find the current neighborhood, you will specify a point using the special
+:query:`$geometry` field in :term:`GeoJSON` format:
 
-```javascript
-db.neighborhoods.findOne({ geometry: { $geoIntersects: { $geometry: { type: "Point", coordinates: [ -73.93414657, 40.82302903 ] } } } })
-```
+.. code-block:: javascript
+
+   db.neighborhoods.findOne({ geometry: { $geoIntersects: { $geometry: { type: "Point", coordinates: [ -73.93414657, 40.82302903 ] } } } })
 
 This query will return the following result:
 
-```javascript
-{
-    "_id" : ObjectId("55cb9c666c522cafdb053a68"),
-    "geometry" : {
-        "type" : "Polygon",
-        "coordinates" : [
-            [
-                [
-                    -73.93383000695911,
-                    40.81949109558767
-                ],
-                ...
-            ]
-        ]
-    },
-    "name" : "Central Harlem North-Polo Grounds"
-}
-```
+.. code-block:: javascript
+
+   {
+       "_id" : ObjectId("55cb9c666c522cafdb053a68"),
+       "geometry" : {
+           "type" : "Polygon",
+           "coordinates" : [
+               [
+                   [
+                       -73.93383000695911,
+                       40.81949109558767
+                   ],
+                   ...
+               ]
+           ]
+       },
+       "name" : "Central Harlem North-Polo Grounds"
+   }
 
 ### Find all Restaurants in the Neighborhood
 
-You can also query to find all restaurants contained in a given neighborhood. Run the following in :binary:`~bin.mongosh` to find the neighborhood containing the user, and then count the restaurants within that neighborhood:
+You can also query to find all restaurants contained in a given neighborhood.
+Run the following in :binary:`~bin.mongosh` to find the neighborhood
+containing the user, and then count the restaurants within that neighborhood:
 
-```javascript
-var neighborhood = db.neighborhoods.findOne( { geometry: { $geoIntersects: { $geometry: { type: "Point", coordinates: [ -73.93414657, 40.82302903 ] } } } } )
-db.restaurants.find( { location: { $geoWithin: { $geometry: neighborhood.geometry } } } ).count()
-```
+.. code-block:: javascript
 
-This query will tell you that there are 127 restaurants in the requested neighborhood, visualized in the following figure:
+   var neighborhood = db.neighborhoods.findOne( { geometry: { $geoIntersects: { $geometry: { type: "Point", coordinates: [ -73.93414657, 40.82302903 ] } } } } )
+   db.restaurants.find( { location: { $geoWithin: { $geometry: neighborhood.geometry } } } ).count()
 
-.. include:: /images/geospatial-all-restaurants.rst
+This query will tell you that there are 127 restaurants in the requested
+neighborhood, visualized in the following figure:
+
+**include:** /images/geospatial-all-restaurants.rst
 
 ### Find Restaurants within a Distance
 
-To find restaurants within a specified distance of a point, you can use either :query:`$geoWithin` with :query:`$centerSphere` to return results in unsorted order, or :query:`$nearSphere` with :query:`$maxDistance` if you need results sorted by distance.
+To find restaurants within a specified distance of a point, you can
+use either :query:`$geoWithin` with :query:`$centerSphere` to return results
+in unsorted order, or :query:`$nearSphere` with :query:`$maxDistance` if you need
+results sorted by distance.
 
-### Unsorted with `$geoWithin`
+### Unsorted with ``$geoWithin``
 
-To find restaurants within a circular region, use :query:`$geoWithin` with :query:`$centerSphere`. :query:`$centerSphere` is a MongoDB-specific syntax to denote a circular region by specifying the center and the radius in radians.
+To find restaurants within a circular region, use :query:`$geoWithin` with
+:query:`$centerSphere`. :query:`$centerSphere` is a MongoDB-specific syntax to
+denote a circular region by specifying the center and the radius in radians.
 
-:query:`$geoWithin` does not return the documents in any specific order, so it may show the user the furthest documents first.
+:query:`$geoWithin` does not return the documents in any specific order, so it
+may show the user the furthest documents first.
 
 The following will find all restaurants within five miles of the user:
 
-```javascript
-db.restaurants.find({ location:
-   { $geoWithin:
-      { $centerSphere: [ [ -73.93414657, 40.82302903 ], 5 / 3963.2 ] } } })
-```
+.. code-block:: javascript
 
-:query:`$centerSphere`'s second argument accepts the radius in radians, so you must divide it by the radius of the earth in miles. See `calculate-distance-spherical-geometry` for more information on converting between distance units.
+   db.restaurants.find({ location:
+      { $geoWithin:
+         { $centerSphere: [ [ -73.93414657, 40.82302903 ], 5 / 3963.2 ] } } })
 
-### Sorted with `$nearSphere`
+:query:`$centerSphere`'s second argument accepts the radius in radians, so you
+must divide it by the radius of the earth in miles. See
+:ref:`calculate-distance-spherical-geometry`
+for more information on converting between distance units.
 
-You may also use :query:`$nearSphere` and specify a :query:`$maxDistance` term in meters. This will return all restaurants within five miles of the user in sorted order from nearest to farthest:
+### Sorted with ``$nearSphere``
 
-```javascript
-var METERS_PER_MILE = 1609.34
-db.restaurants.find({ location: { $nearSphere: { $geometry: { type: "Point", coordinates: [ -73.93414657, 40.82302903 ] }, $maxDistance: 5 * METERS_PER_MILE } } })
-```
+You may also use :query:`$nearSphere` and specify a :query:`$maxDistance` term
+in meters. This will return all restaurants within five miles of the user in
+sorted order from nearest to farthest:
+
+.. code-block:: javascript
+
+   var METERS_PER_MILE = 1609.34
+   db.restaurants.find({ location: { $nearSphere: { $geometry: { type: "Point", coordinates: [ -73.93414657, 40.82302903 ] }, $maxDistance: 5 * METERS_PER_MILE } } })

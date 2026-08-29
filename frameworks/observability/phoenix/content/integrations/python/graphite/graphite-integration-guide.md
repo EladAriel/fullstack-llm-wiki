@@ -4,16 +4,16 @@ framework: "Arize Phoenix"
 source_repo: "https://github.com/Arize-ai/phoenix.git"
 source_branch: "main"
 source_path: "docs/phoenix/integrations/python/graphite/graphite-integration-guide.mdx"
-source_commit: "69b3ab92c37ff65812feaa2dbf0b1c0ad5ae55fe"
-source_commit_short: "69b3ab9"
-source_commit_date: "2026-07-25T11:48:12-06:00"
-generated_at: "2026-07-25T19:08:24.858950Z"
+source_commit: "c48e50e9906fcc56c1c103ebd93ef3c95ed6b6e7"
+source_commit_short: "c48e50e"
+source_commit_date: "2026-08-29T01:45:20-06:00"
+generated_at: "2026-08-29T09:39:58.931940Z"
 ---
 ---
 title: "Graphite Integration Guide"
 ---
 
-This document provides comprehensive guidance on integrating Graphite with Arize AX and Phoenix for distributed tracing and observability.
+This document provides comprehensive guidance on integrating Graphite with Phoenix for distributed tracing and observability.
 
 ## Table of Contents
 
@@ -29,7 +29,6 @@ This document provides comprehensive guidance on integrating Graphite with Arize
 
 Graphite integrates with OpenTelemetry to provide distributed tracing through multiple backends:
 
-- **Arize AX**: Production-grade monitoring and observability platform for AI applications
 - **Phoenix**: Local/remote tracing solution ideal for development and debugging
 - **Auto**: Automatic detection of available tracing endpoints
 - **In-Memory**: Testing mode without external dependencies
@@ -50,7 +49,6 @@ Grafi includes the following observability dependencies by default:
 ```toml
 dependencies = [
     "openinference-instrumentation-openai>=0.1.30",
-    "arize-otel>=0.10.0",
     "arize-phoenix-otel>=0.13.1",
 ]
 ```
@@ -99,26 +97,17 @@ services:
 
 ### Environment Variables
 
-#### Arize AX Configuration
+#### Collector Configuration
 
-Set these environment variables when using Arize AX:
-
-```bash
-# Required for Arize AX
-export ARIZE_API_KEY="your-arize-api-key"
-export ARIZE_SPACE_ID="your-space-id"
-export ARIZE_PROJECT_NAME="your-project-name"
-```
-
-#### Phoenix Configuration
-
-Set these environment variables to override default Phoenix settings:
+Graphite reads its collector target from its own environment variables — a bare host and a port, used for gRPC export. These default to Phoenix's local gRPC endpoint:
 
 ```bash
 # Optional - defaults to localhost:4317
-export PHOENIX_ENDPOINT="localhost" # if using docker compose and ports are forwarded
-export PHOENIX_PORT="4317" # This will override port settings in setup_tracing()
+export OTEL_COLLECTOR_ENDPOINT="localhost"
+export OTEL_COLLECTOR_PORT="4317"
 ```
+
+Graphite does not read Phoenix's `PHOENIX_*` environment variables; equivalently, pass `collector_endpoint` and `collector_port` directly to `setup_tracing()`.
 
 ### Setup Function Parameters
 
@@ -133,7 +122,7 @@ def setup_tracing(
 ) -> Tracer:
 ```
 
-- **tracing_options**: Backend to use (ARIZE, PHOENIX, AUTO, IN_MEMORY)
+- **tracing_options**: Backend to use (PHOENIX, AUTO, IN_MEMORY)
 - **collector_endpoint**: Hostname of the collector (default: "localhost")
 - **collector_port**: Port number of the collector (default: 4317)
 - **project_name**: Name for the tracing project (default: "grafi-trace")
@@ -141,29 +130,9 @@ def setup_tracing(
 
 ## Tracing Options
 
-Grafi provides four tracing backend options through the `TracingOptions` enum:
+Grafi provides three tracing backend options through the `TracingOptions` enum:
 
-### 1. ARIZE AX - Production Monitoring
-
-Use Arize AX for production environments with enterprise-grade observability:
-
-```python
-from grafi.common.instrumentations.tracing import TracingOptions, setup_tracing
-
-tracing = setup_tracing(
-    tracing_options=TracingOptions.ARIZE,
-    collector_endpoint="https://otlp.arize.com/v1",
-    project_name="my-dev-project",
-)
-```
-
-**When to use:**
-- Production deployments
-- Need for team collaboration and sharing
-- Require advanced analytics and monitoring
-- Enterprise compliance requirements
-
-### 2. PHOENIX - Local/Remote Development
+### 1. PHOENIX - Local/Remote Development
 
 Use Phoenix for development and debugging:
 
@@ -184,7 +153,7 @@ tracer = setup_tracing(
 - Learning and experimentation
 - Running Phoenix locally or on a remote server
 
-### 3. AUTO - Automatic Detection
+### 2. AUTO - Automatic Detection
 
 Let Grafi automatically detect available tracing endpoints:
 
@@ -208,7 +177,7 @@ tracer = setup_tracing(
 - CI/CD pipelines
 - Flexible deployment scenarios
 
-### 4. IN_MEMORY - Testing
+### 3. IN_MEMORY - Testing
 
 Use in-memory tracing for tests and offline work:
 
@@ -238,26 +207,7 @@ container.register_tracer(tracer)
 # Your assistant code here
 ```
 
-### Example 2: Production Setup with Arize AX
-
-```python
-from grafi.common.containers.container import container
-from grafi.common.instrumentations.tracing import TracingOptions, setup_tracing
-
-# Ensure environment variables are set
-# ARIZE_API_KEY, ARIZE_SPACE_ID, ARIZE_PROJECT_NAME
-
-tracer = setup_tracing(
-    tracing_options=TracingOptions.ARIZE,
-    collector_endpoint="https://otlp.arize.com/v1",
-    project_name="production-assistant"
-)
-container.register_tracer(tracer)
-
-# Your assistant code here
-```
-
-### Example 3: Development with Local Phoenix
+### Example 2: Development with Local Phoenix
 
 First, start Phoenix locally:
 
@@ -288,7 +238,7 @@ container.register_tracer(tracer)
 
 Visit `http://localhost:6006` to view the Phoenix UI.
 
-### Example 4: Testing with In-Memory Tracing
+### Example 3: Testing with In-Memory Tracing
 
 ```python
 from grafi.common.containers.container import container
@@ -301,7 +251,7 @@ container.register_tracer(tracer)
 # Your test code here
 ```
 
-### Example 5: Remote Phoenix Instance
+### Example 4: Remote Phoenix Instance
 
 ```python
 from grafi.common.containers.container import container
@@ -315,7 +265,7 @@ tracer = setup_tracing(
 container.register_tracer(tracer)
 ```
 
-### Example 6: Complete Assistant with Tracing
+### Example 5: Complete Assistant with Tracing
 
 ```python
 import os
@@ -381,8 +331,8 @@ from grafi.common.instrumentations.tracing import TracingOptions, setup_tracing
 env = os.getenv("ENVIRONMENT", "development")
 
 if env == "production":
-    tracing_option = TracingOptions.ARIZE
-    endpoint = "https://otlp.arize.com/v1"
+    tracing_option = TracingOptions.PHOENIX
+    endpoint = "phoenix.example.com"
 elif env == "staging":
     tracing_option = TracingOptions.PHOENIX
     endpoint = "staging-phoenix.example.com"
@@ -432,10 +382,10 @@ Never hardcode API keys. Use environment variables or secret management:
 import os
 
 # Good: Use environment variables
-api_key = os.getenv("ARIZE_API_KEY")
+api_key = os.getenv("PHOENIX_API_KEY")
 
 # Bad: Never hardcode
-# os.environ["ARIZE_API_KEY"] = "hardcoded-key"
+# os.environ["PHOENIX_API_KEY"] = "hardcoded-key"
 ```
 
 ### 5. Graceful Degradation with AUTO Mode
@@ -498,29 +448,6 @@ def setup_test_tracing():
    tracer = setup_tracing(tracing_options=TracingOptions.AUTO)
    ```
 
-### Issue: Arize AX traces not appearing
-
-**Symptom**: No traces visible in the Arize AX dashboard
-
-**Solution**:
-1. Verify environment variables are set:
-   ```python
-   import os
-   print(os.getenv("ARIZE_API_KEY"))
-   print(os.getenv("ARIZE_SPACE_ID"))
-   print(os.getenv("ARIZE_PROJECT_NAME"))
-   ```
-
-2. Check the collector endpoint:
-   ```python
-   tracer = setup_tracing(
-       tracing_options=TracingOptions.ARIZE,
-       collector_endpoint="https://otlp.arize.com/v1"
-   )
-   ```
-
-3. Verify API key has proper permissions
-
 ### Issue: Connection timeout with Phoenix
 
 **Symptom**: Slow startup or timeout errors
@@ -578,11 +505,6 @@ tracer = setup_tracing(tracing_options=TracingOptions.AUTO)
 
 ## Additional Resources
 
-### Arize AX Resources
-- [Arize AX Platform Documentation](https://docs.arize.com/)
-- [Arize AX OpenTelemetry Integration](https://arize.com/docs/ax/integrations/opentelemetry/opentelemetry-arize-otel)
-- [Arize AX Python SDK](https://arize-client-python.readthedocs.io/)
-
 ### Phoenix Resources
 - [Phoenix Documentation](https://docs.arize.com/phoenix)
 - [Phoenix GitHub Repository](https://github.com/Arize-ai/phoenix)
@@ -598,5 +520,4 @@ tracer = setup_tracing(tracing_options=TracingOptions.AUTO)
 For issues related to:
 
 - **Graphite tracing integration**: Open an issue on the Grafi repository
-- **Arize AX platform**: Contact Arize AX support or consult their documentation
 - **Phoenix**: Check the Phoenix GitHub issues or documentation

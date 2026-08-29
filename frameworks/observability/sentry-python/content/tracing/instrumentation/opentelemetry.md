@@ -4,10 +4,10 @@ framework: "Sentry Python"
 source_repo: "https://github.com/getsentry/sentry-docs.git"
 source_branch: "master"
 source_path: "docs/platforms/python/tracing/instrumentation/opentelemetry.mdx"
-source_commit: "8557ccbd46b02c43301ef74ff54516736ecf9d69"
-source_commit_short: "8557ccb"
-source_commit_date: "2026-07-24T13:12:02-04:00"
-generated_at: "2026-07-25T19:08:13.533962Z"
+source_commit: "8b4e4a23b18ee70f5fdb05bcda48869c10be2f60"
+source_commit_short: "8b4e4a2"
+source_commit_date: "2026-08-28T22:17:56+00:00"
+generated_at: "2026-08-29T09:40:09.046643Z"
 ---
 # Opentelemetry
 
@@ -39,4 +39,4 @@ With Sentry’s OpenTelemetry SDK, an OpenTelemetry `Span` becomes a Sentry `Tra
 
 ## Additional Configuration
 
-If you need more fine-grained control over Sentry, take a look at the <PlatformLink to="/configuration/">Configuration page</PlatformLink>. In case you'd like to apply client-side sampling or filter out transactions before sending them to Sentry (to get rid of health checks, for example), you may find the <PlatformLink to="/configuration/filtering/#filtering-transaction-events">Filtering page</PlatformLink> helpful.
+If you need more fine-grained control over Sentry, take a look at the <PlatformLink to="/configuration/">Configuration page</PlatformLink>. In case you'd like to apply client-side sampling or filter out transactions before sending them to Sentry (to get rid of health checks, for example), you may find the <PlatformLink to="/configuration/filtering/#filtering-transactions-and-spans">Filtering page</PlatformLink> helpful.

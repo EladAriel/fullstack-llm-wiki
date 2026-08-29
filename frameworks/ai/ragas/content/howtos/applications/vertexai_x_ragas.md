@@ -5,11 +5,10 @@ source_repo: "https://github.com/vibrantlabsai/ragas"
 source_branch: "main"
 source_path: "docs/howtos/applications/vertexai_x_ragas.md"
 source_commit: "298b68274234c060deacab3cf5fb52aa3a20e885"
-source_commit_short: "298b6827"
+source_commit_short: "298b682"
 source_commit_date: "2026-02-24T13:17:18+05:30"
-generated_at: "2026-06-23T13:55:50Z"
+generated_at: "2026-08-29T09:38:15.977790Z"
 ---
-
 # Getting Started: Ragas with Vertex AI
 
 This tutorial is part of a three-part series on how to use Vertex AI models with Ragas. This first tutorial is intended to set up the groundwork; the remaining two can be followed in any order. You can navigate to the other tutorials using the links below:

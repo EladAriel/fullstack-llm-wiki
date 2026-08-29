@@ -1,122 +1,197 @@
 ---
 type: "Framework Learn Page"
-framework: "mongodb"
+framework: "MongoDB"
 source_repo: "https://github.com/mongodb/docs.git"
 source_branch: "main"
 source_path: "content/manual/manual/source/reference/method/KeyVault.rewrapManyDataKey.txt"
-source_commit: "ab9db26ed3d11618cdb61516d8180337d8e3f679"
-source_commit_short: "ab9db26e"
-source_commit_date: "2026-07-24T16:22:46-06:00"
-generated_at: "2026-07-25T11:51:15Z"
+source_commit: "b9f2bc487a2878b65e3c1f80024bebab76954f27"
+source_commit_short: "b9f2bc48"
+source_commit_date: "2026-08-28T17:09:45-05:00"
+generated_at: "2026-08-29T09:39:19.949182Z"
 ---
-
-=============================================
+.. _server-keyvault-rewrap-manydatakey-method:
 
 # KeyVault.rewrapManyDataKey() (mongosh method)
 
-> **Warning:** Before you rotate your {+dek-long+}s, ensure you create
-a backup of your {+key-vault-long+}. If you lose access to your
-{+dek-long+}s, you will lose all your encrypted data.
-To learn how to create a backup of a collection,
-see `<manual-tutorial-backup-and-restore>`.
+**meta:** :description: Rewrap multiple Data Encryption Keys with a new Customer Master Key using `KeyVault.rewrapManyDataKey()` to rotate encryption keys.
+
+.. default-domain:: mongodb
+
+**contents:** On this page
+   :local:
+   :backlinks: none
+   :depth: 1
+   :class: singlecol
+
+**method:** KeyVault.rewrapManyDataKey(filter, options)
+
+   Decrypts multiple {+dek-long+}s ({+dek-abbr-no-hover+}) 
+   and re-encrypts them with a new {+cmk-long+} ({+cmk-abbr-no-hover+}).
+   Use this method to rotate the {+cmk-abbr-no-hover+} that encrypts your
+   {+dek-abbr-no-hover+}s. To learn more about {+cmk-abbr-no-hover+}s
+   and {+dek-abbr-no-hover+}s, see :ref:`<qe-reference-keys-key-vaults>`.
+
+   You specify a {+cmk-abbr-no-hover+} through the ``masterKey`` parameter.
+   If you do not include a ``masterKey`` argument, the method decrypts
+   and encrypts each {+dek-abbr-no-hover+} with the {+cmk-abbr-no-hover+}
+   referenced in that {+dek-abbr-no-hover+}'s metadata. To learn more about
+   the metadata of {+dek-abbr-no-hover+}s, see
+   :ref:`<csfle-reference-decryption-metadata>`.
+
+   :returns:
+  
+     A :ref:`BulkWriteResult <server-bulkwriteresult-method>` object
+     that reports how many data keys were affected.
+
+**warning:** Back-Up Your {+key-vault-long+}
+
+   Before you rotate your {+dek-long+}s, ensure you create
+   a backup of your {+key-vault-long+}. If you lose access to your
+   {+dek-long+}s, you will lose all your encrypted data.
+
+   To learn how to create a backup of a collection,
+   see :ref:`<manual-tutorial-backup-and-restore>`.
+
 
 ## Compatibility
 
-This command is available in deployments hosted in the following environments:
+This command is available in deployments hosted in the following
+environments: 
 
-.. include:: /includes/fact-environments-atlas-only.rst
+**include:** /includes/fact-environments-atlas-only.rst
 
-.. include:: /includes/fact-environments-onprem-only.rst
+**include:** /includes/fact-environments-onprem-only.rst
+
 
 ## Syntax
+   
+``KeyVault.rewrapManyDataKey`` has the following syntax:
 
-`KeyVault.rewrapManyDataKey` has the following syntax:
+.. code-block:: javascript
 
-```javascript
-let keyVault = db.getMongo().getKeyVault()
+  let keyVault = db.getMongo().getKeyVault()
+  
+  keyVault.rewrapManyDataKey(
+    <filter>,
+    <options>
+  )
 
-keyVault.rewrapManyDataKey(
- <filter>,
- <options>
-)
-```
+.. list-table::
+  :header-rows: 1
+  :widths: 20 20 80
 
-.. include:: /includes/in-use-encryption/admonition-csfle-key-rotation.txt
+  * - Parameter
+
+    - Type
+
+    - Description
+
+  * - ``filter``
+    
+    - :ref:`query filter document <document-query-filter>` 
+
+    - The query filter for the keyvault collection
+    
+  * - ``options``
+    
+    - document
+
+      This document has two fields:
+
+      - ``provider``: A :ref:`KMS provider 
+        <qe-fundamentals-kms-providers>` (AWS KMS, Azure Key Vault, 
+        GCP KMS, the local provider, or KMIP)
+      - ``masterKey``: A KMS-specific key used to encrypt the new 
+        data key
+
+**include:** /includes/in-use-encryption/admonition-csfle-key-rotation.txt
+
 
 ## Behavior
 
-This operation is not atomic and should not be run in parallel with other key management operations.
+This operation is not atomic and should not be run in parallel with 
+other key management operations.
 
 ### Requires Configuring Client-Side Field Level Encryption on Database Connection
 
-.. include:: /includes/extracts/csfle-requires-enabling-encryption.rst
+**include:** /includes/extracts/csfle-requires-enabling-encryption.rst
 
 ## Example
 
-These examples allow you to rapidly evaluate client-side field level encryption. For specific examples using each supported :abbr:`KMS (Key Management Service)` provider, see `field-level-encryption-data-key-manage`.
+These examples allow you to rapidly evaluate client-side field level 
+encryption. For specific examples using each supported 
+:abbr:`KMS (Key Management Service)` provider, see
+:ref:`field-level-encryption-data-key-manage`.
 
-.. include:: /includes/csfle-connection-boilerplate-example.rst
+**include:** /includes/csfle-connection-boilerplate-example.rst
 
-Retrieve the :method:`KeyVault <getKeyVault()>` object and use the :method:`KeyVault.rewrapManyDataKey` method to rewrap the existing keys in a new `masterKey`. If no new `masterKey` is given, each data key retains its respective current `masterKey`.
+Retrieve the :method:`KeyVault <getKeyVault()>` object and use the
+:method:`KeyVault.rewrapManyDataKey` method to rewrap the existing
+keys in a new ``masterKey``. If no new ``masterKey`` is given, each
+data key retains its respective current ``masterKey``. 
 
 ### Rewrap Data Keys with the Current masterKey
 
-The following example shows how you can rewrap each data key with its respective current `masterKey`:
+The following example shows how you can rewrap each data key with its 
+respective current ``masterKey``:
 
-```javascript
-let keyVault = mongo.getKeyVault()
+.. code-block:: javascript
 
-keyVault.rewrapManyDataKey()
-```
+   let keyVault = mongo.getKeyVault()
+
+   keyVault.rewrapManyDataKey()
 
 ### Rewrap Data Keys with a New masterKey
 
-The following example shows how you can rewrap each data key with a new `masterKey`:
+The following example shows how you can rewrap each data key with a new ``masterKey``:
 
-```javascript
-let keyVault = mongo.getKeyVault()
+.. code-block:: javascript
 
-keyVault.rewrapManyDataKey({}, {
-  provider: 'aws',
-  masterKey: {
-    region: 'us-east-2',
-    key: 'arn:aws:kms:us-east-2:...'
-  }
-})
-```
+   let keyVault = mongo.getKeyVault()
+
+   keyVault.rewrapManyDataKey({}, {
+     provider: 'aws',
+     masterKey: {
+       region: 'us-east-2',
+       key: 'arn:aws:kms:us-east-2:...'
+     }
+   })
 
 ### Rewrap Data Keys That Have Not Been Rewrapped Recently
 
-The following example shows how to rewrap data keys that have not been rewrapped in the previous thirty days.
+The following example shows how to rewrap data keys that have not
+been rewrapped in the previous thirty days.
 
-```javascript
-let keyVault = mongo.getKeyVault()
+.. code-block:: javascript
 
-const thirtyDaysAgo = new Date(Date.now() - 30 * 24 * 60 * 60 * 1000);
+   let keyVault = mongo.getKeyVault()
+   
+   const thirtyDaysAgo = new Date(Date.now() - 30 * 24 * 60 * 60 * 1000);
 
-keyVault.rewrapManyDataKey({ updateDate: { $lt: thirtyDaysAgo } });
-```
+   keyVault.rewrapManyDataKey({ updateDate: { $lt: thirtyDaysAgo } });
 
 ### Output
 
-:method:`KeyVault.rewrapManyDataKey()` returns a `BulkWriteResult` object detailing how many data keys were affected:
+:method:`KeyVault.rewrapManyDataKey()` returns a ``BulkWriteResult``
+object detailing how many data keys were affected:
 
-```json
-{
-  bulkWriteResult: BulkWriteResult {
-    result: {
-      ok: 1,
-      writeErrors: [],
-      writeConcernErrors: [],
-      insertedIds: [],
-      nInserted: 0,
-      nUpserted: 0,
-      nMatched: 3,
-      nModified: 3,
-      nRemoved: 0,
-      upserted: [],
-      opTime: { ts: Timestamp({ t: 1655840760, i: 3 }), t: 23 }
-    }
-  }
-}
-```
+.. code-block:: json
+   :copyable: false
+
+   {
+     bulkWriteResult: BulkWriteResult {
+       result: {
+         ok: 1,
+         writeErrors: [],
+         writeConcernErrors: [],
+         insertedIds: [],
+         nInserted: 0,
+         nUpserted: 0,
+         nMatched: 3,
+         nModified: 3,
+         nRemoved: 0,
+         upserted: [],
+         opTime: { ts: Timestamp({ t: 1655840760, i: 3 }), t: 23 }
+       }
+     }
+   }

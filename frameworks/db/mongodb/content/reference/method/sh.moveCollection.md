@@ -1,64 +1,102 @@
 ---
 type: "Framework Learn Page"
-framework: "mongodb"
+framework: "MongoDB"
 source_repo: "https://github.com/mongodb/docs.git"
 source_branch: "main"
 source_path: "content/manual/manual/source/reference/method/sh.moveCollection.txt"
-source_commit: "ab9db26ed3d11618cdb61516d8180337d8e3f679"
-source_commit_short: "ab9db26e"
-source_commit_date: "2026-07-24T16:22:46-06:00"
-generated_at: "2026-07-25T11:51:15Z"
+source_commit: "b9f2bc487a2878b65e3c1f80024bebab76954f27"
+source_commit_short: "b9f2bc48"
+source_commit_date: "2026-08-28T17:09:45-05:00"
+generated_at: "2026-08-29T09:39:19.989541Z"
 ---
-
-====================================
-
 # sh.moveCollection() (mongosh method)
+
+.. default-domain:: mongodb
+
+**contents:** On this page
+   :local:
+   :backlinks: none
+   :depth: 1
+   :class: singlecol
 
 ## Definition
 
+**method:** sh.moveCollection(namespace, toShard)
+
+   .. |mc| replace:: ``sh.moveCollection()``
+   .. |sc| replace:: :method:`sh.shardCollection()`
+   .. |rsc| replace:: :method:`sh.reshardCollection()`
+   .. include:: /includes/mc-description.rst
+
+   .. |dbcommand| replace:: :dbcommand:`moveCollection` command
+   .. include:: /includes/fact-mongosh-shell-method-alt.rst
+
 ## Syntax
 
-`sh.moveCollection()` has the following syntax:
+``sh.moveCollection()`` has the following syntax:
 
-```javascript
-sh.moveCollection( "<namespace>", "<toShard>" )
-```
+.. code-block:: javascript
+  
+   sh.moveCollection( "<namespace>", "<toShard>" )
 
-.. include:: /includes/retrieve-shard-id-note.rst
+**include:** /includes/retrieve-shard-id-note.rst
 
 ### Parameters
+  
+``sh.moveCollection()`` takes the following parameters:
 
-`sh.moveCollection()` takes the following parameters:
+.. list-table::
+   :header-rows: 1
+   :widths: 20 20 80
+
+   * - Parameter
+     - Type
+     - Description
+
+   * - ``namespace``
+     - string
+     - Database and name of the collection to move.
+
+   * - ``toShard``
+     - string
+     - ID of the recipient shard.
 
 ## Compatibility
 
+.. |command| replace:: method
+
 This method is available in deployments hosted in the following environments:
 
-.. include:: /includes/fact-environments-atlas-only.rst
+**include:** /includes/fact-environments-atlas-only.rst
 
-> **Note:** This command is not available on the Atlas Free and Flex Tier.
+**note:** This command is not available on the Atlas Free and Flex Tier.
 
-.. include:: /includes/fact-environments-onprem-only.rst
+**include:** /includes/fact-environments-onprem-only.rst
+
+.. _moveCollection-method-considerations:
 
 ## Considerations
 
-.. include:: /includes/mc-considerations.rst
+**include:** /includes/mc-considerations.rst
+
+.. _moveCollection-method-reqs:
 
 ## Requirements
 
-.. include:: /includes/mc-reqs.rst
+**include:** /includes/mc-reqs.rst
 
 ## Examples
 
-This example moves an unsharded collection named `inventory` on the `app` database to the `shard02` shard.
+This example moves an unsharded collection named ``inventory`` on the
+``app`` database to the ``shard02`` shard.
 
-```javascript
-sh.moveCollection( "app.inventory", "shard02" )  
-```
+.. code-block:: javascript
+  
+   sh.moveCollection( "app.inventory", "shard02" )  
 
-.. include:: /includes/mc-sh-status.rst
+**include:** /includes/mc-sh-status.rst
 
 ## Learn More
 
 - :dbcommand:`moveCollection`
-- `moveable-collections`
+- :ref:`moveable-collections`

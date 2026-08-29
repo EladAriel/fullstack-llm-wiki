@@ -1,7 +1,7 @@
 ---
 type: "Framework Learn Directory Index"
 framework: "Grafana"
-generated_at: "2026-07-25T19:08:09.121920Z"
+generated_at: "2026-08-29T09:39:37.586602Z"
 ---
 # Team-Management
 
@@ -20,3 +20,7 @@ This directory contains Grafana learning pages related to team-management.
 - [_Index](_index.md)
 - [Administering Grafana Teams](administering-grafana-teams.md)
 - [Configure Grafana Teams](configure-grafana-teams.md)
+
+## Subdirectories
+
+- [Team Folders](team-folders/index.md)

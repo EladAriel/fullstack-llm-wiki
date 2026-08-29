@@ -1,7 +1,7 @@
 ---
 type: "Framework Learn Directory Index"
 framework: "Arize Phoenix"
-generated_at: "2026-07-25T19:08:24.988420Z"
+generated_at: "2026-08-29T09:39:58.964828Z"
 ---
 # 07-2026
 
@@ -21,3 +21,4 @@ This directory contains Arize Phoenix learning pages related to 07-2026.
 - [07 14 2026 Command Palette Sessions And Tables](07-14-2026-command-palette-sessions-and-tables.md)
 - [07 17 2026 Oauth2 Authorization Server](07-17-2026-oauth2-authorization-server.md)
 - [07 22 2026 Mcp Setup Provider Filter And Evals](07-22-2026-mcp-setup-provider-filter-and-evals.md)
+- [07 28 2026 Experiment Charts Span Downloads And Root Span Filters](07-28-2026-experiment-charts-span-downloads-and-root-span-filters.md)

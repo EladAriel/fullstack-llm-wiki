@@ -1,55 +1,94 @@
 ---
 type: "Framework Learn Page"
-framework: "mongodb"
+framework: "MongoDB"
 source_repo: "https://github.com/mongodb/docs.git"
 source_branch: "main"
 source_path: "content/manual/manual/source/reference/operator/query/and.txt"
-source_commit: "ab9db26ed3d11618cdb61516d8180337d8e3f679"
-source_commit_short: "ab9db26e"
-source_commit_date: "2026-07-24T16:22:46-06:00"
-generated_at: "2026-07-25T11:51:15Z"
+source_commit: "b9f2bc487a2878b65e3c1f80024bebab76954f27"
+source_commit_short: "b9f2bc48"
+source_commit_date: "2026-08-28T17:09:45-05:00"
+generated_at: "2026-08-29T09:39:20.251534Z"
 ---
-
-===============================
-
 # $and (query predicate operator)
+
+.. default-domain:: mongodb
+
+**facet:** :name: programming_language
+   :values: shell
+
+**meta:** :description: Use the $and operator to perform a logical AND operation on expressions, selecting documents satisfying all conditions. 
+
+**contents:** On this page
+   :local:
+   :backlinks: none
+   :depth: 1
+   :class: singlecol
+
+**query:** $and
+
+   :query:`$and` performs a logical ``AND`` operation on an array of
+   one or more expressions and selects the documents that satisfy all
+   the expressions.
+
+   .. note::
+
+      MongoDB provides an implicit ``AND`` operation when you specify a
+      comma separated list of expressions.
 
 ## Compatibility
 
-.. include:: /includes/fact-compatibility.rst
+.. |operator-method| replace:: ``$and``
+
+**include:** /includes/fact-compatibility.rst
 
 ## Syntax
 
 The :query:`$and` has the following syntax:
 
-```javascript
-{ $and: [ { <expression1> }, { <expression2> } , ... , { <expressionN> } ] }
-```
+.. code-block:: javascript
+   
+   { $and: [ { <expression1> }, { <expression2> } , ... , { <expressionN> } ] }
 
 ## Behavior
 
-When evaluating the clauses in the :query:`$and` expression, MongoDB's query optimizer considers which indexes are available that could help satisfy clauses of the :query:`$and` expression when `selecting the best plan to execute <read-operations-query-optimization>`.
+.. |and-or| replace:: ``$and``
+.. |true-false| replace:: ``false``
 
-.. include:: /includes/and-or-behavior.rst
+When evaluating the clauses in the :query:`$and` expression, MongoDB's
+query optimizer considers which indexes are available that could
+help satisfy clauses of the :query:`$and` expression when
+:ref:`selecting the best plan to execute <read-operations-query-optimization>`.
+ 
+**include:** /includes/and-or-behavior.rst
 
-Most programming languages and drivers, including the `MongoDB Shell <mdb-shell-overview>` (`mongosh`), do not allow the construction of objects with duplicate keys at the same object level. For example:
+Most programming languages and drivers, including the
+:ref:`MongoDB Shell <mdb-shell-overview>` (``mongosh``),
+do not allow the construction of objects with duplicate keys at the
+same object level. For example:
 
-```javascript
-db.inventory.find( { price: { $in: [ 7.99, 3.99 ], $in: [ 4.99, 1.99 ] } } )
-```
+.. code-block:: javascript
 
-The previous query is invalid because the field name `price` has duplicate operators at the same object level. The query sent to the server differs from the intent. To make the query work, use an explicit `AND`:
+   db.inventory.find( { price: { $in: [ 7.99, 3.99 ], $in: [ 4.99, 1.99 ] } } )
 
-```javascript
-db.inventory.find( {
-   $and: [
-      { price: { $in: [ 7.99, 3.99 ] } },
-      { price: { $in: [ 4.99, 1.99 ] } }
-   ]
-} )
-```
+The previous query is invalid because the field name ``price`` has
+duplicate operators at the same object level. The query sent to the
+server differs from the intent. To make the query work, use an explicit
+``AND``:
 
-The previous query explicitly checks that both conditions are satisfied: the `price` array must include at least one value from each :query:`$in` set. For more information, see `query-and-examples`.
+.. code-block:: javascript
+
+   db.inventory.find( {
+      $and: [
+         { price: { $in: [ 7.99, 3.99 ] } },
+         { price: { $in: [ 4.99, 1.99 ] } }
+      ]
+   } )
+
+The previous query explicitly checks that both conditions are satisfied:
+the ``price`` array must include at least one value from each
+:query:`$in` set. For more information, see :ref:`query-and-examples`.
+
+.. _query-and-examples:
 
 ## Examples
 
@@ -57,58 +96,69 @@ The examples match multiple expressions on the same field.
 
 Consider this query:
 
-```javascript
-db.inventory.find( { $and: [ { price: { $ne: 1.99 } }, { price: { $exists: true } } ] } )
-```
+.. code-block:: javascript
 
-The query selects all documents in the `inventory` collection where:
+   db.inventory.find( { $and: [ { price: { $ne: 1.99 } }, { price: { $exists: true } } ] } )
 
-- the `price` field value is not equal to `1.99` **and**
-- the `price` field exists.
-You can simplify this query by combining the operator expressions for the `price` field into a single query object with a nested implicit `AND`:
+The query selects all documents in the ``inventory`` collection where:
 
-```javascript
-db.inventory.find( { price: { $ne: 1.99, $exists: true } } )
-```
+- the ``price`` field value is not equal to ``1.99`` **and**
+- the ``price`` field exists.
 
-Rewrites are not always possible, particularly when duplicate conditions exist on the same field. For example:
+You can simplify this query by combining the operator expressions for
+the ``price`` field into a single query object with a nested implicit
+``AND``:
 
-```javascript
-db.inventory.find( { status: { $ne: "closed", $ne: "archived" } } )
-```
+.. code-block:: javascript
 
-The previous query is invalid because it uses :query:`$ne` more than once on the `status` field at the same object level. Use :query:`$nin` instead:
+   db.inventory.find( { price: { $ne: 1.99, $exists: true } } )
 
-```javascript
-db.inventory.find( { status: { $nin: [ "closed", "archived" ] } } )
-```
+Rewrites are not always possible, particularly when duplicate
+conditions exist on the same field. For example:
+
+.. code-block:: javascript
+
+   db.inventory.find( { status: { $ne: "closed", $ne: "archived" } } )
+
+The previous query is invalid because it uses :query:`$ne` more than
+once on the ``status`` field at the same object level. Use :query:`$nin`
+instead:
+
+.. code-block:: javascript
+
+   db.inventory.find( { status: { $nin: [ "closed", "archived" ] } } )
 
 Rewrite the query based on your intent. Consider this query:
 
-```javascript
-db.inventory.find( {
-   $and: [
-      { status: "new" },
-      { status: "processing" }
-   ]
-} )
-```
+.. code-block:: javascript
 
-To find documents where `status` is either `new` or `processing`, use :query:`$in`:
+   db.inventory.find( {
+      $and: [
+         { status: "new" },
+         { status: "processing" }
+      ]
+   } )
 
-```javascript
-db.inventory.find( { status: { $in: [ "new", "processing" ] } } )
-```
+To find documents where ``status`` is either ``new`` or ``processing``,
+use :query:`$in`:
 
-If your `status` field is an array `[ "new", "processing" ]` and you want to check if the document contains both `new` and `processing`, use :query:`$all`:
+.. code-block:: javascript
 
-```javascript
-db.inventory.find( { status: { $all: [ "new", "processing" ] } } )
-```
+   db.inventory.find( { status: { $in: [ "new", "processing" ] } } )
 
-The previous query is semantically equivalent to `AND`, but :query:`$all` is clearer when querying array fields.
+If your ``status`` field is an array ``[ "new", "processing" ]`` and
+you want to check if the document contains both ``new`` and
+``processing``, use :query:`$all`:
 
-Similar to duplicate field names, the same considerations apply for duplicate operators used in the query.
+.. code-block:: javascript
+
+   db.inventory.find( { status: { $all: [ "new", "processing" ] } } )
+
+The previous query is semantically equivalent to ``AND``, but
+:query:`$all` is clearer when querying array fields.
+
+Similar to duplicate field names, the same considerations apply for
+duplicate operators used in the query.
 
 ## Learn More
 

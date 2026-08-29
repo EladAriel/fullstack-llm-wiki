@@ -1,50 +1,62 @@
 ---
 type: "Framework Learn Page"
-framework: "mongodb"
+framework: "MongoDB"
 source_repo: "https://github.com/mongodb/docs.git"
 source_branch: "main"
 source_path: "content/manual/manual/source/tutorial/change-standalone-wiredtiger.txt"
-source_commit: "ab9db26ed3d11618cdb61516d8180337d8e3f679"
-source_commit_short: "ab9db26e"
-source_commit_date: "2026-07-24T16:22:46-06:00"
-generated_at: "2026-07-25T11:51:15Z"
+source_commit: "b9f2bc487a2878b65e3c1f80024bebab76954f27"
+source_commit_short: "b9f2bc48"
+source_commit_date: "2026-08-28T17:09:45-05:00"
+generated_at: "2026-08-29T09:39:19.642379Z"
 ---
-
-==============================================
-
 # Change a Self-Managed Standalone to WiredTiger
 
-> **Note:** You must upgrade to WiredTiger. MongoDB removed the deprecated MMAPv1 storage
-engine in version 4.2.
+**meta:** :keywords: on-prem
+   :description: Upgrade a standalone MongoDB instance to WiredTiger using `mongodump` and `mongorestore` utilities for data export and import.
 
-Use this tutorial to change the storage engine of a `standalone` MongoDB instance to `WiredTiger <storage-wiredtiger>`.
+.. default-domain:: mongodb
+
+**note:** You must upgrade to WiredTiger. MongoDB removed the deprecated MMAPv1 storage 
+   engine in version 4.2. 
+
+Use this tutorial to change the storage engine of a :term:`standalone`
+MongoDB instance to :ref:`WiredTiger <storage-wiredtiger>`.
 
 ## Considerations
 
-### `mongodump` and `mongorestore`
+### ``mongodump`` and ``mongorestore``
 
-This tutorial uses the :binary:`~bin.mongodump` and :binary:`~bin.mongorestore` utilities to export and import data.
+This tutorial uses the :binary:`~bin.mongodump` and
+:binary:`~bin.mongorestore` utilities to export and import data.
 
 - Ensure that these MongoDB package components are installed and
-updated on your system.
+  updated on your system.
 
 - Make sure you have sufficient drive space available for the
-:binary:`~bin.mongodump` export file and the data files of your new :binary:`~bin.mongod` instance running with WiredTiger.
+  :binary:`~bin.mongodump` export file and the data files of your new
+  :binary:`~bin.mongod` instance running with WiredTiger.
 
 ### Default Bind to Localhost
 
-.. include:: /includes/fact-default-bind-ip-change.rst
+**include:** /includes/fact-default-bind-ip-change.rst
 
-The tutorial runs :binary:`~bin.mongodump` and :binary:`~bin.mongorestore` from the same host as the :binary:`~bin.mongod` they are connecting to. If run remotely, :binary:`~bin.mongodump` and :binary:`~bin.mongorestore` must specify the ip address or the associated hostname in order to connect to the :binary:`~bin.mongod`.
+The tutorial runs :binary:`~bin.mongodump` and
+:binary:`~bin.mongorestore` from the same host as the
+:binary:`~bin.mongod` they are connecting to. If run remotely,
+:binary:`~bin.mongodump` and :binary:`~bin.mongorestore` must specify
+the ip address or the associated hostname in order to connect to the
+:binary:`~bin.mongod`.
 
 ### XFS and WiredTiger
 
-With the WiredTiger storage engine, using XFS for data bearing nodes is recommended on Linux. For more information, see `prod-notes-linux-file-system`.
+With the WiredTiger storage engine, using XFS for data bearing nodes is
+recommended on Linux. For more information, see
+:ref:`prod-notes-linux-file-system`.
 
 ### MMAPv1 Only Restrictions
 
-.. include:: /includes/fact-mmapv1-only-restrictions.rst
+**include:** /includes/fact-mmapv1-only-restrictions.rst
 
 ## Procedure
 
-.. include:: /includes/steps/change-standalone-wiredtiger.rst
+**include:** /includes/steps/change-standalone-wiredtiger.rst

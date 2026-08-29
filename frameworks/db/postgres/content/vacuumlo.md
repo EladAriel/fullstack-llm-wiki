@@ -1,54 +1,258 @@
 ---
 type: "Framework Learn Page"
-framework: "postgres"
+framework: "PostgreSQL"
 source_repo: "https://github.com/postgres/postgres.git"
 source_branch: "master"
 source_path: "doc/src/sgml/vacuumlo.sgml"
-source_commit: "38afc3dcb25c45b744d4025029ce0a6c90b7059f"
-source_commit_short: "38afc3dc"
-source_commit_date: "2026-07-25T19:08:27+09:00"
-generated_at: "2026-07-25T11:50:59Z"
+source_commit: "6c5f1d6074208146930b67c2054509c3e82f6f7f"
+source_commit_short: "6c5f1d6"
+source_commit_date: "2026-08-28T23:24:47+02:00"
+generated_at: "2026-08-29T09:39:24.405298Z"
 ---
-
 vacuumlo
+ 
 
-`vacuumlo`
-1
-Application
+ 
+  
+# vacuumlo
 
-vacuumlo
-remove orphaned large objects from a PostgreSQL database
+  1
+  Application
+ 
 
-`vacuumlo`
-`option`
-`dbname`
+ 
+  
+# vacuumlo
 
-## Description
+  remove orphaned large objects from a PostgreSQL database
+ 
 
-`vacuumlo` is a simple utility program that will remove any orphaned large objects from a PostgreSQL database. An orphaned large object (LO) is considered to be any LO whose OID does not appear in any `oid` or `lo` data column of the database.
+ 
+  
+   vacuumlo
+   option
+   dbname
+  
+ 
 
-If you use this, you may also be interested in the `lo_manage` trigger in the `lo` module. `lo_manage` is useful to try to avoid creating orphaned LOs in the first place.
+ 
+  
+# Description
 
-All databases named on the command line are processed.
+ 
+  vacuumlo is a simple utility program that will remove any
+  orphaned large objects from a
+  PostgreSQL database.  An orphaned large object (LO) is
+  considered to be any LO whose OID does not appear in any oid or
+  lo data column of the database.
+ 
 
-## Options
+ 
+  If you use this, you may also be interested in the lo_manage
+  trigger in the  module.
+  lo_manage is useful to try
+  to avoid creating orphaned LOs in the first place.
+ 
 
-`vacuumlo` accepts the following command-line arguments: - Remove no more than `limit` large objects per transaction (default 1000). Since the server acquires a lock per LO removed, removing too many LOs in one transaction risks exceeding `guc-max-locks-per-transaction`. Set the limit to zero if you want all removals done in a single transaction. - Don't remove anything, just show what would be done. - Write a lot of progress messages. - Print the `vacuumlo` version and exit. - Show help about `vacuumlo` command line arguments, and exit.
+  
+   All databases named on the command line are processed.
+  
 
-`vacuumlo` also accepts the following command-line arguments for connection parameters: - Database server's host. - Database server's port. - User name to connect as. - Never issue a password prompt. If the server requires password authentication and a password is not available by other means such as a `.pgpass` file, the connection attempt will fail. This option can be useful in batch jobs and scripts where no user is present to enter a password. - Force `vacuumlo` to prompt for a password before connecting to a database. This option is never essential, since `vacuumlo` will automatically prompt for a password if the server demands password authentication. However, `vacuumlo` will waste a connection attempt finding out that the server wants a password. In some cases it is worth typing `-W` to avoid the extra connection attempt.
+ 
 
-## Environment
+ 
+  
+# Options
 
-- Default connection parameters.
+  
+   vacuumlo accepts the following command-line arguments:
 
-This utility, like most other PostgreSQL utilities, also uses the environment variables supported by `libpq` (see `libpq-envars`).
+  
+   
+    -l limit
+    --limit=limit
+    
+     
+      Remove no more than limit large objects per
+      transaction (default 1000).  Since the server acquires a lock per LO
+      removed, removing too many LOs in one transaction risks exceeding
+      .  Set the limit to
+      zero if you want all removals done in a single transaction.
+     
 
-The environment variable `PG_COLOR` specifies whether to use color in diagnostic messages. Possible values are `always`, `auto` and `never`.
+    
+   
 
-## Notes
+   
+    -n
+    --dry-run
+    
+     Don't remove anything, just show what would be done.
 
-`vacuumlo` works by the following method: First, `vacuumlo` builds a temporary table which contains all of the OIDs of the large objects in the selected database. It then scans through all columns in the database that are of type `oid` or `lo`, and removes matching entries from the temporary table. (Note: Only types with these names are considered; in particular, domains over them are not considered.) The remaining entries in the temporary table identify orphaned LOs. These are removed.
+    
+   
 
-## Author
+   
+    -v
+    --verbose
+    
+     Write a lot of progress messages.
 
-Peter Mount peter@retep.org.uk
+    
+   
+
+   
+    -V
+    --version
+    
+     
+      Print the vacuumlo version and exit.
+     
+
+    
+   
+
+   
+    -?
+    --help
+    
+     
+      Show help about vacuumlo command line
+      arguments, and exit.
+     
+
+    
+   
+  
+  
+
+  
+   vacuumlo also accepts the following command-line
+   arguments for connection parameters:
+
+  
+   
+    -h host
+    --host=host
+    
+     Database server's host.
+
+    
+   
+
+   
+    -p port
+    --port=port
+    
+     Database server's port.
+
+    
+   
+
+   
+    -U username
+    --username=username
+    
+     User name to connect as.
+
+    
+   
+
+   
+    -w
+    --no-password
+    
+     
+      Never issue a password prompt.  If the server requires password
+      authentication and a password is not available by other means
+      such as a .pgpass file, the connection
+      attempt will fail.  This option can be useful in batch jobs and
+      scripts where no user is present to enter a password.
+     
+
+    
+   
+
+   
+    -W
+    --password
+    
+     
+      Force vacuumlo to prompt for a
+      password before connecting to a database.
+     
+
+     
+      This option is never essential, since
+      vacuumlo will automatically prompt
+      for a password if the server demands password authentication.
+      However, vacuumlo will waste a
+      connection attempt finding out that the server wants a password.
+      In some cases it is worth typing -W to avoid the extra
+      connection attempt.
+     
+
+    
+   
+  
+  
+
+ 
+
+ 
+  
+# Environment
+
+  
+   
+    PGHOST
+    PGPORT
+    PGUSER
+
+    
+     
+      Default connection parameters.
+     
+
+    
+   
+  
+
+  
+   This utility, like most other PostgreSQL utilities,
+   also uses the environment variables supported by libpq
+   (see ).
+  
+
+  
+   The environment variable PG_COLOR specifies whether to use
+   color in diagnostic messages. Possible values are
+   always, auto and
+   never.
+  
+
+ 
+
+ 
+  
+# Notes
+
+  
+   vacuumlo works by the following method:
+   First, vacuumlo builds a temporary table which contains all
+   of the OIDs of the large objects in the selected database.  It then scans
+   through all columns in the database that are of type
+   oid or lo, and removes matching entries from the temporary
+   table.  (Note: Only types with these names are considered; in particular,
+   domains over them are not considered.)  The remaining entries in the
+   temporary table identify orphaned LOs.  These are removed.
+  
+
+ 
+
+ 
+  
+# Author
+
+  
+   Peter Mount peter@retep.org.uk

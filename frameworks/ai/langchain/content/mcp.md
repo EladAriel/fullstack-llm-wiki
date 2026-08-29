@@ -4,12 +4,11 @@ framework: "LangChain"
 source_repo: "https://github.com/langchain-ai/docs"
 source_branch: "main"
 source_path: "src/oss/langchain/mcp.mdx"
-source_commit: "2aae1dfc98ee953a9a5185fb6fcdd9efb3f4d878"
-source_commit_short: "2aae1dfc"
-source_commit_date: "2026-07-25T00:27:23Z"
-generated_at: "2026-07-25T11:51:05Z"
+source_commit: "a174f9cf7c91ee5eb14ee2382eb48bfe6e4956e9"
+source_commit_short: "a174f9c"
+source_commit_date: "2026-08-28T17:04:12-07:00"
+generated_at: "2026-08-29T09:38:24.253192Z"
 ---
-
 ---
 title: Model Context Protocol (MCP)
 ---
@@ -417,14 +416,32 @@ MCP supports different transport mechanisms for client-server communication.
 
 The `http` transport (also referred to as `streamable-http`) uses HTTP requests for client-server communication. See the [MCP HTTP transport specification](https://modelcontextprotocol.io/specification/2025-03-26/basic/transports#streamable-http) for more details.
 
+Use a local URL for servers you run yourself, or a hosted URL such as the [LangChain docs MCP server](/use-these-docs) (`https://docs.langchain.com/mcp`), which is public and does not require an API key.
+
 :::python
 ```python
+from langchain.agents import create_agent
+from langchain_mcp_adapters.client import MultiServerMCPClient
+
 client = MultiServerMCPClient(
     {
-        "weather": {
+        "mcp": {
             "transport": "http",
-            "url": "http://localhost:8000/mcp",
+            # "url": "http://localhost:8000/mcp",  # Local server
+            "url": "https://docs.langchain.com/mcp",  # Hosted server
         }
+    }
+)
+tools = await client.get_tools()
+agent = create_agent("openai:gpt-5.4", tools)
+response = await agent.ainvoke(
+    {
+        "messages": [
+            {
+                "role": "user",
+                "content": "How do I connect LangChain to an MCP server over HTTP?",
+            }
+        ]
     }
 )
 ```
@@ -432,11 +449,26 @@ client = MultiServerMCPClient(
 
 :::js
 ```typescript
+import { MultiServerMCPClient } from "@langchain/mcp-adapters";
+import { createAgent } from "langchain";
+
 const client = new MultiServerMCPClient({
-    weather: {
-        transport: "sse",
-        url: "http://localhost:8000/mcp",
+    mcp: {
+        transport: "http",
+        // url: "http://localhost:8000/mcp", // Local server
+        url: "https://docs.langchain.com/mcp", // Hosted server
     },
+});
+
+const tools = await client.getTools();
+const agent = createAgent({ model: "openai:gpt-5.4", tools });
+const response = await agent.invoke({
+    messages: [
+        {
+            role: "user",
+            content: "How do I connect LangChain to an MCP server over HTTP?",
+        },
+    ],
 });
 ```
 :::
@@ -546,7 +578,7 @@ async with client.session("server_name") as session:  # [!code highlight]
     # Pass the session to load tools, resources, or prompts
     tools = await load_mcp_tools(session)  # [!code highlight]
     agent = create_agent(
-        "google_genai:gemini-3.5-flash",
+        "google_genai:gemini-3.6-flash",
         tools
     )
 ```

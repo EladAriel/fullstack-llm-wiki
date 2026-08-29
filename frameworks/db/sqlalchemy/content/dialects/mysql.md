@@ -1,89 +1,272 @@
 ---
 type: "Framework Learn Page"
-framework: "sqlalchemy"
+framework: "SQLAlchemy"
 source_repo: "https://github.com/sqlalchemy/sqlalchemy"
 source_branch: "main"
 source_path: "doc/build/dialects/mysql.rst"
-source_commit: "aa1a5575358d3aa14953b04dced02f4763fed2e7"
-source_commit_short: "aa1a5575"
-source_commit_date: "2026-07-23T18:02:59Z"
-generated_at: "2026-07-25T11:50:45Z"
+source_commit: "85cafd1a131fa8afeeeab23151940480b3fb0042"
+source_commit_short: "85cafd1"
+source_commit_date: "2026-08-28T20:17:49+00:00"
+generated_at: "2026-08-29T09:39:27.549686Z"
 ---
+.. _mysql_toplevel:
 
 # MySQL and MariaDB
 
+**automodule:** sqlalchemy.dialects.mysql.base
+
 ## MySQL SQL Constructs
+
+**currentmodule:** sqlalchemy.dialects.mysql
+
+**autoclass:** match
+    :members:
 
 ## MySQL Data Types
 
-As with all SQLAlchemy dialects, all UPPERCASE types that are known to be valid with MySQL are importable from the top level dialect:
+As with all SQLAlchemy dialects, all UPPERCASE types that are known to be
+valid with MySQL are importable from the top level dialect::
 
-```
-from sqlalchemy.dialects.mysql import (
-    BIGINT,
-    BINARY,
-    BIT,
-    BLOB,
-    BOOLEAN,
-    CHAR,
-    DATE,
-    DATETIME,
-    DECIMAL,
-    DECIMAL,
-    DOUBLE,
-    ENUM,
-    FLOAT,
-    INTEGER,
-    LONGBLOB,
-    LONGTEXT,
-    MEDIUMBLOB,
-    MEDIUMINT,
-    MEDIUMTEXT,
-    NCHAR,
-    NUMERIC,
-    NVARCHAR,
-    REAL,
-    SET,
-    SMALLINT,
-    TEXT,
-    TIME,
-    TIMESTAMP,
-    TINYBLOB,
-    TINYINT,
-    TINYTEXT,
-    VARBINARY,
-    VARCHAR,
-    YEAR,
-)
-```
+    from sqlalchemy.dialects.mysql import (
+        BIGINT,
+        BINARY,
+        BIT,
+        BLOB,
+        BOOLEAN,
+        CHAR,
+        DATE,
+        DATETIME,
+        DECIMAL,
+        DECIMAL,
+        DOUBLE,
+        ENUM,
+        FLOAT,
+        INTEGER,
+        LONGBLOB,
+        LONGTEXT,
+        MEDIUMBLOB,
+        MEDIUMINT,
+        MEDIUMTEXT,
+        NCHAR,
+        NUMERIC,
+        NVARCHAR,
+        REAL,
+        SET,
+        SMALLINT,
+        TEXT,
+        TIME,
+        TIMESTAMP,
+        TINYBLOB,
+        TINYINT,
+        TINYTEXT,
+        VARBINARY,
+        VARCHAR,
+        YEAR,
+    )
 
-In addition to the above types, MariaDB also supports the following:
+In addition to the above types, MariaDB also supports the following::
 
-```
-from sqlalchemy.dialects.mysql import (
-    INET4,
-    INET6,
-)
-```
+    from sqlalchemy.dialects.mysql import (
+        INET4,
+        INET6,
+    )
 
-Types which are specific to MySQL or MariaDB, or have specific construction arguments, are as follows:
+Types which are specific to MySQL or MariaDB, or have specific
+construction arguments, are as follows:
 
-in the dialect module, just imported from sqltypes.  this avoids warnings in the sphinx build
+.. note: where :noindex: is used, indicates a type that is not redefined
+   in the dialect module, just imported from sqltypes.  this avoids warnings
+   in the sphinx build
+
+**currentmodule:** sqlalchemy.dialects.mysql
+
+**autoclass:** BIGINT
+    :members: __init__
+
+
+**autoclass:** BINARY
+    :noindex:
+    :members: __init__
+
+
+**autoclass:** BIT
+    :members: __init__
+
+
+**autoclass:** BLOB
+    :members: __init__
+    :noindex:
+
+
+**autoclass:** BOOLEAN
+    :members: __init__
+    :noindex:
+
+
+**autoclass:** CHAR
+    :members: __init__
+
+
+**autoclass:** DATE
+    :members: __init__
+    :noindex:
+
+
+**autoclass:** DATETIME
+    :members: __init__
+
+
+**autoclass:** DECIMAL
+    :members: __init__
+
+
+**autoclass:** DOUBLE
+    :members: __init__
+    :noindex:
+
+**autoclass:** ENUM
+    :members: __init__
+
+
+**autoclass:** FLOAT
+    :members: __init__
+
+
+**autoclass:** INET4
+
+**autoclass:** INET6
+
+**autoclass:** INTEGER
+    :members: __init__
+
+**autoclass:** JSON
+    :members:
+
+**autoclass:** LONGBLOB
+    :members: __init__
+
+
+**autoclass:** LONGTEXT
+    :members: __init__
+
+
+**autoclass:** MEDIUMBLOB
+    :members: __init__
+
+
+**autoclass:** MEDIUMINT
+    :members: __init__
+
+
+**autoclass:** MEDIUMTEXT
+    :members: __init__
+
+
+**autoclass:** NCHAR
+    :members: __init__
+
+
+**autoclass:** NUMERIC
+    :members: __init__
+
+
+**autoclass:** NVARCHAR
+    :members: __init__
+
+
+**autoclass:** REAL
+    :members: __init__
+
+
+**autoclass:** SET
+    :members: __init__
+
+
+**autoclass:** SMALLINT
+    :members: __init__
+
+
+**autoclass:** TEXT
+    :members: __init__
+    :noindex:
+
+
+**autoclass:** TIME
+    :members: __init__
+
+
+**autoclass:** TIMESTAMP
+    :members: __init__
+
+
+**autoclass:** TINYBLOB
+    :members: __init__
+
+
+**autoclass:** TINYINT
+    :members: __init__
+
+
+**autoclass:** TINYTEXT
+    :members: __init__
+
+
+**autoclass:** VARBINARY
+    :members: __init__
+    :noindex:
+
+
+**autoclass:** VARCHAR
+    :members: __init__
+
+
+**autoclass:** YEAR
+    :members: __init__
 
 ## MySQL DML Constructs
 
+**autofunction:** sqlalchemy.dialects.mysql.insert
+
+**autoclass:** sqlalchemy.dialects.mysql.Insert
+  :members:
+
+**autofunction:** sqlalchemy.dialects.mysql.limit
+
+
+
 ## mysqlclient (fork of MySQL-Python)
+
+**automodule:** sqlalchemy.dialects.mysql.mysqldb
 
 ## PyMySQL
 
+**automodule:** sqlalchemy.dialects.mysql.pymysql
+
 ## MariaDB-Connector
+
+**automodule:** sqlalchemy.dialects.mysql.mariadbconnector
 
 ## MySQL-Connector
 
+**automodule:** sqlalchemy.dialects.mysql.mysqlconnector
+
+.. _asyncmy:
+
 ## asyncmy
+
+**automodule:** sqlalchemy.dialects.mysql.asyncmy
+
+
+.. _aiomysql:
 
 ## aiomysql
 
+**automodule:** sqlalchemy.dialects.mysql.aiomysql
+
 ## cymysql
 
+**automodule:** sqlalchemy.dialects.mysql.cymysql
+
 ## pyodbc
+
+**automodule:** sqlalchemy.dialects.mysql.pyodbc

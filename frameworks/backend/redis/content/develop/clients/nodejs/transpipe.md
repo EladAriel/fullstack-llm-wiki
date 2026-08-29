@@ -1,14 +1,15 @@
 ---
 type: "Framework Learn Page"
-framework: "redis"
+framework: "Redis"
 source_repo: "https://github.com/redis/docs.git"
 source_branch: "main"
 source_path: "content/develop/clients/nodejs/transpipe.md"
-source_commit: "9d30f68c3dad1a6b3b7d30fe604b911348ce8152"
-source_commit_short: "9d30f68c"
-source_commit_date: "2026-07-24T10:52:10-07:00"
-generated_at: "2026-07-25T11:51:22Z"
+source_commit: "f8693349287b0efbef3c865b6f6a2aceca88594d"
+source_commit_short: "f869334"
+source_commit_date: "2026-08-28T10:01:19-05:00"
+generated_at: "2026-08-29T09:38:56.080668Z"
 ---
+# Transpipe
 
 ---
 categories:
@@ -121,7 +122,7 @@ console.log(res3); // >>> 3
 
 Redis supports *optimistic locking* to avoid inconsistent updates
 to different keys. The basic idea is to watch for changes to any
-keys that you use in a transaction while you are are processing the
+keys that you use in a transaction while you are processing the
 updates. If the watched keys do change, you must restart the updates
 with the latest data from the keys. See
 [Transactions]({{< relref "develop/using-commands/transactions" >}})

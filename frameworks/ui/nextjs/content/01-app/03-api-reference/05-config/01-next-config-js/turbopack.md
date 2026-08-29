@@ -1,14 +1,15 @@
 ---
 type: "Framework Learn Page"
-framework: "nextjs"
+framework: "Next.js"
 source_repo: "https://github.com/vercel/next.js/"
 source_branch: "canary"
 source_path: "docs/01-app/03-api-reference/05-config/01-next-config-js/turbopack.mdx"
-source_commit: "dcf242a17b5d4622bbd9624db531a9d84177619f"
-source_commit_short: "dcf242a1"
-source_commit_date: "2026-07-25T10:16:19+02:00"
-generated_at: "2026-07-25T11:50:53Z"
+source_commit: "33a5d542e519fe4e05c8c8c2c2845da9f741699b"
+source_commit_short: "33a5d542"
+source_commit_date: "2026-08-29T00:04:45-07:00"
+generated_at: "2026-08-29T09:40:24.301745Z"
 ---
+# Turbopack
 
 ---
 title: turbopack
@@ -19,7 +20,7 @@ description: Configure Next.js with Turbopack-specific options
 
 The `turbopack` option lets you customize [Turbopack](/docs/app/api-reference/turbopack) to transform different files and change how modules are resolved.
 
-> **Good to know**: The `turbopack` option was previously named `experimental.turbo` in Next.js versions 13.0.0 to 15.2.x. The `experimental.turbo` option will be removed in Next.js 16.
+> **Good to know**: The `turbopack` option was previously named `experimental.turbo` in Next.js versions 13.0.0 to 15.2.x, an option which still works as an alias, but new configuration should use the top-level `turbopack` option.
 >
 > If you are using an older version of Next.js, run `npx @next/codemod@latest next-experimental-turbo-to-turbopack .` to automatically migrate your configuration.
 
@@ -305,9 +306,12 @@ Available module types:
 | `typescript` | Process as TypeScript                                    |
 | `css`        | Process as CSS                                           |
 | `css-module` | Process as CSS module                                    |
+| `json`       | Parse as JSON and export it                              |
 | `wasm`       | Process as WebAssembly                                   |
-| `raw`        | Return raw contents as string                            |
-| `bytes`      | Inline contents as bytes                                 |
+| `node`       | Process as a native Node.js addon                        |
+| `raw`        | Export the contents as a string (an alias of `text`)     |
+| `text`       | Export the contents as a string                          |
+| `bytes`      | Export the contents as a `Uint8Array`                    |
 
 ### Inline loader configuration with import attributes
 

@@ -1,43 +1,131 @@
 ---
 type: "Framework Learn Page"
-framework: "postgres"
+framework: "PostgreSQL"
 source_repo: "https://github.com/postgres/postgres.git"
 source_branch: "master"
 source_path: "doc/src/sgml/ref/pg_controldata.sgml"
-source_commit: "38afc3dcb25c45b744d4025029ce0a6c90b7059f"
-source_commit_short: "38afc3dc"
-source_commit_date: "2026-07-25T19:08:27+09:00"
-generated_at: "2026-07-25T11:50:59Z"
+source_commit: "6c5f1d6074208146930b67c2054509c3e82f6f7f"
+source_commit_short: "6c5f1d6"
+source_commit_date: "2026-08-28T23:24:47+02:00"
+generated_at: "2026-08-29T09:39:24.591525Z"
 ---
-
 pg_controldata
+ 
 
-`pg_controldata`
-1
-Application
+ 
+  
+# pg_controldata
 
-pg_controldata
-display control information of a PostgreSQL database cluster
+  1
+  Application
+ 
 
-`pg_controldata`
-`option`
+ 
+  
+# pg_controldata
 
-`-D`
-`--pgdata`
+  display control information of a PostgreSQL database cluster
+ 
 
-`datadir`
+ 
+  
+   pg_controldata
+   option
+   
+    
+     -D
+     --pgdata
+    
+    datadir
+   
+  
+ 
 
-## Description
+ 
+  
+# Description
 
-`pg_controldata` prints information initialized during `initdb`, such as the catalog version. It also shows information about write-ahead logging and checkpoint processing. This information is cluster-wide, and not specific to any one database.
+  
+   pg_controldata prints information initialized during
+   initdb, such as the catalog version.
+   It also shows information about write-ahead logging and checkpoint
+   processing.  This information is cluster-wide, and not specific to any one
+   database.
+  
 
-This utility can only be run by the user who initialized the cluster because it requires read access to the data directory. You can specify the data directory on the command line, or use the environment variable `PGDATA`.
+  
+   This utility can only be run by the user who initialized the cluster because
+   it requires read access to the data directory.
+   You can specify the data directory on the command line, or use
+   the environment variable PGDATA.
+  
 
-## Options
+ 
 
-- Specifies the directory where the database cluster is stored. - Print the `pg_controldata` version and exit. - Show help about `pg_controldata` command line arguments, and exit.
+ 
+  
+# Options
 
-## Environment
+   
+    
+     
+      -D datadir
+      --pgdata=datadir
+      
+       
+        Specifies the directory where the database cluster is stored.
+       
 
-- Default data directory location
-- Specifies whether to use color in diagnostic messages. Possible values are `always`, `auto` and `never`.
+      
+     
+
+     
+       -V
+       --version
+       
+       
+        Print the pg_controldata version and exit.
+       
+
+       
+     
+
+     
+      -?
+      --help
+       
+        
+         Show help about pg_controldata command line
+         arguments, and exit.
+        
+
+       
+      
+    
+   
+
+ 
+
+ 
+  
+# Environment
+
+  
+   
+    PGDATA
+
+    
+     
+      Default data directory location
+     
+
+    
+   
+
+   
+    PG_COLOR
+    
+     
+      Specifies whether to use color in diagnostic messages. Possible values
+      are always, auto and
+      never.

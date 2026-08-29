@@ -1,89 +1,166 @@
 ---
 type: "Framework Learn Page"
-framework: "mongodb"
+framework: "MongoDB"
 source_repo: "https://github.com/mongodb/docs.git"
 source_branch: "main"
 source_path: "content/manual/manual/source/reference/method/cursor.explain.txt"
-source_commit: "ab9db26ed3d11618cdb61516d8180337d8e3f679"
-source_commit_short: "ab9db26e"
-source_commit_date: "2026-07-24T16:22:46-06:00"
-generated_at: "2026-07-25T11:51:15Z"
+source_commit: "b9f2bc487a2878b65e3c1f80024bebab76954f27"
+source_commit_short: "b9f2bc48"
+source_commit_date: "2026-08-28T17:09:45-05:00"
+generated_at: "2026-08-29T09:39:19.956319Z"
 ---
-
-=================================
-
 # cursor.explain() (mongosh method)
+
+**meta:** :description: Discover how to use `cursor.explain()` to obtain query plan details and execution statistics for MongoDB queries.
+
+.. default-domain:: mongodb
+
+**contents:** On this page
+   :local:
+   :backlinks: none
+   :depth: 1
+   :class: singlecol
 
 ## Definition
 
-> **Note:** `cursor.explain()` defaults to `queryPlanner`, unlike
-the :dbcommand:`explain` command, which defaults to
-`allPlansExecution`.
+**method:** cursor.explain(verbosity)
+
+   .. include:: /includes/fact-mongosh-shell-method.rst
+
+   Provides information on the query plan for the
+   :method:`db.collection.find()` method.
+
+   The ``explain()`` method has the following form:
+
+   .. code-block:: javascript
+
+      db.collection.find().explain()
+
+   The ``explain()`` method has the following parameter:
+
+   .. list-table::
+      :header-rows: 1
+      :widths: 20 10 10 80
+   
+      * - Parameter
+        - Necessity
+        - Type
+        - Description
+   
+      * - ``verbose``
+        - Optional
+        - String
+        - Determines the amount of information to include in the explain
+          output. The possible verbosity modes are:
+          
+          - ``allPlansExecution``
+          - ``executionStats``
+          - ``queryPlanner`` (*Default*)
+          
+          For backwards compatibility with earlier versions of
+          ``explain()``, MongoDB interprets ``true`` as
+          ``allPlansExecution`` and ``false`` as ``queryPlanner``.
+          
+          For more information on the modes, see
+          :ref:`explain-cursor-method-verbosity`.
+
+
+   The :method:`~cursor.explain()` method returns a document with the
+   query plan and, optionally, the execution statistics.
+
+**note:** ``cursor.explain()`` defaults to ``queryPlanner``, unlike
+   the :dbcommand:`explain` command, which defaults to
+   ``allPlansExecution``.
 
 ## Compatibility
 
-This method is available in deployments hosted in the following environments:
+This method is available in deployments hosted in the following environments: 
 
-.. include:: /includes/fact-environments-atlas-only.rst
+**include:** /includes/fact-environments-atlas-only.rst
 
-.. include:: /includes/fact-environments-atlas-support-all.rst
+**include:** /includes/fact-environments-atlas-support-all.rst
 
-.. include:: /includes/fact-environments-onprem-only.rst
+**include:** /includes/fact-environments-onprem-only.rst
 
 ## Required Access
 
-.. include:: /includes/explain-required-access.rst
+**include:** /includes/explain-required-access.rst
 
 ## Behavior
 
-.. include:: includes/explain-ignores-cache-plan.rst
+**include:** includes/explain-ignores-cache-plan.rst
+
+.. _explain-cursor-method-verbosity:
 
 ### Verbosity Modes
 
-The behavior of :method:`cursor.explain()` and the amount of information returned depend on the `verbosity` mode.
+The behavior of :method:`cursor.explain()` and the amount of
+information returned depend on the ``verbosity`` mode.
 
-`queryPlanner` Mode ``````````````````````
+.. |explain| replace:: :method:`cursor.explain()`
+.. |operation| replace:: method
 
-By default, :method:`cursor.explain()` runs in `queryPlanner` verbosity mode.
+.. _explain-cursor-method-queryPlanner:
 
-.. include:: /includes/fact-explain-verbosity-queryPlanner.rst
+### ``queryPlanner`` Mode
 
-`executionStats` Mode ```````````````````````
+By default, :method:`cursor.explain()` runs in ``queryPlanner``
+verbosity mode.
 
-.. include:: /includes/fact-explain-verbosity-executionStats.rst
+**include:** /includes/fact-explain-verbosity-queryPlanner.rst
 
-.. include:: /includes/fact-explain-verbosity-executionStats.rst
+.. _explain-cursor-method-executionStats:
 
-`allPlansExecution` Mode ``````````````````````````
+### ``executionStats`` Mode
 
-.. include:: /includes/fact-explain-verbosity-allPlansExecution.rst
+**include:** /includes/fact-explain-verbosity-executionStats.rst
+   :end-before: start-explain-write
 
-.. include:: /includes/fact-explain-verbosity-allPlansExecution.rst
+**include:** /includes/fact-explain-verbosity-executionStats.rst
+   :start-after: end-explain-write
 
-### `db.collection.explain().find()`
+.. _explain-cursor-method-allPlansExecution:
 
-.. include:: /includes/fact-explain-methods-differences.rst
+### ``allPlansExecution`` Mode
+
+**include:** /includes/fact-explain-verbosity-allPlansExecution.rst
+   :end-before: start-explain-write
+
+**include:** /includes/fact-explain-verbosity-allPlansExecution.rst
+   :start-after: end-explain-write
+
+### ``db.collection.explain().find()``
+
+**include:** /includes/fact-explain-methods-differences.rst
 
 See :method:`db.collection.explain()` for more information.
 
 ### Sharded Clusters
 
-.. versionadded:: 8.3
+**versionadded:** 8.3
 
-If you run `cursor.explain()` against a database that does not exist on a sharded cluster, the execution stage reaches the end-of-stream and the operation does not create the database. For more information on end-of-stream execution stats, see `explain.executionStats.executionStages.isEOF`.
+If you run ``cursor.explain()`` against a database that does not exist on a
+sharded cluster, the execution stage reaches the end-of-stream and the operation
+does not create the database. For more information on end-of-stream execution
+stats, see :data:`explain.executionStats.executionStages.isEOF`. 
+
+.. _explain-cursor-method-output:
 
 ## Output
 
-.. include:: /includes/fact-explain-results-categories.rst
+**include:** /includes/fact-explain-results-categories.rst
 
-For details on the output, see `/reference/explain-results`.
+For details on the output, see :doc:`/reference/explain-results`.
 
 ## Example
 
-The following example runs :method:`cursor.explain()` in `"executionStats" <explain-method-executionStats>` verbosity mode to return the query planning and execution information for the specified :method:`db.collection.find()` operation:
+The following example runs :method:`cursor.explain()` in
+:ref:`"executionStats" <explain-method-executionStats>` verbosity mode
+to return the query planning and execution information for the
+specified :method:`db.collection.find()` operation:
 
-```javascript
-db.products.find(
-   { quantity: { $gt: 50 }, category: "apparel" }
-).explain("executionStats")
-```
+.. code-block:: javascript
+
+   db.products.find(
+      { quantity: { $gt: 50 }, category: "apparel" }
+   ).explain("executionStats")

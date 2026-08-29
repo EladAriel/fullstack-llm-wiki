@@ -1,65 +1,124 @@
 ---
 type: "Framework Learn Page"
-framework: "mongodb"
+framework: "MongoDB"
 source_repo: "https://github.com/mongodb/docs.git"
 source_branch: "main"
 source_path: "content/manual/manual/source/reference/operator/aggregation/radiansToDegrees.txt"
-source_commit: "ab9db26ed3d11618cdb61516d8180337d8e3f679"
-source_commit_short: "ab9db26e"
-source_commit_date: "2026-07-24T16:22:46-06:00"
-generated_at: "2026-07-25T11:51:15Z"
+source_commit: "b9f2bc487a2878b65e3c1f80024bebab76954f27"
+source_commit_short: "b9f2bc48"
+source_commit_date: "2026-08-28T17:09:45-05:00"
+generated_at: "2026-08-29T09:39:20.146988Z"
 ---
-
-=======================================
-
 # $radiansToDegrees (expression operator)
+
+**meta:** :description: Convert radians to degrees using the `$radiansToDegrees` aggregation operator, handling `null`, `NaN`, and infinity values.
+
+.. default-domain:: mongodb
+
+**contents:** On this page
+   :local:
+   :backlinks: none
+   :depth: 1
+   :class: singlecol
 
 ## Definition
 
+**expression:** $radiansToDegrees
+
+   Converts an input value measured in radians to degrees.
+
+   :expression:`$radiansToDegrees` has the following syntax:
+
+   .. code-block:: javascript
+
+      { $radiansToDegrees: <expression> }
+
+   :expression:`$radiansToDegrees` takes any valid :ref:`expression
+   <aggregation-expressions>` that resolves to a number.
+
+   By default :expression:`$radiansToDegrees` returns values as a
+   ``double``. :expression:`$radiansToDegrees` can also return values
+   as a :ref:`128-bit decimal <shell-type-decimal>` as long as the
+   ``<expression>`` resolves to a 128-bit decimal value.
+
+   For more information on expressions, see 
+   :ref:`aggregation-expressions`.
+
 ## Behavior
 
-### `null`, `NaN`, and `+/- Infinity`
+### ``null``, ``NaN``, and ``+/- Infinity``
 
-If the argument resolves to a value of `null` or refers to a field that is missing, :expression:`$radiansToDegrees` returns `null`. If the argument resolves to `NaN`, :expression:`$radiansToDegrees` returns `NaN`. If the argument resolves to negative or positive infinity, :expression:`$radiansToDegrees` negative or positive infinity respectively.
+If the argument resolves to a value of ``null`` or refers to a field
+that is missing, :expression:`$radiansToDegrees` returns ``null``. If
+the argument resolves to ``NaN``, :expression:`$radiansToDegrees`
+returns ``NaN``. If the argument resolves to negative or positive
+infinity, :expression:`$radiansToDegrees` negative or positive infinity
+respectively.
+
+.. list-table::
+   :header-rows: 1
+   :widths: 85 15
+
+   * - Example
+     - Results
+
+   * - ``{ $radiansToDegrees: NaN }``
+     - ``NaN``
+
+   * - ``{ $radiansToDegrees: null }``
+     - ``null``
+
+   * - ``{ $radiansToDegrees : Infinity}``
+     - ``Infinity``
+
+   * - ``{ $radiansToDegrees : -Infinity }``
+     - ``-Infinity``
 
 ## Example
 
-The `trigonometry` collection contains a document that contains three angles measured in radians:
+The ``trigonometry`` collection contains a document that contains
+three angles measured in radians:
 
-```json
-{
-  "angle_a" : Decimal128("0.9272952180016122324285124629224290"),
-  "angle_b" : Decimal128("0.6435011087932843868028092287173227"),
-  "angle_c" : Decimal128("1.570796326794896619231321691639752")
-}
-```
+.. code-block:: json
 
-The following aggregation operation uses the :expression:`$radiansToDegrees` expression to convert each value to its degree equivalent and add them to the input document using the :pipeline:`$addFields` pipeline stage.
+   {
+     "angle_a" : Decimal128("0.9272952180016122324285124629224290"),
+     "angle_b" : Decimal128("0.6435011087932843868028092287173227"),
+     "angle_c" : Decimal128("1.570796326794896619231321691639752")
+   }
 
-```bash
-db.trigangles.aggregate([
-  {
-    $addFields: {
-      "angle_a_deg" : { $radiansToDegrees : "$angle_a"},
-      "angle_b_deg" : { $radiansToDegrees : "$angle_b"},
-      "angle_c_deg" : { $radiansToDegrees : "$angle_c"}
-    }
-  }
-])
-```
+The following aggregation operation uses the 
+:expression:`$radiansToDegrees` expression to convert each value to
+its degree equivalent and add them to the input document using the 
+:pipeline:`$addFields` pipeline stage.
+
+.. code-block:: bash
+
+   db.trigangles.aggregate([
+     {
+       $addFields: {
+         "angle_a_deg" : { $radiansToDegrees : "$angle_a"},
+         "angle_b_deg" : { $radiansToDegrees : "$angle_b"},
+         "angle_c_deg" : { $radiansToDegrees : "$angle_c"}
+       }
+     }
+   ])
 
 The operation returns the following document:
 
-```bash
-{
-  "_id" : ObjectId("5c50aec71c75c59232b3ede4"),
-  "angle_a" : Decimal128("0.9272952180016122324285124629224290"),
-  "angle_b" : Decimal128("0.6435011087932843868028092287173227"),
-  "angle_c" : Decimal128("1.570796326794896619231321691639752"),
-  "angle_a_deg" : Decimal128("53.13010235415597870314438744090659"),
-  "angle_b_deg" : Decimal128("36.86989764584402129685561255909341"),
-  "angle_c_deg" : Decimal128("90.00000000000000000000000000000000")
-}
-```
+.. code-block:: bash
+   :copyable: false
 
-Since `angle_a`, `angle_b`, and `angle_c` are stored as `128-bit decimals <shell-type-decimal>`, the output of :expression:`$radiansToDegrees` is a 128-bit decimal.
+   {
+     "_id" : ObjectId("5c50aec71c75c59232b3ede4"),
+     "angle_a" : Decimal128("0.9272952180016122324285124629224290"),
+     "angle_b" : Decimal128("0.6435011087932843868028092287173227"),
+     "angle_c" : Decimal128("1.570796326794896619231321691639752"),
+     "angle_a_deg" : Decimal128("53.13010235415597870314438744090659"),
+     "angle_b_deg" : Decimal128("36.86989764584402129685561255909341"),
+     "angle_c_deg" : Decimal128("90.00000000000000000000000000000000")
+   }
+
+Since ``angle_a``, ``angle_b``, and ``angle_c`` are stored as 
+:ref:`128-bit decimals <shell-type-decimal>`, the output of 
+:expression:`$radiansToDegrees` is a 128-bit decimal. 

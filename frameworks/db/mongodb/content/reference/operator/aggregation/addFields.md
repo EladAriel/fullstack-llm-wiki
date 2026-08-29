@@ -1,64 +1,254 @@
 ---
 type: "Framework Learn Page"
-framework: "mongodb"
+framework: "MongoDB"
 source_repo: "https://github.com/mongodb/docs.git"
 source_branch: "main"
 source_path: "content/manual/manual/source/reference/operator/aggregation/addFields.txt"
-source_commit: "ab9db26ed3d11618cdb61516d8180337d8e3f679"
-source_commit_short: "ab9db26e"
-source_commit_date: "2026-07-24T16:22:46-06:00"
-generated_at: "2026-07-25T11:51:15Z"
+source_commit: "b9f2bc487a2878b65e3c1f80024bebab76954f27"
+source_commit_short: "b9f2bc48"
+source_commit_date: "2026-08-28T17:09:45-05:00"
+generated_at: "2026-08-29T09:39:20.180152Z"
 ---
-
-==============================
-
 # $addFields (aggregation stage)
+
+.. default-domain:: mongodb
+
+**facet:** :name: programming_language
+   :values: shell
+
+**meta:** :description: Use the $addFields aggregation stage to add or overwrite fields in documents, update embedded subdocuments with dot notation, and remove fields using $$REMOVE.
+
+**contents:** On this page
+   :local:
+   :backlinks: none
+   :depth: 1
+   :class: singlecol
 
 ## Definition
 
+**pipeline:** $addFields
+
+   Adds new fields to documents. ``$addFields`` outputs documents that
+   contain all existing fields from the input documents and newly
+   added fields.
+
+   The :pipeline:`$addFields` stage is equivalent to a
+   :pipeline:`$project` stage that explicitly specifies all existing
+   fields in the input documents and adds the new fields.
+   
+   .. note::
+   
+      You can also use the :pipeline:`$set` stage, which is an alias for
+      :pipeline:`$addFields`.
+
 ## Compatibility
 
-.. include:: /includes/fact-compatibility.rst
+.. |operator-method| replace:: ``$addFields``
+
+**include:** /includes/fact-compatibility.rst
 
 ## Syntax
 
 The stage has the following syntax:
 
-```javascript
-{ $addFields: { <newField>: <expression>, ... } }
-```
+.. code-block:: javascript
 
-Specify the name of each field to add and set its value to an `aggregation expression <aggregation-expressions>` or an empty object.
+   { $addFields: { <newField>: <expression>, ... } }
 
-> **Important:** If the name of the new field is the same as an existing field name
-(including `_id`), `$addFields` overwrites the existing value
-of that field with the value of the specified expression.
+Specify the name of each field to add and set its value to an
+:ref:`aggregation expression <aggregation-expressions>` or an empty
+object.
+
+**important:** If the name of the new field is the same as an existing field name
+   (including ``_id``), ``$addFields`` overwrites the existing value
+   of that field with the value of the specified expression.
 
 ## Behavior
 
-- `$addFields` appends new fields to existing documents. You can
-include one or more `$addFields` stages in an aggregation operation.
+- ``$addFields`` appends new fields to existing documents. You can
+  include one or more ``$addFields`` stages in an aggregation operation.
 
-- `$addFields` accepts the embedding of objects where you can set a value to
-an aggregation expression or to an empty object. For example, the following nested objects are accepted:
+- ``$addFields`` accepts the embedding of objects where you can set a value to
+  an aggregation expression or to an empty object. For example, the following
+  nested objects are accepted:
 
-```javascript
-  {$addFields: { a: { b: { } } } }
+  .. code-block:: javascript
 
-To add a field or fields to embedded documents (including documents in
-arrays) use the dot notation. See :ref:`example
-<add-field-to-embedded>`.
-```
+     {$addFields: { a: { b: { } } } }
+
+  To add a field or fields to embedded documents (including documents in
+  arrays) use the dot notation. See :ref:`example
+  <add-field-to-embedded>`.
 
 - To add an element to an existing array field with
-:pipeline:`$addFields`, use :expression:`$concatArrays`. See `example <addFields-add-element-to-array>`.
+  :pipeline:`$addFields`, use :expression:`$concatArrays`. See
+  :ref:`example <addFields-add-element-to-array>`.
 
 ## Examples
 
-> **Tip:** .. include:: /includes/aggregation/agg-project-remove-fields-compare.rst
-For an example using `$$REMOVE` in a `$project` stage, see
-`remove-example`.
+.. tabs-drivers::
+
+   .. tab::
+      :tabid: shell
+
+      .. include:: /includes/sample-data-usage.rst
+
+### Using Two ``$addFields`` Stages
+
+      The following operation uses two
+      :pipeline:`$addFields` stages to first convert runtime to
+      hours, then compute a licensing fee at $0.50 per hour:
+
+      .. io-code-block::
+         :copyable: true
+
+         .. input:: /code-examples/tested/command-line/mongosh/aggregation/stages/add-fields/two-stages.snippet.add-fields-two-stages.js
+            :language: javascript
+            :category: usage example
+
+         .. output:: /code-examples/tested/command-line/mongosh/aggregation/stages/add-fields/two-stages-output.sh
+            :language: javascript
+
+### Adding Fields to an Embedded Document
+
+      .. _add-field-to-embedded:
+
+      Use dot notation to add new fields to embedded documents.
+
+      The following aggregation operation
+      adds a ``certified`` field to the embedded ``imdb`` document
+      in each movie:
+
+      .. io-code-block::
+         :copyable: true
+
+         .. input:: /code-examples/tested/command-line/mongosh/aggregation/stages/add-fields/embedded-doc.snippet.add-fields-embedded-doc.js
+            :language: javascript
+            :category: usage example
+
+         .. output:: /code-examples/tested/command-line/mongosh/aggregation/stages/add-fields/embedded-doc-output.sh
+            :language: javascript
+
+### Overwriting an Existing Field
+
+      Specifying an existing field name in an ``$addFields`` operation
+      causes the original field to be replaced.
+
+      The following
+      ``$addFields`` operation overwrites the ``runtime`` field
+      to add 15 minutes:
+
+      .. io-code-block::
+         :copyable: true
+
+         .. input:: /code-examples/tested/command-line/mongosh/aggregation/stages/add-fields/overwrite-field.snippet.add-fields-overwrite.js
+            :language: javascript
+            :category: usage example
+
+         .. output:: /code-examples/tested/command-line/mongosh/aggregation/stages/add-fields/overwrite-field-output.sh
+            :language: javascript
+
+      You can also replace one field with another. The following operation sets
+      ``_id`` to the movie's title and replaces the ``title`` field with the
+      movie's primary genre:
+
+      .. io-code-block::
+         :copyable: true
+
+         .. input:: /code-examples/tested/command-line/mongosh/aggregation/stages/add-fields/field-substitution.snippet.add-fields-field-substitution.js
+            :language: javascript
+            :category: usage example
+
+         .. output:: /code-examples/tested/command-line/mongosh/aggregation/stages/add-fields/field-substitution-output.sh
+            :language: javascript
+
+      .. _addFields-add-element-to-array:
+
+### Add Element to an Array
+
+      You can use :pipeline:`$addFields` with a
+      :expression:`$concatArrays` expression to add an element to an
+      existing array field. The following operation appends ``Epic`` to the
+      ``genres`` array of movies with the title ``Centennial``:
+
+      .. io-code-block::
+         :copyable: true
+
+         .. input:: /code-examples/tested/command-line/mongosh/aggregation/stages/add-fields/add-to-array.snippet.add-fields-add-to-array.js
+            :language: javascript
+            :category: usage example
+
+         .. output:: /code-examples/tested/command-line/mongosh/aggregation/stages/add-fields/add-to-array-output.sh
+            :language: javascript
+
+      .. _addFields-remove-example:
+
+### Remove Fields
+
+      You can use ``$addFields`` with the :variable:`$$REMOVE <REMOVE>`
+      variable to remove document fields.
+
+      The following operation uses ``$addFields`` to
+      remove the ``plot`` field with the ``$$REMOVE`` variable:
+
+      .. io-code-block::
+         :copyable: true
+
+         .. input:: /code-examples/tested/command-line/mongosh/aggregation/stages/add-fields/remove-field.snippet.add-fields-remove-field.js
+            :language: javascript
+            :category: usage example
+
+         .. output:: /code-examples/tested/command-line/mongosh/aggregation/stages/add-fields/remove-field-output.sh
+            :language: javascript
+
+      You can also use ``$$REMOVE`` to conditionally remove fields. For
+      example, the following aggregation removes the ``rated`` field from
+      documents where ``rated`` is ``null``:
+
+      .. io-code-block::
+         :copyable: true
+
+         .. input:: /code-examples/tested/command-line/mongosh/aggregation/stages/add-fields/remove-field-conditional.snippet.add-fields-remove-field-conditional.js
+            :language: javascript
+            :category: usage example
+
+         .. output:: /code-examples/tested/command-line/mongosh/aggregation/stages/add-fields/remove-field-conditional-output.sh
+            :language: javascript
+
+   .. tab::
+      :tabid: nodejs
+
+      .. include:: /includes/driver-examples/node/aggregation/sample-mflix.rst
+
+      .. include:: /includes/driver-examples/node/aggregation/stage-intro.rst
+
+         .. replacement:: stage-name
+
+            ``$addFields``
+
+         .. replacement:: stage-specific-info
+
+         .. replacement:: method-description
+
+               adds a ``totalReviews`` field to each movie document, which
+               contains the movie's total number of reviews
+
+         .. replacement:: more-method-description
+         
+      .. literalinclude:: /includes/driver-examples/node/aggregation/examples.js
+         :language: javascript
+         :dedent: 2
+         :start-after: //start addFields
+         :end-before: //end addFields
+
+**tip:** Comparison with $project
+
+   .. include:: /includes/aggregation/agg-project-remove-fields-compare.rst
+
+   For an example using ``$$REMOVE`` in a ``$project`` stage, see
+   :ref:`remove-example`.
 
 ## Learn More
 
-To learn more about related pipeline stages, see the :pipeline:`$project` and :pipeline:`$set` guides.
+To learn more about related pipeline stages, see the :pipeline:`$project` and
+:pipeline:`$set` guides.

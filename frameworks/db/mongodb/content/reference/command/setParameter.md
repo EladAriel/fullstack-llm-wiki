@@ -1,48 +1,71 @@
 ---
 type: "Framework Learn Page"
-framework: "mongodb"
+framework: "MongoDB"
 source_repo: "https://github.com/mongodb/docs.git"
 source_branch: "main"
 source_path: "content/manual/manual/source/reference/command/setParameter.txt"
-source_commit: "ab9db26ed3d11618cdb61516d8180337d8e3f679"
-source_commit_short: "ab9db26e"
-source_commit_date: "2026-07-24T16:22:46-06:00"
-generated_at: "2026-07-25T11:51:15Z"
+source_commit: "b9f2bc487a2878b65e3c1f80024bebab76954f27"
+source_commit_short: "b9f2bc48"
+source_commit_date: "2026-08-28T17:09:45-05:00"
+generated_at: "2026-08-29T09:39:20.067674Z"
 ---
-
-===============================
-
 # setParameter (database command)
 
+**meta:** :description: Modify server options with the `setParameter` command, which must be issued against the admin database and does not persist after server restarts.
+
+.. default-domain:: mongodb
+
+**contents:** On this page
+   :local:
+   :backlinks: none
+   :depth: 1
+   :class: singlecol
+
 ## Definition
+   
+
+**dbcommand:** setParameter
+
+   :dbcommand:`setParameter` is an administrative command for
+   modifying options normally set on the command line. You must issue
+   the :dbcommand:`setParameter` command against the :term:`admin 
+   database`.
 
 ## Compatibility
 
-This command is available in deployments hosted in the following environments:
+This command is available in deployments hosted in the following environments: 
 
-.. include:: /includes/fact-environments-onprem-only.rst
+**include:** /includes/fact-environments-onprem-only.rst
 
-.. include:: /includes/fact-environments-no-atlas-support.rst
+**include:** /includes/fact-environments-no-atlas-support.rst
 
 ## Syntax
 
-```javascript
-db.adminCommand( 
-   { 
-     setParameter: 1, 
-     <parameter>: <value> 
-   } 
-)
-```
+.. code-block:: javascript
 
-For the available parameters, including examples, see `/reference/parameters`.
+   db.adminCommand( 
+      { 
+        setParameter: 1, 
+        <parameter>: <value> 
+      } 
+   )
+
+For the available parameters, including examples, see
+:doc:`/reference/parameters`.
+
+.. _setParameter-commands-not-persistent:
 
 ## Behavior
 
 ### Persistence
 
-Commands issued by the admin command :dbcommand:`setParameter` do not survive server restarts. For a persistent option use the :option:`--setParameter <mongod --setParameter>` command line option or the :setting:`setParameter` configuration file setting.
+Commands issued by the admin command :dbcommand:`setParameter`
+do not survive server restarts. For a persistent option use the
+:option:`--setParameter <mongod --setParameter>` command line option 
+or the :setting:`setParameter` configuration file setting.
 
 ### Stable API
 
-When using `Stable API <stable-api>` V1 with `apiStrict <api-strict-desc>` set to `true`, you cannot use :dbcommand:`setParameter` to modify server parameters.
+When using :ref:`Stable API <stable-api>` V1 with :ref:`apiStrict
+<api-strict-desc>` set to ``true``, you cannot use
+:dbcommand:`setParameter` to modify server parameters.

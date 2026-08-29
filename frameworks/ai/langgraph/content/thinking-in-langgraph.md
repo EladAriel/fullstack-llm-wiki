@@ -4,12 +4,11 @@ framework: "LangGraph"
 source_repo: "https://github.com/langchain-ai/docs"
 source_branch: "main"
 source_path: "src/oss/langgraph/thinking-in-langgraph.mdx"
-source_commit: "2aae1dfc98ee953a9a5185fb6fcdd9efb3f4d878"
-source_commit_short: "2aae1dfc"
-source_commit_date: "2026-07-25T00:27:23Z"
-generated_at: "2026-07-25T11:51:08Z"
+source_commit: "a174f9cf7c91ee5eb14ee2382eb48bfe6e4956e9"
+source_commit_short: "a174f9c"
+source_commit_date: "2026-08-28T17:04:12-07:00"
+generated_at: "2026-08-29T09:38:45.960505Z"
 ---
-
 ---
 title: Thinking in LangGraph
 description: Learn how to think about building agents with LangGraph
@@ -408,7 +407,9 @@ Different errors need different handling strategies:
     from langgraph.types import Command
 
 
-    def lookup_customer_history(state: State) -> Command[Literal["draft_response"]]:
+    def lookup_customer_history(
+        state: State
+    ) -> Command[Literal["lookup_customer_history", "draft_response"]]:
         if not state.get('customer_id'):
             user_input = interrupt({
                 "message": "Customer ID needed",
@@ -515,6 +516,8 @@ Different errors need different handling strategies:
         error_handler=payment_error_handler,
     )
     ```
+
+    To apply the same `retry_policy`, `timeout`, or `error_handler` to every node in a graph without repeating them on each `add_node`, use `StateGraph.set_node_defaults(...)`. Per-node values still take precedence. See [Fault tolerance](/oss/langgraph/fault-tolerance#graph-defaults).
 
     :::
 

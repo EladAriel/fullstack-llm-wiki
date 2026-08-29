@@ -1,305 +1,340 @@
 ---
 type: "Framework Learn Page"
-framework: "mongodb"
+framework: "MongoDB"
 source_repo: "https://github.com/mongodb/docs.git"
 source_branch: "main"
 source_path: "content/manual/manual/source/reference/mql/expressions.txt"
-source_commit: "ab9db26ed3d11618cdb61516d8180337d8e3f679"
-source_commit_short: "ab9db26e"
-source_commit_date: "2026-07-24T16:22:46-06:00"
-generated_at: "2026-07-25T11:51:15Z"
+source_commit: "b9f2bc487a2878b65e3c1f80024bebab76954f27"
+source_commit_short: "b9f2bc48"
+source_commit_date: "2026-08-28T17:09:45-05:00"
+generated_at: "2026-08-29T09:39:19.863657Z"
 ---
-
-===========
+.. _operator-ref-landing:
+.. _expressions-ref-landing:
+.. _aggregation-expressions:
+.. _aggregation-expression-operators:
+.. _aggregation-pipeline-operators:
+.. _agg-quick-ref-operator-expressions:
 
 # Expressions
 
-Expressions are :abbr:`MQL (MongoDB Query Language)` components that resolve to a value without modifying their inputs. You can use them in the following contexts:
+**meta:** :description: Explore MongoDB expressions for query and aggregation operations. Learn how to use field paths, aggregation variables, literals, and expression objects.
+
+**contents:** On this page
+   :local:
+   :backlinks: none
+   :depth: 1
+   :class: singlecol
+
+Expressions are :abbr:`MQL (MongoDB Query Language)` components that
+resolve to a value without modifying their inputs. You can use them
+in the following contexts:
 
 - Some aggregation pipeline stages, such as :pipeline:`$project`,
-:pipeline:`$addFields`, and :pipeline:`$group`
+  :pipeline:`$addFields`, and :pipeline:`$group`
+  
+- :term:`Query predicates <query predicate>` that use :query:`$expr`
 
-- `Query predicates <query predicate>` that use :query:`$expr`
-- Find command `projections <read-operations-projection>`
-.. include:: /includes/expression-components.rst
+- Find command :ref:`projections <read-operations-projection>`
 
-Expression operators take an array of arguments and have the following form:
+**include:** /includes/expression-components.rst
 
-```javascript
-{ <operator>: [ <argument1>, <argument2> ... ] }
-```
+Expression operators take an array of arguments and have the following
+form:
 
-If an operator accepts a single argument, you can omit the outer array:
+.. code-block:: javascript
 
-```javascript
-{ <operator>: <argument> }
-```
+   { <operator>: [ <argument1>, <argument2> ... ] }
+
+If an operator accepts a single argument, you can omit the outer
+array:
+
+.. code-block:: javascript
+
+   { <operator>: <argument> }
+
+.. _agg-quick-ref-operator-arithmetic:
 
 ## Arithmetic Operators
 
-.. include:: /includes/extracts/agg-operators-arithmetic.rst
+**include:** /includes/extracts/agg-operators-arithmetic.rst
+
+.. _agg-quick-ref-operator-array:
 
 ## Array Operators
 
-.. include:: /includes/extracts/agg-operators-array.rst
+**include:** /includes/extracts/agg-operators-array.rst
 
 ## Bitwise Operators
 
-.. include:: /includes/bitwise-operators.rst
+**include:** /includes/bitwise-operators.rst
 
 ## Boolean Operators
 
-.. include:: /includes/extracts/agg-operators-boolean.rst
+**include:** /includes/extracts/agg-operators-boolean.rst
+
+.. _aggregation-comparison-operators:
 
 ## Comparison Operators
 
-.. include:: /includes/extracts/agg-operators-comparison.rst
+**include:** /includes/extracts/agg-operators-comparison.rst
+
+.. _aggregation-conditional-expression-operators:
 
 ## Conditional Operators
 
-.. include:: /includes/extracts/agg-operators-conditional.rst
+**include:** /includes/extracts/agg-operators-conditional.rst
 
 ## Custom Aggregation Operators
 
-.. include:: /includes/extracts/agg-operators-custom-aggregation.rst
+**include:** /includes/extracts/agg-operators-custom-aggregation.rst
 
 ## Data Size Operators
 
-.. include:: /includes/extracts/agg-operators-data-size.rst
+**include:** /includes/extracts/agg-operators-data-size.rst
+
+.. _agg-qr-date-operators:
 
 ## Date Operators
 
-.. include:: /includes/extracts/agg-operators-date.rst
+**include:** /includes/extracts/agg-operators-date.rst
 
 ## Expressions Associated with Accumulators
 
-Some :pipeline:`$group` accumulators are also available as expressions that compute a value over input arguments or an input array.
+Some :pipeline:`$group` accumulators are also available as expressions
+that compute a value over input arguments or an input array.
 
-.. include:: /includes/agg-operators-accumulators-project.rst
+**include:** /includes/agg-operators-accumulators-project.rst
+
 
 ## Literal Expression Operators
 
-.. include:: /includes/extracts/agg-operators-literal.rst
+**include:** /includes/extracts/agg-operators-literal.rst
 
 ## Miscellaneous Operators
 
-.. include:: /includes/extracts/agg-operators-miscellaneous.rst
+**include:** /includes/extracts/agg-operators-miscellaneous.rst
 
 ## Object Operators
 
-.. include:: /includes/extracts/agg-operators-objects.rst
+**include:** /includes/extracts/agg-operators-objects.rst
+
+.. _agg-qr-set-operators:
 
 ## Set Operators
 
-.. include:: /includes/extracts/agg-operators-set.rst
+**include:** /includes/extracts/agg-operators-set.rst
 
 ## String Operators
 
-.. include:: /includes/extracts/agg-operators-string.rst
+**include:** /includes/extracts/agg-operators-string.rst
+
+.. _qe-aggregation-operators:
 
 ### Encrypted String Operators
 
-.. include:: /includes/aggregation/agg-operators-encrypted.rst
+**include:** /includes/aggregation/agg-operators-encrypted.rst
 
 ## Text Operators
 
-.. include:: /includes/extracts/agg-operators-text.rst
+**include:** /includes/extracts/agg-operators-text.rst
 
 ## Timestamp Operators
 
-.. include:: /includes/extracts/agg-operators-timestamp.rst
+**include:** /includes/extracts/agg-operators-timestamp.rst
 
 ## Trigonometry Operators
 
-.. include:: /includes/extracts/agg-operators-trigonometry.rst
+**include:** /includes/extracts/agg-operators-trigonometry.rst
 
 ## Type Operators
 
-.. include:: /includes/extracts/agg-operators-type.rst
+**include:** /includes/extracts/agg-operators-type.rst
 
 ## Variable Operators
 
-.. include:: /includes/extracts/agg-operators-variable-project.rst
+**include:** /includes/extracts/agg-operators-variable-project.rst
 
 ## Vector Similarity Operators
 
-.. include:: /includes/extracts/agg-operators-vector-similarity.rst
+**include:** /includes/extracts/agg-operators-vector-similarity.rst
 
 ## Window Operators
 
-.. include:: /includes/extracts/agg-operators-window.rst
+**include:** /includes/extracts/agg-operators-window.rst
 
-## Contents
+**toctree:** :titlesonly: 
+   :hidden: 
 
-- $abs </reference/operator/aggregation/abs>
-- $acos </reference/operator/aggregation/acos>
-- $acosh </reference/operator/aggregation/acosh>
-- $add </reference/operator/aggregation/add>
-- $allElementsTrue </reference/operator/aggregation/allElementsTrue>
-- $and </reference/operator/aggregation/and>
-- $anyElementTrue </reference/operator/aggregation/anyElementTrue>
-- $arrayElemAt </reference/operator/aggregation/arrayElemAt>
-- $arrayToObject </reference/operator/aggregation/arrayToObject>
-- $asin </reference/operator/aggregation/asin>
-- $asinh </reference/operator/aggregation/asinh>
-- $atan </reference/operator/aggregation/atan>
-- $atan2 </reference/operator/aggregation/atan2>
-- $atanh </reference/operator/aggregation/atanh>
-- $binarySize </reference/operator/aggregation/binarySize>
-- $bitAnd </reference/operator/aggregation/bitAnd>
-- $bitNot </reference/operator/aggregation/bitNot>
-- $bitOr </reference/operator/aggregation/bitOr>
-- $bitXor </reference/operator/aggregation/bitXor>
-- $bottom </reference/operator/bottom>
-- $bottomN </reference/operator/bottomN>
-- $bsonSize </reference/operator/aggregation/bsonSize>
-- $ceil </reference/operator/aggregation/ceil>
-- $cmp </reference/operator/aggregation/cmp>
-- $concat </reference/operator/aggregation/concat>
-- $concatArrays </reference/operator/aggregation/concatArrays>
-- $cond </reference/operator/aggregation/cond>
-- $convert </reference/operator/aggregation/convert>
-- $cos </reference/operator/aggregation/cos>
-- $cosh </reference/operator/aggregation/cosh>
-- $covariancePop </reference/operator/aggregation/covariancePop>
-- $covarianceSamp </reference/operator/aggregation/covarianceSamp>
-- $createObjectId </reference/operator/aggregation/createObjectId>
-- $dateAdd </reference/operator/aggregation/dateAdd>
-- $dateDiff </reference/operator/aggregation/dateDiff>
-- $dateFromParts </reference/operator/aggregation/dateFromParts>
-- $dateFromString </reference/operator/aggregation/dateFromString>
-- $dateSubtract </reference/operator/aggregation/dateSubtract>
-- $dateToParts </reference/operator/aggregation/dateToParts>
-- $dateToString <reference/operator/aggregation/dateToString>
-- $dateTrunc </reference/operator/aggregation/dateTrunc>
-- $dayOfMonth </reference/operator/aggregation/dayOfMonth>
-- $dayOfWeek </reference/operator/aggregation/dayOfWeek>
-- $dayOfYear </reference/operator/aggregation/dayOfYear>
-- $degreesToRadians </reference/operator/aggregation/degreesToRadians>
-- $denseRank </reference/operator/aggregation/denseRank>
-- $derivative </reference/operator/aggregation/derivative>
-- $deserializeEJSON </reference/operator/aggregation/deserializeEJSON>
-- $divide </reference/operator/aggregation/divide>
-- $documentNumber </reference/operator/aggregation/documentNumber>
-- $encStrContains </reference/operator/aggregation/encStrContains>
-- $encStrEndsWith </reference/operator/aggregation/encStrEndsWith>
-- $encStrNormalizedEq </reference/operator/aggregation/encStrNormalizedEq>
-- $encStrStartsWith </reference/operator/aggregation/encStrStartsWith>
-- $eq </reference/operator/aggregation/eq>
-- $exp </reference/operator/aggregation/exp>
-- $expMovingAvg </reference/operator/aggregation/expMovingAvg>
-- $filter </reference/operator/aggregation/filter>
-- $floor </reference/operator/aggregation/floor>
-- $function </reference/operator/aggregation/function>
-- $getField </reference/operator/aggregation/getField>
-- $gt </reference/operator/aggregation/gt>
-- $gte </reference/operator/aggregation/gte>
-- $hash </reference/operator/aggregation/hash>
-- $hexHash </reference/operator/aggregation/hexHash>
-- $hour </reference/operator/aggregation/hour>
-- $ifNull </reference/operator/aggregation/ifNull>
-- $in </reference/operator/aggregation/in>
-- $indexOfArray </reference/operator/aggregation/indexOfArray>
-- $indexOfBytes </reference/operator/aggregation/indexOfBytes>
-- $indexOfCP </reference/operator/aggregation/indexOfCP>
-- $integral </reference/operator/aggregation/integral>
-- $isArray </reference/operator/aggregation/isArray>
-- $isNumber </reference/operator/aggregation/isNumber>
-- $isoDayOfWeek </reference/operator/aggregation/isoDayOfWeek>
-- $isoWeek </reference/operator/aggregation/isoWeek>
-- $isoWeekYear </reference/operator/aggregation/isoWeekYear>
-- $let </reference/operator/aggregation/let>
-- $linearFill </reference/operator/aggregation/linearFill>
-- $literal </reference/operator/aggregation/literal>
-- $ln </reference/operator/aggregation/ln>
-- $locf </reference/operator/aggregation/locf>
-- $log </reference/operator/aggregation/log>
-- $log10 </reference/operator/aggregation/log10>
-- $lt </reference/operator/aggregation/lt>
-- $lte </reference/operator/aggregation/lte>
-- $ltrim </reference/operator/aggregation/ltrim>
-- $map </reference/operator/aggregation/map>
-- $maxN-array-element </reference/operator/aggregation/maxN-array-element>
-- $meta </reference/operator/aggregation/meta>
-- $minN-array-element </reference/operator/aggregation/minN-array-element>
-- $millisecond </reference/operator/aggregation/millisecond>
-- $minMaxScaler </reference/operator/aggregation/minMaxScaler>
-- $minute </reference/operator/aggregation/minute>
-- $mod </reference/operator/aggregation/mod>
-- $month </reference/operator/aggregation/month>
-- $multiply </reference/operator/aggregation/multiply>
-- $ne </reference/operator/aggregation/ne>
-- $not </reference/operator/aggregation/not>
-- $objectToArray </reference/operator/aggregation/objectToArray>
-- $or </reference/operator/aggregation/or>
-- $pow </reference/operator/aggregation/pow>
-- $radiansToDegrees </reference/operator/aggregation/radiansToDegrees>
-- $rand </reference/operator/aggregation/rand>
-- $range </reference/operator/aggregation/range>
-- $rank </reference/operator/aggregation/rank>
-- $reduce </reference/operator/aggregation/reduce>
-- $regexFind </reference/operator/aggregation/regexFind>
-- $regexFindAll </reference/operator/aggregation/regexFindAll>
-- $regexMatch </reference/operator/aggregation/regexMatch>
-- $replaceOne </reference/operator/aggregation/replaceOne>
-- $replaceAll </reference/operator/aggregation/replaceAll>
-- $reverseArray </reference/operator/aggregation/reverseArray>
-- $round </reference/operator/aggregation/round>
-- $rtrim </reference/operator/aggregation/rtrim>
-- $sampleRate </reference/operator/aggregation/sampleRate>
-- $second </reference/operator/aggregation/second>
-- $serializeEJSON </reference/operator/aggregation/serializeEJSON>
-- $setDifference </reference/operator/aggregation/setDifference>
-- $setEquals </reference/operator/aggregation/setEquals>
-- $setField </reference/operator/aggregation/setField>
-- $setIntersection </reference/operator/aggregation/setIntersection>
-- $setIsSubset </reference/operator/aggregation/setIsSubset>
-- $setUnion </reference/operator/aggregation/setUnion>
-- $shift </reference/operator/aggregation/shift>
-- $sigmoid </reference/operator/aggregation/sigmoid>
-- $similarityCosine </reference/operator/aggregation/similarityCosine>
-- $similarityDotProduct </reference/operator/aggregation/similarityDotProduct>
-- $similarityEuclidean </reference/operator/aggregation/similarityEuclidean>
-- $size </reference/operator/aggregation/size>
-- $sin </reference/operator/aggregation/sin>
-- $sinh </reference/operator/aggregation/sinh>
-- $slice </reference/operator/aggregation/slice>
-- $sortArray </reference/operator/aggregation/sortArray>
-- $split </reference/operator/aggregation/split>
-- $sqrt </reference/operator/aggregation/sqrt>
-- $strcasecmp </reference/operator/aggregation/strcasecmp>
-- $strLenBytes </reference/operator/aggregation/strLenBytes>
-- $strLenCP </reference/operator/aggregation/strLenCP>
-- $substr </reference/operator/aggregation/substr>
-- $substrBytes </reference/operator/aggregation/substrBytes>
-- $substrCP </reference/operator/aggregation/substrCP>
-- $subtract </reference/operator/aggregation/subtract>
-- $subtype </reference/operator/aggregation/subtype>
-- $switch </reference/operator/aggregation/switch>
-- $tan </reference/operator/aggregation/tan>
-- $tanh </reference/operator/aggregation/tanh>
-- $toArray </reference/operator/aggregation/toArray>
-- $toBool </reference/operator/aggregation/toBool>
-- $toDate </reference/operator/aggregation/toDate>
-- $toDecimal </reference/operator/aggregation/toDecimal>
-- $toDouble </reference/operator/aggregation/toDouble>
-- $toHashedIndexKey </reference/operator/aggregation/toHashedIndexKey>
-- $toInt </reference/operator/aggregation/toInt>
-- $toLong </reference/operator/aggregation/toLong>
-- $toObject </reference/operator/aggregation/toObject>
-- $toObjectId </reference/operator/aggregation/toObjectId>
-- $top </reference/operator/top>
-- $topN </reference/operator/topN>
-- $toString </reference/operator/aggregation/toString>
-- $toLower </reference/operator/aggregation/toLower>
-- $toUpper </reference/operator/aggregation/toUpper>
-- $toUUID </reference/operator/aggregation/toUUID>
-- $tsIncrement </reference/operator/aggregation/tsIncrement>
-- $tsSecond </reference/operator/aggregation/tsSecond>
-- $trim </reference/operator/aggregation/trim>
-- $trunc </reference/operator/aggregation/trunc>
-- $type </reference/operator/aggregation/type>
-- $unsetField </reference/operator/aggregation/unsetField>
-- $week </reference/operator/aggregation/week>
-- $year </reference/operator/aggregation/year>
-- $zip </reference/operator/aggregation/zip>
+   $abs </reference/operator/aggregation/abs>
+   $acos </reference/operator/aggregation/acos>
+   $acosh </reference/operator/aggregation/acosh>
+   $add </reference/operator/aggregation/add>
+   $allElementsTrue </reference/operator/aggregation/allElementsTrue>
+   $and </reference/operator/aggregation/and>
+   $anyElementTrue </reference/operator/aggregation/anyElementTrue>
+   $arrayElemAt </reference/operator/aggregation/arrayElemAt>
+   $arrayToObject </reference/operator/aggregation/arrayToObject>
+   $asin </reference/operator/aggregation/asin>
+   $asinh </reference/operator/aggregation/asinh>
+   $atan </reference/operator/aggregation/atan>
+   $atan2 </reference/operator/aggregation/atan2>
+   $atanh </reference/operator/aggregation/atanh>
+   $binarySize </reference/operator/aggregation/binarySize>
+   $bitAnd </reference/operator/aggregation/bitAnd>
+   $bitNot </reference/operator/aggregation/bitNot>
+   $bitOr </reference/operator/aggregation/bitOr>
+   $bitXor </reference/operator/aggregation/bitXor>
+   $bottom </reference/operator/bottom>
+   $bottomN </reference/operator/bottomN>
+   $bsonSize </reference/operator/aggregation/bsonSize>
+   $ceil </reference/operator/aggregation/ceil>
+   $cmp </reference/operator/aggregation/cmp>
+   $concat </reference/operator/aggregation/concat>
+   $concatArrays </reference/operator/aggregation/concatArrays>
+   $cond </reference/operator/aggregation/cond>
+   $convert </reference/operator/aggregation/convert>
+   $cos </reference/operator/aggregation/cos>
+   $cosh </reference/operator/aggregation/cosh>
+   $covariancePop </reference/operator/aggregation/covariancePop>
+   $covarianceSamp </reference/operator/aggregation/covarianceSamp>
+   $createObjectId </reference/operator/aggregation/createObjectId>
+   $dateAdd </reference/operator/aggregation/dateAdd>
+   $dateDiff </reference/operator/aggregation/dateDiff>
+   $dateFromParts </reference/operator/aggregation/dateFromParts>
+   $dateFromString </reference/operator/aggregation/dateFromString>
+   $dateSubtract </reference/operator/aggregation/dateSubtract>
+   $dateToParts </reference/operator/aggregation/dateToParts>
+   $dateToString <reference/operator/aggregation/dateToString>
+   $dateTrunc </reference/operator/aggregation/dateTrunc>
+   $dayOfMonth </reference/operator/aggregation/dayOfMonth>
+   $dayOfWeek </reference/operator/aggregation/dayOfWeek>
+   $dayOfYear </reference/operator/aggregation/dayOfYear>
+   $degreesToRadians </reference/operator/aggregation/degreesToRadians>
+   $denseRank </reference/operator/aggregation/denseRank>
+   $derivative </reference/operator/aggregation/derivative>
+   $deserializeEJSON </reference/operator/aggregation/deserializeEJSON>
+   $divide </reference/operator/aggregation/divide>
+   $documentNumber </reference/operator/aggregation/documentNumber>
+   $encStrContains </reference/operator/aggregation/encStrContains>
+   $encStrEndsWith </reference/operator/aggregation/encStrEndsWith>
+   $encStrNormalizedEq </reference/operator/aggregation/encStrNormalizedEq>
+   $encStrStartsWith </reference/operator/aggregation/encStrStartsWith>
+   $eq </reference/operator/aggregation/eq>
+   $exp </reference/operator/aggregation/exp>
+   $expMovingAvg </reference/operator/aggregation/expMovingAvg>
+   $filter </reference/operator/aggregation/filter>
+   $floor </reference/operator/aggregation/floor>
+   $function </reference/operator/aggregation/function>
+   $getField </reference/operator/aggregation/getField>
+   $gt </reference/operator/aggregation/gt>
+   $gte </reference/operator/aggregation/gte>
+   $hash </reference/operator/aggregation/hash>
+   $hexHash </reference/operator/aggregation/hexHash>
+   $hour </reference/operator/aggregation/hour>
+   $ifNull </reference/operator/aggregation/ifNull>
+   $in </reference/operator/aggregation/in>
+   $indexOfArray </reference/operator/aggregation/indexOfArray>
+   $indexOfBytes </reference/operator/aggregation/indexOfBytes>
+   $indexOfCP </reference/operator/aggregation/indexOfCP>
+   $integral </reference/operator/aggregation/integral>
+   $isArray </reference/operator/aggregation/isArray>
+   $isNumber </reference/operator/aggregation/isNumber>
+   $isoDayOfWeek </reference/operator/aggregation/isoDayOfWeek>
+   $isoWeek </reference/operator/aggregation/isoWeek>
+   $isoWeekYear </reference/operator/aggregation/isoWeekYear>
+   $let </reference/operator/aggregation/let>
+   $linearFill </reference/operator/aggregation/linearFill>
+   $literal </reference/operator/aggregation/literal>
+   $ln </reference/operator/aggregation/ln>
+   $locf </reference/operator/aggregation/locf>
+   $log </reference/operator/aggregation/log>
+   $log10 </reference/operator/aggregation/log10>
+   $lt </reference/operator/aggregation/lt>
+   $lte </reference/operator/aggregation/lte>
+   $ltrim </reference/operator/aggregation/ltrim>
+   $map </reference/operator/aggregation/map>
+   $maxN-array-element </reference/operator/aggregation/maxN-array-element>
+   $meta </reference/operator/aggregation/meta>
+   $minN-array-element </reference/operator/aggregation/minN-array-element>
+   $millisecond </reference/operator/aggregation/millisecond>
+   $minMaxScaler </reference/operator/aggregation/minMaxScaler>
+   $minute </reference/operator/aggregation/minute>
+   $mod </reference/operator/aggregation/mod>
+   $month </reference/operator/aggregation/month>
+   $multiply </reference/operator/aggregation/multiply>
+   $ne </reference/operator/aggregation/ne>
+   $not </reference/operator/aggregation/not>
+   $objectToArray </reference/operator/aggregation/objectToArray>
+   $or </reference/operator/aggregation/or>
+   $pow </reference/operator/aggregation/pow>
+   $radiansToDegrees </reference/operator/aggregation/radiansToDegrees>
+   $rand </reference/operator/aggregation/rand>
+   $range </reference/operator/aggregation/range>
+   $rank </reference/operator/aggregation/rank>
+   $reduce </reference/operator/aggregation/reduce>
+   $regexFind </reference/operator/aggregation/regexFind>
+   $regexFindAll </reference/operator/aggregation/regexFindAll>
+   $regexMatch </reference/operator/aggregation/regexMatch>
+   $replaceOne </reference/operator/aggregation/replaceOne>
+   $replaceAll </reference/operator/aggregation/replaceAll>
+   $reverseArray </reference/operator/aggregation/reverseArray>
+   $round </reference/operator/aggregation/round>
+   $rtrim </reference/operator/aggregation/rtrim>
+   $sampleRate </reference/operator/aggregation/sampleRate>
+   $second </reference/operator/aggregation/second>
+   $serializeEJSON </reference/operator/aggregation/serializeEJSON>
+   $setDifference </reference/operator/aggregation/setDifference>
+   $setEquals </reference/operator/aggregation/setEquals>
+   $setField </reference/operator/aggregation/setField>
+   $setIntersection </reference/operator/aggregation/setIntersection>
+   $setIsSubset </reference/operator/aggregation/setIsSubset>
+   $setUnion </reference/operator/aggregation/setUnion>
+   $shift </reference/operator/aggregation/shift>
+   $sigmoid </reference/operator/aggregation/sigmoid>
+   $similarityCosine </reference/operator/aggregation/similarityCosine>
+   $similarityDotProduct </reference/operator/aggregation/similarityDotProduct>
+   $similarityEuclidean </reference/operator/aggregation/similarityEuclidean>
+   $size </reference/operator/aggregation/size>
+   $sin </reference/operator/aggregation/sin>
+   $sinh </reference/operator/aggregation/sinh>
+   $slice </reference/operator/aggregation/slice>
+   $sortArray </reference/operator/aggregation/sortArray>
+   $split </reference/operator/aggregation/split>
+   $sqrt </reference/operator/aggregation/sqrt>
+   $strcasecmp </reference/operator/aggregation/strcasecmp>
+   $strLenBytes </reference/operator/aggregation/strLenBytes>
+   $strLenCP </reference/operator/aggregation/strLenCP>
+   $substr </reference/operator/aggregation/substr>
+   $substrBytes </reference/operator/aggregation/substrBytes>
+   $substrCP </reference/operator/aggregation/substrCP>
+   $subtract </reference/operator/aggregation/subtract>
+   $subtype </reference/operator/aggregation/subtype>
+   $switch </reference/operator/aggregation/switch>
+   $tan </reference/operator/aggregation/tan>
+   $tanh </reference/operator/aggregation/tanh>
+   $toArray </reference/operator/aggregation/toArray>
+   $toBool </reference/operator/aggregation/toBool>
+   $toDate </reference/operator/aggregation/toDate>
+   $toDecimal </reference/operator/aggregation/toDecimal>
+   $toDouble </reference/operator/aggregation/toDouble>
+   $toHashedIndexKey </reference/operator/aggregation/toHashedIndexKey>
+   $toInt </reference/operator/aggregation/toInt>
+   $toLong </reference/operator/aggregation/toLong>
+   $toObject </reference/operator/aggregation/toObject>
+   $toObjectId </reference/operator/aggregation/toObjectId>
+   $top </reference/operator/top>
+   $topN </reference/operator/topN>
+   $toString </reference/operator/aggregation/toString>
+   $toLower </reference/operator/aggregation/toLower>
+   $toUpper </reference/operator/aggregation/toUpper>
+   $toUUID </reference/operator/aggregation/toUUID>
+   $tsIncrement </reference/operator/aggregation/tsIncrement>
+   $tsSecond </reference/operator/aggregation/tsSecond>
+   $trim </reference/operator/aggregation/trim>
+   $trunc </reference/operator/aggregation/trunc>
+   $type </reference/operator/aggregation/type>
+   $unsetField </reference/operator/aggregation/unsetField>
+   $week </reference/operator/aggregation/week>
+   $year </reference/operator/aggregation/year>
+   $zip </reference/operator/aggregation/zip>

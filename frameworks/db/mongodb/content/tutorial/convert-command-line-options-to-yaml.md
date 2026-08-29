@@ -1,101 +1,118 @@
 ---
 type: "Framework Learn Page"
-framework: "mongodb"
+framework: "MongoDB"
 source_repo: "https://github.com/mongodb/docs.git"
 source_branch: "main"
 source_path: "content/manual/manual/source/tutorial/convert-command-line-options-to-yaml.txt"
-source_commit: "ab9db26ed3d11618cdb61516d8180337d8e3f679"
-source_commit_short: "ab9db26e"
-source_commit_date: "2026-07-24T16:22:46-06:00"
-generated_at: "2026-07-25T11:51:15Z"
+source_commit: "b9f2bc487a2878b65e3c1f80024bebab76954f27"
+source_commit_short: "b9f2bc48"
+source_commit_date: "2026-08-28T17:09:45-05:00"
+generated_at: "2026-08-29T09:39:19.590479Z"
 ---
-
-=================================================
-
 # Convert Self-Managed Command-Line Options to YAML
 
-:binary:`~bin.mongod` and :binary:`~bin.mongos` accept the `--outputConfig` command-line option to output the configuration used by the :binary:`mongod` or :binary:`mongos` instance.
+**meta:** :keywords: on-prem
+   :description: Convert `mongod` and `mongos` command-line options to YAML configuration using the `--outputConfig` option.
 
-You can use this option to convert command-line options to YAML configuration.
+.. default-domain:: mongodb
 
+:binary:`~bin.mongod` and :binary:`~bin.mongos` accept the
+``--outputConfig`` command-line option to output the configuration
+used by the :binary:`mongod` or :binary:`mongos` instance.
+
+You can use this option to convert command-line options to YAML
+configuration.
+   
 ## Examples
 
-### Convert `mongod` Command-Line Options to YAML
+### Convert ``mongod`` Command-Line Options to YAML
 
-Consider the following :binary:`~bin.mongod` invocation that uses the command-line options:
+Consider the following :binary:`~bin.mongod` invocation that uses the
+command-line options:
 
-```bash
-mongod --shardsvr --replSet myShard  --dbpath /var/lib/mongodb --bind_ip localhost,My-Example-Hostname --fork --logpath /var/log/mongodb/mongod.log --clusterAuthMode x509 --tlsMode requireTLS  --tlsCAFile /path/to/my/CA/file  --tlsCertificateKeyFile /path/to/my/certificate/file --tlsClusterFile /path/to/my/cluster/membership/file
-```
+.. code-block:: bash
+   :copyable: false
 
-Include the :option:`--outputConfig <mongod --outputConfig>` command-line option to generate the corresponding YAML file.
+   mongod --shardsvr --replSet myShard  --dbpath /var/lib/mongodb --bind_ip localhost,My-Example-Hostname --fork --logpath /var/log/mongodb/mongod.log --clusterAuthMode x509 --tlsMode requireTLS  --tlsCAFile /path/to/my/CA/file  --tlsCertificateKeyFile /path/to/my/certificate/file --tlsClusterFile /path/to/my/cluster/membership/file
 
-```bash
-mongod --shardsvr --replSet myShard  --dbpath /var/lib/mongodb --bind_ip localhost,My-Example-Hostname --fork --logpath /var/log/mongodb/mongod.log --clusterAuthMode x509 --tlsMode requireTLS  --tlsCAFile /path/to/my/CA/file  --tlsCertificateKeyFile /path/to/my/certificate/file --tlsClusterFile /path/to/my/cluster/membership/file --outputConfig
-```
+Include the :option:`--outputConfig <mongod --outputConfig>`
+command-line option to generate the corresponding YAML file.
 
-The :binary:`~bin.mongod` outputs the following YAML to `stdout` and exits:
+.. code-block:: bash
 
-```yaml
-net:
-  bindIp: localhost,My-Example-Hostname
-  tls:
-    CAFile: /path/to/my/CA/file
-    certificateKeyFile: /path/to/my/certificate/file
-    clusterFile: /path/to/my/cluster/membership/file
-    mode: requireTLS
-outputConfig: true
-processManagement:
-  fork: true
-replication:
-  replSet: myShard
-security:
-  clusterAuthMode: x509
-sharding:
-  clusterRole: shardsvr
-storage:
-  dbPath: /var/lib/mongodb
-systemLog:
-  destination: file
-  path: /var/log/mongodb/mongod.log
-```
+   mongod --shardsvr --replSet myShard  --dbpath /var/lib/mongodb --bind_ip localhost,My-Example-Hostname --fork --logpath /var/log/mongodb/mongod.log --clusterAuthMode x509 --tlsMode requireTLS  --tlsCAFile /path/to/my/CA/file  --tlsCertificateKeyFile /path/to/my/certificate/file --tlsClusterFile /path/to/my/cluster/membership/file --outputConfig
 
-To create a configuration file, copy the generated content into a file and delete the `outputConfig` setting from the YAML.
+The :binary:`~bin.mongod` outputs the following YAML to ``stdout`` and
+exits:
 
-### Convert `mongos` Command-Line Options to YAML
+.. code-block:: yaml
+   :emphasize-lines: 8
 
-Consider the following :binary:`~bin.mongos` invocation that uses the command-line options:
+   net:
+     bindIp: localhost,My-Example-Hostname
+     tls:
+       CAFile: /path/to/my/CA/file
+       certificateKeyFile: /path/to/my/certificate/file
+       clusterFile: /path/to/my/cluster/membership/file
+       mode: requireTLS
+   outputConfig: true
+   processManagement:
+     fork: true
+   replication:
+     replSet: myShard
+   security:
+     clusterAuthMode: x509
+   sharding:
+     clusterRole: shardsvr
+   storage:
+     dbPath: /var/lib/mongodb
+   systemLog:
+     destination: file
+     path: /var/log/mongodb/mongod.log
 
-```bash
-mongos --configdb myCSRS/cfg1.example.net:27019,cfg2.example.net:27019 --bind_ip localhost,My-Example-MONGOS-Hostname --fork --logpath /var/log/mongodb/mongos.log --clusterAuthMode x509 --tlsMode requireTLS  --tlsCAFile /path/to/my/CA/file  --tlsCertificateKeyFile /path/to/my/certificate/file --tlsClusterFile /path/to/my/cluster/membership/file
-```
+To create a configuration file, copy the generated content into a
+file and delete the ``outputConfig`` setting from the YAML.
 
-Include the :option:`--outputConfig <mongos --outputConfig>` command-line option to generate the corresponding YAML for the :binary:`~bin.mongos` instance:
+### Convert ``mongos`` Command-Line Options to YAML
 
-```bash
-mongos --configdb myCSRS/cfg1.example.net:27019,cfg2.example.net:27019 --bind_ip localhost,My-Example-MONGOS-Hostname --fork --logpath /var/log/mongodb/mongos.log --clusterAuthMode x509 --tlsMode requireTLS  --tlsCAFile /path/to/my/CA/file  --tlsCertificateKeyFile /path/to/my/certificate/file --tlsClusterFile /path/to/my/cluster/membership/file --outputConfig
-```
+Consider the following :binary:`~bin.mongos` invocation that uses the
+command-line options:
 
-The :binary:`~bin.mongos` outputs the following YAML to `stdout` and exits:
+.. code-block:: bash
+   :copyable: false
 
-```yaml
-net:
-  bindIp: localhost,My-Example-MONGOS-Hostname
-  tls:
-    CAFile: /path/to/my/CA/file
-    certificateKeyFile: /path/to/my/certificate/file
-    clusterFile: /path/to/my/cluster/membership/file
-    mode: requireTLS
-outputConfig: true
-processManagement:
-  fork: true
-security:
-  clusterAuthMode: x509
-sharding:
-  configDB: myCSRS/cfg1.example.net:27019,cfg2.example.net:27019
-systemLog:
-  destination: file
-  path: /var/log/mongodb/mongos.log
-```
+   mongos --configdb myCSRS/cfg1.example.net:27019,cfg2.example.net:27019 --bind_ip localhost,My-Example-MONGOS-Hostname --fork --logpath /var/log/mongodb/mongos.log --clusterAuthMode x509 --tlsMode requireTLS  --tlsCAFile /path/to/my/CA/file  --tlsCertificateKeyFile /path/to/my/certificate/file --tlsClusterFile /path/to/my/cluster/membership/file
 
-To create a configuration file, copy the generated content into a file and delete the `outputConfig` setting from the YAML.
+Include the :option:`--outputConfig <mongos --outputConfig>`
+command-line option to generate the corresponding YAML for the
+:binary:`~bin.mongos` instance:
+
+.. code-block:: bash
+
+   mongos --configdb myCSRS/cfg1.example.net:27019,cfg2.example.net:27019 --bind_ip localhost,My-Example-MONGOS-Hostname --fork --logpath /var/log/mongodb/mongos.log --clusterAuthMode x509 --tlsMode requireTLS  --tlsCAFile /path/to/my/CA/file  --tlsCertificateKeyFile /path/to/my/certificate/file --tlsClusterFile /path/to/my/cluster/membership/file --outputConfig
+
+The :binary:`~bin.mongos` outputs the following YAML to ``stdout`` and exits:
+
+.. code-block:: yaml
+   :emphasize-lines: 8
+
+   net:
+     bindIp: localhost,My-Example-MONGOS-Hostname
+     tls:
+       CAFile: /path/to/my/CA/file
+       certificateKeyFile: /path/to/my/certificate/file
+       clusterFile: /path/to/my/cluster/membership/file
+       mode: requireTLS
+   outputConfig: true
+   processManagement:
+     fork: true
+   security:
+     clusterAuthMode: x509
+   sharding:
+     configDB: myCSRS/cfg1.example.net:27019,cfg2.example.net:27019
+   systemLog:
+     destination: file
+     path: /var/log/mongodb/mongos.log
+
+To create a configuration file, copy the generated content into a
+file and delete the ``outputConfig`` setting from the YAML.

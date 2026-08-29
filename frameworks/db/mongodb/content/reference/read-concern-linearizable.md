@@ -1,70 +1,98 @@
 ---
 type: "Framework Learn Page"
-framework: "mongodb"
+framework: "MongoDB"
 source_repo: "https://github.com/mongodb/docs.git"
 source_branch: "main"
 source_path: "content/manual/manual/source/reference/read-concern-linearizable.txt"
-source_commit: "ab9db26ed3d11618cdb61516d8180337d8e3f679"
-source_commit_short: "ab9db26e"
-source_commit_date: "2026-07-24T16:22:46-06:00"
-generated_at: "2026-07-25T11:51:15Z"
+source_commit: "b9f2bc487a2878b65e3c1f80024bebab76954f27"
+source_commit_short: "b9f2bc48"
+source_commit_date: "2026-08-28T17:09:45-05:00"
+generated_at: "2026-08-29T09:39:19.720693Z"
 ---
+.. default-domain:: mongodb
 
-===============================
+# Read Concern ``"linearizable"``
 
-# Read Concern `"linearizable"`
+**meta:** :description: Specify linearizable read concern for primary-only operations to ensure data reflects all successful majority-acknowledged writes before the read starts.
 
-The query returns data that reflects all successful majority-acknowledged writes that completed prior to the start of the read operation. The query may wait for concurrently executing writes to propagate to a majority of replica set members before returning results.
+**readconcern:** "linearizable"
 
-If a majority of your replica set members crash and restart after the read operation, documents returned by the read operation are durable if :rsconf:`writeConcernMajorityJournalDefault` is set to the default state of `true`.
 
-.. include:: /includes/extracts/no-journaling-rollback.rst
 
-You can specify linearizable read concern for read operations on the :replstate:`primary <PRIMARY>` only.
+The query returns data that reflects all successful
+majority-acknowledged writes that completed prior to the start of the
+read operation. The query may wait for concurrently executing writes to
+propagate to a majority of replica set members before returning results.
 
-> **Tip:** Always use `maxTimeMS` with linearizable read concern in case a
-majority of data bearing members are unavailable. `maxTimeMS`
-ensures that the operation does not block indefinitely and instead
-ensures that the operation returns an error if the read concern
-cannot be fulfilled.
+If a majority of your replica set members crash and restart after the
+read operation, documents returned by the read operation are durable if
+:rsconf:`writeConcernMajorityJournalDefault` is set to the default
+state of ``true``.
+
+**include:** /includes/extracts/no-journaling-rollback.rst
+
+You can specify linearizable read concern for read operations on
+the :replstate:`primary <PRIMARY>` only.
+
+**tip:** Always use ``maxTimeMS`` with linearizable read concern in case a
+   majority of data bearing members are unavailable. ``maxTimeMS``
+   ensures that the operation does not block indefinitely and instead
+   ensures that the operation returns an error if the read concern
+   cannot be fulfilled.
 
 ## Requirements
 
-.. include:: /includes/read-concern/linearizable-requirements.rst
+**include:** /includes/read-concern/linearizable-requirements.rst
 
 ## Causally Consistent Sessions
 
-Read concern :readconcern:`"linearizable"` is unavailable for use with causally consistent sessions.
+Read concern :readconcern:`"linearizable"` is unavailable for use with
+causally consistent sessions.
 
 ## Aggregation Restriction
 
-.. include:: /includes/extracts/4.2-changes-linearizable-agg.rst
+**include:** /includes/extracts/4.2-changes-linearizable-agg.rst
 
 ## Real Time Order
 
-Combined with :writeconcern:`"majority"` write concern, :readconcern:`"linearizable"` read concern enables multiple threads to perform reads and writes on a single document as if a single thread performed these operations in real time; that is, the corresponding schedule for these reads and writes is considered linearizable.
+Combined with :writeconcern:`"majority"` write concern,
+:readconcern:`"linearizable"` read concern enables multiple threads to
+perform reads and writes on a single document as if a single thread
+performed these operations in real time; that is, the corresponding
+schedule for these reads and writes is considered linearizable.
 
 ## Read Your Own Writes
 
-.. include:: /includes/fact-read-own-writes.rst
+**include:** /includes/fact-read-own-writes.rst
 
 ## Performance Comparisons
 
-Unlike :readconcern:`"majority"`, :readconcern:`"linearizable"` read concern confirms with secondary members that the read operation is reading from a primary that is capable of confirming writes with :writeconcern:`{ w: "majority" } <"majority">` write concern. [#edge-cases-2-primaries]_ As such, reads with linearizable read concern may be significantly slower than reads with :readconcern:`"majority"` or :readconcern:`"local"` read concerns.
+Unlike :readconcern:`"majority"`, :readconcern:`"linearizable"` read
+concern confirms with secondary members that the read operation is
+reading from a primary that is capable of confirming writes with
+:writeconcern:`{ w: "majority" } <"majority">` write concern.
+[#edge-cases-2-primaries]_ As such, reads with linearizable read
+concern may be significantly slower than reads with
+:readconcern:`"majority"` or :readconcern:`"local"` read concerns.
 
-Always use `maxTimeMS` with linearizable read concern in case a majority of data bearing members are unavailable. `maxTimeMS` ensures that the operation does not block indefinitely and instead ensures that the operation returns an error if the read concern cannot be fulfilled.
+Always use ``maxTimeMS`` with linearizable read concern in case a
+majority of data bearing members are unavailable. ``maxTimeMS`` ensures
+that the operation does not block indefinitely and instead ensures that
+the operation returns an error if the read concern cannot be fulfilled.
 
 For example:
 
-```javascript
-db.restaurants.find( { _id: 5 } ).readConcern("linearizable").maxTimeMS(10000)
+.. code-block:: javascript
 
-db.runCommand( {
-     find: "restaurants",
-     filter: { _id: 5 },
-     readConcern: { level: "linearizable" },
-     maxTimeMS: 10000
-} )
-```
+   db.restaurants.find( { _id: 5 } ).readConcern("linearizable").maxTimeMS(10000)
 
-.. include:: /includes/footnote-two-primaries-edge-cases.rst
+   db.runCommand( {
+        find: "restaurants",
+        filter: { _id: 5 },
+        readConcern: { level: "linearizable" },
+        maxTimeMS: 10000
+   } )
+
+.. [#edge-cases-2-primaries]
+
+   .. include:: /includes/footnote-two-primaries-edge-cases.rst

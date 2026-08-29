@@ -4,10 +4,10 @@ framework: "Grafana"
 source_repo: "https://github.com/grafana/grafana.git"
 source_branch: "main"
 source_path: "docs/sources/as-code/infrastructure-as-code/terraform/terraform-knowledge-graph/getting-started.md"
-source_commit: "d18e58d33aa8741f08fbab4aa73bdaf1f04e3be5"
-source_commit_short: "d18e58d3"
-source_commit_date: "2026-07-25T13:50:43+02:00"
-generated_at: "2026-07-25T19:08:09.054491Z"
+source_commit: "5e3a02f81d2aadf4bf24fe49ed97d872556f5bf9"
+source_commit_short: "5e3a02f8"
+source_commit_date: "2026-08-29T10:58:19+09:00"
+generated_at: "2026-08-29T09:39:37.543144Z"
 ---
 ---
 description: Learn how to configure Terraform to manage Knowledge Graph resources
@@ -33,7 +33,10 @@ Before you begin, ensure you have the following:
 - A Grafana Cloud account, as shown in [Get started](/docs/grafana-cloud/get-started/)
 - [Terraform](https://www.terraform.io/downloads) installed on your machine
 - Administrator permissions in your Grafana instance
-- [Knowledge Graph enabled](/docs/grafana-cloud/knowledge-graph/get-started/) in your Grafana Cloud stack
+
+{{< admonition type="note" >}}
+You don't need to enable the Knowledge Graph before using Terraform. The [`grafana_asserts_stack` resource](../knowledge-graph-stack/) handles the full onboarding flow, including enabling the Knowledge Graph on your stack.
+{{< /admonition >}}
 
 {{< admonition type="note" >}}
 All Terraform configuration files should be saved in the same directory.

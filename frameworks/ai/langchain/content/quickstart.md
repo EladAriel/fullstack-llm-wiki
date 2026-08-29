@@ -4,11 +4,12 @@ framework: "LangChain"
 source_repo: "https://github.com/langchain-ai/docs"
 source_branch: "main"
 source_path: "src/oss/langchain/quickstart.mdx"
-source_commit: "2aae1dfc98ee953a9a5185fb6fcdd9efb3f4d878"
-source_commit_short: "2aae1dfc"
-source_commit_date: "2026-07-25T00:27:23Z"
-generated_at: "2026-07-25T11:51:05Z"
+source_commit: "a174f9cf7c91ee5eb14ee2382eb48bfe6e4956e9"
+source_commit_short: "a174f9c"
+source_commit_date: "2026-08-28T17:04:12-07:00"
+generated_at: "2026-08-29T09:38:24.251034Z"
 ---
+# Quickstart
 
 ---
 title: Quickstart
@@ -26,25 +27,36 @@ This quickstart shows you how to create a fully functional AI agent in just a fe
 
 ## Install dependencies
 
+:::python
+<Note>
+    **Python 3.11+**
+
+    To run the code in this Quickstart, use Python 3.11 or higher.
+</Note>
+:::
+
 Install the following packages to follow along:
 
 :::python
 <CodeGroup>
     ```bash uv
+    uv python pin 3.11
     uv init
-    uv add langchain deepagents
+    uv add langchain
     uv sync
     ```
 
     ```bash pip
-    pip install -U langchain deepagents
+    # Install Python 3.11+ separately if needed.
+    pip install -U langchain
     ```
 
     ```bash venv
-    python3 -m venv .venv
+    # Install Python 3.11+ separately if needed.
+    python3.11 -m venv .venv
     source .venv/bin/activate
     # Windows: .venv\Scripts\activate
-    pip install -U langchain deepagents
+    pip install -U langchain
     ```
 </CodeGroup>
 :::
@@ -52,22 +64,22 @@ Install the following packages to follow along:
 :::js
 <CodeGroup>
     ```bash npm
-    npm install deepagents langchain @langchain/core
+    npm install langchain @langchain/core
     # Requires Node.js 22+
     ```
 
     ```bash pnpm
-    pnpm add deepagents langchain @langchain/core
+    pnpm add langchain @langchain/core
     # Requires Node.js 22+
     ```
 
     ```bash yarn
-    yarn add deepagents langchain @langchain/core
+    yarn add langchain @langchain/core
     # Requires Node.js 22+
     ```
 
     ```bash bun
-    bun add deepagents langchain @langchain/core
+    bun add langchain @langchain/core
     # Requires Bun v1.0.0+
     ```
 </CodeGroup>
@@ -77,89 +89,149 @@ Install the following packages to follow along:
 
 Get an API key from [any supported model provider](/oss/integrations/providers/overview) (for example, Google Gemini or OpenAI).
 
-Set the API keys, for example:
+Set the API keys in your shell or in a `.env` file, for example:
 
 <Tabs>
   <Tab title="OpenAI">
+    <CodeGroup>
+    ```bash Shell
+    export OPENAI_API_KEY="your-api-key"
+    ```
 
-```bash
-export OPENAI_API_KEY="your-api-key"
-```
-
+    ```bash .env
+    OPENAI_API_KEY=your-api-key
+    ```
+    </CodeGroup>
   </Tab>
   <Tab title="Google Gemini">
+    <CodeGroup>
+    ```bash Shell
+    export GOOGLE_API_KEY="your-api-key"
+    ```
 
-```bash
-export GOOGLE_API_KEY="your-api-key"
-```
-
+    ```bash .env
+    GOOGLE_API_KEY=your-api-key
+    ```
+    </CodeGroup>
   </Tab>
   <Tab title="Claude (Anthropic)">
+    <CodeGroup>
+    ```bash Shell
+    export ANTHROPIC_API_KEY="your-api-key"
+    ```
 
-```bash
-export ANTHROPIC_API_KEY="your-api-key"
-```
-
+    ```bash .env
+    ANTHROPIC_API_KEY=your-api-key
+    ```
+    </CodeGroup>
   </Tab>
   <Tab title="OpenRouter">
+    <CodeGroup>
+    ```bash Shell
+    export OPENROUTER_API_KEY="your-api-key"
+    ```
 
-```bash
-export OPENROUTER_API_KEY="your-api-key"
-```
-
+    ```bash .env
+    OPENROUTER_API_KEY=your-api-key
+    ```
+    </CodeGroup>
   </Tab>
   <Tab title="Fireworks">
+    <CodeGroup>
+    ```bash Shell
+    export FIREWORKS_API_KEY="your-api-key"
+    ```
 
-```bash
-export FIREWORKS_API_KEY="your-api-key"
-```
-
+    ```bash .env
+    FIREWORKS_API_KEY=your-api-key
+    ```
+    </CodeGroup>
   </Tab>
   <Tab title="Baseten">
+    <CodeGroup>
+    ```bash Shell
+    export BASETEN_API_KEY="your-api-key"
+    ```
 
-```bash
-export BASETEN_API_KEY="your-api-key"
-```
-
+    ```bash .env
+    BASETEN_API_KEY=your-api-key
+    ```
+    </CodeGroup>
   </Tab>
   <Tab title="Ollama">
+    <CodeGroup>
+    ```bash Shell
+    # Local: Ollama must be running (https://ollama.com)
+    # Cloud: Set your Ollama API key for hosted inference
+    export OLLAMA_API_KEY="your-api-key"
+    ```
 
-```bash
-# Local: Ollama must be running (https://ollama.com)
-# Cloud: Set your Ollama API key for hosted inference
-export OLLAMA_API_KEY="your-api-key"
-```
-
+    ```bash .env
+    # Local: Ollama must be running (https://ollama.com)
+    # Cloud: Set your Ollama API key for hosted inference
+    OLLAMA_API_KEY=your-api-key
+    ```
+    </CodeGroup>
   </Tab>
   <Tab title="Azure">
+    <CodeGroup>
+    ```bash Shell
+    export AZURE_OPENAI_API_KEY="your-api-key"
+    export AZURE_OPENAI_ENDPOINT="https://your-resource.openai.azure.com"
+    export AZURE_OPENAI_DEPLOYMENT_NAME="your-deployment"
+    ```
 
-```bash
-export AZURE_OPENAI_API_KEY="your-api-key"
-export AZURE_OPENAI_ENDPOINT="https://your-resource.openai.azure.com"
-export AZURE_OPENAI_DEPLOYMENT_NAME="your-deployment"
-```
-
+    ```bash .env
+    AZURE_OPENAI_API_KEY=your-api-key
+    AZURE_OPENAI_ENDPOINT=https://your-resource.openai.azure.com
+    AZURE_OPENAI_DEPLOYMENT_NAME=your-deployment
+    ```
+    </CodeGroup>
   </Tab>
   <Tab title="AWS Bedrock">
+    <CodeGroup>
+    ```bash Shell
+    export AWS_ACCESS_KEY_ID="your-access-key"
+    export AWS_SECRET_ACCESS_KEY="your-secret-key"
+    export AWS_REGION="us-east-1"
+    ```
 
-```bash
-export AWS_ACCESS_KEY_ID="your-access-key"
-export AWS_SECRET_ACCESS_KEY="your-secret-key"
-export AWS_REGION="us-east-1"
-```
-
+    ```bash .env
+    AWS_ACCESS_KEY_ID=your-access-key
+    AWS_SECRET_ACCESS_KEY=your-secret-key
+    AWS_REGION=us-east-1
+    ```
+    </CodeGroup>
   </Tab>
   <Tab title="HuggingFace">
+    <CodeGroup>
+    ```bash Shell
+    export HUGGINGFACEHUB_API_TOKEN="hf_..."
+    ```
 
-```bash
-export HUGGINGFACEHUB_API_TOKEN="hf_..."
-```
-
+    ```bash .env
+    HUGGINGFACEHUB_API_TOKEN=hf_...
+    ```
+    </CodeGroup>
   </Tab>
   <Tab title="Other">
     See the full list of supported [chat model integrations](/oss/integrations/chat).
   </Tab>
 </Tabs>
+
+:::python
+To load a `.env` file, use [`python-dotenv`](https://pypi.org/project/python-dotenv/) (`load_dotenv()`).
+:::
+
+:::js
+To load a `.env` file, use [`dotenv`](https://www.npmjs.com/package/dotenv) (`import "dotenv/config"`).
+:::
+
+<Tip>
+    **Using LangSmith Gateway**
+
+    The [LangSmith Gateway](/langsmith/llm-gateway) routes most major providers through LangSmith. You can [bring your own provider keys](/langsmith/llm-gateway-quickstart#2-make-a-call), or use [Gateway Credits](/langsmith/llm-gateway-credits) to access models without a provider key.
+</Tip>
 
 ## Build a basic agent
 
@@ -296,16 +368,20 @@ Start by creating a simple agent that can answer questions and call tools. The a
     ```python Azure
     import os
     from langchain.agents import create_agent
+    from langchain.chat_models import init_chat_model
 
     def get_weather(city: str) -> str:
         """Get weather for a given city."""
         return f"It's always sunny in {city}!"
 
+    model = init_chat_model(
+        "azure_openai:gpt-5.5",
+        azure_deployment=os.environ["AZURE_OPENAI_DEPLOYMENT_NAME"],
+    )
     agent = create_agent(
-        model="azure_openai:gpt-5.5",
+        model=model,
         tools=[get_weather],
         system_prompt="You are a helpful assistant",
-        azure_deployment=os.environ["AZURE_OPENAI_DEPLOYMENT_NAME"],
     )
 
     result = agent.invoke(
@@ -321,8 +397,7 @@ Start by creating a simple agent that can answer questions and call tools. The a
         return f"It's always sunny in {city}!"
 
     agent = create_agent(
-        model="us.anthropic.claude-sonnet-4-6",
-        model_provider="bedrock_converse",
+        model="bedrock_converse:us.anthropic.claude-sonnet-4-6",
         tools=[get_weather],
         system_prompt="You are a helpful assistant",
     )
@@ -340,12 +415,9 @@ Start by creating a simple agent that can answer questions and call tools. The a
         return f"It's always sunny in {city}!"
 
     agent = create_agent(
-        model="microsoft/Phi-3-mini-4k-instruct",
-        model_provider="huggingface",
+        model="huggingface:microsoft/Phi-3-mini-4k-instruct",
         tools=[get_weather],
         system_prompt="You are a helpful assistant",
-        temperature=0.7,
-        max_tokens=1024,
     )
 
     result = agent.invoke(
@@ -1010,10 +1082,42 @@ Along the way you will explore the following concepts:
 
         Use deep agents when you want maximum capability with minimal setup; choose LangChain agents when you need fine-grained control.
 
-        <Warning>
-            Since the code invokes the model with the entire text from The Great Gatsby, it uses a large amount of tokens.
+        To compare both in this step, install the `deepagents` package:
 
-            You can view example output in the next step.
+        :::python
+        <CodeGroup>
+            ```bash uv
+            uv add deepagents
+            ```
+
+            ```bash pip
+            pip install -U deepagents
+            ```
+        </CodeGroup>
+        :::
+
+        :::js
+        <CodeGroup>
+            ```bash npm
+            npm install deepagents
+            ```
+
+            ```bash pnpm
+            pnpm add deepagents
+            ```
+
+            ```bash yarn
+            yarn add deepagents
+            ```
+
+            ```bash bun
+            bun add deepagents
+            ```
+        </CodeGroup>
+        :::
+
+        <Warning>
+            This example sends the entire text of The Great Gatsby to the model and may take a minute or two to respond. You can view example output in the next step.
         </Warning>
 
         Let's try both:
@@ -1051,16 +1155,19 @@ Along the way you will explore the following concepts:
         your available tools and reasoning, do not fabricate numbers: use `null` for that field and spell out
         the limitation in `how_you_computed_counts`. If you encounter any errors please report what the error was and what the error message was."""
 
+        print("Running create_agent...", flush=True)
         agent_result = agent.invoke(
             {"messages": [{"role": "user", "content": content}]},
             config={"configurable": {"thread_id": "great-gatsby-lc"}},
         )
+        print("Running create_deep_agent...", flush=True)
         deep_agent_result = deep_agent.invoke(
             {"messages": [{"role": "user", "content": content}]},
             config={"configurable": {"thread_id": "great-gatsby-da"}},
         )
+        print("\ncreate_agent:")
         print(agent_result["messages"][-1].content_blocks)
-        print("\n")
+        print("\ncreate_deep_agent:")
         print(deep_agent_result["messages"][-1].content_blocks)
         ```
         :::
@@ -1096,10 +1203,12 @@ Along the way you will explore the following concepts:
             your available tools and reasoning, do not fabricate numbers: use \`null\` for that field and spell out
             the limitation in \`how_you_computed_counts\`. If you encounter any errors please report what the error was and what the error message was.`;
 
+            console.log("Running createAgent...");
             const agentResult = await agent.invoke(
                 { messages: [{ role: "user", content }] },
                 { configurable: { thread_id: "great-gatsby-lc" } },
             );
+            console.log("Running createDeepAgent...");
             const deepAgentResult = await deepAgent.invoke(
                 { messages: [{ role: "user", content }] },
                 { configurable: { thread_id: "great-gatsby-da" } },
@@ -1107,9 +1216,10 @@ Along the way you will explore the following concepts:
 
             const agentMessages = agentResult.messages;
             const deepMessages = deepAgentResult.messages;
-            console.log(agentMessages[agentMessages.length - 1]!.content_blocks);
-            console.log("\n");
-            console.log(deepMessages[deepMessages.length - 1]!.content_blocks);
+            console.log("\ncreateAgent:");
+            console.log(agentMessages[agentMessages.length - 1]!.contentBlocks);
+            console.log("\ncreateDeepAgent:");
+            console.log(deepMessages[deepMessages.length - 1]!.contentBlocks);
         }
 
         main().catch((err) => {
@@ -1118,6 +1228,8 @@ Along the way you will explore the following concepts:
         });
         ```
         :::
+
+        The following expander has everything together in a runnable script:
 
         <Expandable title="Full example code">
 
@@ -1195,16 +1307,19 @@ Along the way you will explore the following concepts:
         your available tools and reasoning, do not fabricate numbers: use `null` for that field and spell out
         the limitation in `how_you_computed_counts`. If you encounter any errors please report what the error was and what the error message was."""
 
+        print("Running create_agent...", flush=True)
         agent_result = agent.invoke(
             {"messages": [{"role": "user", "content": content}]},
             config={"configurable": {"thread_id": "great-gatsby-lc"}},
         )
+        print("Running create_deep_agent...", flush=True)
         deep_agent_result = deep_agent.invoke(
             {"messages": [{"role": "user", "content": content}]},
             config={"configurable": {"thread_id": "great-gatsby-da"}},
         )
+        print("\ncreate_agent:")
         print(agent_result["messages"][-1].content_blocks)
-        print("\n")
+        print("\ncreate_deep_agent:")
         print(deep_agent_result["messages"][-1].content_blocks)
         ```
         :::
@@ -1290,10 +1405,12 @@ Along the way you will explore the following concepts:
             your available tools and reasoning, do not fabricate numbers: use \`null\` for that field and spell out
             the limitation in \`how_you_computed_counts\`. If you encounter any errors please report what the error was and what the error message was.`;
 
+            console.log("Running createAgent...");
             const agentResult = await agent.invoke(
                 { messages: [{ role: "user", content }] },
                 { configurable: { thread_id: "great-gatsby-lc" } },
             );
+            console.log("Running createDeepAgent...");
             const deepAgentResult = await deepAgent.invoke(
                 { messages: [{ role: "user", content }] },
                 { configurable: { thread_id: "great-gatsby-da" } },
@@ -1301,9 +1418,10 @@ Along the way you will explore the following concepts:
 
             const agentMessages = agentResult.messages;
             const deepMessages = deepAgentResult.messages;
-            console.log(agentMessages[agentMessages.length - 1]!.content_blocks);
-            console.log("\n");
-            console.log(deepMessages[deepMessages.length - 1]!.content_blocks);
+            console.log("\ncreateAgent:");
+            console.log(agentMessages[agentMessages.length - 1]!.contentBlocks);
+            console.log("\ncreateDeepAgent:");
+            console.log(deepMessages[deepMessages.length - 1]!.contentBlocks);
         }
 
         main().catch((err) => {

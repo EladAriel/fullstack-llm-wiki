@@ -1,61 +1,149 @@
 ---
 type: "Framework Learn Page"
-framework: "mongodb"
+framework: "MongoDB"
 source_repo: "https://github.com/mongodb/docs.git"
 source_branch: "main"
 source_path: "content/manual/manual/source/reference/method/ClientEncryption.encryptExpression.txt"
-source_commit: "ab9db26ed3d11618cdb61516d8180337d8e3f679"
-source_commit_short: "ab9db26e"
-source_commit_date: "2026-07-24T16:22:46-06:00"
-generated_at: "2026-07-25T11:51:15Z"
+source_commit: "b9f2bc487a2878b65e3c1f80024bebab76954f27"
+source_commit_short: "b9f2bc48"
+source_commit_date: "2026-08-28T17:09:45-05:00"
+generated_at: "2026-08-29T09:39:19.977090Z"
 ---
+**facet:** :name: genre
+   :values: reference
 
-=====================================================
+**meta:** :keywords: code example, node.js
+
+**meta:** :keywords: queryable encryption
 
 # ClientEncryption.encryptExpression() (mongosh method)
 
+.. default-domain:: mongodb
+
+**contents:** On this page
+   :local:
+   :backlinks: none
+   :depth: 1
+   :class: singlecol
+
+**method:** ClientEncryption.encryptExpression(keyId, expression, encOptions)
+
+   ``ClientEncryption.encryptExpression`` encrypts an :ref:`MQL expression
+   <mql-reference>` to query a range index, using the queried field's ``keyId``
+   and the query type and algorithm from the ``encOptions`` document. It
+   returns the encrypted result of the query.
+
+   :returns:
+  
+   The encrypted result of the query as a :bsontype:`binary data
+   <Binary>`  object with `subtype 6 <https://github.com/mongodb/specifications/blob/master/source/client-side-encryption/subtype6.rst>`_.
+
+
 ## Compatibility
 
-This command is available in deployments hosted in the following environments:
+This command is available in deployments hosted in the following
+environments: 
 
-.. include:: /includes/fact-environments-atlas-only.rst
+**include:** /includes/fact-environments-atlas-only.rst
 
-.. include:: /includes/fact-environments-onprem-only.rst
+**include:** /includes/fact-environments-onprem-only.rst
+
 
 ## Syntax
 
-```javascript
-clientEncryption = db.getMongo().getClientEncryption()
+.. code-block:: javascript
 
-clientEncryption.encryptExpression(
-   keyId,
-   expression,
-   encOptions
-)
-```
+   clientEncryption = db.getMongo().getClientEncryption()
+  
+   clientEncryption.encryptExpression(
+      keyId,
+      expression,
+      encOptions
+   )
+
+.. list-table::
+   :header-rows: 1
+   :widths: 20 20 80
+
+   * - Parameter
+     - Type
+     - Description
+
+   * - ``keyId``
+     - ``UUID``
+     - The data encryption key for the field queried in the 
+       expression.
+    
+       The :abbr:`UUID (Universally unique identifier)` is a BSON
+       :bsontype:`binary data <Binary>` object with subtype ``4``
+       that identifies a specific data encryption key. If the data
+       encryption key does not exist in the key vault configured for
+       the database connection, :method:`~ClientEncryption.encryptExpression()`
+       returns an error. See :ref:`qe-reference-key-vault`
+       for more information on key vaults and data encryption keys.
+
+   * - ``expression``
+     - document
+     - The range query expression to encrypt, as one of: 
+
+       - a :pipeline:`$match` expression in the form: 
+         ``{$and: [{<field>: {$gt: <value1>}}, {<field>: {$lt: <value2> }}]}``
+       - an :dbcommand:`aggregate` expression in the form: 
+         ``{$and: [{$gt: [<fieldpath>, <value1>]}, {$lt: [<fieldpath>, <value2>]}]}``
+
+       Expressions can also use :query:`$lte` or :query:`$gte`
+
+   * - ``encOptions``
+     - document
+     - A document with the fields:
+
+       - ``algorithm``: The encryption algorithm to use for 
+         encrypting the ``expression``. Must be set to ``"range"``.
+
+       - ``queryType``: The query type. Must be set to ``"range"``.
+         
+       - ``rangeOptions``: A document with :ref:`range query settings
+         <qe-field-configuration>`. Values must match those in the collection's
+         encryption schema.
+
+         - ``min``, ``max``: Minimum and maximum values that match the field's
+           BSON type.
+         - ``precision``: The number of significant digits MongoDB accounts for
+           when querying ``double`` and ``decimal128`` fields.
+         - ``sparsity``: Affects how thoroughly MongoDB indexes range values.
+         - ``trimFactor``: Controls the throughput of concurrent inserts and 
+           updates.
+         
+       - ``contentionFactor``: Related to the frequency of the values for 
+         fields in the expression. For details, see :ref:`contention
+         <qe-contention>`.
+
 
 ## Behavior
 
-.. include:: /includes/create-an-encrypted-db-conn.rst
+**include:** /includes/create-an-encrypted-db-conn.rst 
+
 
 ## Examples
 
-```javascript
-clientEncryption.encryptExpression(
-   UUID("64e2d87d-f168-493c-bbdf-a394535a2cb9"),
-   {
-      $and: [{ val: { $gt: Int32('100') } }, { val: { $lt: Int32('150') } }]
-   },
-   {
-      algorithm: 'range',
-      queryType: 'range',
-      rangeOptions: { min: Int32('0'), max: Int32('200') },
-      contentionFactor: 8
-   })
-```
+.. code-block:: javascript
 
-If successful, `ClientEncryption.encryptExpression` returns the encrypted query result.
+   clientEncryption.encryptExpression(
+      UUID("64e2d87d-f168-493c-bbdf-a394535a2cb9"),
+      {
+         $and: [{ val: { $gt: Int32('100') } }, { val: { $lt: Int32('150') } }]
+      },
+      {
+         algorithm: 'range',
+         queryType: 'range',
+         rangeOptions: { min: Int32('0'), max: Int32('200') },
+         contentionFactor: 8
+      })
+
+If successful, ``ClientEncryption.encryptExpression`` returns the encrypted 
+query result.
 
 ## Learn More
 
-For complete documentation on initiating MongoDB connections with {+csfle+} or {+qe+} enabled, see :method:`Mongo()`.
+For complete documentation on initiating MongoDB connections with
+{+csfle+} or {+qe+} enabled, see :method:`Mongo()`.

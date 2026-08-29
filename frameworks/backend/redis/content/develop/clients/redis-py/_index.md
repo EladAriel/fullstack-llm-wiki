@@ -1,14 +1,15 @@
 ---
 type: "Framework Learn Page"
-framework: "redis"
+framework: "Redis"
 source_repo: "https://github.com/redis/docs.git"
 source_branch: "main"
 source_path: "content/develop/clients/redis-py/_index.md"
-source_commit: "9d30f68c3dad1a6b3b7d30fe604b911348ce8152"
-source_commit_short: "9d30f68c"
-source_commit_date: "2026-07-24T10:52:10-07:00"
-generated_at: "2026-07-25T11:51:22Z"
+source_commit: "f8693349287b0efbef3c865b6f6a2aceca88594d"
+source_commit_short: "f869334"
+source_commit_date: "2026-08-28T10:01:19-05:00"
+generated_at: "2026-08-29T09:38:56.076179Z"
 ---
+# _Index
 
 ---
 aliases:
@@ -18,6 +19,7 @@ aliases:
 - /clients/python/
 - /connect/clients/redis-py/
 - /clients/redis-py/
+- /develop/clients/python/redis-py/
 categories:
 - docs
 - develop
@@ -38,10 +40,10 @@ weight: 1
 The sections below explain how to install `redis-py` and connect your application
 to a Redis database.
 
-`redis-py` requires a running Redis server. See [here]({{< relref "/operate/oss_and_stack/install/" >}}) for Redis Open Source installation instructions.
+`redis-py` requires a running Redis server. See [here](/content/operate/oss_and_stack/install/_index.md) for Redis Open Source installation instructions.
 
 You can also access Redis with an object-mapping client interface. See
-[RedisOM for Python]({{< relref "/integrate/redisom-for-python" >}})
+[RedisOM for Python](/content/integrate/redisom-for-python/_index.md)
 for more information.
 
 ## Install

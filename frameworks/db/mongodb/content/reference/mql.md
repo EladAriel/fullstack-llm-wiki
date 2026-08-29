@@ -1,41 +1,65 @@
 ---
 type: "Framework Learn Page"
-framework: "mongodb"
+framework: "MongoDB"
 source_repo: "https://github.com/mongodb/docs.git"
 source_branch: "main"
 source_path: "content/manual/manual/source/reference/mql.txt"
-source_commit: "ab9db26ed3d11618cdb61516d8180337d8e3f679"
-source_commit_short: "ab9db26e"
-source_commit_date: "2026-07-24T16:22:46-06:00"
-generated_at: "2026-07-25T11:51:15Z"
+source_commit: "b9f2bc487a2878b65e3c1f80024bebab76954f27"
+source_commit_short: "b9f2bc48"
+source_commit_date: "2026-08-28T17:09:45-05:00"
+generated_at: "2026-08-29T09:39:19.697054Z"
 ---
-
-================================
+.. _mql-reference:
 
 # MongoDB Query Language Reference
 
-:abbr:`MQL (MongoDB Query Language)` comprises query predicates, aggregation pipelines, and other ways to interact with your data.
+**meta:** :description: Reference guide for the MongoDB Query Language, including query predicates, aggregation pipelines, expressions, projections, accumulators, and update operators.
 
-`crud-commands-ref` Database commands used to perform CRUD operations, including aggregation.
+**contents:** On this page
+   :local:
+   :backlinks: none
+   :depth: 1
+   :class: singlecol
 
-`aggregation-pipeline-operator-reference` Aggregation stages used to construct aggregation pipelines.
+:abbr:`MQL (MongoDB Query Language)` comprises query predicates,
+aggregation pipelines, and other ways to interact with your data.
 
-`query-predicates-ref` Expressions used to indicate whether a document matches a given query.
+:ref:`crud-commands-ref`
+  Database commands used to perform CRUD operations, including
+  aggregation.
 
-`expressions-ref-landing` Expressions used in various contexts of MQL including aggregations, query predicates, and projections.
+:ref:`aggregation-pipeline-operator-reference`
+  Aggregation stages used to construct aggregation pipelines.
 
-`projection-operators-ref` Specialized operators used in find command projections.
+:ref:`query-predicates-ref`
+  Expressions used to indicate whether a document matches a given query.
 
-`accumulators-ref` Operators used in group stages to return aggregated values from multiple input documents.
+:ref:`expressions-ref-landing`
+  Expressions used in various contexts of MQL including aggregations,
+  query predicates, and projections.
 
-`update-operators-ref` Operators used to modify documents.
+:ref:`projection-operators-ref`
+  Specialized operators used in find command projections.
 
-## Contents
+:ref:`accumulators-ref`
+  Operators used in group stages to return aggregated values from
+  multiple input documents.
 
-- CRUD Commands </reference/mql/crud-commands>
-- Aggregation Stages </reference/mql/aggregation-stages>
-- Query Predicates </reference/mql/query-predicates>
-- Expressions </reference/mql/expressions>
-- Projection </reference/mql/projection>
-- Accumulators </reference/mql/accumulators>
-- Update </reference/mql/update>
+:ref:`update-operators-ref`
+  Operators used to modify documents.
+
+
+.. TODO: Separate Window Functions in DOCSP-46302
+.. :ref:`window-functions-ref`
+.. Operators used in :pipeline:`$setWindowFields` stages.
+
+**toctree:** :hidden:
+
+   CRUD Commands </reference/mql/crud-commands>
+   Aggregation Stages </reference/mql/aggregation-stages>
+   Query Predicates </reference/mql/query-predicates>
+   Expressions </reference/mql/expressions>
+   Projection </reference/mql/projection>
+   Accumulators </reference/mql/accumulators>
+   Update </reference/mql/update>
+.. Window Functions </reference/mql/window-functions>

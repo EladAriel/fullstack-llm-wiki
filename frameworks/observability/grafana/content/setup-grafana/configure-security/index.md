@@ -1,7 +1,7 @@
 ---
 type: "Framework Learn Directory Index"
 framework: "Grafana"
-generated_at: "2026-07-25T19:08:09.122392Z"
+generated_at: "2026-08-29T09:39:37.579466Z"
 ---
 # Configure-Security
 
@@ -22,3 +22,8 @@ This directory contains Grafana learning pages related to configure-security.
 - [Configure Request Security](configure-request-security.md)
 - [Export Logs](export-logs.md)
 - [Secret Scan](secret-scan.md)
+
+## Subdirectories
+
+- [Configure Database Encryption](configure-database-encryption/index.md)
+- [Configure Security Hardening](configure-security-hardening/index.md)

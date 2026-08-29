@@ -1,29 +1,19 @@
 ---
 type: "Framework Learn Directory Index"
-framework: "react"
-directory: "content/reference/react"
-source_repo: "https://github.com/reactjs/react.dev"
-source_branch: "main"
-source_commit: "7b6c3ceb9dd97249e9dce4a8a94e61aed6424698"
-source_commit_short: "7b6c3ceb"
-source_commit_date: "2026-07-20T15:31:48+02:00"
-generated_at: "2026-07-25T11:50:43Z"
+framework: "React"
+generated_at: "2026-08-29T09:40:25.537486Z"
 ---
 # React
 
-This directory contains react learning pages related to react.
+This directory contains React learning pages related to react.
 
 ## Breadcrumbs
 
-[Wiki Home](../../../index.md) -> [Content](../../index.md) -> [Reference](../index.md) -> [React](index.md)
+[Wiki Home](../index.md) -> [Content](index.md)
 
 ## Navigation
 
-- Parent: [Parent Index](../index.md)
-
-## Child Directories
-
-- None
+- Wiki Home: [Root Index](../index.md)
 
 ## Pages in This Directory
 
@@ -36,7 +26,6 @@ This directory contains react learning pages related to react.
 - [Strictmode](StrictMode.md)
 - [Suspense](Suspense.md)
 - [Viewtransition](ViewTransition.md)
-- [Original Source Index](_source_index.md)
 - [Act](act.md)
 - [Addtransitiontype](addTransitionType.md)
 - [Apis](apis.md)
@@ -48,8 +37,8 @@ This directory contains react learning pages related to react.
 - [Createcontext](createContext.md)
 - [Createelement](createElement.md)
 - [Createref](createRef.md)
-- [Experimental Taintobjectreference](experimental_taintObjectReference.md)
-- [Experimental Taintuniquevalue](experimental_taintUniqueValue.md)
+- [Experimental_Taintobjectreference](experimental_taintObjectReference.md)
+- [Experimental_Taintuniquevalue](experimental_taintUniqueValue.md)
 - [Forwardref](forwardRef.md)
 - [Hooks](hooks.md)
 - [Isvalidelement](isValidElement.md)
@@ -76,11 +65,3 @@ This directory contains react learning pages related to react.
 - [Usestate](useState.md)
 - [Usesyncexternalstore](useSyncExternalStore.md)
 - [Usetransition](useTransition.md)
-
-## IDE LLM Guidance
-
-When answering implementation questions related to this directory:
-
-1. Prefer the most specific page listed above.
-2. If the topic is broad, read the child directory index first.
-3. Use source metadata from each page when giving answers.

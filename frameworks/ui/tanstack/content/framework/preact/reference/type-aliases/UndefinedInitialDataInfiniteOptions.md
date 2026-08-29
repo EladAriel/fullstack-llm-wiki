@@ -1,27 +1,29 @@
 ---
 type: "Framework Learn Page"
-framework: "tanstack"
+framework: "TanStack"
 source_repo: "https://github.com/tanstack/query"
 source_branch: "main"
 source_path: "docs/framework/preact/reference/type-aliases/UndefinedInitialDataInfiniteOptions.md"
-source_commit: "fd50fa14d283c7d6664a796f758498d1ad5bfce7"
-source_commit_short: "fd50fa14"
-source_commit_date: "2026-07-24T22:22:47+10:00"
-generated_at: "2026-07-25T11:50:41Z"
+source_commit: "2969edf32f7e0c48e2a108d84712d6e01edfde21"
+source_commit_short: "2969edf"
+source_commit_date: "2026-08-28T01:03:02+09:00"
+generated_at: "2026-08-29T09:40:33.379592Z"
 ---
+# Undefinedinitialdatainfiniteoptions
 
 ---
 id: UndefinedInitialDataInfiniteOptions
 title: UndefinedInitialDataInfiniteOptions
 ---
 
-# Type Alias: UndefinedInitialDataInfiniteOptions\<TQueryFnData, TError, TData, TQueryKey, TPageParam\>
-
 ```ts
 type UndefinedInitialDataInfiniteOptions<TQueryFnData, TError, TData, TQueryKey, TPageParam> = UseInfiniteQueryOptions<TQueryFnData, TError, TData, TQueryKey, TPageParam> & object;
 ```
 
-Defined in: [preact-query/src/infiniteQueryOptions.ts:13](https://github.com/theVedanta/query/blob/main/packages/preact-query/src/infiniteQueryOptions.ts#L13)
+Defined in: [preact-query/src/infiniteQueryOptions.ts:25](https://github.com/TanStack/query/blob/main/packages/preact-query/src/infiniteQueryOptions.ts#L25)
+
+The options accepted by the `infiniteQueryOptions` overload selected when no `initialData` is set — `data`
+may be `undefined` while the query is `pending`.
 
 ## Type Declaration
 
@@ -33,24 +35,41 @@ optional initialData:
 | InitialDataFunction<NonUndefinedGuard<InfiniteData<TQueryFnData, TPageParam>>>;
 ```
 
+If set, this value will be used as the initial data for the query cache (as long as the query hasn't been
+created or cached yet). If set to a function, the function will be called **once** during the shared/root
+query initialization, and be expected to synchronously return the initial data. Initial data is
+considered stale by default unless a `staleTime` has been set. `initialData` **is persisted** to the
+cache.
+
 ## Type Parameters
 
 ### TQueryFnData
 
 `TQueryFnData`
 
+The type of a single page, as your `queryFn` resolves it.
+
 ### TError
 
 `TError` = `DefaultError`
+
+The type of errors your `queryFn` may throw.
 
 ### TData
 
 `TData` = `InfiniteData`\<`TQueryFnData`\>
 
+The type `data` ends up as after `select` runs — defaults to `InfiniteData<TQueryFnData>`,
+the shape of all fetched pages plus their page params.
+
 ### TQueryKey
 
 `TQueryKey` *extends* `QueryKey` = `QueryKey`
 
+The type of your `queryKey`.
+
 ### TPageParam
 
 `TPageParam` = `unknown`
+
+The type of the parameter passed to `queryFn` to fetch a given page.

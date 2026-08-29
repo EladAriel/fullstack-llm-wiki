@@ -1,60 +1,106 @@
 ---
 type: "Framework Learn Page"
-framework: "mongodb"
+framework: "MongoDB"
 source_repo: "https://github.com/mongodb/docs.git"
 source_branch: "main"
 source_path: "content/manual/manual/source/data-modeling/embedding.txt"
-source_commit: "ab9db26ed3d11618cdb61516d8180337d8e3f679"
-source_commit_short: "ab9db26e"
-source_commit_date: "2026-07-24T16:22:46-06:00"
-generated_at: "2026-07-25T11:51:15Z"
+source_commit: "b9f2bc487a2878b65e3c1f80024bebab76954f27"
+source_commit_short: "b9f2bc48"
+source_commit_date: "2026-08-28T17:09:45-05:00"
+generated_at: "2026-08-29T09:39:19.771728Z"
 ---
-
-====================================
+.. _data-modeling-embedding:
 
 # Embedded Data in Your MongoDB Schema
 
-Embedded documents store related data in a single document structure. A document can contain arrays and sub-documents with related data. These **denormalized** data models allow applications to retrieve related data in a single database operation.
+**meta:** :description: Decide if embedding data in your MongoDB schema design will optimize application performance and data retrieval.
 
-In the following example, the `contact` and `access` fields are embedded documents:
+**contents:** On this page
+   :local:
+   :backlinks: none
+   :depth: 2
+   :class: singlecol
 
-.. include:: /images/data-model-denormalized.rst
+.. dismissible-skills-card::
+   :skill: Relational to Document Model
+   :url: https://learn.mongodb.com/skills?openTab=data%20modeling
 
-Embedded data models are often considered **denormalized** because frequently-accessed data is duplicated in multiple collections.
+Embedded documents store related data in a single document structure. A
+document can contain arrays and sub-documents with related data. These 
+**denormalized** data models allow applications to retrieve related data
+in a single database operation.
 
-Embedded data models let applications query related pieces of information in the same database record. As a result, embedding provides the following benefits:
+In the following example, the ``contact`` and ``access`` fields are embedded 
+documents:
+
+**include:** /images/data-model-denormalized.rst
+
+Embedded data models are often considered **denormalized** because
+frequently-accessed data is duplicated in multiple collections.
+
+Embedded data models let applications query related pieces of
+information in the same database record. As a result, embedding provides the 
+following benefits:
 
 - Better performance for read operations
+
 - The ability to retrieve related data in a single database operation
+
 - The ability to update related data in a single atomic write
-operation
+  operation
 
-Embedded documents store related data in a single document structure. A document can contain arrays and sub-documents with related data. These **denormalized** data models allow applications to retrieve related data in a single database operation.
+Embedded documents store related data in a single document structure. A
+document can contain arrays and sub-documents with related data. These 
+**denormalized** data models allow applications to retrieve related data
+in a single database operation.
 
-> **Note:** Documents in MongoDB must be smaller than 16 mebibytes.
-For large binary data, consider `GridFS <gridfs>`.
+**note:** Document Size Limit
+
+   Documents in MongoDB must be smaller than 16 mebibytes.
+
+   For large binary data, consider :ref:`GridFS <gridfs>`.
 
 ## Use Cases
 
 Use embedded data models in the following scenarios:
 
 - You have "contains" relationships between entities. For example, a
-`contacts` document that contains an `address`. See `data-modeling-example-one-to-one`.
+  ``contacts`` document that contains an ``address``. See
+  :ref:`data-modeling-example-one-to-one`.
 
 - You have one-to-many relationships between entities. In these
-relationships, the "many" or child documents are viewed in the context of the "one" or parent documents. See `data-modeling-example-one-to-many`.
+  relationships, the "many" or child documents are viewed in the context
+  of the "one" or parent documents. See
+  :ref:`data-modeling-example-one-to-many`.
+
+.. _faq-developers-embed-documents:
 
 ### Collections with a Large Number of Small Documents
 
-If you have a collection with a large number of small documents, consider embedding to improve performance. If you can group these small documents by some logical relationship and you frequently retrieve the documents by this grouping, you might consider "rolling-up" the small documents into larger documents that contain an array of embedded documents.
+If you have a collection with a large number of small documents, consider 
+embedding to improve performance. If you can group these small documents by some 
+logical relationship *and* you frequently retrieve the documents by this 
+grouping, you might consider "rolling-up" the small documents into larger 
+documents that contain an array of embedded documents.
 
-"Rolling up" these small documents into logical groupings means that queries to retrieve a group of documents involve sequential reads and fewer random disk accesses. Additionally, "rolling up" documents and moving common fields to the larger document benefit the index on these fields. There would be fewer copies of the common fields and there would be fewer associated key entries in the corresponding index. See `indexes` for more information on indexes.
+"Rolling up" these small documents into logical groupings means that
+queries to retrieve a group of documents involve sequential reads and
+fewer random disk accesses. Additionally, "rolling up" documents and
+moving common fields to the larger document benefit the index on these
+fields. There would be fewer copies of the common fields *and* there
+would be fewer associated key entries in the corresponding index. See
+:ref:`indexes` for more information on indexes.
 
-However, if you often only need to retrieve a subset of the documents within the group, then "rolling-up" the documents may not provide better performance. Furthermore, if small, separate documents represent the natural model for the data, you should maintain that model.
+However, if you often only need to retrieve a subset of the documents
+within the group, then "rolling-up" the documents may not provide
+better performance. Furthermore, if small, separate documents represent
+the natural model for the data, you should maintain that model.
 
 ## Query Embedded Data
 
-To query data within embedded documents, use `dot notation`. For examples of querying data in arrays and embedded documents, see:
+To query data within embedded documents, use :term:`dot notation`. For
+examples of querying data in arrays and embedded documents, see:
 
-- `read-operations-arrays`
-- `read-operations-embedded-documents`
+- :ref:`read-operations-arrays`
+
+- :ref:`read-operations-embedded-documents`

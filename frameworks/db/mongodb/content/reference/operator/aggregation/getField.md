@@ -1,203 +1,277 @@
 ---
 type: "Framework Learn Page"
-framework: "mongodb"
+framework: "MongoDB"
 source_repo: "https://github.com/mongodb/docs.git"
 source_branch: "main"
 source_path: "content/manual/manual/source/reference/operator/aggregation/getField.txt"
-source_commit: "ab9db26ed3d11618cdb61516d8180337d8e3f679"
-source_commit_short: "ab9db26e"
-source_commit_date: "2026-07-24T16:22:46-06:00"
-generated_at: "2026-07-25T11:51:15Z"
+source_commit: "b9f2bc487a2878b65e3c1f80024bebab76954f27"
+source_commit_short: "b9f2bc48"
+source_commit_date: "2026-08-28T17:09:45-05:00"
+generated_at: "2026-08-29T09:39:20.165932Z"
 ---
-
-===============================
-
 # $getField (expression operator)
 
+**meta:** :description: Retrieve field values from documents using `$getField`, including fields with special characters like periods or dollar signs.
+
+.. default-domain:: mongodb
+
+**contents:** On this page
+   :local:
+   :backlinks: none
+   :depth: 1
+   :class: singlecol
+
 ## Definition
+
+**expression:** $getField
+
+   .. versionadded:: 5.0
+
+   Returns the value of a specified field from a document. If you
+   don't specify an object, :expression:`$getField` returns the value of
+   the field from :variable:`$$CURRENT <CURRENT>`.
+
+   You can use :expression:`$getField` to retrieve the value of fields
+   with names that contain periods (``.``) or start with dollar signs
+   (``$``).
+
+   Do not rely on root-level dollar-prefixed field names that collide
+   with reserved internal metadata field names, as those fields may be
+   dropped or inaccessible in some query-processing contexts. For
+   restrictions and guidance on field names that contain dollar signs
+   (``$``) or periods (``.``), see
+   :ref:`crud-concepts-dot-dollar-considerations`.
+
+   .. tip::
+
+      Use :expression:`$setField` to add or update fields with names
+      that contain dollar signs (``$``) or periods (``.``).
 
 ## Syntax
 
 :expression:`$getField` has the following syntax:
 
-```javascript
-{ 
-  $getField: {
-    field: <String>,
-    input: <Object> 
-  }
-}
-```
+.. code-block:: javascript
 
-:expression:`$getField` has the following shorthand syntax for retrieving field values from :variable:`$$CURRENT <CURRENT>`:
+   { 
+     $getField: {
+       field: <String>,
+       input: <Object> 
+     }
+   }
 
-```javascript
-{ 
-  $getField: <String>
-}
-```
+.. list-table::
+   :header-rows: 1
+   :widths: 20 20 80
 
-For this syntax, the argument is equivalent to the value of `field` described above.
+   * - Field
+     - Type
+     - Description
+
+   * - ``field``
+     - String
+     - Input object for which you want to return a value.
+
+       .. versionchanged:: 7.2
+
+          ``field`` accepts any valid :ref:`expression
+          <aggregation-expressions>` that resolves to a string.
+
+       If ``field`` begins with a dollar sign (``$``), place
+       the field name inside a :expression:`$literal` expression
+       to return its value.
+
+   * - ``input``
+     - Object
+     - *Default*: :variable:`$$CURRENT <CURRENT>`
+
+       A valid :ref:`expression <aggregation-expressions>` that 
+       contains the ``field`` for which you want to return a value. 
+       ``input`` must resolve to an object, ``missing``, 
+       ``null``, or ``undefined``. If omitted, defaults
+       to the document currently being processed in the pipeline  
+       (:variable:`$$CURRENT <CURRENT>`).
+
+:expression:`$getField` has the following shorthand syntax for
+retrieving field values from :variable:`$$CURRENT <CURRENT>`:
+
+.. code-block:: javascript
+
+   { 
+     $getField: <String>
+   }
+
+For this syntax, the argument is equivalent to the value of ``field``
+described above.
 
 ## Behavior
 
-- If the `field` that you specify is not present in the `input`
-object, or in :variable:`$$CURRENT <CURRENT>` if you don't specify an `input` object, :expression:`$getField` returns `missing`.
+- If the ``field`` that you specify is not present in the ``input`` 
+  object, or in :variable:`$$CURRENT <CURRENT>` if you don't specify an
+  ``input`` object, :expression:`$getField` returns ``missing``. 
 
-- If `input` evaluates to `missing`, `undefined`, or `null`,
-:expression:`$getField` returns `null`.
+- If ``input`` evaluates to ``missing``, ``undefined``, or ``null``,
+  :expression:`$getField` returns ``null``.
 
-- If `input` evaluates to anything other than an object, `missing`,
-`undefined`, or `null`, :expression:`$getField` returns an error.
+- If ``input`` evaluates to anything other than an object, ``missing``, 
+  ``undefined``, or ``null``, :expression:`$getField` returns an error.
 
 - :expression:`$getField` doesn't implicitly traverse objects or arrays.
-For example, :expression:`$getField` evaluates a `field` value of `a.b.c` as a top-level field `a.b.c` instead of a nested field `{ a: { b: { c: } } }`.
+  For example, :expression:`$getField` evaluates a ``field`` value of
+  ``a.b.c`` as a top-level field ``a.b.c`` instead of a nested field 
+  ``{ a: { b: { c: } } }``.
 
-.. seealso :
+.. seealso ::
 
-```
-:ref:`Considerations for field names <crud-concepts-dot-dollar-considerations>`
-```
-
+   :ref:`Considerations for field names <crud-concepts-dot-dollar-considerations>`
+ 
 ## Examples
 
-### Query Fields that Contain Periods (`.`)
+### Query Fields that Contain Periods (``.``)
 
-Consider an `inventory` collection with the following documents:
+Consider an ``inventory`` collection with the following documents:
 
-```javascript
-db.inventory.insertMany( [
-   { _id: 1, item: "sweatshirt", "price.usd": 45.99, qty: 300 },
-   { _id: 2, item: "winter coat", "price.usd": 499.99, qty: 200 },
-   { _id: 3, item: "sun dress", "price.usd": 199.99, qty: 250 },
-   { _id: 4, item: "leather boots", "price.usd": 249.99, qty: 300 },
-   { _id: 5, item: "bow tie", "price.usd": 9.99, qty: 180 }
-] )
-```
+.. code-block:: javascript
 
-The following operation uses the :expression:`$getField` and :expression:`$gt` operators to find which products have a `price.usd` greater than `200`:
+   db.inventory.insertMany( [
+      { _id: 1, item: "sweatshirt", "price.usd": 45.99, qty: 300 },
+      { _id: 2, item: "winter coat", "price.usd": 499.99, qty: 200 },
+      { _id: 3, item: "sun dress", "price.usd": 199.99, qty: 250 },
+      { _id: 4, item: "leather boots", "price.usd": 249.99, qty: 300 },
+      { _id: 5, item: "bow tie", "price.usd": 9.99, qty: 180 }
+   ] )
 
-```javascript
-db.inventory.aggregate( [
-  {
-    $match: 
-      { $expr: 
-        { $gt: [ { $getField: "price.usd" }, 200 ] }
+The following operation uses the :expression:`$getField` and
+:expression:`$gt` operators to find which products have a ``price.usd``
+greater than ``200``:
+
+.. code-block:: javascript
+
+   db.inventory.aggregate( [
+     {
+       $match: 
+         { $expr: 
+           { $gt: [ { $getField: "price.usd" }, 200 ] }
+         }
       }
-   }
-] )
-```
+   ] )
 
 The operation returns the following results:
 
-```javascript
-[
-  { _id: 2, item: 'winter coat', qty: 200, 'price.usd': 499.99 },
-  { _id: 4, item: 'leather boots', qty: 300, 'price.usd': 249.99 }
-]
-```
+.. code-block:: javascript
+   :copyable: false
 
-### Query Fields that Start with a Dollar Sign (`$`)
+   [
+     { _id: 2, item: 'winter coat', qty: 200, 'price.usd': 499.99 },
+     { _id: 4, item: 'leather boots', qty: 300, 'price.usd': 249.99 }
+   ]
 
-Consider an `inventory` collection with the following documents:
+### Query Fields that Start with a Dollar Sign (``$``)
 
-```javascript
-db.inventory.insertMany( [ 
-   { _id: 1, item: "sweatshirt", "$price": 45.99, qty: 300 },
-   { _id: 2, item: "winter coat", "$price": 499.99, qty: 200 },
-   { _id: 3, item: "sun dress", "$price": 199.99, qty: 250 },
-   { _id: 4, item: "leather boots", "$price": 249.99, qty: 300 },
-   { _id: 5, item: "bow tie", "$price": 9.99, qty: 180 }
-] )
-```
+Consider an ``inventory`` collection with the following documents:
 
-The following operation uses the :expression:`$getField`, :expression:`$gt`, and :expression:`$literal` operators to find which products have a `$price` greater than `200`:
+.. code-block:: javascript
 
-```javascript
-db.inventory.aggregate( [
-  {
-    $match: 
-      { $expr: 
-        { $gt: [ { $getField: {$literal: "$price" } }, 200 ] }
+   db.inventory.insertMany( [ 
+      { _id: 1, item: "sweatshirt", "$price": 45.99, qty: 300 },
+      { _id: 2, item: "winter coat", "$price": 499.99, qty: 200 },
+      { _id: 3, item: "sun dress", "$price": 199.99, qty: 250 },
+      { _id: 4, item: "leather boots", "$price": 249.99, qty: 300 },
+      { _id: 5, item: "bow tie", "$price": 9.99, qty: 180 }
+   ] )
+
+The following operation uses the :expression:`$getField`,
+:expression:`$gt`, and :expression:`$literal` operators to find which 
+products have a ``$price`` greater than ``200``:
+
+.. code-block:: javascript
+
+   db.inventory.aggregate( [
+     {
+       $match: 
+         { $expr: 
+           { $gt: [ { $getField: {$literal: "$price" } }, 200 ] }
+         }
       }
-   }
-] )
-```
+   ] )
 
 The operation returns the following results:
 
-```javascript
-[
-  { _id: 2, item: 'winter coat', qty: 200, '$price': 499.99 },
-  { _id: 4, item: 'leather boots', qty: 300, '$price': 249.99 }
-]
-```
+.. code-block:: javascript
+   :copyable: false
+
+   [
+     { _id: 2, item: 'winter coat', qty: 200, '$price': 499.99 },
+     { _id: 4, item: 'leather boots', qty: 300, '$price': 249.99 }
+   ]
 
 ### Query a Field in a Sub-document
 
-Create an `inventory` collection with the following documents:
+Create an ``inventory`` collection with the following documents:
 
-```javascript
-db.inventory.insertMany( [
-   { _id: 1, item: "sweatshirt",  "price.usd": 45.99,
-     quantity: { "$large": 50, "$medium": 50, "$small": 25 }
-   }, 
-   { _id: 2, item: "winter coat", "price.usd": 499.99,
-     quantity: { "$large": 35, "$medium": 35, "$small": 35 }
-   },
-   { _id: 3, item: "sun dress", "price.usd": 199.99,
-     quantity: { "$large": 45, "$medium": 40, "$small": 5 }
-   },
-   { _id: 4, item: "leather boots", "price.usd": 249.99,
-     quantity: { "$large": 20, "$medium": 30, "$small": 40 }
-   },
-   { _id: 5, item: "bow tie", "price.usd": 9.99,
-     quantity: { "$large": 0, "$medium": 10, "$small": 75 }
-   }
-] )
-```
+.. code-block:: javascript
 
-The following operation returns documents where the number of `$small` items is less than or equal to `20`.
+   db.inventory.insertMany( [
+      { _id: 1, item: "sweatshirt",  "price.usd": 45.99,
+        quantity: { "$large": 50, "$medium": 50, "$small": 25 }
+      }, 
+      { _id: 2, item: "winter coat", "price.usd": 499.99,
+        quantity: { "$large": 35, "$medium": 35, "$small": 35 }
+      },
+      { _id: 3, item: "sun dress", "price.usd": 199.99,
+        quantity: { "$large": 45, "$medium": 40, "$small": 5 }
+      },
+      { _id: 4, item: "leather boots", "price.usd": 249.99,
+        quantity: { "$large": 20, "$medium": 30, "$small": 40 }
+      },
+      { _id: 5, item: "bow tie", "price.usd": 9.99,
+        quantity: { "$large": 0, "$medium": 10, "$small": 75 }
+      }
+   ] )
 
-```javascript
-db.inventory.aggregate( [
-   { $match: 
-      { $expr:
-         { $lte:
-            [
-               { $getField: 
-                  { field: { $literal: "$small" },
-                    input: "$quantity"
-                  }
-               },
-               20
-            ]
+The following operation returns documents where the number of
+``$small`` items is less than or equal to ``20``.
+
+.. code-block:: javascript
+   :emphasize-lines: 6-8
+
+   db.inventory.aggregate( [
+      { $match: 
+         { $expr:
+            { $lte:
+               [
+                  { $getField: 
+                     { field: { $literal: "$small" },
+                       input: "$quantity"
+                     }
+                  },
+                  20
+               ]
+            }
          }
       }
-   }
-] )
-```
+   ] )
 
 Use these operators to query the collection:
 
 - The :expression:`$lte` operator finds values less than or equal to
-20.
-
-- :expression:`$getField` requires explicit `field` and `input`
-parameters because the `$small` field is part of a sub-document.
-
+  20.
+- :expression:`$getField` requires explicit ``field`` and ``input``
+  parameters because the ``$small`` field is part of a
+  sub-document.
 - :expression:`$getField` uses :expression:`$literal` to evaluate
-"`$small`", because the field name has a dollar sign (`$`) in it.
+  "``$small``", because the field name has a dollar sign (``$``) in it.
 
 Example output:
 
-```javascript
-[
-  {
-    _id: 3,
-    item: 'sun dress',
-    'price.usd': 199.99,
-    quantity: { '$large': 45, '$medium': 40, '$small': 5 }
-  }
-]
-```
+.. code-block:: javascript
+   :copyable: false
+
+   [
+     {
+       _id: 3,
+       item: 'sun dress',
+       'price.usd': 199.99,
+       quantity: { '$large': 45, '$medium': 40, '$small': 5 }
+     }
+   ]

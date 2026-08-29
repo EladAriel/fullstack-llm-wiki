@@ -1,139 +1,189 @@
 ---
 type: "Framework Learn Page"
-framework: "mongodb"
+framework: "MongoDB"
 source_repo: "https://github.com/mongodb/docs.git"
 source_branch: "main"
 source_path: "content/manual/manual/source/tutorial/convert-secondary-into-arbiter.txt"
-source_commit: "ab9db26ed3d11618cdb61516d8180337d8e3f679"
-source_commit_short: "ab9db26e"
-source_commit_date: "2026-07-24T16:22:46-06:00"
-generated_at: "2026-07-25T11:51:15Z"
+source_commit: "b9f2bc487a2878b65e3c1f80024bebab76954f27"
+source_commit_short: "b9f2bc48"
+source_commit_date: "2026-08-28T17:09:45-05:00"
+generated_at: "2026-08-29T09:39:19.643244Z"
 ---
-
-==============================================
-
 # Convert a Self-Managed Secondary to an Arbiter
 
-If you have a `secondary` in a `replica set` that no longer needs to hold data but that needs to remain in the set to ensure that the set can `elect a primary <replica-set-elections>`, you may convert the secondary to an `arbiter <replica-set-arbiters>` using either procedure in this tutorial. Both procedures are operationally equivalent:
+**meta:** :keywords: on-prem
+   :description: Convert a secondary in a replica set to an arbiter by either reusing the same port or using a new port, ensuring the set can still elect a primary.
+
+.. default-domain:: mongodb
+
+**contents:** On this page
+   :local:
+   :backlinks: none
+   :depth: 1
+   :class: singlecol
+
+If you have a :term:`secondary` in a :term:`replica set` that no
+longer needs to hold data but that needs to remain in the set to
+ensure that the set can :ref:`elect a primary
+<replica-set-elections>`, you may convert the secondary to an
+:ref:`arbiter <replica-set-arbiters>` using either procedure in this
+tutorial. Both procedures are operationally equivalent:
 
 - You may operate the arbiter on the same port as the former secondary.
-In this procedure, you must shut down the secondary and remove its data before restarting and reconfiguring it as an arbiter.
+  In this procedure, you must shut down the secondary and remove its
+  data before restarting and reconfiguring it as an arbiter.
 
-For this procedure, see `replica-set-convert-secondary-to-arbiter-same-port`.
+  For this procedure, see :ref:`replica-set-convert-secondary-to-arbiter-same-port`.
 
 - Run the arbiter on a new port. In this procedure, you can reconfigure
-the server as an arbiter before shutting down the instance running as a secondary.
+  the server as an arbiter before shutting down the instance running as
+  a secondary.
 
-For this procedure, see `replica-set-convert-secondary-to-arbiter`.
+  For this procedure, see :ref:`replica-set-convert-secondary-to-arbiter`.
+
+.. _replica-set-convert-secondary-to-arbiter-same-port:
 
 ## Convert Secondary to Arbiter and Reuse the Port Number
 
-#. If your application is connecting directly to the secondary, modify the application so that MongoDB queries don't reach the secondary.
+#. If your application is connecting directly to the secondary,
+   modify the application so that MongoDB queries don't reach
+   the secondary.
 
 #. Shut down the secondary.
 
-#. Remove the `secondary` from the `replica set` by calling the :method:`rs.remove()` method. Perform this operation while connected to the current `primary` in :binary:`~bin.mongosh`:
+#. Remove the :term:`secondary` from the :term:`replica set` by calling
+   the :method:`rs.remove()` method. Perform this operation while connected to the current
+   :term:`primary` in :binary:`~bin.mongosh`:
 
-```javascript
-   rs.remove("<hostname><:port>")
-```
+   .. code-block:: javascript
 
-#. Verify that the replica set no longer includes the secondary by calling the :method:`rs.conf()` method in :binary:`~bin.mongosh`:
+      rs.remove("<hostname><:port>")
 
-```javascript
-   rs.conf()
-```
+#. Verify that the replica set no longer includes the secondary by
+   calling the :method:`rs.conf()` method in :binary:`~bin.mongosh`:
+
+   .. code-block:: javascript
+
+      rs.conf()
 
 #. Move the secondary's data directory to an archive folder. For example:
 
-```bash
-   mv /data/db /data/db-old
+   .. code-block:: bash
 
-.. note:: Optional
+      mv /data/db /data/db-old
 
-   You may remove the data instead.
-```
+   .. note:: Optional
+   
+      You may remove the data instead.
 
-#. Create a new, empty data directory to point to when restarting the :binary:`~bin.mongod` instance. You can reuse the previous name. For example:
+#. Create a new, empty data directory to point to when restarting the
+   :binary:`~bin.mongod` instance. You can reuse the previous name. For
+   example:
 
-```bash
-   mkdir /data/db
-```
+   .. code-block:: bash
 
-#. Restart the :binary:`~bin.mongod` instance for the secondary, specifying the port number, the empty data directory, and the replica set. You can use the same port number you used before. Issue a command similar to the following:
+      mkdir /data/db
 
-.. include:: /includes/warning-bind-ip-security-considerations.rst
+#. Restart the :binary:`~bin.mongod` instance for the secondary, specifying
+   the port number, the empty data directory, and the replica set. You
+   can use the same port number you used before. Issue a command similar
+   to the following:
 
-#. In :binary:`~bin.mongosh` convert the secondary to an arbiter using the :method:`rs.addArb()` method:
+   .. include:: /includes/warning-bind-ip-security-considerations.rst
 
-```javascript
-   rs.addArb("<hostname><:port>")
-```
+   .. code-block:: bash
 
-#. Verify the arbiter belongs to the replica set by calling the :method:`rs.conf()` method in :binary:`~bin.mongosh`.
+      mongod --port 27021 --dbpath /data/db --replSet rs  --bind_ip localhost,<hostname(s)|ip address(es)>
 
-```javascript
-   rs.conf()
+#. In :binary:`~bin.mongosh` convert the secondary to an arbiter
+   using the :method:`rs.addArb()` method:
 
-The arbiter member should include the following:
+   .. code-block:: javascript
 
-.. code-block:: javascript
+      rs.addArb("<hostname><:port>")
 
-   "arbiterOnly" : true
-```
+#. Verify the arbiter belongs to the replica set by calling the
+   :method:`rs.conf()` method in :binary:`~bin.mongosh`.
+
+   .. code-block:: javascript
+
+      rs.conf()
+
+   The arbiter member should include the following:
+
+   .. code-block:: javascript
+
+      "arbiterOnly" : true
+
+.. _replica-set-convert-secondary-to-arbiter:
 
 ## Convert Secondary to Arbiter Running on a New Port Number
 
-#. If your application is connecting directly to the secondary or has a connection string referencing the secondary, modify the application so that MongoDB queries don't reach the secondary.
+#. If your application is connecting directly to the secondary
+   or has a connection string referencing the secondary,
+   modify the application so that MongoDB queries don't reach
+   the secondary.
 
-#. Create a new, empty data directory to be used with the new port number. For example:
+#. Create a new, empty data directory to be used with the new port
+   number. For example:
 
-```bash
-   mkdir /data/db-temp
-```
+   .. code-block:: bash
 
-#. Start a new :binary:`~bin.mongod` instance on the new port number, specifying the new data directory and the existing replica set. Issue a command similar to the following:
+      mkdir /data/db-temp
 
-.. include:: /includes/warning-bind-ip-security-considerations.rst
+#. Start a new :binary:`~bin.mongod` instance on the new port number,
+   specifying the new data directory and the existing replica
+   set. Issue a command similar to the following:
 
-#. In :binary:`~bin.mongosh` connected to the current primary, convert the new :binary:`~bin.mongod` instance to an arbiter using the :method:`rs.addArb()` method:
+   .. include:: /includes/warning-bind-ip-security-considerations.rst
 
-```javascript
-   rs.addArb("<hostname><:port>")
-```
+   .. code-block:: bash
 
-#. Verify the arbiter has been added to the replica set by calling the :method:`rs.conf()` method in :binary:`~bin.mongosh`.
+      mongod --port 27021 --dbpath /data/db-temp --replSet rs --bind_ip localhost,<hostname(s)|ip address(es)>
 
-```javascript
-   rs.conf()
+#. In :binary:`~bin.mongosh` connected to the current primary,
+   convert the new :binary:`~bin.mongod` instance to an arbiter using the :method:`rs.addArb()`
+   method:
 
-The arbiter member should include the following:
+   .. code-block:: javascript
 
-.. code-block:: javascript
+      rs.addArb("<hostname><:port>")
 
-   "arbiterOnly" : true
-```
+#. Verify the arbiter has been added to the replica set by calling the
+   :method:`rs.conf()` method in :binary:`~bin.mongosh`.
+
+   .. code-block:: javascript
+
+      rs.conf()
+
+   The arbiter member should include the following:
+
+   .. code-block:: javascript
+
+      "arbiterOnly" : true
 
 #. Shut down the secondary.
 
-#. Remove the `secondary` from the `replica set` by calling the :method:`rs.remove()` method in :binary:`~bin.mongosh`:
+#. Remove the :term:`secondary` from the :term:`replica set` by calling
+   the :method:`rs.remove()` method in :binary:`~bin.mongosh`:
 
-```javascript
-   rs.remove("<hostname><:port>")
-```
+   .. code-block:: javascript
 
-#. Verify that the replica set no longer includes the old secondary by calling the :method:`rs.conf()` method in :binary:`~bin.mongosh`:
+      rs.remove("<hostname><:port>")
 
-```javascript
-   rs.conf()
-```
+#. Verify that the replica set no longer includes the old secondary by
+   calling the :method:`rs.conf()` method in :binary:`~bin.mongosh`:
+
+   .. code-block:: javascript
+
+      rs.conf()
 
 #. Move the secondary's data directory to an archive folder. For example:
 
-```bash
-   mv /data/db /data/db-old
+   .. code-block:: bash
 
-.. note:: Optional
+      mv /data/db /data/db-old
 
-   You may remove the data instead.
-```
+   .. note:: Optional
+   
+      You may remove the data instead.

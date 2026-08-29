@@ -4,10 +4,10 @@ framework: "LangSmith"
 source_repo: "https://github.com/langchain-ai/docs.git"
 source_branch: "main"
 source_path: "src/langsmith/monorepo-support.mdx"
-source_commit: "2aae1dfc98ee953a9a5185fb6fcdd9efb3f4d878"
-source_commit_short: "2aae1df"
-source_commit_date: "2026-07-25T00:27:23+00:00"
-generated_at: "2026-07-25T19:08:33.348751Z"
+source_commit: "a174f9cf7c91ee5eb14ee2382eb48bfe6e4956e9"
+source_commit_short: "a174f9c"
+source_commit_date: "2026-08-28T17:04:12-07:00"
+generated_at: "2026-08-29T09:39:50.615729Z"
 ---
 ---
 title: Monorepo support
@@ -120,7 +120,7 @@ langgraph build -t my-customer-support-agent
 ```
 ```bash JS
 # Run from the root of the monorepo
-langgraph build -t my-customer-support-agent -c agents/customer-support/langgraph.json --build-command "yarn run turbo build" --install-command "yarn install"
+langgraph build -t my-customer-support-agent -c agents/customer-support/langgraph.json
 ```
 </CodeGroup>
 
@@ -132,11 +132,9 @@ The Python build process:
 
 The JavaScript build process:
 1. Uses the directory you called `langgraph build` from (the monorepo root in this case) as the build context.
-2. Automatically detects your package manager (yarn, npm, pnpm, bun)
-3. Runs the appropriate install command.
-    - If you have one or both of a custom build/install command it will run from the directory you called `langgraph build` from.
-    - Otherwise, it will run from the directory where the `langgraph.json` file is located.
-4. Optionally runs a custom build command from the directory where the `langgraph.json` file is located (only if you pass the `--build-command` flag).
+2. Automatically detects your package manager (yarn, npm, pnpm, bun).
+3. Runs the appropriate install flow based on your project configuration.
+4. Uses the directory containing `langgraph.json` to locate the app being built.
 
 ## Tips and best practices
 

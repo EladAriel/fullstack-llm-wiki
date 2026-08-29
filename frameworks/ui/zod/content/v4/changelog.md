@@ -1,14 +1,15 @@
 ---
 type: "Framework Learn Page"
-framework: "zod"
+framework: "Zod"
 source_repo: "https://github.com/colinhacks/zod"
 source_branch: "main"
 source_path: "packages/docs/content/v4/changelog.mdx"
-source_commit: "912f0f51b0ced654d0069741e7160834dca742ee"
-source_commit_short: "912f0f51"
-source_commit_date: "2026-06-10T10:17:29-07:00"
-generated_at: "2026-06-21T11:57:59Z"
+source_commit: "e6b6ab347675cd2bd54b1bdbed16f98c59be82a9"
+source_commit_short: "e6b6ab3"
+source_commit_date: "2026-08-28T17:35:38-07:00"
+generated_at: "2026-08-29T09:40:34.221057Z"
 ---
+# Changelog
 
 ---
 title: Migration guide
@@ -392,6 +393,16 @@ type schemaInput = z.input<typeof schema>;
 // Zod 4: unknown;
 ```
 
+A missing key on an object schema with a `z.coerce.*` field now errors. Use `.default()` to declare the fallback explicitly.
+
+```ts
+const schema = z.object({ foo: z.coerce.boolean() });
+schema.parse({});
+
+// Zod 3: { foo: false }
+// Zod 4: ZodError: Invalid input: expected nonoptional, received undefined
+```
+
 ## `.default()` updates
 
 The application of `.default()` has changed in a subtle way. If the input is `undefined`, `ZodDefault` short-circuits the parsing process and returns the default value. The default value must be assignable to the *output type*.
@@ -479,6 +490,16 @@ const mySchema = z.object({
 });
 // Zod 3: { a?: any; b?: unknown };
 // Zod 4: { a: any; b: unknown };
+```
+
+As of `v4.4.0`, the key is required at parse time too. Zod 4.0–4.3 accepted a missing key despite the inferred type above; requiring it is a soundness fix.
+
+```ts
+mySchema.parse({}); // ❌ (✅ in v4.3 and earlier)
+mySchema.parse({ a: undefined, b: undefined }); // ✅
+
+// use .optional() for a key that may be absent
+z.object({ a: z.any().optional() }).parse({}); // ✅
 ```
 
 ### deprecates `.merge()`

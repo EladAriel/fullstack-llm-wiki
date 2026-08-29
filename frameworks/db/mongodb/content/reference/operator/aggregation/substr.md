@@ -1,62 +1,99 @@
 ---
 type: "Framework Learn Page"
-framework: "mongodb"
+framework: "MongoDB"
 source_repo: "https://github.com/mongodb/docs.git"
 source_branch: "main"
 source_path: "content/manual/manual/source/reference/operator/aggregation/substr.txt"
-source_commit: "ab9db26ed3d11618cdb61516d8180337d8e3f679"
-source_commit_short: "ab9db26e"
-source_commit_date: "2026-07-24T16:22:46-06:00"
-generated_at: "2026-07-25T11:51:15Z"
+source_commit: "b9f2bc487a2878b65e3c1f80024bebab76954f27"
+source_commit_short: "b9f2bc48"
+source_commit_date: "2026-08-28T17:09:45-05:00"
+generated_at: "2026-08-29T09:39:20.190713Z"
 ---
-
-=============================
-
 # $substr (expression operator)
+
+**meta:** :description: Use `$substr` to extract a substring from a string in MongoDB aggregation, specifying start index and length.
+
+.. default-domain:: mongodb
+
+**contents:** On this page
+   :local:
+   :backlinks: none
+   :depth: 1
+   :class: singlecol
 
 ## Definition
 
+**expression:** $substr
+   
+   .. deprecated:: 3.4
+
+      :expression:`$substr` is now an alias for
+      :expression:`$substrBytes`.
+   
+   Returns a substring of a string, starting at a specified index
+   position and including the specified number of characters. The index
+   is zero-based.
+
+   :expression:`$substr` has the following syntax:
+
+   .. code-block:: javascript
+
+      { $substr: [ <string>, <start>, <length> ] }
+
+   The arguments can be any valid :ref:`expression
+   <aggregation-expressions>` as long as the first argument
+   resolves to a string, and the second and third arguments resolve to
+   integers. For more information on expressions, see
+   :ref:`aggregation-expressions`.
+
 ## Behavior
 
-If `<start>` is a negative number, :expression:`$substr` returns an empty string `""`.
+If ``<start>`` is a negative number, :expression:`$substr` returns an
+empty string ``""``.
 
-If `<length>` is a negative number, :expression:`$substr` returns a substring that starts at the specified index and includes the rest of the string.
+If ``<length>`` is a negative number, :expression:`$substr` returns a
+substring that starts at the specified index and includes the rest of
+the string.
 
-.. include:: /includes/intro-aggregation-string.rst
+.. |exp-has| replace:: :expression:`$substr` only has
+
+**include:** /includes/intro-aggregation-string.rst
 
 ## Example
 
-Consider an `inventory` collection with the following documents:
+Consider an ``inventory`` collection with the following documents:
 
-```javascript
-db.inventory.insertMany( [
-   { _id: 1, item: "ABC1", quarter: "13Q1", description: "product 1" },
-   { _id: 2, item: "ABC2", quarter: "13Q4", description: "product 2" },
-   { _id: 3, item: "XYZ1", quarter: "14Q2", description: null }
-] )
-```
+.. code-block:: javascript
 
-The following operation uses the :expression:`$substr` operator to separate the `quarter` value into a `yearSubstring` and a `quarterSubstring`:
+   db.inventory.insertMany( [
+      { _id: 1, item: "ABC1", quarter: "13Q1", description: "product 1" },
+      { _id: 2, item: "ABC2", quarter: "13Q4", description: "product 2" },
+      { _id: 3, item: "XYZ1", quarter: "14Q2", description: null }
+   ] )
 
-```javascript
-db.inventory.aggregate(
-   [
-     {
-       $project:
-          {
-            item: 1,
-            yearSubstring: { $substr: [ "$quarter", 0, 2 ] },
-            quarterSubstring: { $substr: [ "$quarter", 2, -1 ] }
-          }
-      }
-   ]
-)
-```
+The following operation uses the :expression:`$substr` operator
+to separate the ``quarter`` value into a ``yearSubstring`` and a
+``quarterSubstring``:
+
+.. code-block:: javascript
+
+   db.inventory.aggregate(
+      [
+        {
+          $project:
+             {
+               item: 1,
+               yearSubstring: { $substr: [ "$quarter", 0, 2 ] },
+               quarterSubstring: { $substr: [ "$quarter", 2, -1 ] }
+             }
+         }
+      ]
+   )
 
 The operation returns the following results:
 
-```javascript
-{ _id: 1, item: "ABC1", yearSubstring: "13", quarterSubstring: "Q1" }
-{ _id: 2, item: "ABC2", yearSubstring: "13", quarterSubstring: "Q4" }
-{ _id: 3, item: "XYZ1", yearSubstring: "14", quarterSubstring: "Q2" }
-```
+.. code-block:: javascript
+
+   { _id: 1, item: "ABC1", yearSubstring: "13", quarterSubstring: "Q1" }
+   { _id: 2, item: "ABC2", yearSubstring: "13", quarterSubstring: "Q4" }
+   { _id: 3, item: "XYZ1", yearSubstring: "14", quarterSubstring: "Q2" }

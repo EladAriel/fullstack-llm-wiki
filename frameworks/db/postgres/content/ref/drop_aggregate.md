@@ -1,25 +1,34 @@
 ---
 type: "Framework Learn Page"
-framework: "postgres"
+framework: "PostgreSQL"
 source_repo: "https://github.com/postgres/postgres.git"
 source_branch: "master"
 source_path: "doc/src/sgml/ref/drop_aggregate.sgml"
-source_commit: "38afc3dcb25c45b744d4025029ce0a6c90b7059f"
-source_commit_short: "38afc3dc"
-source_commit_date: "2026-07-25T19:08:27+09:00"
-generated_at: "2026-07-25T11:50:59Z"
+source_commit: "6c5f1d6074208146930b67c2054509c3e82f6f7f"
+source_commit_short: "6c5f1d6"
+source_commit_date: "2026-08-28T23:24:47+02:00"
+generated_at: "2026-08-29T09:39:24.599236Z"
 ---
-
 DROP AGGREGATE
+ 
 
-DROP AGGREGATE
-7
-SQL - Language Statements
+ 
+  
+# DROP AGGREGATE
 
-DROP AGGREGATE
-remove an aggregate function
+  7
+  SQL - Language Statements
+ 
 
-```
+ 
+  
+# DROP AGGREGATE
+
+  remove an aggregate function
+ 
+
+ 
+
 DROP AGGREGATE [ IF EXISTS ] name ( aggregate_signature ) [, ...] [ CASCADE | RESTRICT ]
 
 where aggregate_signature is:
@@ -27,48 +36,175 @@ where aggregate_signature is:
 * |
 [ argmode ] [ argname ] argtype [ , ... ] |
 [ [ argmode ] [ argname ] argtype [ , ... ] ] ORDER BY [ argmode ] [ argname ] argtype [ , ... ]
+
+ 
+
+ 
+  
+# Description
+
+  
+   DROP AGGREGATE removes an existing
+   aggregate function. To execute this command the current
+   user must be the owner of the aggregate function.
+  
+
+ 
+
+ 
+  
+# Parameters
+
+  
+
+   
+    IF EXISTS
+    
+     
+      Do not throw an error if the aggregate does not exist. A notice is issued
+      in this case.
+     
+
+    
+   
+
+   
+    name
+    
+     
+      The name (optionally schema-qualified) of an existing aggregate function.
+     
+
+    
+   
+
+   
+    argmode
+
+    
+     
+      The mode of an argument: IN or VARIADIC.
+      If omitted, the default is IN.
+     
+
+    
+   
+
+   
+    argname
+
+    
+     
+      The name of an argument.
+      Note that DROP AGGREGATE does not actually pay
+      any attention to argument names, since only the argument data
+      types are needed to determine the aggregate function's identity.
+     
+
+    
+   
+
+   
+    argtype
+    
+     
+      An input data type on which the aggregate function operates.
+      To reference a zero-argument aggregate function, write *
+      in place of the list of argument specifications.
+      To reference an ordered-set aggregate function, write
+      ORDER BY between the direct and aggregated argument
+      specifications.
+     
+
+    
+   
+
+   
+    CASCADE
+    
+     
+      Automatically drop objects that depend on the aggregate function
+      (such as views using it),
+      and in turn all objects that depend on those objects
+      (see ).
+     
+
+    
+   
+
+   
+    RESTRICT
+    
+     
+      Refuse to drop the aggregate function if any objects depend on
+      it.  This is the default.
+     
+
+    
+   
+  
+ 
+
+ 
+  
+# Notes
+
+   
+    Alternative syntaxes for referencing ordered-set aggregates
+    are described under .
+   
+
+ 
+
+ 
+  
+# Examples
+
+  
+   To remove the aggregate function myavg for type
+   integer:
+
 ```
 
-## Description
-
-`DROP AGGREGATE` removes an existing aggregate function. To execute this command the current user must be the owner of the aggregate function.
-
-## Parameters
-
-- Do not throw an error if the aggregate does not exist. A notice is issued in this case.
-- The name (optionally schema-qualified) of an existing aggregate function.
-- The mode of an argument: `IN` or `VARIADIC`. If omitted, the default is `IN`.
-- The name of an argument. Note that `DROP AGGREGATE` does not actually pay any attention to argument names, since only the argument data types are needed to determine the aggregate function's identity.
-- An input data type on which the aggregate function operates. To reference a zero-argument aggregate function, write `*` in place of the list of argument specifications. To reference an ordered-set aggregate function, write `ORDER BY` between the direct and aggregated argument specifications.
-- Automatically drop objects that depend on the aggregate function (such as views using it), and in turn all objects that depend on those objects (see `ddl-depend`).
-- Refuse to drop the aggregate function if any objects depend on it. This is the default.
-
-## Notes
-
-Alternative syntaxes for referencing ordered-set aggregates are described under `sql-alteraggregate`.
-
-## Examples
-
-To remove the aggregate function `myavg` for type `integer`:
-
-```
 DROP AGGREGATE myavg(integer);
-```
-
-To remove the hypothetical-set aggregate function `myrank`, which takes an arbitrary list of ordering columns and a matching list of direct arguments:
 
 ```
+
+  
+
+  
+   To remove the hypothetical-set aggregate function myrank,
+   which takes an arbitrary list of ordering columns and a matching list
+   of direct arguments:
+
+```
+
 DROP AGGREGATE myrank(VARIADIC "any" ORDER BY VARIADIC "any");
-```
-
-To remove multiple aggregate functions in one command:
 
 ```
+
+  
+
+  
+   To remove multiple aggregate functions in one command:
+
+```
+
 DROP AGGREGATE myavg(integer), myavg(bigint);
+
 ```
 
-## Compatibility
+ 
+  
+# Compatibility
 
-There is no `DROP AGGREGATE` statement in the SQL standard.
+  
+   There is no DROP AGGREGATE statement in the SQL
+   standard.
+  
 
-## See Also
+ 
+
+ 
+  
+# See Also

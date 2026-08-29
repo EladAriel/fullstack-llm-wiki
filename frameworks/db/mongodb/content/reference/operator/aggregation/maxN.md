@@ -1,118 +1,141 @@
 ---
 type: "Framework Learn Page"
-framework: "mongodb"
+framework: "MongoDB"
 source_repo: "https://github.com/mongodb/docs.git"
 source_branch: "main"
 source_path: "content/manual/manual/source/reference/operator/aggregation/maxN.txt"
-source_commit: "ab9db26ed3d11618cdb61516d8180337d8e3f679"
-source_commit_short: "ab9db26e"
-source_commit_date: "2026-07-24T16:22:46-06:00"
-generated_at: "2026-07-25T11:51:15Z"
+source_commit: "b9f2bc487a2878b65e3c1f80024bebab76954f27"
+source_commit_short: "b9f2bc48"
+source_commit_date: "2026-08-28T17:09:45-05:00"
+generated_at: "2026-08-29T09:39:20.205889Z"
 ---
-
-============================
-
 # $maxN (accumulator operator)
+
+**meta:** :description: Use `$maxN` to aggregate the maximum `n` values within a group, filtering out null and missing values, and compare it with `$topN` for sorting needs.
+
+.. default-domain:: mongodb
+
+**contents:** On this page
+  :local:
+  :backlinks: none
+  :depth: 1
+  :class: singlecol
+
+.. Substitution used in includes and in the body of this text
+.. |operatorName| replace:: ``$maxN``
+.. |operatorOrder| replace:: highest
 
 ## Definition
 
+**group:** $maxN
+
+   .. versionadded:: 5.2
+
+   Returns an aggregation of the maxmimum value ``n`` elements within a 
+   group. If the group contains fewer than ``n`` elements, ``$maxN`` 
+   returns all elements in the group.
+
 ## Syntax
 
-```none
-{
-   $maxN:
-      {
-         input: <expression>,
-         n: <expression>
-      }
-}
-```
+.. code-block:: none
+   :copyable: false
 
-- `input` specifies an expression that is the input to `$maxN`. It
-is evaluated for each element in the group and `$maxN` preserves the maximum `n` values.
+   {
+      $maxN:
+         {
+            input: <expression>,
+            n: <expression>
+         }
+   }
 
-- `n` limits the number of results per group and `n` has to be a
-positive integral expression that is either a constant or depends on the `_id` value for :pipeline:`$group`.
+- ``input`` specifies an expression that is the input to ``$maxN``. It 
+  is evaluated for each element in the group and ``$maxN`` preserves the 
+  maximum ``n`` values.
+- ``n`` limits the number of results per group and ``n`` has to be a
+  positive integral expression that is either a constant or depends on 
+  the ``_id`` value for :pipeline:`$group`.
 
 ## Behavior
 
 ### Result Type
 
-.. include:: /includes/agg-expression-bson-order-return-behavior.rst
+**include:** /includes/agg-expression-bson-order-return-behavior.rst
 
 ### Null and Missing Values
 
-- `$maxN` filters out null and missing values.
-Consider the following aggregation that returns the maximum `n` documents from a group:
+- ``$maxN`` filters out null and missing values.
 
-```javascript
-db.aggregate( [
-   {
-      $documents: [
-         { playerId: "PlayerA", gameId: "G1", score: 1 },
-         { playerId: "PlayerB", gameId: "G1", score: 2 },
-         { playerId: "PlayerC", gameId: "G1", score: 3 },
-         { playerId: "PlayerD", gameId: "G1" },
-         { playerId: "PlayerE", gameId: "G1", score: null }
-      ]
-   },
-   {
-      $group:
-      {  
-         _id: "$gameId",
-         maximumThreeScores:
-            { 
-               $maxN:
-                  {    
-                     input: "$score",
-                     n: 4
-                  }
-            }
+Consider the following aggregation that returns the maximum ``n`` 
+documents from a group:
+
+.. code-block:: javascript
+   :emphasize-lines: 7,8
+
+   db.aggregate( [
+      {
+         $documents: [
+            { playerId: "PlayerA", gameId: "G1", score: 1 },
+            { playerId: "PlayerB", gameId: "G1", score: 2 },
+            { playerId: "PlayerC", gameId: "G1", score: 3 },
+            { playerId: "PlayerD", gameId: "G1" },
+            { playerId: "PlayerE", gameId: "G1", score: null }
+         ]
+      },
+      {
+         $group:
+         {  
+            _id: "$gameId",
+            maximumThreeScores:
+               { 
+                  $maxN:
+                     {    
+                        input: "$score",
+                        n: 4
+                     }
+               }
+         }
       }
-   }
-] )
-```
+   ] )
 
 In this example:
 
 - :pipeline:`$documents` creates the literal documents that contain
-player scores.
+  player scores.
+- :pipeline:`$group` groups the documents by ``gameId``. This
+  example has only one ``gameId``, ``G1``.
+- ``PlayerD`` has a missing score and ``PlayerE`` has a
+  null ``score``. These values are both considered as null.
+- The ``maximumThreeScores`` field is specified as :group:`$maxN` 
+  with ``input : "$score"`` and returned as an array.
+- Since there are only 3 documents with ``scores`` ``maxN`` returns the
+  maximum 3  ``score`` fields even though ``n = 4``.
 
-- :pipeline:`$group` groups the documents by `gameId`. This
-example has only one `gameId`, `G1`.
+.. code-block:: javascript
+   :copyable: false
 
-- `PlayerD` has a missing score and `PlayerE` has a
-null `score`. These values are both considered as null.
+   [ 
+      { 
+      _id: 'G1',
+      maximumThreeScores: [ 3, 2, 1 ] 
+      } 
+   ]
 
-- The `maximumThreeScores` field is specified as :group:`$maxN`
-with `input : "$score"` and returned as an array.
+### Comparison of ``$maxN`` and ``$topN`` Accumulators
 
-- Since there are only 3 documents with `scores` `maxN` returns the
-maximum 3  `score` fields even though `n = 4`.
-
-```javascript
-[ 
-   { 
-   _id: 'G1',
-   maximumThreeScores: [ 3, 2, 1 ] 
-   } 
-]
-```
-
-### Comparison of `$maxN` and `$topN` Accumulators
-
-Both :group:`$maxN` and :group:`$topN` accumulators can accomplish similar results.
+Both :group:`$maxN` and :group:`$topN` accumulators can accomplish similar 
+results.
 
 In general:
 
-- :group:`$maxN` has the advantage of finding maximum values
-in no particular sort order. If you want to know the maximum values for `n` documents use :group:`$maxN`.
+- :group:`$maxN` has the advantage of finding maximum values 
+  in no particular sort order. If you want to know the 
+  maximum values for ``n`` documents use :group:`$maxN`.
 
-- If guaranteing a particular sort order is a requirement
-use :group:`$topN`.
+- If guaranteing a particular sort order is a requirement 
+  use :group:`$topN`. 
 
-- Use :group:`$topN` if you don't intend on sorting on the output
-values.
+- Use :group:`$topN` if you don't intend on sorting on the output 
+  values.
 
 ## Restrictions
 
@@ -120,167 +143,175 @@ values.
 
 You can use :group:`$maxN` as an accumulator.
 
-:group:`$maxN` is supported as an `aggregation expression <aggregation-expressions>`.
+:group:`$maxN` is supported as an
+:ref:`aggregation expression <aggregation-expressions>`.
 
-:group:`$maxN` is supported as a :pipeline:`window operator <$setWindowFields>`.
+:group:`$maxN` is supported as a 
+:pipeline:`window operator <$setWindowFields>`.
 
 ### Memory Limit Considerations
 
-Aggregation pipelines which call `$maxN` are subject to the `100 MB limit <agg-memory-restrictions>`. If this limit is exceeded for an individual group, the aggregation fails with an error.
+Aggregation pipelines which call ``$maxN`` are subject to the
+:ref:`100 MB limit <agg-memory-restrictions>`. If this
+limit is exceeded for an individual group, the aggregation fails
+with an error.
 
 ## Examples
 
-Consider a `gamescores` collection with the following documents:
+Consider a ``gamescores`` collection with the following documents:
 
-```javascript
-db.gamescores.insertMany([
-   { playerId: "PlayerA", gameId: "G1", score: 31 },
-   { playerId: "PlayerB", gameId: "G1", score: 33 },
-   { playerId: "PlayerC", gameId: "G1", score: 99 },
-   { playerId: "PlayerD", gameId: "G1", score: 1 },
-   { playerId: "PlayerA", gameId: "G2", score: 10 },
-   { playerId: "PlayerB", gameId: "G2", score: 14 },
-   { playerId: "PlayerC", gameId: "G2", score: 66 },
-   { playerId: "PlayerD", gameId: "G2", score: 80 }
-])
-```
+.. code-block:: javascript
 
-### Find the Maximum Three `Scores` for a Single Game
+   db.gamescores.insertMany([
+      { playerId: "PlayerA", gameId: "G1", score: 31 },
+      { playerId: "PlayerB", gameId: "G1", score: 33 },
+      { playerId: "PlayerC", gameId: "G1", score: 99 },
+      { playerId: "PlayerD", gameId: "G1", score: 1 },
+      { playerId: "PlayerA", gameId: "G2", score: 10 },
+      { playerId: "PlayerB", gameId: "G2", score: 14 },
+      { playerId: "PlayerC", gameId: "G2", score: 66 },
+      { playerId: "PlayerD", gameId: "G2", score: 80 }
+   ])
 
-You can use the `$maxN` accumulator to find the maximum three scores in a single game.
+### Find the Maximum Three ``Scores`` for a Single Game
 
-```javascript
-db.gamescores.aggregate( [
-   {
-      $match : { gameId : "G1" }
-   },
-   {
-      $group:
-         {
-            _id: "$gameId",
-            maxThreeScores:
-               {
-                  $maxN:
+You can use the ``$maxN`` accumulator to find the maximum three scores
+in a single game.
+
+.. code-block:: javascript
+
+   db.gamescores.aggregate( [
+      {
+         $match : { gameId : "G1" }
+      },
+      {
+         $group:
+            {
+               _id: "$gameId",
+               maxThreeScores:
                   {
-                     input: ["$score","$playerId"],
-                     n:3
+                     $maxN:
+                     {
+                        input: ["$score","$playerId"],
+                        n:3
+                     }
                   }
-               }
-         }
-   }
-] )
-```
+            }
+      }
+   ] )
 
 The example pipeline:
 
-- Uses :pipeline:`$match` to filter the results on a single `gameId`.
-In this case, `G1`.
-
-- Uses :pipeline:`$group` to group the results by `gameId`. In this
-case, `G1`.
-
-- Specifies the fields that are input for `$maxN` with
-`input : ["$score","$playerId"]`.
-
-- Uses `$maxN` to return the maximum three score elements
-for the `G1` game with `n : 3`.
+- Uses :pipeline:`$match` to filter the results on a single ``gameId``. 
+  In this case, ``G1``.
+- Uses :pipeline:`$group` to group the results by ``gameId``. In this 
+  case, ``G1``.
+- Specifies the fields that are input for ``$maxN`` with
+  ``input : ["$score","$playerId"]``.
+- Uses ``$maxN`` to return the maximum three score elements
+  for the ``G1`` game with ``n : 3``.
 
 The operation returns the following results:
 
-```javascript
-[
-   {
-      _id: 'G1',
-      maxThreeScores: [ [ 99, 'PlayerC' ], [ 33, 'PlayerB' ], [ 31, 'PlayerA' ] ]
-   }
-]
-```
+.. code-block:: javascript
+   :copyable: false
+
+   [
+      {
+         _id: 'G1',
+         maxThreeScores: [ [ 99, 'PlayerC' ], [ 33, 'PlayerB' ], [ 31, 'PlayerA' ] ]
+      }
+   ]
 
 ### Finding the Maximum Three Scores Across Multiple Games
 
-You can use the `$maxN` accumulator to find the maximum `n` scores in each game.
+You can use the ``$maxN`` accumulator to find the maximum ``n``
+scores in each game.
 
-```javascript
-db.gamescores.aggregate( [
-   {
-      $group:
-      { 
-         _id: "$gameId", 
-         maxScores:
-            {
-               $maxN:
-                  {
-                     input: ["$score","$playerId"],
-                     n: 3
-                  }
-            }
-      }
-   }
-] )
-```
+.. code-block:: javascript
 
-The example pipeline:
-
-- Uses `$group` to group the results by `gameId`.
-- Uses `$maxN` to return the maximum three score elements
-for each game with `n: 3`.
-
-- Specifies the fields that are input for `$maxN` with
-`input: ["$score","$playerId"]`.
-
-The operation returns the following results:
-
-```javascript
-[
-   {
-      _id: 'G1',
-      maxScores: [ [ 99, 'PlayerC' ], [ 33, 'PlayerB' ], [ 31, 'PlayerA' ] ]
-   },
-   {
-      _id: 'G2',
-      maxScores: [ [ 80, 'PlayerD' ], [ 66, 'PlayerC' ], [ 14, 'PlayerB' ] ]
-   }
-]
-```
-
-### Computing `n` Based on the Group Key for `$group`
-
-You can also assign the value of `n` dynamically. In this example, the :expression:`$cond` expression is used on the `gameId` field.
-
-```javascript
-db.gamescores.aggregate([
-   {
-      $group:
+   db.gamescores.aggregate( [
       {
-         _id: {"gameId": "$gameId"},
-         gamescores:
-            {
-               $maxN:
-                  {
-                     input: ["$score","$playerId"],
-                     n: { $cond: { if: {$eq: ["$gameId","G2"] }, then: 1, else: 3 } }
-                  }
-            }
+         $group:
+         { 
+            _id: "$gameId", 
+            maxScores:
+               {
+                  $maxN:
+                     {
+                        input: ["$score","$playerId"],
+                        n: 3
+                     }
+               }
+         }
       }
-   }
-] )
-```
+   ] )
+   
+The example pipeline:
+
+- Uses ``$group`` to group the results by ``gameId``.
+- Uses ``$maxN`` to return the maximum three score elements
+  for each game with ``n: 3``.
+- Specifies the fields that are input for ``$maxN`` with
+  ``input: ["$score","$playerId"]``.
+
+The operation returns the following results:
+
+.. code-block:: javascript
+   :copyable: false
+
+   [
+      {
+         _id: 'G1',
+         maxScores: [ [ 99, 'PlayerC' ], [ 33, 'PlayerB' ], [ 31, 'PlayerA' ] ]
+      },
+      {
+         _id: 'G2',
+         maxScores: [ [ 80, 'PlayerD' ], [ 66, 'PlayerC' ], [ 14, 'PlayerB' ] ]
+      }
+   ]
+
+### Computing ``n`` Based on the Group Key for ``$group``
+
+You can also assign the value of ``n`` dynamically. In this example,
+the :expression:`$cond` expression is used on the ``gameId`` field.
+
+.. code-block:: javascript
+   :emphasize-lines: 11
+
+   db.gamescores.aggregate([
+      {
+         $group:
+         {
+            _id: {"gameId": "$gameId"},
+            gamescores:
+               {
+                  $maxN:
+                     {
+                        input: ["$score","$playerId"],
+                        n: { $cond: { if: {$eq: ["$gameId","G2"] }, then: 1, else: 3 } }
+                     }
+               }
+         }
+      }
+   ] )
 
 The example pipeline:
 
-- Uses `$group` to group the results by `gameId`.
-- Specifies the fields that input for `$maxN` with
-`input : ["$score","$playerId"]`.
+- Uses ``$group`` to group the results by ``gameId``.
+- Specifies the fields that input for ``$maxN`` with
+  ``input : ["$score","$playerId"]``.
+- If the ``gameId`` is ``G2`` then ``n`` is 1, otherwise ``n`` is 3.
 
-- If the `gameId` is `G2` then `n` is 1, otherwise `n` is 3.
 The operation returns the following results:
 
-```javascript
-[
-   { _id: { gameId: 'G2' }, gamescores: [ [ 80, 'PlayerD' ] ] },
-   {
-      _id: { gameId: 'G1' },
-      gamescores: [ [ 99, 'PlayerC' ], [ 33, 'PlayerB' ], [ 31, 'PlayerA' ] ]
-   }
-]
-```
+.. code-block:: javascript
+   :copyable: false
+
+   [
+      { _id: { gameId: 'G2' }, gamescores: [ [ 80, 'PlayerD' ] ] },
+      {
+         _id: { gameId: 'G1' },
+         gamescores: [ [ 99, 'PlayerC' ], [ 33, 'PlayerB' ], [ 31, 'PlayerA' ] ]
+      }
+   ]

@@ -1,14 +1,15 @@
 ---
 type: "Framework Learn Page"
-framework: "jest"
+framework: "Jest"
 source_repo: "https://github.com/jestjs/jest"
 source_branch: "main"
 source_path: "docs/ExpectAPI.md"
-source_commit: "1865dd8659f5131715c780fa92f40623fce2f9c9"
-source_commit_short: "1865dd86"
-source_commit_date: "2026-06-21T13:50:36+02:00"
-generated_at: "2026-06-21T11:51:37Z"
+source_commit: "be425a0b0e3bd60a74e4a7e350aa38c63a2d25ef"
+source_commit_short: "be425a0"
+source_commit_date: "2026-08-28T13:51:49+02:00"
+generated_at: "2026-08-29T09:40:10.454297Z"
 ---
+# Expectapi
 
 ---
 id: expect
@@ -412,7 +413,7 @@ test('this house has my desired features', () => {
   expect(houseForSale).not.toHaveProperty(['kitchen', 'open']);
 
   // Referencing keys with dot in the key itself
-  expect(houseForSale).toHaveProperty(['ceiling.height'], 'tall');
+  expect(houseForSale).toHaveProperty(['ceiling.height'], 2);
 });
 ```
 

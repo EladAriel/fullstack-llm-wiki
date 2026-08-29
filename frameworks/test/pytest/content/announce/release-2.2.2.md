@@ -4,47 +4,49 @@ framework: "pytest"
 source_repo: "https://github.com/pytest-dev/pytest"
 source_branch: "main"
 source_path: "doc/en/announce/release-2.2.2.rst"
-source_commit: "344c23787cdb3431dcc441b8b63ee9950f04b921"
-source_commit_short: "344c2378"
-source_commit_date: "2026-07-24T17:37:16+02:00"
-generated_at: "2026-07-25T11:50:13Z"
+source_commit: "fdba12e1708313f56e9cf713d260c029764ca2b7"
+source_commit_short: "fdba12e"
+source_commit_date: "2026-08-27T21:55:50+02:00"
+generated_at: "2026-08-29T09:40:11.180015Z"
 ---
-
 # pytest-2.2.2: bug fixes
 
-pytest-2.2.2 (updated to 2.2.3 to fix packaging issues) is a minor backward-compatible release of the versatile py.test testing tool.   It contains bug fixes and a few refinements particularly to reporting with "--collectonly", see below for details.
+pytest-2.2.2 (updated to 2.2.3 to fix packaging issues) is a minor
+backward-compatible release of the versatile py.test testing tool.   It
+contains bug fixes and a few refinements particularly to reporting with
+"--collectonly", see below for details.
 
 For general information see here:
 
-http://pytest.org/
+     http://pytest.org/
 
 To install or upgrade pytest:
 
-pip install -U pytest # or easy_install -U pytest
+    pip install -U pytest # or
+    easy_install -U pytest
 
-Special thanks for helping on this release to Ronny Pfannschmidt and Ralf Schmitt and the contributors of issues.
+Special thanks for helping on this release to Ronny Pfannschmidt
+and Ralf Schmitt and the contributors of issues.
 
-best, holger krekel
+best,
+holger krekel
+
 
 ## Changes between 2.2.1 and 2.2.2
 
 - fix issue101: wrong args to unittest.TestCase test function now
-produce better output
-
+  produce better output
 - fix issue102: report more useful errors and hints for when a
-test directory was renamed and some pyc/__pycache__ remain
-
+  test directory was renamed and some pyc/__pycache__ remain
 - fix issue106: allow parametrize to be applied multiple times
-e.g. from module, class and at function level.
-
+  e.g. from module, class and at function level.
 - fix issue107: actually perform session scope finalization
 - don't check in parametrize if indirect parameters are funcarg names
 - add chdir method to monkeypatch funcarg
 - fix crash resulting from calling monkeypatch undo a second time
 - fix issue115: make --collectonly robust against early failure
-(missing files/directories)
-
+  (missing files/directories)
 - "-qq --collectonly" now shows only files and the number of tests in them
 - "-q --collectonly" now shows test ids
 - allow adding of attributes to test reports such that it also works
-with distributed testing (no upgrade of pytest-xdist needed)
+  with distributed testing (no upgrade of pytest-xdist needed)

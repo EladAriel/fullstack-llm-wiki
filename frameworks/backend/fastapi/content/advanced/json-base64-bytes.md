@@ -4,12 +4,11 @@ framework: "FastAPI"
 source_repo: "https://github.com/fastapi/fastapi.git"
 source_branch: "master"
 source_path: "docs/en/docs/advanced/json-base64-bytes.md"
-source_commit: "255b912928904e3ba5980425a54d6837c8bd1a1c"
-source_commit_short: "255b9129"
-source_commit_date: "2026-07-24T21:15:37Z"
-generated_at: "2026-07-25T11:50:10Z"
+source_commit: "49033471594ea5d99a80abdf1043231b7791ee49"
+source_commit_short: "4903347"
+source_commit_date: "2026-08-26T17:53:57+00:00"
+generated_at: "2026-08-29T09:38:49.706912Z"
 ---
-
 # JSON with Bytes as Base64 { #json-with-bytes-as-base64 }
 
 If your app needs to receive and send JSON data, but you need to include binary data in it, you can encode it as base64.

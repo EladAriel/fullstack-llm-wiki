@@ -1,48 +1,103 @@
 ---
 type: "Framework Learn Page"
-framework: "mongodb"
+framework: "MongoDB"
 source_repo: "https://github.com/mongodb/docs.git"
 source_branch: "main"
 source_path: "content/manual/manual/source/reference/method/sp.listWorkspaceDefaults.txt"
-source_commit: "ab9db26ed3d11618cdb61516d8180337d8e3f679"
-source_commit_short: "ab9db26e"
-source_commit_date: "2026-07-24T16:22:46-06:00"
-generated_at: "2026-07-25T11:51:15Z"
+source_commit: "b9f2bc487a2878b65e3c1f80024bebab76954f27"
+source_commit_short: "b9f2bc48"
+source_commit_date: "2026-08-28T17:09:45-05:00"
+generated_at: "2026-08-29T09:39:19.929724Z"
 ---
-
-===========================================
-
 # sp.listWorkspaceDefaults() (mongosh method)
+
+**meta:** :description: Retrieve tier information for a Stream Processing Workspace using `sp.listWorkspaceDefaults()`.
+
+.. default-domain:: mongodb
+
+**contents:** On this page
+   :local:
+   :backlinks: none
+   :depth: 2
+   :class: singlecol
 
 ## Definition
 
+**method:** sp.listWorkspaceDefaults()
+
+   Returns a document containing the default and maximum tier
+   configuration for the current :atlas:`Stream Processing Workspace
+   </atlas-sp/overview/#mongodb-expression-exp.Stream-Processing-Instance>`.
+   This information describes the tier sizing capabilities of your workspace.
+
 ## Compatibility
 
-.. include:: /includes/fact-environments-atlas-support-stream-processing-only.rst
+**include:** /includes/fact-environments-atlas-support-stream-processing-only.rst
 
 ## Syntax
-
+   
 The :method:`sp.listWorkspaceDefaults()` method has the following syntax:
 
-```javascript
-sp.listWorkspaceDefaults()
-```
+.. code-block:: javascript
+
+   sp.listWorkspaceDefaults()
 
 ## Return Value
 
-`sp.listWorkspaceDefaults()` returns a document containing the following fields:
+``sp.listWorkspaceDefaults()`` returns a document containing the following fields:
+
+.. list-table::
+   :header-rows: 1
+   :widths: 30 20 50
+
+   * - Field
+     - Type
+     - Description
+
+   * - ``defaultTierSize``
+     - string
+     - The default tier size assigned to stream processors in this
+       workspace. Stream processors inherit this tier unless you
+       explicitly specify a different tier when creating or starting them.
+
+   * - ``maxTierSize``
+     - string
+     - The maximum tier size available for stream processors in this
+       workspace. This represents the largest tier you can assign to
+       any stream processor.
 
 ## Behavior
 
-`sp.listWorkspaceDefaults()` returns a single document describing the default and maximum tier configuration for the current stream processing workspace to `STDOUT`.
+``sp.listWorkspaceDefaults()`` returns a single document describing
+the default and maximum tier configuration for the current stream
+processing workspace to ``STDOUT``.
 
 ## Access Control
 
-Running `sp.listWorkspaceDefaults()` requires the :atlasrole:`atlasAdmin` role.
+Running ``sp.listWorkspaceDefaults()`` requires the :atlasrole:`atlasAdmin`
+role.
 
 ## Example
 
-The following example shows an expected response from `sp.listWorkspaceDefaults()`:
+The following example shows an expected response from
+``sp.listWorkspaceDefaults()``:
+
+.. io-code-block::
+   :copyable: true
+
+   .. input:: 
+      :language: sh
+
+      sp.listWorkspaceDefaults()
+
+   .. output:: 
+      :language: json
+      :linenos:
+
+      {
+        defaultTierSize: "T2",
+        maxTierSize: "T8"
+      }
 
 ## Learn More
 

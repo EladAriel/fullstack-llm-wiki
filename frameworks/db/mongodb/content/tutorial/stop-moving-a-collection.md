@@ -1,33 +1,101 @@
 ---
 type: "Framework Learn Page"
-framework: "mongodb"
+framework: "MongoDB"
 source_repo: "https://github.com/mongodb/docs.git"
 source_branch: "main"
 source_path: "content/manual/manual/source/tutorial/stop-moving-a-collection.txt"
-source_commit: "ab9db26ed3d11618cdb61516d8180337d8e3f679"
-source_commit_short: "ab9db26e"
-source_commit_date: "2026-07-24T16:22:46-06:00"
-generated_at: "2026-07-25T11:51:15Z"
+source_commit: "b9f2bc487a2878b65e3c1f80024bebab76954f27"
+source_commit_short: "b9f2bc48"
+source_commit_date: "2026-08-28T17:09:45-05:00"
+generated_at: "2026-08-29T09:39:19.588499Z"
 ---
-
-========================
+.. _task-stop-moving-a-collection:
 
 # Stop Moving a Collection
 
-You can stop moving an unsharded collection by using the :dbcommand:`abortMoveCollection` command.
+.. default-domain:: mongodb
+
+**contents:** On this page
+   :local:
+   :backlinks: none
+   :depth: 1
+   :class: singlecol
+
+**facet:** :name: genre 
+   :values: tutorial
+
+You can stop moving an unsharded collection by using the 
+:dbcommand:`abortMoveCollection` command.
 
 ## About this Task
 
-To stop an in-progress :dbcommand:`moveCollection` operation, run the `abortMoveCollection` command on the `admin` database.
+To stop an in-progress :dbcommand:`moveCollection` operation, run the 
+``abortMoveCollection`` command on the ``admin`` database.
 
 ## Access Control
 
-If your deployment has `access control <authorization>` enabled, the :authrole:`enableSharding` role allows you to run the `abortMoveCollection` command.
+If your deployment has :ref:`access control <authorization>` enabled, 
+the :authrole:`enableSharding` role allows you to run the 
+``abortMoveCollection`` command.
 
 ## Steps
+
+**procedure:** :style: normal
+   
+   .. step:: Stop moving the collection
+
+      To stop moving a collection, run the :dbcommand:`abortMoveCollection` 
+      command. The following example stops the in-progress move of the 
+      ``app.inventory`` collection from ``shard01`` to ``shard02``.
+
+      .. code-block:: javascript 
+
+         db.adminCommand( {
+            abortMoveCollection: "app.inventory"
+         } )
+
+      After you run the ``abortMoveCollection`` command, the command output 
+      returns ``ok: 1`` and resembles the following:
+
+      .. code-block:: javascript
+
+         {
+            ok: 1,
+            '$clusterTime': {
+               clusterTime: Timestamp( { t: 1726524884, i: 28 } ),
+               signature: {
+                  hash: Binary.createFromBase64('AAAAAAAAAAAAAAAAAAAAAAAAAAA=', 0),
+                  keyId: Long('0')
+               }
+            },
+            operationTime: Timestamp({ t: 1726524884, i: 28 })
+         }
+
+   .. step:: Confirm the move operation was stopped
+
+      To confirm the collection wasn't moved to the new shard, use the 
+      :pipeline:`$collStats` pipeline stage.
+
+      The following example shows how to confirm that the ``app.inventory``
+      collection remains on the same shard:
+
+      .. code-block:: javascript
+
+         db.inventory.aggregate( [ 
+           { $collStats: {} }, 
+           { $project: { "shard": 1 } } 
+         ] )
+
+      This pipeline stage has output similar to the following:
+
+      .. code-block:: javascript
+         :copyable: false
+
+         [ { shard: 'shard01' } ]
+
 
 ## Learn More
 
 - :dbcommand:`abortMoveCollection`
 - :method:`sh.abortMoveCollection`
-- `moveable-collections`
+- :ref:`moveable-collections`

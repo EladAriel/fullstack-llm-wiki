@@ -4,12 +4,11 @@ framework: "Langfuse"
 source_repo: "https://github.com/langfuse/langfuse-docs"
 source_branch: "main"
 source_path: "content/docs/api-and-data-platform/features/scores-api.mdx"
-source_commit: "fcd1eca34a924867563c3c4e801254c4e66c0021"
-source_commit_short: "fcd1eca3"
-source_commit_date: "2026-07-25T00:45:45Z"
-generated_at: "2026-07-25T11:51:12Z"
+source_commit: "ba26344559edee69ba55c5d3aa80e632f56c1626"
+source_commit_short: "ba26344"
+source_commit_date: "2026-08-29T02:57:18+00:00"
+generated_at: "2026-08-29T09:38:37.758073Z"
 ---
-
 ---
 title: Scores API
 sidebarTitle: Scores API
@@ -174,7 +173,7 @@ scores = langfuse.api.scores_v3.get_many_v3(
     limit=100,
 )
 
-# v2 (deprecated): langfuse.api.scores.get_many(...)
+# v2 (deprecated, sunset date: Nov 16, 2026): langfuse.api.scores.get_many(...)
 ```
 
 Also available as async via `langfuse.async_api.scores_v3.get_many_v3(...)`.
@@ -196,7 +195,7 @@ const scores = await langfuse.api.scoresV3.getManyV3({
   limit: 100,
 });
 
-// v2 (deprecated): langfuse.api.scores.getMany(...)
+// v2 (deprecated, sunset date: Nov 16, 2026): langfuse.api.scores.getMany(...)
 ```
 
 </Tab>

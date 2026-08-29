@@ -1,43 +1,76 @@
 ---
 type: "Framework Learn Page"
-framework: "postgres"
+framework: "PostgreSQL"
 source_repo: "https://github.com/postgres/postgres.git"
 source_branch: "master"
 source_path: "doc/src/sgml/func/func-conditional.sgml"
-source_commit: "38afc3dcb25c45b744d4025029ce0a6c90b7059f"
-source_commit_short: "38afc3dc"
-source_commit_date: "2026-07-25T19:08:27+09:00"
-generated_at: "2026-07-25T11:50:59Z"
+source_commit: "6c5f1d6074208146930b67c2054509c3e82f6f7f"
+source_commit_short: "6c5f1d6"
+source_commit_date: "2026-08-28T23:24:47+02:00"
+generated_at: "2026-08-29T09:39:24.501857Z"
 ---
+# Conditional Expressions
 
-## Conditional Expressions
+  
+   CASE
+  
 
-CASE
+  
+   conditional expression
+  
 
-conditional expression
+  
+   This section describes the SQL-compliant conditional expressions
+   available in PostgreSQL.
+  
 
-This section describes the SQL-compliant conditional expressions available in PostgreSQL.
+  
+   
+    If your needs go beyond the capabilities of these conditional
+    expressions, you might want to consider writing a server-side function
+    in a more expressive programming language.
+   
+  
 
-If your needs go beyond the capabilities of these conditional expressions, you might want to consider writing a server-side function in a more expressive programming language.
+   
+    
+     Although COALESCE, GREATEST, and
+     LEAST are syntactically similar to functions, they are
+     not ordinary functions, and thus cannot be used with explicit
+     VARIADIC array arguments.
+    
+   
 
-Although COALESCE, GREATEST, and LEAST are syntactically similar to functions, they are not ordinary functions, and thus cannot be used with explicit VARIADIC array arguments.
+  
+   CASE
 
-## `CASE`
+  
+   The SQL CASE expression is a
+   generic conditional expression, similar to if/else statements in
+   other programming languages:
 
-The SQL CASE expression is a generic conditional expression, similar to if/else statements in other programming languages:
-
-```
 CASE WHEN condition THEN result
      WHEN ...
      ELSE result
 END
-```
 
-CASE clauses can be used wherever an expression is valid. Each `condition` is an expression that returns a `boolean` result. If the condition's result is true, the value of the CASE expression is the `result` that follows the condition, and the remainder of the CASE expression is not processed. If the condition's result is not true, any subsequent WHEN clauses are examined in the same manner. If no WHEN `condition` yields true, the value of the CASE expression is the `result` of the ELSE clause. If the ELSE clause is omitted and no condition is true, the result is null.
+   CASE clauses can be used wherever
+   an expression is valid.  Each condition is an
+   expression that returns a boolean result.  If the condition's
+   result is true, the value of the CASE expression is the
+   result that follows the condition, and the
+   remainder of the CASE expression is not processed.  If the
+   condition's result is not true, any subsequent WHEN clauses
+   are examined in the same manner.  If no WHEN
+   condition yields true, the value of the
+   CASE expression is the result of the
+   ELSE clause.  If the ELSE clause is
+   omitted and no condition is true, the result is null.
+  
 
-An example:
+   
+    An example:
 
-```
 SELECT * FROM test;
 
  a
@@ -58,25 +91,38 @@ SELECT a,
  1 | one
  2 | two
  3 | other
-```
 
-The data types of all the `result` expressions must be convertible to a single output type. See `typeconv-union-case` for more details.
+   
 
-There is a simple form of CASE expression that is a variant of the general form above:
+  
+   The data types of all the result
+   expressions must be convertible to a single output type.
+   See  for more details.
+  
 
-```
+  
+   There is a simple form of CASE expression
+   that is a variant of the general form above:
+
 CASE expression
     WHEN value THEN result
     WHEN ...
     ELSE result
 END
-```
 
-The first `expression` is computed, then compared to each of the `value` expressions in the WHEN clauses until one is found that is equal to it. If no match is found, the `result` of the ELSE clause (or a null value) is returned. This is similar to the `switch` statement in C.
+   The first
+   expression is computed, then compared to
+   each of the value expressions in the
+   WHEN clauses until one is found that is equal to it.  If
+   no match is found, the result of the
+   ELSE clause (or a null value) is returned.  This is similar
+   to the switch statement in C.
+  
 
-The example above can be written using the simple CASE syntax:
+   
+    The example above can be written using the simple
+    CASE syntax:
 
-```
 SELECT a,
        CASE a WHEN 1 THEN 'one'
               WHEN 2 THEN 'two'
@@ -89,74 +135,144 @@ SELECT a,
  1 | one
  2 | two
  3 | other
-```
 
-A CASE expression does not evaluate any subexpressions that are not needed to determine the result. For example, this is a possible way of avoiding a division-by-zero failure:
+   
 
-```
+   
+    A CASE expression does not evaluate any subexpressions
+    that are not needed to determine the result.  For example, this is a
+    possible way of avoiding a division-by-zero failure:
+
 SELECT ... WHERE CASE WHEN x <> 0 THEN y/x > 1.5 ELSE false END;
-```
 
-As described in `syntax-express-eval`, there are various situations in which subexpressions of an expression are evaluated at different times, so that the principle that CASE evaluates only necessary subexpressions is not ironclad. For example a constant `1/0` subexpression will usually result in a division-by-zero failure at planning time, even if it's within a CASE arm that would never be entered at run time.
+   
 
-## `COALESCE`
+   
+    
+     As described in , there are various
+     situations in which subexpressions of an expression are evaluated at
+     different times, so that the principle that CASE
+     evaluates only necessary subexpressions is not ironclad.  For
+     example a constant 1/0 subexpression will usually result in
+     a division-by-zero failure at planning time, even if it's within
+     a CASE arm that would never be entered at run time.
+    
+   
+  
 
-COALESCE
+  
+   COALESCE
 
-NVL
+  
+   COALESCE
+  
 
-IFNULL
+  
+   NVL
+  
 
-```
+  
+   IFNULL
+  
+
 COALESCE(value , ...)
-```
 
-The `COALESCE` function returns the first of its arguments that is not null. Null is returned only if all arguments are null. It is often used to substitute a default value for null values when data is retrieved for display, for example:
+  
+   The COALESCE function returns the first of its
+   arguments that is not null.  Null is returned only if all arguments
+   are null.  It is often used to substitute a default value for
+   null values when data is retrieved for display, for example:
 
-```
 SELECT COALESCE(description, short_description, '(none)') ...
-```
 
-This returns `description` if it is not null, otherwise `short_description` if it is not null, otherwise `(none)`.
+   This returns description if it is not null, otherwise
+   short_description if it is not null, otherwise (none).
+  
 
-The arguments must all be convertible to a common data type, which will be the type of the result (see `typeconv-union-case` for details).
+   
+    The arguments must all be convertible to a common data type, which
+    will be the type of the result (see
+     for details).
+   
 
-Like a CASE expression, `COALESCE` only evaluates the arguments that are needed to determine the result; that is, arguments to the right of the first non-null argument are not evaluated. This SQL-standard function provides capabilities similar to `NVL` and `IFNULL`, which are used in some other database systems.
+   
+    Like a CASE expression, COALESCE only
+    evaluates the arguments that are needed to determine the result;
+    that is, arguments to the right of the first non-null argument are
+    not evaluated.  This SQL-standard function provides capabilities similar
+    to NVL and IFNULL, which are used in some other
+    database systems.
+   
+  
 
-## `NULLIF`
+  
+   NULLIF
 
-NULLIF
+  
+   NULLIF
+  
 
-```
 NULLIF(value1, value2)
-```
 
-The `NULLIF` function returns a null value if `value1` equals `value2`; otherwise it returns `value1`. This can be used to perform the inverse operation of the `COALESCE` example given above:
+  
+   The NULLIF function returns a null value if
+   value1 equals value2;
+   otherwise it returns value1.
+   This can be used to perform the inverse operation of the
+   COALESCE example given above:
 
-```
 SELECT NULLIF(value, '(none)') ...
-```
 
-In this example, if `value` is `(none)`, null is returned, otherwise the value of `value` is returned.
+   In this example, if value is (none),
+   null is returned, otherwise the value of value
+   is returned.
+  
 
-The two arguments must be of comparable types. To be specific, they are compared exactly as if you had written `value1 = value2`, so there must be a suitable `=` operator available.
+  
+   The two arguments must be of comparable types.
+   To be specific, they are compared exactly as if you had
+   written value1
+   = value2, so there must be a
+   suitable = operator available.
+  
 
-The result has the same type as the first argument -- but there is a subtlety. What is actually returned is the first argument of the implied `=` operator, and in some cases that will have been promoted to match the second argument's type. For example, `NULLIF(1, 2.2)` yields `numeric`, because there is no `integer` `=` `numeric` operator, only `numeric` `=` `numeric`.
+  
+   The result has the same type as the first argument — but there is
+   a subtlety.  What is actually returned is the first argument of the
+   implied = operator, and in some cases that will have
+   been promoted to match the second argument's type.  For
+   example, NULLIF(1, 2.2) yields numeric,
+   because there is no integer =
+   numeric operator,
+   only numeric = numeric.
+  
 
-## `GREATEST` and `LEAST`
+  
 
-GREATEST
+  
+   GREATEST and LEAST
 
-LEAST
+  
+   GREATEST
+  
+  
+   LEAST
+  
 
-```
 GREATEST(value , ...)
-```
 
-```
 LEAST(value , ...)
-```
 
-The `GREATEST` and `LEAST` functions select the largest or smallest value from a list of any number of expressions. The expressions must all be convertible to a common data type, which will be the type of the result (see `typeconv-union-case` for details).
+   
+    The GREATEST and LEAST functions select the
+    largest or smallest value from a list of any number of expressions.
+    The expressions must all be convertible to a common data type, which
+    will be the type of the result
+    (see  for details).
+   
 
-NULL values in the argument list are ignored. The result will be NULL only if all the expressions evaluate to NULL. (This is a deviation from the SQL standard. According to the standard, the return value is NULL if any argument is NULL. Some other databases behave this way.)
+   
+    NULL values in the argument list are ignored.  The result will be NULL
+    only if all the expressions evaluate to NULL.  (This is a deviation from
+    the SQL standard.  According to the standard, the return value is NULL if
+    any argument is NULL.  Some other databases behave this way.)

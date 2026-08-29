@@ -1,41 +1,26 @@
 ---
 type: "Framework Learn Directory Index"
-framework: "tanstack"
-directory: "content/framework/preact/reference"
-source_repo: "https://github.com/tanstack/query"
-source_branch: "main"
-source_commit: "fd50fa14d283c7d6664a796f758498d1ad5bfce7"
-source_commit_short: "fd50fa14"
-source_commit_date: "2026-07-24T22:22:47+10:00"
-generated_at: "2026-07-25T11:50:41Z"
+framework: "TanStack"
+generated_at: "2026-08-29T09:40:33.445608Z"
 ---
 # Reference
 
-This directory contains tanstack learning pages related to reference.
+This directory contains TanStack learning pages related to reference.
 
 ## Breadcrumbs
 
-[Wiki Home](../../../../index.md) -> [Content](../../../index.md) -> [Framework](../../index.md) -> [Preact](../index.md) -> [Reference](index.md)
+[Wiki Home](../index.md) -> [Content](index.md)
 
 ## Navigation
 
-- Parent: [Parent Index](../index.md)
-
-## Child Directories
-
-- [Functions](functions/index.md) - pages related to functions
-- [Interfaces](interfaces/index.md) - pages related to interfaces
-- [Type Aliases](type-aliases/index.md) - pages related to type aliases
-- [Variables](variables/index.md) - pages related to variables
+- Wiki Home: [Root Index](../index.md)
 
 ## Pages in This Directory
 
-- [Original Source Index](_source_index.md)
 
-## IDE LLM Guidance
+## Subdirectories
 
-When answering implementation questions related to this directory:
-
-1. Prefer the most specific page listed above.
-2. If the topic is broad, read the child directory index first.
-3. Use source metadata from each page when giving answers.
+- [Functions](functions/index.md)
+- [Interfaces](interfaces/index.md)
+- [Type Aliases](type-aliases/index.md)
+- [Variables](variables/index.md)

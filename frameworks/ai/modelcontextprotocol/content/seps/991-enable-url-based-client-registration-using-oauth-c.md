@@ -4,11 +4,12 @@ framework: "Model Context Protocol"
 source_repo: "https://github.com/modelcontextprotocol/modelcontextprotocol"
 source_branch: "main"
 source_path: "docs/seps/991-enable-url-based-client-registration-using-oauth-c.mdx"
-source_commit: "7634684382c3d14cf7e9f14073fe40a2d8ace3fa"
-source_commit_short: "76346843"
-source_commit_date: "2026-07-23T16:49:30-07:00"
-generated_at: "2026-07-25T11:50:39Z"
+source_commit: "ca4ab3027f7c844cd3039c956438d72e8253f7f5"
+source_commit_short: "ca4ab30"
+source_commit_date: "2026-08-28T21:24:44-07:00"
+generated_at: "2026-08-29T09:38:48.023397Z"
 ---
+# 991 Enable Url Based Client Registration Using Oauth C
 
 ---
 title: "SEP-991: Enable URL-based Client Registration using OAuth Client ID Metadata Documents"
@@ -24,6 +25,14 @@ description: "Enable URL-based Client Registration using OAuth Client ID Metadat
     Standards Track
   </Badge>
 </div>
+
+<Note>
+  This SEP has reached Final status and is preserved as a historical record of
+  the design as accepted. Changes made to the protocol after finalization are
+  not reflected here. Refer to the [current
+  specification](/specification/latest) and its changelog for authoritative
+  requirements.
+</Note>
 
 | Field         | Value                                                                                                             |
 | ------------- | ----------------------------------------------------------------------------------------------------------------- |
@@ -244,9 +253,9 @@ There is not any additional amplification for the fetch request (i.e. the bandwi
 
 The RFC for Client ID Metadata documents is still a draft. It has been implemented by the platform Bluesky, but has not been ratified or very widely adopted outside of that, and may evolve over time. Our intention is to evolve and align with subsequent drafts and any final standard, while minimizing disruption and breakage with existing implementations.
 
-This approach has the risk that there are implementation challenges or flaws in the protocol that have not surfaced yet. However, even though DCR has been ratified, and it also has a number of implementation challenges that developers are facing when trying to use it in an open ecosystem context like MCP. Those challenges are the motiviation behind this proposal.
+This approach has the risk that there are implementation challenges or flaws in the protocol that have not surfaced yet. However, even though DCR has been ratified, and it also has a number of implementation challenges that developers are facing when trying to use it in an open ecosystem context like MCP. Those challenges are the motivation behind this proposal.
 
-#### Risk: Client implementation burden, espcially local clients
+#### Risk: Client implementation burden, especially local clients
 
 This specification requires an additional piece of infrastructure for clients, since they need to host a metadata file behind an HTTPS url. Without this specification, a client could be strictly a desktop application for example.
 

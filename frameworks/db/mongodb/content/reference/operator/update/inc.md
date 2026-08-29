@@ -1,85 +1,107 @@
 ---
 type: "Framework Learn Page"
-framework: "mongodb"
+framework: "MongoDB"
 source_repo: "https://github.com/mongodb/docs.git"
 source_branch: "main"
 source_path: "content/manual/manual/source/reference/operator/update/inc.txt"
-source_commit: "ab9db26ed3d11618cdb61516d8180337d8e3f679"
-source_commit_short: "ab9db26e"
-source_commit_date: "2026-07-24T16:22:46-06:00"
-generated_at: "2026-07-25T11:51:15Z"
+source_commit: "b9f2bc487a2878b65e3c1f80024bebab76954f27"
+source_commit_short: "b9f2bc48"
+source_commit_date: "2026-08-28T17:09:45-05:00"
+generated_at: "2026-08-29T09:39:20.109522Z"
 ---
-
-======================
-
 # $inc (update operator)
+
+.. default-domain:: mongodb
+
+**facet:** :name: programming_language
+   :values: shell
+
+**meta:** :description: Use the $inc operator to increment field values by specified amounts. $inc creates fields if absent, errors on null values, and is atomic within a document.
+
+**contents:** On this page
+   :local:
+   :backlinks: none
+   :depth: 1
+   :class: singlecol
 
 ## Definition
 
+**update:** $inc
+
+   The :update:`$inc` operator increments a field by a specified value.
+
 ## Compatibility
 
-.. include:: /includes/fact-compatibility.rst
+.. |operator-method| replace:: ``$inc``
+
+**include:** /includes/fact-compatibility.rst
 
 ## Syntax
 
 The :update:`$inc` operator has the following form:
 
-```javascript
-{ $inc: { <field1>: <amount1>, <field2>: <amount2>, ... } }
-```
+.. code-block:: javascript
 
-.. include:: /includes/use-dot-notation.rst
+   { $inc: { <field1>: <amount1>, <field2>: <amount2>, ... } }
+
+**include:** /includes/use-dot-notation.rst
 
 ## Behavior
 
-.. include:: /includes/fact-update-operator-processing-order.rst
+**include:** /includes/fact-update-operator-processing-order.rst
 
 The :update:`$inc` operator accepts positive and negative values.
 
-If the field does not exist, :update:`$inc` creates the field and sets the field to the specified value.
+If the field does not exist, :update:`$inc` creates the field and sets
+the field to the specified value.
 
-Using the :update:`$inc` operator on a field with a null value generates an error.
+Using the :update:`$inc` operator on a field with a null value
+generates an error.
 
 :update:`$inc` is an atomic operation within a single document.
 
-.. include:: /includes/extracts/update-operation-empty-operand-expressions-inc.rst
+**include:** /includes/extracts/update-operation-empty-operand-expressions-inc.rst
 
 ## Example
 
-Create the `products` collection:
+Create the ``products`` collection:
 
-```javascript
-db.products.insertOne(
-   {
-     _id: 1,
-     sku: "abc123",
-     quantity: 10,
-     metrics: { orders: 2, ratings: 3.5 }
-   }
-)
-```
+.. code-block:: javascript
 
-The following :method:`~db.collection.updateOne()` operation uses the :update:`$inc` operator to:
+   db.products.insertOne(
+      {
+        _id: 1,
+        sku: "abc123",
+        quantity: 10,
+        metrics: { orders: 2, ratings: 3.5 }
+      }
+   )
 
-- increase the `"metrics.orders"` field by 1
-- increase the `quantity` field by -2 (which decreases `quantity`)
-```javascript
-db.products.updateOne(
-   { sku: "abc123" },
-   { $inc: { quantity: -2, "metrics.orders": 1 } }
-)
-```
+The following :method:`~db.collection.updateOne()` operation uses the
+:update:`$inc` operator to:
+
+- increase the ``"metrics.orders"`` field by 1
+- increase the ``quantity`` field by -2 (which decreases ``quantity``)
+
+
+.. code-block:: javascript
+
+   db.products.updateOne(
+      { sku: "abc123" },
+      { $inc: { quantity: -2, "metrics.orders": 1 } }
+   )
 
 The operation returns the following result:
 
-```javascript
-{
-  _id: 1,
-  sku: 'abc123',
-  quantity: 8,
-  metrics: { orders: 3, ratings: 3.5 }
-}
-```
+.. code-block:: javascript
+   :copyable: false
 
-> **Seealso:** - :method:`db.collection.updateMany()`
-- :method:`db.collection.findAndModify()`
+   {
+     _id: 1,
+     sku: 'abc123',
+     quantity: 8,
+     metrics: { orders: 3, ratings: 3.5 }
+   }
+
+**seealso:** - :method:`db.collection.updateMany()`
+   - :method:`db.collection.findAndModify()`

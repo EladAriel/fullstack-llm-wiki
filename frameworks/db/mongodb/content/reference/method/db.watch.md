@@ -1,107 +1,270 @@
 ---
 type: "Framework Learn Page"
-framework: "mongodb"
+framework: "MongoDB"
 source_repo: "https://github.com/mongodb/docs.git"
 source_branch: "main"
 source_path: "content/manual/manual/source/reference/method/db.watch.txt"
-source_commit: "ab9db26ed3d11618cdb61516d8180337d8e3f679"
-source_commit_short: "ab9db26e"
-source_commit_date: "2026-07-24T16:22:46-06:00"
-generated_at: "2026-07-25T11:51:15Z"
+source_commit: "b9f2bc487a2878b65e3c1f80024bebab76954f27"
+source_commit_short: "b9f2bc48"
+source_commit_date: "2026-08-28T17:09:45-05:00"
+generated_at: "2026-08-29T09:39:19.884253Z"
 ---
-
-===========================
-
 # db.watch() (mongosh method)
+
+**meta:** :description: Open a change stream cursor for a database to monitor data changes in non-system collections using `db.watch()`.
+
+.. default-domain:: mongodb
+
+**contents:** On this page
+   :local:
+   :backlinks: none
+   :depth: 2
+   :class: singlecol
 
 ## Definition
 
+**method:** db.watch( pipeline, options )
+
+   *For replica sets and sharded clusters only*
+
+   Opens a :ref:`change stream cursor <changeStreams>` for a database
+   to report on all its non-``system`` collections.
+
+   .. list-table::
+      :header-rows: 1
+      :widths: 20 20 80
+
+      * - Parameter
+        - Type
+        - Description
+
+      * - ``pipeline``
+        - array
+        - Optional. An :ref:`aggregation-pipeline` consisting
+          of one or more of the following aggregation stages:
+          
+          .. include:: /includes/extracts/changestream-available-pipeline-stages.rst
+          
+          Specify a pipeline to filter/modify the change events output.
+          
+          .. include:: /includes/extracts/4.2-changes-change-stream-modification-error.rst
+
+      * - ``options``
+        - document
+        - Optional. Additional options that modify the behavior of
+          :method:`db.watch()`.
+
+   The ``options`` document can contain the following fields and values:
+
+   .. list-table::
+      :header-rows: 1
+      :widths: 20 20 80
+   
+      * - Field
+   
+        - Type
+   
+        - Description
+   
+      * - ``resumeAfter``
+   
+        - document
+   
+        - .. include:: /includes/change-stream/resume-after-description.rst
+
+      * - ``startAfter``
+   
+        - document
+   
+        - .. include:: /includes/change-stream/start-after-description.rst
+   
+      * - ``fullDocument``
+   
+        - string
+   
+        - Optional. By default, :method:`db.watch()` returns the delta of
+          those fields modified by an update operation, instead of the entire
+          updated document.
+          
+          Set ``fullDocument`` to ``"updateLookup"`` to direct
+          :method:`db.watch()` to look up the most current 
+          majority-committed version of the updated document.
+          :method:`db.watch()` returns a ``fullDocument`` field with
+          the document lookup in addition to the ``updateDescription`` delta.
+          
+          .. include:: /includes/change-stream-pre-and-post-images-full-document.rst
+
+
+      * - ``fullDocumentBeforeChange``   
+        - string
+        - Optional. Default is ``"off"``.
+
+          .. include:: /includes/change-stream-pre-and-post-images-full-document-before-change.rst
+
+
+      * - ``batchSize``
+   
+        - int
+   
+        - Optional. Specifies the maximum number of change events to return in each
+          batch of the response from the MongoDB cluster. 
+          
+          Has the same functionality as :method:`cursor.batchSize()`.
+          
+          
+   
+      * - ``maxAwaitTimeMS``
+   
+        - int
+   
+        - Optional. The maximum amount of time in milliseconds the server waits for new
+          data changes to report to the change stream cursor before returning an
+          empty batch.
+          
+          Defaults to ``1000`` milliseconds.
+          
+          
+   
+      * - ``collation``
+   
+        - document
+   
+        - Optional. Pass a :ref:`collation document <collation-document-fields>` 
+          to specify a collation for the change stream cursor.
+          
+          If omitted, defaults to ``simple`` binary comparison.
+          
+          
+   
+      * - ``startAtOperationTime``
+   
+        - Timestamp
+   
+        - Optional. The starting point for the change stream. If the specified starting
+          point is in the past, it must be in the time range of the oplog. To
+          check the time range of the oplog, see
+          :method:`rs.printReplicationInfo()`.
+          
+          ``startAtOperationTime`` is mutually exclusive with ``resumeAfter``
+          and ``startAfter``.
+
+   :returns:
+      A :ref:`cursor <cursors>` over the change event documents.
+      See :doc:`/reference/change-events` for examples of change
+      event documents.
+
+   .. seealso::
+      
+      :method:`db.collection.watch()` and :method:`Mongo.watch()`
+
 ## Compatibility
 
-This method is available in deployments hosted in the following environments:
+This method is available in deployments hosted in the following environments: 
 
-.. include:: /includes/fact-environments-atlas-only.rst
+**include:** /includes/fact-environments-atlas-only.rst
 
-.. include:: /includes/fact-environments-atlas-support-all.rst
+**include:** /includes/fact-environments-atlas-support-all.rst
 
-.. include:: /includes/fact-environments-onprem-only.rst
+**include:** /includes/fact-environments-onprem-only.rst
 
 ## Availability
 
 ### Deployment
 
-:method:`db.watch()` is available for replica sets and sharded clusters:
+:method:`db.watch()` is available for replica sets and sharded
+clusters:
 
 - For a replica set, you can issue :method:`db.watch()` on any
-data-bearing member.
+  data-bearing member.
 
 - For a sharded cluster, you must issue :method:`db.watch()` on a
-:binary:`~bin.mongos` instance.
+  :binary:`~bin.mongos` instance.
 
 ### Storage Engine
 
-You can only use :method:`db.watch()` with the `Wired Tiger storage engine <storage-wiredtiger>`.
+You can only use :method:`db.watch()` with the :ref:`Wired Tiger
+storage engine <storage-wiredtiger>`.
 
-### Read Concern `majority` Support
+### Read Concern ``majority`` Support
 
-.. include:: /includes/extracts/changestream-rc-majority-4.2.rst
+**include:** /includes/extracts/changestream-rc-majority-4.2.rst
 
 ## Behavior
 
-- You cannot run :method:`db.watch()` on the `admin`, `local`, or
-`config` database.
+- You cannot run :method:`db.watch()` on the ``admin``, ``local``, or
+  ``config`` database.
 
 - :method:`db.watch()` only notifies on data changes that have
-persisted to a majority of data-bearing members.
+  persisted to a majority of data-bearing members.
 
 - .. include:: /includes/extracts/changestream-cursor-open.rst
+
+
 - You can run :method:`db.watch()` for a database that does not exist.
-However, once the database is created and you drop the database, the change stream cursor closes.
+  However, once the database is created and you drop the database, the
+  change stream cursor closes.
 
 ### Resumability
 
-.. include:: /includes/extracts/changestream-resume.rst
+**include:** /includes/extracts/changestream-resume.rst
 
-.. include:: /includes/change-stream/resume-after
+**include:** /includes/change-stream/resume-after
+
+.. |watchmethod| replace:: :method:`db.watch()`
 
 ### Full Document Lookup of Update Operations
 
-.. include:: /includes/extracts/changestream-full-document-lookup.rst
+**include:** /includes/extracts/changestream-full-document-lookup.rst
 
 ## Access Control
 
-When running with access control, the user must have the :authaction:`find` and :authaction:`changeStream` privilege actions on the `database resource <resource-document>`. That is, a user must have a `role <roles>` that grants the following `privilege <privileges>`:
+When running with access control, the user must have the
+:authaction:`find` and :authaction:`changeStream` privilege actions on
+the :ref:`database resource <resource-document>`. That is, a user must
+have a :ref:`role <roles>` that grants the following :ref:`privilege
+<privileges>`:
 
-```javascript
-{ resource: { db: <dbname>, collection: "" }, actions: [ "find", "changeStream"] }
-```
+.. code-block:: javascript
 
-The built-in :authrole:`read` role provides the appropriate privileges.
+   { resource: { db: <dbname>, collection: "" }, actions: [ "find", "changeStream"] }
+
+The built-in :authrole:`read` role provides the appropriate
+privileges.
 
 ## Cursor Iteration
 
-.. include:: /includes/fact-multiple-cursor-monitors.rst
+**include:** /includes/fact-multiple-cursor-monitors.rst
+
+.. _db.watch-example:
 
 ## Example
 
-The following operation in :binary:`~bin.mongosh` opens a change stream cursor on the `hr` database. The returned cursor reports on data changes to all the non-`system` collections in that database.
+The following operation in :binary:`~bin.mongosh` opens a
+change stream cursor on the ``hr`` database. The returned cursor
+reports on data changes to all the non-``system`` collections in that
+database.
 
-```javascript
-watchCursor = db.getSiblingDB("hr").watch()
-```
+.. code-block:: javascript
 
-Iterate the cursor to check for new events. Use the :method:`cursor.isClosed()` method with the :method:`cursor.tryNext()` method to ensure the loop only exits if the change stream cursor is closed and there are no objects remaining in the latest batch:
+   watchCursor = db.getSiblingDB("hr").watch()
 
-```javascript
-while (!watchCursor.isClosed()) {
-  let next = watchCursor.tryNext()
-  while (next !== null) {
-    printjson(next);
-    next = watchCursor.tryNext()
-  }
-}
-```
 
-For complete documentation on change stream output, see `change-stream-output`.
+Iterate the cursor to check for new events. Use the
+:method:`cursor.isClosed()` method with the :method:`cursor.tryNext()`
+method to ensure the loop only exits if the change stream cursor is
+closed *and* there are no objects remaining in the latest batch:
 
-.. include:: /includes/isExhausted-no-change-streams.rst
+.. code-block:: javascript
+
+   while (!watchCursor.isClosed()) {
+     let next = watchCursor.tryNext()
+     while (next !== null) {
+       printjson(next);
+       next = watchCursor.tryNext()
+     }
+   }
+
+For complete documentation on change stream output, see
+:ref:`change-stream-output`.
+
+**include:** /includes/isExhausted-no-change-streams.rst

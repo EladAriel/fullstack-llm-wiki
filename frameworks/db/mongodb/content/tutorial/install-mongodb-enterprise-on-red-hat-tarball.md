@@ -1,128 +1,172 @@
 ---
 type: "Framework Learn Page"
-framework: "mongodb"
+framework: "MongoDB"
 source_repo: "https://github.com/mongodb/docs.git"
 source_branch: "main"
 source_path: "content/manual/manual/source/tutorial/install-mongodb-enterprise-on-red-hat-tarball.txt"
-source_commit: "ab9db26ed3d11618cdb61516d8180337d8e3f679"
-source_commit_short: "ab9db26e"
-source_commit_date: "2026-07-24T16:22:46-06:00"
-generated_at: "2026-07-25T11:51:15Z"
+source_commit: "b9f2bc487a2878b65e3c1f80024bebab76954f27"
+source_commit_short: "b9f2bc48"
+source_commit_date: "2026-08-28T17:09:45-05:00"
+generated_at: "2026-08-29T09:39:19.566139Z"
 ---
+**meta:** :keywords: on-prem
+   :description: Install MongoDB Enterprise on Red Hat or CentOS using a .tgz tarball, including prerequisites and SELinux configuration.
 
-======================================================
+.. _install-mdb-enterprise-redhat-centos-tgz:
 
 # Install MongoDB Enterprise on Red Hat or CentOS (.tgz)
 
-.. include:: /includes/minor-release.rst
+.. default-domain:: mongodb
+
+**contents:** On this page
+   :local:
+   :backlinks: none
+   :depth: 1
+   :class: twocols
+
+.. |arrow| unicode:: U+27A4
+.. |edition| replace:: Enterprise
+.. |package-name| replace:: ``{+package-name-enterprise+}``
+.. |distro-name| replace:: Red Hat
+.. |package-manager| replace:: ``yum``
+.. |executable-name| replace:: ``mongod``
+.. |mdb-download-link| replace:: `MongoDB Download Center <https://www.mongodb.com/try/download/enterprise>`__
+
+**include:** /includes/minor-release.rst
 
 ## Overview
 
-Use this tutorial to manually install MongoDB {+version+} |edition| Edition on Red Hat Enterprise Linux, CentOS Linux, or Oracle Linux [#oracle-linux]_ using a downloaded `.tgz` tarball.
+Use this tutorial to manually install MongoDB {+version+} |edition|
+Edition on Red Hat Enterprise Linux, CentOS Linux, or Oracle Linux
+[#oracle-linux]_ using a downloaded ``.tgz`` tarball.
 
-:products:`MongoDB Enterprise Edition</mongodb-enterprise-advanced>` is available on select platforms and contains support for several features related to security and monitoring.
+:products:`MongoDB Enterprise Edition</mongodb-enterprise-advanced>`
+is available on select platforms and contains support for several
+features related to security and monitoring.
 
 ### MongoDB Version
 
-.. include:: /includes/fact-install-past-mongodb.rst
+**include:** /includes/fact-install-past-mongodb.rst
 
 ### Installation Method
 
-.. include:: /includes/fact-use-package-manager.rst
+**include:** /includes/fact-use-package-manager.rst
 
-|arrow| See `Install MongoDB using the yum Package Manager<install-mdb-enterprise-redhat-centos>` for instructions.
+|arrow| See :ref:`Install MongoDB using the yum Package Manager<install-mdb-enterprise-redhat-centos>`
+for instructions.
 
 ## Considerations
 
-### MongoDB Shell, `mongosh`
+### MongoDB Shell, ``mongosh``
 
-.. include:: /includes/fact-have-to-install-mongosh-tgz.rst
+**include:** /includes/fact-have-to-install-mongosh-tgz.rst
 
 ### Platform Support
 
-.. include:: /includes/fact-platform-support-enterprise-red-hat.rst
+**include:** /includes/fact-platform-support-enterprise-red-hat.rst
 
 ### Production Notes
 
-.. include:: /includes/fact-see-production-notes.rst
+**include:** /includes/fact-see-production-notes.rst
+
+.. _install-redhat-from-tarball:
 
 ## Install MongoDB Enterprise Edition
 
 ### Prerequisites
 
-.. include:: /includes/fact-tarball-dependencies.rst
+**include:** /includes/fact-tarball-dependencies.rst
 
-.. include:: /includes/deploy/enterprise-prereq-rhel.rst
+**include:** /includes/deploy/enterprise-prereq-rhel.rst
 
 ### Procedure
 
-Follow these steps to manually install MongoDB |edition| Edition from the `.tgz`.
+Follow these steps to manually install MongoDB |edition| Edition from
+the ``.tgz``.
 
-.. include:: /includes/deploy/install-tar.rst
+**include:** /includes/deploy/install-tar.rst
 
 ## Run MongoDB Enterprise Edition
 
 ### ulimit
 
-.. include:: /includes/fact-installation-ulimit.rst
+**include:** /includes/fact-installation-ulimit.rst
 
 ### Directory Paths
 
-To Use Default Directories ``````````````````````````
+### To Use Default Directories
 
-By default, MongoDB runs using the |mongod-user| user account and uses the following default directories:
+By default, MongoDB runs using the |mongod-user| user account and
+uses the following default directories:
 
 - |mongod-datadir| (the data directory)
-- `/var/log/mongodb` (the log directory)
+
+- ``/var/log/mongodb`` (the log directory)
+
 Create the MongoDB data and log directories:
 
-```bash
-sudo mkdir -p /var/lib/mongo
-sudo mkdir -p /var/log/mongodb
-```
+.. code-block:: bash
 
-By default, MongoDB runs using the |mongod-user| user account. Create a |mongod-user| and a `mongodb` group. Ensure that the |mongod-user| belongs to the group then set the owner and group of these directories to |mongod-user|:
+   sudo mkdir -p /var/lib/mongo
+   sudo mkdir -p /var/log/mongodb
 
-```bash
-sudo chown -R mongod:mongod /var/lib/mongo
-sudo chown -R mongod:mongod /var/log/mongodb
-```
+By default, MongoDB runs using the |mongod-user| user account. Create
+a |mongod-user| and a ``mongodb`` group. Ensure that the |mongod-user|
+belongs to the group then set the owner and group of these directories
+to |mongod-user|:
 
-To Use Non-Default Directories ``````````````````````````````
+.. code-block:: bash
 
-To use a data directory and/or log directory other than the default directories:
+   sudo chown -R mongod:mongod /var/lib/mongo
+   sudo chown -R mongod:mongod /var/log/mongodb
+
+### To Use Non-Default Directories
+
+To use a data directory and/or log directory other than the default
+directories:
 
 #. Create the new directory or directories.
 
-#. Edit the configuration file `/etc/mongod.conf` and modify the following fields accordingly:
+#. Edit the configuration file ``/etc/mongod.conf`` and modify the
+   following fields accordingly:
 
-- :setting:`storage.dbPath` to specify a new data directory path (e.g. `/some/data/directory`)
-- :setting:`systemLog.path` to specify a new log file path (e.g. `/some/log/directory/mongod.log`)
-#. Ensure that the user running MongoDB has access to the directory or directories:
+   - :setting:`storage.dbPath` to specify a new data directory path (e.g. ``/some/data/directory``)
 
-```bash
-   sudo chown -R mongod:mongod <directory>
+   - :setting:`systemLog.path` to specify a new log file path (e.g. ``/some/log/directory/mongod.log``)
 
-If you change the user that runs the MongoDB process, you **must**
-give the new user access to these directories.
-```
+#. Ensure that the user running MongoDB has access to the directory or
+   directories:
 
-#. Configure SELinux if enforced.  See `install-rhel-configure-selinux`.
+   .. code-block:: bash
+
+      sudo chown -R mongod:mongod <directory>
+
+   If you change the user that runs the MongoDB process, you **must**
+   give the new user access to these directories.
+
+#. Configure SELinux if enforced.  See :ref:`install-rhel-configure-selinux`.
+
+.. _install-enterprise-tarball-selinux-data-directory:
+
+.. _install-enterprise-tarball-rhel-configure-selinux:
 
 ### Configure SELinux
 
-.. include:: /includes/fact-selinux-redhat-options.rst
+**include:** /includes/fact-selinux-redhat-options.rst
+**include:** /includes/important-selinux-customizations.rst
 
-.. include:: /includes/important-selinux-customizations.rst
+.. |mongod-user| replace:: ``mongod``
+.. |mongod-datadir| replace:: ``/var/lib/mongo``
 
 ### Procedure
 
-Follow these steps to run MongoDB |edition| Edition on your system. These instructions assume that you are using the default settings.
+Follow these steps to run MongoDB |edition| Edition on your system.
+These instructions assume that you are using the default settings.
 
-.. include:: /includes/steps/run-mongodb-on-linux-tarball.rst
+**include:** /includes/steps/run-mongodb-on-linux-tarball.rst
 
 ## Additional Information
 
 ### Localhost Binding by Default
 
-.. include:: /includes/fact-installation-bind-ip-default-in-config.rst
+**include:** /includes/fact-installation-bind-ip-default-in-config.rst

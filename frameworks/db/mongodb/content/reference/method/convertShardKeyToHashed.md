@@ -1,57 +1,82 @@
 ---
 type: "Framework Learn Page"
-framework: "mongodb"
+framework: "MongoDB"
 source_repo: "https://github.com/mongodb/docs.git"
 source_branch: "main"
 source_path: "content/manual/manual/source/reference/method/convertShardKeyToHashed.txt"
-source_commit: "ab9db26ed3d11618cdb61516d8180337d8e3f679"
-source_commit_short: "ab9db26e"
-source_commit_date: "2026-07-24T16:22:46-06:00"
-generated_at: "2026-07-25T11:51:15Z"
+source_commit: "b9f2bc487a2878b65e3c1f80024bebab76954f27"
+source_commit_short: "b9f2bc48"
+source_commit_date: "2026-08-28T17:09:45-05:00"
+generated_at: "2026-08-29T09:39:19.957314Z"
 ---
-
-========================================
-
 # convertShardKeyToHashed (mongosh method)
+
+**meta:** :description: Determine the hashed value of a shard key using the `convertShardKeyToHashed()` method for sharded collections.
+
+.. default-domain:: mongodb
+
+**contents:** On this page
+   :local:
+   :backlinks: none
+   :depth: 1
+   :class: singlecol
 
 ## Description
 
+**method:** convertShardKeyToHashed(<Object>)
+
+   Returns the hashed value for the input. The
+   :method:`convertShardKeyToHashed()` method uses the same hashing
+   function as the hashed index and can be used to see what the
+   :ref:`hashed value <sharding-hashed>` would be for a key.
+
 ## Compatibility
 
-This method is available in deployments hosted in the following environments:
+This method is available in deployments hosted in the following environments: 
 
-.. include:: /includes/fact-environments-atlas-only.rst
+**include:** /includes/fact-environments-atlas-only.rst
 
-.. include:: /includes/fact-environments-atlas-support-all.rst
+**include:** /includes/fact-environments-atlas-support-all.rst
 
-.. include:: /includes/fact-environments-onprem-only.rst
+**include:** /includes/fact-environments-onprem-only.rst
+
 
 ## Example
 
-Consider a sharded collection that uses a `hashed shard key </core/hashed-sharding>` [#populated]_
+Consider a sharded collection that uses a :doc:`hashed shard key
+</core/hashed-sharding>` [#populated]_
 
-```javascript
-use test
+.. code-block:: javascript
 
-db.orders.createIndex( { _id: "hashed" } )
+   use test
 
-sh.shardCollection( "test.orders", { _id : "hashed" } )
-```
+   db.orders.createIndex( { _id: "hashed" } )
 
-If the following document exists in the collection, the hashed value of the `_id` field is used to distribute the document:
+   sh.shardCollection( "test.orders", { _id : "hashed" } )
 
-```javascript
-{
-  _id: ObjectId("5b2be413c06d924ab26ff9ca"),
-  "item" : "Chocolates",
-  "qty" : 25
-}
-```
+If the following document exists in the collection, the hashed value of
+the ``_id`` field is used to distribute the document:
 
-To determine the hashed value of `_id` field used to distribute the document across the shards, you can use the :method:`convertShardKeyToHashed` method:
+.. code-block:: javascript
 
-```javascript
-convertShardKeyToHashed( ObjectId("5b2be413c06d924ab26ff9ca") )
-```
+   {
+     _id: ObjectId("5b2be413c06d924ab26ff9ca"),
+     "item" : "Chocolates",
+     "qty" : 25
+   }
+   
 
-If the collection already contains data, you must create a hashed index on the shard key before you shard the collection. For an empty collection, MongoDB creates the index as part of :method:`sh.shardCollection()`.
+To determine the hashed value of ``_id`` field used to distribute the
+document across the shards, you can use the
+:method:`convertShardKeyToHashed` method:
+
+.. code-block:: javascript
+
+   convertShardKeyToHashed( ObjectId("5b2be413c06d924ab26ff9ca") )
+
+.. [#populated]
+
+   If the collection already contains data, you must create a hashed
+   index on the shard key before you shard the collection. For an empty
+   collection, MongoDB creates the index as part of
+   :method:`sh.shardCollection()`.

@@ -1,44 +1,25 @@
 ---
 type: "Framework Learn Directory Index"
-framework: "sqlalchemy"
-directory: "content/orm/extensions/declarative"
-source_repo: "https://github.com/sqlalchemy/sqlalchemy"
-source_branch: "main"
-source_commit: "aa1a5575358d3aa14953b04dced02f4763fed2e7"
-source_commit_short: "aa1a5575"
-source_commit_date: "2026-07-23T18:02:59Z"
-generated_at: "2026-07-25T11:50:45Z"
+framework: "SQLAlchemy"
+generated_at: "2026-08-29T09:39:27.747118Z"
 ---
 # Declarative
 
-This directory contains sqlalchemy learning pages related to declarative.
+This directory contains SQLAlchemy learning pages related to declarative.
 
 ## Breadcrumbs
 
-[Wiki Home](../../../../index.md) -> [Content](../../../index.md) -> [Orm](../../index.md) -> [Extensions](../index.md) -> [Declarative](index.md)
+[Wiki Home](../index.md) -> [Content](index.md)
 
 ## Navigation
 
-- Parent: [Parent Index](../index.md)
-
-## Child Directories
-
-- None
+- Wiki Home: [Root Index](../index.md)
 
 ## Pages in This Directory
 
-- [Original Source Index](_source_index.md)
 - [Api](api.md)
-- [Basic Use](basic_use.md)
+- [Basic_Use](basic_use.md)
 - [Inheritance](inheritance.md)
 - [Mixins](mixins.md)
 - [Relationships](relationships.md)
-- [Table Config](table_config.md)
-
-## IDE LLM Guidance
-
-When answering implementation questions related to this directory:
-
-1. Prefer the most specific page listed above.
-2. If the topic is broad, read the child directory index first.
-3. Use source metadata from each page when giving answers.
+- [Table_Config](table_config.md)

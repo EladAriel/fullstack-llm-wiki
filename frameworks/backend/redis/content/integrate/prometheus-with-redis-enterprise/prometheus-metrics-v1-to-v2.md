@@ -1,14 +1,15 @@
 ---
 type: "Framework Learn Page"
-framework: "redis"
+framework: "Redis"
 source_repo: "https://github.com/redis/docs.git"
 source_branch: "main"
 source_path: "content/integrate/prometheus-with-redis-enterprise/prometheus-metrics-v1-to-v2.md"
-source_commit: "9d30f68c3dad1a6b3b7d30fe604b911348ce8152"
-source_commit_short: "9d30f68c"
-source_commit_date: "2026-07-24T10:52:10-07:00"
-generated_at: "2026-07-25T11:51:22Z"
+source_commit: "f8693349287b0efbef3c865b6f6a2aceca88594d"
+source_commit_short: "f869334"
+source_commit_date: "2026-08-28T10:01:19-05:00"
+generated_at: "2026-08-29T09:38:56.158779Z"
 ---
+# Prometheus Metrics V1 To V2
 
 ---
 Title: Transition from Prometheus v1 to Prometheus v2
@@ -47,6 +48,14 @@ scrape_configs:
     static_configs:
       - targets: ["<cluster_name>:8070"]
 ```
+
+{{< note >}}
+**Use a single scrape target.** The v2 endpoint is cluster-wide. Every node aggregates metrics from all nodes and returns the same complete result, so one target is enough. If you list one target per node, Prometheus stores every series once per target and multiplies each `sum()`-based dashboard panel by the number of targets. This produces no error. Prometheus reports every target as up and Grafana renders normally. Use your cluster FQDN as the single target so metrics remain available if a node goes down.
+{{< /note >}}
+
+The reason for a single target changed in v2. On v1, only the cluster master served the metrics endpoint and other nodes returned a redirect, so the protocol effectively forced one target. On v2, every node returns the full cluster view and no redirects are involved. If your v1 configuration listed multiple node targets, reduce it to one.
+
+If you prefer a per-node scrape topology, scrape `/v2/node`, which returns only that node's own metrics. Aggregation adds the `cluster` and `node` labels, so `/v2/node` responses omit them. Add `relabel_configs` to supply those labels before using `/v2/node` with the Redis Software Grafana dashboards.
 
 It is possible to scrape both v1 and v2 endpoints simultaneously during the transition period to prepare dashboards and ensure a smooth transition.
 

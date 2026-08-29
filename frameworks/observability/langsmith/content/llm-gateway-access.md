@@ -4,27 +4,27 @@ framework: "LangSmith"
 source_repo: "https://github.com/langchain-ai/docs.git"
 source_branch: "main"
 source_path: "src/langsmith/llm-gateway-access.mdx"
-source_commit: "2aae1dfc98ee953a9a5185fb6fcdd9efb3f4d878"
-source_commit_short: "2aae1df"
-source_commit_date: "2026-07-25T00:27:23+00:00"
-generated_at: "2026-07-25T19:08:33.383628Z"
+source_commit: "a174f9cf7c91ee5eb14ee2382eb48bfe6e4956e9"
+source_commit_short: "a174f9c"
+source_commit_date: "2026-08-28T17:04:12-07:00"
+generated_at: "2026-08-29T09:39:50.601102Z"
 ---
 # Llm Gateway Access
 
 ---
-title: Traces, Engine, and access control
-description: Understand where gateway traces land, how policy violations surface in LangSmith Engine, and who can see and configure what.
+title: Traces and access control
+description: Understand where gateway traces land and who can see and configure what.
 ---
 
 <Note>
-**Private beta:** The LLM Gateway is in private [beta](/langsmith/release-stages). [Sign up for the waitlist](https://www.langchain.com/langsmith-llm-gateway-waitlist) to get access.
+**Beta:** The LLM Gateway is in [beta](/langsmith/release-stages).
 </Note>
 
 Every call through the LLM Gateway is traced to LangSmith, and policy violations surface in [LangSmith Engine](/langsmith/engine) for triage.
 
 ## Where gateway traces appear
 
-By default, all gateway-proxied calls are traced to a project named `gateway` in the [workspace](/langsmith/administration-overview#workspaces) associated with the caller's API key, as well as a API-key specific project with the scheme `gateway-<short_api_key>-<api_key_id>`.
+By default, tracing of content is turned off for all organizations. When tracing content is on, the gateway-proxied calls are traced to a project named `gateway` in the [workspace](/langsmith/administration-overview#workspaces) associated with the caller's API key, as well as an API-key specific project with the scheme `gateway-<short_api_key>-<api_key_id>`.
 
 Control access to these tracing projects with [RBAC](/langsmith/rbac) and [ABAC](/langsmith/abac)
 
@@ -36,6 +36,10 @@ Gateway-proxied calls are distinguishable from direct LLM calls by the project t
 - **Policy evaluation results:** every gateway span records which policies were evaluated and their outcome via `langsmith.metadata.gateway.policy.matched_ids/_names`, `passed_ids/_names`, and `violated_ids/_names`, so both passes and blocks are captured.
 - **Guard rule matches:** when redaction policies apply, the guard pipeline emits a `rule_id → count` map stamped onto the span as `policy.matched_rules`, `passed_rules`, and `violated_rules`. These are rule IDs, not PII or secret category labels.
 - **Cost data:** token counts and cost are computed inline and feed the same spend accumulator that spend-cap policies enforce against.
+
+### Trace content and billing
+
+Using a data retention policy, you can disable trace content (request and response bodies) from being written to a trace. This will apply to any traces emitted through the gateway that match the scope of the policy.
 
 ## LangSmith Engine integration
 
@@ -85,7 +89,7 @@ This means:
 - **Credential control:** provider keys live in one place, managed by admins. Revoking access means revoking the LangSmith API key, not finding distributed copies of provider keys.
 - **Policy enforcement:** because all calls flow through the gateway, policies are enforced consistently. There's no way to bypass cost limits by calling the provider directly (as long as developers don't have access to the provider key separately).
 
-For this to work as intended, don't distribute provider API keys to developers alongside gateway access. The gateway centralizes provider credentials by default. A pass-through mode also exists for OAuth-based flows like Claude Code Max—contact us if your organization wants to allow or restrict it.
+For Claude Code Plus and Max users, Anthropic OAuth pass-through is available to every organization. The caller sends a workspace-scoped LangSmith API key for gateway authentication and an Anthropic OAuth bearer for provider authentication. Gateway permissions, policies, and tracing still apply, while the OAuth bearer is forwarded only to Anthropic and the gateway does not load the workspace's `ANTHROPIC_API_KEY`. Anthropic bills these calls to the user's Claude subscription. See [Set up coding agents](/langsmith/llm-gateway-coding-agents#use-claude-subscription-oauth) for configuration instructions.
 
 ### Restricting trace visibility
 
@@ -100,4 +104,4 @@ If you need to limit who can see gateway traces, you have two options:
 
 - [Admin setup](/langsmith/llm-gateway-admin-setup): the step-by-step guide for configuring all of this.
 - [Spend policies](/langsmith/llm-gateway-spend-policies): attach cost limits to API keys and users.
-- [PII and secrets redaction](/langsmith/llm-gateway-redaction): configure data protection policies.
+- [Data protection](/langsmith/llm-gateway-data-protection): configure data protection policies.

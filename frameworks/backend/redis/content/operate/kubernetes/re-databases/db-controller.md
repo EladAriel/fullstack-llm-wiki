@@ -1,14 +1,15 @@
 ---
 type: "Framework Learn Page"
-framework: "redis"
+framework: "Redis"
 source_repo: "https://github.com/redis/docs.git"
 source_branch: "main"
 source_path: "content/operate/kubernetes/re-databases/db-controller.md"
-source_commit: "9d30f68c3dad1a6b3b7d30fe604b911348ce8152"
-source_commit_short: "9d30f68c"
-source_commit_date: "2026-07-24T10:52:10-07:00"
-generated_at: "2026-07-25T11:51:22Z"
+source_commit: "f8693349287b0efbef3c865b6f6a2aceca88594d"
+source_commit_short: "f869334"
+source_commit_date: "2026-08-28T10:01:19-05:00"
+generated_at: "2026-08-29T09:38:55.125160Z"
 ---
+# Db Controller
 
 ---
 Title: Manage Redis Enterprise databases for Kubernetes
@@ -100,7 +101,7 @@ To modify the database:
     ```
 
 1. Change the specification (only properties in `spec` section) and save the changes.  
-    For more details, see [RedisEnterpriseDatabaseSpec](https://github.com/RedisLabs/redis-enterprise-k8s-docs/blob/master/redis_enterprise_database_api.md#redisenterprisedatabasespec) or [Options for Redis Enterprise databases]({{< relref "/operate/kubernetes/reference/api/redis_enterprise_database_api" >}}). 
+    For more details, see [Options for Redis Enterprise databases]({{< relref "/operate/kubernetes/reference/api/redis_enterprise_database_api" >}}). 
 
 1. Monitor the status to see when the changes take effect:
 

@@ -4,10 +4,10 @@ framework: "Arize Phoenix"
 source_repo: "https://github.com/Arize-ai/phoenix.git"
 source_branch: "main"
 source_path: "docs/phoenix/sdk-api-reference/typescript/overview.mdx"
-source_commit: "69b3ab92c37ff65812feaa2dbf0b1c0ad5ae55fe"
-source_commit_short: "69b3ab9"
-source_commit_date: "2026-07-25T11:48:12-06:00"
-generated_at: "2026-07-25T19:08:24.944298Z"
+source_commit: "c48e50e9906fcc56c1c103ebd93ef3c95ed6b6e7"
+source_commit_short: "c48e50e"
+source_commit_date: "2026-08-29T01:45:20-06:00"
+generated_at: "2026-08-29T09:39:58.809335Z"
 ---
 ---
 title: "TypeScript SDK"
@@ -71,11 +71,10 @@ All packages respect common Phoenix environment variables for seamless configura
 
 | Variable | Description | Used By |
 |----------|-------------|---------|
-| `PHOENIX_COLLECTOR_ENDPOINT` | Trace collector URL | OTEL |
-| `PHOENIX_HOST` | Phoenix server URL | Client, CLI |
+| `PHOENIX_ENDPOINT` | Phoenix base URL — canonical for everything except trace export | Client, MCP, CLI |
+| `PHOENIX_COLLECTOR_ENDPOINT` | Base URL traces are exported to | OTEL (Client, MCP and CLI infer from it when `PHOENIX_ENDPOINT` is unset) |
 | `PHOENIX_API_KEY` | API key for authentication | Client, OTEL, MCP, CLI |
 | `PHOENIX_CLIENT_HEADERS` | Custom HTTP headers (JSON) | Client, CLI |
-| `PHOENIX_BASE_URL` | Phoenix base URL | MCP |
 | `PHOENIX_PROJECT` | Project name or ID | CLI |
 
 ---
