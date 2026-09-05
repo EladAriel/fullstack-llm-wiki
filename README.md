@@ -4,10 +4,12 @@ Local Markdown documentation wikis for AI coding assistants.
 
 Current wikis:
 
+- `system-design/` - system design theory (scaling, CAP, caching, messaging, microservices patterns, and related topics)
 - `frameworks/ai/` - LangChain, LangGraph, Langfuse, FastMCP, Model Context Protocol, and Ragas documentation
 - `frameworks/ui/` - React, TanStack, Zod, shadcn/ui, and Next.js documentation
 - `frameworks/backend/` - FastAPI, Pydantic, and Redis documentation
 - `frameworks/db/` - Beanie, MongoDB, PostgreSQL, PyMongo, SQLAlchemy, and Alembic documentation
+- `frameworks/observability/` - OpenTelemetry, Prometheus, Grafana, Sentry, Helicone, Phoenix, and LangSmith documentation
 - `frameworks/test/` - Jest and pytest documentation
 
 ## Use With Any AI IDE
@@ -21,6 +23,7 @@ How do FastAPI dependencies work?
 What is the React pattern for server components?
 How should I model SQLAlchemy relationships?
 How do LangGraph checkpoints work?
+When should we use the saga pattern instead of 2PC?
 ```
 
 If you want to force a wiki lookup, say it directly:
@@ -35,7 +38,8 @@ Look in the llm wiki for Model Context Protocol transports.
 When the IDE uses the wiki, it should follow this path:
 
 ```text
-framework root index -> nearest directory index -> most specific content page
+frameworks: framework root index -> nearest directory index -> most specific content page
+system-design: system-design/index.md -> category index -> topic page
 ```
 
 ## Clone the wiki
@@ -149,9 +153,12 @@ For another project, copy `skills/fullstack-llm-wiki-navigator/` into that proje
 - `.cursor/skills/fullstack-llm-wiki-navigator/SKILL.md` - Cursor repo skill
 - `.antigravitycli/skills/fullstack-llm-wiki-navigator/SKILL.md` - Antigravity CLI repo skill
 - `skills/fullstack-llm-wiki-navigator/SKILL.md` - portable canonical skill instructions
+- `system-design/index.md` - system design theory wiki index
 - `frameworks/index.md` - global framework category index
 - `frameworks/ai/index.md` - AI framework index
 - `frameworks/ui/index.md` - UI framework index
 - `frameworks/backend/index.md` - backend framework index
 - `frameworks/db/index.md` - database framework index
+- `frameworks/observability/index.md` - observability framework index
 - `frameworks/test/index.md` - test framework index
+- `scripts/generate_system_design_wiki.py` - generator for system-design topic pages
